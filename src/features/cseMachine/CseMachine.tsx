@@ -1,10 +1,11 @@
 import { Context } from 'js-slang';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
+import { parse } from 'js-slang/dist/parser/parser';
 import React from 'react';
 
 import { arrowSelection } from './components/arrows/ArrowSelection';
 import { Layout, LayoutCache } from './CseMachineLayout';
-import { EnvTree } from './CseMachineTypes';
+import { EnvTree, EnvTreeNode } from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
 
 type SetVis = (vis: React.ReactNode) => void;
@@ -21,11 +22,14 @@ export default class CseMachine {
   private static setIsStepLimitExceeded: SetisStepLimitExceeded;
   // Ghost layout snapshots, separated by mode to keep coordinates fixed within each mode.
   public static normalLayoutCache: LayoutCache | null = null;
+  public static normalLiveLayoutCache: LayoutCache | null = null;
   public static printLayoutCache: LayoutCache | null = null;
+  public static printLiveLayoutCache: LayoutCache | null = null;
+  public static usedBuiltInNames = new Set<string>();
   private static printableMode: boolean = false;
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
-  private static centerAlignment: boolean = false; // added for center alignment
+  private static centerAlignment: boolean = false;
   private static centerAlignmentToggled: boolean = false;
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
@@ -44,6 +48,14 @@ export default class CseMachine {
     Layout.clearDeadFrames = enabled;
   }
   public static clearCachedLayouts(): void {
+    CseMachine.normalLayoutCache = null;
+    CseMachine.normalLiveLayoutCache = null;
+    CseMachine.printLayoutCache = null;
+    CseMachine.printLiveLayoutCache = null;
+    CseMachine.usedBuiltInNames.clear();
+    CseMachine.clearMemoizedLayouts();
+  }
+  private static clearMemoizedLayouts(): void {
     Layout.currentLight = undefined;
     Layout.currentDark = undefined;
     Layout.currentStackDark = undefined;
@@ -52,10 +64,11 @@ export default class CseMachine {
     Layout.currentStackTruncLight = undefined;
     Layout.prevLayout = undefined;
     Layout.key = 0;
-    CseMachine.normalLayoutCache = null;
-    CseMachine.printLayoutCache = null;
   }
-  // added for center alignment
+  public static clearLiveLayouts(): void {
+    CseMachine.normalLiveLayoutCache = null;
+    CseMachine.printLiveLayoutCache = null;
+  }
   public static toggleCenterAlignment(): void {
     CseMachine.centerAlignment = !CseMachine.centerAlignment;
     CseMachine.centerAlignmentToggled = true;
@@ -73,20 +86,31 @@ export default class CseMachine {
   public static getStackTruncated(): boolean {
     return CseMachine.stackTruncated;
   }
-  // added for center alignment
   public static getCenterAlignment(): boolean {
     return CseMachine.centerAlignment;
   }
   public static getMasterLayout(): LayoutCache | null {
     return CseMachine.getPrintableMode()
-      ? CseMachine.printLayoutCache
-      : CseMachine.normalLayoutCache;
+      ? Layout.clearDeadFrames
+        ? CseMachine.printLiveLayoutCache
+        : CseMachine.printLayoutCache
+      : Layout.clearDeadFrames
+        ? CseMachine.normalLiveLayoutCache
+        : CseMachine.normalLayoutCache;
   }
   public static setMasterLayout(cache: LayoutCache): void {
     if (CseMachine.getPrintableMode()) {
-      CseMachine.printLayoutCache = cache;
+      if (Layout.clearDeadFrames) {
+        CseMachine.printLiveLayoutCache = cache;
+      } else {
+        CseMachine.printLayoutCache = cache;
+      }
     } else {
-      CseMachine.normalLayoutCache = cache;
+      if (Layout.clearDeadFrames) {
+        CseMachine.normalLiveLayoutCache = cache;
+      } else {
+        CseMachine.normalLayoutCache = cache;
+      }
     }
   }
 
@@ -133,12 +157,136 @@ export default class CseMachine {
       context.chapter
     );
 
-    // Build ghost layout cache lazily per mode, using mode-specific layout.
+    // Build ghost layout cache and built-in/predeclared functions cache lazily per mode, using mode-specific layout.
     if (!CseMachine.normalLayoutCache || !CseMachine.printLayoutCache) {
+      const userCode = context?.unTypecheckedCode?.[0];
+
+      if (typeof userCode === 'string') {
+        const rootNode = context?.runtime?.environmentTree?.root as EnvTreeNode | undefined;
+
+        if (rootNode) {
+          const globalEnvHead = rootNode?.environment?.head || {};
+          const preludeEnvHead = rootNode?.children?.[0]?.environment?.head || {};
+
+          // Helper to check if a word is actually a built-in function
+          const isBuiltIn = (name: string) => name in globalEnvHead || name in preludeEnvHead;
+
+          const ast = parse(userCode, context);
+
+          if (ast) {
+            // THE scope stack: Index 0 is the global program scope.
+            // We push a new Set() when entering a block/function, and pop() when leaving.
+            const scopeStack: Set<string>[] = [new Set()];
+
+            const currentScope = () => scopeStack[scopeStack.length - 1];
+
+            // Checks if a variable exists in the current scope or any parent scope
+            const isDeclaredInScope = (name: string) => {
+              for (let i = scopeStack.length - 1; i >= 0; i--) {
+                if (scopeStack[i].has(name)) return true;
+              }
+              return false;
+            };
+
+            const declareName = (node: any) => {
+              if (node && node.type === 'Identifier') {
+                currentScope().add(node.name);
+              }
+            };
+
+            // The Recursive Walker
+            const walk = (node: any, parentType?: string, keyName?: string) => {
+              if (!node || typeof node !== 'object') return;
+
+              let isNewScope = false;
+
+              // Enter Scope Boundary (Blocks and Functions)
+              if (node.type === 'BlockStatement' || node.type === 'Program') {
+                isNewScope = true;
+                if (node.type !== 'Program') scopeStack.push(new Set());
+
+                // add declarations into this scope before traversing deeper
+                const body = node.body || [];
+                for (const stmt of body) {
+                  if (stmt.type === 'VariableDeclaration') {
+                    for (const decl of stmt.declarations) {
+                      declareName(decl.id);
+                    }
+                  } else if (stmt.type === 'FunctionDeclaration') {
+                    declareName(stmt.id);
+                  }
+                }
+              } else if (
+                node.type === 'ArrowFunctionExpression' ||
+                node.type === 'FunctionExpression' ||
+                node.type === 'FunctionDeclaration'
+              ) {
+                isNewScope = true;
+                scopeStack.push(new Set());
+                // Function parameters act as local variables in this new scope
+                if (node.params) {
+                  node.params.forEach(declareName);
+                }
+              }
+
+              // Check Identifier Usage
+              if (node.type === 'Identifier') {
+                // Ignore property access
+                const isProperty = parentType === 'MemberExpression' && keyName === 'property';
+
+                // If it's used, not in our scope stack, and is a built-in, add it to used global functions
+                if (!isProperty && !isDeclaredInScope(node.name) && isBuiltIn(node.name)) {
+                  CseMachine.usedBuiltInNames.add(node.name);
+                }
+              }
+
+              // Traverse Children Recursively
+              for (const key in node) {
+                const child = node[key];
+                if (child && typeof child === 'object') {
+                  if (Array.isArray(child)) {
+                    child.forEach(c => walk(c, node.type, key));
+                  } else {
+                    walk(child, node.type, key);
+                  }
+                }
+              }
+
+              // Exit Scope Boundary
+              if (isNewScope && node.type !== 'Program') {
+                scopeStack.pop();
+              }
+            };
+            walk(ast);
+
+            const worklist = Array.from(CseMachine.usedBuiltInNames);
+
+            for (let i = 0; i < worklist.length; i++) {
+              const name = worklist[i];
+
+              // If it's a predeclared function, it might rely on other predeclared/built-in
+              if (name in preludeEnvHead) {
+                const source = preludeEnvHead[name]?.toString() || '';
+                const internalWords = source.match(/[a-zA-Z_$][a-zA-Z0-9_$]*/g) || [];
+
+                for (const dep of internalWords) {
+                  if (isBuiltIn(dep) && !CseMachine.usedBuiltInNames.has(dep)) {
+                    CseMachine.usedBuiltInNames.add(dep);
+                    worklist.push(dep);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
       const originalMode = CseMachine.getPrintableMode();
+      const originalAlignment = CseMachine.getCenterAlignment();
 
       const buildCache = (printable: boolean) => {
         CseMachine.printableMode = printable;
+        CseMachine.centerAlignment = false;
         Layout.setContext(
           context.runtime.environmentTree as EnvTree,
           context.runtime.control!,
@@ -153,6 +301,8 @@ export default class CseMachine {
 
       // Restore the user's actual mode setting and layout.
       CseMachine.printableMode = originalMode;
+      CseMachine.centerAlignment = originalAlignment;
+      CseMachine.setClearDeadFrames(false);
       Layout.setContext(
         context.runtime.environmentTree as EnvTree,
         context.runtime.control,
@@ -180,11 +330,17 @@ export default class CseMachine {
         if (!CseMachine.getMasterLayout()) {
           CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
         }
-        if (CseMachine.getMasterLayout()) {
-          Layout.applyFixedPositions();
-        }
+        Layout.applyFixedPositions();
         this.setVis(Layout.draw());
         this.centerAlignmentToggled = false;
+      }
+      // redraw environment model and populate live layout caches
+      if (Layout.clearDeadFrames) {
+        Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
+        if (!CseMachine.getMasterLayout()) {
+          CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+        }
+        Layout.applyFixedPositions();
       }
 
       if (
@@ -229,9 +385,10 @@ export default class CseMachine {
         this.setVis(Layout.currentDark);
       } else {
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
-        if (CseMachine.getMasterLayout()) {
-          Layout.applyFixedPositions();
+        if (!CseMachine.getMasterLayout()) {
+          CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
         }
+        Layout.applyFixedPositions();
         this.setVis(Layout.draw());
       }
       Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
