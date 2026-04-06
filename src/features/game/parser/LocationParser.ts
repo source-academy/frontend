@@ -59,6 +59,12 @@ export default class LocationParser {
           location.navigation.add(otherLocationId);
         });
         break;
+      case 'back':
+        configValues.forEach(backLocationId => {
+          Parser.validator.assertEntityType(GameEntityType.locations, backLocationId);
+          location.back = backLocationId;
+        });
+        break;
       case 'talkTopics': {
         const talkTopics = configValues;
         Parser.validator.assertItemTypes(GameItemType.dialogues, talkTopics);

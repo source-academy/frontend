@@ -21,9 +21,11 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
 import type { PlaygroundWorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+import { ClearDeadFramesAnimation } from 'src/features/cseMachine/animationComponents/ClearDeadFramesAnimation';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
 import { Layout } from 'src/features/cseMachine/CseMachineLayout';
+import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
 import { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
@@ -337,6 +339,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                   <AnchorButton
                     onMouseUp={() => {
                       if (this.state.visualization) {
+                        const prevLevels = Layout.levels;
                         this.setState(
                           prevState => ({
                             clearDeadFrames: true
@@ -344,6 +347,31 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                           () => {
                             CseMachine.setClearDeadFrames(this.state.clearDeadFrames);
                             CseMachine.clearLiveLayouts();
+
+                            // Temporarily store the original draw function
+                            const originalDraw = Layout.draw;
+
+                            // Overriding because the animations are causing
+                            // Konva objects to not be drawn
+                            Layout.draw = () => {
+                              try {
+                                const currLevels = Layout.levels;
+                                const changedFramePairs = computeFramesCoordChange(
+                                  prevLevels,
+                                  currLevels
+                                );
+                                if (changedFramePairs.length > 0) {
+                                  CseAnimation.animations.push(
+                                    new ClearDeadFramesAnimation(changedFramePairs)
+                                  );
+                                  CseAnimation.enableAnimations();
+                                }
+
+                                return originalDraw.apply(Layout);
+                              } finally {
+                                Layout.draw = originalDraw;
+                              }
+                            };
                             CseMachine.redraw();
                           }
                         );
