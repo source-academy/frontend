@@ -1,6 +1,5 @@
 export const ControlStashConfig = Object.freeze({
   ControlPosX: 20,
-  ControlShiftX: -20,
   ControlPosY: 5,
   StashPosX: 140,
   StashPosY: 5,
@@ -33,6 +32,3 @@ export const ControlStashConfig = Object.freeze({
   FontStyleHeader: 'bold',
   FontSizeHeader: 18
 });
-
-export const getControlX = (): number =>
-  ControlStashConfig.ControlPosX + ControlStashConfig.ControlShiftX;

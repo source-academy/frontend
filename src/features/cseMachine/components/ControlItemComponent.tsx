@@ -4,7 +4,7 @@ import { Label, Tag, Text } from 'react-konva';
 
 import CseMachine from '../CseMachine';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
-import { ControlStashConfig, getControlX } from '../CseMachineControlStashConfig';
+import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { Layout } from '../CseMachineLayout';
 import { IHoverable } from '../CseMachineTypes';
 import {
@@ -50,7 +50,7 @@ export class ControlItemComponent extends Visible implements IHoverable {
     this.tooltipRef = React.createRef();
     this.highlightOnHover = highlightOnHover;
     this.unhighlightOnHover = unhighlightOnHover;
-    this._x = getControlX();
+    this._x = ControlStashConfig.ControlPosX;
     this._y = ControlStashConfig.ControlPosY + stackHeight;
     this._width = ControlStashConfig.ControlItemWidth;
     this._height =
