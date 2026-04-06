@@ -529,7 +529,8 @@ function* handleStatuses(
   workspaceLocation: WorkspaceLocation
 ): SagaIterator {
   const statusChan = eventChannel<{ status: RunnerStatus; isActive: boolean }>(emitter => {
-    const onStatusUpdate = (status: RunnerStatus, isActive: boolean) => emitter({ status, isActive });
+    const onStatusUpdate = (status: RunnerStatus, isActive: boolean) =>
+      emitter({ status, isActive });
     hostPlugin.receiveStatusUpdate = onStatusUpdate;
     return () => {
       if (hostPlugin.receiveStatusUpdate === onStatusUpdate) delete hostPlugin.receiveStatusUpdate;

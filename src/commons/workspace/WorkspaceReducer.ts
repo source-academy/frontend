@@ -269,13 +269,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     })
     .addCase(InterpreterActions.appendInterpreterError, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
-      applyInterpreterErrorOutput(
-        state,
-        workspaceLocation,
-        action.payload.errors,
-        false,
-        false
-      );
+      applyInterpreterErrorOutput(state, workspaceLocation, action.payload.errors, false, false);
     })
     .addCase(InterpreterActions.evalInterpreterError, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
