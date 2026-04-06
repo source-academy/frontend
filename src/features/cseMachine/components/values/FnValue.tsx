@@ -29,6 +29,7 @@ import {
   truncateFunctionTooltip
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
+import { ArrowFromFnTooltip } from '../arrows/ArrowFromFnTooltip';
 import { Binding } from '../Binding';
 import { Frame } from '../Frame';
 import { Value } from './Value';
@@ -62,6 +63,8 @@ export class FnValue extends Value implements IHoverable {
   enclosingFrame?: Frame;
   private isExpandedDescription: boolean = false;
   private _arrow: ArrowFromFn | undefined;
+  private tooltipArrow: ArrowFromFnTooltip | undefined;
+  private showTooltipArrow: boolean = false;
 
   constructor(
     /** underlying JS Slang function (contains extra props) */
@@ -144,15 +147,21 @@ export class FnValue extends Value implements IHoverable {
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
     setHoveredCursor(currentTarget);
+    this.ref.current?.getParent()?.moveToTop();
     if (this.isExpandedDescription && this.isTooltipTruncated) {
       this.labelRef.current?.hide();
       this.revealLabelRef.current?.moveToTop();
       this.revealLabelRef.current?.show();
+      this.revealLabelRef.current?.getLayer()?.batchDraw();
     } else {
       this.revealLabelRef.current?.hide();
       this.labelRef.current?.moveToTop();
       this.labelRef.current?.show();
+      this.labelRef.current?.getLayer()?.batchDraw();
     }
+    this.showTooltipArrow = true;
+    this.tooltipArrow?.setVisible(true);
+    currentTarget.getLayer()?.batchDraw();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -161,15 +170,46 @@ export class FnValue extends Value implements IHoverable {
     this.isExpandedDescription = false;
     this.labelRef.current?.hide();
     this.revealLabelRef.current?.hide();
+    this.showTooltipArrow = false;
+    this.tooltipArrow?.setVisible(false);
   };
 
   onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode() || !this.isTooltipTruncated) return;
+    this.ref.current?.getParent()?.moveToTop();
     this.isExpandedDescription = true;
     this.labelRef.current?.hide();
     this.revealLabelRef.current?.moveToTop();
     this.revealLabelRef.current?.show();
     currentTarget.getLayer()?.batchDraw();
+  };
+
+  private getActiveTooltipLabel() {
+    if (!CseMachine.getPrintableMode() && this.isTooltipTruncated && this.isExpandedDescription) {
+      return this.revealLabelRef.current;
+    }
+    return this.labelRef.current;
+  }
+
+  private getTooltipRect = () => {
+    const label = this.getActiveTooltipLabel();
+    if (label && label.isVisible()) {
+      const rect = label.getClientRect();
+      return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+    }
+
+    const useExpanded =
+      !CseMachine.getPrintableMode() && this.isTooltipTruncated && this.isExpandedDescription;
+    const baseX = this.x() + Config.TextMargin;
+    const baseY =
+      this.y() + this.radius + Config.TextMargin + (useExpanded ? 0 : this.printDescriptionOffsetY);
+    const text = useExpanded ? this.tooltip : this.exportTooltip;
+    const width =
+      Math.min(Config.FnDescriptionMaxWidth, getTextWidth(text)) + Config.FnTooltipTextPadding * 2;
+    const height =
+      getTextHeight(text, Config.FnDescriptionMaxWidth) + Config.FnTooltipTextPadding * 2;
+
+    return { x: baseX, y: baseY, width, height };
   };
 
   setArrowSourceHighlightedStyle(): void {
@@ -200,6 +240,10 @@ export class FnValue extends Value implements IHoverable {
     if (this.enclosingFrame) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
     }
+    if (!this.tooltipArrow) {
+      this.tooltipArrow = new ArrowFromFnTooltip(this, this.getTooltipRect);
+    }
+    this.tooltipArrow.setVisible(CseMachine.getPrintableMode() || this.showTooltipArrow);
 
     const isLive: boolean = this.isLive();
     const textColor = isLive ? defaultTextColor() : fadedTextColor();
@@ -253,6 +297,7 @@ export class FnValue extends Value implements IHoverable {
           x={this.x() + Config.TextMargin}
           y={this.y() + this.radius + Config.TextMargin + this.printDescriptionOffsetY}
           visible={CseMachine.getPrintableMode()}
+          listening={false}
           ref={this.labelRef}
         >
           {CseMachine.getPrintableMode() ? (
@@ -283,6 +328,7 @@ export class FnValue extends Value implements IHoverable {
             x={this.x() + Config.TextMargin}
             y={this.y() + this.radius + Config.TextMargin}
             visible={false}
+            listening={false}
             ref={this.revealLabelRef}
           >
             <KonvaTag
@@ -301,6 +347,7 @@ export class FnValue extends Value implements IHoverable {
           </KonvaLabel>
         )}
         {this._arrow?.draw()}
+        {this.tooltipArrow?.draw()}
       </React.Fragment>
     );
   }
