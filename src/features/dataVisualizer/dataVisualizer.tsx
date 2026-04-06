@@ -45,7 +45,7 @@ export default class DataVisualizer {
     if (structures[0] === null) {
       return true;
     }
-    if (structures[0].length != 2) {
+    if (!(structures[0] instanceof Array) || structures[0].length != 2) {
       return false;
     }
     let next = structures[0];
