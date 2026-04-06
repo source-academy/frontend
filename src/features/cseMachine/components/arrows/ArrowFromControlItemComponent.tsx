@@ -27,6 +27,7 @@ export class ArrowFromControlItemComponent extends GenericArrow<
     const postSourceStraightLength = Config.ArrowPostFrameStraightLength;
     const targetY =
       to.y() +
+      // Draw arrow slightly below frame corner if frame is far enough
       (to instanceof Frame && to.x() > ControlStashConfig.ControlItemWidth + 100
         ? ControlStashConfig.ControlItemTextPadding
         : 0);
