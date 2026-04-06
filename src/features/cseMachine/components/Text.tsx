@@ -62,7 +62,7 @@ export class Text extends Visible implements IHoverable {
     options: Partial<TextOptions> = {}
   ) {
     super();
-    this._x = x; 
+    this._x = x;
     this._y = y;
     this.options = { ...this.options, ...options };
 
