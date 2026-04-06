@@ -13,6 +13,8 @@ import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { IHoverable, NonGlobalFn, ReferenceType } from '../../CseMachineTypes';
+import { ArrowFromStreamNullaryFn } from '../arrows/ArrowFromStreamNullaryFn';
+import { ArrayValue } from './ArrayValue';
 import {
   defaultStrokeColor,
   defaultTextColor,
@@ -62,6 +64,7 @@ export class FnValue extends Value implements IHoverable {
   enclosingFrame?: Frame;
   private isExpandedDescription: boolean = false;
   private _arrow: ArrowFromFn | undefined;
+  private _streamArrows: ArrowFromStreamNullaryFn[] = [];
 
   constructor(
     /** underlying JS Slang function (contains extra props) */
@@ -105,6 +108,34 @@ export class FnValue extends Value implements IHoverable {
     this.totalWidth =
       this._width + Config.TextMargin + this.exportTooltipWidth + Config.FnTooltipTextPadding * 2;
 
+    if (Layout.pendingFnLink) {
+      const thisId = (data as any).id
+      const linkedPairs = CseMachine.getStreamLineage(thisId);
+
+      if (linkedPairs != undefined && CseMachine.getStreamLineage(thisId) != undefined) {
+        // console.log(CseMachine.getStreamLineage(thisId))
+        const targetCounts = new Map<ArrayValue, number>();
+
+        for (const pair of linkedPairs) {
+          const pairObject = (Layout.values.get(pair) as ArrayValue);
+          // The pair might not be in Layout.values if it's not reachable in the current step, so we check.
+          if (pairObject instanceof ArrayValue) {
+            const currentCount = targetCounts.get(pairObject) || 0;
+            targetCounts.set(pairObject, currentCount + 1);
+
+            this._streamArrows.push(new ArrowFromStreamNullaryFn(this).to(pairObject) as ArrowFromStreamNullaryFn);
+            this._streamArrows[this._streamArrows.length - 1].draw();
+          }
+        }
+
+        for (const arrow of this._streamArrows) {
+          arrow.draw();
+        }
+      }
+
+      Layout.pendingFnLink = false;
+    }
+
     this.addReference(firstReference);
   }
 
@@ -139,6 +170,16 @@ export class FnValue extends Value implements IHoverable {
 
   arrow(): ArrowFromFn | undefined {
     return this._arrow;
+  }
+
+  addArrow(target: any): void {
+    // Check how many arrows already point to this specific target
+    const currentCount = this._streamArrows.filter(arrow => arrow.target === target).length;
+    
+    // Pass the count as the offsetIndex
+    this._streamArrows?.push(
+      new ArrowFromStreamNullaryFn(this, currentCount).to(target) as ArrowFromStreamNullaryFn
+    );
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -191,13 +232,27 @@ export class FnValue extends Value implements IHoverable {
   }
 
   draw(): React.ReactNode {
+    const pairs = CseMachine.getStreamLineage((this.data as any).id);
+    this._streamArrows = [];
+    if (CseMachine.getPairCreationMode()) {
+      // Clear arrows to prevent duplicates from multiple draw calls
+
+      if(pairs != undefined) {
+        for(const pair of pairs) {
+          const target = Layout.values.get(pair);
+          if (target) {
+            this.addArrow(target);
+          }
+        }
+      }
+    }
     if (this.fnName === undefined) {
       throw new Error('Closure has no main reference and is not initialised!');
     }
     //update center x accourding to the same id from cache
     this.centerX = this.x() + this.radius * 2;
     this.enclosingFrame = Frame.getFrom(this.data.environment);
-    if (this.enclosingFrame) {
+    if (this.enclosingFrame && !CseMachine.getPairCreationMode()) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
     }
 
@@ -301,6 +356,7 @@ export class FnValue extends Value implements IHoverable {
           </KonvaLabel>
         )}
         {this._arrow?.draw()}
+        {this._streamArrows.map((arrow, index) => arrow.draw())}
       </React.Fragment>
     );
   }

@@ -1,4 +1,5 @@
 import { KonvaEventObject } from 'konva/lib/Node';
+import Closure from 'js-slang/dist/cse-machine/closure';
 import React from 'react';
 import { Group } from 'react-konva';
 
@@ -36,6 +37,24 @@ export class ArrayValue extends Value implements IHoverable {
     super();
     Layout.memoizeValue(data, this);
     this.addReference(firstReference);
+      /** handling pairs for stream visualisation */
+    if (data[1] instanceof Closure) {
+      // console.log("array with nullary func id: " + data[1].id);
+      // console.log("array is created from fn with id: " + CseMachine.findKeyByValueInMap(data.id));
+      // CseMachine.viewStreamLineage;
+      const originFnId = CseMachine.findKeyByValueInMap(data.id);
+      // console.log("origin fn: " + originFnId);
+      // console.log(Layout.values);
+      if (originFnId != undefined) {
+        // console.log("result of finding fn that created this array: " + Layout.values.get(originFnId));
+        const originFnValue = Layout.values.get(originFnId);
+        if (originFnValue instanceof FnValue) {
+          originFnValue.addArrow(this);
+        } else {
+          Layout.pendingFnLink = true;
+        }
+      }
+    }
   }
 
   handleNewReference(newReference: ReferenceType): void {

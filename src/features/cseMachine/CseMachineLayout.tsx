@@ -127,10 +127,21 @@ export class Layout {
   static contentGroupRef: RefObject<Group | null> = React.createRef();
   static animationGroupRef: RefObject<Group | null> = React.createRef();
 
+  // For pair creation layouts:
+  static currentDarkPairs: React.ReactNode;
+  static currentLightPairs: React.ReactNode;
+  static currentStackDarkPairs: React.ReactNode;
+  static currentStackTruncDarkPairs: React.ReactNode;
+  static currentStackLightPairs: React.ReactNode;
+  static currentStackTruncLightPairs: React.ReactNode;
+
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
   static invisiblePaddingHorizontal: number = 300;
   static scrollContainerRef: RefObject<HTMLDivElement | null> = React.createRef();
+
+  // STREAM VISUALISATION
+  static pendingFnLink: boolean = false;
 
   static updateDimensions(width: number, height: number) {
     // update the size of the scroll container and stage given the width and height of the sidebar content.
@@ -178,6 +189,13 @@ export class Layout {
     Layout.currentStackTruncDark = undefined;
     Layout.currentStackLight = undefined;
     Layout.currentStackTruncLight = undefined;
+
+    Layout.currentLightPairs = undefined;
+    Layout.currentDarkPairs = undefined;
+    Layout.currentStackDarkPairs = undefined;
+    Layout.currentStackTruncDarkPairs = undefined;
+    Layout.currentStackLightPairs = undefined;
+    Layout.currentStackTruncLightPairs = undefined;
     // clear/initialize data and value arrays
     Layout.values.clear();
     arrowSelection.clearSelection();
@@ -673,6 +691,15 @@ export class Layout {
   }
 
   static draw(): React.ReactNode {
+    const pairValues: Value[] = Array.from(Layout.values.values()).filter(v => {
+      try {
+        const data = (v as any).data;
+        return Array.isArray(data) && data.length === 2;
+      } catch {
+        return false;
+      }
+    });
+    
     if (Layout.key !== 0) {
       return Layout.prevLayout;
     } else {
@@ -719,7 +746,11 @@ export class Layout {
                     listening={false}
                   />
                   <KonvaGroup ref={Layout.contentGroupRef}>
-                    {Layout.levels.map(level => level.draw())}
+                    {CseMachine.getPairCreationMode() 
+                      ? pairValues.map(v => v.draw())
+                      : Layout.levels.map(level => level.draw())
+                    } 
+                    {console.log()}
                     {CseMachine.getControlStash() && Layout.controlComponent.draw()}
                     {CseMachine.getControlStash() && Layout.stashComponent.draw()}
                   </KonvaGroup>
@@ -734,26 +765,51 @@ export class Layout {
           </div>
         </div>
       );
+
       Layout.prevLayout = layout;
-      if (CseMachine.getPrintableMode()) {
-        if (CseMachine.getControlStash()) {
-          if (CseMachine.getStackTruncated()) {
-            Layout.currentStackTruncLight = layout;
+      if (CseMachine.getPairCreationMode()) {
+        if (CseMachine.getPrintableMode()) {
+          if (CseMachine.getControlStash()) {
+            if (CseMachine.getStackTruncated()) {
+              Layout.currentStackTruncLightPairs = layout;
+            } else {
+              Layout.currentStackLightPairs = layout;
+            }
           } else {
-            Layout.currentStackLight = layout;
+            Layout.currentLightPairs = layout;
           }
         } else {
-          Layout.currentLight = layout;
+          if (CseMachine.getControlStash()) {
+            if (CseMachine.getStackTruncated()) {
+              Layout.currentStackTruncDarkPairs = layout;
+            } else {
+              Layout.currentStackDarkPairs = layout;
+            }
+          } else {
+            Layout.currentDarkPairs = layout;
+          }
         }
       } else {
-        if (CseMachine.getControlStash()) {
-          if (CseMachine.getStackTruncated()) {
-            Layout.currentStackTruncDark = layout;
+        if (CseMachine.getPrintableMode()) {
+          if (CseMachine.getControlStash()) {
+            if (CseMachine.getStackTruncated()) {
+              Layout.currentStackTruncLight = layout;
+            } else {
+              Layout.currentStackLight = layout;
+            }
           } else {
-            Layout.currentStackDark = layout;
+            Layout.currentLight = layout;
           }
         } else {
-          Layout.currentDark = layout;
+          if (CseMachine.getControlStash()) {
+            if (CseMachine.getStackTruncated()) {
+              Layout.currentStackTruncDark = layout;
+            } else {
+              Layout.currentStackDark = layout;
+            }
+          } else {
+            Layout.currentDark = layout;
+          }
         }
       }
 

@@ -69,7 +69,7 @@
     "immer": "^9.0.21",
     "java-slang": "^1.0.13",
     "js-cookie": "^3.0.5",
-    "js-slang": "^1.0.89",
+    "js-slang": "file:../js-slang",
     "js-yaml": "^4.1.0",
     "konva": "^10.0.0",
     "lodash": "^4.17.21",
@@ -200,6 +200,7 @@
   },
   "resolutions": {
     "@types/estree": "1.0.8",
-    "vite": "^8.0.0"
+    "vite": "^8.0.0",
+    "js-slang": "portal:/home/yokohama/code/official/js-slang"
   }
 }

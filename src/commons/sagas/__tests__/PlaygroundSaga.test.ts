@@ -88,7 +88,8 @@ describe('Playground saga tests', () => {
           currentStep: -1,
           stepsTotal: 0,
           breakpointSteps: [],
-          changepointSteps: []
+          changepointSteps: [],
+          streamsPointSteps: []
         }
       }
     };
@@ -157,7 +158,8 @@ describe('Playground saga tests', () => {
           currentStep: -1,
           stepsTotal: 0,
           breakpointSteps: [],
-          changepointSteps: []
+          changepointSteps: [],
+          streamsPointSteps: []
         }
       }
     };
@@ -226,7 +228,8 @@ describe('Playground saga tests', () => {
           currentStep: -1,
           stepsTotal: 0,
           breakpointSteps: [],
-          changepointSteps: []
+          changepointSteps: [],
+          streamsPointSteps: []
         }
       }
     };
@@ -278,7 +281,8 @@ describe('Playground saga tests', () => {
           currentStep: -1,
           stepsTotal: 0,
           breakpointSteps: [],
-          changepointSteps: []
+          changepointSteps: [],
+          streamsPointSteps: []
         }
       }
     };
@@ -349,7 +353,8 @@ describe('Playground saga tests', () => {
           currentStep: -1,
           stepsTotal: 0,
           breakpointSteps: [],
-          changepointSteps: []
+          changepointSteps: [],
+          streamsPointSteps: []
         }
       }
     };
@@ -409,7 +414,8 @@ describe('Playground saga tests', () => {
           currentStep: -1,
           stepsTotal: 0,
           breakpointSteps: [],
-          changepointSteps: []
+          changepointSteps: [],
+          streamsPointSteps: []
         }
       }
     };
