@@ -394,32 +394,29 @@ export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[])
 
   // Match levels such that oldLevels.length == newLevels.length
   // in case Clear Dead Frames causes an entire Level to be cleared
-  if (oldLevels.length != newLevels.length) {
-    const tempOldLevels: Level[] = []; // Stores levels that are not cleared
+  const normalizedOldLevels =
+    oldLevels.length === newLevels.length
+      ? oldLevels
+      : oldLevels.filter(({ frames }) => frames.some(f => f.isLive));
 
-    // Find the levels that are not cleared (has at least one live frame)
-    for (const oldLevel of oldLevels) {
-      const framesOfLevel: Frame[] = oldLevel.frames;
-      for (const frame of framesOfLevel) {
-        if (frame.isLive) {
-          tempOldLevels.push(oldLevel);
-          break;
-        }
-      }
-    }
-    oldLevels = tempOldLevels;
-  }
+  // Defensive check in case layout is updated to have more complex frame movements
+  // This error only occurs if the following invariant is violated:
+  // "oldLevels.length != newLevels.length is always due to deletion of levels with only dead frames."
+  // This invariant may be violated if frames can migrate between levels.
+  if (normalizedOldLevels.length !== newLevels.length) {
+    // TODO: Change console.error into throw new Error, and catch them upstream (eg at CseMachine.redraw()),
+    // with centralized error handling for all layout logic.
+    console.error('Level count mismatch for Clear Dead Frames animation, animation not played.');
 
-  // Defensive check in case CSE machine's layout is updated to have more complex frame movements
-  if (oldLevels.length !== newLevels.length) {
-    console.log('Level count mismatch for Clear Dead Frames animation, animation not played.');
+    // Empty array is returned to SideContentCseMachine, causing the animation to not play
+    // since the length of changedFramePairs (the returned value) == 0.
     return [];
   }
 
   // Match each frame that is live
   // Matched frames conceptually represent the same frame, but on different steps (prev vs curr)
-  for (let levelIdx = 0; levelIdx < oldLevels.length; levelIdx++) {
-    const oldLevelFrames = oldLevels[levelIdx].frames;
+  for (let levelIdx = 0; levelIdx < normalizedOldLevels.length; levelIdx++) {
+    const oldLevelFrames = normalizedOldLevels[levelIdx].frames;
     const newLevelFrames = newLevels[levelIdx].frames;
     let oldFrameIdx = 0; // Will always >= newFrameIdx
     let newFrameIdx = 0; // Will always increment one-by-one such that each frame is appended to result
@@ -432,8 +429,11 @@ export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[])
         const newFrame = newLevelFrames[newFrameIdx];
 
         // If oldFrame and newFrame are NOT in the same position, push to result array
-        if (oldFrame.x() != newFrame.x() || oldLevels[levelIdx].y() != newLevels[levelIdx].y()) {
-          result.push([oldLevelFrames[oldFrameIdx], newLevelFrames[newFrameIdx]]);
+        if (
+          oldFrame.x() != newFrame.x() ||
+          normalizedOldLevels[levelIdx].y() != newLevels[levelIdx].y()
+        ) {
+          result.push([oldFrame, newFrame]);
         }
         oldFrameIdx++;
         newFrameIdx++;
