@@ -3,7 +3,7 @@ import type { JSX } from 'react';
 import { Config } from './Config';
 import { Data, Step } from './dataVisualizerTypes';
 import { Tree } from './tree/Tree';
-import { ArrayTreeNode, DataTreeNode } from './tree/TreeNode';
+import { DataTreeNode } from './tree/TreeNode';
 
 /**
  * The data visualizer class.

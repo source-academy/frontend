@@ -1,5 +1,4 @@
 import { Config } from './Config';
-import DataVisualizer from './dataVisualizer';
 import { Data, EmptyList, List, Pair } from './dataVisualizerTypes';
 import { is_list, is_pair } from './list';
 
