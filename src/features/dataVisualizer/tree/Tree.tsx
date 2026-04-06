@@ -75,14 +75,11 @@ export class Tree {
       nodeCount++;
 
       if (genTreeChecker) {
-        node.nodeColor = tree[tree.length - 1];
-        tree.pop();
-        node.nodePos = tree[tree.length - 1];
-        tree.pop();
+        node.nodeColor = DataVisualizer.colorMap.get(tree) ?? 0;
+        node.nodePos = DataVisualizer.posMap.get(tree) ?? 0;
       }
       if (binTreeChecker) {
-        node.nodeColor = tree[tree.length - 1];
-        tree.pop();
+        node.nodeColor = DataVisualizer.colorMap.get(tree) ?? 0;
       }
 
       node.children = tree.map(constructNode);
@@ -103,6 +100,10 @@ export class Tree {
       visitedStructures.set(func, node);
       treeNodes[nodeCount] = node;
       nodeCount++;
+
+      //set genTree and binTree to false since we are rendering a function tree
+      DataVisualizer.isGenTree = false;
+      DataVisualizer.isBinTree = false;
 
       return node;
     }

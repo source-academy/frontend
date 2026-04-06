@@ -3,7 +3,7 @@ import type { JSX } from 'react';
 import { Config } from './Config';
 import { Data, Step } from './dataVisualizerTypes';
 import { Tree } from './tree/Tree';
-import { DataTreeNode } from './tree/TreeNode';
+import { ArrayTreeNode, DataTreeNode } from './tree/TreeNode';
 
 /**
  * The data visualizer class.
@@ -29,6 +29,8 @@ export default class DataVisualizer {
   public static nodeCount: number[] = [];
   public static nodeColor: number[] = [];
   public static longestNodePos: number = 0;
+  public static colorMap: WeakMap<any, number> = new WeakMap();
+  public static posMap: WeakMap<any, number> = new WeakMap();
 
   private steps: Step[] = [];
   private nodeLabel = 0;
@@ -37,6 +39,9 @@ export default class DataVisualizer {
   private constructor() {}
 
   public static isBinaryTree(structures: Data[]): boolean {
+    if (!(structures instanceof Array)) {
+      return false;
+    }
     if (structures[0] === null) {
       return true;
     }
@@ -83,7 +88,7 @@ export default class DataVisualizer {
       if (this.nodeCount[depth] === undefined) {
         this.nodeCount[depth] = 0;
       }
-      structures.push(this.nodeCount[depth]);
+      this.posMap.set(structures, this.nodeCount[depth]);
       if (this.nodeCount[depth] > this.longestNodePos) {
         this.longestNodePos = this.nodeCount[depth];
       }
@@ -96,7 +101,7 @@ export default class DataVisualizer {
       if (newNode) {
         this.nodeColor[depth]++;
       }
-      structures.push(this.nodeColor[depth]);
+      this.colorMap.set(structures, this.nodeColor[depth]);
     }
 
     this.TreeDepth = Math.max(this.TreeDepth, depth);
@@ -108,6 +113,17 @@ export default class DataVisualizer {
   public static init(setSteps: (step: Step[]) => void): void {
     DataVisualizer.setSteps = setSteps;
   }
+
+  /**
+   * Set the visualization mode. This ensures only one mode is active at a time.
+   * @param mode - 'normal' for original view, 'binTree' for binary tree, 'tree' for general tree
+   */
+  public static setMode(mode: 'normal' | 'binTree' | 'tree'): void {
+    DataVisualizer.normalMode = mode === 'normal';
+    DataVisualizer.BinTreeMode = mode === 'binTree';
+    DataVisualizer.treeMode = mode === 'tree';
+  }
+
   // RenderBinaryTree
   public static toggleBinTreeMode(): void {
     DataVisualizer.BinTreeMode = !DataVisualizer.BinTreeMode;

@@ -147,15 +147,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                     justifyContent: 'center'
                   }}
                   onMouseUp={() => {
-                    if (DataVisualizer.getBinTreeMode()) {
-                      DataVisualizer.toggleBinTreeMode();
-                    }
-                    if (DataVisualizer.getTreeMode()) {
-                      DataVisualizer.toggleTreeMode();
-                    }
-                    if (!DataVisualizer.getNormalMode()) {
-                      DataVisualizer.toggleNormalMode();
-                    }
+                    DataVisualizer.setMode('normal');
                     DataVisualizer.redraw();
                   }}
                 >
@@ -175,15 +167,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                     marginLeft: 10
                   }}
                   onMouseUp={() => {
-                    if (DataVisualizer.getTreeMode()) {
-                      DataVisualizer.toggleTreeMode();
-                    }
-                    if (DataVisualizer.getNormalMode()) {
-                      DataVisualizer.toggleNormalMode();
-                    }
-                    if (!DataVisualizer.getBinTreeMode()) {
-                      DataVisualizer.toggleBinTreeMode();
-                    }
+                    DataVisualizer.setMode('binTree');
                     DataVisualizer.redraw();
                   }}
                 >
@@ -206,15 +190,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                     marginLeft: 10
                   }}
                   onMouseUp={() => {
-                    if (DataVisualizer.getBinTreeMode()) {
-                      DataVisualizer.toggleBinTreeMode();
-                    }
-                    if (DataVisualizer.getNormalMode()) {
-                      DataVisualizer.toggleNormalMode();
-                    }
-                    if (!DataVisualizer.getTreeMode()) {
-                      DataVisualizer.toggleTreeMode();
-                    }
+                    DataVisualizer.setMode('tree');
                     DataVisualizer.redraw();
                   }}
                 >
