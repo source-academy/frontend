@@ -270,6 +270,8 @@ export class Frame extends Visible implements IHoverable {
    */
   reassignCoordinatesY(newY: number): void {
     this._y = newY;
+    const relativeTextY = newY - (Config.FontSize + Config.TextPaddingY / 2);
+    this.name.setY(relativeTextY);
   }
 
   reassignWidth(newWidth: number): void {
@@ -301,6 +303,10 @@ export class Frame extends Visible implements IHoverable {
   }
 
   draw(): React.ReactNode {
+    if (CseAnimation.shouldHideFrame(this.environment.id)) {
+      return null;
+    }
+
     return (
       <Group ref={this.ref} key={Layout.key++}>
         {this.name.draw()}

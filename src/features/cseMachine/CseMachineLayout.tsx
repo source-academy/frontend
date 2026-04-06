@@ -757,7 +757,7 @@ export class Layout {
                 </KonvaLayer>
                 <KonvaLayer ref={CseAnimation.layerRef} listening={false}>
                   <KonvaGroup ref={Layout.animationGroupRef}>
-                    {CseMachine.getControlStash() && CseAnimation.animations.map(c => c.draw())}
+                    {CseAnimation.animations.map(c => c.draw())}
                   </KonvaGroup>
                 </KonvaLayer>
               </KonvaStage>
@@ -880,21 +880,18 @@ export class Layout {
       level.frames.forEach(frame => {
         const id = frame.environment.id;
 
-        // get predetermined x coordinate
-        if (cache.framesX.has(id)) {
+        // Get predetermined X and Y coordinates together
+        if (cache.framesX.has(id) && cache.framesY.has(id)) {
           const fixedX = Layout.getGhostFrameX(id)!;
+          const fixedY = Layout.getGhostFrameY(id)!;
+
           frame.reassignCoordinatesX(fixedX);
+          frame.reassignCoordinatesY(fixedY);
+
           frame.bindings.forEach(binding => {
-            binding.reassignCoordinates(fixedX);
+            binding.reassignCoordinates(fixedX, fixedY);
           });
         }
-
-        // TODO: fix y coordinate
-        // get predetermined y coordinate
-        // if (cache.framesY.has(id)) {
-        //   const fixedY = Layout.getGhostFrameY(id)!;
-        //   frame.reassignCoordinatesY(fixedY);
-        // }
 
         // get predetermined width
         if (cache.framesWidth.has(id)) {
