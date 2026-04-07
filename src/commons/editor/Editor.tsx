@@ -462,8 +462,13 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     isEditorAutorun,
     handleEditorEval
   } = props;
+  const handleEditorEvalRef = React.useRef(handleEditorEval);
+  handleEditorEvalRef.current = handleEditorEval;
+
   const keyHandlers: EditorKeyBindingHandlers = {
-    evaluate: handleEditorEval
+    evaluate: () => {
+      handleEditorEvalRef.current();
+    }
   };
 
   const aceEditorProps: IAceEditorProps = {

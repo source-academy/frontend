@@ -62,18 +62,14 @@ const PlaygroundSaga = combineSagaHandlers({
     }
 
     const {
-      context: { chapter: playgroundSourceChapter },
-      editorTabs
+      context: { chapter: playgroundSourceChapter }
     } = yield* selectWorkspace('playground');
 
     if (prevId === SideContentType.substVisualizer) {
       if (newId === SideContentType.mobileEditorRun) return;
-      const hasBreakpoints = editorTabs.find(({ breakpoints }) => breakpoints.find(x => !!x));
 
-      if (!hasBreakpoints) {
-        yield put(WorkspaceActions.toggleUsingSubst(false, workspaceLocation));
-        yield put(WorkspaceActions.clearReplOutput(workspaceLocation));
-      }
+      yield put(WorkspaceActions.toggleUsingSubst(false, workspaceLocation));
+      yield put(WorkspaceActions.clearReplOutput(workspaceLocation));
     }
 
     if (newId !== SideContentType.cseMachine) {

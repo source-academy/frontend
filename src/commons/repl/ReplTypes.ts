@@ -4,4 +4,5 @@ export type OutputProps = {
   output: InterpreterOutput;
   usingSubst?: boolean;
   isHtml?: boolean;
+  showStepperPrompt?: boolean;
 };

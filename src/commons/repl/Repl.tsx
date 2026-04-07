@@ -23,6 +23,7 @@ type StateProps = {
   sourceVariant: Variant;
   externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
+  showStepperPrompt?: boolean;
 };
 
 type DispatchProps = {
@@ -45,6 +46,7 @@ const Repl: React.FC<ReplProps> = props => {
       key={index}
       usingSubst={props.usingSubst ?? false}
       isHtml={props.sourceChapter === Chapter.HTML}
+      showStepperPrompt={props.showStepperPrompt}
     />
   ));
   return (
@@ -97,7 +99,8 @@ export const Output: React.FC<OutputProps> = props => {
       );
     case 'result':
       // We check if we are using Stepper, so we can process the REPL results properly
-      if (props.usingSubst && props.output.value instanceof Array) {
+      const shouldShowStepperPrompt = props.showStepperPrompt ?? false;
+      if (shouldShowStepperPrompt && props.output.value instanceof Array) {
         return (
           <Card>
             <Pre className="log-output">Check out the Stepper tab!</Pre>

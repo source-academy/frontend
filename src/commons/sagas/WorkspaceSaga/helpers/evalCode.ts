@@ -266,7 +266,10 @@ export function* evalCodeSaga(
       }
     }
 
-    const substActiveAndCorrectChapter = context.chapter <= Chapter.SOURCE_2 && substIsActive;
+    const substActiveAndCorrectChapter =
+      actionType !== WorkspaceActions.evalRepl.type &&
+      context.chapter <= Chapter.SOURCE_2 &&
+      substIsActive;
 
     return call(
       runFilesInContext,
