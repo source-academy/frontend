@@ -1,5 +1,5 @@
 import type { Action, AnyAction } from '@reduxjs/toolkit';
-import { put, race, select,take } from 'redux-saga/effects';
+import { put, race, select, take } from 'redux-saga/effects';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
 import { combineSagaHandlers } from '../redux/utils';
@@ -8,7 +8,8 @@ import { getLocation } from '../sideContent/SideContentHelper';
 import {
   type SideContentLocation,
   type SideContentManagerState,
-  SideContentType} from '../sideContent/SideContentTypes';
+  SideContentType
+} from '../sideContent/SideContentTypes';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 
 const isSpawnSideContent = (

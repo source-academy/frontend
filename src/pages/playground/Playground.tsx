@@ -868,11 +868,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
     (editorTabIndex: number, breakpoints: string[]) => {
       const hasBreakpointsInTab = breakpoints.some(Boolean);
 
-      if (hasBreakpointsInTab && playgroundSourceChapter <= Chapter.SOURCE_2) {
+      const hasAnyBreakpointsAfterUpdate = editorTabs.some((tab, index) =>
+        index === editorTabIndex ? hasBreakpointsInTab : tab.breakpoints.some(Boolean)
+      );
+
+      if (hasAnyBreakpointsAfterUpdate && playgroundSourceChapter <= Chapter.SOURCE_2) {
         handleUsingSubst(true);
       }
 
-      if (!hasBreakpointsInTab && selectedTab !== SideContentType.substVisualizer) {
+      if (!hasAnyBreakpointsAfterUpdate && selectedTab !== SideContentType.substVisualizer) {
         handleReplOutputClear();
         handleUsingSubst(false);
       }
@@ -881,6 +885,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
     },
     [
+      editorTabs,
       selectedTab,
       dispatch,
       workspaceLocation,
