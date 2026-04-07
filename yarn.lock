@@ -8766,14 +8766,14 @@ __metadata:
   linkType: hard
 
 "java-slang@npm:^1.0.13":
-  version: 1.0.13
-  resolution: "java-slang@npm:1.0.13"
+  version: 1.0.14
+  resolution: "java-slang@npm:1.0.14"
   dependencies:
     "@types/lodash": "npm:^4.14.198"
     java-parser: "npm:^2.0.5"
     lodash: "npm:^4.17.21"
     peggy: "npm:^4.0.2"
-  checksum: 10c0/8c08c3f534a355a42a99b3ac1d8c967a7f0aaecc86fb5062400fca7a4f412dfe5b2e12b0ac3cd1cf65c0c33bc367190fb956588398433a011733115b9861241e
+  checksum: 10c0/630906d46a7acb10a985bff496a1578e386651c37d250bb106fcea82bd987d8271ba3242a1d6abc16b34f1554d8939b2791091ac97cd63ca17afb51958fd9945
   languageName: node
   linkType: hard
 
