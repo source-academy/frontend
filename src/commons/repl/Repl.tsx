@@ -97,7 +97,7 @@ export const Output: React.FC<OutputProps> = props => {
           <Pre className="log-output">{props.output.consoleLogs.join('\n')}</Pre>
         </Card>
       );
-    case 'result':
+    case 'result': {
       // We check if we are using Stepper, so we can process the REPL results properly
       const shouldShowStepperPrompt = props.showStepperPrompt ?? false;
       if (shouldShowStepperPrompt && props.output.value instanceof Array) {
@@ -115,6 +115,7 @@ export const Output: React.FC<OutputProps> = props => {
       } else {
         return <ResultOutputDisplay output={props.output} />;
       }
+    }
     case 'errors':
       if (props.output.consoleLogs.length === 0) {
         return (
