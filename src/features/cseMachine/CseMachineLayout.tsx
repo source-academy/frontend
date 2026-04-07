@@ -844,23 +844,6 @@ export class Layout {
     return undefined;
   }
 
-    /**
-   * Get the cached y coordinate corresponding to the given environment id, and add offset.
-   * @param envId id of current component in the environment
-   * @returns coordinate of cached position, or undefined if it doesn't exist
-   */
-  static getGhostFrameY(envId: string): number | undefined { // added template
-    if (Layout.clearDeadFrames) {
-      return undefined;
-    }
-    const cache = CseMachine.getMasterLayout();
-    if (cache && cache.framesY.has(envId)) {
-      const fixedY = cache.framesY.get(envId)!;
-      return fixedY;
-    }
-    return undefined;
-  }
-
   /**
    * Get the cached y coordinate corresponding to the given environment id, and add offset.
    * @param envId id of current component in the environment
