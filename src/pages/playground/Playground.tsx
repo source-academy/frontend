@@ -428,12 +428,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
         if (updateCse) {
           CseMachine.clearCachedLayouts();
         }
-<<<<<<< HEAD
         // reset stepper before evaluation
         dispatch(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
         dispatch(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
         dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
-=======
 
         if (playgroundSourceChapter <= Chapter.SOURCE_2) {
           const shouldUseSubst =
@@ -441,7 +439,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
           handleUsingSubst(shouldUseSubst);
         }
 
->>>>>>> 95d5b876 (fix inconsistent stepper alert behaviour)
         dispatch(WorkspaceActions.evalEditor(workspaceLocation));
         CseMachine.setClearDeadFrames(false);
         if (CseMachine.getCenterAlignment()) {
