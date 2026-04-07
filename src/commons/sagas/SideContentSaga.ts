@@ -51,11 +51,14 @@ const SideContentSaga = combineSagaHandlers({
       return;
     }
 
-    if (id === SideContentType.sessionManagement || id === SideContentType.substVisualizer) {
+    if (
+      id === SideContentType.sessionManagement ||
+      id === SideContentType.substVisualizer ||
+      id === SideContentType.cseMachine
+    ) {
       yield put(SideContentActions.endAlertSideContent(id, workspaceLocation));
       return;
     }
-
     const { spawned } = yield race({
       spawned: take(
         (action: AnyAction) =>
