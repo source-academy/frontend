@@ -27,7 +27,7 @@ const SideContentFaceapiDisplay: React.FC = () => {
           style={{ height: 20 }}
           icon={IconNames.CAMERA}
           onClick={takePhoto}
-          text={t('takePicture')}
+          text={t($ => $.takePicture)}
         />
       </div>
       <Divider />
@@ -41,7 +41,7 @@ const SideContentFaceapiDisplay: React.FC = () => {
           style={{ height: 20 }}
           icon={IconNames.RESET}
           onClick={resetPhoto}
-          text={t('reset')}
+          text={t($ => $.reset)}
         />
       </div>
     </div>

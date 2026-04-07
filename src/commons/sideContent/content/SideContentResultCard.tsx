@@ -14,15 +14,15 @@ const buildErrorString = (
     .map(error => {
       switch (error.errorType) {
         case 'timeout':
-          return t('timeout');
+          return t($ => $.timeout);
         case 'syntax':
-          return t('syntax', { line: error.line, errorExplanation: error.errorExplanation });
+          return t($ => $.syntax, { line: error.line, errorExplanation: error.errorExplanation });
         case 'runtime':
-          return t('runtime', { line: error.line, errorExplanation: error.errorExplanation });
+          return t($ => $.runtime, { line: error.line, errorExplanation: error.errorExplanation });
         case 'systemError':
-          return t('systemError', { errorMessage: error.errorMessage });
+          return t($ => $.systemError, { errorMessage: error.errorMessage });
         default:
-          return t('unknown', { errorType: error.errorType });
+          return t($ => $.unknown, { errorType: error.errorType });
       }
     })
     .join('\n\n');

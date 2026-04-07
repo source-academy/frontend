@@ -169,7 +169,7 @@ export const SideContentDataVisualizer = connect(
 )(SideContentDataVisualizerBase);
 
 const makeDataVisualizerTabFrom = (location: SideContentLocation): SideContentTab => ({
-  label: t('sideContent:dataVisualizer.label'),
+  label: t($ => $.dataVisualizer.label, { ns: 'sideContent' }),
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer workspaceLocation={location} />,
   id: SideContentType.dataVisualizer
@@ -179,12 +179,12 @@ const DataVisualizerDefaultText: React.FC = () => {
   const { t } = useTranslation('sideContent', { keyPrefix: 'dataVisualizer' });
   return (
     <p id="data-visualizer-default-text" className={Classes.RUNNING_TEXT}>
-      {t('defaultText')}
+      {t($ => $.defaultText)}
       <br />
       <br />
       <Trans
         ns="sideContent"
-        i18nKey="dataVisualizer.instructions"
+        i18nKey={$ => $.dataVisualizer.instructions}
         components={[
           <code>
             draw_data(x<sub>1</sub>, x<sub>2</sub>, ... x<sub>n</sub>)
@@ -202,7 +202,7 @@ const DataVisualizerDefaultText: React.FC = () => {
       <br />
       <Trans
         ns="sideContent"
-        i18nKey="dataVisualizer.reference"
+        i18nKey={$ => $.dataVisualizer.reference}
         components={[<ItalicLink href={Links.textbookChapter2_2} />]}
       />
     </p>

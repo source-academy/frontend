@@ -128,6 +128,19 @@ export class ContValue extends Value implements IHoverable {
     this.labelRef.current?.hide();
   };
 
+  setArrowSourceHighlightedStyle(): void {
+    if (this.isLive()) {
+      this.setShapesStyle(Config.HoverColor);
+    } else {
+      this.setShapesStyle(Config.HoverDeadColor);
+    }
+  }
+
+  setArrowSourceNormalStyle(): void {
+    const strokeColor = this.isLive() ? defaultStrokeColor() : fadedStrokeColor();
+    this.setShapesStyle(strokeColor);
+  }
+
   draw(): React.ReactNode {
     if (this.enclosingFrame) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;

@@ -33,6 +33,8 @@ export class CseAnimation {
   static readonly defaultDuration = 300;
   static readonly defaultEasing = Easings.StrongEaseInOut;
   private static animationEnabled = false;
+  private static hideReferenceArrows = false;
+  private static hiddenFrameIds = new Set<string>();
   private static currentFrame: Frame;
   private static previousFrame: Frame;
 
@@ -47,6 +49,26 @@ export class CseAnimation {
 
   static disableAnimations(): void {
     CseAnimation.animationEnabled = false;
+  }
+
+  static setHideReferenceArrows(shouldHide: boolean): void {
+    CseAnimation.hideReferenceArrows = shouldHide;
+  }
+
+  static shouldHideReferenceArrows(): boolean {
+    return CseAnimation.hideReferenceArrows;
+  }
+
+  static setHiddenFrameIds(frameIds: Iterable<string>): void {
+    CseAnimation.hiddenFrameIds = new Set(frameIds);
+  }
+
+  static clearHiddenFrameIds(): void {
+    CseAnimation.hiddenFrameIds.clear();
+  }
+
+  static shouldHideFrame(frameId: string): boolean {
+    return CseAnimation.hiddenFrameIds.has(frameId);
   }
 
   static setCurrentFrame(frame: Frame) {

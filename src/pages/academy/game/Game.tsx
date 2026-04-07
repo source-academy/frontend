@@ -70,7 +70,11 @@ const Game: React.FC = () => {
 
     if (window.screen.orientation) {
       if (!isFullscreen) {
-        // @ts-expect-error: lock is not defined in the type definition
+        // TODO: For some reason, the line shows a type error in the IDE,
+        // but not during `yarn tsc`. Hence we have to use `ts-ignore`
+        // instead of `ts-expect-error`.
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore: lock is not defined in the type definition
         // as it is not suppored in some browsers (notably Firefox)
         window.screen.orientation.lock('landscape');
       } else {

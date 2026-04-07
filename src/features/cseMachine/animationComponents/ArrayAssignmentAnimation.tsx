@@ -77,7 +77,7 @@ export class ArrayAssignmentAnimation extends Animatable {
     ) {
       this.arrayUnitText = this.arrayUnit.value.text;
       this.arrayUnitTextAnimation = new AnimatedTextComponent({
-        text: this.arrayUnitText.partialStr,
+        text: this.arrayUnitText['partialStr'],
         x: this.arrayUnitText.x(),
         y: this.arrayUnitText.y() - 16,
         opacity: 0

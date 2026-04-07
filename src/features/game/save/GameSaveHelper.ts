@@ -75,7 +75,7 @@ export const createEmptyGameSaveState = (): GameSaveState => {
   return {
     lastCheckpointPlayed: 0,
     currentLocation: undefined,
-    currentPhase: GamePhaseType.Menu,
+    currentPhase: GamePhaseType.Explore,
     chapterNewlyCompleted: false,
     incompleteTasks: [],
     completedTasks: [],

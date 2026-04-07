@@ -38,10 +38,10 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
   const autograderTooltip = useMemo(
     () => (
       <div className="autograder-help-tooltip">
-        <p>{t('tooltip.clickTestcase')}</p>
-        <p>{t('tooltip.executeAll')}</p>
-        <p>{t('tooltip.backgroundInfo')}</p>
-        <p>{t('tooltip.privateTestcases')}</p>
+        <p>{t($ => $.tooltip.clickTestcase)}</p>
+        <p>{t($ => $.tooltip.executeAll)}</p>
+        <p>{t($ => $.tooltip.backgroundInfo)}</p>
+        <p>{t($ => $.tooltip.privateTestcases)}</p>
       </div>
     ),
     [t]
@@ -50,9 +50,18 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
   const testcasesHeader = useMemo(
     () => (
       <div className="testcases-header" data-testid="testcases-header">
-        {columnHeader('header-fn', t('headers.testcase'))}
-        {columnHeader('header-expected', t('headers.expected'))}
-        {columnHeader('header-actual', t('headers.actual'))}
+        {columnHeader(
+          'header-fn',
+          t($ => $.headers.testcase)
+        )}
+        {columnHeader(
+          'header-expected',
+          t($ => $.headers.expected)
+        )}
+        {columnHeader(
+          'header-actual',
+          t($ => $.headers.actual)
+        )}
       </div>
     ),
     [t]
@@ -62,11 +71,23 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
     () => (
       <div className="results-header" data-testid="results-header">
         <div className="header-data">
-          {columnHeader('header-sn', t('headers.sn'))}
-          {columnHeader('header-status', t('headers.status'))}
+          {columnHeader(
+            'header-sn',
+            t($ => $.headers.sn)
+          )}
+          {columnHeader(
+            'header-status',
+            t($ => $.headers.status)
+          )}
         </div>
-        {columnHeader('header-expected', t('headers.expected'))}
-        {columnHeader('header-actual', t('headers.actual'))}
+        {columnHeader(
+          'header-expected',
+          t($ => $.headers.expected)
+        )}
+        {columnHeader(
+          'header-actual',
+          t($ => $.headers.actual)
+        )}
       </div>
     ),
     [t]
@@ -89,7 +110,7 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
         </div>
       ) : (
         <div className="noResults" data-testid="noResults">
-          {t('noTestcases')}
+          {t($ => $.noTestcases)}
         </div>
       ),
     [testcases, testcasesHeader, t, handleTestcaseEval, workspaceLocation]
@@ -106,7 +127,7 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
         </div>
       ) : (
         <div className="noResults" data-testid="noResults">
-          {t('noResults')}
+          {t($ => $.noResults)}
         </div>
       ),
     [autogradingResults, resultsHeader, t]
@@ -126,7 +147,7 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
         minimal={true}
         onClick={toggleTestcases}
       >
-        <span>{t('testcases')}</span>
+        <span>{t($ => $.testcases)}</span>
         <Tooltip content={autograderTooltip} placement={PopoverPosition.LEFT}>
           <Icon icon={IconNames.HELP} />
         </Tooltip>
@@ -134,7 +155,11 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
       <Collapse isOpen={showsTestcases} keepChildrenMounted={true}>
         {testcaseCards}
       </Collapse>
-      {collapseButton(t('results'), showsResults, toggleResults)}
+      {collapseButton(
+        t($ => $.results),
+        showsResults,
+        toggleResults
+      )}
       <Collapse isOpen={showsResults} keepChildrenMounted={true}>
         {resultCards}
       </Collapse>

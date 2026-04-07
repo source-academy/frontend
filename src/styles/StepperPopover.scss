@@ -1,49 +1,42 @@
-/* Styling for the stepper popover box */
-.stepper-popover {
-  .stepper-display {
-    font:
-      16px / normal 'Inconsolata',
-      'Consolas',
-      monospace;
-  }
+// Styling Stepper Popover box
+@import 'stepperVariables';
 
+%stepper-tokens {
   .stepper-literal {
-    color: #ff6078;
+    color: $stepper-literal-color;
   }
-
   .stepper-operator {
-    color: #f89210;
+    color: $stepper-operator-color;
   }
-
   .stepper-identifier {
-    color: #f8d871;
+    color: $stepper-identifier-color;
   }
-
   .stepper-conditional-operator {
-    color: #ffffff;
+    color: $stepper-conditional-color;
   }
-
   .stepper-mu-term {
     font-weight: bold;
     cursor: pointer;
   }
+}
 
-  /* Support for nested blueprint/global code blocks */
+.stepper-popover {
+  @extend %stepper-tokens;
+
+  .stepper-display {
+    font: $stepper-display-font;
+  }
+
   .bp4-code-block {
-    .stepper-literal {
-      color: #ff6078;
-    }
+    @extend %stepper-tokens;
+  }
+}
 
-    .stepper-operator {
-      color: #f89210;
-    }
+.sa-substituter {
+  @extend %stepper-tokens;
 
-    .stepper-identifier {
-      color: #f8d871;
-    }
-
-    .stepper-conditional-operator {
-      color: #ffffff;
-    }
+  .stepper-display {
+    font: $stepper-display-font;
+    color: $stepper-conditional-color;
   }
 }

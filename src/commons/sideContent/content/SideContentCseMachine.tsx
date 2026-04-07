@@ -21,9 +21,11 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
 import type { PlaygroundWorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+import { ClearDeadFramesAnimation } from 'src/features/cseMachine/animationComponents/ClearDeadFramesAnimation';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
 import { Layout } from 'src/features/cseMachine/CseMachineLayout';
+import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
 import { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
@@ -337,13 +339,39 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                   <AnchorButton
                     onMouseUp={() => {
                       if (this.state.visualization) {
+                        const prevLevels = Layout.levels;
                         this.setState(
                           prevState => ({
                             clearDeadFrames: true
                           }),
                           () => {
                             CseMachine.setClearDeadFrames(this.state.clearDeadFrames);
-                            CseMachine.clearCachedLayouts();
+                            CseMachine.clearLiveLayouts();
+
+                            // Temporarily store the original draw function
+                            const originalDraw = Layout.draw;
+
+                            // Overriding because the animations are causing
+                            // Konva objects to not be drawn
+                            Layout.draw = () => {
+                              try {
+                                const currLevels = Layout.levels;
+                                const changedFramePairs = computeFramesCoordChange(
+                                  prevLevels,
+                                  currLevels
+                                );
+                                if (changedFramePairs.length > 0) {
+                                  CseAnimation.animations.push(
+                                    new ClearDeadFramesAnimation(changedFramePairs)
+                                  );
+                                  CseAnimation.enableAnimations();
+                                }
+
+                                return originalDraw.apply(Layout);
+                              } finally {
+                                Layout.draw = originalDraw;
+                              }
+                            };
                             CseMachine.redraw();
                           }
                         );
@@ -449,7 +477,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   private sliderShift = (newValue: number) => {
     if (this.state.clearDeadFrames) {
       CseMachine.setClearDeadFrames(false);
-      CseMachine.clearCachedLayouts();
+      CseMachine.clearLiveLayouts();
       CseMachine.redraw();
     }
     this.props.handleStepUpdate(newValue);
@@ -598,7 +626,7 @@ export const SideContentCseMachine = connect(
 )(SideContentCseMachineBase);
 
 const makeCseMachineTabFrom = (location: NonStoryWorkspaceLocation): SideContentTab => ({
-  label: t('sideContent:cseMachine.label'),
+  label: t($ => $.cseMachine.label, { ns: 'sideContent' }),
   iconName: IconNames.GLOBE,
   body: <SideContentCseMachine workspaceLocation={location} />,
   id: SideContentType.cseMachine
@@ -627,12 +655,12 @@ const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
         <span>
           <Trans
             ns="sideContent"
-            i18nKey="cseMachine.csecDescription"
+            i18nKey={$ => $.cseMachine.csecDescription}
             components={[<ItalicLink href={Links.textbookChapter3_2} />]}
           />{' '}
           <Trans
             ns="sideContent"
-            i18nKey="cseMachine.javaCsec"
+            i18nKey={$ => $.cseMachine.javaCsec}
             components={[<ItalicLink href={`${Links.sourceDocs}java_csec/`} />]}
           />
         </span>
@@ -640,30 +668,30 @@ const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
         <span>
           <Trans
             ns="sideContent"
-            i18nKey="cseMachine.cseDescription"
+            i18nKey={$ => $.cseMachine.cseDescription}
             components={[<ItalicLink href={Links.textbookChapter3_2} />]}
           />
         </span>
       )}
       <br />
       <br />
-      {t('instructions')}
+      {t($ => $.instructions)}
       <br />
       <br />
       <Divider />
-      {t('shortcutsTitle')}
+      {t($ => $.shortcutsTitle)}
       <br />
       <br />
-      {t('shortcuts.a')}
+      {t($ => $.shortcuts.a)}
       <br />
-      {t('shortcuts.e')}
+      {t($ => $.shortcuts.e)}
       <br />
-      {t('shortcuts.f')}
+      {t($ => $.shortcuts.f)}
       <br />
-      {t('shortcuts.b')}
+      {t($ => $.shortcuts.b)}
       <br />
       <br />
-      {t('shortcutsNote')}
+      {t($ => $.shortcutsNote)}
     </div>
   );
 };

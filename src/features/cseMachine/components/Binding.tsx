@@ -57,6 +57,8 @@ export class Binding extends Visible {
       this._y = this.frame.y() + Config.FramePaddingY;
     }
 
+    const GlobalDefaultText = this.keyString === Config.GlobalFrameDefaultText;
+    const colon = isConstant ? 'constant' : 'variable';
     this.keyString += isConstant ? Config.ConstantColon : Config.VariableColon;
     this.value = Layout.createValue(data, this);
 
@@ -66,7 +68,16 @@ export class Binding extends Visible {
         : (this.value.height() - Config.FontSize) / 2;
 
     this.keyYOffset = keyYOffset;
-    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, { faded: !this.isLive });
+    const availableKeyWidth = GlobalDefaultText
+      ? Config.FrameDefaultWidth - Config.FramePaddingX * 2 // for GlobalFrameDefaultText, use default frame width
+      : (Config.FrameDefaultWidth - Config.TextPaddingX - Config.FramePaddingX * 2) / 2;
+
+    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, {
+      maxWidth: availableKeyWidth,
+      faded: !this.isLive,
+      bindingType: colon,
+      parentFrame: this.frame
+    });
 
     const printFnDescriptionHeight =
       CseMachine.getPrintableMode() &&
@@ -101,13 +112,13 @@ export class Binding extends Visible {
    * Reassigns the coordinates according to the final position of this frame
    * @param newX taken from cached layout
    */
-  reassignCoordinates(newX: number): void {
+  reassignCoordinates(newX: number, newY: number): void {
     if (this.prevBinding) {
       this._x = this.prevBinding.x();
       this._y = this.prevBinding.y() + this.prevBinding.height() + Config.TextPaddingY;
     } else {
       this._x = newX + Config.FramePaddingX;
-      this._y = this.frame.y() + Config.FramePaddingY;
+      this._y = newY + Config.FramePaddingY;
     }
   }
 
@@ -135,7 +146,7 @@ export class Binding extends Visible {
       !(this.value instanceof PrimitiveValue) &&
       !(this.value instanceof UnassignedValue)
     ) {
-      this.arrow = new ArrowFromText(this.key).to(this.value);
+      this.arrow = new ArrowFromText(this.key, this.frame).to(this.value);
     }
 
     return (

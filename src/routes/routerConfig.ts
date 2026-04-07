@@ -59,7 +59,7 @@ export const playgroundOnlyRouterConfig: RouteObject[] = [
     path: '*',
     lazy: Application,
     children: [
-      { path: '', loader: () => replace('/playground') },
+      { index: true, loader: () => replace('/playground') },
       { path: 'playground', lazy: Playground },
       ...commonChildrenRoutes,
       { path: '*', lazy: NotFound }
@@ -117,7 +117,7 @@ export const getFullAcademyRouterConfig = ({
       lazy: Application,
       children: [
         {
-          path: '',
+          index: true,
           loader: () => homePageRedirect() || replace(`/courses/${courseId}`)
         },
         {

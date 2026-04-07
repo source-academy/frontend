@@ -17,6 +17,14 @@ export class ArrayNullUnit extends Visible {
     this._width = reference.width();
   }
 
+  setX(x: number): void {
+    this._x = x;
+  }
+
+  setY(y: number): void {
+    this._y = y;
+  }
+
   draw(): React.ReactNode {
     // needs to be recalculated here unlike arrayunit, as primitive value treat it as a text
     this._x = this.reference.x();

@@ -17,7 +17,6 @@ export default class GameActionExecuter {
    */
   public static async executeGameAction(actionType: GameActionType, actionParams: any) {
     const globalAPI = GameGlobalAPI.getInstance();
-
     switch (actionType) {
       case GameActionType.AddItem:
         globalAPI.addItem(actionParams.gameItemType, actionParams.locationId, actionParams.id);
@@ -111,6 +110,13 @@ export default class GameActionExecuter {
         await globalAPI.showQuiz(actionParams.id);
         globalAPI.enableKeyboardInput(true);
         return;
+      case GameActionType.ChangeLocationTo:
+        await globalAPI.swapPhase(GamePhaseType.Sequence);
+        await globalAPI.changeLocationTo(actionParams.id);
+        return;
+      case GameActionType.ShowTopics:
+        await globalAPI.showTopicList();
+        return;
       default:
         return;
     }
@@ -151,6 +157,39 @@ export default class GameActionExecuter {
       case GameActionType.ShowObjectLayer:
       case GameActionType.Delay:
       case GameActionType.ShowQuiz:
+      case GameActionType.ChangeLocationTo:
+      case GameActionType.ShowTopics:
+        return false;
+    }
+  }
+
+  /**
+   * Determine whether the action is about talking or not for the cursor changer
+   *
+   * @param actionType - the type of action
+   * @returns
+   */
+  public static isTalkAction(actionType: GameActionType) {
+    switch (actionType) {
+      case GameActionType.ShowDialogue:
+      case GameActionType.ShowTopics:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * Determine whether the action leads to the change of the location
+   *
+   * @param actionType - the type of action
+   * @returns
+   */
+  public static isMoveAction(actionType: GameActionType) {
+    switch (actionType) {
+      case GameActionType.ChangeLocationTo:
+        return true;
+      default:
         return false;
     }
   }

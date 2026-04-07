@@ -46,15 +46,23 @@ const Dropdown: React.FC = () => {
     ) : null;
 
   const myCourses = isLoggedIn ? (
-    <MenuItem icon={IconNames.PROPERTIES} onClick={toggleMyCoursesOpen} text={t('My Courses')} />
+    <MenuItem
+      icon={IconNames.PROPERTIES}
+      onClick={toggleMyCoursesOpen}
+      text={t($ => $['My Courses'])}
+    />
   ) : null;
 
   const createCourse = isLoggedIn ? (
-    <MenuItem icon={IconNames.ADD} onClick={toggleCreateCourseOpen} text={t('Create Course')} />
+    <MenuItem
+      icon={IconNames.ADD}
+      onClick={toggleCreateCourseOpen}
+      text={t($ => $['Create Course'])}
+    />
   ) : null;
 
   const logout = isLoggedIn ? (
-    <MenuItem icon={IconNames.LOG_OUT} text={t('Logout')} onClick={handleLogOut} />
+    <MenuItem icon={IconNames.LOG_OUT} text={t($ => $['Logout'])} onClick={handleLogOut} />
   ) : null;
 
   const menu = (
@@ -62,9 +70,9 @@ const Dropdown: React.FC = () => {
       {profile}
       {myCourses}
       {createCourse}
-      <MenuItem icon={IconNames.COG} onClick={toggleSettingsOpen} text={t('Settings')} />
-      <MenuItem icon={IconNames.HELP} onClick={toggleAboutOpen} text={t('About')} />
-      <MenuItem icon={IconNames.ERROR} onClick={toggleHelpOpen} text={t('Help')} />
+      <MenuItem icon={IconNames.COG} onClick={toggleSettingsOpen} text={t($ => $['Settings'])} />
+      <MenuItem icon={IconNames.HELP} onClick={toggleAboutOpen} text={t($ => $['About'])} />
+      <MenuItem icon={IconNames.ERROR} onClick={toggleHelpOpen} text={t($ => $['Help'])} />
       {logout}
     </Menu>
   );

@@ -41,7 +41,7 @@ export class AssignmentAnimation extends Animatable {
       this.bindingAnimation = new AnimatedTextComponent({
         ...defaultOptions,
         ...getNodePosition(this.binding.value.text),
-        text: this.binding.value.text.partialStr,
+        text: this.binding.value.text['partialStr'],
         x: this.binding.value.text.x() - 16,
         opacity: 0
       });
