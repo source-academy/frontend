@@ -146,7 +146,7 @@ export class Binding extends Visible {
       !(this.value instanceof PrimitiveValue) &&
       !(this.value instanceof UnassignedValue)
     ) {
-      this.arrow = new ArrowFromText(this.key).to(this.value);
+      this.arrow = new ArrowFromText(this.key, this.frame).to(this.value);
     }
 
     return (

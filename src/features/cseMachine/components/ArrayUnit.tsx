@@ -7,6 +7,7 @@ import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data } from '../CseMachineTypes';
 import {
+  defaultBackgroundColor,
   defaultStrokeColor,
   defaultTextColor,
   fadedStrokeColor,
@@ -126,6 +127,8 @@ export class ArrayUnit extends Visible {
           width={this.width()}
           height={this.height()}
           stroke={strokeColor}
+          fill={defaultBackgroundColor()}
+          listening={false}
           hitStrokeWidth={Config.DataHitStrokeWidth}
           fillEnabled={true}
           cornerRadius={cornerRadius}
@@ -138,6 +141,7 @@ export class ArrayUnit extends Visible {
           {...indexProps}
           text={`${this.index}`}
           stroke={strokeColor}
+          listening={false}
         />
         {this.value.draw()}
         {this.arrow?.draw()}
