@@ -2,7 +2,8 @@ import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Chapter } from 'js-slang/dist/langs';
 import { Frame } from 'js-slang/dist/types';
-import { Group } from 'konva/lib/Group';
+import { Group as KonvaGroupNode } from 'konva/lib/Group';
+import { Layer as KonvaLayerNode } from 'konva/lib/Layer';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Stage } from 'konva/lib/Stage';
 import React, { RefObject } from 'react';
@@ -124,13 +125,23 @@ export class Layout {
   static currentStackLight: React.ReactNode;
   static currentStackTruncLight: React.ReactNode;
   static stageRef: RefObject<Stage | null> = React.createRef();
-  static contentGroupRef: RefObject<Group | null> = React.createRef();
-  static animationGroupRef: RefObject<Group | null> = React.createRef();
+  static contentGroupRef: RefObject<KonvaGroupNode | null> = React.createRef();
+  static animationGroupRef: RefObject<KonvaGroupNode | null> = React.createRef();
+  static arrowUnderlayLayerRef: RefObject<KonvaLayerNode | null> = React.createRef();
+  static underlayArrows: React.ReactNode[] = [];
 
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
   static invisiblePaddingHorizontal: number = 300;
   static scrollContainerRef: RefObject<HTMLDivElement | null> = React.createRef();
+
+  static resetUnderlayArrows() {
+    Layout.underlayArrows = [];
+  }
+
+  static registerUnderlayArrow(arrow: React.ReactNode) {
+    Layout.underlayArrows.push(arrow);
+  }
 
   static updateDimensions(width: number, height: number) {
     // update the size of the scroll container and stage given the width and height of the sidebar content.
@@ -182,6 +193,7 @@ export class Layout {
     Layout.values.clear();
     arrowSelection.clearSelection();
     Layout.key = 0;
+    Layout.resetUnderlayArrows();
 
     // deep copy so we don't mutate the context
     Layout.globalEnvNode = deepCopyTree(envTree).root;
@@ -676,6 +688,11 @@ export class Layout {
     if (Layout.key !== 0) {
       return Layout.prevLayout;
     } else {
+      Layout.resetUnderlayArrows();
+      const levelNodes = Layout.levels.map(level => level.draw());
+      const controlNode = CseMachine.getControlStash() ? Layout.controlComponent.draw() : null;
+      const stashNode = CseMachine.getControlStash() ? Layout.stashComponent.draw() : null;
+      const underlayArrows = [...Layout.underlayArrows];
       const layout = (
         <div className="sa-cse-machine" data-testid="sa-cse-machine">
           <div
@@ -707,6 +724,20 @@ export class Layout {
                 onWheel={Layout.zoomStage}
                 className={classes['draggable']}
               >
+                <KonvaLayer ref={Layout.arrowUnderlayLayerRef}>
+                  <KonvaRect
+                    {...ShapeDefaultProps}
+                    x={0}
+                    y={0}
+                    width={Layout.width()}
+                    height={Layout.height()}
+                    fillEnabled={true}
+                    strokeEnabled={false}
+                    key={Layout.key++}
+                    listening={false}
+                  />
+                  {underlayArrows}
+                </KonvaLayer>
                 <KonvaLayer>
                   <KonvaRect
                     {...ShapeDefaultProps}
@@ -714,19 +745,19 @@ export class Layout {
                     y={0}
                     width={Layout.width()}
                     height={Layout.height()}
-                    fill={defaultBackgroundColor()}
+                    // fill={defaultBackgroundColor()}
                     key={Layout.key++}
                     listening={false}
                   />
                   <KonvaGroup ref={Layout.contentGroupRef}>
-                    {Layout.levels.map(level => level.draw())}
-                    {CseMachine.getControlStash() && Layout.controlComponent.draw()}
-                    {CseMachine.getControlStash() && Layout.stashComponent.draw()}
+                    {levelNodes}
+                    {controlNode}
+                    {stashNode}
                   </KonvaGroup>
                 </KonvaLayer>
                 <KonvaLayer ref={CseAnimation.layerRef} listening={false}>
                   <KonvaGroup ref={Layout.animationGroupRef}>
-                    {CseMachine.getControlStash() && CseAnimation.animations.map(c => c.draw())}
+                    {CseAnimation.animations.map(c => c.draw())}
                   </KonvaGroup>
                 </KonvaLayer>
               </KonvaStage>
@@ -849,21 +880,18 @@ export class Layout {
       level.frames.forEach(frame => {
         const id = frame.environment.id;
 
-        // get predetermined x coordinate
-        if (cache.framesX.has(id)) {
+        // Get predetermined X and Y coordinates together
+        if (cache.framesX.has(id) && cache.framesY.has(id)) {
           const fixedX = Layout.getGhostFrameX(id)!;
+          const fixedY = Layout.getGhostFrameY(id)!;
+
           frame.reassignCoordinatesX(fixedX);
+          frame.reassignCoordinatesY(fixedY);
+
           frame.bindings.forEach(binding => {
-            binding.reassignCoordinates(fixedX);
+            binding.reassignCoordinates(fixedX, fixedY);
           });
         }
-
-        // TODO: fix y coordinate
-        // get predetermined y coordinate
-        // if (cache.framesY.has(id)) {
-        //   const fixedY = Layout.getGhostFrameY(id)!;
-        //   frame.reassignCoordinatesY(fixedY);
-        // }
 
         // get predetermined width
         if (cache.framesWidth.has(id)) {
