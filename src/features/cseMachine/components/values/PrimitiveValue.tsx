@@ -85,12 +85,18 @@ export class PrimitiveValue extends Value {
   }
 
   isLive(): boolean {
-    if (this.text instanceof Text) {
-      return this.text.options.faded === false;
-    } else if (this.text instanceof ArrayNullUnit) {
-      const refPrnt = this.text.reference.parent;
+    const reference = this.references[0];
+    if (!reference) return false;
+
+    if (reference instanceof Binding) {
+      return this.isReferenced() && reference.frame.isLive;
+    }
+
+    if (this.text instanceof Text || this.text instanceof ArrayNullUnit) {
+      const refPrnt = reference.parent;
       return refPrnt.isReferenced() && refPrnt.isEnclosingFrameLive();
     }
+
     return false;
   }
 
