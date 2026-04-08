@@ -1873,11 +1873,11 @@ export const getVersionHistory = async (
   }
   const versions = await resp.json();
   return versions
-    .filter((v: any) => typeof v.version?.code === 'string' && v.inserted_at != null)
+    .filter((v: any) => typeof v.content?.code === 'string' && v.inserted_at != null)
     .map((v: any) => ({
       id: String(v.id),
       name: v.name,
-      code: v.version.code,
+      code: v.content.code,
       timestamp: new Date(
         /[Z+]/.test(v.inserted_at.slice(19)) ? v.inserted_at : v.inserted_at + 'Z'
       ).getTime()
