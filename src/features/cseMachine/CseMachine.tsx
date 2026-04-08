@@ -450,6 +450,7 @@ export default class CseMachine {
         CseAnimation.updateAnimation();
         this.setVis(Layout.draw());
       }
+      this.setVis(Layout.draw());
       Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
     }
   }

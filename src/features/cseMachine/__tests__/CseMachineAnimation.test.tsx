@@ -80,12 +80,13 @@ async function testAnimationComponent<
   mockLayer.add(node);
 
   const timings = args.deltas.map(d => d * CseAnimation.defaultDuration);
+  const getAnimationTime = () =>
+    (component as unknown as { animation?: Konva.Animation }).animation?.frame?.time ?? 0;
   const checker = () => {
     return new Promise<void>((resolve, reject) => {
       let i = 0;
-      const startTime = performance.now();
       const fn = () => {
-        const elapsed = performance.now() - startTime;
+        const elapsed = getAnimationTime();
         if (timings[i] - elapsed < 50 / 3 || elapsed > timings[i]) {
           const expectedProps = expected(elapsed);
           for (const attr in expectedProps) {
