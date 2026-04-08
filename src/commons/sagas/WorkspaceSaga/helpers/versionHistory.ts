@@ -168,6 +168,12 @@ export function* restoreVersionSaga(
     return;
   }
 
+  // Refetch version history to get the newly created version before renaming
+  yield call(fetchVersionHistorySaga, {
+    payload: { workspaceLocation },
+    type: WorkspaceActions.fetchVersionHistory.type
+  });
+
   // Name the restored version as "(name)-restored"
   const newestVersion: { id: string; timestamp: number } | undefined = yield select(
     (state: OverallState) => {
