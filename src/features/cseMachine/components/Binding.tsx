@@ -177,4 +177,3 @@ export class Binding extends Visible {
     );
   }
 }
-
