@@ -164,6 +164,17 @@ export default class DataVisualizer {
     return DataVisualizer.normalMode;
   }
 
+  public static hasCycle(structures: Data, visited: WeakSet<object> = new WeakSet()): boolean {
+    if (!(structures instanceof Array)) {
+      return false;
+    }
+    if (visited.has(structures)) {
+      return true;
+    }
+    visited.add(structures);
+    return this.hasCycle(structures[0], visited) || this.hasCycle(structures[1], visited);
+  }
+
   public static drawData(structures: Data[]): void {
     if (!DataVisualizer.setSteps) {
       throw new Error('Data visualizer not initialized');
@@ -171,6 +182,27 @@ export default class DataVisualizer {
     if (!DataVisualizer.isRedraw) {
       this.dataRecords.push(structures);
     }
+    const root = structures[0];
+    const isCyclic = this.hasCycle(root);
+    DataVisualizer.nodeCount = [];
+    DataVisualizer.nodeColor = [];
+    this.nodeColor[0] = -1;
+    DataVisualizer.longestNodePos = 0;
+    DataVisualizer.TreeDepth = 0;
+    if (isCyclic) {
+      DataVisualizer.isBinTree = false;
+      DataVisualizer.isGenTree = false;
+    } else {
+      DataVisualizer.isBinTree = this.isBinaryTree(structures);
+      DataVisualizer.isGenTree = this.isGeneralTree(root);
+      if (DataVisualizer.isBinTree || DataVisualizer.isGenTree) {
+        this.initializeTreeMetaData(root, 0, 0, false);
+      }
+    }
+    DataVisualizer._instance.addStep(structures);
+    DataVisualizer.setSteps(DataVisualizer._instance.steps);
+
+    /*
     DataVisualizer.isBinTree = this.isBinaryTree(structures[0]);
     DataVisualizer.isGenTree = this.isGeneralTree(structures[0]);
     DataVisualizer.nodeCount = [];
@@ -182,6 +214,7 @@ export default class DataVisualizer {
 
     DataVisualizer._instance.addStep(structures);
     DataVisualizer.setSteps(DataVisualizer._instance.steps);
+    */
   }
 
   public static clearWithData(): void {
