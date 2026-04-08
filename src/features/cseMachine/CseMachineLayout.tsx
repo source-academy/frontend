@@ -715,7 +715,7 @@ export class Layout {
       return Layout.prevLayout;
     } else {
       Layout.resetUnderlayArrows();
-      const levelNodes = Layout.levels.map(level => level.draw());
+      const levelNodes = CseMachine.getPairCreationMode() ? pairValues.map(v => v.draw()) : Layout.levels.map(level => level.draw());
       const controlNode = CseMachine.getControlStash() ? Layout.controlComponent.draw() : null;
       const stashNode = CseMachine.getControlStash() ? Layout.stashComponent.draw() : null;
       const underlayArrows = [...Layout.underlayArrows];
@@ -776,11 +776,6 @@ export class Layout {
                     listening={false}
                   />
                   <KonvaGroup ref={Layout.contentGroupRef}>
-                    {CseMachine.getPairCreationMode()
-                      ? pairValues.map(v => v.draw())
-                      : Layout.levels.map(level => level.draw())}
-                    {CseMachine.getControlStash() && Layout.controlComponent.draw()}
-                    {CseMachine.getControlStash() && Layout.stashComponent.draw()}
                     {levelNodes}
                     {controlNode}
                     {stashNode}
