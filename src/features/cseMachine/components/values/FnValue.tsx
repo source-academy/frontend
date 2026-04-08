@@ -29,8 +29,8 @@ import {
   truncateFunctionTooltip
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
-import { ArrowFromStreamNullaryFn } from '../arrows/ArrowFromStreamNullaryFn';
 import { ArrowFromFnTooltip } from '../arrows/ArrowFromFnTooltip';
+import { ArrowFromStreamNullaryFn } from '../arrows/ArrowFromStreamNullaryFn';
 import { Binding } from '../Binding';
 import { Frame } from '../Frame';
 import { ArrayValue } from './ArrayValue';
@@ -295,7 +295,7 @@ export class FnValue extends Value implements IHoverable {
     //update center x accourding to the same id from cache
     this.centerX = this.x() + this.radius * 2;
     this.enclosingFrame = Frame.getFrom(this.data.environment);
-    if (this.enclosingFrame && !CseMachine.getPairCreationMode()) {
+    if (this.enclosingFrame) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
     }
     if (!this.tooltipArrow) {

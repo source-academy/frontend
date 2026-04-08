@@ -1,3 +1,4 @@
+import { R } from 'ace-builds-internal/lib/bidiutil';
 import { Context } from 'js-slang';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { parse } from 'js-slang/dist/parser/parser';
@@ -47,6 +48,7 @@ export default class CseMachine {
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
   private static pairCreationMode: boolean = false;
+  private static streamVisualisationArrowsMode: boolean = false;
   private static centerAlignment: boolean = false;
   private static centerAlignmentToggled: boolean = false;
   private static arrowOriginFilters: ArrowOriginFilters = {
@@ -61,7 +63,7 @@ export default class CseMachine {
     CseMachine.printableMode = !CseMachine.printableMode;
   }
   public static toggleControlStash(): void {
-    CseMachine.pairCreationMode = false;
+    //CseMachine.pairCreationMode = false;
     CseMachine.controlStash = !CseMachine.controlStash;
   }
   public static toggleStackTruncated(): void {
@@ -71,6 +73,9 @@ export default class CseMachine {
     CseMachine.controlStash = false;
     CseMachine.pairCreationMode = !CseMachine.pairCreationMode;
     CseMachine.redraw();
+  }
+  public static toggleStreamVisualisationArrowsMode() {
+    CseMachine.streamVisualisationArrowsMode = !CseMachine.streamVisualisationArrowsMode;
   }
   public static setClearDeadFrames(enabled: boolean): void {
     Layout.clearDeadFrames = enabled;
@@ -191,6 +196,9 @@ export default class CseMachine {
   }
   public static getPairCreationMode(): boolean {
     return CseMachine.pairCreationMode;
+  }
+  public static getStreamVisualisationArrowsMode() { 
+    return CseMachine.streamVisualisationArrowsMode;
   }
   public static isControl(): boolean {
     return this.control ? !this.control.isEmpty() : false;
