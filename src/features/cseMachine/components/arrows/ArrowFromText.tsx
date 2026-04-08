@@ -1,5 +1,6 @@
 import { Config } from '../../CseMachineConfig';
 import { StepsArray } from '../../CseMachineTypes';
+import { Frame } from '../Frame';
 import { Text } from '../Text';
 import { ArrayValue } from '../values/ArrayValue';
 import { Value } from '../values/Value';
@@ -7,13 +8,29 @@ import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromText extends GenericArrow<Text, Value> {
-  constructor(from: Text) {
+  constructor(
+    from: Text,
+    private readonly sourceFrame: Pick<Frame, 'x' | 'y' | 'width' | 'height'>
+  ) {
     super(from);
     this.isLive = from.options.faded === undefined ? true : !from.options.faded; // Text items are always live
   }
 
   protected updateIsLive(): void {
     this.isLive = this.source.options.faded === undefined ? true : !this.source.options.faded;
+  }
+
+  protected getOriginFilterKey() {
+    return 'text' as const;
+  }
+
+  protected getSourceFrameBounds() {
+    return {
+      x: this.sourceFrame.x(),
+      y: this.sourceFrame.y(),
+      width: this.sourceFrame.width(),
+      height: this.sourceFrame.height()
+    };
   }
 
   protected calculateSteps() {

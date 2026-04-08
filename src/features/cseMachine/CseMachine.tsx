@@ -4,6 +4,7 @@ import { parse } from 'js-slang/dist/parser/parser';
 import React from 'react';
 
 import { arrowSelection } from './components/arrows/ArrowSelection';
+import { CseAnimation } from './CseMachineAnimation';
 import { Layout, LayoutCache } from './CseMachineLayout';
 import { EnvTree, EnvTreeNode } from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
@@ -314,6 +315,7 @@ export default class CseMachine {
     // Apply Fixed Positions
     if (CseMachine.getMasterLayout()) {
       Layout.applyFixedPositions();
+      CseAnimation.updateAnimation();
     }
     this.setVis(Layout.draw());
     this.setIsStepLimitExceeded(context.runtime.control.isEmpty());
@@ -331,6 +333,7 @@ export default class CseMachine {
           CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
         }
         Layout.applyFixedPositions();
+        CseAnimation.updateAnimation();
         this.setVis(Layout.draw());
         this.centerAlignmentToggled = false;
       }
@@ -341,6 +344,7 @@ export default class CseMachine {
           CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
         }
         Layout.applyFixedPositions();
+        CseAnimation.updateAnimation();
       }
 
       if (
@@ -389,8 +393,10 @@ export default class CseMachine {
           CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
         }
         Layout.applyFixedPositions();
+        CseAnimation.updateAnimation();
         this.setVis(Layout.draw());
       }
+      this.setVis(Layout.draw());
       Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
     }
   }

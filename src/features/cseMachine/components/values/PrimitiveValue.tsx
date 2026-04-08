@@ -98,8 +98,8 @@ export class PrimitiveValue extends Value {
         this._y = reference.y() + (reference.height() - Config.FontSize) / 2;
       }
 
-      (this.text as any)._x = this.x();
-      (this.text as any)._y = this.y();
+      this.text.setX(this.x());
+      this.text.setY(this.y());
     }
     return <React.Fragment key={Layout.key++}>{this.text.draw()}</React.Fragment>;
   }

@@ -9,6 +9,7 @@ import { Layout } from '../CseMachineLayout';
 import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   defaultActiveColor,
+  defaultBackgroundColor,
   defaultStrokeColor,
   fadedStrokeColor,
   getTextWidth,
@@ -275,6 +276,8 @@ export class Frame extends Visible implements IHoverable {
    */
   reassignCoordinatesY(newY: number): void {
     this._y = newY;
+    const relativeTextY = newY - (Config.FontSize + Config.TextPaddingY / 2);
+    this.name.setY(relativeTextY);
   }
 
   reassignWidth(newWidth: number): void {
@@ -306,6 +309,10 @@ export class Frame extends Visible implements IHoverable {
   }
 
   draw(): React.ReactNode {
+    if (CseAnimation.shouldHideFrame(this.environment.id)) {
+      return null;
+    }
+
     return (
       <Group ref={this.ref} key={Layout.key++}>
         {this.name.draw()}
@@ -329,6 +336,7 @@ export class Frame extends Visible implements IHoverable {
           onMouseLeave={this.onMouseLeave}
           listening={false}
           key={Layout.key++}
+          fill={defaultBackgroundColor()}
         />
         {this.bindings.map(binding => binding.draw())}
         {this.arrow?.draw()}
