@@ -64,7 +64,8 @@ export class ControlItem extends Visible implements IHoverable {
         this._x + this._width,
         this._y + this._height / 2,
         reference.x(),
-        reference.y() + reference.height() / 2 + reference.name.height()
+        reference.y() + reference.height() / 2 + reference.name.height(),
+        { route: 'manhattan' }
       );
     }
   }

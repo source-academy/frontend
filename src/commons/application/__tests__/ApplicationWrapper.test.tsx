@@ -24,7 +24,7 @@ describe('ApplicationWrapper', () => {
   test('ApplicationWrapper renders NotFound on unknown routes (Full Academy)', async () => {
     const routerConfig = getFullAcademyRouterConfig({
       name: 'Bob',
-      isLoggedIn: false,
+      isLoggedIn: true,
       courseId: 1
     });
 
