@@ -39,14 +39,8 @@ export class ArrayValue extends Value implements IHoverable {
     this.addReference(firstReference);
     /** handling pairs for stream visualisation */
     if (data[1] instanceof Closure) {
-      // console.log("array with nullary func id: " + data[1].id);
-      // console.log("array is created from fn with id: " + CseMachine.findKeyByValueInMap(data.id));
-      // CseMachine.viewStreamLineage;
       const originFnId = CseMachine.findKeyByValueInMap(data.id);
-      // console.log("origin fn: " + originFnId);
-      // console.log(Layout.values);
       if (originFnId != undefined) {
-        // console.log("result of finding fn that created this array: " + Layout.values.get(originFnId));
         const originFnValue = Layout.values.get(originFnId);
         if (originFnValue instanceof FnValue) {
           originFnValue.addArrow(this);
