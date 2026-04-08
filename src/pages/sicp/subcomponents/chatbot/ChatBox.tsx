@@ -1,13 +1,7 @@
 import { Button } from '@blueprintjs/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Tokens } from 'src/commons/application/types/SessionTypes';
-import { useSession, useTokens } from 'src/commons/utils/Hooks';
-import {
-  continueChat,
-  continueGuestChat,
-  initChat,
-  initGuestChat
-} from 'src/features/sicp/chatCompletion/api';
+import { useTokens } from 'src/commons/utils/Hooks';
+import { continueChat, initChat } from 'src/features/sicp/chatCompletion/api';
 import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import classes from 'src/styles/Chatbot.module.scss';
 import { v4 as uuid } from 'uuid';
@@ -52,8 +46,7 @@ const ChatBox: React.FC<Props> = ({
   const [messages, setMessages] = useState<ChatMessage[]>(() => [createInitialMessage()]);
   const [userInput, setUserInput] = useState('');
   const [maxContentSize, setMaxContentSize] = useState(1000);
-  const { isLoggedIn } = useSession();
-  const tokens = useTokens({ throwWhenEmpty: false });
+  const tokens = useTokens();
 
   const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value);
@@ -72,12 +65,7 @@ const ChatBox: React.FC<Props> = ({
     const currentSection = getSection();
     const currentText = getText();
 
-    const chatPromise =
-      isLoggedIn && tokens
-        ? continueChat(tokens as Tokens, userInput, currentSection, currentText)
-        : continueGuestChat(userInput, currentSection, currentText);
-
-    chatPromise
+    continueChat(tokens, userInput, currentSection, currentText)
       .then(resp => {
         setMessages(prev => [...prev, { id: uuid(), role: 'assistant', content: resp.response }]);
       })
@@ -85,7 +73,7 @@ const ChatBox: React.FC<Props> = ({
         setMessages(prev => [...prev, createErrorMessage()]);
       })
       .finally(() => setIsLoading(false));
-  }, [isLoggedIn, tokens, userInput, getSection, getText]);
+  }, [tokens, userInput, getSection, getText]);
 
   const keyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
     e => {
@@ -97,9 +85,7 @@ const ChatBox: React.FC<Props> = ({
   );
 
   const resetChat = useCallback(() => {
-    const initPromise = isLoggedIn && tokens ? initChat(tokens as Tokens) : initGuestChat();
-
-    initPromise
+    initChat(tokens)
       .then(resp => {
         const conversationMessages = resp.messages;
         const maxMessageSize = resp.maxContentSize;
@@ -118,7 +104,7 @@ const ChatBox: React.FC<Props> = ({
       .catch(() => {
         setMessages([createInitialMessage()]);
       });
-  }, [isLoggedIn, tokens]);
+  }, [tokens]);
 
   useEffect(() => {
     resetChat();

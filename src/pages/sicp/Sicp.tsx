@@ -6,6 +6,7 @@ import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
+import { useSession } from 'src/commons/utils/Hooks';
 import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
@@ -43,6 +44,7 @@ const Sicp: React.FC = () => {
   const refs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
   const location = useLocation();
+  const { isLoggedIn } = useSession();
 
   function getSection() {
     // To discard the '/sicpjs/'
@@ -198,7 +200,7 @@ const Sicp: React.FC = () => {
           )}
         </CodeSnippetContext.Provider>
       </SicpErrorBoundary>
-      {Constants.featureFlags.enableSicpChatbot && (
+      {isLoggedIn && Constants.featureFlags.enableSicpChatbot && (
         <Chatbot getSection={getSection} getText={getText} />
       )}
     </div>
