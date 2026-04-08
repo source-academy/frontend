@@ -687,6 +687,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
     CseMachine.redraw();
     this.forceUpdate();
   };
+}
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
   state: OverallState,
