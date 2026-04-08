@@ -2653,7 +2653,8 @@ describe('RESTORE_VERSION', () => {
             }
           ],
           isLoading: false,
-          isHistoryPanelOpen: false
+          isHistoryPanelOpen: false,
+          isAutoSaving: false
         }
       }
     };
@@ -2691,7 +2692,8 @@ describe('RESTORE_VERSION', () => {
             }
           ],
           isLoading: false,
-          isHistoryPanelOpen: false
+          isHistoryPanelOpen: false,
+          isAutoSaving: false
         }
       }
     };
@@ -2767,7 +2769,8 @@ describe('NAME_VERSION', () => {
             }
           ],
           isLoading: false,
-          isHistoryPanelOpen: false
+          isHistoryPanelOpen: false,
+          isAutoSaving: false
         }
       }
     };
@@ -2800,7 +2803,8 @@ describe('NAME_VERSION', () => {
             }
           ],
           isLoading: false,
-          isHistoryPanelOpen: false
+          isHistoryPanelOpen: false,
+          isAutoSaving: false
         }
       }
     };
@@ -2831,7 +2835,8 @@ describe('NAME_VERSION', () => {
             }
           ],
           isLoading: false,
-          isHistoryPanelOpen: false
+          isHistoryPanelOpen: false,
+          isAutoSaving: false
         }
       }
     };

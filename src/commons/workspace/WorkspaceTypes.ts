@@ -29,6 +29,7 @@ export type VersionHistoryState = {
   readonly versions: CodeVersion[];
   readonly isLoading: boolean;
   readonly isHistoryPanelOpen: boolean;
+  readonly isAutoSaving: boolean;
 };
 
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'saveFailed';

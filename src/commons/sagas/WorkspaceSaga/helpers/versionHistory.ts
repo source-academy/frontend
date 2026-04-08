@@ -203,71 +203,90 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
     return false;
   }
 
-  // Skip auto-save for team assessments
-  const isTeamAssessment: boolean = yield select((state: OverallState) => {
-    const assessmentId = state.workspaces.assessment.currentAssessment;
-    if (assessmentId === undefined) return false;
-    const overview = state.session.assessmentOverviews?.find(o => o.id === assessmentId);
-    return overview ? overview.maxTeamSize !== 1 : false;
-  });
-
-  if (isTeamAssessment) {
-    return false;
-  }
-
-  // Get the current code from the active editor tab
-  const { editorTabs, activeEditorTabIndex } = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation]
+  // If another save is already in flight for this workspace, wait for it to finish before proceeding.
+  const isAlreadySaving: boolean = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].versionHistory.isAutoSaving
   );
-
-  if (activeEditorTabIndex === null) {
-    return false;
+  if (isAlreadySaving) {
+    yield take(
+      (action: any) =>
+        action.type === WorkspaceActions.setIsAutoSaving.type &&
+        action.payload.workspaceLocation === workspaceLocation &&
+        action.payload.isAutoSaving === false
+    );
   }
 
-  const code = editorTabs[activeEditorTabIndex].value;
+  yield put(WorkspaceActions.setIsAutoSaving(workspaceLocation, true));
 
-  const questionId: number | undefined = yield call(getCurrentQuestionId, workspaceLocation);
-
-  if (questionId === undefined) {
-    return false;
-  }
-
-  // Skip if code is unchanged from the latest saved version
-  const latestVersion: string | undefined = yield select((state: OverallState) => {
-    const versions = state.workspaces[workspaceLocation].versionHistory.versions;
-    if (versions.length === 0) return undefined;
-    return versions.reduce((latest, v) => (v.timestamp > latest.timestamp ? v : latest)).code;
-  });
-
-  if (code === latestVersion) {
-    yield put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'));
-    return false;
-  }
-
-  // Submit the answer; the backend handles saving as a version.
-  yield put(SessionActions.submitAnswer(questionId, code));
-
-  // Wait for submit to complete before refreshing
-  yield take(
-    (action: any) =>
-      action.type === WorkspaceActions.updateSaveStatus.type &&
-      action.payload.workspaceLocation === workspaceLocation &&
-      (action.payload.saveStatus === 'saved' || action.payload.saveStatus === 'saveFailed')
-  );
-
-  // Refresh version history only if the panel is open;
-  const isHistoryPanelOpen: boolean = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].versionHistory.isHistoryPanelOpen
-  );
-
-  if (isHistoryPanelOpen) {
-    yield call(fetchVersionHistorySaga, {
-      payload: { workspaceLocation },
-      type: WorkspaceActions.fetchVersionHistory.type
+  try {
+    // Skip auto-save for team assessments
+    const isTeamAssessment: boolean = yield select((state: OverallState) => {
+      const assessmentId = state.workspaces.assessment.currentAssessment;
+      if (assessmentId === undefined) return false;
+      const overview = state.session.assessmentOverviews?.find(o => o.id === assessmentId);
+      return overview ? overview.maxTeamSize !== 1 : false;
     });
-  }
 
-  return true;
+    if (isTeamAssessment) {
+      return false;
+    }
+
+    // Get the current code from the active editor tab
+    const { editorTabs, activeEditorTabIndex } = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation]
+    );
+
+    if (activeEditorTabIndex === null) {
+      return false;
+    }
+
+    const code = editorTabs[activeEditorTabIndex].value;
+
+    const questionId: number | undefined = yield call(getCurrentQuestionId, workspaceLocation);
+
+    if (questionId === undefined) {
+      return false;
+    }
+
+    // Skip if code is unchanged from the latest saved version
+    const latestVersion: string | undefined = yield select((state: OverallState) => {
+      const versions = state.workspaces[workspaceLocation].versionHistory.versions;
+      if (versions.length === 0) return undefined;
+      return versions.reduce((latest, v) => (v.timestamp > latest.timestamp ? v : latest)).code;
+    });
+
+    if (code === latestVersion) {
+      yield put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'));
+      return false;
+    }
+
+    // Submit the answer; the backend handles saving as a version.
+    yield put(SessionActions.submitAnswer(questionId, code));
+
+    // Wait for submit to complete before refreshing
+    yield take(
+      (action: any) =>
+        action.type === WorkspaceActions.updateSaveStatus.type &&
+        action.payload.workspaceLocation === workspaceLocation &&
+        (action.payload.saveStatus === 'saved' || action.payload.saveStatus === 'saveFailed')
+    );
+
+    // Refresh version history only if the panel is open
+    const isHistoryPanelOpen: boolean = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].versionHistory.isHistoryPanelOpen
+    );
+
+    if (isHistoryPanelOpen) {
+      yield call(fetchVersionHistorySaga, {
+        payload: { workspaceLocation },
+        type: WorkspaceActions.fetchVersionHistory.type
+      });
+    }
+
+    return true;
+  } finally {
+    yield put(WorkspaceActions.setIsAutoSaving(workspaceLocation, false));
+  }
 }
 
 /**

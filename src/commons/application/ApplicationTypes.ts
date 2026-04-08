@@ -411,7 +411,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   versionHistory: {
     versions: [],
     isLoading: false,
-    isHistoryPanelOpen: false
+    isHistoryPanelOpen: false,
+    isAutoSaving: false
   },
   saveStatus: 'idle'
 });

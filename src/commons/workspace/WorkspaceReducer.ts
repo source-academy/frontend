@@ -434,5 +434,9 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(WorkspaceActions.updateSaveStatus, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].saveStatus = action.payload.saveStatus;
+    })
+    .addCase(WorkspaceActions.setIsAutoSaving, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].versionHistory.isAutoSaving = action.payload.isAutoSaving;
     });
 });

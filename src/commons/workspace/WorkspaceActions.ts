@@ -306,6 +306,10 @@ const newActions = createActions('workspace', {
   updateSaveStatus: (workspaceLocation: WorkspaceLocation, saveStatus: SaveStatus) => ({
     workspaceLocation,
     saveStatus
+  }),
+  setIsAutoSaving: (workspaceLocation: WorkspaceLocation, isAutoSaving: boolean) => ({
+    workspaceLocation,
+    isAutoSaving
   })
 });
 
