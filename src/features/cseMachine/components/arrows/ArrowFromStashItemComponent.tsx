@@ -1,5 +1,6 @@
 import { FnValue } from '../../components/values/FnValue';
 import { GlobalFnValue } from '../../components/values/GlobalFnValue';
+import { Config } from '../../CseMachineConfig';
 import { StepsArray } from '../../CseMachineTypes';
 import { Frame } from '../Frame';
 import { StashItemComponent } from '../StashItemComponent';
@@ -26,9 +27,25 @@ export class ArrowFromStashItemComponent extends GenericArrow<
     const to = this.target;
     if (!to) return [];
 
+    const terminalSegmentLength = Math.max(Config.ArrowHeadSize, Config.MinTerminalSegmentLength);
+    const postSourceStraightLength = Config.ArrowPostFrameStraightLength;
+    const targetX = to.x() + (to.x() < from.x() + from.width() / 2 ? to.width() / 2 : 0);
+    const turnY =
+      to.y() >= from.y() + from.height()
+        ? Math.max(
+            from.y() + from.height() + postSourceStraightLength,
+            to.y() - terminalSegmentLength
+          )
+        : Math.max(
+            from.y() + from.height() + postSourceStraightLength,
+            to.y() + terminalSegmentLength
+          );
+
     const steps: StepsArray = [
       (x, y) => [x + from.width() / 2, y + from.height()],
-      (x, y) => [to.x() + (to.x() < x ? to.width() / 2 : 0), to.y()]
+      (x, y) => [x, turnY],
+      () => [targetX, turnY],
+      (x, y) => [x, to.y()]
     ];
 
     return steps;
