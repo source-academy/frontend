@@ -231,6 +231,10 @@ export default class DataVisualizer {
   static redraw() {
     this.isRedraw = true;
     this.clear();
-    return DataVisualizer.dataRecords.map(structures => this.drawData(structures));
+    try {
+      return DataVisualizer.dataRecords.map(structures => this.drawData(structures));
+    } finally {
+      this.isRedraw = false;
+    }
   }
 }
