@@ -151,8 +151,6 @@ export class GeneralTreeDrawer extends OriginalTreeDrawer {
         if (index == 0) {
           myY = y + Config.DistanceY * 2;
           myX = originX;
-          OriginalTreeDrawer.colorCounter++;
-          colorIndex = OriginalTreeDrawer.colorCounter;
         } else {
           myY = y;
           myX = x + Config.NWidth + Config.BoxWidth;

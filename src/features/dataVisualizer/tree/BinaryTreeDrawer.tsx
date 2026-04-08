@@ -161,13 +161,10 @@ export class BinaryTreeDrawer extends OriginalTreeDrawer {
           // NEW left branch
           myY = y + Config.DistanceY * 2;
           myX = x - Config.NWidth * scalerV;
-          OriginalTreeDrawer.colorCounter++;
-          colorIndex = OriginalTreeDrawer.colorCounter;
         } else if (index === 0) {
           // NEW right branch
           myY = y + Config.DistanceY * 2;
           myX = x + Config.NWidth * scalerV;
-          colorIndex = OriginalTreeDrawer.colorCounter;
         } else if (y === parentY + Config.DistanceY) {
           // third box
           myY = y;

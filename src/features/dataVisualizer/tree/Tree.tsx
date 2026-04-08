@@ -125,7 +125,6 @@ export class Tree {
   }
 
   draw(): OriginalTreeDrawer | BinaryTreeDrawer | GeneralTreeDrawer {
-    OriginalTreeDrawer.colorCounter = 0;
     if (DataVisualizer.getBinTreeMode()) {
       return new BinaryTreeDrawer(this);
     } else if (DataVisualizer.getTreeMode()) {

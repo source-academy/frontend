@@ -74,7 +74,7 @@ export default class DataVisualizer {
     return this.isGeneralTree(structures[1]) && this.isGeneralTree(structures[0]);
   }
 
-  public static get_depth(
+  public static initializeTreeMetaData(
     structures: Data[],
     depth: number,
     nodePos: number,
@@ -105,8 +105,8 @@ export default class DataVisualizer {
     }
 
     this.TreeDepth = Math.max(this.TreeDepth, depth);
-    this.get_depth(structures[0], depth + 1, 0, true);
-    this.get_depth(structures[1], depth, nodePos + 1, false);
+    this.initializeTreeMetaData(structures[0], depth + 1, 0, true);
+    this.initializeTreeMetaData(structures[1], depth, nodePos + 1, false);
     return depth;
   }
 
@@ -163,7 +163,7 @@ export default class DataVisualizer {
     DataVisualizer.nodeCount = [];
     DataVisualizer.nodeColor = [];
     this.nodeColor[0] = -1;
-    this.get_depth(structures[0], 0, 0, false);
+    this.initializeTreeMetaData(structures[0], 0, 0, false);
 
     DataVisualizer._instance.addStep(structures);
     DataVisualizer.setSteps(DataVisualizer._instance.steps);

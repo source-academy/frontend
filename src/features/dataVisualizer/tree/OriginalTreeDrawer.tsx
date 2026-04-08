@@ -35,7 +35,6 @@ export class OriginalTreeDrawer {
   // Used to account for backward arrow
   protected minX = 0;
   protected minY = 0;
-  public static colorCounter = 0;
 
   protected leftMargin: number = Config.StrokeWidth / 2;
   protected topMargin: number = Config.StrokeWidth / 2;
