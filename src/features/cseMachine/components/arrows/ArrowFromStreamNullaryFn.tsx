@@ -8,19 +8,6 @@ import { DottedArrow } from './DottedArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromStreamNullaryFn extends DottedArrow {
-  // protected calculateSteps() {
-  //   const from = this.source;
-  //   const to = this.target;
-  //   if (!to) return [];
-
-  //   const steps: StepsArray = [
-  //     (x, y) => [from.x() + from.width(), from.y()]
-  //   ];
-  //   steps.push(() => [to.x(), to.y() + Config.DataUnitHeight / 2]);
-
-  //   return steps;
-  // }
-
   constructor(
     from: FnValue | GlobalFnValue | ContValue,
     public offsetIndex: number = 0
