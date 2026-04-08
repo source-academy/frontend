@@ -15,6 +15,7 @@ import {
   setHoveredCursor,
   setUnhoveredCursor
 } from '../CseMachineUtils';
+import { Frame } from './Frame';
 import { Visible } from './Visible';
 
 export interface TextOptions {
@@ -26,6 +27,8 @@ export interface TextOptions {
   isStringIdentifiable: boolean;
   faded: boolean;
   hidden: boolean;
+  bindingType: 'none' | 'constant' | 'variable';
+  parentFrame?: Frame; // Reference to the frame this text belongs to
 }
 
 export const defaultOptions: TextOptions = {
@@ -36,7 +39,8 @@ export const defaultOptions: TextOptions = {
   fontVariant: Config.FontVariant, // can be normal or small-caps. Default is normal
   isStringIdentifiable: false, // if true, contain strings within double quotation marks "". Default is false
   faded: false, // if true, draws text with a lighter shade
-  hidden: false // if true, hides the text when only when first drawn
+  hidden: false, // if true, hides the text when only when first drawn
+  bindingType: 'none' // if > 0, add colon or equal sign to the end of the text (given from binding)
 };
 
 /** this class encapsulates a string to be drawn onto the canvas */
@@ -44,7 +48,7 @@ export class Text extends Visible implements IHoverable {
   readonly _height: number;
   readonly _width: number;
 
-  readonly partialStr: string; // truncated string representation of data
+  public partialStr: string; // truncated string representation of data
   readonly fullStr: string; // full string representation of data
 
   readonly options: TextOptions = defaultOptions;
@@ -52,15 +56,18 @@ export class Text extends Visible implements IHoverable {
 
   constructor(
     readonly data: Data,
-    readonly _x: number,
-    readonly _y: number,
+    x: number,
+    y: number,
     /** additional options (for customization of text) */
     options: Partial<TextOptions> = {}
   ) {
     super();
+    this._x = x;
+    this._y = y;
     this.options = { ...this.options, ...options };
 
-    const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable } = this.options;
+    const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable, bindingType } =
+      this.options;
 
     this.fullStr = this.partialStr = isSourceObject(data)
       ? data.toReplString()
@@ -69,15 +76,36 @@ export class Text extends Visible implements IHoverable {
         : String(data);
     this._height = fontSize;
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
-    if (widthOf(this.partialStr) > maxWidth) {
+    const originalWidth = widthOf(this.partialStr);
+    this.partialStr =
+      bindingType === 'none'
+        ? this.partialStr
+        : bindingType === 'constant'
+          ? this.partialStr.slice(0, -Config.ConstantColon.length)
+          : this.partialStr.slice(0, -Config.VariableColon.length);
+    if (originalWidth > maxWidth) {
       let truncatedText: string = Config.Ellipsis;
       let i = 0;
-      while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis) < maxWidth) {
-        truncatedText = this.partialStr.substring(0, i++) + Config.Ellipsis;
+      if (bindingType !== 'none') {
+        const colon: string =
+          bindingType === 'constant' ? Config.ConstantColon : Config.VariableColon;
+        while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis + colon) < maxWidth) {
+          truncatedText = this.partialStr.substring(0, i++) + Config.Ellipsis + colon;
+        }
+      } else {
+        while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis) < maxWidth) {
+          truncatedText = this.partialStr.substring(0, i++) + Config.Ellipsis;
+        }
       }
       this._width = widthOf(truncatedText);
       this.partialStr = truncatedText;
     } else {
+      this.partialStr +=
+        bindingType !== 'none'
+          ? bindingType === 'constant'
+            ? Config.ConstantColon
+            : Config.VariableColon
+          : '';
       this._width = Math.max(Config.TextMinWidth, widthOf(this.partialStr));
     }
   }
@@ -101,6 +129,14 @@ export class Text extends Visible implements IHoverable {
     } else {
       this.ref.current?.fill(Config.HoverColor);
     }
+  }
+
+  setX(x: number): void {
+    this._x = x;
+  }
+
+  setY(y: number): void {
+    this._y = y;
   }
 
   setArrowSourceNormalStyle(): void {

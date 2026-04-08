@@ -19,9 +19,7 @@ const stringToPositionMap = {
 
 const stringToGameModeMap = {
   talk: GameMode.Talk,
-  explore: GameMode.Explore,
-  move: GameMode.Move,
-  menu: GameMode.Menu
+  explore: GameMode.Explore
 };
 
 const stringToGameItemMap = {
@@ -60,7 +58,9 @@ const stringToActionTypeMap = {
   navigate_to_assessment: GameActionType.NavigateToAssessment,
   update_assessment_status: GameActionType.UpdateAssessmentStatus,
   delay: GameActionType.Delay,
-  show_quiz: GameActionType.ShowQuiz
+  show_quiz: GameActionType.ShowQuiz,
+  change_location_to: GameActionType.ChangeLocationTo,
+  show_topics: GameActionType.ShowTopics
 };
 
 const stringToGameStateStorageMap = {

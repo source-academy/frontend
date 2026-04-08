@@ -67,8 +67,7 @@ const PlaygroundSaga = combineSagaHandlers({
     } = yield* selectWorkspace('playground');
 
     if (prevId === SideContentType.substVisualizer) {
-      if (newId === SideContentType.mobileEditorRun) return;
-      const hasBreakpoints = editorTabs.find(({ breakpoints }) => breakpoints.find(x => !!x));
+      const hasBreakpoints = editorTabs.some(({ breakpoints }) => breakpoints.some(Boolean));
 
       if (!hasBreakpoints) {
         yield put(WorkspaceActions.toggleUsingSubst(false, workspaceLocation));

@@ -11,6 +11,7 @@ export function createEmptyLocation(): GameLocation {
     previewKey: null,
     modes: new Set([]),
     navigation: new Set([]),
+    back: '',
     talkTopics: new Set([]),
     objects: new Set([]),
     boundingBoxes: new Set([]),

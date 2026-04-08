@@ -31,6 +31,7 @@ export default class DialogueManager {
    * @returns {Promise} the promise that resolves when the entire dialogue has been played
    */
   public async showDialogue(dialogueId: ItemId): Promise<void> {
+    GameGlobalAPI.getInstance().hideTooltip(); // make sure the tooltip is hidden before the dialogue
     const dialogue = GameGlobalAPI.getInstance().getDialogueById(dialogueId);
 
     this.dialogueRenderer = new DialogueRenderer(textTypeWriterStyle);

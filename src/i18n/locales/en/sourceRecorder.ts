@@ -1,0 +1,10 @@
+const translations = {
+  sourceRecorder: {
+    deleteTitle: 'Delete Sourcecast',
+    deleteConfirmation: 'Are you sure to delete this sourcecast entry?',
+    confirmDelete: 'Confirm Delete',
+    cancel: 'Cancel'
+  }
+};
+
+export default translations;

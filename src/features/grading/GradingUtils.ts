@@ -19,19 +19,19 @@ export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined
   }
 
   const headers = [
-    t('gradingCsv.assessmentNumber'),
-    t('gradingCsv.assessmentName'),
-    t('gradingCsv.studentName'),
-    t('gradingCsv.studentUsername'),
-    t('gradingCsv.group'),
-    t('gradingCsv.progress'),
-    t('gradingCsv.questionCount'),
-    t('gradingCsv.questionsGraded'),
-    t('gradingCsv.initialXp'),
-    t('gradingCsv.xpAdjustment'),
-    t('gradingCsv.currentXpExclBonus'),
-    t('gradingCsv.maxXp'),
-    t('gradingCsv.bonusXp')
+    t($ => $.gradingCsv.assessmentNumber),
+    t($ => $.gradingCsv.assessmentName),
+    t($ => $.gradingCsv.studentName),
+    t($ => $.gradingCsv.studentUsername),
+    t($ => $.gradingCsv.group),
+    t($ => $.gradingCsv.progress),
+    t($ => $.gradingCsv.questionCount),
+    t($ => $.gradingCsv.questionsGraded),
+    t($ => $.gradingCsv.initialXp),
+    t($ => $.gradingCsv.xpAdjustment),
+    t($ => $.gradingCsv.currentXpExclBonus),
+    t($ => $.gradingCsv.maxXp),
+    t($ => $.gradingCsv.bonusXp)
   ];
 
   const content = new Blob(
