@@ -196,8 +196,7 @@ export class GlobalFnValue extends Value implements IHoverable {
   }
 
   isLive(): boolean {
-    const id = (this.data as any).id;
-    return id ? Layout.liveObjectIDs.has(id) : false;
+    return true;
   }
 
   draw(): React.ReactNode {

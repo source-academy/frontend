@@ -142,9 +142,10 @@ export class Binding extends Visible {
 
   draw(): React.ReactNode {
     const isLive = this.bindingIsLive();
+    const shouldRenderReferencedValue = this.rendersReferencedValue();
 
     if (Layout.clearDeadFrames && !isLive) {
-      return null;
+      return shouldRenderReferencedValue ? this.value.draw() : null;
     }
 
     this.key.options.faded = !isLive;
@@ -171,8 +172,9 @@ export class Binding extends Visible {
           ? null // omit the key since value is anonymous
           : this.key.draw()}
         {this.arrow?.draw()}
-        {this.rendersReferencedValue() ? this.value.draw() : null}
+        {shouldRenderReferencedValue ? this.value.draw() : null}
       </React.Fragment>
     );
   }
 }
+
