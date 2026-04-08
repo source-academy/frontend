@@ -17,6 +17,10 @@ export class ArrowFromControlItemComponent extends GenericArrow<
     this.isLive = true; // Control items are always live
   }
 
+  protected getOriginFilterKey() {
+    return 'control' as const;
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
