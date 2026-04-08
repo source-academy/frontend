@@ -366,25 +366,33 @@
     flex-shrink: 0;
   }
 
-  .version-history-preview-title {
+  .version-history-diff-labels {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .version-history-diff-label {
+    flex: 1;
+    font-size: 12px;
     font-weight: 600;
-    font-size: 13px;
+    opacity: 0.7;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 220px;
+    text-align: center;
   }
 
-  .version-history-preview-code {
+  .version-history-diff-container {
     flex: 1;
-    overflow: auto;
-    margin: 0;
-    padding: 12px;
-    font-family: 'Consolas', monospace;
-    font-size: 12px;
-    line-height: 1.5;
-    white-space: pre;
-    word-break: normal;
+    position: relative;
+    overflow: hidden;
+
+    .ace-diff-container {
+      position: absolute;
+      inset: 0;
+    }
   }
 }
 

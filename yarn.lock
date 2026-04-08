@@ -3122,6 +3122,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sanity/diff-match-patch@npm:3.2.0":
+  version: 3.2.0
+  resolution: "@sanity/diff-match-patch@npm:3.2.0"
+  checksum: 10c0/0f4be6cc1ae00b2b43eefa1f9a2adee462bad2f0a6a98856d957b9f6c7dca0c42e6a7fd47ddcfa96c7d2a9f389570cb65eb830ca88f6b1b890f1063ad5f7df0b
+  languageName: node
+  linkType: hard
+
 "@sentry-internal/browser-utils@npm:10.47.0":
   version: 10.47.0
   resolution: "@sentry-internal/browser-utils@npm:10.47.0"
@@ -4540,6 +4547,15 @@ __metadata:
   version: 1.43.6
   resolution: "ace-builds@npm:1.43.6"
   checksum: 10c0/33d0159a99650602de83b95766643b8f4f6029fc1ab582e47f7678288cae8e1c89b91747d23be42ec153a88d784fb9488935973f7a100b9093f837ac988f5c96
+  languageName: node
+  linkType: hard
+
+"ace-diff@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "ace-diff@npm:4.0.0"
+  dependencies:
+    "@sanity/diff-match-patch": "npm:3.2.0"
+  checksum: 10c0/e78d95b0f015238f12df2c80ed99e45adf6ddfba9e2a676197f472cc5c39c99ef90769817c869864d24e70604aa4278a8e6700e53b2dc762925885fb2b8895ad
   languageName: node
   linkType: hard
 
@@ -7424,6 +7440,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:4.1.2"
     "@vitest/ui": "npm:4.1.2"
     ace-builds: "npm:^1.42.1"
+    ace-diff: "npm:^4.0.0"
     acorn: "npm:^8.9.0"
     ag-grid-community: "npm:^34.1.1"
     ag-grid-react: "npm:^34.1.1"

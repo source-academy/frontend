@@ -1088,6 +1088,7 @@ It is safe to close this window.`}
       {resetTemplateOverlay}
       <VersionHistoryPanel
         versions={versionHistory.versions}
+        currentCode={editorTabs[activeEditorTabIndex ?? 0]?.value ?? ''}
         isOpen={versionHistory.isHistoryPanelOpen}
         isLoading={versionHistory.isLoading}
         onClose={handleToggleHistoryPanel}

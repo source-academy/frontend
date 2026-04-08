@@ -13,9 +13,11 @@ import classNames from 'classnames';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { CodeVersion } from '../workspace/WorkspaceTypes';
+import AceDiffViewer from './AceDiffViewer';
 
 type Props = {
   versions: CodeVersion[];
+  currentCode: string;
   isOpen: boolean;
   isLoading: boolean;
   onClose: () => void;
@@ -32,6 +34,7 @@ const formatTimestamp = (timestamp: number | null | undefined): string => {
 
 export const VersionHistoryPanel: React.FC<Props> = ({
   versions,
+  currentCode,
   isOpen,
   isLoading,
   onClose,
@@ -47,10 +50,10 @@ export const VersionHistoryPanel: React.FC<Props> = ({
       setSelectedVersionId(null);
       return;
     }
-    const stillValid = sortedVersions.some(v => v.id === selectedVersionId);
-    if (!stillValid) {
-      setSelectedVersionId(sortedVersions[0].id);
-    }
+    setSelectedVersionId(prev => {
+      const stillValid = sortedVersions.some(v => v.id === prev);
+      return stillValid ? prev : sortedVersions[0].id;
+    });
   }, [sortedVersions, isOpen]);
 
   const handleRestore = useCallback(
@@ -101,9 +104,12 @@ export const VersionHistoryPanel: React.FC<Props> = ({
     return (
       <div className="version-history-preview-content">
         <div className="version-history-preview-header">
-          <span className="version-history-preview-title">
-            {version.name || formatTimestamp(version.timestamp)}
-          </span>
+          <div className="version-history-diff-labels">
+            <span className="version-history-diff-label">Current</span>
+            <span className="version-history-diff-label">
+              {version.name || formatTimestamp(version.timestamp)}
+            </span>
+          </div>
           <Button
             icon={IconNames.UNDO}
             intent={Intent.PRIMARY}
@@ -111,12 +117,14 @@ export const VersionHistoryPanel: React.FC<Props> = ({
             onClick={() => handleRestore(version.id)}
           />
         </div>
-        <pre className="version-history-preview-code">{version.code}</pre>
+        <div className="version-history-diff-container">
+          <AceDiffViewer currentCode={currentCode} versionCode={version.code} />
+        </div>
       </div>
     );
   };
 
-  const selectedVersion = versions.find(v => v.id === selectedVersionId);
+  const selectedVersion = sortedVersions.find(v => v.id === selectedVersionId);
 
   const content = isLoading ? (
     <NonIdealState
@@ -144,7 +152,7 @@ export const VersionHistoryPanel: React.FC<Props> = ({
       onClose={onClose}
       title="Version History"
       position="right"
-      size="660px"
+      size="100%"
     >
       {content}
     </Drawer>

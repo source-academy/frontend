@@ -53,6 +53,7 @@
     "@tanstack/react-table": "^8.9.3",
     "@tremor/react": "^1.8.2",
     "ace-builds": "^1.42.1",
+    "ace-diff": "^4.0.0",
     "acorn": "^8.9.0",
     "ag-grid-community": "^34.1.1",
     "ag-grid-react": "^34.1.1",

@@ -568,6 +568,7 @@ const GradingWorkspace: React.FC<Props> = props => {
     <div className={classNames('WorkspaceParent', Classes.DARK)}>
       <VersionHistoryPanel
         versions={versionHistory.versions}
+        currentCode={editorTabs[activeEditorTabIndex ?? 0]?.value ?? ''}
         isOpen={versionHistory.isHistoryPanelOpen}
         isLoading={versionHistory.isLoading}
         onClose={handleToggleHistoryPanel}
