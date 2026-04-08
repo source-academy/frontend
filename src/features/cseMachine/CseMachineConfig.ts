@@ -22,7 +22,7 @@ export const Config = Object.freeze({
 
   FnRadius: 15,
   FnInnerRadius: 3,
-  FnTooltipOpacity: 0.3,
+  FnTooltipOpacity: 0.5,
   FnTooltipTextPadding: 5,
   FnDescriptionMaxWidth: 150,
   FnDescriptionMaxHeight: 60,
