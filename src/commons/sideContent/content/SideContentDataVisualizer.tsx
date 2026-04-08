@@ -138,28 +138,33 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
           )}
           {this.state.steps.length > 0 && (
             <>
-            <ButtonGroup>
-              <Tooltip content="Original View" position="top">
-                <AnchorButton
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                  onMouseUp={() => {
-                    DataVisualizer.setMode('normal');
-                    DataVisualizer.redraw();
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Icon icon="grid-view" />
-                    <Checkbox checked={DataVisualizer.getNormalMode()} style={{ marginTop: 7 }}  tabIndex={-1} aria-hidden="true"/>
-                  </div>
-                </AnchorButton>
-              </Tooltip>
-            </ButtonGroup>
-              
+              <ButtonGroup>
+                <Tooltip content="Original View" position="top">
+                  <AnchorButton
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                    onMouseUp={() => {
+                      DataVisualizer.setMode('normal');
+                      DataVisualizer.redraw();
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <Icon icon="grid-view" />
+                      <Checkbox
+                        checked={DataVisualizer.getNormalMode()}
+                        style={{ marginTop: 7 }}
+                        tabIndex={-1}
+                        aria-hidden="true"
+                      />
+                    </div>
+                  </AnchorButton>
+                </Tooltip>
+              </ButtonGroup>
+
               <Tooltip content="Render Binary Tree" position="top">
                 <AnchorButton
                   style={{
@@ -179,7 +184,12 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                       icon="one-to-many"
                       style={{ transform: 'rotate(90deg)', marginLeft: 6 }}
                     />
-                    <Checkbox checked={DataVisualizer.getBinTreeMode()} style={{ marginTop: 7 }} tabIndex={-1} aria-hidden="true"/>
+                    <Checkbox
+                      checked={DataVisualizer.getBinTreeMode()}
+                      style={{ marginTop: 7 }}
+                      tabIndex={-1}
+                      aria-hidden="true"
+                    />
                   </div>
                 </AnchorButton>
               </Tooltip>
@@ -199,7 +209,12 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <Icon icon="diagram-tree" />
-                    <Checkbox checked={DataVisualizer.getTreeMode()} style={{ marginTop: 7 }} tabIndex={-1} aria-hidden="true"/>
+                    <Checkbox
+                      checked={DataVisualizer.getTreeMode()}
+                      style={{ marginTop: 7 }}
+                      tabIndex={-1}
+                      aria-hidden="true"
+                    />
                   </div>
                 </AnchorButton>
               </Tooltip>

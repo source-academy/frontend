@@ -15,7 +15,7 @@ type Props = {
  * Used with ArrayDrawable and FunctionDrawable.
  */
 const ArrowDrawable: React.FC<Props> = props => {
-  if (DataVisualizer.getBinTreeMode()||DataVisualizer.getTreeMode()) {
+  if (DataVisualizer.getBinTreeMode() || DataVisualizer.getTreeMode()) {
     // RenderBinaryTree
     return (
       <Arrow
