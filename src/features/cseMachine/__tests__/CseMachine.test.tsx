@@ -265,3 +265,18 @@ codeSamplesControlStash.forEach(codeSample => {
     });
   });
 });
+
+test('clearRenderedLayouts preserves used built-in names', () => {
+  CseMachine.usedBuiltInNames.add('map');
+  Layout.currentLight = 'light';
+  Layout.currentDark = 'dark';
+
+  CseMachine.clearRenderedLayouts();
+
+  expect(CseMachine.usedBuiltInNames.has('map')).toBe(true);
+  expect(Layout.currentLight).toBeUndefined();
+  expect(Layout.currentDark).toBeUndefined();
+
+  // Cleanup static state to avoid cross-test pollution.
+  CseMachine.clearCachedLayouts();
+});
