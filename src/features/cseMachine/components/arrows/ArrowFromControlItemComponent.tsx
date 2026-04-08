@@ -37,7 +37,7 @@ export class ArrowFromControlItemComponent extends GenericArrow<
             from.x() + from.width() + postSourceStraightLength,
             to.x() - terminalSegmentLength
           )
-        : Math.max(
+        : Math.min(
             from.x() + from.width() + postSourceStraightLength,
             to.x() + terminalSegmentLength
           );
