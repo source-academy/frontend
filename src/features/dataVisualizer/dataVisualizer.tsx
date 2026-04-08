@@ -14,8 +14,7 @@ import { DataTreeNode } from './tree/TreeNode';
  * clear is used by WorkspaceSaga to reset the visualizer after every "Run" button press
  */
 export default class DataVisualizer {
-  private static counter = 1;
-  private static empty(step: Step[]) {}
+  private static empty() {}
   private static setSteps: (step: Step[]) => void = DataVisualizer.empty;
   public static dataRecords: Data[] = [];
   public static isRedraw = false;
@@ -39,26 +38,40 @@ export default class DataVisualizer {
   private constructor() {}
 
   public static isBinaryTree(structures: Data[]): boolean {
+    if (structures == null) {
+      return true;
+    }
     if (!(structures instanceof Array)) {
       return false;
     }
     if (structures[0] === null) {
       return true;
     }
-    if (!(structures[0] instanceof Array) || structures[0].length != 2) {
+    if (structures.length != 2 || !(structures[1] instanceof Array)) {
       return false;
     }
-    let next = structures[0];
+    let next = structures[1];
+
     let ans = false;
     let count = 0;
     while (next instanceof Array) {
+      if (!(next[0] instanceof Array) && typeof next[0] == typeof structures[0]) {
+        return false;
+      }
       count++;
       next = next[1];
     }
-    if (count == 3) {
+    if (count == 2) {
       ans = true;
     }
-    return ans && this.isBinaryTree(structures[0][1]);
+    //further checks to ensure that the left and right subtrees are also binary trees and structures can be accessed
+    const left = structures[1];
+    const right = structures[1][1];
+    if (left instanceof Array && right instanceof Array) {
+      return ans && this.isBinaryTree(left[0]) && this.isBinaryTree(right[0]);
+    } else {
+      return false;
+    }
   }
 
   public static isGeneralTree(structures: Data[]): boolean {
@@ -158,11 +171,13 @@ export default class DataVisualizer {
     if (!DataVisualizer.isRedraw) {
       this.dataRecords.push(structures);
     }
-    DataVisualizer.isBinTree = this.isBinaryTree(structures);
+    DataVisualizer.isBinTree = this.isBinaryTree(structures[0]);
     DataVisualizer.isGenTree = this.isGeneralTree(structures[0]);
     DataVisualizer.nodeCount = [];
     DataVisualizer.nodeColor = [];
     this.nodeColor[0] = -1;
+    DataVisualizer.longestNodePos = 0;
+    DataVisualizer.TreeDepth = 0;
     this.initializeTreeMetaData(structures[0], 0, 0, false);
 
     DataVisualizer._instance.addStep(structures);
@@ -216,7 +231,6 @@ export default class DataVisualizer {
   static redraw() {
     this.isRedraw = true;
     this.clear();
-    DataVisualizer.counter = -DataVisualizer.counter;
     return DataVisualizer.dataRecords.map(structures => this.drawData(structures));
   }
 }

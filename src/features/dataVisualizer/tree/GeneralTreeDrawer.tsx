@@ -163,17 +163,23 @@ export class GeneralTreeDrawer extends OriginalTreeDrawer {
           this.runningX2 = myX;
         }
 
-        if (node.children![1] instanceof ArrayTreeNode) {
-          if (node.children![1].children![0] instanceof ArrayTreeNode) {
-            originIndex = node.children![1].children![0].nodePos;
-            originX = 0 + this.leftMargin + (Config.NWidth + Config.BoxWidth) * originIndex;
+        const rightChild = node.children?.[1];
+        if (rightChild instanceof ArrayTreeNode) {
+          const rightLeftGrandchild = rightChild.children?.[0];
+          if (rightLeftGrandchild instanceof ArrayTreeNode) {
+            originIndex = rightLeftGrandchild.nodePos;
+            originX = this.leftMargin + (Config.NWidth + Config.BoxWidth) * originIndex;
           }
         }
 
-        if (index == 0 && node.children![0] instanceof ArrayTreeNode) {
-          if (node.children![0].children![0] instanceof ArrayTreeNode) {
-            originIndex = node.children![0].children![0].nodePos;
-            originX = 0 + this.leftMargin + (Config.NWidth + Config.BoxWidth) * originIndex;
+        if (index === 0) {
+          const leftChild = node.children?.[0];
+          if (leftChild instanceof ArrayTreeNode) {
+            const leftLeftGrandchild = leftChild.children?.[0];
+            if (leftLeftGrandchild instanceof ArrayTreeNode) {
+              originIndex = leftLeftGrandchild.nodePos;
+              originX = this.leftMargin + (Config.NWidth + Config.BoxWidth) * originIndex;
+            }
           }
         }
 
