@@ -193,7 +193,7 @@ export default class DataVisualizer {
       DataVisualizer.isBinTree = false;
       DataVisualizer.isGenTree = false;
     } else {
-      DataVisualizer.isBinTree = this.isBinaryTree(structures);
+      DataVisualizer.isBinTree = this.isBinaryTree(root);
       DataVisualizer.isGenTree = this.isGeneralTree(root);
       if (DataVisualizer.isBinTree || DataVisualizer.isGenTree) {
         this.initializeTreeMetaData(root, 0, 0, false);
@@ -201,20 +201,6 @@ export default class DataVisualizer {
     }
     DataVisualizer._instance.addStep(structures);
     DataVisualizer.setSteps(DataVisualizer._instance.steps);
-
-    /*
-    DataVisualizer.isBinTree = this.isBinaryTree(structures[0]);
-    DataVisualizer.isGenTree = this.isGeneralTree(structures[0]);
-    DataVisualizer.nodeCount = [];
-    DataVisualizer.nodeColor = [];
-    this.nodeColor[0] = -1;
-    DataVisualizer.longestNodePos = 0;
-    DataVisualizer.TreeDepth = 0;
-    this.initializeTreeMetaData(structures[0], 0, 0, false);
-
-    DataVisualizer._instance.addStep(structures);
-    DataVisualizer.setSteps(DataVisualizer._instance.steps);
-    */
   }
 
   public static clearWithData(): void {
