@@ -1,4 +1,4 @@
-import { Button, Callout, Divider, H2, Icon, Intent, TextArea } from '@blueprintjs/core';
+import { Button, Callout, Divider, FormGroup, H2, Icon, InputGroup, Intent, TextArea } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -49,7 +49,7 @@ GENERAL INSTRUCTIONS:
 - Format your response using markdown. Use fenced code blocks with the language identifier for all code examples, e.g. \`\`\`javascript ... \`\`\`.`;
 
 const PixelbotConfigPanel: React.FC<Props> = props => {
-  const { pixelbotRoutingPrompt, pixelbotAnswerPrompt } = props.courseConfiguration;
+  const { pixelbotRoutingPrompt, pixelbotAnswerPrompt, feedbackUrl } = props.courseConfiguration;
 
   const [documentMap, setDocumentMap] = useState<string>('');
   const [documentMapError, setDocumentMapError] = useState<string>('');
@@ -138,6 +138,37 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
       </p>
 
       <Divider style={{ marginBottom: '24px' }} />
+
+      <div className={classes['section']}>
+        <div className={classes['section-header-center']}>
+          <div>
+            <div className={classes['section-title']}>Feedback URL</div>
+            <div className={classes['section-helper']}>
+              Set a URL where users can submit feedback. A small "Any feedback?" link will appear in
+              the top-right corner of the navigation bar.
+            </div>
+          </div>
+        </div>
+        <FormGroup inline={false} labelFor="feedbackUrl">
+          <InputGroup
+            id="feedbackUrl"
+            value={feedbackUrl || ''}
+            placeholder="e.g. https://forms.google.com/..."
+            onChange={e => {
+              const updatedConfig = {
+                ...props.courseConfiguration,
+                feedbackUrl: e.target.value
+              };
+              props.setCourseConfiguration(updatedConfig);
+            }}
+          />
+        </FormGroup>
+        <Button
+          text="Save Feedback URL"
+          onClick={() => props.onSave(props.courseConfiguration)}
+          style={{ marginBottom: '8px' }}
+        />
+      </div>
 
       <div className={classes['section']}>
         <div className={classes['section-header-center']}>

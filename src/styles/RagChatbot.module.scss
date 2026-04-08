@@ -37,6 +37,19 @@
   flex-shrink: 0;
 }
 
+.feedback-link {
+  font-size: 11px;
+  color: #888;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #333;
+    text-decoration: underline;
+  }
+}
+
 .chat-header-title {
   font-weight: 600;
   font-size: 14px;

@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Tokens } from 'src/commons/application/types/SessionTypes';
-import { useTokens } from 'src/commons/utils/Hooks';
+import { useSession, useTokens } from 'src/commons/utils/Hooks';
 import { initRagChat, sendRagMessage } from 'src/features/ragChat/api';
 import ChatbotCodeSnippet from 'src/pages/sicp/subcomponents/chatbot/ChatbotCodeSnippet';
 import classes from 'src/styles/RagChatbot.module.scss';
@@ -116,6 +116,7 @@ const RagChatBox: React.FC<Props> = ({
   const [messages, setMessages] = useState<ChatMessage[]>(() => [createInitialMessage()]);
   const [userInput, setUserInput] = useState('');
   const [maxContentSize, setMaxContentSize] = useState(1000);
+  const { feedbackUrl } = useSession();
   const tokens = useTokens({ throwWhenEmpty: false });
 
   const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -195,6 +196,16 @@ const RagChatBox: React.FC<Props> = ({
           title={isExpanded ? 'Shrink chat' : 'Expand chat'}
           className={classes['expand-button']}
         />
+        {feedbackUrl && (
+          <a
+            href={feedbackUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={classes['feedback-link']}
+          >
+            Any feedback?
+          </a>
+        )}
       </div>
       <div className={classes['chat-message']} ref={chatRef}>
         {messages.map(message => (

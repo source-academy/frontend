@@ -38,7 +38,8 @@ const defaultCourseConfig: UpdateCourseConfiguration = {
   llmApiUrl: '',
   llmCourseLevelPrompt: '',
   pixelbotRoutingPrompt: '',
-  pixelbotAnswerPrompt: ''
+  pixelbotAnswerPrompt: '',
+  feedbackUrl: ''
 };
 
 const AdminPanel: React.FC = () => {
@@ -81,7 +82,8 @@ const AdminPanel: React.FC = () => {
       llmApiUrl: session.llmApiUrl,
       llmCourseLevelPrompt: session.llmCourseLevelPrompt,
       pixelbotRoutingPrompt: session.pixelbotRoutingPrompt,
-      pixelbotAnswerPrompt: session.pixelbotAnswerPrompt
+      pixelbotAnswerPrompt: session.pixelbotAnswerPrompt,
+      feedbackUrl: session.feedbackUrl
     });
   }, [
     session.courseName,
@@ -101,7 +103,8 @@ const AdminPanel: React.FC = () => {
     session.llmApiUrl,
     session.llmCourseLevelPrompt,
     session.pixelbotRoutingPrompt,
-    session.pixelbotAnswerPrompt
+    session.pixelbotAnswerPrompt,
+    session.feedbackUrl
   ]);
 
   const tableRef = useRef<ImperativeAssessmentConfigPanel>(null);

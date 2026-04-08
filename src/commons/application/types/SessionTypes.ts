@@ -45,6 +45,7 @@ export type SessionState = {
   readonly llmCourseLevelPrompt?: string;
   readonly pixelbotRoutingPrompt?: string;
   readonly pixelbotAnswerPrompt?: string;
+  readonly feedbackUrl?: string;
   readonly enableOverallLeaderboard?: boolean;
   readonly enableContestLeaderboard?: boolean;
   readonly topLeaderboardDisplay?: number;
@@ -129,6 +130,7 @@ export type CourseConfiguration = {
   llmCourseLevelPrompt?: string;
   pixelbotRoutingPrompt?: string;
   pixelbotAnswerPrompt?: string;
+  feedbackUrl?: string;
 };
 
 export type AdminPanelCourseRegistration = {
