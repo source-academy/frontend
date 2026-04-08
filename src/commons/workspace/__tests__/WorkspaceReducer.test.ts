@@ -2844,4 +2844,32 @@ describe('NAME_VERSION', () => {
   });
 });
 
+describe('UPDATE_SAVE_STATUS', () => {
+  test('sets saveStatus to saving on workspace', () => {
+    const actions = generateActions(l => WorkspaceActions.updateSaveStatus(l, 'saving'));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const workspaceLocation = action.payload.workspaceLocation;
+      expect(result[workspaceLocation].saveStatus).toEqual('saving');
+    });
+  });
+
+  test('sets saveStatus to saved on workspace', () => {
+    const actions = generateActions(l => WorkspaceActions.updateSaveStatus(l, 'saved'));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const workspaceLocation = action.payload.workspaceLocation;
+      expect(result[workspaceLocation].saveStatus).toEqual('saved');
+    });
+  });
+
+  test('sets saveStatus to saveFailed on workspace', () => {
+    const action = WorkspaceActions.updateSaveStatus('assessment', 'saveFailed');
+    const result = WorkspaceReducer(defaultWorkspaceManager, action);
+    expect(result.assessment.saveStatus).toEqual('saveFailed');
+  });
+});
+
 // TODO: Add toggleusingcse

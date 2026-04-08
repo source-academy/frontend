@@ -25,6 +25,7 @@ vi.mock('../../../pages/createStore', () => ({
 }));
 
 import InterpreterActions from '../../application/actions/InterpreterActions';
+import SessionActions from '../../application/actions/SessionActions';
 import {
   defaultState,
   fullJSLanguage,
@@ -52,6 +53,7 @@ import { evalCodeSaga } from '../WorkspaceSaga/helpers/evalCode';
 import { evalEditorSaga } from '../WorkspaceSaga/helpers/evalEditor';
 import { evalTestCode } from '../WorkspaceSaga/helpers/evalTestCode';
 import { runTestCase } from '../WorkspaceSaga/helpers/runTestCase';
+import { watchSavingStatus } from '../WorkspaceSaga/helpers/versionHistory';
 
 vi.mock('src/features/cseMachine/CseMachine', async importOriginal => {
   const actual: any = await importOriginal();
@@ -1588,5 +1590,170 @@ describe('VERSION_HISTORY', () => {
         })
         .silentRun();
     });
+  });
+
+  describe('RESTORE_VERSION', () => {
+    test('returns early for non-assessment workspace', () => {
+      const workspaceLocation = 'playground';
+      const state = generateDefaultState(workspaceLocation);
+
+      return expectSaga(workspaceSaga)
+        .withState(state)
+        .not.put.actionType(WorkspaceActions.updateHasUnsavedChanges.type)
+        .dispatch({
+          type: WorkspaceActions.restoreVersion.type,
+          payload: { workspaceLocation, versionId: 'v1' }
+        })
+        .silentRun();
+    });
+
+    test('returns early when version not found in state', () => {
+      const workspaceLocation = 'assessment';
+      const tokens = { accessToken: 'test-access', refreshToken: 'test-refresh' };
+      const state = versionHistoryState(workspaceLocation, tokens);
+
+      return expectSaga(workspaceSaga)
+        .withState(state)
+        .not.put.actionType(WorkspaceActions.updateHasUnsavedChanges.type)
+        .dispatch({
+          type: WorkspaceActions.restoreVersion.type,
+          payload: { workspaceLocation, versionId: 'non-existent' }
+        })
+        .silentRun();
+    });
+
+    test('puts updateHasUnsavedChanges for team assessment without submitting', () => {
+      const workspaceLocation = 'assessment';
+      const versionId = 'v1';
+      const tokens = { accessToken: 'test-access', refreshToken: 'test-refresh' };
+      const base = versionHistoryState(workspaceLocation, tokens);
+
+      const state = {
+        ...base,
+        workspaces: {
+          ...base.workspaces,
+          assessment: {
+            ...base.workspaces.assessment,
+            versionHistory: {
+              versions: [{ id: versionId, code: 'const x = 1;', timestamp: 100 }],
+              isLoading: false,
+              isHistoryPanelOpen: false
+            }
+          }
+        },
+        session: {
+          ...base.session,
+          assessmentOverviews: [{ id: mockAssessmentId, maxTeamSize: 4 }]
+        }
+      };
+
+      return expectSaga(workspaceSaga)
+        .withState(state)
+        .put(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, true))
+        .not.put.actionType(SessionActions.submitAnswer.type)
+        .dispatch({
+          type: WorkspaceActions.restoreVersion.type,
+          payload: { workspaceLocation, versionId }
+        })
+        .silentRun();
+    });
+
+    test('puts updateSaveStatus saved when editor code matches latest version', () => {
+      const workspaceLocation = 'assessment';
+      const versionId = 'v1';
+      const code = 'const x = 1;';
+      const tokens = { accessToken: 'test-access', refreshToken: 'test-refresh' };
+      const base = versionHistoryState(workspaceLocation, tokens);
+
+      const state = {
+        ...base,
+        workspaces: {
+          ...base.workspaces,
+          assessment: {
+            ...base.workspaces.assessment,
+            editorTabs: [{ value: code, highlightedLines: [], breakpoints: [] }],
+            activeEditorTabIndex: 0,
+            versionHistory: {
+              versions: [{ id: versionId, code, timestamp: 100 }],
+              isLoading: false,
+              isHistoryPanelOpen: false
+            }
+          }
+        }
+      };
+
+      return expectSaga(workspaceSaga)
+        .withState(state)
+        .put(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, true))
+        .put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saving'))
+        .put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'))
+        .not.put.actionType(SessionActions.submitAnswer.type)
+        .dispatch({
+          type: WorkspaceActions.restoreVersion.type,
+          payload: { workspaceLocation, versionId }
+        })
+        .silentRun();
+    });
+
+    test('submits answer and renames newest version after successful restore', () => {
+      const workspaceLocation = 'assessment';
+      const versionId = 'v1';
+      const currentEditorCode = 'const current = 1;';
+      const tokens = { accessToken: 'test-access', refreshToken: 'test-refresh' };
+      const base = versionHistoryState(workspaceLocation, tokens);
+
+      const initialVersions = [
+        { id: 'v1', code: 'const original = 1;', timestamp: 100, name: 'Old Version' },
+        { id: 'v2', code: 'const v2 = 1;', timestamp: 200 }
+      ];
+
+      const state = {
+        ...base,
+        workspaces: {
+          ...base.workspaces,
+          assessment: {
+            ...base.workspaces.assessment,
+            editorTabs: [{ value: currentEditorCode, highlightedLines: [], breakpoints: [] }],
+            activeEditorTabIndex: 0,
+            versionHistory: {
+              versions: initialVersions,
+              isLoading: false,
+              isHistoryPanelOpen: false
+            }
+          }
+        }
+      };
+
+      return expectSaga(workspaceSaga)
+        .withState(state)
+        .provide([[matchers.call.fn(getVersionHistory), initialVersions]])
+        .put(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, true))
+        .put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saving'))
+        .put(SessionActions.submitAnswer(mockQuestionDbId, currentEditorCode))
+        .put(WorkspaceActions.receiveVersionHistory(workspaceLocation, initialVersions))
+        .put(WorkspaceActions.nameVersion(workspaceLocation, 'v2', 'Old Version-restored'))
+        .dispatch({
+          type: WorkspaceActions.restoreVersion.type,
+          payload: { workspaceLocation, versionId }
+        })
+        .dispatch(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'))
+        .silentRun();
+    });
+  });
+});
+
+describe('WATCH_SAVING_STATUS', () => {
+  test('puts updateSaveStatus saving for assessment workspace', () => {
+    return expectSaga(watchSavingStatus)
+      .put(WorkspaceActions.updateSaveStatus('assessment', 'saving'))
+      .dispatch(WorkspaceActions.updateEditorValue('assessment', 0, 'new code'))
+      .silentRun();
+  });
+
+  test('does not put updateSaveStatus for non-assessment workspace', () => {
+    return expectSaga(watchSavingStatus)
+      .not.put.actionType(WorkspaceActions.updateSaveStatus.type)
+      .dispatch(WorkspaceActions.updateEditorValue('playground', 0, 'new code'))
+      .silentRun();
   });
 });
