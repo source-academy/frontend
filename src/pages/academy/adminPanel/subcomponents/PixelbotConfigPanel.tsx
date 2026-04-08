@@ -58,15 +58,14 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
   const [routingDraft, setRoutingDraft] = useState('');
   const [answerDraft, setAnswerDraft] = useState('');
 
-  const tokens = useTypedSelector(state => ({
-    accessToken: state.session.accessToken!,
-    refreshToken: state.session.refreshToken!
-  }));
+  const accessToken = useTypedSelector(state => state.session.accessToken);
+  const refreshToken = useTypedSelector(state => state.session.refreshToken);
 
   useEffect(() => {
+    if (!accessToken || !refreshToken) return;
     const fetchDocumentMap = async () => {
       try {
-        const data = await getPixelbotDocumentMap(tokens as Tokens);
+        const data = await getPixelbotDocumentMap({ accessToken, refreshToken } as Tokens);
         if (data) {
           setDocumentMap(JSON.stringify(data, null, 2));
         } else {
@@ -77,7 +76,7 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
       }
     };
     fetchDocumentMap();
-  }, []);
+  }, [accessToken, refreshToken]);
 
   const startEditRouting = useCallback(() => {
     setRoutingDraft(pixelbotRoutingPrompt || DEFAULT_ROUTING_PROMPT);

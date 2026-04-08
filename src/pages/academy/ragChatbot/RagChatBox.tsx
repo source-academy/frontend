@@ -15,8 +15,6 @@ type ChatMessage = {
   content: string;
 };
 
-const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
-
 type RagMessageRendererProps = {
   message: ChatMessage;
   activeSnippetId: string;
@@ -28,58 +26,36 @@ const RagMessageRenderer: React.FC<RagMessageRendererProps> = ({
   activeSnippetId,
   setActiveSnippetId
 }) => {
-  const content = message.content;
-  const messageId = message.id;
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      components={{
+        code({ node, inline, className, children, ...props }: any) {
+          const match = /language-(\w+)/.exec(className || '');
+          const lang = match ? match[1] : 'javascript';
+          const code = String(children).replace(/\n$/, '');
+          const snippetId = `${message.id}-code-${node?.position?.start.offset ?? 0}`;
 
-  const parts: React.ReactNode[] = [];
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
-  let codeBlockIndex = 0;
-
-  // Reset regex state
-  codeBlockRegex.lastIndex = 0;
-
-  while ((match = codeBlockRegex.exec(content)) !== null) {
-    // Render text before this code block as markdown
-    if (match.index > lastIndex) {
-      const text = content.slice(lastIndex, match.index);
-      parts.push(
-        <ReactMarkdown key={`${messageId}-text-${lastIndex}`} remarkPlugins={[remarkGfm]}>
-          {text}
-        </ReactMarkdown>
-      );
-    }
-
-    const lang = match[1] || 'javascript';
-    const code = match[2];
-    const snippetId = `${messageId}-code-${codeBlockIndex}`;
-    codeBlockIndex++;
-
-    parts.push(
-      <ChatbotCodeSnippet
-        key={snippetId}
-        id={snippetId}
-        code={code}
-        activeSnippetId={activeSnippetId}
-        setActiveSnippet={setActiveSnippetId}
-        language={lang}
-      />
-    );
-
-    lastIndex = codeBlockRegex.lastIndex;
-  }
-
-  // Render remaining text as markdown
-  if (lastIndex < content.length) {
-    const text = content.slice(lastIndex);
-    parts.push(
-      <ReactMarkdown key={`${messageId}-text-end`} remarkPlugins={[remarkGfm]}>
-        {text}
-      </ReactMarkdown>
-    );
-  }
-
-  return <>{parts}</>;
+          return !inline ? (
+            <ChatbotCodeSnippet
+              key={snippetId}
+              id={snippetId}
+              code={code}
+              activeSnippetId={activeSnippetId}
+              setActiveSnippet={setActiveSnippetId}
+              language={lang}
+            />
+          ) : (
+            <code className={className} {...props}>
+              {children}
+            </code>
+          );
+        }
+      }}
+    >
+      {message.content}
+    </ReactMarkdown>
+  );
 };
 
 type Props = {
