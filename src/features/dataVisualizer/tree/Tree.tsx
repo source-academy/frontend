@@ -4,7 +4,7 @@ import { isArray, isFunction } from '../dataVisualizerUtils';
 import { AlreadyParsedTreeNode } from './AlreadyParsedTreeNode';
 import { BinaryTreeDrawer } from './BinaryTreeDrawer';
 import { GeneralTreeDrawer } from './GeneralTreeDrawer';
-import { OriginalTreeDrawer } from './OriginalTreeDrawer';
+import { OriginalDrawer } from './OriginalDrawer';
 import {
   ArrayTreeNode,
   DataTreeNode,
@@ -124,13 +124,13 @@ export class Tree {
     return new Tree(rootNode, treeNodes);
   }
 
-  draw(): OriginalTreeDrawer | BinaryTreeDrawer | GeneralTreeDrawer {
+  draw(): OriginalDrawer | BinaryTreeDrawer | GeneralTreeDrawer {
     if (DataVisualizer.getBinTreeMode()) {
       return new BinaryTreeDrawer(this);
     } else if (DataVisualizer.getTreeMode()) {
       return new GeneralTreeDrawer(this);
     } else {
-      return new OriginalTreeDrawer(this);
+      return new OriginalDrawer(this);
     }
   }
 }

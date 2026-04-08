@@ -18,7 +18,7 @@ import {
 /**
  * Base tree drawer for original view
  */
-export class OriginalTreeDrawer {
+export class OriginalDrawer {
   protected tree: Tree;
   public leftCOUNTER: number = 0;
   public rightCOUNTER: number = 0;

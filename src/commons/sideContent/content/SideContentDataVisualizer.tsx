@@ -165,7 +165,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                 </Tooltip>
               </ButtonGroup>
 
-              <Tooltip content="Render Binary Tree" position="top">
+              <Tooltip content="Binary Tree View" position="top">
                 <AnchorButton
                   style={{
                     display: 'flex',
@@ -193,7 +193,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                   </div>
                 </AnchorButton>
               </Tooltip>
-              <Tooltip content="Render General Tree" position="top">
+              <Tooltip content="General Tree View" position="top">
                 <AnchorButton
                   style={{
                     display: 'flex',

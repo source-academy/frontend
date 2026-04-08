@@ -7,7 +7,7 @@ import DataVisualizer from '../dataVisualizer';
 import { toText } from '../dataVisualizerUtils';
 import { ArrowDrawable, BackwardArrowDrawable } from '../drawable/Drawable';
 import { AlreadyParsedTreeNode } from './AlreadyParsedTreeNode';
-import { OriginalTreeDrawer } from './OriginalTreeDrawer';
+import { OriginalDrawer } from './OriginalDrawer';
 import {
   ArrayTreeNode,
   DataTreeNode,
@@ -19,7 +19,7 @@ import {
 /**
  * Tree drawer for binary tree view
  */
-export class BinaryTreeDrawer extends OriginalTreeDrawer {
+export class BinaryTreeDrawer extends OriginalDrawer {
   draw(x: number, y: number, key: number): JSX.Element {
     // NON-BINARY TREE WARNING
     if (!DataVisualizer.isBinTree) {
