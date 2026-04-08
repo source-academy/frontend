@@ -112,7 +112,7 @@ export class Binding extends Visible {
   }
 
   private bindingIsLive(): boolean {
-    return this.isDummyBinding ? ((this.value as any).isLive?.() ?? false) : this.frame.isLive;
+    return this.isDummyBinding ? (this.value?.isLive?.() ?? false) : this.frame.isLive;
   }
 
   public occupiesVerticalSpace(): boolean {
@@ -123,7 +123,7 @@ export class Binding extends Visible {
     if (!isMainReference(this.value, this)) {
       return false;
     }
-    return !Layout.clearDeadFrames || ((this.value as any).isLive?.() ?? true);
+    return !Layout.clearDeadFrames || (this.value?.isLive?.() ?? true);
   }
 
   /**

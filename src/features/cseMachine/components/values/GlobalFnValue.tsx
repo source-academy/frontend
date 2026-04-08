@@ -195,6 +195,11 @@ export class GlobalFnValue extends Value implements IHoverable {
     this.setShapesStyle(strokeColor);
   }
 
+  isLive(): boolean {
+    const id = (this.data as any).id;
+    return id ? Layout.liveObjectIDs.has(id) : false;
+  }
+
   draw(): React.ReactNode {
     this._isDrawn = true;
     if (Layout.globalEnvNode.frame) {

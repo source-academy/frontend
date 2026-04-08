@@ -84,6 +84,16 @@ export class PrimitiveValue extends Value {
     if (this.text instanceof Text) this.text.options.faded = faded;
   }
 
+  isLive(): boolean {
+    if (this.text instanceof Text) {
+      return this.text.options.faded === false;
+    } else if (this.text instanceof ArrayNullUnit) {
+      const refPrnt = this.text.reference.parent;
+      return refPrnt.isReferenced() && refPrnt.isEnclosingFrameLive();
+    }
+    return false;
+  }
+
   draw(): React.ReactNode {
     //Recomputing x and y coordinates due to change in variables/arrays coordinates after preassigning them
     const reference = this.references[0];
