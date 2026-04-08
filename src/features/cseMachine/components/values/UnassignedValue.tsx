@@ -36,6 +36,13 @@ export class UnassignedValue extends Value {
     if (this.text instanceof Text) this.text.options.faded = faded;
   }
 
+  isLive(): boolean {
+    if (this.text instanceof Text) {
+      return this.text.options.faded === false;
+    }
+    return false;
+  }
+
   draw(): React.ReactNode {
     this._isDrawn = true;
     return <React.Fragment key={Layout.key++}>{this.text.draw()}</React.Fragment>;
