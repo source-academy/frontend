@@ -23,6 +23,23 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
     return 'array' as const;
   }
 
+  protected getSourceFrameBounds() {
+    return {
+      x: this.source.x(),
+      y: this.source.y(),
+      width: this.source.width(),
+      height: this.source.height()
+    };
+  }
+
+  protected getSourceFrameSegmentPath(): string {
+    const rect = this.getSourceFrameBounds();
+    if (!rect) {
+      return '';
+    }
+    return this.getPathPrefixUntilFirstBoundaryExit(rect);
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
