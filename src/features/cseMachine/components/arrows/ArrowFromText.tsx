@@ -33,6 +33,18 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
     };
   }
 
+  /**
+   * Only render the initial in-frame prefix above the source frame.
+   * Once the arrow exits the frame for the first time, the rest should stay under frames.
+   */
+  protected getSourceFrameSegmentPath(): string {
+    const rect = this.getSourceFrameBounds();
+    if (!rect) {
+      return '';
+    }
+    return this.getPathPrefixUntilFirstBoundaryExit(rect);
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
