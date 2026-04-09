@@ -73,7 +73,32 @@ type SelectedComment = {
   isEdited: boolean;
 };
 
+type PersistedAiSelectionSnapshot = {
+  selectedComments: SelectedComment[];
+  suggestions: string[];
+};
+
 const normalizeCommentText = (text: string): string => text.replace(/^\n+/, '');
+
+const hydrateSelectedComments = (
+  sourceSuggestions: string[],
+  persistedSelectedIndices: number[],
+  persistedSelectedEdits: Record<number, string>
+): SelectedComment[] => {
+  const validSelectedIndices = [...new Set(persistedSelectedIndices)]
+    .filter(index => index >= 0 && index < sourceSuggestions.length)
+    .sort((a, b) => a - b);
+
+  return validSelectedIndices.map(index => {
+    const original = sourceSuggestions[index] ?? '';
+    const text = normalizeCommentText(persistedSelectedEdits[index] ?? original);
+    return {
+      originalIndex: index,
+      text,
+      isEdited: text !== original
+    };
+  });
+};
 
 const GradingEditor: React.FC<Props> = props => {
   const dispatch = useTypedDispatch();
@@ -90,6 +115,10 @@ const GradingEditor: React.FC<Props> = props => {
   const saveTimeoutRef = useRef<number | undefined>(undefined);
   const selectedCommentsRef = useRef<SelectedComment[]>([]);
   const suggestionsRef = useRef<string[]>([]);
+  const persistedAiSelectionRef = useRef<PersistedAiSelectionSnapshot>({
+    selectedComments: [],
+    suggestions: []
+  });
   const aiCommentTextareaRefs = useRef<Record<number, HTMLTextAreaElement | null>>({});
   const { handleGradingSave, handleGradingSaveAndContinue, handleReautogradeAnswer } = useMemo(
     () =>
@@ -214,6 +243,38 @@ const GradingEditor: React.FC<Props> = props => {
     return { selectedIndices, changedEdits };
   };
 
+  const updatePersistedAiSelectionSnapshot = (
+    selected: SelectedComment[],
+    sourceSuggestions: string[]
+  ) => {
+    const sanitizedSelectedComments = selected
+      .filter(
+        comment => comment.originalIndex >= 0 && comment.originalIndex < sourceSuggestions.length
+      )
+      .map(comment => {
+        const original = sourceSuggestions[comment.originalIndex] ?? '';
+        const text = normalizeCommentText(comment.text);
+        return {
+          originalIndex: comment.originalIndex,
+          text,
+          isEdited: text !== original
+        };
+      })
+      .sort((a, b) => a.originalIndex - b.originalIndex);
+
+    persistedAiSelectionRef.current = {
+      selectedComments: sanitizedSelectedComments,
+      suggestions: [...sourceSuggestions]
+    };
+  };
+
+  const getPersistedAiSelectionSnapshot = (): PersistedAiSelectionSnapshot => ({
+    selectedComments: persistedAiSelectionRef.current.selectedComments.map(comment => ({
+      ...comment
+    })),
+    suggestions: [...persistedAiSelectionRef.current.suggestions]
+  });
+
   const buildSelectionKey = (selected: SelectedComment[], sourceSuggestions: string[]) => {
     const payload = buildSelectionPayload(selected, sourceSuggestions);
     return JSON.stringify({
@@ -249,28 +310,6 @@ const GradingEditor: React.FC<Props> = props => {
         answers: updatedAnswers
       })
     );
-  };
-
-  const buildPersistedSelectionKey = () => {
-    const existingComments = props.ai_comments?.comments || [];
-    const persistedSelectedIndices = props.ai_comments?.selectedIndices || [];
-    const persistedSelectedEdits = props.ai_comments?.selectedEdits || {};
-
-    const validSelectedIndices = [...new Set(persistedSelectedIndices)]
-      .filter(index => index >= 0 && index < existingComments.length)
-      .sort((a, b) => a - b);
-
-    const hydratedSelectedComments: SelectedComment[] = validSelectedIndices.map(index => {
-      const original = existingComments[index] ?? '';
-      const text = normalizeCommentText(persistedSelectedEdits[index] ?? original);
-      return {
-        originalIndex: index,
-        text,
-        isEdited: text !== original
-      };
-    });
-
-    return buildSelectionKey(hydratedSelectedComments, existingComments);
   };
 
   const waitForGradingSaveResult = (saveAndContinue: boolean) => {
@@ -366,6 +405,7 @@ const GradingEditor: React.FC<Props> = props => {
     }
 
     lastSavedSelectionKeyRef.current = currentSelectionKey;
+    updatePersistedAiSelectionSnapshot(selectedComments, suggestions);
 
     return true;
   };
@@ -404,26 +444,18 @@ const GradingEditor: React.FC<Props> = props => {
     const existingComments = props.ai_comments?.comments || [];
     const persistedSelectedIndices = props.ai_comments?.selectedIndices || [];
     const persistedSelectedEdits = props.ai_comments?.selectedEdits || {};
-
-    const validSelectedIndices = [...new Set(persistedSelectedIndices)]
-      .filter(index => index >= 0 && index < existingComments.length)
-      .sort((a, b) => a - b);
-
-    const hydratedSelectedComments: SelectedComment[] = validSelectedIndices.map(index => {
-      const original = existingComments[index] ?? '';
-      const text = normalizeCommentText(persistedSelectedEdits[index] ?? original);
-      return {
-        originalIndex: index,
-        text,
-        isEdited: text !== original
-      };
-    });
+    const hydratedSelectedComments = hydrateSelectedComments(
+      existingComments,
+      persistedSelectedIndices,
+      persistedSelectedEdits
+    );
 
     setUserText(props.comments);
     setSuggestions(existingComments);
     // Lock the button if we already have comments for this submission
     setHasGenerated(existingComments.length > 0);
     setSelectedComments(hydratedSelectedComments);
+    updatePersistedAiSelectionSnapshot(hydratedSelectedComments, existingComments);
     const persistedSelectionKey = buildSelectionKey(hydratedSelectedComments, existingComments);
     initialSelectionKeyRef.current = persistedSelectionKey;
     lastSavedSelectionKeyRef.current = persistedSelectionKey;
@@ -473,16 +505,16 @@ const GradingEditor: React.FC<Props> = props => {
       setIsSaveInFlight(true);
 
       const saveAndContinue = handleSaving === onClickSaveAndContinue;
-      const previousSelectionKey = buildPersistedSelectionKey();
-      const previousSelectedComments: SelectedComment[] = (props.ai_comments?.selectedIndices || [])
-        .filter(index => index >= 0 && index < (props.ai_comments?.comments || []).length)
-        .map(index => {
-          const original = props.ai_comments?.comments?.[index] ?? '';
-          const text = normalizeCommentText(props.ai_comments?.selectedEdits?.[index] ?? original);
-          return { originalIndex: index, text, isEdited: text !== original };
-        });
+      const previousPersistedSnapshot = getPersistedAiSelectionSnapshot();
+      const previousSelectionKey = buildSelectionKey(
+        previousPersistedSnapshot.selectedComments,
+        previousPersistedSnapshot.suggestions
+      );
       const { selectedIndices: previousSelectedIndices, changedEdits: previousChangedEdits } =
-        buildSelectionPayload(previousSelectedComments, props.ai_comments?.comments || []);
+        buildSelectionPayload(
+          previousPersistedSnapshot.selectedComments,
+          previousPersistedSnapshot.suggestions
+        );
 
       const hasSavedChosenComments = await postSaveChosenComments();
       if (!hasSavedChosenComments) {
@@ -517,7 +549,14 @@ const GradingEditor: React.FC<Props> = props => {
           if (rollbackResp && rollbackResp.ok) {
             lastSavedSelectionKeyRef.current = previousSelectionKey;
             initialSelectionKeyRef.current = previousSelectionKey;
-            syncAiCommentsToStore(previousSelectedComments, props.ai_comments?.comments || []);
+            updatePersistedAiSelectionSnapshot(
+              previousPersistedSnapshot.selectedComments,
+              previousPersistedSnapshot.suggestions
+            );
+            syncAiCommentsToStore(
+              previousPersistedSnapshot.selectedComments,
+              previousPersistedSnapshot.suggestions
+            );
             showWarningMessage(
               'Failed to save grading. Reverted AI comment selection to last saved state.'
             );
@@ -717,6 +756,7 @@ const GradingEditor: React.FC<Props> = props => {
         setSuggestions(resp.comments);
         setHasGenerated(true);
         setSelectedComments([]);
+        updatePersistedAiSelectionSnapshot([], resp.comments);
         initialSelectionKeyRef.current = EMPTY_SELECTION_SAVE_KEY;
 
         showSuccessMessage(force ? 'Comments re-generated!' : 'Comments generated!');
