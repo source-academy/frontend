@@ -2,6 +2,7 @@ import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { Variant } from 'js-slang/dist/langs';
 import { call, put, select, StrictEffect } from 'redux-saga/effects';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
+import CseMachine from 'src/features/cseMachine/CseMachine';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import type { DeviceSession } from '../../../../features/remoteExecution/RemoteExecutionTypes';
@@ -62,6 +63,11 @@ export function* evalEditorSaga(
     const context = yield select(
       (state: OverallState) => state.workspaces[workspaceLocation].context
     );
+
+    if (context.executionMethod === 'cse-machine') {
+      CseMachine.resetArrowOriginFilters();
+      CseMachine.clearRenderedLayouts();
+    }
 
     // Insert debugger statements at the lines of the program with a breakpoint.
     for (const editorTab of editorTabs) {

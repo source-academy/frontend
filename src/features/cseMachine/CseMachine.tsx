@@ -6,7 +6,7 @@ import React from 'react';
 import { arrowSelection } from './components/arrows/ArrowSelection';
 import { CseAnimation } from './CseMachineAnimation';
 import { Layout, LayoutCache } from './CseMachineLayout';
-import { EnvTree, EnvTreeNode } from './CseMachineTypes';
+import { ArrowOriginFilterKey, ArrowOriginFilters, EnvTree, EnvTreeNode } from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
 
 type SetVis = (vis: React.ReactNode) => void;
@@ -15,6 +15,22 @@ type SetisStepLimitExceeded = (isControlEmpty: boolean) => void;
 
 /** CSE Machine is exposed from this class */
 export default class CseMachine {
+  private static readonly arrowOriginFilterKeys: ArrowOriginFilterKey[] = [
+    'text',
+    'frame',
+    'function',
+    'array',
+    'control',
+    'stash'
+  ];
+  private static readonly defaultArrowOriginFilters: ArrowOriginFilters = {
+    text: true,
+    frame: true,
+    function: true,
+    array: true,
+    control: true,
+    stash: true
+  };
   /** callback function to update the visualization state in the SideContentCseMachine component */
   private static setVis: SetVis;
   /** function to highlight editor lines */
@@ -32,6 +48,9 @@ export default class CseMachine {
   private static stackTruncated: boolean = false;
   private static centerAlignment: boolean = false;
   private static centerAlignmentToggled: boolean = false;
+  private static arrowOriginFilters: ArrowOriginFilters = {
+    ...CseMachine.defaultArrowOriginFilters
+  };
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
   private static control: Control | undefined;
@@ -56,6 +75,18 @@ export default class CseMachine {
     CseMachine.usedBuiltInNames.clear();
     CseMachine.clearMemoizedLayouts();
   }
+
+  /**
+   * Clears memoized rendered nodes while preserving fixed-position caches and
+   * used built-in names inferred from source code.
+   *
+   * Use this for view-only toggles (for example arrow filters) that should
+   * force a fresh draw without recomputing global-frame built-in function names.
+   */
+  public static clearRenderedLayouts(): void {
+    CseMachine.clearMemoizedLayouts();
+  }
+
   private static clearMemoizedLayouts(): void {
     Layout.currentLight = undefined;
     Layout.currentDark = undefined;
@@ -89,6 +120,29 @@ export default class CseMachine {
   }
   public static getCenterAlignment(): boolean {
     return CseMachine.centerAlignment;
+  }
+
+  public static getArrowOriginFilters(): ArrowOriginFilters {
+    return { ...CseMachine.arrowOriginFilters };
+  }
+
+  public static isArrowOriginVisible(origin: ArrowOriginFilterKey | null): boolean {
+    if (origin === null) return true;
+    return CseMachine.arrowOriginFilters[origin];
+  }
+
+  public static setArrowOriginVisible(origin: ArrowOriginFilterKey, visible: boolean): void {
+    CseMachine.arrowOriginFilters[origin] = visible;
+  }
+
+  public static setAllArrowOriginsVisible(visible: boolean): void {
+    for (const origin of CseMachine.arrowOriginFilterKeys) {
+      CseMachine.arrowOriginFilters[origin] = visible;
+    }
+  }
+
+  public static resetArrowOriginFilters(): void {
+    CseMachine.arrowOriginFilters = { ...CseMachine.defaultArrowOriginFilters };
   }
   public static getMasterLayout(): LayoutCache | null {
     return CseMachine.getPrintableMode()
@@ -408,6 +462,7 @@ export default class CseMachine {
   }
 
   static clearCse() {
+    CseMachine.resetArrowOriginFilters();
     if (this.setVis) {
       this.setVis(undefined);
       CseMachine.environmentTree = undefined;

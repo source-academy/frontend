@@ -11,8 +11,11 @@ type Props = {
 };
 
 const DraggableRepl: React.FC<Props> = props => {
+  const nodeRef = React.useRef<HTMLDivElement>(null);
+
   return (
     <Draggable
+      nodeRef={nodeRef}
       axis="y"
       handle="#dragHandle"
       position={props.position}
@@ -20,7 +23,7 @@ const DraggableRepl: React.FC<Props> = props => {
       onDrag={props.onDrag}
       disabled={props.disabled}
     >
-      <div className="mobile-draggable">
+      <div ref={nodeRef} className="mobile-draggable">
         {!props.disabled ? (
           <div className="handle enabled" id="dragHandle">
             {['1', '2', '3'].map(i => (
