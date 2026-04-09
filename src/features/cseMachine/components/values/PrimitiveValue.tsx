@@ -84,6 +84,22 @@ export class PrimitiveValue extends Value {
     if (this.text instanceof Text) this.text.options.faded = faded;
   }
 
+  isLive(): boolean {
+    const reference = this.references[0];
+    if (!reference) return false;
+
+    if (reference instanceof Binding) {
+      return this.isReferenced() && reference.frame.isLive;
+    }
+
+    if (this.text instanceof Text || this.text instanceof ArrayNullUnit) {
+      const refPrnt = reference.parent;
+      return refPrnt.isReferenced() && refPrnt.isEnclosingFrameLive();
+    }
+
+    return false;
+  }
+
   draw(): React.ReactNode {
     //Recomputing x and y coordinates due to change in variables/arrays coordinates after preassigning them
     const reference = this.references[0];
@@ -98,8 +114,8 @@ export class PrimitiveValue extends Value {
         this._y = reference.y() + (reference.height() - Config.FontSize) / 2;
       }
 
-      (this.text as any)._x = this.x();
-      (this.text as any)._y = this.y();
+      this.text.setX(this.x());
+      this.text.setY(this.y());
     }
     return <React.Fragment key={Layout.key++}>{this.text.draw()}</React.Fragment>;
   }

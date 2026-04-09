@@ -14,13 +14,15 @@ export const Config = Object.freeze({
   FramePaddingX: 20,
   FramePaddingY: 30,
   FrameMinGapX: 80,
-  FrameMarginX: 30,
+  FrameMarginX: 50,
   FrameMarginY: 10,
   FrameCornerRadius: 3,
 
+  ArrayVerticalOffset: 20,
+
   FnRadius: 15,
   FnInnerRadius: 3,
-  FnTooltipOpacity: 0.3,
+  FnTooltipOpacity: 0.5,
   FnTooltipTextPadding: 5,
   FnDescriptionMaxWidth: 150,
   FnDescriptionMaxHeight: 60,
@@ -46,12 +48,15 @@ export const Config = Object.freeze({
   ArrowHitStrokeWidth: 5,
   ArrowHoveredStrokeWidth: 2,
   ArrowHoveredHeadSize: 15,
-  ArrowCornerRadius: 40,
+  ArrowCornerRadius: 20,
+  ArrowMinCornerRadius: 5,
+  ArrowSmallBendRadiusScale: 1,
 
   MaxExportWidth: 20000,
   MaxExportHeight: 12000,
 
   MinTerminalSegmentLength: 30,
+  ArrowPostFrameStraightLength: 20,
   // Canvas background color
   BgColor: '#2c3e50',
   PrintBgColor: '#fff',

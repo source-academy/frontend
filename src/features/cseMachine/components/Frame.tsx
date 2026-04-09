@@ -9,6 +9,7 @@ import { Layout } from '../CseMachineLayout';
 import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   defaultActiveColor,
+  defaultBackgroundColor,
   defaultStrokeColor,
   fadedStrokeColor,
   getTextWidth,
@@ -16,7 +17,6 @@ import {
   isClosure,
   isDataArray,
   isDummyKey,
-  isMainReference,
   isPrimitiveData,
   isSourceObject,
   isUnassigned
@@ -176,21 +176,28 @@ export class Frame extends Visible implements IHoverable {
 
     // Create all the bindings and values
     let prevBinding: Binding | null = null;
+    let prevVisibleBinding: Binding | null = null;
+    let lastVisibleBinding: Binding | null = null;
 
     this.isLive = this.environment ? Layout.liveEnvIDs.has(this.environment.id) : false;
 
     for (const [key, data] of entries) {
       const constant =
         this.environment.head[key]?.description === 'const declaration' || !data.writable;
+      const previousBindingForLayout = Layout.clearDeadFrames ? prevVisibleBinding : prevBinding;
       const currBinding: Binding = new Binding(
         key,
         data.value,
         this,
-        prevBinding,
+        previousBindingForLayout,
         constant,
         this.isLive
       );
       prevBinding = currBinding;
+      if (currBinding.occupiesVerticalSpace()) {
+        prevVisibleBinding = currBinding;
+        lastVisibleBinding = currBinding;
+      }
       this.bindings.push(currBinding);
     }
 
@@ -198,9 +205,9 @@ export class Frame extends Visible implements IHoverable {
     // `totalDataWidth` is measured strictly as overflow beyond the frame's right edge.
     const frameRightX = this.x() + this.width();
     for (const binding of this.bindings) {
-      const value = binding.value;
-      if (!isMainReference(value, binding)) continue;
+      if (!binding.rendersReferencedValue()) continue;
 
+      const value = binding.value;
       let valueRightX: number | undefined;
       if (value instanceof ArrayValue) {
         valueRightX = value.x() + value.totalWidth;
@@ -220,9 +227,9 @@ export class Frame extends Visible implements IHoverable {
 
     this.totalWidth = this.width();
 
-    // derive the height of the frame from the the position of the last binding
-    this._height = prevBinding
-      ? prevBinding.y() - this.y() + prevBinding.height() + Config.FramePaddingY
+    // derive the height of the frame from the the position of the last visible binding
+    this._height = lastVisibleBinding
+      ? lastVisibleBinding.y() - this.y() + lastVisibleBinding.height() + Config.FramePaddingY
       : Config.FramePaddingY * 2;
 
     this._name = new Text(
@@ -269,6 +276,8 @@ export class Frame extends Visible implements IHoverable {
    */
   reassignCoordinatesY(newY: number): void {
     this._y = newY;
+    const relativeTextY = newY - (Config.FontSize + Config.TextPaddingY / 2);
+    this.name.setY(relativeTextY);
   }
 
   reassignWidth(newWidth: number): void {
@@ -300,6 +309,10 @@ export class Frame extends Visible implements IHoverable {
   }
 
   draw(): React.ReactNode {
+    if (CseAnimation.shouldHideFrame(this.environment.id)) {
+      return null;
+    }
+
     return (
       <Group ref={this.ref} key={Layout.key++}>
         {this.name.draw()}
@@ -323,6 +336,7 @@ export class Frame extends Visible implements IHoverable {
           onMouseLeave={this.onMouseLeave}
           listening={false}
           key={Layout.key++}
+          fill={defaultBackgroundColor()}
         />
         {this.bindings.map(binding => binding.draw())}
         {this.arrow?.draw()}

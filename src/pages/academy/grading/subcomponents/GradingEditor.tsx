@@ -73,7 +73,8 @@ type SelectedComment = {
   isEdited: boolean;
 };
 
-type PersistedAiSelectionSnapshot = {
+type PersistedAiSelectionState = {
+  selectionKey: string;
   selectedComments: SelectedComment[];
   suggestions: string[];
 };
@@ -115,7 +116,8 @@ const GradingEditor: React.FC<Props> = props => {
   const saveTimeoutRef = useRef<number | undefined>(undefined);
   const selectedCommentsRef = useRef<SelectedComment[]>([]);
   const suggestionsRef = useRef<string[]>([]);
-  const persistedAiSelectionRef = useRef<PersistedAiSelectionSnapshot>({
+  const persistedAiSelectionRef = useRef<PersistedAiSelectionState>({
+    selectionKey: EMPTY_SELECTION_SAVE_KEY,
     selectedComments: [],
     suggestions: []
   });
@@ -262,13 +264,23 @@ const GradingEditor: React.FC<Props> = props => {
       })
       .sort((a, b) => a.originalIndex - b.originalIndex);
 
+    const { selectedIndices, changedEdits } = buildSelectionPayload(
+      sanitizedSelectedComments,
+      sourceSuggestions
+    );
+
     persistedAiSelectionRef.current = {
+      selectionKey: JSON.stringify({
+        selected_indices: selectedIndices,
+        edits: changedEdits
+      }),
       selectedComments: sanitizedSelectedComments,
       suggestions: [...sourceSuggestions]
     };
   };
 
-  const getPersistedAiSelectionSnapshot = (): PersistedAiSelectionSnapshot => ({
+  const getPersistedAiSelectionSnapshot = (): PersistedAiSelectionState => ({
+    selectionKey: persistedAiSelectionRef.current.selectionKey,
     selectedComments: persistedAiSelectionRef.current.selectedComments.map(comment => ({
       ...comment
     })),
@@ -505,15 +517,11 @@ const GradingEditor: React.FC<Props> = props => {
       setIsSaveInFlight(true);
 
       const saveAndContinue = handleSaving === onClickSaveAndContinue;
-      const previousPersistedSnapshot = getPersistedAiSelectionSnapshot();
-      const previousSelectionKey = buildSelectionKey(
-        previousPersistedSnapshot.selectedComments,
-        previousPersistedSnapshot.suggestions
-      );
+      const previousPersistedSelection = getPersistedAiSelectionSnapshot();
       const { selectedIndices: previousSelectedIndices, changedEdits: previousChangedEdits } =
         buildSelectionPayload(
-          previousPersistedSnapshot.selectedComments,
-          previousPersistedSnapshot.suggestions
+          previousPersistedSelection.selectedComments,
+          previousPersistedSelection.suggestions
         );
 
       const hasSavedChosenComments = await postSaveChosenComments();
@@ -538,7 +546,7 @@ const GradingEditor: React.FC<Props> = props => {
       const gradingSaved = await waitForGradingSaveResult(saveAndContinue);
       if (!gradingSaved) {
         const currentSelectionKey = buildSelectionKey(selectedComments, suggestions);
-        if (currentSelectionKey !== previousSelectionKey) {
+        if (currentSelectionKey !== previousPersistedSelection.selectionKey) {
           const rollbackResp = await saveChosenComments(
             tokens,
             props.answer_id,
@@ -547,15 +555,15 @@ const GradingEditor: React.FC<Props> = props => {
           );
 
           if (rollbackResp && rollbackResp.ok) {
-            lastSavedSelectionKeyRef.current = previousSelectionKey;
-            initialSelectionKeyRef.current = previousSelectionKey;
+            lastSavedSelectionKeyRef.current = previousPersistedSelection.selectionKey;
+            initialSelectionKeyRef.current = previousPersistedSelection.selectionKey;
             updatePersistedAiSelectionSnapshot(
-              previousPersistedSnapshot.selectedComments,
-              previousPersistedSnapshot.suggestions
+              previousPersistedSelection.selectedComments,
+              previousPersistedSelection.suggestions
             );
             syncAiCommentsToStore(
-              previousPersistedSnapshot.selectedComments,
-              previousPersistedSnapshot.suggestions
+              previousPersistedSelection.selectedComments,
+              previousPersistedSelection.suggestions
             );
             showWarningMessage(
               'Failed to save grading. Reverted AI comment selection to last saved state.'

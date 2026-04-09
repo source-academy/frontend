@@ -26,7 +26,9 @@ export enum GameActionType {
   NavigateToAssessment = 'NavigateToAssessment',
   UpdateAssessmentStatus = 'UpdateAssessmentStatus',
   Delay = 'Delay',
-  ShowQuiz = 'ShowQuiz'
+  ShowQuiz = 'ShowQuiz',
+  ChangeLocationTo = 'ChangeLocationTo',
+  ShowTopics = 'ShowTopics'
 }
 
 /**
