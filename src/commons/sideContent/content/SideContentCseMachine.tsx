@@ -370,9 +370,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                         />
                         <Checkbox
                           checked={CseMachine.getPairCreationMode()}
-                          disabled={!this.state.visualization}
                           label="Stream visualisation"
-                          onChange={() => CseMachine.togglePairCreationMode()}
+                          onChange={() => CseMachine.getPairCreationMode()}
                         />
                       </div>
                     }
@@ -380,7 +379,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     <AnchorButton icon="flow-branch" disabled={!this.state.visualization} />
                   </Popover>
                 </Tooltip>
-                {/* <Tooltip content="Pair Visualisation" compact>
+                <Tooltip content="Pair Visualisation" compact>
                   <AnchorButton
                     onMouseUp={() => {
                       if (this.state.visualization) {
@@ -398,7 +397,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                       style={{ margin: 0 }}
                     />
                   </AnchorButton>
-                </Tooltip> */}
+                </Tooltip>
               </ButtonGroup>
             )}
             <ButtonGroup>
@@ -639,7 +638,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   };
 
   private stepNextChangepoint = () => {
-    const changeSteps = this.props.changepointSteps;
+    const changeSteps = this.getActiveChangeSteps();
     for (const step of changeSteps) {
       if (step > this.state.value) {
         this.sliderShift(step);
@@ -652,7 +651,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   };
 
   private stepPrevChangepoint = () => {
-    const changeSteps = this.props.changepointSteps;
+    const changeSteps = this.getActiveChangeSteps();
     for (let i = changeSteps.length - 1; i >= 0; i--) {
       const step = changeSteps[i];
       if (step < this.state.value) {
