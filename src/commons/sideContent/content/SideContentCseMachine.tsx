@@ -69,7 +69,6 @@ type StateProps = {
   currentStep: number;
   breakpointSteps: number[];
   changepointSteps: number[];
-  streamsPointSteps: number[];
   needCseUpdate: boolean;
   machineOutput: InterpreterOutput[];
   chapter: Chapter;
@@ -371,8 +370,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                         <Checkbox
                           checked={CseMachine.getPairCreationMode()}
                           disabled={!this.state.visualization}
-                          label="Stream visualisation"
-                          onChange={() => CseMachine.togglePairCreationMode()}
+                          label="Pairs returned by nullary functions"
+                          onChange={() => this.togglePairCreationModeArrows()}
                         />
                       </div>
                     }
@@ -380,25 +379,6 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     <AnchorButton icon="flow-branch" disabled={!this.state.visualization} />
                   </Popover>
                 </Tooltip>
-                {/* <Tooltip content="Pair Visualisation" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        CseMachine.togglePairCreationMode();
-                        Layout.draw();
-                        CseMachine.redraw();
-                      }
-                    }}
-                    icon="array"
-                    disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      checked={CseMachine.getPairCreationMode()}
-                      disabled={!this.state.visualization}
-                      style={{ margin: 0 }}
-                    />
-                  </AnchorButton>
-                </Tooltip> */}
               </ButtonGroup>
             )}
             <ButtonGroup>
@@ -664,17 +644,15 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
     this.sliderShift(0);
     this.sliderRelease(0);
   };
-
-
-  private getActiveChangeSteps = () => {
-    return CseMachine.getPairCreationMode()
-      ? this.props.streamsPointSteps
-      : this.props.changepointSteps;
-  };
       
   private toggleArrowFilter = (origin: ArrowOriginFilterKey) => {
     const filters = CseMachine.getArrowOriginFilters();
     CseMachine.setArrowOriginVisible(origin, !filters[origin]);
+    this.refreshArrowFilters();
+  };
+
+  private togglePairCreationModeArrows = () => {
+    CseMachine.togglePairCreationMode();
     this.refreshArrowFilters();
   };
 
@@ -718,7 +696,6 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     currentStep: workspace.currentStep,
     breakpointSteps: workspace.breakpointSteps,
     changepointSteps: workspace.changepointSteps,
-    streamsPointSteps: workspace.streamsPointSteps,
     needCseUpdate: workspace.updateCse,
     machineOutput: workspace.output,
     chapter: workspace.context.chapter

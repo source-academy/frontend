@@ -702,21 +702,12 @@ export class Layout {
   }
 
   static draw(): React.ReactNode {
-    const pairValues: Value[] = Array.from(Layout.values.values()).filter(v => {
-      try {
-        const data = (v as any).data;
-        return Array.isArray(data) && data.length === 2;
-      } catch {
-        return false;
-      }
-    });
-
     if (Layout.key !== 0) {
       return Layout.prevLayout;
     } else {
       Layout.resetUnderlayArrows();
       const levelNodes = Layout.levels.map(level => level.draw());
-      const streamNodes = CseMachine.getPairCreationMode() ? pairValues.map(v => v.draw()) : null;
+      const streamNodes = null;
       const controlNode = CseMachine.getControlStash() ? Layout.controlComponent.draw() : null;
       const stashNode = CseMachine.getControlStash() ? Layout.stashComponent.draw() : null;
       const underlayArrows = [...Layout.underlayArrows];
@@ -795,49 +786,25 @@ export class Layout {
       );
 
       Layout.prevLayout = layout;
-      if (CseMachine.getPairCreationMode()) {
-        if (CseMachine.getPrintableMode()) {
-          if (CseMachine.getControlStash()) {
-            if (CseMachine.getStackTruncated()) {
-              Layout.currentStackTruncLightPairs = layout;
-            } else {
-              Layout.currentStackLightPairs = layout;
-            }
+      if (CseMachine.getPrintableMode()) {
+        if (CseMachine.getControlStash()) {
+          if (CseMachine.getStackTruncated()) {
+            Layout.currentStackTruncLight = layout;
           } else {
-            Layout.currentLightPairs = layout;
+            Layout.currentStackLight = layout;
           }
         } else {
-          if (CseMachine.getControlStash()) {
-            if (CseMachine.getStackTruncated()) {
-              Layout.currentStackTruncDarkPairs = layout;
-            } else {
-              Layout.currentStackDarkPairs = layout;
-            }
-          } else {
-            Layout.currentDarkPairs = layout;
-          }
+          Layout.currentLight = layout;
         }
       } else {
-        if (CseMachine.getPrintableMode()) {
-          if (CseMachine.getControlStash()) {
-            if (CseMachine.getStackTruncated()) {
-              Layout.currentStackTruncLight = layout;
-            } else {
-              Layout.currentStackLight = layout;
-            }
+        if (CseMachine.getControlStash()) {
+          if (CseMachine.getStackTruncated()) {
+            Layout.currentStackTruncDark = layout;
           } else {
-            Layout.currentLight = layout;
+            Layout.currentStackDark = layout;
           }
         } else {
-          if (CseMachine.getControlStash()) {
-            if (CseMachine.getStackTruncated()) {
-              Layout.currentStackTruncDark = layout;
-            } else {
-              Layout.currentStackDark = layout;
-            }
-          } else {
-            Layout.currentDark = layout;
-          }
+          Layout.currentDark = layout;
         }
       }
 
