@@ -133,10 +133,6 @@ export class FnValue extends Value implements IHoverable {
             this._streamArrows[this._streamArrows.length - 1].draw();
           }
         }
-
-        for (const arrow of this._streamArrows) {
-          arrow.draw();
-        }
       }
 
       Layout.pendingFnLink = false;
