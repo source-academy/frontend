@@ -40,4 +40,6 @@ export abstract class Value extends Visible {
 
   /** draw logic */
   abstract draw(): React.ReactNode;
+
+  abstract isLive(): boolean;
 }
