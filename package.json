@@ -200,6 +200,7 @@
   },
   "resolutions": {
     "@types/estree": "1.0.8",
-    "vite": "^8.0.0"
+    "vite": "^8.0.0",
+    "js-slang": "portal:/home/yokohama/code/official/js-slang"
   }
 }
