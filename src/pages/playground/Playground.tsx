@@ -275,11 +275,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }
 
   const [lastEdit, setLastEdit] = useState(new Date());
-  const { selectedTab, setSelectedTab } = useSideContent(
+  const { alerts, selectedTab, setSelectedTab } = useSideContent(
     workspaceLocation,
     shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction
   );
-  const [hasBreakpoints, setHasBreakpoints] = useState(false);
+  const showStepperPrompt = alerts.includes(SideContentType.substVisualizer);
+  const hasAnyBreakpoints = useMemo(
+    () => editorTabs.some(tab => tab.breakpoints.some(Boolean)),
+    [editorTabs]
+  );
   const [sessionId, setSessionId] = useState(() =>
     initSession('playground', {
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
@@ -411,56 +415,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // const onChangeTabs = useCallback(
-  //   (
-  //     newTabId: SideContentType,
-  //     prevTabId: SideContentType,
-  //     event: React.MouseEvent<HTMLElement>
-  //   ) => {
-  //     if (newTabId === prevTabId) {
-  //       return;
-  //     }
-
-  //     // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
-  //     if (prevTabId === SideContentType.substVisualizer) {
-  //       if (newTabId === SideContentType.mobileEditorRun) return;
-  //       if (!hasBreakpoints) {
-  //         handleReplOutputClear();
-  //         handleUsingSubst(false);
-  //       }
-  //     }
-
-  // if (
-  //   prevTabId === SideContentType.cseMachine &&
-  //   newTabId === SideContentType.mobileEditorRun
-  // ) {
-  //   return;
-  // }
-
-  //     // if (newTabId !== SideContentType.cseMachine) {
-  //     //   handleCseMachineReset();
-  //     // }
-
-  //     // if (
-  //     //   isSourceLanguage(playgroundSourceChapter) &&
-  //     //   (newTabId === SideContentType.substVisualizer || newTabId === SideContentType.cseMachine)
-  //     // ) {
-  //     //   if (playgroundSourceChapter <= Chapter.SOURCE_2) {
-  //     //     handleUsingSubst(true);
-  //     //   } else {
-  //     //     handleUsingCse(true);
-  //     //   }
-  //     // }
-
-  //     // setSelectedTab(newTabId);
-  //   },
-  //   [
-  //     hasBreakpoints,
-  //     handleUsingSubst,
-  //     handleReplOutputClear
-  //   ]
-  // );
-
   const pushLog = useCallback(
     (newInput: Input) => {
       log(sessionId, newInput);
@@ -478,6 +432,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
         dispatch(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
         dispatch(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
         dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
+
+        if (playgroundSourceChapter <= Chapter.SOURCE_2) {
+          const shouldUseSubst =
+            selectedTab === SideContentType.substVisualizer || hasAnyBreakpoints;
+          handleUsingSubst(shouldUseSubst);
+        }
+
         dispatch(WorkspaceActions.evalEditor(workspaceLocation));
         CseMachine.setClearDeadFrames(false);
         if (CseMachine.getCenterAlignment()) {
@@ -492,7 +453,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleDebuggerReset: () => dispatch(InterpreterActions.debuggerReset(workspaceLocation)),
       handleDebuggerResume: () => dispatch(InterpreterActions.debuggerResume(workspaceLocation))
     };
-  }, [dispatch, workspaceLocation, updateCse]);
+  }, [
+    dispatch,
+    workspaceLocation,
+    updateCse,
+    playgroundSourceChapter,
+    selectedTab,
+    hasAnyBreakpoints,
+    handleUsingSubst
+  ]);
 
   const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
 
@@ -524,7 +493,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const chapterSelectHandler = useCallback(
     (sublanguage: SALanguage, e: any) => {
       const { chapter, variant } = sublanguage;
-      if ((chapter <= 2 && hasBreakpoints) || selectedTab === SideContentType.substVisualizer) {
+      if ((chapter <= 2 && hasAnyBreakpoints) || selectedTab === SideContentType.substVisualizer) {
         handleUsingSubst(true);
       }
       if (chapter > 2) {
@@ -548,7 +517,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     },
     [
       dispatch,
-      hasBreakpoints,
+      hasAnyBreakpoints,
       selectedTab,
       pushLog,
       handleReplOutputClear,
@@ -897,31 +866,26 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const handleEditorUpdateBreakpoints = useCallback(
     (editorTabIndex: number, breakpoints: string[]) => {
-      // get rid of holes in array
-      const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;
-      if (numberOfBreakpoints > 0) {
-        setHasBreakpoints(true);
-        if (playgroundSourceChapter <= 2) {
-          /**
-           * There are breakpoints set on Source Chapter 2, so we set the
-           * Redux state for the editor to evaluate to the substituter
-           */
+      const hasBreakpointsInTab = breakpoints.some(Boolean);
 
-          handleUsingSubst(true);
-        }
-      }
-      if (numberOfBreakpoints === 0) {
-        setHasBreakpoints(false);
+      const hasAnyBreakpointsAfterUpdate = editorTabs.some((tab, index) =>
+        index === editorTabIndex ? hasBreakpointsInTab : tab.breakpoints.some(Boolean)
+      );
 
-        if (selectedTab !== SideContentType.substVisualizer) {
-          handleReplOutputClear();
-          handleUsingSubst(false);
-        }
+      if (hasAnyBreakpointsAfterUpdate && playgroundSourceChapter <= Chapter.SOURCE_2) {
+        handleUsingSubst(true);
       }
+
+      if (!hasAnyBreakpointsAfterUpdate && selectedTab !== SideContentType.substVisualizer) {
+        handleReplOutputClear();
+        handleUsingSubst(false);
+      }
+
       handleSetEditorBreakpoints(editorTabIndex, breakpoints);
       dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
     },
     [
+      editorTabs,
       selectedTab,
       dispatch,
       workspaceLocation,
@@ -996,6 +960,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     replValue,
     handleReplEval,
     usingSubst,
+    showStepperPrompt,
     handleBrowseHistoryDown: replHandlers.handleBrowseHistoryDown,
     handleBrowseHistoryUp: replHandlers.handleBrowseHistoryUp,
     handleReplValueChange: replHandlers.handleReplValueChange,

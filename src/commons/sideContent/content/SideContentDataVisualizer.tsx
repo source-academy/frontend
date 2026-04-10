@@ -1,4 +1,6 @@
-import { Button, Card, Classes } from '@blueprintjs/core';
+import { AnchorButton, Button, ButtonGroup, Card, Checkbox, Classes } from '@blueprintjs/core';
+import { Tooltip } from '@blueprintjs/core';
+import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
@@ -133,6 +135,90 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
             </div>
           ) : (
             <DataVisualizerDefaultText />
+          )}
+          {this.state.steps.length > 0 && (
+            <>
+              <ButtonGroup>
+                <Tooltip content="Original View" position="top">
+                  <AnchorButton
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                    onMouseUp={() => {
+                      DataVisualizer.setMode('normal');
+                      DataVisualizer.redraw();
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <Icon icon="grid-view" />
+                      <Checkbox
+                        checked={DataVisualizer.getNormalMode()}
+                        style={{ marginTop: 7 }}
+                        tabIndex={-1}
+                        aria-hidden="true"
+                      />
+                    </div>
+                  </AnchorButton>
+                </Tooltip>
+              </ButtonGroup>
+
+              <Tooltip content="Binary Tree View" position="top">
+                <AnchorButton
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginLeft: 10
+                  }}
+                  onMouseUp={() => {
+                    DataVisualizer.setMode('binTree');
+                    DataVisualizer.redraw();
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Icon
+                      icon="one-to-many"
+                      style={{ transform: 'rotate(90deg)', marginLeft: 6 }}
+                    />
+                    <Checkbox
+                      checked={DataVisualizer.getBinTreeMode()}
+                      style={{ marginTop: 7 }}
+                      tabIndex={-1}
+                      aria-hidden="true"
+                    />
+                  </div>
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip content="General Tree View" position="top">
+                <AnchorButton
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginLeft: 10
+                  }}
+                  onMouseUp={() => {
+                    DataVisualizer.setMode('tree');
+                    DataVisualizer.redraw();
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Icon icon="diagram-tree" />
+                    <Checkbox
+                      checked={DataVisualizer.getTreeMode()}
+                      style={{ marginTop: 7 }}
+                      tabIndex={-1}
+                      aria-hidden="true"
+                    />
+                  </div>
+                </AnchorButton>
+              </Tooltip>
+            </>
           )}
         </div>
       </HotKeys>
