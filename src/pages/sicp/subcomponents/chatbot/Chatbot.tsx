@@ -2,6 +2,7 @@ import { AnchorButton, Icon } from '@blueprintjs/core';
 import * as React from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 import logo from 'src/assets/SA.jpg';
+import { useSession } from 'src/commons/utils/Hooks';
 import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import classes from 'src/styles/Chatbot.module.scss';
 

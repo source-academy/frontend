@@ -77,7 +77,7 @@ const createErrorMessage = (): ChatMessage => ({
   role: 'assistant'
 });
 
-const scrollToBottom = (ref: React.RefObject<HTMLDivElement>) => {
+const scrollToBottom = (ref: React.RefObject<HTMLDivElement | null>) => {
   ref.current?.scrollTo({ top: ref.current?.scrollHeight });
 };
 
@@ -100,14 +100,18 @@ const RagChatBox: React.FC<Props> = ({
   };
 
   const sendMessage = useCallback(() => {
-    if (userInput.trim() === '' || !tokens) {
+    if (userInput.trim() === '' || !tokens.accessToken || !tokens.refreshToken) {
       return;
     }
+    const authedTokens: Tokens = {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken
+    };
     setUserInput('');
     setMessages(prev => [...prev, { id: uuid(), role: 'user', content: userInput }]);
     setIsLoading(true);
 
-    sendRagMessage(tokens as Tokens, userInput)
+    sendRagMessage(authedTokens, userInput)
       .then(resp => {
         setMessages(prev => [...prev, { id: uuid(), role: 'assistant', content: resp.response }]);
       })
@@ -127,9 +131,13 @@ const RagChatBox: React.FC<Props> = ({
   );
 
   const resetChat = useCallback(() => {
-    if (!tokens) return;
+    if (!tokens.accessToken || !tokens.refreshToken) return;
+    const authedTokens: Tokens = {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken
+    };
 
-    initRagChat(tokens as Tokens)
+    initRagChat(authedTokens)
       .then(resp => {
         const conversationMessages = resp.messages;
         const maxMessageSize = resp.maxContentSize;
