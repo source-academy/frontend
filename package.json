@@ -47,7 +47,7 @@
     "@sourceacademy/conductor": "https://github.com/source-academy/conductor.git#0.3.0",
     "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.6",
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.2",
-    "@sourceacademy/sharedb-ace": "2.1.1",
+    "@sourceacademy/sharedb-ace": "2.1.2",
     "@sourceacademy/sling-client": "^0.1.0",
     "@szhsin/react-menu": "^4.0.0",
     "@tanstack/react-table": "^8.9.3",
