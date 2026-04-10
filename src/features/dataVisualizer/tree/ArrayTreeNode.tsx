@@ -33,8 +33,8 @@ export class ArrayTreeNode extends DrawableTreeNode {
                 y: parentY + Config.BoxHeight / 2
               },
               to: {
-                x,
-                y
+                x: parentY == y ? x - (Config.BoxWidth / 2) - (Config.StrokeWidth * 2) : x,
+                y: parentY == y ? parentY - Config.ArrowPointerOffsetVertical + (Config.BoxHeight / 2) : y
               }
             }}
           ></ArrowDrawable>

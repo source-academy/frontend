@@ -24,10 +24,10 @@ export class BinaryTreeDrawer extends OriginalDrawer {
     // NON-BINARY TREE WARNING
     if (!DataVisualizer.isBinTree) {
       return (
-        <Stage key={key} width={400} height={100}>
+        <Stage key={key} width={490} height={100}>
           <Layer>
             <Text
-              text={'Render binary tree only supports binary trees'}
+              text={'Binary Tree View only supports binary trees (no cycles)'}
               align="center"
               fontStyle="normal"
               fontSize={20}
