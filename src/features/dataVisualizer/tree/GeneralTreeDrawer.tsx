@@ -24,10 +24,10 @@ export class GeneralTreeDrawer extends OriginalDrawer {
     // NON-GENERAL TREE WARNING
     if (!DataVisualizer.isGenTree) {
       return (
-        <Stage key={key} width={400} height={100}>
+        <Stage key={key} width={445} height={100}>
           <Layer>
             <Text
-              text={'Render general tree only supports trees'}
+              text={'General Tree View only supports trees (no cycles)'}
               align="center"
               fontStyle="normal"
               fontSize={20}
