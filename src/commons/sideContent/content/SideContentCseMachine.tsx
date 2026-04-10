@@ -644,7 +644,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
     this.sliderShift(0);
     this.sliderRelease(0);
   };
-      
+
   private toggleArrowFilter = (origin: ArrowOriginFilterKey) => {
     const filters = CseMachine.getArrowOriginFilters();
     CseMachine.setArrowOriginVisible(origin, !filters[origin]);

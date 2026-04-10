@@ -70,6 +70,9 @@ export default class CseMachine {
   public static togglePairCreationMode(): void {
     CseMachine.pairCreationMode = !CseMachine.pairCreationMode;
   }
+  public static resetPairCreationMode(): void {
+    CseMachine.pairCreationMode = false;
+  }
   public static setClearDeadFrames(enabled: boolean): void {
     Layout.clearDeadFrames = enabled;
   }
@@ -425,6 +428,11 @@ export default class CseMachine {
 
       if (CseMachine.getPairCreationMode()) {
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
+        if (!CseMachine.getMasterLayout()) {
+          CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+        }
+        Layout.applyFixedPositions();
+        CseAnimation.updateAnimation();
         this.setVis(Layout.draw());
         // this.setVis(Layout.draw());
         // console.log(Layout.currentDarkPairs);
@@ -491,6 +499,7 @@ export default class CseMachine {
 
   static clearCse() {
     CseMachine.resetArrowOriginFilters();
+    CseMachine.resetPairCreationMode();
     if (this.setVis) {
       this.setVis(undefined);
       CseMachine.environmentTree = undefined;
