@@ -27,13 +27,14 @@ import { ArrayValue } from './components/values/ArrayValue';
 import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
 import { isBuiltInFn, isEnvEqual, isInstr, isStreamFn } from './CseMachineUtils';
-import { isList, isSymbol } from './utils/scheme';
 
 export class CseAnimation {
   static readonly animations: Animatable[] = [];
   static readonly defaultDuration = 300;
   static readonly defaultEasing = Easings.StrongEaseInOut;
   private static animationEnabled = false;
+  private static hideReferenceArrows = false;
+  private static hiddenFrameIds = new Set<string>();
   private static currentFrame: Frame;
   private static previousFrame: Frame;
 
@@ -48,6 +49,26 @@ export class CseAnimation {
 
   static disableAnimations(): void {
     CseAnimation.animationEnabled = false;
+  }
+
+  static setHideReferenceArrows(shouldHide: boolean): void {
+    CseAnimation.hideReferenceArrows = shouldHide;
+  }
+
+  static shouldHideReferenceArrows(): boolean {
+    return CseAnimation.hideReferenceArrows;
+  }
+
+  static setHiddenFrameIds(frameIds: Iterable<string>): void {
+    CseAnimation.hiddenFrameIds = new Set(frameIds);
+  }
+
+  static clearHiddenFrameIds(): void {
+    CseAnimation.hiddenFrameIds.clear();
+  }
+
+  static shouldHideFrame(frameId: string): boolean {
+    return CseAnimation.hiddenFrameIds.has(frameId);
   }
 
   static setCurrentFrame(frame: Frame) {
@@ -329,77 +350,6 @@ export class CseAnimation {
         case InstrType.RESET:
           break;
       }
-    } else {
-      // these are either scheme lists or values.
-      // The value is a number, boolean, string or null. (control -> stash)
-      if (
-        lastControlItem === null ||
-        typeof lastControlItem === 'number' ||
-        typeof lastControlItem === 'boolean' ||
-        typeof lastControlItem === 'string'
-      ) {
-        CseAnimation.animations.push(
-          new ControlToStashAnimation(lastControlComponent, currStashComponent!)
-        );
-      }
-      // The value is a symbol. (lookup, control -> stash)
-      else if (isSymbol(lastControlItem)) {
-        CseAnimation.animations.push(
-          new ControlToStashAnimation(lastControlComponent, currStashComponent!)
-        );
-      }
-      // The value is a list. (control -> control)
-      else if (isList(lastControlItem)) {
-        // base our decision on the first element of the list.
-        const firstElement = (lastControlItem as any)[0];
-        if (isSymbol(firstElement)) {
-          switch (firstElement.sym) {
-            case 'lambda':
-            case 'define':
-            case 'set!':
-            case 'if':
-            case 'begin':
-              CseAnimation.animations.push(
-                new ControlExpansionAnimation(
-                  lastControlComponent,
-                  CseAnimation.getNewControlItems()
-                )
-              );
-              break;
-            case 'quote':
-              CseAnimation.animations.push(
-                new ControlToStashAnimation(lastControlComponent, currStashComponent!)
-              );
-              break;
-            case 'define-syntax':
-              // undefined was pushed onto the stash.
-              CseAnimation.animations.push(
-                new ControlToStashAnimation(lastControlComponent, currStashComponent!)
-              );
-              break;
-            case 'syntax-rules':
-            // nothing.
-            // TODO: Check if this fallthrough behavior is intentional
-            // eslint-disable-next-line no-fallthrough
-            default:
-              // it's probably an application, or a macro expansion.
-              // either way, it's a control -> control expansion.
-              CseAnimation.animations.push(
-                new ControlExpansionAnimation(
-                  lastControlComponent,
-                  CseAnimation.getNewControlItems()
-                )
-              );
-              break;
-          }
-        } else {
-          // it's probably an application.
-          CseAnimation.animations.push(
-            new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
-          );
-        }
-      }
-      return;
     }
   }
 

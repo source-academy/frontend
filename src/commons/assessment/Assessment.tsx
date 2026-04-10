@@ -13,7 +13,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { sortBy } from 'lodash';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useLoaderData, useParams } from 'react-router';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';

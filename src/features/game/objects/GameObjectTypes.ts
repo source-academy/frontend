@@ -20,6 +20,9 @@ export type ObjectProperty = TrackInteraction &
     y: number;
     width?: number;
     height?: number;
+    isDoor: boolean;
+    isChat: boolean;
+    leadTo: string;
   };
 
 export type ObjectLayerProps = {

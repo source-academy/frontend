@@ -2,7 +2,7 @@ import { ItemId } from '../commons/CommonTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import ActionConditionChecker from './GameActionConditionChecker';
 import GameActionExecuter from './GameActionExecuter';
-import { ActionCondition } from './GameActionTypes';
+import { ActionCondition, GameActionType } from './GameActionTypes';
 
 /**
  * This class manages all game actions, and is called whenever
@@ -79,5 +79,25 @@ export default class GameActionManager {
       (isRepeatable || !GameGlobalAPI.getInstance().hasTriggeredInteraction(interactionId)) &&
       (await ActionConditionChecker.checkAllConditionsSatisfied(actionConditions))
     );
+  }
+
+  /**
+   * check if the action is about talking to change the cursor
+   *
+   * @param actionType action type
+   * @returns
+   */
+  public isTalkAction(actionType: GameActionType): boolean {
+    return GameActionExecuter.isTalkAction(actionType);
+  }
+
+  /**
+   * Check if the action is about moving to change the cursor
+   *
+   * @param actionType action type
+   * @returns
+   */
+  public isMoveAction(actionType: GameActionType): boolean {
+    return GameActionExecuter.isMoveAction(actionType);
   }
 }

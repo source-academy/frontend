@@ -29,7 +29,7 @@ const createErrorMessage = (): ChatMessage => ({
   role: 'assistant'
 });
 
-const scrollToBottom = (ref: React.RefObject<HTMLDivElement>) => {
+const scrollToBottom = (ref: React.RefObject<HTMLDivElement | null>) => {
   ref.current?.scrollTo({ top: ref.current?.scrollHeight });
 };
 
@@ -119,16 +119,14 @@ const ChatBox: React.FC<Props> = ({
     <div
       className={`${classes['chat-container']} ${isExpanded ? classes['chat-container-expanded'] : ''}`}
     >
-      <div className={classes['chat-header']}>
-        <Button
-          size="small"
-          variant="minimal"
-          icon={isExpanded ? 'minimize' : 'maximize'}
-          onClick={toggleExpanded}
-          title={isExpanded ? 'Shrink chat' : 'Expand chat'}
-          className={classes['expand-button']}
-        />
-      </div>
+      <Button
+        size="small"
+        variant="minimal"
+        icon={isExpanded ? 'minimize' : 'maximize'}
+        onClick={toggleExpanded}
+        title={isExpanded ? 'Shrink chat' : 'Expand chat'}
+        className={classes['expand-button']}
+      />
       <div className={classes['chat-message']} ref={chatRef}>
         {messages.map(message => (
           <div

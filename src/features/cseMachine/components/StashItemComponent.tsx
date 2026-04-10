@@ -24,7 +24,7 @@ import {
   setUnhoveredStyle,
   truncateText
 } from '../CseMachineUtils';
-import { isContinuation } from '../utils/scheme';
+import { isContinuation } from '../utils/continuation';
 import { ArrowFromStashItemComponent } from './arrows/ArrowFromStashItemComponent';
 import { ArrayValue } from './values/ArrayValue';
 import { ContValue } from './values/ContValue';
@@ -105,6 +105,16 @@ export class StashItemComponent extends Visible implements IHoverable {
     }
     this.ref.current.zIndex(this.zIndex);
   };
+
+  setArrowSourceHighlightedStyle(): void {
+    this.tag?.stroke(Config.HoverColor);
+    this.secItem?.fill(Config.HoverColor);
+  }
+
+  setArrowSourceNormalStyle(): void {
+    this.tag?.stroke(isStashItemInDanger(this.index) ? defaultDangerColor() : defaultStrokeColor());
+    this.secItem?.fill(defaultTextColor());
+  }
 
   destroy() {
     this.ref.current.destroyChildren();

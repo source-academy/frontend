@@ -1,7 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/errors/base';
-import { act } from 'react';
-import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import { AutogradingResult, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { mockGradingAnswer } from '../../mocks/GradingMocks';
@@ -88,10 +86,8 @@ test('Autograder renders placeholders correctly when testcases and results are e
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
-
-  await act(() => render(app));
+  const { asFragment } = render(app);
+  expect(asFragment()).toMatchSnapshot();
 
   // Both noResults <div>s are rendered (one under 'Testcases', other under 'Autograder Results')
   expect(screen.queryAllByTestId('noResults')).toHaveLength(2);
@@ -113,10 +109,8 @@ test('Autograder renders public testcases with different statuses correctly', as
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
-
-  await act(() => render(app));
+  const { asFragment } = render(app);
+  expect(asFragment()).toMatchSnapshot();
 
   // Expect only the header <div> for testcases section to be rendered
   expect(screen.queryAllByTestId('testcases-header')).toHaveLength(1);
@@ -158,10 +152,8 @@ test('Autograder renders opaque testcases with different statuses correctly in A
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
-
-  await act(() => render(app));
+  const { asFragment } = render(app);
+  expect(asFragment()).toMatchSnapshot();
 
   // No autograder result Card components should be rendered
   expect(screen.queryAllByTestId('ResultCard')).toHaveLength(0);
@@ -187,10 +179,8 @@ test('Autograder renders opaque testcases with different statuses correctly in G
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
-
-  await act(() => render(app));
+  const { asFragment } = render(app);
+  expect(asFragment()).toMatchSnapshot();
 
   // No autograder result Card components should be rendered
   expect(screen.queryAllByTestId('ResultCard')).toHaveLength(0);
@@ -218,10 +208,8 @@ test('Autograder renders secret testcases with different statuses correctly', as
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
-
-  await act(() => render(app));
+  const { asFragment } = render(app);
+  expect(asFragment()).toMatchSnapshot();
 
   // Expect only the header <div> for testcases section to be rendered
   expect(screen.queryAllByTestId('testcases-header')).toHaveLength(1);
@@ -257,10 +245,8 @@ test('Autograder renders autograder results with different statuses correctly', 
     handleTestcaseEval: (testcaseId: number) => {}
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
-
-  await act(() => render(app));
+  const { asFragment } = render(app);
+  expect(asFragment()).toMatchSnapshot();
 
   // Expect only the header <div> for autograder results section to be rendered
   expect(screen.queryAllByTestId('testcases-header')).toHaveLength(0);

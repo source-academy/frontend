@@ -26,7 +26,7 @@ import {
   setHoveredCursor,
   setUnhoveredCursor
 } from '../../CseMachineUtils';
-import { Continuation } from '../../utils/scheme';
+import { Continuation } from '../../utils/continuation';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
 import { Frame } from '../Frame';
@@ -37,7 +37,7 @@ import { Value } from './Value';
 export class ContValue extends Value implements IHoverable {
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
-  readonly labelRef: RefObject<Label> = React.createRef();
+  readonly labelRef: RefObject<Label | null> = React.createRef();
 
   readonly tooltip: string = 'continuation';
   readonly tooltipWidth: number = getTextWidth(this.tooltip);
@@ -127,6 +127,19 @@ export class ContValue extends Value implements IHoverable {
     setUnhoveredCursor(currentTarget);
     this.labelRef.current?.hide();
   };
+
+  setArrowSourceHighlightedStyle(): void {
+    if (this.isLive()) {
+      this.setShapesStyle(Config.HoverColor);
+    } else {
+      this.setShapesStyle(Config.HoverDeadColor);
+    }
+  }
+
+  setArrowSourceNormalStyle(): void {
+    const strokeColor = this.isLive() ? defaultStrokeColor() : fadedStrokeColor();
+    this.setShapesStyle(strokeColor);
+  }
 
   draw(): React.ReactNode {
     if (this.enclosingFrame) {

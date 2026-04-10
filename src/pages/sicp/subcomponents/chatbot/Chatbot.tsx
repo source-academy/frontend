@@ -51,6 +51,7 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [position, setPosition] = React.useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = React.useState(false);
+  const { isLoggedIn } = useSession();
   const nodeRef = React.useRef<HTMLDivElement>(null);
 
   const isSnippetOpen = activeSnippetId !== '';
@@ -103,28 +104,53 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
 
   return (
     <div>
-      <Draggable
-        nodeRef={nodeRef}
-        handle={`.${classes['bot-button']}`}
-        position={position}
-        onStart={handleDragStart}
-        onDrag={handleDrag}
-        onStop={handleDragStop}
-      >
-        <div
-          ref={nodeRef}
-          className={classes['bot-container']}
-          style={{ display: isSnippetOpen ? 'none' : 'block' }}
+      {isLoggedIn && (
+        <Draggable
+          nodeRef={nodeRef}
+          handle={`.${classes['bot-button']}`}
+          position={position}
+          onStart={handleDragStart}
+          onDrag={handleDrag}
+          onStop={handleDragStop}
         >
-          <div className={classes['bot-area']}>
-            {isDivVisible && (
-              <div className={classes['tips-box']}>
-                <p className={classes['tips-message']}>
-                  I am Louis, your SICP bot
-                  <br />
-                  {tipsMessage}
-                </p>
-              </div>
+          <div
+            ref={nodeRef}
+            className={classes['bot-container']}
+            style={{ display: isSnippetOpen ? 'none' : 'block' }}
+          >
+            <div className={classes['bot-area']}>
+              {isDivVisible && (
+                <div className={classes['tips-box']}>
+                  <p className={classes['tips-message']}>
+                    I am Louis, your SICP bot
+                    <br />
+                    {tipsMessage}
+                  </p>
+                </div>
+              )}
+              <AnchorButton
+                className={classes['bot-button']}
+                onMouseEnter={() => !isDragging && setIsDivVisible(true)}
+                onMouseLeave={() => setIsDivVisible(false)}
+                onClick={togglePop}
+                icon={
+                  <Icon
+                    icon={
+                      <img src={logo} className={classes['iSA']} alt="SA Logo" draggable={false} />
+                    }
+                  />
+                }
+              />
+            </div>
+            {isPop && (
+              <ChatBox
+                getSection={getSection}
+                getText={getText}
+                activeSnippetId={activeSnippetId}
+                setActiveSnippetId={setActiveSnippetId}
+                isExpanded={isExpanded}
+                toggleExpanded={toggleExpanded}
+              />
             )}
             <AnchorButton
               className={classes['bot-button']}
@@ -140,18 +166,8 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
               }
             />
           </div>
-          {isPop && (
-            <ChatBox
-              getSection={getSection}
-              getText={getText}
-              activeSnippetId={activeSnippetId}
-              setActiveSnippetId={setActiveSnippetId}
-              isExpanded={isExpanded}
-              toggleExpanded={toggleExpanded}
-            />
-          )}
-        </div>
-      </Draggable>
+        </Draggable>
+      )}
     </div>
   );
 };

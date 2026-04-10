@@ -1,47 +1,80 @@
 import { Button } from '@blueprintjs/core';
-import { arrayMoveImmutable } from 'array-move';
-import React from 'react';
 import {
-  SortableContainer,
-  SortableContainerProps,
-  SortableElement,
-  SortableElementProps
-} from 'react-sortable-hoc';
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import React from 'react';
 
-type SortableItemProps = SortableElementProps & {
-  value: any;
+type SortableItemProps = {
+  id: string;
 };
 
-const SortableItem = React.memo(
-  SortableElement<SortableItemProps>(({ value }: any) => (
-    <div>
-      <Button>{value}</Button>
+const SortableItem = React.memo(({ id }: SortableItemProps) => {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition
+  };
+
+  return (
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <Button>{id}</Button>
     </div>
-  ))
-);
+  );
+});
 
-type SortableListProps = SortableContainerProps & {
+type SortableListProps = {
   items: string[];
+  onSortEnd: (event: DragEndEvent) => void;
 };
 
-export const SortableList = React.memo(
-  SortableContainer<SortableListProps>(({ items }: any) => {
-    return (
-      <div>
-        {items &&
-          items.map((value: any, index: number) => (
-            <SortableItem key={`item-${value}`} index={index} value={value} />
-          ))}
-      </div>
-    );
-  })
-);
+export const SortableList = React.memo(({ items, onSortEnd }: SortableListProps) => {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates
+    })
+  );
+
+  return (
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onSortEnd}>
+      <SortableContext items={items} strategy={verticalListSortingStrategy}>
+        <div>
+          {items && items.map((value: string) => <SortableItem key={`item-${value}`} id={value} />)}
+        </div>
+      </SortableContext>
+    </DndContext>
+  );
+});
 
 export const useSortableList = () => {
   const [items, setItems] = React.useState<string[]>([]);
 
-  const onSortEnd = React.useCallback(({ oldIndex, newIndex }: any) => {
-    setItems(prevState => arrayMoveImmutable(prevState, oldIndex, newIndex));
+  const onSortEnd = React.useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setItems(prevState => {
+        const oldIndex = prevState.indexOf(active.id as string);
+        const newIndex = prevState.indexOf(over.id as string);
+
+        return arrayMove(prevState, oldIndex, newIndex);
+      });
+    }
   }, []);
 
   return {

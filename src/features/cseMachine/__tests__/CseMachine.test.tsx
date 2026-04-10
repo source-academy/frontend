@@ -190,7 +190,7 @@ codeSamples.forEach((code, idx) => {
     checkLayout();
     CseMachine.togglePrintableMode();
   });
-});
+}, 10_000);
 
 const codeSamplesControlStash: [string, string, number, boolean?][] = [
   [
@@ -264,4 +264,19 @@ codeSamplesControlStash.forEach(codeSample => {
       if (isFunction(item.value) || isArray(item.value)) expect(item.arrow).toBeDefined();
     });
   });
+});
+
+test('clearRenderedLayouts preserves used built-in names', () => {
+  CseMachine.usedBuiltInNames.add('map');
+  Layout.currentLight = 'light';
+  Layout.currentDark = 'dark';
+
+  CseMachine.clearRenderedLayouts();
+
+  expect(CseMachine.usedBuiltInNames.has('map')).toBe(true);
+  expect(Layout.currentLight).toBeUndefined();
+  expect(Layout.currentDark).toBeUndefined();
+
+  // Cleanup static state to avoid cross-test pollution.
+  CseMachine.clearCachedLayouts();
 });

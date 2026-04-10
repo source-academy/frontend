@@ -1,529 +1,596 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`NavigationBar > Renders "Not logged in" correctly 1`] = `
-<React.Fragment>
-  <Blueprint6.Navbar
-    className="NavigationBar primary-navbar _primary-navbar_d292d6 bp6-dark"
+<DocumentFragment>
+  <div
+    class="bp6-navbar NavigationBar primary-navbar _primary-navbar_d292d6 bp6-dark"
   >
-    <Blueprint6.NavbarGroup
-      align="left"
+    <div
+      class="bp6-navbar-group bp6-align-left"
     >
-      <Blueprint6.Popover
-        boundary="clippingParents"
-        captureDismiss={false}
-        content={
-          <Blueprint6.Navbar>
-            <Blueprint6.NavbarGroup />
-          </Blueprint6.Navbar>
-        }
-        defaultIsOpen={false}
-        disabled={true}
-        fill={false}
-        hasBackdrop={false}
-        hoverCloseDelay={300}
-        hoverOpenDelay={150}
-        inheritDarkTheme={true}
-        interactionKind="hover"
-        matchTargetWidth={false}
-        minimal={false}
-        openOnTargetFocus={true}
-        popoverClassName="desktop-navbar-popover"
-        position="bottom-right"
-        positioningStrategy="absolute"
-        shouldReturnFocusOnClose={false}
-        targetTagName="span"
-        transitionDuration={300}
-        usePortal={true}
+      <span
+        class="bp6-popover-target"
       >
-        <NavLink
-          className="NavigationBar__link"
-          to="/welcome"
+        <a
+          aria-haspopup="menu"
+          class="NavigationBar__link"
+          data-discover="true"
+          href="/welcome"
         >
-          <Blueprint6.NavbarHeading>
-            <Blueprint6.Button
-              active={true}
-              className="app-title"
-              icon="symbol-diamond"
-              minimal={true}
+          <div
+            class="bp6-navbar-heading"
+          >
+            <button
+              class="bp6-button bp6-active bp6-minimal app-title"
+              type="button"
             >
-              Source Academy @ NUS
-            </Blueprint6.Button>
-          </Blueprint6.NavbarHeading>
-        </NavLink>
-      </Blueprint6.Popover>
-      <DesktopNavLink
-        disabled={true}
-        icon="music"
-        text="Sourcecast"
-        to="/courses/undefined/sourcecast"
-      />
-      <DesktopNavLink
-        disabled={true}
-        icon="code"
-        text="Playground"
-        to="/playground"
-      />
-      <DesktopNavLink
-        disabled={true}
-        icon="book"
-        text="SICP JS"
-        to="/sicpjs"
-      />
-      <DesktopNavLink
-        disabled={true}
-        icon="mountain"
-        text="Achievements"
-        to="/courses/undefined/achievements"
-      />
-      <DesktopNavLink
-        disabled={true}
-        icon="git-repo"
-        text="Stories"
-        to="/courses/undefined/stories"
-      />
-      <DesktopNavLink
-        disabled={true}
-        icon="timeline-bar-chart"
-        text="Leaderboard"
-        to="/courses/undefined/leaderboard"
-      />
-    </Blueprint6.NavbarGroup>
-    <Blueprint6.NavbarGroup
-      align="right"
+              <span
+                aria-hidden="true"
+                class="bp6-icon bp6-icon-standard bp6-icon-symbol-diamond"
+                data-icon="symbol-diamond"
+              />
+              <span
+                class="bp6-button-text"
+              >
+                Source Academy @ NUS
+              </span>
+            </button>
+          </div>
+        </a>
+      </span>
+    </div>
+    <div
+      class="bp6-navbar-group bp6-align-right"
     >
-      <NavigationBarLangSelectButton />
-      <NavLink
-        className={[Function]}
-        to="/contributors"
+      <span
+        class="bp6-popover-target"
       >
-        <Blueprint6.Icon
-          icon="heart"
+        <button
+          aria-expanded="false"
+          aria-haspopup="menu"
+          class="bp6-button"
+          data-testid="NavigationBarLangSelectButton"
+          type="button"
+        >
+          <span
+            class="bp6-button-text"
+          >
+            JavaScript
+          </span>
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-standard bp6-icon-caret-down"
+            data-icon="caret-down"
+          />
+        </button>
+      </span>
+      <a
+        class="NavigationBar__link bp6-button bp6-minimal"
+        data-discover="true"
+        href="/contributors"
+      >
+        <span
+          aria-hidden="true"
+          class="bp6-icon bp6-icon-standard bp6-icon-heart"
+          data-icon="heart"
         />
-      </NavLink>
+      </a>
       <div
-        className="visible-xs"
+        class="visible-xs"
       >
-        <Blueprint6.NavbarDivider
-          className="thin-divider"
+        <div
+          class="bp6-navbar-divider thin-divider"
         />
       </div>
       <div
-        className="hidden-xs"
+        class="hidden-xs"
       >
-        <Blueprint6.NavbarDivider
-          className="default-divider"
+        <div
+          class="bp6-navbar-divider default-divider"
         />
       </div>
-      <Dropdown />
-    </Blueprint6.NavbarGroup>
-  </Blueprint6.Navbar>
-  <Routes>
-    <Route
-      element={null}
-      path="/playground/*"
-    />
-    <Route
-      element={null}
-      path="/contributors"
-    />
-    <Route
-      element={null}
-      path="/courses/:courseId/sourcecast"
-    />
-    <Route
-      element={null}
-      path="/courses/:courseId/achievements"
-    />
-    <Route
-      element={null}
-      path="/courses/:courseId/leaderboard/*"
-    />
-    <Route
-      element={<SicpNavigationBar />}
-      path="/sicpjs/:section?"
-    />
-    <Route
-      element={null}
-      path="*"
-    />
-  </Routes>
-</React.Fragment>
+      <span
+        class="bp6-popover-target"
+      >
+        <button
+          class="bp6-button bp6-minimal"
+        >
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-standard bp6-icon-caret-down"
+            data-icon="caret-down"
+          />
+        </button>
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
 `;
 
 exports[`NavigationBar > Renders correctly for student with course 1`] = `
-<React.Fragment>
-  <Blueprint6.Navbar
-    className="NavigationBar primary-navbar _primary-navbar_d292d6 bp6-dark"
+<DocumentFragment>
+  <div
+    class="bp6-navbar NavigationBar primary-navbar _primary-navbar_d292d6 bp6-dark"
   >
-    <Blueprint6.NavbarGroup
-      align="left"
+    <div
+      class="bp6-navbar-group bp6-align-left"
     >
-      <Blueprint6.Popover
-        boundary="clippingParents"
-        captureDismiss={false}
-        content={
-          <Blueprint6.Navbar>
-            <Blueprint6.NavbarGroup>
-              <DesktopNavLink
-                disabled={false}
-                hasNotifications={true}
-                hiddenInBreakpoints={
-                  [
-                    "xs",
-                    "sm",
-                  ]
-                }
-                icon="flame"
-                text="Missions"
-                to="/courses/1/missions"
-              />
-              <DesktopNavLink
-                disabled={false}
-                hasNotifications={true}
-                hiddenInBreakpoints={
-                  [
-                    "xs",
-                    "sm",
-                  ]
-                }
-                icon="lightbulb"
-                text="Quests"
-                to="/courses/1/quests"
-              />
-              <DesktopNavLink
-                disabled={false}
-                hasNotifications={true}
-                hiddenInBreakpoints={
-                  [
-                    "xs",
-                    "sm",
-                  ]
-                }
-                icon="predictive-analysis"
-                text="Paths"
-                to="/courses/1/paths"
-              />
-              <DesktopNavLink
-                disabled={false}
-                hasNotifications={true}
-                hiddenInBreakpoints={
-                  [
-                    "xs",
-                    "sm",
-                  ]
-                }
-                icon="comparison"
-                text="Contests"
-                to="/courses/1/contests"
-              />
-              <DesktopNavLink
-                disabled={false}
-                hasNotifications={true}
-                hiddenInBreakpoints={
-                  [
-                    "xs",
-                    "sm",
-                  ]
-                }
-                icon="manual"
-                text="Missions"
-                to="/courses/1/missions"
-              />
-            </Blueprint6.NavbarGroup>
-          </Blueprint6.Navbar>
-        }
-        defaultIsOpen={false}
-        disabled={true}
-        fill={false}
-        hasBackdrop={false}
-        hoverCloseDelay={300}
-        hoverOpenDelay={150}
-        inheritDarkTheme={true}
-        interactionKind="hover"
-        matchTargetWidth={false}
-        minimal={false}
-        openOnTargetFocus={true}
-        popoverClassName="desktop-navbar-popover"
-        position="bottom-right"
-        positioningStrategy="absolute"
-        shouldReturnFocusOnClose={false}
-        targetTagName="span"
-        transitionDuration={300}
-        usePortal={true}
+      <span
+        class="bp6-popover-target"
       >
-        <NavLink
-          className="NavigationBar__link"
-          to="/courses/1"
+        <a
+          aria-current="page"
+          aria-haspopup="menu"
+          class="NavigationBar__link active"
+          data-discover="true"
+          href="/courses/1"
         >
-          <Blueprint6.NavbarHeading>
-            <Blueprint6.Button
-              active={true}
-              className="app-title"
-              icon="symbol-diamond"
-              minimal={true}
+          <div
+            class="bp6-navbar-heading"
+          >
+            <button
+              class="bp6-button bp6-active bp6-minimal app-title"
+              type="button"
             >
-              CS1101S
-            </Blueprint6.Button>
-          </Blueprint6.NavbarHeading>
-        </NavLink>
-      </Blueprint6.Popover>
-      <DesktopNavLink
-        disabled={false}
-        icon="music"
-        text="Sourcecast"
-        to="/courses/1/sourcecast"
-      />
-      <DesktopNavLink
-        disabled={false}
-        icon="code"
-        text="Playground"
-        to="/playground"
-      />
-      <DesktopNavLink
-        disabled={false}
-        icon="book"
-        text="SICP JS"
-        to="/sicpjs"
-      />
-      <DesktopNavLink
-        disabled={false}
-        icon="mountain"
-        text="Achievements"
-        to="/courses/1/achievements"
-      />
-      <DesktopNavLink
-        disabled={true}
-        icon="git-repo"
-        text="Stories"
-        to="/courses/1/stories"
-      />
-      <DesktopNavLink
-        disabled={true}
-        icon="timeline-bar-chart"
-        text="Leaderboard"
-        to="/courses/1/leaderboard"
-      />
-    </Blueprint6.NavbarGroup>
-    <Blueprint6.NavbarGroup
-      align="right"
+              <span
+                aria-hidden="true"
+                class="bp6-icon bp6-icon-symbol-diamond"
+              >
+                <svg
+                  data-icon="symbol-diamond"
+                  height="16"
+                  role="img"
+                  viewBox="0 0 16 16"
+                  width="16"
+                >
+                  <path
+                    d="M12 8.01c0-.19-.07-.36-.16-.51l.01-.01-3-5-.01.01c-.17-.29-.48-.49-.84-.49s-.67.2-.84.49l-.02-.01-3 5 .02.01c-.09.15-.16.32-.16.51s.07.36.16.51h-.02l3 5 .01-.01c.18.29.49.5.85.5s.67-.2.84-.49l.01.01 3-5-.01-.01c.09-.16.16-.32.16-.51"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </span>
+              <span
+                class="bp6-button-text"
+              >
+                CS1101S
+              </span>
+            </button>
+          </div>
+        </a>
+      </span>
+      <a
+        class=""
+        data-discover="true"
+        href="/playground"
+        title="Playground"
+      >
+        <button
+          class="bp6-button bp6-minimal"
+          type="button"
+        >
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-standard bp6-icon-code"
+            data-icon="code"
+          />
+          <span
+            class="bp6-button-text"
+          >
+            Playground
+          </span>
+        </button>
+      </a>
+      <a
+        class=""
+        data-discover="true"
+        href="/sicpjs"
+        title="SICP JS"
+      >
+        <button
+          class="bp6-button bp6-minimal"
+          type="button"
+        >
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-standard bp6-icon-book"
+            data-icon="book"
+          />
+          <span
+            class="bp6-button-text"
+          >
+            SICP JS
+          </span>
+        </button>
+      </a>
+    </div>
+    <div
+      class="bp6-navbar-group bp6-align-right"
     >
-      <NavigationBarLangSelectButton />
-      <NavLink
-        className={[Function]}
-        to="/contributors"
+      <span
+        class="bp6-popover-target"
       >
-        <Blueprint6.Icon
-          icon="heart"
-        />
-      </NavLink>
+        <button
+          aria-expanded="false"
+          aria-haspopup="menu"
+          class="bp6-button"
+          data-testid="NavigationBarLangSelectButton"
+          type="button"
+        >
+          <span
+            class="bp6-button-text"
+          >
+            JavaScript
+          </span>
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-caret-down"
+          >
+            <svg
+              data-icon="caret-down"
+              height="16"
+              role="img"
+              viewBox="0 0 16 16"
+              width="16"
+            >
+              <path
+                d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </span>
+        </button>
+      </span>
+      <a
+        class="NavigationBar__link bp6-button bp6-minimal"
+        data-discover="true"
+        href="/contributors"
+      >
+        <span
+          aria-hidden="true"
+          class="bp6-icon bp6-icon-heart"
+        >
+          <svg
+            data-icon="heart"
+            height="16"
+            role="img"
+            viewBox="0 0 16 16"
+            width="16"
+          >
+            <path
+              d="M16 5.095c0-2.255-1.88-4.083-4.2-4.083-1.682 0-3.13.964-3.8 2.352a4.21 4.21 0 00-3.8-2.352C1.88 1.012 0 2.84 0 5.095c0 .066.007.13.01.194H.004c.001.047.01.096.014.143l.013.142c.07.8.321 1.663.824 2.573C2.073 10.355 4.233 12.018 8 15c3.767-2.982 5.926-4.647 7.144-6.853.501-.906.752-1.767.823-2.563q.01-.083.016-.164c.003-.043.012-.088.013-.13h-.006c.003-.066.01-.13.01-.195"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </span>
+      </a>
       <div
-        className="visible-xs"
+        class="visible-xs"
       >
-        <Blueprint6.NavbarDivider
-          className="thin-divider"
+        <div
+          class="bp6-navbar-divider thin-divider"
         />
       </div>
       <div
-        className="hidden-xs"
+        class="hidden-xs"
       >
-        <Blueprint6.NavbarDivider
-          className="default-divider"
+        <div
+          class="bp6-navbar-divider default-divider"
         />
       </div>
-      <Dropdown />
-    </Blueprint6.NavbarGroup>
-  </Blueprint6.Navbar>
-  <Routes>
-    <Route
-      element={null}
-      path="/playground/*"
+      <span
+        class="bp6-popover-target"
+      >
+        <button
+          class="bp6-button bp6-minimal"
+        >
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-caret-down"
+          >
+            <svg
+              data-icon="caret-down"
+              height="16"
+              role="img"
+              viewBox="0 0 16 16"
+              width="16"
+            >
+              <path
+                d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </span>
+        </button>
+      </span>
+    </div>
+  </div>
+  <div
+    class="bp6-navbar NavigationBar secondary-navbar"
+  >
+    <div
+      class="bp6-navbar-group bp6-align-left"
+    >
+      <a
+        class=""
+        data-discover="true"
+        href="/courses/1/missions"
+        title="Missions"
+      >
+        <button
+          class="bp6-button bp6-minimal"
+          type="button"
+        >
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-standard bp6-icon-flame"
+            data-icon="flame"
+          />
+          <span
+            class="bp6-button-text"
+          >
+            Missions
+          </span>
+        </button>
+      </a>
+      <a
+        class=""
+        data-discover="true"
+        href="/courses/1/quests"
+        title="Quests"
+      >
+        <button
+          class="bp6-button bp6-minimal"
+          type="button"
+        >
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-standard bp6-icon-lightbulb"
+            data-icon="lightbulb"
+          />
+          <span
+            class="bp6-button-text"
+          >
+            Quests
+          </span>
+        </button>
+      </a>
+      <a
+        class=""
+        data-discover="true"
+        href="/courses/1/paths"
+        title="Paths"
+      >
+        <button
+          class="bp6-button bp6-minimal"
+          type="button"
+        >
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-standard bp6-icon-predictive-analysis"
+            data-icon="predictive-analysis"
+          />
+          <span
+            class="bp6-button-text"
+          >
+            Paths
+          </span>
+        </button>
+      </a>
+      <a
+        class=""
+        data-discover="true"
+        href="/courses/1/contests"
+        title="Contests"
+      >
+        <button
+          class="bp6-button bp6-minimal"
+          type="button"
+        >
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-standard bp6-icon-comparison"
+            data-icon="comparison"
+          />
+          <span
+            class="bp6-button-text"
+          >
+            Contests
+          </span>
+        </button>
+      </a>
+    </div>
+    <div
+      class="bp6-navbar-group bp6-align-right"
     />
-    <Route
-      element={null}
-      path="/contributors"
-    />
-    <Route
-      element={null}
-      path="/courses/:courseId/sourcecast"
-    />
-    <Route
-      element={null}
-      path="/courses/:courseId/achievements"
-    />
-    <Route
-      element={null}
-      path="/courses/:courseId/leaderboard/*"
-    />
-    <Route
-      element={<SicpNavigationBar />}
-      path="/sicpjs/:section?"
-    />
-    <Route
-      element={
-        <AcademyNavigationBar
-          assessmentTypes={
-            [
-              "Missions",
-              "Quests",
-              "Paths",
-              "Contests",
-              "Missions",
-            ]
-          }
-        />
-      }
-      path="*"
-    />
-  </Routes>
-</React.Fragment>
+  </div>
+</DocumentFragment>
 `;
 
 exports[`NavigationBar > Renders correctly for student without course 1`] = `
-<React.Fragment>
-  <Blueprint6.Navbar
-    className="NavigationBar primary-navbar _primary-navbar_d292d6 bp6-dark"
+<DocumentFragment>
+  <div
+    class="bp6-navbar NavigationBar primary-navbar _primary-navbar_d292d6 bp6-dark"
   >
-    <Blueprint6.NavbarGroup
-      align="left"
+    <div
+      class="bp6-navbar-group bp6-align-left"
     >
-      <Blueprint6.Popover
-        boundary="clippingParents"
-        captureDismiss={false}
-        content={
-          <Blueprint6.Navbar>
-            <Blueprint6.NavbarGroup />
-          </Blueprint6.Navbar>
-        }
-        defaultIsOpen={false}
-        disabled={true}
-        fill={false}
-        hasBackdrop={false}
-        hoverCloseDelay={300}
-        hoverOpenDelay={150}
-        inheritDarkTheme={true}
-        interactionKind="hover"
-        matchTargetWidth={false}
-        minimal={false}
-        openOnTargetFocus={true}
-        popoverClassName="desktop-navbar-popover"
-        position="bottom-right"
-        positioningStrategy="absolute"
-        shouldReturnFocusOnClose={false}
-        targetTagName="span"
-        transitionDuration={300}
-        usePortal={true}
+      <span
+        class="bp6-popover-target"
       >
-        <NavLink
-          className="NavigationBar__link"
-          to="/welcome"
+        <a
+          aria-haspopup="menu"
+          class="NavigationBar__link"
+          data-discover="true"
+          href="/welcome"
         >
-          <Blueprint6.NavbarHeading>
-            <Blueprint6.Button
-              active={true}
-              className="app-title"
-              icon="symbol-diamond"
-              minimal={true}
+          <div
+            class="bp6-navbar-heading"
+          >
+            <button
+              class="bp6-button bp6-active bp6-minimal app-title"
+              type="button"
             >
-              Source Academy @ NUS
-            </Blueprint6.Button>
-          </Blueprint6.NavbarHeading>
-        </NavLink>
-      </Blueprint6.Popover>
-      <DesktopNavLink
-        disabled={true}
-        icon="music"
-        text="Sourcecast"
-        to="/courses/undefined/sourcecast"
-      />
-      <DesktopNavLink
-        disabled={true}
-        icon="code"
-        text="Playground"
-        to="/playground"
-      />
-      <DesktopNavLink
-        disabled={false}
-        icon="book"
-        text="SICP JS"
-        to="/sicpjs"
-      />
-      <DesktopNavLink
-        disabled={true}
-        icon="mountain"
-        text="Achievements"
-        to="/courses/undefined/achievements"
-      />
-      <DesktopNavLink
-        disabled={true}
-        icon="git-repo"
-        text="Stories"
-        to="/courses/undefined/stories"
-      />
-      <DesktopNavLink
-        disabled={true}
-        icon="timeline-bar-chart"
-        text="Leaderboard"
-        to="/courses/undefined/leaderboard"
-      />
-    </Blueprint6.NavbarGroup>
-    <Blueprint6.NavbarGroup
-      align="right"
+              <span
+                aria-hidden="true"
+                class="bp6-icon bp6-icon-symbol-diamond"
+              >
+                <svg
+                  data-icon="symbol-diamond"
+                  height="16"
+                  role="img"
+                  viewBox="0 0 16 16"
+                  width="16"
+                >
+                  <path
+                    d="M12 8.01c0-.19-.07-.36-.16-.51l.01-.01-3-5-.01.01c-.17-.29-.48-.49-.84-.49s-.67.2-.84.49l-.02-.01-3 5 .02.01c-.09.15-.16.32-.16.51s.07.36.16.51h-.02l3 5 .01-.01c.18.29.49.5.85.5s.67-.2.84-.49l.01.01 3-5-.01-.01c.09-.16.16-.32.16-.51"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </span>
+              <span
+                class="bp6-button-text"
+              >
+                Source Academy @ NUS
+              </span>
+            </button>
+          </div>
+        </a>
+      </span>
+      <a
+        class=""
+        data-discover="true"
+        href="/sicpjs"
+        title="SICP JS"
+      >
+        <button
+          class="bp6-button bp6-minimal"
+          type="button"
+        >
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-book"
+          >
+            <svg
+              data-icon="book"
+              height="16"
+              role="img"
+              viewBox="0 0 16 16"
+              width="16"
+            >
+              <path
+                d="M2 1v14c0 .55.45 1 1 1h1V0H3c-.55 0-1 .45-1 1m11-1h-1v7l-2-2-2 2V0H5v16h8c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </span>
+          <span
+            class="bp6-button-text"
+          >
+            SICP JS
+          </span>
+        </button>
+      </a>
+    </div>
+    <div
+      class="bp6-navbar-group bp6-align-right"
     >
-      <NavigationBarLangSelectButton />
-      <NavLink
-        className={[Function]}
-        to="/contributors"
+      <span
+        class="bp6-popover-target"
       >
-        <Blueprint6.Icon
-          icon="heart"
-        />
-      </NavLink>
+        <button
+          aria-expanded="false"
+          aria-haspopup="menu"
+          class="bp6-button"
+          data-testid="NavigationBarLangSelectButton"
+          type="button"
+        >
+          <span
+            class="bp6-button-text"
+          >
+            JavaScript
+          </span>
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-caret-down"
+          >
+            <svg
+              data-icon="caret-down"
+              height="16"
+              role="img"
+              viewBox="0 0 16 16"
+              width="16"
+            >
+              <path
+                d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </span>
+        </button>
+      </span>
+      <a
+        class="NavigationBar__link bp6-button bp6-minimal"
+        data-discover="true"
+        href="/contributors"
+      >
+        <span
+          aria-hidden="true"
+          class="bp6-icon bp6-icon-heart"
+        >
+          <svg
+            data-icon="heart"
+            height="16"
+            role="img"
+            viewBox="0 0 16 16"
+            width="16"
+          >
+            <path
+              d="M16 5.095c0-2.255-1.88-4.083-4.2-4.083-1.682 0-3.13.964-3.8 2.352a4.21 4.21 0 00-3.8-2.352C1.88 1.012 0 2.84 0 5.095c0 .066.007.13.01.194H.004c.001.047.01.096.014.143l.013.142c.07.8.321 1.663.824 2.573C2.073 10.355 4.233 12.018 8 15c3.767-2.982 5.926-4.647 7.144-6.853.501-.906.752-1.767.823-2.563q.01-.083.016-.164c.003-.043.012-.088.013-.13h-.006c.003-.066.01-.13.01-.195"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </span>
+      </a>
       <div
-        className="visible-xs"
+        class="visible-xs"
       >
-        <Blueprint6.NavbarDivider
-          className="thin-divider"
+        <div
+          class="bp6-navbar-divider thin-divider"
         />
       </div>
       <div
-        className="hidden-xs"
+        class="hidden-xs"
       >
-        <Blueprint6.NavbarDivider
-          className="default-divider"
+        <div
+          class="bp6-navbar-divider default-divider"
         />
       </div>
-      <Dropdown />
-    </Blueprint6.NavbarGroup>
-  </Blueprint6.Navbar>
-  <Routes>
-    <Route
-      element={null}
-      path="/playground/*"
-    />
-    <Route
-      element={null}
-      path="/contributors"
-    />
-    <Route
-      element={null}
-      path="/courses/:courseId/sourcecast"
-    />
-    <Route
-      element={null}
-      path="/courses/:courseId/achievements"
-    />
-    <Route
-      element={null}
-      path="/courses/:courseId/leaderboard/*"
-    />
-    <Route
-      element={<SicpNavigationBar />}
-      path="/sicpjs/:section?"
-    />
-    <Route
-      element={null}
-      path="*"
-    />
-  </Routes>
-</React.Fragment>
+      <span
+        class="bp6-popover-target"
+      >
+        <button
+          class="bp6-button bp6-minimal"
+        >
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-caret-down"
+          >
+            <svg
+              data-icon="caret-down"
+              height="16"
+              role="img"
+              viewBox="0 0 16 16"
+              width="16"
+            >
+              <path
+                d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                fill-rule="evenodd"
+              />
+            </svg>
+          </span>
+        </button>
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
 `;

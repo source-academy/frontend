@@ -5,6 +5,8 @@ import {
   Checkbox,
   Classes,
   Divider,
+  Popover,
+  Position,
   Slider,
   Tooltip
 } from '@blueprintjs/core';
@@ -21,9 +23,12 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
 import type { PlaygroundWorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+import { ClearDeadFramesAnimation } from 'src/features/cseMachine/animationComponents/ClearDeadFramesAnimation';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
 import { Layout } from 'src/features/cseMachine/CseMachineLayout';
+import { ArrowOriginFilterKey } from 'src/features/cseMachine/CseMachineTypes';
+import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
 import { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
@@ -34,6 +39,15 @@ import { beginAlertSideContent } from '../SideContentActions';
 import { getLocation } from '../SideContentHelper';
 import { NonStoryWorkspaceLocation, SideContentTab, SideContentType } from '../SideContentTypes';
 
+const ALL_ARROW_FILTER_KEYS: ArrowOriginFilterKey[] = [
+  'text',
+  'frame',
+  'function',
+  'array',
+  'control',
+  'stash'
+];
+
 type State = {
   visualization: React.ReactNode;
   value: number;
@@ -42,6 +56,8 @@ type State = {
   lastStep: boolean;
   stepLimitExceeded: boolean;
   chapter: Chapter;
+  clearDeadFrames: boolean;
+  arrowFilterOpen: boolean;
 };
 
 type CseMachineProps = OwnProps & StateProps & DispatchProps;
@@ -82,7 +98,9 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
       height: this.calculateHeight(props.sideContentHeight),
       lastStep: false,
       stepLimitExceeded: false,
-      chapter: props.chapter
+      chapter: props.chapter,
+      clearDeadFrames: false,
+      arrowFilterOpen: false
     };
     if (this.isJava()) {
       JavaCseMachine.init(
@@ -106,7 +124,11 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
         },
         // We shouldn't be able to move slider to a step number beyond the step limit
         isControlEmpty => {
-          this.setState({ stepLimitExceeded: false });
+          const isAtLastStep = this.state.value === this.props.stepsTotal;
+
+          this.setState({
+            stepLimitExceeded: !isControlEmpty && isAtLastStep
+          });
         }
       );
     }
@@ -167,6 +189,9 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   componentWillUnmount() {
     this.handleResize.cancel();
     window.removeEventListener('resize', this.handleResize);
+    if (!this.isJava()) {
+      CseMachine.resetArrowOriginFilters();
+    }
   }
 
   componentDidUpdate(prevProps: {
@@ -182,6 +207,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
       this.handleResize();
     }
     if (prevProps.needCseUpdate && !this.props.needCseUpdate) {
+      CseMachine.resetArrowOriginFilters();
+      this.setState({ arrowFilterOpen: false });
       this.stepFirst();
       if (this.isJava()) {
         JavaCseMachine.clearCse();
@@ -192,6 +219,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   }
 
   public render() {
+    const arrowFilters = CseMachine.getArrowOriginFilters();
+    const areAllArrowFiltersSelected = ALL_ARROW_FILTER_KEYS.every(key => arrowFilters[key]);
     const hotkeyBindings: HotkeyItem[] = this.state.visualization
       ? [
           ['a', this.stepFirst],
@@ -205,6 +234,11 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
           ['b', () => {}],
           ['e', () => {}]
         ];
+
+    const currentStep = Math.max(0, this.state.value);
+    const isAtFirstStep = currentStep < 1;
+    const isAtLastStep = currentStep >= this.props.stepsTotal;
+    const isNavDisabled = !this.state.visualization;
 
     return (
       <HotKeys
@@ -268,16 +302,87 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     />
                   </AnchorButton>
                 </Tooltip>
+
+                <Tooltip content="Alignment" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      if (this.state.visualization) {
+                        CseMachine.toggleCenterAlignment();
+                        CseMachine.redraw();
+                      }
+                    }}
+                    icon="eye-open"
+                    disabled={!this.state.visualization}
+                  >
+                    <Checkbox
+                      checked={CseMachine.getCenterAlignment()}
+                      disabled={!this.state.visualization}
+                      style={{ margin: 0 }}
+                    />
+                  </AnchorButton>
+                </Tooltip>
+                <Tooltip content="Filter Arrows" compact>
+                  <Popover
+                    isOpen={this.state.arrowFilterOpen}
+                    onInteraction={nextOpen => this.setState({ arrowFilterOpen: nextOpen })}
+                    position={Position.BOTTOM_LEFT}
+                    content={
+                      <div style={{ padding: '8px 10px', minWidth: '210px' }}>
+                        <div style={{ marginBottom: '8px', fontWeight: 600 }}>Filter Arrows</div>
+                        <Button
+                          small
+                          minimal
+                          onClick={() => this.setAllArrowFilters(!areAllArrowFiltersSelected)}
+                          style={{ marginBottom: '8px' }}
+                        >
+                          {areAllArrowFiltersSelected ? 'Deselect all' : 'Select all'}
+                        </Button>
+                        <Checkbox
+                          checked={arrowFilters.text}
+                          label="From text"
+                          onChange={() => this.toggleArrowFilter('text')}
+                        />
+                        <Checkbox
+                          checked={arrowFilters.frame}
+                          label="From frames"
+                          onChange={() => this.toggleArrowFilter('frame')}
+                        />
+                        <Checkbox
+                          checked={arrowFilters.function}
+                          label="From function objects"
+                          onChange={() => this.toggleArrowFilter('function')}
+                        />
+                        <Checkbox
+                          checked={arrowFilters.array}
+                          label="From arrays"
+                          onChange={() => this.toggleArrowFilter('array')}
+                        />
+                        <Checkbox
+                          checked={arrowFilters.control}
+                          label="From control"
+                          onChange={() => this.toggleArrowFilter('control')}
+                        />
+                        <Checkbox
+                          checked={arrowFilters.stash}
+                          label="From stash"
+                          onChange={() => this.toggleArrowFilter('stash')}
+                        />
+                      </div>
+                    }
+                  >
+                    <AnchorButton icon="flow-branch" disabled={!this.state.visualization} />
+                  </Popover>
+                </Tooltip>
               </ButtonGroup>
             )}
             <ButtonGroup>
               <Button
-                disabled={!this.state.visualization}
+                disabled={isNavDisabled || isAtFirstStep}
                 icon="double-chevron-left"
                 onClick={this.stepPrevBreakpoint}
               />
               <Button
-                disabled={!this.state.visualization}
+                disabled={isNavDisabled || isAtFirstStep}
                 icon="chevron-left"
                 onClick={
                   this.isJava() || CseMachine.getControlStash()
@@ -286,7 +391,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                 }
               />
               <Button
-                disabled={!this.state.visualization}
+                disabled={isNavDisabled || isAtLastStep}
                 icon="chevron-right"
                 onClick={
                   this.isJava() || CseMachine.getControlStash()
@@ -295,13 +400,60 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                 }
               />
               <Button
-                disabled={!this.state.visualization}
+                disabled={isNavDisabled || isAtLastStep}
                 icon="double-chevron-right"
                 onClick={this.stepNextBreakpoint}
               />
             </ButtonGroup>
+
             {!this.isJava() && (
               <ButtonGroup>
+                <Tooltip content="Clear Dead Frames" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      if (this.state.visualization) {
+                        const prevLevels = Layout.levels;
+                        this.setState(
+                          prevState => ({
+                            clearDeadFrames: true
+                          }),
+                          () => {
+                            CseMachine.setClearDeadFrames(this.state.clearDeadFrames);
+                            CseMachine.clearLiveLayouts();
+
+                            // Temporarily store the original draw function
+                            const originalDraw = Layout.draw;
+
+                            // Overriding because the animations are causing
+                            // Konva objects to not be drawn
+                            Layout.draw = () => {
+                              try {
+                                const currLevels = Layout.levels;
+                                const changedFramePairs = computeFramesCoordChange(
+                                  prevLevels,
+                                  currLevels
+                                );
+                                if (changedFramePairs.length > 0) {
+                                  CseAnimation.animations.push(
+                                    new ClearDeadFramesAnimation(changedFramePairs)
+                                  );
+                                  CseAnimation.enableAnimations();
+                                }
+
+                                return originalDraw.apply(Layout);
+                              } finally {
+                                Layout.draw = originalDraw;
+                              }
+                            };
+                            CseMachine.redraw();
+                          }
+                        );
+                      }
+                    }}
+                    icon="eraser"
+                    disabled={this.state.clearDeadFrames || !this.state.visualization}
+                  ></AnchorButton>
+                </Tooltip>
                 <Tooltip content="Print" compact>
                   <AnchorButton
                     onMouseUp={() => {
@@ -396,9 +548,14 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   };
 
   private sliderShift = (newValue: number) => {
+    if (this.state.clearDeadFrames) {
+      CseMachine.setClearDeadFrames(false);
+      CseMachine.clearLiveLayouts();
+      CseMachine.redraw();
+    }
     this.props.handleStepUpdate(newValue);
     this.setState((state: State) => {
-      return { value: newValue };
+      return { value: newValue, clearDeadFrames: false };
     });
   };
 
@@ -479,6 +636,23 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
     this.sliderShift(0);
     this.sliderRelease(0);
   };
+
+  private toggleArrowFilter = (origin: ArrowOriginFilterKey) => {
+    const filters = CseMachine.getArrowOriginFilters();
+    CseMachine.setArrowOriginVisible(origin, !filters[origin]);
+    this.refreshArrowFilters();
+  };
+
+  private setAllArrowFilters = (visible: boolean) => {
+    CseMachine.setAllArrowOriginsVisible(visible);
+    this.refreshArrowFilters();
+  };
+
+  private refreshArrowFilters = () => {
+    CseMachine.clearRenderedLayouts();
+    CseMachine.redraw();
+    this.forceUpdate();
+  };
 }
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
@@ -542,7 +716,7 @@ export const SideContentCseMachine = connect(
 )(SideContentCseMachineBase);
 
 const makeCseMachineTabFrom = (location: NonStoryWorkspaceLocation): SideContentTab => ({
-  label: t('sideContent:cseMachine.label'),
+  label: t($ => $.cseMachine.label, { ns: 'sideContent' }),
   iconName: IconNames.GLOBE,
   body: <SideContentCseMachine workspaceLocation={location} />,
   id: SideContentType.cseMachine
@@ -571,12 +745,12 @@ const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
         <span>
           <Trans
             ns="sideContent"
-            i18nKey="cseMachine.csecDescription"
+            i18nKey={$ => $.cseMachine.csecDescription}
             components={[<ItalicLink href={Links.textbookChapter3_2} />]}
           />{' '}
           <Trans
             ns="sideContent"
-            i18nKey="cseMachine.javaCsec"
+            i18nKey={$ => $.cseMachine.javaCsec}
             components={[<ItalicLink href={`${Links.sourceDocs}java_csec/`} />]}
           />
         </span>
@@ -584,30 +758,30 @@ const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
         <span>
           <Trans
             ns="sideContent"
-            i18nKey="cseMachine.cseDescription"
+            i18nKey={$ => $.cseMachine.cseDescription}
             components={[<ItalicLink href={Links.textbookChapter3_2} />]}
           />
         </span>
       )}
       <br />
       <br />
-      {t('instructions')}
+      {t($ => $.instructions)}
       <br />
       <br />
       <Divider />
-      {t('shortcutsTitle')}
+      {t($ => $.shortcutsTitle)}
       <br />
       <br />
-      {t('shortcuts.a')}
+      {t($ => $.shortcuts.a)}
       <br />
-      {t('shortcuts.e')}
+      {t($ => $.shortcuts.e)}
       <br />
-      {t('shortcuts.f')}
+      {t($ => $.shortcuts.f)}
       <br />
-      {t('shortcuts.b')}
+      {t($ => $.shortcuts.b)}
       <br />
       <br />
-      {t('shortcutsNote')}
+      {t($ => $.shortcutsNote)}
     </div>
   );
 };

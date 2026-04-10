@@ -1,5 +1,3 @@
-import { estreeDecode } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/encoder-visitor';
-import { unparse } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
 import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
 import {
   AppInstr,
@@ -20,7 +18,6 @@ import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { Text } from 'konva/lib/shapes/Text';
 import { cloneDeep, isObject } from 'lodash';
-import { isSchemeLanguage } from 'src/commons/application/ApplicationTypes';
 import classes from 'src/styles/Draggable.module.scss';
 
 import { ArrayUnit } from './components/ArrayUnit';
@@ -28,6 +25,7 @@ import { Binding } from './components/Binding';
 import { ControlItemComponent } from './components/ControlItemComponent';
 import { isNode } from './components/ControlStack';
 import { Frame } from './components/Frame';
+import { Level } from './components/Level';
 import { StashItemComponent } from './components/StashItemComponent';
 import { ArrayValue } from './components/values/ArrayValue';
 import { ContValue } from './components/values/ContValue';
@@ -55,12 +53,7 @@ import {
   StreamFn,
   Unassigned
 } from './CseMachineTypes';
-import {
-  getAlternateControlItemComponent,
-  isCustomPrimitive,
-  needsNewRepresentation
-} from './utils/altLangs';
-import { isContinuation, schemeToString } from './utils/scheme';
+import { isContinuation } from './utils/continuation';
 class AssertionError extends Error {
   constructor(msg?: string) {
     super(msg);
@@ -206,8 +199,7 @@ export function isPrimitiveData(data: Data): data is Primitive {
     isString(data) ||
     isNumber(data) ||
     isBoolean(data) ||
-    isSourceObject(data) ||
-    isCustomPrimitive(data)
+    isSourceObject(data)
   );
 }
 
@@ -389,6 +381,67 @@ export function computeLiveState(envTree: EnvTree): {
   });
 
   return liveState;
+}
+
+/** Returns an array of pairs of frames.
+ * The two frames in each pair represent the same frame in concept, but the frame's position has
+ * shifted between steps, creating two distinct Frame objects.
+ * The first frame in each pair represents the frame before it shifted. The second frame represents
+ * the frame after it shifted.
+ */
+export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[]): Frame[][] {
+  const result: Frame[][] = [];
+
+  // Match levels such that oldLevels.length == newLevels.length
+  // in case Clear Dead Frames causes an entire Level to be cleared
+  const normalizedOldLevels =
+    oldLevels.length === newLevels.length
+      ? oldLevels
+      : oldLevels.filter(({ frames }) => frames.some(f => f.isLive));
+
+  // Defensive check in case layout is updated to have more complex frame movements
+  // This error only occurs if the following invariant is violated:
+  // "oldLevels.length != newLevels.length is always due to deletion of levels with only dead frames."
+  // This invariant may be violated if frames can migrate between levels.
+  if (normalizedOldLevels.length !== newLevels.length) {
+    // TODO: Change console.error into throw new Error, and catch them upstream (eg at CseMachine.redraw()),
+    // with centralized error handling for all layout logic.
+    console.error('Level count mismatch for Clear Dead Frames animation, animation not played.');
+
+    // Empty array is returned to SideContentCseMachine, causing the animation to not play
+    // since the length of changedFramePairs (the returned value) == 0.
+    return [];
+  }
+
+  // Match each frame that is live
+  // Matched frames conceptually represent the same frame, but on different steps (prev vs curr)
+  for (let levelIdx = 0; levelIdx < normalizedOldLevels.length; levelIdx++) {
+    const oldLevelFrames = normalizedOldLevels[levelIdx].frames;
+    const newLevelFrames = newLevels[levelIdx].frames;
+    let oldFrameIdx = 0; // Will always >= newFrameIdx
+    let newFrameIdx = 0; // Will always increment one-by-one such that each frame is appended to result
+
+    while (newFrameIdx < newLevelFrames.length && oldFrameIdx < oldLevelFrames.length) {
+      if (!oldLevelFrames[oldFrameIdx].isLive) {
+        oldFrameIdx++;
+      } else {
+        const oldFrame = oldLevelFrames[oldFrameIdx];
+        const newFrame = newLevelFrames[newFrameIdx];
+
+        // If oldFrame and newFrame are NOT in the same position, push to result array
+        if (
+          oldFrame.x() != newFrame.x() ||
+          normalizedOldLevels[levelIdx].y() != newLevels[levelIdx].y()
+        ) {
+          result.push([oldFrame, newFrame]);
+        }
+        oldFrameIdx++;
+        newFrameIdx++;
+      }
+    }
+  }
+
+  return result;
 }
 
 /** Returns a set with the elements in `set1` that are not in `set2` */
@@ -744,6 +797,53 @@ export const truncateText = (programStr: string, maxWidth: number, maxHeight: nu
   return [...lines, Config.Ellipsis].join('\n');
 };
 
+const appendSuffixWithinWidth = (line: string, suffix: string, maxWidth: number): string => {
+  const ellipsis = Config.Ellipsis;
+  const ellipsisIndex = line.lastIndexOf(ellipsis);
+
+  if (ellipsisIndex === -1) {
+    return line;
+  }
+
+  let prefix = line.slice(0, ellipsisIndex);
+  let candidate = `${prefix} ${ellipsis + suffix}`;
+
+  while (prefix && getTextWidth(candidate) > maxWidth) {
+    prefix = prefix.slice(0, -1);
+    candidate = `${prefix} ${ellipsis + suffix}`;
+  }
+
+  return candidate;
+};
+
+export const truncateFunctionTooltip = (
+  tooltip: string,
+  maxWidth: number,
+  maxHeight: number
+): string => {
+  const truncatedTooltip = truncateText(tooltip, maxWidth, maxHeight);
+
+  if (truncatedTooltip === tooltip) {
+    return truncatedTooltip;
+  }
+
+  const lines = truncatedTooltip.split('\n');
+  const originalLines = tooltip.split('\n');
+
+  const paramsLineIndex = originalLines.findIndex(line => line.startsWith('params:'));
+  if (paramsLineIndex !== -1 && lines[paramsLineIndex]?.endsWith(Config.Ellipsis)) {
+    lines[paramsLineIndex] = appendSuffixWithinWidth(lines[paramsLineIndex], ')', maxWidth);
+  }
+
+  const bodyClosingLineIndex = originalLines.findLastIndex(line => line.trim() === '}');
+  if (bodyClosingLineIndex !== -1 && bodyClosingLineIndex >= lines.length) {
+    const lastLineIndex = lines.length - 1;
+    lines[lastLineIndex] = appendSuffixWithinWidth(lines[lastLineIndex], ' }', maxWidth);
+  }
+
+  return lines.join('\n');
+};
+
 /**
  * Typeguard for Instr to distinguish between program statements and instructions.
  * The typeguard from js-slang cannot be used due to Typescript raising some weird errors
@@ -769,43 +869,8 @@ export function getControlItemComponent(
     : index === Layout.control.size() - 1;
   if (!isInstr(controlItem)) {
     if (!isNode(controlItem)) {
-      // at the moment, the only non-node and non-instruction control items are
-      // literals from scheme.
-      const representation = schemeToString(controlItem as any);
-      return new ControlItemComponent(
-        representation,
-        representation,
-        stackHeight,
-        highlightOnHover,
-        unhighlightOnHover,
-        topItem
-      );
-    }
-    // there's no reason to provide an alternate representation
-    // for a instruction.
-    if (needsNewRepresentation(chapter)) {
-      return getAlternateControlItemComponent(
-        controlItem,
-        stackHeight,
-        highlightOnHover,
-        unhighlightOnHover,
-        topItem,
-        chapter
-      );
-    }
-
-    if (isSchemeLanguage(chapter)) {
-      // use the js-slang decoder on the control item
-      controlItem = estreeDecode(controlItem as any);
-      const text = unparse(controlItem as any);
-      return new ControlItemComponent(
-        text,
-        text,
-        stackHeight,
-        highlightOnHover,
-        unhighlightOnHover,
-        topItem
-      );
+      // should not happen
+      throw new Error('Unknown control item type');
     }
 
     // at this point, the control item is a node.
@@ -1129,8 +1194,15 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
   return false;
 };
 
+const isHulkModeEnabled = () =>
+  typeof document !== 'undefined' && document.querySelector('.Playground.GreenScreen') !== null;
+
 export const defaultBackgroundColor = () =>
-  CseMachine.getPrintableMode() ? Config.PrintBgColor : Config.BgColor;
+  isHulkModeEnabled()
+    ? '#00ff00'
+    : CseMachine.getPrintableMode()
+      ? Config.PrintBgColor
+      : Config.BgColor;
 
 export const defaultTextColor = () =>
   CseMachine.getPrintableMode() ? Config.PrintTextColor : Config.TextColor;

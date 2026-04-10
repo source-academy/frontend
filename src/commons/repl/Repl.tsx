@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { stringify } from 'js-slang/dist/utils/stringify';
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import type { InterpreterOutput, ResultOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
@@ -23,6 +23,7 @@ type StateProps = {
   sourceVariant: Variant;
   externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
+  showStepperPrompt?: boolean;
 };
 
 type DispatchProps = {
@@ -45,6 +46,7 @@ const Repl: React.FC<ReplProps> = props => {
       key={index}
       usingSubst={props.usingSubst ?? false}
       isHtml={props.sourceChapter === Chapter.HTML}
+      showStepperPrompt={props.showStepperPrompt}
     />
   ));
   return (
@@ -95,9 +97,10 @@ export const Output: React.FC<OutputProps> = props => {
           <Pre className="log-output">{props.output.consoleLogs.join('\n')}</Pre>
         </Card>
       );
-    case 'result':
+    case 'result': {
       // We check if we are using Stepper, so we can process the REPL results properly
-      if (props.usingSubst && props.output.value instanceof Array) {
+      const shouldShowStepperPrompt = props.showStepperPrompt ?? false;
+      if (shouldShowStepperPrompt && props.output.value instanceof Array) {
         return (
           <Card>
             <Pre className="log-output">Check out the Stepper tab!</Pre>
@@ -112,6 +115,7 @@ export const Output: React.FC<OutputProps> = props => {
       } else {
         return <ResultOutputDisplay output={props.output} />;
       }
+    }
     case 'errors':
       if (props.output.consoleLogs.length === 0) {
         return (

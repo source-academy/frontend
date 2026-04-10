@@ -7,6 +7,7 @@ import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data } from '../CseMachineTypes';
 import {
+  defaultBackgroundColor,
   defaultStrokeColor,
   defaultTextColor,
   fadedStrokeColor,
@@ -60,6 +61,22 @@ export class ArrayUnit extends Visible {
     if (!CseMachine.getPrintableMode()) this.indexRef.current?.hide();
   }
 
+  setArrowSourceHighlightedStyle(): void {
+    if (this.parent.isLive()) {
+      this.ref.current?.stroke(Config.HoverColor);
+    } else {
+      this.ref.current?.stroke(Config.HoverDeadColor);
+    }
+  }
+
+  setArrowSourceNormalStyle(): void {
+    this.ref.current?.stroke(
+      this.parent.isReferenced() && this.parent.isEnclosingFrameLive()
+        ? defaultStrokeColor()
+        : fadedStrokeColor()
+    );
+  }
+
   draw(): React.ReactNode {
     if (this.isDrawn()) return null;
     this._isDrawn = true;
@@ -110,6 +127,8 @@ export class ArrayUnit extends Visible {
           width={this.width()}
           height={this.height()}
           stroke={strokeColor}
+          fill={defaultBackgroundColor()}
+          listening={false}
           hitStrokeWidth={Config.DataHitStrokeWidth}
           fillEnabled={true}
           cornerRadius={cornerRadius}
@@ -122,6 +141,7 @@ export class ArrayUnit extends Visible {
           {...indexProps}
           text={`${this.index}`}
           stroke={strokeColor}
+          listening={false}
         />
         {this.value.draw()}
         {this.arrow?.draw()}

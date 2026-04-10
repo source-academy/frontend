@@ -3,7 +3,7 @@ import { Rect } from 'react-konva';
 
 import { ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { defaultStrokeColor, fadedStrokeColor } from '../CseMachineUtils';
+import { defaultBackgroundColor, defaultStrokeColor, fadedStrokeColor } from '../CseMachineUtils';
 import { ArrayValue } from './values/ArrayValue';
 import { Visible } from './Visible';
 
@@ -21,6 +21,9 @@ export class ArrayEmptyUnit extends Visible {
   }
 
   draw(): React.ReactNode {
+    if (Layout.clearDeadFrames && !this.parent.isLive()) {
+      return null;
+    }
     const strokeColor =
       this.parent.isReferenced() && this.parent.isEnclosingFrameLive()
         ? defaultStrokeColor()
@@ -33,7 +36,10 @@ export class ArrayEmptyUnit extends Visible {
         y={this.y()}
         width={this.width()}
         height={this.height()}
+        fill={defaultBackgroundColor()}
+        fillEnabled={true}
         stroke={strokeColor}
+        listening={false}
         ref={this.ref}
       />
     );

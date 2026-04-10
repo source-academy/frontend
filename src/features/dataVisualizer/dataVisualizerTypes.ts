@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 // Source-related types
 export type Data = any;
 export type Pair = [Data, Data];

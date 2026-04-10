@@ -1,0 +1,15 @@
+// Shared stepper variables
+
+$stepper-literal-color: #ff6078;
+$stepper-operator-color: #f89210;
+$stepper-identifier-color: #f8d871;
+$stepper-conditional-color: #ffffff;
+$stepper-display-font:
+  16px / normal 'Inconsolata',
+  'Consolas',
+  monospace;
+
+$before-marker-bg: rgba(172, 0, 0, 0.75);
+$before-marker-hover-bg: rgba(100, 101, 57, 0.75);
+$after-marker-bg: rgba(0, 128, 0, 0.75);
+$after-marker-hover-bg: rgba(61, 101, 57, 0.75);

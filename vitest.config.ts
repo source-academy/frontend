@@ -1,6 +1,4 @@
-import path from 'node:path';
-
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -14,8 +12,8 @@ export default defineConfig({
     }
   },
   resolve: {
+    tsconfigPaths: true,
     alias: {
-      src: path.resolve(__dirname, 'src'),
       // File mocks for static assets
       '\\.(jpg|jpeg|png|gif)$': './src/fileMock.ts',
       '\\.svg$': 'identity-obj-proxy',

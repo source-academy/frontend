@@ -1,24 +1,4 @@
-import { deepFilter, shallowRender } from '../TestUtils';
-
-const Component: React.FC = () => (
-  <div className="testing">
-    <p>Some</p>
-    <div>
-      nested<span>text</span>
-    </div>
-  </div>
-);
-test('shallowRender renders correctly', () => {
-  const result = shallowRender(<Component />);
-  expect(result.type).toBe('div');
-  expect(result.props.className).toBe('testing');
-  expect(result.props.children).toEqual([
-    <p>Some</p>,
-    <div>
-      nested<span>text</span>
-    </div>
-  ]);
-});
+import { deepFilter } from '../TestUtils';
 
 describe('deepFilter', () => {
   const createObjectWithProps = (props: any) => ({
