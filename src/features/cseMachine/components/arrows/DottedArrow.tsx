@@ -8,7 +8,7 @@ import { GenericArrow } from './GenericArrow';
 
 export class DottedArrow extends GenericArrow<IVisible, IVisible> {
   draw() {
-    const stroke = CseMachine.getPrintableMode() ? Config.PrintDangerColor : '#ded74e';
+    const stroke = CseMachine.getPrintableMode() ? '#9B870C' : '#ded74e';
     return (
       <KonvaGroup key={Layout.key++} ref={this.ref} listening={false}>
         <KonvaPath
