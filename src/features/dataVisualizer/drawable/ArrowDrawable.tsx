@@ -21,9 +21,9 @@ const ArrowDrawable: React.FC<Props> = props => {
       <Arrow
         key={props + ''}
         points={[
-          props.from.x, 
-          props.from.y, 
-          props.to.x + Config.BoxWidth / 2, 
+          props.from.x,
+          props.from.y,
+          props.to.x + Config.BoxWidth / 2,
           props.to.y + Config.ArrowPointerOffsetVertical
         ]}
         pointerWidth={Config.ArrowPointerSize}
