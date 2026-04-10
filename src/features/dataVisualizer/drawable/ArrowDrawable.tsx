@@ -16,11 +16,16 @@ type Props = {
  */
 const ArrowDrawable: React.FC<Props> = props => {
   if (DataVisualizer.getBinTreeMode() || DataVisualizer.getTreeMode()) {
-    // RenderBinaryTree
+    // Binary Tree View and General Tree View
     return (
       <Arrow
         key={props + ''}
-        points={[props.from.x, props.from.y, props.to.x, props.to.y]}
+        points={[
+          props.from.x,
+          props.from.y,
+          props.to.x + Config.BoxWidth / 2,
+          props.to.y + Config.ArrowPointerOffsetVertical
+        ]}
         pointerWidth={Config.ArrowPointerSize}
         pointerLength={Config.ArrowPointerSize}
         fill={Config.Fill}
