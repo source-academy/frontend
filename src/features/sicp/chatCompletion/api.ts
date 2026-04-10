@@ -40,4 +40,3 @@ export async function continueChat(
   }
   return await response.json();
 }
-
