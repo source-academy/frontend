@@ -1,5 +1,4 @@
 import SoundAssets from '../assets/SoundAssets';
-import { screenSize } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import { promptWithChoices } from '../effects/Prompt';
 import { keyboardShortcuts } from '../input/GameInputConstants';
@@ -7,7 +6,7 @@ import GameInputManager from '../input/GameInputManager';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
-import { textTypeWriterStyle } from './GameDialogueConstants';
+import DialogueConstants, { textTypeWriterStyle } from './GameDialogueConstants';
 import DialogueGenerator from './GameDialogueGenerator';
 import DialogueRenderer from './GameDialogueRenderer';
 import DialogueSpeakerRenderer from './GameDialogueSpeakerRenderer';
@@ -150,12 +149,15 @@ export default class DialogueManager {
 
     this.skipButton = new Phaser.GameObjects.Image(
       gameManager,
-      screenSize.x - 62.5,
-      screenSize.y * 0.73,
+      DialogueConstants.skipButton.x,
+      DialogueConstants.skipButton.y,
       'skip-icon'
     ).setInteractive({ useHandCursor: true });
 
-    this.skipButton.setDisplaySize(45, 45);
+    this.skipButton.setDisplaySize(
+      DialogueConstants.skipButton.size,
+      DialogueConstants.skipButton.size
+    );
 
     this.skipButton.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
       await this.triggerSkip();
@@ -169,34 +171,38 @@ export default class DialogueManager {
    * Does not skip prompts that require user input.
    */
   private async skipRemainingDialogue() {
-    if (this.isSkipping) return; // Prevent multiple skip calls
+    if (this.isSkipping) return;
     this.isSkipping = true;
 
-    // Hide and disable button while skipping
-    if (this.skipButton) {
+    // Hide and disable the button while skipping
+    if (this.skipButton && this.skipButton.active) {
       this.skipButton.setVisible(false);
       this.skipButton.disableInteractive();
     }
 
-    // Plays the sound effect exactly once when skip starts
     GameGlobalAPI.getInstance().playSound(SoundAssets.dialogueAdvance.key);
 
     try {
-      // Keep advancing the dialogue until we hit a stopping point
       while (this.isSkipping) {
-        if (this.dialogueRenderer) {
-          this.dialogueRenderer.finishTypewriting();
-        }
+        if (!this.dialogueRenderer) break;
+        this.dialogueRenderer.finishTypewriting();
 
         const nextLine = this.getDialogueGenerator().peekNextLine();
+        const hasPrompt = nextLine && nextLine.prompt;
+        const hasActions = nextLine && nextLine.actionIds && nextLine.actionIds.length > 0;
 
-        if (nextLine && nextLine.prompt) {
+        if (this.nextLineResolve) {
+          await this.nextLineResolve();
+        }
+
+        if (!this.skipButton || !this.skipButton.active) {
           this.isSkipping = false;
           break;
         }
 
-        if (this.nextLineResolve) {
-          await this.nextLineResolve();
+        if (hasPrompt || hasActions) {
+          this.isSkipping = false;
+          break;
         }
 
         if (!nextLine || !nextLine.line) {
@@ -204,7 +210,6 @@ export default class DialogueManager {
           break;
         }
 
-        // Small delay to prevent freezing
         await new Promise(resolve => setTimeout(resolve, 50));
       }
     } finally {
@@ -212,6 +217,7 @@ export default class DialogueManager {
 
       if (
         this.skipButton &&
+        this.skipButton.active &&
         !this.isDialoguePromptActive &&
         this.getDialogueGenerator().peekNextLine() !== null
       ) {
@@ -245,7 +251,9 @@ export default class DialogueManager {
     if (prompt) {
       // Prevent skipping, hide the skip button and prevent the usage of "s" keyboard shortcut
       this.isDialoguePromptActive = true;
-      if (this.skipButton) this.skipButton.setVisible(false);
+      if (this.skipButton && this.skipButton.active) {
+        this.skipButton.setVisible(false);
+      }
 
       this.getInputManager().enableKeyboardInput(false);
       const response = await promptWithChoices(
@@ -266,7 +274,7 @@ export default class DialogueManager {
 
     if (!line) {
       //Permanently hide the skip button when there is no more dialogue
-      if (this.skipButton) {
+      if (this.skipButton && this.skipButton.active) {
         this.skipButton.setVisible(false);
       }
 
@@ -277,7 +285,7 @@ export default class DialogueManager {
       ]);
       resolve();
     } else if (!this.isSkipping && !this.isDialoguePromptActive) {
-      if (this.skipButton) {
+      if (this.skipButton && this.skipButton.active) {
         this.skipButton.setVisible(true);
         this.skipButton.setInteractive({ useHandCursor: true });
       }
