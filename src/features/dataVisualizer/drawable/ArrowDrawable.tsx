@@ -2,6 +2,7 @@ import React from 'react';
 import { Arrow } from 'react-konva';
 
 import { Config } from '../Config';
+import DataVisualizer from '../dataVisualizer';
 
 type Props = {
   from: { x: number; y: number };
@@ -14,23 +15,45 @@ type Props = {
  * Used with ArrayDrawable and FunctionDrawable.
  */
 const ArrowDrawable: React.FC<Props> = props => {
-  return (
-    <Arrow
-      key={props + ''}
-      points={[
-        props.from.x,
-        props.from.y,
-        props.to.x + Config.ArrowPointerOffsetHorizontal,
-        props.to.y + Config.ArrowPointerOffsetVertical
-      ]}
-      pointerWidth={Config.ArrowPointerSize}
-      pointerLength={Config.ArrowPointerSize}
-      fill={Config.Fill}
-      stroke={Config.Stroke}
-      strokeWidth={Config.StrokeWidth}
-      preventDefault={false}
-    ></Arrow>
-  );
+  if (DataVisualizer.getBinTreeMode() || DataVisualizer.getTreeMode()) {
+    // Binary Tree View and General Tree View
+    return (
+      <Arrow
+        key={props + ''}
+        points={[
+          props.from.x,
+          props.from.y,
+          props.to.x + Config.BoxWidth / 2,
+          props.to.y + Config.ArrowPointerOffsetVertical
+        ]}
+        pointerWidth={Config.ArrowPointerSize}
+        pointerLength={Config.ArrowPointerSize}
+        fill={Config.Fill}
+        stroke={Config.Stroke}
+        strokeWidth={Config.StrokeWidth}
+        preventDefault={false}
+      ></Arrow>
+    );
+  } else {
+    // OriginalView
+    return (
+      <Arrow
+        key={props + ''}
+        points={[
+          props.from.x,
+          props.from.y,
+          props.to.x + Config.BoxWidth / 2,
+          props.to.y + Config.ArrowPointerOffsetVertical
+        ]}
+        pointerWidth={Config.ArrowPointerSize}
+        pointerLength={Config.ArrowPointerSize}
+        fill={Config.Fill}
+        stroke={Config.Stroke}
+        strokeWidth={Config.StrokeWidth}
+        preventDefault={false}
+      ></Arrow>
+    );
+  }
 };
 
 export default React.memo(ArrowDrawable);
