@@ -264,12 +264,16 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
     yield put(SessionActions.submitAnswer(questionId, code));
 
     // Wait for submit to complete before refreshing
-    yield take(
+    const saveAction: ReturnType<typeof WorkspaceActions.updateSaveStatus> = yield take(
       (action: any) =>
         action.type === WorkspaceActions.updateSaveStatus.type &&
         action.payload.workspaceLocation === workspaceLocation &&
         (action.payload.saveStatus === 'saved' || action.payload.saveStatus === 'saveFailed')
     );
+
+    if (saveAction.payload.saveStatus === 'saveFailed') {
+      return false;
+    }
 
     // Refresh version history only if the panel is open
     const isHistoryPanelOpen: boolean = yield select(
