@@ -1,7 +1,7 @@
 import Konva from 'konva';
 import { AnimationFn } from 'konva/lib/types';
 import React from 'react';
-import { Arrow, KonvaNodeComponent, Path, Rect, Text } from 'react-konva';
+import { Arrow, Circle, KonvaNodeComponent, Line, Path, Rect, Text } from 'react-konva';
 
 import { CseAnimation } from '../../CseMachineAnimation';
 import { Config } from '../../CseMachineConfig';
@@ -101,10 +101,10 @@ abstract class BaseAnimationComponent<
       throw new Error('Missing animation layer! Unable to create animation component!');
     }
     this.animation = new Konva.Animation(this.animationFn, CseAnimation.getLayer());
-    if (props.x) this._x = props.x;
-    if (props.y) this._y = props.y;
-    if (props.width) this._width = props.width;
-    if (props.height) this._height = props.height;
+    if (props.x !== undefined) this._x = props.x;
+    if (props.y !== undefined) this._y = props.y;
+    if (props.width !== undefined) this._width = props.width;
+    if (props.height !== undefined) this._height = props.height;
   }
 
   animateTo(to: Partial<KonvaConfig>, animationConfig?: AnimationConfig): Promise<void> {
@@ -220,5 +220,25 @@ export class AnimatedArrowComponent extends AnimationComponent<Konva.Arrow, Konv
       pointerWidth: Config.ArrowHeadSize
     };
     super(Arrow, { ...defaultProps, ...props });
+  }
+}
+
+// Mainly for animating function object
+export class AnimatedCircleComponent extends AnimationComponent<Konva.Circle, Konva.CircleConfig> {
+  constructor(props: Konva.CircleConfig) {
+    const defaultProps = {
+      radius: Config.FnRadius,
+      stroke: defaultStrokeColor()
+    };
+    super(Circle, { ...defaultProps, ...props });
+  }
+}
+
+export class AnimatedLineComponent extends AnimationComponent<Konva.Line, Konva.LineConfig> {
+  constructor(props: Konva.LineConfig) {
+    const defaultProps = {
+      stroke: defaultStrokeColor()
+    };
+    super(Line, { ...defaultProps, ...props });
   }
 }

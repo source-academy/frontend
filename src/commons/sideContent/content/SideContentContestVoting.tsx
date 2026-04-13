@@ -172,7 +172,7 @@ const SideContentContestVoting: React.FC<SideContentContestVotingProps> = ({
             </div>
           </div>
         ) : (
-          <div className="noResults">{t('noEntries')}</div>
+          <div className="noResults">{t($ => $.noEntries)}</div>
         )}
       </div>
     ),
@@ -219,8 +219,8 @@ const SideContentContestVoting: React.FC<SideContentContestVotingProps> = ({
         variant="minimal"
         onClick={() => setShowContestEntries(!showContestEntries)}
       >
-        <span>{t('title')}</span>
-        <Tooltip content={<span>{t('tooltip')}</span>}>
+        <span>{t($ => $.title)}</span>
+        <Tooltip content={<span>{t($ => $.tooltip)}</span>}>
           <Icon icon={IconNames.HELP} />
         </Tooltip>
       </Button>

@@ -374,7 +374,7 @@ export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
         {!shouldHide && (
           <Translation ns="commons" keyPrefix="navigationBar">
             {t =>
-              t(props.text as keyof i18nDefaultLangKeys['commons']['navigationBar'], {
+              t($ => $[props.text as keyof i18nDefaultLangKeys['commons']['navigationBar']], {
                 defaultValue: props.text
               })
             }
@@ -404,7 +404,7 @@ const MobileNavLink: React.FC<
       <Button minimal large icon={props.icon}>
         <Translation ns="commons" keyPrefix="navigationBar">
           {t =>
-            t(props.text as keyof i18nDefaultLangKeys['commons']['navigationBar'], {
+            t($ => $[props.text as keyof i18nDefaultLangKeys['commons']['navigationBar']], {
               defaultValue: props.text
             })
           }

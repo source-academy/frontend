@@ -9,6 +9,7 @@ import { Layout } from '../CseMachineLayout';
 import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   defaultActiveColor,
+  defaultBackgroundColor,
   defaultStrokeColor,
   fadedStrokeColor,
   getTextWidth,
@@ -16,7 +17,6 @@ import {
   isClosure,
   isDataArray,
   isDummyKey,
-  isMainReference,
   isPrimitiveData,
   isSourceObject,
   isUnassigned
@@ -155,8 +155,10 @@ export class Frame extends Visible implements IHoverable {
       let bindingTextWidth = getTextWidth(
         key + (constant ? Config.ConstantColon : Config.VariableColon)
       );
+      // TODO: Check if key + colon size exceed default frame width
       if (isUnassigned(data.value)) {
         bindingTextWidth += Config.TextPaddingX + getTextWidth(Config.UnassignedData);
+        // TODO: Check if unassigned text size exceed default frame width
       } else if (isPrimitiveData(data.value)) {
         bindingTextWidth +=
           Config.TextPaddingX +
@@ -165,27 +167,37 @@ export class Frame extends Visible implements IHoverable {
               ? data.value.toReplString()
               : JSON.stringify(data.value) || String(data.value)
           );
+        // TODO: Check if primitive value size exceed default frame width
       }
+      // To replace later
       this._width = Math.max(this._width, bindingTextWidth + Config.FramePaddingX * 2);
+      this._width = Math.min(this._width, Config.FrameDefaultWidth); // cap the frame width to default width
     }
 
     // Create all the bindings and values
     let prevBinding: Binding | null = null;
+    let prevVisibleBinding: Binding | null = null;
+    let lastVisibleBinding: Binding | null = null;
 
     this.isLive = this.environment ? Layout.liveEnvIDs.has(this.environment.id) : false;
 
     for (const [key, data] of entries) {
       const constant =
         this.environment.head[key]?.description === 'const declaration' || !data.writable;
+      const previousBindingForLayout = Layout.clearDeadFrames ? prevVisibleBinding : prevBinding;
       const currBinding: Binding = new Binding(
         key,
         data.value,
         this,
-        prevBinding,
+        previousBindingForLayout,
         constant,
         this.isLive
       );
       prevBinding = currBinding;
+      if (currBinding.occupiesVerticalSpace()) {
+        prevVisibleBinding = currBinding;
+        lastVisibleBinding = currBinding;
+      }
       this.bindings.push(currBinding);
     }
 
@@ -193,9 +205,9 @@ export class Frame extends Visible implements IHoverable {
     // `totalDataWidth` is measured strictly as overflow beyond the frame's right edge.
     const frameRightX = this.x() + this.width();
     for (const binding of this.bindings) {
-      const value = binding.value;
-      if (!isMainReference(value, binding)) continue;
+      if (!binding.rendersReferencedValue()) continue;
 
+      const value = binding.value;
       let valueRightX: number | undefined;
       if (value instanceof ArrayValue) {
         valueRightX = value.x() + value.totalWidth;
@@ -215,9 +227,9 @@ export class Frame extends Visible implements IHoverable {
 
     this.totalWidth = this.width();
 
-    // derive the height of the frame from the the position of the last binding
-    this._height = prevBinding
-      ? prevBinding.y() - this.y() + prevBinding.height() + Config.FramePaddingY
+    // derive the height of the frame from the the position of the last visible binding
+    this._height = lastVisibleBinding
+      ? lastVisibleBinding.y() - this.y() + lastVisibleBinding.height() + Config.FramePaddingY
       : Config.FramePaddingY * 2;
 
     this._name = new Text(
@@ -243,7 +255,7 @@ export class Frame extends Visible implements IHoverable {
    * Reassigns the coordinates according to the final position of this frame
    * @param newX taken from cached layout
    */
-  reassignCoordinates(newX: number): void {
+  reassignCoordinatesX(newX: number): void {
     this._x = newX;
 
     let textOffset = 0;
@@ -256,6 +268,20 @@ export class Frame extends Visible implements IHoverable {
       this.level!.y(), // this method is only called after the frame is drawn
       { maxWidth: this.width(), faded: !this.isLive }
     );
+  }
+
+  /**
+   * Reassigns the coordinates according to the final position of this frame
+   * @param newY taken from cached layout
+   */
+  reassignCoordinatesY(newY: number): void {
+    this._y = newY;
+    const relativeTextY = newY - (Config.FontSize + Config.TextPaddingY / 2);
+    this.name.setY(relativeTextY);
+  }
+
+  reassignWidth(newWidth: number): void {
+    this._width = newWidth;
   }
 
   onMouseEnter = () => {};
@@ -283,6 +309,10 @@ export class Frame extends Visible implements IHoverable {
   }
 
   draw(): React.ReactNode {
+    if (CseAnimation.shouldHideFrame(this.environment.id)) {
+      return null;
+    }
+
     return (
       <Group ref={this.ref} key={Layout.key++}>
         {this.name.draw()}
@@ -306,6 +336,7 @@ export class Frame extends Visible implements IHoverable {
           onMouseLeave={this.onMouseLeave}
           listening={false}
           key={Layout.key++}
+          fill={defaultBackgroundColor()}
         />
         {this.bindings.map(binding => binding.draw())}
         {this.arrow?.draw()}

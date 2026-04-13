@@ -8,5 +8,6 @@ declare module 'i18next' {
   // Extend CustomTypeOptions
   interface CustomTypeOptions {
     resources: i18nDefaultLangKeys;
+    enableSelector: true;
   }
 }

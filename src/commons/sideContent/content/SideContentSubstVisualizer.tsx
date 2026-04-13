@@ -49,29 +49,29 @@ const SubstDefaultText = () => {
   return (
     <div>
       <div id="substituter-default-text" className={Classes.RUNNING_TEXT}>
-        {t('welcome')}
+        {t($ => $.welcome)}
         <br />
         <br />
-        {t('instructions')}
+        {t($ => $.instructions)}
         <br />
         <br />
-        {t('evaluationSteps')}
+        {t($ => $.evaluationSteps)}
         <br />
         <br />
         <Divider />
-        {t('shortcutsTitle')}
+        {t($ => $.shortcutsTitle)}
         <br />
         <br />
-        {t('shortcuts.a')}
+        {t($ => $.shortcuts.a)}
         <br />
-        {t('shortcuts.e')}
+        {t($ => $.shortcuts.e)}
         <br />
-        {t('shortcuts.f')}
+        {t($ => $.shortcuts.f)}
         <br />
-        {t('shortcuts.b')}
+        {t($ => $.shortcuts.b)}
         <br />
         <br />
-        {t('shortcutsNote')}
+        {t($ => $.shortcutsNote)}
       </div>
     </div>
   );
@@ -113,18 +113,46 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
     }
   }, [props.content, setStepValue, alertSideContent]);
 
-  const stepFirst = () => setStepValue(1);
-  const stepLast = () => setStepValue(lastStepValue);
+  const stepNextBreakpoint = useCallback(() => {
+    // Search forward from current step for a DebuggerStatement redex
+    for (let i = stepValue; i < props.content.length; i++) {
+      const markers = props.content[i].markers;
+      if (markers?.some(marker => marker.redex?.type === 'DebuggerStatement')) {
+        setStepValue(i + 1); // +1 because stepValue is 1-indexed
+        return;
+      }
+    }
+    // Optional: If no next breakpoint found, go to the last step
+    setStepValue(props.content.length);
+  }, [stepValue, props.content]);
+
+  const stepPreviousBreakpoint = useCallback(() => {
+    // Start searching from the step BEFORE the current one
+    // index = (stepValue - 1) - 1
+    for (let i = stepValue - 2; i >= 0; i--) {
+      const markers = props.content[i].markers;
+
+      const isDebuggerStep = markers?.some(marker => marker.redex?.type === 'DebuggerStatement');
+
+      if (isDebuggerStep) {
+        setStepValue(i + 1); // Convert back to 1-based indexing
+        return;
+      }
+    }
+    // Optional: If no previous breakpoint found, go to the first step
+    setStepValue(1);
+  }, [stepValue, props.content]);
+
   const stepPrevious = () => setStepValue(Math.max(1, stepValue - 1));
   const stepNext = () => setStepValue(Math.min(props.content.length, stepValue + 1));
 
   // Setup hotkey bindings
   const hotkeyBindings: HotkeyItem[] = hasRunCode
     ? [
-        ['a', stepFirst],
+        ['a', stepPreviousBreakpoint],
         ['f', stepNext],
         ['b', stepPrevious],
-        ['e', stepLast]
+        ['e', stepNextBreakpoint]
       ]
     : [
         ['a', () => {}],
@@ -171,18 +199,14 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
       />
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <ButtonGroup>
-          <Button disabled={!hasRunCode} icon="double-chevron-left" onClick={stepFirst} />
           <Button
-            disabled={!hasRunCode || stepValue === 1}
-            icon="chevron-left"
-            onClick={stepPrevious}
+            disabled={!hasRunCode}
+            icon="double-chevron-left"
+            onClick={stepPreviousBreakpoint}
           />
-          <Button
-            disabled={!hasRunCode || stepValue === lastStepValue}
-            icon="chevron-right"
-            onClick={stepNext}
-          />
-          <Button disabled={!hasRunCode} icon="double-chevron-right" onClick={stepLast} />
+          <Button disabled={!hasRunCode} icon="chevron-left" onClick={stepPrevious} />
+          <Button disabled={!hasRunCode} icon="chevron-right" onClick={stepNext} />
+          <Button disabled={!hasRunCode} icon="double-chevron-right" onClick={stepNextBreakpoint} />
         </ButtonGroup>
       </div>{' '}
       <br />
@@ -587,6 +611,9 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
             : 'undefined'}
         </span>
       );
+    },
+    DebuggerStatement(node: StepperBaseNode) {
+      return <span className="stepper-operator">debugger;</span>;
     }
   };
 
@@ -650,16 +677,15 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
   };
 
   // Entry point of rendering
-  const renderer = renderers[currentNode.type as keyof typeof renderers];
+  const renderer = (
+    renderers as unknown as Record<string, (node: StepperBaseNode) => React.ReactNode>
+  )[currentNode.type];
   const isParenthesis = expressionNeedsParenthesis(
     currentNode,
     renderContext.parentNode,
     renderContext.isRight
   );
-  let result: React.ReactNode = renderer
-    ? // @ts-expect-error All subclasses of stepper base node has its corresponding renderes
-      renderer(currentNode)
-    : `<${currentNode.type}>`; // For debugging in case some AST renderer has not been implemented yet
+  let result: React.ReactNode = renderer ? renderer(currentNode) : `<${currentNode.type}>`; // For debugging in case some AST renderer has not been implemented yet
   if (isParenthesis) {
     result = (
       <span>

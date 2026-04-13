@@ -4,8 +4,9 @@ import { parse } from 'js-slang/dist/parser/parser';
 import React from 'react';
 
 import { arrowSelection } from './components/arrows/ArrowSelection';
+import { CseAnimation } from './CseMachineAnimation';
 import { Layout, LayoutCache } from './CseMachineLayout';
-import { EnvTree, EnvTreeNode } from './CseMachineTypes';
+import { ArrowOriginFilterKey, ArrowOriginFilters, EnvTree, EnvTreeNode } from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
 
 type SetVis = (vis: React.ReactNode) => void;
@@ -14,6 +15,22 @@ type SetisStepLimitExceeded = (isControlEmpty: boolean) => void;
 
 /** CSE Machine is exposed from this class */
 export default class CseMachine {
+  private static readonly arrowOriginFilterKeys: ArrowOriginFilterKey[] = [
+    'text',
+    'frame',
+    'function',
+    'array',
+    'control',
+    'stash'
+  ];
+  private static readonly defaultArrowOriginFilters: ArrowOriginFilters = {
+    text: true,
+    frame: true,
+    function: true,
+    array: true,
+    control: true,
+    stash: true
+  };
   /** callback function to update the visualization state in the SideContentCseMachine component */
   private static setVis: SetVis;
   /** function to highlight editor lines */
@@ -22,13 +39,18 @@ export default class CseMachine {
   private static setIsStepLimitExceeded: SetisStepLimitExceeded;
   // Ghost layout snapshots, separated by mode to keep coordinates fixed within each mode.
   public static normalLayoutCache: LayoutCache | null = null;
+  public static normalLiveLayoutCache: LayoutCache | null = null;
   public static printLayoutCache: LayoutCache | null = null;
+  public static printLiveLayoutCache: LayoutCache | null = null;
   public static usedBuiltInNames = new Set<string>();
   private static printableMode: boolean = false;
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
-  private static centerAlignment: boolean = false; // added for center alignment
+  private static centerAlignment: boolean = false;
   private static centerAlignmentToggled: boolean = false;
+  private static arrowOriginFilters: ArrowOriginFilters = {
+    ...CseMachine.defaultArrowOriginFilters
+  };
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
   private static control: Control | undefined;
@@ -46,6 +68,26 @@ export default class CseMachine {
     Layout.clearDeadFrames = enabled;
   }
   public static clearCachedLayouts(): void {
+    CseMachine.normalLayoutCache = null;
+    CseMachine.normalLiveLayoutCache = null;
+    CseMachine.printLayoutCache = null;
+    CseMachine.printLiveLayoutCache = null;
+    CseMachine.usedBuiltInNames.clear();
+    CseMachine.clearMemoizedLayouts();
+  }
+
+  /**
+   * Clears memoized rendered nodes while preserving fixed-position caches and
+   * used built-in names inferred from source code.
+   *
+   * Use this for view-only toggles (for example arrow filters) that should
+   * force a fresh draw without recomputing global-frame built-in function names.
+   */
+  public static clearRenderedLayouts(): void {
+    CseMachine.clearMemoizedLayouts();
+  }
+
+  private static clearMemoizedLayouts(): void {
     Layout.currentLight = undefined;
     Layout.currentDark = undefined;
     Layout.currentStackDark = undefined;
@@ -54,11 +96,11 @@ export default class CseMachine {
     Layout.currentStackTruncLight = undefined;
     Layout.prevLayout = undefined;
     Layout.key = 0;
-    CseMachine.normalLayoutCache = null;
-    CseMachine.printLayoutCache = null;
-    CseMachine.usedBuiltInNames.clear();
   }
-  // added for center alignment
+  public static clearLiveLayouts(): void {
+    CseMachine.normalLiveLayoutCache = null;
+    CseMachine.printLiveLayoutCache = null;
+  }
   public static toggleCenterAlignment(): void {
     CseMachine.centerAlignment = !CseMachine.centerAlignment;
     CseMachine.centerAlignmentToggled = true;
@@ -76,20 +118,54 @@ export default class CseMachine {
   public static getStackTruncated(): boolean {
     return CseMachine.stackTruncated;
   }
-  // added for center alignment
   public static getCenterAlignment(): boolean {
     return CseMachine.centerAlignment;
   }
+
+  public static getArrowOriginFilters(): ArrowOriginFilters {
+    return { ...CseMachine.arrowOriginFilters };
+  }
+
+  public static isArrowOriginVisible(origin: ArrowOriginFilterKey | null): boolean {
+    if (origin === null) return true;
+    return CseMachine.arrowOriginFilters[origin];
+  }
+
+  public static setArrowOriginVisible(origin: ArrowOriginFilterKey, visible: boolean): void {
+    CseMachine.arrowOriginFilters[origin] = visible;
+  }
+
+  public static setAllArrowOriginsVisible(visible: boolean): void {
+    for (const origin of CseMachine.arrowOriginFilterKeys) {
+      CseMachine.arrowOriginFilters[origin] = visible;
+    }
+  }
+
+  public static resetArrowOriginFilters(): void {
+    CseMachine.arrowOriginFilters = { ...CseMachine.defaultArrowOriginFilters };
+  }
   public static getMasterLayout(): LayoutCache | null {
     return CseMachine.getPrintableMode()
-      ? CseMachine.printLayoutCache
-      : CseMachine.normalLayoutCache;
+      ? Layout.clearDeadFrames
+        ? CseMachine.printLiveLayoutCache
+        : CseMachine.printLayoutCache
+      : Layout.clearDeadFrames
+        ? CseMachine.normalLiveLayoutCache
+        : CseMachine.normalLayoutCache;
   }
   public static setMasterLayout(cache: LayoutCache): void {
     if (CseMachine.getPrintableMode()) {
-      CseMachine.printLayoutCache = cache;
+      if (Layout.clearDeadFrames) {
+        CseMachine.printLiveLayoutCache = cache;
+      } else {
+        CseMachine.printLayoutCache = cache;
+      }
     } else {
-      CseMachine.normalLayoutCache = cache;
+      if (Layout.clearDeadFrames) {
+        CseMachine.normalLiveLayoutCache = cache;
+      } else {
+        CseMachine.normalLayoutCache = cache;
+      }
     }
   }
 
@@ -261,9 +337,11 @@ export default class CseMachine {
       }
 
       const originalMode = CseMachine.getPrintableMode();
+      const originalAlignment = CseMachine.getCenterAlignment();
 
       const buildCache = (printable: boolean) => {
         CseMachine.printableMode = printable;
+        CseMachine.centerAlignment = false;
         Layout.setContext(
           context.runtime.environmentTree as EnvTree,
           context.runtime.control!,
@@ -278,6 +356,8 @@ export default class CseMachine {
 
       // Restore the user's actual mode setting and layout.
       CseMachine.printableMode = originalMode;
+      CseMachine.centerAlignment = originalAlignment;
+      CseMachine.setClearDeadFrames(false);
       Layout.setContext(
         context.runtime.environmentTree as EnvTree,
         context.runtime.control,
@@ -289,6 +369,7 @@ export default class CseMachine {
     // Apply Fixed Positions
     if (CseMachine.getMasterLayout()) {
       Layout.applyFixedPositions();
+      CseAnimation.updateAnimation();
     }
     this.setVis(Layout.draw());
     this.setIsStepLimitExceeded(context.runtime.control.isEmpty());
@@ -305,11 +386,19 @@ export default class CseMachine {
         if (!CseMachine.getMasterLayout()) {
           CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
         }
-        if (CseMachine.getMasterLayout()) {
-          Layout.applyFixedPositions();
-        }
+        Layout.applyFixedPositions();
+        CseAnimation.updateAnimation();
         this.setVis(Layout.draw());
         this.centerAlignmentToggled = false;
+      }
+      // redraw environment model and populate live layout caches
+      if (Layout.clearDeadFrames) {
+        Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
+        if (!CseMachine.getMasterLayout()) {
+          CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+        }
+        Layout.applyFixedPositions();
+        CseAnimation.updateAnimation();
       }
 
       if (
@@ -354,9 +443,11 @@ export default class CseMachine {
         this.setVis(Layout.currentDark);
       } else {
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
-        if (CseMachine.getMasterLayout()) {
-          Layout.applyFixedPositions();
+        if (!CseMachine.getMasterLayout()) {
+          CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
         }
+        Layout.applyFixedPositions();
+        CseAnimation.updateAnimation();
         this.setVis(Layout.draw());
       }
       Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
@@ -370,6 +461,7 @@ export default class CseMachine {
   }
 
   static clearCse() {
+    CseMachine.resetArrowOriginFilters();
     if (this.setVis) {
       this.setVis(undefined);
       CseMachine.environmentTree = undefined;
