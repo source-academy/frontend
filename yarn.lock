@@ -3232,10 +3232,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/conductor@https://github.com/source-academy/conductor.git#0.3.0":
-  version: 0.3.0
-  resolution: "@sourceacademy/conductor@https://github.com/source-academy/conductor.git#commit=09f0592b41c21e1a7fe5506e6dfddfbc6dcabfb4"
-  checksum: 10c0/2b97f06661dfede57edd5f33a89153573c52b1c81a122057ce024aa91deeca4718fa344d057f77309e0bd4deac83e83840cb372c486fe46da492495bcb4ee003
+"@sourceacademy/conductor@https://github.com/source-academy/conductor.git#0.4.0":
+  version: 0.4.0
+  resolution: "@sourceacademy/conductor@https://github.com/source-academy/conductor.git#commit=00a0d5fdce269d62a0feb33230300db27121be05"
+  checksum: 10c0/1e92b0eb3d9c67f3ab5fd7768e24a33941a006df85770aaf1938c9484a4d466c6136202ad06a202a257bc7117b87907dda6e3c695340c24f5ab8ada8d12b5c77
   languageName: node
   linkType: hard
 
@@ -7410,7 +7410,7 @@ __metadata:
     "@rsbuild/plugin-svgr": "npm:^1.2.0"
     "@sentry/react": "npm:^10.5.0"
     "@sourceacademy/c-slang": "npm:^1.0.21"
-    "@sourceacademy/conductor": "https://github.com/source-academy/conductor.git#0.3.0"
+    "@sourceacademy/conductor": "https://github.com/source-academy/conductor.git#0.4.0"
     "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.6"
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.2"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
