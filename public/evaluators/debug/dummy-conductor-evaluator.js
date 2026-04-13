@@ -10,11 +10,10 @@
   }
   self.addEventListener('message', captureEarlyMessage);
 
-  // Fixed version of conductor runner that is known to work with the current conductor API.
   const CONDUCTOR_RUNNER_URL =
-    'https://cdn.jsdelivr.net/npm/@sourceacademy/conductor@0.3.0/dist/conductor/runner/index.js';
+    'https://cdn.jsdelivr.net/npm/@sourceacademy/conductor@latest/dist/conductor/runner/index.js';
   const CONDUCTOR_TYPES_URL =
-    'https://cdn.jsdelivr.net/npm/@sourceacademy/conductor@0.3.0/dist/conductor/types/index.js';
+    'https://cdn.jsdelivr.net/npm/@sourceacademy/conductor@latest/dist/conductor/types/index.js';
 
   function parseResult(text) {
     const value = text.trim();
