@@ -1,7 +1,7 @@
 import { useMediaQuery } from '@mantine/hooks';
 import React, { RefObject } from 'react';
 // eslint-disable-next-line no-restricted-imports
-import { TypedUseSelectorHook, useSelector } from 'react-redux';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 import { OverallState } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
@@ -72,6 +72,9 @@ export function useLocalStorageState<T>(
 
 /** Typed version of useSelector. Use this instead of the useSelector hook. */
 export const useTypedSelector: TypedUseSelectorHook<OverallState> = useSelector;
+
+/** Typed-safe wrapper for useDispatch to avoid direct react-redux imports in components. */
+export const useTypedDispatch = () => useDispatch();
 /**
  * Dynamically returns the dimensions (width & height) of an HTML element, updating whenever the
  * element is loaded or resized.

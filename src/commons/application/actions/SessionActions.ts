@@ -131,6 +131,13 @@ const SessionActions = createActions('session', {
    * no id for Grading.
    */
   updateGrading: (submissionId: number, grading: GradingQuery) => ({ submissionId, grading }),
+  updateGradingSaveResult: (
+    submissionId: number,
+    questionId: number,
+    success: boolean,
+    saveAndContinue: boolean,
+    requestId: number
+  ) => ({ submissionId, questionId, success, saveAndContinue, requestId }),
   unsubmitSubmission: (submissionId: number) => ({ submissionId }),
   // Publishing / unpublishing actions
   publishGrading: (submissionId: number) => ({ submissionId }),

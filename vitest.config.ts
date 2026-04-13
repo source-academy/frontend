@@ -7,6 +7,13 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/setupTests.ts'],
+    // Prevent worker startup timeout cascades in constrained environments.
+    pool: 'threads',
+    poolOptions: {
+      threads: {
+        singleThread: true
+      }
+    },
     coverage: {
       reporter: ['text', 'html', 'lcov']
     }

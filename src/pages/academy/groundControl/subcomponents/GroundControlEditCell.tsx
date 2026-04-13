@@ -1,5 +1,4 @@
 import { Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
-import { DateInput } from '@blueprintjs/datetime';
 import { IconNames } from '@blueprintjs/icons';
 import dayjs from 'dayjs';
 import React, { useCallback, useState } from 'react';
@@ -15,10 +14,11 @@ type Props = {
 };
 
 const dateDisplayFormat = 'YYYY-MM-DD HH:mm:ss ZZ';
+const dateInputFormat = 'YYYY-MM-DDTHH:mm:ss';
 
 const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDate }) => {
-  const minDate = new Date(2010, 0, 0);
-  const maxDate = new Date(2030, 11, 31);
+  const minDate = dayjs(new Date(2010, 0, 1));
+  const maxDate = dayjs(new Date(2030, 11, 31));
 
   const currentDateString = forOpenDate ? data.openAt : data.closeAt;
   const currentDate = dayjs(currentDateString, undefined, true);
@@ -45,43 +45,45 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
     }
   }, [newDate, currentDate, data, handleAssessmentChangeDate, forOpenDate, handleCloseDialog]);
 
-  const handleParseDate = (str: string) => {
-    const date = dayjs(str, dateDisplayFormat, true);
-    return date.isValid() ? date.toDate() : false;
-  };
-  const handleFormatDate = (date: Date) => dayjs(date).format(dateDisplayFormat);
-
   const handleDateChange = React.useCallback(
-    (selectedDate: string | null) => setNewDate(dayjs(selectedDate)),
-    []
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const selected = dayjs(event.target.value);
+
+      if (!selected.isValid()) {
+        showWarningMessage('Failed to parse date string! Defaulting to current date.', 2000);
+        setNewDate(currentDate);
+        return;
+      }
+
+      if (selected.isBefore(minDate) || selected.isAfter(maxDate)) {
+        showWarningMessage('Date is out of allowed range.', 2000);
+        return;
+      }
+
+      setNewDate(selected);
+    },
+    [currentDate, minDate, maxDate]
   );
-  const handleDateError = React.useCallback(() => {
-    // Reset date to current date if user enters an invalid date string
-    showWarningMessage('Failed to parse date string! Defaulting to current date.', 2000);
-    setNewDate(currentDate);
-  }, [currentDate]);
 
   const dateInput = (
-    <DateInput
-      formatDate={handleFormatDate}
+    <input
+      type="datetime-local"
+      className="bp6-input"
+      value={newDate ? newDate.format(dateInputFormat) : ''}
       onChange={handleDateChange}
-      onError={handleDateError}
-      parseDate={handleParseDate}
-      placeholder={`${dateDisplayFormat} or select a date`}
-      value={newDate?.toISOString()}
-      disableTimezoneSelect
-      timePrecision="second"
-      fill
-      minDate={minDate}
-      maxDate={maxDate}
-      closeOnSelection={false}
+      min={minDate.format(dateInputFormat)}
+      max={maxDate.format(dateInputFormat)}
+      step={1}
+      aria-label="Assessment date and time"
     />
   );
 
   return (
     <>
-      <span className="date-cell-text">{currentDate.format(dateDisplayFormat)}</span>
-      <ControlButton icon={IconNames.EDIT} onClick={handleOpenDialog} />
+      <div className="date-cell-content">
+        <span className="date-cell-text">{currentDate.format(dateDisplayFormat)}</span>
+        <ControlButton icon={IconNames.EDIT} onClick={handleOpenDialog} />
+      </div>
       <Dialog
         icon={IconNames.INFO_SIGN}
         isOpen={isDialogOpen}

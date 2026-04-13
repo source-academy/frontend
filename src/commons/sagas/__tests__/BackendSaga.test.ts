@@ -63,6 +63,7 @@ import {
   postAssessment,
   postAuth,
   postCreateCourse,
+  postGrading,
   postReautogradeAnswer,
   postReautogradeSubmission,
   putAssessmentConfigs,
@@ -136,6 +137,8 @@ const mockCourseConfiguration1: CourseConfiguration = {
   enableContestLeaderboard: true,
   enableSourcecast: true,
   enableStories: false,
+  enableLlmGrading: false,
+  hasLlmContent: false,
   topLeaderboardDisplay: 100,
   topContestLeaderboardDisplay: 10,
   sourceChapter: Chapter.SOURCE_1,
@@ -173,6 +176,8 @@ const mockCourseConfiguration2: CourseConfiguration = {
   topContestLeaderboardDisplay: 10,
   enableSourcecast: true,
   enableStories: false,
+  enableLlmGrading: true,
+  hasLlmContent: true,
   sourceChapter: Chapter.SOURCE_4,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
@@ -451,6 +456,35 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
           { user, courseRegistration, courseConfiguration, assessmentConfigurations }
         ]
       ])
+      .dispatch({ type: SessionActions.fetchUserAndCourse.type, payload: true })
+      .silentRun();
+  });
+
+  test('regression: initial fetchUserAndCourse stores hasLlmContent so navbar conditions are correct before visiting admin pages', () => {
+    const courseConfigurationWithLlm = {
+      ...mockCourseConfiguration2,
+      enableLlmGrading: true,
+      hasLlmContent: true
+    };
+
+    return expectSaga(BackendSaga)
+      .withState({ session: mockTokens })
+      .provide([
+        [
+          call(getUser, mockTokens),
+          {
+            user,
+            courseRegistration,
+            courseConfiguration: courseConfigurationWithLlm,
+            assessmentConfigurations
+          }
+        ]
+      ])
+      .call(getUser, mockTokens)
+      .put(SessionActions.setUser(user))
+      .put(SessionActions.setCourseRegistration(courseRegistration))
+      .put(SessionActions.setCourseConfiguration(courseConfigurationWithLlm))
+      .put(SessionActions.setAssessmentConfigurations(assessmentConfigurations))
       .dispatch({ type: SessionActions.fetchUserAndCourse.type, payload: true })
       .silentRun();
   });
@@ -815,6 +849,83 @@ describe('Test SUBMIT_ASSESSMENT action', () => {
     return expect(mockStates.session.assessmentOverviews[0].status).not.toEqual(
       AssessmentStatuses.submitted
     );
+  });
+});
+
+describe('Test SUBMIT_GRADING_AND_CONTINUE action', () => {
+  const submissionId = 999;
+  const questionId = 1234;
+  const xpAdjustment = 10;
+  const comments = 'saved comments';
+
+  const mockStateWithGrading = {
+    ...mockStates,
+    session: {
+      ...mockStates.session,
+      role: Role.Staff,
+      gradings: {
+        [submissionId]: {
+          answers: [
+            {
+              question: { id: questionId },
+              grade: { xpAdjustment: 0, xp: 80, comments: '', gradedAt: '' }
+            }
+          ],
+          assessment: mockAssessment
+        }
+      }
+    },
+    workspaces: {
+      ...mockStates.workspaces,
+      grading: { currentQuestion: 1 }
+    }
+  } as any;
+
+  test('navigates only after successful save', () => {
+    const router = createMemoryRouter([
+      {
+        path: '/',
+        element: null
+      }
+    ]);
+
+    return expectSaga(BackendSaga)
+      .withState({ ...mockStateWithGrading, router })
+      .provide([
+        [call(postGrading, submissionId, questionId, xpAdjustment, mockTokens, comments), okResp]
+      ])
+      .call(postGrading, submissionId, questionId, xpAdjustment, mockTokens, comments)
+      .call(showSuccessMessage, 'Submitted!', 1000)
+      .dispatch(
+        SessionActions.submitGradingAndContinue(submissionId, questionId, xpAdjustment, comments)
+      )
+      .silentRun()
+      .then(() => {
+        expect(router.state.location.pathname).toBe('/courses/1/grading/999/2');
+      });
+  });
+
+  test('does not navigate when save fails', () => {
+    const router = createMemoryRouter([
+      {
+        path: '/',
+        element: null
+      }
+    ]);
+
+    return expectSaga(BackendSaga)
+      .withState({ ...mockStateWithGrading, router })
+      .provide([
+        [call(postGrading, submissionId, questionId, xpAdjustment, mockTokens, comments), null]
+      ])
+      .call(postGrading, submissionId, questionId, xpAdjustment, mockTokens, comments)
+      .dispatch(
+        SessionActions.submitGradingAndContinue(submissionId, questionId, xpAdjustment, comments)
+      )
+      .silentRun()
+      .then(() => {
+        expect(router.state.location.pathname).toBe('/');
+      });
   });
 });
 

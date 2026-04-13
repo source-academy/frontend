@@ -18,14 +18,79 @@
 }
 
 .grading-comment-selector-item {
-  margin: 3px;
+  margin: 3px 0;
   padding: 7px;
   background-color: $cadet-color-2;
   border: 1px solid $cadet-color-3;
+  border-radius: 4px;
   width: 100%;
-  cursor: pointer;
+  text-align: left;
 
-  &:hover {
-    background-color: $cadet-color-3;
+  &.selected {
+    border-color: #137cbd;
+    background-color: rgba(19, 124, 189, 0.1);
   }
+}
+
+.comment-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.comment-checkbox {
+  flex-shrink: 0;
+  margin: 0 !important;
+}
+
+.comment-text {
+  flex: 1;
+  cursor: pointer;
+  word-break: break-word;
+}
+
+.edit-button {
+  flex-shrink: 0;
+}
+
+.edit-section {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid $cadet-color-3;
+}
+
+.edit-textarea {
+  width: 100%;
+  min-height: 80px;
+  font-size: 0.875rem;
+}
+
+.diff-title {
+  margin-top: 8px;
+  margin-bottom: 4px;
+  font-size: 0.8rem;
+}
+
+.diff-preview {
+  padding: 6px;
+  background-color: $cadet-color-1;
+  border: 1px solid $cadet-color-3;
+  border-radius: 3px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.diff-del {
+  background-color: rgba(219, 55, 55, 0.2);
+  text-decoration: line-through;
+  color: #db3737;
+  margin-right: 2px;
+}
+
+.diff-add {
+  background-color: rgba(15, 153, 96, 0.2);
+  color: #0f9960;
+  margin-left: 2px;
 }

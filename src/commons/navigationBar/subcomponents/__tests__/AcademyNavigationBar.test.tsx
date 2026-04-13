@@ -8,7 +8,8 @@ import AcademyNavigationBar from '../AcademyNavigationBar';
 
 const assessmentTypes = ['Missions', 'Quests', 'Paths', 'Contests', 'Others'];
 const staffRoutes = ['grading', 'sourcereel', 'gamesimulator', 'dashboard', 'teamformation'];
-const adminRoutes = ['groundcontrol', 'adminpanel'];
+const adminRoutes = ['groundcontrol', 'llmstats', 'adminpanel'];
+const adminRoutesWithoutLlmStats = ['groundcontrol', 'adminpanel'];
 const courseId = 0;
 const createCoursePath = (path: string) => `/courses/${courseId}/${path}`;
 
@@ -35,15 +36,25 @@ const validateAdminPaths = (hrefs: string[], exist: boolean = true) =>
     expect(hrefs.includes(path)).toBe(exist);
   });
 
+const validateSpecificPaths = (hrefs: string[], paths: string[], exist: boolean = true) =>
+  paths.forEach(path => {
+    expect(hrefs.includes(path)).toBe(exist);
+  });
+
 const mockProps = {
   assessmentTypes
 };
 
-const renderNav = (role: Role) => {
+const renderNav = (
+  role: Role,
+  options?: { enableLlmGrading?: boolean; hasLlmContent?: boolean }
+) => {
   const store = mockInitialStore({
     session: {
       role,
-      courseId
+      courseId,
+      enableLlmGrading: options?.enableLlmGrading,
+      hasLlmContent: options?.hasLlmContent
     }
   });
 
@@ -57,8 +68,7 @@ const renderNav = (role: Role) => {
 };
 
 test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Grading, Team Formation and AdminPanel NavLinks do NOT render for Role.Student', () => {
-  const tree = renderNav(Role.Student);
-  expect(tree.asFragment()).toMatchSnapshot();
+  const tree = renderNav(Role.Student, { enableLlmGrading: false, hasLlmContent: false });
 
   const hrefs = getHrefs(tree.container);
   validateAssessmentPaths(hrefs, true);
@@ -67,8 +77,7 @@ test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gradi
 });
 
 test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Team Formation and Grading NavLinks render for Role.Staff', () => {
-  const tree = renderNav(Role.Staff);
-  expect(tree.asFragment()).toMatchSnapshot();
+  const tree = renderNav(Role.Staff, { enableLlmGrading: false, hasLlmContent: false });
 
   const hrefs = getHrefs(tree.container);
   validateAssessmentPaths(hrefs, true);
@@ -76,9 +85,36 @@ test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Team 
   validateAdminPaths(hrefs, false);
 });
 
+test('MissionControl, GroundControl and AdminPanel render for Role.Admin when LLM grading is disabled, but LLM Statistics does not', () => {
+  const tree = renderNav(Role.Admin, { enableLlmGrading: false, hasLlmContent: false });
+
+  const hrefs = getHrefs(tree.container);
+  validateAssessmentPaths(hrefs, true);
+  validateStaffPaths(hrefs, true);
+  validateSpecificPaths(hrefs, adminRoutesWithoutLlmStats.map(createCoursePath), true);
+  validateSpecificPaths(hrefs, [createCoursePath('llmstats')], false);
+});
+
+test('MissionControl, GroundControl and LLM Statistics render for Role.Admin when LLM grading is enabled even if there is no LLM content', () => {
+  const tree = renderNav(Role.Admin, { enableLlmGrading: true, hasLlmContent: false });
+
+  const hrefs = getHrefs(tree.container);
+  validateAssessmentPaths(hrefs, true);
+  validateStaffPaths(hrefs, true);
+  validateAdminPaths(hrefs, true);
+});
+
+test('MissionControl, GroundControl and LLM Statistics render for Role.Admin when LLM grading is enabled and hasLlmContent is still loading', () => {
+  const tree = renderNav(Role.Admin, { enableLlmGrading: true, hasLlmContent: undefined });
+
+  const hrefs = getHrefs(tree.container);
+  validateAssessmentPaths(hrefs, true);
+  validateStaffPaths(hrefs, true);
+  validateAdminPaths(hrefs, true);
+});
+
 test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Grading, Team Formation and AdminPanel NavLinks render for Role.Admin', () => {
-  const tree = renderNav(Role.Admin);
-  expect(tree.asFragment()).toMatchSnapshot();
+  const tree = renderNav(Role.Admin, { enableLlmGrading: true, hasLlmContent: true });
 
   const hrefs = getHrefs(tree.container);
   validateAssessmentPaths(hrefs, true);

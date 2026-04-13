@@ -1,0 +1,7 @@
+{
+  "stories": {
+    "deleteConfirmation": "您确定要删除此故事吗？",
+    "delete": "删除",
+    "allStories": "所有故事"
+  }
+}

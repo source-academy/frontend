@@ -40,6 +40,7 @@ export type SessionState = {
   readonly enableSourcecast?: boolean;
   readonly enableStories?: boolean;
   readonly enableLlmGrading?: boolean;
+  readonly hasLlmContent?: boolean;
   readonly llmModel?: string;
   readonly llmApiUrl?: string;
   readonly llmCourseLevelPrompt?: string;
@@ -55,6 +56,9 @@ export type SessionState = {
   readonly assessmentConfigurations?: AssessmentConfiguration[];
   readonly userCourseRegistrations?: AdminPanelCourseRegistration[];
 
+  readonly llmInputCost?: number;
+  readonly llmOutputCost?: number;
+
   // For research data collection
   readonly agreedToResearch?: boolean | null;
   readonly sessionId: number;
@@ -66,12 +70,21 @@ export type SessionState = {
   readonly teamFormationOverview?: TeamFormationOverview;
   readonly teamFormationOverviews?: TeamFormationOverview[];
   readonly gradings: { [id: number]: GradingQuery };
+  readonly gradingSaveResult?: GradingSaveResult;
   readonly notifications: Notification[];
   readonly googleUser?: string;
   readonly githubOctokitObject: { octokit: Octokit | undefined };
   readonly githubAccessToken?: string;
   readonly remoteExecutionDevices?: Device[];
   readonly remoteExecutionSession?: DeviceSession;
+};
+
+export type GradingSaveResult = {
+  submissionId: number;
+  questionId: number;
+  success: boolean;
+  saveAndContinue: boolean;
+  requestId: number;
 };
 
 export type Tokens = {
@@ -114,6 +127,7 @@ export type CourseConfiguration = {
   enableSourcecast: boolean;
   enableStories: boolean;
   enableLlmGrading?: boolean;
+  hasLlmContent?: boolean;
   enableOverallLeaderboard: boolean;
   enableContestLeaderboard: boolean;
   topLeaderboardDisplay: number;
@@ -125,6 +139,9 @@ export type CourseConfiguration = {
   llmModel?: string;
   llmApiUrl?: string;
   llmCourseLevelPrompt?: string;
+  //For llm token consumption calc
+  llmInputCost?: number;
+  llmOutputCost?: number;
 };
 
 export type AdminPanelCourseRegistration = {

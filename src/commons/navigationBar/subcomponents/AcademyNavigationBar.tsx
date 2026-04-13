@@ -13,7 +13,7 @@ type Props = {
 };
 
 const AcademyNavigationBar: React.FC<Props> = ({ assessmentTypes }) => {
-  const { role, courseId } = useSession();
+  const { role, courseId, enableLlmGrading } = useSession();
   const isEnrolledInACourse = !!role;
 
   const leftEntries: NavbarEntryInfo[] = useMemo(
@@ -22,8 +22,14 @@ const AcademyNavigationBar: React.FC<Props> = ({ assessmentTypes }) => {
   );
 
   const rightEntries: NavbarEntryInfo[] = useMemo(
-    () => getAcademyNavbarRightInfo({ isEnrolledInACourse, courseId, role }),
-    [isEnrolledInACourse, courseId, role]
+    () =>
+      getAcademyNavbarRightInfo({
+        isEnrolledInACourse,
+        courseId,
+        role,
+        enableLlmGrading
+      }),
+    [isEnrolledInACourse, courseId, role, enableLlmGrading]
   );
 
   if (courseId === undefined || !isEnrolledInACourse) {
@@ -78,10 +84,12 @@ export const assessmentTypesToNavlinkInfo = ({
 
 const getStaffNavlinkInfo = ({
   courseId,
-  role
+  role,
+  enableLlmGrading
 }: {
   courseId?: number;
   role?: Role;
+  enableLlmGrading?: boolean;
 }): NavbarEntryInfo[] => {
   const isStaffOrAdmin = role === Role.Admin || role === Role.Staff;
   const isAdmin = role === Role.Admin;
@@ -92,6 +100,13 @@ const getStaffNavlinkInfo = ({
       icon: IconNames.SATELLITE,
       text: 'Ground Control',
       disabled: !isAdmin,
+      hiddenInBreakpoints: ['xs', 'sm']
+    },
+    {
+      to: `/courses/${courseId}/llmstats`,
+      icon: IconNames.CHART,
+      text: 'LLM Statistics',
+      disabled: !(isAdmin && enableLlmGrading),
       hiddenInBreakpoints: ['xs', 'sm']
     },
     {
@@ -143,11 +158,13 @@ const getStaffNavlinkInfo = ({
 export const getAcademyNavbarRightInfo = ({
   isEnrolledInACourse,
   courseId,
-  role
+  role,
+  enableLlmGrading
 }: {
   isEnrolledInACourse: boolean;
   courseId?: number;
   role?: Role;
-}): NavbarEntryInfo[] => [...getStaffNavlinkInfo({ courseId, role })];
+  enableLlmGrading?: boolean;
+}): NavbarEntryInfo[] => [...getStaffNavlinkInfo({ courseId, role, enableLlmGrading })];
 
 export default AcademyNavigationBar;

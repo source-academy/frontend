@@ -76,7 +76,6 @@ const GradingWorkspace: React.FC<Props> = props => {
 
   const grading = useTypedSelector(state => state.session.gradings[props.submissionId]);
   const courseId = useTypedSelector(state => state.session.courseId);
-  const llm_grading = useTypedSelector(state => state.session.enableLlmGrading);
   const {
     autogradingResults,
     isFolderModeEnabled,
@@ -304,8 +303,15 @@ const GradingWorkspace: React.FC<Props> = props => {
         body: (
           <GradingEditor
             answer_id={grading!.answers[questionId].id}
-            ai_comments={grading!.answers[questionId].ai_comments || []}
+            ai_comments={
+              grading!.answers[questionId].ai_comments || {
+                comments: [],
+                selectedIndices: [],
+                selectedEdits: {}
+              }
+            }
             solution={grading!.answers[questionId].question.solution}
+            assessmentId={grading!.assessment.id}
             questionId={grading!.answers[questionId].question.id}
             prompts={grading!.answers[questionId].prompts}
             submissionId={props.submissionId}
@@ -326,7 +332,10 @@ const GradingWorkspace: React.FC<Props> = props => {
                 ? [grading!.answers[questionId].student.username]
                 : grading!.answers[questionId].team!.map(member => member.username)
             }
-            is_llm={!!llm_grading && grading!.answers[questionId].question.type == 'programming'}
+            is_llm={
+              !!grading!.enable_llm_grading &&
+              grading!.answers[questionId].question.type == 'programming'
+            }
             comments={grading!.answers[questionId].grade.comments ?? ''}
             graderName={
               grading!.answers[questionId].grade.grader

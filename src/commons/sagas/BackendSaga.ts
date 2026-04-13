@@ -600,14 +600,20 @@ function* sendGrade(
     | ReturnType<typeof actions.submitGradingAndContinue>
 ): any {
   const role: Role = yield select((state: OverallState) => state.session.role!);
-  if (role === Role.Student) {
-    return yield call(showWarningMessage, 'Only staff can submit answers.');
-  }
-
   const { submissionId, questionId, xpAdjustment, comments } = action.payload;
+  const saveAndContinue = action.type === SessionActions.submitGradingAndContinue.type;
+
+  if (role === Role.Student) {
+    yield call(showWarningMessage, 'Only staff can submit answers.');
+    yield put(
+      actions.updateGradingSaveResult(submissionId, questionId, false, saveAndContinue, Date.now())
+    );
+    return false;
+  }
   const tokens: Tokens = yield selectTokens();
 
-  const resp: Response | null = yield postGrading(
+  const resp: Response | null = yield call(
+    postGrading,
     submissionId,
     questionId,
     xpAdjustment,
@@ -615,7 +621,11 @@ function* sendGrade(
     comments
   );
   if (!resp || !resp.ok) {
-    return yield handleResponseError(resp);
+    yield handleResponseError(resp);
+    yield put(
+      actions.updateGradingSaveResult(submissionId, questionId, false, saveAndContinue, Date.now())
+    );
+    return false;
   }
 
   yield call(showSuccessMessage, 'Submitted!', 1000);
@@ -640,13 +650,21 @@ function* sendGrade(
     actions.updateGrading(submissionId, {
       answers: newGrading,
       assessment: grading.assessment,
-      enable_llm_grading: false
+      enable_llm_grading: grading.enable_llm_grading
     })
   );
+
+  yield put(
+    actions.updateGradingSaveResult(submissionId, questionId, true, saveAndContinue, Date.now())
+  );
+  return true;
 }
 
 function* sendGradeAndContinue(action: ReturnType<typeof actions.submitGradingAndContinue>) {
-  yield* sendGrade(action);
+  const didSave: boolean = yield* sendGrade(action);
+  if (!didSave) {
+    return;
+  }
 
   const { submissionId } = action.payload;
   const [currentQuestion, courseId]: [number | undefined, number] = yield select(
