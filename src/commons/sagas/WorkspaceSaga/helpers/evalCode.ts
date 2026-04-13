@@ -623,11 +623,11 @@ export function* evalCodeConductorSaga(
     yield put(actions.clearReplInput(workspaceLocation));
     yield call([hostPlugin, 'sendChunk'], code);
   }
+  yield cancel(statusTask);
   yield call([conduit, 'terminate']);
   yield cancel(stdoutTask);
   yield cancel(resultTask);
   yield cancel(errorTask);
-  yield cancel(statusTask);
   //yield put(actions.debuggerReset(workspaceLocation));
   yield put(actions.endInterruptExecution(workspaceLocation));
   console.log('killed');
