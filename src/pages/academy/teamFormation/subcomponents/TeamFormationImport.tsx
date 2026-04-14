@@ -1,5 +1,3 @@
-import '@tremor/react/dist/esm/tremor.css';
-
 import { Button } from '@blueprintjs/core';
 import { useState } from 'react';
 import { FileUploader } from 'react-drag-drop-files';
