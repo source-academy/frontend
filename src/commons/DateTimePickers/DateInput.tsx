@@ -1,6 +1,6 @@
 import { Button, InputGroup, Popover } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import GradingFlex from '../grading/GradingFlex';
 import DatePicker from './DatePicker';
@@ -38,6 +38,14 @@ const DateInput: React.FC<DateInputProps> = ({
   void disableTimezoneSelect;
   const [inputValue, setInputValue] = useState(value ? formatDate(new Date(value)) : '');
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (value) {
+      setInputValue(formatDate(new Date(value)));
+    } else {
+      setInputValue('');
+    }
+  }, [value, formatDate]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
