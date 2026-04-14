@@ -1,7 +1,7 @@
 import { Button, Classes, Divider, HTMLSelect } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { Matcher } from 'react-day-picker';
 import {
   DayPicker,
@@ -36,26 +36,38 @@ const DatePicker: React.FC<DatePickerProps> = ({
   minDate,
   maxDate
 }) => {
-  const [selected, setSelected] = useState<Date | undefined>(value);
+  const [selectedDatetime, setSelectedDatetime] = useState<Date | undefined>(value);
 
-  const handleSelect = (date: Date | undefined) => {
-    setSelected(date);
-    if (date) {
-      onChange(date);
+  useEffect(() => {
+    setSelectedDatetime(value);
+  }, [value]);
+
+  const handleSelectDate = (date: Date | undefined) => {
+    if (selectedDatetime && date) {
+      const newDatetime = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        selectedDatetime.getHours(),
+        selectedDatetime.getMinutes(),
+        selectedDatetime.getSeconds()
+      );
+      setSelectedDatetime(newDatetime);
+      onChange(newDatetime);
     }
   };
 
   const handleTimeChange = (time: Date) => {
-    if (selected) {
-      const newDate = new Date(
-        selected.getFullYear(),
-        selected.getMonth(),
-        selected.getDate(),
+    if (selectedDatetime) {
+      const newDatetime = new Date(
+        selectedDatetime.getFullYear(),
+        selectedDatetime.getMonth(),
+        selectedDatetime.getDate(),
         time.getHours(),
         time.getMinutes(),
         time.getSeconds()
       );
-      onChange(newDate);
+      onChange(newDatetime);
     }
   };
 
@@ -71,8 +83,8 @@ const DatePicker: React.FC<DatePickerProps> = ({
     <div className="bp6-datepicker">
       <DayPicker
         mode="single"
-        selected={selected}
-        onSelect={handleSelect}
+        selected={selectedDatetime}
+        onSelect={handleSelectDate}
         hidden={hidden.length > 0 ? hidden : undefined}
         startMonth={minDate ? new Date(minDate.getFullYear(), minDate.getMonth()) : undefined}
         endMonth={maxDate ? new Date(maxDate.getFullYear(), maxDate.getMonth()) : undefined}
