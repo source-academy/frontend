@@ -111,7 +111,8 @@ const DatePicker: React.FC<DatePickerProps> = ({
                     Classes.INTENT_PRIMARY
                 )}
                 disabled={modifiers.outside}
-                onClick={onClick as any}
+                // @ts-expect-error - mismatched types
+                onClick={onClick}
               >
                 {day.date.getDate()}
               </Button>
@@ -128,16 +129,19 @@ const DatePicker: React.FC<DatePickerProps> = ({
             );
           },
           Dropdown(props) {
-            return <HTMLSelect minimal {...(props as any)} />;
+            // @ts-expect-error - mismatched types
+            return <HTMLSelect minimal {...props} />;
           },
           NextMonthButton({ onClick }) {
             return (
-              <Button icon={IconNames.CHEVRON_RIGHT} variant="minimal" onClick={onClick as any} />
+              // @ts-expect-error - mismatched types
+              <Button icon={IconNames.CHEVRON_RIGHT} variant="minimal" onClick={onClick} />
             );
           },
           PreviousMonthButton({ onClick }) {
             return (
-              <Button icon={IconNames.CHEVRON_LEFT} variant="minimal" onClick={onClick as any} />
+              // @ts-expect-error - mismatched types
+              <Button icon={IconNames.CHEVRON_LEFT} variant="minimal" onClick={onClick} />
             );
           }
         }}
