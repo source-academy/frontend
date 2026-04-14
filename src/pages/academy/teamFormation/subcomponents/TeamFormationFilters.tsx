@@ -1,5 +1,6 @@
 import { ColumnFilter, ColumnFiltersState } from '@tanstack/react-table';
-import { Flex } from '@tremor/react';
+import React from 'react';
+import GradingFlex from 'src/commons/grading/GradingFlex';
 
 import { FilterBadge } from './TeamFormationBadges';
 
@@ -10,11 +11,11 @@ type TeamFormationFiltersProps = {
 
 const TeamFormationFilters: React.FC<TeamFormationFiltersProps> = ({ filters, onFilterRemove }) => {
   return (
-    <Flex justifyContent="justify-start" spaceX="space-x-1">
+    <GradingFlex justifyContent="flex-start" style={{ columnGap: '0.25rem' }}>
       {filters.map(filter => (
         <FilterBadge filter={filter} onRemove={onFilterRemove} key={filter.id} />
       ))}
-    </Flex>
+    </GradingFlex>
   );
 };
 
