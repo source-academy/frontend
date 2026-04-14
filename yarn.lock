@@ -1583,6 +1583,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@date-fns/tz@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "@date-fns/tz@npm:1.4.1"
+  checksum: 10c0/9033fdc4682fe3d4d147625ce04fa88a8792653594e2de8d5a438c8f3bfc0990ee28fe773f91cac6810b06d818b5b281ae0608752ba8337257d0279ded3f019a
+  languageName: node
+  linkType: hard
+
 "@discoveryjs/json-ext@npm:^0.6.3":
   version: 0.6.3
   resolution: "@discoveryjs/json-ext@npm:0.6.3"
@@ -3618,6 +3625,13 @@ __metadata:
     react: ">=16.14.0"
     react-dom: ">=16.14.0"
   checksum: 10c0/69a86cc52bf9915c74d70acd031e8f86080e95dcbcc84766af879b33345f2e38d8db8f8f01d5035d916e60af462e9c6838ca016a7a85e2d86ae6f32c92bf3044
+  languageName: node
+  linkType: hard
+
+"@tabby_ai/hijri-converter@npm:1.0.5":
+  version: 1.0.5
+  resolution: "@tabby_ai/hijri-converter@npm:1.0.5"
+  checksum: 10c0/40044f463ff57855315c8925461942311460bb64e16706480dde98142f40bcd8e9925bb6fee401fd209397b5bb25368d1529c85b1e6c7e6216ea2085f6aaf61e
   languageName: node
   linkType: hard
 
@@ -5995,6 +6009,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"date-fns-jalali@npm:4.1.0-0":
+  version: 4.1.0-0
+  resolution: "date-fns-jalali@npm:4.1.0-0"
+  checksum: 10c0/f9ad98d9f7e8e5abe0d070dc806b0c8baded2b1208626c42e92cbd2605b5171f5714d6b79b20cc2666267d821699244c9d0b5e93274106cf57d6232da77596ed
+  languageName: node
+  linkType: hard
+
 "date-fns-tz@npm:^2.0.0":
   version: 2.0.1
   resolution: "date-fns-tz@npm:2.0.1"
@@ -6010,6 +6031,13 @@ __metadata:
   dependencies:
     "@babel/runtime": "npm:^7.21.0"
   checksum: 10c0/e4b521fbf22bc8c3db332bbfb7b094fd3e7627de0259a9d17c7551e2d2702608a7307a449206065916538e384f37b181565447ce2637ae09828427aed9cb5581
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "date-fns@npm:4.1.0"
+  checksum: 10c0/b79ff32830e6b7faa009590af6ae0fb8c3fd9ffad46d930548fbb5acf473773b4712ae887e156ba91a7b3dc30591ce0f517d69fd83bd9c38650fdc03b4e0bac8
   languageName: node
   linkType: hard
 
@@ -7268,6 +7296,7 @@ __metadata:
     re-resizable: "npm:^6.9.9"
     react: "npm:^19.2.4"
     react-ace: "npm:^14.0.0"
+    react-day-picker: "npm:^9.14.0"
     react-debounce-render: "npm:^8.0.2"
     react-dom: "npm:^19.2.4"
     react-drag-drop-files: "npm:^3.0.0"
@@ -10929,6 +10958,20 @@ __metadata:
     date-fns: ^2.28.0 || ^3.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 10c0/e9868aced1e40b4cb7d6cf8d50e250226b38ec7ebea944b65aa9db20a0f36d0581b8a501297d09dcbf2d812de852168952b3fb27990915381629d6e314c2a4d8
+  languageName: node
+  linkType: hard
+
+"react-day-picker@npm:^9.14.0":
+  version: 9.14.0
+  resolution: "react-day-picker@npm:9.14.0"
+  dependencies:
+    "@date-fns/tz": "npm:^1.4.1"
+    "@tabby_ai/hijri-converter": "npm:1.0.5"
+    date-fns: "npm:^4.1.0"
+    date-fns-jalali: "npm:4.1.0-0"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 10c0/5d26b2e8e28fb504c2ec577bda2ea26709ccab07555aada0674bd72ae38963de6f5cab135d936bb2fef935f97f73c6510657b15b936766e53d5c65811d13289a
   languageName: node
   linkType: hard
 
