@@ -121,6 +121,7 @@ class Settings extends Phaser.Scene {
     this.getLayerManager().addToLayer(Layer.UI, optCont);
     this.getLayerManager().addToLayer(Layer.UI, this.sfxVolumeRadioButtons);
     this.getLayerManager().addToLayer(Layer.UI, this.bgmVolumeRadioButtons);
+    this.getLayerManager().addToLayer(Layer.UI, this.skipConfirmRadioButtons);
     this.getLayerManager().addToLayer(Layer.UI, applySettingsButton);
     this.getLayerManager().addToLayer(Layer.UI, backButton);
   }
