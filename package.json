@@ -32,7 +32,6 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^6.0.0",
-    "@blueprintjs/datetime": "^6.0.0",
     "@blueprintjs/icons": "^6.0.0",
     "@blueprintjs/select": "^6.0.0",
     "@convergencelabs/ace-collab-ext": "^0.6.0",
