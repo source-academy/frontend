@@ -51,20 +51,6 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
             renderProgressStatus={renderGradingTooltip}
             makeSubmissionButton={makeSubmissionButton}
           />
-          {/* <div className={classes['listing-xp']}>
-            <H6>
-              {overview.isGradingPublished
-                ? `XP: ${overview.xp} / ${overview.maxXp}`
-                : `Max XP: ${overview.maxXp}`}
-            </H6>
-            {overview.earlySubmissionXp > 0 && (
-              <Tooltip
-                content={`Max XP ends on ${getPrettyDateAfterHours(overview.openAt, overview.hoursBeforeEarlyXpDecay)}`}
-              >
-                <Icon icon={IconNames.INFO_SIGN} />
-              </Tooltip>
-            )}
-          </div> */}
           <div className="listing-description">
             <Markdown content={overview.shortSummary} />
           </div>
