@@ -51,7 +51,7 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
             renderProgressStatus={renderGradingTooltip}
             makeSubmissionButton={makeSubmissionButton}
           />
-          <div className={classes['listing-xp']}>
+          {/* <div className={classes['listing-xp']}>
             <H6>
               {overview.isGradingPublished
                 ? `XP: ${overview.xp} / ${overview.maxXp}`
@@ -64,7 +64,7 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
                 <Icon icon={IconNames.INFO_SIGN} />
               </Tooltip>
             )}
-          </div>
+          </div> */}
           <div className="listing-description">
             <Markdown content={overview.shortSummary} />
           </div>
