@@ -54,6 +54,9 @@ const DatePicker: React.FC<DatePickerProps> = ({
       );
       setSelectedDatetime(newDatetime);
       onChange(newDatetime);
+    } else {
+      setSelectedDatetime(date);
+      onChange(date || null);
     }
   };
 
