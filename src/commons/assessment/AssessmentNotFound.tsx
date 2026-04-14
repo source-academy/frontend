@@ -1,9 +1,9 @@
 import { Classes, NonIdealState } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 const AssessmentNotFound: React.FC = () => (
-  <div className={classNames('NoPage', Classes.DARK)}>
+  <div className={clsx('NoPage', Classes.DARK)}>
     <NonIdealState
       icon={IconNames.ERROR}
       title="Assessment Not Found"

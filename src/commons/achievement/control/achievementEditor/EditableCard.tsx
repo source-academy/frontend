@@ -1,6 +1,6 @@
 import { EditableText, NumericInput, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'es-toolkit';
 import React, { useContext, useMemo, useReducer, useState } from 'react';
 
 import { AchievementContext } from '../../../../features/achievement/AchievementConstants';

@@ -4,7 +4,7 @@ import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { t } from 'i18next';
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -62,7 +62,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
 
     return (
       <HotKeys bindings={hotkeyBindings}>
-        <div className={classNames('sa-data-visualizer', Classes.DARK)}>
+        <div className={clsx('sa-data-visualizer', Classes.DARK)}>
           {this.state.steps.length > 1 ? (
             <div
               style={{
@@ -122,7 +122,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                   <Card style={{ background: '#1a2530', padding: 10 }}>
                     {step.length > 1 && (
                       <h5
-                        className={classNames(Classes.HEADING, Classes.MONOSPACE_TEXT)}
+                        className={clsx(Classes.HEADING, Classes.MONOSPACE_TEXT)}
                         style={{ marginTop: 0, marginBottom: 20, whiteSpace: 'nowrap' }}
                       >
                         Structure {i + 1}

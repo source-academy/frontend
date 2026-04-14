@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { throttle } from 'es-toolkit';
 import { setAutoFreeze } from 'immer';
-import { throttle } from 'lodash';
 import createSagaMiddleware from 'redux-saga';
 import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 

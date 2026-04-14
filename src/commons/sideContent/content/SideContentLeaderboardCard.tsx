@@ -1,5 +1,5 @@
 import { Card, Classes, Elevation, Pre } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React from 'react';
 
 import { ContestEntry } from '../../assessment/AssessmentTypes';
@@ -21,7 +21,7 @@ const SideContentLeaderboardCard: React.FC<SideContentLeaderboardCardProps> = ({
   rank
 }) => {
   return (
-    <div className={classNames('LeaderboardCard')}>
+    <div className={clsx('LeaderboardCard')}>
       <Card
         className={Classes.INTERACTIVE}
         elevation={Elevation.ONE}

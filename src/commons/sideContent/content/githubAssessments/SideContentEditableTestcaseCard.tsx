@@ -1,6 +1,6 @@
 import { Button, Card, Classes, Elevation, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import React from 'react';
@@ -72,7 +72,7 @@ const SideContentEditableTestcaseCard: React.FC<SideContentEditableTestcaseCardP
   }, [testcase]);
 
   return (
-    <div className={classNames('EditableAutograderCard', extraClasses)}>
+    <div className={clsx('EditableAutograderCard', extraClasses)}>
       <Card className={Classes.INTERACTIVE} elevation={Elevation.ONE}>
         {
           <>

@@ -13,10 +13,10 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
-import classNames from 'classnames';
+import clsx from 'clsx';
+import { debounce } from 'es-toolkit';
 import { t } from 'i18next';
 import { Chapter } from 'js-slang/dist/langs';
-import { debounce } from 'lodash';
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
@@ -248,7 +248,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
           overflow: this.state.visualization ? 'hidden' : 'auto'
         }}
       >
-        <div className={classNames('sa-substituter', Classes.DARK)}>
+        <div className={clsx('sa-substituter', Classes.DARK)}>
           <Slider
             disabled={!this.state.visualization}
             min={0}

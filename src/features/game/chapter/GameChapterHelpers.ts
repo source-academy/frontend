@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { sortBy } from 'es-toolkit/compat';
 import { request } from 'src/commons/utils/RequestHelper';
 
 import { store } from '../../../pages/createStore';
@@ -19,7 +19,7 @@ export async function fetchGameChapters(): Promise<GameChapter[]> {
   });
   if (!response) return [];
   const chapterDetails = response.status === 200 ? await response.json() : [];
-  const sortedChapters = _.sortBy(chapterDetails, chapterDetail => new Date(chapterDetail.openAt));
+  const sortedChapters = sortBy(chapterDetails, chapterDetail => new Date(chapterDetail.openAt));
   sortedChapters.forEach(chapter => (chapter.filenames = chapter.filenames.map(toTxtPath)));
   return sortedChapters;
 }

@@ -4,7 +4,7 @@ import 'js-slang/dist/editors/ace/theme/source';
 
 import { Card } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
-import { isEqual } from 'lodash';
+import { isEqual } from 'es-toolkit';
 import React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
 

@@ -1,7 +1,7 @@
 import { Classes, HTMLTable, Icon, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { CollabEditingAccess, type SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -75,7 +75,7 @@ function AdminView({ users, playgroundCode }: AdminViewProps) {
           alignIndicator="left"
           checked={toggleAll}
           onChange={event => handleAllToggleAccess(event.target.checked)}
-          className={classNames(classes['switch'], classes['default-switch'])}
+          className={clsx(classes['switch'], classes['default-switch'])}
         />
       </span>
       <br />
@@ -86,7 +86,7 @@ function AdminView({ users, playgroundCode }: AdminViewProps) {
           alignIndicator="left"
           checked={defaultRole}
           onChange={event => handleDefaultToggleAccess(event.target.checked)}
-          className={classNames(classes['switch'], classes['default-switch'])}
+          className={clsx(classes['switch'], classes['default-switch'])}
         />
       </span>
       <HTMLTable compact className={classes['table']}>
@@ -99,7 +99,7 @@ function AdminView({ users, playgroundCode }: AdminViewProps) {
         <tbody>
           {Object.entries(users).map(([userId, user], index) => (
             <tr key={userId}>
-              <td className={classNames(Classes.INTERACTIVE, classes['left-cell'])}>
+              <td className={clsx(Classes.INTERACTIVE, classes['left-cell'])}>
                 <div style={{ backgroundColor: user.color }} className={classes['user-icon']} />
                 <div>{user.name}</div>
               </td>
@@ -187,14 +187,14 @@ const SideContentSessionManagement: React.FC<Props> = ({
               {Object.values(users).map((user, index) => {
                 return (
                   <tr key={user.color}>
-                    <td className={classNames(Classes.INTERACTIVE, classes['left-cell'])}>
+                    <td className={clsx(Classes.INTERACTIVE, classes['left-cell'])}>
                       <div
                         style={{ backgroundColor: user.color }}
                         className={classes['user-icon']}
                       />
                       <div>{user.name}</div>
                     </td>
-                    <td className={classNames(Classes.INTERACTIVE, classes['right-cell'])}>
+                    <td className={clsx(Classes.INTERACTIVE, classes['right-cell'])}>
                       {user.role === CollabEditingAccess.OWNER
                         ? 'Admin'
                         : user.role.charAt(0).toUpperCase() + user.role.slice(1)}

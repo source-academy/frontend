@@ -1,6 +1,6 @@
 import { Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import qs from 'query-string';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
@@ -50,7 +50,7 @@ const GitHubCallback: React.FC = () => {
       the website administrator.
     </Failure>
   ) : (
-    <div className={classNames('NoPage', Classes.DARK)}>
+    <div className={clsx('NoPage', Classes.DARK)}>
       <NonIdealState description="Logging In..." icon={<Spinner size={SpinnerSize.LARGE} />} />
     </div>
   );
@@ -96,7 +96,7 @@ async function retrieveAuthTokenUpdatePage(
 
 function Failure({ title, children }: { title: string; children: string }) {
   return (
-    <div className={classNames('NoPage', Classes.DARK)}>
+    <div className={clsx('NoPage', Classes.DARK)}>
       <NonIdealState icon={IconNames.ERROR} title={title} description={children} />
     </div>
   );

@@ -12,7 +12,7 @@ import {
 } from '@blueprintjs/core';
 import { Octokit } from '@octokit/rest';
 import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 
 import {
@@ -46,7 +46,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
 
   return (
     <Dialog className="githubDialog" isOpen={true} onClose={handleClose}>
-      <div className={classNames('githubDialogHeader', Classes.DIALOG_HEADER)}>
+      <div className={clsx('githubDialogHeader', Classes.DIALOG_HEADER)}>
         <h3>Select a File</h3>
       </div>
       <DialogBody>
@@ -55,7 +55,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
           onNodeClick={handleNodeClick}
           onNodeCollapse={handleNodeCollapse}
           onNodeExpand={handleNodeExpand}
-          className={classNames('FileTree', Classes.ELEVATION_0)}
+          className={clsx('FileTree', Classes.ELEVATION_0)}
         />
         {props.pickerType === 'Save' && (
           <div>

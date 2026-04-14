@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React, { useState } from 'react';
 import { Navigate, useParams } from 'react-router';
 import { useSession } from 'src/commons/utils/Hooks';
@@ -72,7 +72,7 @@ const MissionControl: React.FC = () => {
 
   // Finally, render the ContentDisplay.
   return (
-    <div className={classNames('Assessment', academyClasses['Academy'])}>
+    <div className={clsx('Assessment', academyClasses['Academy'])}>
       <ContentDisplay display={display} />
     </div>
   );

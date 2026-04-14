@@ -1,7 +1,7 @@
 import { Classes, NonIdealState } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as Sentry from '@sentry/react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router';
@@ -46,7 +46,7 @@ const ApplicationWrapper: React.FC = () => {
 
   if (!isApiHealthy) {
     return (
-      <div className={classNames('NoPage', Classes.DARK)}>
+      <div className={clsx('NoPage', Classes.DARK)}>
         <NonIdealState
           icon={IconNames.WRENCH}
           title="Under maintenance"

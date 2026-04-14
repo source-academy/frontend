@@ -1,6 +1,6 @@
 import { Card, Elevation, HTMLSelect, Intent, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React from 'react';
 import { FileRejection, useDropzone } from 'react-dropzone';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
@@ -75,7 +75,7 @@ const MaterialDropzone: React.FC<DropzoneProps> = props => {
     });
 
   const classList = React.useMemo(() => {
-    return classNames(
+    return clsx(
       'dropzone-base',
       isFocused || isDragActive ? 'dropzone-active' : undefined,
       isDragAccept ? 'dropzone-accept' : undefined,

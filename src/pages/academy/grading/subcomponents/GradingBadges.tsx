@@ -1,6 +1,6 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React from 'react';
 import { ProgressStatus, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import { ColumnFilter } from 'src/features/grading/GradingTypes';
@@ -21,7 +21,7 @@ type BadgeProps = {
 const Badge: React.FC<BadgeProps> = props => {
   return (
     <div
-      className={classNames(
+      className={clsx(
         badgeClasses['grading-badge'],
         badgeClasses[`grading-badge-${props.size ?? 'sm'}`]
       )}

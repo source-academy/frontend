@@ -1,5 +1,5 @@
 import { Card, Elevation, Pre } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import type { TFunction } from 'i18next';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -37,7 +37,7 @@ const SideContentResultCard: React.FC<Props> = ({ index, result }) => {
   const { t } = useTranslation('sideContent', { keyPrefix: 'resultCard' });
   return (
     <div
-      className={classNames('ResultCard', result.resultType === 'pass' ? 'correct' : 'wrong')}
+      className={clsx('ResultCard', result.resultType === 'pass' ? 'correct' : 'wrong')}
       data-testid="ResultCard"
     >
       <Card elevation={Elevation.ONE}>

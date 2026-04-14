@@ -10,7 +10,7 @@ import {
   InputGroup,
   Tooltip
 } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React from 'react';
 import { QrReader } from 'react-qr-reader';
 import { useDispatch } from 'react-redux';
@@ -112,7 +112,7 @@ const RemoteExecutionDeviceDialog: React.FC<Props> = ({
         >
           <input
             id="sa-remote-execution-name"
-            className={classNames(
+            className={clsx(
               Classes.INPUT,
               Classes.FILL,
               nameField.isValid || Classes.INTENT_DANGER
@@ -128,7 +128,7 @@ const RemoteExecutionDeviceDialog: React.FC<Props> = ({
         <FormGroup label="Type" labelFor="sa-remote-execution-type">
           <HTMLSelect
             id="sa-remote-execution-type"
-            className={classNames(Classes.FILL)}
+            className={clsx(Classes.FILL)}
             ref={element => void (typeField.ref.current = element)}
             disabled={isSubmitting || !!deviceToEdit}
             {...(deviceToEdit ? { value: deviceToEdit.type } : undefined)}
@@ -144,7 +144,7 @@ const RemoteExecutionDeviceDialog: React.FC<Props> = ({
         <FormGroup label="Secret" labelFor="sa-remote-execution-secret">
           <InputGroup
             id="sa-remote-execution-secret"
-            className={classNames(Classes.FILL, secretField.isValid || Classes.INTENT_DANGER)}
+            className={clsx(Classes.FILL, secretField.isValid || Classes.INTENT_DANGER)}
             type="text"
             inputRef={secretField.ref}
             onChange={secretField.onChange}

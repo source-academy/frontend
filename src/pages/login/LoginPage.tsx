@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, Card, Classes, Elevation, H4, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useCallback } from 'react';
 import { Translation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className={classNames(classes['Login'], Classes.DARK)}>
+    <div className={clsx(classes['Login'], Classes.DARK)}>
       <Card elevation={Elevation.FOUR}>
         <div className={classes['login-header']}>
           <H4>

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { sortBy } from 'es-toolkit/compat';
 
 import { sendAdminStoryRequest, sendAssetRequest, sendStoryRequest } from './GameSimulatorRequest';
 import { ChapterDetail } from './GameSimulatorTypes';
@@ -114,7 +114,7 @@ export async function uploadAssetToS3(file: File, folderName: string) {
 export async function fetchChapters(): Promise<ChapterDetail[]> {
   const response = await sendStoryRequest('', 'GET');
   const chapterDetails = response.status === 200 ? await response.json() : [];
-  return _.sortBy(chapterDetails, (chapterDetail: ChapterDetail) => new Date(chapterDetail.openAt));
+  return sortBy(chapterDetails, (chapterDetail: ChapterDetail) => new Date(chapterDetail.openAt));
 }
 
 /**
