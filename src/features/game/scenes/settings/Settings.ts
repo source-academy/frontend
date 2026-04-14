@@ -129,7 +129,7 @@ class Settings extends Phaser.Scene {
    * Options header to display.
    */
   private getSettingsHeader() {
-    return ['SFX', 'BGM'];
+    return ['SFX', 'BGM', 'Skip Confirm'];
   }
 
   /**
