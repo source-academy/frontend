@@ -174,7 +174,7 @@ export default class DialogueManager {
     if (this.isSkipping) return;
     this.isSkipping = true;
 
-    // Hide and disable the button while skipping
+    // Hide and disable button while skipping
     if (this.skipButton && this.skipButton.active) {
       this.skipButton.setVisible(false);
       this.skipButton.disableInteractive();
@@ -186,26 +186,26 @@ export default class DialogueManager {
       while (this.isSkipping) {
         if (!this.dialogueRenderer) break;
         this.dialogueRenderer.finishTypewriting();
-
         const nextLine = this.getDialogueGenerator().peekNextLine();
-        const hasPrompt = nextLine && nextLine.prompt;
-        const hasActions = nextLine && nextLine.actionIds && nextLine.actionIds.length > 0;
 
-        if (this.nextLineResolve) {
-          await this.nextLineResolve();
-        }
-
-        if (!this.skipButton || !this.skipButton.active) {
+        if (!nextLine || !nextLine.line) {
           this.isSkipping = false;
           break;
         }
+
+        const hasPrompt = nextLine.prompt !== undefined;
+        const hasActions = nextLine.actionIds && nextLine.actionIds.length > 0;
 
         if (hasPrompt || hasActions) {
           this.isSkipping = false;
           break;
         }
 
-        if (!nextLine || !nextLine.line) {
+        if (this.nextLineResolve) {
+          await this.nextLineResolve();
+        }
+
+        if (!this.skipButton || !this.skipButton.active) {
           this.isSkipping = false;
           break;
         }
