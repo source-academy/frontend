@@ -2,6 +2,7 @@ import { Card, Elevation, H4, H6, Icon, Intent, Position, Text, Tooltip } from '
 import { IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { JSX } from 'react';
+
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import Markdown from '../Markdown';
 import NotificationBadge from '../notificationBadge/NotificationBadge';
