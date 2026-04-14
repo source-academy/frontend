@@ -2,13 +2,11 @@ import { Card, Elevation, H4, H6, Icon, Intent, Position, Text, Tooltip } from '
 import { IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { JSX } from 'react';
-import classes from 'src/styles/Academy.module.scss';
-
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import Markdown from '../Markdown';
 import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
-import { beforeNow, getPrettyDate, getPrettyDateAfterHours } from '../utils/DateHelper';
+import { beforeNow, getPrettyDate } from '../utils/DateHelper';
 import { useResponsive } from '../utils/Hooks';
 import AssessmentInteractButton from './AssessmentInteractButton';
 import { AssessmentOverview } from './AssessmentTypes';
