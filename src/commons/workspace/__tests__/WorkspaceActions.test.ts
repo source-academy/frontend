@@ -614,7 +614,8 @@ test('fetchVersionHistory generates correct action object', () => {
   expect(action).toEqual({
     type: WorkspaceActions.fetchVersionHistory.type,
     payload: {
-      workspaceLocation: gradingWorkspace
+      workspaceLocation: gradingWorkspace,
+      skipAutoSave: false
     }
   });
 });

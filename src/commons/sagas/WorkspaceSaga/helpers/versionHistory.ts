@@ -67,7 +67,7 @@ function* getCurrentQuestionId(workspaceLocation: WorkspaceLocation) {
 export function* fetchVersionHistorySaga(
   action: ReturnType<typeof WorkspaceActions.fetchVersionHistory>
 ) {
-  const { workspaceLocation } = action.payload;
+  const { workspaceLocation, skipAutoSave } = action.payload;
 
   // Get the current question ID
   const questionId: number | undefined = yield call(getCurrentQuestionId, workspaceLocation);
@@ -85,8 +85,10 @@ export function* fetchVersionHistorySaga(
     refreshToken: state.session.refreshToken
   }));
 
-  // save code now to prevent loss of current code
-  yield call(performAutoSave, workspaceLocation);
+  // Save current code before fetching
+  if (!skipAutoSave) {
+    yield call(performAutoSave, workspaceLocation);
+  }
 
   // call API
   const versions: any[] | null = yield call(getVersionHistory, questionId, tokens);
@@ -128,7 +130,7 @@ export function* nameVersionSaga(action: ReturnType<typeof WorkspaceActions.name
     yield call(showWarningMessage, 'Failed to rename version');
     // Refetch to revert the optimistic update
     yield call(fetchVersionHistorySaga, {
-      payload: { workspaceLocation },
+      payload: { workspaceLocation, skipAutoSave: true },
       type: WorkspaceActions.fetchVersionHistory.type
     });
   }
@@ -186,9 +188,9 @@ export function* restoreVersionSaga(
     return;
   }
 
-  // Refetch version history to get the newly created version before renaming
+  // Refetch version history to get the newly created version before renaming.
   yield call(fetchVersionHistorySaga, {
-    payload: { workspaceLocation },
+    payload: { workspaceLocation, skipAutoSave: true },
     type: WorkspaceActions.fetchVersionHistory.type
   });
 

@@ -288,7 +288,10 @@ const newActions = createActions('workspace', {
   setGradingHasLoadedBefore: () => true,
   updateAllColsSortStates: (sortStates: AllColsSortStates) => ({ sortStates }),
   updateGradingColumnVisibility: (filters: GradingColumnVisibility) => ({ filters }),
-  fetchVersionHistory: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
+  fetchVersionHistory: (workspaceLocation: WorkspaceLocation, skipAutoSave?: boolean) => ({
+    workspaceLocation,
+    skipAutoSave: skipAutoSave ?? false
+  }),
   receiveVersionHistory: (workspaceLocation: WorkspaceLocation, versions: CodeVersion[]) => ({
     workspaceLocation,
     versions
