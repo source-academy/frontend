@@ -184,7 +184,13 @@ export function* restoreVersionSaga(
   const newVersionCreated: boolean = yield call(performAutoSave, workspaceLocation);
 
   if (!newVersionCreated) {
-    yield put(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, false));
+    // Ensure save did not fail before updating unsaved changes to false
+    const saveStatus: string = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].saveStatus
+    );
+    if (saveStatus !== 'saveFailed') {
+      yield put(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, false));
+    }
     return;
   }
 
