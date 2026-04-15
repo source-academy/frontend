@@ -14,6 +14,7 @@ import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { GlobalFn, IHoverable } from '../../CseMachineTypes';
 import {
+  defaultBackgroundColor,
   defaultStrokeColor,
   defaultTextColor,
   fadedStrokeColor,
@@ -199,6 +200,62 @@ export class GlobalFnValue extends Value implements IHoverable {
     return true;
   }
 
+  private drawTooltipLabels(strokeColor: string, textColor: string): React.ReactNode {
+    return (
+      <React.Fragment key={Layout.key++}>
+        <KonvaLabel
+          x={this.x() + Config.TextMargin}
+          y={this.y() + this.radius + Config.TextMargin + this.printDescriptionOffsetY}
+          visible={CseMachine.getPrintableMode()}
+          listening={false}
+          ref={this.labelRef}
+        >
+          <KonvaTag
+            stroke={strokeColor}
+            fill={defaultBackgroundColor()}
+            cornerRadius={Config.FrameCornerRadius}
+          />
+          <KonvaText
+            text={
+              !CseMachine.getPrintableMode() && this.isTooltipTruncated
+                ? `${this.exportTooltip}\n(click for full)`
+                : this.exportTooltip
+            }
+            fontFamily={Config.FontFamily}
+            fontSize={Config.FontSize}
+            fontStyle={Config.FontStyle}
+            fill={textColor}
+            padding={Config.FnTooltipTextPadding}
+            width={Config.FnDescriptionMaxWidth}
+          />
+        </KonvaLabel>
+        {!CseMachine.getPrintableMode() && this.isTooltipTruncated && (
+          <KonvaLabel
+            x={this.x() + Config.TextMargin}
+            y={this.y() + this.radius + Config.TextMargin}
+            visible={false}
+            listening={false}
+            ref={this.revealLabelRef}
+          >
+            <KonvaTag
+              stroke={strokeColor}
+              fill={defaultBackgroundColor()}
+              cornerRadius={Config.FrameCornerRadius}
+            />
+            <KonvaText
+              text={this.tooltip}
+              fontFamily={Config.FontFamily}
+              fontSize={Config.FontSize}
+              fontStyle={Config.FontStyle}
+              fill={textColor}
+              padding={Config.FnTooltipTextPadding}
+            />
+          </KonvaLabel>
+        )}
+      </React.Fragment>
+    );
+  }
+
   draw(): React.ReactNode {
     this._isDrawn = true;
     if (Layout.globalEnvNode.frame) {
@@ -210,6 +267,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     this.tooltipArrow.setVisible(CseMachine.getPrintableMode() || this.showTooltipArrow);
     const textColor = this.isReferenced() ? defaultTextColor() : fadedTextColor();
     const strokeColor = this.isReferenced() ? defaultStrokeColor() : fadedStrokeColor();
+    Layout.registerOverlayNode(this.drawTooltipLabels(strokeColor, textColor));
     return (
       <React.Fragment key={Layout.key++}>
         <Group
@@ -251,59 +309,6 @@ export class GlobalFnValue extends Value implements IHoverable {
             fill={strokeColor}
           />
         </Group>
-        <KonvaLabel
-          x={this.x() + Config.TextMargin}
-          y={this.y() + this.radius + Config.TextMargin + this.printDescriptionOffsetY}
-          visible={CseMachine.getPrintableMode()}
-          listening={false}
-          ref={this.labelRef}
-        >
-          {CseMachine.getPrintableMode() ? (
-            <KonvaTag stroke={strokeColor} />
-          ) : (
-            <KonvaTag
-              stroke={Config.HoverBgColor}
-              fill={Config.HoverBgColor}
-              opacity={Config.FnTooltipOpacity}
-            />
-          )}
-          <KonvaText
-            text={
-              !CseMachine.getPrintableMode() && this.isTooltipTruncated
-                ? `${this.exportTooltip}\n(click for full)`
-                : this.exportTooltip
-            }
-            fontFamily={Config.FontFamily}
-            fontSize={Config.FontSize}
-            fontStyle={Config.FontStyle}
-            fill={textColor}
-            padding={Config.FnTooltipTextPadding}
-            width={Config.FnDescriptionMaxWidth}
-          />
-        </KonvaLabel>
-        {!CseMachine.getPrintableMode() && this.isTooltipTruncated && (
-          <KonvaLabel
-            x={this.x() + Config.TextMargin}
-            y={this.y() + this.radius + Config.TextMargin}
-            visible={false}
-            listening={false}
-            ref={this.revealLabelRef}
-          >
-            <KonvaTag
-              stroke={Config.HoverBgColor}
-              fill={Config.HoverBgColor}
-              opacity={Config.FnTooltipOpacity}
-            />
-            <KonvaText
-              text={this.tooltip}
-              fontFamily={Config.FontFamily}
-              fontSize={Config.FontSize}
-              fontStyle={Config.FontStyle}
-              fill={textColor}
-              padding={Config.FnTooltipTextPadding}
-            />
-          </KonvaLabel>
-        )}
         {this._arrow?.draw()}
         {this.tooltipArrow?.draw()}
       </React.Fragment>
