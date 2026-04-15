@@ -1670,6 +1670,10 @@ describe('VERSION_HISTORY', () => {
 
       const state = {
         ...base,
+        session: {
+          ...base.session,
+          assessmentOverviews: [{ id: mockAssessmentId, isAutosaveEnabled: true, maxTeamSize: 1 }]
+        },
         workspaces: {
           ...base.workspaces,
           assessment: {
@@ -1712,6 +1716,10 @@ describe('VERSION_HISTORY', () => {
 
       const state = {
         ...base,
+        session: {
+          ...base.session,
+          assessmentOverviews: [{ id: mockAssessmentId, isAutosaveEnabled: true, maxTeamSize: 1 }]
+        },
         workspaces: {
           ...base.workspaces,
           assessment: {
