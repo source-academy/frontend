@@ -50,11 +50,11 @@ export default class DataVisualizer {
     if (structures.length != 2 || !(structures[1] instanceof Array)) {
       return false;
     }
-    if (data != null && !(structures[0] instanceof Array) && (typeof structures[0] != typeof data)) {
+    if (data != null && !(structures[0] instanceof Array) && typeof structures[0] != typeof data) {
       return false;
     }
     let next = structures[1];
-    data=structures[0];
+    data = structures[0];
 
     let ans = false;
     let count = 0;
@@ -84,17 +84,22 @@ export default class DataVisualizer {
     if (structures == null) {
       return true;
     }
-    if (data != null && !(structures[0] instanceof Array) && typeof structures[0] != typeof data &&  structures[0] != null) {
+    if (
+      data != null &&
+      !(structures[0] instanceof Array) &&
+      typeof structures[0] != typeof data &&
+      structures[0] != null
+    ) {
       return false;
     }
-    if (structures.length == 2 && structures[1] == null){
-      if (structures[0] instanceof Array){
+    if (structures.length == 2 && structures[1] == null) {
+      if (structures[0] instanceof Array) {
         return this.isGeneralTree(structures[0], data);
       }
       return true;
     }
     if (!(structures[0] instanceof Array) && structures[1] != null) {
-      if (!(structures[0] instanceof Array)){
+      if (!(structures[0] instanceof Array)) {
         data = structures[0];
       }
       return this.isGeneralTree(structures[1], data);
