@@ -71,6 +71,9 @@ export function* fetchVersionHistorySaga(
     refreshToken: state.session.refreshToken
   }));
 
+  // save code now to prevent loss of current code
+  yield call(performAutoSave, workspaceLocation);
+
   // call API
   const versions: any[] | null = yield call(getVersionHistory, questionId, tokens);
 
@@ -274,18 +277,6 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
 
     if (saveAction.payload.saveStatus === 'saveFailed') {
       return false;
-    }
-
-    // Refresh version history only if the panel is open
-    const isHistoryPanelOpen: boolean = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].versionHistory.isHistoryPanelOpen
-    );
-
-    if (isHistoryPanelOpen) {
-      yield call(fetchVersionHistorySaga, {
-        payload: { workspaceLocation },
-        type: WorkspaceActions.fetchVersionHistory.type
-      });
     }
 
     return true;
