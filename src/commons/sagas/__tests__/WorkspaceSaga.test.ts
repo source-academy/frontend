@@ -1748,7 +1748,17 @@ describe('VERSION_HISTORY', () => {
 
 describe('WATCH_SAVING_STATUS', () => {
   test('puts updateSaveStatus saving for assessment workspace', () => {
+    const assessmentId = 42;
+    const base = generateDefaultState('assessment', { currentAssessment: assessmentId });
+    const state = {
+      ...base,
+      session: {
+        ...base.session,
+        assessmentOverviews: [{ id: assessmentId, type: 'Missions', isAutosaveEnabled: true }]
+      }
+    };
     return expectSaga(watchSavingStatus)
+      .withState(state)
       .put(WorkspaceActions.updateSaveStatus('assessment', 'saving'))
       .dispatch(WorkspaceActions.updateEditorValue('assessment', 0, 'new code'))
       .silentRun();

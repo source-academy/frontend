@@ -1799,6 +1799,36 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
               </span>
             </button>
           </span>
+          <a
+            aria-disabled="true"
+            class="bp6-button bp6-disabled bp6-minimal"
+            disabled=""
+            role="button"
+            tabindex="-1"
+          >
+            <span
+              aria-hidden="true"
+              class="bp6-icon bp6-icon-floppy-disk"
+            >
+              <svg
+                data-icon="floppy-disk"
+                height="16"
+                role="img"
+                viewBox="0 0 16 16"
+                width="16"
+              >
+                <path
+                  d="M15.71 2.29l-2-2A1 1 0 0013 0h-1v6H4V0H1C.45 0 0 .45 0 1v14c0 .55.45 1 1 1h14c.55 0 1-.45 1-1V3c0-.28-.11-.53-.29-.71M14 15H2V9c0-.55.45-1 1-1h10c.55 0 1 .45 1 1zM11 1H9v4h2z"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              class="bp6-button-text"
+            >
+              Save
+            </span>
+          </a>
           <button
             class="bp6-button bp6-minimal"
           >
@@ -2664,6 +2694,32 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
           >
             <span
               aria-hidden="true"
+              class="bp6-icon bp6-icon-floppy-disk"
+            >
+              <svg
+                data-icon="floppy-disk"
+                height="16"
+                role="img"
+                viewBox="0 0 16 16"
+                width="16"
+              >
+                <path
+                  d="M15.71 2.29l-2-2A1 1 0 0013 0h-1v6H4V0H1C.45 0 0 .45 0 1v14c0 .55.45 1 1 1h14c.55 0 1-.45 1-1V3c0-.28-.11-.53-.29-.71M14 15H2V9c0-.55.45-1 1-1h10c.55 0 1 .45 1 1zM11 1H9v4h2z"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              class="bp6-button-text"
+            >
+              Save
+            </span>
+          </button>
+          <button
+            class="bp6-button bp6-minimal"
+          >
+            <span
+              aria-hidden="true"
               class="bp6-icon bp6-icon-repeat"
             >
               <svg
@@ -3519,6 +3575,32 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
               </span>
             </button>
           </span>
+          <button
+            class="bp6-button bp6-minimal"
+          >
+            <span
+              aria-hidden="true"
+              class="bp6-icon bp6-icon-floppy-disk"
+            >
+              <svg
+                data-icon="floppy-disk"
+                height="16"
+                role="img"
+                viewBox="0 0 16 16"
+                width="16"
+              >
+                <path
+                  d="M15.71 2.29l-2-2A1 1 0 0013 0h-1v6H4V0H1C.45 0 0 .45 0 1v14c0 .55.45 1 1 1h14c.55 0 1-.45 1-1V3c0-.28-.11-.53-.29-.71M14 15H2V9c0-.55.45-1 1-1h10c.55 0 1 .45 1 1zM11 1H9v4h2z"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              class="bp6-button-text"
+            >
+              Save
+            </span>
+          </button>
           <button
             class="bp6-button bp6-minimal"
           >
