@@ -1,20 +1,13 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
 import React, { RefObject } from 'react';
-import {
-  Circle,
-  Group,
-  Label as KonvaLabel,
-  Tag as KonvaTag,
-  Text as KonvaText
-} from 'react-konva';
+import { Circle, Group } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { GlobalFn, IHoverable } from '../../CseMachineTypes';
 import {
-  defaultBackgroundColor,
   defaultStrokeColor,
   defaultTextColor,
   fadedStrokeColor,
@@ -30,7 +23,7 @@ import {
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { ArrowFromFnTooltip } from '../arrows/ArrowFromFnTooltip';
 import { Binding } from '../Binding';
-import { Value } from './Value';
+import { FunctionTooltipLabels, Value } from './Value';
 
 /** this encapsulates a function from the global frame */
 export class GlobalFnValue extends Value implements IHoverable {
@@ -200,62 +193,6 @@ export class GlobalFnValue extends Value implements IHoverable {
     return true;
   }
 
-  private drawTooltipLabels(strokeColor: string, textColor: string): React.ReactNode {
-    return (
-      <React.Fragment key={Layout.key++}>
-        <KonvaLabel
-          x={this.x() + Config.TextMargin}
-          y={this.y() + this.radius + Config.TextMargin + this.printDescriptionOffsetY}
-          visible={CseMachine.getPrintableMode()}
-          listening={false}
-          ref={this.labelRef}
-        >
-          <KonvaTag
-            stroke={strokeColor}
-            fill={defaultBackgroundColor()}
-            cornerRadius={Config.FrameCornerRadius}
-          />
-          <KonvaText
-            text={
-              !CseMachine.getPrintableMode() && this.isTooltipTruncated
-                ? `${this.exportTooltip}\n(click for full)`
-                : this.exportTooltip
-            }
-            fontFamily={Config.FontFamily}
-            fontSize={Config.FontSize}
-            fontStyle={Config.FontStyle}
-            fill={textColor}
-            padding={Config.FnTooltipTextPadding}
-            width={Config.FnDescriptionMaxWidth}
-          />
-        </KonvaLabel>
-        {!CseMachine.getPrintableMode() && this.isTooltipTruncated && (
-          <KonvaLabel
-            x={this.x() + Config.TextMargin}
-            y={this.y() + this.radius + Config.TextMargin}
-            visible={false}
-            listening={false}
-            ref={this.revealLabelRef}
-          >
-            <KonvaTag
-              stroke={strokeColor}
-              fill={defaultBackgroundColor()}
-              cornerRadius={Config.FrameCornerRadius}
-            />
-            <KonvaText
-              text={this.tooltip}
-              fontFamily={Config.FontFamily}
-              fontSize={Config.FontSize}
-              fontStyle={Config.FontStyle}
-              fill={textColor}
-              padding={Config.FnTooltipTextPadding}
-            />
-          </KonvaLabel>
-        )}
-      </React.Fragment>
-    );
-  }
-
   draw(): React.ReactNode {
     this._isDrawn = true;
     if (Layout.globalEnvNode.frame) {
@@ -267,7 +204,22 @@ export class GlobalFnValue extends Value implements IHoverable {
     this.tooltipArrow.setVisible(CseMachine.getPrintableMode() || this.showTooltipArrow);
     const textColor = this.isReferenced() ? defaultTextColor() : fadedTextColor();
     const strokeColor = this.isReferenced() ? defaultStrokeColor() : fadedStrokeColor();
-    Layout.registerOverlayNode(this.drawTooltipLabels(strokeColor, textColor));
+    Layout.registerOverlayNode(
+      <FunctionTooltipLabels
+        key={Layout.key++}
+        x={this.x()}
+        y={this.y()}
+        radius={this.radius}
+        printDescriptionOffsetY={this.printDescriptionOffsetY}
+        isTooltipTruncated={this.isTooltipTruncated}
+        exportTooltip={this.exportTooltip}
+        tooltip={this.tooltip}
+        strokeColor={strokeColor}
+        textColor={textColor}
+        labelRef={this.labelRef}
+        revealLabelRef={this.revealLabelRef}
+      />
+    );
     return (
       <React.Fragment key={Layout.key++}>
         <Group
