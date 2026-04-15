@@ -183,12 +183,14 @@ export function* restoreVersionSaga(
   yield put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saving'));
   const newVersionCreated: boolean = yield call(performAutoSave, workspaceLocation);
 
+  const autosaveEnabled: boolean = yield call(isAutosaveEnabledForCurrentAssessment);
+
   if (!newVersionCreated) {
     // Ensure save did not fail before updating unsaved changes to false
     const saveStatus: string = yield select(
       (state: OverallState) => state.workspaces[workspaceLocation].saveStatus
     );
-    if (saveStatus !== 'saveFailed') {
+    if (saveStatus !== 'saveFailed' && autosaveEnabled) {
       yield put(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, false));
     }
     return;
@@ -226,6 +228,12 @@ export function* restoreVersionSaga(
 function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
   // Only assessment workspaces auto-save
   if (workspaceLocation !== 'assessment') {
+    return false;
+  }
+
+  // Skip auto-save if autosave is disabled for this assessment
+  const autosaveEnabled: boolean = yield call(isAutosaveEnabledForCurrentAssessment);
+  if (!autosaveEnabled) {
     return false;
   }
 
