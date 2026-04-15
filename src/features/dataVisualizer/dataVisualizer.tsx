@@ -82,7 +82,12 @@ export default class DataVisualizer {
     if (structures == null) {
       return true;
     }
-    if (data != null && !(structures[0] instanceof Array) && typeof structures[0] != typeof data && structures[0] != null) {
+    if (
+      data != null &&
+      !(structures[0] instanceof Array) &&
+      typeof structures[0] != typeof data &&
+      structures[0] != null
+    ) {
       return false;
     }
     if (structures.length == 2 && structures[1] == null) {
