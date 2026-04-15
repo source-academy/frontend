@@ -853,7 +853,11 @@ export class Layout {
     const cache = CseMachine.getMasterLayout();
     if (cache && cache.framesY.has(envId)) {
       const fixedY = cache.framesY.get(envId)!;
-      return fixedY;
+      let offset: number = 0;
+      offset += CseMachine.getControlStash()
+        ? ControlStashConfig.ControlPosX + ControlStashConfig.StashItemHeight
+        : 0;
+      return fixedY + offset;
     }
     return undefined;
   }
