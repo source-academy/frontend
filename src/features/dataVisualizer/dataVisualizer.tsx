@@ -79,17 +79,10 @@ export default class DataVisualizer {
   }
 
   public static isGeneralTree(structures: Data[], data: any): boolean {
-    console.log(structures);
-    console.log(data);
     if (structures == null) {
       return true;
     }
-    if (
-      data != null &&
-      !(structures[0] instanceof Array) &&
-      typeof structures[0] != typeof data &&
-      structures[0] != null
-    ) {
+    if (data != null && !(structures[0] instanceof Array) && typeof structures[0] != typeof data && structures[0] != null) {
       return false;
     }
     if (structures.length == 2 && structures[1] == null) {
@@ -99,9 +92,7 @@ export default class DataVisualizer {
       return true;
     }
     if (!(structures[0] instanceof Array) && structures[1] != null) {
-      if (!(structures[0] instanceof Array)) {
-        data = structures[0];
-      }
+      data = structures[0];
       return this.isGeneralTree(structures[1], data);
     }
     if (structures.length != 2 || (!(structures[1] instanceof Array) && structures[1] != null)) {
