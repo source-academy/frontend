@@ -423,6 +423,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_question_overview"
+                          aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
                           class="bp6-tab side-content-tab"
@@ -460,6 +461,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_briefing"
+                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
@@ -497,6 +499,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_contest_voting"
+                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
@@ -1276,6 +1279,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with MCQ question render
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_question_overview"
+                          aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
                           class="bp6-tab side-content-tab"
@@ -1313,6 +1317,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with MCQ question render
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_briefing"
+                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
@@ -1350,6 +1355,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with MCQ question render
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_autograder"
+                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
@@ -2121,6 +2127,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_question_overview"
+                          aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
                           class="bp6-tab side-content-tab"
@@ -2158,6 +2165,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_briefing"
+                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
@@ -2195,6 +2203,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_autograder"
+                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
@@ -2978,6 +2987,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_question_overview"
+                          aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
                           class="bp6-tab side-content-tab"
@@ -3015,6 +3025,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_briefing"
+                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
@@ -3052,6 +3063,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_autograder"
+                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
@@ -3835,6 +3847,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_question_overview"
+                          aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
                           class="bp6-tab side-content-tab"
@@ -3872,6 +3885,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_briefing"
+                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
@@ -3909,6 +3923,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_autograder"
+                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
@@ -3946,6 +3961,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_grading"
+                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"

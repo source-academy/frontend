@@ -6,11 +6,6 @@ exports[`AnimationComponent animates correctly with conflicting animateTo calls 
   height={100}
   listening={false}
   perfectDrawEnabled={false}
-  ref={
-    {
-      "current": null,
-    }
-  }
   width={100}
   x={0}
   y={0}
@@ -22,11 +17,6 @@ exports[`AnimationComponent animates correctly with custom animation config 1`] 
   listening={false}
   opacity={0}
   perfectDrawEnabled={false}
-  ref={
-    {
-      "current": null,
-    }
-  }
   text="test"
   x={0}
   y={100}
@@ -39,11 +29,6 @@ exports[`AnimationComponent animates correctly with default animation config 1`]
   height={100}
   listening={false}
   perfectDrawEnabled={false}
-  ref={
-    {
-      "current": null,
-    }
-  }
 />
 `;
 
@@ -53,11 +38,6 @@ exports[`AnimationComponent animates correctly with parallel animateTo calls 1 1
   listening={false}
   opacity={0}
   perfectDrawEnabled={false}
-  ref={
-    {
-      "current": null,
-    }
-  }
   x={0}
   y={0}
 />
@@ -69,11 +49,6 @@ exports[`AnimationComponent animates correctly with parallel animateTo calls 2 1
   height={100}
   listening={false}
   perfectDrawEnabled={false}
-  ref={
-    {
-      "current": null,
-    }
-  }
   width={100}
   x={0}
   y={0}

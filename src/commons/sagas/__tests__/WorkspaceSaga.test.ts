@@ -1456,6 +1456,7 @@ describe('VERSION_HISTORY', () => {
           type: WorkspaceActions.fetchVersionHistory.type,
           payload: { workspaceLocation }
         })
+        .dispatch(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'))
         .silentRun();
     });
 
@@ -1491,6 +1492,7 @@ describe('VERSION_HISTORY', () => {
           type: WorkspaceActions.fetchVersionHistory.type,
           payload: { workspaceLocation }
         })
+        .dispatch(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'))
         .silentRun();
     });
   });
@@ -1562,6 +1564,7 @@ describe('VERSION_HISTORY', () => {
           type: WorkspaceActions.nameVersion.type,
           payload: { workspaceLocation, versionId, name }
         })
+        .dispatch(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'))
         .silentRun();
     });
 
@@ -1736,6 +1739,7 @@ describe('VERSION_HISTORY', () => {
           type: WorkspaceActions.restoreVersion.type,
           payload: { workspaceLocation, versionId }
         })
+        .dispatch(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'))
         .dispatch(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'))
         .silentRun();
     });
