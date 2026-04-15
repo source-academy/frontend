@@ -955,7 +955,8 @@ const newBackendSagaTwo = combineSagaHandlers({
         hoursBeforeEarlyXpDecay: 0,
         hasTokenCounter: false,
         hasVotingFeatures: false,
-        earlySubmissionXp: 0
+        earlySubmissionXp: 0,
+        isAutosaveEnabled: true
       }
     ];
 
@@ -1155,10 +1156,11 @@ function* oldBackendSagaThree(): SagaIterator {
       const id = action.payload.id;
       const hasVotingFeatures = action.payload.hasVotingFeatures;
       const hasTokenCounter = action.payload.hasTokenCounter;
+      const isAutosaveEnabled = action.payload.isAutosaveEnabled;
 
       const resp: Response | null = yield updateAssessment(
         id,
-        { hasVotingFeatures: hasVotingFeatures, hasTokenCounter: hasTokenCounter },
+        { hasVotingFeatures, hasTokenCounter, isAutosaveEnabled },
         tokens
       );
       if (!resp || !resp.ok) {

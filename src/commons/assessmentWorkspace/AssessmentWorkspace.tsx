@@ -700,7 +700,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const onClickSave = () => {
       if (isSaving) return;
       setIsSaving(true);
-      checkLastModified();
+      if (isTeamAssessment) {
+        checkLastModified();
+      } else {
+        saveClick(false);
+      }
       setTimeout(() => {
         setIsSaving(false);
       }, 3000);
@@ -800,15 +804,19 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       ? assessmentOverview.maxTeamSize !== 1
       : false;
 
-    const saveButton =
-      isTeamAssessment && question.type === QuestionTypes.programming ? (
-        <ControlButtonSaveButton
-          key="save"
-          hasUnsavedChanges={hasUnsavedChanges}
-          onClickSave={onClickSave}
-          isDisabled={!props.canSave || !teamFormationOverview}
-        />
-      ) : null;
+    const isAutosaveEnabled = assessmentOverview ? assessmentOverview.isAutosaveEnabled : false;
+
+    const showSaveButton =
+      question.type === QuestionTypes.programming && (isTeamAssessment || !isAutosaveEnabled);
+
+    const saveButton = showSaveButton ? (
+      <ControlButtonSaveButton
+        key="save"
+        hasUnsavedChanges={hasUnsavedChanges}
+        onClickSave={onClickSave}
+        isDisabled={!props.canSave || (isTeamAssessment && !teamFormationOverview)}
+      />
+    ) : null;
 
     const versionHistoryButton =
       question.type !== QuestionTypes.mcq ? (
@@ -822,7 +830,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       ) : null;
 
     const saveStatusIndicator =
-      question.type !== QuestionTypes.mcq && !isTeamAssessment ? (
+      question.type !== QuestionTypes.mcq && !isTeamAssessment && isAutosaveEnabled ? (
         <ControlBarSaveStatusIndicator saveStatus={saveStatus} key="save_status" />
       ) : null;
 

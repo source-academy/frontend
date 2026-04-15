@@ -10,6 +10,20 @@ import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { getVersionHistory, updateVersionName } from '../../RequestsSaga';
 
 /**
+ * Checks whether autosave is enabled for the current assessment workspace.
+ * Defaults to false if the config cannot be found.
+ */
+function* isAutosaveEnabledForCurrentAssessment(): SagaIterator<boolean> {
+  return yield select((state: OverallState) => {
+    const assessmentId = state.workspaces.assessment.currentAssessment;
+    if (assessmentId === undefined) return false;
+    const overview = state.session.assessmentOverviews?.find(o => o.id === assessmentId);
+    if (!overview) return false;
+    return overview.isAutosaveEnabled;
+  });
+}
+
+/**
  * Helper to get the current question ID for assessment or grading workspace.
  */
 function* getCurrentQuestionId(workspaceLocation: WorkspaceLocation) {
@@ -295,6 +309,9 @@ export function* watchAutoSave() {
     WorkspaceActions.updateEditorValue.type,
     function* (action: ReturnType<typeof WorkspaceActions.updateEditorValue>) {
       const { workspaceLocation } = action.payload;
+      if (workspaceLocation !== 'assessment') return;
+      const autosaveEnabled: boolean = yield call(isAutosaveEnabledForCurrentAssessment);
+      if (!autosaveEnabled) return;
       yield call(performAutoSave, workspaceLocation);
     }
   );
@@ -309,10 +326,9 @@ export function* watchSavingStatus() {
     WorkspaceActions.updateEditorValue.type,
     function* (action: ReturnType<typeof WorkspaceActions.updateEditorValue>) {
       const { workspaceLocation } = action.payload;
-      // Only set saving status for workspaces that actually auto-save
-      if (workspaceLocation !== 'assessment') {
-        return;
-      }
+      if (workspaceLocation !== 'assessment') return;
+      const autosaveEnabled: boolean = yield call(isAutosaveEnabledForCurrentAssessment);
+      if (!autosaveEnabled) return;
       yield put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saving'));
     }
   );
