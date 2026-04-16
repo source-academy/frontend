@@ -1,8 +1,8 @@
 import { Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
-import { DateInput } from '@blueprintjs/datetime';
 import { IconNames } from '@blueprintjs/icons';
 import dayjs from 'dayjs';
 import React, { useCallback, useState } from 'react';
+import { DateInput } from 'src/commons/DateTimePickers';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';

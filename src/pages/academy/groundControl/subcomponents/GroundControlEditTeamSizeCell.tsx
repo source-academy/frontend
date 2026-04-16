@@ -1,9 +1,7 @@
-import '@tremor/react/dist/esm/tremor.css';
-
-import { Icon as BpIcon } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Button, Flex } from '@tremor/react';
 import React, { useCallback } from 'react';
+import GradingFlex from 'src/commons/grading/GradingFlex';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 
@@ -44,22 +42,16 @@ const EditTeamSizeCell: React.FC<Props> = ({ data, onTeamSizeChange }) => {
   };
 
   return (
-    <Flex>
+    <GradingFlex alignItems="center" style={{ columnGap: '0.5rem' }}>
       <Button
-        size="xs"
-        icon={() => <BpIcon icon={IconNames.MINUS} />}
-        variant="light"
+        variant="minimal"
+        icon={IconNames.MINUS}
         onClick={handleDecrement}
         disabled={teamSize === minTeamSize}
       />
       <span>{teamSize}</span>
-      <Button
-        size="xs"
-        icon={() => <BpIcon icon={IconNames.PLUS} />}
-        variant="light"
-        onClick={handleIncrement}
-      />
-    </Flex>
+      <Button variant="minimal" icon={IconNames.PLUS} onClick={handleIncrement} />
+    </GradingFlex>
   );
 };
 
