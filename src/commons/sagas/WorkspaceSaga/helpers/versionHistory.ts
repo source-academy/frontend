@@ -251,6 +251,18 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
     return false;
   }
 
+  // Skip auto-save for team assessments
+  const isTeamAssessment: boolean = yield select((state: OverallState) => {
+    const assessmentId = state.workspaces.assessment.currentAssessment;
+    if (assessmentId === undefined) return false;
+    const overview = state.session.assessmentOverviews?.find(o => o.id === assessmentId);
+    return overview ? overview.maxTeamSize !== 1 : false;
+  });
+
+  if (isTeamAssessment) {
+    return false;
+  }
+
   // If another save is already in flight for this workspace, wait for it to finish before proceeding.
   const isAlreadySaving: boolean = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].versionHistory.isAutoSaving
@@ -267,18 +279,6 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
   yield put(WorkspaceActions.setIsAutoSaving(workspaceLocation, true));
 
   try {
-    // Skip auto-save for team assessments
-    const isTeamAssessment: boolean = yield select((state: OverallState) => {
-      const assessmentId = state.workspaces.assessment.currentAssessment;
-      if (assessmentId === undefined) return false;
-      const overview = state.session.assessmentOverviews?.find(o => o.id === assessmentId);
-      return overview ? overview.maxTeamSize !== 1 : false;
-    });
-
-    if (isTeamAssessment) {
-      return false;
-    }
-
     // Get the current code from the active editor tab
     const { editorTabs, activeEditorTabIndex } = yield select(
       (state: OverallState) => state.workspaces[workspaceLocation]
