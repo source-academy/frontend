@@ -296,14 +296,17 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
       return false;
     }
 
-    // Skip if code is unchanged from the latest saved version
-    const latestVersion: string | undefined = yield select((state: OverallState) => {
-      const versions = state.workspaces[workspaceLocation].versionHistory.versions;
-      if (versions.length === 0) return undefined;
-      return versions.reduce((latest, v) => (v.timestamp > latest.timestamp ? v : latest)).code;
+    // Skip if code matches the last submitted answer
+    const lastSubmittedAnswer: string | undefined = yield select((state: OverallState) => {
+      const assessmentId = state.workspaces.assessment.currentAssessment;
+      const questionIndex = state.workspaces.assessment.currentQuestion;
+      if (assessmentId === undefined || questionIndex === undefined) return undefined;
+      return state.session.assessments[assessmentId]?.questions[questionIndex]?.answer as
+        | string
+        | undefined;
     });
 
-    if (code === latestVersion) {
+    if (code === lastSubmittedAnswer) {
       yield put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'));
       return false;
     }
