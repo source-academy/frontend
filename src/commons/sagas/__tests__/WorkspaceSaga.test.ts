@@ -1672,7 +1672,12 @@ describe('VERSION_HISTORY', () => {
         ...base,
         session: {
           ...base.session,
-          assessmentOverviews: [{ id: mockAssessmentId, isAutosaveEnabled: true, maxTeamSize: 1 }]
+          assessmentOverviews: [{ id: mockAssessmentId, isAutosaveEnabled: true, maxTeamSize: 1 }],
+          assessments: {
+            [mockAssessmentId]: {
+              questions: [{ id: mockQuestionDbId, type: 'programming', answer: code }]
+            }
+          }
         },
         workspaces: {
           ...base.workspaces,
@@ -1718,7 +1723,12 @@ describe('VERSION_HISTORY', () => {
         ...base,
         session: {
           ...base.session,
-          assessmentOverviews: [{ id: mockAssessmentId, isAutosaveEnabled: true, maxTeamSize: 1 }]
+          assessmentOverviews: [{ id: mockAssessmentId, isAutosaveEnabled: true, maxTeamSize: 1 }],
+          assessments: {
+            [mockAssessmentId]: {
+              questions: [{ id: mockQuestionDbId, type: 'programming' }]
+            }
+          }
         },
         workspaces: {
           ...base.workspaces,
