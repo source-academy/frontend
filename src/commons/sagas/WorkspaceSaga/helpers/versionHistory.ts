@@ -4,6 +4,7 @@ import { call, debounce, put, select, take, takeEvery } from 'redux-saga/effects
 import SessionActions from '../../../application/actions/SessionActions';
 import type { OverallState } from '../../../application/ApplicationTypes';
 import type { Tokens } from '../../../application/types/SessionTypes';
+import { QuestionTypes } from '../../../assessment/AssessmentTypes';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
@@ -234,6 +235,19 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
   // Skip auto-save if autosave is disabled for this assessment
   const autosaveEnabled: boolean = yield call(isAutosaveEnabledForCurrentAssessment);
   if (!autosaveEnabled) {
+    return false;
+  }
+
+  // Skip auto-save for MCQ questions
+  const currentQuestionType: string | undefined = yield select((state: OverallState) => {
+    const assessmentId = state.workspaces.assessment.currentAssessment;
+    if (assessmentId === undefined) return undefined;
+    const questionIndex = state.workspaces.assessment.currentQuestion;
+    if (questionIndex === undefined) return undefined;
+    return state.session.assessments[assessmentId]?.questions[questionIndex]?.type;
+  });
+
+  if (currentQuestionType !== QuestionTypes.programming) {
     return false;
   }
 
