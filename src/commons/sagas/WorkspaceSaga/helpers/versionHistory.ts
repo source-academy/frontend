@@ -173,7 +173,9 @@ export function* restoreVersionSaga(
     return overview ? overview.maxTeamSize !== 1 : false;
   });
 
-  if (isTeamAssessment) {
+  const autosaveEnabled: boolean = yield call(isAutosaveEnabledForCurrentAssessment);
+
+  if (isTeamAssessment || !autosaveEnabled) {
     // For team assessments, dont submit
     yield put(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, true));
     return;
@@ -184,14 +186,12 @@ export function* restoreVersionSaga(
   yield put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saving'));
   const newVersionCreated: boolean = yield call(performAutoSave, workspaceLocation);
 
-  const autosaveEnabled: boolean = yield call(isAutosaveEnabledForCurrentAssessment);
-
   if (!newVersionCreated) {
     // Ensure save did not fail before updating unsaved changes to false
     const saveStatus: string = yield select(
       (state: OverallState) => state.workspaces[workspaceLocation].saveStatus
     );
-    if (saveStatus !== 'saveFailed' && autosaveEnabled) {
+    if (saveStatus !== 'saveFailed') {
       yield put(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, false));
     }
     return;
