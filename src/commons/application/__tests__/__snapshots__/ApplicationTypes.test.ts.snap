@@ -1,19 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`available Python language configurations > matches snapshot 1`] = `
-[
-  {
-    "chapter": -4,
-    "displayName": "Python §1",
-    "mainLanguage": "Python",
-    "supports": {
-      "repl": true,
-    },
-    "variant": "default",
-  },
-]
-`;
-
 exports[`available Source language configurations > matches snapshot 1`] = `
 [
   {

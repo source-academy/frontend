@@ -131,14 +131,12 @@ export enum StoriesRole {
 
 export enum SupportedLanguage {
   JAVASCRIPT = 'JavaScript',
-  PYTHON = 'Python',
   JAVA = 'Java',
   C = 'C'
 }
 
 export const SUPPORTED_LANGUAGES = [
   SupportedLanguage.JAVASCRIPT,
-  SupportedLanguage.PYTHON,
   SupportedLanguage.JAVA,
   SupportedLanguage.C
 ];
@@ -197,18 +195,6 @@ export const htmlLanguage: SALanguage = {
 export function isCseVariant(variant: Variant): boolean {
   return variant == Variant.EXPLICIT_CONTROL;
 }
-
-const pySubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
-  { chapter: Chapter.PYTHON_1, variant: Variant.DEFAULT, displayName: 'Python \xa71' }
-  //{ chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
-  //{ chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
-  //{ chapter: Chapter.PYTHON_4, variant: Variant.DEFAULT, displayName: 'Python \xa74' }
-  //{ chapter: Chapter.FULL_PYTHON, variant: Variant.DEFAULT, displayName: 'Full Python' }
-];
-
-export const pyLanguages: SALanguage[] = pySubLanguages.map(sublang => {
-  return { ...sublang, mainLanguage: SupportedLanguage.PYTHON, supports: { repl: true } };
-});
 
 export const javaLanguages: SALanguage[] = [
   {
@@ -290,7 +276,6 @@ export const ALL_LANGUAGES: readonly SALanguage[] = [
   fullJSLanguage,
   fullTSLanguage,
   htmlLanguage,
-  ...pyLanguages,
   ...javaLanguages,
   ...cLanguages
 ];
