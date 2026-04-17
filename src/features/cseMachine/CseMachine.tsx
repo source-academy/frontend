@@ -56,7 +56,7 @@ export default class CseMachine {
   private static currentEnvId: string;
   private static control: Control | undefined;
   private static stash: Stash | undefined;
-  private static streamLineage: Map<string, string[]>;
+  private static streamLineage: Map<string, string[]> = new Map();
   public static togglePrintableMode(): void {
     CseMachine.printableMode = !CseMachine.printableMode;
   }
