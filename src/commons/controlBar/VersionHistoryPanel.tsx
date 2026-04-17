@@ -21,7 +21,7 @@ type Props = {
   isOpen: boolean;
   isLoading: boolean;
   onClose: () => void;
-  onRestore: (versionId: string) => void;
+  onRestore: (version: CodeVersion) => void;
   onRename: (versionId: string, name: string) => void;
 };
 
@@ -57,8 +57,8 @@ export const VersionHistoryPanel: React.FC<Props> = ({
   }, [sortedVersions, isOpen]);
 
   const handleRestore = useCallback(
-    (versionId: string) => {
-      onRestore(versionId);
+    (version: CodeVersion) => {
+      onRestore(version);
       onClose();
     },
     [onRestore, onClose]
@@ -114,7 +114,7 @@ export const VersionHistoryPanel: React.FC<Props> = ({
             icon={IconNames.UNDO}
             intent={Intent.PRIMARY}
             text="Restore this version"
-            onClick={() => handleRestore(version.id)}
+            onClick={() => handleRestore(version)}
           />
         </div>
         <div className="version-history-diff-container">

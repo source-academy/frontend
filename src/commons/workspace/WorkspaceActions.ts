@@ -296,9 +296,16 @@ const newActions = createActions('workspace', {
     workspaceLocation,
     versions
   }),
-  restoreVersion: (workspaceLocation: WorkspaceLocation, versionId: string) => ({
+  restoreVersion: (
+    workspaceLocation: WorkspaceLocation,
+    versionId: string,
+    name: string | null | undefined,
+    timestamp: number
+  ) => ({
     workspaceLocation,
-    versionId
+    versionId,
+    name,
+    timestamp
   }),
   nameVersion: (workspaceLocation: WorkspaceLocation, versionId: string, name: string) => ({
     workspaceLocation,

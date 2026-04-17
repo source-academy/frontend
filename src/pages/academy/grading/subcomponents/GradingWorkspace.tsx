@@ -38,7 +38,11 @@ import { SideContentProps } from '../../../../commons/sideContent/SideContent';
 import { useSideContent } from '../../../../commons/sideContent/SideContentHelper';
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
-import { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
+import {
+  type CodeVersion,
+  WorkspaceLocation,
+  WorkspaceState
+} from '../../../../commons/workspace/WorkspaceTypes';
 import { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditor';
 
@@ -168,8 +172,15 @@ const GradingWorkspace: React.FC<Props> = props => {
         dispatch(WorkspaceActions.fetchVersionHistory(workspaceLocation)),
       handleToggleHistoryPanel: () =>
         dispatch(WorkspaceActions.toggleHistoryPanel(workspaceLocation)),
-      handleRestoreVersion: (versionId: string) =>
-        dispatch(WorkspaceActions.restoreVersion(workspaceLocation, versionId)),
+      handleRestoreVersion: (version: CodeVersion) =>
+        dispatch(
+          WorkspaceActions.restoreVersion(
+            workspaceLocation,
+            version.id,
+            version.name,
+            version.timestamp
+          )
+        ),
       handleNameVersion: (versionId: string, name: string) =>
         dispatch(WorkspaceActions.nameVersion(workspaceLocation, versionId, name))
     };

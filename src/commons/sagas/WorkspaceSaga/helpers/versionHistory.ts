@@ -143,27 +143,15 @@ export function* nameVersionSaga(action: ReturnType<typeof WorkspaceActions.name
 export function* restoreVersionSaga(
   action: ReturnType<typeof WorkspaceActions.restoreVersion>
 ): SagaIterator {
-  const { workspaceLocation, versionId } = action.payload;
+  const {
+    workspaceLocation,
+    name: restoredVersionName,
+    timestamp: restoredVersionTimestamp
+  } = action.payload;
 
   if (workspaceLocation !== 'assessment') {
     return;
   }
-
-  // Find the restored version's name and timestamp from state
-  const restoredVersion: { name: string | null | undefined; timestamp: number } | undefined =
-    yield select((state: OverallState) => {
-      const version = state.workspaces[workspaceLocation].versionHistory.versions.find(
-        v => v.id === versionId
-      );
-      if (!version) return undefined;
-      return { name: version.name, timestamp: version.timestamp };
-    });
-
-  if (restoredVersion === undefined) {
-    return;
-  }
-
-  const { name: restoredVersionName, timestamp: restoredVersionTimestamp } = restoredVersion;
 
   // Check if this is a team assessment
   const isTeamAssessment: boolean = yield select((state: OverallState) => {

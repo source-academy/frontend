@@ -79,7 +79,7 @@ import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import { assertType } from '../utils/TypeHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+import { type CodeVersion, WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 
 export type AssessmentWorkspaceProps = {
@@ -199,8 +199,15 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         dispatch(WorkspaceActions.fetchVersionHistory(workspaceLocation)),
       handleToggleHistoryPanel: () =>
         dispatch(WorkspaceActions.toggleHistoryPanel(workspaceLocation)),
-      handleRestoreVersion: (versionId: string) =>
-        dispatch(WorkspaceActions.restoreVersion(workspaceLocation, versionId)),
+      handleRestoreVersion: (version: CodeVersion) =>
+        dispatch(
+          WorkspaceActions.restoreVersion(
+            workspaceLocation,
+            version.id,
+            version.name,
+            version.timestamp
+          )
+        ),
       handleNameVersion: (versionId: string, name: string) =>
         dispatch(WorkspaceActions.nameVersion(workspaceLocation, versionId, name))
     };
