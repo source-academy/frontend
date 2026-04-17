@@ -13,6 +13,7 @@ import { getVersionHistory, updateVersionName } from '../../RequestsSaga';
 /**
  * Checks whether autosave is enabled for the current assessment workspace.
  * Defaults to false if the config cannot be found.
+ * Defaults to true for assessments created before feature implementation
  */
 function* isAutosaveEnabledForCurrentAssessment(): SagaIterator<boolean> {
   return yield select((state: OverallState) => {
@@ -20,7 +21,7 @@ function* isAutosaveEnabledForCurrentAssessment(): SagaIterator<boolean> {
     if (assessmentId === undefined) return false;
     const overview = state.session.assessmentOverviews?.find(o => o.id === assessmentId);
     if (!overview) return false;
-    return overview.isAutosaveEnabled;
+    return overview.isAutosaveEnabled ?? true;
   });
 }
 
