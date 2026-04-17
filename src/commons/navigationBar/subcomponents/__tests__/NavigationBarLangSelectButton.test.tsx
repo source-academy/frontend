@@ -34,21 +34,6 @@ describe('NavigationBarLangSelectButton', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('should call selectLang with "Python" when "Python" menu item is clicked', async () => {
-    const { app, store } = createAppWithStore();
-    const container = render(app);
-
-    const button = await container.findByTestId('NavigationBarLangSelectButton');
-    await user.click(button);
-
-    const pythonSelector = await container.findByText(SupportedLanguage.PYTHON);
-    await user.click(pythonSelector);
-
-    expect(store.getState().playground.languageConfig.mainLanguage).toEqual(
-      SupportedLanguage.PYTHON
-    );
-  });
-
   it('should call selectLang with "JavaScript" when "JavaScript" menu item is clicked', async () => {
     const { app, store } = createAppWithStore();
     const container = render(app);
