@@ -192,21 +192,18 @@ export function* restoreVersionSaga(
   });
 
   // Name the restored version as "(name)-restored"
-  const newestVersion: { id: string; timestamp: number } | undefined = yield select(
-    (state: OverallState) => {
-      const versions = state.workspaces[workspaceLocation].versionHistory.versions;
-      if (versions.length === 0) return undefined;
-      return versions.reduce((latest, v) => (v.timestamp > latest.timestamp ? v : latest));
-    }
-  );
+  const newestVersionId: string | undefined = yield select((state: OverallState) => {
+    const versions = state.workspaces[workspaceLocation].versionHistory.versions;
+    return versions[versions.length - 1]?.id;
+  });
 
-  if (newestVersion) {
+  if (newestVersionId) {
     const restoredLabel =
       restoredVersionName || new Date(restoredVersionTimestamp).toLocaleString();
     const restoredName = `${restoredLabel}-restored`;
 
     // Optimistically update the name in state
-    yield put(WorkspaceActions.nameVersion(workspaceLocation, newestVersion.id, restoredName));
+    yield put(WorkspaceActions.nameVersion(workspaceLocation, newestVersionId, restoredName));
   }
 }
 
