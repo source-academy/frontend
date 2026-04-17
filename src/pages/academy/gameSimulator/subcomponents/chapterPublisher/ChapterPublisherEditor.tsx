@@ -1,6 +1,6 @@
 import { Button, Classes, Intent, Switch } from '@blueprintjs/core';
-import { DatePicker } from '@blueprintjs/datetime';
 import { memo, useCallback, useEffect, useState } from 'react';
+import { DatePicker } from 'src/commons/DateTimePickers';
 import { getStandardDateTime } from 'src/commons/utils/DateHelper';
 import { useInput } from 'src/commons/utils/Hooks';
 import { SortableList, useSortableList } from 'src/commons/utils/SortableList';

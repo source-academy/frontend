@@ -129,6 +129,7 @@ export class Layout {
   static animationGroupRef: RefObject<KonvaGroupNode | null> = React.createRef();
   static arrowUnderlayLayerRef: RefObject<KonvaLayerNode | null> = React.createRef();
   static underlayArrows: React.ReactNode[] = [];
+  static overlayNodes: React.ReactNode[] = [];
 
   // For pair creation layouts:
   static currentDarkPairs: React.ReactNode;
@@ -151,6 +152,14 @@ export class Layout {
 
   static registerUnderlayArrow(arrow: React.ReactNode) {
     Layout.underlayArrows.push(arrow);
+  }
+
+  static resetOverlayNodes() {
+    Layout.overlayNodes = [];
+  }
+
+  static registerOverlayNode(node: React.ReactNode) {
+    Layout.overlayNodes.push(node);
   }
 
   static updateDimensions(width: number, height: number) {
@@ -211,6 +220,7 @@ export class Layout {
     arrowSelection.clearSelection();
     Layout.key = 0;
     Layout.resetUnderlayArrows();
+    Layout.resetOverlayNodes();
 
     // deep copy so we don't mutate the context
     Layout.globalEnvNode = deepCopyTree(envTree).root;
@@ -706,11 +716,13 @@ export class Layout {
       return Layout.prevLayout;
     } else {
       Layout.resetUnderlayArrows();
+      Layout.resetOverlayNodes();
       const levelNodes = Layout.levels.map(level => level.draw());
       const streamNodes = null;
       const controlNode = CseMachine.getControlStash() ? Layout.controlComponent.draw() : null;
       const stashNode = CseMachine.getControlStash() ? Layout.stashComponent.draw() : null;
       const underlayArrows = [...Layout.underlayArrows];
+      const overlayNodes = [...Layout.overlayNodes];
       const layout = (
         <div className="sa-cse-machine" data-testid="sa-cse-machine">
           <div
@@ -779,6 +791,7 @@ export class Layout {
                     {CseAnimation.animations.map(c => c.draw())}
                   </KonvaGroup>
                 </KonvaLayer>
+                <KonvaLayer listening={false}>{overlayNodes}</KonvaLayer>
               </KonvaStage>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import { Button, Dialog, Tooltip } from '@blueprintjs/core';
-import { DatePicker } from '@blueprintjs/datetime';
 import React, { useState } from 'react';
 import { prettifyDate } from 'src/commons/achievement/utils/DateHelper';
+import { DatePicker } from 'src/commons/DateTimePickers';
 
 type Props = {
   type: string;

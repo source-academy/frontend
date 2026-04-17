@@ -1,5 +1,6 @@
 import { createReducer, type Reducer } from '@reduxjs/toolkit';
-import { castDraft } from 'immer';
+import { castDraft, type Draft } from 'immer';
+import { type SourceError } from 'js-slang/dist/errors/base';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
@@ -80,6 +81,90 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
   handleCseAndStepperActions(builder);
   handleReplActions(builder);
   handleDebuggerActions(builder);
+
+  function applyInterpreterResultOutput(
+    state: Draft<WorkspaceManagerState>,
+    workspaceLocation: WorkspaceLocation,
+    value: unknown,
+    shouldStopRunning: boolean
+  ) {
+    const tokens = state[workspaceLocation].tokenCount;
+    const newOutputEntry: Partial<ResultOutput> = {
+      type: 'result',
+      value
+    };
+
+    const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
+    let newOutput: InterpreterOutput[];
+
+    if (lastOutput !== undefined && lastOutput.type === 'running') {
+      const newOutputEntryWithLogs = {
+        consoleLogs: lastOutput.consoleLogs,
+        ...newOutputEntry
+      } as ResultOutput;
+      const notificationOutputs: NotificationOutput[] = [];
+      if (state[workspaceLocation].hasTokenCounter) {
+        notificationOutputs.push({
+          consoleLog: `This program has ${tokens} tokens.`,
+          type: 'notification'
+        });
+      }
+      const customNotification = state[workspaceLocation].customNotification;
+      if (customNotification !== '') {
+        notificationOutputs.push({
+          consoleLog: customNotification,
+          type: 'notification'
+        });
+      }
+      newOutput = state[workspaceLocation].output
+        .slice(0, -1)
+        .concat([...notificationOutputs, newOutputEntryWithLogs]);
+    } else {
+      newOutput = state[workspaceLocation].output.concat({
+        consoleLogs: [],
+        ...newOutputEntry
+      } as ResultOutput);
+    }
+
+    state[workspaceLocation].output = newOutput;
+    if (shouldStopRunning) {
+      state[workspaceLocation].isRunning = false;
+    }
+  }
+
+  function applyInterpreterErrorOutput(
+    state: Draft<WorkspaceManagerState>,
+    workspaceLocation: WorkspaceLocation,
+    errors: SourceError[],
+    shouldStopRunning: boolean,
+    shouldStopDebugging: boolean
+  ) {
+    const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
+    let newOutput: InterpreterOutput[];
+
+    if (lastOutput !== undefined && lastOutput.type === 'running') {
+      newOutput = state[workspaceLocation].output.slice(0, -1).concat({
+        type: 'errors',
+        errors,
+        consoleLogs: lastOutput.consoleLogs
+      } as ErrorOutput);
+    } else {
+      newOutput = state[workspaceLocation].output.concat({
+        type: 'errors',
+        errors,
+        consoleLogs: []
+      } as ErrorOutput);
+    }
+
+    state[workspaceLocation].output = newOutput;
+    if (shouldStopRunning) {
+      state[workspaceLocation].isRunning = false;
+    }
+    if (shouldStopDebugging) {
+      state[workspaceLocation].isDebugging = false;
+    }
+  }
+
   builder
     .addCase(WorkspaceActions.setTokenCount, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -161,48 +246,13 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       state[workspaceLocation].isRunning = true;
       state[workspaceLocation].isDebugging = false;
     })
+    .addCase(InterpreterActions.appendInterpreterResult, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      applyInterpreterResultOutput(state, workspaceLocation, action.payload.value, false);
+    })
     .addCase(InterpreterActions.evalInterpreterSuccess, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
-      const tokens = state[workspaceLocation].tokenCount;
-      const newOutputEntry: Partial<ResultOutput> = {
-        type: action.payload.type as 'result',
-        value: action.payload.value
-      };
-
-      const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
-      let newOutput: InterpreterOutput[];
-
-      if (lastOutput !== undefined && lastOutput.type === 'running') {
-        const newOutputEntryWithLogs = {
-          consoleLogs: lastOutput.consoleLogs,
-          ...newOutputEntry
-        } as ResultOutput;
-        const notificationOutputs: NotificationOutput[] = [];
-        if (state[workspaceLocation].hasTokenCounter) {
-          notificationOutputs.push({
-            consoleLog: `This program has ${tokens} tokens.`,
-            type: 'notification'
-          });
-        }
-        const customNotification = state[workspaceLocation].customNotification;
-        if (customNotification !== '') {
-          notificationOutputs.push({
-            consoleLog: customNotification,
-            type: 'notification'
-          });
-        }
-        newOutput = state[workspaceLocation].output
-          .slice(0, -1)
-          .concat([...notificationOutputs, newOutputEntryWithLogs]);
-      } else {
-        newOutput = state[workspaceLocation].output.concat({
-          consoleLogs: [],
-          ...newOutputEntry
-        } as ResultOutput);
-      }
-
-      state[workspaceLocation].output = newOutput;
-      state[workspaceLocation].isRunning = false;
+      applyInterpreterResultOutput(state, workspaceLocation, action.payload.value, true);
     })
     .addCase(InterpreterActions.evalTestcaseSuccess, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -217,29 +267,17 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       testcase.result = undefined;
       testcase.errors = action.payload.value;
     })
+    .addCase(InterpreterActions.appendInterpreterError, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      applyInterpreterErrorOutput(state, workspaceLocation, action.payload.errors, false, false);
+    })
     .addCase(InterpreterActions.evalInterpreterError, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
-
-      const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
-      let newOutput: InterpreterOutput[];
-
-      if (lastOutput !== undefined && lastOutput.type === 'running') {
-        newOutput = state[workspaceLocation].output.slice(0, -1).concat({
-          type: action.payload.type,
-          errors: action.payload.errors,
-          consoleLogs: lastOutput.consoleLogs
-        } as ErrorOutput);
-      } else {
-        newOutput = state[workspaceLocation].output.concat({
-          type: action.payload.type,
-          errors: action.payload.errors,
-          consoleLogs: []
-        } as ErrorOutput);
-      }
-
-      state[workspaceLocation].output = newOutput;
-      state[workspaceLocation].isRunning = false;
-      state[workspaceLocation].isDebugging = false;
+      applyInterpreterErrorOutput(state, workspaceLocation, action.payload.errors, true, true);
+    })
+    .addCase(InterpreterActions.setIsRunning, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].isRunning = action.payload.isRunning;
     })
     /**
      * Called to signal the end of an interruption,
