@@ -30,6 +30,19 @@ test('evalInterpreterSuccess generates correct action object', () => {
   });
 });
 
+test('appendInterpreterResult generates correct action object', () => {
+  const value = 'value';
+  const action = InterpreterActions.appendInterpreterResult(value, gradingWorkspace);
+  expect(action).toEqual({
+    type: InterpreterActions.appendInterpreterResult.type,
+    payload: {
+      type: 'result',
+      value,
+      workspaceLocation: gradingWorkspace
+    }
+  });
+});
+
 test('evalTestcaseSuccess generates correct action object', () => {
   const value = 'another value';
   const index = 3;
@@ -54,6 +67,30 @@ test('evalInterpreterError generates correct action object', () => {
       type: 'errors',
       errors,
       workspaceLocation: assessmentWorkspace
+    }
+  });
+});
+
+test('appendInterpreterError generates correct action object', () => {
+  const errors: any = [];
+  const action = InterpreterActions.appendInterpreterError(errors, assessmentWorkspace);
+  expect(action).toEqual({
+    type: InterpreterActions.appendInterpreterError.type,
+    payload: {
+      type: 'errors',
+      errors,
+      workspaceLocation: assessmentWorkspace
+    }
+  });
+});
+
+test('setIsRunning generates correct action object', () => {
+  const action = InterpreterActions.setIsRunning(false, playgroundWorkspace);
+  expect(action).toEqual({
+    type: InterpreterActions.setIsRunning.type,
+    payload: {
+      isRunning: false,
+      workspaceLocation: playgroundWorkspace
     }
   });
 });

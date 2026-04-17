@@ -612,6 +612,33 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
   });
 });
 
+describe('APPEND_INTERPRETER_RESULT', () => {
+  test('updates output without changing isRunning', () => {
+    const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
+      output: outputWithRunningOutput,
+      isRunning: true
+    });
+
+    const actions = generateActions(l => InterpreterActions.appendInterpreterResult(undefined, l));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(evalEditorDefaultState, action);
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...evalEditorDefaultState,
+        [location]: {
+          ...evalEditorDefaultState[location],
+          isRunning: true,
+          output: [
+            { ...outputWithRunningOutput[0] },
+            { type: 'result', consoleLogs: ['console-log-test-2'], value: undefined }
+          ]
+        }
+      });
+    });
+  });
+});
+
 describe('EVAL_REPL', () => {
   test('sets isRunning to true', () => {
     const actions = generateActions(WorkspaceActions.evalRepl);
@@ -624,6 +651,56 @@ describe('EVAL_REPL', () => {
         [location]: {
           ...defaultWorkspaceManager[location],
           isRunning: true
+        }
+      });
+    });
+  });
+});
+
+describe('SET_IS_RUNNING', () => {
+  test('sets isRunning to the provided value', () => {
+    const actions = generateActions(l => InterpreterActions.setIsRunning(false, l));
+
+    actions.forEach(action => {
+      const initialState: WorkspaceManagerState = generateDefaultWorkspace({ isRunning: true });
+      const result = WorkspaceReducer(initialState, action);
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
+
+      expect(result).toEqual({
+        ...initialState,
+        [location]: {
+          ...initialState[location],
+          isRunning: false
+        }
+      });
+    });
+  });
+});
+
+describe('APPEND_INTERPRETER_ERROR', () => {
+  test('updates output without changing isRunning or isDebugging', () => {
+    const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
+      output: outputWithRunningAndCodeOutput,
+      isRunning: true,
+      isDebugging: true
+    });
+
+    const actions = generateActions(l => InterpreterActions.appendInterpreterError([], l));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(evalEditorDefaultState, action);
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...evalEditorDefaultState,
+        [location]: {
+          ...evalEditorDefaultState[location],
+          isRunning: true,
+          isDebugging: true,
+          output: [
+            { ...outputWithRunningAndCodeOutput[0] },
+            { ...outputWithRunningAndCodeOutput[1] },
+            { type: 'errors', errors: [], consoleLogs: [] }
+          ]
         }
       });
     });
