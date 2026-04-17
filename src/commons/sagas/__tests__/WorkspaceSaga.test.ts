@@ -1605,22 +1605,7 @@ describe('VERSION_HISTORY', () => {
         .not.put.actionType(WorkspaceActions.updateHasUnsavedChanges.type)
         .dispatch({
           type: WorkspaceActions.restoreVersion.type,
-          payload: { workspaceLocation, versionId: 'v1' }
-        })
-        .silentRun();
-    });
-
-    test('returns early when version not found in state', () => {
-      const workspaceLocation = 'assessment';
-      const tokens = { accessToken: 'test-access', refreshToken: 'test-refresh' };
-      const state = versionHistoryState(workspaceLocation, tokens);
-
-      return expectSaga(workspaceSaga)
-        .withState(state)
-        .not.put.actionType(WorkspaceActions.updateHasUnsavedChanges.type)
-        .dispatch({
-          type: WorkspaceActions.restoreVersion.type,
-          payload: { workspaceLocation, versionId: 'non-existent' }
+          payload: { workspaceLocation, versionId: 'v1', name: undefined, timestamp: 100 }
         })
         .silentRun();
     });
@@ -1656,7 +1641,7 @@ describe('VERSION_HISTORY', () => {
         .not.put.actionType(SessionActions.submitAnswer.type)
         .dispatch({
           type: WorkspaceActions.restoreVersion.type,
-          payload: { workspaceLocation, versionId }
+          payload: { workspaceLocation, versionId, name: undefined, timestamp: 100 }
         })
         .silentRun();
     });
@@ -1702,7 +1687,7 @@ describe('VERSION_HISTORY', () => {
         .not.put.actionType(SessionActions.submitAnswer.type)
         .dispatch({
           type: WorkspaceActions.restoreVersion.type,
-          payload: { workspaceLocation, versionId }
+          payload: { workspaceLocation, versionId, name: undefined, timestamp: 100 }
         })
         .silentRun();
     });
@@ -1755,7 +1740,7 @@ describe('VERSION_HISTORY', () => {
         .put(WorkspaceActions.nameVersion(workspaceLocation, 'v2', 'Old Version-restored'))
         .dispatch({
           type: WorkspaceActions.restoreVersion.type,
-          payload: { workspaceLocation, versionId }
+          payload: { workspaceLocation, versionId, name: 'Old Version', timestamp: 100 }
         })
         .dispatch(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'))
         .dispatch(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'))

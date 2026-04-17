@@ -646,12 +646,16 @@ test('receiveVersionHistory generates correct action object', () => {
 
 test('restoreVersion generates correct action object', () => {
   const versionId = 'v123';
-  const action = WorkspaceActions.restoreVersion(assessmentWorkspace, versionId);
+  const name = 'My Version';
+  const timestamp = 1234567890;
+  const action = WorkspaceActions.restoreVersion(assessmentWorkspace, versionId, name, timestamp);
   expect(action).toEqual({
     type: WorkspaceActions.restoreVersion.type,
     payload: {
       workspaceLocation: assessmentWorkspace,
-      versionId
+      versionId,
+      name,
+      timestamp
     }
   });
 });

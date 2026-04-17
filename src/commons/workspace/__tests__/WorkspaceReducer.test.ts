@@ -2736,7 +2736,12 @@ describe('RESTORE_VERSION', () => {
       }
     };
 
-    const action = WorkspaceActions.restoreVersion('assessment', versionId);
+    const action = WorkspaceActions.restoreVersion(
+      'assessment',
+      versionId,
+      'Test Version',
+      1234567890
+    );
     const result = WorkspaceReducer(stateWithVersions, action);
 
     expect(result.assessment.editorTabs[0].value).toEqual(versionCode);
@@ -2744,7 +2749,7 @@ describe('RESTORE_VERSION', () => {
 
   test('does not restore if version not found', () => {
     const versionId = 'non-existent';
-    const action = WorkspaceActions.restoreVersion('assessment', versionId);
+    const action = WorkspaceActions.restoreVersion('assessment', versionId, undefined, 0);
     const result = WorkspaceReducer(defaultWorkspaceManager, action);
 
     // State should remain unchanged
@@ -2775,7 +2780,7 @@ describe('RESTORE_VERSION', () => {
       }
     };
 
-    const action = WorkspaceActions.restoreVersion('assessment', versionId);
+    const action = WorkspaceActions.restoreVersion('assessment', versionId, undefined, 1234567890);
     const result = WorkspaceReducer(stateWithNoActiveTab, action);
 
     // State should remain unchanged - no active tab to restore to
