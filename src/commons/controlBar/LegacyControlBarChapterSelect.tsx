@@ -9,7 +9,6 @@ import {
   fullTSLanguage,
   htmlLanguage,
   javaLanguages,
-  pyLanguages,
   SALanguage,
   sourceLanguages,
   styliseSublanguage
@@ -85,7 +84,6 @@ export const LegacyControlBarChapterSelect: React.FC<ControlBarChapterSelectProp
     // for public deployments. HTML, while sandboxed, is treated the same way to be safe.
     // See https://github.com/source-academy/frontend/pull/2460#issuecomment-1528759912
     ...(Constants.playgroundOnly ? [fullJSLanguage, fullTSLanguage, htmlLanguage] : []),
-    ...pyLanguages,
     ...javaLanguages
   ];
 
