@@ -7,9 +7,13 @@ vi.mock('../AceDiffViewer', () => ({
   default: () => <div data-testid="ace-diff-viewer" />
 }));
 
+const MINUTE = 60 * 1000;
+
+// Two versions close together (same group), one far apart (separate group)
 const mockVersions = [
   { id: 'v1', timestamp: 1000000000000, name: 'Version 1' },
-  { id: 'v2', timestamp: 1000000001000, name: 'Version 2' }
+  { id: 'v2', timestamp: 1000000001000, name: 'Version 2' },
+  { id: 'v3', timestamp: 1000000001000 + 20 * MINUTE, name: 'Version 3' }
 ];
 
 const defaultProps = {
@@ -17,7 +21,7 @@ const defaultProps = {
   currentCode: 'const x = 3;',
   isOpen: true,
   isLoading: false,
-  selectedVersion: mockVersions[1],
+  selectedVersion: mockVersions[2],
   selectedVersionCode: 'const x = 2;',
   isLoadingCode: false,
   onClose: vi.fn(),
@@ -36,11 +40,29 @@ test('renders empty state when no versions', () => {
   expect(screen.getByText(/No versions found/)).toBeDefined();
 });
 
-test('renders version list items', () => {
+test('groups versions within 5 minutes together', () => {
   render(<VersionHistoryPanel {...defaultProps} />);
-  // Version names appear in both the list and the preview header
-  expect(screen.getAllByText('Version 1').length).toBeGreaterThan(0);
-  expect(screen.getAllByText('Version 2').length).toBeGreaterThan(0);
+  // v3 is 10 min apart — separate group; v1 and v2 are 1s apart — same group
+  expect(screen.getByText('2 versions')).toBeDefined();
+});
+
+test('single-version group renders without a dropdown header', () => {
+  render(<VersionHistoryPanel {...defaultProps} />);
+  // v3 is its own group — no group header, so no aria-expanded on a v3 button
+  expect(screen.getAllByText('Version 3').length).toBeGreaterThan(0);
+  const expandButtons = screen.queryAllByRole('button', { expanded: false });
+  // Only the v1/v2 multi-version group should have aria-expanded; v3 has none
+  expect(expandButtons.every(btn => !btn.textContent?.includes('Version 3'))).toBe(true);
+});
+
+test('clicking a multi-version group header expands it', () => {
+  render(<VersionHistoryPanel {...defaultProps} />);
+  // The v1/v2 group header is collapsed; clicking should expand it
+  const groupHeader = screen.getByRole('button', { name: /2 versions/i });
+  // Before click, nested items hidden (aria-expanded false)
+  expect(groupHeader.getAttribute('aria-expanded')).toBe('false');
+  fireEvent.click(groupHeader);
+  expect(groupHeader.getAttribute('aria-expanded')).toBe('true');
 });
 
 test('renders restore button for selected version', () => {

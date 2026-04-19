@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { CodeVersion, CodeVersionMetadata } from '../workspace/WorkspaceTypes';
 import AceDiffViewer from './AceDiffViewer';
@@ -29,11 +29,39 @@ type Props = {
   onRename: (versionId: string, name: string) => void;
 };
 
+// Versions within this window of each other are grouped into one change set.
+const GROUP_THRESHOLD_MS = 15 * 60 * 1000;
+
+type VersionGroup = {
+  /** ID of the newest version in the group is used as a group key. */
+  id: string;
+  versions: CodeVersionMetadata[];
+};
+
 const formatTimestamp = (timestamp: number | null | undefined): string => {
   if (timestamp == null) return 'Unknown date';
   const date = new Date(timestamp);
   if (isNaN(date.getTime())) return 'Unknown date';
   return date.toLocaleString();
+};
+
+const groupVersions = (sortedNewestFirst: CodeVersionMetadata[]): VersionGroup[] => {
+  if (sortedNewestFirst.length === 0) return [];
+  const groups: VersionGroup[] = [];
+  let current: CodeVersionMetadata[] = [sortedNewestFirst[0]];
+
+  for (let i = 1; i < sortedNewestFirst.length; i++) {
+    const prev = sortedNewestFirst[i - 1];
+    const curr = sortedNewestFirst[i];
+    if (prev.timestamp - curr.timestamp <= GROUP_THRESHOLD_MS) {
+      current.push(curr);
+    } else {
+      groups.push({ id: current[0].id, versions: current });
+      current = [curr];
+    }
+  }
+  groups.push({ id: current[0].id, versions: current });
+  return groups;
 };
 
 export const VersionHistoryPanel: React.FC<Props> = ({
@@ -49,12 +77,31 @@ export const VersionHistoryPanel: React.FC<Props> = ({
   onRestore,
   onRename
 }) => {
-  const sortedVersions = useMemo(() => [...versions].reverse(), [versions]);
+  const sortedVersions = useMemo(
+    () => [...versions].sort((a, b) => b.timestamp - a.timestamp),
+    [versions]
+  );
+  const groups = useMemo(() => groupVersions(sortedVersions), [sortedVersions]);
+
+  // Track expanded groups by id
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!isOpen || sortedVersions.length === 0) return;
     onSelectVersion(sortedVersions[0]);
   }, [isOpen, sortedVersions]);
+
+  const toggleGroup = useCallback((groupId: string) => {
+    setExpandedGroups(prev => {
+      const next = new Set(prev);
+      if (next.has(groupId)) {
+        next.delete(groupId);
+      } else {
+        next.add(groupId);
+      }
+      return next;
+    });
+  }, []);
 
   const handleRestore = useCallback(() => {
     if (!selectedVersion || !selectedVersionCode) return;
@@ -63,14 +110,15 @@ export const VersionHistoryPanel: React.FC<Props> = ({
     onClose();
   }, [selectedVersion, selectedVersionCode, onRestore, onClose]);
 
-  const renderVersionItem = (version: CodeVersionMetadata) => (
+  const renderVersionItem = (version: CodeVersionMetadata, nested = false) => (
     <div
       key={version.id}
       role="button"
       tabIndex={0}
       aria-pressed={version.id === selectedVersion?.id}
       className={classNames('version-history-item', {
-        'version-history-item--selected': version.id === selectedVersion?.id
+        'version-history-item--selected': version.id === selectedVersion?.id,
+        'version-history-item--nested': nested
       })}
       onClick={() => onSelectVersion(version)}
       onKeyDown={e => {
@@ -93,6 +141,74 @@ export const VersionHistoryPanel: React.FC<Props> = ({
       </div>
     </div>
   );
+
+  const renderGroup = (group: VersionGroup) => {
+    const isExpanded = expandedGroups.has(group.id);
+    const newestVersion = group.versions[0];
+    const label = newestVersion.name || formatTimestamp(newestVersion.timestamp);
+    const hasMultiple = group.versions.length > 1;
+
+    if (!hasMultiple) {
+      return (
+        <div key={group.id} className="version-history-group">
+          {renderVersionItem(newestVersion, false)}
+        </div>
+      );
+    }
+
+    return (
+      <div key={group.id} className="version-history-group">
+        <div
+          role="button"
+          tabIndex={0}
+          aria-expanded={isExpanded}
+          className={classNames('version-history-group-header', {
+            'version-history-group-header--expanded': isExpanded,
+            'version-history-group-header--contains-selected': group.versions.some(
+              v => v.id === selectedVersion?.id
+            )
+          })}
+          onClick={() => toggleGroup(group.id)}
+          onKeyDown={e => {
+            if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
+              e.preventDefault();
+              toggleGroup(group.id);
+            }
+          }}
+        >
+          <div className="version-history-group-header-info">
+            <div
+              className="version-history-group-label"
+              onClick={e => e.stopPropagation()}
+              onKeyDown={e => e.stopPropagation()}
+            >
+              <EditableText
+                key={newestVersion.name ?? newestVersion.id}
+                defaultValue={label}
+                placeholder={formatTimestamp(newestVersion.timestamp)}
+                onConfirm={(value: string) => onRename(newestVersion.id, value)}
+                selectAllOnFocus
+              />
+            </div>
+            <span className="version-history-group-count">{group.versions.length} versions</span>
+          </div>
+          <span
+            className={classNames('version-history-group-chevron', {
+              'version-history-group-chevron--open': isExpanded
+            })}
+          >
+            ›
+          </span>
+        </div>
+
+        {isExpanded && (
+          <div className="version-history-group-body">
+            {group.versions.map(v => renderVersionItem(v, true))}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   const renderPreviewPane = () => {
     if (!selectedVersion) {
@@ -143,7 +259,7 @@ export const VersionHistoryPanel: React.FC<Props> = ({
     />
   ) : (
     <div className="version-history-body">
-      <div className="version-history-list">{sortedVersions.map(renderVersionItem)}</div>
+      <div className="version-history-list">{groups.map(g => renderGroup(g))}</div>
       <div className="version-history-preview">{renderPreviewPane()}</div>
     </div>
   );
