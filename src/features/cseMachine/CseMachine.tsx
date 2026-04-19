@@ -70,9 +70,6 @@ export default class CseMachine {
   public static togglePairCreationMode(): void {
     CseMachine.pairCreationMode = !CseMachine.pairCreationMode;
   }
-  public static resetPairCreationMode(): void {
-    CseMachine.pairCreationMode = false;
-  }
   public static setClearDeadFrames(enabled: boolean): void {
     Layout.clearDeadFrames = enabled;
   }
@@ -498,7 +495,6 @@ export default class CseMachine {
 
   static clearCse() {
     CseMachine.resetArrowOriginFilters();
-    CseMachine.resetPairCreationMode();
     if (this.setVis) {
       this.setVis(undefined);
       CseMachine.environmentTree = undefined;
