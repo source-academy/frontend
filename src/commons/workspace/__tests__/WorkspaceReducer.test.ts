@@ -2724,11 +2724,13 @@ describe('RESTORE_VERSION', () => {
           versions: [
             {
               id: versionId,
-              code: versionCode,
               timestamp: 1234567890,
               name: 'Test Version'
             }
           ],
+          selectedVersion: null,
+          selectedVersionCode: null,
+          isLoadingCode: false,
           isLoading: false,
           isHistoryPanelOpen: false,
           isAutoSaving: false
@@ -2740,20 +2742,12 @@ describe('RESTORE_VERSION', () => {
       'assessment',
       versionId,
       'Test Version',
-      1234567890
+      1234567890,
+      versionCode
     );
     const result = WorkspaceReducer(stateWithVersions, action);
 
     expect(result.assessment.editorTabs[0].value).toEqual(versionCode);
-  });
-
-  test('does not restore if version not found', () => {
-    const versionId = 'non-existent';
-    const action = WorkspaceActions.restoreVersion('assessment', versionId, undefined, 0);
-    const result = WorkspaceReducer(defaultWorkspaceManager, action);
-
-    // State should remain unchanged
-    expect(result).toEqual(defaultWorkspaceManager);
   });
 
   test('does not restore if no active editor tab', () => {
@@ -2764,23 +2758,17 @@ describe('RESTORE_VERSION', () => {
       ...defaultWorkspaceManager,
       assessment: {
         ...defaultWorkspaceManager.assessment,
-        activeEditorTabIndex: null,
-        versionHistory: {
-          versions: [
-            {
-              id: versionId,
-              code: versionCode,
-              timestamp: 1234567890
-            }
-          ],
-          isLoading: false,
-          isHistoryPanelOpen: false,
-          isAutoSaving: false
-        }
+        activeEditorTabIndex: null
       }
     };
 
-    const action = WorkspaceActions.restoreVersion('assessment', versionId, undefined, 1234567890);
+    const action = WorkspaceActions.restoreVersion(
+      'assessment',
+      versionId,
+      undefined,
+      1234567890,
+      versionCode
+    );
     const result = WorkspaceReducer(stateWithNoActiveTab, action);
 
     // State should remain unchanged - no active tab to restore to
@@ -2841,15 +2829,16 @@ describe('NAME_VERSION', () => {
           versions: [
             {
               id: versionId,
-              code: 'const x = 1;',
               timestamp: 1234567890
             },
             {
               id: 'v2',
-              code: 'const x = 2;',
               timestamp: 1234567900
             }
           ],
+          selectedVersion: null,
+          selectedVersionCode: null,
+          isLoadingCode: false,
           isLoading: false,
           isHistoryPanelOpen: false,
           isAutoSaving: false
@@ -2880,10 +2869,12 @@ describe('NAME_VERSION', () => {
           versions: [
             {
               id: 'v1',
-              code: 'const x = 1;',
               timestamp: 1234567890
             }
           ],
+          selectedVersion: null,
+          selectedVersionCode: null,
+          isLoadingCode: false,
           isLoading: false,
           isHistoryPanelOpen: false,
           isAutoSaving: false
@@ -2911,11 +2902,13 @@ describe('NAME_VERSION', () => {
           versions: [
             {
               id: versionId,
-              code: 'const x = 1;',
               timestamp: 1234567890,
               name: 'Old Name'
             }
           ],
+          selectedVersion: null,
+          selectedVersionCode: null,
+          isLoadingCode: false,
           isLoading: false,
           isHistoryPanelOpen: false,
           isAutoSaving: false

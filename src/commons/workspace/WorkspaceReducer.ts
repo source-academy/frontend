@@ -444,15 +444,22 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       state[workspaceLocation].versionHistory.versions = action.payload.versions;
       state[workspaceLocation].versionHistory.isLoading = false;
     })
+    .addCase(WorkspaceActions.selectVersion, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].versionHistory.selectedVersion = action.payload.version;
+      state[workspaceLocation].versionHistory.selectedVersionCode = null;
+      state[workspaceLocation].versionHistory.isLoadingCode = action.payload.version !== null;
+    })
+    .addCase(WorkspaceActions.receiveVersionCode, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].versionHistory.selectedVersionCode = action.payload.code;
+      state[workspaceLocation].versionHistory.isLoadingCode = false;
+    })
     .addCase(WorkspaceActions.restoreVersion, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const workspace = state[workspaceLocation];
-      const version = workspace.versionHistory.versions.find(
-        v => v.id === action.payload.versionId
-      );
-      if (!version) return;
       if (workspace.activeEditorTabIndex !== null) {
-        workspace.editorTabs[workspace.activeEditorTabIndex].value = version.code;
+        workspace.editorTabs[workspace.activeEditorTabIndex].value = action.payload.code;
       }
     })
     .addCase(WorkspaceActions.toggleHistoryPanel, (state, action) => {

@@ -10,17 +10,21 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
-import type { CodeVersion } from '../workspace/WorkspaceTypes';
+import type { CodeVersion, CodeVersionMetadata } from '../workspace/WorkspaceTypes';
 import AceDiffViewer from './AceDiffViewer';
 
 type Props = {
-  versions: CodeVersion[];
+  versions: CodeVersionMetadata[];
   currentCode: string;
   isOpen: boolean;
   isLoading: boolean;
+  selectedVersion: CodeVersionMetadata | null;
+  selectedVersionCode: string | null;
+  isLoadingCode: boolean;
   onClose: () => void;
+  onSelectVersion: (version: CodeVersionMetadata) => void;
   onRestore: (version: CodeVersion) => void;
   onRename: (versionId: string, name: string) => void;
 };
@@ -37,47 +41,42 @@ export const VersionHistoryPanel: React.FC<Props> = ({
   currentCode,
   isOpen,
   isLoading,
+  selectedVersion,
+  selectedVersionCode,
+  isLoadingCode,
   onClose,
+  onSelectVersion,
   onRestore,
   onRename
 }) => {
-  const [selectedVersionId, setSelectedVersionId] = useState<string | null>(null);
-
   const sortedVersions = useMemo(() => [...versions].reverse(), [versions]);
 
   useEffect(() => {
-    if (!isOpen || sortedVersions.length === 0) {
-      setSelectedVersionId(null);
-      return;
-    }
-    setSelectedVersionId(prev => {
-      const stillValid = sortedVersions.some(v => v.id === prev);
-      return stillValid ? prev : sortedVersions[0].id;
-    });
-  }, [sortedVersions, isOpen]);
+    if (!isOpen || sortedVersions.length === 0) return;
+    onSelectVersion(sortedVersions[0]);
+  }, [isOpen, sortedVersions]);
 
-  const handleRestore = useCallback(
-    (version: CodeVersion) => {
-      onRestore(version);
-      onClose();
-    },
-    [onRestore, onClose]
-  );
+  const handleRestore = useCallback(() => {
+    if (!selectedVersion || !selectedVersionCode) return;
+    const version: CodeVersion = { ...selectedVersion, code: selectedVersionCode };
+    onRestore(version);
+    onClose();
+  }, [selectedVersion, selectedVersionCode, onRestore, onClose]);
 
-  const renderVersionItem = (version: CodeVersion) => (
+  const renderVersionItem = (version: CodeVersionMetadata) => (
     <div
       key={version.id}
       role="button"
       tabIndex={0}
-      aria-pressed={version.id === selectedVersionId}
+      aria-pressed={version.id === selectedVersion?.id}
       className={classNames('version-history-item', {
-        'version-history-item--selected': version.id === selectedVersionId
+        'version-history-item--selected': version.id === selectedVersion?.id
       })}
-      onClick={() => setSelectedVersionId(version.id)}
+      onClick={() => onSelectVersion(version)}
       onKeyDown={e => {
         if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
           e.preventDefault();
-          setSelectedVersionId(version.id);
+          onSelectVersion(version);
         }
       }}
     >
@@ -95,8 +94,8 @@ export const VersionHistoryPanel: React.FC<Props> = ({
     </div>
   );
 
-  const renderPreviewPane = (version: CodeVersion | undefined) => {
-    if (!version) {
+  const renderPreviewPane = () => {
+    if (!selectedVersion) {
       return (
         <NonIdealState description="Select a version to preview its code." icon={IconNames.CODE} />
       );
@@ -107,24 +106,30 @@ export const VersionHistoryPanel: React.FC<Props> = ({
           <div className="version-history-diff-labels">
             <span className="version-history-diff-label">Current</span>
             <span className="version-history-diff-label">
-              {version.name || formatTimestamp(version.timestamp)}
+              {selectedVersion.name || formatTimestamp(selectedVersion.timestamp)}
             </span>
           </div>
           <Button
             icon={IconNames.UNDO}
             intent={Intent.PRIMARY}
             text="Restore this version"
-            onClick={() => handleRestore(version)}
+            disabled={isLoadingCode || !selectedVersionCode}
+            onClick={handleRestore}
           />
         </div>
         <div className="version-history-diff-container">
-          <AceDiffViewer currentCode={currentCode} versionCode={version.code} />
+          {isLoadingCode ? (
+            <NonIdealState
+              description="Loading version code..."
+              icon={<Spinner size={SpinnerSize.STANDARD} />}
+            />
+          ) : (
+            <AceDiffViewer currentCode={currentCode} versionCode={selectedVersionCode ?? ''} />
+          )}
         </div>
       </div>
     );
   };
-
-  const selectedVersion = sortedVersions.find(v => v.id === selectedVersionId);
 
   const content = isLoading ? (
     <NonIdealState
@@ -139,7 +144,7 @@ export const VersionHistoryPanel: React.FC<Props> = ({
   ) : (
     <div className="version-history-body">
       <div className="version-history-list">{sortedVersions.map(renderVersionItem)}</div>
-      <div className="version-history-preview">{renderPreviewPane(selectedVersion)}</div>
+      <div className="version-history-preview">{renderPreviewPane()}</div>
     </div>
   );
 

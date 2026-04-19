@@ -18,15 +18,21 @@ export const EVAL_SILENT = 'EVAL_SILENT';
 export type WorkspaceLocation = keyof WorkspaceManagerState;
 export type WorkspaceLocationsWithTools = Extract<WorkspaceLocation, 'playground' | 'sicp'>;
 
-export type CodeVersion = {
+export type CodeVersionMetadata = {
   readonly id: string;
-  readonly code: string;
   readonly timestamp: number;
   readonly name?: string;
 };
 
+export type CodeVersion = CodeVersionMetadata & {
+  readonly code: string;
+};
+
 export type VersionHistoryState = {
-  readonly versions: CodeVersion[];
+  readonly versions: CodeVersionMetadata[];
+  readonly selectedVersion: CodeVersionMetadata | null;
+  readonly selectedVersionCode: string | null;
+  readonly isLoadingCode: boolean;
   readonly isLoading: boolean;
   readonly isHistoryPanelOpen: boolean;
   readonly isAutoSaving: boolean;

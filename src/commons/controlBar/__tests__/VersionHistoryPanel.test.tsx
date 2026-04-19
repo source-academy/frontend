@@ -8,8 +8,8 @@ vi.mock('../AceDiffViewer', () => ({
 }));
 
 const mockVersions = [
-  { id: 'v1', code: 'const x = 1;', timestamp: 1000000000000, name: 'Version 1' },
-  { id: 'v2', code: 'const x = 2;', timestamp: 1000000001000, name: 'Version 2' }
+  { id: 'v1', timestamp: 1000000000000, name: 'Version 1' },
+  { id: 'v2', timestamp: 1000000001000, name: 'Version 2' }
 ];
 
 const defaultProps = {
@@ -17,7 +17,11 @@ const defaultProps = {
   currentCode: 'const x = 3;',
   isOpen: true,
   isLoading: false,
+  selectedVersion: mockVersions[1],
+  selectedVersionCode: 'const x = 2;',
+  isLoadingCode: false,
   onClose: vi.fn(),
+  onSelectVersion: vi.fn(),
   onRestore: vi.fn(),
   onRename: vi.fn()
 };

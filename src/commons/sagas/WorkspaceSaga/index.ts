@@ -40,7 +40,8 @@ import { runTestCase } from './helpers/runTestCase';
 import {
   fetchVersionHistorySaga,
   nameVersionSaga,
-  restoreVersionSaga
+  restoreVersionSaga,
+  selectVersionSaga
 } from './helpers/versionHistory';
 
 const WorkspaceSaga = combineSagaHandlers({
@@ -485,6 +486,9 @@ const WorkspaceSaga = combineSagaHandlers({
   },
   [WorkspaceActions.fetchVersionHistory.type]: function* (action) {
     yield* fetchVersionHistorySaga(action);
+  },
+  [WorkspaceActions.selectVersion.type]: function* (action) {
+    yield call(selectVersionSaga, action);
   },
   [WorkspaceActions.nameVersion.type]: function* (action) {
     yield* nameVersionSaga(action);

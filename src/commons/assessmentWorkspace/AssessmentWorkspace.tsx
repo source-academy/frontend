@@ -79,7 +79,12 @@ import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import { assertType } from '../utils/TypeHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import { type CodeVersion, WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+import {
+  type CodeVersion,
+  type CodeVersionMetadata,
+  WorkspaceLocation,
+  WorkspaceState
+} from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 
 export type AssessmentWorkspaceProps = {
@@ -156,6 +161,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleDisableTokenCounter,
     handleFetchVersionHistory,
     handleToggleHistoryPanel,
+    handleSelectVersion,
     handleRestoreVersion,
     handleNameVersion
   } = useMemo(() => {
@@ -199,13 +205,16 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         dispatch(WorkspaceActions.fetchVersionHistory(workspaceLocation)),
       handleToggleHistoryPanel: () =>
         dispatch(WorkspaceActions.toggleHistoryPanel(workspaceLocation)),
+      handleSelectVersion: (version: CodeVersionMetadata) =>
+        dispatch(WorkspaceActions.selectVersion(workspaceLocation, version)),
       handleRestoreVersion: (version: CodeVersion) =>
         dispatch(
           WorkspaceActions.restoreVersion(
             workspaceLocation,
             version.id,
             version.name,
-            version.timestamp
+            version.timestamp,
+            version.code
           )
         ),
       handleNameVersion: (versionId: string, name: string) =>
@@ -1106,7 +1115,11 @@ It is safe to close this window.`}
         currentCode={editorTabs[activeEditorTabIndex ?? 0]?.value ?? ''}
         isOpen={versionHistory.isHistoryPanelOpen}
         isLoading={versionHistory.isLoading}
+        selectedVersion={versionHistory.selectedVersion}
+        selectedVersionCode={versionHistory.selectedVersionCode}
+        isLoadingCode={versionHistory.isLoadingCode}
         onClose={handleToggleHistoryPanel}
+        onSelectVersion={handleSelectVersion}
         onRestore={handleRestoreVersion}
         onRename={handleNameVersion}
       />

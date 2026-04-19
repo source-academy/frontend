@@ -395,6 +395,9 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   updateUserRoleCallback: () => {},
   versionHistory: {
     versions: [],
+    selectedVersion: null,
+    selectedVersionCode: null,
+    isLoadingCode: false,
     isLoading: false,
     isHistoryPanelOpen: false,
     isAutoSaving: false

@@ -8,7 +8,7 @@ import { QuestionTypes } from '../../../assessment/AssessmentTypes';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
-import { getVersionHistory, updateVersionName } from '../../RequestsSaga';
+import { getVersionCode, getVersionHistory, updateVersionName } from '../../RequestsSaga';
 
 /**
  * Checks whether autosave is enabled for the current assessment workspace.
@@ -102,6 +102,41 @@ export function* fetchVersionHistorySaga(
     // call with empty versions array to set loading to false and display warning
     yield put(WorkspaceActions.receiveVersionHistory(workspaceLocation, []));
     yield call(showWarningMessage, 'Failed to load version history');
+  }
+}
+
+/**
+ * Saga to fetch the code for a selected version
+ */
+export function* selectVersionSaga(
+  action: ReturnType<typeof WorkspaceActions.selectVersion>
+): SagaIterator {
+  const { workspaceLocation, version } = action.payload;
+
+  if (version === null) return;
+
+  const questionId: number | undefined = yield call(getCurrentQuestionId, workspaceLocation);
+
+  if (questionId === undefined) {
+    yield call(showWarningMessage, 'Error loading version: No question ID found');
+    yield put(WorkspaceActions.receiveVersionCode(workspaceLocation, version.id, ''));
+    return;
+  }
+
+  const tokens: Tokens = yield select((state: OverallState) => ({
+    accessToken: state.session.accessToken,
+    refreshToken: state.session.refreshToken
+  }));
+
+  const versionWithCode: any | null = yield call(getVersionCode, questionId, version.id, tokens);
+
+  if (versionWithCode) {
+    yield put(
+      WorkspaceActions.receiveVersionCode(workspaceLocation, version.id, versionWithCode.code)
+    );
+  } else {
+    yield call(showWarningMessage, 'Failed to load version code');
+    yield put(WorkspaceActions.receiveVersionCode(workspaceLocation, version.id, ''));
   }
 }
 
