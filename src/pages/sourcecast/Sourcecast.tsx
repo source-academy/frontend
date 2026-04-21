@@ -257,8 +257,8 @@ const Sourcecast: React.FC = () => {
           <span className="Multi-line">
             <Pre>
               {title
-                ? t('sourcecast.titleDescription', { title, description })
-                : t('sourcecast.introduction')}
+                ? t($ => $.sourcecast.titleDescription, { title, description })
+                : t($ => $.sourcecast.introduction)}
             </Pre>
           </span>
           <SourceRecorderTable

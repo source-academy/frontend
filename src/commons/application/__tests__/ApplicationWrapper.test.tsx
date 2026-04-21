@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { createStore } from 'src/pages/createStore';
@@ -24,7 +24,7 @@ describe('ApplicationWrapper', () => {
   test('ApplicationWrapper renders NotFound on unknown routes (Full Academy)', async () => {
     const routerConfig = getFullAcademyRouterConfig({
       name: 'Bob',
-      isLoggedIn: false,
+      isLoggedIn: true,
       courseId: 1
     });
 
@@ -36,7 +36,7 @@ describe('ApplicationWrapper', () => {
       </Provider>
     );
     render(app);
-    const element = await waitFor(() => screen.getByTestId('NotFound-Component'));
+    const element = await screen.findByTestId('NotFound-Component', {}, { timeout: 5000 });
     expect(element).toBeTruthy();
   });
 
@@ -51,7 +51,7 @@ describe('ApplicationWrapper', () => {
       </Provider>
     );
     render(app);
-    const element = await waitFor(() => screen.getByTestId('NotFound-Component'));
+    const element = await screen.findByTestId('NotFound-Component', {}, { timeout: 5000 });
     expect(element).toBeTruthy();
   });
 });

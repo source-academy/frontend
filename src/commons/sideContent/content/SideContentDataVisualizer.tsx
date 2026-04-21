@@ -1,4 +1,6 @@
-import { Button, Card, Classes } from '@blueprintjs/core';
+import { AnchorButton, Button, ButtonGroup, Card, Checkbox, Classes } from '@blueprintjs/core';
+import { Tooltip } from '@blueprintjs/core';
+import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
@@ -134,6 +136,93 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
           ) : (
             <DataVisualizerDefaultText />
           )}
+          {this.state.steps.length > 0 && (
+            <>
+              <ButtonGroup>
+                <Tooltip content="Original View" position="top">
+                  <AnchorButton
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                    onMouseUp={() => {
+                      DataVisualizer.setMode('normal');
+                      DataVisualizer.redraw();
+                      this.onViewModeClick(this.state.currentStep);
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <Icon icon="grid-view" />
+                      <Checkbox
+                        checked={DataVisualizer.getNormalMode()}
+                        style={{ marginTop: 7 }}
+                        tabIndex={-1}
+                        aria-hidden="true"
+                      />
+                    </div>
+                  </AnchorButton>
+                </Tooltip>
+              </ButtonGroup>
+
+              <Tooltip content="Binary Tree View" position="top">
+                <AnchorButton
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginLeft: 10
+                  }}
+                  onMouseUp={() => {
+                    DataVisualizer.setMode('binTree');
+                    DataVisualizer.redraw();
+                    this.onViewModeClick(this.state.currentStep);
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Icon
+                      icon="one-to-many"
+                      style={{ transform: 'rotate(90deg)', marginLeft: 6 }}
+                    />
+                    <Checkbox
+                      checked={DataVisualizer.getBinTreeMode()}
+                      style={{ marginTop: 7 }}
+                      tabIndex={-1}
+                      aria-hidden="true"
+                    />
+                  </div>
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip content="General Tree View" position="top">
+                <AnchorButton
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginLeft: 10
+                  }}
+                  onMouseUp={() => {
+                    DataVisualizer.setMode('tree');
+                    DataVisualizer.redraw();
+                    this.onViewModeClick(this.state.currentStep);
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Icon icon="diagram-tree" />
+                    <Checkbox
+                      checked={DataVisualizer.getTreeMode()}
+                      style={{ marginTop: 7 }}
+                      tabIndex={-1}
+                      aria-hidden="true"
+                    />
+                  </div>
+                </AnchorButton>
+              </Tooltip>
+            </>
+          )}
         </div>
       </HotKeys>
     );
@@ -150,6 +239,12 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
     const finalStep = this.state.steps.length - 1;
     this.setState(state => {
       return { currentStep: Math.min(finalStep, state.currentStep + 1) };
+    });
+  };
+
+  private onViewModeClick = (prevStep: number) => {
+    this.setState(() => {
+      return { currentStep: prevStep };
     });
   };
 }
@@ -169,7 +264,7 @@ export const SideContentDataVisualizer = connect(
 )(SideContentDataVisualizerBase);
 
 const makeDataVisualizerTabFrom = (location: SideContentLocation): SideContentTab => ({
-  label: t('sideContent:dataVisualizer.label'),
+  label: t($ => $.dataVisualizer.label, { ns: 'sideContent' }),
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer workspaceLocation={location} />,
   id: SideContentType.dataVisualizer
@@ -179,12 +274,12 @@ const DataVisualizerDefaultText: React.FC = () => {
   const { t } = useTranslation('sideContent', { keyPrefix: 'dataVisualizer' });
   return (
     <p id="data-visualizer-default-text" className={Classes.RUNNING_TEXT}>
-      {t('defaultText')}
+      {t($ => $.defaultText)}
       <br />
       <br />
       <Trans
         ns="sideContent"
-        i18nKey="dataVisualizer.instructions"
+        i18nKey={$ => $.dataVisualizer.instructions}
         components={[
           <code>
             draw_data(x<sub>1</sub>, x<sub>2</sub>, ... x<sub>n</sub>)
@@ -202,7 +297,7 @@ const DataVisualizerDefaultText: React.FC = () => {
       <br />
       <Trans
         ns="sideContent"
-        i18nKey="dataVisualizer.reference"
+        i18nKey={$ => $.dataVisualizer.reference}
         components={[<ItalicLink href={Links.textbookChapter2_2} />]}
       />
     </p>

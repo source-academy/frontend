@@ -29,6 +29,7 @@ export class Binding extends Visible {
    */
   readonly isDummyBinding: boolean = false;
   readonly keyYOffset: number;
+  readonly printFnDescriptionHeight: number;
 
   /** arrow that is drawn from the key to the value */
   arrow?: GenericArrow<Text, Value>;
@@ -57,6 +58,8 @@ export class Binding extends Visible {
       this._y = this.frame.y() + Config.FramePaddingY;
     }
 
+    const GlobalDefaultText = this.keyString === Config.GlobalFrameDefaultText;
+    const colon = isConstant ? 'constant' : 'variable';
     this.keyString += isConstant ? Config.ConstantColon : Config.VariableColon;
     this.value = Layout.createValue(data, this);
 
@@ -66,11 +69,20 @@ export class Binding extends Visible {
         : (this.value.height() - Config.FontSize) / 2;
 
     this.keyYOffset = keyYOffset;
-    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, { faded: !this.isLive });
+    const availableKeyWidth = GlobalDefaultText
+      ? Config.FrameDefaultWidth - Config.FramePaddingX * 2 // for GlobalFrameDefaultText, use default frame width
+      : (Config.FrameDefaultWidth - Config.TextPaddingX - Config.FramePaddingX * 2) / 2;
 
-    const printFnDescriptionHeight =
+    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, {
+      maxWidth: availableKeyWidth,
+      faded: !this.isLive,
+      bindingType: colon,
+      parentFrame: this.frame
+    });
+
+    this.printFnDescriptionHeight =
       CseMachine.getPrintableMode() &&
-      isMainReference(this.value, this) &&
+      this.rendersReferencedValue() &&
       (this.value instanceof FnValue || this.value instanceof GlobalFnValue)
         ? this.value.printDescriptionHeight +
           this.value.printDescriptionOffsetY +
@@ -79,13 +91,15 @@ export class Binding extends Visible {
         : 0;
 
     // derive the width from the right bound of the value
-    this._width = isMainReference(this.value, this) ? this.value.x() - this.x() : this.key.width();
+    this._width = this.rendersReferencedValue() ? this.value.x() - this.x() : this.key.width();
 
     this._height = Math.max(
       this.key.height(),
-      this.value instanceof ArrayValue
+      this.rendersReferencedValue() && this.value instanceof ArrayValue
         ? this.value.totalHeight
-        : this.value.height() + printFnDescriptionHeight
+        : this.rendersReferencedValue()
+          ? this.value.height() + this.printFnDescriptionHeight
+          : 0
     );
 
     if (this.isDummyBinding && !isMainReference(this.value, this)) {
@@ -97,27 +111,48 @@ export class Binding extends Visible {
     }
   }
 
+  private bindingIsLive(): boolean {
+    return this.isDummyBinding ? (this.value?.isLive?.() ?? false) : this.frame.isLive;
+  }
+
+  public occupiesVerticalSpace(): boolean {
+    return !Layout.clearDeadFrames || this.bindingIsLive();
+  }
+
+  public rendersReferencedValue(): boolean {
+    if (!isMainReference(this.value, this)) {
+      return false;
+    }
+    if (!Layout.clearDeadFrames) {
+      return true;
+    }
+    // Keep function values interactive even when they are classified as dead.
+    if (this.value instanceof FnValue || this.value instanceof GlobalFnValue) {
+      return true;
+    }
+    return this.value?.isLive?.() ?? true;
+  }
+
   /**
    * Reassigns the coordinates according to the final position of this frame
    * @param newX taken from cached layout
    */
-  reassignCoordinates(newX: number): void {
+  reassignCoordinates(newX: number, newY: number): void {
     if (this.prevBinding) {
       this._x = this.prevBinding.x();
       this._y = this.prevBinding.y() + this.prevBinding.height() + Config.TextPaddingY;
     } else {
       this._x = newX + Config.FramePaddingX;
-      this._y = this.frame.y() + Config.FramePaddingY;
+      this._y = newY + Config.FramePaddingY;
     }
   }
 
   draw(): React.ReactNode {
-    const isLive = this.isDummyBinding //check if binding is an unreferenced heap object
-      ? ((this.value as any).isLive?.() ?? false)
-      : this.frame.isLive;
+    const isLive = this.bindingIsLive();
+    const shouldRenderReferencedValue = this.rendersReferencedValue();
 
     if (Layout.clearDeadFrames && !isLive) {
-      return null;
+      return shouldRenderReferencedValue ? this.value.draw() : null;
     }
 
     this.key.options.faded = !isLive;
@@ -135,7 +170,7 @@ export class Binding extends Visible {
       !(this.value instanceof PrimitiveValue) &&
       !(this.value instanceof UnassignedValue)
     ) {
-      this.arrow = new ArrowFromText(this.key).to(this.value);
+      this.arrow = new ArrowFromText(this.key, this.frame).to(this.value);
     }
 
     return (
@@ -144,7 +179,7 @@ export class Binding extends Visible {
           ? null // omit the key since value is anonymous
           : this.key.draw()}
         {this.arrow?.draw()}
-        {isMainReference(this.value, this) ? this.value.draw() : null}
+        {shouldRenderReferencedValue ? this.value.draw() : null}
       </React.Fragment>
     );
   }

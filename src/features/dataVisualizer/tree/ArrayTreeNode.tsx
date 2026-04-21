@@ -9,8 +9,17 @@ import { DrawableTreeNode } from './DrawableTreeNode';
  * Represents a node corresponding to a Source pair or array.
  */
 export class ArrayTreeNode extends DrawableTreeNode {
-  createDrawable(x: number, y: number, parentX: number, parentY: number): JSX.Element {
-    const arrayProps = { nodes: this.children ?? [], x, y };
+  Colors: string[] = ['#d81d1d', '#e46510', '#25a232', '#0d54ed', '#e6148f', '#ad0ede'];
+  createDrawable(
+    x: number,
+    y: number,
+    parentX: number,
+    parentY: number,
+    colorIndex: number
+  ): JSX.Element {
+    let color = '';
+    color = colorIndex === -1 ? 'black' : this.Colors[colorIndex % this.Colors.length];
+    const arrayProps = { nodes: this.children ?? [], x, y, color };
     const arrayDrawable = <ArrayDrawable {...arrayProps}></ArrayDrawable>;
 
     this._drawable = (
@@ -24,8 +33,11 @@ export class ArrayTreeNode extends DrawableTreeNode {
                 y: parentY + Config.BoxHeight / 2
               },
               to: {
-                x,
-                y
+                x: parentY == y ? x - Config.BoxWidth / 2 - Config.StrokeWidth * 2 : x,
+                y:
+                  parentY == y
+                    ? parentY - Config.ArrowPointerOffsetVertical + Config.BoxHeight / 2
+                    : y
               }
             }}
           ></ArrowDrawable>

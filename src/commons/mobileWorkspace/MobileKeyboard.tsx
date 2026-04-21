@@ -8,6 +8,7 @@ type Props = {
 };
 
 const MobileKeyboard: React.FC<Props> = props => {
+  const nodeRef = React.useRef<HTMLDivElement>(null);
   const [isKeyboardShown, setIsKeyboardShown] = React.useState(false);
   const [buttonContent, setButtonContent] = React.useState('ᐸ');
   const [keyboardPosition, setKeyboardPosition] = React.useState({ x: 0, y: 0 });
@@ -129,13 +130,14 @@ const MobileKeyboard: React.FC<Props> = props => {
 
   return (
     <Draggable
+      nodeRef={nodeRef}
       axis="y"
       handle="#floating-dragHandle"
       position={keyboardPosition}
       bounds={{ top: -200, left: 0, right: 0, bottom: +200 }}
       onDrag={onDrag}
     >
-      <div className="mobile-floating-keyboard" id="mobile-floating-toggle">
+      <div ref={nodeRef} className="mobile-floating-keyboard" id="mobile-floating-toggle">
         <button
           className="mobile-floating-toggle"
           onClick={handleHiding}
