@@ -11,9 +11,9 @@ const MINUTE = 60 * 1000;
 
 // Two versions close together (same group), one far apart (separate group)
 const mockVersions = [
-  { id: 'v1', timestamp: 1000000000000, name: 'Version 1' },
+  { id: 'v3', timestamp: 1000000001000 + 20 * MINUTE, name: 'Version 3' },
   { id: 'v2', timestamp: 1000000001000, name: 'Version 2' },
-  { id: 'v3', timestamp: 1000000001000 + 20 * MINUTE, name: 'Version 3' }
+  { id: 'v1', timestamp: 1000000000000, name: 'Version 1' }
 ];
 
 const defaultProps = {

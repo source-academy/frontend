@@ -1700,8 +1700,8 @@ describe('VERSION_HISTORY', () => {
       const base = versionHistoryState(workspaceLocation, tokens);
 
       const initialVersions = [
-        { id: 'v1', code: 'const original = 1;', timestamp: 100, name: 'Old Version' },
-        { id: 'v2', code: 'const v2 = 1;', timestamp: 200 }
+        { id: 'v2', code: 'const v2 = 1;', timestamp: 200 },
+        { id: 'v1', code: 'const original = 1;', timestamp: 100, name: 'Old Version' }
       ];
 
       const state = {
