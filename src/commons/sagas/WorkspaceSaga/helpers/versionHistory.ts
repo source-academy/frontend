@@ -166,10 +166,7 @@ export function* nameVersionSaga(action: ReturnType<typeof WorkspaceActions.name
   if (!resp || !resp.ok) {
     yield call(showWarningMessage, 'Failed to rename version');
     // Refetch to revert the optimistic update
-    yield call(fetchVersionHistorySaga, {
-      payload: { workspaceLocation, skipAutoSave: true },
-      type: WorkspaceActions.fetchVersionHistory.type
-    });
+    yield put(WorkspaceActions.fetchVersionHistory(workspaceLocation, true));
   }
 }
 
@@ -222,10 +219,12 @@ export function* restoreVersionSaga(
   }
 
   // Refetch version history to get the newly created version before renaming.
-  yield call(fetchVersionHistorySaga, {
-    payload: { workspaceLocation, skipAutoSave: true },
-    type: WorkspaceActions.fetchVersionHistory.type
-  });
+  yield put(WorkspaceActions.fetchVersionHistory(workspaceLocation, true));
+  yield take(
+    (action: any) =>
+      action.type === WorkspaceActions.receiveVersionHistory.type &&
+      action.payload.workspaceLocation === workspaceLocation
+  );
 
   // Name the restored version as "(name)-restored"
   const newestVersionId: string | undefined = yield select((state: OverallState) => {
