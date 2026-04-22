@@ -49,8 +49,8 @@ const ApplicationWrapper: React.FC = () => {
       <div className={classNames('NoPage', Classes.DARK)}>
         <NonIdealState
           icon={IconNames.WRENCH}
-          title="Under maintenance"
-          description="The Source Academy is currently undergoing maintenance. Please try again later."
+          title="Problem connecting to backend"
+          description="Contact the course teachers so they can resolve the issue"
         />
       </div>
     );
