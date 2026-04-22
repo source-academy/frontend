@@ -85,7 +85,7 @@ export const VersionHistoryPanel: React.FC<Props> = ({
   useEffect(() => {
     if (!isOpen || versions.length === 0) return;
     onSelectVersion(versions[0]);
-  }, [isOpen, versions]);
+  }, [isOpen, versions, onSelectVersion]);
 
   const toggleGroup = useCallback((groupId: string) => {
     setExpandedGroups(prev => {
