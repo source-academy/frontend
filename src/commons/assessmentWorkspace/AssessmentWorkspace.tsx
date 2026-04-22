@@ -1003,7 +1003,7 @@ It is safe to close this window.`}
     >
       <DialogBody>
         <Markdown content="Are you sure you want to reset the template?" />
-        <Markdown content="*Note this will not affect your version history.*" />
+        <Markdown content="*Note: This will not affect your version history.*" />
       </DialogBody>
       <DialogFooter
         actions={
