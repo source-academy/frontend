@@ -1,5 +1,5 @@
 import { SagaIterator } from 'redux-saga';
-import { call, debounce, put, select, take, takeEvery } from 'redux-saga/effects';
+import { call, debounce, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
 
 import SessionActions from '../../../application/actions/SessionActions';
 import type { OverallState } from '../../../application/ApplicationTypes';
@@ -289,12 +289,15 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
     (state: OverallState) => state.workspaces[workspaceLocation].versionHistory.isAutoSaving
   );
   if (isAlreadySaving) {
-    yield take(
-      (action: any) =>
-        action.type === WorkspaceActions.setIsAutoSaving.type &&
-        action.payload.workspaceLocation === workspaceLocation &&
-        action.payload.isAutoSaving === false
-    );
+    yield race({
+      finished: take(
+        (action: any) =>
+          action.type === WorkspaceActions.setIsAutoSaving.type &&
+          action.payload.workspaceLocation === workspaceLocation &&
+          action.payload.isAutoSaving === false
+      ),
+      timeout: delay(30000)
+    });
   }
 
   yield put(WorkspaceActions.setIsAutoSaving(workspaceLocation, true));
@@ -336,14 +339,17 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
     yield put(SessionActions.submitAnswer(questionId, code));
 
     // Wait for submit to complete before refreshing
-    const saveAction: ReturnType<typeof WorkspaceActions.updateSaveStatus> = yield take(
-      (action: any) =>
-        action.type === WorkspaceActions.updateSaveStatus.type &&
-        action.payload.workspaceLocation === workspaceLocation &&
-        (action.payload.saveStatus === 'saved' || action.payload.saveStatus === 'saveFailed')
-    );
+    const { saveAction } = yield race({
+      saveAction: take(
+        (action: any) =>
+          action.type === WorkspaceActions.updateSaveStatus.type &&
+          action.payload.workspaceLocation === workspaceLocation &&
+          (action.payload.saveStatus === 'saved' || action.payload.saveStatus === 'saveFailed')
+      ),
+      timeout: delay(30000)
+    });
 
-    if (saveAction.payload.saveStatus === 'saveFailed') {
+    if (!saveAction || saveAction.payload.saveStatus === 'saveFailed') {
       return false;
     }
 
