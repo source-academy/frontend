@@ -77,19 +77,15 @@ export const VersionHistoryPanel: React.FC<Props> = ({
   onRestore,
   onRename
 }) => {
-  const sortedVersions = useMemo(
-    () => [...versions].sort((a, b) => b.timestamp - a.timestamp),
-    [versions]
-  );
-  const groups = useMemo(() => groupVersions(sortedVersions), [sortedVersions]);
+  const groups = useMemo(() => groupVersions(versions), [versions]);
 
   // Track expanded groups by id
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    if (!isOpen || sortedVersions.length === 0) return;
-    onSelectVersion(sortedVersions[0]);
-  }, [isOpen, sortedVersions]);
+    if (!isOpen || versions.length === 0) return;
+    onSelectVersion(versions[0]);
+  }, [isOpen, versions]);
 
   const toggleGroup = useCallback((groupId: string) => {
     setExpandedGroups(prev => {

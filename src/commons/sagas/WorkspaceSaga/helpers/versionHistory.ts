@@ -230,7 +230,7 @@ export function* restoreVersionSaga(
   // Name the restored version as "(name)-restored"
   const newestVersionId: string | undefined = yield select((state: OverallState) => {
     const versions = state.workspaces[workspaceLocation].versionHistory.versions;
-    return versions[versions.length - 1]?.id;
+    return versions[0]?.id;
   });
 
   if (newestVersionId) {
