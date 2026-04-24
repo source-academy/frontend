@@ -1,9 +1,11 @@
 import type { ModulesGlobalConfig as CCompilerConfig } from '@sourceacademy/c-slang/ctowasm/dist';
-import loadSourceModules from 'js-slang/dist/modules/loader';
-import type { ModuleFunctions } from 'js-slang/dist/modules/moduleTypes';
+import loadSourceModules, { memoizedGetModuleManifestAsync } from 'js-slang/dist/modules/loader';
+import type { ModuleInfo } from 'js-slang/dist/modules/moduleTypes';
 import type { Context } from 'js-slang/dist/types';
 
 import InterpreterActions from '../application/actions/InterpreterActions';
+
+type ModuleFunctions = Record<string, any>;
 
 export async function makeCCompilerConfig(
   program: string,
@@ -44,7 +46,16 @@ export async function loadModulesUsedInCProgram(
     includedModules.map(m => m.slice(1, m.length - 1)).filter(m => modulesAvailableForC.has(m))
   );
 
-  const loadedModules = await loadSourceModules(modulesToLoad, context, true);
+  const manifest = await memoizedGetModuleManifestAsync();
+  const sourceModulesToImport: Record<string, ModuleInfo> = {};
+  for (const name of modulesToLoad) {
+    if (manifest[name]) {
+      sourceModulesToImport[name] = { name, ...manifest[name] };
+    }
+  }
+  const loadedModules = await loadSourceModules(sourceModulesToImport, context, {
+    loadTabs: true
+  });
   Object.values(loadedModules).forEach(functions => {
     Object.entries(functions).forEach(([name, func]) => {
       allModuleFunctions[name] = func;

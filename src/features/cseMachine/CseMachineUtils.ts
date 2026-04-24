@@ -72,7 +72,7 @@ export function isEmptyObject(object: object): object is EmptyObject {
 
 /** Returns `true` if `x` is a source object, e.g. runes */
 export function isSourceObject(x: any): x is SourceObject {
-  return isObject(x) && 'toReplString' in x && isFunction(x.toReplString);
+  return isObject(x) && !isFunction(x) && 'toReplString' in x && isFunction(x.toReplString);
 }
 
 /** Returns `true` if `object` is `Environment` */
