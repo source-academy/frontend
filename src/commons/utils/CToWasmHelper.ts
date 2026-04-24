@@ -49,9 +49,10 @@ export async function loadModulesUsedInCProgram(
   const manifest = await memoizedGetModuleManifestAsync();
   const sourceModulesToImport: Record<string, ModuleInfo> = {};
   for (const name of modulesToLoad) {
-    if (manifest[name]) {
-      sourceModulesToImport[name] = { name, ...manifest[name] };
+    if (!manifest[name]) {
+      throw new Error(`Module "${name}" not found in the Source modules manifest.`);
     }
+    sourceModulesToImport[name] = { name, ...manifest[name] };
   }
   const loadedModules = await loadSourceModules(sourceModulesToImport, context, {
     loadTabs: true

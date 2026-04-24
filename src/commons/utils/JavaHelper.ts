@@ -74,10 +74,12 @@ export async function javaRun(
     if (path.startsWith('modules')) {
       const module = path.split('/')[1] as string;
       const manifest = await memoizedGetModuleManifestAsync();
-      const sourceModulesToImport: Record<string, ModuleInfo> = {};
-      if (manifest[module]) {
-        sourceModulesToImport[module] = { name: module, ...manifest[module] };
+      if (!manifest[module]) {
+        throw new Error(`Module "${module}" not found in the Source modules manifest.`);
       }
+      const sourceModulesToImport: Record<string, ModuleInfo> = {
+        [module]: { name: module, ...manifest[module] }
+      };
       const moduleFuncs = await loadSourceModules(sourceModulesToImport, context, {
         loadTabs: true
       });
