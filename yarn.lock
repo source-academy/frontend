@@ -8616,8 +8616,8 @@ __metadata:
   linkType: hard
 
 "js-slang@npm:^1.0.90":
-  version: 1.0.90
-  resolution: "js-slang@npm:1.0.90"
+  version: 1.0.92
+  resolution: "js-slang@npm:1.0.92"
   dependencies:
     "@babel/parser": "npm:^7.19.4"
     "@commander-js/extra-typings": "npm:^14.0.0"
@@ -8633,7 +8633,7 @@ __metadata:
     source-map: "npm:0.7.6"
   bin:
     js-slang: dist/repl/index.js
-  checksum: 10c0/4e4d1dcb2ff3b7103096518d800246dbe55272a900699450282e88dc856b6d87f1d3d1c6fbf67927f2fe43aa88100f76ca5debd8449a2642623bd1ccc070a864
+  checksum: 10c0/faea8ab62fa1faecf68725becfb1184a13d8163bbc18d21a14c24f709fdd657ed5b7bbc9280765ca520d554261e96b1b1591abb16406ea8aa7ddff51501ad84c
   languageName: node
   linkType: hard
 
