@@ -2932,7 +2932,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rsbuild/plugin-react@npm:^1.3.0, @rsbuild/plugin-react@npm:^1.4.6":
+"@rsbuild/plugin-react@npm:^1.4.6":
   version: 1.4.6
   resolution: "@rsbuild/plugin-react@npm:1.4.6"
   dependencies:
@@ -2944,6 +2944,21 @@ __metadata:
     "@rsbuild/core":
       optional: true
   checksum: 10c0/e878c565ecdb23a1b08050adcd05e06c2c07dd8fc06be3d4de52b4976f593c27a823c42a2fbd21628ff70a24ad00f00171e889615a5b291a3bc02834e009f96f
+  languageName: node
+  linkType: hard
+
+"@rsbuild/plugin-react@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@rsbuild/plugin-react@npm:2.0.0"
+  dependencies:
+    "@rspack/plugin-react-refresh": "npm:2.0.0"
+    react-refresh: "npm:^0.18.0"
+  peerDependencies:
+    "@rsbuild/core": ^2.0.0-0
+  peerDependenciesMeta:
+    "@rsbuild/core":
+      optional: true
+  checksum: 10c0/8d56bcdf876da942d16a279c6702b56021a133962e6ce013cfda25bd1b83053aa1ac3663408b972f7d345578eca04555ed2371d5a56057e6ee4fd4ee5362c8e1
   languageName: node
   linkType: hard
 
@@ -3115,6 +3130,19 @@ __metadata:
   version: 1.1.0
   resolution: "@rspack/lite-tapable@npm:1.1.0"
   checksum: 10c0/15059d1da73192b150339ceba3142a2d0073fa298dad9a497cc8c6037c597c3a982ed4c88dc50afa7b70d0757df1b47af7ae407cfe8acd31d333d524b84a7a4b
+  languageName: node
+  linkType: hard
+
+"@rspack/plugin-react-refresh@npm:2.0.0":
+  version: 2.0.0
+  resolution: "@rspack/plugin-react-refresh@npm:2.0.0"
+  peerDependencies:
+    "@rspack/core": ^2.0.0-0
+    react-refresh: ">=0.10.0 <1.0.0"
+  peerDependenciesMeta:
+    "@rspack/core":
+      optional: true
+  checksum: 10c0/ee8e6492c0772536abb98ab5ec92d0e4ad092613a3a6085542f0b354131eef48f4d7cbe9a8cf9a9389d5e51d623d08a2c07594c8add5ad5fb54fd5543150ead1
   languageName: node
   linkType: hard
 
@@ -7172,7 +7200,7 @@ __metadata:
     "@rsbuild/core": "npm:^1.3.12"
     "@rsbuild/plugin-eslint": "npm:^1.1.1"
     "@rsbuild/plugin-node-polyfill": "npm:^1.3.0"
-    "@rsbuild/plugin-react": "npm:^1.3.0"
+    "@rsbuild/plugin-react": "npm:^2.0.0"
     "@rsbuild/plugin-sass": "npm:^1.3.1"
     "@rsbuild/plugin-svgr": "npm:^1.2.0"
     "@sentry/react": "npm:^10.5.0"
