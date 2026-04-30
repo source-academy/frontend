@@ -123,7 +123,7 @@
     "@rsbuild/plugin-node-polyfill": "^1.3.0",
     "@rsbuild/plugin-react": "^1.3.0",
     "@rsbuild/plugin-sass": "^1.3.1",
-    "@rsbuild/plugin-svgr": "^1.2.0",
+    "@rsbuild/plugin-svgr": "^2.0.0",
     "@svgr/webpack": "^8.0.0",
     "@swc/core": "^1.11.22",
     "@testing-library/dom": "^10.4.0",
