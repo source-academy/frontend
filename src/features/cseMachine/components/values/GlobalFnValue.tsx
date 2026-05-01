@@ -61,11 +61,14 @@ export class GlobalFnValue extends Value implements IHoverable {
     Layout.memoizeValue(data, this);
     // check for frame x cooridnate in cache
     const ghostX = Layout.getGhostFrameX(mainReference.frame.environment.id);
+    const ghostY = Layout.getGhostFrameY(mainReference.frame.environment.id);
     const frameX = ghostX !== undefined ? ghostX : mainReference.frame.x();
+    const frameY = ghostY !== undefined ? ghostY : mainReference.frame.y();
     // derive the coordinates from the main reference (binding)
     // if frame x coordinate exitst use it, if not use live value
     this._x = frameX + mainReference.frame.width() + Config.FrameMarginX;
-    this._y = mainReference.y();
+    const relativeOffset = mainReference.y() - mainReference.frame.y();
+    this._y = frameY + relativeOffset;
     this.centerX = this._x + this.radius * 2;
     this._y += this.radius;
 
