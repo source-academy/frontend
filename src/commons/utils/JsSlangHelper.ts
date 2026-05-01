@@ -156,7 +156,7 @@ export function createContext<T>(
   variant: Variant = Variant.DEFAULT,
   languageOptions?: LanguageOptions
 ) {
-  return createSlangContext<T>(
+  const context = createSlangContext<T>(
     chapter,
     variant,
     languageOptions,
@@ -164,6 +164,13 @@ export function createContext<T>(
     externalContext,
     externalBuiltIns
   );
+  // js-slang's createContext initializes `moduleContexts` as a lazy-init Proxy
+  // that writes to its target on every property read. Redux Toolkit (Immer)
+  // freezes state, after which the proxy's `get` trap throws
+  // "Cannot add property ..., object is not extensible" for any unknown key
+  // (e.g. JSON.stringify probing `toJSON`). Replace with a plain object.
+  context.moduleContexts = {};
+  return context;
 }
 
 // Assumes that the grader doesn't need additional external libraries apart from the standard
