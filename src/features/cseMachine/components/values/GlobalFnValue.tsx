@@ -69,7 +69,6 @@ export class GlobalFnValue extends Value implements IHoverable {
     this._x = frameX + mainReference.frame.width() + Config.FrameMarginX;
     const relativeOffset = mainReference.y() - mainReference.frame.y();
     this._y = frameY + relativeOffset;
-    //this._y = mainReference.y();
     this.centerX = this._x + this.radius * 2;
     this._y += this.radius;
 
