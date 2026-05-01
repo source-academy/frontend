@@ -1,10 +1,22 @@
-import { Icon } from '@blueprintjs/core';
+import { Button, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColumnFilter } from '@tanstack/react-table';
-import { Badge } from '@tremor/react';
 import React from 'react';
 
 import { getBadgeColorFromLabelLegacy } from '../../grading/subcomponents/GradingBadges';
+
+// TODO: Remove after migration is completed
+const TREMOR_TO_BLUEPRINT_INTENT: Record<string, Intent> = {
+  indigo: Intent.PRIMARY,
+  emerald: Intent.SUCCESS,
+  sky: Intent.PRIMARY,
+  purple: Intent.PRIMARY,
+  gray: Intent.NONE,
+  red: Intent.DANGER,
+  yellow: Intent.WARNING,
+  green: Intent.SUCCESS,
+  blue: Intent.PRIMARY
+};
 
 type Props = {
   filter: ColumnFilter;
@@ -14,14 +26,13 @@ type Props = {
 const FilterBadge: React.FC<Props> = ({ filter, onRemove }) => {
   let filterValue = filter.value as string;
   filterValue = filterValue.charAt(0).toUpperCase() + filterValue.slice(1);
+  const legacyColor = getBadgeColorFromLabelLegacy(filterValue);
+  const intent = TREMOR_TO_BLUEPRINT_INTENT[legacyColor] || Intent.NONE;
+
   return (
-    <button type="button" onClick={() => onRemove(filter)} style={{ padding: 0 }}>
-      <Badge
-        text={filterValue}
-        icon={() => <Icon icon={IconNames.CROSS} style={{ marginRight: '0.25rem' }} />}
-        color={getBadgeColorFromLabelLegacy(filterValue)}
-      />
-    </button>
+    <Button intent={intent} icon={IconNames.CROSS} onClick={() => onRemove(filter)}>
+      {filterValue}
+    </Button>
   );
 };
 

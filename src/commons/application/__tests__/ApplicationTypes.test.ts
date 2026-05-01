@@ -1,11 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
 
-import {
-  ALL_LANGUAGES,
-  getLanguageConfig,
-  pyLanguages,
-  sourceLanguages
-} from '../ApplicationTypes';
+import { ALL_LANGUAGES, getLanguageConfig, sourceLanguages } from '../ApplicationTypes';
 
 describe('getLanguageConfig', () => {
   test('works for existing variants', () => {
@@ -87,11 +82,5 @@ describe('available Source language configurations', () => {
 
   test('matches snapshot', () => {
     expect(sourceLanguages).toMatchSnapshot();
-  });
-});
-
-describe('available Python language configurations', () => {
-  test('matches snapshot', () => {
-    expect(pyLanguages).toMatchSnapshot();
   });
 });
