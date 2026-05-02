@@ -221,7 +221,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sharedbConnected,
     usingSubst,
     usingCse,
-    updateCse,
     isFolderModeEnabled,
     activeEditorTabIndex,
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
