@@ -502,7 +502,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         time: Date.now(),
         type: 'chapterSelect',
         data: chapter
-      };  
+      };
 
       pushLog(input);
 
