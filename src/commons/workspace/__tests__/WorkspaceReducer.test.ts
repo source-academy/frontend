@@ -2619,4 +2619,337 @@ describe('TOGGLE_USING_SUBST', () => {
   });
 });
 
+// Version History Reducer Tests
+
+describe('FETCH_VERSION_HISTORY', () => {
+  test('sets isLoading to true when fetching version history', () => {
+    const actions = generateActions(l => WorkspaceActions.fetchVersionHistory(l));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
+
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          versionHistory: {
+            ...defaultWorkspaceManager[location].versionHistory,
+            isLoading: true
+          }
+        }
+      });
+    });
+  });
+});
+
+describe('RECEIVE_VERSION_HISTORY', () => {
+  test('updates versions and sets isLoading to false', () => {
+    const versions = [
+      {
+        id: 'v1',
+        code: 'const x = 1;',
+        timestamp: 1234567890,
+        name: 'Version 1'
+      },
+      {
+        id: 'v2',
+        code: 'const x = 2;',
+        timestamp: 1234567900
+      }
+    ];
+
+    const actions = generateActions(l => WorkspaceActions.receiveVersionHistory(l, versions));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
+
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          versionHistory: {
+            ...defaultWorkspaceManager[location].versionHistory,
+            versions,
+            isLoading: false
+          }
+        }
+      });
+    });
+  });
+
+  test('handles empty versions array', () => {
+    const versions: any[] = [];
+    const actions = generateActions(l => WorkspaceActions.receiveVersionHistory(l, versions));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
+
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          versionHistory: {
+            ...defaultWorkspaceManager[location].versionHistory,
+            versions: [],
+            isLoading: false
+          }
+        }
+      });
+    });
+  });
+});
+
+describe('RESTORE_VERSION', () => {
+  test('restores version code to active editor tab', () => {
+    const versionId = 'v1';
+    const versionCode = 'const restored = true;';
+
+    // Create a state with version history
+    const stateWithVersions: WorkspaceManagerState = {
+      ...defaultWorkspaceManager,
+      assessment: {
+        ...defaultWorkspaceManager.assessment,
+        activeEditorTabIndex: 0,
+        editorTabs: [
+          {
+            value: 'const old = false;',
+            highlightedLines: [],
+            breakpoints: []
+          }
+        ],
+        versionHistory: {
+          versions: [
+            {
+              id: versionId,
+              timestamp: 1234567890,
+              name: 'Test Version'
+            }
+          ],
+          selectedVersion: null,
+          selectedVersionCode: null,
+          isLoadingCode: false,
+          isLoading: false,
+          isHistoryPanelOpen: false,
+          isAutoSaving: false
+        }
+      }
+    };
+
+    const action = WorkspaceActions.restoreVersion(
+      'assessment',
+      versionId,
+      'Test Version',
+      1234567890,
+      versionCode
+    );
+    const result = WorkspaceReducer(stateWithVersions, action);
+
+    expect(result.assessment.editorTabs[0].value).toEqual(versionCode);
+  });
+
+  test('does not restore if no active editor tab', () => {
+    const versionId = 'v1';
+    const versionCode = 'const restored = true;';
+
+    const stateWithNoActiveTab: WorkspaceManagerState = {
+      ...defaultWorkspaceManager,
+      assessment: {
+        ...defaultWorkspaceManager.assessment,
+        activeEditorTabIndex: null
+      }
+    };
+
+    const action = WorkspaceActions.restoreVersion(
+      'assessment',
+      versionId,
+      undefined,
+      1234567890,
+      versionCode
+    );
+    const result = WorkspaceReducer(stateWithNoActiveTab, action);
+
+    // State should remain unchanged - no active tab to restore to
+    expect(result.assessment.activeEditorTabIndex).toBeNull();
+  });
+});
+
+describe('TOGGLE_HISTORY_PANEL', () => {
+  test('toggles isHistoryPanelOpen from false to true', () => {
+    const actions = generateActions(l => WorkspaceActions.toggleHistoryPanel(l));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
+
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          versionHistory: {
+            ...defaultWorkspaceManager[location].versionHistory,
+            isHistoryPanelOpen: true
+          }
+        }
+      });
+    });
+  });
+
+  test('toggles isHistoryPanelOpen from true to false', () => {
+    const stateWithPanelOpen: WorkspaceManagerState = {
+      ...defaultWorkspaceManager,
+      assessment: {
+        ...defaultWorkspaceManager.assessment,
+        versionHistory: {
+          ...defaultWorkspaceManager.assessment.versionHistory,
+          isHistoryPanelOpen: true
+        }
+      }
+    };
+
+    const action = WorkspaceActions.toggleHistoryPanel('assessment');
+    const result = WorkspaceReducer(stateWithPanelOpen, action);
+
+    expect(result.assessment.versionHistory.isHistoryPanelOpen).toBe(false);
+  });
+});
+
+describe('NAME_VERSION', () => {
+  test('updates version name correctly', () => {
+    const versionId = 'v1';
+    const newName = 'Final Version';
+
+    const stateWithVersions: WorkspaceManagerState = {
+      ...defaultWorkspaceManager,
+      assessment: {
+        ...defaultWorkspaceManager.assessment,
+        versionHistory: {
+          versions: [
+            {
+              id: versionId,
+              timestamp: 1234567890
+            },
+            {
+              id: 'v2',
+              timestamp: 1234567900
+            }
+          ],
+          selectedVersion: null,
+          selectedVersionCode: null,
+          isLoadingCode: false,
+          isLoading: false,
+          isHistoryPanelOpen: false,
+          isAutoSaving: false
+        }
+      }
+    };
+
+    const action = WorkspaceActions.nameVersion('assessment', versionId, newName);
+    const result = WorkspaceReducer(stateWithVersions, action);
+
+    const updatedVersion = result.assessment.versionHistory.versions.find(v => v.id === versionId);
+    expect(updatedVersion?.name).toEqual(newName);
+
+    // Other versions should remain unchanged
+    const otherVersion = result.assessment.versionHistory.versions.find(v => v.id === 'v2');
+    expect(otherVersion?.name).toBeUndefined();
+  });
+
+  test('does not update if version not found', () => {
+    const versionId = 'non-existent';
+    const newName = 'Should Not Apply';
+
+    const stateWithVersions: WorkspaceManagerState = {
+      ...defaultWorkspaceManager,
+      assessment: {
+        ...defaultWorkspaceManager.assessment,
+        versionHistory: {
+          versions: [
+            {
+              id: 'v1',
+              timestamp: 1234567890
+            }
+          ],
+          selectedVersion: null,
+          selectedVersionCode: null,
+          isLoadingCode: false,
+          isLoading: false,
+          isHistoryPanelOpen: false,
+          isAutoSaving: false
+        }
+      }
+    };
+
+    const action = WorkspaceActions.nameVersion('assessment', versionId, newName);
+    const result = WorkspaceReducer(stateWithVersions, action);
+
+    // Version should not have the new name
+    const version = result.assessment.versionHistory.versions.find(v => v.id === 'v1');
+    expect(version?.name).toBeUndefined();
+  });
+
+  test('can clear version name by setting it to empty string', () => {
+    const versionId = 'v1';
+    const newName = '';
+
+    const stateWithVersions: WorkspaceManagerState = {
+      ...defaultWorkspaceManager,
+      assessment: {
+        ...defaultWorkspaceManager.assessment,
+        versionHistory: {
+          versions: [
+            {
+              id: versionId,
+              timestamp: 1234567890,
+              name: 'Old Name'
+            }
+          ],
+          selectedVersion: null,
+          selectedVersionCode: null,
+          isLoadingCode: false,
+          isLoading: false,
+          isHistoryPanelOpen: false,
+          isAutoSaving: false
+        }
+      }
+    };
+
+    const action = WorkspaceActions.nameVersion('assessment', versionId, newName);
+    const result = WorkspaceReducer(stateWithVersions, action);
+
+    const updatedVersion = result.assessment.versionHistory.versions.find(v => v.id === versionId);
+    expect(updatedVersion?.name).toEqual('');
+  });
+});
+
+describe('UPDATE_SAVE_STATUS', () => {
+  test('sets saveStatus to saving on workspace', () => {
+    const actions = generateActions(l => WorkspaceActions.updateSaveStatus(l, 'saving'));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const workspaceLocation = action.payload.workspaceLocation;
+      expect(result[workspaceLocation].saveStatus).toEqual('saving');
+    });
+  });
+
+  test('sets saveStatus to saved on workspace', () => {
+    const actions = generateActions(l => WorkspaceActions.updateSaveStatus(l, 'saved'));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const workspaceLocation = action.payload.workspaceLocation;
+      expect(result[workspaceLocation].saveStatus).toEqual('saved');
+    });
+  });
+
+  test('sets saveStatus to saveFailed on workspace', () => {
+    const action = WorkspaceActions.updateSaveStatus('assessment', 'saveFailed');
+    const result = WorkspaceReducer(defaultWorkspaceManager, action);
+    expect(result.assessment.saveStatus).toEqual('saveFailed');
+  });
+});
+
 // TODO: Add toggleusingcse

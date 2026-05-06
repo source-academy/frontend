@@ -392,7 +392,17 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   debuggerContext: {} as DebuggerContext,
   lastDebuggerResult: undefined,
   files: {},
-  updateUserRoleCallback: () => {}
+  updateUserRoleCallback: () => {},
+  versionHistory: {
+    versions: [],
+    selectedVersion: null,
+    selectedVersionCode: null,
+    isLoadingCode: false,
+    isLoading: false,
+    isHistoryPanelOpen: false,
+    isAutoSaving: false
+  },
+  saveStatus: 'idle'
 });
 
 const defaultFileName = 'program.js';

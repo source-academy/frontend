@@ -20,7 +20,8 @@ const mockAssessmentConfig: AssessmentConfiguration = {
   hasTokenCounter: false,
   hasVotingFeatures: false,
   hoursBeforeEarlyXpDecay: 48,
-  earlySubmissionXp: 200
+  earlySubmissionXp: 200,
+  isAutosaveEnabled: true
 };
 
 const getOverriddenStore = ({

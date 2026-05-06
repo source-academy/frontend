@@ -53,6 +53,9 @@ import { ControlBarQuestionViewButton } from '../controlBar/ControlBarQuestionVi
 import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
+import { ControlBarSaveStatusIndicator } from '../controlBar/ControlBarSaveStatusIndicator';
+import { ControlBarVersionHistoryButton } from '../controlBar/ControlBarVersionHistoryButton';
+import { VersionHistoryPanel } from '../controlBar/VersionHistoryPanel';
 import ControlButton from '../ControlButton';
 import {
   convertEditorTabStateToProps,
@@ -76,7 +79,12 @@ import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import { assertType } from '../utils/TypeHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+import {
+  type CodeVersion,
+  type CodeVersionMetadata,
+  WorkspaceLocation,
+  WorkspaceState
+} from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 
 export type AssessmentWorkspaceProps = {
@@ -127,7 +135,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     output,
     replValue,
     currentAssessment: storedAssessmentId,
-    currentQuestion: storedQuestionId
+    currentQuestion: storedQuestionId,
+    versionHistory,
+    saveStatus
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
 
   const dispatch = useDispatch();
@@ -148,7 +158,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleCheckLastModifiedAt,
     handleUpdateHasUnsavedChanges,
     handleEnableTokenCounter,
-    handleDisableTokenCounter
+    handleDisableTokenCounter,
+    handleFetchVersionHistory,
+    handleToggleHistoryPanel,
+    handleSelectVersion,
+    handleRestoreVersion,
+    handleNameVersion
   } = useMemo(() => {
     return {
       handleTeamOverviewFetch: (assessmentId: number) =>
@@ -185,7 +200,25 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       handleEnableTokenCounter: () =>
         dispatch(WorkspaceActions.enableTokenCounter(workspaceLocation)),
       handleDisableTokenCounter: () =>
-        dispatch(WorkspaceActions.disableTokenCounter(workspaceLocation))
+        dispatch(WorkspaceActions.disableTokenCounter(workspaceLocation)),
+      handleFetchVersionHistory: () =>
+        dispatch(WorkspaceActions.fetchVersionHistory(workspaceLocation)),
+      handleToggleHistoryPanel: () =>
+        dispatch(WorkspaceActions.toggleHistoryPanel(workspaceLocation)),
+      handleSelectVersion: (version: CodeVersionMetadata) =>
+        dispatch(WorkspaceActions.selectVersion(workspaceLocation, version)),
+      handleRestoreVersion: (version: CodeVersion) =>
+        dispatch(
+          WorkspaceActions.restoreVersion(
+            workspaceLocation,
+            version.id,
+            version.name,
+            version.timestamp,
+            version.code
+          )
+        ),
+      handleNameVersion: (versionId: string, name: string) =>
+        dispatch(WorkspaceActions.nameVersion(workspaceLocation, versionId, name))
     };
   }, [dispatch]);
 
@@ -410,6 +443,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
     handleClearContext(question.library, true);
     handleUpdateHasUnsavedChanges(false);
+    handleFetchVersionHistory();
 
     const chapter = question.library.chapter;
     const questionType = question.type;
@@ -682,21 +716,25 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const onClickSave = () => {
       if (isSaving) return;
       setIsSaving(true);
-      checkLastModified();
+      if (isTeamAssessment) {
+        checkLastModified();
+      } else {
+        saveClick(false);
+      }
       setTimeout(() => {
         setIsSaving(false);
       }, 3000);
     };
 
     const checkLastModified = () => {
-      const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 0;
+      const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 1;
       if (isTeamAssessment && question.type === QuestionTypes.programming) {
         handleCheckLastModifiedAt(question.id, question.lastModifiedAt, saveClick);
       }
     };
 
     const saveClick = async (modified: boolean) => {
-      const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 0;
+      const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 1;
       if (isTeamAssessment && question.type === QuestionTypes.programming) {
         if (modified) {
           const confirm = await showSimpleConfirmDialog({
@@ -778,23 +816,38 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       />
     );
 
-    // Define the function to check if the Save button should be disabled
-    const shouldDisableSaveButton = (): boolean | undefined => {
-      const isIndividualAssessment: boolean = assessmentOverview?.maxTeamSize === 1;
-      if (isIndividualAssessment) {
-        return false;
-      }
-      return !teamFormationOverview;
-    };
+    const isTeamAssessment: boolean = assessmentOverview
+      ? assessmentOverview.maxTeamSize !== 1
+      : false;
 
-    const saveButton =
-      props.canSave && question.type === QuestionTypes.programming ? (
-        <ControlButtonSaveButton
-          hasUnsavedChanges={hasUnsavedChanges}
-          isDisabled={shouldDisableSaveButton()}
-          onClickSave={onClickSave}
-          key="save"
+    const isAutosaveEnabled = assessmentOverview ? assessmentOverview.isAutosaveEnabled : false;
+
+    const showSaveButton =
+      question.type === QuestionTypes.programming && (isTeamAssessment || !isAutosaveEnabled);
+
+    const saveButton = showSaveButton ? (
+      <ControlButtonSaveButton
+        key="save"
+        hasUnsavedChanges={hasUnsavedChanges}
+        onClickSave={onClickSave}
+        isDisabled={!props.canSave || (isTeamAssessment && !teamFormationOverview)}
+      />
+    ) : null;
+
+    const versionHistoryButton =
+      question.type !== QuestionTypes.mcq ? (
+        <ControlBarVersionHistoryButton
+          onClick={() => {
+            handleFetchVersionHistory();
+            handleToggleHistoryPanel();
+          }}
+          key="version_history"
         />
+      ) : null;
+
+    const saveStatusIndicator =
+      question.type !== QuestionTypes.mcq && !isTeamAssessment && isAutosaveEnabled ? (
+        <ControlBarSaveStatusIndicator saveStatus={saveStatus} key="save_status" />
       ) : null;
 
     const chapterSelect = (
@@ -811,8 +864,15 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     return {
       editorButtons:
         !isMobileBreakpoint || isVscode
-          ? [runButton, saveButton, resetButton, chapterSelect]
-          : [saveButton, resetButton],
+          ? [
+              runButton,
+              saveButton,
+              resetButton,
+              versionHistoryButton,
+              saveStatusIndicator,
+              chapterSelect
+            ]
+          : [saveButton, resetButton, versionHistoryButton, saveStatusIndicator],
       flowButtons: [previousButton, questionView, nextButton]
     };
   };
@@ -943,7 +1003,7 @@ It is safe to close this window.`}
     >
       <DialogBody>
         <Markdown content="Are you sure you want to reset the template?" />
-        <Markdown content="*Note this will not affect the saved copy of your program, unless you save over it.*" />
+        <Markdown content="*Note: This will not affect your version history.*" />
       </DialogBody>
       <DialogFooter
         actions={
@@ -1050,6 +1110,19 @@ It is safe to close this window.`}
       {submissionOverlay}
       {overlay}
       {resetTemplateOverlay}
+      <VersionHistoryPanel
+        versions={versionHistory.versions}
+        currentCode={editorTabs[activeEditorTabIndex ?? 0]?.value ?? ''}
+        isOpen={versionHistory.isHistoryPanelOpen}
+        isLoading={versionHistory.isLoading}
+        selectedVersion={versionHistory.selectedVersion}
+        selectedVersionCode={versionHistory.selectedVersionCode}
+        isLoadingCode={versionHistory.isLoadingCode}
+        onClose={handleToggleHistoryPanel}
+        onSelectVersion={handleSelectVersion}
+        onRestore={handleRestoreVersion}
+        onRename={handleNameVersion}
+      />
       {isVscode || !isMobileBreakpoint ? (
         <Workspace {...workspaceProps} />
       ) : (

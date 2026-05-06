@@ -16,7 +16,16 @@ import * as matchers from 'redux-saga-test-plan/matchers';
 import { showFullJSDisclaimer, showFullTSDisclaimer } from 'src/commons/utils/WarningDialogHelper';
 import { vi } from 'vitest';
 
+// Mock createStore to prevent Immer auto-freeze from freezing defaultWorkspaceManager.
+// Importing RequestsSaga triggers store creation via createStore, and due to ES module
+// hoisting, rootReducer initializes (freezing shared state) before setAutoFreeze(false) runs.
+vi.mock('../../../pages/createStore', () => ({
+  store: { getState: () => ({ session: {} }) },
+  createStore: vi.fn()
+}));
+
 import InterpreterActions from '../../application/actions/InterpreterActions';
+import SessionActions from '../../application/actions/SessionActions';
 import {
   defaultState,
   fullJSLanguage,
@@ -38,11 +47,13 @@ import {
 } from '../../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
 import type { WorkspaceLocation, WorkspaceState } from '../../workspace/WorkspaceTypes';
+import { getVersionHistory, updateVersionName } from '../RequestsSaga';
 import workspaceSaga from '../WorkspaceSaga';
 import { evalCodeSaga } from '../WorkspaceSaga/helpers/evalCode';
 import { evalEditorSaga } from '../WorkspaceSaga/helpers/evalEditor';
 import { evalTestCode } from '../WorkspaceSaga/helpers/evalTestCode';
 import { runTestCase } from '../WorkspaceSaga/helpers/runTestCase';
+import { watchSavingStatus } from '../WorkspaceSaga/helpers/versionHistory';
 
 vi.mock('src/features/cseMachine/CseMachine', async importOriginal => {
   const actual: any = await importOriginal();
@@ -1363,5 +1374,403 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
       .not.call(runTestCase, workspaceLocation, 3)
       .provide([[call(runTestCase, workspaceLocation, 0), false]])
       .silentRun(2000);
+  });
+});
+
+describe('VERSION_HISTORY', () => {
+  // Helper to build state with proper assessment/grading data so getCurrentQuestionId
+  // can resolve the actual question ID from the question index.
+  const mockAssessmentId = 42;
+  const mockQuestionDbId = 101; // The actual DB question ID
+  const mockQuestionIndex = 0; // The index in the questions array
+  const mockSubmissionId = 7;
+
+  function versionHistoryState(
+    workspaceLocation: WorkspaceLocation,
+    tokens: { accessToken: string; refreshToken: string }
+  ) {
+    const workspacePayload: any = { currentQuestion: mockQuestionIndex };
+    if (workspaceLocation === 'assessment') {
+      workspacePayload.currentAssessment = mockAssessmentId;
+    }
+    if (workspaceLocation === 'grading') {
+      workspacePayload.currentSubmission = mockSubmissionId;
+    }
+
+    const state = generateDefaultState(workspaceLocation, workspacePayload);
+
+    const sessionOverrides: any = {
+      ...state.session,
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken
+    };
+
+    if (workspaceLocation === 'assessment') {
+      sessionOverrides.assessments = {
+        [mockAssessmentId]: {
+          questions: [{ id: mockQuestionDbId }]
+        }
+      };
+    }
+
+    if (workspaceLocation === 'grading') {
+      sessionOverrides.gradings = {
+        [mockSubmissionId]: {
+          answers: [{ question: { id: mockQuestionDbId } }]
+        }
+      };
+    }
+
+    return { ...state, session: sessionOverrides };
+  }
+
+  describe('FETCH_VERSION_HISTORY', () => {
+    test('fetches version history successfully', () => {
+      const workspaceLocation = 'assessment';
+      const tokens = {
+        accessToken: 'test-access-token',
+        refreshToken: 'test-refresh-token'
+      };
+
+      const mockVersions = [
+        {
+          id: 'v1',
+          code: 'const x = 1;',
+          timestamp: 1234567890,
+          name: 'Version 1'
+        },
+        {
+          id: 'v2',
+          code: 'const x = 2;',
+          timestamp: 1234567900
+        }
+      ];
+
+      const state = versionHistoryState(workspaceLocation, tokens);
+
+      return expectSaga(workspaceSaga)
+        .withState(state)
+        .provide([[matchers.call.fn(getVersionHistory), mockVersions]])
+        .put(WorkspaceActions.receiveVersionHistory(workspaceLocation, mockVersions))
+        .dispatch({
+          type: WorkspaceActions.fetchVersionHistory.type,
+          payload: { workspaceLocation }
+        })
+        .dispatch(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'))
+        .silentRun();
+    });
+
+    test('returns empty array when no question ID is available', () => {
+      const workspaceLocation = 'playground';
+      const state = generateDefaultState(workspaceLocation);
+
+      return expectSaga(workspaceSaga)
+        .withState(state)
+        .put(WorkspaceActions.receiveVersionHistory(workspaceLocation, []))
+        .dispatch({
+          type: WorkspaceActions.fetchVersionHistory.type,
+          payload: { workspaceLocation }
+        })
+        .silentRun();
+    });
+
+    test('shows warning when fetch fails', () => {
+      const workspaceLocation = 'assessment';
+      const tokens = {
+        accessToken: 'test-access-token',
+        refreshToken: 'test-refresh-token'
+      };
+
+      const state = versionHistoryState(workspaceLocation, tokens);
+
+      return expectSaga(workspaceSaga)
+        .withState(state)
+        .provide([[matchers.call.fn(getVersionHistory), null]])
+        .put(WorkspaceActions.receiveVersionHistory(workspaceLocation, []))
+        .call(showWarningMessage, 'Failed to load version history')
+        .dispatch({
+          type: WorkspaceActions.fetchVersionHistory.type,
+          payload: { workspaceLocation }
+        })
+        .dispatch(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'))
+        .silentRun();
+    });
+  });
+
+  describe('NAME_VERSION', () => {
+    test('names version successfully without refetching', () => {
+      const workspaceLocation = 'assessment';
+      const versionId = 'v1';
+      const name = 'Final Version';
+      const tokens = {
+        accessToken: 'test-access-token',
+        refreshToken: 'test-refresh-token'
+      };
+
+      const state = versionHistoryState(workspaceLocation, tokens);
+
+      const mockResponse = new Response(null, { status: 200, statusText: 'OK' });
+
+      return expectSaga(workspaceSaga)
+        .withState(state)
+        .provide([[matchers.call.fn(updateVersionName), mockResponse]])
+        .not.put.actionType(WorkspaceActions.receiveVersionHistory.type)
+        .dispatch({
+          type: WorkspaceActions.nameVersion.type,
+          payload: { workspaceLocation, versionId, name }
+        })
+        .silentRun();
+    });
+
+    test('shows warning when no question ID is available', () => {
+      const workspaceLocation = 'playground';
+      const versionId = 'v1';
+      const name = 'Final Version';
+
+      const state = generateDefaultState(workspaceLocation);
+
+      return expectSaga(workspaceSaga)
+        .withState(state)
+        .call(showWarningMessage, 'Error renaming version: No question ID found')
+        .dispatch({
+          type: WorkspaceActions.nameVersion.type,
+          payload: { workspaceLocation, versionId, name }
+        })
+        .silentRun();
+    });
+
+    test('shows warning and refetches when naming fails', () => {
+      const workspaceLocation = 'assessment';
+      const versionId = 'v1';
+      const name = 'Final Version';
+      const tokens = {
+        accessToken: 'test-access-token',
+        refreshToken: 'test-refresh-token'
+      };
+
+      const state = versionHistoryState(workspaceLocation, tokens);
+
+      const mockFailedResponse = new Response(null, { status: 500, statusText: 'Error' });
+
+      return expectSaga(workspaceSaga)
+        .withState(state)
+        .provide([
+          [matchers.call.fn(updateVersionName), mockFailedResponse],
+          [matchers.call.fn(getVersionHistory), []]
+        ])
+        .call(showWarningMessage, 'Failed to rename version')
+        .put(WorkspaceActions.receiveVersionHistory(workspaceLocation, []))
+        .dispatch({
+          type: WorkspaceActions.nameVersion.type,
+          payload: { workspaceLocation, versionId, name }
+        })
+        .dispatch(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'))
+        .silentRun();
+    });
+
+    test('refetches history when response is null', () => {
+      const workspaceLocation = 'grading';
+      const versionId = 'v1';
+      const name = 'Final Version';
+      const tokens = {
+        accessToken: 'test-access-token',
+        refreshToken: 'test-refresh-token'
+      };
+
+      const state = versionHistoryState(workspaceLocation, tokens);
+
+      return expectSaga(workspaceSaga)
+        .withState(state)
+        .provide([
+          [matchers.call.fn(updateVersionName), null],
+          [matchers.call.fn(getVersionHistory), []]
+        ])
+        .call(showWarningMessage, 'Failed to rename version')
+        .put(WorkspaceActions.receiveVersionHistory(workspaceLocation, []))
+        .dispatch({
+          type: WorkspaceActions.nameVersion.type,
+          payload: { workspaceLocation, versionId, name }
+        })
+        .silentRun();
+    });
+  });
+
+  describe('RESTORE_VERSION', () => {
+    test('returns early for non-assessment workspace', () => {
+      const workspaceLocation = 'playground';
+      const state = generateDefaultState(workspaceLocation);
+
+      return expectSaga(workspaceSaga)
+        .withState(state)
+        .not.put.actionType(WorkspaceActions.updateHasUnsavedChanges.type)
+        .dispatch({
+          type: WorkspaceActions.restoreVersion.type,
+          payload: { workspaceLocation, versionId: 'v1', name: undefined, timestamp: 100 }
+        })
+        .silentRun();
+    });
+
+    test('puts updateHasUnsavedChanges for team assessment without submitting', () => {
+      const workspaceLocation = 'assessment';
+      const versionId = 'v1';
+      const tokens = { accessToken: 'test-access', refreshToken: 'test-refresh' };
+      const base = versionHistoryState(workspaceLocation, tokens);
+
+      const state = {
+        ...base,
+        workspaces: {
+          ...base.workspaces,
+          assessment: {
+            ...base.workspaces.assessment,
+            versionHistory: {
+              versions: [{ id: versionId, code: 'const x = 1;', timestamp: 100 }],
+              isLoading: false,
+              isHistoryPanelOpen: false
+            }
+          }
+        },
+        session: {
+          ...base.session,
+          assessmentOverviews: [{ id: mockAssessmentId, maxTeamSize: 4 }]
+        }
+      };
+
+      return expectSaga(workspaceSaga)
+        .withState(state)
+        .put(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, true))
+        .not.put.actionType(SessionActions.submitAnswer.type)
+        .dispatch({
+          type: WorkspaceActions.restoreVersion.type,
+          payload: { workspaceLocation, versionId, name: undefined, timestamp: 100 }
+        })
+        .silentRun();
+    });
+
+    test('puts updateSaveStatus saved when editor code matches latest version', () => {
+      const workspaceLocation = 'assessment';
+      const versionId = 'v1';
+      const code = 'const x = 1;';
+      const tokens = { accessToken: 'test-access', refreshToken: 'test-refresh' };
+      const base = versionHistoryState(workspaceLocation, tokens);
+
+      const state = {
+        ...base,
+        session: {
+          ...base.session,
+          assessmentOverviews: [{ id: mockAssessmentId, isAutosaveEnabled: true, maxTeamSize: 1 }],
+          assessments: {
+            [mockAssessmentId]: {
+              questions: [{ id: mockQuestionDbId, type: 'programming', answer: code }]
+            }
+          }
+        },
+        workspaces: {
+          ...base.workspaces,
+          assessment: {
+            ...base.workspaces.assessment,
+            editorTabs: [{ value: code, highlightedLines: [], breakpoints: [] }],
+            activeEditorTabIndex: 0,
+            versionHistory: {
+              versions: [{ id: versionId, code, timestamp: 100 }],
+              isLoading: false,
+              isHistoryPanelOpen: false
+            }
+          }
+        }
+      };
+
+      return expectSaga(workspaceSaga)
+        .withState(state)
+        .put(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, true))
+        .put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saving'))
+        .put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'))
+        .not.put.actionType(SessionActions.submitAnswer.type)
+        .dispatch({
+          type: WorkspaceActions.restoreVersion.type,
+          payload: { workspaceLocation, versionId, name: undefined, timestamp: 100 }
+        })
+        .silentRun();
+    });
+
+    test('submits answer and renames newest version after successful restore', () => {
+      const workspaceLocation = 'assessment';
+      const versionId = 'v1';
+      const currentEditorCode = 'const current = 1;';
+      const tokens = { accessToken: 'test-access', refreshToken: 'test-refresh' };
+      const base = versionHistoryState(workspaceLocation, tokens);
+
+      const initialVersions = [
+        { id: 'v2', code: 'const v2 = 1;', timestamp: 200 },
+        { id: 'v1', code: 'const original = 1;', timestamp: 100, name: 'Old Version' }
+      ];
+
+      const state = {
+        ...base,
+        session: {
+          ...base.session,
+          assessmentOverviews: [{ id: mockAssessmentId, isAutosaveEnabled: true, maxTeamSize: 1 }],
+          assessments: {
+            [mockAssessmentId]: {
+              questions: [{ id: mockQuestionDbId, type: 'programming' }]
+            }
+          }
+        },
+        workspaces: {
+          ...base.workspaces,
+          assessment: {
+            ...base.workspaces.assessment,
+            editorTabs: [{ value: currentEditorCode, highlightedLines: [], breakpoints: [] }],
+            activeEditorTabIndex: 0,
+            versionHistory: {
+              versions: initialVersions,
+              isLoading: false,
+              isHistoryPanelOpen: false
+            }
+          }
+        }
+      };
+
+      return expectSaga(workspaceSaga)
+        .withState(state)
+        .provide([[matchers.call.fn(getVersionHistory), initialVersions]])
+        .put(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, true))
+        .put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saving'))
+        .put(SessionActions.submitAnswer(mockQuestionDbId, currentEditorCode))
+        .put(WorkspaceActions.receiveVersionHistory(workspaceLocation, initialVersions))
+        .put(WorkspaceActions.nameVersion(workspaceLocation, 'v2', 'Old Version-restored'))
+        .dispatch({
+          type: WorkspaceActions.restoreVersion.type,
+          payload: { workspaceLocation, versionId, name: 'Old Version', timestamp: 100 }
+        })
+        .dispatch(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'))
+        .dispatch(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'))
+        .silentRun();
+    });
+  });
+});
+
+describe('WATCH_SAVING_STATUS', () => {
+  test('puts updateSaveStatus saving for assessment workspace', () => {
+    const assessmentId = 42;
+    const base = generateDefaultState('assessment', { currentAssessment: assessmentId });
+    const state = {
+      ...base,
+      session: {
+        ...base.session,
+        assessmentOverviews: [{ id: assessmentId, type: 'Missions', isAutosaveEnabled: true }]
+      }
+    };
+    return expectSaga(watchSavingStatus)
+      .withState(state)
+      .put(WorkspaceActions.updateSaveStatus('assessment', 'saving'))
+      .dispatch(WorkspaceActions.updateEditorValue('assessment', 0, 'new code'))
+      .silentRun();
+  });
+
+  test('does not put updateSaveStatus for non-assessment workspace', () => {
+    return expectSaga(watchSavingStatus)
+      .not.put.actionType(WorkspaceActions.updateSaveStatus.type)
+      .dispatch(WorkspaceActions.updateEditorValue('playground', 0, 'new code'))
+      .silentRun();
   });
 });

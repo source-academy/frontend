@@ -1419,6 +1419,7 @@ export const updateAssessment = async (
     maxTeamSize?: number;
     hasTokenCounter?: boolean;
     hasVotingFeatures?: boolean;
+    isAutosaveEnabled?: boolean;
     assignEntriesForVoting?: boolean;
   },
   tokens: Tokens
@@ -1864,4 +1865,86 @@ export const courseIdWithoutPrefix: () => string = () => {
     showWarningMessage(`No course selected!`, 1000);
     throw new Error(`No course selected`);
   }
+};
+
+/**
+ * GET /courses/:courseId/assessments/question/:questionId/version/history
+ * Fetch version history for a workspace
+ */
+export const getVersionHistory = async (
+  questionId: number,
+  tokens: Tokens
+): Promise<any[] | null> => {
+  const resp = await request(`${courseId()}/assessments/question/${questionId}/versions`, 'GET', {
+    accessToken: tokens.accessToken,
+    errorMessage: 'Could not fetch version history.',
+    refreshToken: tokens.refreshToken
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+  const versions = await resp.json();
+  return versions
+    .filter((v: any) => v.id != null && v.inserted_at != null)
+    .map((v: any) => ({
+      id: String(v.id),
+      name: v.name,
+      timestamp: new Date(v.inserted_at).getTime()
+    }));
+};
+
+export const getVersionCode = async (
+  questionId: number,
+  versionId: string,
+  tokens: Tokens
+): Promise<any | null> => {
+  const resp = await request(
+    `${courseId()}/assessments/question/${questionId}/versions/${versionId}`,
+    'GET',
+    {
+      accessToken: tokens.accessToken,
+      errorMessage: 'Could not fetch version code.',
+      refreshToken: tokens.refreshToken
+    }
+  );
+  if (!resp || !resp.ok) {
+    return null;
+  }
+  const v = await resp.json();
+  if (typeof v.content?.code !== 'string' || v.inserted_at == null) {
+    return null;
+  }
+  return {
+    id: String(v.id),
+    name: v.name,
+    code: v.content.code,
+    timestamp: new Date(
+      /[Z+]/.test(v.inserted_at.slice(19)) ? v.inserted_at : v.inserted_at + 'Z'
+    ).getTime()
+  };
+};
+
+/**
+ * PUT courses/:course_id/assessments/question/:questionid/versions/:versionid/name
+ * Update the name of a version
+ */
+export const updateVersionName = async (
+  questionId: number,
+  versionId: string,
+  name: string,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(
+    `${courseId()}/assessments/question/${questionId}/versions/${versionId}/name`,
+    'PUT',
+    {
+      accessToken: tokens.accessToken,
+      body: {
+        name
+      },
+      errorMessage: 'Could not update version name.',
+      refreshToken: tokens.refreshToken
+    }
+  );
+  return resp;
 };
