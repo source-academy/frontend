@@ -1,6 +1,5 @@
 import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
 import type { Context } from 'js-slang';
-import { createConductor } from 'src/features/conductor/createConductor';
 
 import type {
   AllColsSortStates,
