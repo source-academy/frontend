@@ -3043,6 +3043,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sanity/diff-match-patch@npm:3.2.0":
+  version: 3.2.0
+  resolution: "@sanity/diff-match-patch@npm:3.2.0"
+  checksum: 10c0/0f4be6cc1ae00b2b43eefa1f9a2adee462bad2f0a6a98856d957b9f6c7dca0c42e6a7fd47ddcfa96c7d2a9f389570cb65eb830ca88f6b1b890f1063ad5f7df0b
+  languageName: node
+  linkType: hard
+
 "@sentry-internal/browser-utils@npm:10.51.0":
   version: 10.51.0
   resolution: "@sentry-internal/browser-utils@npm:10.51.0"
