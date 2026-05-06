@@ -480,60 +480,60 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   const conductorEnabled = useFeature(flagConductorEnable);
   const selectedEvaluatorId = useTypedSelector(s => s.languageDirectory.selectedEvaluatorId)!;
   useEffect(() => {
-  if (!conductorEnabled || !reactAceRef.current || !selectedEvaluatorId) {
-    return;
-  }
+    if (!conductorEnabled || !reactAceRef.current || !selectedEvaluatorId) {
+      return;
+    }
 
-  const editor = reactAceRef.current.editor;
-  const modeId = `ace/mode/${selectedEvaluatorId}`;
-  let modeChangeUnsub: (() => void) | undefined;
-  let pollHandle: ReturnType<typeof setInterval> | undefined;
+    const editor = reactAceRef.current.editor;
+    const modeId = `ace/mode/${selectedEvaluatorId}`;
+    let modeChangeUnsub: (() => void) | undefined;
+    let pollHandle: ReturnType<typeof setInterval> | undefined;
 
-  const apply = (session: any) => {
-    const modeModule = acequire(modeId);
-    if (!modeModule?.Mode) return false;
-    if ((session.getMode() as any).$id === modeId) return true;
-    session.setMode(new modeModule.Mode());
-    return true;
-  };
+    const apply = (session: any) => {
+      const modeModule = acequire(modeId);
+      if (!modeModule?.Mode) return false;
+      if ((session.getMode() as any).$id === modeId) return true;
+      session.setMode(new modeModule.Mode());
+      return true;
+    };
 
-  const attachToSession = (session: any) => {
-    modeChangeUnsub?.();
-    if (pollHandle) clearInterval(pollHandle);
+    const attachToSession = (session: any) => {
+      modeChangeUnsub?.();
+      if (pollHandle) clearInterval(pollHandle);
 
-    const onChangeMode = () => {
-      if ((session.getMode() as any).$id !== modeId) {
-        apply(session);
+      const onChangeMode = () => {
+        if ((session.getMode() as any).$id !== modeId) {
+          apply(session);
+        }
+      };
+      session.on('changeMode', onChangeMode);
+      modeChangeUnsub = () => session.off('changeMode', onChangeMode);
+
+      if (!apply(session)) {
+        pollHandle = setInterval(() => {
+          if (apply(session)) {
+            clearInterval(pollHandle);
+            pollHandle = undefined;
+          }
+        }, 200);
       }
     };
-    session.on('changeMode', onChangeMode);
-    modeChangeUnsub = () => session.off('changeMode', onChangeMode);
 
-    if (!apply(session)) {
-      pollHandle = setInterval(() => {
-        if (apply(session)) {
-          clearInterval(pollHandle);
-          pollHandle = undefined;
-        }
-      }, 200);
-    }
-  };
+    attachToSession(editor.getSession());
 
-  attachToSession(editor.getSession());
+    const onChangeSession = (e: any) => {
+      attachToSession(e.session);
+    };
+    editor.on('changeSession', onChangeSession);
 
-  const onChangeSession = (e: any) => {
-    attachToSession(e.session);
-  };
-  editor.on('changeSession', onChangeSession);
+    return () => {
+      modeChangeUnsub?.();
+      if (pollHandle) clearInterval(pollHandle);
+      editor.off('changeSession', onChangeSession);
+    };
+  }, [conductorEnabled, selectedEvaluatorId]);
 
-  return () => {
-    modeChangeUnsub?.();
-    if (pollHandle) clearInterval(pollHandle);
-    editor.off('changeSession', onChangeSession);
-  };
-}, [conductorEnabled, selectedEvaluatorId]);  
-
-const aceEditorProps: IAceEditorProps = {
+  const aceEditorProps: IAceEditorProps = {
     className: 'react-ace',
     editorProps: {
       $blockScrolling: Infinity

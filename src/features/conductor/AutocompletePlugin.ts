@@ -10,7 +10,6 @@ import ace from 'ace-builds/src-noconflict/ace';
 import { EventChannel, eventChannel, Unsubscribe } from 'redux-saga';
 import 'ace-builds/src-noconflict/mode-python';
 
-
 export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
   private currentMode: string | null = null;
 
@@ -59,7 +58,7 @@ export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
       this.pairQuotesAfter = data.pairQuotesAfter;
       this.$id = data.id;
       this.snippetFileId = data.snippetFileId;
-      
+
       this.getNextLineIndent = new (acequire(data.indents.hookFrom).Mode)().getNextLineIndent;
       this.checkOutdent = new (acequire(data.outdents.hookFrom).Mode)().checkOutdent;
       this.autoOutdent = new (acequire(data.autoOutdent.hookFrom).Mode)().autoOutdent;
@@ -78,7 +77,7 @@ export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
   setMode(editor: Editor) {
     const session = editor.getSession();
     const ModeConstructor = acequire(this.currentMode || 'ace/mode/text').Mode;
-    session.setMode(new ModeConstructor()); 
+    session.setMode(new ModeConstructor());
   }
 
   complete(code: string, row: number, column: number): EventChannel<AutoCompleteEntry[]> {
