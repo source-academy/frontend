@@ -1,3 +1,5 @@
+import 'ace-builds/src-noconflict/mode-python';
+
 import {
   AceRules,
   AutoCompleteEntry,
@@ -5,10 +7,9 @@ import {
   SyntaxHighlightData
 } from '@sourceacademy/autocomplete';
 import { Editor } from 'ace-builds';
-import { require as acequire } from 'ace-builds/src-noconflict/ace';
 import ace from 'ace-builds/src-noconflict/ace';
+import { require as acequire } from 'ace-builds/src-noconflict/ace';
 import { EventChannel, eventChannel, Unsubscribe } from 'redux-saga';
-import 'ace-builds/src-noconflict/mode-python';
 
 export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
   private currentMode: string | null = null;

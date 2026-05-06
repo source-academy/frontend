@@ -6,6 +6,8 @@ import { Chapter, Variant } from 'js-slang/dist/langs';
 import Phaser from 'phaser';
 import { EventChannel } from 'redux-saga';
 import { call, put, select, take } from 'redux-saga/effects';
+import { race } from 'redux-saga/effects';
+import { delay } from 'redux-saga/effects';
 import AutoCompletePlugin from 'src/features/conductor/AutocompletePlugin';
 import { BrowserHostPlugin } from 'src/features/conductor/BrowserHostPlugin';
 
@@ -43,9 +45,6 @@ import { selectWorkspace } from '../SafeEffects';
 import { evalCodeSaga } from './helpers/evalCode';
 import { evalEditorSaga } from './helpers/evalEditor';
 import { runTestCase } from './helpers/runTestCase';
-
-import { race } from 'redux-saga/effects';
-import { delay } from 'redux-saga/effects';
 
 const WorkspaceSaga = combineSagaHandlers({
   [WorkspaceActions.addHtmlConsoleError.type]: function* (action) {
