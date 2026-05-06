@@ -130,7 +130,6 @@ export type WorkspaceState = {
   readonly debuggerContext: DebuggerContext;
   readonly lastDebuggerResult: any;
   readonly files: UploadResult;
-  readonly conductor: ReturnType<typeof createConductor> | null;
   readonly updateUserRoleCallback: (id: string, newRole: CollabEditingAccess) => void;
   readonly versionHistory: VersionHistoryState;
   readonly saveStatus: SaveStatus;
