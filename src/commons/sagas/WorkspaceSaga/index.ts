@@ -1,8 +1,13 @@
+import { AutoCompleteEntry } from '@sourceacademy/autocomplete';
+import type { IConduit } from '@sourceacademy/conductor/conduit';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { type Context, findDeclaration, getNames } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import Phaser from 'phaser';
-import { call, put, select } from 'redux-saga/effects';
+import { EventChannel } from 'redux-saga';
+import { call, put, select, take } from 'redux-saga/effects';
+import AutoCompletePlugin from 'src/features/conductor/AutocompletePlugin';
+import { BrowserHostPlugin } from 'src/features/conductor/BrowserHostPlugin';
 
 import InterpreterActions from '../../../commons/application/actions/InterpreterActions';
 import { combineSagaHandlers } from '../../../commons/redux/utils';
@@ -33,10 +38,14 @@ import {
   showWarningMessage
 } from '../../utils/notifications/NotificationsHelper';
 import { showFullJSDisclaimer, showFullTSDisclaimer } from '../../utils/WarningDialogHelper';
+import { getPreparedConductorSaga } from '../helpers/conductorEvaluatorCache';
 import { selectWorkspace } from '../SafeEffects';
 import { evalCodeSaga } from './helpers/evalCode';
 import { evalEditorSaga } from './helpers/evalEditor';
 import { runTestCase } from './helpers/runTestCase';
+
+import { race } from 'redux-saga/effects';
+import { delay } from 'redux-saga/effects';
 
 const WorkspaceSaga = combineSagaHandlers({
   [WorkspaceActions.addHtmlConsoleError.type]: function* (action) {
@@ -142,7 +151,6 @@ const WorkspaceSaga = combineSagaHandlers({
       externalLibrary: extLib,
       programPrependValue: prepend
     } = yield* selectWorkspace(workspaceLocation);
-
     const editorValue = editorTabs[activeEditorTabIndex ?? 0].value;
 
     // Deal with prepended code
@@ -153,6 +161,47 @@ const WorkspaceSaga = combineSagaHandlers({
     } else {
       prependLength = prepend.split('\n').length;
       autocompleteCode = prepend + '\n' + editorValue;
+    }
+
+    if (yield select(selectConductorEnable)) {
+      const { conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } =
+        yield call(getPreparedConductorSaga);
+
+      const plugin = conduit.lookupPlugin('__autocomplete_plugin_web') as AutoCompletePlugin;
+      if (plugin) {
+        const channel: EventChannel<AutoCompleteEntry[]> = yield call(
+          [plugin, 'complete'],
+          autocompleteCode,
+          action.payload.row + prependLength,
+          action.payload.column
+        );
+        //const names: AutoCompleteEntry[] = yield take(channel);
+        const { names, timeout }: { names?: AutoCompleteEntry[]; timeout?: true } = yield race({
+        names: take(channel),
+        timeout: delay(3000),
+        });
+
+        if (timeout || !names) {
+          console.warn('autocomplete channel timed out — runner never replied');
+          channel.close();
+          return;
+        }
+
+        yield call(
+          action.payload.callback,
+          null,
+          names.map(name => ({
+            meta: name.meta,
+            value: name.name,
+            caption: name.name,
+            docHTML: name.docHTML,
+            score: name.score ? name.score + 1000 : 1000, // Prioritize suggestions from code
+            name: undefined
+          }))
+        );
+        channel.close();
+      }
+      return;
     }
 
     const [editorNames, displaySuggestions]: Awaited<ReturnType<typeof getNames>> = yield call(

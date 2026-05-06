@@ -392,6 +392,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   debuggerContext: {} as DebuggerContext,
   lastDebuggerResult: undefined,
   files: {},
+  conductor: null,
   updateUserRoleCallback: () => {}
 });
 

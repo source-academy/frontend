@@ -1,5 +1,5 @@
 import { Conduit, IConduit } from '@sourceacademy/conductor/conduit';
-
+import AutoCompletePlugin from './AutocompletePlugin';
 import { BrowserHostPlugin } from './BrowserHostPlugin';
 
 export function createConductor(
@@ -10,5 +10,6 @@ export function createConductor(
   const worker = new Worker(evaluatorPath);
   const conduit = new Conduit(worker, true);
   const hostPlugin = conduit.registerPlugin(BrowserHostPlugin, onRequestFile, onRequestLoadPlugin);
+  hostPlugin.registerPlugin(AutoCompletePlugin);
   return { hostPlugin, conduit };
 }
