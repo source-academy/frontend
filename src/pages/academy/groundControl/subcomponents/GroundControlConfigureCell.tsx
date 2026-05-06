@@ -24,7 +24,8 @@ type Props = {
   handleConfigureAssessment: (
     id: number,
     hasVotingFeatures: boolean,
-    hasTokenCounter: boolean
+    hasTokenCounter: boolean,
+    isAutosaveEnabled: boolean
   ) => void;
   handleAssignEntriesForVoting: (id: number) => void;
   data: AssessmentOverview;
@@ -38,23 +39,32 @@ const ConfigureCell: React.FC<Props> = ({
   const [isDialogOpen, setDialogState] = useState(false);
   const [hasVotingFeatures, setHasVotingFeatures] = useState(!!data.hasVotingFeatures);
   const [hasTokenCounter, setHasTokenCounter] = useState(!!data.hasTokenCounter);
+  const [isAutosaveEnabled, setIsAutosaveEnabled] = useState(data.isAutosaveEnabled ?? false);
   const [isTeamAssessment, setIsTeamAssessment] = useState(false);
   const [isVotingPublished] = useState(!!data.isVotingPublished);
 
   const handleOpenDialog = useCallback(() => setDialogState(true), []);
   const handleCloseDialog = useCallback(() => setDialogState(false), []);
 
-  // Updates assessment overview with changes to hasVotingFeatures and hasTokenCounter
+  // Updates assessment overview with changes to hasVotingFeatures, hasTokenCounter and isAutosaveEnabled
   const handleConfigure = useCallback(() => {
     const { id } = data;
-    handleConfigureAssessment(id, hasVotingFeatures, hasTokenCounter);
+    handleConfigureAssessment(id, hasVotingFeatures, hasTokenCounter, isAutosaveEnabled);
     handleCloseDialog();
-  }, [data, handleCloseDialog, handleConfigureAssessment, hasTokenCounter, hasVotingFeatures]);
+  }, [
+    data,
+    handleCloseDialog,
+    handleConfigureAssessment,
+    hasTokenCounter,
+    hasVotingFeatures,
+    isAutosaveEnabled
+  ]);
 
   // Toggles in configuration pannel
   const toggleHasTokenCounter = useCallback(() => setHasTokenCounter(prev => !prev), []);
   const toggleVotingFeatures = useCallback(() => setHasVotingFeatures(prev => !prev), []);
   const toggleIsTeamAssessment = useCallback(() => setIsTeamAssessment(prev => !prev), []);
+  const toggleIsAutosaveEnabled = useCallback(() => setIsAutosaveEnabled(prev => !prev), []);
 
   return (
     <>
@@ -84,6 +94,13 @@ const ConfigureCell: React.FC<Props> = ({
               onChange={toggleHasTokenCounter}
               inline
               label="Enable token counter"
+            />
+            <Switch
+              className="is-autosave-enabled"
+              checked={isAutosaveEnabled}
+              onChange={toggleIsAutosaveEnabled}
+              inline
+              label="Enable autosave"
             />
           </div>
           <div className="team-related-configs">

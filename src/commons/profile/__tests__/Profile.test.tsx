@@ -30,7 +30,8 @@ const assessmentConfigurations: AssessmentConfiguration[] = [
   hasTokenCounter: false,
   hasVotingFeatures: false,
   hoursBeforeEarlyXpDecay: 0,
-  earlySubmissionXp: 0
+  earlySubmissionXp: 0,
+  isAutosaveEnabled: true
 }));
 
 const createProfileWithStore = (storeOverrides?: DeepPartial<OverallState>) => {

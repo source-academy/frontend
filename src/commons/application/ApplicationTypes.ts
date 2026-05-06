@@ -392,8 +392,22 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   debuggerContext: {} as DebuggerContext,
   lastDebuggerResult: undefined,
   files: {},
+<<<<<<< feat/conductor-autocomplete-highlighting
   conductor: null,
   updateUserRoleCallback: () => {}
+=======
+  updateUserRoleCallback: () => {},
+  versionHistory: {
+    versions: [],
+    selectedVersion: null,
+    selectedVersionCode: null,
+    isLoadingCode: false,
+    isLoading: false,
+    isHistoryPanelOpen: false,
+    isAutoSaving: false
+  },
+  saveStatus: 'idle'
+>>>>>>> master
 });
 
 const defaultFileName = 'program.js';

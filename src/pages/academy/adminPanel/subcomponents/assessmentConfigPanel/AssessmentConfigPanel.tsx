@@ -36,7 +36,8 @@ const defaultAssessmentConfig: AssessmentConfiguration = {
   hoursBeforeEarlyXpDecay: 0,
   hasTokenCounter: false,
   hasVotingFeatures: false,
-  earlySubmissionXp: 0
+  earlySubmissionXp: 0,
+  isAutosaveEnabled: true
 };
 
 export type ImperativeAssessmentConfigPanel = {
@@ -138,6 +139,7 @@ const AssessmentConfigPanel: WithImperativeApi<
     const setHasVotingFeatures = useCallback(valueSetter('hasVotingFeatures'), []);
     const setEarlyXp = useCallback(valueSetter('earlySubmissionXp'), []);
     const setHoursBeforeDecay = useCallback(valueSetter('hoursBeforeEarlyXpDecay'), []);
+    const setIsAutosaveEnabled = useCallback(valueSetter('isAutosaveEnabled'), []);
     /* eslint-enable */
 
     const addRowHandler = useCallback(() => {
@@ -232,6 +234,15 @@ const AssessmentConfigPanel: WithImperativeApi<
           }
         },
         {
+          headerName: 'Autosave',
+          field: 'isAutosaveEnabled',
+          cellRenderer: BooleanCell,
+          cellRendererParams: {
+            setStateHandler: setIsAutosaveEnabled,
+            field: 'isAutosaveEnabled'
+          }
+        },
+        {
           headerName: 'Max Bonus XP',
           field: 'earlySubmissionXp',
           cellRenderer: NumericCell,
@@ -263,14 +274,14 @@ const AssessmentConfigPanel: WithImperativeApi<
       [
         deleteRowHandler,
         setDisplayInDashboard,
+        setIsAutosaveEnabled,
         setIsMinigame,
         setEarlyXp,
         setHasTokenCounter,
         setHasVotingFeatures,
         setHoursBeforeDecay,
         setIsGradingAutoPublished,
-        setIsManuallyGraded,
-        setIsMinigame
+        setIsManuallyGraded
       ]
     );
 

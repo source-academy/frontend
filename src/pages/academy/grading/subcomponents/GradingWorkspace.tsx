@@ -27,6 +27,8 @@ import { ControlBarNextButton } from '../../../../commons/controlBar/ControlBarN
 import { ControlBarPreviousButton } from '../../../../commons/controlBar/ControlBarPreviousButton';
 import { ControlBarQuestionViewButton } from '../../../../commons/controlBar/ControlBarQuestionViewButton';
 import { ControlBarRunButton } from '../../../../commons/controlBar/ControlBarRunButton';
+import { ControlBarVersionHistoryButton } from '../../../../commons/controlBar/ControlBarVersionHistoryButton';
+import { VersionHistoryPanel } from '../../../../commons/controlBar/VersionHistoryPanel';
 import { convertEditorTabStateToProps } from '../../../../commons/editor/EditorContainer';
 import { Position } from '../../../../commons/editor/EditorTypes';
 import Markdown from '../../../../commons/Markdown';
@@ -36,7 +38,12 @@ import { SideContentProps } from '../../../../commons/sideContent/SideContent';
 import { useSideContent } from '../../../../commons/sideContent/SideContentHelper';
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
-import { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
+import {
+  type CodeVersion,
+  type CodeVersionMetadata,
+  WorkspaceLocation,
+  WorkspaceState
+} from '../../../../commons/workspace/WorkspaceTypes';
 import { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditor';
 
@@ -87,7 +94,8 @@ const GradingWorkspace: React.FC<Props> = props => {
     output,
     replValue,
     currentSubmission: storedSubmissionId,
-    currentQuestion: storedQuestionId
+    currentQuestion: storedQuestionId,
+    versionHistory
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);
 
   const dispatch = useDispatch();
@@ -112,7 +120,12 @@ const GradingWorkspace: React.FC<Props> = props => {
     handleRunAllTestcases,
     handleUpdateCurrentSubmissionId,
     handleUpdateHasUnsavedChanges,
-    handlePromptAutocomplete
+    handlePromptAutocomplete,
+    handleFetchVersionHistory,
+    handleToggleHistoryPanel,
+    handleSelectVersion,
+    handleRestoreVersion,
+    handleNameVersion
   } = useMemo(() => {
     return {
       handleBrowseHistoryDown: () =>
@@ -156,7 +169,25 @@ const GradingWorkspace: React.FC<Props> = props => {
       handleUpdateHasUnsavedChanges: (unsavedChanges: boolean) =>
         dispatch(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, unsavedChanges)),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        dispatch(WorkspaceActions.promptAutocomplete(workspaceLocation, row, col, callback))
+        dispatch(WorkspaceActions.promptAutocomplete(workspaceLocation, row, col, callback)),
+      handleFetchVersionHistory: () =>
+        dispatch(WorkspaceActions.fetchVersionHistory(workspaceLocation)),
+      handleToggleHistoryPanel: () =>
+        dispatch(WorkspaceActions.toggleHistoryPanel(workspaceLocation)),
+      handleSelectVersion: (version: CodeVersionMetadata) =>
+        dispatch(WorkspaceActions.selectVersion(workspaceLocation, version)),
+      handleRestoreVersion: (version: CodeVersion) =>
+        dispatch(
+          WorkspaceActions.restoreVersion(
+            workspaceLocation,
+            version.id,
+            version.name,
+            version.timestamp,
+            version.code
+          )
+        ),
+      handleNameVersion: (versionId: string, name: string) =>
+        dispatch(WorkspaceActions.nameVersion(workspaceLocation, versionId, name))
     };
   }, [dispatch]);
 
@@ -450,8 +481,18 @@ const GradingWorkspace: React.FC<Props> = props => {
       />
     );
 
+    const versionHistoryButton = (
+      <ControlBarVersionHistoryButton
+        onClick={() => {
+          handleFetchVersionHistory();
+          handleToggleHistoryPanel();
+        }}
+        key="version_history"
+      />
+    );
+
     return {
-      editorButtons: [runButton],
+      editorButtons: [runButton, versionHistoryButton],
       flowButtons: [previousButton, questionView, nextButton]
     };
   };
@@ -541,6 +582,19 @@ const GradingWorkspace: React.FC<Props> = props => {
   };
   return (
     <div className={classNames('WorkspaceParent', Classes.DARK)}>
+      <VersionHistoryPanel
+        versions={versionHistory.versions}
+        currentCode={editorTabs[activeEditorTabIndex ?? 0]?.value ?? ''}
+        isOpen={versionHistory.isHistoryPanelOpen}
+        isLoading={versionHistory.isLoading}
+        selectedVersion={versionHistory.selectedVersion}
+        selectedVersionCode={versionHistory.selectedVersionCode}
+        isLoadingCode={versionHistory.isLoadingCode}
+        onClose={handleToggleHistoryPanel}
+        onSelectVersion={handleSelectVersion}
+        onRestore={handleRestoreVersion}
+        onRename={handleNameVersion}
+      />
       <Workspace {...workspaceProps} />
     </div>
   );
