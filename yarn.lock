@@ -4432,32 +4432,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ag-charts-types@npm:12.3.1":
-  version: 12.3.1
-  resolution: "ag-charts-types@npm:12.3.1"
-  checksum: 10c0/e2db0006ddb96f7d5766749cbfd15371725027dacd7fd516c511ad69e72acbbd6bca6ec96c445ca7c962c05e7d915503572a050f92485c6a8d3efaabbfcf0b59
+"ag-charts-types@npm:13.2.1":
+  version: 13.2.1
+  resolution: "ag-charts-types@npm:13.2.1"
+  checksum: 10c0/2a5c69354c2dbefdb4d6c65531cbd9931ba02bbc637dd60f53cb004f64328d2ffc5542e04955ccb3a9b17d57b0351b0852163b0c7c01c9685246c3ec2ccb8e06
   languageName: node
   linkType: hard
 
-"ag-grid-community@npm:34.3.1, ag-grid-community@npm:^34.1.1":
-  version: 34.3.1
-  resolution: "ag-grid-community@npm:34.3.1"
+"ag-grid-community@npm:35.2.1, ag-grid-community@npm:^35.0.0":
+  version: 35.2.1
+  resolution: "ag-grid-community@npm:35.2.1"
   dependencies:
-    ag-charts-types: "npm:12.3.1"
-  checksum: 10c0/13e0ccaaac10dbbbb8fcee664e4bbb70cef14e84b662fa1c9e294993dd1fda857be9ff8c6e13d82550513816a62d528489b08c06add5d5b7f0344481301b79b9
+    ag-charts-types: "npm:13.2.1"
+  checksum: 10c0/e75c5c8cf43aad10d74456549c414f6a88ba456fa1ce919913fbe9f944c6621dcdbe86e84a3f8faaf7c48c7695a8de402b9e63472bdf001e3c52b3d1199c9813
   languageName: node
   linkType: hard
 
-"ag-grid-react@npm:^34.1.1":
-  version: 34.3.1
-  resolution: "ag-grid-react@npm:34.3.1"
+"ag-grid-react@npm:^35.0.0":
+  version: 35.2.1
+  resolution: "ag-grid-react@npm:35.2.1"
   dependencies:
-    ag-grid-community: "npm:34.3.1"
+    ag-grid-community: "npm:35.2.1"
     prop-types: "npm:^15.8.1"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/d0efe5678c3721c571d673fabd44e4d871beabe7e5444dbb4d84ddf70757cad813a6276914d1240f8f838fb8a82f19e675c1a6317c1c4e90b9bad29019ea15b5
+  checksum: 10c0/b096a20da431d432525691db1282e898089afb9ed485c6ae5cf88a44d8e09392f7b8a742614cf9b09de1645d8403d0ca2a9a70daaf927eb4d6c2d0ed96d05582
   languageName: node
   linkType: hard
 
@@ -7092,8 +7092,8 @@ __metadata:
     "@vitest/ui": "npm:4.1.5"
     ace-builds: "npm:^1.42.1"
     acorn: "npm:^8.9.0"
-    ag-grid-community: "npm:^34.1.1"
-    ag-grid-react: "npm:^34.1.1"
+    ag-grid-community: "npm:^35.0.0"
+    ag-grid-react: "npm:^35.0.0"
     array-move: "npm:^4.0.0"
     browserfs: "npm:^1.4.3"
     buffer: "npm:^6.0.3"
