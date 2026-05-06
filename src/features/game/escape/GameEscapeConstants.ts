@@ -23,11 +23,12 @@ export const optTextStyle: BitmapFontStyle = {
 const EscapeConstants = {
   button: { y: screenSize.y * 0.15 },
   escapeOptTextConfig: { x: 0, y: 0, oriX: 0.37, oriY: 0.75 },
-  settings: { yOffset: -screenCenter.y * 0.1, ySpace: screenSize.y * 0.3 },
+  settings: { yOffset: -screenCenter.y * 0.1, ySpace: screenSize.y * 0.2 },
   settingsTextConfig: { x: screenSize.x * 0.38, y: -screenCenter.y * 0.1, oriX: 0.0, oriY: 0.5 },
   radioButtons: { xSpace: screenSize.x * 0.2 },
   radioChoiceTextConfig: { x: 0, y: -45, oriX: 0.5, oriY: 0.25 },
-  volOpt: { x: screenSize.x * 0.05 }
+  volOpt: { x: screenSize.x * 0.05 },
+  skipConfirmOpts: ['ON', 'OFF']
 };
 
 export default EscapeConstants;

@@ -6,7 +6,7 @@ import GameInputManager from '../input/GameInputManager';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
-import { textTypeWriterStyle } from './GameDialogueConstants';
+import DialogueConstants, { textTypeWriterStyle } from './GameDialogueConstants';
 import DialogueGenerator from './GameDialogueGenerator';
 import DialogueRenderer from './GameDialogueRenderer';
 import DialogueSpeakerRenderer from './GameDialogueSpeakerRenderer';
@@ -25,6 +25,12 @@ export default class DialogueManager {
     GameGlobalAPI.getInstance().getGameManager()
   );
 
+  private skipButton?: Phaser.GameObjects.Image;
+  private isSkipping: boolean = false;
+  private nextLineResolve?: (value: void | PromiseLike<void>) => void;
+  private isPrompting: boolean = false;
+  private isDialoguePromptActive: boolean = false;
+
   /**
    * @param dialogueId the dialogue Id of the dialogue you want to play
    *
@@ -38,13 +44,19 @@ export default class DialogueManager {
     this.dialogueGenerator = new DialogueGenerator(dialogue.content);
     this.speakerRenderer = new DialogueSpeakerRenderer();
 
-    GameGlobalAPI.getInstance().addToLayer(
-      Layer.Dialogue,
-      this.dialogueRenderer.getDialogueContainer()
-    );
+    const dialogueContainer = this.dialogueRenderer.getDialogueContainer();
+    this.createSkipButton(dialogueContainer);
+
+    GameGlobalAPI.getInstance().addToLayer(Layer.Dialogue, dialogueContainer);
 
     GameGlobalAPI.getInstance().fadeInLayer(Layer.Dialogue);
     await new Promise(resolve => this.playWholeDialogue(resolve as () => void));
+
+    if (this.skipButton) {
+      this.skipButton.destroy();
+      this.skipButton = undefined;
+    }
+
     this.getDialogueRenderer().destroy();
     this.getSpeakerRenderer().changeSpeakerTo(null);
   }
@@ -52,25 +64,178 @@ export default class DialogueManager {
   private async playWholeDialogue(resolve: () => void) {
     await this.showNextLine(resolve);
     // add keyboard listener for dialogue box
+    this.nextLineResolve = () => this.showNextLine(resolve);
+
     this.getInputManager().registerKeyboardListener(keyboardShortcuts.Next, 'up', async () => {
       // show the next line if dashboard or escape menu are not displayed
       if (
         !GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal()
       ) {
-        await this.showNextLine(resolve);
+        if (!this.isSkipping && !this.isPrompting) {
+          await this.showNextLine(resolve);
+        }
       }
     });
+
+    this.getInputManager().registerKeyboardListener(
+      keyboardShortcuts.SkipDialogue,
+      'up',
+      async () => {
+        await this.triggerSkip();
+      }
+    );
+
+    // Dialogue Box Mouse Click
     this.getDialogueRenderer()
       .getDialogueBox()
       .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
-        await this.showNextLine(resolve);
+        if (!this.isSkipping && !this.isPrompting) {
+          await this.showNextLine(resolve);
+        }
       });
   }
 
-  public async showNextLine(resolve: () => void) {
+  private async triggerSkip() {
+    if (this.isPrompting || this.isSkipping || this.isDialoguePromptActive) return;
+
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    const phaseManager = gameManager.getPhaseManager();
+
+    if (phaseManager.isCurrentPhaseTerminal()) return;
+
+    const settings = SourceAcademyGame.getInstance().getSaveManager().getSettings();
+    const requiresConfirm = settings.skipConfirm !== false;
+
+    if (requiresConfirm) {
+      this.isPrompting = true;
+
+      if (this.skipButton) {
+        this.skipButton.setVisible(false);
+        this.skipButton.disableInteractive();
+      }
+
+      this.getInputManager().enableKeyboardInput(false);
+
+      const dialogueBox = this.getDialogueRenderer().getDialogueBox();
+      GameGlobalAPI.getInstance().enableSprite(dialogueBox, false);
+
+      const response = await promptWithChoices(
+        gameManager,
+        'Skip remaining dialogue?',
+        ['Yes', 'No'],
+        Layer.Dialogue
+      );
+
+      this.getInputManager().enableKeyboardInput(true);
+      GameGlobalAPI.getInstance().enableSprite(dialogueBox, true);
+
+      if (this.skipButton) {
+        this.skipButton.setVisible(true);
+        this.skipButton.setInteractive({ useHandCursor: true });
+      }
+
+      this.isPrompting = false;
+
+      if (response === 0) {
+        await this.skipRemainingDialogue();
+      }
+    } else {
+      await this.skipRemainingDialogue();
+    }
+  }
+
+  private createSkipButton(dialogueContainer: Phaser.GameObjects.Container) {
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
+
+    this.skipButton = new Phaser.GameObjects.Image(
+      gameManager,
+      DialogueConstants.skipButton.x,
+      DialogueConstants.skipButton.y,
+      'skip-icon'
+    ).setInteractive({ useHandCursor: true });
+
+    this.skipButton.setDisplaySize(
+      DialogueConstants.skipButton.size,
+      DialogueConstants.skipButton.size
+    );
+
+    this.skipButton.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
+      await this.triggerSkip();
+    });
+
+    dialogueContainer.add(this.skipButton);
+  }
+
+  /**
+   * Skips all remaining dialogue until a prompt (choice) is encountered.
+   * Does not skip prompts that require user input.
+   */
+  private async skipRemainingDialogue() {
+    if (this.isSkipping) return;
+    this.isSkipping = true;
+
+    // Hide and disable button while skipping
+    if (this.skipButton && this.skipButton.active) {
+      this.skipButton.setVisible(false);
+      this.skipButton.disableInteractive();
+    }
+
     GameGlobalAPI.getInstance().playSound(SoundAssets.dialogueAdvance.key);
+
+    try {
+      while (this.isSkipping) {
+        if (!this.dialogueRenderer) break;
+        this.dialogueRenderer.finishTypewriting();
+        const nextLine = this.getDialogueGenerator().peekNextLine();
+
+        if (!nextLine || !nextLine.line) {
+          this.isSkipping = false;
+          break;
+        }
+
+        const hasPrompt = nextLine.prompt !== undefined;
+        const hasActions = nextLine.actionIds && nextLine.actionIds.length > 0;
+
+        if (hasPrompt || hasActions) {
+          this.isSkipping = false;
+          break;
+        }
+
+        if (this.nextLineResolve) {
+          await this.nextLineResolve();
+        }
+
+        if (!this.skipButton || !this.skipButton.active) {
+          this.isSkipping = false;
+          break;
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
+    } finally {
+      this.isSkipping = false;
+
+      if (
+        this.skipButton &&
+        this.skipButton.active &&
+        !this.isDialoguePromptActive &&
+        this.getDialogueGenerator().peekNextLine() !== null
+      ) {
+        this.skipButton.setVisible(true);
+        this.skipButton.setInteractive({ useHandCursor: true });
+      }
+    }
+  }
+
+  public async showNextLine(resolve: () => void) {
+    // Only play sound if we are not skipping, to avoid spamming sounds when skipping
+    if (!this.isSkipping) {
+      GameGlobalAPI.getInstance().playSound(SoundAssets.dialogueAdvance.key);
+    }
+
     const { line, speakerDetail, actionIds, prompt } =
       await this.getDialogueGenerator().generateNextLine();
+
     const lineWithQuizScores = this.makeLineWithQuizScores(line);
     const lineWithName = lineWithQuizScores.replace('{name}', this.getUsername());
     this.getDialogueRenderer().changeText(lineWithName);
@@ -84,25 +249,46 @@ export default class DialogueManager {
     this.getInputManager().enableKeyboardInput(false);
 
     if (prompt) {
-      // disable keyboard input to prevent continue dialogue
+      // Prevent skipping, hide the skip button and prevent the usage of "s" keyboard shortcut
+      this.isDialoguePromptActive = true;
+      if (this.skipButton && this.skipButton.active) {
+        this.skipButton.setVisible(false);
+      }
+
       this.getInputManager().enableKeyboardInput(false);
       const response = await promptWithChoices(
         GameGlobalAPI.getInstance().getGameManager(),
         prompt.promptTitle,
         prompt.choices.map(choice => choice[0])
       );
-
       this.getInputManager().enableKeyboardInput(true);
       this.getDialogueGenerator().updateCurrPart(prompt.choices[response][1]);
+
+      if (this.skipButton) this.skipButton.setVisible(true);
+      this.isDialoguePromptActive = false;
     }
+
     await GameGlobalAPI.getInstance().processGameActionsInSamePhase(actionIds);
     GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), true);
     this.getInputManager().enableKeyboardInput(true);
 
     if (!line) {
-      // clear keyboard listeners when dialogue ends
-      this.getInputManager().clearKeyboardListeners([keyboardShortcuts.Next]);
+      //Permanently hide the skip button when there is no more dialogue
+      if (this.skipButton && this.skipButton.active) {
+        this.skipButton.setVisible(false);
+      }
+
+      // Prevents skipping by using the "s" keyboard shortcut
+      this.getInputManager().clearKeyboardListeners([
+        keyboardShortcuts.Next,
+        keyboardShortcuts.SkipDialogue
+      ]);
       resolve();
+    } else if (!this.isSkipping && !this.isDialoguePromptActive) {
+      if (this.skipButton && this.skipButton.active) {
+        this.skipButton.setVisible(true);
+        this.skipButton.setInteractive({ useHandCursor: true });
+      }
     }
   }
 

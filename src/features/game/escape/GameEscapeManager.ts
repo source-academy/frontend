@@ -22,6 +22,7 @@ import EscapeConstants, {
 class GameEscapeManager implements IGameUI {
   private bgmVolumeRadioButtons: CommonRadioButton | undefined;
   private sfxVolumeRadioButtons: CommonRadioButton | undefined;
+  private skipConfirmRadioButtons: CommonRadioButton | undefined;
   private scene: IBaseScene;
 
   /**
@@ -73,19 +74,37 @@ class GameEscapeManager implements IGameUI {
     );
 
     // Get user settings, to use as default choice in the radio buttons
-    const { bgmVolume, sfxVolume } = this.getSettingsSaveManager().getSettings();
+    const { bgmVolume, sfxVolume, skipConfirm } = this.getSettingsSaveManager().getSettings();
     const sfxVolIdx = SettingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === sfxVolume
     );
     const bgmVolIdx = SettingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === bgmVolume
     );
+    const skipConfirmIdx = skipConfirm !== false ? 0 : 1;
 
     // SFX Radio buttons
-    this.sfxVolumeRadioButtons = this.createSettingsRadioOptions(sfxVolIdx, settingsPos[0][1]);
+    this.sfxVolumeRadioButtons = this.createSettingsRadioOptions(
+      SettingsConstants.volContainerOpts,
+      sfxVolIdx,
+      settingsPos[0][1]
+    );
     // BGM Radio buttons
-    this.bgmVolumeRadioButtons = this.createSettingsRadioOptions(bgmVolIdx, settingsPos[1][1]);
-    escapeMenuContainer.add([this.sfxVolumeRadioButtons, this.bgmVolumeRadioButtons]);
+    this.bgmVolumeRadioButtons = this.createSettingsRadioOptions(
+      SettingsConstants.volContainerOpts,
+      bgmVolIdx,
+      settingsPos[1][1]
+    );
+    this.skipConfirmRadioButtons = this.createSettingsRadioOptions(
+      EscapeConstants.skipConfirmOpts,
+      skipConfirmIdx,
+      settingsPos[2][1]
+    );
+    escapeMenuContainer.add([
+      this.sfxVolumeRadioButtons,
+      this.bgmVolumeRadioButtons,
+      this.skipConfirmRadioButtons
+    ]);
 
     // Get all the buttons
     const buttons = this.getOptButtons();
@@ -114,7 +133,7 @@ class GameEscapeManager implements IGameUI {
    * are handled separately (radio buttons)
    */
   private getSettings() {
-    return ['SFX', 'BGM'];
+    return ['SFX', 'BGM', 'Skip Confirm'];
   }
 
   /**
@@ -123,11 +142,11 @@ class GameEscapeManager implements IGameUI {
    * @param defaultChoiceIdx default option for the radio button
    * @param yPos y position of the radio buttons
    */
-  private createSettingsRadioOptions(defaultChoiceIdx: number, yPos: number) {
+  private createSettingsRadioOptions(choices: string[], defaultChoiceIdx: number, yPos: number) {
     return new CommonRadioButton(
       this.scene,
       {
-        choices: SettingsConstants.volContainerOpts,
+        choices: choices,
         defaultChoiceIdx: defaultChoiceIdx,
         maxXSpace: EscapeConstants.radioButtons.xSpace,
         radioChoiceConfig: {
@@ -206,9 +225,12 @@ class GameEscapeManager implements IGameUI {
     const bgmVol = this.bgmVolumeRadioButtons
       ? parseFloat(this.bgmVolumeRadioButtons.getChosenChoice())
       : 1;
+    const skipConfirmVal = this.skipConfirmRadioButtons
+      ? this.skipConfirmRadioButtons.getChosenChoice() === 'ON'
+      : true;
 
     // Save settings
-    const newSettings = { bgmVolume: bgmVol, sfxVolume: sfxVol };
+    const newSettings = { bgmVolume: bgmVol, sfxVolume: sfxVol, skipConfirm: skipConfirmVal };
     await this.getSettingsSaveManager().saveSettings(newSettings);
 
     // Apply settings

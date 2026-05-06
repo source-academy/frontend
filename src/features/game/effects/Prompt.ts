@@ -46,7 +46,8 @@ const promptOptStyle: BitmapFontStyle = {
 export async function promptWithChoices(
   scene: Phaser.Scene,
   text: string,
-  choices: string[]
+  choices: string[],
+  targetLayer: Layer = Layer.UI
 ): Promise<number> {
   const promptContainer = new Phaser.GameObjects.Container(scene, 0, 0);
 
@@ -87,7 +88,10 @@ export async function promptWithChoices(
     ySpacing: PromptConstants.yInterval
   });
 
-  GameGlobalAPI.getInstance().addToLayer(Layer.UI, promptContainer);
+  GameGlobalAPI.getInstance().addToLayer(targetLayer, promptContainer);
+
+  //Used to prevent spamming the confirm for the skip button using shortcut key
+  let isResolved = false;
 
   const activatePromptContainer: Promise<number> = new Promise(resolve => {
     promptContainer.add(
@@ -98,7 +102,17 @@ export async function promptWithChoices(
           textConfig: PromptConstants.textConfig,
           bitMapTextStyle: promptOptStyle,
           onUp: () => {
-            promptContainer.destroy();
+            //Prevents the confirm prompt from showing up multiple times if someone tries to spam clicks it
+            if (isResolved) return;
+
+            const phaseManager = GameGlobalAPI.getInstance().getGameManager().getPhaseManager();
+
+            if (phaseManager.isCurrentPhaseTerminal()) {
+              return;
+            }
+
+            isResolved = true;
+
             resolve(index);
           }
         }).setPosition(

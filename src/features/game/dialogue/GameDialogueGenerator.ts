@@ -58,4 +58,12 @@ export default class DialogueGenerator {
     this.currPart = goto;
     this.currLineNum = 0;
   }
+
+  public peekNextLine(): DialogueLine | null {
+    const lines = this.dialogueContent.get(this.currPart);
+    if (!lines || !lines[this.currLineNum]) {
+      return null;
+    }
+    return lines[this.currLineNum];
+  }
 }

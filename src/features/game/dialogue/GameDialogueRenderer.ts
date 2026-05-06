@@ -61,7 +61,11 @@ class DialogueRenderer {
    */
   public destroy() {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    this.typewriter.clearTyping();
+
+    if (this.typewriter && this.typewriter.clearTyping) {
+      this.typewriter.clearTyping();
+    }
+
     this.blinkingDiamond.clearBlink();
     this.getDialogueBox().off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
     fadeAndDestroy(gameManager, this.getDialogueContainer());
@@ -90,6 +94,12 @@ class DialogueRenderer {
    */
   public changeText(message: string) {
     this.typewriter.changeLine(message);
+  }
+
+  public finishTypewriting() {
+    if (this.typewriter && this.typewriter.finishTyping) {
+      this.typewriter.finishTyping();
+    }
   }
 }
 
