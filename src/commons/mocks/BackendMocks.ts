@@ -30,7 +30,6 @@ import {
 import { routerNavigate } from '../sagas/BackendSaga';
 import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   mockAssessmentConfigurations,
   mockAssessmentOverviews,
@@ -137,8 +136,8 @@ export function* mockBackendSaga(): SagaIterator {
         questions: newQuestions
       };
       yield put(actions.updateAssessment(newAssessment));
-      yield put(actions.updateSaveStatus('assessment' as WorkspaceLocation, 'saved'));
-      return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
+      yield put(actions.updateSaveStatus('assessment', 'saved'));
+      return yield put(actions.updateHasUnsavedChanges('assessment', false));
     }
   );
 
