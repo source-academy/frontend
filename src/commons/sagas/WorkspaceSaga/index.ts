@@ -177,8 +177,8 @@ const WorkspaceSaga = combineSagaHandlers({
         );
         //const names: AutoCompleteEntry[] = yield take(channel);
         const { names, timeout }: { names?: AutoCompleteEntry[]; timeout?: true } = yield race({
-        names: take(channel),
-        timeout: delay(3000),
+          names: take(channel),
+          timeout: delay(3000)
         });
 
         if (timeout || !names) {
