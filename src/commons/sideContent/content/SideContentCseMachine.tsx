@@ -367,6 +367,12 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                           label="From stash"
                           onChange={() => this.toggleArrowFilter('stash')}
                         />
+                        <Checkbox
+                          checked={CseMachine.getPairCreationMode()}
+                          disabled={!this.state.visualization}
+                          label="Pairs returned by nullary functions"
+                          onChange={() => this.togglePairCreationModeArrows()}
+                        />
                       </div>
                     }
                   >
@@ -613,7 +619,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   };
 
   private stepNextChangepoint = () => {
-    for (const step of this.props.changepointSteps) {
+    const changeSteps = this.props.changepointSteps;
+    for (const step of changeSteps) {
       if (step > this.state.value) {
         this.sliderShift(step);
         this.sliderRelease(step);
@@ -625,8 +632,9 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   };
 
   private stepPrevChangepoint = () => {
-    for (let i = this.props.changepointSteps.length - 1; i >= 0; i--) {
-      const step = this.props.changepointSteps[i];
+    const changeSteps = this.props.changepointSteps;
+    for (let i = changeSteps.length - 1; i >= 0; i--) {
+      const step = changeSteps[i];
       if (step < this.state.value) {
         this.sliderShift(step);
         this.sliderRelease(step);
@@ -640,6 +648,11 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   private toggleArrowFilter = (origin: ArrowOriginFilterKey) => {
     const filters = CseMachine.getArrowOriginFilters();
     CseMachine.setArrowOriginVisible(origin, !filters[origin]);
+    this.refreshArrowFilters();
+  };
+
+  private togglePairCreationModeArrows = () => {
+    CseMachine.togglePairCreationMode();
     this.refreshArrowFilters();
   };
 

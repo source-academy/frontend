@@ -46,6 +46,7 @@ export default class CseMachine {
   private static printableMode: boolean = false;
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
+  private static pairCreationMode: boolean = false;
   private static centerAlignment: boolean = false;
   private static centerAlignmentToggled: boolean = false;
   private static arrowOriginFilters: ArrowOriginFilters = {
@@ -55,14 +56,19 @@ export default class CseMachine {
   private static currentEnvId: string;
   private static control: Control | undefined;
   private static stash: Stash | undefined;
+  private static streamLineage: Map<string, string[]> = new Map();
   public static togglePrintableMode(): void {
     CseMachine.printableMode = !CseMachine.printableMode;
   }
   public static toggleControlStash(): void {
+    //CseMachine.pairCreationMode = false;
     CseMachine.controlStash = !CseMachine.controlStash;
   }
   public static toggleStackTruncated(): void {
     CseMachine.stackTruncated = !CseMachine.stackTruncated;
+  }
+  public static togglePairCreationMode(): void {
+    CseMachine.pairCreationMode = !CseMachine.pairCreationMode;
   }
   public static setClearDeadFrames(enabled: boolean): void {
     Layout.clearDeadFrames = enabled;
@@ -168,7 +174,22 @@ export default class CseMachine {
       }
     }
   }
+  public static getStreamLineage(key: string): string[] | undefined {
+    return CseMachine.streamLineage.get(key);
+  }
+  public static findKeyByValueInMap(value: any) {
+    for (const [key, array] of CseMachine.streamLineage.entries()) {
+      // console.log(key + array);
+      if (array.includes(value)) {
+        return key;
+      }
+    }
 
+    return undefined;
+  }
+  public static getPairCreationMode(): boolean {
+    return CseMachine.pairCreationMode;
+  }
   public static isControl(): boolean {
     return this.control ? !this.control.isEmpty() : false;
   }
@@ -203,6 +224,7 @@ export default class CseMachine {
       throw new Error('CSE machine not initialized');
     CseMachine.control = context.runtime.control;
     CseMachine.stash = context.runtime.stash;
+    CseMachine.streamLineage = context.streamLineage;
     CseMachine.setClearDeadFrames(false);
 
     Layout.setContext(
@@ -401,7 +423,18 @@ export default class CseMachine {
         CseAnimation.updateAnimation();
       }
 
-      if (
+      if (CseMachine.getPairCreationMode()) {
+        Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
+        if (!CseMachine.getMasterLayout()) {
+          CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+        }
+        Layout.applyFixedPositions();
+        CseAnimation.updateAnimation();
+        this.setVis(Layout.draw());
+        // this.setVis(Layout.draw());
+        // console.log(Layout.currentDarkPairs);
+        // this.setVis(Layout.currentDarkPairs);
+      } else if (
         CseMachine.getPrintableMode() &&
         CseMachine.getControlStash() &&
         CseMachine.getStackTruncated() &&
