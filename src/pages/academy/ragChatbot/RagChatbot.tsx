@@ -1,19 +1,13 @@
 import { AnchorButton, Icon } from '@blueprintjs/core';
 import * as React from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
-import logo from 'src/assets/SA.jpg';
+import pixelLogo from 'src/assets/pixel.jpg';
 import { useSession } from 'src/commons/utils/Hooks';
-import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
-import classes from 'src/styles/Chatbot.module.scss';
+import classes from 'src/styles/RagChatbot.module.scss';
 
-import ChatBox from './ChatBox';
+import RagChatBox from './RagChatBox';
 
-type Props = {
-  getSection: () => SicpSection;
-  getText: () => string;
-};
-
-const ICON_SIZE = 50;
+const ICON_SIZE = 70;
 const CHAT_WIDTH = 400;
 const CHAT_HEIGHT = 450;
 const CHAT_EXPANDED_WIDTH = 700;
@@ -44,26 +38,31 @@ const clampPosition = (
   };
 };
 
-const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
+const RagChatbot: React.FC = () => {
+  const { isLoggedIn } = useSession();
   const [isPop, setPop] = React.useState(false);
   const [isDivVisible, setIsDivVisible] = React.useState(false);
-  const [tipsMessage, setTipsMessage] = React.useState('You can click me for a chat');
+  const [tipsMessage, setTipsMessage] = React.useState('Click me for a chat!');
   const [activeSnippetId, setActiveSnippetId] = React.useState('');
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [position, setPosition] = React.useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = React.useState(false);
-  const { isLoggedIn } = useSession();
   const nodeRef = React.useRef<HTMLDivElement>(null);
 
   const isSnippetOpen = activeSnippetId !== '';
 
-  const toggleExpanded = React.useCallback(() => {
+  // Only show for logged-in users
+  if (!isLoggedIn) {
+    return null;
+  }
+
+  const toggleExpanded = () => {
     setIsExpanded(prev => {
       const next = !prev;
       setPosition(pos => clampPosition(pos.x, pos.y, true, next));
       return next;
     });
-  }, []);
+  };
 
   const togglePop = () => {
     if (isDragging) {
@@ -75,17 +74,9 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
       setTipsMessage('');
       setPosition(pos => clampPosition(pos.x, pos.y, true, isExpanded));
     } else {
-      setTipsMessage('You can click me for a chat');
+      setTipsMessage('Click me for a chat!');
     }
   };
-
-  React.useEffect(() => {
-    const handleResize = () => {
-      setPosition(pos => clampPosition(pos.x, pos.y, isPop, isExpanded));
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [isPop, isExpanded]);
 
   const handleDragStart = () => {
     setIsDragging(false);
@@ -105,53 +96,28 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
 
   return (
     <div>
-      {isLoggedIn && (
-        <Draggable
-          nodeRef={nodeRef}
-          handle={`.${classes['bot-button']}`}
-          position={position}
-          onStart={handleDragStart}
-          onDrag={handleDrag}
-          onStop={handleDragStop}
+      <Draggable
+        nodeRef={nodeRef}
+        handle={`.${classes['bot-button']}`}
+        position={position}
+        onStart={handleDragStart}
+        onDrag={handleDrag}
+        onStop={handleDragStop}
+      >
+        <div
+          ref={nodeRef}
+          className={classes['bot-container']}
+          style={{ display: isSnippetOpen ? 'none' : 'block' }}
         >
-          <div
-            ref={nodeRef}
-            className={classes['bot-container']}
-            style={{ display: isSnippetOpen ? 'none' : 'block' }}
-          >
-            <div className={classes['bot-area']}>
-              {isDivVisible && (
-                <div className={classes['tips-box']}>
-                  <p className={classes['tips-message']}>
-                    I am Louis, your SICP bot
-                    <br />
-                    {tipsMessage}
-                  </p>
-                </div>
-              )}
-              <AnchorButton
-                className={classes['bot-button']}
-                onMouseEnter={() => !isDragging && setIsDivVisible(true)}
-                onMouseLeave={() => setIsDivVisible(false)}
-                onClick={togglePop}
-                icon={
-                  <Icon
-                    icon={
-                      <img src={logo} className={classes['iSA']} alt="SA Logo" draggable={false} />
-                    }
-                  />
-                }
-              />
-            </div>
-            {isPop && (
-              <ChatBox
-                getSection={getSection}
-                getText={getText}
-                activeSnippetId={activeSnippetId}
-                setActiveSnippetId={setActiveSnippetId}
-                isExpanded={isExpanded}
-                toggleExpanded={toggleExpanded}
-              />
+          <div className={classes['bot-area']}>
+            {isDivVisible && (
+              <div className={classes['tips-box']}>
+                <p className={classes['tips-message']}>
+                  {'I am Pixel, your CS1101S assistant'}
+                  <br />
+                  {tipsMessage}
+                </p>
+              </div>
             )}
             <AnchorButton
               className={classes['bot-button']}
@@ -161,16 +127,29 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
               icon={
                 <Icon
                   icon={
-                    <img src={logo} className={classes['iSA']} alt="SA Logo" draggable={false} />
+                    <img
+                      src={pixelLogo}
+                      className={classes['pixel-avatar']}
+                      alt="Pixel Logo"
+                      draggable={false}
+                    />
                   }
                 />
               }
             />
           </div>
-        </Draggable>
-      )}
+          {isPop && (
+            <RagChatBox
+              isExpanded={isExpanded}
+              toggleExpanded={toggleExpanded}
+              activeSnippetId={activeSnippetId}
+              setActiveSnippetId={setActiveSnippetId}
+            />
+          )}
+        </div>
+      </Draggable>
     </div>
   );
 };
 
-export default Chatbot;
+export default RagChatbot;

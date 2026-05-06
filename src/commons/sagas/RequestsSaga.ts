@@ -1515,6 +1515,21 @@ export const getAssessmentConfigs = async (
 };
 
 /**
+ * GET /courses/{courseId}/admin/config/pixelbot_document_map
+ */
+export const getPixelbotDocumentMap = async (tokens: Tokens): Promise<any[] | null> => {
+  const resp = await request(`${courseId()}/admin/config/pixelbot_document_map`, 'GET', {
+    ...tokens
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  const data = await resp.json();
+  return data.documentMap;
+};
+
+/**
  * PUT /courses/{courseId}/admin/config/assessment_configs
  */
 export const putAssessmentConfigs = async (

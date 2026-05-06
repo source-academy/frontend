@@ -11,8 +11,6 @@
   position: relative;
   width: 400px;
   height: 450px;
-  max-height: 80vh;
-  max-width: 100vw;
   border-radius: 8px;
   background-color: #f1f1f1;
   padding: 16px;
@@ -27,9 +25,35 @@
 
 .chat-container-expanded {
   width: 700px;
-  max-width: 100vw;
   height: 80vh;
   max-height: 800px;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.feedback-link {
+  font-size: 11px;
+  color: #888;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #333;
+    text-decoration: underline;
+  }
+}
+
+.chat-header-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
 }
 
 .expand-button {
@@ -75,9 +99,9 @@
   position: absolute;
   right: 10px;
   bottom: 10px;
-  background-color: transparent;
+  background-color: #e8e8e8;
   border: none;
-  padding: 0;
+  padding: 6px;
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -92,7 +116,7 @@
   }
 }
 
-.iSA {
+.pixel-avatar {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -254,6 +278,7 @@
   align-items: center;
   height: 20px;
 }
+
 .input-count {
   font-size: 10px;
   color: #666;
