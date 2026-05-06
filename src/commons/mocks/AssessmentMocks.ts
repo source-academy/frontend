@@ -25,7 +25,8 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
       hasVotingFeatures: false,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isAutosaveEnabled: true
     },
     {
       assessmentConfigId: 2,
@@ -37,7 +38,8 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
       hasVotingFeatures: false,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isAutosaveEnabled: true
     },
     {
       assessmentConfigId: 3,
@@ -49,7 +51,8 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
       hasVotingFeatures: false,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isAutosaveEnabled: true
     },
     {
       assessmentConfigId: 4,
@@ -61,7 +64,8 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
       hasVotingFeatures: true,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isAutosaveEnabled: true
     },
     {
       assessmentConfigId: 5,
@@ -73,7 +77,8 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
       hasVotingFeatures: false,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isAutosaveEnabled: true
     }
   ],
   [
@@ -87,7 +92,8 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
       hasVotingFeatures: false,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isAutosaveEnabled: true
     },
     {
       assessmentConfigId: 2,
@@ -99,7 +105,8 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
       hasVotingFeatures: false,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isAutosaveEnabled: true
     },
     {
       assessmentConfigId: 3,
@@ -111,7 +118,8 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
       hasVotingFeatures: false,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isAutosaveEnabled: true
     }
   ]
 ];

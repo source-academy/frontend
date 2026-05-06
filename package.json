@@ -51,6 +51,7 @@
     "@szhsin/react-menu": "^4.0.0",
     "@tanstack/react-table": "^8.9.3",
     "ace-builds": "^1.42.1",
+    "ace-diff": "^4.0.0",
     "acorn": "^8.9.0",
     "ag-grid-community": "^35.0.0",
     "ag-grid-react": "^35.0.0",

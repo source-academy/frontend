@@ -268,7 +268,8 @@ test('setAssessmentConfigurations generates correct action object', () => {
       hasTokenCounter: false,
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isAutosaveEnabled: true
     },
     {
       assessmentConfigId: 2,
@@ -280,7 +281,8 @@ test('setAssessmentConfigurations generates correct action object', () => {
       hasTokenCounter: false,
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isAutosaveEnabled: true
     },
     {
       assessmentConfigId: 3,
@@ -292,7 +294,8 @@ test('setAssessmentConfigurations generates correct action object', () => {
       hasTokenCounter: false,
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isAutosaveEnabled: true
     }
   ];
   const action = SessionActions.setAssessmentConfigurations(assesmentConfigurations);
@@ -726,7 +729,8 @@ test('updateAssessmentTypes generates correct action object', () => {
       hasTokenCounter: false,
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isAutosaveEnabled: true
     },
     {
       assessmentConfigId: 2,
@@ -738,7 +742,8 @@ test('updateAssessmentTypes generates correct action object', () => {
       hasTokenCounter: false,
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isAutosaveEnabled: true
     },
     {
       assessmentConfigId: 3,
@@ -750,7 +755,8 @@ test('updateAssessmentTypes generates correct action object', () => {
       hasTokenCounter: false,
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isAutosaveEnabled: true
     },
     {
       assessmentConfigId: 4,
@@ -762,7 +768,8 @@ test('updateAssessmentTypes generates correct action object', () => {
       hasTokenCounter: false,
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isAutosaveEnabled: true
     },
     {
       assessmentConfigId: 5,
@@ -774,7 +781,8 @@ test('updateAssessmentTypes generates correct action object', () => {
       hasTokenCounter: false,
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 0,
-      earlySubmissionXp: 0
+      earlySubmissionXp: 0,
+      isAutosaveEnabled: true
     },
     {
       assessmentConfigId: 6,
@@ -786,7 +794,8 @@ test('updateAssessmentTypes generates correct action object', () => {
       hasTokenCounter: false,
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isAutosaveEnabled: true
     }
   ];
   const action = SessionActions.updateAssessmentConfigs(assessmentConfigs);
@@ -807,7 +816,8 @@ test('deleteAssessmentConfig generates correct action object', () => {
     hasTokenCounter: false,
     hasVotingFeatures: false,
     hoursBeforeEarlyXpDecay: 48,
-    earlySubmissionXp: 200
+    earlySubmissionXp: 200,
+    isAutosaveEnabled: true
   };
   const action = SessionActions.deleteAssessmentConfig(assessmentConfig);
   expect(action).toEqual({

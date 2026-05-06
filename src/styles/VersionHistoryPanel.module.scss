@@ -1,0 +1,179 @@
+.drawer {
+  .body {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .list {
+    width: 280px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 4px 0;
+  }
+
+  .group {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .groupHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.06);
+    }
+
+    &.groupHeaderContainsSelected {
+      border-left: 3px solid #137cbd;
+      padding-left: 9px;
+    }
+  }
+
+  .groupHeaderInfo {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .groupLabel {
+    font-weight: 600;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .groupCount {
+    font-size: 11px;
+    opacity: 0.55;
+    margin-top: 2px;
+  }
+
+  .groupChevron {
+    font-size: 18px;
+    line-height: 1;
+    opacity: 0.6;
+    margin-left: 6px;
+    transform: rotate(0deg);
+    transition: transform 0.15s ease;
+    flex-shrink: 0;
+
+    &.groupChevronOpen {
+      transform: rotate(90deg);
+    }
+  }
+
+  .groupBody {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+
+  .item {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background-color 0.1s ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.06);
+    }
+
+    &.itemSelected {
+      background-color: rgba(255, 255, 255, 0.12);
+      border-left: 3px solid #137cbd;
+      padding-left: 9px;
+    }
+
+    &.itemNested {
+      padding-left: 20px;
+
+      &.itemSelected {
+        padding-left: 17px;
+      }
+    }
+  }
+
+  .itemInfo {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .itemName {
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .itemTimestamp {
+    font-size: 12px;
+    opacity: 0.6;
+  }
+
+  .preview {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .previewContent {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .previewHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+  }
+
+  .diffLabels {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .diffLabel {
+    flex: 1;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.7;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  .diffContainer {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+
+    :global(.ace-diff-container) {
+      position: absolute;
+      inset: 0;
+    }
+  }
+}
