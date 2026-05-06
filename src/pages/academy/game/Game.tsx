@@ -1,6 +1,6 @@
 import { Button, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { useFullscreen } from '@mantine/hooks';
+import { useFullscreenElement } from '@mantine/hooks';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -61,7 +61,7 @@ const Game: React.FC = () => {
     ref: fullscreenRef,
     toggle: toggleFullscreen,
     fullscreen: isFullscreen
-  } = useFullscreen<HTMLDivElement>();
+  } = useFullscreenElement<HTMLDivElement>();
 
   // This function is a wrapper around toggleFullscreen that also locks the screen orientation
   // to landscape when entering fullscreen and unlocks it when exiting fullscreen

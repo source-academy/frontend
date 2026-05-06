@@ -25,7 +25,8 @@ const defaultProps = assertType<AssessmentWorkspaceProps>()({
     hasTokenCounter: false,
     hasVotingFeatures: false,
     hoursBeforeEarlyXpDecay: 48,
-    earlySubmissionXp: 200
+    earlySubmissionXp: 200,
+    isAutosaveEnabled: true
   },
   fromContestLeaderboard: false,
   questionId: 0

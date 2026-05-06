@@ -434,5 +434,56 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(setUpdateUserRoleCallback, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].updateUserRoleCallback = action.payload.updateUserRoleCallback;
+    })
+    .addCase(WorkspaceActions.fetchVersionHistory, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].versionHistory.isLoading = true;
+    })
+    .addCase(WorkspaceActions.receiveVersionHistory, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].versionHistory.versions = action.payload.versions;
+      state[workspaceLocation].versionHistory.isLoading = false;
+    })
+    .addCase(WorkspaceActions.selectVersion, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].versionHistory.selectedVersion = action.payload.version;
+      state[workspaceLocation].versionHistory.selectedVersionCode = null;
+      state[workspaceLocation].versionHistory.isLoadingCode = action.payload.version !== null;
+    })
+    .addCase(WorkspaceActions.receiveVersionCode, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      const versionHistory = state[workspaceLocation].versionHistory;
+      if (versionHistory.selectedVersion?.id !== action.payload.versionId) return;
+      versionHistory.selectedVersionCode = action.payload.code;
+      versionHistory.isLoadingCode = false;
+    })
+    .addCase(WorkspaceActions.restoreVersion, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      const workspace = state[workspaceLocation];
+      if (workspace.activeEditorTabIndex !== null) {
+        workspace.editorTabs[workspace.activeEditorTabIndex].value = action.payload.code;
+      }
+    })
+    .addCase(WorkspaceActions.toggleHistoryPanel, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].versionHistory.isHistoryPanelOpen =
+        !state[workspaceLocation].versionHistory.isHistoryPanelOpen;
+    })
+    .addCase(WorkspaceActions.nameVersion, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      const version = state[workspaceLocation].versionHistory.versions.find(
+        v => v.id === action.payload.versionId
+      );
+      if (version) {
+        version.name = action.payload.name;
+      }
+    })
+    .addCase(WorkspaceActions.updateSaveStatus, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].saveStatus = action.payload.saveStatus;
+    })
+    .addCase(WorkspaceActions.setIsAutoSaving, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].versionHistory.isAutoSaving = action.payload.isAutoSaving;
     });
 });
