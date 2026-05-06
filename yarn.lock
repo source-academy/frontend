@@ -2095,12 +2095,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/hooks@npm:^7.11.2":
-  version: 7.17.8
-  resolution: "@mantine/hooks@npm:7.17.8"
+"@mantine/hooks@npm:^9.0.0":
+  version: 9.1.1
+  resolution: "@mantine/hooks@npm:9.1.1"
   peerDependencies:
-    react: ^18.x || ^19.x
-  checksum: 10c0/c68ace173bae85f7dcc20951bd7d35853e743a24934d963701118e2015a7ab37fecabcb84b5013b7cf9b83ad8439fe5ac5a1502a0493c1fbb1e41f5560ddf01e
+    react: ^19.2.0
+  checksum: 10c0/63189c4e2c67f296822dc6e844152cf2521878ba7aed1b6a99b4c34662b2f97f4f43d46a84772a38e5fbbf478c42ac76066bcde2089b71d9051eee734f44b4c1
   languageName: node
   linkType: hard
 
@@ -7045,7 +7045,7 @@ __metadata:
     "@dnd-kit/core": "npm:^6.3.1"
     "@dnd-kit/sortable": "npm:^10.0.0"
     "@dnd-kit/utilities": "npm:^3.2.2"
-    "@mantine/hooks": "npm:^7.11.2"
+    "@mantine/hooks": "npm:^9.0.0"
     "@octokit/rest": "npm:^22.0.0"
     "@reduxjs/toolkit": "npm:^1.9.7"
     "@rsbuild/core": "npm:^2.0.3"
