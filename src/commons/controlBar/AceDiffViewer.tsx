@@ -1,7 +1,7 @@
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-twilight';
-import 'ace-diff/styles.css';
 import 'ace-diff/styles-twilight.css';
+import 'ace-diff/styles.css';
 
 import * as ace from 'ace-builds';
 import AceDiff from 'ace-diff';
@@ -40,7 +40,7 @@ const AceDiffViewer: React.FC<Props> = ({ currentCode, versionCode }) => {
           editable: false,
           copyLinkEnabled: false
         }
-      } as any);
+      });
     };
 
     const observer = new ResizeObserver(() => {
@@ -57,7 +57,7 @@ const AceDiffViewer: React.FC<Props> = ({ currentCode, versionCode }) => {
       editors.right.resize(true);
       const liveLineHeight = editors.left.renderer.lineHeight || editors.right.renderer.lineHeight;
       if (liveLineHeight) {
-        (diff as any).lineHeight = liveLineHeight;
+        diff.lineHeight = liveLineHeight;
       }
       diff.diff();
     });
