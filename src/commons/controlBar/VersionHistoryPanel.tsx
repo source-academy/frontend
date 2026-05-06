@@ -12,6 +12,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import styles from '../../styles/VersionHistoryPanel.module.scss';
 import type { CodeVersion, CodeVersionMetadata } from '../workspace/WorkspaceTypes';
 import AceDiffViewer from './AceDiffViewer';
 
@@ -112,9 +113,9 @@ export const VersionHistoryPanel: React.FC<Props> = ({
       role="button"
       tabIndex={0}
       aria-pressed={version.id === selectedVersion?.id}
-      className={classNames('version-history-item', {
-        'version-history-item--selected': version.id === selectedVersion?.id,
-        'version-history-item--nested': nested
+      className={classNames(styles.item, {
+        [styles.itemSelected]: version.id === selectedVersion?.id,
+        [styles.itemNested]: nested
       })}
       onClick={() => onSelectVersion(version)}
       onKeyDown={e => {
@@ -124,16 +125,16 @@ export const VersionHistoryPanel: React.FC<Props> = ({
         }
       }}
     >
-      <div className="version-history-item-info">
+      <div className={styles.itemInfo}>
         <EditableText
           key={version.name ?? version.id}
-          className="version-history-item-name"
+          className={styles.itemName}
           defaultValue={version.name || formatTimestamp(version.timestamp)}
           placeholder={formatTimestamp(version.timestamp)}
           onConfirm={(value: string) => onRename(version.id, value)}
           selectAllOnFocus
         />
-        <span className="version-history-item-timestamp">{formatTimestamp(version.timestamp)}</span>
+        <span className={styles.itemTimestamp}>{formatTimestamp(version.timestamp)}</span>
       </div>
     </div>
   );
@@ -146,21 +147,20 @@ export const VersionHistoryPanel: React.FC<Props> = ({
 
     if (!hasMultiple) {
       return (
-        <div key={group.id} className="version-history-group">
+        <div key={group.id} className={styles.group}>
           {renderVersionItem(newestVersion, false)}
         </div>
       );
     }
 
     return (
-      <div key={group.id} className="version-history-group">
+      <div key={group.id} className={styles.group}>
         <div
           role="button"
           tabIndex={0}
           aria-expanded={isExpanded}
-          className={classNames('version-history-group-header', {
-            'version-history-group-header--expanded': isExpanded,
-            'version-history-group-header--contains-selected': group.versions.some(
+          className={classNames(styles.groupHeader, {
+            [styles.groupHeaderContainsSelected]: group.versions.some(
               v => v.id === selectedVersion?.id
             )
           })}
@@ -172,9 +172,9 @@ export const VersionHistoryPanel: React.FC<Props> = ({
             }
           }}
         >
-          <div className="version-history-group-header-info">
+          <div className={styles.groupHeaderInfo}>
             <div
-              className="version-history-group-label"
+              className={styles.groupLabel}
               onClick={e => e.stopPropagation()}
               onKeyDown={e => e.stopPropagation()}
             >
@@ -186,11 +186,11 @@ export const VersionHistoryPanel: React.FC<Props> = ({
                 selectAllOnFocus
               />
             </div>
-            <span className="version-history-group-count">{group.versions.length} versions</span>
+            <span className={styles.groupCount}>{group.versions.length} versions</span>
           </div>
           <span
-            className={classNames('version-history-group-chevron', {
-              'version-history-group-chevron--open': isExpanded
+            className={classNames(styles.groupChevron, {
+              [styles.groupChevronOpen]: isExpanded
             })}
           >
             ›
@@ -198,7 +198,7 @@ export const VersionHistoryPanel: React.FC<Props> = ({
         </div>
 
         {isExpanded && (
-          <div className="version-history-group-body">
+          <div className={styles.groupBody}>
             {group.versions.map(v => renderVersionItem(v, true))}
           </div>
         )}
@@ -213,11 +213,11 @@ export const VersionHistoryPanel: React.FC<Props> = ({
       );
     }
     return (
-      <div className="version-history-preview-content">
-        <div className="version-history-preview-header">
-          <div className="version-history-diff-labels">
-            <span className="version-history-diff-label">Current</span>
-            <span className="version-history-diff-label">
+      <div className={styles.previewContent}>
+        <div className={styles.previewHeader}>
+          <div className={styles.diffLabels}>
+            <span className={styles.diffLabel}>Current</span>
+            <span className={styles.diffLabel}>
               {selectedVersion.name || formatTimestamp(selectedVersion.timestamp)}
             </span>
           </div>
@@ -229,7 +229,7 @@ export const VersionHistoryPanel: React.FC<Props> = ({
             onClick={handleRestore}
           />
         </div>
-        <div className="version-history-diff-container">
+        <div className={styles.diffContainer}>
           {isLoadingCode ? (
             <NonIdealState
               description="Loading version code..."
@@ -254,15 +254,15 @@ export const VersionHistoryPanel: React.FC<Props> = ({
       icon={IconNames.HISTORY}
     />
   ) : (
-    <div className="version-history-body">
-      <div className="version-history-list">{groups.map(g => renderGroup(g))}</div>
-      <div className="version-history-preview">{renderPreviewPane()}</div>
+    <div className={styles.body}>
+      <div className={styles.list}>{groups.map(g => renderGroup(g))}</div>
+      <div className={styles.preview}>{renderPreviewPane()}</div>
     </div>
   );
 
   return (
     <Drawer
-      className={classNames('version-history-drawer', Classes.DARK)}
+      className={classNames(styles.drawer, Classes.DARK)}
       icon={IconNames.HISTORY}
       isCloseButtonShown={true}
       isOpen={isOpen}
