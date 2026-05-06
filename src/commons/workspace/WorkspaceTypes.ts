@@ -1,5 +1,6 @@
 import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
 import type { Context } from 'js-slang';
+import { createConductor } from 'src/features/conductor/createConductor';
 
 import type {
   AllColsSortStates,
@@ -107,6 +108,7 @@ export type WorkspaceState = {
   readonly debuggerContext: DebuggerContext;
   readonly lastDebuggerResult: any;
   readonly files: UploadResult;
+  readonly conductor: ReturnType<typeof createConductor> | null;
   readonly updateUserRoleCallback: (id: string, newRole: CollabEditingAccess) => void;
 };
 

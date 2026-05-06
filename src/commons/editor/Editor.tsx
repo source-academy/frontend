@@ -22,7 +22,7 @@ import { Card } from '@blueprintjs/core';
 import * as AceBuilds from 'ace-builds';
 import { Ace, require as acequire, createEditSession } from 'ace-builds';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
 import { IAceEditor } from 'react-ace/lib/types';
 import { SALanguage } from '../application/ApplicationTypes';
@@ -41,6 +41,11 @@ import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
+import { useFeature } from '../featureFlags/useFeature';
+import { useTypedSelector } from '../utils/Hooks';
+
+//const CONDUCTOR_ACE_MODE_READY_EVENT = 'conductor:ace-mode-ready';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (
@@ -72,6 +77,7 @@ type EditorStateProps = {
   sourceVariant?: Variant;
   hooks?: EditorHook[];
   editorBinding?: EditorBinding;
+  mode?: string;
   setUsers?: React.Dispatch<React.SetStateAction<Record<string, SharedbAceUser>>>;
   // TODO: Handle changing of external library
   updateLanguageCallback?: (sublanguage: SALanguage, e: any) => void;
@@ -471,6 +477,62 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     }
   };
 
+  const conductorEnabled = useFeature(flagConductorEnable);
+  const selectedEvaluatorId = useTypedSelector(s => s.languageDirectory.selectedEvaluatorId)!;
+  useEffect(() => {
+    if (!conductorEnabled || !reactAceRef.current || !selectedEvaluatorId) {
+      return;
+    }
+
+    const editor = reactAceRef.current.editor;
+    const modeId = `ace/mode/${selectedEvaluatorId}`;
+    let modeChangeUnsub: (() => void) | undefined;
+    let pollHandle: ReturnType<typeof setInterval> | undefined;
+
+    const apply = (session: any) => {
+      const modeModule = acequire(modeId);
+      if (!modeModule?.Mode) return false;
+      if ((session.getMode() as any).$id === modeId) return true;
+      session.setMode(new modeModule.Mode());
+      return true;
+    };
+
+    const attachToSession = (session: any) => {
+      modeChangeUnsub?.();
+      if (pollHandle) clearInterval(pollHandle);
+
+      const onChangeMode = () => {
+        if ((session.getMode() as any).$id !== modeId) {
+          apply(session);
+        }
+      };
+      session.on('changeMode', onChangeMode);
+      modeChangeUnsub = () => session.off('changeMode', onChangeMode);
+
+      if (!apply(session)) {
+        pollHandle = setInterval(() => {
+          if (apply(session)) {
+            clearInterval(pollHandle);
+            pollHandle = undefined;
+          }
+        }, 200);
+      }
+    };
+
+    attachToSession(editor.getSession());
+
+    const onChangeSession = (e: any) => {
+      attachToSession(e.session);
+    };
+    editor.on('changeSession', onChangeSession);
+
+    return () => {
+      modeChangeUnsub?.();
+      if (pollHandle) clearInterval(pollHandle);
+      editor.off('changeSession', onChangeSession);
+    };
+  }, [conductorEnabled, selectedEvaluatorId]);
+
   const aceEditorProps: IAceEditorProps = {
     className: 'react-ace',
     editorProps: {
@@ -480,7 +542,9 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     fontSize: 17,
     height: '100%',
     highlightActiveLine: false,
-    mode: getModeString(sourceChapter, sourceVariant, externalLibraryName),
+    mode: conductorEnabled
+      ? 'text'
+      : getModeString(sourceChapter, sourceVariant, externalLibraryName),
     theme: 'source',
     value: props.editorValue,
     width: '100%',
