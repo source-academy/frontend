@@ -1,0 +1,83 @@
+.pixelbot-config {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+
+  .description {
+    color: #5c7080;
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  .section {
+    margin-bottom: 28px;
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .section-header-center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 8px;
+      position: relative;
+
+      .edit-icon {
+        position: absolute;
+        right: 0;
+      }
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .section-helper {
+      color: #5c7080;
+      font-size: 12px;
+    }
+
+    .edit-icon {
+      color: #a7b6c2;
+      cursor: pointer;
+      padding: 4px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      transition: color 0.15s ease;
+
+      &:hover {
+        color: #5c7080;
+      }
+    }
+
+    .prompt-textarea {
+      height: 400px;
+      font-family: monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      resize: vertical;
+    }
+
+    .document-map-textarea {
+      height: 300px;
+      font-family: monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      background-color: #f5f8fa;
+      resize: vertical;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+  }
+}

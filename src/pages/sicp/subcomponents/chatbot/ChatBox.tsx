@@ -65,7 +65,6 @@ const ChatBox: React.FC<Props> = ({
     const currentSection = getSection();
     const currentText = getText();
 
-    // No chatId needed - backend identifies conversation by user
     continueChat(tokens, userInput, currentSection, currentText)
       .then(resp => {
         setMessages(prev => [...prev, { id: uuid(), role: 'assistant', content: resp.response }]);
@@ -86,26 +85,27 @@ const ChatBox: React.FC<Props> = ({
   );
 
   const resetChat = useCallback(() => {
-    initChat(tokens).then(resp => {
-      const conversationMessages = resp.messages;
-      const maxMessageSize = resp.maxContentSize;
-      // Load all previous messages from the conversation, or use initial if empty
-      if (conversationMessages && conversationMessages.length > 0) {
-        // Ensure all messages have IDs (backend may not provide them)
-        const messagesWithIds = conversationMessages.map(msg => ({
-          ...msg,
-          id: msg.id || uuid()
-        }));
-        setMessages(messagesWithIds);
-      } else {
+    initChat(tokens)
+      .then(resp => {
+        const conversationMessages = resp.messages;
+        const maxMessageSize = resp.maxContentSize;
+        if (conversationMessages && conversationMessages.length > 0) {
+          const messagesWithIds = conversationMessages.map(msg => ({
+            ...msg,
+            id: msg.id || uuid()
+          }));
+          setMessages(messagesWithIds);
+        } else {
+          setMessages([createInitialMessage()]);
+        }
+        setMaxContentSize(maxMessageSize);
+        setUserInput('');
+      })
+      .catch(() => {
         setMessages([createInitialMessage()]);
-      }
-      setMaxContentSize(maxMessageSize);
-      setUserInput('');
-    });
+      });
   }, [tokens]);
 
-  // Run once when component is mounted
   useEffect(() => {
     resetChat();
     // eslint-disable-next-line react-hooks/exhaustive-deps
