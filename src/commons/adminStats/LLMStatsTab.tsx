@@ -12,7 +12,7 @@ import {
   Tag
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 
 import { LLMAssessmentStat, LLMCourseStat, LLMQuestionStat } from '../assessment/AssessmentTypes';
 import { getLLMCourseStats } from '../sagas/RequestsSaga';
@@ -287,7 +287,7 @@ const LLMStatsTab: React.FC = () => {
           {sortedAssessments.map(assessment => {
             const isExpanded = expanded.has(assessment.assessment_id);
             return (
-              <React.Fragment key={assessment.assessment_id}>
+              <Fragment key={assessment.assessment_id}>
                 <tr
                   style={{ cursor: 'pointer' }}
                   onClick={() => toggleRow(assessment.assessment_id)}
@@ -345,7 +345,7 @@ const LLMStatsTab: React.FC = () => {
                     </td>
                   </tr>
                 )}
-              </React.Fragment>
+              </Fragment>
             );
           })}
         </tbody>

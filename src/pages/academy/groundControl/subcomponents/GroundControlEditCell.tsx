@@ -2,7 +2,6 @@ import { Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import dayjs from 'dayjs';
 import { useCallback, useState } from 'react';
-import { DateInput } from 'src/commons/DateTimePickers';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
@@ -46,7 +45,7 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
     }
   }, [newDate, currentDate, data, handleAssessmentChangeDate, forOpenDate, handleCloseDialog]);
 
-  const handleDateChange = React.useCallback(
+  const handleDateChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const selected = dayjs(event.target.value);
 
