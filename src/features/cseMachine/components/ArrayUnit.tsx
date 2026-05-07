@@ -1,5 +1,4 @@
 import { Text, TextConfig } from 'konva/lib/shapes/Text';
-import React from 'react';
 import { Text as KonvaText } from 'react-konva';
 
 import CseMachine from '../CseMachine';
