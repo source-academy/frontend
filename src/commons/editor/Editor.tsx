@@ -36,14 +36,14 @@ import { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 // TODO: Should further refactor into EditorBase + different variants.
 // Ideally, hooks should be specified by the parent component instead.
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
+import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { useFeature } from '../featureFlags/useFeature';
+import { useTypedSelector } from '../utils/Hooks';
 import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
-import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
-import { useFeature } from '../featureFlags/useFeature';
-import { useTypedSelector } from '../utils/Hooks';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (
