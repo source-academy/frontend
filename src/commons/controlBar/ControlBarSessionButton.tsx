@@ -29,7 +29,7 @@ function handleError(error: any) {
   showWarningMessage(`Could not connect: ${(error && error.message) || error || 'Unknown error'}`);
 }
 
-export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
+function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
   const joinElemRef = useRef('');
   const [sessionId, setSessionId] = useState('');
   const [defaultReadOnly, setDefaultReadOnly] = useState(true);
@@ -199,3 +199,5 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
     </Tooltip>
   );
 }
+
+export default ControlBarSessionButtons;

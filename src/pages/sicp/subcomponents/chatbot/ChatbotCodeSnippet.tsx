@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
-import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
+import ControlBarCloseButton from 'src/commons/controlBar/ControlBarCloseButton';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import Playground from 'src/pages/playground/Playground';

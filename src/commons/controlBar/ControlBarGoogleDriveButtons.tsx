@@ -23,7 +23,7 @@ type Props = {
   onPopoverOpening?: () => any;
 };
 
-export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
+const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
   const { isMobileBreakpoint } = useResponsive();
   const state: PersistenceState = props.currentFile
     ? props.isDirty
@@ -85,3 +85,5 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
     </Tooltip>
   );
 };
+
+export default ControlBarGoogleDriveButtons;

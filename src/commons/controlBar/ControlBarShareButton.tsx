@@ -34,7 +34,7 @@ type State = {
   isLoading: boolean;
 };
 
-export class ControlBarShareButton extends PureComponent<ControlBarShareButtonProps, State> {
+class ControlBarShareButton extends PureComponent<ControlBarShareButtonProps, State> {
   private shareInputElem: React.RefObject<HTMLInputElement | null>;
 
   constructor(props: ControlBarShareButtonProps) {
@@ -143,3 +143,5 @@ export class ControlBarShareButton extends PureComponent<ControlBarShareButtonPr
     }
   }
 }
+
+export default ControlBarShareButton;

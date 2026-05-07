@@ -68,7 +68,7 @@ const chapterRenderer: (isFolderModeEnabled: boolean) => ItemRenderer<SALanguage
 
 const ChapterSelectComponent = Select.ofType<SALanguage>();
 
-export const LegacyControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = ({
+const LegacyControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = ({
   isFolderModeEnabled,
   sourceChapter,
   sourceVariant,
@@ -104,3 +104,5 @@ export const LegacyControlBarChapterSelect: React.FC<ControlBarChapterSelectProp
     </ChapterSelectComponent>
   );
 };
+
+export default LegacyControlBarChapterSelect;

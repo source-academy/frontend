@@ -10,7 +10,7 @@ import LanguageDirectoryActions from '../../features/directory/LanguageDirectory
 import { SALanguage } from '../application/ApplicationTypes';
 import { useFeature } from '../featureFlags/useFeature';
 import { useTypedSelector } from '../utils/Hooks';
-import { LegacyControlBarChapterSelect } from './LegacyControlBarChapterSelect';
+import LegacyControlBarChapterSelect from './LegacyControlBarChapterSelect';
 
 type ControlBarChapterSelectProps = DispatchProps & StateProps;
 
@@ -25,7 +25,7 @@ type StateProps = {
   disabled?: boolean;
 };
 
-export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = ({
+const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = ({
   isFolderModeEnabled,
   sourceChapter,
   sourceVariant,
@@ -93,3 +93,5 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
     </EvaluatorSelectComponent>
   );
 };
+
+export default ControlBarChapterSelect;

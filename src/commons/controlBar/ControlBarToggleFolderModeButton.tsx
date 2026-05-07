@@ -10,7 +10,7 @@ type Props = {
   toggleFolderMode: () => void;
 };
 
-export const ControlBarToggleFolderModeButton: React.FC<Props> = ({
+const ControlBarToggleFolderModeButton: React.FC<Props> = ({
   isFolderModeEnabled,
   isSessionActive,
   isPersistenceActive,
@@ -35,3 +35,5 @@ export const ControlBarToggleFolderModeButton: React.FC<Props> = ({
     </Tooltip>
   );
 };
+
+export default ControlBarToggleFolderModeButton;

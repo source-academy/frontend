@@ -5,7 +5,7 @@ import { flagConductorEnable } from '../../features/conductor/flagConductorEnabl
 import ControlButton from '../ControlButton';
 import { useFeature } from '../featureFlags/useFeature';
 import { useResponsive } from '../utils/Hooks';
-import { ControlBarRunButton } from './ControlBarRunButton';
+import ControlBarRunButton from './ControlBarRunButton';
 
 type ControlBarAutorunButtonProps = DispatchProps & StateProps;
 
@@ -29,7 +29,7 @@ type StateProps = {
   sourceChapter?: number;
 };
 
-export const ControlBarAutorunButtons: React.FC<ControlBarAutorunButtonProps> = props => {
+const ControlBarAutorunButtons: React.FC<ControlBarAutorunButtonProps> = props => {
   const showRunButton = !props.isDebugging && (
     <ControlBarRunButton
       handleEditorEval={props.handleEditorEval}
@@ -103,3 +103,5 @@ export const ControlBarAutorunButtons: React.FC<ControlBarAutorunButtonProps> = 
     </>
   );
 };
+
+export default ControlBarAutorunButtons;

@@ -12,7 +12,7 @@ type StateProps = {
   key: string;
 };
 
-export const ControlBarExecutionTime: React.FC<ControlBarExecutionTimeProps> = props => {
+const ControlBarExecutionTime: React.FC<ControlBarExecutionTimeProps> = props => {
   return (
     <Tooltip content="Execution Time" placement={Position.TOP}>
       <NumericInput
@@ -25,3 +25,5 @@ export const ControlBarExecutionTime: React.FC<ControlBarExecutionTimeProps> = p
     </Tooltip>
   );
 };
+
+export default ControlBarExecutionTime;

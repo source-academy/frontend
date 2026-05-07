@@ -15,7 +15,7 @@ type StateProps = {
   isDisabled?: boolean;
 };
 
-export const ControlButtonSaveButton: React.FC<ControlBarSaveButtonProps> = props => {
+const ControlButtonSaveButton: React.FC<ControlBarSaveButtonProps> = props => {
   const saveButtonOpts = props.hasUnsavedChanges ? { intent: Intent.WARNING, minimal: false } : {};
 
   return (
@@ -28,3 +28,5 @@ export const ControlButtonSaveButton: React.FC<ControlBarSaveButtonProps> = prop
     />
   );
 };
+
+export default ControlButtonSaveButton;

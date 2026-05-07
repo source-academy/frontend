@@ -4,7 +4,7 @@ import { Resizable } from 're-resizable';
 import { useCallback, useContext, useMemo } from 'react';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
-import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
+import ControlBarCloseButton from 'src/commons/controlBar/ControlBarCloseButton';
 import { useResponsive } from 'src/commons/utils/Hooks';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import Playground from 'src/pages/playground/Playground';

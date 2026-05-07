@@ -43,19 +43,19 @@ import {
   QuestionTypes,
   Testcase
 } from '../assessment/AssessmentTypes';
-import { ControlBarProps } from '../controlBar/ControlBar';
-import { ControlBarChapterSelect } from '../controlBar/ControlBarChapterSelect';
-import { ControlBarClearButton } from '../controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../controlBar/ControlBarEvalButton';
-import { ControlBarNextButton } from '../controlBar/ControlBarNextButton';
-import { ControlBarPreviousButton } from '../controlBar/ControlBarPreviousButton';
-import { ControlBarQuestionViewButton } from '../controlBar/ControlBarQuestionViewButton';
-import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
-import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
-import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
-import { ControlBarSaveStatusIndicator } from '../controlBar/ControlBarSaveStatusIndicator';
-import { ControlBarVersionHistoryButton } from '../controlBar/ControlBarVersionHistoryButton';
-import { VersionHistoryPanel } from '../controlBar/VersionHistoryPanel';
+import type { ControlBarProps } from '../controlBar/ControlBar';
+import ControlBarChapterSelect from '../controlBar/ControlBarChapterSelect';
+import ControlBarClearButton from '../controlBar/ControlBarClearButton';
+import ControlBarEvalButton from '../controlBar/ControlBarEvalButton';
+import ControlBarNextButton from '../controlBar/ControlBarNextButton';
+import ControlBarPreviousButton from '../controlBar/ControlBarPreviousButton';
+import ControlBarQuestionViewButton from '../controlBar/ControlBarQuestionViewButton';
+import ControlBarResetButton from '../controlBar/ControlBarResetButton';
+import ControlBarRunButton from '../controlBar/ControlBarRunButton';
+import ControlButtonSaveButton from '../controlBar/ControlBarSaveButton';
+import ControlBarSaveStatusIndicator from '../controlBar/ControlBarSaveStatusIndicator';
+import ControlBarVersionHistoryButton from '../controlBar/ControlBarVersionHistoryButton';
+import VersionHistoryPanel from '../controlBar/VersionHistoryPanel';
 import ControlButton from '../ControlButton';
 import {
   convertEditorTabStateToProps,

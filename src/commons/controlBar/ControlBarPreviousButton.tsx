@@ -13,8 +13,10 @@ type StateProps = {
   questionProgress: [number, number] | null;
 };
 
-export const ControlBarPreviousButton: React.FC<ControlBarPreviousButtonProps> = props => {
+const ControlBarPreviousButton: React.FC<ControlBarPreviousButtonProps> = props => {
   return props.questionProgress![0] <= 1 ? null : (
     <ControlButton label="Previous" icon={IconNames.ARROW_LEFT} onClick={props.onClick} />
   );
 };
+
+export default ControlBarPreviousButton;

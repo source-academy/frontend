@@ -6,6 +6,8 @@ type ControlBarCloseButtonProps = {
   handleClose: () => void;
 };
 
-export const ControlBarCloseButton: React.FC<ControlBarCloseButtonProps> = ({ handleClose }) => {
+const ControlBarCloseButton: React.FC<ControlBarCloseButtonProps> = ({ handleClose }) => {
   return <ControlButton label="Close" icon={IconNames.CROSS} onClick={handleClose} />;
 };
+
+export default ControlBarCloseButton;
