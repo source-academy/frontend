@@ -21,8 +21,7 @@ import SessionActions from '../../../../commons/application/actions/SessionActio
 import ControlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
 import { Prompt } from '../../../../commons/ReactRouterPrompt';
-import { postGenerateComments } from '../../../../commons/sagas/RequestsSaga';
-import { saveFinalComment } from '../../../../commons/sagas/RequestsSaga';
+import { postGenerateComments, saveFinalComment } from '../../../../commons/sagas/RequestsSaga';
 import { getPrettyDate } from '../../../../commons/utils/DateHelper';
 import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper';
 import {
