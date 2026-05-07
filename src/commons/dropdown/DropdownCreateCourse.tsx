@@ -38,7 +38,6 @@ const DropdownCreateCourse = (props => {
     viewable: true,
     enableGame: true,
     enableAchievements: true,
-    enableSourcecast: true,
     enableStories: false,
     enableLlmGrading: false,
     sourceChapter: Chapter.SOURCE_1,
@@ -213,19 +212,6 @@ const DropdownCreateCourse = (props => {
               }
             />
 
-            <Switch
-              checked={courseConfig.enableSourcecast}
-              inline
-              label="Enable Sourcecast"
-              onChange={e =>
-                setCourseConfig({
-                  ...courseConfig,
-                  enableSourcecast: (e.target as HTMLInputElement).checked
-                })
-              }
-            />
-          </div>
-          <div>
             <Switch
               checked={courseConfig.enableStories}
               inline
