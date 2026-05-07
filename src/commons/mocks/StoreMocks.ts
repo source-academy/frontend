@@ -13,7 +13,6 @@ import {
   defaultRouter,
   defaultSession,
   defaultSideContentManager,
-  defaultStories,
   defaultVscode,
   defaultWorkspaceManager,
   OverallState
@@ -34,7 +33,6 @@ export function mockInitialStore(
     playground: defaultPlayground,
     workspaces: defaultWorkspaceManager,
     session: defaultSession,
-    stories: defaultStories,
     featureFlags: defaultFeatureFlags,
     fileSystem: defaultFileSystem,
     sideContent: defaultSideContentManager,

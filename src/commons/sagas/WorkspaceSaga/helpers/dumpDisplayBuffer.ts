@@ -5,13 +5,7 @@ import DisplayBufferService from '../../../utils/DisplayBufferService';
 import { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 
 export function* dumpDisplayBuffer(
-  workspaceLocation: WorkspaceLocation,
-  isStoriesBlock: boolean = false,
-  storyEnv?: string
+  workspaceLocation: WorkspaceLocation
 ): Generator<StrictEffect, void, any> {
-  if (!isStoriesBlock) {
-    yield put(actions.handleConsoleLog(workspaceLocation, ...DisplayBufferService.dump()));
-  } else {
-    yield put(actions.handleStoriesConsoleLog(storyEnv!, ...DisplayBufferService.dump()));
-  }
+  yield put(actions.handleConsoleLog(workspaceLocation, ...DisplayBufferService.dump()));
 }

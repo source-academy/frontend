@@ -14,18 +14,15 @@ import ace from 'react-ace';
 import ReactDOM from 'react-dom';
 import { useDispatch } from 'react-redux';
 
-import { defaultSideContent } from '../application/ApplicationTypes';
 import { useTypedSelector } from '../utils/Hooks';
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
 import { visitSideContent } from './SideContentActions';
 import {
   ModuleSideContent,
-  NonStoryWorkspaceLocation,
   SideContentLocation,
   SideContentState,
   SideContentTab,
-  SideContentType,
-  StoryWorkspaceLocation
+  SideContentType
 } from './SideContentTypes';
 
 const requireProvider = (x: string) => {
@@ -78,11 +75,9 @@ export const generateTabAlert = (shouldAlert: boolean) =>
   `side-content-tooltip${shouldAlert ? ' side-content-tab-alert' : ''}`;
 
 export const useSideContent = (location: SideContentLocation, defaultTab?: SideContentType) => {
-  const [workspaceLocation, storyEnv] = getLocation(location);
-  const { alerts, dynamicTabs, selectedTab, height }: SideContentState = useTypedSelector(state =>
-    workspaceLocation === 'stories'
-      ? (state.sideContent.stories[storyEnv] ?? { ...defaultSideContent })
-      : state.sideContent[workspaceLocation]
+  const [workspaceLocation] = getLocation(location);
+  const { alerts, dynamicTabs, selectedTab, height }: SideContentState = useTypedSelector(
+    state => state.sideContent[workspaceLocation]
   );
   const dispatch = useDispatch();
   const setSelectedTab = useCallback(
@@ -109,20 +104,8 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
 };
 
 /**
- * Determine if the given SideContentLocation is a Story location specification
- * or a regular WorkspaceSpecification
- */
-export const isStoryLocation = (
-  location: SideContentLocation
-): location is StoryWorkspaceLocation => location.startsWith('stories');
-
-/**
  * Give a SideContentLocation specification, return the WorkspaceLocation
- * and StoryEnv value, if present
  */
-export const getLocation = (
-  location: SideContentLocation
-): [NonStoryWorkspaceLocation] | ['stories', string] => {
-  if (isStoryLocation(location)) return location.split('.', 2) as ['stories', string];
-  return [location];
-};
+export const getLocation = (location: SideContentLocation): [location: SideContentLocation] => [
+  location
+];
