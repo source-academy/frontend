@@ -5,7 +5,10 @@ import * as jsslang from 'js-slang';
 import * as jsslangDist from 'js-slang/dist';
 import lodash from 'lodash';
 import phaser from 'phaser';
-import React, { useCallback } from 'react';
+// We need it to inject modules into the context
+// eslint-disable-next-line no-restricted-imports
+import * as React from 'react';
+import { useCallback } from 'react';
 import JSXRuntime from 'react/jsx-runtime';
 import ace from 'react-ace';
 import ReactDOM from 'react-dom';
