@@ -24,12 +24,12 @@ import Messages, { sendToWebview } from 'src/features/vscode/messages';
 import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
 
 import { initSession, log } from '../../features/eventLogging';
-import {
+import type {
   CodeDelta,
   Input,
-  KeyboardCommand,
   SelectionRange
-} from '../../features/sourceRecorder/SourceRecorderTypes';
+} from '../../features/eventLogging/EventLoggingTypes';
+import { KeyboardCommand } from '../../features/eventLogging/EventLoggingTypes';
 import SessionActions from '../application/actions/SessionActions';
 import { defaultWorkspaceManager } from '../application/ApplicationTypes';
 import {
