@@ -1,6 +1,5 @@
 import 'src/styles/Leaderboard.scss';
 
-import React from 'react';
 import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 
 type Props =

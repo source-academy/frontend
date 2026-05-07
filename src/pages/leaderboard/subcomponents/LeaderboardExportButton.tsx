@@ -1,6 +1,5 @@
 import 'src/styles/Leaderboard.scss';
 
-import React from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import {
   getAllOverallLeaderboardXP,

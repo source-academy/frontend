@@ -7,7 +7,7 @@
  *
  * See: https://github.com/remix-run/react-router/issues/8139#issuecomment-1382428200
  */
-import React from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useBeforeUnload, useBlocker } from 'react-router';
 
 // You can abstract `useBlocker` to use the browser's `window.confirm` dialog to
@@ -26,13 +26,10 @@ function usePrompt(
   { beforeUnload }: { beforeUnload?: boolean } = {}
 ) {
   const blocker = useBlocker(
-    React.useCallback(
-      () => (typeof message === 'string' ? !window.confirm(message) : false),
-      [message]
-    )
+    useCallback(() => (typeof message === 'string' ? !window.confirm(message) : false), [message])
   );
-  const prevState = React.useRef(blocker.state);
-  React.useEffect(() => {
+  const prevState = useRef(blocker.state);
+  useEffect(() => {
     if (blocker.state === 'blocked') {
       blocker.reset();
     }
@@ -40,7 +37,7 @@ function usePrompt(
   }, [blocker]);
 
   useBeforeUnload(
-    React.useCallback(
+    useCallback(
       event => {
         if (beforeUnload && typeof message === 'string') {
           event.preventDefault();

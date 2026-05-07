@@ -1,9 +1,12 @@
 import { Icon, Tab, Tabs, Tooltip, Tree, TreeNodeInfo } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
-import React, { type JSX } from 'react';
+import { type JSX, useEffect, useState } from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
-import { fetchAssetPaths, s3AssetFolders } from 'src/features/gameSimulator/GameSimulatorService';
-import { deleteS3File } from 'src/features/gameSimulator/GameSimulatorService';
+import {
+  deleteS3File,
+  fetchAssetPaths,
+  s3AssetFolders
+} from 'src/features/gameSimulator/GameSimulatorService';
 
 import AssetViewerPreview from './AssetViewerPreview';
 import AssetViewerUpload from './AssetViewerUpload';
@@ -18,10 +21,10 @@ import { convertAssetPathsToTree, treeMap } from './AssetViewerUtils';
 const AssetViewer: React.FC = () => {
   const { value: assetPaths } = useRequest<string[]>(fetchAssetPaths, []);
 
-  const [currentAsset, setCurrentAsset] = React.useState('');
-  const [assetTree, setAssetTree] = React.useState<TreeNodeInfo[]>([]);
+  const [currentAsset, setCurrentAsset] = useState('');
+  const [assetTree, setAssetTree] = useState<TreeNodeInfo[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const deleteIcon = (filePath: string): JSX.Element => {
       const deleteFile = async () => {
         const confirm = window.confirm(`Are you sure you want to delete ${filePath}?`);
