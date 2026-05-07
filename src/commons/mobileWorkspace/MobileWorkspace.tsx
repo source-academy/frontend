@@ -120,12 +120,6 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   const createWorkspaceInput = () => {
     if (props.editorContainerProps) {
-      const editorContainerProps = {
-        ...props.editorContainerProps
-      };
-      if (editorContainerProps.editorVariant === 'sourcecast') {
-        editorContainerProps.setDraggableReplPosition = () => handleShowRepl(-100);
-      }
       return <EditorContainer {...enableMobileKeyboardForEditor(props.editorContainerProps)} />;
     } else {
       return <McqChooser {...props.mcqProps!} />;
