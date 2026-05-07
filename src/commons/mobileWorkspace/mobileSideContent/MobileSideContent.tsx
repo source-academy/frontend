@@ -75,7 +75,7 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
         ? {
             ...tab.body,
             props: {
-              ...tab.body.props,
+              ...(tab.body.props as any),
               workspaceLocation
             }
           }
