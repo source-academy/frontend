@@ -15,7 +15,7 @@ import {
   Tag
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTokens } from 'src/commons/utils/Hooks';
 
 import {
@@ -180,7 +180,7 @@ const LLMStatsDialog: React.FC<LLMStatsDialogProps> = ({
   const [questionFeedback, setQuestionFeedback] = useState<FeedbackEntry[]>([]);
   const [questionFeedbackLoading, setQuestionFeedbackLoading] = useState(false);
 
-  const questionDisplayOrderById = React.useMemo(() => {
+  const questionDisplayOrderById = useMemo(() => {
     const map = new Map<number, number>();
     stats?.questions.forEach(q => map.set(q.question_id, q.display_order));
     return map;

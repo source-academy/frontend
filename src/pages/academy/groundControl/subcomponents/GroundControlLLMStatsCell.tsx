@@ -1,17 +1,17 @@
 import { Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useSession } from 'src/commons/utils/Hooks';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
 import LLMStatsDialog from './LLMStatsDialog';
 
-type LLMStatsCellProps = {
+type Props = {
   data: AssessmentOverview;
 };
 
-const LLMStatsCell: React.FC<LLMStatsCellProps> = ({ data }) => {
+const LLMStatsCell: React.FC<Props> = ({ data }) => {
   const { enableLlmGrading } = useSession();
   const [isDialogOpen, setDialogOpen] = useState(false);
 

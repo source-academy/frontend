@@ -8,7 +8,7 @@ import {
   TextArea
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Tokens } from 'src/commons/application/types/SessionTypes';
 
 import { submitLLMFeedback } from '../../../../commons/sagas/RequestsSaga';
@@ -30,7 +30,7 @@ const LLMFeedbackButton: React.FC<Props> = ({ tokens, assessmentId, questionId }
   const [body, setBody] = useState('');
   const [rating, setRating] = useState<number>(0);
   const [submitting, setSubmitting] = useState(false);
-  const starButtonRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
+  const starButtonRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
   const handleOpen = useCallback(() => setIsOpen(true), []);
   const handleClose = useCallback(() => {

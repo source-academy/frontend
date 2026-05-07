@@ -1,5 +1,3 @@
-import React from 'react';
-
 import LLMStatsTab from '../../../commons/adminStats/LLMStatsTab';
 import ContentDisplay from '../../../commons/ContentDisplay';
 
