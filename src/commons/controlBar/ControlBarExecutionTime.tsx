@@ -4,7 +4,6 @@ import { IconNames } from '@blueprintjs/icons';
 type Props = {
   handleChangeExecTime?: (execTime: number) => void;
   execTime?: number;
-  key: string;
 };
 
 const ControlBarExecutionTime: React.FC<Props> = props => {
