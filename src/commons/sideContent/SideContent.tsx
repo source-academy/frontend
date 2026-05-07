@@ -1,4 +1,5 @@
 import { Card, Icon, Tab, TabProps, Tabs, Tooltip } from '@blueprintjs/core';
+import { cloneElement } from 'react';
 
 import { assertType } from '../utils/TypeHelper';
 import { generateTabAlert, getTabId } from './SideContentHelper';
@@ -51,15 +52,7 @@ const renderTab = (
   }
 
   const tabBody: React.ReactElement = workspaceLocation
-    ? {
-        ...tab.body,
-        props: {
-          ...(tab.body.props as any),
-          workspaceLocation,
-          editorWidth,
-          sideContentHeight
-        }
-      }
+    ? cloneElement(tab.body, { workspaceLocation, editorWidth, sideContentHeight } as any)
     : tab.body;
   const tabPanel: React.ReactElement = <div className="side-content-text">{tabBody}</div>;
 
