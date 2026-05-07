@@ -1,6 +1,6 @@
 import { Tree, TreeNodeInfo } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
-import React, { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import toc from '../../../features/sicp/data/toc.json';
@@ -30,7 +30,7 @@ const SicpToc: React.FC<TocProps> = props => {
     setSidebarContent(newState);
   };
 
-  const handleNodeClicked = React.useCallback(
+  const handleNodeClicked = useCallback(
     (node: TreeNodeInfo) => {
       if (props.handleCloseToc) {
         props.handleCloseToc();
