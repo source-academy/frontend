@@ -20,7 +20,6 @@ type Props = {
   handleUpdateShortURL: (s: string) => void;
   queryString?: string;
   shortURL?: string;
-  key: string;
   isSicp?: boolean;
 };
 
