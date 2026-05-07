@@ -1,5 +1,4 @@
 import { IconName } from '@blueprintjs/core';
-import type { JSX } from 'react';
 
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
@@ -58,7 +57,7 @@ export enum SideContentType {
 export type SideContentTab = {
   label: string;
   iconName: IconName;
-  body: JSX.Element | null;
+  body: React.ReactElement | null;
   id?: SideContentType;
   disabled?: boolean;
 };
@@ -80,7 +79,7 @@ export type SideContentTab = {
 export type ModuleSideContent = {
   label: string;
   iconName: IconName;
-  body: (props: any) => JSX.Element;
+  body: (props: any) => React.ReactElement;
   toSpawn?: (context: DebuggerContext) => boolean;
 };
 

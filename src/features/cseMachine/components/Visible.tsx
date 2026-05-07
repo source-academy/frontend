@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import { createRef, type RefObject } from 'react';
+import { createRef } from 'react';
 
 import { IVisible } from '../CseMachineTypes';
 
@@ -43,7 +43,7 @@ export abstract class Visible implements IVisible {
       }
     });
   }
-  public ref: RefObject<any> = createRef();
+  public ref: React.RefObject<any> = createRef();
   protected get tag() {
     return this.ref.current?.getChildren?.()[0];
   }

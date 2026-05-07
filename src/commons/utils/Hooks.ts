@@ -1,5 +1,5 @@
 import { useMediaQuery } from '@mantine/hooks';
-import { RefObject, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 // eslint-disable-next-line no-restricted-imports
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
 
@@ -80,7 +80,7 @@ export const useTypedSelector: TypedUseSelectorHook<OverallState> = useSelector;
  */
 
 export const useDimensions = (
-  ref: RefObject<HTMLElement | null>
+  ref: React.RefObject<HTMLElement | null>
 ): [width: number, height: number] => {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);

@@ -1,5 +1,5 @@
 import { Button } from '@blueprintjs/core';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useTokens } from 'src/commons/utils/Hooks';
 import { continueChat, initChat } from 'src/features/sicp/chatCompletion/api';
 import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
@@ -200,10 +200,10 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
       parts.push(
         <div key={`${messageId}-text-${lastIndex}`} style={{ marginBottom: '0.5em' }}>
           {text.split('\n').map((line, i) => (
-            <React.Fragment key={i}>
+            <Fragment key={i}>
               {line}
               <br />
-            </React.Fragment>
+            </Fragment>
           ))}
         </div>
       );
@@ -259,10 +259,10 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
     parts.push(
       <div key={`${messageId}-text-end`} style={{ marginBottom: '0.5em' }}>
         {text.split('\n').map((line, i) => (
-          <React.Fragment key={i}>
+          <Fragment key={i}>
             {line}
             <br />
-          </React.Fragment>
+          </Fragment>
         ))}
       </div>
     );

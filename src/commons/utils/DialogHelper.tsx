@@ -1,5 +1,5 @@
 import { type IconName, Intent } from '@blueprintjs/core';
-import { createElement, createRef, PureComponent, type ReactNode } from 'react';
+import { createElement, createRef, PureComponent } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import { ConfirmDialog, ConfirmDialogProps } from '../dialogs/ConfirmDialog';
@@ -86,7 +86,7 @@ export function showConfirmDialog<T>(
 export interface SimpleConfirmDialogProps {
   icon?: IconName;
   title?: string;
-  contents?: ReactNode;
+  contents?: React.ReactNode;
   positiveLabel?: string;
   positiveIntent?: Intent;
   negativeLabel?: string;
@@ -114,7 +114,7 @@ export function showSimpleConfirmDialog(props: SimpleConfirmDialogProps): Promis
 
 export interface SimpleErrorDialogProps {
   title?: string;
-  contents?: ReactNode;
+  contents?: React.ReactNode;
   label?: string;
   props?: Partial<ConfirmDialogProps<boolean>>;
 }
@@ -139,7 +139,7 @@ export function showSimpleErrorDialog(props: SimpleErrorDialogProps): Promise<bo
 
 export function showSimplePromptDialog(props: {
   title?: string;
-  contents?: ReactNode;
+  contents?: React.ReactNode;
   positiveLabel?: string;
   negativeLabel?: string;
   props?: Partial<PromptDialogProps<boolean>>;
