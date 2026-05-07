@@ -1,7 +1,7 @@
-import { Ace } from 'ace-builds';
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { Position } from 'src/commons/editor/EditorTypes';
-import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import type { Ace } from 'ace-builds';
+import type { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import type { Position } from 'src/commons/editor/EditorTypes';
+import type { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 
 export enum KeyboardCommand {
   run = 'run'
