@@ -2,7 +2,6 @@ const translations = {
   navigationBar: {
     'Ground Control': '课程管理',
     Dashboard: '仪表板',
-    Sourcereel: '源代码卷轴',
     'Team Formation': '团队组建',
     Grading: '评分',
     'Game Simulator': '游戏模拟器',

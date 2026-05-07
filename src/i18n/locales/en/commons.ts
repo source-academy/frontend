@@ -2,7 +2,6 @@ const translations = {
   navigationBar: {
     'Ground Control': 'Ground Control',
     Dashboard: 'Dashboard',
-    Sourcereel: 'Sourcereel',
     'Team Formation': 'Team Formation',
     Grading: 'Grading',
     'Game Simulator': 'Game Simulator',
