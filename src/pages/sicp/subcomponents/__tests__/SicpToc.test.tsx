@@ -1,6 +1,7 @@
 import { MemoryRouter } from 'react-router';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 
+import { SicpLanguageContextProvider } from '../SicpLanguageProvider';
 import SicpToc from '../SicpToc';
 
 test('Sicp toc renders correctly', async () => {
@@ -10,7 +11,9 @@ test('Sicp toc renders correctly', async () => {
 
   const tree = await renderTreeJson(
     <MemoryRouter>
-      <SicpToc {...props} />
+      <SicpLanguageContextProvider>
+        <SicpToc {...props} />
+      </SicpLanguageContextProvider>
     </MemoryRouter>
   );
   expect(tree).toMatchSnapshot();

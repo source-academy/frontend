@@ -28,8 +28,7 @@ const productionModules: readonly Module[] = [
   RowApiModule,
   RowDragModule,
   TextEditorModule,
-  TextFilterModule,
-  ValidationModule
+  TextFilterModule
 ];
 
 export const initializeAgGridModules = () => {
