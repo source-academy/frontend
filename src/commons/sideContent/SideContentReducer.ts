@@ -11,7 +11,7 @@ import {
   visitSideContent
 } from './SideContentActions';
 import { getDynamicTabs, getLocation, getTabId } from './SideContentHelper';
-import { SideContentManagerState } from './SideContentTypes';
+import { SideContentManagerState, SideContentState } from './SideContentTypes';
 
 export const SideContentReducer: Reducer<SideContentManagerState, SourceActionType> = (
   state: SideContentManagerState = defaultSideContentManager,
@@ -20,131 +20,66 @@ export const SideContentReducer: Reducer<SideContentManagerState, SourceActionTy
   if (!(action as any).payload?.workspaceLocation) {
     return state;
   }
-  const [workspaceLocation, storyEnv] = getLocation((action as any).payload.workspaceLocation);
+  const [workspaceLocation] = getLocation((action as any).payload.workspaceLocation);
 
-  const sideContentState =
-    workspaceLocation === 'stories' ? state.stories[storyEnv] : state[workspaceLocation];
+  const key = workspaceLocation as keyof SideContentManagerState;
+  const sideContentState: SideContentState = state[key];
 
   switch (action.type) {
     case changeSideContentHeight.type:
-      return workspaceLocation === 'stories'
-        ? {
-            ...state,
-            stories: {
-              ...state.stories,
-              [storyEnv]: {
-                ...state.stories[storyEnv],
-                height: action.payload.height
-              }
-            }
-          }
-        : {
-            ...state,
-            [workspaceLocation]: {
-              ...state[workspaceLocation],
-              height: action.payload.height
-            }
-          };
+      return {
+        ...state,
+        [key]: {
+          ...sideContentState,
+          height: action.payload.height
+        }
+      };
     case endAlertSideContent.type: {
       if (action.payload.id !== sideContentState.selectedTab) {
-        return workspaceLocation === 'stories'
-          ? {
-              ...state,
-              stories: {
-                ...state.stories,
-                [storyEnv]: {
-                  ...state.stories[storyEnv],
-                  alerts: [...state.stories[storyEnv].alerts, action.payload.id]
-                }
-              }
-            }
-          : {
-              ...state,
-              [workspaceLocation]: {
-                ...state[workspaceLocation],
-                alerts: [...state[workspaceLocation].alerts, action.payload.id]
-              }
-            };
+        return {
+          ...state,
+          [key]: {
+            ...sideContentState,
+            alerts: [...sideContentState.alerts, action.payload.id]
+          }
+        };
       }
       return state;
     }
     case removeSideContentAlert.type:
-      return workspaceLocation === 'stories'
-        ? {
-            ...state,
-            stories: {
-              ...state.stories,
-              [storyEnv]: {
-                ...state.stories[storyEnv],
-                alerts: state.stories[storyEnv].alerts.filter(id => id !== action.payload.id)
-              }
-            }
-          }
-        : {
-            ...state,
-            [workspaceLocation]: {
-              ...state[workspaceLocation],
-              alerts: state[workspaceLocation].alerts.filter(id => id !== action.payload.id)
-            }
-          };
+      return {
+        ...state,
+        [key]: {
+          ...sideContentState,
+          alerts: sideContentState.alerts.filter((id: string) => id !== action.payload.id)
+        }
+      };
     case resetSideContent.type:
-      return workspaceLocation === 'stories'
-        ? {
-            ...state,
-            stories: {
-              ...state.stories,
-              [storyEnv]: defaultSideContent
-            }
-          }
-        : {
-            ...state,
-            [workspaceLocation]: defaultSideContent
-          };
+      return {
+        ...state,
+        [key]: defaultSideContent
+      };
     case spawnSideContent.type: {
       const dynamicTabs = getDynamicTabs(action.payload.debuggerContext);
       const alerts = dynamicTabs.map(getTabId).filter(id => id !== sideContentState.selectedTab);
-      return workspaceLocation === 'stories'
-        ? {
-            ...state,
-            stories: {
-              ...state.stories,
-              [storyEnv]: {
-                ...state.stories[storyEnv],
-                alerts,
-                dynamicTabs
-              }
-            }
-          }
-        : {
-            ...state,
-            [workspaceLocation]: {
-              ...state[workspaceLocation],
-              alerts,
-              dynamicTabs
-            }
-          };
+      return {
+        ...state,
+        [key]: {
+          ...sideContentState,
+          alerts,
+          dynamicTabs
+        }
+      };
     }
     case visitSideContent.type:
-      return workspaceLocation === 'stories'
-        ? {
-            ...state,
-            stories: {
-              ...state.stories,
-              [storyEnv]: {
-                ...state.stories[storyEnv],
-                alerts: state.stories[storyEnv].alerts.filter(id => id !== action.payload.newId),
-                selectedTab: action.payload.newId
-              }
-            }
-          }
-        : {
-            ...state,
-            [workspaceLocation]: {
-              ...state[workspaceLocation],
-              alerts: state[workspaceLocation].alerts.filter(id => id !== action.payload.newId),
-              selectedTab: action.payload.newId
-            }
-          };
+      return {
+        ...state,
+        [key]: {
+          ...sideContentState,
+          alerts: sideContentState.alerts.filter((id: string) => id !== action.payload.newId),
+          selectedTab: action.payload.newId
+        }
+      };
     default:
       return state;
   }
