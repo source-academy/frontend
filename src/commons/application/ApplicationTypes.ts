@@ -8,7 +8,6 @@ import type { LanguageDirectoryState } from '../../features/directory/LanguageDi
 import type { PluginDirectoryState } from '../../features/directory/PluginDirectoryTypes';
 import type { LeaderboardState } from '../../features/leaderboard/LeaderboardTypes';
 import type { PlaygroundState } from '../../features/playground/PlaygroundTypes';
-import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import type { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
 import { freshSortState } from '../../pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
@@ -359,7 +358,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
       filePath: ['playground', 'sicp'].includes(workspaceLocation)
         ? getDefaultFilePath(workspaceLocation)
         : undefined,
-      value: ['playground', 'sourcecast'].includes(workspaceLocation) ? defaultEditorValue : '',
+      value: ['playground'].includes(workspaceLocation) ? defaultEditorValue : '',
       highlightedLines: [],
       breakpoints: []
     }
@@ -454,41 +453,6 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
       }
     ]
   },
-  sourcecast: {
-    ...createDefaultWorkspace('sourcecast'),
-    audioUrl: '',
-    codeDeltasToApply: null,
-    currentPlayerTime: 0,
-    description: null,
-    inputToApply: null,
-    playbackData: {
-      init: {
-        editorValue: '',
-        chapter: Chapter.SOURCE_1,
-        externalLibrary: ExternalLibraryName.NONE
-      },
-      inputs: []
-    },
-    playbackDuration: 0,
-    playbackStatus: PlaybackStatus.paused,
-    sourcecastIndex: null,
-    title: null,
-    uid: null
-  },
-  sourcereel: {
-    ...createDefaultWorkspace('sourcereel'),
-    playbackData: {
-      init: {
-        editorValue: '',
-        chapter: Chapter.SOURCE_1,
-        externalLibrary: ExternalLibraryName.NONE
-      },
-      inputs: []
-    },
-    recordingStatus: RecordingStatus.notStarted,
-    timeElapsedBeforePause: 0,
-    timeResumed: 0
-  },
   sicp: {
     ...createDefaultWorkspace('sicp'),
     usingSubst: false,
@@ -576,8 +540,6 @@ export const defaultSideContentManager: SideContentManagerState = {
   grading: defaultSideContent,
   playground: defaultSideContent,
   sicp: defaultSideContent,
-  sourcecast: defaultSideContent,
-  sourcereel: defaultSideContent,
   stories: {}
 };
 

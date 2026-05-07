@@ -87,7 +87,7 @@ import type {
   CodeDelta,
   Input,
   SelectionRange
-} from '../../features/sourceRecorder/SourceRecorderTypes';
+} from '../../features/eventLogging/EventLoggingTypes';
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   desktopOnlyTabIds,

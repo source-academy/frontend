@@ -2,13 +2,11 @@ const translations = {
   navigationBar: {
     'Ground Control': 'Ģŗőûñď Çőñţŗőļ',
     Dashboard: 'Ďáşħƀőáŗď',
-    Sourcereel: 'Śőûŗćéŗééļ',
     'Team Formation': 'Ťéâm Ƒőŗmáţíőñ',
     Grading: 'Ĝŗáďíñĝ',
     'Game Simulator': 'Ĝámé Śímûļáţőŗ',
     'Admin Panel': 'Áďmíñ Ƥáñéļ',
     Stories: 'Šţőŗíéş',
-    Sourcecast: 'Šőûŗčéčáşţ',
     Playground: 'Ƥļáÿğŕőûñď',
     'SICP JS': 'ŠĨĆƤ ĴŚ',
     Achievements: 'Ãčĥíéṽéḿéñţş',

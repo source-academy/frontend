@@ -16,9 +16,6 @@ import LeaderboardActions from '../../features/leaderboard/LeaderboardActions';
 import PersistenceActions from '../../features/persistence/PersistenceActions';
 import PlaygroundActions from '../../features/playground/PlaygroundActions';
 import RemoteExecutionActions from '../../features/remoteExecution/RemoteExecutionActions';
-import SourcecastActions from '../../features/sourceRecorder/sourcecast/SourcecastActions';
-import SourceRecorderActions from '../../features/sourceRecorder/SourceRecorderActions';
-import SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
 import StoriesActions from '../../features/stories/StoriesActions';
 import VscodeActions from '../application/actions/VscodeActions';
 import { FeatureFlagsActions } from '../featureFlags';
@@ -33,9 +30,6 @@ export const actions = {
   ...InterpreterActions,
   ...PlaygroundActions,
   ...SessionActions,
-  ...SourcecastActions,
-  ...SourceRecorderActions,
-  ...SourcereelActions,
   ...WorkspaceActions,
   ...GitHubActions,
   ...GroundControlActions,

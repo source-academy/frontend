@@ -45,7 +45,6 @@ const CourseConfigPanel: React.FC<Props> = props => {
     enableContestLeaderboard,
     topLeaderboardDisplay,
     topContestLeaderboardDisplay,
-    enableSourcecast,
     enableStories,
     enableLlmGrading,
     moduleHelpText,
@@ -323,16 +322,6 @@ const CourseConfigPanel: React.FC<Props> = props => {
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
                 enableAchievements: (e.target as HTMLInputElement).checked
-              })
-            }
-          />
-          <Switch
-            checked={enableSourcecast}
-            label="Enable Sourcecast"
-            onChange={e =>
-              props.setCourseConfiguration({
-                ...props.courseConfiguration,
-                enableSourcecast: (e.target as HTMLInputElement).checked
               })
             }
           />
