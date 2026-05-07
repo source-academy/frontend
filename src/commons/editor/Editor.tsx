@@ -45,8 +45,6 @@ import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable'
 import { useFeature } from '../featureFlags/useFeature';
 import { useTypedSelector } from '../utils/Hooks';
 
-//const CONDUCTOR_ACE_MODE_READY_EVENT = 'conductor:ace-mode-ready';
-
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (
   inProps: Readonly<EditorProps>,
