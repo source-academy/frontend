@@ -79,13 +79,7 @@ export type WorkspaceManagerState = {
   readonly grading: GradingWorkspaceState;
   readonly playground: PlaygroundWorkspaceState;
   readonly sicp: SicpWorkspaceState;
-  readonly stories: StoriesWorkspaceState;
 };
-
-type StoriesWorkspaceAttr = {
-  // TODO: Add stories workspace attributes
-};
-type StoriesWorkspaceState = StoriesWorkspaceAttr & WorkspaceState;
 
 export type EditorTabState = {
   readonly filePath?: string;
