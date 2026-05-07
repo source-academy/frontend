@@ -25,7 +25,7 @@ import type {
 import type { RouterState } from './types/CommonsTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
 import type { SessionState } from './types/SessionTypes';
-import type { VscodeState as VscodeState } from './types/VscodeTypes';
+import type { VscodeState } from './types/VscodeTypes';
 
 export type OverallState = {
   readonly router: RouterState;

@@ -1,5 +1,4 @@
 import Konva from 'konva';
-import type { JSX } from 'react';
 import { Layer, Stage, Text } from 'react-konva';
 
 import { Config } from '../Config';
@@ -20,7 +19,7 @@ import {
  * Tree drawer for binary tree view
  */
 export class BinaryTreeDrawer extends OriginalDrawer {
-  draw(x: number, y: number, key: number): JSX.Element {
+  draw(x: number, y: number, key: number): React.ReactElement {
     // NON-BINARY TREE WARNING
     if (!DataVisualizer.isBinTree) {
       return (
@@ -116,7 +115,7 @@ export class BinaryTreeDrawer extends OriginalDrawer {
 
       const isBackwardArrow = arrowProps.from.y >= arrowProps.to.y;
 
-      let arrow: JSX.Element;
+      let arrow: React.ReactElement;
 
       if (isBackwardArrow) {
         // Update the minX and minY, in case overflow to the top or left happens

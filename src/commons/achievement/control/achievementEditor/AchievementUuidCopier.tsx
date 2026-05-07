@@ -1,6 +1,5 @@
 import { Button, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 import { showSuccessMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
 type Props = {

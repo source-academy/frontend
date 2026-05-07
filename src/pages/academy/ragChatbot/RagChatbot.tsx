@@ -1,5 +1,5 @@
 import { AnchorButton, Icon } from '@blueprintjs/core';
-import * as React from 'react';
+import { useRef, useState } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 import pixelLogo from 'src/assets/pixel.jpg';
 import { useSession } from 'src/commons/utils/Hooks';
@@ -40,14 +40,14 @@ const clampPosition = (
 
 const RagChatbot: React.FC = () => {
   const { isLoggedIn } = useSession();
-  const [isPop, setPop] = React.useState(false);
-  const [isDivVisible, setIsDivVisible] = React.useState(false);
-  const [tipsMessage, setTipsMessage] = React.useState('Click me for a chat!');
-  const [activeSnippetId, setActiveSnippetId] = React.useState('');
-  const [isExpanded, setIsExpanded] = React.useState(false);
-  const [position, setPosition] = React.useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = React.useState(false);
-  const nodeRef = React.useRef<HTMLDivElement>(null);
+  const [isPop, setPop] = useState(false);
+  const [isDivVisible, setIsDivVisible] = useState(false);
+  const [tipsMessage, setTipsMessage] = useState('Click me for a chat!');
+  const [activeSnippetId, setActiveSnippetId] = useState('');
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const nodeRef = useRef<HTMLDivElement>(null);
 
   const isSnippetOpen = activeSnippetId !== '';
 

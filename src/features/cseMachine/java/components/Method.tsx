@@ -1,6 +1,6 @@
 import { astToString, ECE } from 'java-slang';
 import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import { createRef, Fragment } from 'react';
 import { Circle, Group, Label, Tag, Text } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
@@ -20,7 +20,7 @@ import { CseMachine } from '../CseMachine';
 export class Method extends Visible implements IHoverable {
   private _centerX: number;
 
-  private readonly _tooltipRef: RefObject<any>;
+  private readonly _tooltipRef: React.RefObject<any>;
   private readonly _tooltip: string;
 
   constructor(
@@ -38,7 +38,7 @@ export class Method extends Visible implements IHoverable {
     this._centerX = this._x + Config.FnRadius * 2;
 
     // Tooltip.
-    this._tooltipRef = React.createRef();
+    this._tooltipRef = createRef();
     this._tooltip = astToString(this._method.mtdOrCon);
   }
 
@@ -63,7 +63,7 @@ export class Method extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     return (
-      <React.Fragment key={CseMachine.key++}>
+      <Fragment key={CseMachine.key++}>
         <Group
           onMouseEnter={e => this.onMouseEnter(e)}
           onMouseLeave={e => this.onMouseLeave(e)}
@@ -114,7 +114,7 @@ export class Method extends Visible implements IHoverable {
             key={CseMachine.key++}
           />
         </Label>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

@@ -1,5 +1,5 @@
 import { Ace } from 'ace-builds';
-import React from 'react';
+import { useRef, useState } from 'react';
 import Draggable, { DraggableEvent, DraggableEventHandler } from 'react-draggable';
 import Keyboard from 'react-simple-keyboard';
 
@@ -8,13 +8,13 @@ type Props = {
 };
 
 const MobileKeyboard: React.FC<Props> = props => {
-  const nodeRef = React.useRef<HTMLDivElement>(null);
-  const [isKeyboardShown, setIsKeyboardShown] = React.useState(false);
-  const [buttonContent, setButtonContent] = React.useState('ᐸ');
-  const [keyboardPosition, setKeyboardPosition] = React.useState({ x: 0, y: 0 });
-  const [targetKeyboardInput, setTargetKeyboardInput] = React.useState<Ace.Editor | null>(null);
-  const [lastKeyPressed, setLastKeyPressed] = React.useState<string>('');
-  const [touchStartInfo, setTouchStartInfo] = React.useState({ x: 0, y: 0, time: 0 });
+  const nodeRef = useRef<HTMLDivElement>(null);
+  const [isKeyboardShown, setIsKeyboardShown] = useState(false);
+  const [buttonContent, setButtonContent] = useState('ᐸ');
+  const [keyboardPosition, setKeyboardPosition] = useState({ x: 0, y: 0 });
+  const [targetKeyboardInput, setTargetKeyboardInput] = useState<Ace.Editor | null>(null);
+  const [lastKeyPressed, setLastKeyPressed] = useState<string>('');
+  const [touchStartInfo, setTouchStartInfo] = useState({ x: 0, y: 0, time: 0 });
 
   const onDrag: DraggableEventHandler = (
     e: DraggableEvent,

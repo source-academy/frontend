@@ -1,6 +1,6 @@
 import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';

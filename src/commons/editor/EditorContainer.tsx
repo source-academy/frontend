@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React from 'react';
+import { useContext } from 'react';
 
 import { EditorTabState } from '../workspace/WorkspaceTypes';
 import { WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
@@ -40,7 +40,7 @@ const createNormalEditorTab =
   };
 
 const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerProps) => {
-  const [workspaceSettings] = React.useContext(WorkspaceSettingsContext)!;
+  const [workspaceSettings] = useContext(WorkspaceSettingsContext)!;
   const {
     baseFilePath,
     isFolderModeEnabled,

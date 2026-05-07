@@ -2,7 +2,7 @@ import { Classes } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import React, { type JSX } from 'react';
+import { useEffect, useRef } from 'react';
 import AceEditor from 'react-ace';
 import ReactAce from 'react-ace/lib/ace';
 
@@ -31,14 +31,14 @@ type StateProps = {
 };
 
 type OwnProps = {
-  replButtons: Array<JSX.Element | null>;
+  replButtons: Array<React.ReactElement | null>;
 };
 
 export const ReplInput: React.FC<ReplInputProps> = props => {
   const { onFocus, onBlur } = props;
 
-  const replInput = React.useRef<ReactAce>(null);
-  const replInputBottom = React.useRef<HTMLDivElement>(null);
+  const replInput = useRef<ReactAce>(null);
+  const replInputBottom = useRef<HTMLDivElement>(null);
 
   const { isDesktopBreakpoint } = useResponsive();
 
@@ -55,7 +55,7 @@ export const ReplInput: React.FC<ReplInputProps> = props => {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!replInput.current) {
       return;
     }
@@ -68,7 +68,7 @@ export const ReplInput: React.FC<ReplInputProps> = props => {
     }
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!replInputBottom.current || props.disableScrolling) {
       return;
     }

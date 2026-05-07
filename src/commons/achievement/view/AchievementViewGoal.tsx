@@ -1,5 +1,4 @@
 import { ProgressBar } from '@blueprintjs/core';
-import React from 'react';
 
 import { AchievementGoal } from '../../../features/achievement/AchievementTypes';
 

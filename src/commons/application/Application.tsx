@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router';
 import Messages, {
@@ -22,7 +22,7 @@ const Application: React.FC = () => {
   // Used in the mobile/PWA experience (e.g. separate handling of orientation changes on Andriod & iOS due to unique browser behaviours)
   const isMobile = /iPhone|iPad|Android/.test(navigator.userAgent);
   const isPWA = window.matchMedia('(display-mode: standalone)').matches; // Checks if user is accessing from the PWA
-  const browserDimensions = React.useRef({ height: 0, width: 0 });
+  const browserDimensions = useRef({ height: 0, width: 0 });
 
   const [workspaceSettings, setWorkspaceSettings] = useLocalStorageState(
     Constants.workspaceSettingsLocalStorageKey,
@@ -31,7 +31,7 @@ const Application: React.FC = () => {
 
   // Effect to fetch the latest user info and course configurations from the backend on refresh,
   // if the user was previously logged in
-  React.useEffect(() => {
+  useEffect(() => {
     if (isLoggedIn) {
       dispatch(SessionActions.fetchUserAndCourse());
     }
@@ -48,7 +48,7 @@ const Application: React.FC = () => {
    * does not update the application height when the Android keyboard triggers the resize event. IOS
    * devices are not affected.
    */
-  React.useEffect(() => {
+  useEffect(() => {
     const orientationChangeHandler = () => {
       if (
         !(
@@ -78,7 +78,7 @@ const Application: React.FC = () => {
   }, [isPWA, isMobile]);
 
   // Effect to handle messages from VS Code
-  React.useEffect(() => {
+  useEffect(() => {
     if (!window.confirm) {
       // Polyfill confirm() to instead show as VS Code notification
       // TODO: Pass text as a new Message to the webview

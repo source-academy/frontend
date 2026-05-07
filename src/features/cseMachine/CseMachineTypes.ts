@@ -5,7 +5,6 @@ import {
 import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
 import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
-import React from 'react';
 
 import { ArrayUnit } from './components/ArrayUnit';
 import { Binding } from './components/Binding';

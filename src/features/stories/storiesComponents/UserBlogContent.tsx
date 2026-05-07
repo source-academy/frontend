@@ -1,6 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import yaml from 'js-yaml';
-import React, { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import debounceRender from 'react-debounce-render';
 import Constants from 'src/commons/utils/Constants';
 import { propsAreEqual } from 'src/commons/utils/MemoizeHelper';
@@ -115,4 +115,4 @@ const UserBlogContent: React.FC<Props> = ({ fileContent }) => {
   );
 };
 
-export default React.memo(debounceRender(UserBlogContent, 500), propsAreEqual);
+export default memo(debounceRender(UserBlogContent, 500), propsAreEqual);

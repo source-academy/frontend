@@ -7,6 +7,38 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import tseslint from 'typescript-eslint';
 
+const reactRestrictedImports = [
+  'FC',
+  'FunctionComponent',
+  'SFC',
+  'ReactNode',
+  'ReactElement',
+  'ComponentType',
+  'JSX',
+  'CSSProperties',
+  'ErrorInfo',
+  'MouseEvent',
+  'KeyboardEvent',
+  'RefObject'
+];
+
+const restrictedImports = [
+  ...reactRestrictedImports.map(importName => ({
+    name: 'react',
+    importNames: [importName],
+    message: `Use the fully qualified name React.${importName} instead of importing ${importName} directly.`
+  })),
+  {
+    name: 'react-redux',
+    importNames: [
+      // TODO: Create typed hook for useDispatch
+      // "useDispatch",
+      'useSelector'
+    ],
+    message: 'Use the typed hook "useTypedSelector" instead.'
+  }
+];
+
 export default tseslint.config(
   { ignores: ['eslint.config.mjs', '**/*.snap'] },
   eslint.configs.recommended,
@@ -36,22 +68,6 @@ export default tseslint.config(
       'react-hooks/refs': 'warn', // TODO: Fix and delete (default is error)
       'react-hooks/use-memo': 'warn', // TODO: Fix and delete (default is error)
       'no-empty': 'warn',
-      'no-restricted-imports': [
-        'error',
-        {
-          paths: [
-            {
-              name: 'react-redux',
-              importNames: [
-                // TODO: Create typed hook for useDispatch
-                // "useDispatch",
-                'useSelector'
-              ],
-              message: 'Use the typed hook "useTypedSelector" instead.'
-            }
-          ]
-        }
-      ],
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-duplicate-enum-values': 'off',
       '@typescript-eslint/no-empty-function': 'off',
@@ -77,6 +93,12 @@ export default tseslint.config(
         }
       ],
       'simple-import-sort/imports': 'error'
+    }
+  },
+  {
+    files: ['**/*.tsx', '**/*.ts'],
+    rules: {
+      'no-restricted-imports': ['error', ...restrictedImports]
     }
   }
 );

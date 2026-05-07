@@ -14,7 +14,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import React from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import AcademyActions from 'src/features/academy/AcademyActions';
 
@@ -32,7 +32,7 @@ type Props = {
 const DropdownCreateCourse = (props => {
   const dispatch = useDispatch();
 
-  const [courseConfig, setCourseConfig] = React.useState<UpdateCourseConfiguration>({
+  const [courseConfig, setCourseConfig] = useState<UpdateCourseConfiguration>({
     courseName: '',
     courseShortName: '',
     viewable: true,
@@ -47,7 +47,7 @@ const DropdownCreateCourse = (props => {
   });
 
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
-    React.useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
+    useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
 
   const sourceChapterOptions = [
     { value: Chapter.SOURCE_1 },
@@ -76,7 +76,7 @@ const DropdownCreateCourse = (props => {
     props.onClose();
   };
 
-  const onChangeTabs = React.useCallback(
+  const onChangeTabs = useCallback(
     (
       newTabId: CourseHelpTextEditorTab,
       prevTabId: CourseHelpTextEditorTab,

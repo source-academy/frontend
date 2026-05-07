@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Assessment } from '../assessment/AssessmentTypes';
 import { limitNumberRange } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';

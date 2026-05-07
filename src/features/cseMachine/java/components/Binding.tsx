@@ -1,5 +1,5 @@
 import { ECE } from 'java-slang';
-import React from 'react';
+import { Fragment } from 'react';
 
 import { Visible } from '../../components/Visible';
 import { Config } from '../../CseMachineConfig';
@@ -83,14 +83,14 @@ export class Binding extends Visible {
 
   draw(): React.ReactNode {
     return (
-      <React.Fragment key={CseMachine.key++}>
+      <Fragment key={CseMachine.key++}>
         {/* Name */}
         {this._name.draw()}
 
         {/* Value */}
         {this._value.draw()}
         {this._arrow?.draw()}
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

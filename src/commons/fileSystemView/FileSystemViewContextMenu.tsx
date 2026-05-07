@@ -1,11 +1,11 @@
 import { Classes } from '@blueprintjs/core';
 import { ControlledMenu, MenuItem, useMenuState } from '@szhsin/react-menu';
 import classNames from 'classnames';
-import React, { type JSX } from 'react';
+import { useState } from 'react';
 import classes from 'src/styles/ContextMenu.module.scss';
 
 type Props = {
-  children?: JSX.Element;
+  children?: React.ReactElement;
   className?: string;
   createNewFile?: () => void;
   createNewDirectory?: () => void;
@@ -24,7 +24,7 @@ const FileSystemViewContextMenu: React.FC<Props> = ({
   remove
 }) => {
   const [menuProps, toggleMenu] = useMenuState();
-  const [anchorPoint, setAnchorPoint] = React.useState({ x: 0, y: 0 });
+  const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
   const onContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();

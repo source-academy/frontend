@@ -1,6 +1,5 @@
 import { TreeNodeInfo } from '@blueprintjs/core';
 import { set } from 'lodash';
-import type { JSX } from 'react';
 
 type Tree = Record<any, any> | string[] | any;
 
@@ -21,7 +20,7 @@ type Tree = Record<any, any> | string[] | any;
  */
 export function convertAssetPathsToTree(
   assetPaths: string[],
-  iconRenderer: (pathName: string) => JSX.Element,
+  iconRenderer: (pathName: string) => React.ReactElement,
   rootFolders: string[] = []
 ): TreeNodeInfo[] {
   const assetObj: Tree = {};

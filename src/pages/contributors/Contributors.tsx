@@ -1,5 +1,4 @@
 import { Card, Elevation } from '@blueprintjs/core';
-import React from 'react';
 
 import ContributorsDetails from './subcomponents/ContributorsDetails';
 import ContributorsList from './subcomponents/ContributorsList';

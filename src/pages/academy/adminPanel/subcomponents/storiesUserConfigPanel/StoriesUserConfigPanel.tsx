@@ -1,7 +1,7 @@
 import { Button, H2 } from '@blueprintjs/core';
 import { type ColDef, type GridApi, type GridReadyEvent, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import React from 'react';
+import { useRef } from 'react';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { AdminPanelStoriesUser } from 'src/features/stories/StoriesTypes';
 
@@ -30,7 +30,7 @@ const defaultColumnDefs: ColDef = {
  *   no admins left in a course)
  */
 const StoriesUserConfigPanel: React.FC<Props> = props => {
-  const gridApi = React.useRef<GridApi>(null);
+  const gridApi = useRef<GridApi>(null);
 
   const storiesUsers = props.storiesUsers?.map(e =>
     !e.name ? { ...e, name: '(user has yet to log in)' } : e

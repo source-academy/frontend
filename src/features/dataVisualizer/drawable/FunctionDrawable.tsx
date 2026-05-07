@@ -1,4 +1,4 @@
-import React from 'react';
+import { PureComponent } from 'react';
 import { Circle, Group } from 'react-konva';
 
 import { Config } from '../Config';
@@ -11,7 +11,7 @@ type FunctionProps = {
 /**
  * Represents a function object drawn using two circles.
  */
-class FunctionDrawable extends React.PureComponent<FunctionProps> {
+class FunctionDrawable extends PureComponent<FunctionProps> {
   render() {
     return (
       <Group {...this.props}>

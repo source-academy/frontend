@@ -1,5 +1,4 @@
 import { Label } from 'konva/lib/shapes/Label';
-import React, { RefObject } from 'react';
 import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
@@ -18,8 +17,8 @@ type FunctionTooltipLabelsProps = {
   tooltip: string;
   strokeColor: string;
   textColor: string;
-  labelRef: RefObject<Label | null>;
-  revealLabelRef: RefObject<Label | null>;
+  labelRef: React.RefObject<Label | null>;
+  revealLabelRef: React.RefObject<Label | null>;
 };
 
 export const FunctionTooltipLabels = ({
@@ -35,7 +34,7 @@ export const FunctionTooltipLabels = ({
   labelRef,
   revealLabelRef
 }: FunctionTooltipLabelsProps): React.ReactNode => (
-  <React.Fragment>
+  <>
     <KonvaLabel
       x={x + Config.TextMargin}
       y={y + radius + Config.TextMargin + printDescriptionOffsetY}
@@ -85,7 +84,7 @@ export const FunctionTooltipLabels = ({
         />
       </KonvaLabel>
     )}
-  </React.Fragment>
+  </>
 );
 
 /** the value of a `Binding` or an `ArrayUnit` */

@@ -1,6 +1,6 @@
 import { Classes, Icon, Tab, Tabs, Tooltip } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React, { type JSX } from 'react';
+import { memo } from 'react';
 import { SideContentProps } from 'src/commons/sideContent/SideContent';
 import { generateIconId } from 'src/commons/sideContent/SideContentHelper';
 import SideContentProvider from 'src/commons/sideContent/SideContentProvider';
@@ -26,7 +26,7 @@ type MobileControlBarProps = {
 const renderTab = (tab: SideContentTab, isIOS: boolean) => {
   const iconSize = 20;
   const tabId = tab.id === undefined ? tab.label : tab.id;
-  const tabTitle: JSX.Element = (
+  const tabTitle: React.ReactElement = (
     <Tooltip
       content={tab.label}
       onOpening={() => {
@@ -71,11 +71,11 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
     const renderPanel = (tab: SideContentTab, workspaceLocation?: SideContentLocation) => {
       if (!tab.body) return;
 
-      const tabBody: JSX.Element = workspaceLocation
+      const tabBody: React.ReactElement = workspaceLocation
         ? {
             ...tab.body,
             props: {
-              ...tab.body.props,
+              ...(tab.body.props as any),
               workspaceLocation
             }
           }
@@ -122,4 +122,4 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
   );
 };
 
-export default React.memo(MobileSideContent, propsAreEqual);
+export default memo(MobileSideContent, propsAreEqual);

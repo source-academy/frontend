@@ -1,6 +1,5 @@
 import { Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
 import ControlButton from '../ControlButton';

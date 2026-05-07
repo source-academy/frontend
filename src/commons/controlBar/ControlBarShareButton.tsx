@@ -8,7 +8,7 @@ import {
   Tooltip
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
+import { createRef, PureComponent } from 'react';
 import CopyToClipboard from 'src/commons/utils/CopyToClipboard';
 
 import ControlButton from '../ControlButton';
@@ -34,7 +34,7 @@ type State = {
   isLoading: boolean;
 };
 
-export class ControlBarShareButton extends React.PureComponent<ControlBarShareButtonProps, State> {
+export class ControlBarShareButton extends PureComponent<ControlBarShareButtonProps, State> {
   private shareInputElem: React.RefObject<HTMLInputElement | null>;
 
   constructor(props: ControlBarShareButtonProps) {
@@ -42,7 +42,7 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
     this.selectShareInputText = this.selectShareInputText.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.toggleButton = this.toggleButton.bind(this);
-    this.shareInputElem = React.createRef();
+    this.shareInputElem = createRef();
     this.state = { keyword: '', isLoading: false };
   }
 

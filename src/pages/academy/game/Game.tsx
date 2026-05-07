@@ -1,7 +1,7 @@
 import { Button, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useFullscreenElement } from '@mantine/hooks';
-import React from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import AchievementActions from 'src/features/achievement/AchievementActions';
@@ -19,16 +19,16 @@ const Game: React.FC = () => {
   const achievements = useTypedSelector(state => state.achievement.achievements);
   const goals = useTypedSelector(state => state.achievement.goals);
 
-  const [isTestStudent, setIsTestStudent] = React.useState(false);
-  const [isUsingMock, setIsUsingMock] = React.useState(false);
+  const [isTestStudent, setIsTestStudent] = useState(false);
+  const [isUsingMock, setIsUsingMock] = useState(false);
   const isVscode = useTypedSelector(state => state.vscode.isVscode);
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(AchievementActions.getAchievements());
     dispatch(AchievementActions.getOwnGoals());
   }, [dispatch]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const game = createSourceAcademyGame();
     return () => {
       game.isMounted = false;
@@ -37,7 +37,7 @@ const Game: React.FC = () => {
     };
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     SourceAcademyGame.getInstance().setAccountInfo({
       accessToken: session.accessToken,
       refreshToken: session.refreshToken,
@@ -83,11 +83,11 @@ const Game: React.FC = () => {
     }
   };
 
-  const gameDisplayRef = React.useRef<HTMLDivElement | null>(null);
+  const gameDisplayRef = useRef<HTMLDivElement | null>(null);
 
   // This function sets the gameDisplayRef and also calls the ref callback from useFullscreen
   // to attach the fullscreen logic to the game display element
-  const setGameDisplayRefs = React.useCallback(
+  const setGameDisplayRefs = useCallback(
     (node: HTMLDivElement | null) => {
       // Refs returned by useRef()
       gameDisplayRef.current = node;
@@ -100,10 +100,10 @@ const Game: React.FC = () => {
 
   // Logic for the fullscreen button to dynamically adjust its size, position and padding
   // based on the size of the game display.
-  const [iconLeft, setIconLeft] = React.useState('0px');
-  const [iconPadding, setIconPadding] = React.useState('0px');
+  const [iconLeft, setIconLeft] = useState('0px');
+  const [iconPadding, setIconPadding] = useState('0px');
 
-  const handleResize = React.useCallback(() => {
+  const handleResize = useCallback(() => {
     if (gameDisplayRef.current) {
       const aspectRatio = 16 / 9;
       const height = gameDisplayRef.current.offsetHeight;
@@ -120,11 +120,11 @@ const Game: React.FC = () => {
   // at the time handleResize is called, so the height of gameDisplayRef.current
   // is still the fullscreen height.
   // To fix this, we delay handleResize by 100ms.
-  const delayedHandleResize = React.useCallback(() => {
+  const delayedHandleResize = useCallback(() => {
     setTimeout(handleResize, 100);
   }, [handleResize]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.addEventListener('resize', delayedHandleResize);
     delayedHandleResize();
 

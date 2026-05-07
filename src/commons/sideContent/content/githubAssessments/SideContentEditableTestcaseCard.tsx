@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/utils/stringify';
-import React from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { Testcase, TestcaseTypes } from '../../../assessment/AssessmentTypes';
 
@@ -30,7 +30,7 @@ const SideContentEditableTestcaseCard: React.FC<SideContentEditableTestcaseCardP
   deleteTestcase
 }) => {
   // TODO (Refactor): testcase type seems unused in GitHub Assessments
-  const extraClasses = React.useMemo(() => {
+  const extraClasses = useMemo(() => {
     const isEvaluated = testcase.result !== undefined || testcase.errors;
     const isEqual = stringify(testcase.result) === testcase.answer;
 
@@ -41,7 +41,7 @@ const SideContentEditableTestcaseCard: React.FC<SideContentEditableTestcaseCardP
     };
   }, [testcase]);
 
-  const handleRunTestcase = React.useCallback(() => {
+  const handleRunTestcase = useCallback(() => {
     handleTestcaseEval(index);
   }, [index, handleTestcaseEval]);
 
@@ -59,7 +59,7 @@ const SideContentEditableTestcaseCard: React.FC<SideContentEditableTestcaseCardP
     />
   );
 
-  const answer = React.useMemo(() => {
+  const answer = useMemo(() => {
     let answer = 'No Answer';
     if (testcase.errors) {
       answer = parseError(testcase.errors);

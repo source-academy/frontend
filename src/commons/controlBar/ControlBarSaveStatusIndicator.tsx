@@ -1,6 +1,5 @@
 import { Intent, type MaybeElement, Spinner, SpinnerSize, Tag } from '@blueprintjs/core';
 import { type IconName, IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 import type { SaveStatus } from '../workspace/WorkspaceTypes';
 
