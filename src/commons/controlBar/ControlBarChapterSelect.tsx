@@ -3,7 +3,6 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';

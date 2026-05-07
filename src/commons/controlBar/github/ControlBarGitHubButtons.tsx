@@ -1,7 +1,6 @@
 import { ButtonGroup, Classes, Intent, Popover, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
-import React from 'react';
 import { useResponsive } from 'src/commons/utils/Hooks';
 
 import { GitHubSaveInfo } from '../../../features/github/GitHubTypes';

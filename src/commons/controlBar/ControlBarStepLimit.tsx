@@ -1,6 +1,5 @@
 import { NumericInput, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 type ControlBarStepLimitProps = DispatchProps & StateProps;
 
