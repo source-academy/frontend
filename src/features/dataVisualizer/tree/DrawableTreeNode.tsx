@@ -1,5 +1,3 @@
-import type { JSX } from 'react';
-
 import { TreeNode } from './BaseTreeNode';
 
 /**
@@ -8,7 +6,7 @@ import { TreeNode } from './BaseTreeNode';
  * Concrete implementations: ArrayTreeNode, FunctionTreeNode
  */
 export abstract class DrawableTreeNode extends TreeNode {
-  protected _drawable?: JSX.Element;
+  protected _drawable?: React.ReactElement;
   public drawableX?: number;
   public drawableY?: number;
 
@@ -31,5 +29,5 @@ export abstract class DrawableTreeNode extends TreeNode {
     parentX: number,
     parentY: number,
     colorIndex: number
-  ): JSX.Element;
+  ): React.ReactElement;
 }
