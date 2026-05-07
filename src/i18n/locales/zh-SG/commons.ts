@@ -8,7 +8,6 @@ const translations = {
     'Game Simulator': '游戏模拟器',
     'Admin Panel': '管理面板',
     Stories: '故事',
-    Sourcecast: '源代码广播',
     Playground: '游乐场',
     'SICP JS': 'SICP JS',
     Achievements: '成就',

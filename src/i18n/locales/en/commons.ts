@@ -8,7 +8,6 @@ const translations = {
     'Game Simulator': 'Game Simulator',
     'Admin Panel': 'Admin Panel',
     Stories: 'Stories',
-    Sourcecast: 'Sourcecast',
     Playground: 'Playground',
     'SICP JS': 'SICP JS',
     Achievements: 'Achievements',

@@ -8,7 +8,6 @@ const translations = {
     'Game Simulator': 'Ĝámé Śímûļáţőŗ',
     'Admin Panel': 'Áďmíñ Ƥáñéļ',
     Stories: 'Šţőŗíéş',
-    Sourcecast: 'Šőûŗčéčáşţ',
     Playground: 'Ƥļáÿğŕőûñď',
     'SICP JS': 'ŠĨĆƤ ĴŚ',
     Achievements: 'Ãčĥíéṽéḿéñţş',
