@@ -1,6 +1,7 @@
 import { Classes } from '@blueprintjs/core';
 import classNames from 'classnames';
 import DOMPurify from 'dompurify';
+import { memo } from 'react';
 import { Converter } from 'showdown';
 
 type Props = {
@@ -34,4 +35,4 @@ const Markdown: React.FC<Props> = props => {
   );
 };
 
-export default React.memo(Markdown);
+export default memo(Markdown);
