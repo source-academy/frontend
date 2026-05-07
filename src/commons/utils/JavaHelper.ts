@@ -4,7 +4,8 @@ import setupJVM, { parseBin } from 'java-slang/dist/jvm';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
 import { Context, Result } from 'js-slang';
 import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/errors/base';
-import loadSourceModules from 'js-slang/dist/modules/loader';
+import loadSourceModules, { memoizedGetModuleManifestAsync } from 'js-slang/dist/modules/loader';
+import type { ModuleInfo } from 'js-slang/dist/modules/moduleTypes';
 
 import { CseMachine } from '../../features/cseMachine/java/CseMachine';
 import { UploadResult } from '../sideContent/content/SideContentUpload';
@@ -72,8 +73,20 @@ export async function javaRun(
     // dynamic load modules
     if (path.startsWith('modules')) {
       const module = path.split('/')[1] as string;
-      const moduleFuncs = await loadSourceModules(new Set([module]), context, true);
-      const { proxy } = createModuleProxy(module, moduleFuncs[module]);
+      const manifest = await memoizedGetModuleManifestAsync();
+      if (!manifest[module]) {
+        throw new Error(`Module "${module}" not found in the Source modules manifest.`);
+      }
+      const sourceModulesToImport: Record<string, ModuleInfo> = {
+        [module]: { name: module, ...manifest[module] }
+      };
+      const moduleFuncs = await loadSourceModules(sourceModulesToImport, context, {
+        loadTabs: true
+      });
+      const { proxy } = createModuleProxy(
+        module,
+        moduleFuncs[module] as { [key: string]: Function | object }
+      );
       return { default: proxy };
     }
     return await import(`java-slang/dist/jvm/stdlib/${path}.js`);

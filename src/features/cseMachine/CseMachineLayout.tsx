@@ -129,6 +129,7 @@ export class Layout {
   static animationGroupRef: RefObject<KonvaGroupNode | null> = React.createRef();
   static arrowUnderlayLayerRef: RefObject<KonvaLayerNode | null> = React.createRef();
   static underlayArrows: React.ReactNode[] = [];
+  static overlayNodes: React.ReactNode[] = [];
 
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
@@ -141,6 +142,14 @@ export class Layout {
 
   static registerUnderlayArrow(arrow: React.ReactNode) {
     Layout.underlayArrows.push(arrow);
+  }
+
+  static resetOverlayNodes() {
+    Layout.overlayNodes = [];
+  }
+
+  static registerOverlayNode(node: React.ReactNode) {
+    Layout.overlayNodes.push(node);
   }
 
   static updateDimensions(width: number, height: number) {
@@ -194,6 +203,7 @@ export class Layout {
     arrowSelection.clearSelection();
     Layout.key = 0;
     Layout.resetUnderlayArrows();
+    Layout.resetOverlayNodes();
 
     // deep copy so we don't mutate the context
     Layout.globalEnvNode = deepCopyTree(envTree).root;
@@ -689,10 +699,12 @@ export class Layout {
       return Layout.prevLayout;
     } else {
       Layout.resetUnderlayArrows();
+      Layout.resetOverlayNodes();
       const levelNodes = Layout.levels.map(level => level.draw());
       const controlNode = CseMachine.getControlStash() ? Layout.controlComponent.draw() : null;
       const stashNode = CseMachine.getControlStash() ? Layout.stashComponent.draw() : null;
       const underlayArrows = [...Layout.underlayArrows];
+      const overlayNodes = [...Layout.overlayNodes];
       const layout = (
         <div className="sa-cse-machine" data-testid="sa-cse-machine">
           <div
@@ -760,6 +772,7 @@ export class Layout {
                     {CseAnimation.animations.map(c => c.draw())}
                   </KonvaGroup>
                 </KonvaLayer>
+                <KonvaLayer listening={false}>{overlayNodes}</KonvaLayer>
               </KonvaStage>
             </div>
           </div>
@@ -807,16 +820,19 @@ export class Layout {
 
     Layout.levels.forEach(level => {
       const frames = level.frames;
-      const controlStashOffset =
+      const controlStashOffsetX =
         ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth;
-      const offset = controlStash ? controlStashOffset : 0;
+      const controlStashOffsetY =
+        ControlStashConfig.ControlPosY + ControlStashConfig.StashItemHeight;
+      const offsetX = controlStash ? controlStashOffsetX : 0;
+      const offsetY = controlStash ? controlStashOffsetY : 0;
       // `level.width()` already includes the last frame's right-side overflow.
       const currWidth = level.width();
       cache.largestWidth = Math.max(cache.largestWidth, currWidth);
       frames.forEach(frame => {
-        cache.framesX.set(frame.environment.id, frame.x() - offset);
+        cache.framesX.set(frame.environment.id, frame.x() - offsetX);
         cache.framesWidth.set(frame.environment.id, frame.width());
-        cache.framesY.set(frame.environment.id, frame.y());
+        cache.framesY.set(frame.environment.id, frame.y() - offsetY);
         cache.levelWidth.set(frame.environment.id, currWidth);
       });
     });
@@ -832,13 +848,15 @@ export class Layout {
     const cache = CseMachine.getMasterLayout();
     if (cache && cache.framesX.has(envId)) {
       const fixedX = cache.framesX.get(envId)!;
-      let offset: number = 0;
-      offset += CseMachine.getControlStash()
-        ? ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth
-        : 0;
-      offset += CseMachine.getCenterAlignment()
-        ? Math.floor((cache.largestWidth - cache.levelWidth.get(envId)!) / 2)
-        : 0;
+
+      const offset =
+        (CseMachine.getControlStash()
+          ? ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth
+          : 0) +
+        (CseMachine.getCenterAlignment()
+          ? Math.floor((cache.largestWidth - cache.levelWidth.get(envId)!) / 2)
+          : 0);
+
       return fixedX + offset;
     }
     return undefined;
@@ -853,7 +871,11 @@ export class Layout {
     const cache = CseMachine.getMasterLayout();
     if (cache && cache.framesY.has(envId)) {
       const fixedY = cache.framesY.get(envId)!;
-      return fixedY;
+      const offset = CseMachine.getControlStash()
+        ? ControlStashConfig.ControlPosY + ControlStashConfig.StashItemHeight
+        : 0;
+
+      return fixedY + offset;
     }
     return undefined;
   }

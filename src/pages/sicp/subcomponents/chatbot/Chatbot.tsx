@@ -153,6 +153,19 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
                 toggleExpanded={toggleExpanded}
               />
             )}
+            <AnchorButton
+              className={classes['bot-button']}
+              onMouseEnter={() => !isDragging && setIsDivVisible(true)}
+              onMouseLeave={() => setIsDivVisible(false)}
+              onClick={togglePop}
+              icon={
+                <Icon
+                  icon={
+                    <img src={logo} className={classes['iSA']} alt="SA Logo" draggable={false} />
+                  }
+                />
+              }
+            />
           </div>
         </Draggable>
       )}

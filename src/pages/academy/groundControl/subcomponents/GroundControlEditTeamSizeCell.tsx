@@ -1,6 +1,7 @@
 import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useCallback } from 'react';
+import GradingFlex from 'src/commons/grading/GradingFlex';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 
@@ -41,17 +42,17 @@ const EditTeamSizeCell: React.FC<Props> = ({ data, onTeamSizeChange }) => {
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+    <GradingFlex alignItems="center" style={{ columnGap: '2rem' }}>
       <Button
-        small
-        minimal
+        variant="minimal"
+        size="small"
         icon={IconNames.MINUS}
         onClick={handleDecrement}
         disabled={teamSize === minTeamSize}
       />
       <span>{teamSize}</span>
-      <Button small minimal icon={IconNames.PLUS} onClick={handleIncrement} />
-    </div>
+      <Button size="small" variant="minimal" icon={IconNames.PLUS} onClick={handleIncrement} />
+    </GradingFlex>
   );
 };
 

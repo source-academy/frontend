@@ -123,7 +123,14 @@ export class Binding extends Visible {
     if (!isMainReference(this.value, this)) {
       return false;
     }
-    return !Layout.clearDeadFrames || (this.value?.isLive?.() ?? true);
+    if (!Layout.clearDeadFrames) {
+      return true;
+    }
+    // Keep function values interactive even when they are classified as dead.
+    if (this.value instanceof FnValue || this.value instanceof GlobalFnValue) {
+      return true;
+    }
+    return this.value?.isLive?.() ?? true;
   }
 
   /**

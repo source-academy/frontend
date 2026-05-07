@@ -195,7 +195,8 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
     hasVotingFeatures: false,
-    earlySubmissionXp: 200
+    earlySubmissionXp: 200,
+    isAutosaveEnabled: true
   },
   {
     assessmentConfigId: 2,
@@ -207,7 +208,8 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
     hasVotingFeatures: false,
-    earlySubmissionXp: 200
+    earlySubmissionXp: 200,
+    isAutosaveEnabled: true
   },
   {
     assessmentConfigId: 3,
@@ -219,7 +221,8 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
     hasVotingFeatures: false,
-    earlySubmissionXp: 200
+    earlySubmissionXp: 200,
+    isAutosaveEnabled: true
   },
   {
     assessmentConfigId: 4,
@@ -231,7 +234,8 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
     hasVotingFeatures: true,
-    earlySubmissionXp: 200
+    earlySubmissionXp: 200,
+    isAutosaveEnabled: true
   },
   {
     assessmentConfigId: 5,
@@ -243,7 +247,8 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
     hasVotingFeatures: false,
-    earlySubmissionXp: 200
+    earlySubmissionXp: 200,
+    isAutosaveEnabled: true
   }
 ];
 
@@ -710,7 +715,7 @@ describe('Test SUBMIT_ANSWER action', () => {
         ]
       ])
       .not.call.fn(showWarningMessage)
-      .call(showSuccessMessage, 'Saved!', 1000)
+      .not.call.fn(showSuccessMessage)
       .put(SessionActions.updateAssessment(mockNewAssessment))
       .put(WorkspaceActions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
       .dispatch({ type: SessionActions.submitAnswer.type, payload: mockAnsweredAssessmentQuestion })
@@ -752,7 +757,7 @@ describe('Test SUBMIT_ANSWER action', () => {
         ]
       ])
       .not.call.fn(showWarningMessage)
-      .call(showSuccessMessage, 'Saved!', 1000)
+      .not.call.fn(showSuccessMessage)
       .put(SessionActions.updateAssessment(mockNewAssessment))
       .put(WorkspaceActions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
       .dispatch({ type: SessionActions.submitAnswer.type, payload: mockAnsweredAssessmentQuestion })
@@ -1184,7 +1189,8 @@ describe('Test CREATE_COURSE action', () => {
       hoursBeforeEarlyXpDecay: 0,
       hasTokenCounter: false,
       hasVotingFeatures: false,
-      earlySubmissionXp: 0
+      earlySubmissionXp: 0,
+      isAutosaveEnabled: true
     }
   ];
 

@@ -12,7 +12,9 @@ import type { HighlightedLines, Position } from '../editor/EditorTypes';
 import { createActions } from '../redux/utils';
 import type { UploadResult } from '../sideContent/content/SideContentUpload';
 import type {
+  CodeVersionMetadata,
   EditorTabState,
+  SaveStatus,
   SubmissionsTableFilters,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
@@ -285,7 +287,54 @@ const newActions = createActions('workspace', {
   decreaseRequestCounter: 0,
   setGradingHasLoadedBefore: () => true,
   updateAllColsSortStates: (sortStates: AllColsSortStates) => ({ sortStates }),
-  updateGradingColumnVisibility: (filters: GradingColumnVisibility) => ({ filters })
+  updateGradingColumnVisibility: (filters: GradingColumnVisibility) => ({ filters }),
+  fetchVersionHistory: (workspaceLocation: WorkspaceLocation, skipAutoSave?: boolean) => ({
+    workspaceLocation,
+    skipAutoSave: skipAutoSave ?? false
+  }),
+  receiveVersionHistory: (
+    workspaceLocation: WorkspaceLocation,
+    versions: CodeVersionMetadata[]
+  ) => ({
+    workspaceLocation,
+    versions
+  }),
+  selectVersion: (workspaceLocation: WorkspaceLocation, version: CodeVersionMetadata | null) => ({
+    workspaceLocation,
+    version
+  }),
+  receiveVersionCode: (workspaceLocation: WorkspaceLocation, versionId: string, code: string) => ({
+    workspaceLocation,
+    versionId,
+    code
+  }),
+  restoreVersion: (
+    workspaceLocation: WorkspaceLocation,
+    versionId: string,
+    name: string | null | undefined,
+    timestamp: number,
+    code: string
+  ) => ({
+    workspaceLocation,
+    versionId,
+    name,
+    timestamp,
+    code
+  }),
+  nameVersion: (workspaceLocation: WorkspaceLocation, versionId: string, name: string) => ({
+    workspaceLocation,
+    versionId,
+    name
+  }),
+  toggleHistoryPanel: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
+  updateSaveStatus: (workspaceLocation: WorkspaceLocation, saveStatus: SaveStatus) => ({
+    workspaceLocation,
+    saveStatus
+  }),
+  setIsAutoSaving: (workspaceLocation: WorkspaceLocation, isAutoSaving: boolean) => ({
+    workspaceLocation,
+    isAutoSaving
+  })
 });
 
 export default newActions;

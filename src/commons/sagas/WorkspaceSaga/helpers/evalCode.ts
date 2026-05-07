@@ -1,5 +1,6 @@
 import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
 import type { IConduit } from '@sourceacademy/conductor/conduit';
+import { RunnerStatus } from '@sourceacademy/conductor/types';
 import { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import { tokenizer } from 'acorn';
 import { type Context, interrupt, type Result, resume, runFilesInContext } from 'js-slang';
@@ -495,7 +496,7 @@ function* handleResults(
   try {
     while (true) {
       const result = yield take(resultChan);
-      yield put(actions.evalInterpreterSuccess(result, workspaceLocation));
+      yield put(actions.appendInterpreterResult(result, workspaceLocation));
     }
   } finally {
     if (yield cancelled()) {
@@ -517,12 +518,43 @@ function* handleErrors(
   try {
     while (true) {
       const error = yield take(errorChan);
-      yield put(actions.evalInterpreterError([toConductorSourceError(error)], workspaceLocation));
+      yield put(actions.appendInterpreterError([toConductorSourceError(error)], workspaceLocation));
     }
   } finally {
     if (yield cancelled()) {
       errorChan.close();
     }
+  }
+}
+
+function* handleStatuses(
+  hostPlugin: BrowserHostPlugin,
+  workspaceLocation: WorkspaceLocation
+): SagaIterator {
+  const statusChan = eventChannel<{ status: RunnerStatus; isActive: boolean }>(emitter => {
+    const onStatusUpdate = (status: RunnerStatus, isActive: boolean) =>
+      emitter({ status, isActive });
+    hostPlugin.receiveStatusUpdate = onStatusUpdate;
+    return () => {
+      if (hostPlugin.receiveStatusUpdate === onStatusUpdate) delete hostPlugin.receiveStatusUpdate;
+    };
+  });
+  try {
+    while (true) {
+      const { status, isActive } = yield take(statusChan);
+      if (status === RunnerStatus.RUNNING) {
+        yield put(actions.setIsRunning(isActive, workspaceLocation));
+      }
+
+      const isTerminalStatus =
+        isActive && (status === RunnerStatus.STOPPED || status === RunnerStatus.ERROR);
+
+      if (isTerminalStatus) {
+        yield put(actions.beginInterruptExecution(workspaceLocation));
+      }
+    }
+  } finally {
+    statusChan.close();
   }
 }
 /**
@@ -574,6 +606,7 @@ export function* evalCodeConductorSaga(
   const stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
   const resultTask = yield fork(handleResults, hostPlugin, workspaceLocation);
   const errorTask = yield fork(handleErrors, hostPlugin, workspaceLocation);
+  const statusTask = yield fork(handleStatuses, hostPlugin, workspaceLocation);
   yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
 
   // This exit logic of this while loop might be causing an unintended infinite loop in the REPL
@@ -590,6 +623,7 @@ export function* evalCodeConductorSaga(
     yield put(actions.clearReplInput(workspaceLocation));
     yield call([hostPlugin, 'sendChunk'], code);
   }
+  yield cancel(statusTask);
   yield call([conduit, 'terminate']);
   yield cancel(stdoutTask);
   yield cancel(resultTask);

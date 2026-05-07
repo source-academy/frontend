@@ -221,7 +221,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sharedbConnected,
     usingSubst,
     usingCse,
-    updateCse,
     isFolderModeEnabled,
     activeEditorTabIndex,
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
@@ -425,9 +424,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const autorunButtonHandlers = useMemo(() => {
     return {
       handleEditorEval: () => {
-        if (updateCse) {
-          CseMachine.clearCachedLayouts();
-        }
+        CseMachine.clearCachedLayouts();
         // reset stepper before evaluation
         dispatch(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
         dispatch(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
@@ -456,7 +453,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }, [
     dispatch,
     workspaceLocation,
-    updateCse,
     playgroundSourceChapter,
     selectedTab,
     hasAnyBreakpoints,

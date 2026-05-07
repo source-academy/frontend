@@ -1,6 +1,4 @@
-import '@tremor/react/dist/esm/tremor.css';
-
-import { Icon as BpIcon } from '@blueprintjs/core';
+import { Button, HTMLTable, Icon as BpIcon, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import {
   Column,
@@ -14,20 +12,9 @@ import {
   Row,
   useReactTable
 } from '@tanstack/react-table';
-import {
-  Bold,
-  Button,
-  Flex,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeaderCell,
-  TableRow,
-  Text,
-  TextInput
-} from '@tremor/react';
 import React, { useState } from 'react';
+import GradingFlex from 'src/commons/grading/GradingFlex';
+import GradingText from 'src/commons/grading/GradingText';
 import { objectKeys } from 'src/commons/utils/TypeHelper';
 import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 
@@ -140,72 +127,72 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
 
   return (
     <>
-      <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
-        <Flex alignItems="items-center" spaceX="space-x-2">
-          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', height: '1.75rem' }}>
+      <GradingFlex
+        justifyContent="space-between"
+        alignItems="center"
+        style={{ marginTop: '0.5rem' }}
+      >
+        <GradingFlex alignItems="center" style={{ columnGap: '0.5rem' }}>
+          <GradingFlex alignItems="center" style={{ columnGap: '0.5rem', height: '1.75rem' }}>
             <BpIcon icon={IconNames.FILTER_LIST} />
-            <Text>
+            <GradingText>
               {columnFilters.length > 0
                 ? 'Filters: '
                 : 'No filters applied. Click on any cell to filter by its value.'}{' '}
-            </Text>
-          </div>
+            </GradingText>
+          </GradingFlex>
           <TeamFormationFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
-        </Flex>
+        </GradingFlex>
 
-        <TextInput
-          maxWidth="max-w-sm"
-          icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
+        <InputGroup
+          style={{ maxWidth: '14rem' }}
+          leftIcon={IconNames.SEARCH}
           placeholder="Search for any value here..."
           onChange={e => setGlobalFilter(e.target.value)}
         />
-      </Flex>
-      <Table marginTop="mt-2">
-        <TableHead>
+      </GradingFlex>
+      <HTMLTable style={{ marginTop: '0.5rem', width: '100%' }}>
+        <thead>
           {table.getHeaderGroups().map(headerGroup => (
-            <TableRow key={headerGroup.id}>
+            <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => (
-                <TableHeaderCell key={header.id}>
+                <th key={header.id}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(header.column.columnDef.header, header.getContext())}
-                </TableHeaderCell>
+                </th>
               ))}
-            </TableRow>
+            </tr>
           ))}
-        </TableHead>
-        <TableBody>
+        </thead>
+        <tbody>
           {table.getRowModel().rows.map(row => (
-            <TableRow key={row.id}>
+            <tr key={row.id}>
               {row.getVisibleCells().map(cell => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
+                <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
               ))}
-            </TableRow>
+            </tr>
           ))}
-        </TableBody>
-      </Table>
+        </tbody>
+      </HTMLTable>
       <div>
-        <Flex justifyContent="justify-center" spaceX="space-x-3">
+        <GradingFlex justifyContent="center" style={{ columnGap: '0.75rem' }}>
           <Button
-            size="xs"
-            icon={() => <BpIcon icon={IconNames.ARROW_LEFT} />}
-            variant="light"
+            variant="minimal"
+            icon={IconNames.ARROW_LEFT}
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           />
-          <Bold>
+          <GradingText style={{ fontWeight: 'bold' }}>
             Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-          </Bold>
+          </GradingText>
           <Button
-            size="xs"
-            icon={() => <BpIcon icon={IconNames.ARROW_RIGHT} />}
-            variant="light"
+            variant="minimal"
+            icon={IconNames.ARROW_RIGHT}
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           />
-        </Flex>
+        </GradingFlex>
       </div>
     </>
   );
@@ -223,9 +210,9 @@ const Filterable: React.FC<FilterableProps> = ({ column, value, children }) => {
   };
 
   return (
-    <button type="button" onClick={handleFilterChange} style={{ padding: 0 }}>
+    <Button variant="minimal" onClick={handleFilterChange} style={{ padding: 0 }}>
       {children || value}
-    </button>
+    </Button>
   );
 };
 

@@ -149,7 +149,8 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       displayInDashboard: true,
       isMinigame: false,
       hasTokenCounter: false,
-      hasVotingFeatures: false
+      hasVotingFeatures: false,
+      isAutosaveEnabled: true
     },
     {
       assessmentConfigId: 1,
@@ -164,7 +165,8 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       displayInDashboard: true,
       isMinigame: false,
       hasTokenCounter: false,
-      hasVotingFeatures: false
+      hasVotingFeatures: false,
+      isAutosaveEnabled: true
     },
     {
       assessmentConfigId: 1,
@@ -179,7 +181,8 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       displayInDashboard: true,
       isMinigame: false,
       hasTokenCounter: false,
-      hasVotingFeatures: false
+      hasVotingFeatures: false,
+      isAutosaveEnabled: true
     }
   ];
 

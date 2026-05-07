@@ -1,5 +1,3 @@
-import '@tremor/react/dist/esm/tremor.css';
-
 import { Button } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';

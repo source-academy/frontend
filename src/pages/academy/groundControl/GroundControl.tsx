@@ -39,7 +39,8 @@ export type DispatchProps = {
   handleConfigureAssessment: (
     id: number,
     hasVotingFeatures: boolean,
-    hasTokenCounter: boolean
+    hasTokenCounter: boolean,
+    isAutosaveEnabled: boolean
   ) => void;
   handleAssignEntriesForVoting: (id: number) => void;
   handleFetchCourseConfigs: () => void;

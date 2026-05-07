@@ -10,6 +10,7 @@ import classes from 'src/styles/Academy.module.scss';
 
 import SessionActions from '../../commons/application/actions/SessionActions';
 import { numberRegExp } from '../../features/academy/AcademyTypes';
+import RagChatbot from './ragChatbot/RagChatbot';
 
 const Academy: React.FC = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ const Academy: React.FC = () => {
             It will take on null/true/false when the backend returns. */}
       {Constants.showResearchPrompt && agreedToResearch === null && <ResearchAgreementPrompt />}
       <Outlet />
+      <RagChatbot />
     </div>
   );
 };

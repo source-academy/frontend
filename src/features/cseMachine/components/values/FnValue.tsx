@@ -1,13 +1,7 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
 import React, { RefObject } from 'react';
-import {
-  Circle,
-  Group,
-  Label as KonvaLabel,
-  Tag as KonvaTag,
-  Text as KonvaText
-} from 'react-konva';
+import { Circle, Group } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
@@ -32,7 +26,7 @@ import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { ArrowFromFnTooltip } from '../arrows/ArrowFromFnTooltip';
 import { Binding } from '../Binding';
 import { Frame } from '../Frame';
-import { Value } from './Value';
+import { FunctionTooltipLabels, Value } from './Value';
 
 /** this class encapsulates a JS Slang function (not from the global frame) that
  *  contains extra props such as environment and fnName */
@@ -248,10 +242,23 @@ export class FnValue extends Value implements IHoverable {
     const isLive: boolean = this.isLive();
     const textColor = isLive ? defaultTextColor() : fadedTextColor();
     const strokeColor = isLive ? defaultStrokeColor() : fadedStrokeColor();
-    //dont need to check isReferenced here since live is ALL we need to know
-    if (Layout.clearDeadFrames && !isLive) {
-      return null;
-    }
+    Layout.registerOverlayNode(
+      <FunctionTooltipLabels
+        key={Layout.key++}
+        x={this.x()}
+        y={this.y()}
+        radius={this.radius}
+        printDescriptionOffsetY={this.printDescriptionOffsetY}
+        isTooltipTruncated={this.isTooltipTruncated}
+        exportTooltip={this.exportTooltip}
+        tooltip={this.tooltip}
+        strokeColor={strokeColor}
+        textColor={textColor}
+        labelRef={this.labelRef}
+        revealLabelRef={this.revealLabelRef}
+      />
+    );
+    // Keep function objects rendered so they remain hoverable in clear-dead-frames mode.
     return (
       <React.Fragment key={Layout.key++}>
         <Group
@@ -293,59 +300,6 @@ export class FnValue extends Value implements IHoverable {
             fill={strokeColor}
           />
         </Group>
-        <KonvaLabel
-          x={this.x() + Config.TextMargin}
-          y={this.y() + this.radius + Config.TextMargin + this.printDescriptionOffsetY}
-          visible={CseMachine.getPrintableMode()}
-          listening={false}
-          ref={this.labelRef}
-        >
-          {CseMachine.getPrintableMode() ? (
-            <KonvaTag stroke={strokeColor} />
-          ) : (
-            <KonvaTag
-              stroke={Config.HoverBgColor}
-              fill={Config.HoverBgColor}
-              opacity={Config.FnTooltipOpacity}
-            />
-          )}
-          <KonvaText
-            text={
-              !CseMachine.getPrintableMode() && this.isTooltipTruncated
-                ? `${this.exportTooltip}\n(click for full)`
-                : this.exportTooltip
-            }
-            fontFamily={Config.FontFamily}
-            fontSize={Config.FontSize}
-            fontStyle={Config.FontStyle}
-            fill={textColor} //even the text that appears on hover is faded if unreferenced
-            padding={Config.FnTooltipTextPadding}
-            width={Config.FnDescriptionMaxWidth}
-          />
-        </KonvaLabel>
-        {!CseMachine.getPrintableMode() && this.isTooltipTruncated && (
-          <KonvaLabel
-            x={this.x() + Config.TextMargin}
-            y={this.y() + this.radius + Config.TextMargin}
-            visible={false}
-            listening={false}
-            ref={this.revealLabelRef}
-          >
-            <KonvaTag
-              stroke={Config.HoverBgColor}
-              fill={Config.HoverBgColor}
-              opacity={Config.FnTooltipOpacity}
-            />
-            <KonvaText
-              text={this.tooltip}
-              fontFamily={Config.FontFamily}
-              fontSize={Config.FontSize}
-              fontStyle={Config.FontStyle}
-              fill={textColor}
-              padding={Config.FnTooltipTextPadding}
-            />
-          </KonvaLabel>
-        )}
         {this._arrow?.draw()}
         {this.tooltipArrow?.draw()}
       </React.Fragment>

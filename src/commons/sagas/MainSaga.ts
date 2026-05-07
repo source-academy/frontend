@@ -17,6 +17,7 @@ import RemoteExecutionSaga from './RemoteExecutionSaga';
 import SideContentSaga from './SideContentSaga';
 import StoriesSaga from './StoriesSaga';
 import WorkspaceSaga from './WorkspaceSaga';
+import { watchAutoSave, watchSavingStatus } from './WorkspaceSaga/helpers/versionHistory';
 
 export default function* MainSaga(): SagaIterator {
   yield all([
@@ -33,6 +34,8 @@ export default function* MainSaga(): SagaIterator {
     fork(SideContentSaga),
     fork(FeatureFlagSaga),
     fork(LanguageDirectorySaga),
-    fork(PluginDirectorySaga)
+    fork(PluginDirectorySaga),
+    fork(watchAutoSave),
+    fork(watchSavingStatus)
   ]);
 }

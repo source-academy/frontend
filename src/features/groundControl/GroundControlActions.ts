@@ -15,10 +15,16 @@ const GroundControlActions = createActions('groundControl', {
     forceUpdate,
     assessmentConfigId
   }),
-  configureAssessment: (id: number, hasVotingFeatures: boolean, hasTokenCounter: boolean) => ({
+  configureAssessment: (
+    id: number,
+    hasVotingFeatures: boolean,
+    hasTokenCounter: boolean,
+    isAutosaveEnabled: boolean
+  ) => ({
     id,
     hasVotingFeatures,
-    hasTokenCounter
+    hasTokenCounter,
+    isAutosaveEnabled
   }),
   assignEntriesForVoting: (id: number) => ({ id })
 });

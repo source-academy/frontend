@@ -150,6 +150,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                     onMouseUp={() => {
                       DataVisualizer.setMode('normal');
                       DataVisualizer.redraw();
+                      this.onViewModeClick(this.state.currentStep);
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -177,6 +178,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                   onMouseUp={() => {
                     DataVisualizer.setMode('binTree');
                     DataVisualizer.redraw();
+                    this.onViewModeClick(this.state.currentStep);
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -205,6 +207,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                   onMouseUp={() => {
                     DataVisualizer.setMode('tree');
                     DataVisualizer.redraw();
+                    this.onViewModeClick(this.state.currentStep);
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -236,6 +239,12 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
     const finalStep = this.state.steps.length - 1;
     this.setState(state => {
       return { currentStep: Math.min(finalStep, state.currentStep + 1) };
+    });
+  };
+
+  private onViewModeClick = (prevStep: number) => {
+    this.setState(() => {
+      return { currentStep: prevStep };
     });
   };
 }
