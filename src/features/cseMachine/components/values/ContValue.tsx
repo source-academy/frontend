@@ -2,7 +2,7 @@ import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
-import React, { RefObject } from 'react';
+import { createRef, Fragment } from 'react';
 import {
   Circle,
   Group,
@@ -37,7 +37,7 @@ import { Value } from './Value';
 export class ContValue extends Value implements IHoverable {
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
-  readonly labelRef: RefObject<Label | null> = React.createRef();
+  readonly labelRef: React.RefObject<Label | null> = createRef();
 
   readonly tooltip: string = 'continuation';
   readonly tooltipWidth: number = getTextWidth(this.tooltip);
@@ -150,7 +150,7 @@ export class ContValue extends Value implements IHoverable {
     //dont need to check isReferenced here since live is ALL we need to know
 
     return (
-      <React.Fragment key={Layout.key++}>
+      <Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>
           <Rect
             {...ShapeDefaultProps}
@@ -212,7 +212,7 @@ export class ContValue extends Value implements IHoverable {
           />
         </KonvaLabel>
         {this._arrow?.draw()}
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

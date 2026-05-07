@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, Card, Divider, Elevation, H1, H3 } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';

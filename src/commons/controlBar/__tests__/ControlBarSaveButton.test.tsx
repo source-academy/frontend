@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 
-import { ControlButtonSaveButton } from '../ControlBarSaveButton';
+import ControlButtonSaveButton from '../ControlBarSaveButton';
 
 test('renders save button', () => {
   render(<ControlButtonSaveButton key="save" onClickSave={vi.fn()} />);

@@ -1,5 +1,4 @@
 import { Checkbox, H5, NonIdealState, Spinner } from '@blueprintjs/core';
-import React from 'react';
 import styles from 'src/styles/GradingCommentSelector.module.scss';
 
 type Props = {

@@ -1,7 +1,7 @@
-import React, { type JSX } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
-  children: JSX.Element;
+  children: React.ReactElement;
   waitInMsBeforeRender: number;
 };
 
@@ -9,9 +9,9 @@ type Props = {
  * Delays the rendering of child components by a set time.
  */
 const Delay: React.FC<Props> = ({ children, waitInMsBeforeRender }) => {
-  const [isRendered, setIsRendered] = React.useState(false);
+  const [isRendered, setIsRendered] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timeoutId = setTimeout(() => setIsRendered(true), waitInMsBeforeRender);
     return () => clearTimeout(timeoutId);
   }, [waitInMsBeforeRender]);

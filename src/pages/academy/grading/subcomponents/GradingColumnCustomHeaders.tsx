@@ -1,7 +1,7 @@
 import { Icon } from '@blueprintjs/core';
 import { CustomHeaderProps } from 'ag-grid-react';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { SortStates } from 'src/features/grading/GradingTypes';

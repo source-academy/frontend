@@ -1,10 +1,9 @@
 import { Intent, ToastProps } from '@blueprintjs/core';
-import type { JSX } from 'react';
 
 import { notification } from './createNotification';
 
 export const showSuccessMessage = (
-  message: string | JSX.Element,
+  message: string | React.ReactElement,
   timeout: number = 2000,
   key?: string
 ) =>
@@ -18,7 +17,7 @@ export const showSuccessMessage = (
   );
 
 export const showWarningMessage = (
-  message: string | JSX.Element,
+  message: string | React.ReactElement,
   timeout: number = 2000,
   key?: string
 ) =>
@@ -32,7 +31,7 @@ export const showWarningMessage = (
   );
 
 export const showDangerMessage = (
-  message: string | JSX.Element,
+  message: string | React.ReactElement,
   timeout: number = 2000,
   key?: string
 ) =>

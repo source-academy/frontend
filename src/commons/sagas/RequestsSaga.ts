@@ -26,7 +26,6 @@ import {
   Device,
   WebSocketEndpointInformation
 } from '../../features/remoteExecution/RemoteExecutionTypes';
-import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
 import { UsernameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
 import { store } from '../../pages/createStore';
@@ -1262,63 +1261,6 @@ export const postAcknowledgeNotifications = async (
   const resp: Response | null = await request(`${courseId()}/notifications/acknowledge`, 'POST', {
     ...tokens,
     body: { notificationIds: ids }
-  });
-
-  return resp;
-};
-
-/**
- * GET /courses/{courseId}/sourcecast
- */
-export const getSourcecastIndex = async (tokens: Tokens): Promise<SourcecastData[] | null> => {
-  const resp = await request(`${courseId()}/sourcecast`, 'GET', {
-    ...tokens
-  });
-  if (!resp || !resp.ok) {
-    return null;
-  }
-
-  return await resp.json();
-};
-
-/**
- * POST /courses/{courseId}/admin/sourcecast
- */
-export const postSourcecast = async (
-  title: string,
-  description: string,
-  uid: string,
-  audio: Blob,
-  playbackData: PlaybackData,
-  tokens: Tokens
-): Promise<Response | null> => {
-  const formData = new FormData();
-  const filename = Date.now().toString() + '.wav';
-  formData.append('sourcecast[title]', title);
-  formData.append('sourcecast[description]', description);
-  formData.append('sourcecast[uid]', uid);
-  formData.append('sourcecast[audio]', audio, filename);
-  formData.append('sourcecast[playbackData]', JSON.stringify(playbackData));
-  const resp = await request(`${courseId()}/admin/sourcecast`, 'POST', {
-    ...tokens,
-    body: formData,
-    noContentType: true,
-    noHeaderAccept: true
-  });
-
-  return resp;
-};
-
-/**
- * DELETE /courses/{courseId}/admin/sourcecast/{sourcecastId}
- */
-export const deleteSourcecastEntry = async (
-  id: number,
-  tokens: Tokens
-): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/sourcecast/${id}`, 'DELETE', {
-    ...tokens,
-    noHeaderAccept: true
   });
 
   return resp;

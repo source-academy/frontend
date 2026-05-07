@@ -2,7 +2,7 @@ import 'katex/dist/katex.min.css';
 
 import { Button, Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React, { useRef, useState } from 'react';
+import { createContext, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
@@ -28,7 +28,7 @@ const baseUrl = Constants.sicpBackendUrl + 'json/';
 const extension = '.json';
 
 // Context to determine which code snippet is active
-export const CodeSnippetContext = React.createContext({
+export const CodeSnippetContext = createContext({
   active: '0',
   setActive: (x: string) => {}
 });
@@ -87,7 +87,7 @@ const Sicp: React.FC = () => {
   };
 
   // Handle loading of latest viewed section and fetch json data
-  React.useEffect(() => {
+  useEffect(() => {
     if (!section) {
       /**
        * Handles rerouting to the latest viewed section when clicking from
@@ -141,7 +141,7 @@ const Sicp: React.FC = () => {
   }, [section, navigate]);
 
   // Scroll to correct position
-  React.useEffect(() => {
+  useEffect(() => {
     if (loading) {
       return;
     }
@@ -153,7 +153,7 @@ const Sicp: React.FC = () => {
   }, [location.hash, loading]);
 
   // Close all active code snippet when new page is loaded
-  React.useEffect(() => {
+  useEffect(() => {
     setActive('0');
   }, [data]);
 

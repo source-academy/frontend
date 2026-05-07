@@ -1,5 +1,5 @@
 import { Button, Card, Collapse, Elevation } from '@blueprintjs/core';
-import React, { type JSX } from 'react';
+import { useState } from 'react';
 
 export const noSolutionPlaceholder = (
   <span>
@@ -15,12 +15,12 @@ export const noSolutionPlaceholder = (
 
 type Props = {
   title: string;
-  body: JSX.Element;
-  solution: JSX.Element | undefined;
+  body: React.ReactElement;
+  solution: React.ReactElement | undefined;
 };
 
 const SicpExercise: React.FC<Props> = props => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const onClick = () => {
     setIsOpen(!isOpen);

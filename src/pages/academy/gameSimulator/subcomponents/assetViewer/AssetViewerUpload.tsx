@@ -1,5 +1,5 @@
 import { Button, InputGroup, Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { s3AssetFolders, uploadAssetsToS3 } from 'src/features/gameSimulator/GameSimulatorService';
 
 /**

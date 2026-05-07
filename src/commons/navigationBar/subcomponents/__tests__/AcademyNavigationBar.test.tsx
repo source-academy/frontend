@@ -7,7 +7,7 @@ import { Role } from '../../../application/ApplicationTypes';
 import AcademyNavigationBar from '../AcademyNavigationBar';
 
 const assessmentTypes = ['Missions', 'Quests', 'Paths', 'Contests', 'Others'];
-const staffRoutes = ['grading', 'sourcereel', 'gamesimulator', 'dashboard', 'teamformation'];
+const staffRoutes = ['grading', 'gamesimulator', 'dashboard', 'teamformation'];
 const adminRoutes = ['groundcontrol', 'llmstats', 'adminpanel'];
 const adminRoutesWithoutLlmStats = ['groundcontrol', 'adminpanel'];
 const courseId = 0;
@@ -67,7 +67,7 @@ const renderNav = (
   );
 };
 
-test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Grading, Team Formation and AdminPanel NavLinks do NOT render for Role.Student', () => {
+test('MissionControl, GroundControl, GameSimulator, Dashboard, Grading, Team Formation and AdminPanel NavLinks do NOT render for Role.Student', () => {
   const tree = renderNav(Role.Student, { enableLlmGrading: false, hasLlmContent: false });
 
   const hrefs = getHrefs(tree.container);
@@ -76,7 +76,7 @@ test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gradi
   validateAdminPaths(hrefs, false);
 });
 
-test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Team Formation and Grading NavLinks render for Role.Staff', () => {
+test('MissionControl, GroundControl, GameSimulator, Dashboard, Team Formation and Grading NavLinks render for Role.Staff', () => {
   const tree = renderNav(Role.Staff, { enableLlmGrading: false, hasLlmContent: false });
 
   const hrefs = getHrefs(tree.container);
@@ -113,7 +113,7 @@ test('MissionControl, GroundControl and LLM Statistics render for Role.Admin whe
   validateAdminPaths(hrefs, true);
 });
 
-test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Grading, Team Formation and AdminPanel NavLinks render for Role.Admin', () => {
+test('MissionControl, GroundControl, GameSimulator, Dashboard, Grading, Team Formation and AdminPanel NavLinks render for Role.Admin', () => {
   const tree = renderNav(Role.Admin, { enableLlmGrading: true, hasLlmContent: true });
 
   const hrefs = getHrefs(tree.container);

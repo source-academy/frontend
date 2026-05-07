@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 
 import CseMachine from '../CseMachine';
 import { Config } from '../CseMachineConfig';
@@ -174,13 +174,13 @@ export class Binding extends Visible {
     }
 
     return (
-      <React.Fragment key={Layout.key++}>
+      <Fragment key={Layout.key++}>
         {this.isDummyBinding
           ? null // omit the key since value is anonymous
           : this.key.draw()}
         {this.arrow?.draw()}
         {shouldRenderReferencedValue ? this.value.draw() : null}
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

@@ -8,7 +8,7 @@ import {
   Spinner
 } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React, { SetStateAction, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router';
 import BrickSvg from 'src/assets/BrickSvg';
@@ -32,7 +32,7 @@ import DeviceMenuItemButtons from './DeviceMenuItemButtons';
 interface SideContentRemoteExecutionProps {
   workspace: WorkspaceLocation;
   secretParams?: string;
-  callbackFunction?: React.Dispatch<SetStateAction<string | undefined>>;
+  callbackFunction?: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
 const DeviceContent = ({ session }: { session?: DeviceSession }) => {
@@ -68,10 +68,10 @@ const motorPorts = ['portA', 'portB', 'portC', 'portD'] as const;
 const sensorPorts = ['port1', 'port2', 'port3', 'port4'] as const;
 
 const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = props => {
-  const [dialogState, setDialogState] = React.useState<Device | true | undefined>(
+  const [dialogState, setDialogState] = useState<Device | true | undefined>(
     props.secretParams ? true : undefined
   );
-  const [secretParams, setSecretParams] = React.useState(props.secretParams);
+  const [secretParams, setSecretParams] = useState(props.secretParams);
 
   const isLoggedIn = useTypedSelector(state => !!state.session.accessToken && !!state.session.role);
   const devices = useTypedSelector(state => state.session.remoteExecutionDevices);
@@ -80,7 +80,7 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
 
   const isConnected = currentSession?.connection.status === 'CONNECTED';
 
-  React.useEffect(() => {
+  useEffect(() => {
     // this is not supposed to happen - the destructor below should disconnect
     // once the user navigates away from the workspace
     if (currentSession && currentSession.workspace !== props.workspace) {
@@ -93,13 +93,13 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
     }
   }, [currentSession, dispatch, props.workspace]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!devices && isLoggedIn) {
       dispatch(actions.remoteExecFetchDevices());
     }
   }, [dispatch, devices, isLoggedIn]);
 
-  React.useEffect(
+  useEffect(
     () => () => {
       // note the double () => - this function is a destructor
       dispatch(actions.remoteExecDisconnect());

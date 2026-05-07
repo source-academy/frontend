@@ -3,7 +3,6 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
@@ -11,22 +10,19 @@ import LanguageDirectoryActions from '../../features/directory/LanguageDirectory
 import { SALanguage } from '../application/ApplicationTypes';
 import { useFeature } from '../featureFlags/useFeature';
 import { useTypedSelector } from '../utils/Hooks';
-import { LegacyControlBarChapterSelect } from './LegacyControlBarChapterSelect';
+import LegacyControlBarChapterSelect from './LegacyControlBarChapterSelect';
 
-type ControlBarChapterSelectProps = DispatchProps & StateProps;
+const EvaluatorSelectComponent = Select.ofType<IEvaluatorDefinition>();
 
-type DispatchProps = {
+type Props = {
   handleChapterSelect?: (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => void;
-};
-
-type StateProps = {
   isFolderModeEnabled: boolean;
   sourceChapter: Chapter;
   sourceVariant: Variant;
   disabled?: boolean;
 };
 
-export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = ({
+const ControlBarChapterSelect: React.FC<Props> = ({
   isFolderModeEnabled,
   sourceChapter,
   sourceVariant,
@@ -50,8 +46,6 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
       />
     );
   }
-
-  const EvaluatorSelectComponent = Select.ofType<IEvaluatorDefinition>();
 
   const currentLanguage = dirLanguages.find(l => l.id === selectedLanguageId);
   const evaluators = currentLanguage?.evaluators ?? [];
@@ -94,3 +88,5 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
     </EvaluatorSelectComponent>
   );
 };
+
+export default ControlBarChapterSelect;

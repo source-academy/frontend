@@ -1,6 +1,6 @@
 import 'src/styles/Leaderboard.scss';
 
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 

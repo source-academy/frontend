@@ -22,25 +22,28 @@ import { Card } from '@blueprintjs/core';
 import * as AceBuilds from 'ace-builds';
 import { Ace, require as acequire, createEditSession } from 'ace-builds';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import React from 'react';
+import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
 import { IAceEditor } from 'react-ace/lib/types';
 import { SALanguage } from '../application/ApplicationTypes';
-import { EditorBinding } from '../WorkspaceSettingsContext';
 import { getModeString, selectMode } from '../utils/AceHelper';
 import { objectEntries } from '../utils/TypeHelper';
+import { EditorBinding } from '../WorkspaceSettingsContext';
 import { KeyFunction, keyBindings } from './EditorHotkeys';
 import { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 
 // =============== Hooks ===============
 // TODO: Should further refactor into EditorBase + different variants.
 // Ideally, hooks should be specified by the parent component instead.
+import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
+import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { useFeature } from '../featureFlags/useFeature';
+import { useTypedSelector } from '../utils/Hooks';
 import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
-import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (
@@ -72,6 +75,7 @@ type EditorStateProps = {
   sourceVariant?: Variant;
   hooks?: EditorHook[];
   editorBinding?: EditorBinding;
+  mode?: string;
   setUsers?: React.Dispatch<React.SetStateAction<Record<string, SharedbAceUser>>>;
   // TODO: Handle changing of external library
   updateLanguageCallback?: (sublanguage: SALanguage, e: any) => void;
@@ -345,13 +349,13 @@ const moveCursor = (editor: AceEditor['editor'], position: Position) => {
   editor.renderer.scrollCursorIntoView(position, 0.5);
 };
 
-const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
-  const reactAceRef: React.MutableRefObject<AceEditor | null> = React.useRef(null);
-  const [filePath, setFilePath] = React.useState<string | undefined>(undefined);
+const EditorBase = memo((props: EditorProps & LocalStateProps) => {
+  const reactAceRef: React.MutableRefObject<AceEditor | null> = useRef(null);
+  const [filePath, setFilePath] = useState<string | undefined>(undefined);
 
   // Refs for things that technically shouldn't change... but just in case.
-  const handleEditorUpdateBreakpointsRef = React.useRef(props.handleEditorUpdateBreakpoints);
-  const handlePromptAutocompleteRef = React.useRef(props.handlePromptAutocomplete);
+  const handleEditorUpdateBreakpointsRef = useRef(props.handleEditorUpdateBreakpoints);
+  const handlePromptAutocompleteRef = useRef(props.handlePromptAutocomplete);
 
   const editor = reactAceRef.current?.editor;
   // Set edit session history when switching to another editor tab.
@@ -374,12 +378,12 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     handleEditorUpdateBreakpointsRef.current = props.handleEditorUpdateBreakpoints;
     handlePromptAutocompleteRef.current = props.handlePromptAutocomplete;
   }, [props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (editor === undefined) {
       return;
     }
@@ -387,7 +391,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   }, [editor, props.breakpoints]);
 
   // Handles input into AceEditor causing app to scroll to the top on iOS Safari
-  React.useEffect(() => {
+  useEffect(() => {
     const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
     if (isIOS) {
       document.body.style.position = 'fixed';
@@ -416,7 +420,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   // unconditionally.
   selectMode(sourceChapter, sourceVariant, externalLibraryName);
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (editor === undefined) {
       return;
     }
@@ -446,7 +450,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     }
   }, [editor, props.sourceChapter, props.editorTabIndex]);
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (editor === undefined) {
       return;
     }
@@ -462,7 +466,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     isEditorAutorun,
     handleEditorEval
   } = props;
-  const handleEditorEvalRef = React.useRef(handleEditorEval);
+  const handleEditorEvalRef = useRef(handleEditorEval);
   handleEditorEvalRef.current = handleEditorEval;
 
   const keyHandlers: EditorKeyBindingHandlers = {
@@ -471,16 +475,79 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     }
   };
 
+  const conductorEnabled = useFeature(flagConductorEnable);
+  const selectedEvaluatorId = useTypedSelector(s => s.languageDirectory.selectedEvaluatorId)!;
+  useEffect(() => {
+    if (!conductorEnabled || !reactAceRef.current || !selectedEvaluatorId) {
+      return;
+    }
+
+    const editor = reactAceRef.current.editor;
+    const modeId = `ace/mode/${selectedEvaluatorId}`;
+    let modeChangeUnsub: (() => void) | undefined;
+    let pollHandle: ReturnType<typeof setInterval> | undefined;
+
+    const apply = (session: any) => {
+      let modeModule: any;
+      try {
+        modeModule = acequire(modeId);
+      } catch {
+        return false;
+      }
+      if (!modeModule?.Mode) return false;
+      if ((session.getMode() as any).$id === modeId) return true;
+      session.setMode(new modeModule.Mode());
+      return true;
+    };
+
+    const attachToSession = (session: any) => {
+      modeChangeUnsub?.();
+      if (pollHandle) clearInterval(pollHandle);
+
+      const onChangeMode = () => {
+        if ((session.getMode() as any).$id !== modeId) {
+          apply(session);
+        }
+      };
+      session.on('changeMode', onChangeMode);
+      modeChangeUnsub = () => session.off('changeMode', onChangeMode);
+
+      if (!apply(session)) {
+        pollHandle = setInterval(() => {
+          if (apply(session)) {
+            clearInterval(pollHandle);
+            pollHandle = undefined;
+          }
+        }, 200);
+      }
+    };
+
+    attachToSession(editor.getSession());
+
+    const onChangeSession = (e: any) => {
+      attachToSession(e.session);
+    };
+    editor.on('changeSession', onChangeSession);
+
+    return () => {
+      modeChangeUnsub?.();
+      if (pollHandle) clearInterval(pollHandle);
+      editor.off('changeSession', onChangeSession);
+    };
+  }, [conductorEnabled, selectedEvaluatorId]);
+
   const aceEditorProps: IAceEditorProps = {
     className: 'react-ace',
     editorProps: {
       $blockScrolling: Infinity
     },
-    markers: React.useMemo(() => getMarkers(props.highlightedLines), [props.highlightedLines]),
+    markers: useMemo(() => getMarkers(props.highlightedLines), [props.highlightedLines]),
     fontSize: 17,
     height: '100%',
     highlightActiveLine: false,
-    mode: getModeString(sourceChapter, sourceVariant, externalLibraryName),
+    mode: conductorEnabled
+      ? 'text'
+      : getModeString(sourceChapter, sourceVariant, externalLibraryName),
     theme: 'source',
     value: props.editorValue,
     width: '100%',
@@ -494,7 +561,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
 
   // Hooks must not change after an editor is instantiated, so to prevent that
   // we store the original value and always use that only
-  const [hooks] = React.useState(props.hooks);
+  const [hooks] = useState(props.hooks);
   if (hooks) {
     // Note: the following is extremely non-standard use of hooks
     // DO NOT refactor this into any form where the hook is called from a lambda
@@ -505,7 +572,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
 
   const { onChange } = aceEditorProps;
 
-  aceEditorProps.onChange = React.useCallback(
+  aceEditorProps.onChange = useCallback(
     (newCode: string, delta: Ace.Delta) => {
       if (!reactAceRef.current) {
         return;
@@ -645,7 +712,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   };
 
   // Remove the overlay div when the editor is unmounted
-  React.useEffect(() => {
+  useEffect(() => {
     return () => {
       const div = document.getElementById('overlay');
       if (div) {
@@ -668,7 +735,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
 const hooks = [useHighlighting, useNavigation, useShareAce, useRefactor];
 
 const Editor: React.FC<EditorProps> = (props: EditorProps) => {
-  const [sessions, setSessions] = React.useState<Record<string, Ace.EditSession>>({});
+  const [sessions, setSessions] = useState<Record<string, Ace.EditSession>>({});
 
   // Create new edit session.
   const defaultMode = acequire('ace/mode/javascript').Mode();

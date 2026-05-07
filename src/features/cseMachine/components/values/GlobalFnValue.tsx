@@ -1,6 +1,6 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
-import React, { RefObject } from 'react';
+import { createRef, Fragment } from 'react';
 import { Circle, Group } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
@@ -42,8 +42,8 @@ export class GlobalFnValue extends Value implements IHoverable {
   readonly printDescriptionOffsetY: number;
   readonly printDescriptionBottomGap: number;
   readonly totalWidth: number;
-  readonly labelRef: RefObject<Label | null> = React.createRef();
-  readonly revealLabelRef: RefObject<Label | null> = React.createRef();
+  readonly labelRef: React.RefObject<Label | null> = createRef();
+  readonly revealLabelRef: React.RefObject<Label | null> = createRef();
 
   centerX: number;
   private isExpandedDescription: boolean = false;
@@ -224,7 +224,7 @@ export class GlobalFnValue extends Value implements IHoverable {
       />
     );
     return (
-      <React.Fragment key={Layout.key++}>
+      <Fragment key={Layout.key++}>
         <Group
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
@@ -266,7 +266,7 @@ export class GlobalFnValue extends Value implements IHoverable {
         </Group>
         {this._arrow?.draw()}
         {this.tooltipArrow?.draw()}
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

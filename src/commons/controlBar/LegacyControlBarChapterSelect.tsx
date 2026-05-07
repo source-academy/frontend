@@ -2,7 +2,6 @@ import { Button, Menu, MenuItem, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import React from 'react';
 
 import {
   fullJSLanguage,
@@ -16,13 +15,8 @@ import {
 import Constants from '../utils/Constants';
 import { useTypedSelector } from '../utils/Hooks';
 
-type ControlBarChapterSelectProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   handleChapterSelect?: (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => void;
-};
-
-type StateProps = {
   isFolderModeEnabled: boolean;
   sourceChapter: Chapter;
   sourceVariant: Variant;
@@ -69,7 +63,7 @@ const chapterRenderer: (isFolderModeEnabled: boolean) => ItemRenderer<SALanguage
 
 const ChapterSelectComponent = Select.ofType<SALanguage>();
 
-export const LegacyControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = ({
+const LegacyControlBarChapterSelect: React.FC<Props> = ({
   isFolderModeEnabled,
   sourceChapter,
   sourceVariant,
@@ -105,3 +99,5 @@ export const LegacyControlBarChapterSelect: React.FC<ControlBarChapterSelectProp
     </ChapterSelectComponent>
   );
 };
+
+export default LegacyControlBarChapterSelect;

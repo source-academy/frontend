@@ -1,24 +1,18 @@
 import { Card } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 import { Assessment, IMCQQuestion } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import { limitNumberRange } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 
-type MCQQuestionTemplateTabProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   updateAssessment: (assessment: Assessment) => void;
-};
-
-type StateProps = {
   assessment: Assessment;
   questionId: number;
 };
 
-const MCQQuestionTemplateTab: React.FC<MCQQuestionTemplateTabProps> = props => {
+const MCQQuestionTemplateTab: React.FC<Props> = props => {
   const addOption = () => {
     const { assessment, questionId } = props;
     const question = assessment!.questions[questionId] as IMCQQuestion;

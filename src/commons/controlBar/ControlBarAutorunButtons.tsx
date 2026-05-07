@@ -1,25 +1,19 @@
 import { Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
 import ControlButton from '../ControlButton';
 import { useFeature } from '../featureFlags/useFeature';
 import { useResponsive } from '../utils/Hooks';
-import { ControlBarRunButton } from './ControlBarRunButton';
+import ControlBarRunButton from './ControlBarRunButton';
 
-type ControlBarAutorunButtonProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   handleDebuggerPause: () => void;
   handleDebuggerReset: () => void;
   handleDebuggerResume: () => void;
   handleEditorEval: () => void;
   handleInterruptEval: () => void;
   handleToggleEditorAutorun?: () => void;
-};
-
-type StateProps = {
   isEntrypointFileDefined: boolean;
   isDebugging: boolean;
   isEditorAutorun?: boolean;
@@ -30,7 +24,7 @@ type StateProps = {
   sourceChapter?: number;
 };
 
-export const ControlBarAutorunButtons: React.FC<ControlBarAutorunButtonProps> = props => {
+const ControlBarAutorunButtons: React.FC<Props> = props => {
   const showRunButton = !props.isDebugging && (
     <ControlBarRunButton
       handleEditorEval={props.handleEditorEval}
@@ -104,3 +98,5 @@ export const ControlBarAutorunButtons: React.FC<ControlBarAutorunButtonProps> = 
     </>
   );
 };
+
+export default ControlBarAutorunButtons;

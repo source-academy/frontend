@@ -1,5 +1,4 @@
 import { Easings } from 'konva/lib/Tween';
-import React from 'react';
 import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';

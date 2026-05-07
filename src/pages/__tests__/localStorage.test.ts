@@ -21,7 +21,6 @@ const mockShortDefaultState: SavedState = {
     enableAchievements: defaultState.session.enableAchievements,
     enableOverallLeaderboard: defaultState.session.enableOverallLeaderboard,
     enableContestLeaderboard: defaultState.session.enableContestLeaderboard,
-    enableSourcecast: defaultState.session.enableSourcecast,
     enableStories: defaultState.session.enableStories,
     moduleHelpText: defaultState.session.moduleHelpText,
     assetsPrefix: defaultState.session.assetsPrefix,

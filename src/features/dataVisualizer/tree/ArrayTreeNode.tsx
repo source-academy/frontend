@@ -1,4 +1,3 @@
-import type { JSX } from 'react';
 import { Group } from 'react-konva';
 
 import { Config } from '../Config';
@@ -16,7 +15,7 @@ export class ArrayTreeNode extends DrawableTreeNode {
     parentX: number,
     parentY: number,
     colorIndex: number
-  ): JSX.Element {
+  ): React.ReactElement {
     let color = '';
     color = colorIndex === -1 ? 'black' : this.Colors[colorIndex % this.Colors.length];
     const arrayProps = { nodes: this.children ?? [], x, y, color };

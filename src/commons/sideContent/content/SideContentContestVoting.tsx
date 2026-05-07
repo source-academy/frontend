@@ -1,18 +1,13 @@
 import { Button, Card, Classes, Collapse, Elevation, Icon, Pre, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ContestEntry } from '../../assessment/AssessmentTypes';
 
-type SideContentContestVotingProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   handleContestEntryClick: (submissionId: number, answer: string) => void;
-};
-
-type StateProps = {
   canSave: boolean;
   isValid: boolean;
   handleVotingSubmissionChange: (entryId: number, score: number) => void;
@@ -28,7 +23,7 @@ const TIERS = [
   { name: 'D', color: 'rgb(127, 191, 255)', score: 1 }
 ];
 
-const SideContentContestVoting: React.FC<SideContentContestVotingProps> = ({
+const SideContentContestVoting: React.FC<Props> = ({
   contestEntries,
   canSave,
   isValid,

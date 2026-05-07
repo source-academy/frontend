@@ -1,6 +1,6 @@
 import { Card, Icon, IconName } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React, { type JSX } from 'react';
+import { useState } from 'react';
 
 import { SideContentType } from '../sideContent/SideContentTypes';
 
@@ -13,7 +13,7 @@ import { SideContentType } from '../sideContent/SideContentTypes';
  */
 export type SideBarTab = {
   label: string;
-  body: JSX.Element;
+  body: React.ReactElement;
   iconName: IconName;
   id?: SideContentType;
 };
@@ -26,7 +26,7 @@ type Props = {
 };
 
 const SideBar: React.FC<Props> = ({ tabs, isExpanded, expandSideBar, collapseSideBar }) => {
-  const [selectedTabIndex, setSelectedTabIndex] = React.useState(0);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   const handleTabSelection = (tabIndex: number) => {
     if (selectedTabIndex === tabIndex) {

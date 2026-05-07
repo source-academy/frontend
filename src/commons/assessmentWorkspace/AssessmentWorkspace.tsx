@@ -14,7 +14,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { isEqual } from 'lodash';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
@@ -24,12 +24,12 @@ import Messages, { sendToWebview } from 'src/features/vscode/messages';
 import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
 
 import { initSession, log } from '../../features/eventLogging';
-import {
+import type {
   CodeDelta,
   Input,
-  KeyboardCommand,
   SelectionRange
-} from '../../features/sourceRecorder/SourceRecorderTypes';
+} from '../../features/eventLogging/EventLoggingTypes';
+import { KeyboardCommand } from '../../features/eventLogging/EventLoggingTypes';
 import SessionActions from '../application/actions/SessionActions';
 import { defaultWorkspaceManager } from '../application/ApplicationTypes';
 import {
@@ -43,19 +43,19 @@ import {
   QuestionTypes,
   Testcase
 } from '../assessment/AssessmentTypes';
-import { ControlBarProps } from '../controlBar/ControlBar';
-import { ControlBarChapterSelect } from '../controlBar/ControlBarChapterSelect';
-import { ControlBarClearButton } from '../controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../controlBar/ControlBarEvalButton';
-import { ControlBarNextButton } from '../controlBar/ControlBarNextButton';
-import { ControlBarPreviousButton } from '../controlBar/ControlBarPreviousButton';
-import { ControlBarQuestionViewButton } from '../controlBar/ControlBarQuestionViewButton';
-import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
-import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
-import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
-import { ControlBarSaveStatusIndicator } from '../controlBar/ControlBarSaveStatusIndicator';
-import { ControlBarVersionHistoryButton } from '../controlBar/ControlBarVersionHistoryButton';
-import { VersionHistoryPanel } from '../controlBar/VersionHistoryPanel';
+import type { ControlBarProps } from '../controlBar/ControlBar';
+import ControlBarChapterSelect from '../controlBar/ControlBarChapterSelect';
+import ControlBarClearButton from '../controlBar/ControlBarClearButton';
+import ControlBarEvalButton from '../controlBar/ControlBarEvalButton';
+import ControlBarNextButton from '../controlBar/ControlBarNextButton';
+import ControlBarPreviousButton from '../controlBar/ControlBarPreviousButton';
+import ControlBarQuestionViewButton from '../controlBar/ControlBarQuestionViewButton';
+import ControlBarResetButton from '../controlBar/ControlBarResetButton';
+import ControlBarRunButton from '../controlBar/ControlBarRunButton';
+import ControlButtonSaveButton from '../controlBar/ControlBarSaveButton';
+import ControlBarSaveStatusIndicator from '../controlBar/ControlBarSaveStatusIndicator';
+import ControlBarVersionHistoryButton from '../controlBar/ControlBarVersionHistoryButton';
+import VersionHistoryPanel from '../controlBar/VersionHistoryPanel';
 import ControlButton from '../ControlButton';
 import {
   convertEditorTabStateToProps,

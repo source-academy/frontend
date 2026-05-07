@@ -9,7 +9,7 @@ import * as Sentry from '@sentry/react';
 import sharedbAce from '@sourceacademy/sharedb-ace';
 import type SharedbAceBinding from '@sourceacademy/sharedb-ace/binding';
 import { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
-import React from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { getLanguageConfig } from '../application/ApplicationTypes';
@@ -32,14 +32,14 @@ const color = getColor();
 const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
   // use a ref to refer to any other props so that we run the effect below
   // *only* when the editorSessionId or sessionDetails changes
-  const propsRef = React.useRef(inProps);
+  const propsRef = useRef(inProps);
   propsRef.current = inProps;
 
   const { editorSessionId, sessionDetails } = inProps;
   const { name, userId } = useSession();
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!editorSessionId || !sessionDetails) {
       return;
     }

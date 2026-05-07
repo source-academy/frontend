@@ -6,7 +6,6 @@ import {
   Options as MdastToHastConverterOptions,
   toHast
 } from 'mdast-util-to-hast';
-import React from 'react';
 import * as runtime from 'react/jsx-runtime';
 import { IEditorProps } from 'react-ace';
 import rehypeReact from 'rehype-react';

@@ -1,5 +1,5 @@
 import { Button, Dialog, Tooltip } from '@blueprintjs/core';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { prettifyTime } from 'src/commons/achievement/utils/DateHelper';
 import { TimePicker } from 'src/commons/DateTimePickers';
 

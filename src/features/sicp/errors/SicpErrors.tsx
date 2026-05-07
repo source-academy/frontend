@@ -1,6 +1,5 @@
 import { NonIdealState } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import type { JSX } from 'react';
 
 export enum SicpErrorType {
   UNEXPECTED_ERROR,
@@ -40,7 +39,7 @@ const parsingError = (
   </div>
 );
 
-const errorComponent = (description: JSX.Element) => (
+const errorComponent = (description: React.ReactElement) => (
   <NonIdealState title="Something went wrong :(" description={description} icon={IconNames.ERROR} />
 );
 

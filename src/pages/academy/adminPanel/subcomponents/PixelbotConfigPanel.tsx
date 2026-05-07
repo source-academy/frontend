@@ -10,7 +10,7 @@ import {
   TextArea
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/PixelbotConfig.module.scss';
 

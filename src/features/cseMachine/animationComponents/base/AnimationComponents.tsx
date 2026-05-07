@@ -1,6 +1,5 @@
 import Konva from 'konva';
 import { AnimationFn } from 'konva/lib/types';
-import React from 'react';
 import { Arrow, Circle, KonvaNodeComponent, Line, Path, Rect, Text } from 'react-konva';
 
 import { CseAnimation } from '../../CseMachineAnimation';

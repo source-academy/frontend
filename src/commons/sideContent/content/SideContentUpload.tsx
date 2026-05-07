@@ -1,7 +1,7 @@
 import { FileInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { t } from 'i18next';
-import React, { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { SideContentTab, SideContentType } from '../SideContentTypes';
@@ -31,7 +31,7 @@ type Props = {
  */
 const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
   const { t } = useTranslation('sideContent', { keyPrefix: 'upload' });
-  const [count, setCount] = React.useState(0);
+  const [count, setCount] = useState(0);
 
   const handleFileUpload: React.ChangeEventHandler<HTMLInputElement> = useCallback(
     e => {

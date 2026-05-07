@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import React, { act } from 'react';
+import { act } from 'react';
 
 export const renderTree = async (element: React.ReactElement) => {
   const app = render(element);

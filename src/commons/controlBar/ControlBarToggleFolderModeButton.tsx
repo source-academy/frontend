@@ -1,6 +1,5 @@
 import { Colors, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 import ControlButton from '../ControlButton';
 
@@ -11,7 +10,7 @@ type Props = {
   toggleFolderMode: () => void;
 };
 
-export const ControlBarToggleFolderModeButton: React.FC<Props> = ({
+const ControlBarToggleFolderModeButton: React.FC<Props> = ({
   isFolderModeEnabled,
   isSessionActive,
   isPersistenceActive,
@@ -36,3 +35,5 @@ export const ControlBarToggleFolderModeButton: React.FC<Props> = ({
     </Tooltip>
   );
 };
+
+export default ControlBarToggleFolderModeButton;

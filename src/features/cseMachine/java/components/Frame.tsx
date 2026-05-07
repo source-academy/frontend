@@ -1,6 +1,6 @@
 import { ECE } from 'java-slang';
 import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import { createRef } from 'react';
 import { Group, Label, Rect, Tag, Text as KonvaText } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
@@ -15,7 +15,7 @@ import { Method } from './Method';
 import { Text } from './Text';
 
 export class Frame extends Visible implements IHoverable {
-  readonly tooltipRef: RefObject<any>;
+  readonly tooltipRef: React.RefObject<any>;
 
   readonly bindings: Binding[] = [];
   readonly name: Text;
@@ -59,7 +59,7 @@ export class Frame extends Visible implements IHoverable {
         b.setArrowToX(this._x + this._width + Config.FramePaddingX);
       });
 
-    this.tooltipRef = React.createRef();
+    this.tooltipRef = createRef();
   }
 
   setWidth(width: number) {

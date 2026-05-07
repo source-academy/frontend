@@ -1,5 +1,4 @@
 import { NumericInput } from '@blueprintjs/core';
-import React from 'react';
 
 type TimePickerProps = {
   value?: Date;

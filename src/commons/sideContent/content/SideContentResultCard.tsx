@@ -1,7 +1,6 @@
 import { Card, Elevation, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
 import type { TFunction } from 'i18next';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AutogradingError, AutogradingResult } from '../../assessment/AssessmentTypes';

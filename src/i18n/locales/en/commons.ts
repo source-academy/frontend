@@ -2,13 +2,11 @@ const translations = {
   navigationBar: {
     'Ground Control': 'Ground Control',
     Dashboard: 'Dashboard',
-    Sourcereel: 'Sourcereel',
     'Team Formation': 'Team Formation',
     Grading: 'Grading',
     'Game Simulator': 'Game Simulator',
     'Admin Panel': 'Admin Panel',
     Stories: 'Stories',
-    Sourcecast: 'Sourcecast',
     Playground: 'Playground',
     'SICP JS': 'SICP JS',
     Achievements: 'Achievements',

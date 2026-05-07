@@ -1,6 +1,6 @@
 import { NumericInput } from '@blueprintjs/core';
 import { IRowNode } from 'ag-grid-community';
-import React from 'react';
+import { useCallback } from 'react';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { KeysOfType } from 'src/commons/utils/TypeHelper';
 
@@ -15,7 +15,7 @@ const NumericCell: React.FC<Props> = props => {
   const { data } = props;
   const { rowIndex } = props.node;
 
-  const changeHandler = React.useCallback(
+  const changeHandler = useCallback(
     (value: number) => {
       props.setStateHandler(rowIndex!, value);
     },

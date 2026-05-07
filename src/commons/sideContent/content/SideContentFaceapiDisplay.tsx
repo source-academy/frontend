@@ -1,6 +1,5 @@
 import { Button, Divider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 const SideContentFaceapiDisplay: React.FC = () => {

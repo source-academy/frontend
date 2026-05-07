@@ -2,7 +2,7 @@ import 'src/styles/Leaderboard.scss';
 
 import { type ColDef, themeAlpine } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
