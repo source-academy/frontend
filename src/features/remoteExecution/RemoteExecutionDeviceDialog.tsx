@@ -11,7 +11,7 @@ import {
   Tooltip
 } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React from 'react';
+import { useState } from 'react';
 import { QrReader } from 'react-qr-reader';
 import { useDispatch } from 'react-redux';
 
@@ -50,10 +50,10 @@ const RemoteExecutionDeviceDialog: React.FC<Props> = ({
   const typeField = useField<HTMLSelectElement>();
   const secretField = useField<HTMLInputElement>(validateNotEmpty);
 
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState<string | undefined>();
-  const [showScanner, setShowScanner] = React.useState(false);
-  const [cameraFacingMode, setCameraFacingMode] = React.useState(FACING_MODE.ENVIRONMENT);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
+  const [showScanner, setShowScanner] = useState(false);
+  const [cameraFacingMode, setCameraFacingMode] = useState(FACING_MODE.ENVIRONMENT);
 
   const onSubmit = async () => {
     const fields = collectFieldValues(nameField, typeField, secretField);
