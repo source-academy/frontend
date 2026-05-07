@@ -1,5 +1,5 @@
-import { IconName, Intent } from '@blueprintjs/core';
-import React from 'react';
+import { type IconName, Intent } from '@blueprintjs/core';
+import { createElement, createRef, PureComponent, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import { ConfirmDialog, ConfirmDialogProps } from '../dialogs/ConfirmDialog';
@@ -10,11 +10,11 @@ import { PropsType } from './TypeHelper';
 // https://github.com/palantir/blueprint/blob/develop/packages/core/src/components/toast/toaster.tsx
 
 interface DialogHelperState {
-  dialog: ReturnType<typeof React.createElement> | null;
+  dialog: ReturnType<typeof createElement> | null;
   dialogOnClose: (() => void) | null;
 }
 
-class DialogHelper extends React.PureComponent<{}, DialogHelperState> {
+class DialogHelper extends PureComponent<{}, DialogHelperState> {
   public state: DialogHelperState = {
     dialog: null,
     dialogOnClose: null
@@ -31,7 +31,7 @@ class DialogHelper extends React.PureComponent<{}, DialogHelperState> {
     document.body.appendChild(containerElement);
     const root = createRoot(containerElement);
 
-    const dialogRef = React.createRef<DialogHelper>();
+    const dialogRef = createRef<DialogHelper>();
     root.render(<DialogHelper ref={dialogRef} />);
     return dialogRef;
   }
@@ -86,7 +86,7 @@ export function showConfirmDialog<T>(
 export interface SimpleConfirmDialogProps {
   icon?: IconName;
   title?: string;
-  contents?: React.ReactNode;
+  contents?: ReactNode;
   positiveLabel?: string;
   positiveIntent?: Intent;
   negativeLabel?: string;
@@ -114,7 +114,7 @@ export function showSimpleConfirmDialog(props: SimpleConfirmDialogProps): Promis
 
 export interface SimpleErrorDialogProps {
   title?: string;
-  contents?: React.ReactNode;
+  contents?: ReactNode;
   label?: string;
   props?: Partial<ConfirmDialogProps<boolean>>;
 }
@@ -139,7 +139,7 @@ export function showSimpleErrorDialog(props: SimpleErrorDialogProps): Promise<bo
 
 export function showSimplePromptDialog(props: {
   title?: string;
-  contents?: React.ReactNode;
+  contents?: ReactNode;
   positiveLabel?: string;
   negativeLabel?: string;
   props?: Partial<PromptDialogProps<boolean>>;
