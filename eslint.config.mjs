@@ -14,7 +14,11 @@ const reactRestrictedImports = [
   'ReactNode',
   'ReactElement',
   'ComponentType',
-  'JSX'
+  'JSX',
+  'CSSProperties',
+  'MouseEvent',
+  'KeyboardEvent',
+  'RefObject'
 ];
 
 const restrictedImports = [
