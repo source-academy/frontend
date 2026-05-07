@@ -14,14 +14,9 @@ import ControlButton from '../ControlButton';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 
-type DeploymentTabProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   updateAssessment: (assessment: Assessment) => void;
   handleRefreshLibrary: (library: Library) => void;
-};
-
-type StateProps = {
   assessment: Assessment;
   label: string;
   pathToLibrary: Array<string | number>;
@@ -29,7 +24,7 @@ type StateProps = {
   isOptionalDeployment: boolean;
 };
 
-const DeploymentTab: React.FC<DeploymentTabProps> = props => {
+const DeploymentTab: React.FC<Props> = props => {
   const deploymentTab = () => {
     const deploymentPath = props.pathToLibrary;
     const deployment = getValueFromPath(deploymentPath, props.assessment) as Library;

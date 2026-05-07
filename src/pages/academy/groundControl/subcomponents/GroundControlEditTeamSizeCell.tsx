@@ -5,13 +5,8 @@ import GradingFlex from 'src/commons/grading/GradingFlex';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 
-type Props = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   onTeamSizeChange: (id: number, newTeamSize: number) => void;
-};
-
-type StateProps = {
   data: AssessmentOverview;
 };
 

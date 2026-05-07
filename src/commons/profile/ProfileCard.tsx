@@ -5,20 +5,15 @@ import { NavLink } from 'react-router';
 import { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 
-type ProfileCardProps = DispatchProps & StateProps;
-
-type StateProps = {
+type Props = {
   item: AssessmentOverview;
   courseId?: number;
-};
-
-type DispatchProps = {
   getFrac: (num: number, den: number) => number;
   parseColour: (frac: number) => string;
   renderIcon: (category: AssessmentType) => IconName;
 };
 
-const ProfileCard: React.FC<ProfileCardProps> = props => {
+const ProfileCard: React.FC<Props> = props => {
   const { item } = props;
 
   const isInvalidXP = item.maxXp <= 0 && item.xp === 0;

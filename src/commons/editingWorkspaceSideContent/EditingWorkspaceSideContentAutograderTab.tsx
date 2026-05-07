@@ -11,19 +11,14 @@ import ControlButton from '../ControlButton';
 import { getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 
-type AutograderProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   handleTestcaseEval: (testcase: Testcase) => void;
   updateAssessment: (assessment: Assessment) => void;
-};
-
-type StateProps = {
   assessment: Assessment;
   questionId: number;
 };
 
-export const AutograderTab: React.FC<AutograderProps> = props => {
+export const AutograderTab: React.FC<Props> = props => {
   const addTestcase = (testcases: Testcase[]) => () => {
     testcases.push(testcaseTemplate());
     props.updateAssessment(props.assessment);

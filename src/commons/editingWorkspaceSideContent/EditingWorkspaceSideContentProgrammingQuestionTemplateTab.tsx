@@ -9,15 +9,10 @@ import ControlButton from '../ControlButton';
 import { WorkspaceState } from '../workspace/WorkspaceTypes';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
-type QuestionEditorProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   updateAssessment: (assessment: Assessment) => void;
   handleEditorValueChange: (newEditorValue: string) => void;
   handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
-};
-
-type StateProps = {
   assessment: Assessment;
   editorValue: string;
   questionId: number;
@@ -61,7 +56,7 @@ const questionEditors: QuestionEditor[] = [
 /*
  * activeEditor is the default editor to show initially
  */
-const ProgrammingQuestionTemplateTab: React.FC<QuestionEditorProps> = props => {
+const ProgrammingQuestionTemplateTab: React.FC<Props> = props => {
   const [activeEditor, setActiveEditor] = useState(questionEditors[0]);
   const [templateValue, setTemplateValue] = useState('');
   const [templateFocused, setTemplateFocused] = useState(false);

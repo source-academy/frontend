@@ -5,21 +5,16 @@ import { Assessment } from '../assessment/AssessmentTypes';
 import Markdown from '../Markdown';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
-type TextAreaContentProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   processResults?: (newVal: string | number) => string | number;
   updateAssessment: (assessment: Assessment) => void;
-};
-
-type StateProps = {
   assessment: Assessment;
   isNumber?: boolean;
   path: Array<string | number>;
   useRawValue?: boolean;
 };
 
-export const TextAreaContent: React.FC<TextAreaContentProps> = props => {
+export const TextAreaContent: React.FC<Props> = props => {
   const isNumberVal = props.isNumber || false;
 
   const [isEditing, setIsEditing] = useState(false);

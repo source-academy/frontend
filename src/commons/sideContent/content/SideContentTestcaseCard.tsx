@@ -7,22 +7,14 @@ import { useCallback, useMemo } from 'react';
 import { Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 
-type SideContentTestcaseCardProps = DispatchProps & StateProps & OwnProps;
-
-type DispatchProps = {
+type Props = {
   handleTestcaseEval: (testcaseId: number) => void;
-};
-
-type StateProps = {
   index: number;
   testcase: Testcase;
-};
-
-type OwnProps = {
   workspaceLocation: WorkspaceLocation;
 };
 
-const SideContentTestcaseCard: React.FC<SideContentTestcaseCardProps> = props => {
+const SideContentTestcaseCard: React.FC<Props> = props => {
   const { index, testcase, handleTestcaseEval } = props;
 
   const extraClasses = useMemo(() => {
