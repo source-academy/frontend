@@ -488,7 +488,12 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     let pollHandle: ReturnType<typeof setInterval> | undefined;
 
     const apply = (session: any) => {
-      const modeModule = acequire(modeId);
+      let modeModule: any;
+      try {
+        modeModule = acequire(modeId);
+      } catch {
+        return false;
+      }
       if (!modeModule?.Mode) return false;
       if ((session.getMode() as any).$id === modeId) return true;
       session.setMode(new modeModule.Mode());
