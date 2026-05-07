@@ -1,5 +1,5 @@
 import { useMediaQuery } from '@mantine/hooks';
-import React, { RefObject } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 // eslint-disable-next-line no-restricted-imports
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
 
@@ -15,9 +15,9 @@ import { readLocalStorage, setLocalStorage } from './LocalStorageHelper';
  * @param defaultValue T
  */
 export function useRequest<T>(requestFn: () => Promise<T>, defaultValue: T) {
-  const [value, setValue] = React.useState<T>(defaultValue);
+  const [value, setValue] = useState<T>(defaultValue);
 
-  React.useEffect(() => {
+  useEffect(() => {
     (async () => {
       const fetchedValue = await requestFn();
       setValue(fetchedValue);
@@ -36,7 +36,7 @@ export function useRequest<T>(requestFn: () => Promise<T>, defaultValue: T) {
  * @param defaultValue default value of input field
  */
 export function useInput<T>(defaultValue: T) {
-  const [value, setValue] = React.useState<T>(defaultValue);
+  const [value, setValue] = useState<T>(defaultValue);
 
   return {
     value,
@@ -51,7 +51,7 @@ export function useInput<T>(defaultValue: T) {
 }
 
 /**
- * This hook usage is similar to React.useState, the only difference
+ * This hook usage is similar to useState, the only difference
  * being that the state is also written to local storage at the specified key on state updates.
  *
  * When calling this hook, the value will take on the stored value in local storage (if any).
@@ -61,9 +61,9 @@ export function useLocalStorageState<T>(
   key: string,
   defaultValue: T
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
-  const [value, setValue] = React.useState<T>(readLocalStorage(key, defaultValue));
+  const [value, setValue] = useState<T>(readLocalStorage(key, defaultValue));
 
-  React.useEffect(() => {
+  useEffect(() => {
     setLocalStorage(key, value);
   }, [key, value]);
 
@@ -80,12 +80,12 @@ export const useTypedSelector: TypedUseSelectorHook<OverallState> = useSelector;
  */
 
 export const useDimensions = (
-  ref: RefObject<HTMLElement | null>
+  ref: React.RefObject<HTMLElement | null>
 ): [width: number, height: number] => {
-  const [width, setWidth] = React.useState(0);
-  const [height, setHeight] = React.useState(0);
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
 
-  const resizeObserver = React.useMemo(
+  const resizeObserver = useMemo(
     () =>
       new ResizeObserver((entries: ResizeObserverEntry[], observer: ResizeObserver) => {
         if (entries.length !== 1) {
@@ -100,7 +100,7 @@ export const useDimensions = (
     []
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     const htmlElement = ref.current;
     if (htmlElement === null) {
       return;

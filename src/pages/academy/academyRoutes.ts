@@ -16,7 +16,6 @@ const notFoundPath = 'not_found';
 
 const Assessment = () => import('../../commons/assessment/Assessment');
 const Game = () => import('./game/Game');
-const Sourcecast = () => import('../sourcecast/Sourcecast');
 const Achievement = () => import('../achievement/Achievement');
 const OverallLeaderboard = () => import('../leaderboard/subcomponents/OverallLeaderboard');
 const ContestLeaderboardWrapper = () =>
@@ -78,7 +77,6 @@ const getCommonAcademyRoutes = (): RouteObject[] => {
       lazy: Assessment,
       loader: assessmentLoader
     },
-    { path: 'sourcecast/:sourcecastId?', lazy: Sourcecast },
     { path: 'achievements/*', lazy: Achievement },
     {
       path: 'leaderboard',
@@ -98,7 +96,6 @@ const getCommonAcademyRoutes = (): RouteObject[] => {
 
 const GroundControl = () => import('./groundControl/GroundControlContainer');
 const Grading = () => import('./grading/Grading');
-const Sourcereel = () => import('./sourcereel/Sourcereel');
 const GameSimulator = () => import('./gameSimulator/GameSimulator');
 const TeamFormation = () => import('./teamFormation/TeamFormation');
 const TeamFormationForm = () => import('./teamFormation/subcomponents/TeamFormationForm');
@@ -107,7 +104,6 @@ const Dashboard = () => import('./dashboard/Dashboard');
 
 const staffRoutes: RouteObject[] = [
   { path: `grading/${gradingRegExp}`, lazy: Grading },
-  { path: 'sourcereel', lazy: Sourcereel },
   { path: 'gamesimulator', lazy: GameSimulator },
   { path: 'teamformation', lazy: TeamFormation },
   { path: 'teamformation/create', lazy: TeamFormationForm },

@@ -1,10 +1,10 @@
-import React from 'react';
+import { createContext } from 'react';
 
 import AchievementInferencer from '../../commons/achievement/utils/AchievementInferencer';
 import { Links } from '../../commons/utils/Constants';
 import { FilterStatus } from './AchievementTypes';
 
-export const AchievementContext = React.createContext(new AchievementInferencer([], []));
+export const AchievementContext = createContext(new AchievementInferencer([], []));
 
 export enum DeadlineColors {
   RED = '#f00',

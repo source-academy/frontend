@@ -1,4 +1,3 @@
-import React from 'react';
 import { Line as KonvaLine } from 'react-konva';
 
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';

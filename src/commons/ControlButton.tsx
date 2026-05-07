@@ -1,5 +1,4 @@
 import { AnchorButton, Button, Icon, IconName, Intent } from '@blueprintjs/core';
-import React from 'react';
 
 type ButtonOptions = {
   className: string;

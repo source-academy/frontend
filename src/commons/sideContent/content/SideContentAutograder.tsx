@@ -9,18 +9,10 @@ import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import SideContentResultCard from './SideContentResultCard';
 import SideContentTestcaseCard from './SideContentTestcaseCard';
 
-export type SideContentAutograderProps = DispatchProps & StateProps & OwnProps;
-
-type DispatchProps = {
+export type SideContentAutograderProps = {
   handleTestcaseEval: (testcaseId: number) => void;
-};
-
-type StateProps = {
   autogradingResults: AutogradingResult[];
   testcases: Testcase[];
-};
-
-type OwnProps = {
   /**
    * We need to know the workspace location to hide 'opaque' testcases
    * in AssessmentsWorkspace, but show them in GradingWorkspace.

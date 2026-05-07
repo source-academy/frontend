@@ -1,6 +1,6 @@
 import { Switch } from '@blueprintjs/core';
 import { IRowNode } from 'ag-grid-community';
-import React from 'react';
+import { useCallback } from 'react';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { KeysOfType } from 'src/commons/utils/TypeHelper';
 
@@ -16,7 +16,7 @@ const BooleanCell: React.FC<Props> = props => {
   const { rowIndex } = props.node;
   const checked = data[props.field];
 
-  const changeHandler = React.useCallback(() => {
+  const changeHandler = useCallback(() => {
     props.setStateHandler(rowIndex!, !checked);
   }, [props, rowIndex, checked]);
 

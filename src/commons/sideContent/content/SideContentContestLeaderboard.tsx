@@ -1,19 +1,14 @@
 import { Button, Collapse, Icon, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ContestEntry } from '../../assessment/AssessmentTypes';
 import { SideContentType } from '../SideContentTypes';
 import SideContentLeaderboardCard from './SideContentLeaderboardCard';
 
-export type SideContentContestLeaderboardProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+export type SideContentContestLeaderboardProps = {
   handleContestEntryClick: (submissionId: number, answer: string) => void;
-};
-
-type StateProps = {
   orderedContestEntries: ContestEntry[];
   leaderboardType: SideContentType;
 };

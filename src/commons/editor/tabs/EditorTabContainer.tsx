@@ -1,5 +1,3 @@
-import React from 'react';
-
 import EditorTab from './EditorTab';
 import { getShortestUniqueFilePaths } from './utils';
 

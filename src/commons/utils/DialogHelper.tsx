@@ -1,5 +1,5 @@
-import { IconName, Intent } from '@blueprintjs/core';
-import React from 'react';
+import { type IconName, Intent } from '@blueprintjs/core';
+import { createElement, createRef, PureComponent } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import { ConfirmDialog, ConfirmDialogProps } from '../dialogs/ConfirmDialog';
@@ -10,11 +10,11 @@ import { PropsType } from './TypeHelper';
 // https://github.com/palantir/blueprint/blob/develop/packages/core/src/components/toast/toaster.tsx
 
 interface DialogHelperState {
-  dialog: ReturnType<typeof React.createElement> | null;
+  dialog: ReturnType<typeof createElement> | null;
   dialogOnClose: (() => void) | null;
 }
 
-class DialogHelper extends React.PureComponent<{}, DialogHelperState> {
+class DialogHelper extends PureComponent<{}, DialogHelperState> {
   public state: DialogHelperState = {
     dialog: null,
     dialogOnClose: null
@@ -31,7 +31,7 @@ class DialogHelper extends React.PureComponent<{}, DialogHelperState> {
     document.body.appendChild(containerElement);
     const root = createRoot(containerElement);
 
-    const dialogRef = React.createRef<DialogHelper>();
+    const dialogRef = createRef<DialogHelper>();
     root.render(<DialogHelper ref={dialogRef} />);
     return dialogRef;
   }

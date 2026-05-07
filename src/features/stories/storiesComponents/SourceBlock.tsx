@@ -1,11 +1,11 @@
 import { Card, Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import React, { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
 import { ResultOutput, styliseSublanguage } from 'src/commons/application/ApplicationTypes';
-import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
+import ControlBarRunButton from 'src/commons/controlBar/ControlBarRunButton';
 import ControlButton from 'src/commons/ControlButton';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
@@ -76,7 +76,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const output = useTypedSelector(store => store.stories.envs[env]?.output || []);
   const { selectedTab, setSelectedTab } = useSideContent(`stories.${env}`);
 
-  const onChangeTabs = React.useCallback(
+  const onChangeTabs = useCallback(
     (
       newTabId: SideContentType,
       prevTabId: SideContentType,
@@ -126,7 +126,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     id: SideContentType.storiesRun
   };
 
-  const tabs = React.useMemo(() => {
+  const tabs = useMemo(() => {
     const tabs: SideContentTab[] = [outputTab];
 
     // TODO: Restore logic post refactor

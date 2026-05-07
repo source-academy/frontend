@@ -17,7 +17,7 @@ import classNames from 'classnames';
 import { t } from 'i18next';
 import { Chapter } from 'js-slang/dist/langs';
 import { debounce } from 'lodash';
-import React from 'react';
+import { Component } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
@@ -88,7 +88,7 @@ type DispatchProps = {
   handleAlertSideContent: () => void;
 };
 
-class SideContentCseMachineBase extends React.Component<CseMachineProps, State> {
+class SideContentCseMachineBase extends Component<CseMachineProps, State> {
   constructor(props: CseMachineProps) {
     super(props);
     this.state = {

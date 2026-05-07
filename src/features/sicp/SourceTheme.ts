@@ -1,5 +1,3 @@
-import React from 'react';
-
 /**
  * Source Theme for use with react-syntax-highlighter.
  * Tries to match the Source Theme for Ace Editor in js-slang

@@ -15,7 +15,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router';
 import Textarea from 'react-textarea-autosize';
 
@@ -27,19 +27,14 @@ import Constants from '../utils/Constants';
 import { getPrettyDate } from '../utils/DateHelper';
 import { exportXml, storeLocalAssessmentOverview } from '../XMLParser/XMLParserHelper';
 
-type EditingOverviewCardProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   updateEditingOverview: (overview: AssessmentOverview) => void;
-};
-
-type StateProps = {
   listingPath: string;
   overview: AssessmentOverview;
   assessmentTypes: AssessmentType[];
 };
 
-export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => {
+export const EditingOverviewCard: React.FC<Props> = props => {
   const [editingOverviewField, setEditingOverviewField] = useState('');
   const [fieldValue, setFieldValue] = useState<any>('');
   const [showOptionsOverlay, setShowOptionsOverlay] = useState(false);

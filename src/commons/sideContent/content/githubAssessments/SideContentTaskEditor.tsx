@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback } from 'react';
 
 import SideContentMarkdownEditor from './SideContentMarkdownEditor';
 
@@ -21,7 +21,7 @@ const SideContentTaskEditor: React.FC<Props> = props => {
     ? 'Welcome to Mission Mode! This is where the Task Briefing for each question will appear!'
     : taskDescriptions[taskIndex];
 
-  const taskBriefingSetter = React.useCallback(
+  const taskBriefingSetter = useCallback(
     (newDescription: string) => {
       if (indexOutOfRange) {
         return;

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Route } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { SentryRoutes } from 'src/routes/routerConfig';

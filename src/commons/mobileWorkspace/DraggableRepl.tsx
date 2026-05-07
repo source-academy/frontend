@@ -1,4 +1,4 @@
-import React from 'react';
+import { useRef } from 'react';
 import Draggable, { DraggableEventHandler } from 'react-draggable';
 
 import Repl, { ReplProps } from '../repl/Repl';
@@ -11,7 +11,7 @@ type Props = {
 };
 
 const DraggableRepl: React.FC<Props> = props => {
-  const nodeRef = React.useRef<HTMLDivElement>(null);
+  const nodeRef = useRef<HTMLDivElement>(null);
 
   return (
     <Draggable

@@ -2,7 +2,6 @@ import { Button, Classes, Divider, MenuItem, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import React from 'react';
 
 import { SALanguage, sourceLanguages, styliseSublanguage } from '../application/ApplicationTypes';
 import {
@@ -15,14 +14,9 @@ import ControlButton from '../ControlButton';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 
-type DeploymentTabProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   updateAssessment: (assessment: Assessment) => void;
   handleRefreshLibrary: (library: Library) => void;
-};
-
-type StateProps = {
   assessment: Assessment;
   label: string;
   pathToLibrary: Array<string | number>;
@@ -30,7 +24,7 @@ type StateProps = {
   isOptionalDeployment: boolean;
 };
 
-const DeploymentTab: React.FC<DeploymentTabProps> = props => {
+const DeploymentTab: React.FC<Props> = props => {
   const deploymentTab = () => {
     const deploymentPath = props.pathToLibrary;
     const deployment = getValueFromPath(deploymentPath, props.assessment) as Library;
@@ -65,7 +59,7 @@ const DeploymentTab: React.FC<DeploymentTabProps> = props => {
     );
 
     const symbolsFragment = (
-      <React.Fragment>
+      <>
         External Library:
         <br />
         {externalSelect(deployment.external.name, handleExternalSelect)}
@@ -76,18 +70,18 @@ const DeploymentTab: React.FC<DeploymentTabProps> = props => {
           <tbody>{symbols}</tbody>
         </table>
         <ControlButton label="New Symbol" icon={IconNames.PLUS} onClick={handleNewSymbol} />
-      </React.Fragment>
+      </>
     );
 
     const globalsFragment = (
-      <React.Fragment>
+      <>
         <div>Globals:</div>
         <br />
         <table style={{ width: '100%', borderSpacing: '5px' }}>
           <tbody>{globals}</tbody>
         </table>
         <ControlButton label="New Global" icon={IconNames.PLUS} onClick={handleNewGlobal} />
-      </React.Fragment>
+      </>
     );
 
     return (

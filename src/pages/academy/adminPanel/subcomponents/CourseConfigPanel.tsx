@@ -13,7 +13,7 @@ import {
   TextArea
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
+import { useCallback, useState } from 'react';
 import { useResponsive } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/CourseConfig.module.scss';
 
@@ -33,7 +33,7 @@ type Props = {
 const CourseConfigPanel: React.FC<Props> = props => {
   const { isMobileBreakpoint } = useResponsive();
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
-    React.useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
+    useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
 
   const {
     courseName,
@@ -45,7 +45,6 @@ const CourseConfigPanel: React.FC<Props> = props => {
     enableContestLeaderboard,
     topLeaderboardDisplay,
     topContestLeaderboardDisplay,
-    enableSourcecast,
     enableStories,
     enableLlmGrading,
     moduleHelpText,
@@ -76,7 +75,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
     </div>
   );
 
-  const onChangeTabs = React.useCallback(
+  const onChangeTabs = useCallback(
     (
       newTabId: CourseHelpTextEditorTab,
       prevTabId: CourseHelpTextEditorTab,
@@ -323,16 +322,6 @@ const CourseConfigPanel: React.FC<Props> = props => {
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
                 enableAchievements: (e.target as HTMLInputElement).checked
-              })
-            }
-          />
-          <Switch
-            checked={enableSourcecast}
-            label="Enable Sourcecast"
-            onChange={e =>
-              props.setCourseConfiguration({
-                ...props.courseConfiguration,
-                enableSourcecast: (e.target as HTMLInputElement).checked
               })
             }
           />

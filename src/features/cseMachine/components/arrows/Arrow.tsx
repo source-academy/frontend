@@ -1,5 +1,4 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
 
 import { ArrayUnit } from '../ArrayUnit';
 import { ControlItemComponent } from '../ControlItemComponent';
@@ -26,7 +25,7 @@ export abstract class Arrow {
   abstract onClick(e: KonvaEventObject<MouseEvent>): void;
   abstract source: Visible;
   abstract target: Visible | undefined;
-  abstract ref: RefObject<any>;
+  abstract ref: React.RefObject<any>;
   abstract x(): number;
   abstract y(): number;
   abstract height(): number;

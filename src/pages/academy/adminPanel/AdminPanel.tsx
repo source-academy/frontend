@@ -1,5 +1,5 @@
 import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
@@ -29,7 +29,6 @@ const defaultCourseConfig: UpdateCourseConfiguration = {
   enableContestLeaderboard: true,
   topLeaderboardDisplay: 100,
   topContestLeaderboardDisplay: 10,
-  enableSourcecast: true,
   enableStories: false,
   enableLlmGrading: false,
   moduleHelpText: '',
@@ -74,7 +73,6 @@ const AdminPanel: React.FC = () => {
       enableContestLeaderboard: session.enableContestLeaderboard,
       topLeaderboardDisplay: session.topLeaderboardDisplay,
       topContestLeaderboardDisplay: session.topContestLeaderboardDisplay,
-      enableSourcecast: session.enableSourcecast,
       enableStories: session.enableStories,
       enableLlmGrading: session.enableLlmGrading,
       moduleHelpText: session.moduleHelpText,
@@ -94,7 +92,6 @@ const AdminPanel: React.FC = () => {
     session.topLeaderboardDisplay,
     session.topContestLeaderboardDisplay,
     session.enableGame,
-    session.enableSourcecast,
     session.enableStories,
     session.enableLlmGrading,
     session.moduleHelpText,

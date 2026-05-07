@@ -1,5 +1,5 @@
 import { Text, TextConfig } from 'konva/lib/shapes/Text';
-import React from 'react';
+import { createRef, Fragment } from 'react';
 import { Text as KonvaText } from 'react-konva';
 
 import CseMachine from '../CseMachine';
@@ -33,7 +33,7 @@ export class ArrayUnit extends Visible {
   readonly isLastUnit: boolean;
   /** arrow that is drawn from the array unit to the value */
   arrow?: GenericArrow<ArrayUnit, Value>;
-  readonly indexRef = React.createRef<Text>();
+  readonly indexRef = createRef<Text>();
 
   constructor(
     /** index of this unit in its parent */
@@ -119,7 +119,7 @@ export class ArrayUnit extends Visible {
         : fadedStrokeColor();
 
     return (
-      <React.Fragment key={Layout.key++}>
+      <Fragment key={Layout.key++}>
         <RoundedRect
           key={Layout.key++}
           x={this.x()}
@@ -145,7 +145,7 @@ export class ArrayUnit extends Visible {
         />
         {this.value.draw()}
         {this.arrow?.draw()}
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

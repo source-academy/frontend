@@ -1,5 +1,5 @@
 import { HTMLSelect, Popover, Position } from '@blueprintjs/core';
-import React from 'react';
+import { useCallback } from 'react';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { AdminPanelStoriesUser } from 'src/features/stories/StoriesTypes';
 
@@ -13,7 +13,7 @@ type Props = {
 const RolesCell: React.FC<Props> = props => {
   const { data } = props;
 
-  const changeHandler = React.useCallback(
+  const changeHandler = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       props.handleUpdateStoriesUserRole(data.id, e.target.value as StoriesRole);
     },

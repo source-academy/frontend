@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { IRowNode } from 'ag-grid-community';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import ControlButton from 'src/commons/ControlButton';
 

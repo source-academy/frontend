@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { act, type JSX } from 'react';
+import { act } from 'react';
 import { Route, Routes, StaticRouter } from 'react-router';
 import { Mock, vi } from 'vitest';
 
@@ -7,7 +7,7 @@ import Constants from '../../../commons/utils/Constants';
 import { exchangeAccessCode } from '../../../features/github/GitHubUtils';
 import GitHubCallback from '../GitHubCallback';
 
-function renderWithLocation(element: JSX.Element, location: string) {
+function renderWithLocation(element: React.ReactElement, location: string) {
   return render(
     <StaticRouter location={location}>
       <Routes>

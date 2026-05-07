@@ -10,7 +10,7 @@ import {
   Tooltip
 } from '@blueprintjs/core';
 import { IconNames, Team } from '@blueprintjs/icons';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';

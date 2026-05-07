@@ -1,6 +1,6 @@
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
-import React from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import classes from 'src/styles/FileSystemView.module.scss';
 
@@ -29,7 +29,7 @@ const FileSystemViewFileName: React.FC<Props> = ({
   setIsEditing,
   refreshDirectory
 }) => {
-  const [editedFileName, setEditedFileName] = React.useState(fileName);
+  const [editedFileName, setEditedFileName] = useState(fileName);
   const dispatch = useDispatch();
 
   const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) =>

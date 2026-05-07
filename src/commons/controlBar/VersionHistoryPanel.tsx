@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import styles from '../../styles/VersionHistoryPanel.module.scss';
 import type { CodeVersion, CodeVersionMetadata } from '../workspace/WorkspaceTypes';
@@ -65,7 +65,7 @@ const groupVersions = (sortedNewestFirst: CodeVersionMetadata[]): VersionGroup[]
   return groups;
 };
 
-export const VersionHistoryPanel: React.FC<Props> = ({
+const VersionHistoryPanel: React.FC<Props> = ({
   versions,
   currentCode,
   isOpen,
@@ -275,3 +275,5 @@ export const VersionHistoryPanel: React.FC<Props> = ({
     </Drawer>
   );
 };
+
+export default VersionHistoryPanel;

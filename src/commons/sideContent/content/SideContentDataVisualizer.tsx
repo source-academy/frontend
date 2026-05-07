@@ -1,12 +1,19 @@
-import { AnchorButton, Button, ButtonGroup, Card, Checkbox, Classes } from '@blueprintjs/core';
-import { Tooltip } from '@blueprintjs/core';
-import { Icon } from '@blueprintjs/core';
+import {
+  AnchorButton,
+  Button,
+  ButtonGroup,
+  Card,
+  Checkbox,
+  Classes,
+  Icon,
+  Tooltip
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
 import { t } from 'i18next';
-import React from 'react';
+import { Component } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { connect, MapDispatchToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
@@ -36,7 +43,7 @@ type DispatchProps = {
  * data_data function in Source. It adds a listener to the DataVisualizer singleton
  * which updates the steps list via setState whenever new steps are added.
  */
-class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchProps, State> {
+class SideContentDataVisualizerBase extends Component<OwnProps & DispatchProps, State> {
   constructor(props: any) {
     super(props);
     this.state = { steps: [], currentStep: 0 };

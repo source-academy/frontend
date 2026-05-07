@@ -1,4 +1,3 @@
-import React from 'react';
 import classes from 'src/styles/Grading.module.scss';
 
 type Props = {

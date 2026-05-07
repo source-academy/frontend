@@ -1,5 +1,5 @@
 import { Button } from '@blueprintjs/core';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Form, useNavigate, useParams } from 'react-router';
 import Select, { ActionMeta, MultiValue } from 'react-select';

@@ -1,6 +1,6 @@
 import { Drawer, DrawerSize, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
-import React, { type JSX, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import SessionActions from '../application/actions/SessionActions';
@@ -53,7 +53,7 @@ const Profile = (props => {
   }, [assessmentOverviews, isLoggedIn, isEnrolledInACourse]);
 
   // Render
-  let content: JSX.Element;
+  let content: React.ReactElement;
 
   if (!isLoaded) {
     content = <NonIdealState description="Loading..." icon={<Spinner />} />;

@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useStore } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
@@ -19,7 +19,7 @@ import {
   setSessionDetails,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
-import { ControlBarExecutionTime } from 'src/commons/controlBar/ControlBarExecutionTime';
+import ControlBarExecutionTime from 'src/commons/controlBar/ControlBarExecutionTime';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
@@ -55,16 +55,16 @@ import {
   type SALanguage
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
-import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
-import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
-import { ControlBarGoogleDriveButtons } from '../../commons/controlBar/ControlBarGoogleDriveButtons';
-import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
-import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
-import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
-import { ControlBarToggleFolderModeButton } from '../../commons/controlBar/ControlBarToggleFolderModeButton';
-import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
+import ControlBarAutorunButtons from '../../commons/controlBar/ControlBarAutorunButtons';
+import ControlBarChapterSelect from '../../commons/controlBar/ControlBarChapterSelect';
+import ControlBarClearButton from '../../commons/controlBar/ControlBarClearButton';
+import ControlBarEvalButton from '../../commons/controlBar/ControlBarEvalButton';
+import ControlBarGoogleDriveButtons from '../../commons/controlBar/ControlBarGoogleDriveButtons';
+import ControlBarSessionButtons from '../../commons/controlBar/ControlBarSessionButton';
+import ControlBarShareButton from '../../commons/controlBar/ControlBarShareButton';
+import ControlBarStepLimit from '../../commons/controlBar/ControlBarStepLimit';
+import ControlBarToggleFolderModeButton from '../../commons/controlBar/ControlBarToggleFolderModeButton';
+import ControlBarGitHubButtons from '../../commons/controlBar/github/ControlBarGitHubButtons';
 import {
   convertEditorTabStateToProps,
   type NormalEditorContainerProps
@@ -87,7 +87,7 @@ import type {
   CodeDelta,
   Input,
   SelectionRange
-} from '../../features/sourceRecorder/SourceRecorderTypes';
+} from '../../features/eventLogging/EventLoggingTypes';
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   desktopOnlyTabIds,
@@ -384,7 +384,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   }, [isMobileBreakpoint, isVscode, selectedTab, setSelectedTab]);
 
-  const onEditorValueChange = React.useCallback(
+  const onEditorValueChange = useCallback(
     (editorTabIndex: number, newEditorValue: string) => {
       setLastEdit(new Date());
       handleEditorValueChange(editorTabIndex, newEditorValue);

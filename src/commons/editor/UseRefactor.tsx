@@ -1,6 +1,6 @@
 import { Range } from 'ace-builds';
 import { createContext, getAllOccurrencesInScope } from 'js-slang';
-import React from 'react';
+import { useCallback } from 'react';
 
 import { EditorHook } from './Editor';
 
@@ -14,7 +14,7 @@ import { EditorHook } from './Editor';
 const useRefactor: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
   const { sourceChapter } = inProps;
 
-  const refactor = React.useCallback(() => {
+  const refactor = useCallback(() => {
     const editor = reactAceRef.current!.editor;
     if (!editor) {
       return;

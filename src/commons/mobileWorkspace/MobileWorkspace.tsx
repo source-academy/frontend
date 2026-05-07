@@ -2,7 +2,7 @@ import { FocusStyleManager } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useMediaQuery } from '@mantine/hooks';
 import { Ace } from 'ace-builds';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { DraggableEvent } from 'react-draggable';
 
 import ControlBar from '../controlBar/ControlBar';
@@ -120,12 +120,6 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   const createWorkspaceInput = () => {
     if (props.editorContainerProps) {
-      const editorContainerProps = {
-        ...props.editorContainerProps
-      };
-      if (editorContainerProps.editorVariant === 'sourcecast') {
-        editorContainerProps.setDraggableReplPosition = () => handleShowRepl(-100);
-      }
       return <EditorContainer {...enableMobileKeyboardForEditor(props.editorContainerProps)} />;
     } else {
       return <McqChooser {...props.mcqProps!} />;
