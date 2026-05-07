@@ -1,6 +1,6 @@
 import { Card, Icon, IconName } from '@blueprintjs/core';
 import classNames from 'classnames';
-import { type JSX, useState } from 'react';
+import { useState } from 'react';
 
 import { SideContentType } from '../sideContent/SideContentTypes';
 
@@ -13,7 +13,7 @@ import { SideContentType } from '../sideContent/SideContentTypes';
  */
 export type SideBarTab = {
   label: string;
-  body: JSX.Element;
+  body: React.ReactElement;
   iconName: IconName;
   id?: SideContentType;
 };

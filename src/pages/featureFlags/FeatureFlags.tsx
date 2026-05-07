@@ -12,7 +12,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { BlueprintIcons_16Id } from '@blueprintjs/icons/lib/esm/generated/16px/blueprint-icons-16';
-import React, { ChangeEventHandler, MouseEvent, PropsWithChildren, useRef, useState } from 'react';
+import { ChangeEventHandler, PropsWithChildren, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { FeatureFlagsActions } from '../../commons/featureFlags';
@@ -121,7 +121,7 @@ const FeatureFlagSection: React.FC<FlagCardProps<any> & { icon: BlueprintIcons_1
 
   const isModified = modifiedFlag !== undefined;
 
-  const onReset = (e: MouseEvent) => {
+  const onReset = (e: React.MouseEvent) => {
     dispatch(FeatureFlagsActions.resetFlag({ featureFlag: flag }));
     e.stopPropagation();
   };

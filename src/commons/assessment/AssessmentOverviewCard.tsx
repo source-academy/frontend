@@ -1,7 +1,6 @@
 import { Card, Elevation, H4, H6, Icon, Intent, Position, Text, Tooltip } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { JSX } from 'react';
 import classes from 'src/styles/Academy.module.scss';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
@@ -19,7 +18,7 @@ type AssessmentOverviewCardProps = {
   /** Will only render the attempt button if true, regardless of attempt status. */
   renderAttemptButton: boolean;
   renderGradingTooltip: boolean;
-  makeSubmissionButton: (overview: AssessmentOverview) => JSX.Element;
+  makeSubmissionButton: (overview: AssessmentOverview) => React.ReactElement;
 };
 
 /** A card to display `AssessmentOverview`s. */
@@ -105,7 +104,7 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
 type AssessmentOverviewCardTitleProps = {
   overview: AssessmentOverview;
   renderProgressStatus: boolean;
-  makeSubmissionButton: (overview: AssessmentOverview) => JSX.Element;
+  makeSubmissionButton: (overview: AssessmentOverview) => React.ReactElement;
 };
 
 const AssessmentOverviewCardTitle: React.FC<AssessmentOverviewCardTitleProps> = ({

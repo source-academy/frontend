@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { stringify } from 'js-slang/dist/utils/stringify';
-import { type JSX, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import type { InterpreterOutput, ResultOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
@@ -36,7 +36,7 @@ type DispatchProps = {
 };
 
 type OwnProps = {
-  replButtons: Array<JSX.Element | null>;
+  replButtons: Array<React.ReactElement | null>;
 };
 
 const Repl: React.FC<ReplProps> = props => {

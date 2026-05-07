@@ -8,7 +8,7 @@ import {
   Tooltip
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { createRef, PureComponent, type RefObject } from 'react';
+import { createRef, PureComponent } from 'react';
 import CopyToClipboard from 'src/commons/utils/CopyToClipboard';
 
 import ControlButton from '../ControlButton';
@@ -35,7 +35,7 @@ type State = {
 };
 
 export class ControlBarShareButton extends PureComponent<ControlBarShareButtonProps, State> {
-  private shareInputElem: RefObject<HTMLInputElement | null>;
+  private shareInputElem: React.RefObject<HTMLInputElement | null>;
 
   constructor(props: ControlBarShareButtonProps) {
     super(props);

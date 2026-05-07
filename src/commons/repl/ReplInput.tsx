@@ -2,7 +2,7 @@ import { Classes } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import { type JSX, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import AceEditor from 'react-ace';
 import ReactAce from 'react-ace/lib/ace';
 
@@ -31,7 +31,7 @@ type StateProps = {
 };
 
 type OwnProps = {
-  replButtons: Array<JSX.Element | null>;
+  replButtons: Array<React.ReactElement | null>;
 };
 
 export const ReplInput: React.FC<ReplInputProps> = props => {

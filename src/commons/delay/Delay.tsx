@@ -1,7 +1,7 @@
-import { type JSX, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
-  children: JSX.Element;
+  children: React.ReactElement;
   waitInMsBeforeRender: number;
 };
 
