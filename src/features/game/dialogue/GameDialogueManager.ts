@@ -1,3 +1,4 @@
+import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { ItemId } from '../commons/CommonTypes';
 import { promptWithChoices } from '../effects/Prompt';
@@ -6,6 +7,7 @@ import GameInputManager from '../input/GameInputManager';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
+import { createButton } from '../utils/ButtonUtils';
 import DialogueConstants, { textTypeWriterStyle } from './GameDialogueConstants';
 import DialogueGenerator from './GameDialogueGenerator';
 import DialogueRenderer from './GameDialogueRenderer';
@@ -25,7 +27,7 @@ export default class DialogueManager {
     GameGlobalAPI.getInstance().getGameManager()
   );
 
-  private skipButton?: Phaser.GameObjects.Image;
+  private skipButton?: Phaser.GameObjects.Container;
   private isSkipping: boolean = false;
   private nextLineResolve?: (value: void | PromiseLike<void>) => void;
   private isPrompting: boolean = false;
@@ -45,7 +47,13 @@ export default class DialogueManager {
     this.speakerRenderer = new DialogueSpeakerRenderer();
 
     const dialogueContainer = this.dialogueRenderer.getDialogueContainer();
-    this.createSkipButton(dialogueContainer);
+    this.skipButton = createButton(GameGlobalAPI.getInstance().getGameManager(), {
+      assetKey: ImageAssets.skipButton.key,
+      onUp: async () => {
+        await this.triggerSkip();
+      }
+    }).setPosition(DialogueConstants.skipButton.x, DialogueConstants.skipButton.y);
+    dialogueContainer.add(this.skipButton);
 
     GameGlobalAPI.getInstance().addToLayer(Layer.Dialogue, dialogueContainer);
 
@@ -111,7 +119,6 @@ export default class DialogueManager {
 
       if (this.skipButton) {
         this.skipButton.setVisible(false);
-        this.skipButton.disableInteractive();
       }
 
       this.getInputManager().enableKeyboardInput(false);
@@ -131,7 +138,6 @@ export default class DialogueManager {
 
       if (this.skipButton) {
         this.skipButton.setVisible(true);
-        this.skipButton.setInteractive({ useHandCursor: true });
       }
 
       this.isPrompting = false;
@@ -142,28 +148,6 @@ export default class DialogueManager {
     } else {
       await this.skipRemainingDialogue();
     }
-  }
-
-  private createSkipButton(dialogueContainer: Phaser.GameObjects.Container) {
-    const gameManager = GameGlobalAPI.getInstance().getGameManager();
-
-    this.skipButton = new Phaser.GameObjects.Image(
-      gameManager,
-      DialogueConstants.skipButton.x,
-      DialogueConstants.skipButton.y,
-      'skip-icon'
-    ).setInteractive({ useHandCursor: true });
-
-    this.skipButton.setDisplaySize(
-      DialogueConstants.skipButton.size,
-      DialogueConstants.skipButton.size
-    );
-
-    this.skipButton.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
-      await this.triggerSkip();
-    });
-
-    dialogueContainer.add(this.skipButton);
   }
 
   /**
@@ -177,7 +161,6 @@ export default class DialogueManager {
     // Hide and disable button while skipping
     if (this.skipButton && this.skipButton.active) {
       this.skipButton.setVisible(false);
-      this.skipButton.disableInteractive();
     }
 
     GameGlobalAPI.getInstance().playSound(SoundAssets.dialogueAdvance.key);
@@ -222,7 +205,6 @@ export default class DialogueManager {
         this.getDialogueGenerator().peekNextLine() !== null
       ) {
         this.skipButton.setVisible(true);
-        this.skipButton.setInteractive({ useHandCursor: true });
       }
     }
   }
@@ -287,7 +269,6 @@ export default class DialogueManager {
     } else if (!this.isSkipping && !this.isDialoguePromptActive) {
       if (this.skipButton && this.skipButton.active) {
         this.skipButton.setVisible(true);
-        this.skipButton.setInteractive({ useHandCursor: true });
       }
     }
   }

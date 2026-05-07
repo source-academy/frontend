@@ -150,7 +150,6 @@ class GameManager extends Phaser.Scene {
     );
     this.preloadLocationsAssets();
     this.bindKeyboardTriggers();
-    this.load.image('skip-icon', '/assets/skip-icon.png');
   }
 
   /**
