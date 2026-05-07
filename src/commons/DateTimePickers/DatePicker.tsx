@@ -1,7 +1,7 @@
 import { Button, Classes, Divider, HTMLSelect } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Matcher } from 'react-day-picker';
 import {
   DayPicker,
