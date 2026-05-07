@@ -205,6 +205,8 @@ const WorkspaceSaga = combineSagaHandlers({
           }))
         );
         channel.close();
+      } else {
+        yield call(action.payload.callback, null, []);
       }
       return;
     }
