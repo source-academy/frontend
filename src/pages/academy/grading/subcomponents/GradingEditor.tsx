@@ -11,7 +11,7 @@ import {
   Pre
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { useDispatch } from 'react-redux';
 import { AutogradingResult, LLMPrompt } from 'src/commons/assessment/AssessmentTypes';
@@ -21,8 +21,7 @@ import SessionActions from '../../../../commons/application/actions/SessionActio
 import ControlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
 import { Prompt } from '../../../../commons/ReactRouterPrompt';
-import { postGenerateComments } from '../../../../commons/sagas/RequestsSaga';
-import { saveFinalComment } from '../../../../commons/sagas/RequestsSaga';
+import { postGenerateComments, saveFinalComment } from '../../../../commons/sagas/RequestsSaga';
 import { getPrettyDate } from '../../../../commons/utils/DateHelper';
 import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper';
 import {

@@ -10,7 +10,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { type ColDef, type GridApi, type GridReadyEvent, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSession } from 'src/commons/utils/Hooks';
 
 import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';

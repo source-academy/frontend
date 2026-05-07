@@ -1,5 +1,3 @@
-import type { JSX } from 'react';
-
 import { Config } from './Config';
 import { Data, Step } from './dataVisualizerTypes';
 import { Tree } from './tree/Tree';
@@ -254,7 +252,7 @@ export default class DataVisualizer {
     this.steps.push(step);
   }
 
-  private createDrawing(xs: Data, key: number): JSX.Element {
+  private createDrawing(xs: Data, key: number): React.ReactElement {
     const treeDrawer = Tree.fromSourceStructure(xs).draw();
 
     // To account for overflow to the left side due to a backward arrow

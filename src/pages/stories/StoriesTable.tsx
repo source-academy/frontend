@@ -2,7 +2,7 @@ import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, themeQuartz } from 'ag-grid-community';
 import { AgGridReact, CustomCellRendererProps } from 'ag-grid-react';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import { StoryListView } from 'src/features/stories/StoriesTypes';
 import classes from 'src/styles/Stories.module.scss';

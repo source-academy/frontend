@@ -14,7 +14,7 @@ import {
 } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Translation } from 'react-i18next';
 import { type Location, NavLink, Route, useLocation } from 'react-router';
 import { i18nDefaultLangKeys } from 'src/i18n/i18next';
@@ -100,7 +100,6 @@ const NavigationBar: React.FC = () => {
     enableAchievements,
     enableOverallLeaderboard,
     enableContestLeaderboard,
-    enableSourcecast,
     enableStories,
     assessmentConfigurations
   } = useSession();
@@ -123,12 +122,6 @@ const NavigationBar: React.FC = () => {
 
   const fullAcademyNavbarLeftCommonInfo: NavbarEntryInfo[] = useMemo(() => {
     return [
-      {
-        to: `/courses/${courseId}/sourcecast`,
-        icon: IconNames.MUSIC,
-        text: 'Sourcecast',
-        disabled: !(isEnrolledInACourse && enableSourcecast)
-      },
       {
         to: '/playground',
         icon: IconNames.CODE,
@@ -164,7 +157,6 @@ const NavigationBar: React.FC = () => {
   }, [
     courseId,
     isEnrolledInACourse,
-    enableSourcecast,
     enableStories,
     isLoggedIn,
     enableAchievements,
@@ -221,7 +213,6 @@ const NavigationBar: React.FC = () => {
       '/playground',
       '/sicpjs',
       '/contributors',
-      `/courses/${courseId}/sourcecast`,
       `/courses/${courseId}/achievements`,
       `/courses/${courseId}/leaderboard`
     ];
@@ -316,7 +307,6 @@ const NavigationBar: React.FC = () => {
       <SentryRoutes>
         <Route path="/playground/*" element={null} />
         <Route path="/contributors" element={null} />
-        <Route path="/courses/:courseId/sourcecast" element={null} />
         <Route path="/courses/:courseId/achievements" element={null} />
         <Route path="/courses/:courseId/leaderboard/*" element={null} />
         <Route path="/sicpjs/:section?" element={<SicpNavigationBar />} />

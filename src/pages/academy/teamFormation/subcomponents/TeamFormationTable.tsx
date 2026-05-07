@@ -12,7 +12,7 @@ import {
   Row,
   useReactTable
 } from '@tanstack/react-table';
-import React, { useState } from 'react';
+import { Fragment, useState } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
 import { objectKeys } from 'src/commons/utils/TypeHelper';
@@ -41,12 +41,12 @@ const columns = [
     header: 'Students',
     cell: info =>
       info.getValue().map((name: string, index: number) => (
-        <React.Fragment key={index}>
+        <Fragment key={index}>
           <Filterable column={info.column} value={name}>
             {name}
           </Filterable>
           {', '}
-        </React.Fragment>
+        </Fragment>
       )),
     filterFn: (row, id: string | number, filterValue: any): boolean => {
       const rowValue = row.original[id as keyof typeof row.original];

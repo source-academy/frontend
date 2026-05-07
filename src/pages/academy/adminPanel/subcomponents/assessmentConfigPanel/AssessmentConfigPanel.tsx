@@ -9,7 +9,7 @@ import {
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { cloneDeep, isEqual } from 'lodash';
-import React, {
+import {
   forwardRef,
   useCallback,
   useEffect,
@@ -63,7 +63,7 @@ const AssessmentConfigPanel: WithImperativeApi<
   React.FC<Props>
 > = forwardRef<ImperativeAssessmentConfigPanel, Props>(
   ({ setHasChangesAssessmentConfig, initialConfigs }, imperativeRef) => {
-    const gridApi = React.useRef<GridApi<AssessmentConfiguration>>(null);
+    const gridApi = useRef<GridApi<AssessmentConfiguration>>(null);
     // Create a mutable copy of the initialConfigs to track changes
     // to prevent UI flicker during state changes.
     const tableState = useRef(cloneDeep(initialConfigs));

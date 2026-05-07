@@ -1,6 +1,5 @@
 import { Dialog, DialogBody, HTMLSelect } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 import { useNavigate } from 'react-router';
 
 import { Role } from '../application/ApplicationTypes';

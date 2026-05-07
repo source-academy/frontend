@@ -1,5 +1,4 @@
 import { ECE } from 'java-slang';
-import React from 'react';
 import { Group } from 'react-konva';
 
 import { Visible } from '../../components/Visible';

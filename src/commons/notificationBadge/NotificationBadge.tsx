@@ -1,5 +1,4 @@
 import { Intent, Popover, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core';
-import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import SessionActions from '../application/actions/SessionActions';

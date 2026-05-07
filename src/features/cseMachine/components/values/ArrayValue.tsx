@@ -1,5 +1,4 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import React from 'react';
 import { Group } from 'react-konva';
 
 import CseMachine from '../../CseMachine';

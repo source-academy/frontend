@@ -1,6 +1,6 @@
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
 import { useSession } from 'src/commons/utils/Hooks';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
@@ -100,13 +100,6 @@ const getStaffNavlinkInfo = ({
       text: 'Dashboard',
       disabled: !isStaffOrAdmin,
       hiddenInBreakpoints: ['xs', 'sm']
-    },
-    {
-      to: `/courses/${courseId}/sourcereel`,
-      icon: IconNames.MOBILE_VIDEO,
-      text: 'Sourcereel',
-      disabled: !isStaffOrAdmin,
-      hiddenInBreakpoints: ['xs', 'sm', 'md']
     },
     {
       to: `/courses/${courseId}/teamformation`,

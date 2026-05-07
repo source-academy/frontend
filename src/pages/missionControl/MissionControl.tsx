@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Navigate, useParams } from 'react-router';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';

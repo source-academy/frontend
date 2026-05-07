@@ -1,8 +1,0 @@
-const translations = {
-  sourcecast: {
-    titleDescription: 'Title: {{title}}\nDescription: {{description}}',
-    introduction: 'Welcome to Sourcecast!'
-  }
-};
-
-export default translations;

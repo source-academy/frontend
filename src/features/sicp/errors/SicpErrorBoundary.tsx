@@ -1,9 +1,9 @@
-import { Component, ErrorInfo, ReactNode } from 'react';
+import { Component } from 'react';
 
 import getSicpError, { SicpErrorType } from './SicpErrors';
 
 type Props = {
-  children: ReactNode;
+  children: React.ReactNode;
 };
 
 type State = {
@@ -20,7 +20,7 @@ class SicpErrorBoundary extends Component<Props, State> {
     return { hasError: true };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  public componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('Uncaught error:', error, errorInfo);
   }
 

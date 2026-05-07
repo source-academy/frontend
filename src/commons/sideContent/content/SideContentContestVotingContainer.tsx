@@ -1,17 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
 import { ContestEntry } from '../../assessment/AssessmentTypes';
 import SideContentContestVoting from './SideContentContestVoting';
 
-export type SideContentContestVotingContainerProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+export type SideContentContestVotingContainerProps = {
   handleContestEntryClick: (submissionId: number, answer: string) => void;
   handleSave: (votingSubmission: ContestEntry[]) => void;
-};
-
-type StateProps = {
   canSave: boolean;
   contestEntries: ContestEntry[];
 };

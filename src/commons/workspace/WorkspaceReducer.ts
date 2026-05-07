@@ -2,8 +2,6 @@ import { createReducer, type Reducer } from '@reduxjs/toolkit';
 import { castDraft, type Draft } from 'immer';
 import { type SourceError } from 'js-slang/dist/errors/base';
 
-import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
-import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
 import { logOut } from '../application/actions/CommonsActions';
 import InterpreterActions from '../application/actions/InterpreterActions';
 import {
@@ -45,32 +43,6 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> 
   state = defaultWorkspaceManager,
   action
 ) => {
-  const workspaceLocation = getWorkspaceLocation(action);
-  switch (workspaceLocation) {
-    case 'sourcecast': {
-      const sourcecastState = SourcecastReducer(state.sourcecast, action);
-      if (sourcecastState === state.sourcecast) {
-        break;
-      }
-      return {
-        ...state,
-        sourcecast: sourcecastState
-      };
-    }
-    case 'sourcereel': {
-      const sourcereelState = SourcereelReducer(state.sourcereel, action);
-      if (sourcereelState === state.sourcereel) {
-        break;
-      }
-      return {
-        ...state,
-        sourcereel: sourcereelState
-      };
-    }
-    default:
-      break;
-  }
-
   // state = oldWorkspaceReducer(state, action);
   state = newWorkspaceReducer(state, action);
   return state;

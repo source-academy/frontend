@@ -1,5 +1,5 @@
 import { TextArea } from '@blueprintjs/core';
-import React, { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Markdown from '../../../Markdown';
 
@@ -10,9 +10,9 @@ type Props = {
 };
 
 const SideContentMarkdownEditor: React.FC<Props> = ({ allowEdits, content, setContent }) => {
-  const [editorModeOn, setEditorModeOn] = React.useState(false);
+  const [editorModeOn, setEditorModeOn] = useState(false);
 
-  const node = React.useRef<HTMLDivElement>(null);
+  const node = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClick(event: any) {

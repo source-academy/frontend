@@ -36,8 +36,6 @@ const locations: ReadonlyArray<WorkspaceLocation> = [
   'assessment',
   'grading',
   'playground',
-  'sourcecast',
-  'sourcereel',
   'sicp'
 ] as const;
 
@@ -60,14 +58,6 @@ function generateDefaultWorkspace(payload: any = {}): WorkspaceManagerState {
     },
     playground: {
       ...defaultWorkspaceManager.playground,
-      ...cloneDeep(payload)
-    },
-    sourcecast: {
-      ...defaultWorkspaceManager.sourcecast,
-      ...cloneDeep(payload)
-    },
-    sourcereel: {
-      ...defaultWorkspaceManager.sourcereel,
       ...cloneDeep(payload)
     },
     sicp: {

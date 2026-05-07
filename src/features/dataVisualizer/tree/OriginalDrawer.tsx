@@ -1,5 +1,4 @@
 import Konva from 'konva';
-import type { JSX } from 'react';
 import { Layer, Stage, Text } from 'react-konva';
 
 import { Config } from '../Config';
@@ -27,7 +26,7 @@ export class OriginalDrawer {
   protected runningY: number = 0;
   protected runningX2: number = 0; // for rightCOUNTER
 
-  protected drawables: JSX.Element[];
+  protected drawables: React.ReactElement[];
   protected nodeWidths: Map<TreeNode, number>;
   public width: number = 0;
   public height: number = 0;
@@ -48,7 +47,7 @@ export class OriginalDrawer {
   /**
    * Draws a tree at x, y, by calling drawNode on the root at x, y.
    */
-  draw(x: number, y: number, key: number): JSX.Element {
+  draw(x: number, y: number, key: number): React.ReactElement {
     if (this.tree.rootNode instanceof DataTreeNode) {
       const text = toText(this.tree.rootNode.data);
       const textConfig = {
@@ -118,7 +117,7 @@ export class OriginalDrawer {
 
       const isBackwardArrow = arrowProps.from.y >= arrowProps.to.y;
 
-      let arrow: JSX.Element;
+      let arrow: React.ReactElement;
 
       if (isBackwardArrow) {
         // Update the minX and minY, in case overflow to the top or left happens

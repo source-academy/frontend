@@ -85,7 +85,6 @@ test('SET_COURSE_CONFIGURATION works correctly', () => {
     viewable: true,
     enableGame: true,
     enableAchievements: true,
-    enableSourcecast: true,
     enableStories: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,

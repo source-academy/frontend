@@ -1,5 +1,4 @@
 import Konva from 'konva';
-import { RefObject } from 'react';
 import * as ReactKonva from 'react-konva';
 
 import { AnimatableTo, AnimationConfig } from '../animationComponents/base/Animatable';
@@ -76,7 +75,7 @@ async function testAnimationComponent<
   // node and assign it to the RefObject's `current` property
   expect(konvaNodeMap[nodeType]).toBeDefined();
   const node = Reflect.construct(konvaNodeMap[nodeType], [nodeProps]) as Konva.Shape;
-  (component.ref as Writable<RefObject<any>>).current = node;
+  (component.ref as Writable<React.RefObject<any>>).current = node;
   mockLayer.add(node);
 
   const timings = args.deltas.map(d => d * CseAnimation.defaultDuration);

@@ -1,5 +1,4 @@
 import { NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
-import React from 'react';
 import { useSession } from 'src/commons/utils/Hooks';
 
 import ContentDisplay from '../../../commons/ContentDisplay';

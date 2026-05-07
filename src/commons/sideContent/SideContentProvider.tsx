@@ -1,4 +1,4 @@
-import { type JSX, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import { useSideContent } from './SideContentHelper';
 import type {
@@ -19,7 +19,7 @@ type SideContentProviderProps = {
     changeTabsCallback: ChangeTabsCallback;
     height?: number;
     selectedTab?: SideContentType;
-  }) => JSX.Element;
+  }) => React.ReactElement;
 
   /**
    * Providing this prop changes the side content provider to uncontrolled mode. The user is

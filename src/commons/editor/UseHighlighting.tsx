@@ -1,15 +1,15 @@
 import { Ace, Range as AceRange } from 'ace-builds';
 import { createContext, getAllOccurrencesInScope, getScope } from 'js-slang';
-import React from 'react';
+import { useCallback, useRef } from 'react';
 
 import { EditorHook } from './Editor';
 
 const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
-  const propsRef = React.useRef(inProps);
+  const propsRef = useRef(inProps);
   propsRef.current = inProps;
-  const markerIdsRef = React.useRef<Array<number>>([]);
+  const markerIdsRef = useRef<Array<number>>([]);
 
-  const handleVariableHighlighting = React.useCallback(() => {
+  const handleVariableHighlighting = useCallback(() => {
     // using Ace Editor's way of highlighting as seen here: https://github.com/ajaxorg/ace/blob/master/lib/ace/editor.js#L497
     // We use async blocks so we don't block the browser during editing
 
@@ -43,7 +43,7 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
     }, 10);
   }, [reactAceRef]);
 
-  const handleHighlightScope = React.useCallback(() => {
+  const handleHighlightScope = useCallback(() => {
     if (!reactAceRef.current) {
       return;
     }
@@ -77,14 +77,14 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
   }, [reactAceRef]);
 
   const { onChange: prevOnChange, onCursorChange: prevOnCursorChange } = outProps;
-  outProps.onChange = React.useCallback(
+  outProps.onChange = useCallback(
     (value: string, event?: any) => {
       handleVariableHighlighting();
       prevOnChange?.(value, event);
     },
     [handleVariableHighlighting, prevOnChange]
   );
-  outProps.onCursorChange = React.useCallback(
+  outProps.onCursorChange = useCallback(
     (value: any, event?: any) => {
       handleVariableHighlighting();
       prevOnCursorChange?.(value, event);

@@ -1,6 +1,6 @@
 import { ECE } from 'java-slang';
 import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import { createRef } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 
 import { defaultBackgroundColor } from '../CseMachineUtils';
@@ -21,7 +21,7 @@ export class CseMachine {
   /** function to highlight editor lines */
   public static setEditorHighlightedLines: SetEditorHighlightedLines;
 
-  public static stageRef: RefObject<any> = React.createRef();
+  public static stageRef: React.RefObject<any> = createRef();
   /** scale factor for zooming and out of canvas */
   public static scaleFactor = 1.02;
 

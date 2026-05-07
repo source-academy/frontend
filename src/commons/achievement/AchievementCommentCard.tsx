@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import classes from 'src/styles/AchievementCommentCard.module.scss';
 

@@ -1,5 +1,4 @@
 import { Property } from 'csstype';
-import React from 'react';
 
 const defaultStyles: React.CSSProperties = {
   display: 'flex'

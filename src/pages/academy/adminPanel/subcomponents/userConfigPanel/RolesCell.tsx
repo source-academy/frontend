@@ -1,5 +1,5 @@
 import { HTMLSelect, Popover, Position } from '@blueprintjs/core';
-import React from 'react';
+import { useCallback } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
 
@@ -13,7 +13,7 @@ type Props = {
 const RolesCell: React.FC<Props> = props => {
   const { data } = props;
 
-  const changeHandler = React.useCallback(
+  const changeHandler = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       props.handleUpdateUserRole(data.courseRegId, e.target.value as Role);
     },

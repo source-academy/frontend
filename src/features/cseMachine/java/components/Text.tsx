@@ -1,4 +1,3 @@
-import React from 'react';
 import { Group as KonvaGroup, Label as KonvaLabel, Text as KonvaText } from 'react-konva';
 
 import { Visible } from '../../components/Visible';

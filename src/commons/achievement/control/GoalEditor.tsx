@@ -1,10 +1,10 @@
-import React, { type JSX, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 import EditableGoal from './goalEditor/EditableGoal';
 import GoalAdder from './goalEditor/GoalAdder';
 
-let editableGoals: JSX.Element[] = [];
+let editableGoals: React.ReactElement[] = [];
 
 type Props = {
   requestPublish: () => void;

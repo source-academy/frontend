@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { useFullscreenElement } from '@mantine/hooks';
 import { Enable, NumberSize, Resizable, ResizableProps, ResizeCallback } from 're-resizable';
 import { Direction } from 're-resizable/lib/resizer';
-import React, { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
 import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
@@ -14,13 +14,8 @@ import SideBar, { SideBarTab } from '../sideBar/SideBar';
 import SideContent, { SideContentProps } from '../sideContent/SideContent';
 import { useDimensions, useTypedSelector } from '../utils/Hooks';
 
-export type WorkspaceProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+export type WorkspaceProps = {
   handleSideContentHeightChange: (height: number) => void;
-};
-
-type StateProps = {
   // Either editorProps or mcqProps must be provided
   controlBarProps: ControlBarProps;
   editorContainerProps?: EditorContainerProps;
@@ -196,8 +191,8 @@ const Workspace: React.FC<WorkspaceProps> = props => {
     fullscreen: isFullscreen
   } = useFullscreenElement<HTMLDivElement>();
 
-  const fullscreenContainerRef = React.useRef<HTMLDivElement | null>(null);
-  const setFullscreenRefs = React.useCallback(
+  const fullscreenContainerRef = useRef<HTMLDivElement | null>(null);
+  const setFullscreenRefs = useCallback(
     (node: HTMLDivElement | null) => {
       fullscreenContainerRef.current = node;
       fullscreenRef(node);

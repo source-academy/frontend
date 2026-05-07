@@ -1,6 +1,6 @@
 import Konva from 'konva';
 import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import { createRef } from 'react';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
@@ -23,10 +23,10 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   target: Target | undefined;
   faded: boolean = false;
   protected _visible: boolean = true;
-  private pathRef: RefObject<Konva.Path | null> = React.createRef();
-  private sourceSegmentPathRef: RefObject<Konva.Path | null> = React.createRef();
-  private sourceSegmentGroupRef: RefObject<Konva.Group | null> = React.createRef();
-  private arrowHeadRef: RefObject<Konva.Arrow | null> = React.createRef();
+  private pathRef: React.RefObject<Konva.Path | null> = createRef();
+  private sourceSegmentPathRef: React.RefObject<Konva.Path | null> = createRef();
+  private sourceSegmentGroupRef: React.RefObject<Konva.Group | null> = createRef();
+  private arrowHeadRef: React.RefObject<Konva.Arrow | null> = createRef();
 
   // Check if this arrow is selected
   protected isSelected(): boolean {

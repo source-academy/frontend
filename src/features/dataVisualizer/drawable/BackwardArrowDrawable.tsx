@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { Arrow } from 'react-konva';
 
 import { Config } from '../Config';
@@ -63,4 +63,4 @@ const BackwardArrowDrawable: React.FC<Props> = ({ from, to }) => {
   );
 };
 
-export default React.memo(BackwardArrowDrawable);
+export default memo(BackwardArrowDrawable);

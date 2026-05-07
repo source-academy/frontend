@@ -1,6 +1,5 @@
 import { Intent, type MaybeElement, Spinner, SpinnerSize, Tag } from '@blueprintjs/core';
 import { type IconName, IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 import type { SaveStatus } from '../workspace/WorkspaceTypes';
 
@@ -32,7 +31,7 @@ const statusConfig: Record<Exclude<SaveStatus, 'idle'>, StatusConfig> = {
   }
 };
 
-export const ControlBarSaveStatusIndicator: React.FC<Props> = ({ saveStatus }) => {
+const ControlBarSaveStatusIndicator: React.FC<Props> = ({ saveStatus }) => {
   if (saveStatus === 'idle') {
     return null;
   }
@@ -45,3 +44,5 @@ export const ControlBarSaveStatusIndicator: React.FC<Props> = ({ saveStatus }) =
     </Tag>
   );
 };
+
+export default ControlBarSaveStatusIndicator;

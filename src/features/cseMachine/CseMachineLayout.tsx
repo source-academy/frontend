@@ -6,7 +6,7 @@ import { Group as KonvaGroupNode } from 'konva/lib/Group';
 import { Layer as KonvaLayerNode } from 'konva/lib/Layer';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Stage } from 'konva/lib/Stage';
-import React, { RefObject } from 'react';
+import { createRef } from 'react';
 import {
   Group as KonvaGroup,
   Layer as KonvaLayer,
@@ -124,17 +124,17 @@ export class Layout {
   static currentStackTruncDark: React.ReactNode;
   static currentStackLight: React.ReactNode;
   static currentStackTruncLight: React.ReactNode;
-  static stageRef: RefObject<Stage | null> = React.createRef();
-  static contentGroupRef: RefObject<KonvaGroupNode | null> = React.createRef();
-  static animationGroupRef: RefObject<KonvaGroupNode | null> = React.createRef();
-  static arrowUnderlayLayerRef: RefObject<KonvaLayerNode | null> = React.createRef();
+  static stageRef: React.RefObject<Stage | null> = createRef();
+  static contentGroupRef: React.RefObject<KonvaGroupNode | null> = createRef();
+  static animationGroupRef: React.RefObject<KonvaGroupNode | null> = createRef();
+  static arrowUnderlayLayerRef: React.RefObject<KonvaLayerNode | null> = createRef();
   static underlayArrows: React.ReactNode[] = [];
   static overlayNodes: React.ReactNode[] = [];
 
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
   static invisiblePaddingHorizontal: number = 300;
-  static scrollContainerRef: RefObject<HTMLDivElement | null> = React.createRef();
+  static scrollContainerRef: React.RefObject<HTMLDivElement | null> = createRef();
 
   static resetUnderlayArrows() {
     Layout.underlayArrows = [];

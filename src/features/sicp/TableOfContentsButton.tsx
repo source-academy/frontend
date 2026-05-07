@@ -1,5 +1,3 @@
-import React from 'react';
-
 import ControlButton from '../../commons/ControlButton';
 
 type TableOfContentsButtonProps = {

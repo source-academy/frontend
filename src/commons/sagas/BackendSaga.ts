@@ -4,8 +4,6 @@ import { all, call, fork, put, select } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import DashboardActions from 'src/features/dashboard/DashboardActions';
 import GroundControlActions from 'src/features/groundControl/GroundControlActions';
-import SourcecastActions from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
-import SourceRecorderActions from 'src/features/sourceRecorder/SourceRecorderActions';
 import { postNewStoriesUsers } from 'src/features/stories/storiesComponents/BackendAccess';
 import type { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
@@ -17,8 +15,6 @@ import {
   type GradingQuestion,
   SortStates
 } from '../../features/grading/GradingTypes';
-import type { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
-import SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
 import type { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
 import SessionActions from '../application/actions/SessionActions';
 import { type OverallState, Role } from '../application/ApplicationTypes';
@@ -52,7 +48,6 @@ import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   checkAnswerLastModifiedAt,
   deleteAssessment,
-  deleteSourcecastEntry,
   deleteTeam,
   getAssessment,
   getAssessmentConfigs,
@@ -63,7 +58,6 @@ import {
   getGradingSummary,
   getLatestCourseRegistrationAndConfiguration,
   getNotifications,
-  getSourcecastIndex,
   getStudents,
   getTeamFormationOverview,
   getTeamFormationOverviews,
@@ -79,7 +73,6 @@ import {
   postGrading,
   postReautogradeAnswer,
   postReautogradeSubmission,
-  postSourcecast,
   postTeams,
   postUnsubmit,
   postUploadTeams,
@@ -720,62 +713,6 @@ const newBackendSagaTwo = combineSagaHandlers({
     if (!resp || !resp.ok) {
       return yield handleResponseError(resp);
     }
-  },
-  [SourcereelActions.deleteSourcecastEntry.type]: function* (action) {
-    const role: Role = yield select((state: OverallState) => state.session.role!);
-    if (role === Role.Student) {
-      return yield call(showWarningMessage, 'Only staff can delete sourcecasts.');
-    }
-
-    const tokens: Tokens = yield selectTokens();
-    const { id } = action.payload;
-
-    const resp: Response | null = yield deleteSourcecastEntry(id, tokens);
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
-    }
-
-    const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
-    if (sourcecastIndex) {
-      yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
-    }
-
-    yield call(showSuccessMessage, 'Deleted successfully!', 1000);
-  },
-  [SourcecastActions.fetchSourcecastIndex.type]: function* (action) {
-    const tokens: Tokens = yield selectTokens();
-
-    const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
-    if (sourcecastIndex) {
-      yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
-    }
-  },
-  [SourceRecorderActions.saveSourcecastData.type]: function* (action) {
-    const [role, courseId]: [Role, number | undefined] = yield select((state: OverallState) => [
-      state.session.role!,
-      state.session.courseId
-    ]);
-    if (role === Role.Student) {
-      return yield call(showWarningMessage, 'Only staff can save sourcecasts.');
-    }
-
-    const { title, description, uid, audio, playbackData } = action.payload;
-    const tokens: Tokens = yield selectTokens();
-
-    const resp: Response | null = yield postSourcecast(
-      title,
-      description,
-      uid,
-      audio,
-      playbackData,
-      tokens
-    );
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
-    }
-
-    yield call(showSuccessMessage, 'Saved successfully!', 1000);
-    yield routerNavigate(`/courses/${courseId}/sourcecast`);
   },
   [WorkspaceActions.changeSublanguage.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();

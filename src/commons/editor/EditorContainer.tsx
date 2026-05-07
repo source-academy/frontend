@@ -1,9 +1,6 @@
 import _ from 'lodash';
-import React from 'react';
+import { useContext } from 'react';
 
-import SourcecastEditor, {
-  SourceRecorderEditorProps
-} from '../sourceRecorder/SourceRecorderEditor';
 import { EditorTabState } from '../workspace/WorkspaceTypes';
 import { WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import Editor, { EditorProps, EditorTabStateProps } from './Editor';
@@ -23,15 +20,7 @@ export type NormalEditorContainerProps = Omit<EditorProps, keyof EditorTabStateP
     editorVariant: 'normal';
   };
 
-export type SourcecastEditorContainerProps = Omit<
-  SourceRecorderEditorProps,
-  keyof EditorTabStateProps
-> &
-  OwnProps & {
-    editorVariant: 'sourcecast';
-  };
-
-export type EditorContainerProps = NormalEditorContainerProps | SourcecastEditorContainerProps;
+export type EditorContainerProps = NormalEditorContainerProps;
 
 export const convertEditorTabStateToProps = (
   editorTab: EditorTabState,
@@ -50,14 +39,8 @@ const createNormalEditorTab =
     return <Editor {...editorProps} {...editorTabStateProps} />;
   };
 
-const createSourcecastEditorTab =
-  (editorProps: Omit<SourceRecorderEditorProps, keyof EditorTabStateProps>) =>
-  (editorTabStateProps: EditorTabStateProps) => {
-    return <SourcecastEditor {...editorProps} {...editorTabStateProps} />;
-  };
-
 const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerProps) => {
-  const [workspaceSettings] = React.useContext(WorkspaceSettingsContext)!;
+  const [workspaceSettings] = useContext(WorkspaceSettingsContext)!;
   const {
     baseFilePath,
     isFolderModeEnabled,
@@ -69,10 +52,7 @@ const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerP
   } = props;
   editorProps.editorBinding = workspaceSettings.editorBinding;
 
-  const createEditorTab =
-    editorProps.editorVariant === 'sourcecast'
-      ? createSourcecastEditorTab(editorProps)
-      : createNormalEditorTab(editorProps);
+  const createEditorTab = createNormalEditorTab(editorProps);
 
   if (activeEditorTabIndex === null) {
     return (
