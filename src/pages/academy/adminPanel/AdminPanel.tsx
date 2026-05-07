@@ -1,5 +1,5 @@
 import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';

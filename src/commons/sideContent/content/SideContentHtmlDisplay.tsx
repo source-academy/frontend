@@ -1,7 +1,7 @@
 import { IconNames } from '@blueprintjs/icons';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { t } from 'i18next';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { connect, MapDispatchToProps } from 'react-redux';
 import { ResultOutput } from 'src/commons/application/ApplicationTypes';
