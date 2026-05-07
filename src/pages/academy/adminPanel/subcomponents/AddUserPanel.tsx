@@ -15,7 +15,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { type ColDef, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { uniqBy } from 'lodash';
-import { type JSX, useState } from 'react';
+import { useState } from 'react';
 import { useCSVReader } from 'react-papaparse';
 import { Role } from 'src/commons/application/ApplicationTypes';
 
@@ -46,7 +46,7 @@ const defaultColumnDefs: ColDef = {
 
 const AddUserPanel: React.FC<Props> = props => {
   const [users, setUsers] = useState<UsernameRoleGroup[]>([]);
-  const [invalidCsvMsg, setInvalidCsvMsg] = useState<string | JSX.Element>('');
+  const [invalidCsvMsg, setInvalidCsvMsg] = useState<string | React.ReactElement>('');
   const { CSVReader } = useCSVReader();
 
   const grid = (

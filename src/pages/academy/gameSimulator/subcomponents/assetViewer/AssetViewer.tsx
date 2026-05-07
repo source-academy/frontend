@@ -1,6 +1,6 @@
 import { Icon, Tab, Tabs, Tooltip, Tree, TreeNodeInfo } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
-import { type JSX, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
 import {
   deleteS3File,
@@ -25,7 +25,7 @@ const AssetViewer: React.FC = () => {
   const [assetTree, setAssetTree] = useState<TreeNodeInfo[]>([]);
 
   useEffect(() => {
-    const deleteIcon = (filePath: string): JSX.Element => {
+    const deleteIcon = (filePath: string): React.ReactElement => {
       const deleteFile = async () => {
         const confirm = window.confirm(`Are you sure you want to delete ${filePath}?`);
         alert(

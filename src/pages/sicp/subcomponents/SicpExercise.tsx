@@ -1,5 +1,5 @@
 import { Button, Card, Collapse, Elevation } from '@blueprintjs/core';
-import { type JSX, useState } from 'react';
+import { useState } from 'react';
 
 export const noSolutionPlaceholder = (
   <span>
@@ -15,8 +15,8 @@ export const noSolutionPlaceholder = (
 
 type Props = {
   title: string;
-  body: JSX.Element;
-  solution: JSX.Element | undefined;
+  body: React.ReactElement;
+  solution: React.ReactElement | undefined;
 };
 
 const SicpExercise: React.FC<Props> = props => {
