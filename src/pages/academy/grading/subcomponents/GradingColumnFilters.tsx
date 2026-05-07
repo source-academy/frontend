@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { ColumnFilterBadge } from './GradingBadges';
 
 type Props = {
