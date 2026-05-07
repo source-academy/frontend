@@ -16,6 +16,7 @@ const reactRestrictedImports = [
   'ComponentType',
   'JSX',
   'CSSProperties',
+  'ErrorInfo',
   'MouseEvent',
   'KeyboardEvent',
   'RefObject'
