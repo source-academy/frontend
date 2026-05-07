@@ -18,8 +18,6 @@ export const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> =
   grading: '',
   playground: '/playground',
   sicp: '/sicp',
-  sourcecast: '',
-  sourcereel: '',
   stories: '' // TODO: Investigate if stories workspace base path is needed
 };
 
