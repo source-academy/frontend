@@ -26,7 +26,16 @@ const restrictedImports = [
     name: 'react',
     importNames: [importName],
     message: `Use the fully qualified name React.${importName} instead of importing ${importName} directly.`
-  }))
+  })),
+  {
+    name: 'react-redux',
+    importNames: [
+      // TODO: Create typed hook for useDispatch
+      // "useDispatch",
+      'useSelector'
+    ],
+    message: 'Use the typed hook "useTypedSelector" instead.'
+  }
 ];
 
 export default tseslint.config(
@@ -58,22 +67,6 @@ export default tseslint.config(
       'react-hooks/refs': 'warn', // TODO: Fix and delete (default is error)
       'react-hooks/use-memo': 'warn', // TODO: Fix and delete (default is error)
       'no-empty': 'warn',
-      'no-restricted-imports': [
-        'error',
-        {
-          paths: [
-            {
-              name: 'react-redux',
-              importNames: [
-                // TODO: Create typed hook for useDispatch
-                // "useDispatch",
-                'useSelector'
-              ],
-              message: 'Use the typed hook "useTypedSelector" instead.'
-            }
-          ]
-        }
-      ],
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-duplicate-enum-values': 'off',
       '@typescript-eslint/no-empty-function': 'off',
