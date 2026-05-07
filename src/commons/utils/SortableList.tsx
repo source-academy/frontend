@@ -16,13 +16,13 @@ import {
   verticalListSortingStrategy
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import React from 'react';
+import { memo, useCallback, useState } from 'react';
 
 type SortableItemProps = {
   id: string;
 };
 
-const SortableItem = React.memo(({ id }: SortableItemProps) => {
+const SortableItem = memo(({ id }: SortableItemProps) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
 
   const style = {
@@ -42,7 +42,7 @@ type SortableListProps = {
   onSortEnd: (event: DragEndEvent) => void;
 };
 
-export const SortableList = React.memo(({ items, onSortEnd }: SortableListProps) => {
+export const SortableList = memo(({ items, onSortEnd }: SortableListProps) => {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -62,9 +62,9 @@ export const SortableList = React.memo(({ items, onSortEnd }: SortableListProps)
 });
 
 export const useSortableList = () => {
-  const [items, setItems] = React.useState<string[]>([]);
+  const [items, setItems] = useState<string[]>([]);
 
-  const onSortEnd = React.useCallback((event: DragEndEvent) => {
+  const onSortEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
 
     if (over && active.id !== over.id) {

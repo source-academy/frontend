@@ -51,11 +51,11 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
   };
   const handleFormatDate = (date: Date) => dayjs(date).format(dateDisplayFormat);
 
-  const handleDateChange = React.useCallback(
+  const handleDateChange = useCallback(
     (selectedDate: string | null) => setNewDate(dayjs(selectedDate)),
     []
   );
-  const handleDateError = React.useCallback(() => {
+  const handleDateError = useCallback(() => {
     // Reset date to current date if user enters an invalid date string
     showWarningMessage('Failed to parse date string! Defaulting to current date.', 2000);
     setNewDate(currentDate);
