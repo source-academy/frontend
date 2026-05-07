@@ -2,7 +2,7 @@ import { AppInstr, ArrLitInstr, AssmtInstr, InstrType } from 'js-slang/dist/cse-
 import { Node } from 'js-slang/dist/types';
 import { Layer } from 'konva/lib/Layer';
 import { Easings } from 'konva/lib/Tween';
-import React from 'react';
+import { createRef } from 'react';
 
 import { ArrayAccessAnimation } from './animationComponents/ArrayAccessAnimation';
 import { ArrayAssignmentAnimation } from './animationComponents/ArrayAssignmentAnimation';
@@ -38,7 +38,7 @@ export class CseAnimation {
   private static currentFrame: Frame;
   private static previousFrame: Frame;
 
-  static layerRef = React.createRef<Layer>();
+  static layerRef = createRef<Layer>();
   static getLayer(): Layer | null {
     return this.layerRef.current;
   }

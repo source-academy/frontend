@@ -15,7 +15,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { type ColDef, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { uniqBy } from 'lodash';
-import React, { type JSX } from 'react';
+import { type JSX, useState } from 'react';
 import { useCSVReader } from 'react-papaparse';
 import { Role } from 'src/commons/application/ApplicationTypes';
 
@@ -45,8 +45,8 @@ const defaultColumnDefs: ColDef = {
 };
 
 const AddUserPanel: React.FC<Props> = props => {
-  const [users, setUsers] = React.useState<UsernameRoleGroup[]>([]);
-  const [invalidCsvMsg, setInvalidCsvMsg] = React.useState<string | JSX.Element>('');
+  const [users, setUsers] = useState<UsernameRoleGroup[]>([]);
+  const [invalidCsvMsg, setInvalidCsvMsg] = useState<string | JSX.Element>('');
   const { CSVReader } = useCSVReader();
 
   const grid = (
@@ -66,7 +66,7 @@ const AddUserPanel: React.FC<Props> = props => {
   );
 
   const htmlSelectOptions = [...Constants.authProviders.entries()].map(([id, _]) => id);
-  const [provider, setProvider] = React.useState(htmlSelectOptions[0]);
+  const [provider, setProvider] = useState(htmlSelectOptions[0]);
 
   const validateCsvInput = (results: any) => {
     const { data, errors }: { data: string[][]; errors: any[] } = results;

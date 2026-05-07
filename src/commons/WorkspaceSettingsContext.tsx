@@ -1,4 +1,4 @@
-import React from 'react';
+import { createContext, type Dispatch, type SetStateAction } from 'react';
 
 export enum EditorBinding {
   NONE = '',
@@ -19,6 +19,6 @@ export const defaultWorkspaceSettings: WorkspaceSettings = {
  *
  * The local storage state is initialized in Application.tsx via the useLocalStorageState hook.
  */
-export const WorkspaceSettingsContext = React.createContext<
-  [WorkspaceSettings, React.Dispatch<React.SetStateAction<WorkspaceSettings>>] | null
+export const WorkspaceSettingsContext = createContext<
+  [WorkspaceSettings, Dispatch<SetStateAction<WorkspaceSettings>>] | null
 >(null);

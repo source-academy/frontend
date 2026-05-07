@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
@@ -117,6 +117,6 @@ export class PrimitiveValue extends Value {
       this.text.setX(this.x());
       this.text.setY(this.y());
     }
-    return <React.Fragment key={Layout.key++}>{this.text.draw()}</React.Fragment>;
+    return <Fragment key={Layout.key++}>{this.text.draw()}</Fragment>;
   }
 }

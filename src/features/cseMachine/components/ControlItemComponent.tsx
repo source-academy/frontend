@@ -1,5 +1,5 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import React from 'react';
+import { createRef, Fragment, type RefObject } from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
 import CseMachine from '../CseMachine';
@@ -25,7 +25,7 @@ import { Visible } from './Visible';
 export class ControlItemComponent extends Visible implements IHoverable {
   /** text to display */
   readonly text: string;
-  readonly tooltipRef: React.RefObject<any>;
+  readonly tooltipRef: RefObject<any>;
   readonly arrow?: ArrowFromControlItemComponent;
 
   constructor(
@@ -47,7 +47,7 @@ export class ControlItemComponent extends Visible implements IHoverable {
       ControlStashConfig.ControlMaxTextWidth,
       ControlStashConfig.ControlMaxTextHeight
     );
-    this.tooltipRef = React.createRef();
+    this.tooltipRef = createRef();
     this.highlightOnHover = highlightOnHover;
     this.unhighlightOnHover = unhighlightOnHover;
     this._x = ControlStashConfig.ControlPosX;
@@ -120,7 +120,7 @@ export class ControlItemComponent extends Visible implements IHoverable {
       cornerRadius: ControlStashConfig.ControlItemCornerRadius
     };
     return (
-      <React.Fragment key={Layout.key++}>
+      <Fragment key={Layout.key++}>
         <Label
           ref={this.ref}
           x={this.x()}
@@ -158,7 +158,7 @@ export class ControlItemComponent extends Visible implements IHoverable {
           />
         </Label>
         {this.arrow?.draw()}
-      </React.Fragment>
+      </Fragment>
     );
   }
 }
