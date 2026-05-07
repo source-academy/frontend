@@ -7,18 +7,13 @@ import { useFeature } from '../featureFlags/useFeature';
 import { useResponsive } from '../utils/Hooks';
 import ControlBarRunButton from './ControlBarRunButton';
 
-type ControlBarAutorunButtonProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   handleDebuggerPause: () => void;
   handleDebuggerReset: () => void;
   handleDebuggerResume: () => void;
   handleEditorEval: () => void;
   handleInterruptEval: () => void;
   handleToggleEditorAutorun?: () => void;
-};
-
-type StateProps = {
   isEntrypointFileDefined: boolean;
   isDebugging: boolean;
   isEditorAutorun?: boolean;
@@ -29,7 +24,7 @@ type StateProps = {
   sourceChapter?: number;
 };
 
-const ControlBarAutorunButtons: React.FC<ControlBarAutorunButtonProps> = props => {
+const ControlBarAutorunButtons: React.FC<Props> = props => {
   const showRunButton = !props.isDebugging && (
     <ControlBarRunButton
       handleEditorEval={props.handleEditorEval}

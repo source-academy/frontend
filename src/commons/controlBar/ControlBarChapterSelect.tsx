@@ -12,20 +12,15 @@ import { useFeature } from '../featureFlags/useFeature';
 import { useTypedSelector } from '../utils/Hooks';
 import LegacyControlBarChapterSelect from './LegacyControlBarChapterSelect';
 
-type ControlBarChapterSelectProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   handleChapterSelect?: (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => void;
-};
-
-type StateProps = {
   isFolderModeEnabled: boolean;
   sourceChapter: Chapter;
   sourceVariant: Variant;
   disabled?: boolean;
 };
 
-const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = ({
+const ControlBarChapterSelect: React.FC<Props> = ({
   isFolderModeEnabled,
   sourceChapter,
   sourceVariant,

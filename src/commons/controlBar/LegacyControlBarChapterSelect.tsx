@@ -15,13 +15,8 @@ import {
 import Constants from '../utils/Constants';
 import { useTypedSelector } from '../utils/Hooks';
 
-type ControlBarChapterSelectProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   handleChapterSelect?: (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => void;
-};
-
-type StateProps = {
   isFolderModeEnabled: boolean;
   sourceChapter: Chapter;
   sourceVariant: Variant;
@@ -68,7 +63,7 @@ const chapterRenderer: (isFolderModeEnabled: boolean) => ItemRenderer<SALanguage
 
 const ChapterSelectComponent = Select.ofType<SALanguage>();
 
-const LegacyControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = ({
+const LegacyControlBarChapterSelect: React.FC<Props> = ({
   isFolderModeEnabled,
   sourceChapter,
   sourceVariant,

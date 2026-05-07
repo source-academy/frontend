@@ -14,15 +14,10 @@ import CopyToClipboard from 'src/commons/utils/CopyToClipboard';
 import ControlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 
-type ControlBarShareButtonProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   handleGenerateLz?: () => void;
   handleShortenURL: (s: string) => void;
   handleUpdateShortURL: (s: string) => void;
-};
-
-type StateProps = {
   queryString?: string;
   shortURL?: string;
   key: string;
@@ -34,10 +29,10 @@ type State = {
   isLoading: boolean;
 };
 
-class ControlBarShareButton extends PureComponent<ControlBarShareButtonProps, State> {
+class ControlBarShareButton extends PureComponent<Props, State> {
   private shareInputElem: React.RefObject<HTMLInputElement | null>;
 
-  constructor(props: ControlBarShareButtonProps) {
+  constructor(props: Props) {
     super(props);
     this.selectShareInputText = this.selectShareInputText.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -116,7 +111,7 @@ class ControlBarShareButton extends PureComponent<ControlBarShareButtonProps, St
     );
   }
 
-  public componentDidUpdate(prevProps: ControlBarShareButtonProps) {
+  public componentDidUpdate(prevProps: Props) {
     if (this.props.shortURL !== prevProps.shortURL) {
       this.setState({ keyword: '', isLoading: false });
     }
