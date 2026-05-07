@@ -13,7 +13,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { sortBy } from 'lodash';
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useLoaderData, useParams } from 'react-router';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
@@ -144,7 +144,7 @@ const Assessment: React.FC = () => {
   }
 
   // Otherwise, render a list of assOwnProps
-  let display: JSX.Element;
+  let display: React.ReactElement;
   if (assessmentOverviews === undefined) {
     display = <NonIdealState description="Fetching assessment..." icon={<Spinner />} />;
   } else if (assessmentOverviews.length === 0) {
