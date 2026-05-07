@@ -27,19 +27,14 @@ import Constants from '../utils/Constants';
 import { getPrettyDate } from '../utils/DateHelper';
 import { exportXml, storeLocalAssessmentOverview } from '../XMLParser/XMLParserHelper';
 
-type EditingOverviewCardProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   updateEditingOverview: (overview: AssessmentOverview) => void;
-};
-
-type StateProps = {
   listingPath: string;
   overview: AssessmentOverview;
   assessmentTypes: AssessmentType[];
 };
 
-export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => {
+export const EditingOverviewCard: React.FC<Props> = props => {
   const [editingOverviewField, setEditingOverviewField] = useState('');
   const [fieldValue, setFieldValue] = useState<any>('');
   const [showOptionsOverlay, setShowOptionsOverlay] = useState(false);

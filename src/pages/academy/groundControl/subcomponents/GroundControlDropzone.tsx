@@ -8,13 +8,8 @@ import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes'
 import ControlButton from '../../../../commons/ControlButton';
 import { showWarningMessage } from '../../../../commons/utils/notifications/NotificationsHelper';
 
-export type DropzoneProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+export type DropzoneProps = {
   handleUploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) => void;
-};
-
-type StateProps = {
   assessmentConfigurations?: AssessmentConfiguration[];
 };
 

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { ControlBarSaveStatusIndicator } from '../ControlBarSaveStatusIndicator';
+import ControlBarSaveStatusIndicator from '../ControlBarSaveStatusIndicator';
 
 test('renders null when status is idle', () => {
   const { container } = render(<ControlBarSaveStatusIndicator saveStatus="idle" />);

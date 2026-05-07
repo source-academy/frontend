@@ -3,20 +3,15 @@ import { IconNames } from '@blueprintjs/icons';
 
 import ControlButton from '../ControlButton';
 
-type ControlButtonRunButtonProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   handleEditorEval: () => void;
-};
-
-type StateProps = {
   key: string;
   isEntrypointFileDefined: boolean;
   color?: string;
   className?: string;
 };
 
-export const ControlBarRunButton: React.FC<ControlButtonRunButtonProps> = props => {
+const ControlBarRunButton: React.FC<Props> = props => {
   const tooltipContent = props.isEntrypointFileDefined
     ? '...or press shift-enter in the editor'
     : 'Open a file to evaluate the program with the file as the entrypoint';
@@ -32,3 +27,5 @@ export const ControlBarRunButton: React.FC<ControlButtonRunButtonProps> = props 
     </Tooltip>
   );
 };
+
+export default ControlBarRunButton;

@@ -3,19 +3,14 @@ import { IconNames } from '@blueprintjs/icons';
 
 import ControlButton from '../ControlButton';
 
-type ControlBarSaveButtonProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   onClickSave?(): any;
-};
-
-type StateProps = {
   key: string;
   hasUnsavedChanges?: boolean;
   isDisabled?: boolean;
 };
 
-export const ControlButtonSaveButton: React.FC<ControlBarSaveButtonProps> = props => {
+const ControlButtonSaveButton: React.FC<Props> = props => {
   const saveButtonOpts = props.hasUnsavedChanges ? { intent: Intent.WARNING, minimal: false } : {};
 
   return (
@@ -28,3 +23,5 @@ export const ControlButtonSaveButton: React.FC<ControlBarSaveButtonProps> = prop
     />
   );
 };
+
+export default ControlButtonSaveButton;

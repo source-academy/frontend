@@ -11,9 +11,7 @@ import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { ReplInput } from './ReplInput';
 import type { OutputProps } from './ReplTypes';
 
-export type ReplProps = DispatchProps & StateProps & OwnProps;
-
-type StateProps = {
+export type ReplProps = {
   output: InterpreterOutput[];
   replValue: string;
   hidden?: boolean;
@@ -24,18 +22,12 @@ type StateProps = {
   externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
   showStepperPrompt?: boolean;
-};
-
-type DispatchProps = {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleReplEval: () => void;
   handleReplValueChange: (newCode: string) => void;
   onFocus?: (editor: Ace.Editor) => void;
   onBlur?: () => void;
-};
-
-type OwnProps = {
   replButtons: Array<React.ReactElement | null>;
 };
 

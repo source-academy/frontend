@@ -6,6 +6,8 @@ type Props = {
   onClick?(): any;
 };
 
-export const ControlBarResetButton: React.FC<Props> = ({ onClick }) => {
+const ControlBarResetButton: React.FC<Props> = ({ onClick }) => {
   return <ControlButton label="Reset" icon={IconNames.REPEAT} onClick={onClick} />;
 };
+
+export default ControlBarResetButton;

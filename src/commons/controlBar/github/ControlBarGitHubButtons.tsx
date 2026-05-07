@@ -24,7 +24,7 @@ type Props = {
  *
  * @param props Component properties
  */
-export const ControlBarGitHubButtons: React.FC<Props> = props => {
+const ControlBarGitHubButtons: React.FC<Props> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const filePath = props.githubSaveInfo.filePath || '';
@@ -109,3 +109,5 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
     </Tooltip>
   );
 };
+
+export default ControlBarGitHubButtons;

@@ -20,15 +20,15 @@ import {
   QuestionTypes,
   Testcase
 } from '../../../../commons/assessment/AssessmentTypes';
-import { ControlBarProps } from '../../../../commons/controlBar/ControlBar';
-import { ControlBarClearButton } from '../../../../commons/controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../../../../commons/controlBar/ControlBarEvalButton';
-import { ControlBarNextButton } from '../../../../commons/controlBar/ControlBarNextButton';
-import { ControlBarPreviousButton } from '../../../../commons/controlBar/ControlBarPreviousButton';
-import { ControlBarQuestionViewButton } from '../../../../commons/controlBar/ControlBarQuestionViewButton';
-import { ControlBarRunButton } from '../../../../commons/controlBar/ControlBarRunButton';
-import { ControlBarVersionHistoryButton } from '../../../../commons/controlBar/ControlBarVersionHistoryButton';
-import { VersionHistoryPanel } from '../../../../commons/controlBar/VersionHistoryPanel';
+import type { ControlBarProps } from '../../../../commons/controlBar/ControlBar';
+import ControlBarClearButton from '../../../../commons/controlBar/ControlBarClearButton';
+import ControlBarEvalButton from '../../../../commons/controlBar/ControlBarEvalButton';
+import ControlBarNextButton from '../../../../commons/controlBar/ControlBarNextButton';
+import ControlBarPreviousButton from '../../../../commons/controlBar/ControlBarPreviousButton';
+import ControlBarQuestionViewButton from '../../../../commons/controlBar/ControlBarQuestionViewButton';
+import ControlBarRunButton from '../../../../commons/controlBar/ControlBarRunButton';
+import ControlBarVersionHistoryButton from '../../../../commons/controlBar/ControlBarVersionHistoryButton';
+import VersionHistoryPanel from '../../../../commons/controlBar/VersionHistoryPanel';
 import { convertEditorTabStateToProps } from '../../../../commons/editor/EditorContainer';
 import { Position } from '../../../../commons/editor/EditorTypes';
 import Markdown from '../../../../commons/Markdown';

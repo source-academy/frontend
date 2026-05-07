@@ -6,6 +6,8 @@ type Props = {
   onClick?: () => void;
 };
 
-export const ControlBarVersionHistoryButton: React.FC<Props> = ({ onClick }) => {
+const ControlBarVersionHistoryButton: React.FC<Props> = ({ onClick }) => {
   return <ControlButton label="History" icon={IconNames.HISTORY} onClick={onClick} />;
 };
+
+export default ControlBarVersionHistoryButton;

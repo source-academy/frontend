@@ -19,7 +19,7 @@ import {
   setSessionDetails,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
-import { ControlBarExecutionTime } from 'src/commons/controlBar/ControlBarExecutionTime';
+import ControlBarExecutionTime from 'src/commons/controlBar/ControlBarExecutionTime';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
@@ -55,16 +55,16 @@ import {
   type SALanguage
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
-import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
-import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
-import { ControlBarGoogleDriveButtons } from '../../commons/controlBar/ControlBarGoogleDriveButtons';
-import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
-import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
-import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
-import { ControlBarToggleFolderModeButton } from '../../commons/controlBar/ControlBarToggleFolderModeButton';
-import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
+import ControlBarAutorunButtons from '../../commons/controlBar/ControlBarAutorunButtons';
+import ControlBarChapterSelect from '../../commons/controlBar/ControlBarChapterSelect';
+import ControlBarClearButton from '../../commons/controlBar/ControlBarClearButton';
+import ControlBarEvalButton from '../../commons/controlBar/ControlBarEvalButton';
+import ControlBarGoogleDriveButtons from '../../commons/controlBar/ControlBarGoogleDriveButtons';
+import ControlBarSessionButtons from '../../commons/controlBar/ControlBarSessionButton';
+import ControlBarShareButton from '../../commons/controlBar/ControlBarShareButton';
+import ControlBarStepLimit from '../../commons/controlBar/ControlBarStepLimit';
+import ControlBarToggleFolderModeButton from '../../commons/controlBar/ControlBarToggleFolderModeButton';
+import ControlBarGitHubButtons from '../../commons/controlBar/github/ControlBarGitHubButtons';
 import {
   convertEditorTabStateToProps,
   type NormalEditorContainerProps

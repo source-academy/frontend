@@ -8,16 +8,11 @@ import { createNewSession, getDocInfoFromSessionId } from '../collabEditing/Coll
 import ControlButton from '../ControlButton';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
-type ControlBarSessionButtonsProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   handleSetEditorSessionId?: (editorSessionId: string) => void;
   handleSetSessionDetails?: (
     sessionDetails: { docId: string; readOnly: boolean; owner: boolean } | null
   ) => void;
-};
-
-type StateProps = {
   isFolderModeEnabled: boolean;
   editorSessionId?: string;
   getEditorValue: () => string;
@@ -29,7 +24,7 @@ function handleError(error: any) {
   showWarningMessage(`Could not connect: ${(error && error.message) || error || 'Unknown error'}`);
 }
 
-export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
+function ControlBarSessionButtons(props: Props) {
   const joinElemRef = useRef('');
   const [sessionId, setSessionId] = useState('');
   const [defaultReadOnly, setDefaultReadOnly] = useState(true);
@@ -199,3 +194,5 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
     </Tooltip>
   );
 }
+
+export default ControlBarSessionButtons;

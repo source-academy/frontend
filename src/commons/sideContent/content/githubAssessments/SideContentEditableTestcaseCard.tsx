@@ -7,21 +7,16 @@ import { useCallback, useMemo } from 'react';
 
 import { Testcase, TestcaseTypes } from '../../../assessment/AssessmentTypes';
 
-type SideContentEditableTestcaseCardProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   setTestcaseProgram: (newProgram: string) => void;
   setTestcaseExpectedResult: (newExpectedResult: string) => void;
   handleTestcaseEval: (testcaseId: number) => void;
   deleteTestcase: (testcaseId: number) => void;
-};
-
-type StateProps = {
   index: number;
   testcase: Testcase;
 };
 
-const SideContentEditableTestcaseCard: React.FC<SideContentEditableTestcaseCardProps> = ({
+const SideContentEditableTestcaseCard: React.FC<Props> = ({
   index,
   testcase,
   setTestcaseProgram,

@@ -7,13 +7,8 @@ import { ContestEntry } from '../../assessment/AssessmentTypes';
 import { SideContentType } from '../SideContentTypes';
 import SideContentLeaderboardCard from './SideContentLeaderboardCard';
 
-export type SideContentContestLeaderboardProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+export type SideContentContestLeaderboardProps = {
   handleContestEntryClick: (submissionId: number, answer: string) => void;
-};
-
-type StateProps = {
   orderedContestEntries: ContestEntry[];
   leaderboardType: SideContentType;
 };

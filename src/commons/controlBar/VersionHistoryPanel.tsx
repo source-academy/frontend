@@ -65,7 +65,7 @@ const groupVersions = (sortedNewestFirst: CodeVersionMetadata[]): VersionGroup[]
   return groups;
 };
 
-export const VersionHistoryPanel: React.FC<Props> = ({
+const VersionHistoryPanel: React.FC<Props> = ({
   versions,
   currentCode,
   isOpen,
@@ -275,3 +275,5 @@ export const VersionHistoryPanel: React.FC<Props> = ({
     </Drawer>
   );
 };
+
+export default VersionHistoryPanel;

@@ -1,20 +1,15 @@
 import { NumericInput, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 
-type ControlBarStepLimitProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   handleChangeStepLimit?: (stepLimit: number) => void;
   handleOnBlurAutoScale?: (stepLimit: number) => void;
-};
-
-type StateProps = {
   stepLimit?: number;
   stepSize: number;
   key: string;
 };
 
-export const ControlBarStepLimit: React.FC<ControlBarStepLimitProps> = props => {
+const ControlBarStepLimit: React.FC<Props> = props => {
   /**
    * Scale the odd stepLimit into the next even integer.
    * Triggered when the input box lost focus.
@@ -38,3 +33,5 @@ export const ControlBarStepLimit: React.FC<ControlBarStepLimitProps> = props => 
     </Tooltip>
   );
 };
+
+export default ControlBarStepLimit;

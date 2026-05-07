@@ -11,26 +11,18 @@ import { getModeString, selectMode } from '../utils/AceHelper';
 import { useResponsive } from '../utils/Hooks';
 // source mode and chapter imported in Editor.tsx
 
-export type ReplInputProps = DispatchProps & StateProps & OwnProps;
-
-type DispatchProps = {
+export type ReplInputProps = {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleReplValueChange: (newCode: string) => void;
   handleReplEval: () => void;
   onFocus?: (editor: Ace.Editor) => void;
   onBlur?: () => void;
-};
-
-type StateProps = {
   replValue: string;
   sourceChapter: Chapter;
   sourceVariant: Variant;
   externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
-};
-
-type OwnProps = {
   replButtons: Array<React.ReactElement | null>;
 };
 
