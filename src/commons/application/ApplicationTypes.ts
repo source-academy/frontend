@@ -8,7 +8,6 @@ import type { LanguageDirectoryState } from '../../features/directory/LanguageDi
 import type { PluginDirectoryState } from '../../features/directory/PluginDirectoryTypes';
 import type { LeaderboardState } from '../../features/leaderboard/LeaderboardTypes';
 import type { PlaygroundState } from '../../features/playground/PlaygroundTypes';
-import type { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
 import { freshSortState } from '../../pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { defaultFeatureFlags, FeatureFlagsState } from '../featureFlags';
@@ -33,7 +32,6 @@ export type OverallState = {
   readonly leaderboard: LeaderboardState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
-  readonly stories: StoriesState;
   readonly workspaces: WorkspaceManagerState;
   readonly dashboard: DashboardState;
   readonly featureFlags: FeatureFlagsState;
@@ -118,13 +116,6 @@ export type InterpreterOutput =
 export enum Role {
   Student = 'student',
   Staff = 'staff',
-  Admin = 'admin'
-}
-
-// Must match https://github.com/source-academy/stories-backend/blob/main/internal/enums/groups/role.go
-export enum StoriesRole {
-  Standard = 'member',
-  Moderator = 'moderator',
   Admin = 'admin'
 }
 
@@ -472,10 +463,6 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
         breakpoints: []
       }
     ]
-  },
-  stories: {
-    ...createDefaultWorkspace('stories')
-    // TODO: Perhaps we can add default values?
   }
 };
 
@@ -503,29 +490,6 @@ export const defaultSession: SessionState = {
   notifications: []
 };
 
-export const defaultStories: StoriesState = {
-  storyList: [],
-  currentStoryId: null,
-  currentStory: null,
-  envs: {},
-  storiesUsers: []
-};
-
-export const createDefaultStoriesEnv = (
-  envName: string,
-  chapter: Chapter,
-  variant: Variant
-): StoriesEnvState => ({
-  context: createContext<string>(chapter, [], envName, variant),
-  execTime: 1000,
-  isRunning: false,
-  output: [],
-  stepLimit: 1000,
-  globals: [],
-  usingSubst: false,
-  debuggerContext: {} as DebuggerContext
-});
-
 export const defaultFileSystem: FileSystemState = {
   inBrowserFileSystem: null
 };
@@ -539,8 +503,7 @@ export const defaultSideContentManager: SideContentManagerState = {
   assessment: defaultSideContent,
   grading: defaultSideContent,
   playground: defaultSideContent,
-  sicp: defaultSideContent,
-  stories: {}
+  sicp: defaultSideContent
 };
 
 export const defaultVscode: VscodeState = {
@@ -566,7 +529,6 @@ export const defaultState: OverallState = {
   dashboard: defaultDashboard,
   playground: defaultPlayground,
   session: defaultSession,
-  stories: defaultStories,
   workspaces: defaultWorkspaceManager,
   featureFlags: defaultFeatureFlags,
   fileSystem: defaultFileSystem,

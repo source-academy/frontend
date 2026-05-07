@@ -10,7 +10,6 @@ import {
   takeLatest,
   takeLeading
 } from 'redux-saga/effects';
-import type { StoriesEnvState } from 'src/features/stories/StoriesTypes';
 
 import type { OverallState } from '../application/ApplicationTypes';
 import type { WorkspaceLocation, WorkspaceManagerState } from '../workspace/WorkspaceTypes';
@@ -128,12 +127,5 @@ export function* selectWorkspace<T extends WorkspaceLocation, U>(
   );
 
   if (f) return f(workspace);
-  return workspace;
-}
-
-export function* selectStoryEnv(storyEnv: string) {
-  const workspace: StoriesEnvState = yield select(
-    (state: OverallState) => state.stories.envs[storyEnv]
-  );
   return workspace;
 }
