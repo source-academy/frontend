@@ -7,6 +7,24 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import tseslint from 'typescript-eslint';
 
+const reactRestrictedImports = [
+  'FC',
+  'FunctionComponent',
+  'SFC',
+  'ReactNode',
+  'ReactElement',
+  'ComponentType',
+  'JSX'
+];
+
+const restrictedImports = [
+  ...reactRestrictedImports.map(importName => ({
+    name: 'react',
+    importNames: [importName],
+    message: `Use the fully qualified name React.${importName} instead of importing ${importName} directly.`
+  }))
+];
+
 export default tseslint.config(
   { ignores: ['eslint.config.mjs', '**/*.snap'] },
   eslint.configs.recommended,
@@ -77,6 +95,12 @@ export default tseslint.config(
         }
       ],
       'simple-import-sort/imports': 'error'
+    }
+  },
+  {
+    files: ['**/*.tsx', '**/*.ts'],
+    rules: {
+      'no-restricted-imports': ['error', ...restrictedImports]
     }
   }
 );
