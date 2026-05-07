@@ -12,7 +12,6 @@ import resultCard from './sideContent/resultCard';
 import sessionManagement from './sideContent/sessionManagement';
 import substVisualizer from './sideContent/substVisualizer';
 import upload from './sideContent/upload';
-import sourceRecorder from './sourceRecorder';
 import stories from './stories';
 import welcome from './welcome';
 
@@ -21,7 +20,6 @@ export default {
   login,
   translation: {
     ...grading,
-    ...sourceRecorder,
     ...stories,
     ...welcome
   },
