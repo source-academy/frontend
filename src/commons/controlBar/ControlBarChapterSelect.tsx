@@ -12,6 +12,8 @@ import { useFeature } from '../featureFlags/useFeature';
 import { useTypedSelector } from '../utils/Hooks';
 import LegacyControlBarChapterSelect from './LegacyControlBarChapterSelect';
 
+const EvaluatorSelectComponent = Select.ofType<IEvaluatorDefinition>();
+
 type Props = {
   handleChapterSelect?: (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => void;
   isFolderModeEnabled: boolean;
@@ -44,8 +46,6 @@ const ControlBarChapterSelect: React.FC<Props> = ({
       />
     );
   }
-
-  const EvaluatorSelectComponent = Select.ofType<IEvaluatorDefinition>();
 
   const currentLanguage = dirLanguages.find(l => l.id === selectedLanguageId);
   const evaluators = currentLanguage?.evaluators ?? [];
