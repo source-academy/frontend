@@ -18,8 +18,14 @@ const reactRestrictedImports = [
   'CSSProperties',
   'ErrorInfo',
   'MouseEvent',
+  'MouseEventHandler',
   'KeyboardEvent',
-  'RefObject'
+  'RefObject',
+  'Dispatch',
+  'SetStateAction',
+  'PropsWithChildren',
+  'ChangeEvent',
+  'ChangeEventHandler'
 ];
 
 const restrictedImports = [

@@ -1,6 +1,6 @@
 import { Classes, Icon, Tab, Tabs, Tooltip } from '@blueprintjs/core';
 import classNames from 'classnames';
-import { memo } from 'react';
+import { cloneElement, memo } from 'react';
 import { SideContentProps } from 'src/commons/sideContent/SideContent';
 import { generateIconId } from 'src/commons/sideContent/SideContentHelper';
 import SideContentProvider from 'src/commons/sideContent/SideContentProvider';
@@ -72,13 +72,7 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
       if (!tab.body) return;
 
       const tabBody: React.ReactElement = workspaceLocation
-        ? {
-            ...tab.body,
-            props: {
-              ...(tab.body.props as any),
-              workspaceLocation
-            }
-          }
+        ? cloneElement(tab.body, { workspaceLocation } as any)
         : tab.body;
 
       // Render the other panels only when their corresponding tab is selected

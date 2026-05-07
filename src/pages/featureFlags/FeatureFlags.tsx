@@ -12,7 +12,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { BlueprintIcons_16Id } from '@blueprintjs/icons/lib/esm/generated/16px/blueprint-icons-16';
-import { ChangeEventHandler, PropsWithChildren, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { FeatureFlagsActions } from '../../commons/featureFlags';
@@ -20,7 +20,10 @@ import { FeatureFlag } from '../../commons/featureFlags/FeatureFlag';
 import { publicFlags } from '../../commons/featureFlags/publicFlags';
 import { useTypedSelector } from '../../commons/utils/Hooks';
 
-type FlagCardProps<T> = PropsWithChildren<{ flag: FeatureFlag<T>; modifiedFlag: T | undefined }>;
+type FlagCardProps<T> = React.PropsWithChildren<{
+  flag: FeatureFlag<T>;
+  modifiedFlag: T | undefined;
+}>;
 
 const BooleanFlagCard: React.FC<FlagCardProps<boolean>> = ({ flag, modifiedFlag }) => {
   const currentFlag = modifiedFlag ?? flag.defaultValue;
@@ -28,7 +31,7 @@ const BooleanFlagCard: React.FC<FlagCardProps<boolean>> = ({ flag, modifiedFlag 
 
   const dispatch = useDispatch();
 
-  const onChange: ChangeEventHandler<HTMLInputElement> = e => {
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = e => {
     dispatch(FeatureFlagsActions.setFlag({ featureFlag: flag, value: !currentFlag }));
   };
 

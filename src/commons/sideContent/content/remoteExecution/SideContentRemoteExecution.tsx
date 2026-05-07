@@ -8,7 +8,7 @@ import {
   Spinner
 } from '@blueprintjs/core';
 import classNames from 'classnames';
-import { SetStateAction, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router';
 import BrickSvg from 'src/assets/BrickSvg';
@@ -32,7 +32,7 @@ import DeviceMenuItemButtons from './DeviceMenuItemButtons';
 interface SideContentRemoteExecutionProps {
   workspace: WorkspaceLocation;
   secretParams?: string;
-  callbackFunction?: React.Dispatch<SetStateAction<string | undefined>>;
+  callbackFunction?: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
 const DeviceContent = ({ session }: { session?: DeviceSession }) => {
