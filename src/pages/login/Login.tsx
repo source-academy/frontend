@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 import { useSession } from 'src/commons/utils/Hooks';
 

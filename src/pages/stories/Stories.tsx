@@ -1,6 +1,6 @@
 import { Button, InputGroup, NonIdealState } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
