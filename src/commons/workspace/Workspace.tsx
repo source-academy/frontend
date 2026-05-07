@@ -1,6 +1,6 @@
 import { Button, FocusStyleManager, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { useFullscreen } from '@mantine/hooks';
+import { useFullscreenElement } from '@mantine/hooks';
 import { Enable, NumberSize, Resizable, ResizableProps, ResizeCallback } from 're-resizable';
 import { Direction } from 're-resizable/lib/resizer';
 import React, { useEffect, useRef, useState } from 'react';
@@ -194,7 +194,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
     ref: fullscreenRef,
     toggle: toggleFullscreen,
     fullscreen: isFullscreen
-  } = useFullscreen<HTMLDivElement>();
+  } = useFullscreenElement<HTMLDivElement>();
 
   const fullscreenContainerRef = React.useRef<HTMLDivElement | null>(null);
   const setFullscreenRefs = React.useCallback(

@@ -3,7 +3,7 @@ import type { Node } from 'estree';
 import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
 import createContext, { EnvTree } from 'js-slang/dist/createContext';
 import type { Context } from 'js-slang/dist/types';
-import { TypeError } from 'js-slang/dist/utils/rttc';
+import { RuntimeTypeError } from 'js-slang/dist/utils/rttc';
 
 export function mockContext(chapter = 1): Context {
   return createContext(chapter);
@@ -43,7 +43,7 @@ export function mockRuntimeContext(): Context {
   return context;
 }
 
-export function mockTypeError(): TypeError {
+export function mockTypeError(): RuntimeTypeError {
   // Typecast to Node to fix estree-acorn compatability.
-  return new TypeError(parse('', ACORN_PARSE_OPTIONS) as Node, '', '', '');
+  return new RuntimeTypeError(parse('', ACORN_PARSE_OPTIONS) as Node, '', '', '');
 }

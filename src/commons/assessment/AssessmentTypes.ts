@@ -68,6 +68,7 @@ export type AssessmentOverview = {
   isPublished?: boolean; // refers to assessment as a whole being published
   hasVotingFeatures: boolean;
   hasTokenCounter?: boolean;
+  isAutosaveEnabled?: boolean;
   isVotingPublished?: boolean;
   maxXp: number;
   earlySubmissionXp: number;
@@ -112,6 +113,7 @@ export type AssessmentConfiguration = {
   earlySubmissionXp: number;
   hasTokenCounter: boolean;
   hasVotingFeatures: boolean;
+  isAutosaveEnabled: boolean;
 };
 
 export interface IProgrammingQuestion extends BaseQuestion {

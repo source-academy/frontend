@@ -15,6 +15,7 @@ import AssessmentConfigPanel, {
   ImperativeAssessmentConfigPanel
 } from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
+import PixelbotConfigPanel from './subcomponents/PixelbotConfigPanel';
 import StoriesUserConfigPanel from './subcomponents/storiesUserConfigPanel/StoriesUserConfigPanel';
 import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
 
@@ -35,7 +36,10 @@ const defaultCourseConfig: UpdateCourseConfiguration = {
   llmApiKey: '',
   llmModel: '',
   llmApiUrl: '',
-  llmCourseLevelPrompt: ''
+  llmCourseLevelPrompt: '',
+  pixelbotRoutingPrompt: '',
+  pixelbotAnswerPrompt: '',
+  feedbackUrl: ''
 };
 
 const AdminPanel: React.FC = () => {
@@ -76,7 +80,10 @@ const AdminPanel: React.FC = () => {
       moduleHelpText: session.moduleHelpText,
       llmModel: session.llmModel,
       llmApiUrl: session.llmApiUrl,
-      llmCourseLevelPrompt: session.llmCourseLevelPrompt
+      llmCourseLevelPrompt: session.llmCourseLevelPrompt,
+      pixelbotRoutingPrompt: session.pixelbotRoutingPrompt,
+      pixelbotAnswerPrompt: session.pixelbotAnswerPrompt,
+      feedbackUrl: session.feedbackUrl
     });
   }, [
     session.courseName,
@@ -94,7 +101,10 @@ const AdminPanel: React.FC = () => {
     session.viewable,
     session.llmModel,
     session.llmApiUrl,
-    session.llmCourseLevelPrompt
+    session.llmCourseLevelPrompt,
+    session.pixelbotRoutingPrompt,
+    session.pixelbotAnswerPrompt,
+    session.feedbackUrl
   ]);
 
   const tableRef = useRef<ImperativeAssessmentConfigPanel>(null);
@@ -215,6 +225,18 @@ const AdminPanel: React.FC = () => {
             <AddStoriesUserPanel
               handleAddNewUsersToCourse={(users, provider) =>
                 dispatch(AcademyActions.addNewStoriesUsersToCourse(users, provider))
+              }
+            />
+          }
+        />
+        <Tab
+          id="pixelbot-settings"
+          title="Pixelbot Settings"
+          panel={
+            <PixelbotConfigPanel
+              {...courseConfigPanelProps}
+              onSave={(config: UpdateCourseConfiguration) =>
+                dispatch(SessionActions.updateCourseConfig(config))
               }
             />
           }

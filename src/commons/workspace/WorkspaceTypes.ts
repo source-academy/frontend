@@ -18,6 +18,28 @@ export const EVAL_SILENT = 'EVAL_SILENT';
 export type WorkspaceLocation = keyof WorkspaceManagerState;
 export type WorkspaceLocationsWithTools = Extract<WorkspaceLocation, 'playground' | 'sicp'>;
 
+export type CodeVersionMetadata = {
+  readonly id: string;
+  readonly timestamp: number;
+  readonly name?: string;
+};
+
+export type CodeVersion = CodeVersionMetadata & {
+  readonly code: string;
+};
+
+export type VersionHistoryState = {
+  readonly versions: CodeVersionMetadata[];
+  readonly selectedVersion: CodeVersionMetadata | null;
+  readonly selectedVersionCode: string | null;
+  readonly isLoadingCode: boolean;
+  readonly isLoading: boolean;
+  readonly isHistoryPanelOpen: boolean;
+  readonly isAutoSaving: boolean;
+};
+
+export type SaveStatus = 'idle' | 'saving' | 'saved' | 'saveFailed';
+
 type AssessmentWorkspaceAttr = {
   readonly currentAssessment?: number;
   readonly currentQuestion?: number;
@@ -108,6 +130,8 @@ export type WorkspaceState = {
   readonly lastDebuggerResult: any;
   readonly files: UploadResult;
   readonly updateUserRoleCallback: (id: string, newRole: CollabEditingAccess) => void;
+  readonly versionHistory: VersionHistoryState;
+  readonly saveStatus: SaveStatus;
 };
 
 type ReplHistory = {

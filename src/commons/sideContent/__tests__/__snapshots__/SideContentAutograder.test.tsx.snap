@@ -21,7 +21,7 @@ exports[`Autograder renders autograder results with different statuses correctly
           width="16"
         >
           <path
-            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
             fill-rule="evenodd"
           />
         </svg>
@@ -88,7 +88,7 @@ exports[`Autograder renders autograder results with different statuses correctly
           width="16"
         >
           <path
-            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
             fill-rule="evenodd"
           />
         </svg>
@@ -132,7 +132,7 @@ exports[`Autograder renders autograder results with different statuses correctly
                     width="16"
                   >
                     <path
-                      d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                      d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
                       fill-rule="evenodd"
                     />
                   </svg>
@@ -154,7 +154,7 @@ exports[`Autograder renders autograder results with different statuses correctly
                     width="16"
                   >
                     <path
-                      d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                      d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
                       fill-rule="evenodd"
                     />
                   </svg>
@@ -177,7 +177,7 @@ exports[`Autograder renders autograder results with different statuses correctly
                   width="16"
                 >
                   <path
-                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
                     fill-rule="evenodd"
                   />
                 </svg>
@@ -199,7 +199,7 @@ exports[`Autograder renders autograder results with different statuses correctly
                   width="16"
                 >
                   <path
-                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
                     fill-rule="evenodd"
                   />
                 </svg>
@@ -411,7 +411,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
           width="16"
         >
           <path
-            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
             fill-rule="evenodd"
           />
         </svg>
@@ -478,7 +478,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
                   width="16"
                 >
                   <path
-                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
                     fill-rule="evenodd"
                   />
                 </svg>
@@ -500,7 +500,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
                   width="16"
                 >
                   <path
-                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
                     fill-rule="evenodd"
                   />
                 </svg>
@@ -522,7 +522,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
                   width="16"
                 >
                   <path
-                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
                     fill-rule="evenodd"
                   />
                 </svg>
@@ -607,7 +607,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
           width="16"
         >
           <path
-            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
             fill-rule="evenodd"
           />
         </svg>
@@ -660,7 +660,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
           width="16"
         >
           <path
-            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
             fill-rule="evenodd"
           />
         </svg>
@@ -727,7 +727,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
                   width="16"
                 >
                   <path
-                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
                     fill-rule="evenodd"
                   />
                 </svg>
@@ -749,7 +749,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
                   width="16"
                 >
                   <path
-                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
                     fill-rule="evenodd"
                   />
                 </svg>
@@ -771,7 +771,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
                   width="16"
                 >
                   <path
-                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
                     fill-rule="evenodd"
                   />
                 </svg>
@@ -896,7 +896,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
           width="16"
         >
           <path
-            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
             fill-rule="evenodd"
           />
         </svg>
@@ -1033,7 +1033,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
           width="16"
         >
           <path
-            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
             fill-rule="evenodd"
           />
         </svg>
@@ -1100,7 +1100,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
                   width="16"
                 >
                   <path
-                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
                     fill-rule="evenodd"
                   />
                 </svg>
@@ -1122,7 +1122,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
                   width="16"
                 >
                   <path
-                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
                     fill-rule="evenodd"
                   />
                 </svg>
@@ -1144,7 +1144,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
                   width="16"
                 >
                   <path
-                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
                     fill-rule="evenodd"
                   />
                 </svg>
@@ -1294,7 +1294,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
           width="16"
         >
           <path
-            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
             fill-rule="evenodd"
           />
         </svg>
@@ -1347,7 +1347,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
           width="16"
         >
           <path
-            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
             fill-rule="evenodd"
           />
         </svg>
@@ -1414,7 +1414,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
                   width="16"
                 >
                   <path
-                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
                     fill-rule="evenodd"
                   />
                 </svg>
@@ -1436,7 +1436,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
                   width="16"
                 >
                   <path
-                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
                     fill-rule="evenodd"
                   />
                 </svg>
@@ -1458,7 +1458,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
                   width="16"
                 >
                   <path
-                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+                    d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
                     fill-rule="evenodd"
                   />
                 </svg>
@@ -1608,7 +1608,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
           width="16"
         >
           <path
-            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
+            d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 0 0-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33"
             fill-rule="evenodd"
           />
         </svg>
