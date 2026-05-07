@@ -1,6 +1,6 @@
 import { Button, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';

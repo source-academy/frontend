@@ -11,7 +11,7 @@ import {
   Pre
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { useDispatch } from 'react-redux';
 import { AutogradingResult, LLMPrompt } from 'src/commons/assessment/AssessmentTypes';

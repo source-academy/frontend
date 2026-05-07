@@ -12,7 +12,7 @@ import {
   Row,
   useReactTable
 } from '@tanstack/react-table';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
 import { objectKeys } from 'src/commons/utils/TypeHelper';

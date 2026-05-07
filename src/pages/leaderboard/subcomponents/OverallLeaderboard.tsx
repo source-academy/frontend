@@ -2,7 +2,7 @@ import 'src/styles/Leaderboard.scss';
 
 import { ColDef, IDatasource, themeAlpine } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import default_avatar from 'src/assets/default-avatar.jpg';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
