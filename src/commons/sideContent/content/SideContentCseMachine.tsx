@@ -22,7 +22,10 @@ import { Trans, useTranslation } from 'react-i18next';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
-import type { PlaygroundWorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+import {
+  type PlaygroundWorkspaceState,
+  WorkspaceLocation
+} from 'src/commons/workspace/WorkspaceTypes';
 import { ClearDeadFramesAnimation } from 'src/features/cseMachine/animationComponents/ClearDeadFramesAnimation';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
@@ -37,7 +40,7 @@ import Constants, { Links } from '../../utils/Constants';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
 import { beginAlertSideContent } from '../SideContentActions';
 import { getLocation } from '../SideContentHelper';
-import { NonStoryWorkspaceLocation, SideContentTab, SideContentType } from '../SideContentTypes';
+import { SideContentTab, SideContentType } from '../SideContentTypes';
 
 const ALL_ARROW_FILTER_KEYS: ArrowOriginFilterKey[] = [
   'text',
@@ -75,7 +78,7 @@ type StateProps = {
 };
 
 type OwnProps = {
-  workspaceLocation: NonStoryWorkspaceLocation;
+  workspaceLocation: WorkspaceLocation;
 };
 
 type DispatchProps = {
@@ -715,7 +718,7 @@ export const SideContentCseMachine = connect(
   mapDispatchToProps
 )(SideContentCseMachineBase);
 
-const makeCseMachineTabFrom = (location: NonStoryWorkspaceLocation): SideContentTab => ({
+const makeCseMachineTabFrom = (location: WorkspaceLocation): SideContentTab => ({
   label: t($ => $.cseMachine.label, { ns: 'sideContent' }),
   iconName: IconNames.GLOBE,
   body: <SideContentCseMachine workspaceLocation={location} />,
