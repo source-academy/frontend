@@ -1,7 +1,7 @@
 import { Button, H2 } from '@blueprintjs/core';
 import { type ColDef, type GridApi, type GridReadyEvent, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import React from 'react';
+import { useRef } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
 
@@ -30,7 +30,7 @@ const defaultColumnDefs: ColDef = {
  *   no admins left in a course)
  */
 const UserConfigPanel: React.FC<Props> = props => {
-  const gridApi = React.useRef<GridApi>(null);
+  const gridApi = useRef<GridApi>(null);
 
   const userCourseRegistrations = props.userCourseRegistrations?.map(e =>
     !e.name ? { ...e, name: '(user has yet to log in)' } : e
