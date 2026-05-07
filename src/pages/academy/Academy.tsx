@@ -1,6 +1,6 @@
 import { Card, Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, Outlet, useNavigate, useParams } from 'react-router';
 import ResearchAgreementPrompt from 'src/commons/researchAgreementPrompt/ResearchAgreementPrompt';
@@ -14,7 +14,7 @@ import RagChatbot from './ragChatbot/RagChatbot';
 
 const Academy: React.FC = () => {
   const dispatch = useDispatch();
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(SessionActions.fetchStudents());
     dispatch(SessionActions.fetchNotifications());
     dispatch(SessionActions.fetchTeamFormationOverviews(false));
@@ -40,7 +40,7 @@ const CourseSelectingAcademy: React.FC = () => {
   const { courseId: routeCourseIdStr } = useParams<{ courseId?: string }>();
   const routeCourseId = routeCourseIdStr != null ? parseInt(routeCourseIdStr, 10) : undefined;
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Regex to handle case where routeCourseIdStr is not a number
     if (!routeCourseIdStr?.match(numberRegExp)) {
       navigate('/');

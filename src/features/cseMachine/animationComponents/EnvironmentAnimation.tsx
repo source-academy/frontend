@@ -1,4 +1,3 @@
-import React from 'react';
 import { Group } from 'react-konva';
 
 import { Frame } from '../components/Frame';

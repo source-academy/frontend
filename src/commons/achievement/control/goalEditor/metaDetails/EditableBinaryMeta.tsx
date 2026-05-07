@@ -1,7 +1,6 @@
 import { Button, EditableText, MenuItem, NumericInput, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
-import React from 'react';
 import { BinaryMeta, GoalMeta } from 'src/features/achievement/AchievementTypes';
 import { AND, BooleanExpression, OR } from 'src/features/achievement/ExpressionTypes';
 
