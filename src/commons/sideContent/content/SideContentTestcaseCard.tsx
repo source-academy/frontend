@@ -2,7 +2,7 @@ import { Card, Classes, Elevation, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/utils/stringify';
-import React from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
@@ -25,7 +25,7 @@ type OwnProps = {
 const SideContentTestcaseCard: React.FC<SideContentTestcaseCardProps> = props => {
   const { index, testcase, handleTestcaseEval } = props;
 
-  const extraClasses = React.useMemo(() => {
+  const extraClasses = useMemo(() => {
     const isEvaluated = testcase.result !== undefined || testcase.errors;
     const isEqual = stringify(testcase.result) === testcase.answer;
 
@@ -37,7 +37,7 @@ const SideContentTestcaseCard: React.FC<SideContentTestcaseCardProps> = props =>
     };
   }, [testcase]);
 
-  const handleRunTestcase = React.useCallback(() => {
+  const handleRunTestcase = useCallback(() => {
     handleTestcaseEval(index);
   }, [index, handleTestcaseEval]);
 

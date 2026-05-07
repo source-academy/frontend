@@ -1,6 +1,6 @@
 import { Classes, Icon, Tab, Tabs, Tooltip } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React, { type JSX } from 'react';
+import { type JSX, memo } from 'react';
 import { SideContentProps } from 'src/commons/sideContent/SideContent';
 import { generateIconId } from 'src/commons/sideContent/SideContentHelper';
 import SideContentProvider from 'src/commons/sideContent/SideContentProvider';
@@ -122,4 +122,4 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
   );
 };
 
-export default React.memo(MobileSideContent, propsAreEqual);
+export default memo(MobileSideContent, propsAreEqual);
