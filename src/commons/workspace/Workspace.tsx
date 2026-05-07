@@ -14,13 +14,8 @@ import SideBar, { SideBarTab } from '../sideBar/SideBar';
 import SideContent, { SideContentProps } from '../sideContent/SideContent';
 import { useDimensions, useTypedSelector } from '../utils/Hooks';
 
-export type WorkspaceProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+export type WorkspaceProps = {
   handleSideContentHeightChange: (height: number) => void;
-};
-
-type StateProps = {
   // Either editorProps or mcqProps must be provided
   controlBarProps: ControlBarProps;
   editorContainerProps?: EditorContainerProps;
