@@ -4,7 +4,7 @@ import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { type Context, findDeclaration, getNames } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import Phaser from 'phaser';
-import { EventChannel } from 'redux-saga';
+import type { EventChannel } from 'redux-saga';
 import { call, put, select, take } from 'redux-saga/effects';
 import { race } from 'redux-saga/effects';
 import { delay } from 'redux-saga/effects';
