@@ -201,7 +201,7 @@ export default class DialogueManager {
           break;
         }
 
-        await new Promise(resolve => setTimeout(resolve, nextLine.line.length * 3));
+        await new Promise(resolve => setTimeout(resolve, Math.max(500, nextLine.line.length * 8)));
       }
     } finally {
       this.isSkipping = false;
