@@ -172,10 +172,11 @@ export default class DialogueManager {
     try {
       while (this.isSkipping) {
         if (!this.dialogueRenderer) break;
-        this.dialogueRenderer.finishTypewriting();
+
         const nextLine = this.getDialogueGenerator().peekNextLine();
 
         if (!nextLine || !nextLine.line) {
+          this.dialogueRenderer.finishTypewriting();
           this.isSkipping = false;
           break;
         }
@@ -184,9 +185,12 @@ export default class DialogueManager {
         const hasActions = nextLine.actionIds && nextLine.actionIds.length > 0;
 
         if (hasPrompt || hasActions) {
+          this.dialogueRenderer.finishTypewriting();
           this.isSkipping = false;
           break;
         }
+
+        this.dialogueRenderer.finishTypewriting();
 
         if (this.nextLineResolve) {
           await this.nextLineResolve();
@@ -197,7 +201,7 @@ export default class DialogueManager {
           break;
         }
 
-        await new Promise(resolve => setTimeout(resolve, 50));
+        await new Promise(resolve => setTimeout(resolve, nextLine.line.length * 3));
       }
     } finally {
       this.isSkipping = false;
