@@ -53,6 +53,10 @@ export default class DialogueManager {
         await this.triggerSkip();
       }
     }).setPosition(DialogueConstants.skipButton.x, DialogueConstants.skipButton.y);
+    (this.skipButton.getAt(0) as Phaser.GameObjects.Sprite).setDisplaySize(
+      DialogueConstants.skipButton.size,
+      DialogueConstants.skipButton.size
+    );
     dialogueContainer.add(this.skipButton);
 
     GameGlobalAPI.getInstance().addToLayer(Layer.Dialogue, dialogueContainer);
