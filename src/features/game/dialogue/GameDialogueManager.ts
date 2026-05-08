@@ -206,11 +206,14 @@ export default class DialogueManager {
     } finally {
       this.isSkipping = false;
 
+      const upcoming = this.getDialogueGenerator().peekNextLine();
       if (
         this.skipButton &&
         this.skipButton.active &&
         !this.isDialoguePromptActive &&
-        this.getDialogueGenerator().peekNextLine() !== null
+        upcoming?.line &&
+        !upcoming.prompt &&
+        !(upcoming.actionIds && upcoming.actionIds.length > 0)
       ) {
         this.skipButton.setVisible(true);
       }
