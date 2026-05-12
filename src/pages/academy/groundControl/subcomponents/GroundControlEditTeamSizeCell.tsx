@@ -37,15 +37,16 @@ const EditTeamSizeCell: React.FC<Props> = ({ data, onTeamSizeChange }) => {
   };
 
   return (
-    <GradingFlex alignItems="center" style={{ columnGap: '0.5rem' }}>
+    <GradingFlex alignItems="center" style={{ columnGap: '2rem' }}>
       <Button
         variant="minimal"
+        size="small"
         icon={IconNames.MINUS}
         onClick={handleDecrement}
         disabled={teamSize === minTeamSize}
       />
       <span>{teamSize}</span>
-      <Button variant="minimal" icon={IconNames.PLUS} onClick={handleIncrement} />
+      <Button size="small" variant="minimal" icon={IconNames.PLUS} onClick={handleIncrement} />
     </GradingFlex>
   );
 };

@@ -7,9 +7,11 @@
 
   .inputs {
     display: flex;
-    flex-flow: row wrap;
-    justify-content: space-around;
-    max-width: 900px;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    max-width: 1200px;
     width: 100%;
 
     .text {
@@ -17,6 +19,8 @@
       flex-direction: column;
       justify-content: space-around;
       align-items: center;
+      flex: 1 1 auto;
+      min-width: 0;
 
       :global(.#{$ns}-tab-list) {
         margin-left: 8px;
@@ -75,8 +79,19 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      flex: 0 0 240px;
+
       label {
         margin-top: 1.5rem;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      flex-flow: row wrap;
+      justify-content: space-around;
+
+      .booleans {
+        flex: 1 1 100%;
       }
     }
   }
