@@ -1,6 +1,6 @@
-import { TreeNodeInfo } from '@blueprintjs/core';
+import type { TreeNodeInfo } from '@blueprintjs/core';
 import type { Octokit } from '@octokit/rest';
-import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
+import type { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import { GitHubFileNodeData } from './GitHubFileNodeData';

@@ -1,6 +1,6 @@
 import { Ace } from 'ace-builds';
 import { useRef, useState } from 'react';
-import Draggable, { DraggableEvent, DraggableEventHandler } from 'react-draggable';
+import Draggable, { type DraggableEvent, type DraggableEventHandler } from 'react-draggable';
 import Keyboard from 'react-simple-keyboard';
 
 type Props = {

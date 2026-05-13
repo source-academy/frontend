@@ -8,10 +8,10 @@ import {
   InputGroup,
   Intent,
   Tree,
-  TreeNodeInfo
+  type TreeNodeInfo
 } from '@blueprintjs/core';
 import { Octokit } from '@octokit/rest';
-import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
+import type { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 

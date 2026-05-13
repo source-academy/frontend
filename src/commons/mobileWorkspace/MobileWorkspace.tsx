@@ -3,18 +3,20 @@ import { IconNames } from '@blueprintjs/icons';
 import { useMediaQuery } from '@mantine/hooks';
 import { Ace } from 'ace-builds';
 import { useCallback, useEffect, useState } from 'react';
-import { DraggableEvent } from 'react-draggable';
+import type { DraggableEvent } from 'react-draggable';
 
 import ControlBar from '../controlBar/ControlBar';
-import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
-import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
+import EditorContainer, { type EditorContainerProps } from '../editor/EditorContainer';
+import McqChooser, { type McqChooserProps } from '../mcqChooser/McqChooser';
 import { Prompt } from '../ReactRouterPrompt';
-import { ReplProps } from '../repl/Repl';
-import { SideBarTab } from '../sideBar/SideBar';
-import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import type { ReplProps } from '../repl/Repl';
+import type { SideBarTab } from '../sideBar/SideBar';
+import { type SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import DraggableRepl from './DraggableRepl';
 import MobileKeyboard from './MobileKeyboard';
-import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/MobileSideContent';
+import MobileSideContent, {
+  type MobileSideContentProps
+} from './mobileSideContent/MobileSideContent';
 
 export type MobileWorkspaceProps = {
   editorContainerProps?: EditorContainerProps; // Either editorProps or mcqProps must be provided

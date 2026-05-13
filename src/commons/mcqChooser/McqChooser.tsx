@@ -1,6 +1,6 @@
 import { Button, Card, Intent } from '@blueprintjs/core';
 
-import { IMCQQuestion } from '../assessment/AssessmentTypes';
+import type { IMCQQuestion } from '../assessment/AssessmentTypes';
 import Markdown from '../Markdown';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 

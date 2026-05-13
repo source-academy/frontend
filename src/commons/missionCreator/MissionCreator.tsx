@@ -6,8 +6,8 @@ import { parseString } from 'xml2js';
 
 import SessionActions from '../application/actions/SessionActions';
 import {
-  Assessment,
-  AssessmentOverview,
+  type Assessment,
+  type AssessmentOverview,
   assessmentTemplate,
   overviewTemplate
 } from '../assessment/AssessmentTypes';
