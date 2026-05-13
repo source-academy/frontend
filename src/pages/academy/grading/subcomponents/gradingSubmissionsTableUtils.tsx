@@ -1,6 +1,7 @@
-import { ColDef, ICellRendererParams } from 'ag-grid-community';
+import type { ColDef, ICellRendererParams } from 'ag-grid-community';
 import classNames from 'classnames';
-import { ColumnFields, ColumnName, IGradingTableRow } from 'src/features/grading/GradingTypes';
+import type { IGradingTableRow } from 'src/features/grading/GradingTypes';
+import { ColumnFields, ColumnName } from 'src/features/grading/GradingTypes';
 import classes from 'src/styles/Grading.module.scss';
 
 import GradingActions from './GradingActions';
