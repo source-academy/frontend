@@ -14,11 +14,8 @@ import insertFakeAchievements from '../../../commons/achievement/utils/InsertFak
 import SessionActions from '../../../commons/application/actions/SessionActions';
 import AchievementActions from '../../../features/achievement/AchievementActions';
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
-import {
-  AchievementUser,
-  FilterStatus,
-  GoalProgress
-} from '../../../features/achievement/AchievementTypes';
+import type { AchievementUser, GoalProgress } from '../../../features/achievement/AchievementTypes';
+import { FilterStatus } from '../../../features/achievement/AchievementTypes';
 
 /**
  * Generates <AchievementTask /> components

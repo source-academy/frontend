@@ -2,7 +2,7 @@ import { Dialog, DialogBody, DialogFooter, Intent, Tooltip } from '@blueprintjs/
 import { IconNames } from '@blueprintjs/icons';
 import { useCallback, useState } from 'react';
 
-import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
 
 type Props = {

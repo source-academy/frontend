@@ -2,8 +2,9 @@ import { Card, Elevation, HTMLSelect, Intent, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { FileRejection, useDropzone } from 'react-dropzone';
-import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
+import type { FileRejection } from 'react-dropzone';
+import { useDropzone } from 'react-dropzone';
+import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 
 import ControlButton from '../../../../commons/ControlButton';
 import { showWarningMessage } from '../../../../commons/utils/notifications/NotificationsHelper';

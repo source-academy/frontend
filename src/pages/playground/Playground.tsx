@@ -75,13 +75,13 @@ import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import MobileWorkspace, {
   type MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
-import { SideBarTab } from '../../commons/sideBar/SideBar';
+import type { SideBarTab } from '../../commons/sideBar/SideBar';
 import { type SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants, { Links } from '../../commons/utils/Constants';
 import { generateLanguageIntroduction } from '../../commons/utils/IntroductionHelper';
 import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
 import { type IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
-import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import Workspace, { type WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
 import type {
   CodeDelta,

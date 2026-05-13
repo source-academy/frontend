@@ -2,7 +2,7 @@ import { Button } from '@blueprintjs/core';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Tokens } from 'src/commons/application/types/SessionTypes';
+import type { Tokens } from 'src/commons/application/types/SessionTypes';
 import { useSession, useTokens } from 'src/commons/utils/Hooks';
 import { initRagChat, sendRagMessage } from 'src/features/ragChat/api';
 import ChatbotCodeSnippet from 'src/pages/sicp/subcomponents/chatbot/ChatbotCodeSnippet';

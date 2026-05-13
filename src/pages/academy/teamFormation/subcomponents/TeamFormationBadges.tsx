@@ -1,6 +1,6 @@
 import { Button, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ColumnFilter } from '@tanstack/react-table';
+import type { ColumnFilter } from '@tanstack/react-table';
 
 import { getBadgeColorFromLabelLegacy } from '../../grading/subcomponents/GradingBadges';
 

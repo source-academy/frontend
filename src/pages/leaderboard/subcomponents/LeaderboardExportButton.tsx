@@ -7,7 +7,10 @@ import {
   getContestScoreLeaderboard
 } from 'src/commons/sagas/RequestsSaga';
 import { useSession } from 'src/commons/utils/Hooks';
-import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
+import type {
+  ContestLeaderboardRow,
+  LeaderboardRow
+} from 'src/features/leaderboard/LeaderboardTypes';
 
 type Props = {
   type: string;

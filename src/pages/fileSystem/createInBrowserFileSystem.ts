@@ -1,12 +1,12 @@
-import { Store } from '@reduxjs/toolkit';
+import type { Store } from '@reduxjs/toolkit';
 import { BFSRequire, configure } from 'browserfs';
 import { ApiError } from 'browserfs/dist/node/core/api_error';
-import { FSModule } from 'browserfs/dist/node/core/FS';
+import type { FSModule } from 'browserfs/dist/node/core/FS';
 
-import { OverallState } from '../../commons/application/ApplicationTypes';
+import type { OverallState } from '../../commons/application/ApplicationTypes';
 import { setInBrowserFileSystem } from '../../commons/fileSystem/FileSystemActions';
 import { writeFileRecursively } from '../../commons/fileSystem/utils';
-import { EditorTabState, WorkspaceManagerState } from '../../commons/workspace/WorkspaceTypes';
+import type { EditorTabState, WorkspaceManagerState } from '../../commons/workspace/WorkspaceTypes';
 
 /**
  * Maps workspaces to their file system base path.

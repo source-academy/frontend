@@ -9,7 +9,7 @@ import { AssessmentStatuses } from '../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
 import { EditingOverviewCard } from '../../commons/editingOverviewCard/EditingOverviewCard';
 import EditingWorkspace, {
-  EditingWorkspaceProps
+  type EditingWorkspaceProps
 } from '../../commons/editingWorkspace/EditingWorkspace';
 import MissionCreator from '../../commons/missionCreator/MissionCreator';
 import Constants from '../../commons/utils/Constants';
