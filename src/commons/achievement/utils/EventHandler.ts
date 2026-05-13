@@ -1,9 +1,9 @@
 import {
-  AchievementGoal,
-  AchievementItem,
-  EventMeta,
+  type AchievementGoal,
+  type AchievementItem,
+  type EventMeta,
   EventType,
-  GoalProgress,
+  type GoalProgress,
   GoalType
 } from '../../../features/achievement/AchievementTypes';
 import { showSuccessMessage } from '../../utils/notifications/NotificationsHelper';

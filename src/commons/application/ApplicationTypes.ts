@@ -1,5 +1,5 @@
 import { type SourceError } from 'js-slang/dist/errors/base';
-import { Chapter, Language, Variant } from 'js-slang/dist/langs';
+import { Chapter, type Language, Variant } from 'js-slang/dist/langs';
 import { type Value } from 'js-slang/dist/types';
 
 import type { AchievementState } from '../../features/achievement/AchievementTypes';
@@ -10,7 +10,7 @@ import type { LeaderboardState } from '../../features/leaderboard/LeaderboardTyp
 import type { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { freshSortState } from '../../pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
-import { defaultFeatureFlags, FeatureFlagsState } from '../featureFlags';
+import { defaultFeatureFlags, type FeatureFlagsState } from '../featureFlags';
 import type { FileSystemState } from '../fileSystem/FileSystemTypes';
 import type { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';

@@ -1,10 +1,10 @@
-import {
+import type {
   AchievementGoal,
   AchievementItem,
   GoalDefinition,
-  GoalMeta,
-  GoalType
+  GoalMeta
 } from '../../../features/achievement/AchievementTypes';
+import { GoalType } from '../../../features/achievement/AchievementTypes';
 
 export const backendifyGoalDefinition = (goal: GoalDefinition) => ({
   targetCount: goal.meta.type === GoalType.ASSESSMENT ? 1 : goal.meta.targetCount,
