@@ -1,4 +1,4 @@
-import { DistributedKeyOf, Merge } from 'src/commons/utils/TypeHelper';
+import type { DistributedKeyOf, Merge } from 'src/commons/utils/TypeHelper';
 
 import tocNavigation from './data/toc-navigation.json';
 

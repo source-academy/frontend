@@ -1,9 +1,9 @@
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants, screenSize } from '../commons/CommonConstants';
-import { ItemId } from '../commons/CommonTypes';
+import type { ItemId } from '../commons/CommonTypes';
 import { createDialogueBox, createTypewriter } from '../dialogue/GameDialogueHelper';
-import { DialogueObject } from '../dialogue/GameDialogueTypes';
+import type { DialogueObject } from '../dialogue/GameDialogueTypes';
 import { fadeAndDestroy } from '../effects/FadeEffect';
 import { rightSideEntryTweenProps, rightSideExitTweenProps } from '../effects/FlyEffect';
 import { promptWithChoices } from '../effects/Prompt';
@@ -22,7 +22,7 @@ import {
   startPrompt
 } from './GameQuizConstants';
 import GameQuizReactionManager from './GameQuizReactionManager';
-import { Question } from './GameQuizType';
+import type { Question } from './GameQuizType';
 
 export default class QuizManager {
   private reactionManager?: GameQuizReactionManager;

@@ -1,4 +1,4 @@
-import { AssetKey, AssetPath } from 'src/features/game/commons/CommonTypes';
+import type { AssetKey, AssetPath } from 'src/features/game/commons/CommonTypes';
 
 /**
  * The functions below loads assets, and and only resolves

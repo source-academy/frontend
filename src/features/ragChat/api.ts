@@ -1,4 +1,4 @@
-import { Tokens } from 'src/commons/application/types/SessionTypes';
+import type { Tokens } from 'src/commons/application/types/SessionTypes';
 import { request } from 'src/commons/utils/RequestHelper';
 
 type ChatMessage = {

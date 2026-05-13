@@ -1,5 +1,5 @@
 import { Octokit } from '@octokit/rest';
-import {
+import type {
   GetResponseDataTypeFromEndpointMethod,
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';

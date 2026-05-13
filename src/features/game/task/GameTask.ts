@@ -1,4 +1,4 @@
-import { TaskDetail } from './GameTaskTypes';
+import type { TaskDetail } from './GameTaskTypes';
 
 /**
  * The class encapsulates data on all the task ids
