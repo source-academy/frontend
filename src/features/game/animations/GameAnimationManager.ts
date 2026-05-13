@@ -1,5 +1,6 @@
-import { AnimType, AssetType, ImageAsset } from '../assets/AssetsTypes';
-import { AssetKey } from '../commons/CommonTypes';
+import type { ImageAsset } from '../assets/AssetsTypes';
+import { AnimType, AssetType } from '../assets/AssetsTypes';
+import type { AssetKey } from '../commons/CommonTypes';
 import { GameItemType } from '../location/GameMapTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { mandatory } from '../utils/GameUtils';

@@ -4,7 +4,7 @@ import { request } from 'src/commons/utils/RequestHelper';
 import { store } from '../../../pages/createStore';
 import { toTxtPath } from '../assets/TextAssets';
 import SourceAcademyGame from '../SourceAcademyGame';
-import { GameChapter } from './GameChapterTypes';
+import type { GameChapter } from './GameChapterTypes';
 
 /**
  * Fetches all chapters from the backend

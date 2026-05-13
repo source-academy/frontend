@@ -1,5 +1,6 @@
 import { AssetType } from '../assets/AssetsTypes';
-import { GameItemType, GameLocation, LocationId } from '../location/GameMapTypes';
+import type { GameLocation, LocationId } from '../location/GameMapTypes';
+import { GameItemType } from '../location/GameMapTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';

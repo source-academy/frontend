@@ -1,5 +1,6 @@
 /// <reference lib="webworker" />
-import { deleteRecordsUpto, getRecords, LoggedRecord } from '.';
+import type { LoggedRecord } from '.';
+import { deleteRecordsUpto, getRecords } from '.';
 import { SYNC_LOGS } from './client';
 
 declare const self: ServiceWorkerGlobalScope;

@@ -1,4 +1,9 @@
-import { Dialogue, DialogueLine, DialogueObject, PartName } from '../dialogue/GameDialogueTypes';
+import type {
+  Dialogue,
+  DialogueLine,
+  DialogueObject,
+  PartName
+} from '../dialogue/GameDialogueTypes';
 import { GameItemType } from '../location/GameMapTypes';
 import { mapValues } from '../utils/GameUtils';
 import StringUtils from '../utils/StringUtils';

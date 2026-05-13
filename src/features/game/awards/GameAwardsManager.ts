@@ -1,7 +1,7 @@
 import ImageAssets from '../assets/ImageAssets';
 import { Constants } from '../commons/CommonConstants';
-import { IBaseScene } from '../commons/CommonTypes';
-import { DashboardPageManager } from '../dashboard/GameDashboardTypes';
+import type { IBaseScene } from '../commons/CommonTypes';
+import type { DashboardPageManager } from '../dashboard/GameDashboardTypes';
 import { createButton } from '../utils/ButtonUtils';
 import { limitNumber } from '../utils/GameUtils';
 import { resizeUnderflow } from '../utils/SpriteUtils';
@@ -14,7 +14,7 @@ import AwardsConstants, {
   listBannerTextStyle
 } from './GameAwardsConstants';
 import { createAssetKeyPreviewCont, getAwardProps } from './GameAwardsHelper';
-import { AwardProperty } from './GameAwardsTypes';
+import type { AwardProperty } from './GameAwardsTypes';
 
 /**
  * Manager for an award page on the dashboard (either collectibles or achievements).

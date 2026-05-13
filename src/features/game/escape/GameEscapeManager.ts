@@ -2,7 +2,7 @@ import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
 import CommonRadioButton from '../commons/CommonRadioButton';
-import { IBaseScene, IGameUI } from '../commons/CommonTypes';
+import type { IBaseScene, IGameUI } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import SettingsConstants from '../scenes/settings/SettingsConstants';

@@ -1,7 +1,7 @@
 import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
 import { screenSize } from '../../commons/CommonConstants';
-import { IGameUI, ItemId } from '../../commons/CommonTypes';
+import type { IGameUI, ItemId } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { keyboardShortcuts } from '../../input/GameInputConstants';

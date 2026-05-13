@@ -1,7 +1,8 @@
 import Konva from 'konva';
 import * as ReactKonva from 'react-konva';
 
-import { AnimatableTo, AnimationConfig } from '../animationComponents/base/Animatable';
+import type { AnimationConfig } from '../animationComponents/base/Animatable';
+import { AnimatableTo } from '../animationComponents/base/Animatable';
 import { AnimationComponent } from '../animationComponents/base/AnimationComponents';
 import { CseAnimation } from '../CseMachineAnimation';
 

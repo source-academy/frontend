@@ -1,4 +1,4 @@
-import { LocationId } from '../location/GameMapTypes';
+import type { LocationId } from '../location/GameMapTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 import StringUtils from '../utils/StringUtils';
 import Parser from './Parser';

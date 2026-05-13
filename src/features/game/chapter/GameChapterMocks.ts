@@ -1,4 +1,4 @@
-import { GameChapter } from './GameChapterTypes';
+import type { GameChapter } from './GameChapterTypes';
 
 const GameChapterMocks: GameChapter[] = [
   {
