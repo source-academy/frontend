@@ -1,10 +1,10 @@
-import { IPluginDefinition, PluginType } from '@sourceacademy/plugin-directory'; // importing from /dist/types fails for some reason
+import { type IPluginDefinition, PluginType } from '@sourceacademy/plugin-directory'; // importing from /dist/types fails for some reason
 import { call, fork, put, select } from 'redux-saga/effects';
 
 import { selectDirectoryPluginUrl } from '../../features/directory/flagDirectoryPluginUrl';
 import PluginDirectoryActions from '../../features/directory/PluginDirectoryActions';
-import { PluginDirectoryState } from '../../features/directory/PluginDirectoryTypes';
-import { OverallState } from '../application/ApplicationTypes';
+import type { PluginDirectoryState } from '../../features/directory/PluginDirectoryTypes';
+import type { OverallState } from '../application/ApplicationTypes';
 import { combineSagaHandlers } from '../redux/utils';
 
 export function* getPluginDefinitionSaga(pluginId: string) {

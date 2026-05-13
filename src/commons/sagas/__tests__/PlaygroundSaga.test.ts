@@ -10,7 +10,7 @@ import {
   defaultState,
   defaultWorkspaceManager,
   getDefaultFilePath,
-  OverallState
+  type OverallState
 } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import Constants from '../../utils/Constants';

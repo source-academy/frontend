@@ -1,12 +1,12 @@
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
-import { IconName, IconNames } from '@blueprintjs/icons';
+import { type IconName, IconNames } from '@blueprintjs/icons';
 import { useMemo } from 'react';
-import { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
+import type { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
 import { useSession } from 'src/commons/utils/Hooks';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 import { Role } from '../../application/ApplicationTypes';
-import { DesktopNavLink, NavbarEntryInfo } from '../NavigationBar';
+import { DesktopNavLink, type NavbarEntryInfo } from '../NavigationBar';
 
 type Props = {
   assessmentTypes?: AssessmentType[];

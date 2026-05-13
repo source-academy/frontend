@@ -1,12 +1,12 @@
 import { ECE } from 'java-slang';
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { createRef } from 'react';
 import { Group, Label, Rect, Tag, Text as KonvaText } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
-import { IHoverable } from '../../CseMachineTypes';
+import type { IHoverable } from '../../CseMachineTypes';
 import { defaultTextColor, setHoveredCursor, setUnhoveredCursor } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 import { Arrow } from './Arrow';

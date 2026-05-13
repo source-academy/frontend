@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 
-import {
+import type {
   CodeOutput,
   ErrorOutput,
   InterpreterOutput,

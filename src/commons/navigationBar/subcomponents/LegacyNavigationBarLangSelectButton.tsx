@@ -5,7 +5,7 @@ import {
   cLanguages,
   getLanguageConfig,
   javaLanguages,
-  SALanguage,
+  type SALanguage,
   sourceLanguages,
   SUPPORTED_LANGUAGES,
   SupportedLanguage

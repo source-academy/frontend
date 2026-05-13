@@ -1,7 +1,7 @@
 import { call, put } from 'redux-saga/effects';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 
-import { Tokens } from '../application/types/SessionTypes';
+import type { Tokens } from '../application/types/SessionTypes';
 import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
 import { selectTokens } from './BackendSaga';

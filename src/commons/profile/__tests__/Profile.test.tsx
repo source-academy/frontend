@@ -2,13 +2,13 @@ import { render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
-import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
+import { type OverallState, Role } from 'src/commons/application/ApplicationTypes';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
-import { assertType, DeepPartial } from 'src/commons/utils/TypeHelper';
+import { assertType, type DeepPartial } from 'src/commons/utils/TypeHelper';
 
-import { AssessmentConfiguration, AssessmentStatuses } from '../../assessment/AssessmentTypes';
+import { type AssessmentConfiguration, AssessmentStatuses } from '../../assessment/AssessmentTypes';
 import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';
-import Profile, { ProfileProps } from '../Profile';
+import Profile, { type ProfileProps } from '../Profile';
 
 const mockNoClosedAssessmentOverviews = mockAssessmentOverviews.filter(
   item => item.status !== AssessmentStatuses.submitted
