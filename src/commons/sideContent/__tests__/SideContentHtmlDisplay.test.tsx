@@ -7,9 +7,9 @@ import { vi } from 'vitest';
 
 import {
   SideContentHtmlDisplay,
-  SideContentHtmlDisplayProps
+  type SideContentHtmlDisplayProps
 } from '../content/SideContentHtmlDisplay';
-import { SideContentLocation } from '../SideContentTypes';
+import type { SideContentLocation } from '../SideContentTypes';
 
 const Component = (props: SideContentHtmlDisplayProps) => {
   const store = mockInitialStore();

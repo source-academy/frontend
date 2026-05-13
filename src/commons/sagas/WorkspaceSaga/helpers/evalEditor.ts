@@ -1,6 +1,6 @@
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { Variant } from 'js-slang/dist/langs';
-import { call, put, select, StrictEffect } from 'redux-saga/effects';
+import { call, put, select, type StrictEffect } from 'redux-saga/effects';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 

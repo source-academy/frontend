@@ -1,10 +1,14 @@
 import { render, screen } from '@testing-library/react';
-import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/errors/base';
+import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors/base';
 
-import { AutogradingResult, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
+import {
+  type AutogradingResult,
+  type Testcase,
+  TestcaseTypes
+} from '../../assessment/AssessmentTypes';
 import { mockGradingAnswer } from '../../mocks/GradingMocks';
 import SideContentAutograder, {
-  SideContentAutograderProps
+  type SideContentAutograderProps
 } from '../content/SideContentAutograder';
 
 const mockErrors: SourceError[] = [

@@ -3,11 +3,15 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import { t } from 'i18next';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { connect, MapDispatchToProps } from 'react-redux';
-import { ResultOutput } from 'src/commons/application/ApplicationTypes';
+import { connect, type MapDispatchToProps } from 'react-redux';
+import type { ResultOutput } from 'src/commons/application/ApplicationTypes';
 
 import { beginAlertSideContent } from '../SideContentActions';
-import { SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
+import {
+  type SideContentLocation,
+  type SideContentTab,
+  SideContentType
+} from '../SideContentTypes';
 
 type OwnProps = {
   content: string;

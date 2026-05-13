@@ -5,7 +5,7 @@ import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { useCallback, useMemo } from 'react';
 
-import { Testcase, TestcaseTypes } from '../../../assessment/AssessmentTypes';
+import { type Testcase, TestcaseTypes } from '../../../assessment/AssessmentTypes';
 
 type Props = {
   setTestcaseProgram: (newProgram: string) => void;

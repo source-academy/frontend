@@ -11,7 +11,7 @@ import {
   Tooltip
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { HotkeyItem } from '@mantine/hooks';
+import type { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
 import { t } from 'i18next';
@@ -19,28 +19,28 @@ import { Chapter } from 'js-slang/dist/langs';
 import { debounce } from 'lodash';
 import { Component } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { connect, type MapDispatchToProps, type MapStateToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
 import {
   type PlaygroundWorkspaceState,
-  WorkspaceLocation
+  type WorkspaceLocation
 } from 'src/commons/workspace/WorkspaceTypes';
 import { ClearDeadFramesAnimation } from 'src/features/cseMachine/animationComponents/ClearDeadFramesAnimation';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
 import { Layout } from 'src/features/cseMachine/CseMachineLayout';
-import { ArrowOriginFilterKey } from 'src/features/cseMachine/CseMachineTypes';
+import type { ArrowOriginFilterKey } from 'src/features/cseMachine/CseMachineTypes';
 import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
-import { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
-import { HighlightedLines } from '../../editor/EditorTypes';
+import type { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
+import type { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
 import { beginAlertSideContent } from '../SideContentActions';
 import { getLocation } from '../SideContentHelper';
-import { SideContentTab, SideContentType } from '../SideContentTypes';
+import { type SideContentTab, SideContentType } from '../SideContentTypes';
 
 const ALL_ARROW_FILTER_KEYS: ArrowOriginFilterKey[] = [
   'text',

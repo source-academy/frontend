@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ContestEntry } from '../../assessment/AssessmentTypes';
+import type { ContestEntry } from '../../assessment/AssessmentTypes';
 
 type Props = {
   handleContestEntryClick: (submissionId: number, answer: string) => void;

@@ -1,6 +1,6 @@
 import { createActions } from '../redux/utils';
-import { DebuggerContext, type WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { SideContentLocation, SideContentType } from './SideContentTypes';
+import type { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { SideContentLocation, SideContentType } from './SideContentTypes';
 
 const SideContentActions = createActions('sideContent', {
   beginAlertSideContent: (id: SideContentType, workspaceLocation: SideContentLocation) => ({

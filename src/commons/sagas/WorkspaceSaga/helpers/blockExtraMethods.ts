@@ -1,4 +1,4 @@
-import { Context } from 'js-slang';
+import type { Context } from 'js-slang';
 import { Variant } from 'js-slang/dist/langs';
 import { call } from 'redux-saga/effects';
 
