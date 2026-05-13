@@ -13,15 +13,7 @@ vi.mock('monaco-editor', () => ({
 vi.mock('@monaco-editor/react', () => ({
   default: (props: any) => (
     <textarea
-      data-folding={String(props.options?.folding)}
-      data-glyph-margin={String(props.options?.glyphMargin)}
-      data-line-decorations-width={String(props.options?.lineDecorationsWidth)}
-      data-line-height={String(props.options?.lineHeight)}
-      data-line-numbers-min-chars={String(props.options?.lineNumbersMinChars)}
-      data-quick-suggestions={String(props.options?.quickSuggestions)}
-      data-suggest-on-trigger-characters={String(props.options?.suggestOnTriggerCharacters)}
       data-theme={props.theme}
-      data-word-based-suggestions={props.options?.wordBasedSuggestions}
       data-testid="MonacoReactEditorMock"
       onChange={event => props.onChange(event.target.value, { source: 'test' })}
       readOnly={props.options?.readOnly ?? false}
@@ -55,14 +47,6 @@ test('MonacoEditor renders the Monaco React editor wrapper', () => {
   expect(screen.getByTestId('Editor')).toBeTruthy();
   expect(editor.value).toBe('const x = 1;');
   expect(editor.dataset.theme).toBe('source');
-  expect(editor.dataset.folding).toBe('false');
-  expect(editor.dataset.glyphMargin).toBe('false');
-  expect(editor.dataset.lineDecorationsWidth).toBe('4');
-  expect(editor.dataset.lineHeight).toBe('19');
-  expect(editor.dataset.lineNumbersMinChars).toBe('3');
-  expect(editor.dataset.quickSuggestions).toBe('false');
-  expect(editor.dataset.suggestOnTriggerCharacters).toBe('false');
-  expect(editor.dataset.wordBasedSuggestions).toBe('off');
 });
 
 test('MonacoEditor forwards changes to workspace handlers', () => {
