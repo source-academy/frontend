@@ -71,7 +71,6 @@ export const saveState = (state: OverallState) => {
         enableContestLeaderboard: state.session.enableContestLeaderboard,
         topLeaderboardDisplay: state.session.topLeaderboardDisplay,
         topContestLeaderboardDisplay: state.session.topContestLeaderboardDisplay,
-        enableStories: state.session.enableStories,
         enableLlmGrading: state.session.enableLlmGrading,
         llmCourseLevelPrompt: state.session.llmCourseLevelPrompt,
         moduleHelpText: state.session.moduleHelpText,

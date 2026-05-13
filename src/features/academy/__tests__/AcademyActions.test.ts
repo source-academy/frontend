@@ -31,7 +31,6 @@ test('createCourse generates correct action object', () => {
     enableAchievements: true,
     enableOverallLeaderboard: true,
     enableContestLeaderboard: true,
-    enableStories: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text'

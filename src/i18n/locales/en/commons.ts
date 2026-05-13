@@ -6,7 +6,6 @@ const translations = {
     Grading: 'Grading',
     'Game Simulator': 'Game Simulator',
     'Admin Panel': 'Admin Panel',
-    Stories: 'Stories',
     Playground: 'Playground',
     'SICP JS': 'SICP JS',
     Achievements: 'Achievements',

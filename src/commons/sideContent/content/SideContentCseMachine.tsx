@@ -666,10 +666,6 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
   const [loc] = getLocation(ownProps.workspaceLocation);
 
   switch (loc) {
-    // case 'stories': {
-    //   workspace = state.stories.envs[storyEnv]
-    //   break
-    // }
     case 'sicp': {
       workspace = state.workspaces.sicp;
       break;

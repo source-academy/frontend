@@ -38,7 +38,6 @@ const DropdownCreateCourse = (props => {
     viewable: true,
     enableGame: true,
     enableAchievements: true,
-    enableStories: false,
     enableLlmGrading: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
@@ -208,18 +207,6 @@ const DropdownCreateCourse = (props => {
                 setCourseConfig({
                   ...courseConfig,
                   enableGame: (e.target as HTMLInputElement).checked
-                })
-              }
-            />
-
-            <Switch
-              checked={courseConfig.enableStories}
-              inline
-              label="Enable Stories"
-              onChange={e =>
-                setCourseConfig({
-                  ...courseConfig,
-                  enableStories: (e.target as HTMLInputElement).checked
                 })
               }
             />

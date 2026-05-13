@@ -37,7 +37,6 @@ export type SessionState = {
   readonly viewable?: boolean;
   readonly enableGame?: boolean;
   readonly enableAchievements?: boolean;
-  readonly enableStories?: boolean;
   readonly enableLlmGrading?: boolean;
   readonly llmModel?: string;
   readonly llmApiUrl?: string;
@@ -113,7 +112,6 @@ export type CourseConfiguration = {
   viewable: boolean;
   enableGame: boolean;
   enableAchievements: boolean;
-  enableStories: boolean;
   enableLlmGrading?: boolean;
   enableOverallLeaderboard: boolean;
   enableContestLeaderboard: boolean;

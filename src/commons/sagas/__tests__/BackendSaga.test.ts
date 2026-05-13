@@ -1,7 +1,7 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { createMemoryRouter } from 'react-router';
-import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
+import { call } from 'redux-saga/effects';
 import { mockTeamFormationOverviews } from 'src/commons/mocks/TeamFormationMocks';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
@@ -134,7 +134,6 @@ const mockCourseConfiguration1: CourseConfiguration = {
   enableAchievements: true,
   enableOverallLeaderboard: true,
   enableContestLeaderboard: true,
-  enableStories: false,
   topLeaderboardDisplay: 100,
   topContestLeaderboardDisplay: 10,
   sourceChapter: Chapter.SOURCE_1,
@@ -170,7 +169,6 @@ const mockCourseConfiguration2: CourseConfiguration = {
   enableContestLeaderboard: true,
   topLeaderboardDisplay: 100,
   topContestLeaderboardDisplay: 10,
-  enableStories: false,
   sourceChapter: Chapter.SOURCE_4,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
@@ -956,7 +954,6 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
     enableContestLeaderboard: true,
     topLeaderboardDisplay: 100,
     topContestLeaderboardDisplay: 10,
-    enableStories: false,
     sourceChapter: Chapter.SOURCE_4,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help',
@@ -1055,7 +1052,6 @@ describe('Test CREATE_COURSE action', () => {
     enableAchievements: true,
     enableOverallLeaderboard: true,
     enableContestLeaderboard: true,
-    enableStories: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text'
