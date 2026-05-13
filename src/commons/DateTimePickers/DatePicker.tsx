@@ -1,13 +1,13 @@
 import { Button, Classes, Divider, HTMLSelect } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
-import { useEffect, useState } from 'react';
-import type { Matcher } from 'react-day-picker';
+import type { Matcher } from '@daypicker/react';
 import {
   DayPicker,
   MonthCaption as DayPickerMonthCaption,
   Nav as DayPickerNav,
-} from 'react-day-picker';
+} from '@daypicker/react';
+import classNames from 'classnames';
+import { useEffect, useState } from 'react';
 
 import GradingFlex from '../grading/GradingFlex';
 import TimePicker from './TimePicker';
