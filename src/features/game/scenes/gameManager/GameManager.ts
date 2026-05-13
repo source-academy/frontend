@@ -10,7 +10,7 @@ import GameCharacterManager from '../../character/GameCharacterManager';
 import { Constants } from '../../commons/CommonConstants';
 import type { AssetKey } from '../../commons/CommonTypes';
 import GameDashboardManager from '../../dashboard/GameDashboardManager';
-import type { DashboardPage } from '../../dashboard/GameDashboardTypes';
+import { DashboardPage } from '../../dashboard/GameDashboardTypes';
 import GameDialogueManager from '../../dialogue/GameDialogueManager';
 import GameDialogueStorageManager from '../../dialogue/GameDialogueStorageManager';
 import { blackFade, blackScreen, fadeIn } from '../../effects/FadeEffect';
