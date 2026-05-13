@@ -149,13 +149,14 @@ const GroundControl: React.FC = () => {
                   id: number,
                   hasVotingFeatures: boolean,
                   hasTokenCounter: boolean,
+                  isAutosaveEnabled: boolean,
                 ) =>
                   dispatch(
                     GroundControlActions.configureAssessment(
                       id,
                       hasVotingFeatures,
                       hasTokenCounter,
-                      isAutosaveEnabled, // TODO: Fix error
+                      isAutosaveEnabled,
                     ),
                   )
                 }
