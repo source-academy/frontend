@@ -1,5 +1,5 @@
 import { Constants, screenCenter, screenSize } from '../commons/CommonConstants';
-import { IBaseScene } from '../commons/CommonTypes';
+import type { IBaseScene } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { sleep } from '../utils/GameUtils';
 import { HexColor } from '../utils/StyleUtils';

@@ -2,7 +2,7 @@ import FontAssets from '../assets/FontAssets';
 import ImageAssets from '../assets/ImageAssets';
 import { createButton } from '../utils/ButtonUtils';
 import { screenCenter } from './CommonConstants';
-import { BitmapFontStyle } from './CommonTypes';
+import type { BitmapFontStyle } from './CommonTypes';
 
 const leaveMessage = 'turn around and leave';
 const backTextYPos = -screenCenter.y * 0.975;

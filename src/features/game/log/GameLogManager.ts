@@ -1,6 +1,6 @@
-import { IBaseScene } from '../commons/CommonTypes';
+import type { IBaseScene } from '../commons/CommonTypes';
 import DashboardConstants from '../dashboard/GameDashboardConstants';
-import { DashboardPageManager } from '../dashboard/GameDashboardTypes';
+import type { DashboardPageManager } from '../dashboard/GameDashboardTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { limitNumber } from '../utils/GameUtils';
 import { createBitmapText } from '../utils/TextUtils';

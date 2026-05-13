@@ -1,5 +1,5 @@
 import FontAssets from '../assets/FontAssets';
-import { BitmapFontStyle, ILayeredScene, TextConfig } from '../commons/CommonTypes';
+import type { BitmapFontStyle, ILayeredScene, TextConfig } from '../commons/CommonTypes';
 import { createBitmapText } from '../utils/TextUtils';
 
 const defaultGlitchStyle: BitmapFontStyle = {

@@ -2,7 +2,7 @@ import FontAssets from '../assets/FontAssets';
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants, screenSize } from '../commons/CommonConstants';
-import { BitmapFontStyle, IBaseScene } from '../commons/CommonTypes';
+import type { BitmapFontStyle, IBaseScene } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
