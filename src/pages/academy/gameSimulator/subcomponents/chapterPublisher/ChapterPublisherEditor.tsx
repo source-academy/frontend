@@ -9,7 +9,7 @@ import {
   deleteChapterRequest,
   updateChapterRequest
 } from 'src/features/gameSimulator/GameSimulatorService';
-import { ChapterSimProps } from 'src/features/gameSimulator/GameSimulatorTypes';
+import type { ChapterSimProps } from 'src/features/gameSimulator/GameSimulatorTypes';
 import { dateOneYearFromNow } from 'src/features/gameSimulator/GameSimulatorUtils';
 
 /**

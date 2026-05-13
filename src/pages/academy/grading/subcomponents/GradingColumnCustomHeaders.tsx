@@ -1,5 +1,5 @@
 import { Icon } from '@blueprintjs/core';
-import { CustomHeaderProps } from 'ag-grid-react';
+import type { CustomHeaderProps } from 'ag-grid-react';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';

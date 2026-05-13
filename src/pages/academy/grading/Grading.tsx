@@ -12,7 +12,7 @@ import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
-import { GradingOverview } from 'src/features/grading/GradingTypes';
+import type { GradingOverview } from 'src/features/grading/GradingTypes';
 import {
   exportGradingCSV,
   paginationToBackendParams,

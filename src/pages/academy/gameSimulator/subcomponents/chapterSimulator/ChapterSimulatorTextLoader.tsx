@@ -2,7 +2,7 @@ import { Button, Classes, Tab, Tabs } from '@blueprintjs/core';
 import { useState } from 'react';
 import { toTxtPath } from 'src/features/game/assets/TextAssets';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
-import { StorageProps } from 'src/features/gameSimulator/GameSimulatorTypes';
+import type { StorageProps } from 'src/features/gameSimulator/GameSimulatorTypes';
 import {
   createHeadersWithCors,
   loadFileLocally
