@@ -5,17 +5,17 @@ import {
   Intent,
   NonIdealState,
   Spinner,
-  SpinnerSize
+  SpinnerSize,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { type ColDef, type GridApi, type GridReadyEvent, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import React, { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSession } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../../../commons/application/actions/SessionActions';
-import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import GroundControlActions from '../../../features/groundControl/GroundControlActions';
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelect';
@@ -32,7 +32,7 @@ const defaultColumnDefs: ColDef = {
   minWidth: 70,
   filter: true,
   resizable: true,
-  sortable: true
+  sortable: true,
 };
 
 const GroundControl: React.FC = () => {
@@ -40,7 +40,7 @@ const GroundControl: React.FC = () => {
   const { assessmentOverviews, assessmentConfigurations } = useSession();
   const dispatch = useDispatch();
 
-  const gridApi = useRef<GridApi>();
+  const gridApi = useRef<GridApi | null>(null);
 
   const onGridReady = (params: GridReadyEvent) => {
     gridApi.current = params.api;
@@ -50,8 +50,8 @@ const GroundControl: React.FC = () => {
     params.api.applyColumnState({
       state: [
         { colId: 'openAt', sort: 'desc' },
-        { colId: 'closeAt', sort: 'desc' }
-      ]
+        { colId: 'closeAt', sort: 'desc' },
+      ],
     });
   };
 
@@ -66,16 +66,16 @@ const GroundControl: React.FC = () => {
         filter: 'agDateColumnFilter',
         filterParams: {
           comparator: dateFilterComparator,
-          inRangeInclusive: true
+          inRangeInclusive: true,
         },
         sortingOrder: ['desc', 'asc', null],
         cellRenderer: EditCell,
         cellRendererParams: {
           handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) =>
             dispatch(GroundControlActions.changeDateAssessment(id, openAt, closeAt)),
-          forOpenDate: true
+          forOpenDate: true,
         },
-        flex: 3
+        flex: 3,
       },
       {
         headerName: 'Close Date',
@@ -83,16 +83,16 @@ const GroundControl: React.FC = () => {
         filter: 'agDateColumnFilter',
         filterParams: {
           comparator: dateFilterComparator,
-          inRangeInclusive: true
+          inRangeInclusive: true,
         },
         sortingOrder: ['desc', 'asc', null],
         cellRenderer: EditCell,
         cellRendererParams: {
           handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) =>
             dispatch(GroundControlActions.changeDateAssessment(id, openAt, closeAt)),
-          forOpenDate: false
+          forOpenDate: false,
         },
-        flex: 3
+        flex: 3,
       },
       {
         headerName: 'Max Team Size',
@@ -100,8 +100,8 @@ const GroundControl: React.FC = () => {
         cellRenderer: EditTeamSizeCell,
         cellRendererParams: {
           onTeamSizeChange: (id: number, maxTeamSize: number) =>
-            dispatch(GroundControlActions.changeTeamSizeAssessment(id, maxTeamSize))
-        }
+            dispatch(GroundControlActions.changeTeamSizeAssessment(id, maxTeamSize)),
+        },
       },
       {
         headerName: 'Published',
@@ -109,12 +109,12 @@ const GroundControl: React.FC = () => {
         cellRenderer: PublishCell,
         cellRendererParams: {
           handlePublishAssessment: (togglePublishAssessmentTo: boolean, id: number) =>
-            dispatch(GroundControlActions.publishAssessment(togglePublishAssessmentTo, id))
+            dispatch(GroundControlActions.publishAssessment(togglePublishAssessmentTo, id)),
         },
         filter: false,
         resizable: false,
         sortable: false,
-        cellStyle: { padding: 0 }
+        cellStyle: { padding: 0 },
       },
       {
         headerName: 'Grading',
@@ -124,12 +124,12 @@ const GroundControl: React.FC = () => {
           handlePublishGradingAll: (id: number) =>
             dispatch(GroundControlActions.publishGradingAll(id)),
           handleUnpublishGradingAll: (id: number) =>
-            dispatch(GroundControlActions.unpublishGradingAll(id))
+            dispatch(GroundControlActions.unpublishGradingAll(id)),
         },
         filter: false,
         resizable: false,
         sortable: false,
-        cellStyle: { padding: 0 }
+        cellStyle: { padding: 0 },
       },
       {
         headerName: 'Actions',
@@ -148,10 +148,15 @@ const GroundControl: React.FC = () => {
                 handleConfigureAssessment={(
                   id: number,
                   hasVotingFeatures: boolean,
-                  hasTokenCounter: boolean
+                  hasTokenCounter: boolean,
                 ) =>
                   dispatch(
-                    GroundControlActions.configureAssessment(id, hasVotingFeatures, hasTokenCounter)
+                    GroundControlActions.configureAssessment(
+                      id,
+                      hasVotingFeatures,
+                      hasTokenCounter,
+                      isAutosaveEnabled, // TODO: Fix error
+                    ),
                   )
                 }
                 handleAssignEntriesForVoting={(id: number) =>
@@ -164,10 +169,10 @@ const GroundControl: React.FC = () => {
         filter: false,
         resizable: false,
         sortable: false,
-        cellStyle: { padding: 0 }
-      }
+        cellStyle: { padding: 0 },
+      },
     ],
-    [dispatch]
+    [dispatch],
   );
 
   const controls = (
