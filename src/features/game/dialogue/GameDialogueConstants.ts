@@ -10,10 +10,10 @@ const DialogueConstants = {
   rect: {
     x: dialogueRectMargin,
     y: 760,
-    width: screenSize.x - dialogueRectMargin * 2
+    width: screenSize.x - dialogueRectMargin * 2,
   },
   text: { xPad: 100, yPad: 70 },
-  speakerTextConfig: { x: 320, y: 745, oriX: 0.5, oriY: 0.5 }
+  speakerTextConfig: { x: 320, y: 745, oriX: 0.5, oriY: 0.5 },
 };
 
 export const textTypeWriterStyle = {
@@ -24,14 +24,14 @@ export const textTypeWriterStyle = {
   lineSpacing: 10,
   wordWrap: {
     width:
-      DialogueConstants.rect.width - DialogueConstants.text.xPad * 2 - DialogueConstants.rect.x * 2
-  }
+      DialogueConstants.rect.width - DialogueConstants.text.xPad * 2 - DialogueConstants.rect.x * 2,
+  },
 };
 
 export const speakerTextStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 36,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 export default DialogueConstants;

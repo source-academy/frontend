@@ -26,19 +26,19 @@ export function mockRuntimeContext(): Context {
         type: 'Literal',
         loc: {
           start: { line: 1, column: 0 },
-          end: { line: 1, column: 1 }
+          end: { line: 1, column: 1 },
         },
         value: 0,
         raw: '0',
-        range: [0, 1]
-      }
+        range: [0, 1],
+      },
     ],
     control: null,
     stash: null,
     objectCount: 0,
     envStepsTotal: 0,
     breakpointSteps: [],
-    changepointSteps: []
+    changepointSteps: [],
   };
   return context;
 }

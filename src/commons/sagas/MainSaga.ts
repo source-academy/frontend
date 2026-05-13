@@ -34,6 +34,6 @@ export default function* MainSaga(): SagaIterator {
     fork(LanguageDirectorySaga),
     fork(PluginDirectorySaga),
     fork(watchAutoSave),
-    fork(watchSavingStatus)
+    fork(watchSavingStatus),
   ]);
 }

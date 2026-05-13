@@ -19,7 +19,7 @@ import {
   QuizConstants,
   quizOptStyle,
   quizTextStyle,
-  startPrompt
+  startPrompt,
 } from './GameQuizConstants';
 import GameQuizReactionManager from './GameQuizReactionManager';
 import type { Question } from './GameQuizType';
@@ -47,7 +47,7 @@ export default class QuizManager {
     for (let i = 0; i < numOfQuestions; i++) {
       numOfCorrect += await this.showQuizQuestion(
         GameGlobalAPI.getInstance().getGameManager(),
-        quiz.questions[i]
+        quiz.questions[i],
       );
     }
     GameGlobalAPI.getInstance().setQuizScore(quizId, numOfCorrect);
@@ -97,7 +97,7 @@ export default class QuizManager {
       screenSize.x - QuizConstants.textPad,
       QuizConstants.y,
       selfQuestionPrompt,
-      quizTextStyle
+      quizTextStyle,
     ).setOrigin(1.0, 0.0);
 
     const quizHeaderBg = new Phaser.GameObjects.Rectangle(
@@ -107,7 +107,7 @@ export default class QuizManager {
       QuizConstants.width * quizPartitions,
       header.getBounds().bottom * 0.5 + QuizConstants.textPad,
       HexColor.darkBlue,
-      0.8
+      0.8,
     ).setOrigin(1.0, 0.0);
 
     const quizBg = new Phaser.GameObjects.Rectangle(
@@ -117,7 +117,7 @@ export default class QuizManager {
       QuizConstants.width * quizPartitions,
       quizHeaderBg.getBounds().bottom * 0.5 + (quizHeight + 0.5) * QuizConstants.yInterval,
       HexColor.lightBlue,
-      0.2
+      0.2,
     ).setOrigin(1.0, 0.0);
 
     quizContainer.add([
@@ -125,13 +125,13 @@ export default class QuizManager {
       quizHeaderBg,
       header,
       quizQuestionBox,
-      quizQuestionWriter.container
+      quizQuestionWriter.container,
     ]);
 
     const buttonPositions = calcListFormatPos({
       numOfItems: choices.length,
       xSpacing: 0,
-      ySpacing: QuizConstants.yInterval
+      ySpacing: QuizConstants.yInterval,
     });
 
     GameGlobalAPI.getInstance().addToLayer(Layer.Dialogue, quizContainer);
@@ -152,16 +152,16 @@ export default class QuizManager {
                 await this.showReaction(response.reaction);
               }
               resolve(isCorrect);
-            }
+            },
           }).setPosition(
             screenSize.x -
               QuizConstants.width / 2 -
               QuizConstants.width * (quizPartitions - Math.floor(index / 5) - 1),
             (buttonPositions[index][1] % (5 * QuizConstants.yInterval)) +
               quizHeaderBg.getBounds().bottom +
-              QuizConstants.optionsYOffSet
-          )
-        )
+              QuizConstants.optionsYOffSet,
+          ),
+        ),
       );
     });
 
@@ -173,7 +173,7 @@ export default class QuizManager {
     scene.add.tween({
       targets: quizContainer,
       alpha: 1,
-      ...rightSideEntryTweenProps
+      ...rightSideEntryTweenProps,
     });
     await sleep(rightSideEntryTweenProps.duration);
 
@@ -182,7 +182,7 @@ export default class QuizManager {
     scene.add.tween({
       targets: quizContainer,
       alpha: 1,
-      ...rightSideExitTweenProps
+      ...rightSideExitTweenProps,
     });
 
     fadeAndDestroy(scene, quizContainer, { fadeDuration: Constants.fadeDuration });

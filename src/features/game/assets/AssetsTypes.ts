@@ -25,12 +25,12 @@ export type ImageConfig = {
 
 export enum AssetType {
   Image = 'Image',
-  Sprite = 'Sprite'
+  Sprite = 'Sprite',
 }
 
 export enum AnimType {
   Background = 'Background',
-  Object = 'Object'
+  Object = 'Object',
 }
 
 export type SoundAsset = {

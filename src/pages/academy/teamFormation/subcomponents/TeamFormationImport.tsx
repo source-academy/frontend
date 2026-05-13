@@ -17,7 +17,7 @@ const TeamFormationImport: React.FC = () => {
   const { courseId, students } = useTypedSelector(state => state.session);
   const assessmentOverviews = useTypedSelector(state => state.session.assessmentOverviews);
   const [selectedAssessment, setSelectedAssessment] = useState<AssessmentOverview | undefined>(
-    undefined
+    undefined,
   );
   let maxNoOfStudents: number | undefined = selectedAssessment ? selectedAssessment.maxTeamSize : 0;
 
@@ -62,7 +62,7 @@ const TeamFormationImport: React.FC = () => {
               id="assessment"
               options={assessmentOverviews?.map(assessment => ({
                 label: assessment.title,
-                value: assessment
+                value: assessment,
               }))}
               value={
                 selectedAssessment

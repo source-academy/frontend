@@ -21,7 +21,7 @@ type File = {
  */
 export const retrieveFilesInWorkspaceAsRecord = (
   workspaceLocation: WorkspaceLocation,
-  fileSystem: FSModule
+  fileSystem: FSModule,
 ): Promise<Record<string, string>> => {
   const processFile = (filePath: string): Promise<File> => {
     return new Promise((resolve, reject) => {
@@ -36,7 +36,7 @@ export const retrieveFilesInWorkspaceAsRecord = (
 
         resolve({
           path: filePath,
-          contents: fileContents
+          contents: fileContents,
         });
       });
     });
@@ -73,7 +73,7 @@ export const retrieveFilesInWorkspaceAsRecord = (
                   resolve(processDirectory(fullPath));
                 }
               });
-            })
+            }),
           );
         }
 
@@ -106,7 +106,7 @@ export const retrieveFilesInWorkspaceAsRecord = (
 export const overwriteFilesInWorkspace = async (
   workspaceLocation: WorkspaceLocation,
   fileSystem: FSModule,
-  files: Record<string, string>
+  files: Record<string, string>,
 ): Promise<void> => {
   await rmFilesInDirRecursively(fileSystem, WORKSPACE_BASE_PATHS[workspaceLocation]);
   for (const [filePath, fileContents] of Object.entries(files)) {
@@ -123,7 +123,7 @@ export const overwriteFilesInWorkspace = async (
  */
 export const rmFilesInDirRecursively = (
   fileSystem: FSModule,
-  directoryPath: string
+  directoryPath: string,
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
     fileSystem.readdir(directoryPath, async (err, fileNames): Promise<void> => {
@@ -218,7 +218,7 @@ export const rmdirRecursively = (fileSystem: FSModule, directoryPath: string): P
 export const writeFileRecursively = (
   fileSystem: FSModule,
   filePath: string,
-  fileContents: string
+  fileContents: string,
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
     // Create directories along the path if they do not exist.

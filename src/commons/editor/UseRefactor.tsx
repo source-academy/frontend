@@ -23,12 +23,12 @@ const useRefactor: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     const position = editor.getCursorPosition();
     const sourceLocations = getAllOccurrencesInScope(code, createContext(sourceChapter), {
       line: position.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
-      column: position.column
+      column: position.column,
     });
 
     const selection = editor.getSelection();
     const ranges = sourceLocations.map(
-      loc => new Range(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column)
+      loc => new Range(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column),
     );
     ranges.forEach(range => selection.addRange(range));
   }, [reactAceRef, sourceChapter]);

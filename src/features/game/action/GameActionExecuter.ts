@@ -74,7 +74,7 @@ export default class GameActionExecuter {
           actionParams.id,
           actionParams.position,
           actionParams.duration,
-          actionParams.size
+          actionParams.size,
         );
         return;
       case GameActionType.MakeObjectBlink:

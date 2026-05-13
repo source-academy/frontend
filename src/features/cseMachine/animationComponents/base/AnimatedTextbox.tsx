@@ -24,7 +24,7 @@ export class AnimatedTextbox extends AnimatableTo<TextRectSharedConfig> {
   constructor(
     text: string,
     sharedProps: TextRectSharedConfig,
-    additionalProps?: { rectProps?: RectConfig; textProps?: TextConfig }
+    additionalProps?: { rectProps?: RectConfig; textProps?: TextConfig },
   ) {
     super();
     const rectProps = { ...sharedProps, ...additionalProps?.rectProps };
@@ -35,7 +35,7 @@ export class AnimatedTextbox extends AnimatableTo<TextRectSharedConfig> {
       padding: ControlStashConfig.ControlItemTextPadding,
       ...sharedProps,
       ...additionalProps?.textProps,
-      text
+      text,
     };
     this.textComponent = new AnimatedTextComponent(textProps);
   }
@@ -60,7 +60,7 @@ export class AnimatedTextbox extends AnimatableTo<TextRectSharedConfig> {
   async animateTo(to: Partial<TextRectSharedConfig>, animationConfig?: AnimationConfig) {
     await Promise.all([
       this.animateRectTo(to, animationConfig),
-      this.animateTextTo(to, animationConfig)
+      this.animateTextTo(to, animationConfig),
     ]);
   }
 

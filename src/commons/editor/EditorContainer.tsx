@@ -24,12 +24,12 @@ export type EditorContainerProps = NormalEditorContainerProps;
 
 export const convertEditorTabStateToProps = (
   editorTab: EditorTabState,
-  editorTabIndex: number
+  editorTabIndex: number,
 ): EditorTabStateProps => {
   return {
     editorTabIndex,
     editorValue: editorTab.value,
-    ..._.pick(editorTab, 'filePath', 'highlightedLines', 'breakpoints', 'newCursorPosition')
+    ..._.pick(editorTab, 'filePath', 'highlightedLines', 'breakpoints', 'newCursorPosition'),
   };
 };
 

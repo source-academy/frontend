@@ -15,32 +15,32 @@ import {
   promptReloginMessage,
   request,
   type RequestMethod,
-  userSessionExpiredNotificationKey
+  userSessionExpiredNotificationKey,
 } from '../RequestHelper';
 
 global.fetch = vi.fn();
 const fetchMock = fetch as Mock;
 
 vi.mock('../../utils/notifications/NotificationsHelper', () => ({
-  showWarningMessage: vi.fn()
+  showWarningMessage: vi.fn(),
 }));
 const showWarningMessageSpy = showWarningMessage as Mock<typeof showWarningMessage>;
 vi.mock('../../sagas/RequestsSaga');
 const postRefreshSpy = postRefresh as Mock<typeof postRefresh>;
 vi.mock('../../../pages/createStore', () => ({
   store: {
-    dispatch: vi.fn()
-  }
+    dispatch: vi.fn(),
+  },
 }));
 const storeDispatchSpy = store.dispatch as unknown as Mock<typeof store.dispatch>;
 
 const tokens: Tokens = {
   accessToken: 'accessToken',
-  refreshToken: 'refreshToken'
+  refreshToken: 'refreshToken',
 };
 const refreshedTokens: Tokens = {
   accessToken: 'refreshedAccessToken',
-  refreshToken: 'refreshedRefreshToken'
+  refreshToken: 'refreshedRefreshToken',
 };
 
 export type MockResponse = {
@@ -52,17 +52,17 @@ export type MockResponse = {
 const OK_RESP: MockResponse = {
   ok: true,
   status: 200,
-  statusText: 'OK'
+  statusText: 'OK',
 };
 const UNAUTHORIZED_401_ERROR_RESP: MockResponse = {
   ok: false,
   status: 401,
-  statusText: 'Unauthorized'
+  statusText: 'Unauthorized',
 };
 const NON_UNAUTHORIZED_401_ERROR_RESP: MockResponse = {
   ok: false,
   status: 400,
-  statusText: 'Bad Request'
+  statusText: 'Bad Request',
 };
 
 const apiPath = 'api_path';
@@ -78,7 +78,7 @@ const mock401ErrorResponseOnce = () =>
   fetchMock.mockImplementationOnce(() => Promise.resolve(UNAUTHORIZED_401_ERROR_RESP));
 const mockPostRefresh = (success: boolean) =>
   postRefreshSpy.mockImplementation(
-    () => new Promise(resolve => setTimeout(() => resolve(success ? refreshedTokens : null), 500))
+    () => new Promise(resolve => setTimeout(() => resolve(success ? refreshedTokens : null), 500)),
   );
 
 const mockNetworkErrorOnce = () => fetchMock.mockImplementationOnce(() => Promise.reject());
@@ -94,19 +94,19 @@ const makeRequest = (method: RequestMethod = GET_METHOD) => request(apiPath, met
 const expectFetchToBeCalledWithCorrectParams = () =>
   expect(fetchMock).toBeCalledWith(
     fullApiUrl,
-    generateApiCallHeadersAndFetchOptions(GET_METHOD, fetchOptions)
+    generateApiCallHeadersAndFetchOptions(GET_METHOD, fetchOptions),
   );
 const expectRefreshFlowFetchesToBeCalledWithCorrectParams = () => {
   expect(fetchMock).toBeCalledTimes(2);
   expect(fetchMock).toHaveBeenNthCalledWith(
     1,
     fullApiUrl,
-    expect.objectContaining(generateApiCallHeadersAndFetchOptions(GET_METHOD, fetchOptions))
+    expect.objectContaining(generateApiCallHeadersAndFetchOptions(GET_METHOD, fetchOptions)),
   );
   expect(fetchMock).toHaveBeenNthCalledWith(
     2,
     fullApiUrl,
-    expect.objectContaining(generateApiCallHeadersAndFetchOptions(GET_METHOD, refreshFetchOptions))
+    expect.objectContaining(generateApiCallHeadersAndFetchOptions(GET_METHOD, refreshFetchOptions)),
   );
   // expect(fetchMock).toHaveBeenNthCalledWith(
   //   1,
@@ -133,7 +133,7 @@ const expectStoreToDispatchLogout = (dispatchOccurs: boolean) =>
 describe('request', () => {
   // Mock location object as jsdom can't navigate
   Object.defineProperty(window, 'location', {
-    value: new URL('http://sourceacademy.nus.edu.sg')
+    value: new URL('http://sourceacademy.nus.edu.sg'),
   });
 
   beforeEach(() => {
@@ -159,7 +159,7 @@ describe('request', () => {
 
     expectFetchToBeCalledWithCorrectParams();
     expect(showWarningMessageSpy).toBeCalledWith(
-      getResponseErrorMessage(NON_UNAUTHORIZED_401_ERROR_RESP)
+      getResponseErrorMessage(NON_UNAUTHORIZED_401_ERROR_RESP),
     );
     expectPostRefreshToBeCalled(false);
     expect(resp).toBeNull();
@@ -189,7 +189,7 @@ describe('request', () => {
     expectStoreToDispatchRefreshedTokens(true);
     expectRefreshFlowFetchesToBeCalledWithCorrectParams();
     expect(showWarningMessageSpy).toBeCalledWith(
-      getResponseErrorMessage(NON_UNAUTHORIZED_401_ERROR_RESP)
+      getResponseErrorMessage(NON_UNAUTHORIZED_401_ERROR_RESP),
     );
     expectStoreToDispatchLogout(false);
     expect(resp).toBeNull();
@@ -208,7 +208,7 @@ describe('request', () => {
     expect(showWarningMessageSpy).toBeCalledWith(
       autoLogoutMessage,
       undefined,
-      userSessionExpiredNotificationKey
+      userSessionExpiredNotificationKey,
     );
     expectStoreToDispatchLogout(true);
     expect(resp).toBeNull();
@@ -227,7 +227,7 @@ describe('request', () => {
     expect(showWarningMessageSpy).toBeCalledWith(
       promptReloginMessage,
       -1,
-      userSessionExpiredNotificationKey
+      userSessionExpiredNotificationKey,
     );
     expectStoreToDispatchLogout(false);
     expect(resp).toBeNull();
@@ -246,7 +246,7 @@ describe('request', () => {
     expect(showWarningMessageSpy).toBeCalledWith(
       autoLogoutMessage,
       undefined,
-      userSessionExpiredNotificationKey
+      userSessionExpiredNotificationKey,
     );
     expectStoreToDispatchLogout(true);
     expect(resp).toBeNull();
@@ -265,7 +265,7 @@ describe('request', () => {
     expect(showWarningMessageSpy).toBeCalledWith(
       promptReloginMessage,
       -1,
-      userSessionExpiredNotificationKey
+      userSessionExpiredNotificationKey,
     );
     expectStoreToDispatchLogout(false);
     expect(resp).toBeNull();
@@ -292,10 +292,10 @@ describe('request', () => {
         [fetchOptions, refreshFetchOptions].flatMap(opts =>
           (['GET', 'POST', 'DELETE'] as RequestMethod[]).map(method => [
             fullApiUrl,
-            generateApiCallHeadersAndFetchOptions(method, opts)
-          ])
-        )
-      )
+            generateApiCallHeadersAndFetchOptions(method, opts),
+          ]),
+        ),
+      ),
     );
   });
 
@@ -326,7 +326,7 @@ describe('request', () => {
     expect(showWarningMessageSpy).toBeCalledWith(
       networkErrorMessage,
       undefined,
-      networkErrorNotificationKey
+      networkErrorNotificationKey,
     );
     expectStoreToDispatchLogout(false);
     expect(resp).toBeNull();

@@ -13,7 +13,7 @@ export enum EditableCardActionType {
   CHANGE_XP = 'CHANGE_XP',
   DELETE_ACHIEVEMENT = 'DELETE_ACHIEVEMENT',
   DISCARD_CHANGES = 'DISCARD_CHANGES',
-  SAVE_CHANGES = 'SAVE_CHANGES'
+  SAVE_CHANGES = 'SAVE_CHANGES',
 }
 
 export type EditableCardAction =

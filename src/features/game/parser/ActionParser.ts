@@ -40,7 +40,7 @@ export default class ActionParser {
     const gameAction = this.parseActionContent(actionString);
     if (conditionalsString) {
       gameAction.actionConditions = StringUtils.splitByChar(conditionalsString, 'AND').map(
-        condition => ConditionParser.parse(condition)
+        condition => ConditionParser.parse(condition),
       );
     }
 
@@ -212,7 +212,7 @@ export default class ActionParser {
       actionConditions: [],
       interactionId: actionId,
       isInteractive: false,
-      isRepeatable: repeatable
+      isRepeatable: repeatable,
     };
   }
 

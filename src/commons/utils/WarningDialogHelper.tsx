@@ -19,7 +19,7 @@ const FULL_JS_DISCLAIMER_DIALOG_PROPS: SimpleConfirmDialogProps = {
   ),
   positiveIntent: 'danger',
   positiveLabel: 'Proceed',
-  negativeLabel: 'Cancel'
+  negativeLabel: 'Cancel',
 };
 
 const FULL_JS_URL_LOAD_INFO: string =
@@ -51,7 +51,7 @@ const FULL_TS_DISCLAIMER_DIALOG_PROPS: SimpleConfirmDialogProps = {
   ),
   positiveIntent: 'danger',
   positiveLabel: 'Proceed',
-  negativeLabel: 'Cancel'
+  negativeLabel: 'Cancel',
 };
 
 const FULL_TS_URL_LOAD_INFO: string =
@@ -83,7 +83,7 @@ const HTML_DISCLAIMER_DIALOG_PROPS: SimpleConfirmDialogProps = {
   ),
   positiveIntent: 'danger',
   positiveLabel: 'Proceed',
-  negativeLabel: 'Cancel'
+  negativeLabel: 'Cancel',
 };
 
 export function showHTMLDisclaimer(): Promise<boolean> {

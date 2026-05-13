@@ -7,7 +7,7 @@ import {
   Icon,
   InputGroup,
   Intent,
-  TextArea
+  TextArea,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useCallback, useEffect, useState } from 'react';
@@ -16,7 +16,7 @@ import classes from 'src/styles/PixelbotConfig.module.scss';
 
 import type {
   Tokens,
-  UpdateCourseConfiguration
+  UpdateCourseConfiguration,
 } from '../../../../commons/application/types/SessionTypes';
 import { getPixelbotDocumentMap } from '../../../../commons/sagas/RequestsSaga';
 
@@ -96,7 +96,7 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
   const saveRouting = useCallback(() => {
     const updatedConfig = {
       ...props.courseConfiguration,
-      pixelbotRoutingPrompt: routingDraft
+      pixelbotRoutingPrompt: routingDraft,
     };
     props.setCourseConfiguration(updatedConfig);
     props.onSave(updatedConfig);
@@ -119,7 +119,7 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
   const saveAnswer = useCallback(() => {
     const updatedConfig = {
       ...props.courseConfiguration,
-      pixelbotAnswerPrompt: answerDraft
+      pixelbotAnswerPrompt: answerDraft,
     };
     props.setCourseConfiguration(updatedConfig);
     props.onSave(updatedConfig);
@@ -166,7 +166,7 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
             onChange={e => {
               const updatedConfig = {
                 ...props.courseConfiguration,
-                feedbackUrl: e.target.value
+                feedbackUrl: e.target.value,
               };
               props.setCourseConfiguration(updatedConfig);
             }}

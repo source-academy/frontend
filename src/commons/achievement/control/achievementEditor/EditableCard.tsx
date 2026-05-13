@@ -6,7 +6,7 @@ import { useContext, useMemo, useReducer, useState } from 'react';
 import { AchievementContext } from '../../../../features/achievement/AchievementConstants';
 import type {
   AchievementItem,
-  AchievementView
+  AchievementView,
 } from '../../../../features/achievement/AchievementTypes';
 import ItemDeleter from '../common/ItemDeleter';
 import ItemSaver from '../common/ItemSaver';
@@ -20,7 +20,7 @@ import EditableView from './EditableView';
 const init = (achievement: AchievementItem): State => {
   return {
     editableAchievement: achievement,
-    isDirty: false
+    isDirty: false,
   };
 };
 
@@ -29,95 +29,95 @@ const reducer = (state: State, action: Action) => {
     case ActionType.SAVE_CHANGES:
       return {
         ...state,
-        isDirty: false
+        isDirty: false,
       };
     case ActionType.DISCARD_CHANGES:
       return init(action.payload);
     case ActionType.DELETE_ACHIEVEMENT:
       return {
         ...state,
-        isDirty: false
+        isDirty: false,
       };
     case ActionType.CHANGE_CARD_BACKGROUND:
       return {
         editableAchievement: {
           ...state.editableAchievement,
-          cardBackground: action.payload
+          cardBackground: action.payload,
         },
-        isDirty: true
+        isDirty: true,
       };
     case ActionType.CHANGE_DEADLINE:
       return {
         editableAchievement: {
           ...state.editableAchievement,
-          deadline: action.payload
+          deadline: action.payload,
         },
-        isDirty: true
+        isDirty: true,
       };
     case ActionType.CHANGE_GOAL_UUIDS:
       return {
         editableAchievement: {
           ...state.editableAchievement,
-          goalUuids: action.payload
+          goalUuids: action.payload,
         },
-        isDirty: true
+        isDirty: true,
       };
     case ActionType.CHANGE_POSITION:
       return {
         editableAchievement: {
           ...state.editableAchievement,
           isTask: action.payload !== 0,
-          position: action.payload
+          position: action.payload,
         },
-        isDirty: true
+        isDirty: true,
       };
     case ActionType.CHANGE_PREREQUISITE_UUIDS:
       return {
         editableAchievement: {
           ...state.editableAchievement,
-          prerequisiteUuids: action.payload
+          prerequisiteUuids: action.payload,
         },
-        isDirty: true
+        isDirty: true,
       };
     case ActionType.CHANGE_RELEASE:
       return {
         editableAchievement: {
           ...state.editableAchievement,
-          release: action.payload
+          release: action.payload,
         },
-        isDirty: true
+        isDirty: true,
       };
     case ActionType.CHANGE_TITLE:
       return {
         editableAchievement: {
           ...state.editableAchievement,
-          title: action.payload
+          title: action.payload,
         },
-        isDirty: true
+        isDirty: true,
       };
     case ActionType.CHANGE_VIEW:
       return {
         editableAchievement: {
           ...state.editableAchievement,
-          view: action.payload
+          view: action.payload,
         },
-        isDirty: true
+        isDirty: true,
       };
     case ActionType.CHANGE_XP:
       return {
         editableAchievement: {
           ...state.editableAchievement,
-          xp: action.payload
+          xp: action.payload,
         },
-        isDirty: true
+        isDirty: true,
       };
     case ActionType.CHANGE_IS_VARIABLE_XP:
       return {
         editableAchievement: {
           ...state.editableAchievement,
-          isVariableXp: !state.editableAchievement.isVariableXp
+          isVariableXp: !state.editableAchievement.isVariableXp,
         },
-        isDirty: true
+        isDirty: true,
       };
     default:
       return state;
@@ -137,7 +137,7 @@ const EditableCard: React.FC<Props> = ({
   isNewAchievement,
   releaseUuid,
   removeCard,
-  requestPublish
+  requestPublish,
 }) => {
   const inferencer = useContext(AchievementContext);
   const achievement = inferencer.getAchievement(uuid);
@@ -205,7 +205,7 @@ const EditableCard: React.FC<Props> = ({
     <li
       className="editable-card"
       style={{
-        background: `url(${cardBackground}) center/cover`
+        background: `url(${cardBackground}) center/cover`,
       }}
     >
       <div className="action-button">

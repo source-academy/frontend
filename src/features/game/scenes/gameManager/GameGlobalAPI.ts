@@ -158,7 +158,7 @@ class GameGlobalAPI {
   public getAllActivatables() {
     return [
       ...this.getGameManager().getObjectManager().getActivatables(),
-      ...this.getGameManager().getBBoxManager().getActivatables()
+      ...this.getGameManager().getBBoxManager().getActivatables(),
     ];
   }
 
@@ -462,15 +462,15 @@ class GameGlobalAPI {
     const response = await promptWithChoices(
       GameGlobalAPI.getInstance().getGameManager(),
       `Are you ready for the challenge?`,
-      ['Yes', 'No']
+      ['Yes', 'No'],
     );
     if (response === 0) {
       const assessments = await getAssessmentOverviews(
-        SourceAcademyGame.getInstance().getAccountInfo()
+        SourceAcademyGame.getInstance().getAccountInfo(),
       );
       if (assessments) {
         const { id, type } = assessments.filter(
-          assessment => assessment.number === assessmentId
+          assessment => assessment.number === assessmentId,
         )[0];
         window.open(`/courses/${courseId()}/${type.toLowerCase()}/${id}/0`, 'blank');
         window.focus();
@@ -489,7 +489,7 @@ class GameGlobalAPI {
   public createCharacterSprite(
     characterId: ItemId,
     overrideExpression?: string,
-    overridePosition?: GamePosition
+    overridePosition?: GamePosition,
   ) {
     return this.getGameManager()
       .getCharacterManager()

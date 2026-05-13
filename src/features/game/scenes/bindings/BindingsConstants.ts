@@ -9,19 +9,19 @@ export const BindingConstants = {
     xOffset: screenSize.x / 5,
     yOffset1: screenCenter.y - screenSize.y / 4,
     yOffset2: screenCenter.y - screenSize.y / 1.5,
-    yInterval: 150
+    yInterval: 150,
   },
-  icon: { x: screenCenter.x - 100 }
+  icon: { x: screenCenter.x - 100 },
 };
 
 export const keyStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 30,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 export const keyDescStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 25,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };

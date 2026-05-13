@@ -6,7 +6,7 @@ const PluginDirectoryActions = createActions('directory/plugins', {
   /** Fetch plugins (saga) */
   fetchPlugins: null,
   /** Set plugins list */
-  setPlugins: (plugins: IPluginDefinition[]) => ({ plugins })
+  setPlugins: (plugins: IPluginDefinition[]) => ({ plugins }),
 });
 
 export default PluginDirectoryActions;

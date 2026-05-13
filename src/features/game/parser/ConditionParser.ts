@@ -28,9 +28,9 @@ export default class ConditionParser {
         return {
           state: GameStateStorage.ChecklistState,
           conditionParams: {
-            id: condParams[0]
+            id: condParams[0],
           },
-          boolean: !hasExclamation
+          boolean: !hasExclamation,
         };
 
       case GameStateStorage.TasklistState:
@@ -38,9 +38,9 @@ export default class ConditionParser {
         return {
           state: GameStateStorage.TasklistState,
           conditionParams: {
-            id: condParams[0]
+            id: condParams[0],
           },
-          boolean: !hasExclamation
+          boolean: !hasExclamation,
         };
 
       case GameStateStorage.UserState:
@@ -48,9 +48,9 @@ export default class ConditionParser {
           state: GameStateStorage.UserState,
           conditionParams: {
             userStateType: ParserConverter.stringToUserStateType(condParams[0]),
-            id: condParams[1]
+            id: condParams[1],
           },
-          boolean: !hasExclamation
+          boolean: !hasExclamation,
         };
 
       case GameStateStorage.AttemptedQuizState:
@@ -58,9 +58,9 @@ export default class ConditionParser {
         return {
           state: GameStateStorage.AttemptedQuizState,
           conditionParams: {
-            id: condParams[0]
+            id: condParams[0],
           },
-          boolean: !hasExclamation
+          boolean: !hasExclamation,
         };
 
       case GameStateStorage.PassedQuizState:
@@ -68,9 +68,9 @@ export default class ConditionParser {
         return {
           state: GameStateStorage.PassedQuizState,
           conditionParams: {
-            id: condParams[0]
+            id: condParams[0],
           },
-          boolean: !hasExclamation
+          boolean: !hasExclamation,
         };
 
       case GameStateStorage.QuizScoreState:
@@ -82,9 +82,9 @@ export default class ConditionParser {
           state: GameStateStorage.QuizScoreState,
           conditionParams: {
             id: condParams[0],
-            score: condParams[1]
+            score: condParams[1],
           },
-          boolean: !hasExclamation
+          boolean: !hasExclamation,
         };
 
       default:

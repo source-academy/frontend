@@ -19,7 +19,7 @@ const EditorTab: React.FC<Props> = ({ filePath, isActive, setActive, remove }) =
   return (
     <Card
       className={classNames('editor-tab', {
-        selected: isActive
+        selected: isActive,
       })}
       onClick={setActive}
     >

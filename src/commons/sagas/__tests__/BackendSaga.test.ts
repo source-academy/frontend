@@ -14,25 +14,25 @@ import {
   Role,
   type SALanguage,
   type Story,
-  SupportedLanguage
+  SupportedLanguage,
 } from '../../application/ApplicationTypes';
 import type {
   AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
   UpdateCourseConfiguration,
-  User
+  User,
 } from '../../application/types/SessionTypes';
 import {
   type Assessment,
   type AssessmentConfiguration,
   AssessmentStatuses,
-  type Question
+  type Question,
 } from '../../assessment/AssessmentTypes';
 import {
   mockAssessmentOverviews,
   mockAssessmentQuestions,
-  mockAssessments
+  mockAssessments,
 } from '../../mocks/AssessmentMocks';
 import { mockGradingSummary } from '../../mocks/GradingMocks';
 import { mockNotifications, mockStudents } from '../../mocks/UserMocks';
@@ -41,7 +41,7 @@ import { AuthProviderType, computeFrontendRedirectUri } from '../../utils/AuthHe
 import Constants from '../../utils/Constants';
 import {
   showSuccessMessage,
-  showWarningMessage
+  showWarningMessage,
 } from '../../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
 import type { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
@@ -71,7 +71,7 @@ import {
   putLatestViewedCourse,
   putNewUsers,
   putUserRole,
-  removeUserCourseRegistration
+  removeUserCourseRegistration,
 } from '../RequestsSaga';
 
 // ----------------------------------------
@@ -97,16 +97,16 @@ const mockUser: User = {
       courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
       courseShortName: `CS1101S`,
       role: Role.Admin,
-      viewable: true
+      viewable: true,
     },
     {
       courseId: 2,
       courseName: `CS2030S Programming Methodology II (AY20/21 Sem 2)`,
       courseShortName: `CS2030S`,
       role: Role.Staff,
-      viewable: true
-    }
-  ]
+      viewable: true,
+    },
+  ],
 };
 
 const mockCourseRegistration1: CourseRegistration = {
@@ -115,15 +115,15 @@ const mockCourseRegistration1: CourseRegistration = {
   group: '42D',
   gameState: {
     collectibles: {},
-    completed_quests: []
+    completed_quests: [],
   } as GameState,
   courseId: 1,
   xp: 1,
   story: {
     story: '',
-    playStory: false
+    playStory: false,
   } as Story,
-  agreedToResearch: null
+  agreedToResearch: null,
 };
 
 const mockCourseConfiguration1: CourseConfiguration = {
@@ -139,7 +139,7 @@ const mockCourseConfiguration1: CourseConfiguration = {
   sourceChapter: Chapter.SOURCE_1,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
-  assetsPrefix: ''
+  assetsPrefix: '',
 };
 
 const mockCourseRegistration2: CourseRegistration = {
@@ -148,15 +148,15 @@ const mockCourseRegistration2: CourseRegistration = {
   group: '4D',
   gameState: {
     collectibles: {},
-    completed_quests: []
+    completed_quests: [],
   } as GameState,
   courseId: 2,
   xp: 1,
   story: {
     story: '',
-    playStory: false
+    playStory: false,
   } as Story,
-  agreedToResearch: true
+  agreedToResearch: true,
 };
 
 const mockCourseConfiguration2: CourseConfiguration = {
@@ -172,7 +172,7 @@ const mockCourseConfiguration2: CourseConfiguration = {
   sourceChapter: Chapter.SOURCE_4,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
-  assetsPrefix: ''
+  assetsPrefix: '',
 };
 
 const mockAssessmentConfigurations: AssessmentConfiguration[] = [
@@ -187,7 +187,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     hasTokenCounter: false,
     hasVotingFeatures: false,
     earlySubmissionXp: 200,
-    isAutosaveEnabled: true
+    isAutosaveEnabled: true,
   },
   {
     assessmentConfigId: 2,
@@ -200,7 +200,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     hasTokenCounter: false,
     hasVotingFeatures: false,
     earlySubmissionXp: 200,
-    isAutosaveEnabled: true
+    isAutosaveEnabled: true,
   },
   {
     assessmentConfigId: 3,
@@ -213,7 +213,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     hasTokenCounter: false,
     hasVotingFeatures: false,
     earlySubmissionXp: 200,
-    isAutosaveEnabled: true
+    isAutosaveEnabled: true,
   },
   {
     assessmentConfigId: 4,
@@ -226,7 +226,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     hasTokenCounter: false,
     hasVotingFeatures: true,
     earlySubmissionXp: 200,
-    isAutosaveEnabled: true
+    isAutosaveEnabled: true,
   },
   {
     assessmentConfigId: 5,
@@ -239,21 +239,21 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     hasTokenCounter: false,
     hasVotingFeatures: false,
     earlySubmissionXp: 200,
-    isAutosaveEnabled: true
-  }
+    isAutosaveEnabled: true,
+  },
 ];
 
 const mockRouter = createMemoryRouter([
   {
     path: '/',
-    element: null
-  }
+    element: null,
+  },
 ]);
 
 const mockVscodeSlice = {
   vscode: {
-    isVscode: false
-  }
+    isVscode: false,
+  },
 };
 
 const mockStates = {
@@ -267,12 +267,12 @@ const mockStates = {
     ...mockTokens,
     ...mockUser,
     ...mockCourseRegistration1,
-    ...mockCourseConfiguration1
+    ...mockCourseConfiguration1,
   },
   workspaces: {
-    assessment: { currentAssessment: mockAssessment.id }
+    assessment: { currentAssessment: mockAssessment.id },
   },
-  ...mockVscodeSlice
+  ...mockVscodeSlice,
 };
 
 const okResp = { ok: true };
@@ -287,7 +287,7 @@ describe('Test FETCH_AUTH action', () => {
     name: providerId,
     endpoint: `https://test/?client_id=${clientId}`,
     isDefault: true,
-    type: AuthProviderType.OAUTH2
+    type: AuthProviderType.OAUTH2,
   });
   const redirectUrl = computeFrontendRedirectUri(providerId);
 
@@ -314,8 +314,8 @@ describe('Test FETCH_AUTH action', () => {
         [call(postAuth, code, providerId, clientId, redirectUrl), mockTokens],
         [
           call(getUser, mockTokens),
-          { user, courseRegistration, courseConfiguration, assessmentConfigurations }
-        ]
+          { user, courseRegistration, courseConfiguration, assessmentConfigurations },
+        ],
       ])
       .dispatch({ type: SessionActions.fetchAuth.type, payload: { code, providerId } })
       .silentRun();
@@ -349,9 +349,9 @@ describe('Test FETCH_AUTH action', () => {
             user: userWithNoCourse,
             courseRegistration: null,
             courseConfiguration: null,
-            assessmentConfigurations: null
-          }
-        ]
+            assessmentConfigurations: null,
+          },
+        ],
       ])
       .call(postAuth, code, providerId, clientId, redirectUrl)
       .put(SessionActions.setTokens(mockTokens))
@@ -375,9 +375,9 @@ describe('Test FETCH_AUTH action', () => {
             user,
             courseRegistration: null,
             courseConfiguration: null,
-            assessmentConfigurations: null
-          }
-        ]
+            assessmentConfigurations: null,
+          },
+        ],
       ])
       .withState({ session: mockTokens, ...mockVscodeSlice }) // need to mock tokens for updateLatestViewedCourse call
       .call(postAuth, code, providerId, clientId, redirectUrl)
@@ -403,9 +403,9 @@ describe('Test FETCH_AUTH action', () => {
             user: null,
             courseRegistration: null,
             courseConfiguration: null,
-            assessmentConfigurations: null
-          }
-        ]
+            assessmentConfigurations: null,
+          },
+        ],
       ])
       .call(postAuth, code, providerId, clientId, redirectUrl)
       .put(SessionActions.setTokens(mockTokens))
@@ -449,8 +449,8 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
       .provide([
         [
           call(getUser, mockTokens),
-          { user, courseRegistration, courseConfiguration, assessmentConfigurations }
-        ]
+          { user, courseRegistration, courseConfiguration, assessmentConfigurations },
+        ],
       ])
       .dispatch({ type: SessionActions.fetchUserAndCourse.type, payload: true })
       .silentRun();
@@ -466,9 +466,9 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
             user,
             courseRegistration: null,
             courseConfiguration: null,
-            assessmentConfigurations: null
-          }
-        ]
+            assessmentConfigurations: null,
+          },
+        ],
       ])
       .call(getUser, mockTokens)
       .put(SessionActions.setUser(user))
@@ -491,9 +491,9 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
             user: userWithNoCourse,
             courseRegistration: null,
             courseConfiguration: null,
-            assessmentConfigurations: null
-          }
-        ]
+            assessmentConfigurations: null,
+          },
+        ],
       ])
       .call(getUser, mockTokens)
       .put(SessionActions.setUser(userWithNoCourse))
@@ -515,9 +515,9 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
             user: null,
             courseRegistration: null,
             courseConfiguration: null,
-            assessmentConfigurations: null
-          }
-        ]
+            assessmentConfigurations: null,
+          },
+        ],
       ])
       .call(getUser, mockTokens)
       .not.put.actionType(SessionActions.setUser.type)
@@ -657,11 +657,11 @@ describe('Test SUBMIT_ANSWER action', () => {
           return { ...question, answer: mockAnsweredAssessmentQuestion.answer } as Question;
         }
         return question;
-      }
+      },
     );
     const mockNewAssessment = {
       ...mockAssessment,
-      questions: mockNewQuestions
+      questions: mockNewQuestions,
     };
     await expectSaga(BackendSaga)
       .withState(mockStates)
@@ -671,10 +671,10 @@ describe('Test SUBMIT_ANSWER action', () => {
             postAnswer,
             mockAnsweredAssessmentQuestion.id,
             mockAnsweredAssessmentQuestion.answer || '',
-            mockTokens
+            mockTokens,
           ),
-          okResp
-        ]
+          okResp,
+        ],
       ])
       .not.call.fn(showWarningMessage)
       .not.call.fn(showSuccessMessage)
@@ -684,7 +684,7 @@ describe('Test SUBMIT_ANSWER action', () => {
       .silentRun();
     // To make sure no changes in state
     return expect(mockStates.session.assessments[mockNewAssessment.id].questions[0].answer).toEqual(
-      null
+      null,
     );
   });
 
@@ -699,11 +699,11 @@ describe('Test SUBMIT_ANSWER action', () => {
           return { ...question, answer: mockAnsweredAssessmentQuestion.answer } as Question;
         }
         return question;
-      }
+      },
     );
     const mockNewAssessment = {
       ...mockAssessment,
-      questions: mockNewQuestions
+      questions: mockNewQuestions,
     };
     await expectSaga(BackendSaga)
       .withState({ ...mockStates, session: { ...mockStates.session, role: Role.Staff } })
@@ -713,10 +713,10 @@ describe('Test SUBMIT_ANSWER action', () => {
             postAnswer,
             mockAnsweredAssessmentQuestion.id,
             mockAnsweredAssessmentQuestion.answer || '',
-            mockTokens
+            mockTokens,
           ),
-          okResp
-        ]
+          okResp,
+        ],
       ])
       .not.call.fn(showWarningMessage)
       .not.call.fn(showSuccessMessage)
@@ -726,7 +726,7 @@ describe('Test SUBMIT_ANSWER action', () => {
       .silentRun();
     // To make sure no changes in state
     return expect(mockStates.session.assessments[mockNewAssessment.id].questions[0].answer).toEqual(
-      null
+      null,
     );
   });
 
@@ -740,16 +740,16 @@ describe('Test SUBMIT_ANSWER action', () => {
             postAnswer,
             mockAnsweredAssessmentQuestion.id,
             mockAnsweredAssessmentQuestion.answer,
-            mockTokens
+            mockTokens,
           ),
-          null
-        ]
+          null,
+        ],
       ])
       .call(
         postAnswer,
         mockAnsweredAssessmentQuestion.id,
         mockAnsweredAssessmentQuestion.answer,
-        mockTokens
+        mockTokens,
       )
       .call(showWarningMessage, "Couldn't reach our servers. Are you online?")
       .not.call.fn(showSuccessMessage)
@@ -780,7 +780,7 @@ describe('Test SUBMIT_ASSESSMENT action', () => {
       .silentRun();
     expect(mockStates.session.assessmentOverviews[0].id).toEqual(mockAssessmentId);
     return expect(mockStates.session.assessmentOverviews[0].status).not.toEqual(
-      AssessmentStatuses.submitted
+      AssessmentStatuses.submitted,
     );
   });
 
@@ -814,7 +814,7 @@ describe('Test SUBMIT_ASSESSMENT action', () => {
       .silentRun();
     expect(mockStates.session.assessmentOverviews[0].id).toEqual(mockAssessmentId);
     return expect(mockStates.session.assessmentOverviews[0].status).not.toEqual(
-      AssessmentStatuses.submitted
+      AssessmentStatuses.submitted,
     );
   });
 });
@@ -843,8 +843,8 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS action', () => {
         type: SessionActions.acknowledgeNotifications.type,
         payload: {
           withFilter: (notifications: Notification[]) =>
-            notifications.filter(notification => ids.includes(notification.id))
-        }
+            notifications.filter(notification => ids.includes(notification.id)),
+        },
       })
       .silentRun();
   });
@@ -857,29 +857,29 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
       variant: Variant.NATIVE,
       displayName: 'Source \xa74 Concurrent',
       mainLanguage: SupportedLanguage.JAVASCRIPT,
-      supports: {}
+      supports: {},
     };
 
     return expectSaga(BackendSaga)
       .withState({ session: { role: Role.Staff, ...mockTokens } })
       .call(putCourseConfig, mockTokens, {
         sourceChapter: sublang.chapter,
-        sourceVariant: sublang.variant
+        sourceVariant: sublang.variant,
       })
       .put(
         SessionActions.setCourseConfiguration({
           sourceChapter: sublang.chapter,
-          sourceVariant: sublang.variant
-        })
+          sourceVariant: sublang.variant,
+        }),
       )
       .provide([
         [
           call(putCourseConfig, mockTokens, {
             sourceChapter: Chapter.SOURCE_4,
-            sourceVariant: Variant.NATIVE
+            sourceVariant: Variant.NATIVE,
           }),
-          { ok: true }
-        ]
+          { ok: true },
+        ],
       ])
       .dispatch({ type: WorkspaceActions.changeSublanguage.type, payload: { sublang } })
       .silentRun();
@@ -904,9 +904,9 @@ describe('Test UPDATE_LATEST_VIEWED_COURSE action', () => {
           {
             courseRegistration: mockCourseRegistration2,
             courseConfiguration: mockCourseConfiguration2,
-            assessmentConfigurations: mockAssessmentConfigurations
-          }
-        ]
+            assessmentConfigurations: mockAssessmentConfigurations,
+          },
+        ],
       ])
       .dispatch({ type: SessionActions.updateLatestViewedCourse.type, payload: { courseId } })
       .silentRun();
@@ -931,8 +931,8 @@ describe('Test UPDATE_LATEST_VIEWED_COURSE action', () => {
         [call(putLatestViewedCourse, mockTokens, courseId), okResp],
         [
           call(getLatestCourseRegistrationAndConfiguration, mockTokens),
-          { courseRegistration: null, courseConfiguration: null }
-        ]
+          { courseRegistration: null, courseConfiguration: null },
+        ],
       ])
       .call(putLatestViewedCourse, mockTokens, courseId)
       .call(getLatestCourseRegistrationAndConfiguration, mockTokens)
@@ -957,7 +957,7 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
     sourceChapter: Chapter.SOURCE_4,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help',
-    assetsPrefix: ''
+    assetsPrefix: '',
   };
 
   test('when course config is changed', () => {
@@ -1012,15 +1012,15 @@ describe('Test FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS action', () => {
       courseId: 1,
       name: 'Bob',
       username: 'E0000001',
-      role: Role.Student
+      role: Role.Student,
     },
     {
       courseRegId: 2,
       courseId: 1,
       name: 'Avenger',
       username: 'E0000002',
-      role: Role.Staff
-    }
+      role: Role.Staff,
+    },
   ];
   test('when course registrations are obtained', () => {
     return expectSaga(BackendSaga)
@@ -1054,7 +1054,7 @@ describe('Test CREATE_COURSE action', () => {
     enableContestLeaderboard: true,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
-    moduleHelpText: 'Help Text'
+    moduleHelpText: 'Help Text',
   };
   const user = mockUser;
   const courseConfiguration = mockCourseConfiguration1;
@@ -1071,8 +1071,8 @@ describe('Test CREATE_COURSE action', () => {
       hasTokenCounter: false,
       hasVotingFeatures: false,
       earlySubmissionXp: 0,
-      isAutosaveEnabled: true
-    }
+      isAutosaveEnabled: true,
+    },
   ];
 
   test('created successfully', () => {
@@ -1086,7 +1086,7 @@ describe('Test CREATE_COURSE action', () => {
         putAssessmentConfigs,
         mockTokens,
         placeholderAssessmentConfig,
-        courseRegistration.courseId
+        courseRegistration.courseId,
       )
       .call.fn(showSuccessMessage)
       .provide([
@@ -1097,10 +1097,10 @@ describe('Test CREATE_COURSE action', () => {
             putAssessmentConfigs,
             mockTokens,
             placeholderAssessmentConfig,
-            courseRegistration.courseId
+            courseRegistration.courseId,
           ),
-          okResp
-        ]
+          okResp,
+        ],
       ])
       .dispatch({ type: AcademyActions.createCourse.type, payload: courseConfig })
       .silentRun();
@@ -1124,7 +1124,7 @@ describe('Test CREATE_COURSE action', () => {
 describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
   const users: UsernameRoleGroup[] = [
     { username: 'student1', role: Role.Student },
-    { username: 'staff1', role: Role.Staff }
+    { username: 'staff1', role: Role.Staff },
   ];
   const provider: string = 'test';
 
@@ -1134,15 +1134,15 @@ describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
       courseId: 1,
       name: 'student1',
       username: 'student1',
-      role: Role.Student
+      role: Role.Student,
     },
     {
       courseRegId: 2,
       courseId: 1,
       name: 'staff1',
       username: 'staff1',
-      role: Role.Staff
-    }
+      role: Role.Staff,
+    },
   ];
 
   test('added successfully', () => {
@@ -1153,7 +1153,7 @@ describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
       .call.fn(showSuccessMessage)
       .provide([
         [call(putNewUsers, mockTokens, users, provider), okResp],
-        [call(getUserCourseRegistrations, mockTokens), userCourseRegistrations]
+        [call(getUserCourseRegistrations, mockTokens), userCourseRegistrations],
       ])
       .dispatch({ type: AcademyActions.addNewUsersToCourse.type, payload: { users, provider } })
       .silentRun();
@@ -1181,15 +1181,15 @@ describe('Test UPDATE_USER_ROLE action', () => {
       courseId: 1,
       name: 'Bob',
       username: 'E0000001',
-      role: Role.Student
+      role: Role.Student,
     },
     {
       courseRegId: 2,
       courseId: 1,
       name: 'Avenger',
       username: 'E0000002',
-      role: Role.Staff
-    }
+      role: Role.Staff,
+    },
   ];
 
   test('updated successfully', () => {
@@ -1200,7 +1200,7 @@ describe('Test UPDATE_USER_ROLE action', () => {
       .call.fn(showSuccessMessage)
       .provide([
         [call(putUserRole, mockTokens, courseRegId, role), okResp],
-        [call(getUserCourseRegistrations, mockTokens), userCourseRegistrations]
+        [call(getUserCourseRegistrations, mockTokens), userCourseRegistrations],
       ])
       .dispatch({ type: SessionActions.updateUserRole.type, payload: { courseRegId, role } })
       .silentRun();
@@ -1230,7 +1230,7 @@ describe('Test UPDATE_COURSE_RESEARCH_AGREEMENT', () => {
       .provide([[call(putCourseResearchAgreement, mockTokens, agreedToResearch), okResp]])
       .dispatch({
         type: SessionActions.updateCourseResearchAgreement.type,
-        payload: { agreedToResearch }
+        payload: { agreedToResearch },
       })
       .silentRun();
   });
@@ -1244,7 +1244,7 @@ describe('Test UPDATE_COURSE_RESEARCH_AGREEMENT', () => {
       .provide([[call(putCourseResearchAgreement, mockTokens, agreedToResearch), errorResp]])
       .dispatch({
         type: SessionActions.updateCourseResearchAgreement.type,
-        payload: { agreedToResearch }
+        payload: { agreedToResearch },
       })
       .silentRun();
   });
@@ -1259,8 +1259,8 @@ describe('Test DELETE_USER_COURSE_REGISTRATION action', () => {
       courseId: 1,
       name: 'Avenger',
       username: 'E0000002',
-      role: Role.Staff
-    }
+      role: Role.Staff,
+    },
   ];
 
   test('deleted successfully', () => {
@@ -1271,11 +1271,11 @@ describe('Test DELETE_USER_COURSE_REGISTRATION action', () => {
       .call.fn(showSuccessMessage)
       .provide([
         [call(removeUserCourseRegistration, mockTokens, courseRegId), okResp],
-        [call(getUserCourseRegistrations, mockTokens), userCourseRegistrations]
+        [call(getUserCourseRegistrations, mockTokens), userCourseRegistrations],
       ])
       .dispatch({
         type: SessionActions.deleteUserCourseRegistration.type,
-        payload: { courseRegId }
+        payload: { courseRegId },
       })
       .silentRun();
   });
@@ -1289,7 +1289,7 @@ describe('Test DELETE_USER_COURSE_REGISTRATION action', () => {
       .provide([[call(removeUserCourseRegistration, mockTokens, courseRegId), errorResp]])
       .dispatch({
         type: SessionActions.deleteUserCourseRegistration.type,
-        payload: { courseRegId }
+        payload: { courseRegId },
       })
       .silentRun();
   });
@@ -1305,11 +1305,11 @@ describe('Test UPDATE_ASSESSMENT_CONFIGS action', () => {
       .call.fn(showSuccessMessage)
       .provide([
         [call(putAssessmentConfigs, mockTokens, mockAssessmentConfigurations), okResp],
-        [call(getAssessmentConfigs, mockTokens), mockAssessmentConfigurations]
+        [call(getAssessmentConfigs, mockTokens), mockAssessmentConfigurations],
       ])
       .dispatch({
         type: SessionActions.updateAssessmentConfigs.type,
-        payload: mockAssessmentConfigurations
+        payload: mockAssessmentConfigurations,
       })
       .silentRun();
   });
@@ -1324,7 +1324,7 @@ describe('Test UPDATE_ASSESSMENT_CONFIGS action', () => {
       .not.call.fn(showSuccessMessage)
       .dispatch({
         type: SessionActions.updateAssessmentConfigs.type,
-        payload: mockAssessmentConfigurations
+        payload: mockAssessmentConfigurations,
       })
       .silentRun();
   });
@@ -1391,7 +1391,7 @@ describe('Test REAUTOGRADE_ANSWER Action', () => {
       .not.call.fn(showWarningMessage)
       .dispatch({
         type: SessionActions.reautogradeAnswer.type,
-        payload: { submissionId, questionId }
+        payload: { submissionId, questionId },
       })
       .silentRun();
   });
@@ -1406,7 +1406,7 @@ describe('Test REAUTOGRADE_ANSWER Action', () => {
       .call.fn(showWarningMessage)
       .dispatch({
         type: SessionActions.reautogradeAnswer.type,
-        payload: { submissionId, questionId }
+        payload: { submissionId, questionId },
       })
       .silentRun();
   });

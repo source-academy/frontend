@@ -39,7 +39,7 @@ class GameTaskLogManager implements DashboardPageManager {
         this.scene,
         'No tasks available.',
         TaskLogConstants.taskTextConfig,
-        taskTextStyle
+        taskTextStyle,
       ).setMaxWidth(TaskLogConstants.textMaxWidth);
       taskListContainer.add(message);
       totalTextHeight = message.height;
@@ -54,7 +54,7 @@ class GameTaskLogManager implements DashboardPageManager {
             this.scene,
             TaskLogConstants.checkMark.x,
             TaskLogConstants.checkMark.y + totalTextHeight,
-            TaskLogConstants.checkMark.imageUrl
+            TaskLogConstants.checkMark.imageUrl,
           );
           taskListContainer.add(checkMark);
         }
@@ -64,9 +64,9 @@ class GameTaskLogManager implements DashboardPageManager {
           task.title,
           {
             ...TaskLogConstants.taskTextConfig,
-            y: TaskLogConstants.taskTextConfig.y + totalTextHeight
+            y: TaskLogConstants.taskTextConfig.y + totalTextHeight,
           },
-          taskTextStyle
+          taskTextStyle,
         ).setMaxWidth(TaskLogConstants.textMaxWidth);
 
         // Underline the task title using a stretched underscore
@@ -76,9 +76,9 @@ class GameTaskLogManager implements DashboardPageManager {
           '_',
           {
             ...TaskLogConstants.taskTextConfig,
-            y: TaskLogConstants.taskTextConfig.y + totalTextHeight
+            y: TaskLogConstants.taskTextConfig.y + totalTextHeight,
           },
-          taskTextStyle
+          taskTextStyle,
         );
         underline.setScale(taskTitle.width / underline.width, 1);
 
@@ -91,9 +91,9 @@ class GameTaskLogManager implements DashboardPageManager {
           task.description + (i < tasksData.length - 1 ? '\n ' : ''), // Line break between tasks
           {
             ...TaskLogConstants.taskTextConfig,
-            y: TaskLogConstants.taskTextConfig.y + totalTextHeight
+            y: TaskLogConstants.taskTextConfig.y + totalTextHeight,
           },
-          taskTextStyle
+          taskTextStyle,
         ).setMaxWidth(TaskLogConstants.textMaxWidth);
 
         taskListContainer.add(taskDescription);
@@ -112,12 +112,12 @@ class GameTaskLogManager implements DashboardPageManager {
       TaskLogConstants.scrollbarTrack.y,
       TaskLogConstants.scrollbarTrack.width,
       TaskLogConstants.scrollbarTrack.height,
-      TaskLogConstants.scrollbarTrack.color
+      TaskLogConstants.scrollbarTrack.color,
     );
 
     const scrollbarThumbHeight = Math.max(
       (TaskLogConstants.logHeight / totalTextHeight) * TaskLogConstants.scrollbarTrack.height,
-      TaskLogConstants.scrollbarThumb.width * 4 // Limit how small thumb can be
+      TaskLogConstants.scrollbarThumb.width * 4, // Limit how small thumb can be
     );
     const scrollbarThumbMaxY =
       TaskLogConstants.scrollbarTrack.y +
@@ -134,7 +134,7 @@ class GameTaskLogManager implements DashboardPageManager {
       scrollbarThumbMaxY,
       TaskLogConstants.scrollbarThumb.width,
       scrollbarThumbHeight,
-      TaskLogConstants.scrollbarThumb.color
+      TaskLogConstants.scrollbarThumb.color,
     );
 
     taskLogContainer.add(scrollbarTrack);
@@ -153,7 +153,7 @@ class GameTaskLogManager implements DashboardPageManager {
       x + width / 2,
       y + height / 2,
       width,
-      height
+      height,
     );
     scrollZone.setInteractive();
     scrollZone.on(
@@ -162,11 +162,11 @@ class GameTaskLogManager implements DashboardPageManager {
         taskListContainer.y = limitNumber(
           taskListContainer.y - deltaY * TaskLogConstants.scrollSpeed,
           taskListContainerMinY,
-          0
+          0,
         );
         scrollbarThumb.y =
           scrollbarThumbMaxY - (taskListContainer.y - taskListContainerMinY) * thumbTextScrollRatio;
-      }
+      },
     );
     taskLogContainer.add(scrollZone);
 

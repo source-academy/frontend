@@ -18,7 +18,7 @@ export class PrimitiveValue extends Value {
     /** data */
     readonly data: Primitive,
     /** what this value is being referenced by */
-    reference: ReferenceType
+    reference: ReferenceType,
   ) {
     super();
 
@@ -29,20 +29,20 @@ export class PrimitiveValue extends Value {
           getTextWidth(reference.keyString) -
           Config.TextPaddingX -
           Config.FramePaddingX * 2,
-        (reference.frame.width() - Config.FramePaddingX * 2) / 2
+        (reference.frame.width() - Config.FramePaddingX * 2) / 2,
       );
       const colon = reference.isConstant ? Config.ConstantColon : Config.VariableColon;
       this._x = Math.min(
         reference.x() + getTextWidth(reference.keyString) + Config.TextPaddingX,
         reference.frame.x() +
           (reference.frame.width() - Config.TextPaddingX - Config.FramePaddingX * 2) / 2 +
-          getTextWidth(colon)
+          getTextWidth(colon),
       );
       this._y = reference.y();
       this.text = new Text(this.data, this.x(), this.y(), {
         maxWidth: maxWidth,
         isStringIdentifiable: !isSourceObject(data),
-        faded: true
+        faded: true,
       });
     } else {
       const maxWidth = reference.width();
@@ -50,7 +50,7 @@ export class PrimitiveValue extends Value {
         ? 0
         : Math.min(
             getTextWidth(isSourceObject(data) ? data.toReplString() : String(this.data)),
-            maxWidth
+            maxWidth,
           );
       this._x = reference.x() + (reference.width() - textWidth) / 2;
       this._y = reference.y() + (reference.height() - Config.FontSize) / 2;
@@ -59,7 +59,7 @@ export class PrimitiveValue extends Value {
         : new Text(this.data, this.x(), this.y(), {
             maxWidth: maxWidth,
             isStringIdentifiable: !isSourceObject(data),
-            faded: true
+            faded: true,
           });
     }
 

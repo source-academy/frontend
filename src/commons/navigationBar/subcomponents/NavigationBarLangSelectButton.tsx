@@ -41,7 +41,7 @@ const NavigationBarLangSelectButton = () => {
       buttonProps={{
         rightIcon: 'caret-down',
         onClick: () => setIsOpen(true),
-        'data-testid': 'NavigationBarLangSelectButton'
+        'data-testid': 'NavigationBarLangSelectButton',
       }}
     />
   );

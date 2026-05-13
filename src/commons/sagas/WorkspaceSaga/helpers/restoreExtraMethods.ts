@@ -10,13 +10,13 @@ export function* restoreExtraMethods(
   context: Context,
   execTime: number,
   workspaceLocation: WorkspaceLocation,
-  unblockKey: string
+  unblockKey: string,
 ) {
   const toUnblock = getDifferenceInMethods(elevatedContext, context);
   const restorer = getRestoreExtraMethodsString(toUnblock, unblockKey);
   const restorerFilePath = '/restorer.js';
   const restorerFiles = {
-    [restorerFilePath]: restorer
+    [restorerFilePath]: restorer,
   };
   yield call(
     evalCodeSaga,
@@ -25,6 +25,6 @@ export function* restoreExtraMethods(
     elevatedContext,
     execTime,
     EVAL_SILENT,
-    workspaceLocation
+    workspaceLocation,
   );
 }

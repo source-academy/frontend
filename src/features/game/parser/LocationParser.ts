@@ -79,7 +79,7 @@ export default class LocationParser {
           Parser.checkpoint.map.addMapAsset(previewKey, {
             type: AssetType.Image,
             key: location.id + 'Preview',
-            path: previewPath
+            path: previewPath,
           });
           location.previewKey = previewKey;
         }
@@ -101,7 +101,7 @@ export default class LocationParser {
   private static parseLocationParagraphs(
     location: GameLocation,
     entityHeader: string,
-    body: string[]
+    body: string[],
   ) {
     switch (entityHeader) {
       case 'objects':

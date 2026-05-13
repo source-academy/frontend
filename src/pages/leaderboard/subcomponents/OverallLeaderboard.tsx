@@ -36,7 +36,7 @@ const columnDefs: ColDef<LeaderboardRow>[] = [
       const rank = params.value;
       const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
       return `${rank} ${medal}`;
-    }
+    },
   },
   {
     field: 'avatar',
@@ -51,10 +51,10 @@ const columnDefs: ColDef<LeaderboardRow>[] = [
         onError={e => (e.currentTarget.src = default_avatar)}
         style={{ flex: '40px', height: '40px', borderRadius: '50%' }}
       />
-    )
+    ),
   },
   { field: 'name', headerName: 'Name', flex: 520, sortable: true },
-  { field: 'xp', headerName: 'XP', flex: 414, sortable: true }
+  { field: 'xp', headerName: 'XP', flex: 414, sortable: true },
 ];
 
 const OverallLeaderboard: React.FC = () => {
@@ -75,11 +75,11 @@ const OverallLeaderboard: React.FC = () => {
   }, []);
 
   const paginatedLeaderboard: { rows: LeaderboardRow[]; userCount: number } = useTypedSelector(
-    store => store.leaderboard.paginatedUserXp
+    store => store.leaderboard.paginatedUserXp,
   );
   const pageSize = 25;
   const visibleEntries = useTypedSelector(
-    store => store.session?.topLeaderboardDisplay ?? Number.MAX_SAFE_INTEGER
+    store => store.session?.topLeaderboardDisplay ?? Number.MAX_SAFE_INTEGER,
   );
   const [top3Leaderboard, setTop3Leaderboard] = useState<LeaderboardRow[]>([]);
 
@@ -100,7 +100,7 @@ const OverallLeaderboard: React.FC = () => {
 
       // Params stored to prevent re-rendering
       latestParamsRef.current = params;
-    }
+    },
   });
 
   useEffect(() => {
@@ -113,7 +113,7 @@ const OverallLeaderboard: React.FC = () => {
 
       successCallback(
         paginatedLeaderboard.rows,
-        Math.min(paginatedLeaderboard.userCount, visibleEntries)
+        Math.min(paginatedLeaderboard.userCount, visibleEntries),
       );
       latestParamsRef.current = null;
     }

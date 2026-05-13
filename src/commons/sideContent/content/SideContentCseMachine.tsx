@@ -8,7 +8,7 @@ import {
   Popover,
   Position,
   Slider,
-  Tooltip
+  Tooltip,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import type { HotkeyItem } from '@mantine/hooks';
@@ -24,7 +24,7 @@ import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
 import {
   type PlaygroundWorkspaceState,
-  type WorkspaceLocation
+  type WorkspaceLocation,
 } from 'src/commons/workspace/WorkspaceTypes';
 import { ClearDeadFramesAnimation } from 'src/features/cseMachine/animationComponents/ClearDeadFramesAnimation';
 import CseMachine from 'src/features/cseMachine/CseMachine';
@@ -48,7 +48,7 @@ const ALL_ARROW_FILTER_KEYS: ArrowOriginFilterKey[] = [
   'function',
   'array',
   'control',
-  'stash'
+  'stash',
 ];
 
 type State = {
@@ -86,7 +86,7 @@ type DispatchProps = {
   handleEditorEval: () => void;
   setEditorHighlightedLines: (
     editorTabIndex: number,
-    newHighlightedLines: HighlightedLines[]
+    newHighlightedLines: HighlightedLines[],
   ) => void;
   handleAlertSideContent: () => void;
 };
@@ -103,14 +103,14 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       stepLimitExceeded: false,
       chapter: props.chapter,
       clearDeadFrames: false,
-      arrowFilterOpen: false
+      arrowFilterOpen: false,
     };
     if (this.isJava()) {
       JavaCseMachine.init(
         visualization => this.setState({ visualization }),
         (segments: [number, number][]) => {
           props.setEditorHighlightedLines(0, segments);
-        }
+        },
       );
     } else {
       CseMachine.init(
@@ -130,9 +130,9 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
           const isAtLastStep = this.state.value === this.props.stepsTotal;
 
           this.setState({
-            stepLimitExceeded: !isControlEmpty && isAtLastStep
+            stepLimitExceeded: !isControlEmpty && isAtLastStep,
           });
-        }
+        },
       );
     }
   }
@@ -150,7 +150,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     } else {
       width = Math.min(
         maxWidth,
-        (window.innerWidth * (100 - parseFloat(editorWidth))) / 100 - horizontalPadding
+        (window.innerWidth * (100 - parseFloat(editorWidth))) / 100 - horizontalPadding,
       );
     }
     return Math.min(width, maxWidth);
@@ -177,7 +177,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     if (newWidth !== this.state.width || newHeight !== this.state.height) {
       this.setState({
         height: newHeight,
-        width: newWidth
+        width: newWidth,
       });
       CseMachine.updateDimensions(newWidth, newHeight);
     }
@@ -229,13 +229,13 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
           ['a', this.stepFirst],
           ['f', this.stepNext],
           ['b', this.stepPrevious],
-          ['e', this.stepLast(this.props.stepsTotal)]
+          ['e', this.stepLast(this.props.stepsTotal)],
         ]
       : [
           ['a', () => {}],
           ['f', () => {}],
           ['b', () => {}],
-          ['e', () => {}]
+          ['e', () => {}],
         ];
 
     const currentStep = Math.max(0, this.state.value);
@@ -248,7 +248,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
         bindings={hotkeyBindings}
         style={{
           maxHeight: '100%',
-          overflow: this.state.visualization ? 'hidden' : 'auto'
+          overflow: this.state.visualization ? 'hidden' : 'auto',
         }}
       >
         <div className={classNames('sa-substituter', Classes.DARK)}>
@@ -264,7 +264,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
             style={{
               display: 'flex',
               justifyContent: this.isJava() ? 'center' : 'space-between',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             {!this.isJava() && (
@@ -418,7 +418,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                         const prevLevels = Layout.levels;
                         this.setState(
                           prevState => ({
-                            clearDeadFrames: true
+                            clearDeadFrames: true,
                           }),
                           () => {
                             CseMachine.setClearDeadFrames(this.state.clearDeadFrames);
@@ -434,11 +434,11 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                                 const currLevels = Layout.levels;
                                 const changedFramePairs = computeFramesCoordChange(
                                   prevLevels,
-                                  currLevels
+                                  currLevels,
                                 );
                                 if (changedFramePairs.length > 0) {
                                   CseAnimation.animations.push(
-                                    new ClearDeadFramesAnimation(changedFramePairs)
+                                    new ClearDeadFramesAnimation(changedFramePairs),
                                   );
                                   CseAnimation.enableAnimations();
                                 }
@@ -449,7 +449,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                               }
                             };
                             CseMachine.redraw();
-                          }
+                          },
                         );
                       }
                     }}
@@ -660,7 +660,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
   state: OverallState,
-  ownProps: OwnProps
+  ownProps: OwnProps,
 ) => {
   let workspace: PlaygroundWorkspaceState;
   const [loc] = getLocation(ownProps.workspaceLocation);
@@ -684,7 +684,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     changepointSteps: workspace.changepointSteps,
     needCseUpdate: workspace.updateCse,
     machineOutput: workspace.output,
-    chapter: workspace.context.chapter
+    chapter: workspace.context.chapter,
   };
 };
 
@@ -698,32 +698,32 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
         beginAlertSideContent(SideContentType.cseMachine, props.workspaceLocation),
       setEditorHighlightedLines: (
         editorTabIndex: number,
-        newHighlightedLines: HighlightedLines[]
+        newHighlightedLines: HighlightedLines[],
       ) =>
         WorkspaceActions.setEditorHighlightedLinesControl(
           props.workspaceLocation,
           editorTabIndex,
-          newHighlightedLines
-        )
+          newHighlightedLines,
+        ),
     },
-    dispatch
+    dispatch,
   );
 
 export const SideContentCseMachine = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(SideContentCseMachineBase);
 
 const makeCseMachineTabFrom = (location: WorkspaceLocation): SideContentTab => ({
   label: t($ => $.cseMachine.label, { ns: 'sideContent' }),
   iconName: IconNames.GLOBE,
   body: <SideContentCseMachine workspaceLocation={location} />,
-  id: SideContentType.cseMachine
+  id: SideContentType.cseMachine,
 });
 
 export const ItalicLink: React.FC<{ href: string; children?: React.ReactNode }> = ({
   href,
-  children
+  children,
 }) => {
   return (
     <a href={href} rel="noopener noreferrer" target="_blank">

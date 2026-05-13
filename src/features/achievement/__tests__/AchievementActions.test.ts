@@ -6,7 +6,7 @@ test('saveAchievements generates correct action object', () => {
 
   expect(action).toEqual({
     type: AchievementActions.saveAchievements.type,
-    payload: []
+    payload: [],
   });
 });
 
@@ -15,7 +15,7 @@ test('getAchievements generates correct action object', () => {
 
   expect(action).toEqual({
     type: AchievementActions.getAchievements.type,
-    payload: {}
+    payload: {},
   });
 });
 
@@ -24,6 +24,6 @@ test('removeAchievement generates correct action object', () => {
 
   expect(action).toEqual({
     type: AchievementActions.removeAchievement.type,
-    payload: mockAchievements[0].uuid
+    payload: mockAchievements[0].uuid,
   });
 });

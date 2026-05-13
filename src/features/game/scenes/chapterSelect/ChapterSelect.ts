@@ -75,8 +75,8 @@ class ChapterSelect extends Phaser.Scene {
     await Promise.all(
       this.getGameChapters().map(
         async chapterDetail =>
-          await loadImage(this, chapterDetail.imageUrl, toS3Path(chapterDetail.imageUrl, true))
-      )
+          await loadImage(this, chapterDetail.imageUrl, toS3Path(chapterDetail.imageUrl, true)),
+      ),
     );
   }
 
@@ -88,7 +88,7 @@ class ChapterSelect extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.spaceshipBg.key
+      ImageAssets.spaceshipBg.key,
     );
     const blackOverlay = new Phaser.GameObjects.Rectangle(
       this,
@@ -96,7 +96,7 @@ class ChapterSelect extends Phaser.Scene {
       screenCenter.y,
       screenSize.x,
       screenSize.y,
-      0
+      0,
     ).setAlpha(0.3);
     this.getLayerManager().addToLayer(Layer.Background, background);
     this.getLayerManager().addToLayer(Layer.Background, blackOverlay);
@@ -117,13 +117,13 @@ class ChapterSelect extends Phaser.Scene {
       this,
       `1 / ${this.numPages()}`,
       chapConstants.pageNumberTextConfig,
-      pageNumberStyle
+      pageNumberStyle,
     );
 
     // Prepare to autoscroll to smallest incomplete chapter
     const latestChapter = Math.min(
       SourceAcademyGame.getInstance().getSaveManager().getLargestCompletedChapterNum() + 1,
-      this.getGameChapters().length - 1
+      this.getGameChapters().length - 1,
     );
     this.targetPage = Math.floor(latestChapter / chapConstants.grid.chapPerPage);
     if (this.targetPage < 0) {
@@ -136,17 +136,17 @@ class ChapterSelect extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.chapterSelectBorder.key
+      ImageAssets.chapterSelectBorder.key,
     );
 
     const leftArrow = createButton(this, {
       assetKey: ImageAssets.chapterSelectArrow.key,
-      onUp: () => this.scrollPrevPage()
+      onUp: () => this.scrollPrevPage(),
     }).setPosition(screenCenter.x - chapConstants.arrow.xOffset, screenCenter.y);
 
     const rightArrow = createButton(this, {
       assetKey: ImageAssets.chapterSelectArrow.key,
-      onUp: () => this.scrollNextPage()
+      onUp: () => this.scrollNextPage(),
     })
       .setPosition(screenCenter.x + chapConstants.arrow.xOffset, screenCenter.y)
       .setScale(-1, 1);
@@ -172,7 +172,7 @@ class ChapterSelect extends Phaser.Scene {
       .add(
         this.getGameChapters().map((chapterDetail, chapterIndex) => {
           return createChapter(this, chapterDetail, chapterIndex);
-        })
+        }),
       )
       .sort('depth')
       .reverse(); // Ensures hover text correctly render over other objects in container

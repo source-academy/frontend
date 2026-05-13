@@ -22,7 +22,7 @@ export default class DialogueManager {
   private dialogueRenderer?: DialogueRenderer;
   private dialogueGenerator?: DialogueGenerator;
   private gameInputManager?: GameInputManager = new GameInputManager(
-    GameGlobalAPI.getInstance().getGameManager()
+    GameGlobalAPI.getInstance().getGameManager(),
   );
 
   /**
@@ -40,7 +40,7 @@ export default class DialogueManager {
 
     GameGlobalAPI.getInstance().addToLayer(
       Layer.Dialogue,
-      this.dialogueRenderer.getDialogueContainer()
+      this.dialogueRenderer.getDialogueContainer(),
     );
 
     GameGlobalAPI.getInstance().fadeInLayer(Layer.Dialogue);
@@ -89,7 +89,7 @@ export default class DialogueManager {
       const response = await promptWithChoices(
         GameGlobalAPI.getInstance().getGameManager(),
         prompt.promptTitle,
-        prompt.choices.map(choice => choice[0])
+        prompt.choices.map(choice => choice[0]),
       );
 
       this.getInputManager().enableKeyboardInput(true);

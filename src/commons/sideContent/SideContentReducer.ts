@@ -8,14 +8,14 @@ import {
   removeSideContentAlert,
   resetSideContent,
   spawnSideContent,
-  visitSideContent
+  visitSideContent,
 } from './SideContentActions';
 import { getDynamicTabs, getLocation, getTabId } from './SideContentHelper';
 import type { SideContentManagerState, SideContentState } from './SideContentTypes';
 
 export const SideContentReducer: Reducer<SideContentManagerState, SourceActionType> = (
   state: SideContentManagerState = defaultSideContentManager,
-  action: SourceActionType
+  action: SourceActionType,
 ): SideContentManagerState => {
   if (!(action as any).payload?.workspaceLocation) {
     return state;
@@ -31,8 +31,8 @@ export const SideContentReducer: Reducer<SideContentManagerState, SourceActionTy
         ...state,
         [key]: {
           ...sideContentState,
-          height: action.payload.height
-        }
+          height: action.payload.height,
+        },
       };
     case endAlertSideContent.type: {
       if (action.payload.id !== sideContentState.selectedTab) {
@@ -40,8 +40,8 @@ export const SideContentReducer: Reducer<SideContentManagerState, SourceActionTy
           ...state,
           [key]: {
             ...sideContentState,
-            alerts: [...sideContentState.alerts, action.payload.id]
-          }
+            alerts: [...sideContentState.alerts, action.payload.id],
+          },
         };
       }
       return state;
@@ -51,13 +51,13 @@ export const SideContentReducer: Reducer<SideContentManagerState, SourceActionTy
         ...state,
         [key]: {
           ...sideContentState,
-          alerts: sideContentState.alerts.filter((id: string) => id !== action.payload.id)
-        }
+          alerts: sideContentState.alerts.filter((id: string) => id !== action.payload.id),
+        },
       };
     case resetSideContent.type:
       return {
         ...state,
-        [key]: defaultSideContent
+        [key]: defaultSideContent,
       };
     case spawnSideContent.type: {
       const dynamicTabs = getDynamicTabs(action.payload.debuggerContext);
@@ -67,8 +67,8 @@ export const SideContentReducer: Reducer<SideContentManagerState, SourceActionTy
         [key]: {
           ...sideContentState,
           alerts,
-          dynamicTabs
-        }
+          dynamicTabs,
+        },
       };
     }
     case visitSideContent.type:
@@ -77,8 +77,8 @@ export const SideContentReducer: Reducer<SideContentManagerState, SourceActionTy
         [key]: {
           ...sideContentState,
           alerts: sideContentState.alerts.filter((id: string) => id !== action.payload.newId),
-          selectedTab: action.payload.newId
-        }
+          selectedTab: action.payload.newId,
+        },
       };
     default:
       return state;

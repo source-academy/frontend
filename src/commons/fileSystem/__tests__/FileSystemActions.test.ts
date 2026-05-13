@@ -8,6 +8,6 @@ test('setInBrowserFileSystem generates correct action object', () => {
   const action = setInBrowserFileSystem(inBrowserFileSystem);
   expect(action).toEqual({
     type: SET_IN_BROWSER_FILE_SYSTEM,
-    payload: { inBrowserFileSystem }
+    payload: { inBrowserFileSystem },
   });
 });

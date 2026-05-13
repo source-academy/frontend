@@ -12,7 +12,7 @@ const translations = {
     Quests: '任务',
     Paths: '路径',
     Contests: '比赛',
-    Others: '其他'
+    Others: '其他',
   },
   dropdown: {
     'My Courses': '我的课程',
@@ -20,8 +20,8 @@ const translations = {
     Logout: '登出',
     Settings: '设置',
     About: '关于',
-    Help: '帮助'
-  }
+    Help: '帮助',
+  },
 };
 
 export default translations;

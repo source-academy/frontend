@@ -32,7 +32,7 @@ export default class TasksParser {
         taskId: taskId,
         title: title,
         description: desc,
-        visible: false
+        visible: false,
       };
       tasks.push(newTask);
     });

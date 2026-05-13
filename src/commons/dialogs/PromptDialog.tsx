@@ -15,12 +15,12 @@ export interface PromptDialogProps<T> extends Omit<
 }
 
 export function PromptDialog<T>(
-  props: PromptDialogProps<T>
+  props: PromptDialogProps<T>,
 ): React.ReactElement<PromptDialogProps<T>> {
   const { enterResponse, validationFunction } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const [isValid, setIsValid] = useState(
-    !validationFunction || validationFunction(props.defaultValue || '')
+    !validationFunction || validationFunction(props.defaultValue || ''),
   );
   useEffect(() => {
     if (!inputRef.current) {
@@ -44,8 +44,8 @@ export function PromptDialog<T>(
     ...choice,
     props: {
       ...choice.props,
-      disabled: choice.disableOnInvalid && !isValid
-    }
+      disabled: choice.disableOnInvalid && !isValid,
+    },
   }));
   const handleEnter = enterResponse
     ? (e: React.KeyboardEvent<HTMLInputElement>) => {

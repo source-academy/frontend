@@ -7,7 +7,7 @@ import type { AutogradingError, AutogradingResult } from '../../assessment/Asses
 
 const buildErrorString = (
   t: TFunction<'sideContent', 'resultCard'>,
-  errors: AutogradingError[]
+  errors: AutogradingError[],
 ) => {
   return errors
     .map(error => {

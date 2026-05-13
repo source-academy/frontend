@@ -15,7 +15,7 @@ export class StashStack extends Visible {
   constructor(
     /** the stash object */
     readonly stash: Stash,
-    readonly chapter: Chapter
+    readonly chapter: Chapter,
   ) {
     super();
     this._x = ControlStashConfig.StashPosX;

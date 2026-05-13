@@ -140,7 +140,7 @@ export const externalBuiltIns = {
   rawDisplay,
   prompt: cadetPrompt,
   alert: cadetAlert,
-  visualiseList: visualizeData
+  visualiseList: visualizeData,
 };
 
 /**
@@ -153,7 +153,7 @@ export function createContext<T>(
   externals: string[],
   externalContext: T,
   variant: Variant = Variant.DEFAULT,
-  languageOptions?: LanguageOptions
+  languageOptions?: LanguageOptions,
 ) {
   const context = createSlangContext<T>(
     chapter,
@@ -161,7 +161,7 @@ export function createContext<T>(
     languageOptions,
     externals,
     externalContext,
-    externalBuiltIns
+    externalBuiltIns,
   );
   // js-slang's createContext initializes `moduleContexts` as a lazy-init Proxy
   // that writes to its target on every property read. Redux Toolkit (Immer)
@@ -201,7 +201,7 @@ export function makeElevatedContext(context: Context) {
         return fakeFrame;
       }
       return target[prop as keyof typeof target];
-    }
+    },
   });
 
   const proxyEnvs = new Proxy(context.runtime.environments, {
@@ -210,7 +210,7 @@ export function makeElevatedContext(context: Context) {
         return proxyGlobalEnv;
       }
       return target[prop as keyof typeof target];
-    }
+    },
   });
 
   const proxyRuntime = new Proxy(context.runtime, {
@@ -219,7 +219,7 @@ export function makeElevatedContext(context: Context) {
         return proxyEnvs;
       }
       return target[prop as keyof typeof target];
-    }
+    },
   });
 
   const elevatedContext = new Proxy(context, {
@@ -232,7 +232,7 @@ export function makeElevatedContext(context: Context) {
         default:
           return target[prop as keyof typeof target];
       }
-    }
+    },
   });
 
   loadStandardLibraries(elevatedContext, externalBuiltIns);
@@ -259,7 +259,7 @@ export function getRestoreExtraMethodsString(removed: string[], unblockKey: stri
 export function getBlockExtraMethodsString(toRemove: string[]) {
   return toRemove
     .map(x =>
-      x === 'makeUndefinedErrorFunction' ? '' : `const ${x} = makeUndefinedErrorFunction('${x}');`
+      x === 'makeUndefinedErrorFunction' ? '' : `const ${x} = makeUndefinedErrorFunction('${x}');`,
     )
     .join('\n');
 }
@@ -269,7 +269,7 @@ export function getBlockExtraMethodsStringTypedVariant(toRemove: string[]) {
     .map(x =>
       x === 'makeUndefinedErrorFunction'
         ? ''
-        : `const ${x} : string = makeUndefinedErrorFunction('${x}');`
+        : `const ${x} : string = makeUndefinedErrorFunction('${x}');`,
     )
     .join('\n');
 }

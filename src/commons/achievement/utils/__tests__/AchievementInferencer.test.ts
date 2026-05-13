@@ -22,8 +22,8 @@ const testAchievement: AchievementItem = {
     coverImage:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/cover-image/default.png',
     description: 'This is a test achievement',
-    completionText: `Congratulations! You've completed the test achievement!`
-  }
+    completionText: `Congratulations! You've completed the test achievement!`,
+  },
 };
 
 const testGoal: AchievementGoal = {
@@ -32,11 +32,11 @@ const testGoal: AchievementGoal = {
   achievementUuids: [],
   meta: {
     type: GoalType.MANUAL,
-    targetCount: 1
+    targetCount: 1,
   },
   count: 0,
   targetCount: 1,
-  completed: false
+  completed: false,
 };
 
 const testGoalComplete: AchievementGoal = {
@@ -45,11 +45,11 @@ const testGoalComplete: AchievementGoal = {
   achievementUuids: [],
   meta: {
     type: GoalType.MANUAL,
-    targetCount: 1
+    targetCount: 1,
   },
   count: 1,
   targetCount: 1,
-  completed: true
+  completed: true,
 };
 
 describe('Achievement Inferencer Constructor', () => {
@@ -85,17 +85,17 @@ describe('Achievement Inferencer Constructor', () => {
     const testAchievement1: AchievementItem = {
       ...testAchievement,
       uuid: '1',
-      title: 'testAchievement1'
+      title: 'testAchievement1',
     };
     const testAchievement2: AchievementItem = {
       ...testAchievement,
       uuid: '2',
-      title: 'testAchievement2'
+      title: 'testAchievement2',
     };
     const testAchievement3: AchievementItem = {
       ...testAchievement,
       uuid: '2',
-      title: 'testAchievement3'
+      title: 'testAchievement3',
     };
 
     const testGoal1: AchievementGoal = { ...testGoal, uuid: '1', text: 'testGoal1' };
@@ -104,7 +104,7 @@ describe('Achievement Inferencer Constructor', () => {
 
     const inferencer = new AchievementInferencer(
       [testAchievement1, testAchievement2, testAchievement3],
-      [testGoal1, testGoal2, testGoal3]
+      [testGoal1, testGoal2, testGoal3],
     );
 
     test('Overwrites items of same IDs', () => {
@@ -132,13 +132,13 @@ describe('Achievement Setter', () => {
     uuid: '1',
     title: 'Test Achievement 1',
     prerequisiteUuids: ['2', '2', '3', '3', '3', '4'],
-    goalUuids: ['1', '2', '2', '1']
+    goalUuids: ['1', '2', '2', '1'],
   };
 
   const testGoal1: AchievementGoal = {
     ...testGoal,
     uuid: '1',
-    text: 'Test Goal 1'
+    text: 'Test Goal 1',
   };
 
   const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
@@ -180,7 +180,7 @@ describe('Achievement Setter', () => {
     const testAchievement2: AchievementItem = {
       ...testAchievement,
       uuid: newUuid,
-      title: 'Test Achievement 2'
+      title: 'Test Achievement 2',
     };
 
     // Before modification
@@ -201,7 +201,7 @@ describe('Achievement Setter', () => {
     const testGoal2: AchievementGoal = {
       ...testGoal,
       uuid: newUuid,
-      text: 'Test Goal 2'
+      text: 'Test Goal 2',
     };
 
     // Before modification
@@ -228,8 +228,8 @@ describe('Achievement Setter', () => {
         .reduce(
           (hasPrereq, achievement) =>
             achievement.prerequisiteUuids.find(uuid => uuid === '2') !== undefined || hasPrereq,
-          false
-        )
+          false,
+        ),
     ).toBeTruthy();
     expect(inferencer.getTitleByUuid('2')).toBe(title);
     expect(inferencer.getUuidByTitle(title)).toBe('2');
@@ -244,8 +244,8 @@ describe('Achievement Setter', () => {
         .reduce(
           (hasPrereq, achievement) =>
             achievement.prerequisiteUuids.find(uuid => uuid === '2') !== undefined || hasPrereq,
-          false
-        )
+          false,
+        ),
     ).toBeFalsy();
     expect(inferencer.getTitleByUuid('2')).toBe('invalid');
     expect(inferencer.getUuidByTitle(title)).toBeUndefined();
@@ -262,8 +262,8 @@ describe('Achievement Setter', () => {
         .reduce(
           (hasGoal, achievement) =>
             achievement.goalUuids.find(uuid => uuid === '2') !== undefined || hasGoal,
-          false
-        )
+          false,
+        ),
     ).toBeTruthy();
     expect(inferencer.getTextByUuid('2')).toBe(text);
     expect(inferencer.getUuidByText(text)).toBe('2');
@@ -278,8 +278,8 @@ describe('Achievement Setter', () => {
         .reduce(
           (hasGoal, achievement) =>
             achievement.goalUuids.find(uuid => uuid === '2') !== undefined || hasGoal,
-          false
-        )
+          false,
+        ),
     ).toBeFalsy();
     expect(inferencer.getTextByUuid('2')).toBe('invalid');
     expect(inferencer.getUuidByText(text)).toBeUndefined();
@@ -319,7 +319,7 @@ describe('Achievement Inferencer Getter', () => {
     const testAchievement1: AchievementItem = {
       ...testAchievement,
       uuid: '1',
-      goalUuids: ['2', '1']
+      goalUuids: ['2', '1'],
     };
     const testAchievement2: AchievementItem = { ...testAchievement, uuid: '2', goalUuids: [] };
 
@@ -328,7 +328,7 @@ describe('Achievement Inferencer Getter', () => {
 
     const inferencer = new AchievementInferencer(
       [testAchievement1, testAchievement2],
-      [testGoal1, testGoal2]
+      [testGoal1, testGoal2],
     );
 
     expect(inferencer.listGoals('1').length).toBe(2);
@@ -341,12 +341,12 @@ describe('Achievement Inferencer Getter', () => {
     const testAchievement1: AchievementItem = {
       ...testAchievement,
       uuid: '1',
-      prerequisiteUuids: ['2']
+      prerequisiteUuids: ['2'],
     };
     const testAchievement2: AchievementItem = {
       ...testAchievement,
       uuid: '2',
-      goalUuids: ['2', '1']
+      goalUuids: ['2', '1'],
     };
 
     const testGoal1: AchievementGoal = { ...testGoal, uuid: '1' };
@@ -354,7 +354,7 @@ describe('Achievement Inferencer Getter', () => {
 
     const inferencer = new AchievementInferencer(
       [testAchievement1, testAchievement2],
-      [testGoal1, testGoal2]
+      [testGoal1, testGoal2],
     );
 
     expect(inferencer.listPrerequisiteGoals('1').length).toBe(2);
@@ -369,7 +369,7 @@ describe('Achievement ID to Title', () => {
   const testAchievement1: AchievementItem = {
     ...testAchievement,
     uuid: achievementUuid,
-    title: achievementTitle
+    title: achievementTitle,
   };
 
   const inferencer = new AchievementInferencer([testAchievement1], []);
@@ -419,24 +419,24 @@ describe('Achievement Prerequisite System', () => {
   const testAchievement1: AchievementItem = {
     ...testAchievement,
     uuid: '1',
-    prerequisiteUuids: ['2', '3']
+    prerequisiteUuids: ['2', '3'],
   };
   const testAchievement2: AchievementItem = { ...testAchievement, uuid: '2' };
   const testAchievement3: AchievementItem = {
     ...testAchievement,
     uuid: '3',
-    prerequisiteUuids: ['4']
+    prerequisiteUuids: ['4'],
   };
   const testAchievement4: AchievementItem = {
     ...testAchievement,
     uuid: '4',
-    prerequisiteUuids: ['5']
+    prerequisiteUuids: ['5'],
   };
   const testAchievement5: AchievementItem = { ...testAchievement, uuid: '5' };
 
   const inferencer = new AchievementInferencer(
     [testAchievement1, testAchievement2, testAchievement3, testAchievement4, testAchievement5],
-    []
+    [],
   );
 
   test('Is immediate children', () => {
@@ -487,7 +487,7 @@ describe('Achievement XP System', () => {
   const testAchievement1: AchievementItem = {
     ...testAchievement,
     uuid: '1',
-    goalUuids: ['1', '3']
+    goalUuids: ['1', '3'],
   };
   const testAchievement2: AchievementItem = { ...testAchievement, uuid: '2', goalUuids: [] };
   const testAchievement3: AchievementItem = { ...testAchievement, uuid: '3', goalUuids: ['3'] };
@@ -498,7 +498,7 @@ describe('Achievement XP System', () => {
 
   const inferencer = new AchievementInferencer(
     [testAchievement1, testAchievement2, testAchievement3],
-    [testGoal1, testGoal2, testGoal3]
+    [testGoal1, testGoal2, testGoal3],
   );
 
   test('XP earned from an achievement', () => {
@@ -530,12 +530,12 @@ describe('Achievement Display Deadline', () => {
   const testAchievement1: AchievementItem = {
     ...testAchievement,
     uuid: '1',
-    prerequisiteUuids: ['2', '5']
+    prerequisiteUuids: ['2', '5'],
   };
   const testAchievement2: AchievementItem = {
     ...testAchievement,
     uuid: '2',
-    prerequisiteUuids: ['3', '4']
+    prerequisiteUuids: ['3', '4'],
   };
   const testAchievement3: AchievementItem = { ...testAchievement, uuid: '3' };
   const testAchievement4: AchievementItem = { ...testAchievement, uuid: '4' };
@@ -544,7 +544,7 @@ describe('Achievement Display Deadline', () => {
   test('All deadlines undefined', () => {
     const inferencer = new AchievementInferencer(
       [testAchievement1, testAchievement2, testAchievement3, testAchievement4, testAchievement5],
-      []
+      [],
     );
 
     expect(inferencer.getDisplayDeadline('1')).toBeUndefined();
@@ -564,7 +564,7 @@ describe('Achievement Display Deadline', () => {
 
     const inferencer = new AchievementInferencer(
       [testAchievement1, testAchievement2, testAchievement3, testAchievement4, testAchievement5],
-      []
+      [],
     );
 
     expect(inferencer.getDisplayDeadline('1')).toEqual(expiredDeadline);
@@ -583,7 +583,7 @@ describe('Achievement Display Deadline', () => {
 
     const inferencer = new AchievementInferencer(
       [testAchievement1, testAchievement2, testAchievement3, testAchievement4, testAchievement5],
-      []
+      [],
     );
 
     expect(inferencer.getDisplayDeadline('1')).toEqual(expiredDeadline);
@@ -602,7 +602,7 @@ describe('Achievement Display Deadline', () => {
 
     const inferencer = new AchievementInferencer(
       [testAchievement1, testAchievement2, testAchievement3, testAchievement4, testAchievement5],
-      []
+      [],
     );
 
     expect(inferencer.getDisplayDeadline('1')).toEqual(closestUnexpiredDeadline);
@@ -618,7 +618,7 @@ describe('Achievement Status', () => {
   const partiallyCompleted: AchievementItem = {
     ...testAchievement,
     uuid: '2',
-    goalUuids: ['1', '3']
+    goalUuids: ['1', '3'],
   };
   const notCompleted: AchievementItem = { ...testAchievement, uuid: '3', goalUuids: ['3'] };
   const emptyGoal: AchievementItem = { ...testAchievement, uuid: '4', goalUuids: [] };
@@ -630,7 +630,7 @@ describe('Achievement Status', () => {
   test('Completed status', () => {
     const inferencer = new AchievementInferencer(
       [fullyCompleted, partiallyCompleted, notCompleted, emptyGoal],
-      [testGoal1, testGoal2, testGoal3]
+      [testGoal1, testGoal2, testGoal3],
     );
 
     expect(inferencer.getStatus('1')).toBe(AchievementStatus.COMPLETED);
@@ -649,7 +649,7 @@ describe('Achievement Status', () => {
 
     const inferencer = new AchievementInferencer(
       [fullyCompleted, deadlineExpired, deadlineUnexpired, noDeadline],
-      [testGoal1, testGoal2, testGoal3]
+      [testGoal1, testGoal2, testGoal3],
     );
 
     expect(inferencer.getStatus('1')).not.toBe(AchievementStatus.ACTIVE);
@@ -671,7 +671,7 @@ describe('Achievement Status', () => {
 
     const inferencer = new AchievementInferencer(
       [unreleased, released, precompleted],
-      [testGoal1, testGoal2, testGoal3]
+      [testGoal1, testGoal2, testGoal3],
     );
 
     expect(inferencer.getStatus('1')).not.toBe(AchievementStatus.UNRELEASED);

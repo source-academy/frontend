@@ -8,7 +8,7 @@ import type {
   MCQChoice,
   ProgressStatus,
   Question,
-  Testcase
+  Testcase,
 } from '../../commons/assessment/AssessmentTypes';
 import type { Notification } from '../../commons/notificationBadge/NotificationBadgeTypes';
 
@@ -20,7 +20,7 @@ export enum ColumnFields {
   groupName = 'groupName',
   progressStatus = 'progressStatus',
   xp = 'xp',
-  actionsIndex = 'actionsIndex'
+  actionsIndex = 'actionsIndex',
 }
 
 export type ColumnFieldsKeys = keyof typeof ColumnFields;
@@ -28,7 +28,7 @@ export type ColumnFieldsKeys = keyof typeof ColumnFields;
 export enum SortStates {
   ASC = 'sort-asc',
   DESC = 'sort-desc',
-  NONE = 'sort'
+  NONE = 'sort',
 }
 
 /**
@@ -119,7 +119,7 @@ export enum ColumnName {
   groupName = 'Group',
   progressStatus = 'Progress',
   xp = 'Raw XP (+Bonus)',
-  actionsIndex = 'Actions'
+  actionsIndex = 'Actions',
 }
 
 export type ColumnNameKeys = keyof typeof ColumnName;

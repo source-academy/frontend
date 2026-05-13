@@ -108,7 +108,7 @@ export default class DataVisualizer {
     structures: Data[],
     depth: number,
     nodePos: number,
-    newNode: boolean
+    newNode: boolean,
   ): number {
     if (!(structures instanceof Array)) {
       return 0;

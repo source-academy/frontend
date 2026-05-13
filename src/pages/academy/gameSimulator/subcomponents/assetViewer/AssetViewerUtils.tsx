@@ -21,7 +21,7 @@ type Tree = Record<any, any> | string[] | any;
 export function convertAssetPathsToTree(
   assetPaths: string[],
   iconRenderer: (pathName: string) => React.ReactElement,
-  rootFolders: string[] = []
+  rootFolders: string[] = [],
 ): TreeNodeInfo[] {
   const assetObj: Tree = {};
   assetPaths.forEach(assetPath => set(assetObj, assetPath.split('/'), 'FILE'));
@@ -41,7 +41,7 @@ export function convertAssetPathsToTree(
         childNodes:
           assetObj[file] === 'FILE'
             ? undefined
-            : convertAssetObjectsToTree([...parentFolders, file], assetObj[file])
+            : convertAssetObjectsToTree([...parentFolders, file], assetObj[file]),
       };
     });
   };

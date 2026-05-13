@@ -28,17 +28,17 @@ beforeAll(() => {
     signOut: () => {},
     isSignedIn: {
       get: () => true,
-      listen: () => {}
+      listen: () => {},
     },
     currentUser: {
       listen: () => {},
       get: () => ({
         isSignedIn: () => true,
         getBasicProfile: () => ({
-          getEmail: () => USER_EMAIL
-        })
-      })
-    }
+          getEmail: () => USER_EMAIL,
+        }),
+      }),
+    },
   } as any;
 
   window.gapi = {
@@ -47,15 +47,15 @@ beforeAll(() => {
       init: () => Promise.resolve(),
       drive: {
         files: {
-          get: () => {}
-        }
-      }
+          get: () => {},
+        },
+      },
     },
     load: (apiName: string, callbackOrConfig: gapi.CallbackOrConfig) =>
       typeof callbackOrConfig === 'function' ? callbackOrConfig() : callbackOrConfig.callback(),
     auth2: {
-      getAuthInstance: () => authInstance
-    }
+      getAuthInstance: () => authInstance,
+    },
   } as any;
 });
 
@@ -77,10 +77,10 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
-              variant: SOURCE_VARIANT
-            }
-          }
-        }
+              variant: SOURCE_VARIANT,
+            },
+          },
+        },
       })
       .dispatch(actions.persistenceOpenPicker())
       .provide({
@@ -100,9 +100,9 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
                     appProperties: {
                       chapter: SOURCE_CHAPTER,
                       variant: SOURCE_VARIANT,
-                      external: SOURCE_LIBRARY
-                    }
-                  }
+                      external: SOURCE_LIBRARY,
+                    },
+                  },
                 };
               }
               break;
@@ -113,10 +113,10 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
               return;
           }
           assert.fail(`unexpected function called: ${effect.fn.name}`);
-        }
+        },
       })
       .put.like({
-        action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME })
+        action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME }),
       })
       .put(actions.updateEditorValue('playground', 0, FILE_DATA))
       .put(actions.chapterSelect(SOURCE_CHAPTER, SOURCE_VARIANT, 'playground'))
@@ -139,7 +139,7 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
               return;
           }
           assert.fail(`unexpected function called: ${effect.fn.name}`);
-        }
+        },
       })
       .not.put.like({ action: { type: PlaygroundActions.playgroundUpdatePersistenceFile.type } })
       .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
@@ -161,7 +161,7 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
               return;
           }
           assert.fail(`unexpected function called: ${effect.fn.name}`);
-        }
+        },
       })
       .not.put.like({ action: { type: PlaygroundActions.playgroundUpdatePersistenceFile.type } })
       .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
@@ -182,10 +182,10 @@ test('PERSISTENCE_SAVE_FILE saves', () => {
           externalLibrary: SOURCE_LIBRARY,
           context: {
             chapter: SOURCE_CHAPTER,
-            variant: SOURCE_VARIANT
-          }
-        }
-      }
+            variant: SOURCE_VARIANT,
+          },
+        },
+      },
     })
     .dispatch(actions.persistenceSaveFile({ id: FILE_ID, name: FILE_NAME }))
     .provide({
@@ -198,7 +198,7 @@ test('PERSISTENCE_SAVE_FILE saves', () => {
               FILE_NAME,
               'text/plain',
               FILE_DATA,
-              { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY }
+              { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY },
             ]);
             updateFileCalled = true;
             return;
@@ -209,10 +209,10 @@ test('PERSISTENCE_SAVE_FILE saves', () => {
             return;
         }
         assert.fail(`unexpected function called: ${effect.fn.name}`);
-      }
+      },
     })
     .put.like({
-      action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME })
+      action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME }),
     })
     .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
     .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
@@ -234,10 +234,10 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
-              variant: SOURCE_VARIANT
-            }
-          }
-        }
+              variant: SOURCE_VARIANT,
+            },
+          },
+        },
       })
       .dispatch(actions.persistenceSaveFileAs())
       .provide({
@@ -256,7 +256,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
                 FILE_NAME,
                 'text/plain',
                 FILE_DATA,
-                { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY }
+                { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY },
               ]);
               updateFileCalled = true;
               return;
@@ -269,10 +269,10 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
               return;
           }
           assert.fail(`unexpected function called: ${effect.fn.name}`);
-        }
+        },
       })
       .put.like({
-        action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME })
+        action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME }),
       })
       .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
       .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
@@ -292,10 +292,10 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
-              variant: SOURCE_VARIANT
-            }
-          }
-        }
+              variant: SOURCE_VARIANT,
+            },
+          },
+        },
       })
       .dispatch(actions.persistenceSaveFileAs())
       .provide({
@@ -314,7 +314,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
                 FILE_NAME,
                 'text/plain',
                 FILE_DATA,
-                { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY }
+                { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY },
               ]);
               updateFileCalled = true;
               return;
@@ -327,10 +327,10 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
               return;
           }
           assert.fail(`unexpected function called: ${effect.fn.name}`);
-        }
+        },
       })
       .put.like({
-        action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME })
+        action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME }),
       })
       .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
       .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
@@ -350,10 +350,10 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
-              variant: SOURCE_VARIANT
-            }
-          }
-        }
+              variant: SOURCE_VARIANT,
+            },
+          },
+        },
       })
       .dispatch(actions.persistenceSaveFileAs())
       .provide({
@@ -372,7 +372,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
                 'root',
                 'text/plain',
                 FILE_DATA,
-                { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY }
+                { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY },
               ]);
               createFileCalled = true;
               return { id: FILE_ID, name: FILE_NAME };
@@ -387,10 +387,10 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
               console.log(effect);
           }
           assert.fail(`unexpected function called: ${effect.fn.name}`);
-        }
+        },
       })
       .put.like({
-        action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME })
+        action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME }),
       })
       .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
       .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
@@ -410,10 +410,10 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
-              variant: SOURCE_VARIANT
-            }
-          }
-        }
+              variant: SOURCE_VARIANT,
+            },
+          },
+        },
       })
       .dispatch(actions.persistenceSaveFileAs())
       .provide({
@@ -432,7 +432,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
                 DIR.id,
                 'text/plain',
                 FILE_DATA,
-                { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY }
+                { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY },
               ]);
               createFileCalled = true;
               return { id: FILE_ID, name: FILE_NAME };
@@ -447,10 +447,10 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
               console.log(effect);
           }
           assert.fail(`unexpected function called: ${effect.fn.name}`);
-        }
+        },
       })
       .put.like({
-        action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME })
+        action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME }),
       })
       .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
       .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
@@ -469,10 +469,10 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
-              variant: SOURCE_VARIANT
-            }
-          }
-        }
+              variant: SOURCE_VARIANT,
+            },
+          },
+        },
       })
       .dispatch(actions.persistenceSaveFileAs())
       .provide({
@@ -493,7 +493,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
               return;
           }
           assert.fail(`unexpected function called: ${effect.fn.name}`);
-        }
+        },
       })
       .not.put.like({ action: { type: PlaygroundActions.playgroundUpdatePersistenceFile.type } })
       .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
@@ -511,10 +511,10 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
             externalLibrary: SOURCE_LIBRARY,
             context: {
               chapter: SOURCE_CHAPTER,
-              variant: SOURCE_VARIANT
-            }
-          }
-        }
+              variant: SOURCE_VARIANT,
+            },
+          },
+        },
       })
       .dispatch(actions.persistenceSaveFileAs())
       .provide({
@@ -537,7 +537,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
               console.log(effect);
           }
           assert.fail(`unexpected function called: ${effect.fn.name}`);
-        }
+        },
       })
       .not.put.like({ action: { type: PlaygroundActions.playgroundUpdatePersistenceFile.type } })
       .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })

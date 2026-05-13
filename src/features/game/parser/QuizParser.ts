@@ -72,7 +72,7 @@ export default class QuizParser {
       question: questionText[0],
       speaker: SpeakerParser.parse('@narrator'),
       answer: this.getQuizAnswer(questionText[1]),
-      options: this.parseOptions(questionText.slice(2))
+      options: this.parseOptions(questionText.slice(2)),
     };
     return question;
   }
@@ -123,7 +123,7 @@ export default class QuizParser {
     }
     const option: Option = {
       text: content[0],
-      reaction: noReaction ? undefined : DialogueParser.parseQuizReaction(content.slice(1))
+      reaction: noReaction ? undefined : DialogueParser.parseQuizReaction(content.slice(1)),
     };
     return option;
   }

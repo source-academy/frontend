@@ -5,7 +5,7 @@ import { createBitmapText } from '../utils/TextUtils';
 const defaultGlitchStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 30,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 /**
@@ -33,7 +33,7 @@ export function createGlitchBitmapText(
   style: BitmapFontStyle = defaultGlitchStyle,
   numOfFrames: number = 4,
   maxXDisplacement: number = 5,
-  maxYDisplacement: number = 3
+  maxYDisplacement: number = 3,
 ) {
   const textFrames = [];
   for (let i = 0; i < numOfFrames; i++) {
@@ -41,7 +41,7 @@ export function createGlitchBitmapText(
       x: baseTextConfig.x + maxXDisplacement * Math.random(),
       y: baseTextConfig.y + maxYDisplacement * Math.random(),
       oriX: baseTextConfig.oriX,
-      oriY: baseTextConfig.oriY
+      oriY: baseTextConfig.oriY,
     };
     const bitmapText = createBitmapText(scene, text, textConfig, style);
     bitmapText.setAlpha(0.4).setBlendMode(Phaser.BlendModes.SCREEN);
@@ -57,7 +57,7 @@ export function createGlitchBitmapText(
       duration: 20,
       yoyo: true,
       loop: -1,
-      loopDelay: 1000 * Math.random()
+      loopDelay: 1000 * Math.random(),
     });
   });
 

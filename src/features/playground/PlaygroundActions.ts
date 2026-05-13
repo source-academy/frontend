@@ -12,9 +12,9 @@ const PlaygroundActions = createActions('playground', {
   playgroundUpdateGitHubSaveInfo: (repoName: string, filePath: string, lastSaved: Date) => ({
     repoName,
     filePath,
-    lastSaved
+    lastSaved,
   }),
-  playgroundConfigLanguage: (languageConfig: SALanguage) => languageConfig
+  playgroundConfigLanguage: (languageConfig: SALanguage) => languageConfig,
 });
 
 // For compatibility with existing code (reducer)
@@ -25,7 +25,7 @@ export const {
   changeQueryString,
   playgroundUpdatePersistenceFile,
   playgroundUpdateGitHubSaveInfo,
-  playgroundConfigLanguage
+  playgroundConfigLanguage,
 } = PlaygroundActions;
 
 // For compatibility with existing code (actions helper)

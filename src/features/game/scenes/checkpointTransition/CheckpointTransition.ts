@@ -72,7 +72,7 @@ class CheckpointTransition extends Phaser.Scene {
       this,
       text,
       CheckpointConstants.transitionTextConfig,
-      transitionTextStyle
+      transitionTextStyle,
     ).setAlpha(0);
 
     this.add.existing(transitionText);
@@ -80,7 +80,7 @@ class CheckpointTransition extends Phaser.Scene {
     // Fade in
     this.tweens.add({
       targets: transitionText,
-      ...CheckpointConstants.entryTween
+      ...CheckpointConstants.entryTween,
     });
 
     await sleep(CheckpointConstants.tweenDuration * 2);
@@ -88,7 +88,7 @@ class CheckpointTransition extends Phaser.Scene {
     // Fade out
     this.tweens.add({
       targets: transitionText,
-      ...CheckpointConstants.exitTween
+      ...CheckpointConstants.exitTween,
     });
 
     await sleep(CheckpointConstants.tweenDuration);
@@ -105,7 +105,7 @@ class CheckpointTransition extends Phaser.Scene {
   private isLastCheckpoint(
     chapterDetails: GameChapter[],
     currChapter: number,
-    currCheckpoint: number
+    currCheckpoint: number,
   ) {
     return currCheckpoint >= chapterDetails[currChapter].filenames.length - 1;
   }

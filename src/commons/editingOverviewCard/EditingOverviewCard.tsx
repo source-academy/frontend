@@ -11,7 +11,7 @@ import {
   Icon,
   Intent,
   MenuItem,
-  Text
+  Text,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import type { ItemRenderer } from '@blueprintjs/select';
@@ -43,7 +43,7 @@ export const EditingOverviewCard: React.FC<Props> = props => {
   const saveEditOverview = (field: keyof AssessmentOverview) => (e: any) => {
     const overview = {
       ...props.overview,
-      [field]: fieldValue
+      [field]: fieldValue,
     };
     setEditingOverviewField('');
     setFieldValue('');
@@ -160,7 +160,7 @@ export const EditingOverviewCard: React.FC<Props> = props => {
   const saveCategory = (i: AssessmentType, e: any) => {
     const overview = {
       ...props.overview,
-      category: i
+      category: i,
     };
     storeLocalAssessmentOverview(overview);
     props.updateEditingOverview(overview);
@@ -204,7 +204,7 @@ export const EditingOverviewCard: React.FC<Props> = props => {
 
   const assessmentTypeSelect = (
     assessmentType: AssessmentType,
-    handleSelect = (i: AssessmentType, e?: React.SyntheticEvent<HTMLElement>) => {}
+    handleSelect = (i: AssessmentType, e?: React.SyntheticEvent<HTMLElement>) => {},
   ) => (
     <AssessmentTypeSelectComponent
       className={Classes.MINIMAL}
@@ -237,5 +237,5 @@ const AssessmentTypeSelectComponent = Select.ofType<AssessmentType>();
 
 const assessmentTypeRenderer: ItemRenderer<AssessmentType> = (
   assessmentType,
-  { handleClick, modifiers, query }
+  { handleClick, modifiers, query },
 ) => <MenuItem active={false} key={assessmentType} onClick={handleClick} text={assessmentType} />;

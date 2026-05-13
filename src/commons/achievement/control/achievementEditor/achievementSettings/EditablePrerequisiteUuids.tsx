@@ -15,7 +15,7 @@ type Props = {
 const EditablePrerequisiteUuids: React.FC<Props> = ({
   changePrerequisiteUuids,
   uuid,
-  prerequisiteUuids
+  prerequisiteUuids,
 }) => {
   const enablePrerequisites = false;
 
@@ -24,7 +24,7 @@ const EditablePrerequisiteUuids: React.FC<Props> = ({
     ? inferencer.listAvailablePrerequisiteUuids(uuid)
     : [];
   const selectedUuids = prerequisiteUuids.filter(
-    uuid => !inferencer.isInvalidAchievement(inferencer.getAchievement(uuid))
+    uuid => !inferencer.isInvalidAchievement(inferencer.getAchievement(uuid)),
   );
 
   const getUuid = (title: string) => inferencer.getUuidByTitle(title);

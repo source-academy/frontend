@@ -21,5 +21,5 @@ export const AchievementReducer: Reducer<AchievementState, SourceActionType> = c
       .addCase(AchievementActions.saveUserAssessmentOverviews, (state, action) => {
         state.assessmentOverviews = action.payload;
       });
-  }
+  },
 );

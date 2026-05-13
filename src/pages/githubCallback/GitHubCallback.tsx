@@ -59,14 +59,14 @@ const GitHubCallback: React.FC = () => {
 async function retrieveAuthTokenUpdatePage(
   accessCode: string,
   clientId: string,
-  onError: () => void
+  onError: () => void,
 ) {
   const responseObject = await GitHubUtils.exchangeAccessCode(
     Constants.githubOAuthProxyUrl,
     qs.stringify({
       code: accessCode,
-      clientId: clientId
-    })
+      clientId: clientId,
+    }),
   );
 
   let response: any;

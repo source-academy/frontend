@@ -9,7 +9,7 @@ import {
   Label as KonvaLabel,
   Rect,
   Tag as KonvaTag,
-  Text as KonvaText
+  Text as KonvaText,
 } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
@@ -24,7 +24,7 @@ import {
   getTextWidth,
   isMainReference,
   setHoveredCursor,
-  setUnhoveredCursor
+  setUnhoveredCursor,
 } from '../../CseMachineUtils';
 import { Continuation } from '../../utils/continuation';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
@@ -55,7 +55,7 @@ export class ContValue extends Value implements IHoverable {
     /** underlying continuation */
     readonly data: Continuation,
     /** what this value is being referenced by */
-    firstReference: ReferenceType
+    firstReference: ReferenceType,
   ) {
     super();
     Layout.memoizeValue(data, this);

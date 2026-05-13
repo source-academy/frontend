@@ -5,7 +5,7 @@ import type {
   BinaryMeta,
   EventMeta,
   GoalMeta,
-  ManualMeta
+  ManualMeta,
 } from 'src/features/achievement/AchievementTypes';
 import { GoalType } from 'src/features/achievement/AchievementTypes';
 

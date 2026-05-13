@@ -7,7 +7,7 @@ import type { VscodeState } from '../types/VscodeTypes';
 
 export const VscodeReducer: Reducer<VscodeState, SourceActionType> = (
   state = defaultVscode,
-  action
+  action,
 ) => {
   state = newVscodeReducer(state, action);
   return state;

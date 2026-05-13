@@ -7,7 +7,7 @@ import {
   type SideContentManagerState,
   type SideContentState,
   type SideContentTab,
-  SideContentType
+  SideContentType,
 } from 'src/commons/sideContent/SideContentTypes';
 import { actions } from 'src/commons/utils/ActionsHelper';
 import { type Mock, vi } from 'vitest';
@@ -16,7 +16,7 @@ import SideContentSaga from '../SideContentSaga';
 
 vi.mock('src/commons/sideContent/SideContentHelper', async () => ({
   ...(await vi.importActual('src/commons/sideContent/SideContentHelper')),
-  getDynamicTabs: vi.fn()
+  getDynamicTabs: vi.fn(),
 }));
 
 describe('Side Content Alerts for normal side content', () => {
@@ -25,14 +25,14 @@ describe('Side Content Alerts for normal side content', () => {
   const expectSagaWrapper = (initialState: SideContentState, dynamicTabs: SideContentTab[]) => {
     mockedGetDynamicTabs.mockImplementationOnce(() => dynamicTabs);
     return expectSaga(SideContentSaga).withReducer(SideContentReducer, {
-      playground: initialState
+      playground: initialState,
     } as unknown as SideContentManagerState);
   };
   const mockTab: SideContentTab = {
     id: SideContentType.module,
     label: 'tab2',
     iconName: IconNames.LAB_TEST,
-    body: null
+    body: null,
   };
 
   test('Check that alerts from existing tabs are processed after dynamic tabs are loaded', async () => {
@@ -48,15 +48,15 @@ describe('Side Content Alerts for normal side content', () => {
     expect(storeState).toMatchObject({
       playground: {
         dynamicTabs: [mockTab],
-        alerts: ['tab2', SideContentType.dataVisualizer]
-      }
+        alerts: ['tab2', SideContentType.dataVisualizer],
+      },
     });
   });
 
   test('All alerts are reset upon new evaluation', async () => {
     const { storeState } = await expectSagaWrapper(
       { alerts: ['tab0', 'tab1', SideContentType.cseMachine], dynamicTabs: [] },
-      []
+      [],
     )
       .dispatch(actions.beginAlertSideContent(SideContentType.dataVisualizer, 'playground'))
       .dispatch(actions.notifyProgramEvaluated({}, {}, '', {} as Context, 'playground'))
@@ -66,8 +66,8 @@ describe('Side Content Alerts for normal side content', () => {
     expect(storeState).toMatchObject({
       playground: {
         dynamicTabs: [],
-        alerts: [SideContentType.dataVisualizer]
-      }
+        alerts: [SideContentType.dataVisualizer],
+      },
     });
   });
 
@@ -76,9 +76,9 @@ describe('Side Content Alerts for normal side content', () => {
       {
         alerts: ['tab0', 'tab1', SideContentType.cseMachine],
         dynamicTabs: [],
-        selectedTab: 'tab2' as any
+        selectedTab: 'tab2' as any,
       },
-      [mockTab]
+      [mockTab],
     )
       .dispatch(actions.beginAlertSideContent(SideContentType.dataVisualizer, 'playground'))
       .dispatch(actions.notifyProgramEvaluated({}, {}, '', {} as Context, 'playground'))
@@ -89,8 +89,8 @@ describe('Side Content Alerts for normal side content', () => {
       playground: {
         dynamicTabs: [mockTab],
         alerts: [SideContentType.dataVisualizer],
-        selectedTab: mockTab.label
-      }
+        selectedTab: mockTab.label,
+      },
     });
   });
 });

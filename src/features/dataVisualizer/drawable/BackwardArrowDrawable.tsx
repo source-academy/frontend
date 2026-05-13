@@ -47,7 +47,7 @@ const BackwardArrowDrawable: React.FC<Props> = ({ from, to }) => {
     to.x + Config.ArrowPointerOffsetHorizontal,
     topY,
     to.x + Config.ArrowPointerOffsetHorizontal,
-    to.y + Config.ArrowPointerOffsetVertical
+    to.y + Config.ArrowPointerOffsetVertical,
   ];
 
   return (

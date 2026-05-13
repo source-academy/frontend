@@ -11,7 +11,7 @@ import {
   defaultStrokeColor,
   defaultTextColor,
   fadedStrokeColor,
-  fadedTextColor
+  fadedTextColor,
 } from '../CseMachineUtils';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { GenericArrow } from './arrows/GenericArrow';
@@ -41,7 +41,7 @@ export class ArrayUnit extends Visible {
     /** the value this unit contains*/
     readonly data: Data,
     /** parent of this unit */
-    readonly parent: ArrayValue
+    readonly parent: ArrayValue,
   ) {
     super();
     this._x = this.parent.x() + this.index * Config.DataUnitWidth;
@@ -73,7 +73,7 @@ export class ArrayUnit extends Visible {
     this.ref.current?.stroke(
       this.parent.isReferenced() && this.parent.isEnclosingFrameLive()
         ? defaultStrokeColor()
-        : fadedStrokeColor()
+        : fadedStrokeColor(),
     );
   }
 
@@ -94,7 +94,7 @@ export class ArrayUnit extends Visible {
       upperLeft: 0,
       lowerLeft: 0,
       upperRight: 0,
-      lowerRight: 0
+      lowerRight: 0,
     };
 
     if (this.isFirstUnit) cornerRadius.upperLeft = cornerRadius.lowerLeft = Config.DataCornerRadius;
@@ -110,7 +110,7 @@ export class ArrayUnit extends Visible {
       y: this.y() - defaultOptions.fontSize - 4,
       width: this.width(),
       padding: 2,
-      visible: CseMachine.getPrintableMode()
+      visible: CseMachine.getPrintableMode(),
     };
 
     const strokeColor =

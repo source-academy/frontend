@@ -8,7 +8,7 @@ export type FeatureFlagsState = {
 };
 
 export const defaultFeatureFlags = {
-  modifiedFlags: {}
+  modifiedFlags: {},
 };
 
 const featureFlagsSlice = createSlice({
@@ -17,14 +17,14 @@ const featureFlagsSlice = createSlice({
   reducers: {
     setFlag<T>(
       state: FeatureFlagsState,
-      action: { payload: { featureFlag: FeatureFlag<T>; value: T } }
+      action: { payload: { featureFlag: FeatureFlag<T>; value: T } },
     ) {
       state.modifiedFlags[action.payload.featureFlag.flagName] = action.payload.value;
     },
     resetFlag<T>(state: FeatureFlagsState, action: { payload: { featureFlag: FeatureFlag<T> } }) {
       delete state.modifiedFlags[action.payload.featureFlag.flagName];
-    }
-  }
+    },
+  },
 });
 
 export const FeatureFlagsActions = featureFlagsSlice.actions;
@@ -35,7 +35,7 @@ export function createFeatureFlag<T>(
   flagName: string,
   defaultValue: T,
   flagDesc?: string,
-  callback?: (newValue: T) => SagaIterator
+  callback?: (newValue: T) => SagaIterator,
 ): FeatureFlag<T> {
   return new FeatureFlag<T>(flagName, defaultValue, flagDesc, callback);
 }

@@ -26,7 +26,7 @@ export function filterNotificationsBySubmission(submissionId: number): Notificat
  * @return A function that takes in an array of notification and filters it by the type of notification.
  */
 export function filterNotificationsByType(
-  assessmentType: AssessmentType
+  assessmentType: AssessmentType,
 ): NotificationFilterFunction {
   return (notifications: Notification[]) =>
     notifications.filter(n => {

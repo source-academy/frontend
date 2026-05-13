@@ -29,7 +29,7 @@ const rootReducer: Reducer<OverallState, SourceActionType> = combineReducers({
   sideContent,
   vscode,
   languageDirectory,
-  pluginDirectory
+  pluginDirectory,
 });
 
 export default rootReducer;

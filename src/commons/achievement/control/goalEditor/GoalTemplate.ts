@@ -2,7 +2,7 @@ import type {
   AchievementGoal,
   GoalDefinition,
   GoalMeta,
-  GoalProgress
+  GoalProgress,
 } from 'src/features/achievement/AchievementTypes';
 import { EventType, GoalType } from 'src/features/achievement/AchievementTypes';
 
@@ -12,18 +12,18 @@ export const metaTemplate = (type: GoalType): GoalMeta => {
       return {
         type: GoalType.ASSESSMENT,
         assessmentNumber: 0,
-        requiredCompletionFrac: 0
+        requiredCompletionFrac: 0,
       };
     case GoalType.BINARY:
       return {
         type: GoalType.BINARY,
         condition: false,
-        targetCount: 1
+        targetCount: 1,
       };
     case GoalType.MANUAL:
       return {
         type: GoalType.MANUAL,
-        targetCount: 1
+        targetCount: 1,
       };
     case GoalType.EVENT:
       return {
@@ -33,7 +33,7 @@ export const metaTemplate = (type: GoalType): GoalMeta => {
         release: undefined,
         deadline: undefined,
         observeFrom: undefined,
-        observeTo: undefined
+        observeTo: undefined,
       };
   }
 };
@@ -42,17 +42,17 @@ export const goalDefinitionTemplate: GoalDefinition = {
   uuid: '',
   text: 'Goal Text Here',
   achievementUuids: [],
-  meta: metaTemplate(GoalType.MANUAL)
+  meta: metaTemplate(GoalType.MANUAL),
 };
 
 const goalProgressTemplate: GoalProgress = {
   uuid: '',
   count: 0,
   targetCount: 1,
-  completed: false
+  completed: false,
 };
 
 export const goalTemplate: AchievementGoal = {
   ...goalDefinitionTemplate,
-  ...goalProgressTemplate
+  ...goalProgressTemplate,
 };

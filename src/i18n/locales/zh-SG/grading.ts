@@ -12,8 +12,8 @@ const translations = {
     xpAdjustment: '经验值调整',
     currentXpExclBonus: '当前经验值（不含奖励）',
     maxXp: '最大经验值',
-    bonusXp: '奖励经验值'
-  }
+    bonusXp: '奖励经验值',
+  },
 };
 
 export default translations;

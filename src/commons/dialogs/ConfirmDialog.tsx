@@ -7,7 +7,7 @@ import {
   DialogFooter,
   type DialogProps,
   type IconName,
-  Intent
+  Intent,
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 import classes from 'src/styles/ConfirmDialog.module.scss';
@@ -25,7 +25,7 @@ export interface ConfirmDialogProps<T> {
 }
 
 export function ConfirmDialog<T>(
-  props: ConfirmDialogProps<T>
+  props: ConfirmDialogProps<T>,
 ): React.ReactElement<ConfirmDialogProps<T>> {
   const buttons = props.choices.map((choice, i) => (
     <Button

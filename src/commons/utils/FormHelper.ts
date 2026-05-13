@@ -5,7 +5,7 @@ import { useCallback, useRef, useState } from 'react';
 } */
 
 export function useField<T extends HTMLInputElement | HTMLSelectElement>(
-  validationFunction?: (value: string | undefined) => boolean
+  validationFunction?: (value: string | undefined) => boolean,
 ) {
   const ref = useRef<T | null>(null);
   const [isValid, setIsValid] = useState(true);

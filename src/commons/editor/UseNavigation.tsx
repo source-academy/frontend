@@ -33,7 +33,7 @@ const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) 
     if (
       hasDeclaration(editor.getValue(), createContext(sourceChapter), {
         line: newPos.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
-        column: newPos.column
+        column: newPos.column,
       })
     ) {
       return;

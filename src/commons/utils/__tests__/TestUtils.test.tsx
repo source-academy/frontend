@@ -2,12 +2,12 @@ import { deepFilter } from '../TestUtils';
 
 describe('deepFilter', () => {
   const createObjectWithProps = (props: any) => ({
-    props
+    props,
   });
   const createNavlinkObject = (to: string) =>
     createObjectWithProps({
       children: 'Navlink Text',
-      to
+      to,
     });
 
   const MISSIONS_PATH = '/courses/0/missions';
@@ -32,7 +32,7 @@ describe('deepFilter', () => {
   test('filters correctly (2 levels deep)', () => {
     const obj = createObjectWithProps({
       children: [NAVLINK_MISSIONS, NAVLINK_QUESTS],
-      to: MISSIONS_PATH
+      to: MISSIONS_PATH,
     });
 
     const result1 = deepFilter(obj, createMatchFn(MISSIONS_PATH), getChildren);
@@ -50,18 +50,18 @@ describe('deepFilter', () => {
       children: [
         createObjectWithProps({
           children: [NAVLINK_MISSIONS, NAVLINK_QUESTS],
-          to: MISSIONS_PATH
+          to: MISSIONS_PATH,
         }),
         createObjectWithProps({
           children: [NAVLINK_QUESTS, NAVLINK_GRADING],
-          to: MISSIONS_PATH
+          to: MISSIONS_PATH,
         }),
         createObjectWithProps({
           children: [NAVLINK_QUESTS, NAVLINK_GRADING, NAVLINK_MISSIONS],
-          to: GRADING_PATH
-        })
+          to: GRADING_PATH,
+        }),
       ],
-      to: MISSIONS_PATH
+      to: MISSIONS_PATH,
     });
 
     const result1 = deepFilter(obj, createMatchFn(MISSIONS_PATH), getChildren);

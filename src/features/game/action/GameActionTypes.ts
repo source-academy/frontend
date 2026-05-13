@@ -28,7 +28,7 @@ export enum GameActionType {
   Delay = 'Delay',
   ShowQuiz = 'ShowQuiz',
   ChangeLocationTo = 'ChangeLocationTo',
-  ShowTopics = 'ShowTopics'
+  ShowTopics = 'ShowTopics',
 }
 
 /**

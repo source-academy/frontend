@@ -7,7 +7,7 @@ import SicpNavigationBar from '../SicpNavigationBar';
 vi.mock('react-router', async () => ({
   ...(await vi.importActual('react-router')),
   useParams: vi.fn().mockReturnValue({ section: 'index' }),
-  useNavigate: vi.fn().mockReturnValue(vi.fn())
+  useNavigate: vi.fn().mockReturnValue(vi.fn()),
 }));
 
 test('Navbar renders correctly', () => {

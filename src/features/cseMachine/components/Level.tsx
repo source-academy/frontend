@@ -17,7 +17,7 @@ export class Level extends Visible {
     /** the level of this */
     readonly parentLevel: Level | null,
     /** the environment tree nodes contained in this level */
-    readonly envTreeNodes: EnvTreeNode[]
+    readonly envTreeNodes: EnvTreeNode[],
   ) {
     super();
     this._x = CseMachine.getControlStash()
@@ -42,7 +42,7 @@ export class Level extends Visible {
     // get the max height of all the frames in this level including the label
     this._height = this.frames.reduce<number>(
       (maxHeight, frame) => Math.max(maxHeight, frame.totalHeight),
-      0
+      0,
     );
     const lastFrame = this.frames[this.frames.length - 1];
     // derive the width of this level from the last frame and its right-side data overflow

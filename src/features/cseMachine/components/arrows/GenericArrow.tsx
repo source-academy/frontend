@@ -84,7 +84,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
 
     const points = this.calculateSteps().reduce<Array<number>>(
       (acc, step) => [...acc, ...step(acc[acc.length - 2], acc[acc.length - 1])],
-      [this.source.x(), this.source.y()]
+      [this.source.x(), this.source.y()],
     );
     points.splice(0, 2);
 
@@ -120,7 +120,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
         const isLastCorner = n + 6 >= points.length;
         const minTerminalStraightLength = Math.max(
           Config.ArrowHeadSize,
-          Config.ArrowMinCornerRadius
+          Config.ArrowMinCornerRadius,
         );
         const terminalAllowance = isLastCorner
           ? Math.max(0, segment2Length - minTerminalStraightLength)
@@ -128,7 +128,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
         const maxSpaceRadius = Math.min(segment1Length / 2, segment2Length / 2, terminalAllowance);
         const desiredRadius = Math.min(
           Config.ArrowCornerRadius,
-          maxSpaceRadius * Config.ArrowSmallBendRadiusScale
+          maxSpaceRadius * Config.ArrowSmallBendRadiusScale,
         );
         const br =
           maxSpaceRadius >= Config.ArrowMinCornerRadius
@@ -322,7 +322,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
       x1: number,
       y1: number,
       x2: number,
-      y2: number
+      y2: number,
     ): [number, number] | null => {
       const dx = x2 - x1;
       const dy = y2 - y1;
@@ -498,7 +498,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
           pointerWidth={this.isSelected() ? Config.ArrowHoveredHeadSize : Config.ArrowHeadSize}
           key={Layout.key++}
         />
-      </KonvaGroup>
+      </KonvaGroup>,
     );
 
     return this.drawSourceFrameSegment(stroke, interactive);

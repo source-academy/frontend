@@ -7,7 +7,7 @@ import type { TeamFormationOverview } from '../../../features/teamFormation/Team
 import type {
   Assessment,
   AssessmentConfiguration,
-  AssessmentOverview
+  AssessmentOverview,
 } from '../../assessment/AssessmentTypes';
 import type { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import type { GameState, Role, Story } from '../ApplicationTypes';

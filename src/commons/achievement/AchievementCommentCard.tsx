@@ -26,7 +26,7 @@ const AchievementCommentCard: React.FC<Props> = ({ assessment, showToQuestion })
       const assessmentWorkspacePath = listingPath + `/${assessment?.id.toString()}`;
       navigate(assessmentWorkspacePath + `/${questionId}`);
     },
-    [assessment?.id, assessment?.type, courseId, navigate]
+    [assessment?.id, assessment?.type, courseId, navigate],
   );
 
   return (

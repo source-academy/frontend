@@ -18,7 +18,7 @@ const ExportScoreLeaderboardButton: React.FC<Props> = ({ assessmentId }) => {
     const gridContainer = document.createElement('div');
     const gridOptions: GridOptions = {
       rowData: scoreLeaderbaord,
-      columnDefs: [{ field: 'student_name' }, { field: 'answer' }, { field: 'final_score' }]
+      columnDefs: [{ field: 'student_name' }, { field: 'answer' }, { field: 'final_score' }],
     };
     const api = createGrid(gridContainer, gridOptions);
     api.exportDataAsCsv();

@@ -30,9 +30,9 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
       });
       const ranges = getAllOccurrencesInScope(code, createContext(chapterNumber), {
         line: position.row + 1,
-        column: position.column
+        column: position.column,
       }).map(
-        loc => new AceRange(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column)
+        loc => new AceRange(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column),
       );
 
       const markerType = 'ace_variable_highlighting';
@@ -54,7 +54,7 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
 
     const ranges = getScope(code, createContext(chapter), {
       line: position.row + 1,
-      column: position.column
+      column: position.column,
     });
 
     if (ranges.length !== 0) {
@@ -66,11 +66,11 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
               range.start.line - 1,
               range.start.column,
               range.end.line - 1,
-              range.end.column
+              range.end.column,
             ),
             'ace_selection',
-            'text'
-          )
+            'text',
+          ),
         );
       });
     }
@@ -82,14 +82,14 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
       handleVariableHighlighting();
       prevOnChange?.(value, event);
     },
-    [handleVariableHighlighting, prevOnChange]
+    [handleVariableHighlighting, prevOnChange],
   );
   outProps.onCursorChange = useCallback(
     (value: any, event?: any) => {
       handleVariableHighlighting();
       prevOnCursorChange?.(value, event);
     },
-    [handleVariableHighlighting, prevOnCursorChange]
+    [handleVariableHighlighting, prevOnCursorChange],
   );
   keyBindings.highlightScope = handleHighlightScope;
 };

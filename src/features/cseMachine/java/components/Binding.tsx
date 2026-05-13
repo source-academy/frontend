@@ -29,26 +29,26 @@ export class Binding extends Visible {
       this._name = new Text(
         name + Config.VariableColon, // := is part of name
         this.x(),
-        this.y()
+        this.y(),
       );
       // Value.
       this._value = new Method(
         this._name.x() + this._name.width(),
         this.y() + this._name.height() / 2,
-        value
+        value,
       );
       this._arrow = new Arrow(
         this._name.x() + this._name.width(),
         this._name.y() + this._name.height() / 2,
         this._value.x(),
-        this._value.y()
+        this._value.y(),
       );
     } else if (value.kind === ECE.StructType.VARIABLE) {
       // Name.
       this._name = new Text(
         name + Config.VariableColon, // := is part of name
         this.x(),
-        this.y() + Config.FontSize + Config.TextPaddingX
+        this.y() + Config.FontSize + Config.TextPaddingX,
       );
       // Value.
       this._value = new Variable(this._name.x() + this._name.width(), this.y(), value);
@@ -58,13 +58,13 @@ export class Binding extends Visible {
       this._name = new Text(
         name + Config.VariableColon, // := is part of name
         this.x(),
-        this.y() + Config.FontSize + Config.TextPaddingX
+        this.y() + Config.FontSize + Config.TextPaddingX,
       );
       // Value.
       this._value = new Text(
         '',
         this._name.x() + this._name.width() + Config.TextPaddingX,
-        this.y() + Config.TextPaddingX
+        this.y() + Config.TextPaddingX,
       );
     }
 

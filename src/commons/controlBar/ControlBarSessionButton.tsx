@@ -11,7 +11,7 @@ import { showSuccessMessage, showWarningMessage } from '../utils/notifications/N
 type Props = {
   handleSetEditorSessionId?: (editorSessionId: string) => void;
   handleSetSessionDetails?: (
-    sessionDetails: { docId: string; readOnly: boolean; owner: boolean } | null
+    sessionDetails: { docId: string; readOnly: boolean; owner: boolean } | null,
   ) => void;
   isFolderModeEnabled: boolean;
   editorSessionId?: string;
@@ -59,7 +59,7 @@ function ControlBarSessionButtons(props: Props) {
             props.handleSetSessionDetails!({
               docId: docInfo.docId,
               readOnly: docInfo.defaultReadOnly,
-              owner: false
+              owner: false,
             });
             setSessionId(joinElemValue);
             setDefaultReadOnly(docInfo.defaultReadOnly);
@@ -79,10 +79,10 @@ function ControlBarSessionButtons(props: Props) {
         error => {
           props.handleSetEditorSessionId!('');
           handleError(error);
-        }
+        },
       );
     },
-    [props.handleSetEditorSessionId, props.handleSetSessionDetails]
+    [props.handleSetEditorSessionId, props.handleSetSessionDetails],
   );
 
   const leaveButton = (
@@ -106,7 +106,7 @@ function ControlBarSessionButtons(props: Props) {
             padding: '10px',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center'
+            justifyContent: 'center',
           }}
         >
           <Text>You are not currently in any session.</Text>
@@ -142,7 +142,7 @@ function ControlBarSessionButtons(props: Props) {
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-evenly',
-                alignItems: 'center'
+                alignItems: 'center',
               }}
             >
               <FormGroup subLabel="Invite other users to this session">
@@ -186,7 +186,7 @@ function ControlBarSessionButtons(props: Props) {
                 ? undefined
                 : props.sharedbConnected
                   ? Colors.GREEN3
-                  : Colors.RED3
+                  : Colors.RED3,
           }}
           isDisabled={props.isFolderModeEnabled}
         />

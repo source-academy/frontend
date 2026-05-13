@@ -15,7 +15,7 @@ export enum Layer {
   WorkerMessage,
   QuizSpeakerBox,
   QuizSpeaker,
-  Tooltip
+  Tooltip,
 }
 
 // Back to Front
@@ -36,5 +36,5 @@ export const defaultLayerSequence = [
   Layer.Escape,
   Layer.UI,
   Layer.Tooltip,
-  Layer.WorkerMessage
+  Layer.WorkerMessage,
 ];

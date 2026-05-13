@@ -9,15 +9,15 @@ const translations = {
       'To execute all testcases at once, evaluate the program in the editor with this tab active.',
     backgroundInfo: 'A green or red background indicates a passed or failed testcase respectively.',
     privateTestcases:
-      'Private testcases (only visible to staff when grading) have a grey background.'
+      'Private testcases (only visible to staff when grading) have a grey background.',
   },
   headers: {
     testcase: 'Testcase',
     expected: 'Expected result',
     actual: 'Actual result',
     sn: 'S/N',
-    status: 'Testcase status'
-  }
+    status: 'Testcase status',
+  },
 };
 
 export default translations;

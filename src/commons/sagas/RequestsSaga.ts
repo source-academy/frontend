@@ -3,7 +3,7 @@ import { backendParamsToProgressStatus } from 'src/features/grading/GradingUtils
 import type {
   ContestLeaderboardRow,
   LeaderboardContestDetails,
-  LeaderboardRow
+  LeaderboardRow,
 } from 'src/features/leaderboard/LeaderboardTypes';
 import type { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
@@ -12,7 +12,7 @@ import type {
   AchievementItem,
   AchievementUser,
   GoalDefinition,
-  GoalProgress
+  GoalProgress,
 } from '../../features/achievement/AchievementTypes';
 import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import type {
@@ -20,11 +20,11 @@ import type {
   GradingOverview,
   GradingOverviews,
   GradingQuery,
-  GradingQuestion
+  GradingQuestion,
 } from '../../features/grading/GradingTypes';
 import type {
   Device,
-  WebSocketEndpointInformation
+  WebSocketEndpointInformation,
 } from '../../features/remoteExecution/RemoteExecutionTypes';
 import type { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
 import type { UsernameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
@@ -33,7 +33,7 @@ import {
   backendifyAchievementItem,
   backendifyGoalDefinition,
   frontendifyAchievementGoal,
-  frontendifyAchievementItem
+  frontendifyAchievementItem,
 } from '../achievement/utils/AchievementBackender';
 import { Role } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
@@ -43,7 +43,7 @@ import type {
   CourseRegistration,
   Tokens,
   UpdateCourseConfiguration,
-  User
+  User,
 } from '../application/types/SessionTypes';
 import type {
   Assessment,
@@ -52,7 +52,7 @@ import type {
   ContestEntry,
   IContestVotingQuestion,
   IProgrammingQuestion,
-  QuestionType
+  QuestionType,
 } from '../assessment/AssessmentTypes';
 import { QuestionTypes } from '../assessment/AssessmentTypes';
 import type { Notification } from '../notificationBadge/NotificationBadgeTypes';
@@ -80,17 +80,17 @@ export const postAuth = async (
   code: string,
   providerId: string,
   clientId?: string,
-  redirectUri?: string
+  redirectUri?: string,
 ): Promise<Tokens | null> => {
   const resp = await request('auth/login', 'POST', {
     body: {
       code,
       provider: providerId,
       ...(clientId ? { client_id: clientId } : {}),
-      ...(redirectUri ? { redirect_uri: redirectUri } : {})
+      ...(redirectUri ? { redirect_uri: redirectUri } : {}),
     },
     errorMessage: 'Could not login. Please contact the module administrator.',
-    withCredentials: true
+    withCredentials: true,
   });
   if (!resp) {
     return null;
@@ -98,7 +98,7 @@ export const postAuth = async (
   const tokens = await resp.json();
   return {
     accessToken: tokens.access_token,
-    refreshToken: tokens.refresh_token
+    refreshToken: tokens.refresh_token,
   };
 };
 
@@ -107,7 +107,7 @@ export const postAuth = async (
  */
 export const postRefresh = async (refreshToken: string): Promise<Tokens | null> => {
   const resp = await request('auth/refresh', 'POST', {
-    body: { refresh_token: refreshToken }
+    body: { refresh_token: refreshToken },
   });
   if (!resp) {
     return null;
@@ -117,7 +117,7 @@ export const postRefresh = async (refreshToken: string): Promise<Tokens | null> 
 
   return {
     accessToken: tokens.access_token,
-    refreshToken: tokens.refresh_token
+    refreshToken: tokens.refresh_token,
   };
 };
 
@@ -125,7 +125,7 @@ export const postRefresh = async (refreshToken: string): Promise<Tokens | null> 
  * GET /user
  */
 export const getUser = async (
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<{
   user: User | null;
   courseRegistration: CourseRegistration | null;
@@ -133,14 +133,14 @@ export const getUser = async (
   assessmentConfigurations: AssessmentConfiguration[] | null;
 }> => {
   const resp = await request('user', 'GET', {
-    ...tokens
+    ...tokens,
   });
   if (!resp || !resp.ok) {
     return {
       user: null,
       courseRegistration: null,
       courseConfiguration: null,
-      assessmentConfigurations: null
+      assessmentConfigurations: null,
     };
   }
 
@@ -151,20 +151,20 @@ export const getUser = async (
  * GET /user/latest_viewed_course
  */
 export const getLatestCourseRegistrationAndConfiguration = async (
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<{
   courseRegistration: CourseRegistration | null;
   courseConfiguration: CourseConfiguration | null;
   assessmentConfigurations: AssessmentConfiguration[] | null;
 }> => {
   const resp = await request('user/latest_viewed_course', 'GET', {
-    ...tokens
+    ...tokens,
   });
   if (!resp || !resp.ok) {
     return {
       courseRegistration: null,
       courseConfiguration: null,
-      assessmentConfigurations: null
+      assessmentConfigurations: null,
     };
   }
 
@@ -176,12 +176,12 @@ export const getLatestCourseRegistrationAndConfiguration = async (
  */
 export const putLatestViewedCourse = async (
   tokens: Tokens,
-  courseId: number
+  courseId: number,
 ): Promise<Response | null> => {
   const resp = await request(`user/latest_viewed_course`, 'PUT', {
     ...tokens,
     body: { courseId: courseId },
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -192,12 +192,12 @@ export const putLatestViewedCourse = async (
  */
 export const putCourseResearchAgreement = async (
   tokens: Tokens,
-  agreedToResearch: boolean
+  agreedToResearch: boolean,
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/user/research_agreement`, 'PUT', {
     ...tokens,
     body: { agreedToResearch },
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -208,12 +208,12 @@ export const putCourseResearchAgreement = async (
  */
 export const postCreateCourse = async (
   tokens: Tokens,
-  courseConfig: UpdateCourseConfiguration
+  courseConfig: UpdateCourseConfiguration,
 ): Promise<Response | null> => {
   const resp = await request(`config/create`, 'POST', {
     ...tokens,
     body: { ...courseConfig, enableStories: false },
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -224,7 +224,7 @@ export const postCreateCourse = async (
  */
 export const getCourseConfig = async (tokens: Tokens): Promise<CourseConfiguration | null> => {
   const resp = await request(`${courseId()}/config`, 'GET', {
-    ...tokens
+    ...tokens,
   });
 
   if (!resp || !resp.ok) {
@@ -241,7 +241,7 @@ export const getCourseConfig = async (tokens: Tokens): Promise<CourseConfigurati
  */
 export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[] | null> => {
   const resp = await request(`${courseId()}/achievements`, 'GET', {
-    ...tokens
+    ...tokens,
   });
 
   if (!resp || !resp.ok) {
@@ -258,10 +258,10 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
  */
 export const getGoals = async (
   tokens: Tokens,
-  studentCourseRegId: number
+  studentCourseRegId: number,
 ): Promise<AchievementGoal[] | null> => {
   const resp = await request(`${courseId()}/admin/users/${studentCourseRegId}/goals`, 'GET', {
-    ...tokens
+    ...tokens,
   });
 
   if (!resp || !resp.ok) {
@@ -278,7 +278,7 @@ export const getGoals = async (
  */
 export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | null> => {
   const resp = await request(`${courseId()}/self/goals`, 'GET', {
-    ...tokens
+    ...tokens,
   });
 
   if (!resp || !resp.ok) {
@@ -295,7 +295,7 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
  */
 export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | null> => {
   const resp = await request(`${courseId()}/admin/users`, 'GET', {
-    ...tokens
+    ...tokens,
   });
 
   if (!resp || !resp.ok) {
@@ -309,8 +309,8 @@ export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | n
       name: user.name,
       courseRegId: user.courseRegId,
       group: user.group,
-      username: user.username
-    })
+      username: user.username,
+    }),
   );
 };
 
@@ -319,13 +319,13 @@ export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | n
  */
 export async function bulkUpdateAchievements(
   achievements: AchievementItem[],
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> {
   const resp = await request(`${courseId()}/admin/achievements`, 'PUT', {
     accessToken: tokens.accessToken,
     body: { achievements: achievements.map(achievement => backendifyAchievementItem(achievement)) },
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken
+    refreshToken: tokens.refreshToken,
   });
 
   return resp;
@@ -337,15 +337,15 @@ export async function bulkUpdateAchievements(
  */
 export async function bulkUpdateGoals(
   goals: GoalDefinition[],
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> {
   const resp = await request(`${courseId()}/admin/goals`, 'PUT', {
     accessToken: tokens.accessToken,
     body: {
-      goals: goals.map(goal => backendifyGoalDefinition(goal))
+      goals: goals.map(goal => backendifyGoalDefinition(goal)),
     },
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken
+    refreshToken: tokens.refreshToken,
   });
 
   return resp;
@@ -357,12 +357,12 @@ export async function bulkUpdateGoals(
  */
 export const updateOwnGoalProgress = async (
   progress: GoalProgress,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/self/goals/${progress.uuid}/progress`, 'POST', {
     ...tokens,
     body: { progress: progress },
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -374,7 +374,7 @@ export const updateOwnGoalProgress = async (
 export const updateGoalProgress = async (
   studentCourseRegId: number,
   progress: GoalProgress,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> => {
   const resp = await request(
     `${courseId()}/admin/users/${studentCourseRegId}/goals/${progress.uuid}/progress`,
@@ -382,8 +382,8 @@ export const updateGoalProgress = async (
     {
       ...tokens,
       body: { progress: progress },
-      noHeaderAccept: true
-    }
+      noHeaderAccept: true,
+    },
   );
 
   return resp;
@@ -396,7 +396,7 @@ export const removeAchievement = async (uuid: string, tokens: Tokens): Promise<R
   const resp = await request(`${courseId()}/admin/achievements/${uuid}`, 'DELETE', {
     ...tokens,
     body: { uuid: uuid },
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -409,7 +409,7 @@ export const removeGoal = async (uuid: string, tokens: Tokens): Promise<Response
   const resp = await request(`${courseId()}/admin/goals/${uuid}`, 'DELETE', {
     ...tokens,
     body: { uuid: uuid },
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -419,10 +419,10 @@ export const removeGoal = async (uuid: string, tokens: Tokens): Promise<Response
  * GET /courses/{courseId}/assessments
  */
 export const getAssessmentOverviews = async (
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<AssessmentOverview[] | null> => {
   const resp = await request(`${courseId()}/assessments`, 'GET', {
-    ...tokens
+    ...tokens,
   });
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
@@ -445,12 +445,12 @@ export const getTotalXp = async (tokens: Tokens, courseRegId?: number): Promise<
   if (courseRegId !== undefined) {
     // If courseRegId is provided, get the total XP of a specific student
     resp = await request(`${courseId()}/admin/users/${courseRegId}/total_xp`, 'GET', {
-      ...tokens
+      ...tokens,
     });
   } else {
     // Otherwise, get the total XP of the current user
     resp = await request(`${courseId()}/user/total_xp`, 'GET', {
-      ...tokens
+      ...tokens,
     });
   }
 
@@ -465,10 +465,10 @@ export const getTotalXp = async (tokens: Tokens, courseRegId?: number): Promise<
  * GET /courses/{courseId}/leaderboards/xp_all
  */
 export const getAllOverallLeaderboardXP = async (
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<LeaderboardRow[] | null> => {
   const resp = await request(`${courseId()}/leaderboards/xp_all`, 'GET', {
-    ...tokens
+    ...tokens,
   });
 
   if (!resp || !resp.ok) {
@@ -484,8 +484,8 @@ export const getAllOverallLeaderboardXP = async (
       username: row.username,
       xp: row.total_xp,
       avatar: '',
-      achievements: ''
-    })
+      achievements: '',
+    }),
   );
 };
 
@@ -495,12 +495,12 @@ export const getAllOverallLeaderboardXP = async (
 export const getOverallLeaderboardXP = async (
   page: number,
   pageSize: number,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<{ rows: LeaderboardRow[]; userCount: number } | null> => {
   const offset = (page - 1) * pageSize;
   const params = new URLSearchParams({ offset: `${offset}`, page_size: `${pageSize}` });
   const resp = await request(`${courseId()}/leaderboards/xp?${params.toString()}`, 'GET', {
-    ...tokens
+    ...tokens,
   });
 
   if (!resp || !resp.ok) {
@@ -516,8 +516,8 @@ export const getOverallLeaderboardXP = async (
       username: row.username,
       xp: row.total_xp,
       avatar: '',
-      achievements: ''
-    })
+      achievements: '',
+    }),
   );
 
   return { rows: rows, userCount: data.total_count };
@@ -529,15 +529,15 @@ export const getOverallLeaderboardXP = async (
 export const getContestScoreLeaderboard = async (
   assessmentId: number,
   count: number,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<ContestLeaderboardRow[] | null> => {
   const params = new URLSearchParams({ count: `${count}` });
   const resp = await request(
     `${courseId()}/assessments/${assessmentId}/contest_score_leaderboard?${params.toString()}`,
     'GET',
     {
-      ...tokens
-    }
+      ...tokens,
+    },
   );
 
   if (!resp || !resp.ok) {
@@ -555,8 +555,8 @@ export const getContestScoreLeaderboard = async (
       avatar: '',
       code: row.answer,
       submissionId: row.submission_id,
-      votingId: rows.voting_id
-    })
+      votingId: rows.voting_id,
+    }),
   );
 };
 
@@ -566,15 +566,15 @@ export const getContestScoreLeaderboard = async (
 export const getContestPopularVoteLeaderboard = async (
   assessmentId: number,
   count: number,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<ContestLeaderboardRow[] | null> => {
   const params = new URLSearchParams({ count: `${count}` });
   const resp = await request(
     `${courseId()}/assessments/${assessmentId}/contest_popular_leaderboard?${params.toString()}`,
     'GET',
     {
-      ...tokens
-    }
+      ...tokens,
+    },
   );
 
   if (!resp || !resp.ok) {
@@ -592,8 +592,8 @@ export const getContestPopularVoteLeaderboard = async (
       avatar: '',
       code: row.answer,
       submissionId: row.submission_id,
-      votingId: rows.voting_id
-    })
+      votingId: rows.voting_id,
+    }),
   );
 };
 
@@ -601,10 +601,10 @@ export const getContestPopularVoteLeaderboard = async (
  * GET /courses/{courseId}/all_contests
  */
 export const getAllContests = async (
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<LeaderboardContestDetails[] | null> => {
   const resp = await request(`${courseId()}/all_contests`, 'GET', {
-    ...tokens
+    ...tokens,
   });
 
   if (!resp || !resp.ok) {
@@ -621,10 +621,10 @@ export const getAllContests = async (
  */
 export const getUserAssessmentOverviews = async (
   courseRegId: number,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<AssessmentOverview[] | null> => {
   const resp = await request(`${courseId()}/admin/users/${courseRegId}/assessments`, 'GET', {
-    ...tokens
+    ...tokens,
   });
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
@@ -647,7 +647,7 @@ export const getAssessment = async (
   assessmentId: number,
   tokens: Tokens,
   courseRegId?: number,
-  password?: string
+  password?: string,
 ): Promise<Assessment | null> => {
   let resp;
   if (courseRegId !== undefined) {
@@ -656,22 +656,22 @@ export const getAssessment = async (
       `${courseId()}/admin/users/${courseRegId}/assessments/${assessmentId}`,
       'GET',
       {
-        ...tokens
-      }
+        ...tokens,
+      },
     );
   } else {
     // Otherwise, we are getting the assessment for the current user
     if (password === undefined) {
       // No password required (either not password-protected, or already previously unlocked)
       resp = await request(`${courseId()}/assessments/${assessmentId}`, 'GET', {
-        ...tokens
+        ...tokens,
       });
     } else {
       // First-time unlocking password-protected assessments
       resp = await request(`${courseId()}/assessments/${assessmentId}/unlock`, 'POST', {
         ...tokens,
         body: { password },
-        errorMessage: 'Incorrect password'
+        errorMessage: 'Incorrect password',
       });
     }
   }
@@ -728,12 +728,12 @@ export const getAssessment = async (
 export const postAnswer = async (
   id: number,
   answer: string | number | ContestEntry[],
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/assessments/question/${id}/answer`, 'POST', {
     ...tokens,
     body: typeof answer == 'object' ? { answer: answer } : { answer: `${answer}` },
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
   return resp;
 };
@@ -744,7 +744,7 @@ export const postAnswer = async (
 export const checkAnswerLastModifiedAt = async (
   id: number,
   lastModifiedAt: string,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<boolean | null> => {
   const resp = await request(
     `${courseId()}/assessments/question/${id}/answerLastModified`,
@@ -752,10 +752,10 @@ export const checkAnswerLastModifiedAt = async (
     {
       ...tokens,
       body: {
-        lastModifiedAt: lastModifiedAt
+        lastModifiedAt: lastModifiedAt,
       },
-      noHeaderAccept: true
-    }
+      noHeaderAccept: true,
+    },
   );
   if (!resp) {
     return null; // invalid accessToken _and_ refreshToken
@@ -770,7 +770,7 @@ export const checkAnswerLastModifiedAt = async (
 export const postAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {
   const resp = await request(`${courseId()}/assessments/${id}/submit`, 'POST', {
     ...tokens,
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -785,14 +785,14 @@ export const getGradingOverviews = async (
   graded: Record<string, any> | undefined,
   pageParams: Record<string, any>,
   filterParams: Record<string, any>,
-  sortedBy: Record<string, any>
+  sortedBy: Record<string, any>,
 ): Promise<GradingOverviews | null> => {
   // gradedQuery placed behind filterQuery to override progress filter if any
   const params = new URLSearchParams({ ...pageParams, ...filterParams, ...graded, ...sortedBy });
   params.append('group', `${group}`);
 
   const resp = await request(`${courseId()}/admin/grading?${params.toString()}`, 'GET', {
-    ...tokens
+    ...tokens,
   });
   if (!resp) {
     return null; // invalid accessToken _and_ refreshToken
@@ -807,7 +807,7 @@ export const getGradingOverviews = async (
  */
 export const getAllGradingOverviews = async (tokens: Tokens): Promise<GradingOverviews | null> => {
   const resp = await request(`${courseId()}/admin/grading/all_submissions`, 'GET', {
-    ...tokens
+    ...tokens,
   });
   if (!resp) {
     return null; // invalid accessToken _and_ refreshToken
@@ -821,10 +821,10 @@ export const getAllGradingOverviews = async (tokens: Tokens): Promise<GradingOve
  * GET /courses/{courseId}/admin/teams
  */
 export const getTeamFormationOverviews = async (
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<TeamFormationOverview[] | null> => {
   const resp = await request(`${courseId()}/admin/teams`, 'GET', {
-    ...tokens
+    ...tokens,
   });
   if (!resp) {
     return null; // invalid accessToken _and_ refreshToken
@@ -838,13 +838,13 @@ export const getTeamFormationOverviews = async (
         assessmentName: overview.assessmentName,
         assessmentType: overview.assessmentType,
         studentIds: overview.studentIds,
-        studentNames: overview.studentNames
+        studentNames: overview.studentNames,
       };
       return teamFormationOverview;
     })
     .sort(
       (subX: TeamFormationOverview, subY: TeamFormationOverview) =>
-        subY.assessmentId - subX.assessmentId
+        subY.assessmentId - subX.assessmentId,
     );
 };
 
@@ -853,10 +853,10 @@ export const getTeamFormationOverviews = async (
  */
 export const getTeamFormationOverview = async (
   assessmentId: number,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<TeamFormationOverview | null> => {
   const resp = await request(`${courseId()}/team/${assessmentId}`, 'GET', {
-    ...tokens
+    ...tokens,
   });
   if (!resp) {
     return null; // invalid accessToken _and_ refreshToken
@@ -868,7 +868,7 @@ export const getTeamFormationOverview = async (
     assessmentName: team.assessmentName,
     assessmentType: team.assessmentType,
     studentIds: team.studentIds,
-    studentNames: team.studentNames
+    studentNames: team.studentNames,
   };
   return teamFormationOverview;
 };
@@ -879,18 +879,18 @@ export const getTeamFormationOverview = async (
 export const postTeams = async (
   assessmentId: number,
   teams: OptionType[][],
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> => {
   const data = {
     team: {
       assessment_id: assessmentId,
-      student_ids: teams.map(team => team.map(option => option?.value))
-    }
+      student_ids: teams.map(team => team.map(option => option?.value)),
+    },
   };
 
   const resp = await request(`${courseId()}/admin/teams`, 'POST', {
     body: data,
-    ...tokens
+    ...tokens,
   });
   return resp;
 };
@@ -904,7 +904,7 @@ export const postUploadTeams = async (
   assessmentId: number,
   teams: File,
   students: User[] | undefined,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> => {
   const parsed_teams: OptionType[][] = [];
 
@@ -922,7 +922,7 @@ export const postUploadTeams = async (
       if (student) {
         team.push({
           label: student.name,
-          value: student
+          value: student,
         });
       }
     });
@@ -932,13 +932,13 @@ export const postUploadTeams = async (
   const data = {
     team: {
       assessment_id: assessmentId,
-      student_ids: parsed_teams.map(team => team.map(option => option?.value))
-    }
+      student_ids: parsed_teams.map(team => team.map(option => option?.value)),
+    },
   };
 
   const resp = await request(`${courseId()}/admin/teams`, 'POST', {
     body: data,
-    ...tokens
+    ...tokens,
   });
   return resp;
 };
@@ -968,17 +968,17 @@ export const putTeams = async (
   assessmentId: number,
   teamId: number,
   teams: OptionType[][],
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> => {
   const data = {
     teamId: teamId,
     assessmentId: assessmentId,
-    student_ids: teams.map(team => team.map(option => option?.value))
+    student_ids: teams.map(team => team.map(option => option?.value)),
   };
 
   const resp = await request(`${courseId()}/admin/teams/${teamId}`, 'PUT', {
     body: data,
-    ...tokens
+    ...tokens,
   });
   return resp;
 };
@@ -988,12 +988,12 @@ export const putTeams = async (
  */
 export const deleteTeam = async (teamId: number, tokens: Tokens): Promise<Response | null> => {
   const data = {
-    teamId: teamId
+    teamId: teamId,
   };
 
   const resp = await request(`${courseId()}/admin/teams/${teamId}`, 'DELETE', {
     body: data,
-    ...tokens
+    ...tokens,
   });
   return resp;
 };
@@ -1003,7 +1003,7 @@ export const deleteTeam = async (teamId: number, tokens: Tokens): Promise<Respon
  */
 export const getStudents = async (tokens: Tokens): Promise<User[] | null> => {
   const resp = await request(`${courseId()}/admin/users/teamformation`, 'GET', {
-    ...tokens
+    ...tokens,
   });
   if (!resp || !resp.ok) {
     return null;
@@ -1017,10 +1017,10 @@ export const getStudents = async (tokens: Tokens): Promise<User[] | null> => {
  */
 export const getGrading = async (
   submissionId: number,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<GradingQuery | null> => {
   const resp = await request(`${courseId()}/admin/grading/${submissionId}`, 'GET', {
-    ...tokens
+    ...tokens,
   });
 
   if (!resp) {
@@ -1046,17 +1046,17 @@ export const getGrading = async (
         postpend: question.postpend || '',
         testcases: question.testcases || [],
         type: question.type as QuestionType,
-        maxXp: question.maxXp
+        maxXp: question.maxXp,
       },
       student,
       team,
       grade: {
         xp: grade.xp,
         xpAdjustment: grade.xpAdjustment,
-        comments: grade.comments
+        comments: grade.comments,
       },
       ai_comments: gradingQuestion.ai_comments?.response?.split('|||') || [],
-      prompts: gradingQuestion.prompts
+      prompts: gradingQuestion.prompts,
     } as GradingQuestion;
 
     if (gradingQuestion.grade.grader !== null) {
@@ -1069,7 +1069,7 @@ export const getGrading = async (
   return {
     enable_llm_grading: gradingResult.enable_llm_grading,
     answers: grading,
-    assessment: gradingResult.assessment
+    assessment: gradingResult.assessment,
   };
 };
 
@@ -1081,17 +1081,17 @@ export const postGrading = async (
   questionId: number,
   xpAdjustment: number,
   tokens: Tokens,
-  comments?: string
+  comments?: string,
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/grading/${submissionId}/${questionId}`, 'POST', {
     ...tokens,
     body: {
       grading: {
         xpAdjustment,
-        comments
-      }
+        comments,
+      },
     },
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -1102,11 +1102,11 @@ export const postGrading = async (
  */
 export const postReautogradeSubmission = async (
   submissionId: number,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/grading/${submissionId}/autograde`, 'POST', {
     ...tokens,
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -1118,15 +1118,15 @@ export const postReautogradeSubmission = async (
 export const postReautogradeAnswer = async (
   submissionId: number,
   questionId: number,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> => {
   const resp = await request(
     `${courseId()}/admin/grading/${submissionId}/${questionId}/autograde`,
     'POST',
     {
       ...tokens,
-      noHeaderAccept: true
-    }
+      noHeaderAccept: true,
+    },
   );
 
   return resp;
@@ -1137,11 +1137,11 @@ export const postReautogradeAnswer = async (
  */
 export const postUnsubmit = async (
   submissionId: number,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/grading/${submissionId}/unsubmit`, 'POST', {
     ...tokens,
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -1152,11 +1152,11 @@ export const postUnsubmit = async (
  */
 export const publishGrading = async (
   submissionId: number,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/grading/${submissionId}/publish_grades`, 'POST', {
     ...tokens,
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -1168,7 +1168,7 @@ export const publishGrading = async (
 export const publishGradingAll = async (id: number, tokens: Tokens): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/grading/${id}/publish_all_grades`, 'POST', {
     ...tokens,
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -1179,15 +1179,15 @@ export const publishGradingAll = async (id: number, tokens: Tokens): Promise<Res
  */
 export const unpublishGrading = async (
   submissionId: number,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> => {
   const resp = await request(
     `${courseId()}/admin/grading/${submissionId}/unpublish_grades`,
     'POST',
     {
       ...tokens,
-      noHeaderAccept: true
-    }
+      noHeaderAccept: true,
+    },
   );
 
   return resp;
@@ -1199,7 +1199,7 @@ export const unpublishGrading = async (
 export const unpublishGradingAll = async (id: number, tokens: Tokens): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/grading/${id}/unpublish_all_grades`, 'POST', {
     ...tokens,
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -1210,7 +1210,7 @@ export const unpublishGradingAll = async (id: number, tokens: Tokens): Promise<R
  */
 export const getNotifications = async (tokens: Tokens): Promise<Notification[]> => {
   const resp: Response | null = await request(`${courseId()}/notifications`, 'GET', {
-    ...tokens
+    ...tokens,
   });
 
   let notifications: Notification[] = [];
@@ -1228,7 +1228,7 @@ export const getNotifications = async (tokens: Tokens): Promise<Notification[]> 
       assessment_id: notification.assessment_id || undefined,
       assessment_type: notification.assessment ? notification.assessment.type : undefined,
       assessment_title: notification.assessment ? notification.assessment.title : undefined,
-      submission_id: notification.submission_id || undefined
+      submission_id: notification.submission_id || undefined,
     } as Notification;
   });
 
@@ -1240,11 +1240,11 @@ export const getNotifications = async (tokens: Tokens): Promise<Notification[]> 
  */
 export const postAcknowledgeNotifications = async (
   tokens: Tokens,
-  ids: number[]
+  ids: number[],
 ): Promise<Response | null> => {
   const resp: Response | null = await request(`${courseId()}/notifications/acknowledge`, 'POST', {
     ...tokens,
-    body: { notificationIds: ids }
+    body: { notificationIds: ids },
   });
 
   return resp;
@@ -1255,14 +1255,14 @@ export const postAcknowledgeNotifications = async (
  */
 export const calculateContestScore = async (
   assessmentId: number,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> => {
   const resp = await request(
     `${courseId()}/admin/assessments/${assessmentId}/contest_calculate_score`,
     'POST',
     {
-      ...tokens
-    }
+      ...tokens,
+    },
   );
 
   return resp;
@@ -1273,14 +1273,14 @@ export const calculateContestScore = async (
  */
 export const dispatchContestXp = async (
   assessmentId: number,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> => {
   const resp = await request(
     `${courseId()}/admin/assessments/${assessmentId}/contest_dispatch_xp`,
     'POST',
     {
-      ...tokens
-    }
+      ...tokens,
+    },
   );
 
   return resp;
@@ -1292,15 +1292,15 @@ export const dispatchContestXp = async (
 export const getScoreLeaderboard = async (
   assessmentId: number,
   count: number | undefined,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<ContestEntry[] | null> => {
   const params = new URLSearchParams({ count: `${count}` });
   const resp = await request(
     `${courseId()}/assessments/${assessmentId}/contest_score_leaderboard?${params.toString()}`,
     'GET',
     {
-      ...tokens
-    }
+      ...tokens,
+    },
   );
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
@@ -1313,8 +1313,8 @@ export const getScoreLeaderboard = async (
       student_name: row.student_name,
       final_score: row.final_score,
       answer: row.answer,
-      submission_id: row.submission_id
-    })
+      submission_id: row.submission_id,
+    }),
   );
 };
 
@@ -1324,15 +1324,15 @@ export const getScoreLeaderboard = async (
 export const getPopularVoteLeaderboard = async (
   assessmentId: number,
   count: number | undefined,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<ContestEntry[] | null> => {
   const params = new URLSearchParams({ count: `${count}` });
   const resp = await request(
     `${courseId()}/assessments/${assessmentId}/contest_popular_leaderboard?${params.toString()}`,
     'GET',
     {
-      ...tokens
-    }
+      ...tokens,
+    },
   );
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
@@ -1344,8 +1344,8 @@ export const getPopularVoteLeaderboard = async (
       student_name: row.student_name,
       final_score: row.final_score,
       answer: row.answer,
-      submission_id: row.submission_id
-    })
+      submission_id: row.submission_id,
+    }),
   );
 };
 
@@ -1364,12 +1364,12 @@ export const updateAssessment = async (
     isAutosaveEnabled?: boolean;
     assignEntriesForVoting?: boolean;
   },
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/assessments/${id}`, 'POST', {
     ...tokens,
     body: body,
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -1381,7 +1381,7 @@ export const updateAssessment = async (
 export const deleteAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/assessments/${id}`, 'DELETE', {
     ...tokens,
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -1394,7 +1394,7 @@ export const uploadAssessment = async (
   file: File,
   tokens: Tokens,
   forceUpdate: boolean,
-  assessmentConfigId: number
+  assessmentConfigId: number,
 ): Promise<Response | null> => {
   const formData = new FormData();
   formData.append('assessment[file]', file);
@@ -1404,7 +1404,7 @@ export const uploadAssessment = async (
     ...tokens,
     body: formData,
     noContentType: true,
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -1415,7 +1415,7 @@ export const uploadAssessment = async (
  */
 export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary | null> => {
   const resp = await request(`${courseId()}/admin/grading/summary`, 'GET', {
-    ...tokens
+    ...tokens,
   });
   if (!resp || !resp.ok) {
     return null;
@@ -1429,12 +1429,12 @@ export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary 
  */
 export const putCourseConfig = async (
   tokens: Tokens,
-  courseConfig: UpdateCourseConfiguration
+  courseConfig: UpdateCourseConfiguration,
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/config`, 'PUT', {
     ...tokens,
     body: { ...courseConfig, enableStories: false },
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -1444,10 +1444,10 @@ export const putCourseConfig = async (
  * GET /courses/{courseId}/admin/config/assessment_configs
  */
 export const getAssessmentConfigs = async (
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<AssessmentConfiguration[] | null> => {
   const resp = await request(`${courseId()}/admin/config/assessment_configs`, 'GET', {
-    ...tokens
+    ...tokens,
   });
   if (!resp || !resp.ok) {
     return null;
@@ -1461,7 +1461,7 @@ export const getAssessmentConfigs = async (
  */
 export const getPixelbotDocumentMap = async (tokens: Tokens): Promise<any[] | null> => {
   const resp = await request(`${courseId()}/admin/config/pixelbot_document_map`, 'GET', {
-    ...tokens
+    ...tokens,
   });
   if (!resp || !resp.ok) {
     return null;
@@ -1477,7 +1477,7 @@ export const getPixelbotDocumentMap = async (tokens: Tokens): Promise<any[] | nu
 export const putAssessmentConfigs = async (
   tokens: Tokens,
   assessmentConfigs: AssessmentConfiguration[],
-  overrideCourseId?: number
+  overrideCourseId?: number,
 ): Promise<Response | null> => {
   const resp = await request(
     `${
@@ -1487,8 +1487,8 @@ export const putAssessmentConfigs = async (
     {
       ...tokens,
       body: { assessmentConfigs },
-      noHeaderAccept: true
-    }
+      noHeaderAccept: true,
+    },
   );
 
   return resp;
@@ -1499,15 +1499,15 @@ export const putAssessmentConfigs = async (
  */
 export const removeAssessmentConfig = async (
   tokens: Tokens,
-  assessmentConfig: AssessmentConfiguration
+  assessmentConfig: AssessmentConfiguration,
 ): Promise<Response | null> => {
   const resp = await request(
     `${courseId()}/admin/config/assessment_config/${assessmentConfig.assessmentConfigId}`,
     'DELETE',
     {
       ...tokens,
-      noHeaderAccept: true
-    }
+      noHeaderAccept: true,
+    },
   );
 
   return resp;
@@ -1518,10 +1518,10 @@ export const removeAssessmentConfig = async (
  */
 export const postGenerateComments = async (
   tokens: Tokens,
-  answer_id: number
+  answer_id: number,
 ): Promise<{ comments: string[] } | null> => {
   const resp = await request(`${courseId()}/admin/generate-comments/${answer_id}`, 'POST', {
-    ...tokens
+    ...tokens,
   });
   if (!resp || !resp.ok) {
     return null;
@@ -1533,11 +1533,11 @@ export const postGenerateComments = async (
 export const saveFinalComment = async (
   tokens: Tokens,
   answer_id: number,
-  comment: string
+  comment: string,
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/save-final-comment/${answer_id}`, 'POST', {
     body: { comment: comment },
-    ...tokens
+    ...tokens,
   });
 
   return resp;
@@ -1547,10 +1547,10 @@ export const saveFinalComment = async (
  * GET /courses/{courseId}/admin/users
  */
 export const getUserCourseRegistrations = async (
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<AdminPanelCourseRegistration[] | null> => {
   const resp = await request(`${courseId()}/admin/users`, 'GET', {
-    ...tokens
+    ...tokens,
   });
   if (!resp || !resp.ok) {
     return null;
@@ -1565,12 +1565,12 @@ export const getUserCourseRegistrations = async (
 export const putNewUsers = async (
   tokens: Tokens,
   users: UsernameRoleGroup[],
-  provider: string
+  provider: string,
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/users`, 'PUT', {
     ...tokens,
     body: { users, provider },
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -1582,12 +1582,12 @@ export const putNewUsers = async (
 export const putUserRole = async (
   tokens: Tokens,
   courseRegId: number,
-  role: Role
+  role: Role,
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/users/${courseRegId}/role`, 'PUT', {
     ...tokens,
     body: { role },
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -1598,11 +1598,11 @@ export const putUserRole = async (
  */
 export const removeUserCourseRegistration = async (
   tokens: Tokens,
-  courseRegId: number
+  courseRegId: number,
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/users/${courseRegId}`, 'DELETE', {
     ...tokens,
-    noHeaderAccept: true
+    noHeaderAccept: true,
   });
 
   return resp;
@@ -1614,7 +1614,7 @@ export const removeUserCourseRegistration = async (
 export async function fetchDevices(tokens: Tokens): Promise<Device | null> {
   const resp = await request(`devices`, 'GET', {
     accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken
+    refreshToken: tokens.refreshToken,
   });
 
   return resp && resp.ok ? resp.json() : null;
@@ -1625,11 +1625,11 @@ export async function fetchDevices(tokens: Tokens): Promise<Device | null> {
  */
 export async function getDeviceWSEndpoint(
   device: Device,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<WebSocketEndpointInformation | null> {
   const resp = await request(`devices/${device.id}/ws_endpoint`, 'GET', {
     accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken
+    refreshToken: tokens.refreshToken,
   });
 
   return resp && resp.ok ? resp.json() : null;
@@ -1643,7 +1643,7 @@ export async function registerDevice(device: Omit<Device, 'id'>, tokens?: Tokens
   const resp = await request(`devices`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
-    body: device
+    body: device,
   });
 
   if (!resp) {
@@ -1663,13 +1663,13 @@ export async function registerDevice(device: Omit<Device, 'id'>, tokens?: Tokens
  */
 export async function editDevice(
   device: Pick<Device, 'id' | 'title'>,
-  tokens?: Tokens
+  tokens?: Tokens,
 ): Promise<boolean> {
   tokens = fillTokens(tokens);
   const resp = await request(`devices/${device.id}`, 'POST', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
-    body: { title: device.title }
+    body: { title: device.title },
   });
 
   if (!resp) {
@@ -1691,7 +1691,7 @@ export async function deleteDevice(device: Pick<Device, 'id'>, tokens?: Tokens):
   tokens = fillTokens(tokens);
   const resp = await request(`devices/${device.id}`, 'DELETE', {
     accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken
+    refreshToken: tokens.refreshToken,
   });
 
   if (!resp) {
@@ -1771,7 +1771,7 @@ const respToGradingOverviews = (gradingOverviews: any): GradingOverviews => {
           overview.isGradingPublished,
           overview.status,
           overview.gradedCount,
-          overview.assessment.questionCount
+          overview.assessment.questionCount,
         ),
         questionCount: overview.assessment.questionCount,
         gradedCount: overview.gradedCount,
@@ -1780,10 +1780,10 @@ const respToGradingOverviews = (gradingOverviews: any): GradingOverviews => {
         xpAdjustment: overview.xpAdjustment,
         currentXp: overview.xp + overview.xpAdjustment,
         maxXp: overview.assessment.maxXp,
-        xpBonus: overview.xpBonus
+        xpBonus: overview.xpBonus,
       };
       return gradingOverview;
-    })
+    }),
   };
 };
 
@@ -1815,12 +1815,12 @@ export const courseIdWithoutPrefix: () => string = () => {
  */
 export const getVersionHistory = async (
   questionId: number,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<any[] | null> => {
   const resp = await request(`${courseId()}/assessments/question/${questionId}/versions`, 'GET', {
     accessToken: tokens.accessToken,
     errorMessage: 'Could not fetch version history.',
-    refreshToken: tokens.refreshToken
+    refreshToken: tokens.refreshToken,
   });
   if (!resp || !resp.ok) {
     return null;
@@ -1831,14 +1831,14 @@ export const getVersionHistory = async (
     .map((v: any) => ({
       id: String(v.id),
       name: v.name,
-      timestamp: new Date(v.inserted_at).getTime()
+      timestamp: new Date(v.inserted_at).getTime(),
     }));
 };
 
 export const getVersionCode = async (
   questionId: number,
   versionId: string,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<any | null> => {
   const resp = await request(
     `${courseId()}/assessments/question/${questionId}/versions/${versionId}`,
@@ -1846,8 +1846,8 @@ export const getVersionCode = async (
     {
       accessToken: tokens.accessToken,
       errorMessage: 'Could not fetch version code.',
-      refreshToken: tokens.refreshToken
-    }
+      refreshToken: tokens.refreshToken,
+    },
   );
   if (!resp || !resp.ok) {
     return null;
@@ -1861,8 +1861,8 @@ export const getVersionCode = async (
     name: v.name,
     code: v.content.code,
     timestamp: new Date(
-      /[Z+]/.test(v.inserted_at.slice(19)) ? v.inserted_at : v.inserted_at + 'Z'
-    ).getTime()
+      /[Z+]/.test(v.inserted_at.slice(19)) ? v.inserted_at : v.inserted_at + 'Z',
+    ).getTime(),
   };
 };
 
@@ -1874,7 +1874,7 @@ export const updateVersionName = async (
   questionId: number,
   versionId: string,
   name: string,
-  tokens: Tokens
+  tokens: Tokens,
 ): Promise<Response | null> => {
   const resp = await request(
     `${courseId()}/assessments/question/${questionId}/versions/${versionId}/name`,
@@ -1882,11 +1882,11 @@ export const updateVersionName = async (
     {
       accessToken: tokens.accessToken,
       body: {
-        name
+        name,
       },
       errorMessage: 'Could not update version name.',
-      refreshToken: tokens.refreshToken
-    }
+      refreshToken: tokens.refreshToken,
+    },
   );
   return resp;
 };

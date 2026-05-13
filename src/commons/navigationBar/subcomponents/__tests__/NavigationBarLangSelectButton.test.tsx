@@ -46,7 +46,7 @@ describe('NavigationBarLangSelectButton', () => {
     await user.click(javascriptSelector);
 
     expect(store.getState().playground.languageConfig.mainLanguage).toEqual(
-      SupportedLanguage.JAVASCRIPT
+      SupportedLanguage.JAVASCRIPT,
     );
   });
 });

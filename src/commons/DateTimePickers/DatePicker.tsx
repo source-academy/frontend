@@ -6,7 +6,7 @@ import type { Matcher } from 'react-day-picker';
 import {
   DayPicker,
   MonthCaption as DayPickerMonthCaption,
-  Nav as DayPickerNav
+  Nav as DayPickerNav,
 } from 'react-day-picker';
 
 import GradingFlex from '../grading/GradingFlex';
@@ -34,7 +34,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   showTimePicker,
   timePickerProps,
   minDate,
-  maxDate
+  maxDate,
 }) => {
   const [selectedDatetime, setSelectedDatetime] = useState<Date | undefined>(value);
 
@@ -50,7 +50,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
         date.getDate(),
         selectedDatetime.getHours(),
         selectedDatetime.getMinutes(),
-        selectedDatetime.getSeconds()
+        selectedDatetime.getSeconds(),
       );
       setSelectedDatetime(newDatetime);
       onChange(newDatetime);
@@ -68,7 +68,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
         selectedDatetime.getDate(),
         time.getHours(),
         time.getMinutes(),
-        time.getSeconds()
+        time.getSeconds(),
       );
       onChange(newDatetime);
     }
@@ -108,7 +108,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
                 className={classNames(
                   modifiers.selected && Classes.ACTIVE,
                   (modifiers.selected || (highlightCurrentDay && modifiers.today)) &&
-                    Classes.INTENT_PRIMARY
+                    Classes.INTENT_PRIMARY,
                 )}
                 disabled={modifiers.outside}
                 // @ts-expect-error - mismatched types
@@ -143,7 +143,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
               // @ts-expect-error - mismatched types
               <Button icon={IconNames.CHEVRON_LEFT} variant="minimal" onClick={onClick} />
             );
-          }
+          },
         }}
       />
       {showTimePicker && (

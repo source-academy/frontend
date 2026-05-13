@@ -3,11 +3,11 @@ import type { BitmapFontStyle } from '../commons/CommonTypes';
 
 export const emptyUserState = {
   collectibles: [],
-  assessments: []
+  assessments: [],
 };
 
 export const userStateStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 35,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };

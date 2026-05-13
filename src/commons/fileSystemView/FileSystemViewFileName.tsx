@@ -27,7 +27,7 @@ const FileSystemViewFileName: React.FC<Props> = ({
   isDirectory,
   isEditing,
   setIsEditing,
-  refreshDirectory
+  refreshDirectory,
 }) => {
   const [editedFileName, setEditedFileName] = useState(fileName);
   const dispatch = useDispatch();
@@ -55,7 +55,7 @@ const FileSystemViewFileName: React.FC<Props> = ({
                 choose a different name.
               </p>
             ),
-            label: 'OK'
+            label: 'OK',
           }).then(() => setEditedFileName(fileName));
           return;
         }
@@ -67,7 +67,7 @@ const FileSystemViewFileName: React.FC<Props> = ({
 
           if (isDirectory) {
             dispatch(
-              WorkspaceActions.renameEditorTabsForDirectory(workspaceLocation, oldPath, newPath)
+              WorkspaceActions.renameEditorTabsForDirectory(workspaceLocation, oldPath, newPath),
             );
           } else {
             dispatch(WorkspaceActions.renameEditorTabForFile(workspaceLocation, oldPath, newPath));

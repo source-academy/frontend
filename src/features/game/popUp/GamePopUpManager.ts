@@ -36,7 +36,7 @@ class GamePopUpManager {
     itemId: ItemId,
     position: GamePosition,
     duration = Constants.popUpDuration,
-    size: GameSize = GameSize.Medium
+    size: GameSize = GameSize.Medium,
   ) {
     // Destroy previous pop up if any
     this.destroyPopUp(position);
@@ -49,7 +49,7 @@ class GamePopUpManager {
       gameManager,
       PopUpConstants.rect.x[position],
       PopUpConstants.rect.y[size],
-      ImageAssets.popUpFrame.key
+      ImageAssets.popUpFrame.key,
     ).setScale(PopUpConstants.rect.scale[size]);
 
     // Get assetKey
@@ -61,7 +61,7 @@ class GamePopUpManager {
       gameManager,
       PopUpConstants.rect.x[position] + PopUpConstants.image.xOffset,
       PopUpConstants.rect.y[size] + PopUpConstants.image.yOffset,
-      assetKey
+      assetKey,
     );
     const newWidth = PopUpConstants.rect.width * PopUpConstants.rect.scale[size];
     const newHeight = PopUpConstants.rect.height * PopUpConstants.rect.scale[size];

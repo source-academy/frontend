@@ -1,7 +1,7 @@
 import type {
   ContributorsInApi,
   Repo,
-  ReposInApi
+  ReposInApi,
 } from '../../../features/contributors/ContributorsTypes';
 
 const apiRepoDetails: string = 'https://api.github.com/orgs/source-academy/repos?per_page=59';
@@ -9,7 +9,7 @@ const ignoreRepos: string[] = ['assessments', 'tools', 'source-academy2'];
 const ignoreContributors: string[] = [
   'dependabot[bot]',
   'dependabot-preview[bot]',
-  'renovate[bot]'
+  'renovate[bot]',
 ];
 
 export const fetchRepos = async () => {
@@ -24,7 +24,7 @@ export const fetchRepos = async () => {
         key: repo.id,
         name: repo.name,
         description: repo.description,
-        link: repo.contributors_url
+        link: repo.contributors_url,
       };
     });
   return repos;
@@ -34,12 +34,12 @@ export const fetchContributors = async (endpoints: Repo[]) => {
   const responses = await Promise.all(
     endpoints.map((endpoint: Repo) => {
       return fetch(endpoint.link);
-    })
+    }),
   );
   const results = await Promise.all(
     responses.map((res: any) => {
       return res.json();
-    })
+    }),
   );
   const contributorsByRepo = await Promise.all(
     results.map((contributors: ContributorsInApi[]) => {
@@ -53,10 +53,10 @@ export const fetchContributors = async (endpoints: Repo[]) => {
             photo: contributor.avatar_url,
             githubPage: contributor.html_url,
             githubName: contributor.login,
-            commits: contributor.contributions
+            commits: contributor.contributions,
           };
         });
-    })
+    }),
   );
   return contributorsByRepo;
 };

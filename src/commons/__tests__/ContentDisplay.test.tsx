@@ -2,7 +2,7 @@ import ContentDisplay, { type ContentDisplayProps } from '../ContentDisplay';
 import { renderTreeJson } from '../utils/TestUtils';
 
 const mockProps: ContentDisplayProps = {
-  display: <div> Test Content </div>
+  display: <div> Test Content </div>,
 };
 
 test('ContentDisplay page renders correctly', async () => {

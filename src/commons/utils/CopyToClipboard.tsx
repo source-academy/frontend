@@ -27,7 +27,7 @@ function CopyToClipboard({ children, text, onCopy }: Props) {
         originalOnClick(e);
       }
     },
-    [onCopy, text, children?.props]
+    [onCopy, text, children?.props],
   );
 
   return children ? cloneElement(children as any, { onClick: handleClick }) : null;

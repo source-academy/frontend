@@ -9,7 +9,7 @@ import {
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
-  setUnhoveredStyle
+  setUnhoveredStyle,
 } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 

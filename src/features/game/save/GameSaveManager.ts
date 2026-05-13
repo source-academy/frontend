@@ -64,7 +64,7 @@ export default class GameSaveManager {
       this.fullSaveState = gameStateToJson(
         this.fullSaveState,
         this.getChapterNum(),
-        this.getCheckpointNum()
+        this.getCheckpointNum(),
       );
       await saveData(this.fullSaveState);
     }

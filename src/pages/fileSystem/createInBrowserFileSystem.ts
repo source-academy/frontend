@@ -17,7 +17,7 @@ export const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> =
   assessment: '',
   grading: '',
   playground: '/playground',
-  sicp: '/sicp'
+  sicp: '/sicp',
 };
 
 export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<void> => {
@@ -29,16 +29,16 @@ export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<v
           [WORKSPACE_BASE_PATHS.playground]: {
             fs: 'IndexedDB',
             options: {
-              storeName: 'playground'
-            }
+              storeName: 'playground',
+            },
           },
           [WORKSPACE_BASE_PATHS.sicp]: {
             fs: 'IndexedDB',
             options: {
-              storeName: 'sicp'
-            }
-          }
-        }
+              storeName: 'sicp',
+            },
+          },
+        },
       },
       (err: ApiError | null | undefined) => {
         if (err) {
@@ -61,7 +61,7 @@ export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<v
         Promise.all(promises)
           .then(() => resolve())
           .catch(err => reject(err));
-      }
+      },
     );
   });
 };
@@ -73,7 +73,7 @@ type EditorTabWithFile = EditorTabState & {
 
 const createFilesForEditorTabs = async (fileSystem: FSModule, editorTabs: EditorTabState[]) => {
   const editorTabsWithFile = editorTabs.filter(
-    (editorTab): editorTab is EditorTabWithFile => editorTab.filePath !== undefined
+    (editorTab): editorTab is EditorTabWithFile => editorTab.filePath !== undefined,
   );
   const promises = editorTabsWithFile.map((editorTab): Promise<void> => {
     return new Promise((resolve, reject) => {

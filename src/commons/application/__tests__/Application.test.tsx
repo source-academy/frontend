@@ -8,8 +8,8 @@ import Application from '../Application';
 test('Application renders correctly', () => {
   const store = mockInitialStore({
     session: {
-      name: 'Bob'
-    }
+      name: 'Bob',
+    },
   });
 
   const app = (

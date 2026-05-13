@@ -28,7 +28,7 @@ export function createStore() {
     devTools: { serialize: true, maxAge: 300 },
     // We already provide the generic type argument, so we put
     // `as any` to prevent excessively long type inference
-    preloadedState: initialStore as any
+    preloadedState: initialStore as any,
     // TODO: Sentry Redux integration once we update to RTK2
   });
   sagaMiddleware.run(MainSaga);
@@ -36,7 +36,7 @@ export function createStore() {
   createdStore.subscribe(
     throttle(() => {
       saveState(createdStore.getState());
-    }, 1000)
+    }, 1000),
   );
 
   return createdStore;
@@ -54,14 +54,14 @@ function loadStore(loadedStore: SavedState | undefined) {
       githubOctokitObject: {
         octokit: loadedStore.session.githubAccessToken
           ? generateOctokitInstance(loadedStore.session.githubAccessToken)
-          : undefined
-      }
+          : undefined,
+      },
     },
     featureFlags: {
       modifiedFlags: {
         ...defaultState.featureFlags.modifiedFlags,
-        ...loadedStore.featureFlags
-      }
+        ...loadedStore.featureFlags,
+      },
     },
     workspaces: {
       ...defaultState.workspaces,
@@ -89,9 +89,9 @@ function loadStore(loadedStore: SavedState | undefined) {
             : defaultState.workspaces.playground.context.chapter,
           variant: loadedStore.playgroundSourceVariant
             ? loadedStore.playgroundSourceVariant
-            : defaultState.workspaces.playground.context.variant
-        }
-      }
-    }
+            : defaultState.workspaces.playground.context.variant,
+        },
+      },
+    },
   };
 }

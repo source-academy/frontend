@@ -27,7 +27,7 @@ const ManageQuestionTab: React.FC<Props> = props => {
           label="Clone"
           icon={IconNames.DOCUMENT}
           onClick={confirmSave(
-            makeQuestion(() => deepCopy(props.assessment.questions[index]), index)
+            makeQuestion(() => deepCopy(props.assessment.questions[index]), index),
           )}
         />
         <ControlButton

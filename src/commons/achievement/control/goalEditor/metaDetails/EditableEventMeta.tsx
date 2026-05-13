@@ -5,7 +5,7 @@ import { Select } from '@blueprintjs/select';
 import {
   type EventMeta,
   EventType,
-  type GoalMeta
+  type GoalMeta,
 } from 'src/features/achievement/AchievementTypes';
 
 import EditableDate from '../EditableDate';

@@ -28,7 +28,7 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
       x: this.source.x(),
       y: this.source.y(),
       width: this.source.width(),
-      height: this.source.height()
+      height: this.source.height(),
     };
   }
 
@@ -46,7 +46,7 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
     if (!to) return [];
 
     const steps: StepsArray = [
-      (x, y) => [x + Config.DataUnitWidth / 2, y + Config.DataUnitHeight / 2]
+      (x, y) => [x + Config.DataUnitWidth / 2, y + Config.DataUnitHeight / 2],
     ];
 
     if (to instanceof FnValue || to instanceof GlobalFnValue || to instanceof ContValue) {
@@ -72,7 +72,7 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
         // Straight arrow that points directly to the target
         steps.push(() => [
           to.x() + Config.DataUnitWidth / 2,
-          to.y() + (from.y() > to.y() ? Config.DataUnitHeight : 0)
+          to.y() + (from.y() > to.y() ? Config.DataUnitHeight : 0),
         ]);
       }
     }

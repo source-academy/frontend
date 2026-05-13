@@ -5,7 +5,7 @@ import {
   DialogFooter,
   Intent,
   Menu,
-  MenuItem
+  MenuItem,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { type ItemListRenderer, type ItemRenderer, Select } from '@blueprintjs/select';
@@ -18,7 +18,7 @@ import { useSession } from 'src/commons/utils/Hooks';
 import {
   type SALanguage,
   sourceLanguages,
-  styliseSublanguage
+  styliseSublanguage,
 } from '../../../../commons/application/ApplicationTypes';
 import ControlButton from '../../../../commons/ControlButton';
 import WorkspaceActions from '../../../../commons/workspace/WorkspaceActions';
@@ -30,13 +30,13 @@ const DefaultChapterSelect: React.FC = () => {
   const {
     // Temporarily load the defaults when the course configuration fetch has yet to return
     sourceChapter = Constants.defaultSourceChapter,
-    sourceVariant = Constants.defaultSourceVariant
+    sourceVariant = Constants.defaultSourceVariant,
   } = useSession();
 
   const dispatch = useDispatch();
   const handleUpdateSublanguage = useCallback(
     (sublang: SALanguage) => dispatch(WorkspaceActions.changeSublanguage(sublang)),
-    [dispatch]
+    [dispatch],
   );
 
   const handleOpenDialog = useCallback(
@@ -44,7 +44,7 @@ const DefaultChapterSelect: React.FC = () => {
       setDialogState(true);
       setSublanguage(choice);
     },
-    [setDialogState, setSublanguage]
+    [setDialogState, setSublanguage],
   );
   const handleCloseDialog = useCallback(() => {
     setDialogState(false);
@@ -58,7 +58,7 @@ const DefaultChapterSelect: React.FC = () => {
     (lang, { handleClick }) => (
       <MenuItem key={lang.displayName} onClick={handleClick} text={lang.displayName} />
     ),
-    []
+    [],
   );
 
   const chapterListRenderer: ItemListRenderer<SALanguage> = useCallback(
@@ -77,7 +77,7 @@ const DefaultChapterSelect: React.FC = () => {
         </Menu>
       );
     },
-    []
+    [],
   );
 
   const DefaultChapterSelectComponent = Select.ofType<SALanguage>();

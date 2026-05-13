@@ -45,8 +45,8 @@ export function useInput<T>(defaultValue: T) {
       value,
       onChange: (event: any) => {
         setValue(event.target.value);
-      }
-    }
+      },
+    },
   };
 }
 
@@ -59,7 +59,7 @@ export function useInput<T>(defaultValue: T) {
  */
 export function useLocalStorageState<T>(
   key: string,
-  defaultValue: T
+  defaultValue: T,
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [value, setValue] = useState<T>(readLocalStorage(key, defaultValue));
 
@@ -80,7 +80,7 @@ export const useTypedSelector: TypedUseSelectorHook<OverallState> = useSelector;
  */
 
 export const useDimensions = (
-  ref: React.RefObject<HTMLElement | null>
+  ref: React.RefObject<HTMLElement | null>,
 ): [width: number, height: number] => {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
@@ -90,14 +90,14 @@ export const useDimensions = (
       new ResizeObserver((entries: ResizeObserverEntry[], observer: ResizeObserver) => {
         if (entries.length !== 1) {
           throw new Error(
-            'Expected only a single HTML element to be observed by the ResizeObserver.'
+            'Expected only a single HTML element to be observed by the ResizeObserver.',
           );
         }
         const contentRect = entries[0].contentRect;
         setWidth(contentRect.width);
         setHeight(contentRect.height);
       }),
-    []
+    [],
   );
 
   useEffect(() => {
@@ -131,7 +131,7 @@ export const useResponsive = () => {
     md,
     lg,
     isMobileBreakpoint: isMobileBreakpoint,
-    isDesktopBreakpoint: isMobileBreakpoint === undefined ? undefined : !isMobileBreakpoint
+    isDesktopBreakpoint: isMobileBreakpoint === undefined ? undefined : !isMobileBreakpoint,
   };
 };
 
@@ -146,7 +146,7 @@ export const useSession = () => {
   return {
     ...session,
     isEnrolledInACourse,
-    isLoggedIn
+    isLoggedIn,
   };
 };
 

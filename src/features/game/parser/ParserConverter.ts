@@ -8,18 +8,18 @@ import { mandatory } from '../utils/GameUtils';
 const stringToSizeMap = {
   small: GameSize.Small,
   medium: GameSize.Medium,
-  large: GameSize.Large
+  large: GameSize.Large,
 };
 
 const stringToPositionMap = {
   left: GamePosition.Left,
   middle: GamePosition.Middle,
-  right: GamePosition.Right
+  right: GamePosition.Right,
 };
 
 const stringToGameModeMap = {
   talk: GameMode.Talk,
-  explore: GameMode.Explore
+  explore: GameMode.Explore,
 };
 
 const stringToGameItemMap = {
@@ -30,7 +30,7 @@ const stringToGameItemMap = {
   characters: GameItemType.characters,
   actions: GameItemType.actions,
   bgmKey: GameItemType.bgmKey,
-  collectibles: GameItemType.collectibles
+  collectibles: GameItemType.collectibles,
 };
 
 const stringToActionTypeMap = {
@@ -60,7 +60,7 @@ const stringToActionTypeMap = {
   delay: GameActionType.Delay,
   show_quiz: GameActionType.ShowQuiz,
   change_location_to: GameActionType.ChangeLocationTo,
-  show_topics: GameActionType.ShowTopics
+  show_topics: GameActionType.ShowTopics,
 };
 
 const stringToGameStateStorageMap = {
@@ -69,13 +69,13 @@ const stringToGameStateStorageMap = {
   userstate: GameStateStorage.UserState,
   attemptedQuiz: GameStateStorage.AttemptedQuizState,
   passedQuiz: GameStateStorage.PassedQuizState,
-  quizScore: GameStateStorage.QuizScoreState
+  quizScore: GameStateStorage.QuizScoreState,
 };
 
 const stringToUserStateTypeMap = {
   assessments: UserStateType.assessments,
   achievements: UserStateType.achievements,
-  collectibles: UserStateType.collectibles
+  collectibles: UserStateType.collectibles,
 };
 
 /**
@@ -101,28 +101,28 @@ export default class ParserConverter {
   public static stringToGameMode(str: string) {
     return mandatory(
       stringToGameModeMap[str as keyof typeof stringToGameModeMap],
-      `Invalid location mode, ${str}`
+      `Invalid location mode, ${str}`,
     );
   }
 
   public static stringToActionType(str: string) {
     return mandatory(
       stringToActionTypeMap[str as keyof typeof stringToActionTypeMap],
-      `Invalid action type, ${str}`
+      `Invalid action type, ${str}`,
     );
   }
 
   public static stringToGameStateStorage(str: string) {
     return mandatory(
       stringToGameStateStorageMap[str as keyof typeof stringToGameStateStorageMap],
-      `Invalid condition type, ${str}`
+      `Invalid condition type, ${str}`,
     );
   }
 
   public static stringToGameItemType(str: string) {
     return mandatory(
       stringToGameItemMap[str as keyof typeof stringToGameItemMap],
-      `Invalid entity type, ${str}`
+      `Invalid entity type, ${str}`,
     );
   }
 
@@ -133,7 +133,7 @@ export default class ParserConverter {
   public static stringToUserStateType(str: string) {
     return mandatory(
       stringToUserStateTypeMap[str as keyof typeof stringToUserStateTypeMap],
-      `Invalid user state type ${str}`
+      `Invalid user state type ${str}`,
     );
   }
 }

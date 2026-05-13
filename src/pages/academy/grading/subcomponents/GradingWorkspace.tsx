@@ -17,7 +17,7 @@ import type {
   IMCQQuestion,
   Library,
   Question,
-  Testcase
+  Testcase,
 } from '../../../../commons/assessment/AssessmentTypes';
 import { QuestionTypes } from '../../../../commons/assessment/AssessmentTypes';
 import type { ControlBarProps } from '../../../../commons/controlBar/ControlBar';
@@ -38,14 +38,14 @@ import type { SideContentProps } from '../../../../commons/sideContent/SideConte
 import { useSideContent } from '../../../../commons/sideContent/SideContentHelper';
 import {
   type SideContentTab,
-  SideContentType
+  SideContentType,
 } from '../../../../commons/sideContent/SideContentTypes';
 import Workspace, { type WorkspaceProps } from '../../../../commons/workspace/Workspace';
 import type {
   CodeVersion,
   CodeVersionMetadata,
   WorkspaceLocation,
-  WorkspaceState
+  WorkspaceState,
 } from '../../../../commons/workspace/WorkspaceTypes';
 import type { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditor';
@@ -69,7 +69,7 @@ const getDisplayName = (
     username: any;
     name: string;
     id: number;
-  }[]
+  }[],
 ): string[] => {
   if (studentName) return [studentName];
   if (team != null) return team.map(member => member.name);
@@ -81,7 +81,7 @@ const GradingWorkspace: React.FC<Props> = props => {
   const navigate = useNavigate();
   const { selectedTab, setSelectedTab } = useSideContent(
     workspaceLocation,
-    SideContentType.grading
+    SideContentType.grading,
   );
 
   const grading = useTypedSelector(state => state.session.gradings[props.submissionId]);
@@ -98,7 +98,7 @@ const GradingWorkspace: React.FC<Props> = props => {
     replValue,
     currentSubmission: storedSubmissionId,
     currentQuestion: storedQuestionId,
-    versionHistory
+    versionHistory,
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);
 
   const dispatch = useDispatch();
@@ -128,7 +128,7 @@ const GradingWorkspace: React.FC<Props> = props => {
     handleToggleHistoryPanel,
     handleSelectVersion,
     handleRestoreVersion,
-    handleNameVersion
+    handleNameVersion,
   } = useMemo(() => {
     return {
       handleBrowseHistoryDown: () =>
@@ -142,7 +142,7 @@ const GradingWorkspace: React.FC<Props> = props => {
       handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
       handleSetActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
         dispatch(
-          WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)
+          WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex),
         ),
       handleRemoveEditorTabByIndex: (editorTabIndex: number) =>
         dispatch(WorkspaceActions.removeEditorTab(workspaceLocation, editorTabIndex)),
@@ -150,7 +150,7 @@ const GradingWorkspace: React.FC<Props> = props => {
         dispatch(WorkspaceActions.updateEditorValue(workspaceLocation, 0, newEditorValue)),
       handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
         dispatch(
-          WorkspaceActions.setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)
+          WorkspaceActions.setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints),
         ),
       handleGradingFetch: (submissionId: number) =>
         dispatch(SessionActions.fetchGrading(submissionId)),
@@ -186,11 +186,11 @@ const GradingWorkspace: React.FC<Props> = props => {
             version.id,
             version.name,
             version.timestamp,
-            version.code
-          )
+            version.code,
+          ),
         ),
       handleNameVersion: (versionId: string, name: string) =>
-        dispatch(WorkspaceActions.nameVersion(workspaceLocation, versionId, name))
+        dispatch(WorkspaceActions.nameVersion(workspaceLocation, versionId, name)),
     };
   }, [dispatch]);
 
@@ -217,7 +217,7 @@ const GradingWorkspace: React.FC<Props> = props => {
         if (question.answer.trim() === question.solutionTemplate.trim()) {
           answer = unansweredPrependValue + question.answer;
           showSimpleErrorDialog({
-            contents: 'Question has not been answered.'
+            contents: 'Question has not been answered.',
           });
         } else {
           answer = question.answer as string;
@@ -293,7 +293,7 @@ const GradingWorkspace: React.FC<Props> = props => {
       }
       if (editorValue.trim() === questionData.solutionTemplate?.trim()) {
         showSimpleErrorDialog({
-          contents: 'Question has not been answered.'
+          contents: 'Question has not been answered.',
         });
         editorValue = unansweredPrependValue + editorValue;
       }
@@ -309,12 +309,12 @@ const GradingWorkspace: React.FC<Props> = props => {
         {
           value: editorValue,
           highlightedLines: [],
-          breakpoints: []
-        }
+          breakpoints: [],
+        },
       ],
       programPrependValue,
       programPostpendValue,
-      editorTestcases
+      editorTestcases,
     });
     handleChangeExecTime(question.library.execTimeMs ?? defaultWorkspaceManager.grading.execTime);
     handleClearContext(question.library, true);
@@ -328,7 +328,7 @@ const GradingWorkspace: React.FC<Props> = props => {
   /** Pre-condition: Grading has been loaded */
   const sideContentProps: (p: Props, q: number) => SideContentProps = (
     props: Props,
-    questionId: number
+    questionId: number,
   ) => {
     const tabs: SideContentTab[] = [
       {
@@ -348,7 +348,7 @@ const GradingWorkspace: React.FC<Props> = props => {
             maxXp={grading!.answers[questionId].question.maxXp}
             studentNames={getDisplayName(
               grading!.answers[questionId].student.name,
-              grading!.answers[questionId].team
+              grading!.answers[questionId].team,
             )}
             studentAnswer={
               grading!.answers[questionId].question.type === 'programming'
@@ -376,13 +376,13 @@ const GradingWorkspace: React.FC<Props> = props => {
             }
           />
         ),
-        id: SideContentType.grading
+        id: SideContentType.grading,
       },
       {
         label: `Question ${questionId + 1}`,
         iconName: IconNames.NINJA,
         body: <Markdown content={grading!.answers[questionId].question.content} />,
-        id: SideContentType.questionOverview
+        id: SideContentType.questionOverview,
       },
       {
         label: `Autograder`,
@@ -395,7 +395,7 @@ const GradingWorkspace: React.FC<Props> = props => {
             workspaceLocation="grading"
           />
         ),
-        id: SideContentType.autograder
+        id: SideContentType.autograder,
       },
       {
         label: `Briefing`,
@@ -409,8 +409,8 @@ const GradingWorkspace: React.FC<Props> = props => {
             }
           />
         ),
-        id: SideContentType.briefing
-      }
+        id: SideContentType.briefing,
+      },
     ];
     const externalLibrary = grading!.answers[questionId].question.library.external;
     const functionsAttached = externalLibrary.symbols;
@@ -419,7 +419,7 @@ const GradingWorkspace: React.FC<Props> = props => {
         label: `Tone Matrix`,
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
-        id: SideContentType.toneMatrix
+        id: SideContentType.toneMatrix,
       });
     }
 
@@ -427,7 +427,7 @@ const GradingWorkspace: React.FC<Props> = props => {
       onChange: (
         newTabId: SideContentType,
         prevTabId: SideContentType,
-        event: React.MouseEvent<HTMLElement>
+        event: React.MouseEvent<HTMLElement>,
       ) => {
         if (newTabId === prevTabId) {
           return;
@@ -436,9 +436,9 @@ const GradingWorkspace: React.FC<Props> = props => {
       },
       tabs: {
         beforeDynamicTabs: tabs,
-        afterDynamicTabs: []
+        afterDynamicTabs: [],
       },
-      workspaceLocation
+      workspaceLocation,
     };
 
     return sideContentProps;
@@ -496,7 +496,7 @@ const GradingWorkspace: React.FC<Props> = props => {
 
     return {
       editorButtons: [runButton, versionHistoryButton],
-      flowButtons: [previousButton, questionView, nextButton]
+      flowButtons: [previousButton, questionView, nextButton],
     };
   };
 
@@ -558,16 +558,16 @@ const GradingWorkspace: React.FC<Props> = props => {
             isEditorAutorun: false,
             sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
             sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
-            externalLibraryName: question?.library?.external?.name || 'NONE'
+            externalLibraryName: question?.library?.external?.name || 'NONE',
           }
         : undefined,
     handleSideContentHeightChange: handleSideContentHeightChange,
     mcqProps: {
       mcq: question as IMCQQuestion,
-      handleMCQSubmit: (i: number) => {}
+      handleMCQSubmit: (i: number) => {},
     },
     sideBarProps: {
-      tabs: []
+      tabs: [],
     },
     sideContentProps: sideContentProps(props, questionId),
     replProps: {
@@ -580,8 +580,8 @@ const GradingWorkspace: React.FC<Props> = props => {
       sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
       sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
       externalLibrary: question?.library?.external?.name || 'NONE',
-      replButtons: replButtons()
-    }
+      replButtons: replButtons(),
+    },
   };
   return (
     <div className={classNames('WorkspaceParent', Classes.DARK)}>

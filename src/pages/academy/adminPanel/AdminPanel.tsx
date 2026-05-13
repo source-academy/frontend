@@ -32,7 +32,7 @@ const defaultCourseConfig: UpdateCourseConfiguration = {
   llmCourseLevelPrompt: '',
   pixelbotRoutingPrompt: '',
   pixelbotAnswerPrompt: '',
-  feedbackUrl: ''
+  feedbackUrl: '',
 };
 
 const AdminPanel: React.FC = () => {
@@ -67,7 +67,7 @@ const AdminPanel: React.FC = () => {
       llmCourseLevelPrompt: session.llmCourseLevelPrompt,
       pixelbotRoutingPrompt: session.pixelbotRoutingPrompt,
       pixelbotAnswerPrompt: session.pixelbotAnswerPrompt,
-      feedbackUrl: session.feedbackUrl
+      feedbackUrl: session.feedbackUrl,
     });
   }, [
     session.courseName,
@@ -86,7 +86,7 @@ const AdminPanel: React.FC = () => {
     session.llmCourseLevelPrompt,
     session.pixelbotRoutingPrompt,
     session.pixelbotAnswerPrompt,
-    session.feedbackUrl
+    session.feedbackUrl,
   ]);
 
   const tableRef = useRef<ImperativeAssessmentConfigPanel>(null);
@@ -99,7 +99,7 @@ const AdminPanel: React.FC = () => {
     setCourseConfiguration: (courseConfig: UpdateCourseConfiguration) => {
       setCourseConfiguration(courseConfig);
       setHasChangesCourseConfig(true);
-    }
+    },
   };
 
   // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
@@ -113,7 +113,7 @@ const AdminPanel: React.FC = () => {
     const currentConfigs = session.assessmentConfigurations ?? [];
     const currentIds = new Set(tableState.map(config => config.assessmentConfigId));
     const configsToDelete = currentConfigs.filter(
-      config => !currentIds.has(config.assessmentConfigId)
+      config => !currentIds.has(config.assessmentConfigId),
     );
     configsToDelete.forEach(config => dispatch(SessionActions.deleteAssessmentConfig(config)));
     if (hasChangesAssessmentConfig) {
@@ -125,7 +125,7 @@ const AdminPanel: React.FC = () => {
     dispatch,
     hasChangesAssessmentConfig,
     hasChangesCourseConfig,
-    session.assessmentConfigurations
+    session.assessmentConfigurations,
   ]);
 
   const data = (

@@ -4,7 +4,7 @@ import type { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponen
 
 const AcademyActions = createActions('academy', {
   createCourse: (courseConfig: UpdateCourseConfiguration) => courseConfig,
-  addNewUsersToCourse: (users: UsernameRoleGroup[], provider: string) => ({ users, provider })
+  addNewUsersToCourse: (users: UsernameRoleGroup[], provider: string) => ({ users, provider }),
 });
 
 // For compatibility with existing code (actions helper)

@@ -21,7 +21,7 @@ type ContinueChatResponse = {
 export async function initRagChat(tokens: Tokens): Promise<InitChatResponse> {
   const response = await request('rag_chat', 'POST', {
     ...tokens,
-    body: {}
+    body: {},
   });
   if (!response) {
     throw new Error('Unknown error occurred.');
@@ -35,13 +35,13 @@ export async function initRagChat(tokens: Tokens): Promise<InitChatResponse> {
 
 export async function sendRagMessage(
   tokens: Tokens,
-  userMessage: string
+  userMessage: string,
 ): Promise<ContinueChatResponse> {
   const response = await request('rag_chat/message', 'POST', {
     ...tokens,
     body: {
-      message: userMessage
-    }
+      message: userMessage,
+    },
   });
   if (!response) {
     throw new Error('Unknown error occurred.');

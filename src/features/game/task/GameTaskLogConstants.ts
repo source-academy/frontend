@@ -6,7 +6,7 @@ import type { BitmapFontStyle } from '../commons/CommonTypes';
 export const taskTextStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 30,
-  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
+  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT,
 };
 
 const scrollbarX = screenSize.x * 0.251;
@@ -18,7 +18,7 @@ const TaskLogConstants = {
   checkMark: {
     x: screenSize.x * -0.202,
     y: screenSize.y * -0.369,
-    imageUrl: ImageAssets.talkOptCheck.key
+    imageUrl: ImageAssets.talkOptCheck.key,
   },
   logHeight: screenSize.y * 0.7632,
   scrollbarTrack: {
@@ -26,10 +26,10 @@ const TaskLogConstants = {
     y: screenSize.y * 0.005,
     width: scrollbarWidth,
     height: screenSize.y * 0.73,
-    color: 0x555555
+    color: 0x555555,
   },
   scrollbarThumb: { x: scrollbarX, width: scrollbarWidth, color: 0x888888 },
-  scrollSpeed: 0.5
+  scrollSpeed: 0.5,
 };
 
 export default TaskLogConstants;

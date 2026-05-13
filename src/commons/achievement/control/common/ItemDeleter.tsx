@@ -13,7 +13,7 @@ const ItemDeleter: React.FC<Props> = ({ deleteItem, item }) => {
       contents: `Are you sure you want to delete '${item}' ?`,
       negativeLabel: 'No',
       positiveIntent: 'danger',
-      positiveLabel: 'Yes, delete'
+      positiveLabel: 'Yes, delete',
     });
     if (confirm) {
       deleteItem();

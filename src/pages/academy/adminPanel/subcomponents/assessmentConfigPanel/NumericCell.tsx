@@ -19,7 +19,7 @@ const NumericCell: React.FC<Props> = props => {
     (value: number) => {
       props.setStateHandler(rowIndex!, value);
     },
-    [props, rowIndex]
+    [props, rowIndex],
   );
 
   return (

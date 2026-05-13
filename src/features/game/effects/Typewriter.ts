@@ -22,7 +22,7 @@ type TypewriterProps = {
  */
 export function Typewriter(
   scene: Phaser.Scene,
-  { x = 0, y = 0, textStyle = {}, typeWriterInterval = 1 }: TypewriterProps
+  { x = 0, y = 0, textStyle = {}, typeWriterInterval = 1 }: TypewriterProps,
 ) {
   const textSprite = new Phaser.GameObjects.Text(scene, x, y, '', textStyle);
 

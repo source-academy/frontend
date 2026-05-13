@@ -9,7 +9,7 @@ import {
   defaultActiveColor,
   defaultDangerColor,
   defaultStrokeColor,
-  getTextWidth
+  getTextWidth,
 } from '../CseMachineUtils';
 import { Animatable, type AnimationConfig } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
@@ -32,7 +32,7 @@ export class ArraySpreadAnimation extends Animatable {
     private controlInstrItem: ControlItemComponent,
     private stashItem: StashItemComponent,
     private resultItems: StashItemComponent[],
-    private currCallInstrItem: ControlItemComponent
+    private currCallInstrItem: ControlItemComponent,
   ) {
     super();
 
@@ -40,25 +40,25 @@ export class ArraySpreadAnimation extends Animatable {
     this.controlInstrAnimation = new AnimatedTextbox(
       controlInstrItem.text,
       getNodePosition(controlInstrItem),
-      { rectProps: { stroke: defaultActiveColor() } }
+      { rectProps: { stroke: defaultActiveColor() } },
     );
     this.stashItemAnimation = new AnimatedTextbox(stashItem.text, getNodePosition(stashItem), {
       rectProps: {
-        stroke: defaultDangerColor()
-      }
+        stroke: defaultDangerColor(),
+      },
     });
 
     // call instr above
     this.currCallInstrAnimation = new AnimatedTextbox(
       this.currCallInstrItem.text,
       getNodePosition(this.currCallInstrItem),
-      { rectProps: { stroke: defaultActiveColor() } }
+      { rectProps: { stroke: defaultActiveColor() } },
     );
 
     this.resultAnimations = resultItems.map(item => {
       return new AnimatedTextbox(item.text, {
         ...getNodePosition(item),
-        opacity: 0
+        opacity: 0,
       });
     });
     if (stashItem.arrow) {
@@ -94,19 +94,19 @@ export class ArraySpreadAnimation extends Animatable {
       ...this.resultAnimations.flatMap(a => [
         a.animateTo(
           { x: startX + (this.endX - startX) / 2 - this.resultItems[0]?.width() / 2 },
-          { duration: 0 }
-        )
+          { duration: 0 },
+        ),
       ]),
       this.controlInstrAnimation.animateRectTo({ stroke: defaultStrokeColor() }, animationConfig),
       this.controlInstrAnimation.animateTo(
         {
           x: startX,
           y: resultY + (this.resultItems[0]?.height() ?? this.stashItem.height()),
-          width: minInstrWidth
+          width: minInstrWidth,
         },
-        animationConfig
+        animationConfig,
       ),
-      this.stashItemAnimation.animateRectTo({ stroke: defaultDangerColor() }, animationConfig)
+      this.stashItemAnimation.animateRectTo({ stroke: defaultDangerColor() }, animationConfig),
     ]);
 
     animationConfig = { ...animationConfig, delay: 0 };
@@ -115,12 +115,12 @@ export class ArraySpreadAnimation extends Animatable {
       this.controlInstrAnimation.animateTo({ x: resultX(0), y: resultY }, animationConfig),
       this.controlInstrAnimation.animateTo(
         { opacity: 0 },
-        { ...animationConfig, duration: fadeDuration }
+        { ...animationConfig, duration: fadeDuration },
       ),
       this.stashItemAnimation.animateTo({ x: resultX(0) }, animationConfig),
       this.stashItemAnimation.animateTo(
         { opacity: 0 },
-        { ...animationConfig, duration: fadeDuration }
+        { ...animationConfig, duration: fadeDuration },
       ),
 
       ...this.resultAnimations.flatMap((a, idx) => [
@@ -128,9 +128,9 @@ export class ArraySpreadAnimation extends Animatable {
         a.animateRectTo({ stroke: defaultDangerColor() }, animationConfig),
         a.animateTo(
           { opacity: 1 },
-          { ...animationConfig, duration: fadeDuration, delay: fadeInDelay }
-        )
-      ])
+          { ...animationConfig, duration: fadeDuration, delay: fadeInDelay },
+        ),
+      ]),
     ]);
 
     this.destroy();

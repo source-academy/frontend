@@ -23,7 +23,7 @@ export class FeatureFlag<T> {
     flagName: string,
     defaultValue: T,
     flagDesc?: string,
-    callback?: (newValue: T) => SagaIterator
+    callback?: (newValue: T) => SagaIterator,
   ) {
     this._flagName = flagName;
     this._defaultValue = defaultValue;

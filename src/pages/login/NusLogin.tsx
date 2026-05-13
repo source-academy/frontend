@@ -11,7 +11,7 @@ import sourceAcademyLogo from '../../assets/SA.jpg';
 
 const nusProviders = [...Constants.nusAuthProviders.entries()].map(([id, { name }]) => ({
   id,
-  name
+  name,
 }));
 
 const NUS_LOGO =
@@ -24,7 +24,7 @@ const NusLogin: React.FC = () => {
   const dispatch = useDispatch();
   const handleLogin = useCallback(
     (providerId: string) => dispatch(SessionActions.login(providerId)),
-    [dispatch]
+    [dispatch],
   );
   const navigate = useNavigate();
 

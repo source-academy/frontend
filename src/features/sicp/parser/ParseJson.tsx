@@ -154,7 +154,7 @@ const handleSnippet = (obj: JsonType) => {
       id: obj.id!,
       initialEditorValueHash: obj.program!,
       prependLength: obj.prependLength!,
-      output: obj.output!
+      output: obj.output!,
     };
     return <CodeSnippet {...CodeSnippetProps} />;
   }
@@ -299,7 +299,7 @@ export const processingFunctions: Record<
 
   TT: (obj, refs) => <Code>{parseArr(obj.child!, refs)}</Code>,
 
-  UL: (obj, refs) => <UL>{parseArr(obj.child!, refs)}</UL>
+  UL: (obj, refs) => <UL>{parseArr(obj.child!, refs)}</UL>,
 };
 
 // Parse array of objects. An array of objects represent sibling nodes.

@@ -15,5 +15,5 @@ export const consoleOverloads: ConsoleOverload = {
     (bufferCallback: DisplayBufferCallback) =>
     (...args: any[]) => {
       bufferCallback(args.map(log => (typeof log === 'string' ? log : stringify(log))).join(' '));
-    }
+    },
 };

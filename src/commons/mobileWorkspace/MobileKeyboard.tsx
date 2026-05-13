@@ -18,7 +18,7 @@ const MobileKeyboard: React.FC<Props> = props => {
 
   const onDrag: DraggableEventHandler = (
     e: DraggableEvent,
-    position: { x: number; y: number }
+    position: { x: number; y: number },
   ): void => {
     setKeyboardPosition(position);
   };
@@ -60,7 +60,7 @@ const MobileKeyboard: React.FC<Props> = props => {
     setTouchStartInfo({
       x: touch.clientX,
       y: touch.clientY,
-      time: Date.now()
+      time: Date.now(),
     });
   };
 
@@ -111,21 +111,23 @@ const MobileKeyboard: React.FC<Props> = props => {
     disableButtonHold: true,
     baseClass: 'simple-keyboard-shortcut',
     layout: {
-      default: ['{ } ( ) " \' _ => ; {tab} && || ! < > = === + - * / % // {arrowleft} {arrowright}']
+      default: [
+        '{ } ( ) " \' _ => ; {tab} && || ! < > = === + - * / % // {arrowleft} {arrowright}',
+      ],
     },
     buttonTheme: [
       {
         class: 'mobile-navigation',
-        buttons: '{arrowleft} {arrowright}'
+        buttons: '{arrowleft} {arrowright}',
       },
       {
         class: 'big-buttons',
-        buttons: '=== &&'
-      }
+        buttons: '=== &&',
+      },
     ],
     theme: 'hg-theme-default',
     preventMouseDownDefault: true,
-    disableCaretPositioning: false
+    disableCaretPositioning: false,
   };
 
   return (

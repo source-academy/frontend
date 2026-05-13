@@ -56,7 +56,7 @@ const Repl: React.FC<ReplProps> = props => {
 };
 
 const ResultOutputDisplay: React.FC<{ output: ResultOutput }> = ({
-  output: { value, consoleLogs }
+  output: { value, consoleLogs },
 }) => {
   const stringified = useMemo(() => stringify(value), [value]);
   if (consoleLogs.length === 0) {

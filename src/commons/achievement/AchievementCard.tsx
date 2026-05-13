@@ -20,7 +20,7 @@ const AchievementCard: React.FC<Props> = ({
   focusState,
   isDropdownOpen,
   shouldRender,
-  toggleDropdown
+  toggleDropdown,
 }) => {
   const inferencer = useContext(AchievementContext);
 
@@ -44,7 +44,7 @@ const AchievementCard: React.FC<Props> = ({
       style={{
         ...handleGlow(uuid, focusUuid),
         opacity: shouldRender ? '100%' : '20%',
-        background: `url(${cardBackground}) center/cover`
+        background: `url(${cardBackground}) center/cover`,
       }}
     >
       <div className="dropdown-button">

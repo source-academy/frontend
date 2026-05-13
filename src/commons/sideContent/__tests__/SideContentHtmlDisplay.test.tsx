@@ -7,7 +7,7 @@ import { vi } from 'vitest';
 
 import {
   SideContentHtmlDisplay,
-  type SideContentHtmlDisplayProps
+  type SideContentHtmlDisplayProps,
 } from '../content/SideContentHtmlDisplay';
 import type { SideContentLocation } from '../SideContentTypes';
 
@@ -24,7 +24,7 @@ test('HTML Display renders correctly', async () => {
   const mockProps = {
     content: stringify('<p>Hello World!</p>'),
     workspaceLocation: 'playground' as SideContentLocation,
-    handleAddHtmlConsoleError: (errorMsg: string) => {}
+    handleAddHtmlConsoleError: (errorMsg: string) => {},
   };
   const htmlDisplay = await renderTreeJson(<Component {...mockProps} />);
   expect(htmlDisplay).toMatchSnapshot();
@@ -36,7 +36,7 @@ describe('HTML Display postMessage Listener', () => {
   const mockProps = {
     content: stringify('<p>Hello World!</p>'),
     handleAddHtmlConsoleError: mockHandleAddHtmlConsoleError,
-    workspaceLocation: 'playground' as SideContentLocation
+    workspaceLocation: 'playground' as SideContentLocation,
   };
 
   const element = <Component {...mockProps} />;
@@ -45,7 +45,7 @@ describe('HTML Display postMessage Listener', () => {
     render(element);
     const mockMessage = {
       data: 'Invalid error',
-      origin: '*'
+      origin: '*',
     };
     fireEvent(window, new MessageEvent('message', mockMessage));
     expect(mockHandleAddHtmlConsoleError).toHaveBeenCalledTimes(0);
@@ -55,7 +55,7 @@ describe('HTML Display postMessage Listener', () => {
     render(element);
     const mockMessage = {
       data: 'Line 1: Syntax Error',
-      origin: '*'
+      origin: '*',
     };
     fireEvent(window, new MessageEvent('message', mockMessage));
     expect(mockHandleAddHtmlConsoleError).toHaveBeenCalledTimes(1);

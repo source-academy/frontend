@@ -5,7 +5,7 @@ import { toS3Path } from 'src/features/game/utils/GameUtils';
 import type { StorageProps } from 'src/features/gameSimulator/GameSimulatorTypes';
 import {
   createHeadersWithCors,
-  loadFileLocally
+  loadFileLocally,
 } from 'src/features/gameSimulator/GameSimulatorUtils';
 
 /**
@@ -27,7 +27,7 @@ const ChapterSimulatorTextLoader: React.FC<StorageProps> = ({ storageName, s3Txt
     const filename = e.target.value;
     setChosenFilename(filename);
     const response = await fetch(toS3Path(`/stories/${filename}`, true), {
-      headers: createHeadersWithCors()
+      headers: createHeadersWithCors(),
     });
     const txt = await response.text();
     sessionStorage.setItem(storageName, txt);

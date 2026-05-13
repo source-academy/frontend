@@ -36,7 +36,7 @@ const TimePicker: React.FC<TimePickerProps> = ({ value, onChange, showArrowButto
 
   const handleWheel = (
     e: React.WheelEvent<HTMLInputElement>,
-    field: 'hours' | 'minutes' | 'seconds'
+    field: 'hours' | 'minutes' | 'seconds',
   ) => {
     e.preventDefault();
     const delta = e.deltaY > 0 ? -1 : 1;

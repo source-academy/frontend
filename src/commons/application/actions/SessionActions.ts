@@ -1,7 +1,7 @@
 import { createActions } from 'src/commons/redux/utils';
 import {
   paginationToBackendParams,
-  unpublishedToBackendParams
+  unpublishedToBackendParams,
 } from 'src/features/grading/GradingUtils';
 import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import type { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
@@ -9,18 +9,18 @@ import type { OptionType } from 'src/pages/academy/teamFormation/subcomponents/T
 import type {
   AllColsSortStates,
   GradingOverviews,
-  GradingQuery
+  GradingQuery,
 } from '../../../features/grading/GradingTypes';
 import type { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
 import type {
   Assessment,
   AssessmentConfiguration,
   AssessmentOverview,
-  ContestEntry
+  ContestEntry,
 } from '../../assessment/AssessmentTypes';
 import type {
   Notification,
-  NotificationFilterFunction
+  NotificationFilterFunction,
 } from '../../notificationBadge/NotificationBadgeTypes';
 import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
 import { Role } from '../ApplicationTypes';
@@ -29,7 +29,7 @@ import type {
   CourseRegistration,
   Tokens,
   UpdateCourseConfiguration,
-  User
+  User,
 } from '../types/SessionTypes';
 
 const SessionActions = createActions('session', {
@@ -39,11 +39,11 @@ const SessionActions = createActions('session', {
   fetchCourseConfig: () => ({}),
   fetchAssessment: (assessmentId: number, assessmentPassword?: string) => ({
     assessmentId,
-    assessmentPassword
+    assessmentPassword,
   }),
   fetchAssessmentAdmin: (assessmentId: number, courseRegId: number) => ({
     assessmentId,
-    courseRegId
+    courseRegId,
   }),
   fetchAssessmentOverviews: () => ({}),
   fetchTotalXp: () => ({}),
@@ -65,7 +65,7 @@ const SessionActions = createActions('session', {
     publishedFilter = unpublishedToBackendParams(false),
     pageParams = paginationToBackendParams(0, 10),
     filterParams = {},
-    allColsSortStates: AllColsSortStates = { currentState: freshSortState, sortBy: '' }
+    allColsSortStates: AllColsSortStates = { currentState: freshSortState, sortBy: '' },
   ) => ({ filterToGroup, publishedFilter, pageParams, filterParams, allColsSortStates }),
   fetchTeamFormationOverviews: (filterToGroup = true) => filterToGroup,
   fetchStudents: () => ({}),
@@ -89,20 +89,20 @@ const SessionActions = createActions('session', {
   checkAnswerLastModifiedAt: (id: number, lastModifiedAt: string, saveAnswer: Function) => ({
     id,
     lastModifiedAt,
-    saveAnswer
+    saveAnswer,
   }),
   submitAssessment: (id: number) => id,
   submitGrading: (
     submissionId: number,
     questionId: number,
     xpAdjustment: number = 0,
-    comments?: string
+    comments?: string,
   ) => ({ submissionId, questionId, xpAdjustment, comments }),
   submitGradingAndContinue: (
     submissionId: number,
     questionId: number,
     xpAdjustment: number = 0,
-    comments?: string
+    comments?: string,
   ) => ({ submissionId, questionId, xpAdjustment, comments }),
   reautogradeSubmission: (submissionId: number) => submissionId,
   reautogradeAnswer: (submissionId: number, questionId: number) => ({ submissionId, questionId }),
@@ -115,13 +115,13 @@ const SessionActions = createActions('session', {
   updateTeam: (teamId: number, assessment: AssessmentOverview, teams: OptionType[][]) => ({
     teamId,
     assessment,
-    teams
+    teams,
   }),
   deleteTeam: (teamId: number) => ({ teamId }),
   bulkUploadTeam: (assessment: AssessmentOverview, file: File, students: User[] | undefined) => ({
     assessment,
     file,
-    students
+    students,
   }),
   updateTeamFormationOverviews: (overviews: TeamFormationOverview[]) => overviews,
   updateTeamFormationOverview: (overview: TeamFormationOverview) => overview,
@@ -147,7 +147,7 @@ const SessionActions = createActions('session', {
   fetchAdminPanelCourseRegistrations: () => ({}),
   updateUserRole: (courseRegId: number, role: Role) => ({ courseRegId, role }),
   deleteUserCourseRegistration: (courseRegId: number) => ({ courseRegId }),
-  updateCourseResearchAgreement: (agreedToResearch: boolean) => ({ agreedToResearch })
+  updateCourseResearchAgreement: (agreedToResearch: boolean) => ({ agreedToResearch }),
 });
 
 // For compatibility with existing code (actions helper)

@@ -12,7 +12,7 @@ import { preloadConductorEvaluatorSaga } from './helpers/conductorEvaluatorCache
 
 export function* getLanguageDefinitionSaga() {
   const directory: LanguageDirectoryState = yield select(
-    (state: OverallState) => state.languageDirectory
+    (state: OverallState) => state.languageDirectory,
   );
   if (!directory.selectedLanguageId) return undefined;
   return directory.languageMap[directory.selectedLanguageId];
@@ -20,7 +20,7 @@ export function* getLanguageDefinitionSaga() {
 
 export function* getEvaluatorDefinitionSaga() {
   const directory: LanguageDirectoryState = yield select(
-    (state: OverallState) => state.languageDirectory
+    (state: OverallState) => state.languageDirectory,
   );
   if (!directory.selectedEvaluatorId) return undefined;
   const language: ILanguageDefinition = yield call(getLanguageDefinitionSaga);
@@ -62,7 +62,7 @@ const languageDirectoryHandlers = combineSagaHandlers({
     } catch (error) {
       console.error('Failed to preload:', error);
     }
-  }
+  },
 });
 
 function* LanguageDirectorySaga() {

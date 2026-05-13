@@ -116,7 +116,7 @@ export class Environment extends Visible {
         classFrameStroke,
         '',
         highlightOnHover,
-        unhighlightOnHover
+        unhighlightOnHover,
       );
       const superClassName = (c as ECE.Class).superclass?.frame.name;
       if (superClassName) {
@@ -137,7 +137,7 @@ export class Environment extends Visible {
             b.value.x() + b.value.width() / 2,
             b.value.y() + b.value.type.height() + (b.value.height() - b.value.type.height()) / 2,
             matchingObj.x(),
-            matchingObj.y() + matchingObj.height() / 2
+            matchingObj.y() + matchingObj.height() / 2,
           );
         }
       });
@@ -161,7 +161,7 @@ export class Environment extends Visible {
               b.value.x() + b.value.width() / 2,
               b.value.y() + b.value.type.height() + (b.value.height() - b.value.type.height()) / 2,
               matchingVariable.x(),
-              matchingVariable.y() + matchingVariable.type.height()
+              matchingVariable.y() + matchingVariable.type.height(),
             );
           }
           if (
@@ -175,7 +175,7 @@ export class Environment extends Visible {
               b.value.x() + b.value.width() / 2,
               b.value.y() + b.value.type.height() + (b.value.height() - b.value.type.height()) / 2,
               matchingObj.x(),
-              matchingObj.y() + matchingObj.height() / 2
+              matchingObj.y() + matchingObj.height() / 2,
             );
           }
         });
@@ -184,13 +184,13 @@ export class Environment extends Visible {
     // Draw line for obj to class.
     this._objects.forEach(obj => {
       const matchingClass = this._classFrames.find(
-        c => c.name.text === obj.object.class.frame.name
+        c => c.name.text === obj.object.class.frame.name,
       )!;
       const line = new Line(
         obj.x() + obj.width(),
         obj.y() + obj.height() / 2,
         matchingClass.x(),
-        matchingClass.y() + matchingClass.height() / 2 + matchingClass.name.height()
+        matchingClass.y() + matchingClass.height() / 2 + matchingClass.name.height(),
       );
       this._lines.push(line);
     });

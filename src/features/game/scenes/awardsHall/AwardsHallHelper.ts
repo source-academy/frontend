@@ -5,7 +5,7 @@ import {
   awardHoverDescStyle,
   awardHoverKeyStyle,
   awardHoverTitleStyle,
-  AwardsHallConstants
+  AwardsHallConstants,
 } from './AwardsHallConstants';
 
 /**
@@ -26,14 +26,14 @@ export const createAwardsHoverContainer = (scene: Phaser.Scene, award: AwardProp
     20,
     awardTitle.getBounds().bottom + 20,
     award.assetKey,
-    awardHoverKeyStyle
+    awardHoverKeyStyle,
   );
   const awardDesc = new Phaser.GameObjects.Text(
     scene,
     20,
     awardAssetKey.getBounds().bottom + 20,
     award.description,
-    awardHoverDescStyle
+    awardHoverDescStyle,
   );
 
   const hoverTextBg = new Phaser.GameObjects.Rectangle(
@@ -42,7 +42,7 @@ export const createAwardsHoverContainer = (scene: Phaser.Scene, award: AwardProp
     0,
     AwardsHallConstants.awardInfo.width,
     awardDesc.getBounds().bottom + 20,
-    HexColor.darkBlue
+    HexColor.darkBlue,
   )
     .setOrigin(0.0, 0.0)
     .setAlpha(0.8);
@@ -51,13 +51,13 @@ export const createAwardsHoverContainer = (scene: Phaser.Scene, award: AwardProp
     scene,
     AwardsHallConstants.awardInfo.width / 2,
     0,
-    ImageAssets.scrollFrame.key
+    ImageAssets.scrollFrame.key,
   );
   const scrollFrameBot = new Phaser.GameObjects.Sprite(
     scene,
     AwardsHallConstants.awardInfo.width / 2,
     hoverTextBg.getBounds().bottom,
-    ImageAssets.scrollFrame.key
+    ImageAssets.scrollFrame.key,
   );
 
   hoverContainer.add([hoverTextBg, awardTitle, awardDesc, scrollFrameTop, scrollFrameBot]);

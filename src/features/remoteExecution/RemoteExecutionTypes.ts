@@ -86,13 +86,13 @@ export const deviceTypes: DeviceType[] = [
       'ev3_ledRightGreen',
       'ev3_ledRightRed',
       'ev3_ledGetBrightness',
-      'ev3_ledSetBrightness'
+      'ev3_ledSetBrightness',
     ],
     languageChapter: Chapter.SOURCE_3,
-    deviceLibraryName: ExternalLibraryName.EV3
-  }
+    deviceLibraryName: ExternalLibraryName.EV3,
+  },
 ];
 
 export const deviceTypesById: Map<string, DeviceType> = new Map(
-  deviceTypes.map(type => [type.id, type])
+  deviceTypes.map(type => [type.id, type]),
 );

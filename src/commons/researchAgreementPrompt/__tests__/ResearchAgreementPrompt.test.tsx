@@ -10,7 +10,7 @@ import ResearchAgreementPrompt from '../ResearchAgreementPrompt';
 
 vi.mock('react-redux', async () => ({
   ...(await vi.importActual('react-redux')),
-  useDispatch: vi.fn()
+  useDispatch: vi.fn(),
 }));
 const useDispatchMock = useDispatch as Mock;
 const dispatchMock = vi.fn();

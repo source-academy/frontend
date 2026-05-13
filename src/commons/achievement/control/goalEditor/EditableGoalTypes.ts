@@ -5,7 +5,7 @@ export enum EditableGoalActionType {
   CHANGE_TEXT = 'CHANGE_TEXT',
   DELETE_GOAL = 'DELETE_GOAL',
   DISCARD_CHANGES = 'DISCARD_CHANGES',
-  SAVE_CHANGES = 'SAVE_CHANGES'
+  SAVE_CHANGES = 'SAVE_CHANGES',
 }
 
 export type EditableGoalAction =

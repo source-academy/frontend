@@ -3,7 +3,7 @@ import type { Context } from 'js-slang';
 
 import type {
   AllColsSortStates,
-  GradingColumnVisibility
+  GradingColumnVisibility,
 } from '../../features/grading/GradingTypes';
 import type { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';

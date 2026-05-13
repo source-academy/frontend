@@ -21,7 +21,7 @@ export default class GamePhaseManager {
   private interruptCheckCallback: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => boolean;
   private interruptTransitionCallback: (
     prevPhase: GamePhaseType,
-    newPhase: GamePhaseType
+    newPhase: GamePhaseType,
   ) => Promise<void>;
   private transitionCallback: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => void;
 
@@ -54,7 +54,7 @@ export default class GamePhaseManager {
    * @param fn callback
    */
   public setInterruptCheckCallback(
-    fn: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => boolean
+    fn: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => boolean,
   ) {
     this.interruptCheckCallback = fn;
   }
@@ -70,7 +70,7 @@ export default class GamePhaseManager {
    * @param fn callback
    */
   public setInterruptCallback(
-    fn: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => Promise<void>
+    fn: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => Promise<void>,
   ) {
     this.interruptTransitionCallback = fn;
   }
@@ -174,7 +174,7 @@ export default class GamePhaseManager {
    */
   public isCurrentPhaseTerminal(): boolean {
     return Object.values(GameTerminalPhaseType).includes(
-      this.getCurrentPhase() as unknown as GameTerminalPhaseType
+      this.getCurrentPhase() as unknown as GameTerminalPhaseType,
     );
   }
 

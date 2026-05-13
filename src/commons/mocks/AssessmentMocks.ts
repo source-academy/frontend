@@ -8,7 +8,7 @@ import type {
   IContestVotingQuestion,
   IMCQQuestion,
   IProgrammingQuestion,
-  Library
+  Library,
 } from '../assessment/AssessmentTypes';
 import { AssessmentStatuses, TestcaseTypes } from '../assessment/AssessmentTypes';
 
@@ -25,7 +25,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       hasTokenCounter: false,
       hasVotingFeatures: false,
       earlySubmissionXp: 200,
-      isAutosaveEnabled: true
+      isAutosaveEnabled: true,
     },
     {
       assessmentConfigId: 2,
@@ -38,7 +38,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       hasTokenCounter: false,
       hasVotingFeatures: false,
       earlySubmissionXp: 200,
-      isAutosaveEnabled: true
+      isAutosaveEnabled: true,
     },
     {
       assessmentConfigId: 3,
@@ -51,7 +51,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       hasTokenCounter: false,
       hasVotingFeatures: false,
       earlySubmissionXp: 200,
-      isAutosaveEnabled: true
+      isAutosaveEnabled: true,
     },
     {
       assessmentConfigId: 4,
@@ -64,7 +64,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       hasTokenCounter: false,
       hasVotingFeatures: true,
       earlySubmissionXp: 200,
-      isAutosaveEnabled: true
+      isAutosaveEnabled: true,
     },
     {
       assessmentConfigId: 5,
@@ -77,8 +77,8 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       hasTokenCounter: false,
       hasVotingFeatures: false,
       earlySubmissionXp: 200,
-      isAutosaveEnabled: true
-    }
+      isAutosaveEnabled: true,
+    },
   ],
   [
     {
@@ -92,7 +92,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       hasTokenCounter: false,
       hasVotingFeatures: false,
       earlySubmissionXp: 200,
-      isAutosaveEnabled: true
+      isAutosaveEnabled: true,
     },
     {
       assessmentConfigId: 2,
@@ -105,7 +105,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       hasTokenCounter: false,
       hasVotingFeatures: false,
       earlySubmissionXp: 200,
-      isAutosaveEnabled: true
+      isAutosaveEnabled: true,
     },
     {
       assessmentConfigId: 3,
@@ -118,9 +118,9 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       hasTokenCounter: false,
       hasVotingFeatures: false,
       earlySubmissionXp: 200,
-      isAutosaveEnabled: true
-    }
-  ]
+      isAutosaveEnabled: true,
+    },
+  ],
 ];
 
 const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
@@ -143,8 +143,8 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false,
-    hoursBeforeEarlyXpDecay: 0
-  }
+    hoursBeforeEarlyXpDecay: 0,
+  },
 ];
 
 const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
@@ -179,7 +179,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     isGradingPublished: false,
     maxTeamSize: 4,
     hasVotingFeatures: false,
-    hoursBeforeEarlyXpDecay: 0
+    hoursBeforeEarlyXpDecay: 0,
   },
   {
     type: 'Missions',
@@ -200,7 +200,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false,
-    hoursBeforeEarlyXpDecay: 0
+    hoursBeforeEarlyXpDecay: 0,
   },
   {
     type: 'Quests',
@@ -221,7 +221,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     isGradingPublished: false,
     maxTeamSize: 2,
     hasVotingFeatures: false,
-    hoursBeforeEarlyXpDecay: 0
+    hoursBeforeEarlyXpDecay: 0,
   },
   {
     type: 'Paths',
@@ -242,7 +242,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     isGradingPublished: false,
     maxTeamSize: 2,
     hasVotingFeatures: false,
-    hoursBeforeEarlyXpDecay: 0
+    hoursBeforeEarlyXpDecay: 0,
   },
   {
     type: 'Others',
@@ -264,8 +264,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     maxTeamSize: 1,
     isGradingPublished: false,
     hasVotingFeatures: false,
-    hoursBeforeEarlyXpDecay: 0
-  }
+    hoursBeforeEarlyXpDecay: 0,
+  },
 ];
 
 const mockClosedAssessmentOverviews: AssessmentOverview[] = [
@@ -288,7 +288,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false,
-    hoursBeforeEarlyXpDecay: 0
+    hoursBeforeEarlyXpDecay: 0,
   },
   {
     type: 'Quests',
@@ -309,7 +309,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false,
-    hoursBeforeEarlyXpDecay: 0
+    hoursBeforeEarlyXpDecay: 0,
   },
   {
     type: 'Quests',
@@ -330,7 +330,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false,
-    hoursBeforeEarlyXpDecay: 0
+    hoursBeforeEarlyXpDecay: 0,
   },
   {
     type: 'Paths',
@@ -351,23 +351,23 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false,
-    hoursBeforeEarlyXpDecay: 0
-  }
+    hoursBeforeEarlyXpDecay: 0,
+  },
 ];
 
 export const mockAssessmentOverviews = [
   ...mockUnopenedAssessmentsOverviews,
   ...mockOpenedAssessmentsOverviews,
-  ...mockClosedAssessmentOverviews
+  ...mockClosedAssessmentOverviews,
 ];
 
 export const mockLibrary: Library = {
   chapter: Chapter.SOURCE_1,
   external: {
     name: ExternalLibraryName.NONE,
-    symbols: []
+    symbols: [],
   },
-  globals: []
+  globals: [],
 };
 
 export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
@@ -393,20 +393,20 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
         type: TestcaseTypes.public,
         program: `answer();`,
         score: 1,
-        answer: `"pizza"`
+        answer: `"pizza"`,
       },
       {
         type: TestcaseTypes.public,
         program: `answer();`,
         score: 1,
-        answer: `"sushi"`
+        answer: `"sushi"`,
       },
       {
         type: TestcaseTypes.public,
         program: `answer();`,
         score: 1,
-        answer: `"chicken rice"`
-      }
+        answer: `"chicken rice"`,
+      },
     ],
     solutionTemplate: `function answer() {
       // Write something here!
@@ -415,7 +415,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     type: 'programming',
     xp: 0,
     maxXp: 2,
-    blocking: false
+    blocking: false,
   },
   {
     autogradingResults: [],
@@ -439,14 +439,14 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
         type: TestcaseTypes.public,
         program: `areaOfCircle(5);`,
         score: 1,
-        answer: `78.53982`
+        answer: `78.53982`,
       },
       {
         type: TestcaseTypes.public,
         program: `volumeOfSphere(5);`,
         score: 1,
-        answer: `523.5988`
-      }
+        answer: `523.5988`,
+      },
     ],
     solutionTemplate: `function areaOfCircle(x) {
       // return area of circle
@@ -458,7 +458,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     type: 'programming',
     xp: 0,
     maxXp: 2,
-    blocking: false
+    blocking: false,
   },
   {
     answer: 3,
@@ -467,20 +467,20 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     choices: [
       {
         content: '**Option** `A`',
-        hint: '_hint_ A is `here`'
+        hint: '_hint_ A is `here`',
       },
       {
         content: '### B',
-        hint: 'hint B'
+        hint: 'hint B',
       },
       {
         content: 'C',
-        hint: null
+        hint: null,
       },
       {
         content: 'D',
-        hint: 'hint D'
-      }
+        hint: 'hint D',
+      },
     ],
     id: 2,
     library: mockLibrary,
@@ -488,7 +488,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     solution: 0,
     xp: 0,
     maxXp: 2,
-    blocking: false
+    blocking: false,
   },
   {
     answer: 3,
@@ -497,20 +497,20 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     choices: [
       {
         content: 'A',
-        hint: null
+        hint: null,
       },
       {
         content: 'B',
-        hint: null
+        hint: null,
       },
       {
         content: 'C',
-        hint: null
+        hint: null,
       },
       {
         content: 'D',
-        hint: null
-      }
+        hint: null,
+      },
     ],
     id: 3,
     library: mockLibrary,
@@ -518,7 +518,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     solution: undefined,
     xp: 0,
     maxXp: 2,
-    blocking: false
+    blocking: false,
   },
   {
     autogradingResults: [],
@@ -534,8 +534,8 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
     type: 'programming',
     xp: 0,
     maxXp: 2,
-    blocking: false
-  }
+    blocking: false,
+  },
 ];
 
 export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
@@ -558,20 +558,20 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
         type: TestcaseTypes.public,
         program: `fibonacci(3);`,
         score: 1,
-        answer: `2`
+        answer: `2`,
       },
       {
         type: TestcaseTypes.public,
         program: `fibonacci(4);`,
         score: 1,
-        answer: `3`
+        answer: `3`,
       },
       {
         type: TestcaseTypes.public,
         program: `fibonacci(5);`,
         score: 1,
-        answer: `5`
-      }
+        answer: `5`,
+      },
     ],
     solutionTemplate: `function fibonacci(n) {
       // Your answer here
@@ -579,7 +579,7 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
     type: 'programming',
     grader: {
       name: 'avenger',
-      id: 1
+      id: 1,
     },
     gradedAt: '2038-06-18T05:24:26.026Z',
     xp: 0,
@@ -611,29 +611,29 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
   ![](image-url-goes-here)`,
     autogradingResults: [
       {
-        resultType: 'pass'
+        resultType: 'pass',
       },
       {
         resultType: 'fail',
         expected: '8',
-        actual: '5'
+        actual: '5',
       },
       {
         resultType: 'error',
         errors: [
           {
-            errorType: 'timeout'
+            errorType: 'timeout',
           },
           {
             errorType: 'syntax',
             line: 1,
             location: 'student',
             errorLine: 'function fibonacci(n) {',
-            errorExplanation: 'Just kidding!'
-          }
-        ]
-      }
-    ]
+            errorExplanation: 'Just kidding!',
+          },
+        ],
+      },
+    ],
   },
   {
     answer: `function recurse(rune, n) {
@@ -652,7 +652,7 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
     type: 'programming',
     grader: {
       name: 'some avenger',
-      id: 1
+      id: 1,
     },
     gradedAt: '2038-06-18T05:24:26.026Z',
     xp: 0,
@@ -692,8 +692,8 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
       #### Upcoming Tasks
       - [] Meet Avenger Avenger at Level X-05
       - [] Open the Pod Bay Doors`,
-    autogradingResults: []
-  }
+    autogradingResults: [],
+  },
 ];
 
 export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
@@ -703,20 +703,20 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
     choices: [
       {
         content: 'XOR gate',
-        hint: 'This is the exclusive-OR gate!'
+        hint: 'This is the exclusive-OR gate!',
       },
       {
         content: 'IF gate',
-        hint: 'Correct!'
+        hint: 'Correct!',
       },
       {
         content: 'AND gate',
-        hint: 'This logic gate exists!'
+        hint: 'This logic gate exists!',
       },
       {
         content: 'OR gate',
-        hint: 'This logic gate exists!'
-      }
+        hint: 'This logic gate exists!',
+      },
     ],
     id: 0,
     library: mockLibrary,
@@ -724,7 +724,7 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
     solution: 1,
     xp: 0,
     maxXp: 0,
-    blocking: false
+    blocking: false,
   },
   {
     autogradingResults: [],
@@ -769,32 +769,32 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
         type: TestcaseTypes.public,
         program: `__AND(list(true, false));`,
         score: 0,
-        answer: `false`
+        answer: `false`,
       },
       {
         type: TestcaseTypes.public,
         program: `__AND(list(true, true, false));`,
         score: 0,
-        answer: `false`
+        answer: `false`,
       },
       {
         type: TestcaseTypes.public,
         program: `__AND(list(true, OR(true, false), OR(true, true)));`,
         score: 0,
-        answer: `true`
+        answer: `true`,
       },
       {
         type: TestcaseTypes.opaque,
         program: `__AND(list(true, OR(false, true), AND(list(true, false)), false));`,
         score: 0,
-        answer: `false`
+        answer: `false`,
       },
       {
         type: TestcaseTypes.opaque,
         program: `__AND(list(true, OR(true, false), OR(true, AND(list(false, true))), true));`,
         score: 0,
-        answer: `true`
-      }
+        answer: `true`,
+      },
     ],
     solutionTemplate: `function AND(inputs) {
       // Your answer here!
@@ -802,7 +802,7 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
     type: 'programming',
     xp: 0,
     maxXp: 0,
-    blocking: false
+    blocking: false,
   },
   {
     autogradingResults: [],
@@ -841,20 +841,20 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
         type: TestcaseTypes.public,
         program: `__XOR(true, false);`,
         score: 0,
-        answer: `true`
+        answer: `true`,
       },
       {
         type: TestcaseTypes.public,
         program: `__XOR(false, true);`,
         score: 0,
-        answer: `true`
+        answer: `true`,
       },
       {
         type: TestcaseTypes.opaque,
         program: `__XOR(true, XOR(true, false));`,
         score: 0,
-        answer: `false`
-      }
+        answer: `false`,
+      },
     ],
     solutionTemplate: `function XOR(x, y) {
       // Your answer here!
@@ -862,7 +862,7 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
     type: 'programming',
     xp: 0,
     maxXp: 0,
-    blocking: false
+    blocking: false,
   },
   {
     autogradingResults: [],
@@ -913,20 +913,20 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
         type: TestcaseTypes.public,
         program: `__NOR_AND(false, true);`,
         score: 0,
-        answer: `false`
+        answer: `false`,
       },
       {
         type: TestcaseTypes.public,
         program: `__NOR_AND(true, true);`,
         score: 0,
-        answer: `true`
+        answer: `true`,
       },
       {
         type: TestcaseTypes.opaque,
         program: `__NOR_AND(true, NOR_AND(false, true));`,
         score: 0,
-        answer: `false`
-      }
+        answer: `false`,
+      },
     ],
     solutionTemplate: `function NOR_AND(x, y) {
       // Your answer here!
@@ -934,8 +934,8 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
     type: 'programming',
     xp: 0,
     maxXp: 0,
-    blocking: false
-  }
+    blocking: false,
+  },
 ];
 
 const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
@@ -951,40 +951,40 @@ const mockContestEntryQuestion: Array<IContestVotingQuestion> = [
     contestEntries: [
       {
         submission_id: 1,
-        answer: { code: "display('voting test')" }
+        answer: { code: "display('voting test')" },
       },
       {
         submission_id: 2,
-        answer: { code: 'function voting_test() { return true; }' }
-      }
+        answer: { code: 'function voting_test() { return true; }' },
+      },
     ],
     scoreLeaderboard: [
       {
         submission_id: 1,
         student_name: 'student_1',
-        answer: { code: "display('score_leaderboard test')" }
+        answer: { code: "display('score_leaderboard test')" },
       },
       {
         submission_id: 2,
         student_name: 'student_2',
-        answer: { code: 'function score_leaderboard_test() { return true; }' }
-      }
+        answer: { code: 'function score_leaderboard_test() { return true; }' },
+      },
     ],
     popularVoteLeaderboard: [
       {
         submission_id: 1,
         student_name: 'student_1',
-        answer: { code: "display('popular_vote_leaderboard test')" }
+        answer: { code: "display('popular_vote_leaderboard test')" },
       },
       {
         submission_id: 2,
         student_name: 'student_2',
-        answer: { code: 'function popular_vote_leaderboard_test() { return true; }' }
-      }
+        answer: { code: 'function popular_vote_leaderboard_test() { return true; }' },
+      },
     ],
     library: mockLibrary,
-    blocking: false
-  }
+    blocking: false,
+  },
 ];
 
 /*
@@ -998,7 +998,7 @@ export const mockAssessments: Assessment[] = [
       'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
     questions: mockAssessmentQuestions,
-    title: 'An Odessey to Runes'
+    title: 'An Odessey to Runes',
   },
   {
     type: 'Missions',
@@ -1007,7 +1007,7 @@ export const mockAssessments: Assessment[] = [
       'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
     questions: mockAssessmentQuestions,
-    title: 'The Secret to Streams'
+    title: 'The Secret to Streams',
   },
   {
     type: 'Quests',
@@ -1033,7 +1033,7 @@ export const mockAssessments: Assessment[] = [
   \`\`\``,
     missionPDF: 'www.google.com',
     questions: mockAssessmentQuestions,
-    title: 'A sample Sidequest'
+    title: 'A sample Sidequest',
   },
   {
     type: 'Missions',
@@ -1042,7 +1042,7 @@ export const mockAssessments: Assessment[] = [
       'This is the closed mission briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
     questions: mockClosedAssessmentQuestions,
-    title: 'A Closed Mission'
+    title: 'A Closed Mission',
   },
   {
     type: 'Quests',
@@ -1051,7 +1051,7 @@ export const mockAssessments: Assessment[] = [
       'This is the closed sidequest briefing. The save button should not exist. This is a placeholder sidequest for testing rendering of grading statuses.',
     missionPDF: 'www.google.com',
     questions: mockClosedAssessmentQuestions,
-    title: 'A Closed Sidequest'
+    title: 'A Closed Sidequest',
   },
   {
     type: 'Paths',
@@ -1063,7 +1063,7 @@ export const mockAssessments: Assessment[] = [
   The path comprises 4 questions and is fully autograded and guided, and there are **no private test cases** - there will be no manual review by default. Please consult your Avenger if you require assistance!</TEXT>`,
     missionPDF: 'www.google.com',
     questions: mockPathQuestions,
-    title: 'A sample guided path'
+    title: 'A sample guided path',
   },
   // mock assessment used for testing contest voting assessments
   {
@@ -1072,6 +1072,6 @@ export const mockAssessments: Assessment[] = [
     title: 'A sample contest voting assessment',
     longSummary: 'Vote for your favourite contest entries here!',
     missionPDF: 'www.google.com',
-    questions: mockContestEntryQuestion
-  }
+    questions: mockContestEntryQuestion,
+  },
 ];

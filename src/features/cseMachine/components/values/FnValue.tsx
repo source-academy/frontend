@@ -20,7 +20,7 @@ import {
   isStreamFn,
   setHoveredCursor,
   setUnhoveredCursor,
-  truncateFunctionTooltip
+  truncateFunctionTooltip,
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { ArrowFromFnTooltip } from '../arrows/ArrowFromFnTooltip';
@@ -64,7 +64,7 @@ export class FnValue extends Value implements IHoverable {
     /** underlying JS Slang function (contains extra props) */
     readonly data: NonGlobalFn,
     /** what this value is being referenced by */
-    firstReference: ReferenceType
+    firstReference: ReferenceType,
   ) {
     super();
     Layout.memoizeValue(data, this);
@@ -86,13 +86,13 @@ export class FnValue extends Value implements IHoverable {
     this.exportTooltip = truncateFunctionTooltip(
       this.tooltip,
       Config.FnDescriptionMaxWidth,
-      Config.FnDescriptionMaxHeight
+      Config.FnDescriptionMaxHeight,
     );
     this.isTooltipTruncated = this.exportTooltip !== this.tooltip;
     this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));
     this.exportTooltipWidth = Math.min(
       Config.FnDescriptionMaxWidth,
-      getTextWidth(this.exportTooltip)
+      getTextWidth(this.exportTooltip),
     );
     this.printDescriptionHeight =
       getTextHeight(this.exportTooltip, Config.FnDescriptionMaxWidth) +
@@ -256,7 +256,7 @@ export class FnValue extends Value implements IHoverable {
         textColor={textColor}
         labelRef={this.labelRef}
         revealLabelRef={this.revealLabelRef}
-      />
+      />,
     );
     // Keep function objects rendered so they remain hoverable in clear-dead-frames mode.
     return (

@@ -31,7 +31,7 @@ export default class DialogueGenerator {
     if (dialogueLine.goto) {
       let currPart: string | null = dialogueLine.goto.part;
       const conditionCheck = await GameActionConditionChecker.checkAllConditionsSatisfied(
-        dialogueLine.goto.conditions
+        dialogueLine.goto.conditions,
       );
       if (!conditionCheck) {
         currPart = dialogueLine.goto.altPart;

@@ -3,7 +3,7 @@ import { createContext } from 'react';
 export enum EditorBinding {
   NONE = '',
   VIM = 'vim',
-  EMACS = 'emacs'
+  EMACS = 'emacs',
 }
 
 export type WorkspaceSettings = {
@@ -11,7 +11,7 @@ export type WorkspaceSettings = {
 };
 
 export const defaultWorkspaceSettings: WorkspaceSettings = {
-  editorBinding: EditorBinding.NONE
+  editorBinding: EditorBinding.NONE,
 };
 
 /**

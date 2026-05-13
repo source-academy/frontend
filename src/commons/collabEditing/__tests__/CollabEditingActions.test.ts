@@ -11,8 +11,8 @@ test('setEditorSessionId generates correct action object', () => {
     type: setEditorSessionId.type,
     payload: {
       workspaceLocation: gradingWorkspace,
-      editorSessionId
-    }
+      editorSessionId,
+    },
   });
 });
 
@@ -23,7 +23,7 @@ test('setSharedbConnected generates correct action object', () => {
     type: setSharedbConnected.type,
     payload: {
       workspaceLocation: playgroundWorkspace,
-      connected
-    }
+      connected,
+    },
   });
 });

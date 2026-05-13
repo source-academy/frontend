@@ -22,7 +22,7 @@ const SideContentEditableTestcaseCard: React.FC<Props> = ({
   setTestcaseProgram,
   setTestcaseExpectedResult,
   handleTestcaseEval,
-  deleteTestcase
+  deleteTestcase,
 }) => {
   // TODO (Refactor): testcase type seems unused in GitHub Assessments
   const extraClasses = useMemo(() => {
@@ -32,7 +32,7 @@ const SideContentEditableTestcaseCard: React.FC<Props> = ({
     return {
       correct: isEvaluated && isEqual,
       wrong: isEvaluated && !isEqual,
-      secret: testcase.type === TestcaseTypes.secret || testcase.type === TestcaseTypes.opaque
+      secret: testcase.type === TestcaseTypes.secret || testcase.type === TestcaseTypes.opaque,
     };
   }, [testcase]);
 

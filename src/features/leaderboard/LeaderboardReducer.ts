@@ -13,7 +13,7 @@ export const LeaderboardReducer: Reducer<LeaderboardState, SourceActionType> = c
       .addCase(LeaderboardActions.saveOverallLeaderboardXP, (state, action) => {
         state.paginatedUserXp = {
           rows: action.payload.rows || [],
-          userCount: action.payload.userCount || 0
+          userCount: action.payload.userCount || 0,
         };
       })
       .addCase(LeaderboardActions.saveAllContestScores, (state, action) => {
@@ -37,5 +37,5 @@ export const LeaderboardReducer: Reducer<LeaderboardState, SourceActionType> = c
       .addCase(LeaderboardActions.resetWorkspaceInitialRun, (state, action) => {
         state.initialRun[action.payload] = false;
       });
-  }
+  },
 );

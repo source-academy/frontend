@@ -29,7 +29,7 @@ export function log(id: string, input: Input) {
   saveRecord({
     ...input,
     questionId: questionIdLookup[id],
-    sessionId: id
+    sessionId: id,
   });
 }
 
@@ -40,7 +40,7 @@ export function initSession(questionId: string, initialState: PlaybackInitial): 
   log(id, {
     ...initialState,
     type: 'init',
-    time: Date.now()
+    time: Date.now(),
   });
   return id;
 }
@@ -78,7 +78,7 @@ const getDB = memoize((): Promise<IDBDatabase> => {
       const db: IDBDatabase = (evt?.target as any).result; // Bug with the types...
       db.createObjectStore(STORE_NAME, {
         keyPath: 'id', // Entry id, only used to figure out the last transfered value
-        autoIncrement: true
+        autoIncrement: true,
       });
     };
   });

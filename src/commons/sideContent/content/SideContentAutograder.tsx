@@ -36,7 +36,7 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
         <p>{t($ => $.tooltip.privateTestcases)}</p>
       </div>
     ),
-    [t]
+    [t],
   );
 
   const testcasesHeader = useMemo(
@@ -44,19 +44,19 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
       <div className="testcases-header" data-testid="testcases-header">
         {columnHeader(
           'header-fn',
-          t($ => $.headers.testcase)
+          t($ => $.headers.testcase),
         )}
         {columnHeader(
           'header-expected',
-          t($ => $.headers.expected)
+          t($ => $.headers.expected),
         )}
         {columnHeader(
           'header-actual',
-          t($ => $.headers.actual)
+          t($ => $.headers.actual),
         )}
       </div>
     ),
-    [t]
+    [t],
   );
 
   const resultsHeader = useMemo(
@@ -65,24 +65,24 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
         <div className="header-data">
           {columnHeader(
             'header-sn',
-            t($ => $.headers.sn)
+            t($ => $.headers.sn),
           )}
           {columnHeader(
             'header-status',
-            t($ => $.headers.status)
+            t($ => $.headers.status),
           )}
         </div>
         {columnHeader(
           'header-expected',
-          t($ => $.headers.expected)
+          t($ => $.headers.expected),
         )}
         {columnHeader(
           'header-actual',
-          t($ => $.headers.actual)
+          t($ => $.headers.actual),
         )}
       </div>
     ),
-    [t]
+    [t],
   );
 
   const testcaseCards = useMemo(
@@ -105,7 +105,7 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
           {t($ => $.noTestcases)}
         </div>
       ),
-    [testcases, testcasesHeader, t, handleTestcaseEval, workspaceLocation]
+    [testcases, testcasesHeader, t, handleTestcaseEval, workspaceLocation],
   );
 
   const resultCards = useMemo(
@@ -122,7 +122,7 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
           {t($ => $.noResults)}
         </div>
       ),
-    [autogradingResults, resultsHeader, t]
+    [autogradingResults, resultsHeader, t],
   );
 
   const toggleTestcases = useCallback(() => {
@@ -150,7 +150,7 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
       {collapseButton(
         t($ => $.results),
         showsResults,
-        toggleResults
+        toggleResults,
       )}
       <Collapse isOpen={showsResults} keepChildrenMounted={true}>
         {resultCards}

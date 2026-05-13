@@ -71,7 +71,7 @@ export default class ObjectParser {
 
     const [objectId, shortPath, x, y, width, height, type, frame] = StringUtils.splitByChar(
       objectDetails,
-      ','
+      ',',
     );
     Parser.validator.registerId(objectId);
 
@@ -85,7 +85,7 @@ export default class ObjectParser {
       interactionId: objectId,
       isDoor: false,
       isChat: false,
-      leadTo: ''
+      leadTo: '',
     };
 
     Parser.checkpoint.map.addMapAsset(this.objectAssetKey(shortPath), {
@@ -98,8 +98,8 @@ export default class ObjectParser {
         centreX: 0,
         centreY: 0,
         endFrame: parseInt(frame) - 1 || 0,
-        animType: AnimType.Object
-      }
+        animType: AnimType.Object,
+      },
     });
 
     Parser.checkpoint.map.setItemInMap(GameItemType.objects, objectId, objectProperty);

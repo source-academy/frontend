@@ -73,7 +73,7 @@ export default class GameActionManager {
   private async checkCanPlayAction(
     isRepeatable: boolean,
     interactionId: string,
-    actionConditions: ActionCondition[]
+    actionConditions: ActionCondition[],
   ) {
     return (
       (isRepeatable || !GameGlobalAPI.getInstance().hasTriggeredInteraction(interactionId)) &&

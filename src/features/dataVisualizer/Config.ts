@@ -25,5 +25,5 @@ export const Config = {
   ArrowMarginBottom: 15,
   ArrowMarginHorizontal: 15,
 
-  MaxTextLength: 20
+  MaxTextLength: 20,
 };

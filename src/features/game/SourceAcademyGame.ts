@@ -32,7 +32,7 @@ export type AccountInfo = {
 
 export enum GameType {
   Simulator = 'Simulator',
-  Game = 'Game'
+  Game = 'Game',
 }
 
 type GlobalGameProps = {
@@ -77,7 +77,7 @@ export default class SourceAcademyGame extends Phaser.Game {
       setGameSimState: Constants.nullFunction,
       soundManager: new GameSoundManager(),
       ssChapterSimFilenames: [],
-      userStateManager: new GameUserStateManager()
+      userStateManager: new GameUserStateManager(),
     };
   }
 
@@ -165,14 +165,14 @@ const config: Phaser.Types.Core.GameConfig = {
   width: screenSize.x,
   height: screenSize.y,
   physics: {
-    default: 'arcade'
+    default: 'arcade',
   },
   scale: {
     mode: Phaser.Scale.FIT,
-    parent: 'game-display'
+    parent: 'game-display',
   },
   fps: {
-    target: 24
+    target: 24,
   },
   scene: [
     Entry,
@@ -183,8 +183,8 @@ const config: Phaser.Types.Core.GameConfig = {
     CheckpointTransition,
     AwardsHall,
     RoomPreview,
-    Bindings
-  ]
+    Bindings,
+  ],
 };
 
 export const createSourceAcademyGame = () => {

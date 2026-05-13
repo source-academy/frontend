@@ -62,7 +62,7 @@ export class GitHubTreeNodeCreator {
       const results: GetContentResponse = await octokit.repos.getContent({
         owner: githubLoginID,
         repo: repoName,
-        path: filePath
+        path: filePath,
       });
 
       const childFiles = results.data;
@@ -89,7 +89,7 @@ export class GitHubTreeNodeCreator {
 
     let node: TreeNodeInfo<GitHubFileNodeData> = {
       id: index,
-      label: 'dummy file'
+      label: 'dummy file',
     };
 
     if (octokitFileData.type === 'file') {
@@ -97,7 +97,7 @@ export class GitHubTreeNodeCreator {
         id: index,
         nodeData: new GitHubFileNodeData(octokitFileData.path, 'file'),
         icon: 'document',
-        label: octokitFileData.name
+        label: octokitFileData.name,
       };
     }
 
@@ -107,7 +107,7 @@ export class GitHubTreeNodeCreator {
         nodeData: new GitHubFileNodeData(octokitFileData.path, 'dir'),
         icon: 'folder-close',
         label: octokitFileData.name,
-        childNodes: [] // Child nodes are initially empty
+        childNodes: [], // Child nodes are initially empty
       };
     }
 

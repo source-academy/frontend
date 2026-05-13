@@ -4,7 +4,7 @@ import type { GradingSummary } from './DashboardTypes';
 
 const DashboardActions = createActions('dashboard', {
   fetchGroupGradingSummary: () => ({}),
-  updateGroupGradingSummary: (gradingSummary: GradingSummary) => gradingSummary
+  updateGroupGradingSummary: (gradingSummary: GradingSummary) => gradingSummary,
 });
 
 // For compatibility with existing code (reducer)

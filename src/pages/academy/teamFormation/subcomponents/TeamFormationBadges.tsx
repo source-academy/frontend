@@ -14,7 +14,7 @@ const TREMOR_TO_BLUEPRINT_INTENT: Record<string, Intent> = {
   red: Intent.DANGER,
   yellow: Intent.WARNING,
   green: Intent.SUCCESS,
-  blue: Intent.PRIMARY
+  blue: Intent.PRIMARY,
 };
 
 type Props = {
