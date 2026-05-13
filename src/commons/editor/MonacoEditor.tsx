@@ -1,10 +1,9 @@
-import './monaco/setupMonaco';
-
 import { Card } from '@blueprintjs/core';
 import MonacoReactEditor from '@monaco-editor/react';
 import { useCallback } from 'react';
 
 import { EditorProps } from './Editor';
+import { SOURCE_MONACO_THEME } from './monaco/setupMonaco';
 
 const languageByExtension: Record<string, string> = {
   c: 'c',
@@ -55,9 +54,10 @@ const MonacoEditor: React.FC<EditorProps> = props => {
             hover: { enabled: false },
             minimap: { enabled: false },
             readOnly: props.sessionDetails?.readOnly ?? false,
+            renderLineHighlight: 'none',
             scrollBeyondLastLine: false,
           }}
-          theme="source"
+          theme={SOURCE_MONACO_THEME}
           value={props.editorValue}
           width="100%"
         />
