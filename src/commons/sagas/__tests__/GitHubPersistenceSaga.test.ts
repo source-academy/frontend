@@ -12,7 +12,7 @@ test('logoutGitHub results in REMOVE_GITHUB_OCTOKIT_OBJECT being dispatched', as
   await expectSaga(GitHubPersistenceSaga)
     .put({
       type: SessionActions.removeGitHubOctokitObjectAndAccessToken.type,
-      payload: {}
+      payload: {},
     })
     .dispatch(actions.logoutGitHub())
     .silentRun();

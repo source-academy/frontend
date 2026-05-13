@@ -1,7 +1,8 @@
 import { Octokit } from '@octokit/rest';
-import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
-import { DeepPartial } from 'src/commons/utils/TypeHelper';
-import { Mock, vi } from 'vitest';
+import type { GetResponseTypeFromEndpointMethod } from '@octokit/types';
+import type { DeepPartial } from 'src/commons/utils/TypeHelper';
+import type { Mock } from 'vitest';
+import { vi } from 'vitest';
 
 import { getGitHubOctokitInstance } from '../../../features/github/GitHubUtils';
 import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';
@@ -116,15 +117,15 @@ function getOctokitInstanceMock() {
         const contentResponse = generateGetContentResponse();
         contentResponse.data = [
           generateGitHubSubDirectory('TestFile', 'file', 'TestFile'),
-          generateGitHubSubDirectory('TestFolder', 'dir', 'TestFolder')
+          generateGitHubSubDirectory('TestFolder', 'dir', 'TestFolder'),
           // TODO: Remove any
         ] as any;
         return contentResponse;
-      }) as any
+      }) as any,
     },
     users: {
-      getAuthenticated: vi.fn().mockResolvedValue(generateGetAuthenticatedResponse()) as any
-    }
+      getAuthenticated: vi.fn().mockResolvedValue(generateGetAuthenticatedResponse()) as any,
+    },
   } satisfies DeepPartial<Octokit>;
 }
 
@@ -148,9 +149,9 @@ function generateGetContentResponse() {
       _links: {
         self: '',
         git: null,
-        html: null
-      }
-    }
+        html: null,
+      },
+    },
   } satisfies GetResponseTypeFromEndpointMethod<Octokit['repos']['getContent']>;
 }
 
@@ -168,8 +169,8 @@ function generateGitHubSubDirectory(name: string, type: 'file' | 'dir', path: st
     _links: {
       self: '',
       git: null,
-      html: null
-    }
+      html: null,
+    },
     // TODO: Remove partial
   } satisfies Partial<GetResponseTypeFromEndpointMethod<Octokit['repos']['getContent']>['data']>;
 }
@@ -207,10 +208,10 @@ function generateGetAuthenticatedResponse() {
       subscriptions_url: 'dummy',
       type: 'dummy',
       updated_at: 'dummy',
-      url: 'dummy'
+      url: 'dummy',
     },
     headers: {},
     status: 200,
-    url: 'www.eh'
+    url: 'www.eh',
   } satisfies GetResponseTypeFromEndpointMethod<Octokit['users']['getAuthenticated']>;
 }

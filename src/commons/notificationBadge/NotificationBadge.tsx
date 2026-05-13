@@ -4,7 +4,8 @@ import { useDispatch } from 'react-redux';
 import SessionActions from '../application/actions/SessionActions';
 import { useSession } from '../utils/Hooks';
 import { filterNotificationsById } from './NotificationBadgeHelper';
-import { Notification, NotificationType, NotificationTypes } from './NotificationBadgeTypes';
+import type { Notification, NotificationType } from './NotificationBadgeTypes';
+import { NotificationTypes } from './NotificationBadgeTypes';
 
 type Props = {
   className?: string;

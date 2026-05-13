@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { useCallback } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 
-import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 
 type Props = {
   onTeamSizeChange: (id: number, newTeamSize: number) => void;
@@ -21,7 +21,7 @@ const EditTeamSizeCell: React.FC<Props> = ({ data, onTeamSizeChange }) => {
       }
       onTeamSizeChange(data.id, size);
     },
-    [data.id, teamSize, onTeamSizeChange]
+    [data.id, teamSize, onTeamSizeChange],
   );
 
   const handleIncrement = () => {

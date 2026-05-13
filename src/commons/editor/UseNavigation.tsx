@@ -4,7 +4,7 @@ import { useCallback, useRef } from 'react';
 
 import { Documentation } from '../documentation/Documentation';
 import { Links } from '../utils/Constants';
-import { EditorHook } from './Editor';
+import type { EditorHook } from './Editor';
 
 // EditorHook structure:
 // EditorHooks grant access to 4 things:
@@ -33,7 +33,7 @@ const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) 
     if (
       hasDeclaration(editor.getValue(), createContext(sourceChapter), {
         line: newPos.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
-        column: newPos.column
+        column: newPos.column,
       })
     ) {
       return;

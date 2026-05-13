@@ -1,6 +1,6 @@
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
-import { ItemId } from '../commons/CommonTypes';
+import type { ItemId } from '../commons/CommonTypes';
 import { promptWithChoices } from '../effects/Prompt';
 import { keyboardShortcuts } from '../input/GameInputConstants';
 import GameInputManager from '../input/GameInputManager';
@@ -24,7 +24,7 @@ export default class DialogueManager {
   private dialogueRenderer?: DialogueRenderer;
   private dialogueGenerator?: DialogueGenerator;
   private gameInputManager?: GameInputManager = new GameInputManager(
-    GameGlobalAPI.getInstance().getGameManager()
+    GameGlobalAPI.getInstance().getGameManager(),
   );
 
   private skipButton?: Phaser.GameObjects.Container;
@@ -252,7 +252,7 @@ export default class DialogueManager {
       const response = await promptWithChoices(
         GameGlobalAPI.getInstance().getGameManager(),
         prompt.promptTitle,
-        prompt.choices.map(choice => choice[0])
+        prompt.choices.map(choice => choice[0]),
       );
       this.getInputManager().enableKeyboardInput(true);
       this.getDialogueGenerator().updateCurrPart(prompt.choices[response][1]);

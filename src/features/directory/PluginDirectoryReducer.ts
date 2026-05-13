@@ -4,7 +4,7 @@ import { generatePluginMap } from '@sourceacademy/plugin-directory/dist/util';
 import { defaultPluginDirectory } from '../../commons/application/ApplicationTypes';
 import type { SourceActionType } from '../../commons/utils/ActionsHelper';
 import Actions from './PluginDirectoryActions';
-import { PluginDirectoryState } from './PluginDirectoryTypes';
+import type { PluginDirectoryState } from './PluginDirectoryTypes';
 
 export const PluginDirectoryReducer: Reducer<PluginDirectoryState, SourceActionType> =
   createReducer(defaultPluginDirectory, builder => {

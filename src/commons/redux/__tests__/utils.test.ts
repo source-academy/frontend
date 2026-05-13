@@ -8,7 +8,7 @@ import { combineSagaHandlers, createActions } from '../utils';
 vi.mock('src/commons/sagas/SafeEffects', () => ({
   // Mock wrap saga to just be a passthrough so that the identity
   // checking that testSaga uses will pass
-  wrapSaga: (x: any) => x
+  wrapSaga: (x: any) => x,
 }));
 
 test('test combineSagaHandlers', () => {
@@ -19,18 +19,18 @@ test('test combineSagaHandlers', () => {
   const saga = combineSagaHandlers({
     [WorkspaceActions.toggleUsingUpload.type]: mockTakeEveryHandler,
     [WorkspaceActions.toggleFolderMode.type]: {
-      takeEvery: mockTakeEveryHandler
+      takeEvery: mockTakeEveryHandler,
     },
     [WorkspaceActions.toggleUsingCse.type]: {
-      takeLatest: mockTakeLatestHandler
+      takeLatest: mockTakeLatestHandler,
     },
     [WorkspaceActions.toggleUsingSubst.type]: {
-      takeLeading: mockTakeLeadingHandler
+      takeLeading: mockTakeLeadingHandler,
     },
     [WorkspaceActions.toggleEditorAutorun.type]: {
       takeEvery: mockTakeEveryHandler,
-      takeLeading: mockTakeLeadingHandler
-    }
+      takeLeading: mockTakeLeadingHandler,
+    },
   });
 
   testSaga(saga)
@@ -54,7 +54,7 @@ test('createActions', () => {
   const actions = createActions('workspace', {
     act0: false,
     act1: (value: string) => ({ value }),
-    act2: 525600
+    act2: 525600,
   });
 
   const act0 = actions.act0();

@@ -6,9 +6,9 @@ import NotificationBadge from '../NotificationBadge';
 import {
   filterNotificationsByAssessment,
   filterNotificationsBySubmission,
-  filterNotificationsByType
+  filterNotificationsByType,
 } from '../NotificationBadgeHelper';
-import { Notification } from '../NotificationBadgeTypes';
+import type { Notification } from '../NotificationBadgeTypes';
 
 const notifications: Notification[] = [
   {
@@ -16,7 +16,7 @@ const notifications: Notification[] = [
     type: 'new',
     assessment_id: 1,
     assessment_type: 'Missions',
-    assessment_title: 'The Secret to Streams'
+    assessment_title: 'The Secret to Streams',
   },
   {
     id: 2,
@@ -24,14 +24,14 @@ const notifications: Notification[] = [
     assessment_id: 1,
     assessment_type: 'Missions',
     assessment_title: 'The Secret to Streams',
-    submission_id: 3
+    submission_id: 3,
   },
   {
     id: 3,
     type: 'unpublished_grading',
     assessment_id: 1,
     assessment_type: 'Missions',
-    assessment_title: 'The Secret to Streams'
+    assessment_title: 'The Secret to Streams',
   },
   {
     id: 4,
@@ -39,13 +39,13 @@ const notifications: Notification[] = [
     assessment_id: 2,
     assessment_type: 'Quests',
     assessment_title: 'The Secret to Streams',
-    submission_id: 3
-  }
+    submission_id: 3,
+  },
 ];
 
 const createAppWithMockedNotifications = (
   notifications: Notification[],
-  filter?: (notifications: Notification[]) => Notification[]
+  filter?: (notifications: Notification[]) => Notification[],
 ) => {
   const mockStore = mockInitialStore({ session: { notifications } });
   return (

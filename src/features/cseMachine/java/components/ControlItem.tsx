@@ -1,11 +1,11 @@
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { createRef, Fragment } from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
 import { ShapeDefaultProps } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
-import { IHoverable } from '../../CseMachineTypes';
+import type { IHoverable } from '../../CseMachineTypes';
 import {
   defaultActiveColor,
   defaultTextColor,
@@ -14,7 +14,7 @@ import {
   setHoveredStyle,
   setUnhoveredCursor,
   setUnhoveredStyle,
-  truncateText
+  truncateText,
 } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 import { Arrow } from './Arrow';
@@ -34,7 +34,7 @@ export class ControlItem extends Visible implements IHoverable {
 
     private readonly _tooltip: string,
     private readonly highlightOnHover: () => void,
-    private readonly unhighlightOnHover: () => void
+    private readonly unhighlightOnHover: () => void,
   ) {
     super();
 
@@ -46,7 +46,7 @@ export class ControlItem extends Visible implements IHoverable {
     this._text = truncateText(
       this._text,
       ControlStashConfig.ControlMaxTextWidth,
-      ControlStashConfig.ControlMaxTextHeight
+      ControlStashConfig.ControlMaxTextHeight,
     );
 
     // Tooltip.
@@ -65,7 +65,7 @@ export class ControlItem extends Visible implements IHoverable {
         this._y + this._height / 2,
         reference.x(),
         reference.y() + reference.height() / 2 + reference.name.height(),
-        { route: 'manhattan' }
+        { route: 'manhattan' },
       );
     }
   }
@@ -99,11 +99,11 @@ export class ControlItem extends Visible implements IHoverable {
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: ControlStashConfig.FontSize,
       fontStyle: ControlStashConfig.FontStyle,
-      fontVariant: ControlStashConfig.FontVariant
+      fontVariant: ControlStashConfig.FontVariant,
     };
     const tagProps = {
       stroke: this._stroke,
-      cornerRadius: ControlStashConfig.ControlItemCornerRadius
+      cornerRadius: ControlStashConfig.ControlItemCornerRadius,
     };
     return (
       <Fragment key={CseMachine.key++}>

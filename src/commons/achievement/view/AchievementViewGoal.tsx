@@ -1,6 +1,6 @@
 import { ProgressBar } from '@blueprintjs/core';
 
-import { AchievementGoal } from '../../../features/achievement/AchievementTypes';
+import type { AchievementGoal } from '../../../features/achievement/AchievementTypes';
 
 /**
  * Maps an array of goalUuid to Goal component

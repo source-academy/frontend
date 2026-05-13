@@ -1,11 +1,12 @@
-import { Icon, Tab, Tabs, Tooltip, Tree, TreeNodeInfo } from '@blueprintjs/core';
+import type { TreeNodeInfo } from '@blueprintjs/core';
+import { Icon, Tab, Tabs, Tooltip, Tree } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
 import {
   deleteS3File,
   fetchAssetPaths,
-  s3AssetFolders
+  s3AssetFolders,
 } from 'src/features/gameSimulator/GameSimulatorService';
 
 import AssetViewerPreview from './AssetViewerPreview';
@@ -31,7 +32,7 @@ const AssetViewer: React.FC = () => {
         alert(
           confirm
             ? await deleteS3File(filePath)
-            : 'Please double check before deleting an asset!\nThere is NO undoing this action!'
+            : 'Please double check before deleting an asset!\nThere is NO undoing this action!',
         );
       };
       return (

@@ -1,7 +1,7 @@
 import { memoize } from 'lodash';
 import { type LoaderFunction, redirect, replace, type RouteObject } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
+import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 import { assessmentRegExp, gradingRegExp, teamRegExp } from 'src/features/academy/AcademyTypes';
 import { GuardedRoute } from 'src/routes/routeGuard';
@@ -9,7 +9,7 @@ import { GuardedRoute } from 'src/routes/routeGuard';
 import { store } from '../createStore';
 import {
   contestLeaderboardLoader,
-  leaderboardLoader
+  leaderboardLoader,
 } from '../leaderboard/subcomponents/leaderboardUtils';
 
 const notFoundPath = 'not_found';
@@ -32,9 +32,9 @@ const buildAssessmentRoutes = memoize(
         acc[assessmentTypeLink(config.type)] = config;
         return acc;
       },
-      {}
+      {},
     );
-  }
+  },
 );
 
 const getCommonAcademyRoutes = (): RouteObject[] => {
@@ -75,7 +75,7 @@ const getCommonAcademyRoutes = (): RouteObject[] => {
     {
       path: `:assessmentConfigType/${assessmentRegExp}`,
       lazy: Assessment,
-      loader: assessmentLoader
+      loader: assessmentLoader,
     },
     { path: 'achievements/*', lazy: Achievement },
     {
@@ -86,11 +86,11 @@ const getCommonAcademyRoutes = (): RouteObject[] => {
         {
           path: 'contests/:contestId?/:leaderboardType',
           loader: contestLeaderboardLoader,
-          lazy: ContestLeaderboardWrapper
-        }
-      ]
+          lazy: ContestLeaderboardWrapper,
+        },
+      ],
     },
-    { path: '*', lazy: NotFound }
+    { path: '*', lazy: NotFound },
   ];
 };
 
@@ -109,21 +109,21 @@ const staffRoutes: RouteObject[] = [
   { path: 'teamformation/create', lazy: TeamFormationForm },
   { path: `teamformation/edit/${teamRegExp}`, lazy: TeamFormationForm },
   { path: 'teamformation/import', lazy: TeamFormationImport },
-  { path: 'dashboard', lazy: Dashboard }
+  { path: 'dashboard', lazy: Dashboard },
 ].map(r =>
   new GuardedRoute(r)
     .check(s => {
       const role = s.session.role;
       return role === Role.Staff || role === Role.Admin;
     }, notFoundPath)
-    .build()
+    .build(),
 );
 
 const AdminPanel = () => import('./adminPanel/AdminPanel');
 
 const adminRoutes: RouteObject[] = [
   { path: 'groundcontrol', lazy: GroundControl },
-  { path: 'adminpanel', lazy: AdminPanel }
+  { path: 'adminpanel', lazy: AdminPanel },
 ].map(r => new GuardedRoute(r).check(s => s.session.role === Role.Admin, notFoundPath).build());
 
 export const getAcademyRoutes = (): RouteObject[] => {

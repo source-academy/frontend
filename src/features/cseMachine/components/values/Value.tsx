@@ -3,7 +3,7 @@ import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-k
 
 import CseMachine from '../../CseMachine';
 import { Config } from '../../CseMachineConfig';
-import { Data, ReferenceType } from '../../CseMachineTypes';
+import type { Data, ReferenceType } from '../../CseMachineTypes';
 import { defaultBackgroundColor, isDummyReference } from '../../CseMachineUtils';
 import { Visible } from '../Visible';
 
@@ -32,7 +32,7 @@ export const FunctionTooltipLabels = ({
   strokeColor,
   textColor,
   labelRef,
-  revealLabelRef
+  revealLabelRef,
 }: FunctionTooltipLabelsProps): React.ReactNode => (
   <>
     <KonvaLabel

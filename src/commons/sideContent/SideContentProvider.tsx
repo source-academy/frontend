@@ -5,7 +5,7 @@ import type {
   ChangeTabsCallback,
   SideContentLocation,
   SideContentTab,
-  SideContentType
+  SideContentType,
 } from './SideContentTypes';
 
 type SideContentProviderProps = {
@@ -50,11 +50,11 @@ export default function SideContentProvider({
   children,
   onChange,
   selectedTab: propsSelectedTab,
-  workspaceLocation
+  workspaceLocation,
 }: SideContentProviderProps) {
   const { alerts, height, dynamicTabs, setSelectedTab, selectedTab } = useSideContent(
     workspaceLocation,
-    defaultTab
+    defaultTab,
   );
 
   const allTabs = tabs
@@ -71,7 +71,7 @@ export default function SideContentProvider({
         setSelectedTab(newId);
       }
     },
-    [onChange, setSelectedTab]
+    [onChange, setSelectedTab],
   );
 
   return children({
@@ -79,6 +79,6 @@ export default function SideContentProvider({
     alerts,
     changeTabsCallback,
     selectedTab: propsSelectedTab ?? selectedTab,
-    height
+    height,
   });
 }

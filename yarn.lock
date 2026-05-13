@@ -1574,6 +1574,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@daypicker/react@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "@daypicker/react@npm:10.0.0"
+  dependencies:
+    react-day-picker: "npm:10.0.0"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 10c0/f3fd39eb50d14ff735027e84c8c14497c50387971b110c87ff7ae352859de2700d2e78cda06ec65cf9b3f5ae2354de527841b7bab3a76e199b70c40683e7299b
+  languageName: node
+  linkType: hard
+
 "@discoveryjs/json-ext@npm:^0.6.3":
   version: 0.6.3
   resolution: "@discoveryjs/json-ext@npm:0.6.3"
@@ -3535,13 +3546,6 @@ __metadata:
     react: ">=16.14.0"
     react-dom: ">=16.14.0"
   checksum: 10c0/69a86cc52bf9915c74d70acd031e8f86080e95dcbcc84766af879b33345f2e38d8db8f8f01d5035d916e60af462e9c6838ca016a7a85e2d86ae6f32c92bf3044
-  languageName: node
-  linkType: hard
-
-"@tabby_ai/hijri-converter@npm:1.0.5":
-  version: 1.0.5
-  resolution: "@tabby_ai/hijri-converter@npm:1.0.5"
-  checksum: 10c0/40044f463ff57855315c8925461942311460bb64e16706480dde98142f40bcd8e9925bb6fee401fd209397b5bb25368d1529c85b1e6c7e6216ea2085f6aaf61e
   languageName: node
   linkType: hard
 
@@ -5914,13 +5918,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"date-fns-jalali@npm:4.1.0-0":
-  version: 4.1.0-0
-  resolution: "date-fns-jalali@npm:4.1.0-0"
-  checksum: 10c0/f9ad98d9f7e8e5abe0d070dc806b0c8baded2b1208626c42e92cbd2605b5171f5714d6b79b20cc2666267d821699244c9d0b5e93274106cf57d6232da77596ed
-  languageName: node
-  linkType: hard
-
 "date-fns@npm:^4.1.0":
   version: 4.1.0
   resolution: "date-fns@npm:4.1.0"
@@ -7067,6 +7064,7 @@ __metadata:
     "@blueprintjs/icons": "npm:^6.0.0"
     "@blueprintjs/select": "npm:^6.0.0"
     "@convergencelabs/ace-collab-ext": "npm:^0.6.0"
+    "@daypicker/react": "npm:^10.0.0"
     "@dnd-kit/core": "npm:^6.3.1"
     "@dnd-kit/sortable": "npm:^10.0.0"
     "@dnd-kit/utilities": "npm:^3.2.2"
@@ -7123,10 +7121,8 @@ __metadata:
     ag-grid-react: "npm:^35.0.0"
     array-move: "npm:^4.0.0"
     browserfs: "npm:^1.4.3"
-    buffer: "npm:^6.0.3"
     canvas: "npm:^3.1.0"
     classnames: "npm:^2.3.2"
-    constants-browserify: "npm:^1.0.0"
     coveralls: "npm:^3.1.1"
     cross-env: "npm:^10.0.0"
     dayjs: "npm:^1.11.13"
@@ -7139,7 +7135,6 @@ __metadata:
     flexboxgrid: "npm:^6.3.1"
     flexboxgrid-helpers: "npm:^1.1.3"
     hastscript: "npm:^9.0.0"
-    https-browserify: "npm:^1.0.0"
     husky: "npm:^9.0.0"
     i18next: "npm:^26.0.3"
     i18next-browser-languagedetector: "npm:^8.0.0"
@@ -7157,18 +7152,13 @@ __metadata:
     mdast-util-to-hast: "npm:^13.0.0"
     normalize.css: "npm:^8.0.1"
     npm-run-all2: "npm:^8.0.0"
-    os-browserify: "npm:^0.3.0"
-    path: "npm:^0.12.7"
-    path-browserify: "npm:^1.0.1"
     phaser: "npm:~3.90.0"
     phaser3spectorjs: "npm:^0.0.8"
     prettier: "npm:^3.3.3"
-    process: "npm:^0.11.10"
     query-string: "npm:^9.0.0"
     re-resizable: "npm:^6.9.9"
     react: "npm:^19.2.4"
     react-ace: "npm:^14.0.0"
-    react-day-picker: "npm:^9.14.0"
     react-debounce-render: "npm:^8.0.2"
     react-dom: "npm:^19.2.4"
     react-drag-drop-files: "npm:^3.0.0"
@@ -7197,13 +7187,9 @@ __metadata:
     sass: "npm:^1.63.6"
     showdown: "npm:^2.1.0"
     sourceror: "npm:^0.8.5"
-    stream-browserify: "npm:^3.0.0"
-    stream-http: "npm:^3.2.0"
-    timers-browserify: "npm:^2.0.12"
     typescript: "npm:^6.0.2"
     typescript-eslint: "npm:^8.1.0"
     unified: "npm:^11.0.0"
-    url: "npm:^0.11.1"
     uuid: "npm:^14.0.0"
     vitest: "npm:4.1.5"
     webpack-bundle-analyzer: "npm:^5.0.0"
@@ -7931,13 +7917,6 @@ __metadata:
   version: 2.0.4
   resolution: "inherits@npm:2.0.4"
   checksum: 10c0/4e531f648b29039fb7426fb94075e6545faa1eb9fe83c29f0b6d9e7263aceb4289d2d4557db0d428188eeb449cc7c5e77b0a0b2c4e248ff2a65933a0dee49ef2
-  languageName: node
-  linkType: hard
-
-"inherits@npm:2.0.3":
-  version: 2.0.3
-  resolution: "inherits@npm:2.0.3"
-  checksum: 10c0/6e56402373149ea076a434072671f9982f5fad030c7662be0332122fe6c0fa490acb3cc1010d90b6eff8d640b1167d77674add52dfd1bb85d545cf29e80e73e7
   languageName: node
   linkType: hard
 
@@ -9088,14 +9067,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lru-cache@npm:^11.0.0":
-  version: 11.2.7
-  resolution: "lru-cache@npm:11.2.7"
-  checksum: 10c0/549cdb59488baa617135fc12159cafb1a97f91079f35093bb3bcad72e849fc64ace636d244212c181dfdf1a99bbfa90757ff303f98561958ee4d0f885d9bd5f7
-  languageName: node
-  linkType: hard
-
-"lru-cache@npm:^11.3.5":
+"lru-cache@npm:^11.0.0, lru-cache@npm:^11.3.5":
   version: 11.3.6
   resolution: "lru-cache@npm:11.3.6"
   checksum: 10c0/3afe3e3000e424c18b640dcea5776b5c1de8684b7dac9718d58792dff1a4692b38cc14e263cbb41bdab98ffcf5408f003b33133b179ce5d271284be72a3ff2a9
@@ -10586,16 +10558,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path@npm:^0.12.7":
-  version: 0.12.7
-  resolution: "path@npm:0.12.7"
-  dependencies:
-    process: "npm:^0.11.1"
-    util: "npm:^0.10.3"
-  checksum: 10c0/f795ce5438a988a590c7b6dfd450ec9baa1c391a8be4c2dea48baa6e0f5b199e56cd83b8c9ebf3991b81bea58236d2c32bdafe2c17a2e70c3a2e4c69891ade59
-  languageName: node
-  linkType: hard
-
 "pathe@npm:^1.1.2":
   version: 1.1.2
   resolution: "pathe@npm:1.1.2"
@@ -10726,18 +10688,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.5.10":
-  version: 8.5.10
-  resolution: "postcss@npm:8.5.10"
-  dependencies:
-    nanoid: "npm:^3.3.11"
-    picocolors: "npm:^1.1.1"
-    source-map-js: "npm:^1.2.1"
-  checksum: 10c0/c592dffa0c4873b401f01955b265538d9942f425040df5e2b8f0ad34c83773a792ea0fa5859ccc99cfb5b955b4ebff118ab7056315388dc83b107b0fa8313576
-  languageName: node
-  linkType: hard
-
-"postcss@npm:^8.5.14":
+"postcss@npm:^8.5.10, postcss@npm:^8.5.14":
   version: 8.5.14
   resolution: "postcss@npm:8.5.14"
   dependencies:
@@ -10832,7 +10783,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"process@npm:^0.11.1, process@npm:^0.11.10":
+"process@npm:^0.11.10":
   version: 0.11.10
   resolution: "process@npm:0.11.10"
   checksum: 10c0/40c3ce4b7e6d4b8c3355479df77aeed46f81b279818ccdc500124e6a5ab882c0cc81ff7ea16384873a95a74c4570b01b120f287abbdd4c877931460eca6084b3
@@ -11014,17 +10965,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-day-picker@npm:^9.14.0":
-  version: 9.14.0
-  resolution: "react-day-picker@npm:9.14.0"
+"react-day-picker@npm:10.0.0":
+  version: 10.0.0
+  resolution: "react-day-picker@npm:10.0.0"
   dependencies:
     "@date-fns/tz": "npm:^1.4.1"
-    "@tabby_ai/hijri-converter": "npm:1.0.5"
     date-fns: "npm:^4.1.0"
-    date-fns-jalali: "npm:4.1.0-0"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 10c0/5d26b2e8e28fb504c2ec577bda2ea26709ccab07555aada0674bd72ae38963de6f5cab135d936bb2fef935f97f73c6510657b15b936766e53d5c65811d13289a
+  checksum: 10c0/ea36192918fbdadb2fda043b1d68b493281e044ee481386a3156ba5a5380246eede7e8aba63e3d48255289cff2d0cfc84e7e336832033f324750c425f1800e8a
   languageName: node
   linkType: hard
 
@@ -11148,8 +11097,8 @@ __metadata:
   linkType: hard
 
 "react-konva@npm:^19.0.7":
-  version: 19.2.3
-  resolution: "react-konva@npm:19.2.3"
+  version: 19.2.4
+  resolution: "react-konva@npm:19.2.4"
   dependencies:
     "@types/react-reconciler": "npm:^0.33.0"
     its-fine: "npm:^2.0.0"
@@ -11159,7 +11108,7 @@ __metadata:
     konva: ^8.0.1 || ^7.2.5 || ^9.0.0 || ^10.0.0
     react: ^19.2.0
     react-dom: ^19.2.0
-  checksum: 10c0/7a7fa60d1e85d794be13bfab5890939f7adc39b29857118103de07bbe4b441281050376bf3e75d0bf6758d4a38dd04100d2a0686e855dc54a8845799cc5d99e6
+  checksum: 10c0/9698fd0799eb17aafab04540bbb46018a9bcdfb7fe26b9a072201c7db43c1625c742fc1a70fa59e7c2fec6c7604a2ebfb3f266d607bfb3ffbae1ea3447223927
   languageName: node
   linkType: hard
 
@@ -13640,7 +13589,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url@npm:^0.11.1, url@npm:^0.11.4":
+"url@npm:^0.11.4":
   version: 0.11.4
   resolution: "url@npm:0.11.4"
   dependencies:
@@ -13698,15 +13647,6 @@ __metadata:
   version: 1.0.2
   resolution: "util-deprecate@npm:1.0.2"
   checksum: 10c0/41a5bdd214df2f6c3ecf8622745e4a366c4adced864bc3c833739791aeeeb1838119af7daed4ba36428114b5c67dcda034a79c882e97e43c03e66a4dd7389942
-  languageName: node
-  linkType: hard
-
-"util@npm:^0.10.3":
-  version: 0.10.4
-  resolution: "util@npm:0.10.4"
-  dependencies:
-    inherits: "npm:2.0.3"
-  checksum: 10c0/d29f6893e406b63b088ce9924da03201df89b31490d4d011f1c07a386ea4b3dbe907464c274023c237da470258e1805d806c7e4009a5974cd6b1d474b675852a
   languageName: node
   linkType: hard
 

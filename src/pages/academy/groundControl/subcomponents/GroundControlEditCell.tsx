@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { useCallback, useState } from 'react';
 import { DateInput } from 'src/commons/DateTimePickers';
 
-import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
 import { showWarningMessage } from '../../../../commons/utils/notifications/NotificationsHelper';
 
@@ -39,7 +39,7 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
       handleAssessmentChangeDate(
         id,
         forOpenDate ? newDate.toISOString() : openAt,
-        forOpenDate ? closeAt : newDate.toISOString()
+        forOpenDate ? closeAt : newDate.toISOString(),
       );
       handleCloseDialog();
     }
@@ -53,7 +53,7 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
 
   const handleDateChange = useCallback(
     (selectedDate: string | null) => setNewDate(dayjs(selectedDate)),
-    []
+    [],
   );
   const handleDateError = useCallback(() => {
     // Reset date to current date if user enters an invalid date string

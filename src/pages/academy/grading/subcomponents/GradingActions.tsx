@@ -3,7 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
-import { ProgressStatus, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
+import type { ProgressStatus } from 'src/commons/assessment/AssessmentTypes';
+import { ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useSession } from 'src/commons/utils/Hooks';
@@ -28,7 +29,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
         </>
       ),
       positiveIntent: 'danger',
-      positiveLabel: 'Reautograde'
+      positiveLabel: 'Reautograde',
     });
     if (confirm) {
       dispatch(SessionActions.reautogradeSubmission(submissionId));
@@ -39,7 +40,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
     const confirm = await showSimpleConfirmDialog({
       contents: 'Are you sure you want to unsubmit?',
       positiveIntent: 'danger',
-      positiveLabel: 'Unsubmit'
+      positiveLabel: 'Unsubmit',
     });
     if (confirm) {
       dispatch(SessionActions.unsubmitSubmission(submissionId));
@@ -50,7 +51,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
     const confirm = await showSimpleConfirmDialog({
       contents: "Publish this assessment's grading?",
       positiveIntent: 'primary',
-      positiveLabel: 'Publish'
+      positiveLabel: 'Publish',
     });
     if (confirm) {
       dispatch(SessionActions.publishGrading(submissionId));
@@ -61,7 +62,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
     const confirm = await showSimpleConfirmDialog({
       contents: "Unpublish this assessment's grading?",
       positiveIntent: 'primary',
-      positiveLabel: 'Unpublish'
+      positiveLabel: 'Unpublish',
     });
     if (confirm) {
       dispatch(SessionActions.unpublishGrading(submissionId));

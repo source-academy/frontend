@@ -13,7 +13,7 @@ import { SideContentCseMachine } from '../content/SideContentCseMachine';
 // to be generated: `style="left: calc(-0px + (% * nan));"`
 vi.mock('@blueprintjs/core', async importOriginal => ({
   ...(await importOriginal()),
-  Slider: (props: any) => <div data-testid="mock-slider">{props.children}</div>
+  Slider: (props: any) => <div data-testid="mock-slider">{props.children}</div>,
 }));
 
 const mockStore = mockInitialStore();

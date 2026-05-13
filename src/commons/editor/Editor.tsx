@@ -23,14 +23,15 @@ import * as AceBuilds from 'ace-builds';
 import { Ace, require as acequire, createEditSession } from 'ace-builds';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
-import { IAceEditor } from 'react-ace/lib/types';
-import { SALanguage } from '../application/ApplicationTypes';
+import type { IAceEditorProps, IEditorProps } from 'react-ace';
+import AceEditor from 'react-ace';
+import type { IAceEditor } from 'react-ace/lib/types';
+import type { SALanguage } from '../application/ApplicationTypes';
 import { getModeString, selectMode } from '../utils/AceHelper';
 import { objectEntries } from '../utils/TypeHelper';
 import { EditorBinding } from '../WorkspaceSettingsContext';
-import { KeyFunction, keyBindings } from './EditorHotkeys';
-import { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
+import { type KeyFunction, keyBindings } from './EditorHotkeys';
+import type { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 
 // =============== Hooks ===============
 // TODO: Should further refactor into EditorBase + different variants.
@@ -50,7 +51,7 @@ export type EditorHook = (
   inProps: Readonly<EditorProps>,
   outProps: IAceEditorProps,
   keyBindings: EditorKeyBindingHandlers,
-  reactAceRef: React.MutableRefObject<AceEditor | null>
+  reactAceRef: React.MutableRefObject<AceEditor | null>,
 ) => void;
 
 export type EditorProps = DispatchProps & EditorStateProps & EditorTabStateProps & OnEvent;
@@ -123,11 +124,11 @@ const EventT: Array<keyof OnEvent> = [
   'onPaste',
   'onFocus',
   'onBlur',
-  'onScroll'
+  'onScroll',
 ];
 
 const getMarkers = (
-  highlightedLines: EditorTabStateProps['highlightedLines']
+  highlightedLines: EditorTabStateProps['highlightedLines'],
 ): IAceEditorProps['markers'] => {
   return highlightedLines.map(lineNums => ({
     startRow: lineNums[0],
@@ -135,14 +136,14 @@ const getMarkers = (
     endRow: lineNums[1],
     endCol: 1,
     className: 'myMarker',
-    type: 'fullLine'
+    type: 'fullLine',
   }));
 };
 
 const makeHandleGutterClick =
   (
     handleEditorUpdateBreakpoints: DispatchProps['handleEditorUpdateBreakpoints'],
-    editorTabIndex: number
+    editorTabIndex: number,
   ) =>
   (e: AceMouseEvent) => {
     const target = e.domEvent.target! as HTMLDivElement;
@@ -329,7 +330,7 @@ const makeCompleter = (handlePromptAutocomplete: DispatchProps['handlePromptAuto
     session: Ace.EditSession,
     pos: Ace.Point,
     prefix: string,
-    callback: () => void
+    callback: () => void,
   ) => {
     // Don't prompt if prefix starts with number
     if (prefix && /\d/.test(prefix.charAt(0))) {
@@ -339,7 +340,7 @@ const makeCompleter = (handlePromptAutocomplete: DispatchProps['handlePromptAuto
 
     // Cursor col is insertion location i.e. last char col + 1
     handlePromptAutocomplete(pos.row + 1, pos.column, callback);
-  }
+  },
 });
 
 const moveCursor = (editor: AceEditor['editor'], position: Position) => {
@@ -407,7 +408,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
   const [sourceChapter, sourceVariant, externalLibraryName] = [
     props.sourceChapter || Chapter.SOURCE_1,
     props.sourceVariant || Variant.DEFAULT,
-    props.externalLibraryName || ExternalLibraryName.NONE
+    props.externalLibraryName || ExternalLibraryName.NONE,
   ];
 
   // this function defines the Ace language and highlighting mode for the
@@ -432,7 +433,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     // hopelessly incomplete
     editor.on(
       'gutterclick' as any,
-      makeHandleGutterClick(handleEditorUpdateBreakpointsRef.current, props.editorTabIndex)
+      makeHandleGutterClick(handleEditorUpdateBreakpointsRef.current, props.editorTabIndex),
     );
 
     // Change all info annotations to error annotations
@@ -445,7 +446,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
       setCompleters([textCompleter, keyWordCompleter]);
     } else {
       acequire('ace/ext/language_tools').setCompleters([
-        makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
+        makeCompleter((...args) => handlePromptAutocompleteRef.current(...args)),
       ]);
     }
   }, [editor, props.sourceChapter, props.editorTabIndex]);
@@ -464,7 +465,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     handleUpdateHasUnsavedChanges,
     handleEditorValueChange,
     isEditorAutorun,
-    handleEditorEval
+    handleEditorEval,
   } = props;
   const handleEditorEvalRef = useRef(handleEditorEval);
   handleEditorEvalRef.current = handleEditorEval;
@@ -472,7 +473,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
   const keyHandlers: EditorKeyBindingHandlers = {
     evaluate: () => {
       handleEditorEvalRef.current();
-    }
+    },
   };
 
   const conductorEnabled = useFeature(flagConductorEnable);
@@ -539,7 +540,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
   const aceEditorProps: IAceEditorProps = {
     className: 'react-ace',
     editorProps: {
-      $blockScrolling: Infinity
+      $blockScrolling: Infinity,
     },
     markers: useMemo(() => getMarkers(props.highlightedLines), [props.highlightedLines]),
     fontSize: 17,
@@ -554,9 +555,9 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     setOptions: {
       enableBasicAutocompletion: true,
       enableLiveAutocompletion: true,
-      fontFamily: "'Inconsolata', 'Consolas', monospace"
+      fontFamily: "'Inconsolata', 'Consolas', monospace",
     },
-    keyboardHandler: props.editorBinding
+    keyboardHandler: props.editorBinding,
   };
 
   // Hooks must not change after an editor is instantiated, so to prevent that
@@ -584,7 +585,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
       handleEditorValueChange(props.editorTabIndex, newCode);
       handleEditorUpdateBreakpointsRef.current(
         props.editorTabIndex,
-        reactAceRef.current.editor.session.getBreakpoints()
+        reactAceRef.current.editor.session.getBreakpoints(),
       );
 
       if (handleUpdateHasUnsavedChanges) {
@@ -604,8 +605,8 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
       handleUpdateHasUnsavedChanges,
       isEditorAutorun,
       onChange,
-      handleEditorEval
-    ]
+      handleEditorEval,
+    ],
   );
 
   aceEditorProps.commands = objectEntries(keyHandlers)
@@ -645,7 +646,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
   acequire('ace/ext/menu_tools/overlay_page').overlayPage = function (
     editor: any,
     contentElement: HTMLElement,
-    callback: any
+    callback: any,
   ) {
     let closer: HTMLElement | null = document.createElement('div');
     // Add id to the overlay div
@@ -707,7 +708,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     }
     return {
       close: close,
-      setIgnoreFocusOut: setIgnoreFocusOut
+      setIgnoreFocusOut: setIgnoreFocusOut,
     };
   };
 
@@ -745,7 +746,7 @@ const Editor: React.FC<EditorProps> = (props: EditorProps) => {
   if (props.filePath !== undefined && sessions[props.filePath] === undefined) {
     setSessions({
       ...sessions,
-      [props.filePath]: defaultEditSession
+      [props.filePath]: defaultEditSession,
     });
   }
 

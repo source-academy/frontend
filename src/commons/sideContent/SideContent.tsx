@@ -1,4 +1,4 @@
-import { Card, Icon, Tab, TabProps, Tabs, Tooltip } from '@blueprintjs/core';
+import { Card, Icon, Tab, type TabProps, Tabs, Tooltip } from '@blueprintjs/core';
 import { cloneElement } from 'react';
 
 import { assertType } from '../utils/TypeHelper';
@@ -8,7 +8,7 @@ import type {
   ChangeTabsCallback,
   SideContentLocation,
   SideContentTab,
-  SideContentType
+  SideContentType,
 } from './SideContentTypes';
 
 export type SideContentProps = {
@@ -29,7 +29,7 @@ const renderTab = (
   shouldAlert: boolean,
   workspaceLocation?: SideContentLocation,
   editorWidth?: string,
-  sideContentHeight?: number
+  sideContentHeight?: number,
 ) => {
   const iconSize = 20;
   const tabId = getTabId(tab);
@@ -44,7 +44,7 @@ const renderTab = (
     id: tabId,
     title: tabTitle,
     disabled: tab.disabled,
-    className: 'side-content-tab'
+    className: 'side-content-tab',
   });
 
   if (!tab.body) {
@@ -78,7 +78,7 @@ const SideContent = ({ renderActiveTabPanelOnly, editorWidth, ...props }: SideCo
                   tabAlerts.includes(tabId),
                   props.workspaceLocation,
                   editorWidth,
-                  height
+                  height,
                 );
               })}
             </Tabs>

@@ -1,7 +1,7 @@
 import { Button, Popover } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 
-import { ControlBarProps } from '../../controlBar/ControlBar';
+import type { ControlBarProps } from '../../controlBar/ControlBar';
 
 const MobileControlBar: React.FC<ControlBarProps> = props => {
   const controlBarMenu = (

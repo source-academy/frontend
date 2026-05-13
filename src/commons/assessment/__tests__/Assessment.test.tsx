@@ -1,14 +1,14 @@
-import { Store } from '@reduxjs/toolkit';
+import type { Store } from '@reduxjs/toolkit';
 import { screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
-import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
+import { type OverallState, Role } from 'src/commons/application/ApplicationTypes';
 import { mockAssessmentOverviews } from 'src/commons/mocks/AssessmentMocks';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 
 import Assessment from '../Assessment';
-import { AssessmentConfiguration, AssessmentOverview } from '../AssessmentTypes';
+import type { AssessmentConfiguration, AssessmentOverview } from '../AssessmentTypes';
 
 const mockAssessmentConfig: AssessmentConfiguration = {
   assessmentConfigId: 1,
@@ -21,12 +21,12 @@ const mockAssessmentConfig: AssessmentConfiguration = {
   hasVotingFeatures: false,
   hoursBeforeEarlyXpDecay: 48,
   earlySubmissionXp: 200,
-  isAutosaveEnabled: true
+  isAutosaveEnabled: true,
 };
 
 const getOverriddenStore = ({
   assessmentOverviews,
-  role
+  role,
 }: {
   assessmentOverviews?: AssessmentOverview[];
   role?: Role;
@@ -34,14 +34,14 @@ const getOverriddenStore = ({
   mockInitialStore({
     session: {
       assessmentOverviews,
-      role
-    }
+      role,
+    },
   });
 
 const createTestComponent = (mockStore: Store<OverallState>) => {
   const router = createMemoryRouter(
     [{ path: '/assessment', element: <Assessment />, loader: () => mockAssessmentConfig }],
-    { initialEntries: ['/assessment'] }
+    { initialEntries: ['/assessment'] },
   );
   return (
     <Provider store={mockStore}>
@@ -73,7 +73,7 @@ test('Assessment page with 0 missions renders correctly', async () => {
 test('Assessment page with multiple loaded missions renders correctly', async () => {
   const mockStore = getOverriddenStore({
     assessmentOverviews: mockAssessmentOverviews,
-    role: Role.Staff
+    role: Role.Staff,
   });
   const app = createTestComponent(mockStore);
 
@@ -86,7 +86,7 @@ test('Assessment page with multiple loaded missions renders correctly', async ()
 test('Assessment page does not show attempt Button for upcoming assessments for student user', async () => {
   const mockStore = getOverriddenStore({
     assessmentOverviews: mockAssessmentOverviews,
-    role: Role.Student
+    role: Role.Student,
   });
   const app = createTestComponent(mockStore);
 

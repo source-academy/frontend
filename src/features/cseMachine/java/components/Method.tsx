@@ -1,19 +1,19 @@
 import { astToString, ECE } from 'java-slang';
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { createRef, Fragment } from 'react';
 import { Circle, Group, Label, Tag, Text } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
-import { IHoverable } from '../../CseMachineTypes';
+import type { IHoverable } from '../../CseMachineTypes';
 import {
   defaultStrokeColor,
   defaultTextColor,
   getTextHeight,
   getTextWidth,
   setHoveredCursor,
-  setUnhoveredCursor
+  setUnhoveredCursor,
 } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 
@@ -26,7 +26,7 @@ export class Method extends Visible implements IHoverable {
   constructor(
     x: number,
     y: number,
-    private readonly _method: ECE.Closure
+    private readonly _method: ECE.Closure,
   ) {
     super();
 

@@ -4,7 +4,7 @@ import type { Position } from 'src/commons/editor/EditorTypes';
 import type { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 
 export enum KeyboardCommand {
-  run = 'run'
+  run = 'run',
 }
 
 type InputTypeShape = {

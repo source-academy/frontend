@@ -1,4 +1,4 @@
-import { Icon, IconName } from '@blueprintjs/core';
+import { Icon, type IconName } from '@blueprintjs/core';
 
 import { getFilterColor } from '../../features/achievement/AchievementConstants';
 import { FilterStatus } from '../../features/achievement/AchievementTypes';

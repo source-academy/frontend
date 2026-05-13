@@ -1,4 +1,4 @@
-import { NodeConfig } from 'konva/lib/Node';
+import type { NodeConfig } from 'konva/lib/Node';
 
 import { Visible } from '../../components/Visible';
 

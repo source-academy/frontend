@@ -5,7 +5,7 @@ import {
   type GridApi,
   type GridReadyEvent,
   type RowDragEvent,
-  themeBalham
+  themeBalham,
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { cloneDeep, isEqual } from 'lodash';
@@ -16,11 +16,11 @@ import {
   useImperativeHandle,
   useMemo,
   useRef,
-  useState
+  useState,
 } from 'react';
-import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
+import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
-import { WithImperativeApi } from 'src/commons/utils/TypeHelper';
+import type { WithImperativeApi } from 'src/commons/utils/TypeHelper';
 
 import BooleanCell from './BooleanCell';
 import DeleteRowCell from './DeleteRowCell';
@@ -37,7 +37,7 @@ const defaultAssessmentConfig: AssessmentConfiguration = {
   hasTokenCounter: false,
   hasVotingFeatures: false,
   earlySubmissionXp: 0,
-  isAutosaveEnabled: true
+  isAutosaveEnabled: true,
 };
 
 export type ImperativeAssessmentConfigPanel = {
@@ -55,7 +55,7 @@ const defaultColumnDefs: ColDef = {
   minWidth: 70,
   filter: false,
   resizable: true,
-  sortable: false
+  sortable: false,
 };
 
 const AssessmentConfigPanel: WithImperativeApi<
@@ -81,8 +81,8 @@ const AssessmentConfigPanel: WithImperativeApi<
         resetData: () => {
           setConfigs(initialConfigs);
           tableState.current = cloneDeep(initialConfigs);
-        }
-      })
+        },
+      }),
     );
 
     // Manually graded assessments should not be auto-published
@@ -129,7 +129,7 @@ const AssessmentConfigPanel: WithImperativeApi<
             return newConfigs;
           });
         },
-      []
+      [],
     );
 
     /* eslint-disable react-hooks/exhaustive-deps */
@@ -168,7 +168,7 @@ const AssessmentConfigPanel: WithImperativeApi<
         const rowToRemove = gridApi.current?.getDisplayedRowAtIndex(index)?.data;
         gridApi.current?.applyTransaction({ remove: [rowToRemove!] });
       },
-      [configs.length]
+      [configs.length],
     );
 
     const columnDefs: ColDef<AssessmentConfiguration>[] = useMemo(
@@ -177,7 +177,7 @@ const AssessmentConfigPanel: WithImperativeApi<
           headerName: 'Assessment Type',
           field: 'type',
           rowDrag: true,
-          editable: true
+          editable: true,
         },
         {
           headerName: 'Is Manually Graded',
@@ -185,8 +185,8 @@ const AssessmentConfigPanel: WithImperativeApi<
           cellRenderer: BooleanCell,
           cellRendererParams: {
             setStateHandler: setIsManuallyGraded,
-            field: 'isManuallyGraded'
-          }
+            field: 'isManuallyGraded',
+          },
         },
         {
           headerName: 'Is Auto-published',
@@ -194,8 +194,8 @@ const AssessmentConfigPanel: WithImperativeApi<
           cellRenderer: BooleanCell,
           cellRendererParams: {
             setStateHandler: setIsGradingAutoPublished,
-            field: 'isGradingAutoPublished'
-          }
+            field: 'isGradingAutoPublished',
+          },
         },
         {
           headerName: 'Display in Dashboard',
@@ -203,8 +203,8 @@ const AssessmentConfigPanel: WithImperativeApi<
           cellRenderer: BooleanCell,
           cellRendererParams: {
             setStateHandler: setDisplayInDashboard,
-            field: 'displayInDashboard'
-          }
+            field: 'displayInDashboard',
+          },
         },
         {
           headerName: 'Is Minigame',
@@ -212,8 +212,8 @@ const AssessmentConfigPanel: WithImperativeApi<
           cellRenderer: BooleanCell,
           cellRendererParams: {
             setStateHandler: setIsMinigame,
-            field: 'isMinigame'
-          }
+            field: 'isMinigame',
+          },
         },
         {
           headerName: 'Voting Features*',
@@ -221,8 +221,8 @@ const AssessmentConfigPanel: WithImperativeApi<
           cellRenderer: BooleanCell,
           cellRendererParams: {
             setStateHandler: setHasVotingFeatures,
-            field: 'hasVotingFeatures'
-          }
+            field: 'hasVotingFeatures',
+          },
         },
         {
           headerName: 'Token Counter*',
@@ -230,8 +230,8 @@ const AssessmentConfigPanel: WithImperativeApi<
           cellRenderer: BooleanCell,
           cellRendererParams: {
             setStateHandler: setHasTokenCounter,
-            field: 'hasTokenCounter'
-          }
+            field: 'hasTokenCounter',
+          },
         },
         {
           headerName: 'Autosave',
@@ -239,8 +239,8 @@ const AssessmentConfigPanel: WithImperativeApi<
           cellRenderer: BooleanCell,
           cellRendererParams: {
             setStateHandler: setIsAutosaveEnabled,
-            field: 'isAutosaveEnabled'
-          }
+            field: 'isAutosaveEnabled',
+          },
         },
         {
           headerName: 'Max Bonus XP',
@@ -248,8 +248,8 @@ const AssessmentConfigPanel: WithImperativeApi<
           cellRenderer: NumericCell,
           cellRendererParams: {
             setStateHandler: setEarlyXp,
-            field: 'earlySubmissionXp'
-          }
+            field: 'earlySubmissionXp',
+          },
         },
         {
           headerName: 'Early Hours Before Decay',
@@ -257,19 +257,19 @@ const AssessmentConfigPanel: WithImperativeApi<
           cellRenderer: NumericCell,
           cellRendererParams: {
             setStateHandler: setHoursBeforeDecay,
-            field: 'hoursBeforeEarlyXpDecay'
-          }
+            field: 'hoursBeforeEarlyXpDecay',
+          },
         },
         {
           headerName: 'Delete',
           field: 'placeholderToPreventColumnRerender' as any,
           cellRenderer: DeleteRowCell,
           cellRendererParams: {
-            deleteRowHandler: deleteRowHandler
+            deleteRowHandler: deleteRowHandler,
           },
           resizable: false,
-          flex: 2
-        }
+          flex: 2,
+        },
       ],
       [
         deleteRowHandler,
@@ -281,8 +281,8 @@ const AssessmentConfigPanel: WithImperativeApi<
         setHasVotingFeatures,
         setHoursBeforeDecay,
         setIsGradingAutoPublished,
-        setIsManuallyGraded
-      ]
+        setIsManuallyGraded,
+      ],
     );
 
     // Tracks the movement of rows in our local React state while dragging
@@ -302,7 +302,7 @@ const AssessmentConfigPanel: WithImperativeApi<
           setConfigs(temp);
         }
       },
-      [configs]
+      [configs],
     );
 
     // Updates the data passed into ag-grid
@@ -364,7 +364,7 @@ const AssessmentConfigPanel: WithImperativeApi<
         {grid}
       </div>
     );
-  }
+  },
 );
 
 function moveInArray(arr: any[], fromIndex: number, toIndex: number): void {

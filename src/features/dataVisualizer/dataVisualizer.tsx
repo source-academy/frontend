@@ -1,5 +1,5 @@
 import { Config } from './Config';
-import { Data, Step } from './dataVisualizerTypes';
+import type { Data, Step } from './dataVisualizerTypes';
 import { Tree } from './tree/Tree';
 import { DataTreeNode } from './tree/TreeNode';
 
@@ -108,7 +108,7 @@ export default class DataVisualizer {
     structures: Data[],
     depth: number,
     nodePos: number,
-    newNode: boolean
+    newNode: boolean,
   ): number {
     if (!(structures instanceof Array)) {
       return 0;

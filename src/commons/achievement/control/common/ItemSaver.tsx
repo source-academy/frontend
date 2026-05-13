@@ -2,7 +2,7 @@ import { Button, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import {
   showSuccessMessage,
-  showWarningMessage
+  showWarningMessage,
 } from 'src/commons/utils/notifications/NotificationsHelper';
 
 type Props = {

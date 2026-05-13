@@ -31,7 +31,7 @@ const SideContentTaskEditor: React.FC<Props> = props => {
       newTaskDescriptions[taskIndex] = newDescription;
       setTaskDescriptions(newTaskDescriptions);
     },
-    [setTaskDescriptions, taskDescriptions, taskIndex, indexOutOfRange]
+    [setTaskDescriptions, taskDescriptions, taskIndex, indexOutOfRange],
   );
 
   return (

@@ -11,7 +11,7 @@ import { FileSystemReducer as fileSystem } from '../../fileSystem/FileSystemRedu
 import { SideContentReducer as sideContent } from '../../sideContent/SideContentReducer';
 import type { SourceActionType } from '../../utils/ActionsHelper';
 import { WorkspaceReducer as workspaces } from '../../workspace/WorkspaceReducer';
-import { OverallState } from '../ApplicationTypes';
+import type { OverallState } from '../ApplicationTypes';
 import { RouterReducer as router } from './CommonsReducer';
 import { SessionsReducer as session } from './SessionsReducer';
 import { VscodeReducer as vscode } from './VscodeReducer';
@@ -29,7 +29,7 @@ const rootReducer: Reducer<OverallState, SourceActionType> = combineReducers({
   sideContent,
   vscode,
   languageDirectory,
-  pluginDirectory
+  pluginDirectory,
 });
 
 export default rootReducer;

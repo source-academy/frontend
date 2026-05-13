@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Textarea from 'react-textarea-autosize';
 
-import { Assessment } from '../assessment/AssessmentTypes';
+import type { Assessment } from '../assessment/AssessmentTypes';
 import Markdown from '../Markdown';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 

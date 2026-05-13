@@ -10,14 +10,14 @@ import {
   NavbarGroup,
   NavbarHeading,
   Popover,
-  Position
+  Position,
 } from '@blueprintjs/core';
-import { IconName, IconNames } from '@blueprintjs/icons';
+import { type IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { useMemo, useState } from 'react';
 import { Translation } from 'react-i18next';
 import { type Location, NavLink, Route, useLocation } from 'react-router';
-import { i18nDefaultLangKeys } from 'src/i18n/i18next';
+import type { i18nDefaultLangKeys } from 'src/i18n/i18next';
 import { SentryRoutes } from 'src/routes/routerConfig';
 import classes from 'src/styles/NavigationBar.module.scss';
 
@@ -28,7 +28,7 @@ import Constants from '../utils/Constants';
 import { useResponsive, useSession } from '../utils/Hooks';
 import AcademyNavigationBar, {
   assessmentTypesToNavlinkInfo,
-  getAcademyNavbarRightInfo
+  getAcademyNavbarRightInfo,
 } from './subcomponents/AcademyNavigationBar';
 import NavigationBarLangSelectButton from './subcomponents/NavigationBarLangSelectButton';
 import SicpNavigationBar from './subcomponents/SicpNavigationBar';
@@ -100,11 +100,11 @@ const NavigationBar: React.FC = () => {
     enableAchievements,
     enableOverallLeaderboard,
     enableContestLeaderboard,
-    assessmentConfigurations
+    assessmentConfigurations,
   } = useSession();
   const assessmentTypes = useMemo(
     () => assessmentConfigurations?.map(c => c.type),
-    [assessmentConfigurations]
+    [assessmentConfigurations],
   );
 
   FocusStyleManager.onlyShowFocusOnTabs();
@@ -114,9 +114,9 @@ const NavigationBar: React.FC = () => {
       assessmentTypesToNavlinkInfo({
         assessmentTypes,
         courseId,
-        isEnrolledInACourse
+        isEnrolledInACourse,
       }),
-    [assessmentTypes, courseId, isEnrolledInACourse]
+    [assessmentTypes, courseId, isEnrolledInACourse],
   );
 
   const fullAcademyNavbarLeftCommonInfo: NavbarEntryInfo[] = useMemo(() => {
@@ -125,26 +125,26 @@ const NavigationBar: React.FC = () => {
         to: '/playground',
         icon: IconNames.CODE,
         text: 'Playground',
-        disabled: !isEnrolledInACourse
+        disabled: !isEnrolledInACourse,
       },
       {
         to: '/sicpjs',
         icon: IconNames.BOOK,
         text: 'SICP JS',
-        disabled: !isLoggedIn
+        disabled: !isLoggedIn,
       },
       {
         to: `/courses/${courseId}/achievements`,
         icon: IconNames.MOUNTAIN,
         text: 'Achievements',
-        disabled: !(isEnrolledInACourse && enableAchievements)
+        disabled: !(isEnrolledInACourse && enableAchievements),
       },
       {
         to: `/courses/${courseId}/leaderboard`,
         icon: IconNames.TIMELINE_BAR_CHART,
         text: 'Leaderboard',
-        disabled: !(isEnrolledInACourse && (enableContestLeaderboard || enableOverallLeaderboard))
-      }
+        disabled: !(isEnrolledInACourse && (enableContestLeaderboard || enableOverallLeaderboard)),
+      },
     ];
   }, [
     courseId,
@@ -152,24 +152,24 @@ const NavigationBar: React.FC = () => {
     isLoggedIn,
     enableAchievements,
     enableContestLeaderboard,
-    enableOverallLeaderboard
+    enableOverallLeaderboard,
   ]);
 
   const fullAcademyMobileNavbarLeftAdditionalInfo = useMemo(
     () => getAcademyNavbarRightInfo({ isEnrolledInACourse, courseId, role }),
-    [isEnrolledInACourse, courseId, role]
+    [isEnrolledInACourse, courseId, role],
   );
 
   const fullAcademyMobileNavbarLeftInfoWithAssessments: NavbarEntryInfo[] = useMemo(() => {
     return [
       ...fullAcademyNavbarLeftAssessmentsInfo,
       ...fullAcademyNavbarLeftCommonInfo,
-      ...fullAcademyMobileNavbarLeftAdditionalInfo
+      ...fullAcademyMobileNavbarLeftAdditionalInfo,
     ];
   }, [
     fullAcademyNavbarLeftAssessmentsInfo,
     fullAcademyNavbarLeftCommonInfo,
-    fullAcademyMobileNavbarLeftAdditionalInfo
+    fullAcademyMobileNavbarLeftAdditionalInfo,
   ]);
 
   const renderPlaygroundOnlyNavbarLeftDesktop = () => (
@@ -188,7 +188,7 @@ const NavigationBar: React.FC = () => {
     const entries = assessmentTypesToNavlinkInfo({
       assessmentTypes,
       courseId,
-      isEnrolledInACourse
+      isEnrolledInACourse,
     });
 
     const desktopNavbarLeftPopoverContent = (
@@ -205,7 +205,7 @@ const NavigationBar: React.FC = () => {
       '/sicpjs',
       '/contributors',
       `/courses/${courseId}/achievements`,
-      `/courses/${courseId}/leaderboard`
+      `/courses/${courseId}/leaderboard`,
     ];
     const enableDesktopPopover =
       courseId != null && !!topNavbarNavlinks.find(x => location.pathname.startsWith(x));
@@ -256,7 +256,7 @@ const NavigationBar: React.FC = () => {
       <NavLink
         className={({ isActive }) =>
           classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
-            [Classes.ACTIVE]: isActive
+            [Classes.ACTIVE]: isActive,
           })
         }
         to="/contributors"
@@ -282,7 +282,7 @@ const NavigationBar: React.FC = () => {
           'NavigationBar',
           'primary-navbar',
           classes['primary-navbar'],
-          Classes.DARK
+          Classes.DARK,
         )}
       >
         {Constants.playgroundOnly
@@ -318,13 +318,13 @@ const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
   {
     to: '/playground',
     icon: IconNames.CODE,
-    text: 'Playground'
+    text: 'Playground',
   },
   {
     to: '/sicpjs',
     icon: IconNames.BOOK,
-    text: 'SICP JS'
-  }
+    text: 'SICP JS',
+  },
 ];
 
 export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
@@ -342,7 +342,7 @@ export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
           <Translation ns="commons" keyPrefix="navigationBar">
             {t =>
               t($ => $[props.text as keyof i18nDefaultLangKeys['commons']['navigationBar']], {
-                defaultValue: props.text
+                defaultValue: props.text,
               })
             }
           </Translation>
@@ -372,7 +372,7 @@ const MobileNavLink: React.FC<
         <Translation ns="commons" keyPrefix="navigationBar">
           {t =>
             t($ => $[props.text as keyof i18nDefaultLangKeys['commons']['navigationBar']], {
-              defaultValue: props.text
+              defaultValue: props.text,
             })
           }
         </Translation>

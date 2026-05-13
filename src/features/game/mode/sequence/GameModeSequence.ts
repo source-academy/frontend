@@ -1,4 +1,4 @@
-import { IGameUI } from '../../commons/CommonTypes';
+import type { IGameUI } from '../../commons/CommonTypes';
 
 /**
  * This is the phase that is active when none of

@@ -5,10 +5,10 @@ import {
   cLanguages,
   getLanguageConfig,
   javaLanguages,
-  SALanguage,
+  type SALanguage,
   sourceLanguages,
   SUPPORTED_LANGUAGES,
-  SupportedLanguage
+  SupportedLanguage,
 } from 'src/commons/application/ApplicationTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -24,7 +24,7 @@ const LegacyNavigationBarLangSelectButton = () => {
   const defaultSublanguages: { [lang in SupportedLanguage]: SALanguage } = {
     [SupportedLanguage.JAVASCRIPT]: sourceLanguages[0],
     [SupportedLanguage.JAVA]: javaLanguages[0],
-    [SupportedLanguage.C]: cLanguages[0]
+    [SupportedLanguage.C]: cLanguages[0],
   };
 
   const selectLang = (language: SupportedLanguage) => {
@@ -43,7 +43,7 @@ const LegacyNavigationBarLangSelectButton = () => {
       buttonProps={{
         rightIcon: 'caret-down',
         onClick: () => setIsOpen(true),
-        'data-testid': 'NavigationBarLangSelectButton'
+        'data-testid': 'NavigationBarLangSelectButton',
       }}
     />
   );

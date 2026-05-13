@@ -1,15 +1,11 @@
 import 'ace-builds/src-noconflict/mode-python';
 
-import {
-  AceRules,
-  AutoCompleteEntry,
-  BaseAutoCompleteWebPlugin,
-  SyntaxHighlightData
-} from '@sourceacademy/autocomplete';
+import type { AceRules, AutoCompleteEntry, SyntaxHighlightData } from '@sourceacademy/autocomplete';
+import { BaseAutoCompleteWebPlugin } from '@sourceacademy/autocomplete';
 import { Editor } from 'ace-builds';
-import ace from 'ace-builds/src-noconflict/ace';
-import { require as acequire } from 'ace-builds/src-noconflict/ace';
-import { EventChannel, eventChannel, Unsubscribe } from 'redux-saga';
+import ace, { require as acequire } from 'ace-builds/src-noconflict/ace';
+import type { EventChannel, Unsubscribe } from 'redux-saga';
+import { eventChannel } from 'redux-saga';
 
 export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
   private currentMode: string | null = null;
@@ -48,7 +44,7 @@ export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
     const Mode = function (this: any) {
       this.HighlightRules = highlightRules;
       this.foldingRules = new (acequire(data.foldingRules.hookFrom).FoldMode)(
-        ...data.foldingRules.args
+        ...data.foldingRules.args,
       );
       this.$behavior = this.$defaultBehaviour;
     };
@@ -70,7 +66,7 @@ export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
       ['exports', 'module'],
       function (require: never, exports: { Mode: typeof Mode }) {
         exports.Mode = Mode;
-      }
+      },
     );
     this.currentMode = data.id;
   }

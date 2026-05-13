@@ -30,7 +30,7 @@ class TooltipManager {
       scaleX: 0.1,
       scaleY: 0.1,
       ease: 'Linear',
-      duration: 200
+      duration: 200,
     });
   }
 
@@ -45,7 +45,7 @@ class TooltipManager {
       targets: tooltipContainer,
       scale: 0,
       ease: 'linear',
-      duration: 200
+      duration: 200,
     });
     tooltipContainer?.setScale(0);
   }

@@ -10,13 +10,13 @@ import {
   defaultState,
   defaultWorkspaceManager,
   getDefaultFilePath,
-  OverallState
+  type OverallState,
 } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import Constants from '../../utils/Constants';
 import {
   showSuccessMessage,
-  showWarningMessage
+  showWarningMessage,
 } from '../../utils/notifications/NotificationsHelper';
 import PlaygroundSaga, { shortenURLRequest } from '../PlaygroundSaga';
 
@@ -63,7 +63,7 @@ describe('Playground saga tests', () => {
 
   test('puts updateShortURL with correct params when shorten request is successful', () => {
     const dummyFiles: Record<string, string> = {
-      [defaultPlaygroundFilePath]: '1 + 1;'
+      [defaultPlaygroundFilePath]: '1 + 1;',
     };
     const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
@@ -78,8 +78,8 @@ describe('Playground saga tests', () => {
               filePath: defaultPlaygroundFilePath,
               value: dummyFiles[defaultPlaygroundFilePath],
               breakpoints: [],
-              highlightedLines: []
-            }
+              highlightedLines: [],
+            },
           ],
           usingSubst: false,
           usingCse: false,
@@ -88,17 +88,17 @@ describe('Playground saga tests', () => {
           currentStep: -1,
           stepsTotal: 0,
           breakpointSteps: [],
-          changepointSteps: []
-        }
-      }
+          changepointSteps: [],
+        },
+      },
     };
     const queryString = createQueryString(dummyFiles, dummyState);
     const nxState: OverallState = {
       ...dummyState,
       playground: {
         queryString,
-        ...dummyState.playground
-      }
+        ...dummyState.playground,
+      },
     };
 
     // a fake response that looks like the real one
@@ -108,20 +108,20 @@ describe('Playground saga tests', () => {
         url: 'https://www.google.com',
         title: 'Google',
         date: '2020-05-21 10:51:59',
-        ip: '11.11.11.11'
+        ip: '11.11.11.11',
       },
       status: 'success',
       message: 'https://www.google.com added to database',
       title: 'Google',
       shorturl: 'http://url-shortener.com/t',
-      statusCode: 200
+      statusCode: 200,
     };
 
     return expectSaga(PlaygroundSaga)
       .withState(nxState)
       .dispatch({
         type: PlaygroundActions.shortenURL.type,
-        payload: ''
+        payload: '',
       })
       .provide([[call(shortenURLRequest, queryString, ''), mockResp]])
       .not.call(showWarningMessage, errMsg)
@@ -132,7 +132,7 @@ describe('Playground saga tests', () => {
 
   test('puts updateShortURL with correct params when shorten request with keyword is successful', () => {
     const dummyFiles: Record<string, string> = {
-      [defaultPlaygroundFilePath]: '1 + 1;'
+      [defaultPlaygroundFilePath]: '1 + 1;',
     };
     const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
@@ -147,8 +147,8 @@ describe('Playground saga tests', () => {
               filePath: defaultPlaygroundFilePath,
               value: dummyFiles[defaultPlaygroundFilePath],
               breakpoints: [],
-              highlightedLines: []
-            }
+              highlightedLines: [],
+            },
           ],
           usingSubst: false,
           usingCse: false,
@@ -157,17 +157,17 @@ describe('Playground saga tests', () => {
           currentStep: -1,
           stepsTotal: 0,
           breakpointSteps: [],
-          changepointSteps: []
-        }
-      }
+          changepointSteps: [],
+        },
+      },
     };
     const queryString = createQueryString(dummyFiles, dummyState);
     const nxState: OverallState = {
       ...dummyState,
       playground: {
         queryString,
-        ...dummyState.playground
-      }
+        ...dummyState.playground,
+      },
     };
 
     // a fake response that looks like the real one
@@ -177,20 +177,20 @@ describe('Playground saga tests', () => {
         url: 'https://www.google.com',
         title: 'Google',
         date: '2020-05-21 10:51:59',
-        ip: '11.11.11.11'
+        ip: '11.11.11.11',
       },
       status: 'success',
       message: 'https://www.google.com added to database',
       title: 'Google',
       shorturl: 'http://url-shortener.com/t',
-      statusCode: 200
+      statusCode: 200,
     };
 
     return expectSaga(PlaygroundSaga)
       .withState(nxState)
       .dispatch({
         type: PlaygroundActions.shortenURL.type,
-        payload: 'tester'
+        payload: 'tester',
       })
       .provide([[call(shortenURLRequest, queryString, 'tester'), mockResp]])
       .not.call(showWarningMessage, errMsg)
@@ -201,7 +201,7 @@ describe('Playground saga tests', () => {
 
   test('shows warning message when shorten request failed', () => {
     const dummyFiles: Record<string, string> = {
-      [defaultPlaygroundFilePath]: '1 + 1;'
+      [defaultPlaygroundFilePath]: '1 + 1;',
     };
     const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
@@ -216,8 +216,8 @@ describe('Playground saga tests', () => {
               filePath: defaultPlaygroundFilePath,
               value: dummyFiles[defaultPlaygroundFilePath],
               breakpoints: [],
-              highlightedLines: []
-            }
+              highlightedLines: [],
+            },
           ],
           usingSubst: false,
           usingCse: false,
@@ -226,24 +226,24 @@ describe('Playground saga tests', () => {
           currentStep: -1,
           stepsTotal: 0,
           breakpointSteps: [],
-          changepointSteps: []
-        }
-      }
+          changepointSteps: [],
+        },
+      },
     };
     const queryString = createQueryString(dummyFiles, dummyState);
     const nxState: OverallState = {
       ...dummyState,
       playground: {
         queryString,
-        ...dummyState.playground
-      }
+        ...dummyState.playground,
+      },
     };
 
     return expectSaga(PlaygroundSaga)
       .withState(nxState)
       .dispatch({
         type: PlaygroundActions.shortenURL.type,
-        payload: ''
+        payload: '',
       })
       .provide([[call(shortenURLRequest, queryString, ''), null]])
       .call(showWarningMessage, errMsg)
@@ -253,7 +253,7 @@ describe('Playground saga tests', () => {
 
   test('shows message and gives url when shorten request returns duplicate error', () => {
     const dummyFiles: Record<string, string> = {
-      [defaultPlaygroundFilePath]: '1 + 1;'
+      [defaultPlaygroundFilePath]: '1 + 1;',
     };
     const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
@@ -268,8 +268,8 @@ describe('Playground saga tests', () => {
               filePath: defaultPlaygroundFilePath,
               value: dummyFiles[defaultPlaygroundFilePath],
               breakpoints: [],
-              highlightedLines: []
-            }
+              highlightedLines: [],
+            },
           ],
           usingSubst: false,
           usingCse: false,
@@ -278,17 +278,17 @@ describe('Playground saga tests', () => {
           currentStep: -1,
           stepsTotal: 0,
           breakpointSteps: [],
-          changepointSteps: []
-        }
-      }
+          changepointSteps: [],
+        },
+      },
     };
     const queryString = createQueryString(dummyFiles, dummyState);
     const nxState: OverallState = {
       ...dummyState,
       playground: {
         queryString,
-        ...dummyState.playground
-      }
+        ...dummyState.playground,
+      },
     };
 
     // a fake response that looks like the real one
@@ -301,19 +301,19 @@ describe('Playground saga tests', () => {
         title: 'Google',
         date: '2020-05-21 10:51:59',
         ip: '11.11.11.11',
-        clicks: '0'
+        clicks: '0',
       },
       message: 'https://www.google.com already exists in database',
       title: 'Google',
       shorturl: 'http://url-shortener.com/t',
-      statusCode: 200
+      statusCode: 200,
     };
 
     return expectSaga(PlaygroundSaga)
       .withState(nxState)
       .dispatch({
         type: PlaygroundActions.shortenURL.type,
-        payload: ''
+        payload: '',
       })
       .provide([[call(shortenURLRequest, queryString, ''), mockResp]])
       .call(showSuccessMessage, mockResp.message)
@@ -324,7 +324,7 @@ describe('Playground saga tests', () => {
 
   test('shows warning when shorten request returns some error without url', () => {
     const dummyFiles: Record<string, string> = {
-      [defaultPlaygroundFilePath]: '1 + 1;'
+      [defaultPlaygroundFilePath]: '1 + 1;',
     };
     const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
@@ -339,8 +339,8 @@ describe('Playground saga tests', () => {
               filePath: defaultPlaygroundFilePath,
               value: dummyFiles[defaultPlaygroundFilePath],
               breakpoints: [],
-              highlightedLines: []
-            }
+              highlightedLines: [],
+            },
           ],
           usingSubst: false,
           usingCse: false,
@@ -349,17 +349,17 @@ describe('Playground saga tests', () => {
           currentStep: -1,
           stepsTotal: 0,
           breakpointSteps: [],
-          changepointSteps: []
-        }
-      }
+          changepointSteps: [],
+        },
+      },
     };
     const queryString = createQueryString(dummyFiles, dummyState);
     const nxState: OverallState = {
       ...dummyState,
       playground: {
         queryString,
-        ...dummyState.playground
-      }
+        ...dummyState.playground,
+      },
     };
 
     // a fake response that looks like the real one
@@ -367,14 +367,14 @@ describe('Playground saga tests', () => {
       status: 'fail',
       code: 'error:keyword',
       message: 'Short URL t already exists in database or is reserved',
-      statusCode: 200
+      statusCode: 200,
     };
 
     return expectSaga(PlaygroundSaga)
       .withState(nxState)
       .dispatch({
         type: PlaygroundActions.shortenURL.type,
-        payload: ''
+        payload: '',
       })
       .provide([[call(shortenURLRequest, queryString, ''), mockResp]])
       .call(showWarningMessage, mockResp.message)
@@ -384,7 +384,7 @@ describe('Playground saga tests', () => {
 
   test('returns errMsg when API call timesout', () => {
     const dummyFiles: Record<string, string> = {
-      [defaultPlaygroundFilePath]: '1 + 1;'
+      [defaultPlaygroundFilePath]: '1 + 1;',
     };
     const defaultPlaygroundState = createDefaultWorkspace('playground');
     const dummyState: OverallState = {
@@ -399,8 +399,8 @@ describe('Playground saga tests', () => {
               filePath: defaultPlaygroundFilePath,
               value: dummyFiles[defaultPlaygroundFilePath],
               breakpoints: [],
-              highlightedLines: []
-            }
+              highlightedLines: [],
+            },
           ],
           usingSubst: false,
           usingCse: false,
@@ -409,30 +409,30 @@ describe('Playground saga tests', () => {
           currentStep: -1,
           stepsTotal: 0,
           breakpointSteps: [],
-          changepointSteps: []
-        }
-      }
+          changepointSteps: [],
+        },
+      },
     };
     const queryString = createQueryString(dummyFiles, dummyState);
     const nxState: OverallState = {
       ...dummyState,
       playground: {
         queryString,
-        ...dummyState.playground
-      }
+        ...dummyState.playground,
+      },
     };
 
     return expectSaga(PlaygroundSaga)
       .withState(nxState)
       .dispatch({
         type: PlaygroundActions.shortenURL.type,
-        payload: ''
+        payload: '',
       })
       .provide({
         race: () => ({
           result: undefined,
-          hasTimedOut: true
-        })
+          hasTimedOut: true,
+        }),
       })
       .call(showWarningMessage, errMsg)
       .put(PlaygroundActions.updateShortURL('ERROR'))
@@ -458,7 +458,7 @@ function createQueryString(files: Record<string, string>, state: OverallState): 
     chap: chapter,
     variant,
     ext: external,
-    exec: execTime
+    exec: execTime,
   });
   return newQueryString;
 }

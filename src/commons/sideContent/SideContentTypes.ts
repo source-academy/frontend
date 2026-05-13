@@ -1,6 +1,6 @@
-import { IconName } from '@blueprintjs/core';
+import type { IconName } from '@blueprintjs/core';
 
-import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 export enum SideContentType {
   autograder = 'autograder',
@@ -34,7 +34,7 @@ export enum SideContentType {
   testcases = 'testcases',
   toneMatrix = 'tone_matrix',
   htmlDisplay = 'html_display',
-  upload = 'upload'
+  upload = 'upload',
 }
 
 /**
@@ -99,7 +99,7 @@ export type SideContentState = {
 export type ChangeTabsCallback = (
   newId: SideContentType,
   oldId: SideContentType,
-  event: React.MouseEvent<HTMLElement>
+  event: React.MouseEvent<HTMLElement>,
 ) => void;
 
 export type SideContentDispatchProps = {

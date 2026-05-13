@@ -1,11 +1,11 @@
 import DashboardActions from '../DashboardActions';
-import { GradingSummary } from '../DashboardTypes';
+import type { GradingSummary } from '../DashboardTypes';
 
 test('fetchGroupGradingSummary generates correct action object', () => {
   const action = DashboardActions.fetchGroupGradingSummary();
   expect(action).toEqual({
     type: DashboardActions.fetchGroupGradingSummary.type,
-    payload: {}
+    payload: {},
   });
 });
 
@@ -17,7 +17,7 @@ test('updateGroupGradingSummary generates correct action object', () => {
       'ungradedMissions',
       'submittedMissions',
       'ungradedQuests',
-      'submittedQuests'
+      'submittedQuests',
     ],
     rows: [
       {
@@ -26,13 +26,13 @@ test('updateGroupGradingSummary generates correct action object', () => {
         ungradedMissions: 123,
         submittedMissions: 200,
         ungradedQuests: 100,
-        submittedQuests: 117
-      }
-    ]
+        submittedQuests: 117,
+      },
+    ],
   };
   const action = DashboardActions.updateGroupGradingSummary(overviews);
   expect(action).toEqual({
     type: DashboardActions.updateGroupGradingSummary.type,
-    payload: overviews
+    payload: overviews,
   });
 });

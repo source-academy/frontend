@@ -2,7 +2,7 @@ import { Button } from '@blueprintjs/core';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Tokens } from 'src/commons/application/types/SessionTypes';
+import type { Tokens } from 'src/commons/application/types/SessionTypes';
 import { useSession, useTokens } from 'src/commons/utils/Hooks';
 import { initRagChat, sendRagMessage } from 'src/features/ragChat/api';
 import ChatbotCodeSnippet from 'src/pages/sicp/subcomponents/chatbot/ChatbotCodeSnippet';
@@ -24,7 +24,7 @@ type RagMessageRendererProps = {
 const RagMessageRenderer: React.FC<RagMessageRendererProps> = ({
   message,
   activeSnippetId,
-  setActiveSnippetId
+  setActiveSnippetId,
 }) => {
   return (
     <ReactMarkdown
@@ -50,7 +50,7 @@ const RagMessageRenderer: React.FC<RagMessageRendererProps> = ({
               {children}
             </code>
           );
-        }
+        },
       }}
     >
       {message.content}
@@ -68,13 +68,13 @@ type Props = {
 const createInitialMessage = (): ChatMessage => ({
   id: uuid(),
   content: 'Hi! Ask me about lectures, tutorials, recitations, or past exams!',
-  role: 'assistant'
+  role: 'assistant',
 });
 
 const createErrorMessage = (): ChatMessage => ({
   id: uuid(),
   content: 'Sorry, something went wrong. Please try again later.',
-  role: 'assistant'
+  role: 'assistant',
 });
 
 const scrollToBottom = (ref: React.RefObject<HTMLDivElement | null>) => {
@@ -85,7 +85,7 @@ const RagChatBox: React.FC<Props> = ({
   isExpanded,
   toggleExpanded,
   activeSnippetId,
-  setActiveSnippetId
+  setActiveSnippetId,
 }) => {
   const chatRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -105,7 +105,7 @@ const RagChatBox: React.FC<Props> = ({
     }
     const authedTokens: Tokens = {
       accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken
+      refreshToken: tokens.refreshToken,
     };
     setUserInput('');
     setMessages(prev => [...prev, { id: uuid(), role: 'user', content: userInput }]);
@@ -127,14 +127,14 @@ const RagChatBox: React.FC<Props> = ({
         sendMessage();
       }
     },
-    [isLoading, sendMessage]
+    [isLoading, sendMessage],
   );
 
   const resetChat = useCallback(() => {
     if (!tokens.accessToken || !tokens.refreshToken) return;
     const authedTokens: Tokens = {
       accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken
+      refreshToken: tokens.refreshToken,
     };
 
     initRagChat(authedTokens)
@@ -144,7 +144,7 @@ const RagChatBox: React.FC<Props> = ({
         if (conversationMessages && conversationMessages.length > 0) {
           const messagesWithIds = conversationMessages.map(msg => ({
             ...msg,
-            id: msg.id || uuid()
+            id: msg.id || uuid(),
           }));
           setMessages(messagesWithIds);
         } else {

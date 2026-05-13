@@ -28,6 +28,6 @@ export abstract class DrawableTreeNode extends TreeNode {
     y: number,
     parentX: number,
     parentY: number,
-    colorIndex: number
+    colorIndex: number,
   ): React.ReactElement;
 }

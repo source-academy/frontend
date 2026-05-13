@@ -33,7 +33,7 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
   id,
   activeSnippetId,
   setActiveSnippet,
-  language = 'javascript'
+  language = 'javascript',
 }) => {
   const dispatch = useDispatch();
 
@@ -56,7 +56,7 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
     initialEditorValueHash,
     prependLength: undefined,
     isSicpEditor: true,
-    handleCloseEditor: handleClose
+    handleCloseEditor: handleClose,
   };
 
   const closeButton = <ControlBarCloseButton key="close" handleClose={handleClose} />;
@@ -64,7 +64,7 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
   const controlBarProps = {
     editorButtons: [],
     flowButtons: [],
-    editingWorkspaceButtons: [closeButton]
+    editingWorkspaceButtons: [closeButton],
   };
 
   return (
@@ -74,7 +74,7 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
         isOpen={isActive}
         transitionDuration={0}
         backdropProps={{
-          style: { position: 'fixed' }
+          style: { position: 'fixed' },
         }}
       >
         <div className={classes['snippet-open']}>

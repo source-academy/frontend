@@ -1,7 +1,8 @@
 import ImageAssets from '../assets/ImageAssets';
-import { SpeakerDetail } from '../character/GameCharacterTypes';
+import type { SpeakerDetail } from '../character/GameCharacterTypes';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
-import { GamePosition, ItemId } from '../commons/CommonTypes';
+import type { ItemId } from '../commons/CommonTypes';
+import { GamePosition } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
@@ -51,7 +52,7 @@ export class QuizSpeakerRenderer {
         ? this.createSpeakerBox(this.getUsername(), GamePosition.Right)
         : this.createSpeakerBox(
             GameGlobalAPI.getInstance().getCharacterById(speakerId).name,
-            GamePosition.Left
+            GamePosition.Left,
           );
     GameGlobalAPI.getInstance().addToLayer(Layer.QuizSpeakerBox, speakerContainer);
   }
@@ -64,7 +65,7 @@ export class QuizSpeakerRenderer {
     const speakerSprite = GameGlobalAPI.getInstance().createCharacterSprite(
       speakerId,
       expression,
-      speakerPosition
+      speakerPosition,
     );
     this.speakerSprite = speakerSprite;
     GameGlobalAPI.getInstance().addToLayer(Layer.QuizSpeaker, speakerSprite);
@@ -77,14 +78,14 @@ export class QuizSpeakerRenderer {
       gameManager,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.speakerBox.key
+      ImageAssets.speakerBox.key,
     ).setAlpha(0.8);
 
     const speakerText = createBitmapText(
       gameManager,
       '',
       QuizConstants.speakerTextConfig,
-      speakerTextStyle
+      speakerTextStyle,
     );
 
     if (position === GamePosition.Right) {

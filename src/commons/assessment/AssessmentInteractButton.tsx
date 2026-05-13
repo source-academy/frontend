@@ -1,5 +1,5 @@
 import { Button } from '@blueprintjs/core';
-import { IconName, IconNames } from '@blueprintjs/icons';
+import { type IconName, IconNames } from '@blueprintjs/icons';
 import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router';
 
@@ -8,7 +8,7 @@ import { filterNotificationsByAssessment } from '../notificationBadge/Notificati
 import Constants from '../utils/Constants';
 import { useTypedSelector } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
-import { AssessmentOverview, AssessmentStatuses } from './AssessmentTypes';
+import { type AssessmentOverview, AssessmentStatuses } from './AssessmentTypes';
 
 type Props = {
   overview: AssessmentOverview;
@@ -30,7 +30,7 @@ const AssessmentInteractButton: React.FC<Props> = ({ overview }) => {
         variant="minimal"
         onClick={() =>
           dispatch(
-            SessionActions.acknowledgeNotifications(filterNotificationsByAssessment(overview.id))
+            SessionActions.acknowledgeNotifications(filterNotificationsByAssessment(overview.id)),
           )
         }
       >
@@ -48,7 +48,7 @@ type ButtonConfiguration = {
 };
 
 const createButtonConfiguration = (
-  overviewStatus: AssessmentOverview['status']
+  overviewStatus: AssessmentOverview['status'],
 ): ButtonConfiguration => {
   let icon: IconName;
   let label: string;

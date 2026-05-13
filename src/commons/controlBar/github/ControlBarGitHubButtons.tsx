@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import { useResponsive } from 'src/commons/utils/Hooks';
 
-import { GitHubSaveInfo } from '../../../features/github/GitHubTypes';
+import type { GitHubSaveInfo } from '../../../features/github/GitHubTypes';
 import ControlButton from '../../ControlButton';
 
 type Props = {

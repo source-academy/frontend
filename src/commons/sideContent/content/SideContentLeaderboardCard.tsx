@@ -1,7 +1,7 @@
 import { Card, Classes, Elevation, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
 
-import { ContestEntry } from '../../assessment/AssessmentTypes';
+import type { ContestEntry } from '../../assessment/AssessmentTypes';
 
 type Props = {
   handleContestEntryClick: (submissionId: number, answer: string) => void;
@@ -12,7 +12,7 @@ type Props = {
 const SideContentLeaderboardCard: React.FC<Props> = ({
   handleContestEntryClick,
   contestEntry,
-  rank
+  rank,
 }) => {
   return (
     <div className={classNames('LeaderboardCard')}>

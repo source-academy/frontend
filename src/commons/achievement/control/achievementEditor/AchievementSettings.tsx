@@ -1,7 +1,7 @@
 import { Button, Checkbox, Dialog, EditableText, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useState } from 'react';
-import { AchievementItem } from 'src/features/achievement/AchievementTypes';
+import type { AchievementItem } from 'src/features/achievement/AchievementTypes';
 
 import EditableGoalUuids from './achievementSettings/EditableGoalUuids';
 import EditablePosition from './achievementSettings/EditablePosition';
@@ -22,7 +22,7 @@ const AchievementSettings: React.FC<Props> = ({
   changePosition,
   changePrerequisiteUuids,
   changeIsVariableXp,
-  editableAchievement
+  editableAchievement,
 }) => {
   const { uuid, cardBackground, goalUuids, position, prerequisiteUuids, isVariableXp } =
     editableAchievement;

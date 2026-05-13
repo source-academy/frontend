@@ -1,12 +1,8 @@
 import { Card, Elevation, H6 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 
-import {
-  Assessment,
-  IProgrammingQuestion,
-  Testcase,
-  testcaseTemplate
-} from '../assessment/AssessmentTypes';
+import type { Assessment, IProgrammingQuestion, Testcase } from '../assessment/AssessmentTypes';
+import { testcaseTemplate } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import { getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';

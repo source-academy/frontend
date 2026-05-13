@@ -7,12 +7,12 @@ import {
   Intent,
   NumericInput,
   Switch,
-  Tooltip
+  Tooltip,
 } from '@blueprintjs/core';
 import { IconNames, Team } from '@blueprintjs/icons';
 import { useCallback, useState } from 'react';
 
-import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
 import CalculateContestScoreButton from '../configureControls/CalculateContestScoreButton';
 import DispatchContestXpButton from '../configureControls/DispatchContestXpButton';
@@ -25,7 +25,7 @@ type Props = {
     id: number,
     hasVotingFeatures: boolean,
     hasTokenCounter: boolean,
-    isAutosaveEnabled: boolean
+    isAutosaveEnabled: boolean,
   ) => void;
   handleAssignEntriesForVoting: (id: number) => void;
   data: AssessmentOverview;
@@ -34,7 +34,7 @@ type Props = {
 const ConfigureCell: React.FC<Props> = ({
   handleConfigureAssessment,
   handleAssignEntriesForVoting,
-  data
+  data,
 }) => {
   const [isDialogOpen, setDialogState] = useState(false);
   const [hasVotingFeatures, setHasVotingFeatures] = useState(!!data.hasVotingFeatures);
@@ -57,7 +57,7 @@ const ConfigureCell: React.FC<Props> = ({
     handleConfigureAssessment,
     hasTokenCounter,
     hasVotingFeatures,
-    isAutosaveEnabled
+    isAutosaveEnabled,
   ]);
 
   // Toggles in configuration pannel

@@ -9,14 +9,14 @@ import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
-import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
+import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 import {
   readSicpSectionLocalStorage,
   setSicpSectionLocalStorage,
   SICP_CACHE_KEY,
-  SICP_INDEX
+  SICP_INDEX,
 } from 'src/features/sicp/utils/SicpUtils';
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
@@ -30,7 +30,7 @@ const extension = '.json';
 // Context to determine which code snippet is active
 export const CodeSnippetContext = createContext({
   active: '0',
-  setActive: (x: string) => {}
+  setActive: (x: string) => {},
 });
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
@@ -82,7 +82,7 @@ const Sicp: React.FC = () => {
 
     parent.scrollTo({
       behavior: 'smooth',
-      top: ref.offsetTop - relativeTop
+      top: ref.offsetTop - relativeTop,
     });
   };
 

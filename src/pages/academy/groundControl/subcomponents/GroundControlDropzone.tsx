@@ -2,8 +2,9 @@ import { Card, Elevation, HTMLSelect, Intent, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { FileRejection, useDropzone } from 'react-dropzone';
-import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
+import type { FileRejection } from 'react-dropzone';
+import { useDropzone } from 'react-dropzone';
+import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 
 import ControlButton from '../../../../commons/ControlButton';
 import { showWarningMessage } from '../../../../commons/utils/notifications/NotificationsHelper';
@@ -31,7 +32,7 @@ const MaterialDropzone: React.FC<DropzoneProps> = props => {
     return props.assessmentConfigurations?.map(e => {
       return {
         value: e.assessmentConfigId,
-        label: e.type
+        label: e.type,
       };
     });
   }, [props.assessmentConfigurations]);
@@ -54,7 +55,7 @@ const MaterialDropzone: React.FC<DropzoneProps> = props => {
       setFile(acceptedFiles[0]);
       setForceUpdate(false);
     },
-    [setFile]
+    [setFile],
   );
   const handleDropRejected = useCallback((rejectedFiles: FileRejection[]) => {
     if (rejectedFiles.length > 1) {
@@ -66,7 +67,7 @@ const MaterialDropzone: React.FC<DropzoneProps> = props => {
     useDropzone({
       multiple: false,
       onDropAccepted: handleDropAccepted,
-      onDropRejected: handleDropRejected
+      onDropRejected: handleDropRejected,
     });
 
   const classList = useMemo(() => {
@@ -74,7 +75,7 @@ const MaterialDropzone: React.FC<DropzoneProps> = props => {
       'dropzone-base',
       isFocused || isDragActive ? 'dropzone-active' : undefined,
       isDragAccept ? 'dropzone-accept' : undefined,
-      isDragReject ? 'dropzone-reject' : undefined
+      isDragReject ? 'dropzone-reject' : undefined,
     );
   }, [isFocused, isDragActive, isDragAccept, isDragReject]);
 
@@ -92,7 +93,7 @@ const MaterialDropzone: React.FC<DropzoneProps> = props => {
         <Switch checked={forceUpdate} onChange={handleSwitchOnChange} />
       </div>
     ),
-    [forceUpdate, handleSwitchOnChange]
+    [forceUpdate, handleSwitchOnChange],
   );
 
   const handleConfirmForceUpdate = useCallback(() => {
@@ -120,7 +121,7 @@ const MaterialDropzone: React.FC<DropzoneProps> = props => {
         />
       </div>
     ),
-    [handleCancelForceUpdate, handleConfirmForceUpdate]
+    [handleCancelForceUpdate, handleConfirmForceUpdate],
   );
 
   return (

@@ -10,7 +10,7 @@ import {
   Tab,
   Tabs,
   Text,
-  TextArea
+  TextArea,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Chapter, Variant } from 'js-slang/dist/langs';
@@ -20,7 +20,7 @@ import AcademyActions from 'src/features/academy/AcademyActions';
 
 import { CourseHelpTextEditorTab } from '../../pages/academy/adminPanel/subcomponents/CourseConfigPanel';
 import { sourceLanguages } from '../application/ApplicationTypes';
-import { UpdateCourseConfiguration } from '../application/types/SessionTypes';
+import type { UpdateCourseConfiguration } from '../application/types/SessionTypes';
 import Markdown from '../Markdown';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
@@ -42,7 +42,7 @@ const DropdownCreateCourse = (props => {
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: '',
-    llmApiKey: ''
+    llmApiKey: '',
   });
 
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
@@ -52,7 +52,7 @@ const DropdownCreateCourse = (props => {
     { value: Chapter.SOURCE_1 },
     { value: Chapter.SOURCE_2 },
     { value: Chapter.SOURCE_3 },
-    { value: Chapter.SOURCE_4 }
+    { value: Chapter.SOURCE_4 },
   ];
 
   const sourceVariantOptions = (chapter: Chapter) =>
@@ -61,7 +61,7 @@ const DropdownCreateCourse = (props => {
       .map(e => {
         return {
           label: e.variant.replace(/^\w/, c => c.toUpperCase()),
-          value: e.variant
+          value: e.variant,
         };
       });
 
@@ -79,14 +79,14 @@ const DropdownCreateCourse = (props => {
     (
       newTabId: CourseHelpTextEditorTab,
       prevTabId: CourseHelpTextEditorTab,
-      event: React.MouseEvent<HTMLElement>
+      event: React.MouseEvent<HTMLElement>,
     ) => {
       if (newTabId === prevTabId) {
         return;
       }
       setCourseHelpTextSelectedTab(newTabId);
     },
-    [setCourseHelpTextSelectedTab]
+    [setCourseHelpTextSelectedTab],
   );
 
   return (
@@ -114,7 +114,7 @@ const DropdownCreateCourse = (props => {
             onChange={e =>
               setCourseConfig({
                 ...courseConfig,
-                courseName: e.target.value
+                courseName: e.target.value,
               })
             }
           />
@@ -131,7 +131,7 @@ const DropdownCreateCourse = (props => {
             onChange={e =>
               setCourseConfig({
                 ...courseConfig,
-                courseShortName: e.target.value
+                courseShortName: e.target.value,
               })
             }
           />
@@ -161,7 +161,7 @@ const DropdownCreateCourse = (props => {
               onChange={e =>
                 setCourseConfig({
                   ...courseConfig,
-                  moduleHelpText: e.target.value
+                  moduleHelpText: e.target.value,
                 })
               }
             />
@@ -182,7 +182,7 @@ const DropdownCreateCourse = (props => {
               onChange={e =>
                 setCourseConfig({
                   ...courseConfig,
-                  viewable: (e.target as HTMLInputElement).checked
+                  viewable: (e.target as HTMLInputElement).checked,
                 })
               }
             />
@@ -193,7 +193,7 @@ const DropdownCreateCourse = (props => {
               onChange={e =>
                 setCourseConfig({
                   ...courseConfig,
-                  enableAchievements: (e.target as HTMLInputElement).checked
+                  enableAchievements: (e.target as HTMLInputElement).checked,
                 })
               }
             />
@@ -206,7 +206,7 @@ const DropdownCreateCourse = (props => {
               onChange={e =>
                 setCourseConfig({
                   ...courseConfig,
-                  enableGame: (e.target as HTMLInputElement).checked
+                  enableGame: (e.target as HTMLInputElement).checked,
                 })
               }
             />
@@ -218,7 +218,7 @@ const DropdownCreateCourse = (props => {
               onChange={e =>
                 setCourseConfig({
                   ...courseConfig,
-                  enableLlmGrading: (e.target as HTMLInputElement).checked
+                  enableLlmGrading: (e.target as HTMLInputElement).checked,
                 })
               }
             />
@@ -237,7 +237,7 @@ const DropdownCreateCourse = (props => {
               onChange={e => {
                 setCourseConfig({
                   ...courseConfig,
-                  sourceChapter: parseInt(e.target.value)
+                  sourceChapter: parseInt(e.target.value),
                 });
               }}
               fill
@@ -255,7 +255,7 @@ const DropdownCreateCourse = (props => {
               onChange={e => {
                 setCourseConfig({
                   ...courseConfig,
-                  sourceVariant: e.target.value as Variant
+                  sourceVariant: e.target.value as Variant,
                 });
               }}
               fill
@@ -274,7 +274,7 @@ const DropdownCreateCourse = (props => {
               onChange={e =>
                 setCourseConfig({
                   ...courseConfig,
-                  llmApiKey: e.target.value
+                  llmApiKey: e.target.value,
                 })
               }
             />

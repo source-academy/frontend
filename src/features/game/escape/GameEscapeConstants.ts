@@ -1,23 +1,23 @@
 import FontAssets from '../assets/FontAssets';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
-import { BitmapFontStyle } from '../commons/CommonTypes';
+import type { BitmapFontStyle } from '../commons/CommonTypes';
 
 export const escapeOptButtonStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 30,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 export const volumeRadioOptTextStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 20,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 export const optTextStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 30,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 const EscapeConstants = {

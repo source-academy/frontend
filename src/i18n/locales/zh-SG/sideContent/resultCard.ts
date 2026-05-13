@@ -3,7 +3,7 @@ const translations = {
   syntax: '[语法] 第 {{line}} 行：{{errorExplanation}}',
   runtime: '[运行时] 第 {{line}} 行：{{errorExplanation}}',
   systemError: '[系统] {{errorMessage}}',
-  unknown: '[未知] 自动评分器错误：类型 {{errorType}}'
+  unknown: '[未知] 自动评分器错误：类型 {{errorType}}',
 };
 
 export default translations;

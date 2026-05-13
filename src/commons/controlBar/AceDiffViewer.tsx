@@ -33,13 +33,13 @@ const AceDiffViewer: React.FC<Props> = ({ currentCode, versionCode }) => {
         left: {
           content: currentCode,
           editable: false,
-          copyLinkEnabled: false
+          copyLinkEnabled: false,
         },
         right: {
           content: versionCode,
           editable: false,
-          copyLinkEnabled: false
-        }
+          copyLinkEnabled: false,
+        },
       });
     };
 

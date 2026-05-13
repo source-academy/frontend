@@ -19,7 +19,7 @@ export default {
   login,
   translation: {
     ...grading,
-    ...welcome
+    ...welcome,
   },
   sideContent: {
     autograder,
@@ -32,6 +32,6 @@ export default {
     resultCard,
     sessionManagement,
     substVisualizer,
-    upload
-  }
+    upload,
+  },
 };

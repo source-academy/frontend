@@ -13,7 +13,7 @@ import {
   RowDragModule,
   TextEditorModule,
   TextFilterModule,
-  ValidationModule
+  ValidationModule,
 } from 'ag-grid-community';
 
 const productionModules: readonly Module[] = [
@@ -29,7 +29,7 @@ const productionModules: readonly Module[] = [
   RowDragModule,
   TextEditorModule,
   TextFilterModule,
-  ValidationModule
+  ValidationModule,
 ];
 
 export const initializeAgGridModules = () => {

@@ -21,7 +21,7 @@ class DialogueRenderer {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     this.dialogueBox = createDialogueBox(gameManager).setInteractive({
       useHandCursor: true,
-      pixelPerfect: true
+      pixelPerfect: true,
     });
     this.typewriter = createTypewriter(gameManager, typewriterStyle);
     this.blinkingDiamond = this.drawDiamond(gameManager);
@@ -43,7 +43,7 @@ class DialogueRenderer {
       scene,
       screenSize.x - dialogueConstants.prompt.x - dialogueConstants.prompt.xPad,
       screenSize.y - dialogueConstants.prompt.y - dialogueConstants.prompt.yPad,
-      ImageAssets.diamond.key
+      ImageAssets.diamond.key,
     ).setDisplaySize(dialogueConstants.prompt.x, dialogueConstants.prompt.y);
 
     return { container: diamondSprite, clearBlink: blink(scene, diamondSprite) };

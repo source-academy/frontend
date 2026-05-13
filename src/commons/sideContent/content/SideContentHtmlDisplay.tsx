@@ -3,11 +3,15 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import { t } from 'i18next';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { connect, MapDispatchToProps } from 'react-redux';
-import { ResultOutput } from 'src/commons/application/ApplicationTypes';
+import { connect, type MapDispatchToProps } from 'react-redux';
+import type { ResultOutput } from 'src/commons/application/ApplicationTypes';
 
 import { beginAlertSideContent } from '../SideContentActions';
-import { SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
+import {
+  type SideContentLocation,
+  type SideContentTab,
+  SideContentType,
+} from '../SideContentTypes';
 
 type OwnProps = {
   content: string;
@@ -60,9 +64,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
   bindActionCreators(
     {
       alertSideContent: () =>
-        beginAlertSideContent(SideContentType.htmlDisplay, props.workspaceLocation)
+        beginAlertSideContent(SideContentType.htmlDisplay, props.workspaceLocation),
     },
-    dispatch
+    dispatch,
   );
 
 export const SideContentHtmlDisplay = connect(null, mapDispatchToProps)(SideContentHtmlDisplayBase);
@@ -70,7 +74,7 @@ export const SideContentHtmlDisplay = connect(null, mapDispatchToProps)(SideCont
 const makeHtmlDisplayTabFrom = (
   output: ResultOutput,
   handleError: (errorMsg: string) => void,
-  workspaceLocation: SideContentLocation
+  workspaceLocation: SideContentLocation,
 ): SideContentTab => ({
   label: t($ => $.htmlDisplay.label, { ns: 'sideContent' }),
   iconName: IconNames.MODAL,
@@ -81,6 +85,6 @@ const makeHtmlDisplayTabFrom = (
       handleAddHtmlConsoleError={handleError}
     />
   ),
-  id: SideContentType.htmlDisplay
+  id: SideContentType.htmlDisplay,
 });
 export { makeHtmlDisplayTabFrom as default, type OwnProps as SideContentHtmlDisplayProps };

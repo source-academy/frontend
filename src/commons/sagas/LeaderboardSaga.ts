@@ -1,7 +1,7 @@
 import { call, put } from 'redux-saga/effects';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 
-import { Tokens } from '../application/types/SessionTypes';
+import type { Tokens } from '../application/types/SessionTypes';
 import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
 import { selectTokens } from './BackendSaga';
@@ -9,7 +9,7 @@ import {
   getAllContests,
   getContestPopularVoteLeaderboard,
   getContestScoreLeaderboard,
-  getOverallLeaderboardXP
+  getOverallLeaderboardXP,
 } from './RequestsSaga';
 
 const LeaderboardSaga = combineSagaHandlers({
@@ -32,7 +32,7 @@ const LeaderboardSaga = combineSagaHandlers({
       getContestScoreLeaderboard,
       assessmentId,
       visibleEntries,
-      tokens
+      tokens,
     );
 
     if (contestScores) {
@@ -48,7 +48,7 @@ const LeaderboardSaga = combineSagaHandlers({
       getContestPopularVoteLeaderboard,
       assessmentId,
       visibleEntries,
-      tokens
+      tokens,
     );
     if (contestPopularVotes) {
       yield put(actions.saveAllContestPopularVotes(contestPopularVotes));
@@ -63,7 +63,7 @@ const LeaderboardSaga = combineSagaHandlers({
     if (contests) {
       yield put(actions.saveContests(contests));
     }
-  }
+  },
 });
 
 export default LeaderboardSaga;

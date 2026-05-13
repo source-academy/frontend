@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import SourceAcademyGame, { AccountInfo, GameType } from 'src/features/game/SourceAcademyGame';
+import type { AccountInfo } from 'src/features/game/SourceAcademyGame';
+import SourceAcademyGame, { GameType } from 'src/features/game/SourceAcademyGame';
 import { gameSimulatorConfig } from 'src/features/gameSimulator/GameSimulatorConstants';
 import { GameSimulatorState } from 'src/features/gameSimulator/GameSimulatorTypes';
 
@@ -43,7 +44,7 @@ const GameSimulator: React.FC = () => {
       accessToken: session.accessToken,
       refreshToken: session.refreshToken,
       role: session.role,
-      name: session.name
+      name: session.name,
     } as AccountInfo);
   }, [session]);
 

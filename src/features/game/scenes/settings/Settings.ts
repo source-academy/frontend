@@ -12,7 +12,7 @@ import { createBitmapText } from '../../utils/TextUtils';
 import SettingsConstants, {
   applySettingsTextStyle,
   optionHeaderTextStyle,
-  optionTextStyle
+  optionTextStyle,
 } from './SettingsConstants';
 
 /**
@@ -44,14 +44,14 @@ class Settings extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.spaceshipBg.key
+      ImageAssets.spaceshipBg.key,
     );
 
     const settingBgImg = new Phaser.GameObjects.Image(
       this,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.settingBanner.key
+      ImageAssets.settingBanner.key,
     );
     this.getLayerManager().addToLayer(Layer.Background, background);
     this.getLayerManager().addToLayer(Layer.Background, settingBgImg);
@@ -68,19 +68,19 @@ class Settings extends Phaser.Scene {
     const optHeaderPos = calcTableFormatPos({
       direction: Direction.Column,
       numOfItems: optHeader.length,
-      maxYSpace: SettingsConstants.opt.ySpace
+      maxYSpace: SettingsConstants.opt.ySpace,
     });
     optCont.add(
-      optHeader.map((header, index) => this.createOptionHeader(header, optHeaderPos[index][1]))
+      optHeader.map((header, index) => this.createOptionHeader(header, optHeaderPos[index][1])),
     );
 
     // Get user default choice
     const { bgmVolume, sfxVolume, skipConfirm } = this.getSaveManager().getSettings();
     const sfxVolIdx = SettingsConstants.volContainerOpts.findIndex(
-      value => parseFloat(value) === sfxVolume
+      value => parseFloat(value) === sfxVolume,
     );
     const bgmVolIdx = SettingsConstants.volContainerOpts.findIndex(
-      value => parseFloat(value) === bgmVolume
+      value => parseFloat(value) === bgmVolume,
     );
     const skipConfirmIdx = skipConfirm !== false ? 0 : 1;
 
@@ -109,7 +109,7 @@ class Settings extends Phaser.Scene {
       message: 'Apply Settings',
       textConfig: { x: 0, y: 0, oriX: 0.33, oriY: 0.85 },
       bitMapTextStyle: applySettingsTextStyle,
-      onUp: () => this.applySettings()
+      onUp: () => this.applySettings(),
     }).setPosition(screenCenter.x, screenSize.y * 0.925);
 
     // Create back button to main menu
@@ -146,13 +146,13 @@ class Settings extends Phaser.Scene {
       this,
       screenCenter.x,
       0,
-      ImageAssets.settingOption.key
+      ImageAssets.settingOption.key,
     );
     const headerText = createBitmapText(
       this,
       header,
       SettingsConstants.optHeaderTextConfig,
-      optionHeaderTextStyle
+      optionHeaderTextStyle,
     );
     optHeaderCont.add([headerDiv, headerText]);
     return optHeaderCont;
@@ -172,10 +172,10 @@ class Settings extends Phaser.Scene {
         defaultChoiceIdx: defaultChoiceIdx,
         maxXSpace: SettingsConstants.opt.xSpace,
         choiceTextConfig: SettingsConstants.radioButtonsTextConfig,
-        bitmapTextStyle: optionTextStyle
+        bitmapTextStyle: optionTextStyle,
       },
       SettingsConstants.opt.x,
-      -screenCenter.y + yPos
+      -screenCenter.y + yPos,
     );
   }
 

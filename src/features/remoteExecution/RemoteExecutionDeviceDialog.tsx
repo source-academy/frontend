@@ -8,7 +8,7 @@ import {
   FormGroup,
   HTMLSelect,
   InputGroup,
-  Tooltip
+  Tooltip,
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { useState } from 'react';
@@ -21,9 +21,10 @@ import {
   checkFieldValidity,
   collectFieldValues,
   useField,
-  validateNotEmpty
+  validateNotEmpty,
 } from '../../commons/utils/FormHelper';
-import { Device, deviceTypes } from './RemoteExecutionTypes';
+import type { Device } from './RemoteExecutionTypes';
+import { deviceTypes } from './RemoteExecutionTypes';
 
 type Props = {
   isOpen: boolean;
@@ -36,14 +37,14 @@ const enum FACING_MODE {
   USER = 'user',
   ENVIRONMENT = 'environment',
   LEFT = 'left',
-  RIGHT = 'right'
+  RIGHT = 'right',
 }
 
 const RemoteExecutionDeviceDialog: React.FC<Props> = ({
   isOpen,
   onClose,
   deviceToEdit,
-  defaultSecret
+  defaultSecret,
 }) => {
   const dispatch = useDispatch();
   const nameField = useField<HTMLInputElement>(validateNotEmpty);
@@ -115,7 +116,7 @@ const RemoteExecutionDeviceDialog: React.FC<Props> = ({
             className={classNames(
               Classes.INPUT,
               Classes.FILL,
-              nameField.isValid || Classes.INTENT_DANGER
+              nameField.isValid || Classes.INTENT_DANGER,
             )}
             type="text"
             ref={nameField.ref}
@@ -161,7 +162,7 @@ const RemoteExecutionDeviceDialog: React.FC<Props> = ({
               textAlign: 'center',
               display: 'flex',
               flexDirection: 'column',
-              rowGap: '0.5rem'
+              rowGap: '0.5rem',
             }}
           >
             <QrReader
@@ -178,7 +179,7 @@ const RemoteExecutionDeviceDialog: React.FC<Props> = ({
                 aspectRatio: 1,
                 frameRate: { ideal: 12 },
                 deviceId: { ideal: '0' },
-                facingMode: { ideal: cameraFacingMode }
+                facingMode: { ideal: cameraFacingMode },
               }}
               containerStyle={{ width: '50%', marginInline: 'auto' }}
               videoStyle={{ borderRadius: '0.3em' }}
@@ -190,7 +191,9 @@ const RemoteExecutionDeviceDialog: React.FC<Props> = ({
                 // Need to do this to force a refresh of the scanner component
                 setShowScanner(false);
                 setCameraFacingMode(() =>
-                  cameraFacingMode === FACING_MODE.USER ? FACING_MODE.ENVIRONMENT : FACING_MODE.USER
+                  cameraFacingMode === FACING_MODE.USER
+                    ? FACING_MODE.ENVIRONMENT
+                    : FACING_MODE.USER,
                 );
                 setTimeout(() => setShowScanner(true), 1);
               }}

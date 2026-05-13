@@ -14,7 +14,7 @@ class GameLayerManager {
 
   constructor(scene: Phaser.Scene) {
     this.layers = new Map(
-      defaultLayerSequence.map(layer => [layer, new Phaser.GameObjects.Container(scene, 0, 0)])
+      defaultLayerSequence.map(layer => [layer, new Phaser.GameObjects.Container(scene, 0, 0)]),
     );
     this.layers.forEach(layer => scene.add.existing(layer));
   }

@@ -12,7 +12,7 @@ import {
   DataTreeNode,
   DrawableTreeNode,
   FunctionTreeNode,
-  TreeNode
+  TreeNode,
 } from './TreeNode';
 
 /**
@@ -44,7 +44,7 @@ export class BinaryTreeDrawer extends OriginalDrawer {
         align: 'center',
         fontStyle: 'normal',
         fontSize: 20,
-        fill: Config.Stroke
+        fill: Config.Stroke,
       };
       const konvaText = new Konva.Text(textConfig);
       this.width = konvaText.width();
@@ -97,7 +97,7 @@ export class BinaryTreeDrawer extends OriginalDrawer {
     colorIndex: number,
     parentIndex: number,
     originIndex: number,
-    originX: number
+    originX: number,
   ) {
     if (node instanceof AlreadyParsedTreeNode) {
       // if its child is part of a cycle and it's been drawn, link back to that node instead
@@ -105,12 +105,12 @@ export class BinaryTreeDrawer extends OriginalDrawer {
       const arrowProps = {
         from: {
           x: parentX + Config.BoxWidth / 2,
-          y: parentY + Config.BoxHeight / 2
+          y: parentY + Config.BoxHeight / 2,
         },
         to: {
           x: drawnNode.drawableX!,
-          y: drawnNode.drawableY!
-        }
+          y: drawnNode.drawableY!,
+        },
       };
 
       const isBackwardArrow = arrowProps.from.y >= arrowProps.to.y;
@@ -121,11 +121,11 @@ export class BinaryTreeDrawer extends OriginalDrawer {
         // Update the minX and minY, in case overflow to the top or left happens
         this.minX = Math.min(
           this.minX,
-          drawnNode.drawableX! - Config.ArrowMarginHorizontal - Config.StrokeWidth / 2
+          drawnNode.drawableX! - Config.ArrowMarginHorizontal - Config.StrokeWidth / 2,
         );
         this.minY = Math.min(
           this.minY,
-          drawnNode.drawableY! - Config.ArrowMarginTop - Config.StrokeWidth / 2
+          drawnNode.drawableY! - Config.ArrowMarginTop - Config.StrokeWidth / 2,
         );
         arrow = (
           <BackwardArrowDrawable key={'Arrow (back)' + parentX + x + parentY + y} {...arrowProps} />
@@ -152,7 +152,7 @@ export class BinaryTreeDrawer extends OriginalDrawer {
         let myX;
         let scalerV = Math.round(
           Math.pow(2, DataVisualizer.TreeDepth) /
-            Math.pow(2, Math.round(y / (6 * Config.BoxHeight)))
+            Math.pow(2, Math.round(y / (6 * Config.BoxHeight))),
         );
         scalerV--;
 
@@ -201,7 +201,7 @@ export class BinaryTreeDrawer extends OriginalDrawer {
           colorIndex,
           colorIndex,
           0,
-          0
+          0,
         );
       });
     }

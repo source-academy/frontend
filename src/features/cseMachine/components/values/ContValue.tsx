@@ -1,6 +1,6 @@
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
-import { Environment } from 'js-slang/dist/types';
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { Environment } from 'js-slang/dist/types';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
 import { createRef, Fragment } from 'react';
 import {
@@ -9,13 +9,13 @@ import {
   Label as KonvaLabel,
   Rect,
   Tag as KonvaTag,
-  Text as KonvaText
+  Text as KonvaText,
 } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { IHoverable, ReferenceType } from '../../CseMachineTypes';
+import type { IHoverable, ReferenceType } from '../../CseMachineTypes';
 import {
   defaultStrokeColor,
   defaultTextColor,
@@ -24,7 +24,7 @@ import {
   getTextWidth,
   isMainReference,
   setHoveredCursor,
-  setUnhoveredCursor
+  setUnhoveredCursor,
 } from '../../CseMachineUtils';
 import { Continuation } from '../../utils/continuation';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
@@ -55,7 +55,7 @@ export class ContValue extends Value implements IHoverable {
     /** underlying continuation */
     readonly data: Continuation,
     /** what this value is being referenced by */
-    firstReference: ReferenceType
+    firstReference: ReferenceType,
   ) {
     super();
     Layout.memoizeValue(data, this);

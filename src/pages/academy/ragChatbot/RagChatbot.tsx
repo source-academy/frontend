@@ -1,6 +1,7 @@
 import { AnchorButton, Icon } from '@blueprintjs/core';
 import { useRef, useState } from 'react';
-import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
+import type { DraggableData, DraggableEvent } from 'react-draggable';
+import Draggable from 'react-draggable';
 import pixelLogo from 'src/assets/pixel.jpg';
 import { useSession } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/RagChatbot.module.scss';
@@ -18,7 +19,7 @@ const clampPosition = (
   x: number,
   y: number,
   chatOpen: boolean,
-  expanded: boolean
+  expanded: boolean,
 ): { x: number; y: number } => {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
@@ -34,7 +35,7 @@ const clampPosition = (
 
   return {
     x: Math.min(maxX, Math.max(minX, x)),
-    y: Math.min(maxY, Math.max(minY, y))
+    y: Math.min(maxY, Math.max(minY, y)),
   };
 };
 

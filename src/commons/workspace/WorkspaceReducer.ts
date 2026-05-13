@@ -10,13 +10,13 @@ import {
   type ErrorOutput,
   type InterpreterOutput,
   type NotificationOutput,
-  type ResultOutput
+  type ResultOutput,
 } from '../application/ApplicationTypes';
 import {
   setEditorSessionId,
   setSessionDetails,
   setSharedbConnected,
-  setUpdateUserRoleCallback
+  setUpdateUserRoleCallback,
 } from '../collabEditing/CollabEditingActions';
 import type { SourceActionType } from '../utils/ActionsHelper';
 import { createContext } from '../utils/JsSlangHelper';
@@ -41,7 +41,7 @@ export const getWorkspaceLocation = (action: any): WorkspaceLocation => {
  */
 export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
   state = defaultWorkspaceManager,
-  action
+  action,
 ) => {
   // state = oldWorkspaceReducer(state, action);
   state = newWorkspaceReducer(state, action);
@@ -58,12 +58,12 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     state: Draft<WorkspaceManagerState>,
     workspaceLocation: WorkspaceLocation,
     value: unknown,
-    shouldStopRunning: boolean
+    shouldStopRunning: boolean,
   ) {
     const tokens = state[workspaceLocation].tokenCount;
     const newOutputEntry: Partial<ResultOutput> = {
       type: 'result',
-      value
+      value,
     };
 
     const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
@@ -72,20 +72,20 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     if (lastOutput !== undefined && lastOutput.type === 'running') {
       const newOutputEntryWithLogs = {
         consoleLogs: lastOutput.consoleLogs,
-        ...newOutputEntry
+        ...newOutputEntry,
       } as ResultOutput;
       const notificationOutputs: NotificationOutput[] = [];
       if (state[workspaceLocation].hasTokenCounter) {
         notificationOutputs.push({
           consoleLog: `This program has ${tokens} tokens.`,
-          type: 'notification'
+          type: 'notification',
         });
       }
       const customNotification = state[workspaceLocation].customNotification;
       if (customNotification !== '') {
         notificationOutputs.push({
           consoleLog: customNotification,
-          type: 'notification'
+          type: 'notification',
         });
       }
       newOutput = state[workspaceLocation].output
@@ -94,7 +94,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     } else {
       newOutput = state[workspaceLocation].output.concat({
         consoleLogs: [],
-        ...newOutputEntry
+        ...newOutputEntry,
       } as ResultOutput);
     }
 
@@ -109,7 +109,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     workspaceLocation: WorkspaceLocation,
     errors: SourceError[],
     shouldStopRunning: boolean,
-    shouldStopDebugging: boolean
+    shouldStopDebugging: boolean,
   ) {
     const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
     let newOutput: InterpreterOutput[];
@@ -118,13 +118,13 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       newOutput = state[workspaceLocation].output.slice(0, -1).concat({
         type: 'errors',
         errors,
-        consoleLogs: lastOutput.consoleLogs
+        consoleLogs: lastOutput.consoleLogs,
       } as ErrorOutput);
     } else {
       newOutput = state[workspaceLocation].output.concat({
         type: 'errors',
         errors,
-        consoleLogs: []
+        consoleLogs: [],
       } as ErrorOutput);
     }
 
@@ -159,11 +159,11 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
             action.payload.library.external.symbols,
             workspaceLocation,
             action.payload.library.variant,
-            action.payload.library.languageOptions
+            action.payload.library.languageOptions,
           ),
           globals: action.payload.library.globals,
-          externalLibrary: action.payload.library.external.name
-        }
+          externalLibrary: action.payload.library.external.name,
+        },
       };
     })
     .addCase(WorkspaceActions.changeExternalLibrary, (state, action) => {
@@ -184,12 +184,12 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         // New block of output.
         newOutput = state[workspaceLocation].output.concat({
           type: 'running',
-          consoleLogs: [...action.payload.logString]
+          consoleLogs: [...action.payload.logString],
         });
       } else {
         const updatedLastOutput = {
           type: lastOutput.type,
-          consoleLogs: lastOutput.consoleLogs.concat(action.payload.logString)
+          consoleLogs: lastOutput.consoleLogs.concat(action.payload.logString),
         };
         newOutput = state[workspaceLocation].output.slice(0, -1);
         newOutput.push(updatedLastOutput);
@@ -202,7 +202,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const playgroundWorkspace = state.playground;
       return castDraft({
         ...defaultWorkspaceManager,
-        playground: playgroundWorkspace
+        playground: playgroundWorkspace,
       });
     })
     .addCase(WorkspaceActions.enableTokenCounter, (state, action) => {
@@ -288,8 +288,8 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         [workspaceLocation]: {
           ...state[workspaceLocation],
           ...createDefaultWorkspace(workspaceLocation),
-          ...action.payload.workspaceOptions
-        }
+          ...action.payload.workspaceOptions,
+        },
       };
     })
     /**
@@ -304,8 +304,8 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          ...action.payload.workspaceOptions
-        }
+          ...action.payload.workspaceOptions,
+        },
       };
     })
     .addCase(WorkspaceActions.increaseRequestCounter, state => {
@@ -329,9 +329,9 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
           ...state[workspaceLocation],
           sessionDetails: {
             ...state[workspaceLocation].sessionDetails,
-            ...action.payload.sessionDetails
-          }
-        }
+            ...action.payload.sessionDetails,
+          },
+        },
       };
     })
     .addCase(WorkspaceActions.setIsEditorReadonly, (state, action) => {
@@ -368,8 +368,8 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          hasUnsavedChanges: action.payload.hasUnsavedChanges
-        }
+          hasUnsavedChanges: action.payload.hasUnsavedChanges,
+        },
       };
     })
     .addCase(WorkspaceActions.updateSublanguage, (state, action) => {
@@ -444,7 +444,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(WorkspaceActions.nameVersion, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const version = state[workspaceLocation].versionHistory.versions.find(
-        v => v.id === action.payload.versionId
+        v => v.id === action.payload.versionId,
       );
       if (version) {
         version.name = action.payload.name;

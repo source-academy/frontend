@@ -12,7 +12,7 @@ import {
   type GradingOverviews,
   type GradingQuery,
   type GradingQuestion,
-  SortStates
+  SortStates,
 } from '../../features/grading/GradingTypes';
 import type { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
 import SessionActions from '../application/actions/SessionActions';
@@ -24,7 +24,7 @@ import type {
   CourseRegistration,
   Tokens,
   UpdateCourseConfiguration,
-  User
+  User,
 } from '../application/types/SessionTypes';
 import {
   type Assessment,
@@ -32,11 +32,11 @@ import {
   type AssessmentOverview,
   AssessmentStatuses,
   ProgressStatuses,
-  type Question
+  type Question,
 } from '../assessment/AssessmentTypes';
 import type {
   Notification,
-  NotificationFilterFunction
+  NotificationFilterFunction,
 } from '../notificationBadge/NotificationBadgeTypes';
 import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
@@ -89,14 +89,14 @@ import {
   unpublishGrading,
   unpublishGradingAll,
   updateAssessment,
-  uploadAssessment
+  uploadAssessment,
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export function selectTokens() {
   return select((state: OverallState) => ({
     accessToken: state.session.accessToken,
-    refreshToken: state.session.refreshToken
+    refreshToken: state.session.refreshToken,
   }));
 }
 
@@ -117,7 +117,7 @@ const newBackendSagaOne = combineSagaHandlers({
     if (!providerId) {
       yield call(
         showWarningMessage,
-        'Could not log in; invalid provider or no providers configured.'
+        'Could not log in; invalid provider or no providers configured.',
       );
       return yield routerNavigate('/');
     }
@@ -155,7 +155,7 @@ const newBackendSagaOne = combineSagaHandlers({
       user,
       courseRegistration,
       courseConfiguration,
-      assessmentConfigurations
+      assessmentConfigurations,
     }: {
       user: User | null;
       courseRegistration: CourseRegistration | null;
@@ -193,7 +193,7 @@ const newBackendSagaOne = combineSagaHandlers({
 
     const assessmentOverviews: AssessmentOverview[] | null = yield call(
       getAssessmentOverviews,
-      tokens
+      tokens,
     );
     if (assessmentOverviews) {
       yield put(actions.updateAssessmentOverviews(assessmentOverviews));
@@ -227,7 +227,7 @@ const newBackendSagaOne = combineSagaHandlers({
       assessmentId,
       tokens,
       undefined,
-      assessmentPassword
+      assessmentPassword,
     );
     if (assessment) {
       yield put(actions.updateAssessment(assessment));
@@ -242,7 +242,7 @@ const newBackendSagaOne = combineSagaHandlers({
       getAssessment,
       assessmentId,
       tokens,
-      courseRegId
+      courseRegId,
     );
     if (assessment) {
       yield put(actions.updateAssessment(assessment));
@@ -261,10 +261,10 @@ const newBackendSagaOne = combineSagaHandlers({
 
     // Now, update the answer for the question in the assessment in the store
     const assessmentId: number = yield select(
-      (state: OverallState) => state.workspaces.assessment.currentAssessment!
+      (state: OverallState) => state.workspaces.assessment.currentAssessment!,
     );
     const assessment: any = yield select(
-      (state: OverallState) => state.session.assessments[assessmentId]
+      (state: OverallState) => state.session.assessments[assessmentId],
     );
     const newQuestions = assessment.questions.slice().map((question: Question) => {
       if (question.id === questionId) {
@@ -274,7 +274,7 @@ const newBackendSagaOne = combineSagaHandlers({
     });
     const newAssessment = {
       ...assessment,
-      questions: newQuestions
+      questions: newQuestions,
     };
 
     yield put(actions.updateAssessment(newAssessment));
@@ -291,7 +291,7 @@ const newBackendSagaOne = combineSagaHandlers({
       checkAnswerLastModifiedAt,
       questionId,
       lastModifiedAt,
-      tokens
+      tokens,
     );
     saveAnswer(resp);
   },
@@ -308,7 +308,7 @@ const newBackendSagaOne = combineSagaHandlers({
 
     // Now, update the status of the assessment overview in the store
     const overviews: AssessmentOverview[] = yield select(
-      (state: OverallState) => state.session.assessmentOverviews
+      (state: OverallState) => state.session.assessmentOverviews,
     );
     const newOverviews = overviews.map(overview => {
       if (overview.id === assessmentId) {
@@ -332,7 +332,7 @@ const newBackendSagaOne = combineSagaHandlers({
 
     const sortedBy = {
       sortBy: allColsSortStates.sortBy,
-      sortDirection: ''
+      sortDirection: '',
     };
 
     Object.entries(allColsSortStates.currentState).forEach(([key, value]) => {
@@ -353,7 +353,7 @@ const newBackendSagaOne = combineSagaHandlers({
       publishedFilter,
       pageParams,
       filterParams,
-      sortedBy
+      sortedBy,
     );
     if (gradingOverviews) {
       yield put(actions.updateGradingOverviews(gradingOverviews));
@@ -366,7 +366,7 @@ const newBackendSagaOne = combineSagaHandlers({
     const teamFormationOverview: TeamFormationOverview | null = yield call(
       getTeamFormationOverview,
       assessmentId,
-      tokens
+      tokens,
     );
     if (teamFormationOverview) {
       yield put(actions.updateTeamFormationOverview(teamFormationOverview));
@@ -382,7 +382,7 @@ const newBackendSagaOne = combineSagaHandlers({
 
     const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
       getTeamFormationOverviews,
-      tokens
+      tokens,
     );
     if (teamFormationOverviews) {
       yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
@@ -409,7 +409,7 @@ const newBackendSagaOne = combineSagaHandlers({
     }
     const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
       getTeamFormationOverviews,
-      tokens
+      tokens,
     );
     if (teamFormationOverviews) {
       yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
@@ -428,14 +428,14 @@ const newBackendSagaOne = combineSagaHandlers({
       assessment.id,
       file,
       students,
-      tokens
+      tokens,
     );
     if (!resp || !resp.ok) {
       return yield handleResponseError(resp);
     }
     const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
       getTeamFormationOverviews,
-      tokens
+      tokens,
     );
 
     yield call(showSuccessMessage, 'Team created successfully', 1000);
@@ -452,7 +452,7 @@ const newBackendSagaOne = combineSagaHandlers({
     }
     const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
       getTeamFormationOverviews,
-      tokens
+      tokens,
     );
 
     yield call(showSuccessMessage, 'Team updated successfully', 1000);
@@ -470,7 +470,7 @@ const newBackendSagaOne = combineSagaHandlers({
     }
     const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
       getTeamFormationOverviews,
-      tokens
+      tokens,
     );
 
     yield call(showSuccessMessage, 'Team deleted successfully', 1000);
@@ -500,7 +500,7 @@ const newBackendSagaOne = combineSagaHandlers({
     }
 
     const overviews: GradingOverview[] = yield select(
-      (state: OverallState) => state.session.gradingOverviews?.data || []
+      (state: OverallState) => state.session.gradingOverviews?.data || [],
     );
     const newOverviews = overviews.map(overview => {
       if (overview.submissionId === submissionId) {
@@ -510,7 +510,7 @@ const newBackendSagaOne = combineSagaHandlers({
     });
 
     const totalPossibleEntries = yield select(
-      (state: OverallState) => state.session.gradingOverviews?.count
+      (state: OverallState) => state.session.gradingOverviews?.count,
     );
 
     yield call(showSuccessMessage, 'Unsubmit successful', 1000);
@@ -526,7 +526,7 @@ const newBackendSagaOne = combineSagaHandlers({
     }
 
     const overviews: GradingOverview[] = yield select(
-      (state: OverallState) => state.session.gradingOverviews?.data || []
+      (state: OverallState) => state.session.gradingOverviews?.data || [],
     );
     const newOverviews = overviews.map(overview => {
       if (overview.submissionId === submissionId) {
@@ -536,7 +536,7 @@ const newBackendSagaOne = combineSagaHandlers({
     });
 
     const totalPossibleEntries = yield select(
-      (state: OverallState) => state.session.gradingOverviews?.count
+      (state: OverallState) => state.session.gradingOverviews?.count,
     );
 
     yield call(showSuccessMessage, 'Publish grading successful', 1000);
@@ -552,7 +552,7 @@ const newBackendSagaOne = combineSagaHandlers({
     }
 
     const overviews: GradingOverview[] = yield select(
-      (state: OverallState) => state.session.gradingOverviews?.data || []
+      (state: OverallState) => state.session.gradingOverviews?.data || [],
     );
     const newOverviews = overviews.map(overview => {
       if (overview.submissionId === submissionId) {
@@ -562,20 +562,20 @@ const newBackendSagaOne = combineSagaHandlers({
     });
 
     const totalPossibleEntries = yield select(
-      (state: OverallState) => state.session.gradingOverviews?.count
+      (state: OverallState) => state.session.gradingOverviews?.count,
     );
 
     yield call(showSuccessMessage, 'Unpublish grading successful', 1000);
     yield put(actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews }));
   },
   [SessionActions.submitGrading.type]: sendGrade,
-  [SessionActions.submitGradingAndContinue.type]: sendGradeAndContinue
+  [SessionActions.submitGradingAndContinue.type]: sendGradeAndContinue,
 });
 
 function* sendGrade(
   action:
     | ReturnType<typeof actions.submitGrading>
-    | ReturnType<typeof actions.submitGradingAndContinue>
+    | ReturnType<typeof actions.submitGradingAndContinue>,
 ): any {
   const role: Role = yield select((state: OverallState) => state.session.role!);
   if (role === Role.Student) {
@@ -590,7 +590,7 @@ function* sendGrade(
     questionId,
     xpAdjustment,
     tokens,
-    comments
+    comments,
   );
   if (!resp || !resp.ok) {
     return yield handleResponseError(resp);
@@ -600,7 +600,7 @@ function* sendGrade(
 
   // Now, update the grade for the question in the Grading in the store
   const grading: GradingQuery = yield select(
-    (state: OverallState) => state.session.gradings[submissionId]
+    (state: OverallState) => state.session.gradings[submissionId],
   );
   const newGrading = grading.answers.slice().map((gradingQuestion: GradingQuestion) => {
     if (gradingQuestion.question.id === questionId) {
@@ -608,7 +608,7 @@ function* sendGrade(
         xpAdjustment,
         xp: gradingQuestion.grade.xp,
         comments,
-        gradedAt: new Date().toISOString()
+        gradedAt: new Date().toISOString(),
       };
     }
     return gradingQuestion;
@@ -618,8 +618,8 @@ function* sendGrade(
     actions.updateGrading(submissionId, {
       answers: newGrading,
       assessment: grading.assessment,
-      enable_llm_grading: false
-    })
+      enable_llm_grading: false,
+    }),
   );
 }
 
@@ -628,7 +628,7 @@ function* sendGradeAndContinue(action: ReturnType<typeof actions.submitGradingAn
 
   const { submissionId } = action.payload;
   const [currentQuestion, courseId]: [number | undefined, number] = yield select(
-    (state: OverallState) => [state.workspaces.grading.currentQuestion, state.session.courseId!]
+    (state: OverallState) => [state.workspaces.grading.currentQuestion, state.session.courseId!],
   );
 
   /**
@@ -640,7 +640,7 @@ function* sendGradeAndContinue(action: ReturnType<typeof actions.submitGradingAn
    * GradingWorkspace will cause a redirect back to '/academy/grading'
    */
   yield routerNavigate(
-    `/courses/${courseId}/grading/${submissionId}/${(currentQuestion || 0) + 1}`
+    `/courses/${courseId}/grading/${submissionId}/${(currentQuestion || 0) + 1}`,
   );
 }
 
@@ -659,7 +659,7 @@ const newBackendSagaTwo = combineSagaHandlers({
       postReautogradeAnswer,
       submissionId,
       questionId,
-      tokens
+      tokens,
     );
 
     yield call(handleReautogradeResponse, resp);
@@ -674,7 +674,7 @@ const newBackendSagaTwo = combineSagaHandlers({
     const tokens: Tokens = yield selectTokens();
     const notificationFilter: NotificationFilterFunction | undefined = action.payload.withFilter;
     const notifications: Notification[] = yield select(
-      (state: OverallState) => state.session.notifications
+      (state: OverallState) => state.session.notifications,
     );
 
     let notificationsToAcknowledge = notifications;
@@ -689,7 +689,7 @@ const newBackendSagaTwo = combineSagaHandlers({
 
     const ids = notificationsToAcknowledge.map(n => n.id);
     const newNotifications: Notification[] = notifications.filter(
-      notification => !ids.includes(notification.id)
+      notification => !ids.includes(notification.id),
     );
 
     yield put(actions.updateNotifications(newNotifications));
@@ -705,7 +705,7 @@ const newBackendSagaTwo = combineSagaHandlers({
 
     const resp: Response | null = yield call(putCourseConfig, tokens, {
       sourceChapter: sublang.chapter,
-      sourceVariant: sublang.variant
+      sourceVariant: sublang.variant,
     });
     if (!resp || !resp.ok) {
       return yield handleResponseError(resp);
@@ -714,8 +714,8 @@ const newBackendSagaTwo = combineSagaHandlers({
     yield put(
       actions.setCourseConfiguration({
         sourceChapter: sublang.chapter,
-        sourceVariant: sublang.variant
-      })
+        sourceVariant: sublang.variant,
+      }),
     );
     yield call(showSuccessMessage, 'Updated successfully!', 1000);
   },
@@ -731,7 +731,7 @@ const newBackendSagaTwo = combineSagaHandlers({
     const {
       courseRegistration,
       courseConfiguration,
-      assessmentConfigurations
+      assessmentConfigurations,
     }: {
       courseRegistration: CourseRegistration | null;
       courseConfiguration: CourseConfiguration | null;
@@ -766,7 +766,7 @@ const newBackendSagaTwo = combineSagaHandlers({
 
     const assessmentConfigs: AssessmentConfiguration[] | null = yield call(
       getAssessmentConfigs,
-      tokens
+      tokens,
     );
     if (assessmentConfigs) {
       yield put(actions.setAssessmentConfigurations(assessmentConfigs));
@@ -783,7 +783,7 @@ const newBackendSagaTwo = combineSagaHandlers({
 
     const updatedAssessmentConfigs: AssessmentConfiguration[] | null = yield call(
       getAssessmentConfigs,
-      tokens
+      tokens,
     );
 
     if (updatedAssessmentConfigs) {
@@ -805,7 +805,7 @@ const newBackendSagaTwo = combineSagaHandlers({
 
     const courseRegistrations: AdminPanelCourseRegistration[] | null = yield call(
       getUserCourseRegistrations,
-      tokens
+      tokens,
     );
     if (courseRegistrations) {
       yield put(actions.setAdminPanelCourseRegistrations(courseRegistrations));
@@ -823,7 +823,7 @@ const newBackendSagaTwo = combineSagaHandlers({
     const {
       user,
       courseRegistration,
-      courseConfiguration
+      courseConfiguration,
     }: {
       user: User | null;
       courseRegistration: CourseRegistration | null;
@@ -857,15 +857,15 @@ const newBackendSagaTwo = combineSagaHandlers({
         hasTokenCounter: false,
         hasVotingFeatures: false,
         earlySubmissionXp: 0,
-        isAutosaveEnabled: true
-      }
+        isAutosaveEnabled: true,
+      },
     ];
 
     const resp1: Response | null = yield call(
       putAssessmentConfigs,
       tokens,
       placeholderAssessmentConfig,
-      courseRegistration.courseId
+      courseRegistration.courseId,
     );
     if (!resp1 || !resp1.ok) {
       return yield handleResponseError(resp);
@@ -921,7 +921,7 @@ const newBackendSagaTwo = combineSagaHandlers({
 
     yield put(actions.fetchAdminPanelCourseRegistrations());
     yield call(showSuccessMessage, 'User deleted!');
-  }
+  },
 });
 
 function* oldBackendSagaThree(): SagaIterator {
@@ -934,7 +934,7 @@ function* oldBackendSagaThree(): SagaIterator {
       if (groupOverviews) {
         yield put(actions.updateGroupGradingSummary(groupOverviews));
       }
-    }
+    },
   );
 
   yield takeEvery(
@@ -952,7 +952,7 @@ function* oldBackendSagaThree(): SagaIterator {
 
       yield put(actions.fetchAssessmentOverviews());
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
-    }
+    },
   );
 
   yield takeEvery(
@@ -969,7 +969,7 @@ function* oldBackendSagaThree(): SagaIterator {
 
       yield put(actions.fetchAssessmentOverviews());
       yield call(showSuccessMessage, 'Team size updated successfully!', 1000);
-    }
+    },
   );
 
   yield takeEvery(
@@ -985,7 +985,7 @@ function* oldBackendSagaThree(): SagaIterator {
 
       yield put(actions.fetchAssessmentOverviews());
       yield call(showSuccessMessage, 'Deleted successfully!', 1000);
-    }
+    },
   );
 
   yield takeEvery(
@@ -998,7 +998,7 @@ function* oldBackendSagaThree(): SagaIterator {
       const resp: Response | null = yield updateAssessment(
         id,
         { isPublished: togglePublishTo },
-        tokens
+        tokens,
       );
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
@@ -1011,7 +1011,7 @@ function* oldBackendSagaThree(): SagaIterator {
       } else {
         yield call(showSuccessMessage, 'Unpublished successfully!', 1000);
       }
-    }
+    },
   );
 
   yield takeEvery(
@@ -1024,7 +1024,7 @@ function* oldBackendSagaThree(): SagaIterator {
         file,
         tokens,
         forceUpdate,
-        assessmentConfigId
+        assessmentConfigId,
       );
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
@@ -1038,7 +1038,7 @@ function* oldBackendSagaThree(): SagaIterator {
       }
 
       yield put(actions.fetchAssessmentOverviews());
-    }
+    },
   );
 
   yield takeEvery(
@@ -1053,7 +1053,7 @@ function* oldBackendSagaThree(): SagaIterator {
       const resp: Response | null = yield updateAssessment(
         id,
         { hasVotingFeatures, hasTokenCounter, isAutosaveEnabled },
-        tokens
+        tokens,
       );
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
@@ -1061,7 +1061,7 @@ function* oldBackendSagaThree(): SagaIterator {
 
       yield put(actions.fetchAssessmentOverviews());
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
-    }
+    },
   );
 
   yield takeEvery(
@@ -1073,9 +1073,9 @@ function* oldBackendSagaThree(): SagaIterator {
       const resp: Response | null = yield updateAssessment(
         id,
         {
-          assignEntriesForVoting: true
+          assignEntriesForVoting: true,
         },
-        tokens
+        tokens,
       );
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
@@ -1083,7 +1083,7 @@ function* oldBackendSagaThree(): SagaIterator {
 
       yield put(actions.fetchAssessmentOverviews());
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
-    }
+    },
   );
 
   yield takeEvery(
@@ -1099,7 +1099,7 @@ function* oldBackendSagaThree(): SagaIterator {
 
       yield put(actions.fetchAssessmentOverviews());
       yield call(showSuccessMessage, 'Published all graded submissons successfully!', 1000);
-    }
+    },
   );
 
   yield takeEvery(
@@ -1115,7 +1115,7 @@ function* oldBackendSagaThree(): SagaIterator {
 
       yield put(actions.fetchAssessmentOverviews());
       yield call(showSuccessMessage, 'Unpublished all submissons successfully!', 1000);
-    }
+    },
   );
 }
 

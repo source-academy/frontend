@@ -5,10 +5,10 @@ import {
   type ForkEffect,
   type HelperWorkerParameters,
   select,
-  SelectEffect,
+  type SelectEffect,
   takeEvery,
   takeLatest,
-  takeLeading
+  takeLeading,
 } from 'redux-saga/effects';
 
 import type { OverallState } from '../application/ApplicationTypes';
@@ -47,7 +47,7 @@ export function wrapSaga<T extends (...args: any[]) => Generator>(saga: T) {
 
 export function safeTakeEvery<P extends ActionPattern, A extends ActionMatchingPattern<P>>(
   pattern: P,
-  worker: (action: A) => any
+  worker: (action: A) => any,
 ): ForkEffect<never>;
 export function safeTakeEvery<P extends ActionPattern, Fn extends (...args: any[]) => any>(
   pattern: P,
@@ -69,7 +69,7 @@ export function safeTakeEvery<P extends ActionPattern, Fn extends (...args: any[
 
 export function safeTakeLatest<P extends ActionPattern, A extends ActionMatchingPattern<P>>(
   pattern: P,
-  worker: (action: A) => any
+  worker: (action: A) => any,
 ): ForkEffect<never>;
 export function safeTakeLatest<P extends ActionPattern, Fn extends (...args: any[]) => any>(
   pattern: P,
@@ -91,7 +91,7 @@ export function safeTakeLatest<P extends ActionPattern, Fn extends (...args: any
 
 export function safeTakeLeading<P extends ActionPattern, A extends ActionMatchingPattern<P>>(
   pattern: P,
-  worker: (action: A) => any
+  worker: (action: A) => any,
 ): ForkEffect<never>;
 export function safeTakeLeading<P extends ActionPattern, Fn extends (...args: any[]) => any>(
   pattern: P,
@@ -113,17 +113,17 @@ export function safeTakeLeading<P extends ActionPattern, Fn extends (...args: an
 
 export function selectWorkspace<T extends WorkspaceLocation, U>(
   workspaceLocation: T,
-  func: (state: WorkspaceManagerState[T]) => U
+  func: (state: WorkspaceManagerState[T]) => U,
 ): Generator<SelectEffect, U>;
 export function selectWorkspace<T extends WorkspaceLocation>(
-  workspaceLocation: T
+  workspaceLocation: T,
 ): Generator<SelectEffect, WorkspaceManagerState[T]>;
 export function* selectWorkspace<T extends WorkspaceLocation, U>(
   workspaceLocation: T,
-  f?: (state: WorkspaceManagerState[T]) => U
+  f?: (state: WorkspaceManagerState[T]) => U,
 ) {
   const workspace: WorkspaceManagerState[T] = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation]
+    (state: OverallState) => state.workspaces[workspaceLocation],
   );
 
   if (f) return f(workspace);

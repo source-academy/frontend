@@ -18,13 +18,13 @@ export class BranchAnimation extends Animatable {
   constructor(
     private branchItem: ControlItemComponent,
     booleanItem: StashItemComponent,
-    private resultItems: ControlItemComponent[]
+    private resultItems: ControlItemComponent[],
   ) {
     super();
     this.booleanItemAnimation = new AnimatedTextbox(
       booleanItem.text,
       getNodePosition(booleanItem),
-      { rectProps: { stroke: defaultDangerColor() } }
+      { rectProps: { stroke: defaultDangerColor() } },
     );
     // Note that branch item is drawn in here as well
     this.controlExpandAnimation = new ControlExpansionAnimation(branchItem, resultItems);
@@ -46,15 +46,15 @@ export class BranchAnimation extends Animatable {
       this.booleanItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
       this.booleanItemAnimation.animateTo({
         x: this.branchItem.x() + this.branchItem.width(),
-        y: this.branchItem.y()
-      })
+        y: this.branchItem.y(),
+      }),
     ]);
     // Merge boolean and branch instruction together
     await Promise.all([
       this.booleanItemAnimation.animateTo({ x: this.branchItem.x() }),
       this.booleanItemAnimation.animateTo({ opacity: 0 }, { duration: 3 / 4 }),
       // Play the control expansion animation for the results of the branch instruction
-      this.controlExpandAnimation.animate()
+      this.controlExpandAnimation.animate(),
     ]);
     this.destroy();
   }

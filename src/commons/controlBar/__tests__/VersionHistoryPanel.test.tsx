@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 import VersionHistoryPanel from '../VersionHistoryPanel';
 
 vi.mock('../AceDiffViewer', () => ({
-  default: () => <div data-testid="ace-diff-viewer" />
+  default: () => <div data-testid="ace-diff-viewer" />,
 }));
 
 const MINUTE = 60 * 1000;
@@ -13,7 +13,7 @@ const MINUTE = 60 * 1000;
 const mockVersions = [
   { id: 'v3', timestamp: 1000000001000 + 20 * MINUTE, name: 'Version 3' },
   { id: 'v2', timestamp: 1000000001000, name: 'Version 2' },
-  { id: 'v1', timestamp: 1000000000000, name: 'Version 1' }
+  { id: 'v1', timestamp: 1000000000000, name: 'Version 1' },
 ];
 
 const defaultProps = {
@@ -27,7 +27,7 @@ const defaultProps = {
   onClose: vi.fn(),
   onSelectVersion: vi.fn(),
   onRestore: vi.fn(),
-  onRename: vi.fn()
+  onRename: vi.fn(),
 };
 
 test('renders loading state when isLoading is true', () => {

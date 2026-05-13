@@ -1,12 +1,13 @@
-import { Button, Card, Classes, Divider, IconName, MenuItem } from '@blueprintjs/core';
+import { Button, Card, Classes, Divider, type IconName, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemRenderer, Select } from '@blueprintjs/select';
+import type { ItemRenderer } from '@blueprintjs/select';
+import { Select } from '@blueprintjs/select';
 import { useState } from 'react';
 import AceEditor from 'react-ace';
 
-import { Assessment } from '../assessment/AssessmentTypes';
+import type { Assessment } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
-import { WorkspaceState } from '../workspace/WorkspaceTypes';
+import type { WorkspaceState } from '../workspace/WorkspaceTypes';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
 type Props = {
@@ -34,23 +35,23 @@ const questionEditors: QuestionEditor[] = [
   {
     label: 'Prepend',
     icon: IconNames.CHEVRON_UP,
-    id: 'prepend'
+    id: 'prepend',
   },
   {
     label: 'Postpend',
     icon: IconNames.CHEVRON_DOWN,
-    id: 'postpend'
+    id: 'postpend',
   },
   {
     label: 'Solution Template',
     icon: IconNames.MANUAL,
-    id: 'solutionTemplate'
+    id: 'solutionTemplate',
   },
   {
     label: 'Suggested Answer',
     icon: IconNames.TICK,
-    id: 'answer'
-  }
+    id: 'answer',
+  },
 ];
 
 /*
@@ -102,7 +103,7 @@ const ProgrammingQuestionTemplateTab: React.FC<Props> = props => {
 
     const editorSelect = (
       currentEditor: QuestionEditor,
-      handleSelect: (i: QuestionEditor) => void
+      handleSelect: (i: QuestionEditor) => void,
     ) => (
       <QuestionEditorSelect
         className={Classes.MINIMAL}
@@ -139,7 +140,7 @@ const ProgrammingQuestionTemplateTab: React.FC<Props> = props => {
         <AceEditor
           className="react-ace"
           editorProps={{
-            $blockScrolling: Infinity
+            $blockScrolling: Infinity,
           }}
           fontSize={14}
           highlightActiveLine={false}

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
-import Draggable, { DraggableEventHandler } from 'react-draggable';
+import Draggable, { type DraggableEventHandler } from 'react-draggable';
 
-import Repl, { ReplProps } from '../repl/Repl';
+import Repl, { type ReplProps } from '../repl/Repl';
 
 type Props = {
   position: { x: number; y: number };

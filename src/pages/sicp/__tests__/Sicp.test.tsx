@@ -10,7 +10,7 @@ import Sicp from '../Sicp';
 vi.mock('react-router', () => ({
   useParams: vi.fn().mockReturnValue({ section: 'index' }),
   useNavigate: vi.fn().mockReturnValue(vi.fn()),
-  useLocation: vi.fn().mockReturnValue({} as Location)
+  useLocation: vi.fn().mockReturnValue({} as Location),
 }));
 
 describe('Sicp renders', () => {

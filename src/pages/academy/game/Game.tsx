@@ -6,11 +6,9 @@ import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import AchievementActions from 'src/features/achievement/AchievementActions';
 import { saveData } from 'src/features/game/save/GameSaveRequests';
-import { FullSaveState } from 'src/features/game/save/GameSaveTypes';
-import SourceAcademyGame, {
-  AccountInfo,
-  createSourceAcademyGame
-} from 'src/features/game/SourceAcademyGame';
+import type { FullSaveState } from 'src/features/game/save/GameSaveTypes';
+import type { AccountInfo } from 'src/features/game/SourceAcademyGame';
+import SourceAcademyGame, { createSourceAcademyGame } from 'src/features/game/SourceAcademyGame';
 
 const Game: React.FC = () => {
   const session = useTypedSelector(state => state.session);
@@ -42,7 +40,7 @@ const Game: React.FC = () => {
       accessToken: session.accessToken,
       refreshToken: session.refreshToken,
       role: session.role,
-      name: session.name
+      name: session.name,
     } as AccountInfo);
     SourceAcademyGame.getInstance().setAchievements(achievements);
     SourceAcademyGame.getInstance().setGoals(goals);
@@ -60,7 +58,7 @@ const Game: React.FC = () => {
   const {
     ref: fullscreenRef,
     toggle: toggleFullscreen,
-    fullscreen: isFullscreen
+    fullscreen: isFullscreen,
   } = useFullscreenElement<HTMLDivElement>();
 
   // This function is a wrapper around toggleFullscreen that also locks the screen orientation
@@ -95,7 +93,7 @@ const Game: React.FC = () => {
       // Ref callback from useFullscreen
       fullscreenRef(node);
     },
-    [fullscreenRef]
+    [fullscreenRef],
   );
 
   // Logic for the fullscreen button to dynamically adjust its size, position and padding

@@ -15,19 +15,19 @@ export function* evalTestCode(
   execTime: number,
   workspaceLocation: WorkspaceLocation,
   index: number,
-  type: TestcaseType
+  type: TestcaseType,
 ) {
   yield put(actions.resetTestcase(workspaceLocation, index));
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context, {
       originalMaxExecTime: execTime,
-      throwInfiniteLoops: true
+      throwInfiniteLoops: true,
     }),
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
      * i.e the trigger for the interpreter to interrupt execution.
      */
-    interrupted: take(InterpreterActions.beginInterruptExecution.type)
+    interrupted: take(InterpreterActions.beginInterruptExecution.type),
   });
 
   if (interrupted) {

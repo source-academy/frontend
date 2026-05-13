@@ -1,4 +1,4 @@
-import { SagaIterator } from 'redux-saga';
+import type { SagaIterator } from 'redux-saga';
 import { all, fork } from 'redux-saga/effects';
 
 import { mockBackendSaga } from '../mocks/BackendMocks';
@@ -34,6 +34,6 @@ export default function* MainSaga(): SagaIterator {
     fork(LanguageDirectorySaga),
     fork(PluginDirectorySaga),
     fork(watchAutoSave),
-    fork(watchSavingStatus)
+    fork(watchSavingStatus),
   ]);
 }

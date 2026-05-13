@@ -6,7 +6,7 @@ import {
   Intent,
   NonIdealState,
   Spinner,
-  SpinnerSize
+  SpinnerSize,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
@@ -16,16 +16,16 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import SessionActions from '../application/actions/SessionActions';
-import {
+import type {
   Assessment,
   AssessmentOverview,
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
   Question,
-  QuestionTypes,
-  Testcase
+  Testcase,
 } from '../assessment/AssessmentTypes';
+import { QuestionTypes } from '../assessment/AssessmentTypes';
 import type { ControlBarProps } from '../controlBar/ControlBar';
 import ControlBarClearButton from '../controlBar/ControlBarClearButton';
 import ControlBarEvalButton from '../controlBar/ControlBarEvalButton';
@@ -45,20 +45,21 @@ import MCQQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorksp
 import ProgrammingQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentProgrammingQuestionTemplateTab';
 import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentTextAreaContent';
 import { convertEditorTabStateToProps } from '../editor/EditorContainer';
-import { Position } from '../editor/EditorTypes';
+import type { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
-import { SideContentProps } from '../sideContent/SideContent';
+import type { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight } from '../sideContent/SideContentActions';
-import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import type { SideContentTab } from '../sideContent/SideContentTypes';
+import { SideContentType } from '../sideContent/SideContentTypes';
 import { useTypedSelector } from '../utils/Hooks';
-import Workspace, { WorkspaceProps } from '../workspace/Workspace';
+import Workspace, { type WorkspaceProps } from '../workspace/Workspace';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+import type { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import {
   retrieveLocalAssessment,
   storeLocalAssessment,
-  storeLocalAssessmentOverview
+  storeLocalAssessmentOverview,
 } from '../XMLParser/XMLParserHelper';
 
 export type EditingWorkspaceProps = {
@@ -88,7 +89,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     output,
     replValue,
     currentAssessment: storedAssessmentId,
-    currentQuestion: storedQuestionId
+    currentQuestion: storedQuestionId,
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
 
   /**
@@ -130,7 +131,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     handleUpdateCurrentAssessmentId,
     handlePromptAutocomplete,
     setActiveEditorTabIndex,
-    removeEditorTabByIndex
+    removeEditorTabByIndex,
   } = useMemo(() => {
     return {
       handleBrowseHistoryDown: () =>
@@ -144,11 +145,11 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
       handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
         dispatch(
-          WorkspaceActions.updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)
+          WorkspaceActions.updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue),
         ),
       handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
         dispatch(
-          WorkspaceActions.setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)
+          WorkspaceActions.setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints),
         ),
       handleReplEval: () => dispatch(WorkspaceActions.evalRepl(workspaceLocation)),
       handleReplOutputClear: () => dispatch(WorkspaceActions.clearReplOutput(workspaceLocation)),
@@ -170,17 +171,17 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
         dispatch(WorkspaceActions.promptAutocomplete(workspaceLocation, row, col, callback)),
       setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
         dispatch(
-          WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)
+          WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex),
         ),
       removeEditorTabByIndex: (editorTabIndex: number) =>
-        dispatch(WorkspaceActions.removeEditorTab(workspaceLocation, editorTabIndex))
+        dispatch(WorkspaceActions.removeEditorTab(workspaceLocation, editorTabIndex)),
     };
   }, [dispatch]);
 
   // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
   const handleFirstEditorValueChange = useCallback(
     (newEditorValue: string) => handleEditorValueChange(0, newEditorValue),
-    [handleEditorValueChange]
+    [handleEditorValueChange],
   );
 
   if (assessment === null || assessment!.questions.length === 0) {
@@ -283,8 +284,8 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
         ...library,
         external: {
           name: library.external.name,
-          symbols: uniq(symbolsVal)
-        }
+          symbols: uniq(symbolsVal),
+        },
       };
     }
     handleClearContext(library, true);
@@ -313,11 +314,11 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
         {
           value: editorValue,
           highlightedLines: [],
-          breakpoints: []
-        }
+          breakpoints: [],
+        },
       ],
       programPrependValue,
-      programPostpendValue
+      programPostpendValue,
     });
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
     handleEditorValueChange(0, editorValue);
@@ -381,7 +382,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   /** Pre-condition: IAssessment has been loaded */
   const sideContentProps: (p: EditingWorkspaceProps, q: number) => SideContentProps = (
     props: EditingWorkspaceProps,
-    questionId: number
+    questionId: number,
   ) => {
     const currentAssessment = assessment!;
     let tabs: SideContentTab[];
@@ -417,13 +418,13 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
               updateAssessment={updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorQuestionOverview
+          id: SideContentType.editorQuestionOverview,
         },
         {
           label: `Question Template`,
           iconName: IconNames.DOCUMENT,
           body: questionTemplateTab,
-          id: SideContentType.editorQuestionTemplate
+          id: SideContentType.editorQuestionTemplate,
         },
         {
           label: `Manage Local Deployment`,
@@ -438,7 +439,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
               isOptionalDeployment={true}
             />
           ),
-          id: SideContentType.editorLocalDeployment
+          id: SideContentType.editorLocalDeployment,
         },
         {
           label: `Manage Local Grader Deployment`,
@@ -454,7 +455,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
               isOptionalDeployment={true}
             />
           ),
-          id: SideContentType.editorLocalGraderDeployment
+          id: SideContentType.editorLocalGraderDeployment,
         },
         {
           label: `Grading`,
@@ -466,8 +467,8 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
               updateAssessment={updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorGrading
-        }
+          id: SideContentType.editorGrading,
+        },
       ];
       if (qnType === 'programming') {
         tabs.push({
@@ -481,7 +482,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
               updateAssessment={updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorAutograder
+          id: SideContentType.editorAutograder,
         });
       }
       const functionsAttached = currentAssessment!.globalDeployment!.external.symbols;
@@ -490,7 +491,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
           label: `Tone Matrix`,
           iconName: IconNames.GRID_VIEW,
           body: <SideContentToneMatrix />,
-          id: SideContentType.toneMatrix
+          id: SideContentType.toneMatrix,
         });
       }
     } else {
@@ -505,7 +506,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
               updateAssessment={updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorBriefing
+          id: SideContentType.editorBriefing,
         },
         {
           label: `Manage Question`,
@@ -518,7 +519,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
               updateAssessment={updateAndSaveAssessment}
             />
           ),
-          id: SideContentType.editorManageQuestion
+          id: SideContentType.editorManageQuestion,
         },
         {
           label: `Manage Global Deployment`,
@@ -533,7 +534,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
               isOptionalDeployment={false}
             />
           ),
-          id: SideContentType.editorGlobalDeployment
+          id: SideContentType.editorGlobalDeployment,
         },
         {
           label: `Manage Global Grader Deployment`,
@@ -548,14 +549,14 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
               isOptionalDeployment={true}
             />
           ),
-          id: SideContentType.editorGlobalGraderDeployment
-        }
+          id: SideContentType.editorGlobalGraderDeployment,
+        },
       ];
     }
 
     return {
       tabs: { beforeDynamicTabs: tabs, afterDynamicTabs: [] },
-      workspaceLocation
+      workspaceLocation,
     };
   };
 
@@ -626,7 +627,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     return {
       editorButtons: [runButton, saveButton, resetButton],
       flowButtons: [previousButton, questionView, nextButton],
-      editingWorkspaceButtons: [toggleEditModeButton]
+      editingWorkspaceButtons: [toggleEditModeButton],
     };
   };
 
@@ -668,7 +669,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
                   editorValue:
                     editorTabStateProps.editorValue ||
                     question.editorValue ||
-                    (question as IProgrammingQuestion).solutionTemplate
+                    (question as IProgrammingQuestion).solutionTemplate,
                 };
               }),
             editorSessionId: '',
@@ -679,7 +680,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
             handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
             handlePromptAutocomplete: handlePromptAutocomplete,
-            isEditorAutorun: false
+            isEditorAutorun: false,
           }
         : undefined,
     handleSideContentHeightChange: handleSideContentHeightChange,
@@ -687,10 +688,10 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     mcqProps: {
       mcq: question as IMCQQuestion,
       handleMCQSubmit: (option: number) =>
-        handleSubmitAnswer(assessment!.questions[questionId].id, option)
+        handleSubmitAnswer(assessment!.questions[questionId].id, option),
     },
     sideBarProps: {
-      tabs: []
+      tabs: [],
     },
     sideContentProps: sideContentProps(props, questionId),
     replProps: {
@@ -703,8 +704,8 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
       sourceVariant: Variant.DEFAULT,
       externalLibrary: question?.library?.external?.name || 'NONE',
-      replButtons: replButtons()
-    }
+      replButtons: replButtons(),
+    },
   };
   return (
     <div className={classNames('WorkspaceParent', Classes.DARK)}>

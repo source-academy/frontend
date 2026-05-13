@@ -22,7 +22,7 @@ export const SourceTheme: { [key: string]: React.CSSProperties } = {
     MozHyphens: 'none',
     msHyphens: 'none',
     hyphens: 'none',
-    fontSize: '1rem'
+    fontSize: '1rem',
   },
   'pre[class*="language-"]': {
     color: 'white',
@@ -44,36 +44,36 @@ export const SourceTheme: { [key: string]: React.CSSProperties } = {
     padding: '1em',
     margin: '0.5em 0',
     overflow: 'auto',
-    borderRadius: '0.3em'
+    borderRadius: '0.3em',
   },
   ':not(pre) > code[class*="language-"]': {
     background: 'transparent',
     padding: '0.1em',
     borderRadius: '0.3em',
-    whiteSpace: 'normal'
+    whiteSpace: 'normal',
   },
   comment: {
-    color: '#0088FF'
+    color: '#0088FF',
   },
   punctuation: {
-    color: 'white'
+    color: 'white',
   },
   boolean: {
-    color: '#FF628C'
+    color: '#FF628C',
   },
   number: {
-    color: '#FF628C'
+    color: '#FF628C',
   },
   string: {
-    color: '#3AD900'
+    color: '#3AD900',
   },
   operator: {
-    color: '#FF9D00'
+    color: '#FF9D00',
   },
   function: {
-    color: '#ffdd00'
+    color: '#ffdd00',
   },
   keyword: {
-    color: '#FF9D00'
-  }
+    color: '#FF9D00',
+  },
 };

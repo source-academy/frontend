@@ -1,16 +1,16 @@
 import { Classes, Icon, Tab, Tabs, Tooltip } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { cloneElement, memo } from 'react';
-import { SideContentProps } from 'src/commons/sideContent/SideContent';
+import type { SideContentProps } from 'src/commons/sideContent/SideContent';
 import { generateIconId } from 'src/commons/sideContent/SideContentHelper';
 import SideContentProvider from 'src/commons/sideContent/SideContentProvider';
 
-import { ControlBarProps } from '../../controlBar/ControlBar';
+import type { ControlBarProps } from '../../controlBar/ControlBar';
 import {
-  ChangeTabsCallback,
-  SideContentLocation,
-  SideContentTab,
-  SideContentType
+  type ChangeTabsCallback,
+  type SideContentLocation,
+  type SideContentTab,
+  SideContentType,
 } from '../../sideContent/SideContentTypes';
 import { propsAreEqual } from '../../utils/MemoizeHelper';
 import MobileControlBar from './MobileControlBar';

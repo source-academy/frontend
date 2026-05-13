@@ -4,7 +4,7 @@ import { t } from 'i18next';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SideContentTab, SideContentType } from '../SideContentTypes';
+import { type SideContentTab, SideContentType } from '../SideContentTypes';
 
 export type UploadResult = {
   [key: string]: any;
@@ -42,7 +42,7 @@ const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
           promises.push(
             getBase64(file, (b64: string) => {
               ret[file.name] = b64;
-            })
+            }),
           );
         }
       }
@@ -51,7 +51,7 @@ const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
         setCount(promises.length);
       });
     },
-    [onUpload]
+    [onUpload],
   );
 
   return (
@@ -79,7 +79,7 @@ const makeUploadTabFrom = (onUpload: (files: UploadResult) => void): SideContent
   label: t($ => $.upload.label, { ns: 'sideContent' }),
   iconName: IconNames.Upload,
   body: <SideContentUpload onUpload={onUpload} />,
-  id: SideContentType.upload
+  id: SideContentType.upload,
 });
 
 export default makeUploadTabFrom;

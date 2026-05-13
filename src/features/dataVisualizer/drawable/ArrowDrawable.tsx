@@ -24,7 +24,7 @@ const ArrowDrawable: React.FC<Props> = props => {
           props.from.x,
           props.from.y,
           props.to.x + Config.BoxWidth / 2,
-          props.to.y + Config.ArrowPointerOffsetVertical
+          props.to.y + Config.ArrowPointerOffsetVertical,
         ]}
         pointerWidth={Config.ArrowPointerSize}
         pointerLength={Config.ArrowPointerSize}
@@ -43,7 +43,7 @@ const ArrowDrawable: React.FC<Props> = props => {
           props.from.x,
           props.from.y,
           props.to.x + Config.BoxWidth / 2,
-          props.to.y + Config.ArrowPointerOffsetVertical
+          props.to.y + Config.ArrowPointerOffsetVertical,
         ]}
         pointerWidth={Config.ArrowPointerSize}
         pointerLength={Config.ArrowPointerSize}

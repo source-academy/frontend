@@ -2,7 +2,8 @@ import { Intent } from '@blueprintjs/core';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 
-import { ConfirmDialog, ConfirmDialogProps } from '../ConfirmDialog';
+import type { ConfirmDialogProps } from '../ConfirmDialog';
+import { ConfirmDialog } from '../ConfirmDialog';
 
 const TEXT1 = 'Random';
 const TEXT2 = 'content';
@@ -16,7 +17,7 @@ const CONTENTS = (
 const CHOICES: ConfirmDialogProps<string>['choices'] = [
   { key: 'choice1', label: 'Choice 1', intent: Intent.PRIMARY },
   { key: 'choice2', label: 'Choice 2' },
-  { key: 'choice3', label: 'Choice 3' }
+  { key: 'choice3', label: 'Choice 3' },
 ];
 
 const RESPONSE_FN = vi.fn((...args) => console.log(args));
@@ -35,8 +36,8 @@ const makeEscapeEvent = () =>
       code: 'Escape',
       keyCode: 27,
       which: 27,
-      bubbles: true
-    } as any /* keyCode is deprecated so missing from the TS DOM typedefs but JSDOM and Blueprint3 use keyCode... */
+      bubbles: true,
+    } as any /* keyCode is deprecated so missing from the TS DOM typedefs but JSDOM and Blueprint3 use keyCode... */,
   );
 
 test('shows content', () => {
@@ -51,7 +52,7 @@ test('shows buttons', () => {
 
   expect(buttons.length).toBe(CHOICES.length);
   buttons.forEach(button =>
-    expect(CHOICES.filter(choice => choice.label === button.textContent).length).toBe(1)
+    expect(CHOICES.filter(choice => choice.label === button.textContent).length).toBe(1),
   );
 });
 

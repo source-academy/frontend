@@ -6,23 +6,27 @@ import {
   Checkbox,
   Classes,
   Icon,
-  Tooltip
+  Tooltip,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { HotkeyItem } from '@mantine/hooks';
+import type { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
 import { t } from 'i18next';
 import { Component } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { connect, MapDispatchToProps } from 'react-redux';
+import { connect, type MapDispatchToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
-import { Step } from '../../../features/dataVisualizer/dataVisualizerTypes';
+import type { Step } from '../../../features/dataVisualizer/dataVisualizerTypes';
 import { Links } from '../../utils/Constants';
 import { beginAlertSideContent } from '../SideContentActions';
-import { SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
+import {
+  type SideContentLocation,
+  type SideContentTab,
+  SideContentType,
+} from '../SideContentTypes';
 import { ItalicLink } from './SideContentCseMachine';
 
 type State = {
@@ -64,7 +68,7 @@ class SideContentDataVisualizerBase extends Component<OwnProps & DispatchProps, 
 
     const hotkeyBindings: HotkeyItem[] = [
       ['ArrowLeft', this.onPrevButtonClick],
-      ['ArrowRight', this.onNextButtonClick]
+      ['ArrowRight', this.onNextButtonClick],
     ];
 
     return (
@@ -77,13 +81,13 @@ class SideContentDataVisualizerBase extends Component<OwnProps & DispatchProps, 
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                marginBottom: 10
+                marginBottom: 10,
               }}
             >
               <Button
                 style={{
                   position: 'absolute',
-                  left: 0
+                  left: 0,
                 }}
                 large={true}
                 outlined={true}
@@ -100,7 +104,7 @@ class SideContentDataVisualizerBase extends Component<OwnProps & DispatchProps, 
               <Button
                 style={{
                   position: 'absolute',
-                  right: 0
+                  right: 0,
                 }}
                 large={true}
                 outlined={true}
@@ -119,7 +123,7 @@ class SideContentDataVisualizerBase extends Component<OwnProps & DispatchProps, 
               style={{
                 display: 'flex',
                 flexDirection: 'row',
-                overflowX: 'auto'
+                overflowX: 'auto',
               }}
             >
               {step?.map((elem, i) => (
@@ -152,7 +156,7 @@ class SideContentDataVisualizerBase extends Component<OwnProps & DispatchProps, 
                       display: 'flex',
                       flexDirection: 'row',
                       alignItems: 'center',
-                      justifyContent: 'center'
+                      justifyContent: 'center',
                     }}
                     onMouseUp={() => {
                       DataVisualizer.setMode('normal');
@@ -180,7 +184,7 @@ class SideContentDataVisualizerBase extends Component<OwnProps & DispatchProps, 
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginLeft: 10
+                    marginLeft: 10,
                   }}
                   onMouseUp={() => {
                     DataVisualizer.setMode('binTree');
@@ -209,7 +213,7 @@ class SideContentDataVisualizerBase extends Component<OwnProps & DispatchProps, 
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginLeft: 10
+                    marginLeft: 10,
                   }}
                   onMouseUp={() => {
                     DataVisualizer.setMode('tree');
@@ -260,21 +264,21 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
   bindActionCreators(
     {
       alertSideContent: () =>
-        beginAlertSideContent(SideContentType.dataVisualizer, props.workspaceLocation)
+        beginAlertSideContent(SideContentType.dataVisualizer, props.workspaceLocation),
     },
-    dispatch
+    dispatch,
   );
 
 export const SideContentDataVisualizer = connect(
   null,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(SideContentDataVisualizerBase);
 
 const makeDataVisualizerTabFrom = (location: SideContentLocation): SideContentTab => ({
   label: t($ => $.dataVisualizer.label, { ns: 'sideContent' }),
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer workspaceLocation={location} />,
-  id: SideContentType.dataVisualizer
+  id: SideContentType.dataVisualizer,
 });
 
 const DataVisualizerDefaultText: React.FC = () => {
@@ -297,7 +301,7 @@ const DataVisualizerDefaultText: React.FC = () => {
           <code>
             k<sup>th</sup>
           </code>,
-          <code>n</code>
+          <code>n</code>,
         ]}
       />
       <br />

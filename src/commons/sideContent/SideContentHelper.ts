@@ -1,5 +1,5 @@
+import type { TabId } from '@blueprintjs/core';
 import * as bpcore from '@blueprintjs/core';
-import { TabId } from '@blueprintjs/core';
 import * as bpicons from '@blueprintjs/icons';
 import * as jsslang from 'js-slang';
 import * as jsslangDist from 'js-slang/dist';
@@ -16,13 +16,13 @@ import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../utils/Hooks';
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
 import { visitSideContent } from './SideContentActions';
-import {
+import type {
   ModuleSideContent,
   SideContentLocation,
   SideContentState,
   SideContentTab,
-  SideContentType
 } from './SideContentTypes';
+import { SideContentType } from './SideContentTypes';
 
 const requireProvider = (x: string) => {
   const exports = {
@@ -34,7 +34,7 @@ const requireProvider = (x: string) => {
     '@blueprintjs/icons': bpicons,
     'js-slang': jsslang,
     'js-slang/dist': jsslangDist,
-    lodash
+    lodash,
   };
 
   if (!(x in exports)) throw new Error(`Dynamic require of ${x} is not supported`);
@@ -62,7 +62,7 @@ export function getDynamicTabs(debuggerContext: DebuggerContext): SideContentTab
     .map(tab => ({
       ...tab,
       body: tab.body(debuggerContext),
-      id: SideContentType.module
+      id: SideContentType.module,
     }));
 }
 
@@ -75,7 +75,7 @@ export const generateTabAlert = (shouldAlert: boolean) =>
 export const useSideContent = (location: SideContentLocation, defaultTab?: SideContentType) => {
   const [workspaceLocation] = getLocation(location);
   const { alerts, dynamicTabs, selectedTab, height }: SideContentState = useTypedSelector(
-    state => state.sideContent[workspaceLocation]
+    state => state.sideContent[workspaceLocation],
   );
   const dispatch = useDispatch();
   const setSelectedTab = useCallback(
@@ -89,7 +89,7 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
       }
       dispatch(visitSideContent(newId, selectedTab, location));
     },
-    [dispatch, location, selectedTab]
+    [dispatch, location, selectedTab],
   );
 
   return {
@@ -97,7 +97,7 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
     dynamicTabs,
     selectedTab: selectedTab ?? defaultTab,
     setSelectedTab,
-    height
+    height,
   };
 };
 
@@ -105,5 +105,5 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
  * Give a SideContentLocation specification, return the WorkspaceLocation
  */
 export const getLocation = (location: SideContentLocation): [location: SideContentLocation] => [
-  location
+  location,
 ];

@@ -1,10 +1,10 @@
 import { Drawer, DrawerSize, NonIdealState, Spinner } from '@blueprintjs/core';
-import { IconName, IconNames } from '@blueprintjs/icons';
+import { type IconName, IconNames } from '@blueprintjs/icons';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import SessionActions from '../application/actions/SessionActions';
-import { AssessmentStatuses, AssessmentType } from '../assessment/AssessmentTypes';
+import { AssessmentStatuses, type AssessmentType } from '../assessment/AssessmentTypes';
 import Constants from '../utils/Constants';
 import { useSession } from '../utils/Hooks';
 import ProfileCard from './ProfileCard';
@@ -27,7 +27,7 @@ const Profile = (props => {
     assessmentOverviews,
     assessmentConfigurations,
     xp,
-    courseId
+    courseId,
   } = useSession();
 
   const dispatch = useDispatch();
@@ -45,7 +45,7 @@ const Profile = (props => {
   }, [isEnrolledInACourse, dispatch, xp]);
 
   const [isLoaded, setIsLoaded] = useState(
-    isLoggedIn && isEnrolledInACourse && assessmentOverviews
+    isLoggedIn && isEnrolledInACourse && assessmentOverviews,
   );
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const Profile = (props => {
   } else {
     // Check if there are any closed assessments, else render a placeholder <div>
     const numClosed = assessmentOverviews!.filter(
-      item => item.status === AssessmentStatuses.submitted
+      item => item.status === AssessmentStatuses.submitted,
     ).length;
 
     const userXp = xp || 0;
@@ -109,7 +109,7 @@ const Profile = (props => {
           IconNames.LIGHTBULB,
           IconNames.PREDICTIVE_ANALYSIS,
           IconNames.COMPARISON,
-          IconNames.MANUAL
+          IconNames.MANUAL,
         ];
         if (assessmentConfigurations) {
           const index = assessmentConfigurations.findIndex(c => c.type === assessmentType);

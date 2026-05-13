@@ -1,5 +1,6 @@
 import { Button, MenuItem } from '@blueprintjs/core';
-import { ItemRenderer, Select } from '@blueprintjs/select';
+import type { ItemRenderer } from '@blueprintjs/select';
+import { Select } from '@blueprintjs/select';
 import { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 

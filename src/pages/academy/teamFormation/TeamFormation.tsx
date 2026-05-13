@@ -8,7 +8,7 @@ const TeamFormation: React.FC = () => {
   const { teamFormationOverviews } = useSession();
   const data =
     teamFormationOverviews?.map(e =>
-      !e.studentNames ? { ...e, studentName: '(user has yet to log in)' } : e
+      !e.studentNames ? { ...e, studentName: '(user has yet to log in)' } : e,
     ) ?? [];
   /* Display either a loading screen or a table with overviews. */
   const loadingDisplay = (

@@ -12,7 +12,7 @@ const translations = {
     Quests: 'Quests',
     Paths: 'Paths',
     Contests: 'Contests',
-    Others: 'Others'
+    Others: 'Others',
   },
   dropdown: {
     'My Courses': 'My Courses',
@@ -20,8 +20,8 @@ const translations = {
     Logout: 'Logout',
     Settings: 'Settings',
     About: 'About',
-    Help: 'Help'
-  }
+    Help: 'Help',
+  },
 };
 
 export default translations;

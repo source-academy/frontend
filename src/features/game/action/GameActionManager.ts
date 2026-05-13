@@ -1,8 +1,8 @@
-import { ItemId } from '../commons/CommonTypes';
+import type { ItemId } from '../commons/CommonTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import ActionConditionChecker from './GameActionConditionChecker';
 import GameActionExecuter from './GameActionExecuter';
-import { ActionCondition, GameActionType } from './GameActionTypes';
+import type { ActionCondition, GameActionType } from './GameActionTypes';
 
 /**
  * This class manages all game actions, and is called whenever
@@ -73,7 +73,7 @@ export default class GameActionManager {
   private async checkCanPlayAction(
     isRepeatable: boolean,
     interactionId: string,
-    actionConditions: ActionCondition[]
+    actionConditions: ActionCondition[],
   ) {
     return (
       (isRepeatable || !GameGlobalAPI.getInstance().hasTriggeredInteraction(interactionId)) &&

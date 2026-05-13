@@ -19,7 +19,7 @@ const Markdown: React.FC<Props> = props => {
     simplifiedAutoLink: props.simplifiedAutoLink,
     strikethrough: props.strikethrough,
     tasklists: props.tasklists,
-    openLinksInNewWindow: props.openLinksInNewWindow
+    openLinksInNewWindow: props.openLinksInNewWindow,
   });
 
   return (
@@ -28,8 +28,8 @@ const Markdown: React.FC<Props> = props => {
       dangerouslySetInnerHTML={{
         __html: DOMPurify.sanitize(converter.makeHtml(props.content), {
           USE_PROFILES: { html: true },
-          ADD_ATTR: ['target']
-        })
+          ADD_ATTR: ['target'],
+        }),
       }}
     />
   );

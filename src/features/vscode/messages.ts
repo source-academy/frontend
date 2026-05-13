@@ -34,7 +34,7 @@ const Messages = createMessages({
     chapter: number,
     prepend: string,
     initialCode: string,
-    breakpoints: string[]
+    breakpoints: string[],
   ) => ({
     workspaceLocation,
     assessmentName,
@@ -42,70 +42,70 @@ const Messages = createMessages({
     chapter,
     prepend,
     initialCode,
-    breakpoints
+    breakpoints,
   }),
   Text: (workspaceLocation: VscWorkspaceLocation, code: string) => ({
     workspaceLocation,
-    code
+    code,
   }),
   EvalEditor: (workspaceLocation: VscWorkspaceLocation) => ({
-    workspaceLocation: workspaceLocation
+    workspaceLocation: workspaceLocation,
   }),
   NotifyAssessmentsOverview: (assessmentOverviews: VscAssessmentOverview[], courseId: number) => ({
     assessmentOverviews,
-    courseId
+    courseId,
   }),
   Navigate: (route: string) => ({
-    route
+    route,
   }),
   McqQuestion: (
     workspaceLocation: VscWorkspaceLocation,
     assessmentName: string,
     questionId: number,
     chapter: number,
-    options: string[]
+    options: string[],
   ) => ({
     workspaceLocation,
     assessmentName,
     questionId,
     chapter,
-    options
+    options,
   }),
   McqAnswer: (
     workspaceLocation: VscWorkspaceLocation,
     assessmentName: string,
     questionId: number,
-    choice: number
+    choice: number,
   ) => ({
     workspaceLocation,
     assessmentName,
     questionId,
-    choice
+    choice,
   }),
   ChangeChapter: (
     assessmentName: string,
     questionId: number,
     chapter: Chapter,
-    variant: Variant
+    variant: Variant,
   ) => ({
     assessmentName,
     questionId,
     chapter,
-    variant
+    variant,
   }),
   ResetEditor: (workspaceLocation: VscWorkspaceLocation, initialCode: string) => ({
     workspaceLocation,
-    initialCode
+    initialCode,
   }),
   AssessmentAnswer: (questionId: number, answer: string) => ({
     questionId,
-    answer
+    answer,
   }),
   LoginWithBrowser: (route: string) => ({ route }),
   SetEditorBreakpoints: (workspaceLocation: VscWorkspaceLocation, newBreakpoints: string[]) => ({
     workspaceLocation,
-    newBreakpoints
-  })
+    newBreakpoints,
+  }),
 });
 
 export default Messages;
@@ -121,7 +121,7 @@ type BaseMessage<T extends string, P extends object> = {
 
 // A helper function to create messages dynamically from schema (hoisted!)
 function createMessages<T extends Record<string, (...args: any[]) => object>>(
-  creators: T
+  creators: T,
 ): {
   [K in Extract<keyof T, string>]: (...args: Parameters<T[K]>) => BaseMessage<K, ReturnType<T[K]>>;
 } {
@@ -130,9 +130,9 @@ function createMessages<T extends Record<string, (...args: any[]) => object>>(
       key,
       (...args: any[]) => ({
         type: key,
-        ...creator(...args)
-      })
-    ])
+        ...creator(...args),
+      }),
+    ]),
   ) as any;
 }
 
@@ -152,10 +152,10 @@ export const MessageTypeNames = (() =>
       .reduce(
         (acc, cur) => ({
           ...acc,
-          [cur]: cur
+          [cur]: cur,
         }),
-        {}
-      )
+        {},
+      ),
   }) as {
     [k in keyof typeof Messages]: k;
   })();

@@ -1,4 +1,5 @@
-import { Conduit, IConduit } from '@sourceacademy/conductor/conduit';
+import type { IConduit } from '@sourceacademy/conductor/conduit';
+import { Conduit } from '@sourceacademy/conductor/conduit';
 
 import AutoCompletePlugin from './AutocompletePlugin';
 import { BrowserHostPlugin } from './BrowserHostPlugin';
@@ -6,7 +7,7 @@ import { BrowserHostPlugin } from './BrowserHostPlugin';
 export function createConductor(
   evaluatorPath: string,
   onRequestFile: (fileName: string) => Promise<string | undefined>,
-  onRequestLoadPlugin: (pluginName: string) => void
+  onRequestLoadPlugin: (pluginName: string) => void,
 ): { hostPlugin: BrowserHostPlugin; conduit: IConduit } {
   const worker = new Worker(evaluatorPath);
   const conduit = new Conduit(worker, true);

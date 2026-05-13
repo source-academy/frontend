@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import CseMachine from '../CseMachine';
 import { Config } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { Data } from '../CseMachineTypes';
+import type { Data } from '../CseMachineTypes';
 import { isDummyKey, isMainReference } from '../CseMachineUtils';
 import { ArrowFromText } from './arrows/ArrowFromText';
 import { GenericArrow } from './arrows/GenericArrow';
@@ -44,7 +44,7 @@ export class Binding extends Visible {
     /** previous binding (the binding above it) */
     readonly prevBinding: Binding | null,
     readonly isConstant: boolean = false,
-    readonly isLive: boolean = true
+    readonly isLive: boolean = true,
   ) {
     super();
     this.isDummyBinding = isDummyKey(this.keyString);
@@ -77,7 +77,7 @@ export class Binding extends Visible {
       maxWidth: availableKeyWidth,
       faded: !this.isLive,
       bindingType: colon,
-      parentFrame: this.frame
+      parentFrame: this.frame,
     });
 
     this.printFnDescriptionHeight =
@@ -99,7 +99,7 @@ export class Binding extends Visible {
         ? this.value.totalHeight
         : this.rendersReferencedValue()
           ? this.value.height() + this.printFnDescriptionHeight
-          : 0
+          : 0,
     );
 
     if (this.isDummyBinding && !isMainReference(this.value, this)) {

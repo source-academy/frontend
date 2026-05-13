@@ -1,8 +1,9 @@
 import { Button, EditableText, MenuItem, NumericInput, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemRenderer, Select } from '@blueprintjs/select';
-import { BinaryMeta, GoalMeta } from 'src/features/achievement/AchievementTypes';
-import { AND, BooleanExpression, OR } from 'src/features/achievement/ExpressionTypes';
+import type { ItemRenderer } from '@blueprintjs/select';
+import { Select } from '@blueprintjs/select';
+import type { BinaryMeta, GoalMeta } from 'src/features/achievement/AchievementTypes';
+import { AND, type BooleanExpression, OR } from 'src/features/achievement/ExpressionTypes';
 
 /**
  * Possible extension: event should be a select of type EventTypes (import from ExpressionTypes)

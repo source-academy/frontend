@@ -1,4 +1,4 @@
-import { Store } from '@reduxjs/toolkit';
+import type { Store } from '@reduxjs/toolkit';
 import _ from 'lodash';
 import mockStore from 'redux-mock-store';
 
@@ -15,14 +15,14 @@ import {
   defaultSideContentManager,
   defaultVscode,
   defaultWorkspaceManager,
-  OverallState
+  type OverallState,
 } from '../application/ApplicationTypes';
 import { defaultFeatureFlags } from '../featureFlags';
-import { SourceActionType } from '../utils/ActionsHelper';
-import { DeepPartial } from '../utils/TypeHelper';
+import type { SourceActionType } from '../utils/ActionsHelper';
+import type { DeepPartial } from '../utils/TypeHelper';
 
 export function mockInitialStore(
-  overrides?: DeepPartial<OverallState>
+  overrides?: DeepPartial<OverallState>,
 ): Store<OverallState, SourceActionType> {
   const createStore = (mockStore as any)();
   const state: OverallState = {
@@ -38,14 +38,14 @@ export function mockInitialStore(
     sideContent: defaultSideContentManager,
     vscode: defaultVscode,
     languageDirectory: defaultLanguageDirectory,
-    pluginDirectory: defaultPluginDirectory
+    pluginDirectory: defaultPluginDirectory,
   };
 
   const lodashMergeCustomizer = (objValue: any, srcValue: any) => {
     if (_.isObject(objValue)) {
       return {
         ...objValue, // destination object
-        ...srcValue // overrides
+        ...srcValue, // overrides
       };
     }
   };

@@ -1,13 +1,13 @@
 import { Button, Classes, Divider, HTMLSelect } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
-import { useEffect, useState } from 'react';
-import type { Matcher } from 'react-day-picker';
+import type { Matcher } from '@daypicker/react';
 import {
   DayPicker,
   MonthCaption as DayPickerMonthCaption,
-  Nav as DayPickerNav
-} from 'react-day-picker';
+  Nav as DayPickerNav,
+} from '@daypicker/react';
+import classNames from 'classnames';
+import { useEffect, useState } from 'react';
 
 import GradingFlex from '../grading/GradingFlex';
 import TimePicker from './TimePicker';
@@ -34,7 +34,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   showTimePicker,
   timePickerProps,
   minDate,
-  maxDate
+  maxDate,
 }) => {
   const [selectedDatetime, setSelectedDatetime] = useState<Date | undefined>(value);
 
@@ -50,7 +50,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
         date.getDate(),
         selectedDatetime.getHours(),
         selectedDatetime.getMinutes(),
-        selectedDatetime.getSeconds()
+        selectedDatetime.getSeconds(),
       );
       setSelectedDatetime(newDatetime);
       onChange(newDatetime);
@@ -68,7 +68,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
         selectedDatetime.getDate(),
         time.getHours(),
         time.getMinutes(),
-        time.getSeconds()
+        time.getSeconds(),
       );
       onChange(newDatetime);
     }
@@ -108,7 +108,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
                 className={classNames(
                   modifiers.selected && Classes.ACTIVE,
                   (modifiers.selected || (highlightCurrentDay && modifiers.today)) &&
-                    Classes.INTENT_PRIMARY
+                    Classes.INTENT_PRIMARY,
                 )}
                 disabled={modifiers.outside}
                 // @ts-expect-error - mismatched types
@@ -143,7 +143,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
               // @ts-expect-error - mismatched types
               <Button icon={IconNames.CHEVRON_LEFT} variant="minimal" onClick={onClick} />
             );
-          }
+          },
         }}
       />
       {showTimePicker && (

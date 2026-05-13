@@ -46,7 +46,7 @@ const restrictedImports = [
 ];
 
 export default tseslint.config(
-  { ignores: ['eslint.config.mjs', '**/*.snap'] },
+  { ignores: ['eslint.config.js', '**/*.snap'] },
   eslint.configs.recommended,
   tseslint.configs.recommended,
   // TODO: Enable when ready

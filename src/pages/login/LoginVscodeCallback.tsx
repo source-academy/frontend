@@ -8,7 +8,7 @@ import {
   Icon,
   NonIdealState,
   Spinner,
-  SpinnerSize
+  SpinnerSize,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
@@ -31,7 +31,7 @@ const LoginVscodeCallback: React.FC = () => {
   const {
     code,
     provider: providerId,
-    'client-request-id': clientRequestId
+    'client-request-id': clientRequestId,
   } = parseQuery(location.search);
   const isVscode = useTypedSelector(state => state.vscode.isVscode);
   const { access_token: accessToken, refresh_token: refreshToken } = parseQuery(location.search);
@@ -62,8 +62,8 @@ const LoginVscodeCallback: React.FC = () => {
       dispatch(
         SessionActions.setTokens({
           accessToken: accessToken,
-          refreshToken: refreshToken
-        })
+          refreshToken: refreshToken,
+        }),
       );
       dispatch(SessionActions.fetchUserAndCourse());
       navigate('/welcome');

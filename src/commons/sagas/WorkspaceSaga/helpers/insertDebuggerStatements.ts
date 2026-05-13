@@ -1,10 +1,10 @@
-import { Context } from 'js-slang';
+import type { Context } from 'js-slang';
 import { parse } from 'js-slang/dist/parser/parser';
-import { put, StrictEffect } from 'redux-saga/effects';
+import { put, type StrictEffect } from 'redux-saga/effects';
 
 import { isSourceLanguage } from '../../../application/ApplicationTypes';
 import { actions } from '../../../utils/ActionsHelper';
-import { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 
 /**
  * Inserts debugger statements into the code based off the breakpoints set by the user.
@@ -39,7 +39,7 @@ export function* insertDebuggerStatements(
   workspaceLocation: WorkspaceLocation,
   code: string,
   breakpoints: string[],
-  context: Context
+  context: Context,
 ): Generator<StrictEffect, string, any> {
   // Check for initial syntax errors.
   if (isSourceLanguage(context.chapter)) {

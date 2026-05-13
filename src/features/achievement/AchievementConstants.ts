@@ -8,12 +8,12 @@ export const AchievementContext = createContext(new AchievementInferencer([], []
 
 export enum DeadlineColors {
   RED = '#f00',
-  BLACK = '#000'
+  BLACK = '#000',
 }
 
 export enum FilterColors {
   BLUE = '#4df',
-  WHITE = '#fff'
+  WHITE = '#fff',
 }
 
 export const achievementAssets = `${Links.sourceAcademyAssets}achievement`;
@@ -25,7 +25,7 @@ export const coverImageUrl = `${achievementAssets}/cover-image`;
 
 export const getAbilityBackground = () => {
   return {
-    background: `url(${backgroundUrl}/exploration.png) no-repeat center/cover`
+    background: `url(${backgroundUrl}/exploration.png) no-repeat center/cover`,
   };
   /*
   switch (ability) {
@@ -79,7 +79,7 @@ export const getAbilityColor = () => {
 
 export const getAbilityGlow = () => ({
   border: `1px solid ${getAbilityColor()}`,
-  boxShadow: `0 0 10px ${getAbilityColor()}`
+  boxShadow: `0 0 10px ${getAbilityColor()}`,
 });
 /*
   ability === AchievementAbility.FLEX

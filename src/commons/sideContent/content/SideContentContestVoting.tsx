@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ContestEntry } from '../../assessment/AssessmentTypes';
+import type { ContestEntry } from '../../assessment/AssessmentTypes';
 
 type Props = {
   handleContestEntryClick: (submissionId: number, answer: string) => void;
@@ -20,7 +20,7 @@ const TIERS = [
   { name: 'A', color: 'rgb(255, 223, 127)', score: 7 },
   { name: 'B', color: 'rgb(255, 255, 127)', score: 4 },
   { name: 'C', color: 'rgb(191, 255, 127)', score: 2 },
-  { name: 'D', color: 'rgb(127, 191, 255)', score: 1 }
+  { name: 'D', color: 'rgb(127, 191, 255)', score: 1 },
 ];
 
 const SideContentContestVoting: React.FC<Props> = ({
@@ -28,7 +28,7 @@ const SideContentContestVoting: React.FC<Props> = ({
   canSave,
   isValid,
   handleContestEntryClick,
-  handleVotingSubmissionChange
+  handleVotingSubmissionChange,
 }) => {
   const { t } = useTranslation('sideContent', { keyPrefix: 'contestVoting' });
   const [showContestEntries, setShowContestEntries] = useState(true);
@@ -55,7 +55,7 @@ const SideContentContestVoting: React.FC<Props> = ({
         }
         setHoveredTier(null);
       },
-    [handleVotingSubmissionChange]
+    [handleVotingSubmissionChange],
   );
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -80,7 +80,7 @@ const SideContentContestVoting: React.FC<Props> = ({
         setHoveredTier(null);
       }
     },
-    [hoveredTier]
+    [hoveredTier],
   );
 
   const handleDrop = useCallback(
@@ -91,7 +91,7 @@ const SideContentContestVoting: React.FC<Props> = ({
         container.appendChild(currentDraggedItem as Node);
       }
     },
-    [currentDraggedItem]
+    [currentDraggedItem],
   );
 
   const contestEntryRefs = useRef<Record<number, HTMLDivElement | null>>({});
@@ -101,7 +101,7 @@ const SideContentContestVoting: React.FC<Props> = ({
     return TIERS.map((tier, index) => (
       <div
         className={classNames('tier', {
-          'hovered-tier': hoveredTier === `tier-${tier.name.toLowerCase()}`
+          'hovered-tier': hoveredTier === `tier-${tier.name.toLowerCase()}`,
         })}
         key={`tier-${tier.name.toLowerCase()}`}
         id={`tier-${tier.name.toLowerCase()}`}
@@ -156,7 +156,7 @@ const SideContentContestVoting: React.FC<Props> = ({
                     onClick={() =>
                       handleContestEntryClick(
                         contestEntry.submission_id,
-                        contestEntry.answer.code ?? ''
+                        contestEntry.answer.code ?? '',
                       )
                     }
                   >
@@ -182,8 +182,8 @@ const SideContentContestVoting: React.FC<Props> = ({
       isValid,
       canSave,
       handleDragEnd,
-      handleContestEntryClick
-    ]
+      handleContestEntryClick,
+    ],
   );
 
   // Upon initial render, loads contest entries in the correct tier using saved score
@@ -193,7 +193,7 @@ const SideContentContestVoting: React.FC<Props> = ({
         const savedTierIndex = TIERS.findIndex(tier =>
           // We are using <= instead of === for backwards
           // compatibiilty with legacy voting submisions.
-          entry.score ? tier.score <= entry.score : false
+          entry.score ? tier.score <= entry.score : false,
         );
         if (savedTierIndex !== -1) {
           const tierContainer = tierContainerRefs.current[savedTierIndex];

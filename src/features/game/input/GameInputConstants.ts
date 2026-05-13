@@ -11,6 +11,6 @@ export const keyboardShortcuts = {
     Phaser.Input.Keyboard.KeyCodes.ONE,
     Phaser.Input.Keyboard.KeyCodes.TWO,
     Phaser.Input.Keyboard.KeyCodes.THREE,
-    Phaser.Input.Keyboard.KeyCodes.FOUR
-  ]
+    Phaser.Input.Keyboard.KeyCodes.FOUR,
+  ],
 };

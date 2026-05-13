@@ -11,7 +11,7 @@ const defaultColumnDefs: ColDef = {
   flex: 1,
   filter: true,
   resizable: true,
-  sortable: true
+  sortable: true,
 };
 
 const Dashboard: React.FC = () => {
@@ -21,7 +21,7 @@ const Dashboard: React.FC = () => {
   const columnDefs = gradingSummary.cols.map(e => {
     return {
       headerName: startCase(e),
-      field: e
+      field: e,
     };
   });
 

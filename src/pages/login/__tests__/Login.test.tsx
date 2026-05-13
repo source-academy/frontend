@@ -1,10 +1,10 @@
-import { Store } from '@reduxjs/toolkit';
+import type { Store } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
 import { Provider, useDispatch } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { Mock, vi } from 'vitest';
+import type { OverallState } from 'src/commons/application/ApplicationTypes';
+import { type Mock, vi } from 'vitest';
 
 import { mockInitialStore } from '../../../commons/mocks/StoreMocks';
 import Login from '../Login';
@@ -13,7 +13,7 @@ import LoginPage from '../LoginPage';
 
 vi.mock('react-redux', async () => ({
   ...(await vi.importActual('react-redux')),
-  useDispatch: vi.fn()
+  useDispatch: vi.fn(),
 }));
 const useDispatchMock = useDispatch as Mock;
 const dispatchMock = vi.fn();
@@ -24,8 +24,8 @@ vi.mock('../../../commons/utils/Constants', () => {
     default: {
       otherAuthProviders: new Map([['luminus', { name: 'LumiNUS' }]]),
       defaultSourceChapter: 4,
-      defaultSourceVariant: 'default'
-    }
+      defaultSourceVariant: 'default',
+    },
   };
 });
 
@@ -33,7 +33,7 @@ vi.mock('../../../commons/utils/Constants', () => {
 const navigateSpy = vi.fn();
 vi.mock('react-router', async () => ({
   ...(await vi.importActual('react-router')),
-  useNavigate: () => navigateSpy
+  useNavigate: () => navigateSpy,
 }));
 
 const createTestComponent = (mockStore: Store<OverallState>, location: string) => {
@@ -44,11 +44,11 @@ const createTestComponent = (mockStore: Store<OverallState>, location: string) =
         element: <Login />,
         children: [
           { path: '', element: <LoginPage /> },
-          { path: 'callback', element: <LoginCallback /> }
-        ]
-      }
+          { path: 'callback', element: <LoginCallback /> },
+        ],
+      },
     ],
-    { initialEntries: [location] }
+    { initialEntries: [location] },
   );
   return (
     <Provider store={mockStore}>
@@ -91,7 +91,7 @@ describe('Login', () => {
     const jwtCookie = `{"access_token":"12345","refresh_token":"67890"}`;
     Object.defineProperty(window.document, 'cookie', {
       writable: true,
-      value: `jwts=${jwtCookie}`
+      value: `jwts=${jwtCookie}`,
     });
 
     const store = mockInitialStore();
@@ -105,8 +105,8 @@ describe('Login', () => {
     test('/login redirects to /welcome', () => {
       const store = mockInitialStore({
         session: {
-          name: 'Bob'
-        }
+          name: 'Bob',
+        },
       });
       const app = createTestComponent(store, '/login');
       render(app);
@@ -117,8 +117,8 @@ describe('Login', () => {
     test('/login/callback redirects to /welcome', () => {
       const store = mockInitialStore({
         session: {
-          name: 'Bob'
-        }
+          name: 'Bob',
+        },
       });
       const app = createTestComponent(store, '/login/callback?code=abc');
       render(app);
@@ -133,8 +133,8 @@ describe('Login', () => {
       const store = mockInitialStore({
         session: {
           name: 'Bob',
-          courseId
-        }
+          courseId,
+        },
       });
       const app = createTestComponent(store, '/login');
       render(app);
@@ -147,8 +147,8 @@ describe('Login', () => {
       const store = mockInitialStore({
         session: {
           name: 'Bob',
-          courseId
-        }
+          courseId,
+        },
       });
       const app = createTestComponent(store, '/login/callback');
       render(app);

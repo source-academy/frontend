@@ -1,6 +1,9 @@
 import 'src/styles/Leaderboard.scss';
 
-import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
+import type {
+  ContestLeaderboardRow,
+  LeaderboardRow,
+} from 'src/features/leaderboard/LeaderboardTypes';
 
 type Props =
   | { type: 'overall'; data: LeaderboardRow[]; outputType: undefined }

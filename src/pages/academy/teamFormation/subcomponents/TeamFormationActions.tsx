@@ -25,7 +25,7 @@ const TeamFormationActions: React.FC<Props> = ({ teamId }) => {
         </>
       ),
       positiveIntent: 'danger',
-      positiveLabel: 'Delete Team'
+      positiveLabel: 'Delete Team',
     });
     if (confirm) {
       dispatch(SessionActions.deleteTeam(teamId));

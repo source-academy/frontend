@@ -1,15 +1,20 @@
 import { Button, Classes, Divider, MenuItem, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemRenderer, Select } from '@blueprintjs/select';
+import type { ItemRenderer } from '@blueprintjs/select';
+import { Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 
-import { SALanguage, sourceLanguages, styliseSublanguage } from '../application/ApplicationTypes';
 import {
-  External,
+  type SALanguage,
+  sourceLanguages,
+  styliseSublanguage,
+} from '../application/ApplicationTypes';
+import {
+  type External,
   externalLibraries,
-  ExternalLibraryName
+  ExternalLibraryName,
 } from '../application/types/ExternalTypes';
-import { Assessment, emptyLibrary, Library } from '../assessment/AssessmentTypes';
+import { type Assessment, emptyLibrary, type Library } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
@@ -187,7 +192,7 @@ const DeploymentTab: React.FC<Props> = props => {
     if (isEmptyLibrary()) {
       let library = getValueFromPath(
         props.pathToCopy || ['globalDeployment'],
-        assessment
+        assessment,
       ) as Library;
       if (library.chapter === -1) {
         library = assessment.globalDeployment!;
@@ -237,7 +242,7 @@ const altEval = (str: string): any => {
 const chapterSelect = (
   currentChap: Chapter,
   variant: Variant = Variant.DEFAULT,
-  handleSelect = (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => {}
+  handleSelect = (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => {},
 ) => (
   <ChapterSelectComponent
     className={Classes.MINIMAL}
@@ -263,12 +268,12 @@ const chapterRenderer: ItemRenderer<SALanguage> = (chap, { handleClick, modifier
 const iExternals = Array.from(externalLibraries.entries()).map((entry, index) => ({
   name: entry[0] as ExternalLibraryName,
   key: index,
-  symbols: entry[1]
+  symbols: entry[1],
 }));
 
 const externalSelect = (
   currentExternal: string,
-  handleSelect: (i: External, e?: React.SyntheticEvent<HTMLElement>) => void
+  handleSelect: (i: External, e?: React.SyntheticEvent<HTMLElement>) => void,
 ) => (
   <ExternalSelectComponent
     className={Classes.MINIMAL}

@@ -14,11 +14,8 @@ import insertFakeAchievements from '../../../commons/achievement/utils/InsertFak
 import SessionActions from '../../../commons/application/actions/SessionActions';
 import AchievementActions from '../../../features/achievement/AchievementActions';
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
-import {
-  AchievementUser,
-  FilterStatus,
-  GoalProgress
-} from '../../../features/achievement/AchievementTypes';
+import type { AchievementUser, GoalProgress } from '../../../features/achievement/AchievementTypes';
+import { FilterStatus } from '../../../features/achievement/AchievementTypes';
 
 /**
  * Generates <AchievementTask /> components
@@ -30,7 +27,7 @@ import {
 export const generateAchievementTasks = (
   taskUuids: string[],
   filterStatus: FilterStatus,
-  focusState: [string, any]
+  focusState: [string, any],
 ) =>
   taskUuids.map(taskUuid => (
     <AchievementTask
@@ -52,14 +49,14 @@ const AchievementDashboard: React.FC = () => {
     name,
     role,
     assessmentOverviews,
-    assessmentConfigurations: assessmentConfigs
+    assessmentConfigurations: assessmentConfigs,
   } = useSession();
 
   const { assessmentOverviews: achievementAssessmentOverviews, users } = useTypedSelector(
-    state => state.achievement
+    state => state.achievement,
   );
   const inferencer = useTypedSelector(
-    state => new AchievementInferencer(state.achievement.achievements, state.achievement.goals)
+    state => new AchievementInferencer(state.achievement.achievements, state.achievement.goals),
   );
 
   const dispatch = useDispatch();
@@ -70,7 +67,7 @@ const AchievementDashboard: React.FC = () => {
     handleGetOwnGoals,
     handleGetUserAssessmentOverviews,
     handleGetUsers,
-    handleUpdateGoalProgress
+    handleUpdateGoalProgress,
   } = useMemo(() => {
     return {
       handleFetchAssessmentOverviews: () => dispatch(SessionActions.fetchAssessmentOverviews()),
@@ -82,7 +79,7 @@ const AchievementDashboard: React.FC = () => {
         dispatch(AchievementActions.getUserAssessmentOverviews(studentCourseRegId)),
       handleGetUsers: () => dispatch(AchievementActions.getUsers()),
       handleUpdateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) =>
-        dispatch(AchievementActions.updateGoalProgress(studentCourseRegId, progress))
+        dispatch(AchievementActions.updateGoalProgress(studentCourseRegId, progress)),
     };
   }, [dispatch]);
 
@@ -109,7 +106,7 @@ const AchievementDashboard: React.FC = () => {
     handleGetGoals,
     handleGetOwnGoals,
     handleGetUserAssessmentOverviews,
-    selectedUser
+    selectedUser,
   ]);
 
   const userAssessmentOverviews = selectedUser
@@ -182,7 +179,7 @@ const AchievementDashboard: React.FC = () => {
                 ? inferencer.listSortedReleasedTaskUuids()
                 : inferencer.listAllSortedAchievementUuids(),
               filterStatus,
-              focusState
+              focusState,
             )}
           </ul>
 

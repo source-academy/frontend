@@ -1,10 +1,10 @@
-import { Tokens } from 'src/commons/application/types/SessionTypes';
+import type { Tokens } from 'src/commons/application/types/SessionTypes';
 import { request } from 'src/commons/utils/RequestHelper';
 
 export async function initChat(tokens: Tokens): Promise<InitChatResponse> {
   const response = await request('chats', 'POST', {
     ...tokens,
-    body: {} // Empty body
+    body: {}, // Empty body
   });
   if (!response) {
     throw new Error('Unknown error occurred.');
@@ -21,15 +21,15 @@ export async function continueChat(
   tokens: Tokens,
   userMessage: string,
   section: string,
-  visibleText: string
+  visibleText: string,
 ): Promise<ContinueChatResponse> {
   const response = await request(`chats/message`, 'POST', {
     ...tokens,
     body: {
       message: userMessage,
       section: section,
-      initialContext: visibleText
-    }
+      initialContext: visibleText,
+    },
   });
   if (!response) {
     throw new Error('Unknown error occurred.');

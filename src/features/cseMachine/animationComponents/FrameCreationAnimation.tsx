@@ -12,7 +12,7 @@ import { CseAnimation } from '../CseMachineAnimation';
 import { Config } from '../CseMachineConfig';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { defaultActiveColor, defaultStrokeColor, isEnvEqual } from '../CseMachineUtils';
-import { Animatable, AnimationConfig } from './base/Animatable';
+import { Animatable, type AnimationConfig } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
 import { getNodeDimensions, getNodeLocation, getNodePosition } from './base/AnimationUtils';
@@ -44,7 +44,7 @@ export class FrameCreationAnimation extends Animatable {
 
   constructor(
     private origin: ControlItemComponent | StashItemComponent,
-    private frame: Frame
+    private frame: Frame,
   ) {
     super();
     const xDiff = frame.x() - origin.x();
@@ -56,12 +56,12 @@ export class FrameCreationAnimation extends Animatable {
         origin instanceof ControlItemComponent
           ? ControlStashConfig.ControlItemTextPadding
           : ControlStashConfig.StashItemTextPadding,
-      opacity: origin instanceof ControlItemComponent ? 1 : 0
+      opacity: origin instanceof ControlItemComponent ? 1 : 0,
     });
     this.borderAnimation = new AnimatedRectComponent({
       ...getNodePosition(origin),
       stroke: origin instanceof ControlItemComponent ? defaultActiveColor() : defaultStrokeColor(),
-      opacity: origin instanceof ControlItemComponent ? 1 : 0
+      opacity: origin instanceof ControlItemComponent ? 1 : 0,
     });
     if (frame.arrow) {
       this.frameArrowAnimation = new AnimatedGenericArrow(frame.arrow, { opacity: 0 });
@@ -71,7 +71,7 @@ export class FrameCreationAnimation extends Animatable {
       ...getNodeDimensions(frame.name),
       x: frame.name.x() - xDiff,
       y: frame.name.y() - yDiff,
-      opacity: 0
+      opacity: 0,
     });
     this.frameKeyAnimations = frame.bindings.map(binding => {
       return new AnimatedTextComponent({
@@ -79,11 +79,11 @@ export class FrameCreationAnimation extends Animatable {
         ...getNodeDimensions(binding.key),
         x: binding.key.x() - xDiff,
         y: binding.key.y() - yDiff,
-        opacity: 0
+        opacity: 0,
       });
     });
     this.frameValues = frame.bindings.flatMap(binding =>
-      binding.value instanceof PrimitiveValue ? binding.value : []
+      binding.value instanceof PrimitiveValue ? binding.value : [],
     );
     this.frameValueAnimations = this.frameValues.map(value => {
       return new AnimatedTextComponent({
@@ -91,7 +91,7 @@ export class FrameCreationAnimation extends Animatable {
         ...getNodeDimensions(value),
         x: value.x() - xDiff,
         y: value.y() - yDiff,
-        opacity: 0
+        opacity: 0,
       });
     });
     this.frameArrows = this.frameArrowAnimations = [];
@@ -114,7 +114,7 @@ export class FrameCreationAnimation extends Animatable {
       return new AnimatedGenericArrow(arrow, {
         x: -xDiff,
         y: -yDiff,
-        opacity: 0
+        opacity: 0,
       });
     });
     return (
@@ -138,14 +138,14 @@ export class FrameCreationAnimation extends Animatable {
     const fadeInConfig = {
       duration: (duration * 3) / 4,
       delay: duration / 4 + (animationConfig?.delay ?? 0),
-      easing: animationConfig?.easing
+      easing: animationConfig?.easing,
     };
     const framePosition = getNodePosition(this.frame);
     // Fade in the arrow last. Declared here first so it runs alongside the rest of the animations,
     // but needed to be awaited later on in this function
     const frameArrowAnimate = this.frameArrowAnimation?.animateTo(
       { opacity: 1 },
-      { delay: duration + (animationConfig?.delay ?? 0) }
+      { delay: duration + (animationConfig?.delay ?? 0) },
     );
     await Promise.all([
       // Fade out the control text during translation
@@ -157,25 +157,25 @@ export class FrameCreationAnimation extends Animatable {
           ...framePosition,
           stroke: defaultActiveColor(),
           opacity: 1,
-          cornerRadius: Config.FrameCornerRadius
+          cornerRadius: Config.FrameCornerRadius,
         },
-        translateConfig
+        translateConfig,
       ),
       this.frameNameAnimation.animateTo(getNodePosition(this.frame.name), translateConfig),
       // Also fade frame bindings in during translation
       ...this.frameKeyAnimations.flatMap((a, i) => [
         a.animateTo(getNodeLocation(this.frame.bindings[i].key), translateConfig),
-        a.animateTo({ opacity: 1 }, fadeInConfig)
+        a.animateTo({ opacity: 1 }, fadeInConfig),
       ]),
       ...this.frameValueAnimations.flatMap((a, i) => [
         a.animateTo(getNodeLocation(this.frameValues[i]), translateConfig),
-        a.animateTo({ opacity: 1 }, fadeInConfig)
+        a.animateTo({ opacity: 1 }, fadeInConfig),
       ]),
       ...this.frameArrowAnimations.flatMap(a => [
         a.animateTo({ x: 0, y: 0 }, translateConfig),
-        a.animateTo({ opacity: 1 }, fadeInConfig)
+        a.animateTo({ opacity: 1 }, fadeInConfig),
       ]),
-      this.frameNameAnimation.animateTo({ opacity: 1 }, fadeInConfig)
+      this.frameNameAnimation.animateTo({ opacity: 1 }, fadeInConfig),
     ]);
     // if variadic array exists, make it fade in together with the frame arrow
     this.variadicArray?.ref.current?.opacity(0);
@@ -183,7 +183,7 @@ export class FrameCreationAnimation extends Animatable {
     this.frame.ref.current?.show();
     this.variadicArray?.ref.current?.to({
       opacity: 1,
-      duration: CseAnimation.defaultDuration / 1000
+      duration: CseAnimation.defaultDuration / 1000,
     });
     // Wait for the frame arrow animation to finish before returning
     await frameArrowAnimate;

@@ -1,5 +1,5 @@
 import { Icon } from '@blueprintjs/core';
-import { CustomHeaderProps } from 'ag-grid-react';
+import type { CustomHeaderProps } from 'ag-grid-react';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
@@ -35,7 +35,7 @@ const GradingColumnCustomHeaders: React.FC<Props> = props => {
     <GradingFlex
       className={classNames(
         props.eGridHeader.classList,
-        classes['grading-table-header-individual']
+        classes['grading-table-header-individual'],
       )}
     >
       <span className="ag-header-cell-text">{props.displayName}</span>

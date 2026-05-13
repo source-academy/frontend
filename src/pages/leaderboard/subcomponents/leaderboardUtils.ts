@@ -1,4 +1,4 @@
-import { LoaderFunction, redirect, replace } from 'react-router';
+import { type LoaderFunction, redirect, replace } from 'react-router';
 import { store } from 'src/pages/createStore';
 
 export const leaderboardLoader: LoaderFunction = ({ request, params }) => {

@@ -7,7 +7,7 @@ import { wrapSaga } from '../SafeEffects';
 
 vi.mock('@sentry/react', async importOriginal => ({
   ...(await importOriginal()),
-  captureException: vi.fn()
+  captureException: vi.fn(),
 }));
 
 // Silence console error

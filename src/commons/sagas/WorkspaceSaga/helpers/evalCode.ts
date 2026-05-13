@@ -1,7 +1,7 @@
 import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { RunnerStatus } from '@sourceacademy/conductor/types';
-import { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
+import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import { tokenizer } from 'acorn';
 import { type Context, interrupt, type Result, resume, runFilesInContext } from 'js-slang';
 import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
@@ -45,22 +45,22 @@ function toConductorSourceError(error: unknown): SourceError {
     location: {
       start: {
         line: 0,
-        column: 0
+        column: 0,
       },
       end: {
         line: 0,
-        column: 0
-      }
+        column: 0,
+      },
     },
     explain: () => message,
-    elaborate: () => ''
+    elaborate: () => '',
   };
 }
 
 async function wasm_compile_and_run(
   wasmCode: string,
   context: Context,
-  isRepl: boolean
+  isRepl: boolean,
 ): Promise<Result> {
   try {
     const wasmModule = await Sourceror.compile(wasmCode, context, isRepl);
@@ -70,7 +70,7 @@ async function wasm_compile_and_run(
       Sourceror.makePlatformImports(makeSourcerorExternalBuiltins(context), transcoder),
       transcoder,
       context,
-      isRepl
+      isRepl,
     );
     return { status: 'finished', context, value: returnedValue };
   } catch (e) {
@@ -87,15 +87,15 @@ async function cCompileAndRun(cCode: string, context: Context): Promise<Result> 
       location: {
         start: {
           line: 0,
-          column: 0
+          column: 0,
         },
         end: {
           line: 0,
-          column: 0
-        }
+          column: 0,
+        },
       },
       explain: () => errorMessage,
-      elaborate: () => ''
+      elaborate: () => '',
     });
   }
 
@@ -106,15 +106,15 @@ async function cCompileAndRun(cCode: string, context: Context): Promise<Result> 
       location: {
         start: {
           line: 0,
-          column: 0
+          column: 0,
         },
         end: {
           line: 0,
-          column: 0
-        }
+          column: 0,
+        },
       },
       explain: () => errorMessage,
-      elaborate: () => ''
+      elaborate: () => '',
     });
   }
   const cCompilerConfig = await makeCCompilerConfig(cCode, context);
@@ -124,11 +124,11 @@ async function cCompileAndRun(cCode: string, context: Context): Promise<Result> 
       // report any compilation failure
       reportCCompilationError(
         `Compilation failed with the following error(s):\n\n${compilationResult.errorMessage}`,
-        context
+        context,
       );
       return {
         status: 'error',
-        context
+        context,
       } as Result;
     }
     if (compilationResult.warnings.length > 0) {
@@ -138,16 +138,16 @@ async function cCompileAndRun(cCode: string, context: Context): Promise<Result> 
         value: {
           toReplString: () =>
             `Compilation and program execution successful with the following warning(s):\n${compilationResult.warnings.join(
-              '\n'
-            )}`
-        }
+              '\n',
+            )}`,
+        },
       };
     }
     if (specialCReturnObject === null) {
       return {
         status: 'finished',
         context,
-        value: { toReplString: () => 'Compilation and program execution successful.' }
+        value: { toReplString: () => 'Compilation and program execution successful.' },
       };
     }
     return { status: 'finished', context, value: specialCReturnObject };
@@ -164,7 +164,7 @@ export function* evalCodeSaga(
   context: Context,
   execTime: number,
   actionType: string,
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
   if (yield select(selectConductorEnable)) {
     return yield call(
@@ -174,7 +174,7 @@ export function* evalCodeSaga(
       context,
       execTime,
       workspaceLocation,
-      actionType
+      actionType,
     );
   }
   context.runtime.debuggerOn =
@@ -195,7 +195,7 @@ export function* evalCodeSaga(
         currentStep: updateCse ? -1 : currentStep,
         cseIsActive: usingCse,
         needUpdateCse: updateCse,
-        substIsActive: usingSubst
+        substIsActive: usingSubst,
       };
     }
 
@@ -204,7 +204,7 @@ export function* evalCodeSaga(
       currentStep: -1,
       cseIsActive: false,
       needUpdateCse: false,
-      substIsActive: false
+      substIsActive: false,
     };
   }
 
@@ -230,7 +230,7 @@ export function* evalCodeSaga(
         wasm_compile_and_run,
         entrypointCode,
         context,
-        actionType === WorkspaceActions.evalRepl.type
+        actionType === WorkspaceActions.evalRepl.type,
       );
     }
 
@@ -241,12 +241,12 @@ export function* evalCodeSaga(
         const {
           usingCse: isUsingCse,
           usingUpload: uploadIsActive,
-          files: uploads
+          files: uploads,
         } = yield* selectWorkspace('playground');
 
         return call(javaRun, entrypointCode, context, currentStep, isUsingCse, {
           uploadIsActive,
-          uploads
+          uploads,
         });
       }
     }
@@ -261,7 +261,7 @@ export function* evalCodeSaga(
       isFolderModeEnabled
         ? files
         : {
-            [entrypointFilePath]: files[entrypointFilePath]
+            [entrypointFilePath]: files[entrypointFilePath],
           },
       entrypointFilePath,
       context,
@@ -271,8 +271,8 @@ export function* evalCodeSaga(
         throwInfiniteLoops: true,
         useSubst: substActiveAndCorrectChapter,
         envSteps: currentStep,
-        executionMethod: cseActiveAndCorrectChapter ? 'cse-machine' : 'auto'
-      }
+        executionMethod: cseActiveAndCorrectChapter ? 'cse-machine' : 'auto',
+      },
     );
   }
 
@@ -284,7 +284,7 @@ export function* evalCodeSaga(
   const {
     result,
     interrupted,
-    paused
+    paused,
   }: {
     result: Result;
     interrupted: any;
@@ -296,7 +296,7 @@ export function* evalCodeSaga(
      * i.e the trigger for the interpreter to interrupt execution.
      */
     interrupted: take(InterpreterActions.beginInterruptExecution.type),
-    paused: take(InterpreterActions.beginDebuggerPause.type)
+    paused: take(InterpreterActions.beginDebuggerPause.type),
   });
 
   if (interrupted) {
@@ -347,10 +347,10 @@ export function* evalCodeSaga(
         yield put(actions.updateStepsTotal(context.runtime.envStepsTotal + 1, workspaceLocation));
         yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
         yield put(
-          actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation)
+          actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation),
         );
         yield put(
-          actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation)
+          actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation),
         );
       }
     }
@@ -376,7 +376,7 @@ export function* evalCodeSaga(
   }
 
   const lastDebuggerResult = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
+    (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult,
   );
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
   if (
@@ -393,8 +393,8 @@ export function* evalCodeSaga(
         lastDebuggerResult,
         entrypointCode,
         context,
-        workspaceLocation
-      )
+        workspaceLocation,
+      ),
     );
   }
 
@@ -416,7 +416,7 @@ export function* evalCodeSaga(
 
 function* handleStdout(
   hostPlugin: BrowserHostPlugin,
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
   const outputChan = eventChannel(emitter => {
     hostPlugin.receiveOutput = emitter;
@@ -438,7 +438,7 @@ function* handleStdout(
 
 function* handleResults(
   hostPlugin: BrowserHostPlugin,
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
   const resultChan = eventChannel(emitter => {
     hostPlugin.receiveResult = emitter;
@@ -460,7 +460,7 @@ function* handleResults(
 
 function* handleErrors(
   hostPlugin: BrowserHostPlugin,
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
   const errorChan = eventChannel(emitter => {
     hostPlugin.receiveError = emitter;
@@ -482,7 +482,7 @@ function* handleErrors(
 
 function* handleStatuses(
   hostPlugin: BrowserHostPlugin,
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
   const statusChan = eventChannel<{ status: RunnerStatus; isActive: boolean }>(emitter => {
     const onStatusUpdate = (status: RunnerStatus, isActive: boolean) =>
@@ -522,14 +522,14 @@ export function* evalCodeConductorSaga(
   execTime: number,
   workspaceLocation: WorkspaceLocation,
   actionType: string,
-  storyEnv?: string
+  storyEnv?: string,
 ): SagaIterator {
   // Wait 5 seconds for language directory to initialise before continuing evaluation
   let evaluator: IEvaluatorDefinition | undefined = yield call(getEvaluatorDefinitionSaga);
   if (!evaluator?.path) {
     const { timeout } = yield race({
       evaluatorSelected: take(LanguageDirectoryActions.setSelectedEvaluator.type),
-      timeout: call(() => new Promise(resolve => setTimeout(() => resolve(true), 5000)))
+      timeout: call(() => new Promise(resolve => setTimeout(() => resolve(true), 5000))),
     });
     if (timeout) {
       throw Error('language directory could not be loaded in time');
@@ -541,7 +541,7 @@ export function* evalCodeConductorSaga(
   // Reuse a preloaded conductor instance when available.
   const { hostPlugin, conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } = yield call(
     getPreparedConductorSaga,
-    { files, consume: true }
+    { files, consume: true },
   );
 
   // Begin evaluation
@@ -555,11 +555,11 @@ export function* evalCodeConductorSaga(
   while (true) {
     const { stop } = yield race({
       repl: take(actions.evalRepl.type),
-      stop: take(actions.beginInterruptExecution.type)
+      stop: take(actions.beginInterruptExecution.type),
     });
     if (stop) break;
     const code: string = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].replValue
+      (state: OverallState) => state.workspaces[workspaceLocation].replValue,
     );
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
     yield put(actions.clearReplInput(workspaceLocation));
@@ -597,10 +597,10 @@ function checkSpecialError(errors: SourceError[]): SpecialError | null {
 function* handleSourceAcademyInterrupt(
   context: Context,
   entrypointCode: string,
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
 ) {
   yield put(
-    actions.evalInterpreterSuccess('Program has been interrupted by module', workspaceLocation)
+    actions.evalInterpreterSuccess('Program has been interrupted by module', workspaceLocation),
   );
   context.errors = [];
   yield put(actions.notifyProgramEvaluated(null, null, entrypointCode, context, workspaceLocation));

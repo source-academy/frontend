@@ -11,7 +11,7 @@ window.matchMedia =
     return {
       matches: false,
       addListener: function () {},
-      removeListener: function () {}
+      removeListener: function () {},
     };
   };
 
@@ -25,7 +25,7 @@ describe('ApplicationWrapper', () => {
     const routerConfig = getFullAcademyRouterConfig({
       name: 'Bob',
       isLoggedIn: true,
-      courseId: 1
+      courseId: 1,
     });
 
     const app = (

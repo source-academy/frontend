@@ -6,11 +6,14 @@ import { useDispatch } from 'react-redux';
 import {
   AchievementContext,
   getAbilityBackground,
-  getAbilityGlow
+  getAbilityGlow,
 } from '../../features/achievement/AchievementConstants';
-import { AchievementStatus, AchievementUser } from '../../features/achievement/AchievementTypes';
+import {
+  AchievementStatus,
+  type AchievementUser,
+} from '../../features/achievement/AchievementTypes';
 import SessionActions from '../application/actions/SessionActions';
-import { Assessment } from '../assessment/AssessmentTypes';
+import type { Assessment } from '../assessment/AssessmentTypes';
 import { useTypedSelector } from '../utils/Hooks';
 import AchievementCommentCard from './AchievementCommentCard';
 import { prettifyDate } from './utils/DateHelper';
@@ -79,7 +82,7 @@ const AchievementView: React.FC<Props> = ({ focusUuid, userState }) => {
         className="cover"
         style={{
           background: `rgba(0, 0, 0, 0.5) url(${coverImage}) center/cover`,
-          backgroundBlendMode: `darken`
+          backgroundBlendMode: `darken`,
         }}
       >
         <h1>{title.toUpperCase()}</h1>

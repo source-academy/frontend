@@ -7,9 +7,9 @@ import { SortableList, useSortableList } from 'src/commons/utils/SortableList';
 import { defaultChapter } from 'src/features/gameSimulator/GameSimulatorConstants';
 import {
   deleteChapterRequest,
-  updateChapterRequest
+  updateChapterRequest,
 } from 'src/features/gameSimulator/GameSimulatorService';
-import { ChapterSimProps } from 'src/features/gameSimulator/GameSimulatorTypes';
+import type { ChapterSimProps } from 'src/features/gameSimulator/GameSimulatorTypes';
 import { dateOneYearFromNow } from 'src/features/gameSimulator/GameSimulatorUtils';
 
 /**
@@ -38,7 +38,7 @@ const ChapterPublisherEditor: React.FC<ChapterSimProps> = ({ chapterDetail, chap
     setChosenFiles(chapterDetail.filenames);
     setIsPublished(chapterDetail.isPublished);
     setTxtsNotChosen(
-      (chapterFilenames || []).filter(textAsset => !chapterDetail.filenames.includes(textAsset))
+      (chapterFilenames || []).filter(textAsset => !chapterDetail.filenames.includes(textAsset)),
     );
   }, [
     chapterDetail,
@@ -47,7 +47,7 @@ const ChapterPublisherEditor: React.FC<ChapterSimProps> = ({ chapterDetail, chap
     setOpenDate,
     setTitle,
     chapterFilenames,
-    rerender
+    rerender,
   ]);
 
   const deleteAllFromChosen = () => chosenFiles.map(deleteFileFromChosen);
@@ -57,7 +57,7 @@ const ChapterPublisherEditor: React.FC<ChapterSimProps> = ({ chapterDetail, chap
       setChosenFiles(prevItemList => prevItemList.filter(item => item !== txtFile));
       setTxtsNotChosen(prevItemList => [...prevItemList, txtFile]);
     },
-    [setChosenFiles]
+    [setChosenFiles],
   );
 
   const addFileToChosen = useCallback(
@@ -65,7 +65,7 @@ const ChapterPublisherEditor: React.FC<ChapterSimProps> = ({ chapterDetail, chap
       setChosenFiles(prevItemList => [...prevItemList, txtFile]);
       setTxtsNotChosen(prevItemList => prevItemList.filter(item => item !== txtFile));
     },
-    [setChosenFiles]
+    [setChosenFiles],
   );
 
   const saveChapter = async () => {
@@ -75,13 +75,13 @@ const ChapterPublisherEditor: React.FC<ChapterSimProps> = ({ chapterDetail, chap
       title,
       filenames: chosenFiles,
       imageUrl,
-      isPublished
+      isPublished,
     };
 
     const confirm = window.confirm(
       `Are you sure you want to save changes to Chapter ${id}: ${title}?\n\nChapter Information: ${JSON.stringify(
-        updatedChapter
-      )}`
+        updatedChapter,
+      )}`,
     );
     if (!confirm) {
       return;
@@ -104,7 +104,7 @@ const ChapterPublisherEditor: React.FC<ChapterSimProps> = ({ chapterDetail, chap
 
   const clearChanges = () => {
     const confirm = window.confirm(
-      `Are you sure you want to clear changes for Chapter ${id}: ${title}?`
+      `Are you sure you want to clear changes for Chapter ${id}: ${title}?`,
     );
     if (confirm) {
       setRender(!rerender);

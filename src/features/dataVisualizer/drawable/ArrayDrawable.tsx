@@ -40,7 +40,7 @@ class ArrayDrawable extends PureComponent<ArrayProps> {
       } else if (isEmptyList(nodeValue)) {
         const props = {
           x: index * Config.BoxWidth,
-          y: 0
+          y: 0,
         };
         return <NullDrawable key={index} {...props} />;
       } else {
@@ -73,7 +73,7 @@ class ArrayDrawable extends PureComponent<ArrayProps> {
             );
           })}
         {this.props.nodes.map(
-          (child, index) => child instanceof DataTreeNode && createChildText(child, index)
+          (child, index) => child instanceof DataTreeNode && createChildText(child, index),
         )}
       </Group>
     );

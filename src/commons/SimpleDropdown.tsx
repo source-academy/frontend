@@ -14,7 +14,7 @@ const SimpleDropdown = <T extends OptionType>({
   selectedValue,
   onClick,
   buttonProps,
-  popoverProps
+  popoverProps,
 }: Props<T>) => {
   const handleClick = (value: T['value']) => {
     onClick?.(value);

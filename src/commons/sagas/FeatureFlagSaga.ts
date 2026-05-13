@@ -9,7 +9,7 @@ const FeatureFlagSaga = combineSagaHandlers({
   },
   [FeatureFlagsActions.resetFlag.type]: function* ({ payload: { featureFlag } }) {
     yield call([featureFlag, 'onChange'], featureFlag.defaultValue);
-  }
+  },
 });
 
 export default FeatureFlagSaga;

@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { useContext } from 'react';
 
-import { EditorTabState } from '../workspace/WorkspaceTypes';
+import type { EditorTabState } from '../workspace/WorkspaceTypes';
 import { WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
-import Editor, { EditorProps, EditorTabStateProps } from './Editor';
+import Editor, { type EditorProps, type EditorTabStateProps } from './Editor';
 import EditorTabContainer from './tabs/EditorTabContainer';
 
 type OwnProps = {
@@ -24,12 +24,12 @@ export type EditorContainerProps = NormalEditorContainerProps;
 
 export const convertEditorTabStateToProps = (
   editorTab: EditorTabState,
-  editorTabIndex: number
+  editorTabIndex: number,
 ): EditorTabStateProps => {
   return {
     editorTabIndex,
     editorValue: editorTab.value,
-    ..._.pick(editorTab, 'filePath', 'highlightedLines', 'breakpoints', 'newCursorPosition')
+    ..._.pick(editorTab, 'filePath', 'highlightedLines', 'breakpoints', 'newCursorPosition'),
   };
 };
 

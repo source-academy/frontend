@@ -1,8 +1,8 @@
-import { Store } from '@reduxjs/toolkit';
+import type { Store } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { UserCourse } from 'src/commons/application/types/SessionTypes';
+import type { OverallState } from 'src/commons/application/ApplicationTypes';
+import type { UserCourse } from 'src/commons/application/types/SessionTypes';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
@@ -13,7 +13,7 @@ import Dropdown from '../Dropdown';
 const getMockedStore = ({
   name,
   courses,
-  courseId
+  courseId,
 }: {
   name?: string;
   courses: UserCourse[];
@@ -23,8 +23,8 @@ const getMockedStore = ({
     session: {
       name,
       courses,
-      courseId
-    }
+      courseId,
+    },
   });
 
 const getElement = (mockStore: Store<OverallState>) => (
@@ -40,7 +40,7 @@ const getElement = (mockStore: Store<OverallState>) => (
 test('Dropdown does not mount Profile, DropdownCourses and DropdownCreateCourses components when a user is not logged in', async () => {
   const mockStore = getMockedStore({
     courses: [],
-    courseId: 1
+    courseId: 1,
   });
   const app = getElement(mockStore);
   const tree = await renderTreeJson(app);
@@ -53,7 +53,7 @@ test('Dropdown correctly mounts Profile, DropdownCourses, and DropdownCreateCour
   const mockStore = getMockedStore({
     name: 'Some user',
     courses: [],
-    courseId: 1
+    courseId: 1,
   });
   const app = getElement(mockStore);
   const tree = await renderTreeJson(app);

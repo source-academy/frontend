@@ -1,6 +1,7 @@
 import { Button, H6, Icon, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { CellClickedEvent, ColDef, themeQuartz } from 'ag-grid-community';
+import type { CellClickedEvent, ColDef } from 'ag-grid-community';
+import { themeQuartz } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
@@ -12,20 +13,18 @@ import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
-import {
-  ColumnFields,
+import type {
   ColumnFieldsKeys,
   ColumnFilter,
   ColumnFiltersState,
-  ColumnName,
   ColumnNameKeys,
   GradingColumnVisibility,
   GradingSubmissionTableProps,
   IGradingTableProperties,
   IGradingTableRow,
   SortStateProperties,
-  SortStates
 } from 'src/features/grading/GradingTypes';
+import { ColumnFields, ColumnName, SortStates } from 'src/features/grading/GradingTypes';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 import classes from 'src/styles/Grading.module.scss';
 
@@ -53,7 +52,7 @@ export const freshSortState: SortStateProperties = {
   groupName: SortStates.NONE,
   progressStatus: SortStates.NONE,
   xp: SortStates.NONE,
-  actionsIndex: SortStates.NONE
+  actionsIndex: SortStates.NONE,
 };
 
 const disabledEditModeCols: string[] = [ColumnFields.actionsIndex];
@@ -67,7 +66,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   totalRows,
   pageSize,
   submissions,
-  updateEntries
+  updateEntries,
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -85,11 +84,11 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   /** The actual value sent to the backend */
   const [searchValue, setSearchValue] = useState('');
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
-    ...tableFilters.columnFilters
+    ...tableFilters.columnFilters,
   ]);
   const [cellFilters, setCellFilters] = useState<{ id: ColumnFields; value: string }[]>([]);
   const [hiddenColumns, setHiddenColumns] = useState<GradingColumnVisibility>(
-    columnVisibility ? columnVisibility : []
+    columnVisibility ? columnVisibility : [],
   );
   const [rowData, setRowData] = useState<IGradingTableRow[]>([]);
   const [colDefs, setColDefs] = useState<ColDef<IGradingTableRow>[]>();
@@ -115,13 +114,13 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           dispatch(
             WorkspaceActions.updateAllColsSortStates({
               currentState: newState,
-              sortBy: affectedID
-            })
+              sortBy: affectedID,
+            }),
           );
         }
       },
-      disabledSortCols: disabledSortCols
-    }
+      disabledSortCols: disabledSortCols,
+    },
   };
 
   const ROW_HEIGHT: number = 60; // in px, declared here to calculate table height
@@ -129,7 +128,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   const tableProperties: IGradingTableProperties = {
     customComponents: {
-      agColumnHeader: GradingColumnCustomHeaders
+      agColumnHeader: GradingColumnCustomHeaders,
     },
     defaultColDefs: defaultColumnDefs,
     headerHeight: HEADER_HEIGHT,
@@ -143,7 +142,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     suppressMenuHide: true,
     suppressPaginationPanel: true,
     suppressRowClickSelection: true,
-    tableMargins: '1rem 0 0 0'
+    tableMargins: '1rem 0 0 0',
   };
 
   // Placing searchValue as a dependency for triggering a page reset will result in double-querying.
@@ -153,7 +152,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         resetPage();
         setSearchValue(newValue);
       }, 300),
-    [resetPage]
+    [resetPage],
   );
 
   const handleSearchQueryUpdate: React.ChangeEventHandler<HTMLInputElement> = e => {
@@ -168,7 +167,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     const filters: Array<{ [key: string]: any }> = [
       { id: ColumnFields.assessmentName, value: searchValue },
       ...columnFilters,
-      ...cellFilters
+      ...cellFilters,
     ].map(convertFilterToBackendParams);
 
     const params: Record<string, any> = {};
@@ -198,7 +197,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     setColumnFilters((prev: ColumnFiltersState) => {
       const alreadyExists = prev.reduce(
         (acc, curr) => acc || (curr.id === id && curr.value === value),
-        false
+        false,
       );
       return alreadyExists ? [...prev] : [...prev, { id, value }];
     });
@@ -215,7 +214,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const handleColumnFilterRemove = (toRemove: string) => {
     if (gridRef.current?.api) {
       setHiddenColumns((prev: GradingColumnVisibility) =>
-        prev.filter(column => column !== toRemove)
+        prev.filter(column => column !== toRemove),
       );
       gridRef.current.api.setColumnsVisible([toRemove], true);
     }
@@ -234,11 +233,11 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           (currentFilter.id === ColumnFields.progressStatus &&
             String(currentFilter.value).toLowerCase() !== ProgressStatuses.graded &&
             String(currentFilter.value).toLowerCase() !== ProgressStatuses.submitted),
-        false
+        false,
       )
     ) {
       setColumnFilters((prev: ColumnFiltersState) =>
-        prev.filter(filter => filter.id !== ColumnFields.progressStatus)
+        prev.filter(filter => filter.id !== ColumnFields.progressStatus),
       );
       resetPage();
       return;
@@ -288,7 +287,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
             ') / ' +
             currentSubmission.maxXp,
           actionsIndex: currentSubmission.submissionId,
-          courseID: courseId!
+          courseID: courseId!,
         };
         newData.push(newRow);
         return (
@@ -373,7 +372,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           minimal={true}
           className={classNames(
             classes['grading-filter-btn'],
-            filterMode && classes['grading-filter-btn-on']
+            filterMode && classes['grading-filter-btn-on'],
           )}
           onClick={e => setFilterMode((prev: boolean) => !prev)}
         >
@@ -411,7 +410,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           suppressPaginationPanel={tableProperties.suppressPaginationPanel}
           rowSelection={{
             mode: 'singleRow',
-            enableClickSelection: !tableProperties.suppressRowClickSelection
+            enableClickSelection: !tableProperties.suppressRowClickSelection,
           }}
           domLayout="autoHeight"
           onFilterChanged={e => {

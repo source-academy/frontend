@@ -1,11 +1,11 @@
-import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
+import type { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
 import WorkspaceActions from '../WorkspaceActions';
 import { getWorkspaceLocation } from '../WorkspaceReducer';
-import { WorkspaceManagerState } from '../WorkspaceTypes';
+import type { WorkspaceManagerState } from '../WorkspaceTypes';
 
 export const handleCseAndStepperActions = (
-  builder: ActionReducerMapBuilder<WorkspaceManagerState>
+  builder: ActionReducerMapBuilder<WorkspaceManagerState>,
 ) => {
   builder
     .addCase(WorkspaceActions.changeStepLimit, (state, action) => {
@@ -39,8 +39,8 @@ export const handleCseAndStepperActions = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          currentStep: action.payload.steps
-        }
+          currentStep: action.payload.steps,
+        },
       };
     })
     .addCase(WorkspaceActions.updateStepsTotal, (state, action) => {
@@ -51,8 +51,8 @@ export const handleCseAndStepperActions = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          stepsTotal: action.payload.steps
-        }
+          stepsTotal: action.payload.steps,
+        },
       };
     })
     .addCase(WorkspaceActions.updateBreakpointSteps, (state, action) => {
@@ -63,8 +63,8 @@ export const handleCseAndStepperActions = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          breakpointSteps: action.payload.breakpointSteps
-        }
+          breakpointSteps: action.payload.breakpointSteps,
+        },
       };
     })
     .addCase(WorkspaceActions.updateChangePointSteps, (state, action) => {
@@ -75,8 +75,8 @@ export const handleCseAndStepperActions = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          changepointSteps: action.payload.changepointSteps
-        }
+          changepointSteps: action.payload.changepointSteps,
+        },
       };
     });
 };

@@ -10,14 +10,14 @@ import {
   Icon,
   Popover,
   Pre,
-  Slider
+  Slider,
 } from '@blueprintjs/core';
-import { getHotkeyHandler, HotkeyItem } from '@mantine/hooks';
+import { getHotkeyHandler, type HotkeyItem } from '@mantine/hooks';
 import classNames from 'classnames';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
-import { IStepperPropContents } from 'js-slang/dist/tracer';
-import { StepperBaseNode } from 'js-slang/dist/tracer/interface';
-import { StepperExpression } from 'js-slang/dist/tracer/nodes';
+import type { IStepperPropContents } from 'js-slang/dist/tracer';
+import type { StepperBaseNode } from 'js-slang/dist/tracer/interface';
+import type { StepperExpression } from 'js-slang/dist/tracer/nodes';
 import { StepperArrayExpression } from 'js-slang/dist/tracer/nodes/Expression/ArrayExpression';
 import { StepperArrowFunctionExpression } from 'js-slang/dist/tracer/nodes/Expression/ArrowFunctionExpression';
 import { StepperBinaryExpression } from 'js-slang/dist/tracer/nodes/Expression/BinaryExpression';
@@ -35,14 +35,14 @@ import { StepperIfStatement } from 'js-slang/dist/tracer/nodes/Statement/IfState
 import { StepperReturnStatement } from 'js-slang/dist/tracer/nodes/Statement/ReturnStatement';
 import {
   StepperVariableDeclaration,
-  StepperVariableDeclarator
+  StepperVariableDeclarator,
 } from 'js-slang/dist/tracer/nodes/Statement/VariableDeclaration';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { beginAlertSideContent } from '../SideContentActions';
-import { SideContentLocation, SideContentType } from '../SideContentTypes';
+import { type SideContentLocation, SideContentType } from '../SideContentTypes';
 
 const SubstDefaultText = () => {
   const { t } = useTranslation('sideContent', { keyPrefix: 'substVisualizer' });
@@ -97,7 +97,7 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
   const dispatch = useDispatch();
   const alertSideContent = useCallback(
     () => dispatch(beginAlertSideContent(SideContentType.substVisualizer, props.workspaceLocation)),
-    [props.workspaceLocation, dispatch]
+    [props.workspaceLocation, dispatch],
   );
   // set source mode as 2
   useEffect(() => {
@@ -152,13 +152,13 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
         ['a', stepPreviousBreakpoint],
         ['f', stepNext],
         ['b', stepPrevious],
-        ['e', stepNextBreakpoint]
+        ['e', stepNextBreakpoint],
       ]
     : [
         ['a', () => {}],
         ['f', () => {}],
         ['b', () => {}],
-        ['e', () => {}]
+        ['e', () => {}],
       ];
   const hotkeyHandler = getHotkeyHandler(hotkeyBindings);
 
@@ -173,7 +173,7 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
         return markers[0].explanation ?? '...';
       }
     },
-    [lastStepValue, props.content]
+    [lastStepValue, props.content],
   );
 
   const getAST = useCallback(
@@ -181,7 +181,7 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
       const contIndex = value <= lastStepValue ? value - 1 : 0;
       return props.content[contIndex];
     },
-    [lastStepValue, props.content]
+    [lastStepValue, props.content],
   );
 
   return (
@@ -246,7 +246,7 @@ type StyleWrapper = (node: StepperBaseNode) => (preformatted: React.ReactNode) =
 // composeStyleWrapper takes two style wrappers and merge its effect together.
 function composeStyleWrapper(
   first: StyleWrapper | undefined,
-  second: StyleWrapper | undefined
+  second: StyleWrapper | undefined,
 ): StyleWrapper | undefined {
   return first === undefined && second === undefined
     ? undefined
@@ -272,7 +272,7 @@ interface FunctionDefinitionPopoverContentProps {
     nodes: StepperExpression[],
     renderNodeFn: (node: StepperBaseNode, context: RenderContext) => React.ReactNode,
     styleWrapper: StyleWrapper | undefined,
-    popoverDepth: number
+    popoverDepth: number,
   ) => React.ReactNode;
 }
 
@@ -281,7 +281,7 @@ const FunctionDefinitionPopoverContent: React.FC<FunctionDefinitionPopoverConten
   styleWrapper,
   popoverDepth,
   renderNode,
-  renderFunctionArguments
+  renderFunctionArguments,
 }) => {
   return (
     <div className={classNames('stepper-popover', Classes.DARK)}>
@@ -294,7 +294,7 @@ const FunctionDefinitionPopoverContent: React.FC<FunctionDefinitionPopoverConten
             <span className="stepper-identifier">{' => '}</span>
             {renderNode(node.body, {
               styleWrapper: styleWrapper ?? (_node => p => p),
-              popoverDepth: popoverDepth + 1
+              popoverDepth: popoverDepth + 1,
             })}
           </code>
         </pre>
@@ -332,7 +332,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
           {renderNode(node.argument, {
             parentNode: node,
             styleWrapper: styleWrapper,
-            popoverDepth: popoverDepth
+            popoverDepth: popoverDepth,
           })}
         </span>
       );
@@ -344,14 +344,14 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
             parentNode: node,
             isRight: false,
             styleWrapper: styleWrapper,
-            popoverDepth: popoverDepth
+            popoverDepth: popoverDepth,
           })}
           <span className="stepper-operator">{` ${node.operator} `}</span>
           {renderNode(node.right, {
             parentNode: node,
             isRight: true,
             styleWrapper: styleWrapper,
-            popoverDepth: popoverDepth
+            popoverDepth: popoverDepth,
           })}
         </span>
       );
@@ -363,14 +363,14 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
             parentNode: node,
             isRight: false,
             styleWrapper: styleWrapper,
-            popoverDepth: popoverDepth
+            popoverDepth: popoverDepth,
           })}
           <span className="stepper-operator">{` ${node.operator} `}</span>
           {renderNode(node.right, {
             parentNode: node,
             isRight: true,
             styleWrapper: styleWrapper,
-            popoverDepth: popoverDepth
+            popoverDepth: popoverDepth,
           })}
         </span>
       );
@@ -400,7 +400,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
             {item}
           </span>
         ),
-        args[0]
+        args[0],
       );
       return (
         <span>
@@ -478,7 +478,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
           <span className="stepper-identifier">{' => '}</span>
           {renderNode(node.body, {
             styleWrapper: composeStyleWrapper(styleWrapper, muTermStyleWrapper)!,
-            popoverDepth: popoverDepth
+            popoverDepth: popoverDepth,
           })}
         </span>
       );
@@ -486,7 +486,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
     CallExpression(node: StepperFunctionApplication) {
       let renderedCallee = renderNode(node.callee, {
         styleWrapper: styleWrapper,
-        popoverDepth: popoverDepth
+        popoverDepth: popoverDepth,
       });
       if (node.callee.type === 'ArrowFunctionExpression' && node.callee.name === undefined) {
         renderedCallee = (
@@ -529,7 +529,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
           <span>
             {renderNode(node.consequent, {
               styleWrapper: styleWrapper,
-              popoverDepth: popoverDepth
+              popoverDepth: popoverDepth,
             })}
           </span>
           {node.alternate && (
@@ -537,7 +537,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
               <span className="stepper-identifier">{' else '}</span>
               {renderNode(node.alternate!, {
                 styleWrapper: styleWrapper,
-                popoverDepth: popoverDepth
+                popoverDepth: popoverDepth,
               })}
             </span>
           )}
@@ -614,7 +614,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
     },
     DebuggerStatement(node: StepperBaseNode) {
       return <span className="stepper-operator">debugger;</span>;
-    }
+    },
   };
 
   // Additional renderers
@@ -622,13 +622,13 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
     nodes: StepperExpression[],
     renderNodeFn: typeof renderNode,
     styleWrapper: StyleWrapper | undefined,
-    popoverDepth: number
+    popoverDepth: number,
   ) => {
     const args: React.ReactNode[] = nodes.map(arg =>
       renderNodeFn(arg, {
         styleWrapper: styleWrapper ?? (_node => p => p),
-        popoverDepth: popoverDepth
-      })
+        popoverDepth: popoverDepth,
+      }),
     );
     let renderedArguments = args.slice(1).reduce(
       (result, item) => (
@@ -638,7 +638,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
           {item}
         </span>
       ),
-      args[0]
+      args[0],
     );
     if (args.length !== 1) {
       renderedArguments = (
@@ -654,7 +654,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
 
   const renderArguments = (nodes: StepperExpression[]) => {
     const args: React.ReactNode[] = nodes.map(arg =>
-      renderNode(arg, { styleWrapper: styleWrapper, popoverDepth: popoverDepth })
+      renderNode(arg, { styleWrapper: styleWrapper, popoverDepth: popoverDepth }),
     );
     let renderedArguments = args.slice(1).reduce(
       (result, item) => (
@@ -664,7 +664,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
           {item}
         </span>
       ),
-      args[0]
+      args[0],
     );
     renderedArguments = (
       <span>
@@ -683,7 +683,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
   const isParenthesis = expressionNeedsParenthesis(
     currentNode,
     renderContext.parentNode,
-    renderContext.isRight
+    renderContext.isRight,
   );
   let result: React.ReactNode = renderer ? renderer(currentNode) : `<${currentNode.type}>`; // For debugging in case some AST renderer has not been implemented yet
   if (isParenthesis) {
@@ -730,7 +730,7 @@ function CustomASTRenderer(props: IStepperPropContents): React.ReactNode {
     }
     return renderNode(props.ast, {
       styleWrapper: markerStyleWrapper,
-      popoverDepth: 0
+      popoverDepth: 0,
     });
   }, [props]);
   return <div className="stepper-display">{getDisplayedNode()}</div>;
@@ -743,7 +743,7 @@ function CustomASTRenderer(props: IStepperPropContents): React.ReactNode {
 function expressionNeedsParenthesis(
   node: StepperBaseNode,
   parentNode?: StepperBaseNode,
-  isRightHand?: boolean
+  isRightHand?: boolean,
 ) {
   if (parentNode === undefined) {
     return false;
@@ -819,7 +819,7 @@ const OPERATOR_PRECEDENCE = {
   '*': 12,
   '%': 12,
   '/': 12,
-  '**': 13
+  '**': 13,
 };
 const NEEDS_PARENTHESES = 17;
 const EXPRESSIONS_PRECEDENCE = {
@@ -852,7 +852,7 @@ const EXPRESSIONS_PRECEDENCE = {
   ConditionalExpression: 4,
   AssignmentExpression: 3,
   YieldExpression: 2,
-  RestElement: 1
+  RestElement: 1,
 };
 
 export default SideContentSubstVisualizer;

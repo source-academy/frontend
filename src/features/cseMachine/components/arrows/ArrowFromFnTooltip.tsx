@@ -1,5 +1,5 @@
 import { Config } from '../../CseMachineConfig';
-import { StepsArray } from '../../CseMachineTypes';
+import type { StepsArray } from '../../CseMachineTypes';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
 import { Visible } from '../Visible';
@@ -38,7 +38,7 @@ class FnLeftCircleAnchor extends Visible {
 class FnTooltipAnchor extends Visible {
   constructor(
     private readonly getRect: () => TooltipRect,
-    private readonly getSourceX: () => number
+    private readonly getSourceX: () => number,
   ) {
     super();
   }

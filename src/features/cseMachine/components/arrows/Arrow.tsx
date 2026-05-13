@@ -1,4 +1,4 @@
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 
 import { ArrayUnit } from '../ArrayUnit';
 import { ControlItemComponent } from '../ControlItemComponent';
@@ -37,7 +37,7 @@ export abstract class Arrow {
   /** factory method that returns the corresponding arrow depending on where the arrow is `from` */
   public static from(
     source: Visible,
-    sourceFrame?: Pick<Frame, 'x' | 'y' | 'width' | 'height'>
+    sourceFrame?: Pick<Frame, 'x' | 'y' | 'width' | 'height'>,
   ): GenericArrow<Visible, Visible> {
     if (source instanceof Frame) return new ArrowFromFrame(source);
     if (source instanceof FnValue || source instanceof GlobalFnValue || source instanceof ContValue)

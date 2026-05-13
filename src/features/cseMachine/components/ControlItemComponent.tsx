@@ -1,4 +1,4 @@
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { createRef, Fragment } from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
@@ -6,7 +6,7 @@ import CseMachine from '../CseMachine';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { Layout } from '../CseMachineLayout';
-import { IHoverable } from '../CseMachineTypes';
+import type { IHoverable } from '../CseMachineTypes';
 import {
   defaultActiveColor,
   defaultStrokeColor,
@@ -16,7 +16,7 @@ import {
   setHoveredStyle,
   setUnhoveredCursor,
   setUnhoveredStyle,
-  truncateText
+  truncateText,
 } from '../CseMachineUtils';
 import { ArrowFromControlItemComponent } from './arrows/ArrowFromControlItemComponent';
 import { Frame } from './Frame';
@@ -39,13 +39,13 @@ export class ControlItemComponent extends Visible implements IHoverable {
     /** callback function to unhighlight editor lines after hover */
     readonly unhighlightOnHover: () => void,
     readonly topItem: boolean,
-    arrowTo?: Frame
+    arrowTo?: Frame,
   ) {
     super();
     this.text = truncateText(
       String(value),
       ControlStashConfig.ControlMaxTextWidth,
-      ControlStashConfig.ControlMaxTextHeight
+      ControlStashConfig.ControlMaxTextHeight,
     );
     this.tooltipRef = createRef();
     this.highlightOnHover = highlightOnHover;
@@ -58,12 +58,12 @@ export class ControlItemComponent extends Visible implements IHoverable {
         this.text,
         ControlStashConfig.ControlMaxTextWidth,
         `${ControlStashConfig.FontStyle} ${ControlStashConfig.FontSize}px ${ControlStashConfig.FontFamily}`,
-        ControlStashConfig.FontSize
+        ControlStashConfig.FontSize,
       ) +
       ControlStashConfig.ControlItemTextPadding * 2;
     if (arrowTo) {
       this.arrow = new ArrowFromControlItemComponent(this).to(
-        arrowTo
+        arrowTo,
       ) as ArrowFromControlItemComponent;
     }
   }
@@ -113,11 +113,11 @@ export class ControlItemComponent extends Visible implements IHoverable {
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: ControlStashConfig.FontSize,
       fontStyle: ControlStashConfig.FontStyle,
-      fontVariant: ControlStashConfig.FontVariant
+      fontVariant: ControlStashConfig.FontVariant,
     };
     const tagProps = {
       stroke: this.topItem ? defaultActiveColor() : defaultStrokeColor(),
-      cornerRadius: ControlStashConfig.ControlItemCornerRadius
+      cornerRadius: ControlStashConfig.ControlItemCornerRadius,
     };
     return (
       <Fragment key={Layout.key++}>

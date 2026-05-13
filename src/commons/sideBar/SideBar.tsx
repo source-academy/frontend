@@ -1,4 +1,4 @@
-import { Card, Icon, IconName } from '@blueprintjs/core';
+import { Card, Icon, type IconName } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { useState } from 'react';
 
@@ -53,7 +53,7 @@ const SideBar: React.FC<Props> = ({ tabs, isExpanded, expandSideBar, collapseSid
           <Card
             key={index}
             className={classNames('sidebar-tab', {
-              selected: isExpanded && selectedTabIndex === index
+              selected: isExpanded && selectedTabIndex === index,
             })}
             onClick={() => handleTabSelection(index)}
           >

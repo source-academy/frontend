@@ -6,7 +6,7 @@ import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
 import { useTypedSelector } from '../utils/Hooks';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 import FileSystemViewList from './FileSystemViewList';
@@ -49,7 +49,7 @@ const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath }) => {
               different name.
             </p>
           ),
-          label: 'OK'
+          label: 'OK',
         }).then(() => {});
         return;
       }
@@ -77,7 +77,7 @@ const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath }) => {
               a different name.
             </p>
           ),
-          label: 'OK'
+          label: 'OK',
         }).then(() => {});
         return;
       }

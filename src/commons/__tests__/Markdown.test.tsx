@@ -8,7 +8,7 @@ import { renderTreeJson } from '../utils/TestUtils';
 const mockProps = (sourceChapter: Chapter, sourceVariant: Variant) => {
   return {
     content: generateLanguageIntroduction(getLanguageConfig(sourceChapter, sourceVariant)),
-    openLinksInNewWindow: true
+    openLinksInNewWindow: true,
   };
 };
 

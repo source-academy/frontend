@@ -4,8 +4,8 @@ import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { useCallback, useMemo } from 'react';
 
-import { Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
-import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
+import { type Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
+import type { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 
 type Props = {
   handleTestcaseEval: (testcaseId: number) => void;
@@ -25,7 +25,7 @@ const SideContentTestcaseCard: React.FC<Props> = props => {
       correct: isEvaluated && isEqual,
       wrong: isEvaluated && !isEqual,
       // opaque and secret testcases will be greyed in the GradingWorkspace
-      secret: testcase.type === TestcaseTypes.secret || testcase.type === TestcaseTypes.opaque
+      secret: testcase.type === TestcaseTypes.secret || testcase.type === TestcaseTypes.opaque,
     };
   }, [testcase]);
 

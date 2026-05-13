@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 const defaultStyles: React.CSSProperties = {
   width: 'max-content',
-  margin: 'auto 0'
+  margin: 'auto 0',
 };
 
 type Props = {

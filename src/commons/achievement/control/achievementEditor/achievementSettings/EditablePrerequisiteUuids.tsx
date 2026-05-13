@@ -1,9 +1,10 @@
 import { MenuItem } from '@blueprintjs/core';
-import { ItemPredicate, ItemRenderer, MultiSelect } from '@blueprintjs/select';
+import type { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
+import { MultiSelect } from '@blueprintjs/select';
 import { without } from 'lodash';
 import { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
-import { AchievementItem } from 'src/features/achievement/AchievementTypes';
+import type { AchievementItem } from 'src/features/achievement/AchievementTypes';
 
 type Props = {
   changePrerequisiteUuids: (prerequisiteUuids: string[]) => void;
@@ -14,7 +15,7 @@ type Props = {
 const EditablePrerequisiteUuids: React.FC<Props> = ({
   changePrerequisiteUuids,
   uuid,
-  prerequisiteUuids
+  prerequisiteUuids,
 }) => {
   const enablePrerequisites = false;
 
@@ -23,7 +24,7 @@ const EditablePrerequisiteUuids: React.FC<Props> = ({
     ? inferencer.listAvailablePrerequisiteUuids(uuid)
     : [];
   const selectedUuids = prerequisiteUuids.filter(
-    uuid => !inferencer.isInvalidAchievement(inferencer.getAchievement(uuid))
+    uuid => !inferencer.isInvalidAchievement(inferencer.getAchievement(uuid)),
   );
 
   const getUuid = (title: string) => inferencer.getUuidByTitle(title);

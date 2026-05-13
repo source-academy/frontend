@@ -1,6 +1,6 @@
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { StepsArray } from '../../CseMachineTypes';
+import type { StepsArray } from '../../CseMachineTypes';
 import { Frame } from '../Frame';
 import { GenericArrow } from './GenericArrow';
 
