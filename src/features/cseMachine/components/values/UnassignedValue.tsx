@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { Unassigned } from '../../CseMachineTypes';
+import type { Unassigned } from '../../CseMachineTypes';
 import { getTextWidth } from '../../CseMachineUtils';
 import { Binding } from '../Binding';
 import { Text } from '../Text';

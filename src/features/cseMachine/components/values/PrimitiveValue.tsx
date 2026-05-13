@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { Primitive, ReferenceType } from '../../CseMachineTypes';
+import type { Primitive, ReferenceType } from '../../CseMachineTypes';
 import { getTextWidth, isNull, isSourceObject } from '../../CseMachineUtils';
 import { ArrayNullUnit } from '../ArrayNullUnit';
 import { Binding } from '../Binding';

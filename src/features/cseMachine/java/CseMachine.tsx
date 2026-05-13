@@ -1,5 +1,5 @@
 import { ECE } from 'java-slang';
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { createRef } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 

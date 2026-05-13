@@ -1,6 +1,6 @@
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
-import { Environment } from 'js-slang/dist/types';
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { Environment } from 'js-slang/dist/types';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
 import { createRef, Fragment } from 'react';
 import {
@@ -15,7 +15,7 @@ import {
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { IHoverable, ReferenceType } from '../../CseMachineTypes';
+import type { IHoverable, ReferenceType } from '../../CseMachineTypes';
 import {
   defaultStrokeColor,
   defaultTextColor,

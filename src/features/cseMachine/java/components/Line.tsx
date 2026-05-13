@@ -1,9 +1,9 @@
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Group, Path } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
-import { IHoverable } from '../../CseMachineTypes';
+import type { IHoverable } from '../../CseMachineTypes';
 import {
   defaultStrokeColor,
   setHoveredCursor,
