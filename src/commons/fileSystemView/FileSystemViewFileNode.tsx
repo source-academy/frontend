@@ -28,7 +28,7 @@ const FileSystemViewFileNode: React.FC<Props> = ({
   basePath,
   fileName,
   indentationLevel,
-  refreshDirectory
+  refreshDirectory,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const dispatch = useDispatch();
@@ -63,7 +63,7 @@ const FileSystemViewFileNode: React.FC<Props> = ({
       ),
       positiveIntent: 'danger',
       positiveLabel: 'Proceed',
-      negativeLabel: 'Cancel'
+      negativeLabel: 'Cancel',
     }).then((shouldProceed: boolean) => {
       if (!shouldProceed) {
         return;

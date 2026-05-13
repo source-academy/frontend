@@ -9,7 +9,7 @@ import { combineSagaHandlers } from '../redux/utils';
 
 export function* getPluginDefinitionSaga(pluginId: string) {
   const directory: PluginDirectoryState = yield select(
-    (state: OverallState) => state.pluginDirectory
+    (state: OverallState) => state.pluginDirectory,
   );
   return directory.pluginMap[pluginId];
 }
@@ -29,7 +29,7 @@ const pluginDirectoryHandlers = combineSagaHandlers({
     }
     const result: IPluginDefinition[] = yield call([response, 'json']);
     yield put(PluginDirectoryActions.setPlugins(result));
-  }
+  },
 });
 
 function* PluginDirectorySaga() {

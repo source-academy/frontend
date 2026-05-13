@@ -12,7 +12,7 @@ import type {
   Library,
   MCQChoice,
   Question,
-  Testcase
+  Testcase,
 } from '../assessment/AssessmentTypes';
 import { AssessmentStatuses, emptyLibrary, TestcaseTypes } from '../assessment/AssessmentTypes';
 import type {
@@ -23,7 +23,7 @@ import type {
   XmlParseStrProblem,
   XmlParseStrProblemChoice,
   XmlParseStrTask,
-  XmlParseStrTestcase
+  XmlParseStrTestcase,
 } from './XMLParserTypes';
 import { EDITING_ID } from './XMLParserTypes';
 
@@ -86,7 +86,7 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
     xp: 0,
     maxTeamSize: 1,
     hasVotingFeatures: false,
-    hoursBeforeEarlyXpDecay: 0
+    hoursBeforeEarlyXpDecay: 0,
   };
 };
 
@@ -103,9 +103,9 @@ const makeAssessment = (result: any): [Assessment, number] => {
       longSummary: task.TEXT[0],
       missionPDF: 'google.com',
       questions: questionArr[0],
-      title: rawOverview.title
+      title: rawOverview.title,
     },
-    questionArr[1]
+    questionArr[1],
   ];
 };
 
@@ -130,9 +130,9 @@ const makeLibrary = (deploymentArr: XmlParseStrDeployment[] | undefined): Librar
       chapter: parseInt(deployment.$.interpreter, 10) as Chapter,
       external: {
         name: nameVal as ExternalLibraryName,
-        symbols: symbolsVal
+        symbols: symbolsVal,
       },
-      globals: globalsVal
+      globals: globalsVal,
     };
   }
 };
@@ -150,7 +150,7 @@ const makeQuestions = (task: XmlParseStrTask): [Question[], number] => {
       graderLibrary: makeLibrary(problem.GRADERDEPLOYMENT),
       type: problem.$.type,
       xp: 0,
-      maxXp: localMaxXp
+      maxXp: localMaxXp,
     };
     maxXp += localMaxXp;
     if (question.type === 'programming') {
@@ -174,7 +174,7 @@ const makeMCQ = (problem: XmlParseStrCProblem, question: BaseQuestion): IMCQQues
   problem.CHOICE.forEach((choice: XmlParseStrProblemChoice, i: number) => {
     choicesVal.push({
       content: choice.TEXT[0],
-      hint: null
+      hint: null,
     });
     solutionVal = choice.$.correct === 'true' ? i : solutionVal;
   });
@@ -183,13 +183,13 @@ const makeMCQ = (problem: XmlParseStrCProblem, question: BaseQuestion): IMCQQues
     type: 'mcq',
     answer: solution ? parseInt(solution[0], 10) : 0,
     choices: choicesVal,
-    solution: solutionVal
+    solution: solutionVal,
   };
 };
 
 const makeProgramming = (
   problem: XmlParseStrPProblem,
-  question: BaseQuestion
+  question: BaseQuestion,
 ): IProgrammingQuestion => {
   const testcases = problem.SNIPPET[0].TESTCASES;
   const publicTestcases = testcases ? testcases[0].PUBLIC || [] : [];
@@ -208,7 +208,7 @@ const makeProgramming = (
     testcasesPrivate: privateTestcases.map(testcase => makeTestcase(testcase)),
     answer: solution ? (solution[0] as string).trim() : '',
     lastModifiedAt: new Date().toISOString(),
-    type: 'programming'
+    type: 'programming',
   };
   if (problem.SNIPPET[0].GRADER) {
     result.graderTemplate = problem.SNIPPET[0].GRADER[0];
@@ -221,7 +221,7 @@ const makeTestcase = (testcase: XmlParseStrTestcase): Testcase => {
     type: TestcaseTypes.public,
     answer: testcase.$.answer,
     score: parseInt(testcase.$.score, 10),
-    program: testcase._
+    program: testcase._,
   };
 };
 
@@ -237,10 +237,10 @@ export const exportXml = () => {
     const xml = {
       CONTENT: {
         $: {
-          'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance'
+          'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
         },
-        TASK: xmlTask
-      }
+        TASK: xmlTask,
+      },
     };
     let xmlStr = builder.buildObject(xml);
     xmlStr = xmlStr.replace(/(&#xD;)+/g, '');
@@ -264,13 +264,13 @@ const download = (filename: string, text: string) => {
 const exportLibrary = (library: Library) => {
   const deployment = {
     $: {
-      interpreter: library.chapter.toString()
+      interpreter: library.chapter.toString(),
     },
     EXTERNAL: {
       $: {
-        name: library.external.name
-      }
-    }
+        name: library.external.name,
+      },
+    },
     // FIXME: Replace any with proper type
   } as any;
 
@@ -283,7 +283,7 @@ const exportLibrary = (library: Library) => {
     deployment['GLOBAL'] = library.globals.map(x => {
       return {
         IDENTIFIER: x[0],
-        VALUE: x[2]
+        VALUE: x[2],
       };
     });
   }
@@ -292,7 +292,7 @@ const exportLibrary = (library: Library) => {
 
 export const assessmentToXml = (
   assessment: Assessment,
-  overview: AssessmentOverview
+  overview: AssessmentOverview,
 ): XmlParseStrTask => {
   const task: any = {};
   const rawOverview: XmlParseStrOverview = {
@@ -302,7 +302,7 @@ export const assessmentToXml = (
     number: overview.number || '',
     startdate: overview.openAt,
     story: overview.story,
-    title: overview.title
+    title: overview.title,
   };
   task.$ = rawOverview;
 
@@ -323,13 +323,13 @@ export const assessmentToXml = (
   assessment.questions.forEach((question: Question) => {
     const problem = {
       $: {
-        type: question.type
+        type: question.type,
       },
       SNIPPET: {
-        SOLUTION: question.answer
+        SOLUTION: question.answer,
       },
       TEXT: question.content,
-      CHOICE: [] as any[]
+      CHOICE: [] as any[],
       // FIXME: Replace any with proper type
     } as any;
 
@@ -358,7 +358,7 @@ export const assessmentToXml = (
         TEMPLATE: question.solutionTemplate,
         PREPEND: question.prepend,
         POSTPEND: question.postpend,
-        TESTCASES: '' as any
+        TESTCASES: '' as any,
       };
 
       if (question.testcases.length || question.testcasesPrivate!.length) {
@@ -369,9 +369,9 @@ export const assessmentToXml = (
             return {
               $: {
                 answer: testcase.answer,
-                score: testcase.score
+                score: testcase.score,
               },
-              _: testcase.program
+              _: testcase.program,
             };
           });
           snippet.TESTCASES['PUBLIC'] = publicTests;
@@ -382,9 +382,9 @@ export const assessmentToXml = (
             return {
               $: {
                 answer: testcase.answer,
-                score: testcase.score
+                score: testcase.score,
               },
-              _: testcase.program
+              _: testcase.program,
             };
           });
           snippet.TESTCASES['PRIVATE'] = privateTests;
@@ -398,9 +398,9 @@ export const assessmentToXml = (
       question.choices.forEach((choice: MCQChoice, i: number) => {
         problem.CHOICE.push({
           $: {
-            correct: question.solution === i ? 'true' : 'false'
+            correct: question.solution === i ? 'true' : 'false',
           },
-          TEXT: choice.content
+          TEXT: choice.content,
         });
       });
     }

@@ -26,7 +26,7 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
   overview,
   renderAttemptButton,
   renderGradingTooltip,
-  makeSubmissionButton
+  makeSubmissionButton,
 }) => {
   const { isMobileBreakpoint } = useResponsive();
   return (
@@ -81,7 +81,7 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
               <Text className="listing-due-date">
                 <Icon className="listing-due-icon" size={12} icon={IconNames.CALENDAR} />
                 {`${beforeNow(overview.openAt) ? 'Opened' : 'Opens'}: ${getPrettyDate(
-                  overview.openAt
+                  overview.openAt,
                 )}`}
               </Text>
               {beforeNow(overview.openAt) && (
@@ -110,7 +110,7 @@ type AssessmentOverviewCardTitleProps = {
 const AssessmentOverviewCardTitle: React.FC<AssessmentOverviewCardTitleProps> = ({
   overview,
   renderProgressStatus,
-  makeSubmissionButton
+  makeSubmissionButton,
 }) => (
   <div className="listing-header">
     <Text ellipsize={true}>

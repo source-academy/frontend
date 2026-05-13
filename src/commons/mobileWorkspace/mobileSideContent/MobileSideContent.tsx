@@ -10,7 +10,7 @@ import {
   type ChangeTabsCallback,
   type SideContentLocation,
   type SideContentTab,
-  SideContentType
+  SideContentType,
 } from '../../sideContent/SideContentTypes';
 import { propsAreEqual } from '../../utils/MemoizeHelper';
 import MobileControlBar from './MobileControlBar';

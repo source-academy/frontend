@@ -20,7 +20,7 @@ const FileSystemViewList: React.FC<Props> = ({
   workspaceLocation,
   fileSystem,
   basePath,
-  indentationLevel
+  indentationLevel,
 }) => {
   const [dirNames, setDirNames] = useState<string[] | undefined>(undefined);
   const [fileNames, setFileNames] = useState<string[] | undefined>(undefined);

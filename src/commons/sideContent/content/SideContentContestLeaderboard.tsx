@@ -58,11 +58,11 @@ const SideContentContestLeaderboard: React.FC<SideContentContestLeaderboardProps
       <div className="leaderboard-header">
         {columnHeader(
           'header-entryid',
-          t($ => $.headers.studentName)
+          t($ => $.headers.studentName),
         )}
         {columnHeader(
           'header-entryrank',
-          t($ => $.headers.rank)
+          t($ => $.headers.rank),
         )}
         {columnHeader(
           'header-score',
@@ -70,7 +70,7 @@ const SideContentContestLeaderboard: React.FC<SideContentContestLeaderboardProps
             ? t($ => $.headers.score.calculated)
             : leaderboardType === SideContentType.popularVoteLeaderboard
               ? t($ => $.headers.score.popularity)
-              : t($ => $.headers.score.default)
+              : t($ => $.headers.score.default),
         )}
       </div>
     );
@@ -94,7 +94,7 @@ const SideContentContestLeaderboard: React.FC<SideContentContestLeaderboardProps
         )}
       </div>
     ),
-    [handleContestEntryClick, orderedContestEntries, contestEntryHeader, t]
+    [handleContestEntryClick, orderedContestEntries, contestEntryHeader, t],
   );
 
   return (

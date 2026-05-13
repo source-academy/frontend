@@ -11,9 +11,9 @@ const RemoteExecutionActions = createActions('remoteExecution', {
   remoteExecDisconnect: () => ({}),
   remoteExecRun: (files: Record<string, string>, entrypointFilePath: string) => ({
     files,
-    entrypointFilePath
+    entrypointFilePath,
   }),
-  remoteExecReplInput: (input: string) => input
+  remoteExecReplInput: (input: string) => input,
 });
 
 // For compatibility with existing code (actions helper)

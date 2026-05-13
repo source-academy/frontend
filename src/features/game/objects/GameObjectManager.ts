@@ -36,7 +36,7 @@ class GameObjectManager implements StateObserver {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Objects]);
     const objIdsToRender = GameGlobalAPI.getInstance().getGameItemsInLocation(
       GameItemType.objects,
-      locationId
+      locationId,
     );
 
     // Refresh mapping
@@ -114,7 +114,7 @@ class GameObjectManager implements StateObserver {
       sprite: object,
       clickArea: object.getClickArea(),
       actionIds,
-      interactionId
+      interactionId,
     };
   }
 
@@ -130,7 +130,7 @@ class GameObjectManager implements StateObserver {
     const object = this.createObject(objectProp);
     GameGlobalAPI.getInstance().addToLayer(
       Layer.Objects,
-      (object.sprite as GlowingImage).getContainer()
+      (object.sprite as GlowingImage).getContainer(),
     );
     this.objects.set(id, object);
     return true;

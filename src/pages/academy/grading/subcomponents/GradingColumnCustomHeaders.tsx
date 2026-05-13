@@ -35,7 +35,7 @@ const GradingColumnCustomHeaders: React.FC<Props> = props => {
     <GradingFlex
       className={classNames(
         props.eGridHeader.classList,
-        classes['grading-table-header-individual']
+        classes['grading-table-header-individual'],
       )}
     >
       <span className="ag-header-cell-text">{props.displayName}</span>

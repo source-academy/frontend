@@ -8,7 +8,7 @@ const translations = {
   mainClass: 'Main class must be named Main and uploaded as Main.class.',
   chooseFiles: 'Choose files...',
   filesUploaded: 'file(s) uploaded.',
-  label: 'Upload files'
+  label: 'Upload files',
 };
 
 export default translations;

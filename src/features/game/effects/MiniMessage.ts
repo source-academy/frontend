@@ -15,7 +15,7 @@ const messageTextConfig = { x: 1900, y: 100, oriX: 1.0, oriY: 0.5 };
 const messageStyle: BitmapFontStyle = {
   key: FontAssets.zektonDarkFont.key,
   size: 24,
-  align: Phaser.GameObjects.BitmapText.ALIGN_RIGHT
+  align: Phaser.GameObjects.BitmapText.ALIGN_RIGHT,
 };
 
 /**
@@ -28,7 +28,7 @@ const makeMiniMessageDisplayer = () => {
   let displayMessagesPromise = Promise.resolve();
   const displayMiniMessage = (scene: IBaseScene, text: string) => {
     displayMessagesPromise = displayMessagesPromise.then(() =>
-      displayMiniMessageHelper(scene, text)
+      displayMiniMessageHelper(scene, text),
     );
   };
   return displayMiniMessage;
@@ -60,7 +60,7 @@ async function displayMiniMessageHelper(scene: IBaseScene, text: string) {
     scene,
     screenSize.x,
     100,
-    ImageAssets.messageBar.key
+    ImageAssets.messageBar.key,
   );
   messageBg.setScale(-1.5, 0.8);
   const messageText = createBitmapText(scene, text, messageTextConfig, messageStyle);
@@ -74,7 +74,7 @@ async function displayMiniMessageHelper(scene: IBaseScene, text: string) {
   scene.add.tween({
     targets: container,
     alpha: 1,
-    ...rightSideEntryTweenProps
+    ...rightSideEntryTweenProps,
   });
 
   await sleep(rightSideEntryTweenProps.duration + messageDuration);
@@ -83,7 +83,7 @@ async function displayMiniMessageHelper(scene: IBaseScene, text: string) {
   scene.add.tween({
     targets: container,
     alpha: 1,
-    ...rightSideExitTweenProps
+    ...rightSideExitTweenProps,
   });
 
   await sleep(rightSideExitTweenProps.duration);

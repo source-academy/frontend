@@ -3,7 +3,7 @@ import '@convergencelabs/ace-collab-ext/dist/css/ace-collab-ext.css';
 import {
   AceMultiCursorManager,
   AceMultiSelectionManager,
-  AceRadarView
+  AceRadarView,
 } from '@convergencelabs/ace-collab-ext';
 import * as Sentry from '@sentry/react';
 import sharedbAce from '@sourceacademy/sharedb-ace';
@@ -53,7 +53,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     const user = {
       name: name || 'Unnamed user',
       color,
-      role: collabEditorAccess
+      role: collabEditorAccess,
     };
 
     const editor = reactAceRef.current!.editor;
@@ -74,7 +74,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     const ShareAce = new sharedbAce(sessionDetails.docId, {
       user,
       WsUrl: getSessionUrl(editorSessionId, true),
-      namespace: 'sa'
+      namespace: 'sa',
     });
 
     const updateUsers = (binding: SharedbAceBinding) => {
@@ -87,8 +87,8 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
         // Change in role, update readOnly status in sessionDetails
         dispatch(
           CollabEditingActions.setSessionDetails('playground', {
-            readOnly: binding.connectedUsers[myUserId].role === CollabEditingAccess.VIEWER
-          })
+            readOnly: binding.connectedUsers[myUserId].role === CollabEditingAccess.VIEWER,
+          }),
         );
       }
     };
@@ -103,25 +103,25 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
         {
           cursorManager,
           selectionManager,
-          radarManager
+          radarManager,
         },
         {
           languageSelectHandler: (language: string) => {
             const { chapter, variant } = parseModeString(language);
             propsRef.current.updateLanguageCallback?.(getLanguageConfig(chapter, variant), null);
-          }
-        }
+          },
+        },
       );
       propsRef.current.handleSetSharedbConnected!(true);
       dispatch(
-        CollabEditingActions.setUpdateUserRoleCallback('playground', binding.changeUserRole)
+        CollabEditingActions.setUpdateUserRoleCallback('playground', binding.changeUserRole),
       );
 
       // Disables editor in a read-only session
       editor.setReadOnly(sessionDetails.readOnly);
       navigator.clipboard.writeText(editorSessionId).then(() => {
         showSuccessMessage(
-          `You have joined a session as ${sessionDetails.readOnly ? 'a viewer' : 'an editor'}. Copied to clipboard: ${editorSessionId}`
+          `You have joined a session as ${sessionDetails.readOnly ? 'a viewer' : 'an editor'}. Copied to clipboard: ${editorSessionId}`,
         );
       });
 

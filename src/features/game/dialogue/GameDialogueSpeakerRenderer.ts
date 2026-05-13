@@ -52,7 +52,7 @@ export default class DialogueSpeakerRenderer {
         ? this.createSpeakerBox(this.getUsername(), GamePosition.Right)
         : this.createSpeakerBox(
             GameGlobalAPI.getInstance().getCharacterById(speakerId).name,
-            GamePosition.Left
+            GamePosition.Left,
           );
     GameGlobalAPI.getInstance().addToLayer(Layer.SpeakerBox, speakerContainer);
   }
@@ -65,7 +65,7 @@ export default class DialogueSpeakerRenderer {
     const speakerSprite = GameGlobalAPI.getInstance().createCharacterSprite(
       speakerId,
       expression,
-      speakerPosition
+      speakerPosition,
     );
     this.speakerSprite = speakerSprite;
     GameGlobalAPI.getInstance().addToLayer(Layer.Speaker, speakerSprite);
@@ -78,14 +78,14 @@ export default class DialogueSpeakerRenderer {
       gameManager,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.speakerBox.key
+      ImageAssets.speakerBox.key,
     ).setAlpha(0.8);
 
     const speakerText = createBitmapText(
       gameManager,
       '',
       DialogueConstants.speakerTextConfig,
-      speakerTextStyle
+      speakerTextStyle,
     );
 
     if (position === GamePosition.Right) {

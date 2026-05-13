@@ -49,7 +49,7 @@ const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath }) => {
               different name.
             </p>
           ),
-          label: 'OK'
+          label: 'OK',
         }).then(() => {});
         return;
       }
@@ -77,7 +77,7 @@ const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath }) => {
               a different name.
             </p>
           ),
-          label: 'OK'
+          label: 'OK',
         }).then(() => {});
         return;
       }

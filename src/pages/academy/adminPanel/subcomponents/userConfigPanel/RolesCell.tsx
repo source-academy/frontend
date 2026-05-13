@@ -17,13 +17,13 @@ const RolesCell: React.FC<Props> = props => {
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       props.handleUpdateUserRole(data.courseRegId, e.target.value as Role);
     },
-    [data, props]
+    [data, props],
   );
 
   const roleOptions = [
     { label: 'Student', value: Role.Student },
     { label: 'Staff', value: Role.Staff },
-    { label: 'Admin', value: Role.Admin }
+    { label: 'Admin', value: Role.Admin },
   ];
   return (
     <Popover

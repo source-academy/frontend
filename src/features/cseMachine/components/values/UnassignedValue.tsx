@@ -20,7 +20,7 @@ export class UnassignedValue extends Value {
     this._x = reference.x() + getTextWidth(reference.keyString) + Config.TextPaddingX;
     this._y = reference.y();
     this.text = new Text(Config.UnassignedData, this._x, this._y, {
-      isStringIdentifiable: false
+      isStringIdentifiable: false,
     });
 
     this._width = this.text.width();

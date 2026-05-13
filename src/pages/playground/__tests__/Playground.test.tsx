@@ -8,7 +8,7 @@ import { createMemoryRouter, type RouteObject, RouterProvider } from 'react-rout
 import {
   defaultEditorValue,
   defaultPlayground,
-  type OverallState
+  type OverallState,
 } from 'src/commons/application/ApplicationTypes';
 import type { Router } from 'src/commons/application/types/CommonsTypes';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
@@ -25,7 +25,7 @@ import Playground, { handleHash } from '../Playground';
 // to be generated: `style="left: calc(-0px + (% * nan));"`
 vi.mock('@blueprintjs/core', async importOriginal => ({
   ...(await importOriginal()),
-  Slider: (props: any) => <div data-testid="mock-slider">{props.children}</div>
+  Slider: (props: any) => <div data-testid="mock-slider">{props.children}</div>,
 }));
 
 // Using @testing-library/react to render snapshot instead of react-test-renderer
@@ -58,15 +58,15 @@ describe('Playground tests', () => {
               <Playground />
             </WorkspaceSettingsContext.Provider>
           </Provider>
-        )
-      }
+        ),
+      },
     ];
   });
 
   test('Playground renders correctly', async () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ['/playground'],
-      initialIndex: 0
+      initialIndex: 0,
     });
 
     const tree = await renderTree(router);
@@ -79,7 +79,7 @@ describe('Playground tests', () => {
   test('Playground with link renders correctly', async () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ['/playground#chap=2&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA'],
-      initialIndex: 0
+      initialIndex: 0,
     });
 
     const tree = await renderTree(router);
@@ -101,14 +101,14 @@ describe('Playground tests', () => {
         testHash,
         {
           handleChapterSelect: mockHandleChapterSelect,
-          handleChangeExecTime: mockHandleChangeExecTime
+          handleChangeExecTime: mockHandleChangeExecTime,
         },
         'playground',
         // We cannot make use of 'dispatch' & BrowserFS in test cases. However, the
         // behaviour being tested here does not actually invoke either of these. As
         // a workaround, we pass in 'undefined' instead & cast to the expected types.
         undefined as unknown as Dispatch,
-        undefined as unknown as FSModule
+        undefined as unknown as FSModule,
       );
 
       expect(mockHandleEditorValueChanged).not.toHaveBeenCalled();

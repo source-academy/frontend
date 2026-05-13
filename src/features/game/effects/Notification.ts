@@ -15,14 +15,14 @@ import { fadeAndDestroy, fadeIn } from './FadeEffect';
 const notifStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
   size: 100,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 const notifTextConfig = {
   x: screenCenter.x,
   y: dialogueConstants.rect.y + notifStyle.size * 2,
   oriX: 0.5,
-  oriY: 0.9
+  oriY: 0.9,
 };
 
 /**

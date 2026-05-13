@@ -4,7 +4,7 @@ import { Outlet } from 'react-router';
 import Messages, {
   type MessageType,
   MessageTypeNames,
-  sendToWebview
+  sendToWebview,
 } from 'src/features/vscode/messages';
 
 import NavigationBar from '../navigationBar/NavigationBar';
@@ -26,7 +26,7 @@ const Application: React.FC = () => {
 
   const [workspaceSettings, setWorkspaceSettings] = useLocalStorageState(
     Constants.workspaceSettingsLocalStorageKey,
-    defaultWorkspaceSettings
+    defaultWorkspaceSettings,
   );
 
   // Effect to fetch the latest user info and course configurations from the backend on refresh,
@@ -59,7 +59,7 @@ const Application: React.FC = () => {
         // If it is not an Android soft keyboard triggering the resize event, update the application height.
         document.documentElement.style.setProperty(
           '--application-height',
-          window.innerHeight + 'px'
+          window.innerHeight + 'px',
         );
       }
       browserDimensions.current = { height: window.innerHeight, width: window.innerWidth };
@@ -109,8 +109,8 @@ const Application: React.FC = () => {
             dispatch(
               SessionActions.setTokens({
                 accessToken: token.accessToken,
-                refreshToken: token.refreshToken
-              })
+                refreshToken: token.refreshToken,
+              }),
             );
             dispatch(SessionActions.fetchUserAndCourse());
           }
@@ -144,8 +144,8 @@ const Application: React.FC = () => {
             WorkspaceActions.setEditorBreakpoint(
               message.workspaceLocation,
               0,
-              message.newBreakpoints
-            )
+              message.newBreakpoints,
+            ),
           );
           break;
       }

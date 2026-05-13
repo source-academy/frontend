@@ -17,31 +17,31 @@ const mockChangedStoredState: SavedState = {
     role: undefined,
     name: 'Jeff',
     userId: 1,
-    githubAccessToken: 'githubAccessToken'
+    githubAccessToken: 'githubAccessToken',
   },
   playgroundIsFolderModeEnabled: true,
   playgroundActiveEditorTabIndex: {
-    value: 1
+    value: 1,
   },
   playgroundEditorTabs: [
     {
       filePath: '/playground/a.js',
       value: `import { square } from './b.js'; square(5);`,
       breakpoints: [],
-      highlightedLines: []
+      highlightedLines: [],
     },
     {
       filePath: '/playground/b.js',
       value: 'export const square = x => x * x;',
       breakpoints: [],
-      highlightedLines: []
-    }
+      highlightedLines: [],
+    },
   ],
   playgroundIsEditorAutorun: true,
   playgroundSourceChapter: Constants.defaultSourceChapter,
   playgroundSourceVariant: Variant.DEFAULT,
   playgroundExternalLibrary: 'NONE' as ExternalLibraryName,
-  playgroundLanguage: defaultLanguageConfig
+  playgroundLanguage: defaultLanguageConfig,
 };
 
 const mockChangedState: OverallState = {
@@ -53,7 +53,7 @@ const mockChangedState: OverallState = {
     role: undefined,
     name: 'Jeff',
     userId: 1,
-    githubAccessToken: 'githubAccessToken'
+    githubAccessToken: 'githubAccessToken',
   },
   workspaces: {
     ...defaultState.workspaces,
@@ -66,18 +66,18 @@ const mockChangedState: OverallState = {
           filePath: '/playground/a.js',
           value: `import { square } from './b.js'; square(5);`,
           breakpoints: [],
-          highlightedLines: []
+          highlightedLines: [],
         },
         {
           filePath: '/playground/b.js',
           value: 'export const square = x => x * x;',
           breakpoints: [],
-          highlightedLines: []
-        }
+          highlightedLines: [],
+        },
       ],
-      isEditorAutorun: true
-    }
-  }
+      isEditorAutorun: true,
+    },
+  },
 };
 
 describe('createStore() function', () => {

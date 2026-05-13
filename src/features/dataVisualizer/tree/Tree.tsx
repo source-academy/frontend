@@ -10,7 +10,7 @@ import {
   DataTreeNode,
   DrawableTreeNode,
   FunctionTreeNode,
-  TreeNode
+  TreeNode,
 } from './TreeNode';
 
 /**

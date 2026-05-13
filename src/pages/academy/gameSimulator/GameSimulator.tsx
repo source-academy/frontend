@@ -44,7 +44,7 @@ const GameSimulator: React.FC = () => {
       accessToken: session.accessToken,
       refreshToken: session.refreshToken,
       role: session.role,
-      name: session.name
+      name: session.name,
     } as AccountInfo);
   }, [session]);
 

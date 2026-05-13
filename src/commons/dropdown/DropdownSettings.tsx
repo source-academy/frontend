@@ -6,7 +6,7 @@ import {
   HTMLSelect,
   Icon,
   PopoverPosition,
-  Tooltip
+  Tooltip,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useContext } from 'react';
@@ -18,7 +18,7 @@ import LocaleSelector from './LocaleSelector';
 const options = [
   { label: 'None', value: EditorBinding.NONE },
   { label: 'Vim', value: EditorBinding.VIM },
-  { label: 'Emacs', value: EditorBinding.EMACS }
+  { label: 'Emacs', value: EditorBinding.EMACS },
 ] as const;
 
 type Props = {
@@ -33,7 +33,7 @@ const DropdownSettings: React.FC<Props> = ({ isOpen, onClose }) => {
     setWorkspaceSettings({
       ...workspaceSettings,
       // Typecast to EditorBinding here is ok since the HTMLSelect only contains 'EditorBinding' options
-      editorBinding: e.target.value as EditorBinding
+      editorBinding: e.target.value as EditorBinding,
     });
   };
 

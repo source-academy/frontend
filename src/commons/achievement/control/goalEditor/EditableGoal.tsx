@@ -13,7 +13,7 @@ import EditableMeta from './EditableMeta';
 const init = (goal: GoalDefinition): State => {
   return {
     editableGoal: goal,
-    isDirty: false
+    isDirty: false,
   };
 };
 
@@ -22,30 +22,30 @@ const reducer = (state: State, action: Action) => {
     case ActionType.SAVE_CHANGES:
       return {
         ...state,
-        isDirty: false
+        isDirty: false,
       };
     case ActionType.DISCARD_CHANGES:
       return init(action.payload);
     case ActionType.DELETE_GOAL:
       return {
         ...state,
-        isDirty: false
+        isDirty: false,
       };
     case ActionType.CHANGE_META:
       return {
         editableGoal: {
           ...state.editableGoal,
-          meta: action.payload
+          meta: action.payload,
         },
-        isDirty: true
+        isDirty: true,
       };
     case ActionType.CHANGE_TEXT:
       return {
         editableGoal: {
           ...state.editableGoal,
-          text: action.payload
+          text: action.payload,
         },
-        isDirty: true
+        isDirty: true,
       };
     default:
       return state;
@@ -65,7 +65,7 @@ const EditableGoal: React.FC<Props> = ({
   isNewGoal,
   releaseUuid,
   removeCard,
-  requestPublish
+  requestPublish,
 }) => {
   const inferencer = useContext(AchievementContext);
   const goal = inferencer.getGoalDefinition(uuid);

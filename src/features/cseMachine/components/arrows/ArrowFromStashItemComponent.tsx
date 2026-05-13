@@ -34,18 +34,18 @@ export class ArrowFromStashItemComponent extends GenericArrow<
       to.y() >= from.y() + from.height()
         ? Math.max(
             from.y() + from.height() + postSourceStraightLength,
-            to.y() - terminalSegmentLength
+            to.y() - terminalSegmentLength,
           )
         : Math.max(
             from.y() + from.height() + postSourceStraightLength,
-            to.y() + terminalSegmentLength
+            to.y() + terminalSegmentLength,
           );
 
     const steps: StepsArray = [
       (x, y) => [x + from.width() / 2, y + from.height()],
       (x, y) => [x, turnY],
       () => [targetX, turnY],
-      (x, y) => [x, to.y()]
+      (x, y) => [x, to.y()],
     ];
 
     return steps;

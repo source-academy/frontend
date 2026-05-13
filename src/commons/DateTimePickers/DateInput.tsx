@@ -32,7 +32,7 @@ const DateInput: React.FC<DateInputProps> = ({
   fill,
   closeOnSelection,
   timePrecision,
-  disableTimezoneSelect
+  disableTimezoneSelect,
 }) => {
   void timePrecision;
   void disableTimezoneSelect;

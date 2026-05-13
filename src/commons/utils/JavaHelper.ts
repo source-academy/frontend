@@ -17,7 +17,7 @@ export async function javaRun(
   context: Context,
   targetStep: number,
   isUsingCse: boolean,
-  options?: { uploadIsActive?: boolean; uploads?: UploadResult }
+  options?: { uploadIsActive?: boolean; uploads?: UploadResult },
 ) {
   let compiled = {};
 
@@ -27,7 +27,7 @@ export async function javaRun(
       severity: 'Error' as any,
       location: { start: { line: -1, column: -1 }, end: { line: -1, column: -1 } },
       explain: () => msg,
-      elaborate: () => msg
+      elaborate: () => msg,
     });
   };
 
@@ -78,14 +78,14 @@ export async function javaRun(
         throw new Error(`Module "${module}" not found in the Source modules manifest.`);
       }
       const sourceModulesToImport: Record<string, ModuleInfo> = {
-        [module]: { name: module, ...manifest[module] }
+        [module]: { name: module, ...manifest[module] },
       };
       const moduleFuncs = await loadSourceModules(sourceModulesToImport, context, {
-        loadTabs: true
+        loadTabs: true,
       });
       const { proxy } = createModuleProxy(
         module,
-        moduleFuncs[module] as { [key: string]: Function | object }
+        moduleFuncs[module] as { [key: string]: Function | object },
       );
       return { default: proxy };
     }
@@ -125,7 +125,7 @@ export async function javaRun(
     try {
       const classFile = compileFromSource(javaCode);
       compiled = {
-        'Main.class': Buffer.from(new BinaryWriter().generateBinary(classFile)).toString('base64')
+        'Main.class': Buffer.from(new BinaryWriter().generateBinary(classFile)).toString('base64'),
       };
     } catch (e) {
       stderr('Compile', e);
@@ -140,12 +140,12 @@ export async function javaRun(
       .then(res => res.json())
       .then((obj: { [key: string]: string }) => {
         return obj;
-      })
+      }),
   )
     .then(stdlib => {
       files = {
         ...stdlib,
-        ...compiled
+        ...compiled,
       };
 
       // run the JVM
@@ -169,12 +169,12 @@ export async function javaRun(
                         toString() {
                           return ' ';
                         }
-                      })()
-                    }
+                      })(),
+                    },
               );
-            }
+            },
           },
-          natives: {}
+          natives: {},
         })();
       });
     })
@@ -199,15 +199,15 @@ export async function runJavaCseMachine(code: string, targetStep: number, contex
     location: {
       start: {
         line: 0,
-        column: 0
+        column: 0,
       },
       end: {
         line: 0,
-        column: 0
-      }
+        column: 0,
+      },
     },
     explain: () => e.explain(),
-    elaborate: () => e.explain()
+    elaborate: () => e.explain(),
   });
   context.executionMethod = 'cse-machine';
   return ECE.runECEvaluator(code, targetStep)

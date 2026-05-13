@@ -29,7 +29,7 @@ export default class CharacterManager implements StateObserver {
   public renderCharacterLayerContainer(locationId: LocationId): void {
     const idsToRender = GameGlobalAPI.getInstance().getGameItemsInLocation(
       GameItemType.characters,
-      locationId
+      locationId,
     );
 
     // Refresh mapping
@@ -50,7 +50,7 @@ export default class CharacterManager implements StateObserver {
   public createCharacterSprite(
     characterId: ItemId,
     overrideExpression?: string,
-    overridePosition?: GamePosition
+    overridePosition?: GamePosition,
   ) {
     const character = GameGlobalAPI.getInstance().getCharacterById(characterId);
     const { defaultPosition, defaultExpression, expressions, scale } = character;
@@ -61,7 +61,7 @@ export default class CharacterManager implements StateObserver {
       GameGlobalAPI.getInstance().getGameManager(),
       characterXPosition,
       screenSize.y,
-      assetKey
+      assetKey,
     ).setOrigin(0.5, 1);
 
     resize(characterSprite, CharConstants.charWidth * scale);

@@ -10,7 +10,7 @@ export const flagDirectoryLanguageUrl = createFeatureFlag(
   'The URL where the language directory may be found.',
   function* () {
     yield put(LanguageDirectoryActions.fetchLanguages());
-  }
+  },
 );
 
 export const selectDirectoryLanguageUrl = featureSelector(flagDirectoryLanguageUrl);

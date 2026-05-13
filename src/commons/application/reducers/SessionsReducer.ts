@@ -9,7 +9,7 @@ import type { SessionState } from '../types/SessionTypes';
 
 export const SessionsReducer: Reducer<SessionState, SourceActionType> = (
   state = defaultSession,
-  action
+  action,
 ) => {
   state = newSessionsReducer(state, action);
   return state;

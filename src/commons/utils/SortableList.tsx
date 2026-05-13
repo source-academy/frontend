@@ -6,14 +6,14 @@ import {
   KeyboardSensor,
   PointerSensor,
   useSensor,
-  useSensors
+  useSensors,
 } from '@dnd-kit/core';
 import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
-  verticalListSortingStrategy
+  verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { memo, useCallback, useState } from 'react';
@@ -27,7 +27,7 @@ const SortableItem = memo(({ id }: SortableItemProps) => {
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition
+    transition,
   };
 
   return (
@@ -46,8 +46,8 @@ export const SortableList = memo(({ items, onSortEnd }: SortableListProps) => {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates
-    })
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
   );
 
   return (
@@ -80,6 +80,6 @@ export const useSortableList = () => {
   return {
     items,
     setItems,
-    onSortEnd
+    onSortEnd,
   };
 };

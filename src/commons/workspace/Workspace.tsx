@@ -62,7 +62,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       event: MouseEvent | TouchEvent,
       direction: Direction,
       elementRef: HTMLElement,
-      delta: NumberSize
+      delta: NumberSize,
     ) => {
       const sideBarWidth = elementRef.clientWidth;
       if (sideBarWidth !== sideBarCollapsedWidth) {
@@ -80,9 +80,9 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       ref: sideBarResizable,
       size: {
         width: isSideBarRendered && isSideBarExpanded ? expandedSideBarWidth : minWidth,
-        height: '100%'
+        height: '100%',
       },
-      defaultSize: { width: minWidth, height: '100%' }
+      defaultSize: { width: minWidth, height: '100%' },
     };
   };
 
@@ -94,7 +94,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       onResize: toggleEditorDividerDisplay,
       ref: leftParentResizable,
       defaultSize: { width: '50%', height: '100%' },
-      as: undefined as any // re-resizable bug - wrong typedef
+      as: undefined as any, // re-resizable bug - wrong typedef
     } as ResizableProps;
   };
 
@@ -106,7 +106,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       className: 'resize-side-content',
       enable: bottomResizeOnly,
       onResize: toggleDividerDisplay,
-      onResizeStop
+      onResizeStop,
     } as ResizableProps;
   };
 
@@ -114,7 +114,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
     event: MouseEvent | TouchEvent,
     direction: Direction,
     elementRef: HTMLElement,
-    delta: NumberSize
+    delta: NumberSize,
   ) => {
     const minWidthThreshold = 100;
     const sideBarWidth = elementRef.clientWidth;
@@ -189,7 +189,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   const {
     ref: fullscreenRef,
     toggle: toggleFullscreen,
-    fullscreen: isFullscreen
+    fullscreen: isFullscreen,
   } = useFullscreenElement<HTMLDivElement>();
 
   const fullscreenContainerRef = useRef<HTMLDivElement | null>(null);
@@ -198,7 +198,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       fullscreenContainerRef.current = node;
       fullscreenRef(node);
     },
-    [fullscreenRef]
+    [fullscreenRef],
   );
 
   return (

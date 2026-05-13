@@ -39,7 +39,7 @@ class GameTask {
     if (prevDetail !== undefined) {
       const newDetail: TaskDetail = {
         ...prevDetail,
-        visible: true
+        visible: true,
       };
       this.taskDetails.set(key, newDetail);
     }

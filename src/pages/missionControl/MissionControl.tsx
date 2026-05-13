@@ -9,7 +9,7 @@ import { AssessmentStatuses } from '../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
 import { EditingOverviewCard } from '../../commons/editingOverviewCard/EditingOverviewCard';
 import EditingWorkspace, {
-  type EditingWorkspaceProps
+  type EditingWorkspaceProps,
 } from '../../commons/editingWorkspace/EditingWorkspace';
 import MissionCreator from '../../commons/missionCreator/MissionCreator';
 import Constants from '../../commons/utils/Constants';
@@ -47,7 +47,7 @@ const MissionControl: React.FC = () => {
       assessmentOverview: overview,
       updateAssessmentOverview: setEditingOverview,
       notAttempted: overview.status === AssessmentStatuses.not_attempted,
-      closeDate: overview.closeAt
+      closeDate: overview.closeAt,
     };
     return (
       <div className={academyClasses['Academy']}>

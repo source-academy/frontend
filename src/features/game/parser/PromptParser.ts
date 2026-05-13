@@ -16,7 +16,7 @@ export default class PromptParser {
   public static parsePrompt(title: string, choices: string[]): Prompt {
     const prompt = {
       promptTitle: title.split('prompt:')[1].trim(),
-      choices: choices.map(this.splitChoice)
+      choices: choices.map(this.splitChoice),
     };
     return prompt;
   }

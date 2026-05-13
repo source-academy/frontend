@@ -8,7 +8,7 @@ import {
   defaultActiveColor,
   defaultDangerColor,
   defaultStrokeColor,
-  isStashItemInDanger
+  isStashItemInDanger,
 } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
@@ -28,18 +28,18 @@ export class ControlToStashAnimation extends Animatable {
 
   constructor(
     controlItem: ControlItemComponent,
-    private stashItem: StashItemComponent
+    private stashItem: StashItemComponent,
   ) {
     super();
     const controlPosition = getNodePosition(controlItem);
     this.borderRectAnimation = new AnimatedRectComponent({
       ...controlPosition,
-      stroke: defaultActiveColor()
+      stroke: defaultActiveColor(),
     });
     this.controlTextAnimation = new AnimatedTextComponent({
       ...controlPosition,
       text: controlItem.text,
-      padding: ControlStashConfig.ControlItemTextPadding
+      padding: ControlStashConfig.ControlItemTextPadding,
     });
     this.textChanged = controlItem.text !== stashItem.text;
     if (this.textChanged) {
@@ -47,7 +47,7 @@ export class ControlToStashAnimation extends Animatable {
         ...controlPosition,
         text: stashItem.text,
         padding: ControlStashConfig.StashItemTextPadding,
-        opacity: 0
+        opacity: 0,
       });
     }
     if (this.stashItem.arrow) {
@@ -75,7 +75,7 @@ export class ControlToStashAnimation extends Animatable {
         ...stashPosition,
         stroke: isStashItemInDanger(this.stashItem.index)
           ? defaultDangerColor()
-          : defaultStrokeColor()
+          : defaultStrokeColor(),
       }),
       this.controlTextAnimation.animateTo(stashPosition),
       // If the text is different, also fade out the old text and fade in the new text
@@ -83,10 +83,10 @@ export class ControlToStashAnimation extends Animatable {
         ? [
             this.controlTextAnimation.animateTo({ opacity: 0 }, { duration: 0.5, delay: 0.2 }),
             this.stackTextAnimation!.animateTo(stashPosition),
-            this.stackTextAnimation!.animateTo({ opacity: 1 }, { duration: 0.5, delay: 0.5 })
+            this.stackTextAnimation!.animateTo({ opacity: 1 }, { duration: 0.5, delay: 0.5 }),
           ]
         : []),
-      this.arrowAnimation?.animateTo({ opacity: 1 }, { delay: 1 })
+      this.arrowAnimation?.animateTo({ opacity: 1 }, { delay: 1 }),
     ]);
     this.destroy();
   }

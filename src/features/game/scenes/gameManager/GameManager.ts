@@ -111,11 +111,11 @@ class GameManager extends Phaser.Scene {
     this.escapeManager = new GameEscapeManager(this);
     this.collectibleManager = new GameAwardsManager(
       this,
-      SourceAcademyGame.getInstance().getUserStateManager().getCollectibles
+      SourceAcademyGame.getInstance().getUserStateManager().getCollectibles,
     );
     this.achievementManager = new GameAwardsManager(
       this,
-      SourceAcademyGame.getInstance().getUserStateManager().getAchievements
+      SourceAcademyGame.getInstance().getUserStateManager().getAchievements,
     );
     this.logManager = new GameLogManager(this);
     this.dialogueStorageManager = new GameDialogueStorageManager();
@@ -127,9 +127,9 @@ class GameManager extends Phaser.Scene {
         DashboardPage.Log,
         DashboardPage.Tasks,
         DashboardPage.Collectibles,
-        DashboardPage.Achievements
+        DashboardPage.Achievements,
       ],
-      [this.logManager, this.taskLogManager, this.collectibleManager, this.achievementManager]
+      [this.logManager, this.taskLogManager, this.collectibleManager, this.achievementManager],
     );
     this.quizManager = new GameQuizManager();
     this.topicManager = new TopicListManager();
@@ -144,10 +144,11 @@ class GameManager extends Phaser.Scene {
     addLoadingScreen(this);
     this.getPhaseManager().setInterruptCheckCallback(
       (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
-        this.transitionChecker(prevPhase, newPhase)
+        this.transitionChecker(prevPhase, newPhase),
     );
     this.getPhaseManager().setInterruptCallback(
-      async (prevPhase: GamePhaseType, newPhase: GamePhaseType) => await this.checkpointTransition()
+      async (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
+        await this.checkpointTransition(),
     );
     this.preloadLocationsAssets();
     this.bindKeyboardTriggers();
@@ -231,11 +232,11 @@ class GameManager extends Phaser.Scene {
     if (startAction) {
       // Execute fast forward actions
       await this.getActionManager().fastForwardGameActions(
-        this.getStateManager().getTriggeredStateChangeActions()
+        this.getStateManager().getTriggeredStateChangeActions(),
       );
       // Game start actions
       await this.getActionManager().processGameActions(
-        this.getStateManager().getGameMap().getGameStartActions()
+        this.getStateManager().getGameMap().getGameStartActions(),
       );
       // By default, change the mode into Explore
       if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Sequence)) {
@@ -358,7 +359,7 @@ class GameManager extends Phaser.Scene {
     this.hasTransitioned = true;
 
     await this.getActionManager().processGameActions(
-      this.getStateManager().getGameMap().getCheckpointCompleteActions()
+      this.getStateManager().getGameMap().getCheckpointCompleteActions(),
     );
 
     // Reset input and cursor, in case it is changed after story complete actions

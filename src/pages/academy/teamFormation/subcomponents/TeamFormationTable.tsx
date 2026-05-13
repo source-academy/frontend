@@ -7,7 +7,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table';
 import { Fragment, useState } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
@@ -24,7 +24,7 @@ const columnHelper = createColumnHelper<TeamFormationOverview>();
 const columns = [
   columnHelper.accessor('assessmentName', {
     header: 'Assessment',
-    cell: info => <Filterable column={info.column} value={info.getValue()} />
+    cell: info => <Filterable column={info.column} value={info.getValue()} />,
   }),
   columnHelper.accessor('assessmentType', {
     header: 'Type',
@@ -32,7 +32,7 @@ const columns = [
       <Filterable column={info.column} value={info.getValue()}>
         <AssessmentTypeBadge type={info.getValue()} />
       </Filterable>
-    )
+    ),
   }),
   columnHelper.accessor('studentNames', {
     header: 'Students',
@@ -51,7 +51,7 @@ const columns = [
         return rowValue === filterValue;
       }
       return rowValue.some(v => v === filterValue);
-    }
+    },
   }),
   columnHelper.accessor(({ teamId }) => ({ teamId }), {
     header: 'Actions',
@@ -59,8 +59,8 @@ const columns = [
     cell: info => {
       const { teamId } = info.getValue();
       return <TeamFormationActions teamId={teamId} />;
-    }
-  })
+    },
+  }),
 ];
 
 type TeamFormationTableProps = {
@@ -73,7 +73,7 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
   if (group) {
     defaultFilters.push({
       id: 'groupName',
-      value: group
+      value: group,
     });
   }
 
@@ -83,7 +83,7 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
   const globalFilterFn = (
     row: Row<TeamFormationOverview>,
     columnId: string | number,
-    filterValue: any
+    filterValue: any,
   ): boolean => {
     for (const column of objectKeys(row.original)) {
       const rowValue = row.original[column];
@@ -107,14 +107,14 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
     columns,
     state: {
       columnFilters,
-      globalFilter
+      globalFilter,
     },
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: globalFilterFn,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel()
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const handleFilterRemove = ({ id, value }: ColumnFilter) => {

@@ -19,8 +19,8 @@ const MCQQuestionTemplateTab: React.FC<Props> = props => {
     const choices = question.choices.concat([
       {
         content: 'A',
-        hint: null
-      }
+        hint: null,
+      },
     ]);
     question.choices = choices;
     assessment!.questions[questionId] = question;
@@ -39,7 +39,7 @@ const MCQQuestionTemplateTab: React.FC<Props> = props => {
   const textareaContent = (
     path: Array<string | number>,
     isNumber: boolean = false,
-    range: number[] = [0]
+    range: number[] = [0],
   ) => {
     if (isNumber) {
       return (
@@ -85,7 +85,7 @@ const MCQQuestionTemplateTab: React.FC<Props> = props => {
           Solution:
           {textareaContent(['questions', questionId, 'solution'], true, [
             0,
-            question.choices.length
+            question.choices.length,
           ])}
           <br />
           <ControlButton label="Add Option" icon={IconNames.CONFIRM} onClick={addOption} />

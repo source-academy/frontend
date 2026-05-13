@@ -15,7 +15,7 @@ const EditableGoalUuids: React.FC<Props> = ({ changeGoalUuids, goalUuids }) => {
   const inferencer = useContext(AchievementContext);
   const allGoalUuids = inferencer.getAllGoalUuids();
   const selectedUuids = goalUuids.filter(
-    uuid => !inferencer.isInvalidGoal(inferencer.getGoal(uuid))
+    uuid => !inferencer.isInvalidGoal(inferencer.getGoal(uuid)),
   );
 
   const getUuid = (text: string) => inferencer.getUuidByText(text);

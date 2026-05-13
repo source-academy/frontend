@@ -83,7 +83,7 @@ const codeSamples = [
     eval_stream(integers_from(1), 2);
     let x = 1;
     debugger;
-    `
+    `,
 ];
 
 codeSamples.forEach((code, idx) => {
@@ -93,7 +93,7 @@ codeSamples.forEach((code, idx) => {
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
       context.runtime.control!,
-      context.runtime.stash!
+      context.runtime.stash!,
     );
 
     // Map of environment.id to Frame
@@ -151,7 +151,9 @@ codeSamples.forEach((code, idx) => {
               if (unit.value instanceof GlobalFnValue) {
                 // Check value has a binding in the global frame
                 expect(
-                  unit.value.references.filter(r => r instanceof Binding && r.frame === globalFrame)
+                  unit.value.references.filter(
+                    r => r instanceof Binding && r.frame === globalFrame,
+                  ),
                 ).toHaveLength(1);
               } else {
                 expect(unit.data).toHaveProperty('environment');
@@ -174,7 +176,7 @@ codeSamples.forEach((code, idx) => {
                     // Functions have the centers aligned instead
                     else {
                       expect(unit.value.x() + unit.value.width() / 2).toEqual(
-                        unit.x() + unit.width() / 2
+                        unit.x() + unit.width() / 2,
                       );
                     }
                   }
@@ -208,7 +210,7 @@ const codeSamplesControlStash: [string, string, number, boolean?][] = [
     }
     create(3)[1]();
     `,
-    33
+    33,
   ],
   [
     'global environments are treated correctly',
@@ -218,7 +220,7 @@ const codeSamplesControlStash: [string, string, number, boolean?][] = [
     }
     math_sin(math_PI / 2);
     `,
-    5
+    5,
   ],
   [
     'Control is truncated properly',
@@ -229,8 +231,8 @@ const codeSamplesControlStash: [string, string, number, boolean?][] = [
       fact(10);
       `,
     140,
-    true
-  ]
+    true,
+  ],
 ];
 
 codeSamplesControlStash.forEach(codeSample => {
@@ -249,7 +251,7 @@ codeSamplesControlStash.forEach(codeSample => {
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
       context.runtime.control!,
-      context.runtime.stash!
+      context.runtime.stash!,
     );
     Layout.draw();
     const controlItemsToTest: ControlItemComponent[] = Layout.controlComponent.stackItemComponents;

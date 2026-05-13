@@ -13,7 +13,7 @@ const workerALines = [
   '',
   'They told me I was to be the pillar of this',
   'spaceship - who knew they meant it literally?',
-  '- A. Halim'
+  '- A. Halim',
 ];
 
 const workerTLines = [
@@ -22,12 +22,12 @@ const workerTLines = [
   '',
   'Behind this closed space, my very blood fuels',
   'these engines - hoping for you to find me.',
-  '- T. S. Chong'
+  '- T. S. Chong',
 ];
 
 const WorkerConstants = {
   yInterval: 80,
-  messageDuration: 5000
+  messageDuration: 5000,
 };
 
 /**
@@ -49,7 +49,7 @@ export function putWorkerMessage(
   x: number,
   y: number,
   width: number = 50,
-  height: number = 50
+  height: number = 50,
 ) {
   const rect = new Phaser.GameObjects.Rectangle(scene, x, y, width, height, 0, 0);
   const lines = workerId === 'A' ? workerALines : workerTLines;
@@ -75,7 +75,7 @@ async function showLines(scene: ILayeredScene, lines: string[]) {
   const linesPos = calcListFormatPos({
     numOfItems: lines.length,
     xSpacing: 0,
-    ySpacing: WorkerConstants.yInterval
+    ySpacing: WorkerConstants.yInterval,
   });
 
   // Each line has different Y position
@@ -94,7 +94,7 @@ async function showLines(scene: ILayeredScene, lines: string[]) {
   lines.forEach((line, index) => {
     const textFrames = createGlitchBitmapText(scene, line, {
       ...textConfig,
-      y: linesPos[index][1] + yStartPos
+      y: linesPos[index][1] + yStartPos,
     });
     textFrames.forEach(frame => scene.getLayerManager().addToLayer(Layer.WorkerMessage, frame));
     setTimeout(() => textFrames.forEach(frame => frame.destroy()), WorkerConstants.messageDuration);

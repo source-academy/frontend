@@ -35,23 +35,23 @@ const questionEditors: QuestionEditor[] = [
   {
     label: 'Prepend',
     icon: IconNames.CHEVRON_UP,
-    id: 'prepend'
+    id: 'prepend',
   },
   {
     label: 'Postpend',
     icon: IconNames.CHEVRON_DOWN,
-    id: 'postpend'
+    id: 'postpend',
   },
   {
     label: 'Solution Template',
     icon: IconNames.MANUAL,
-    id: 'solutionTemplate'
+    id: 'solutionTemplate',
   },
   {
     label: 'Suggested Answer',
     icon: IconNames.TICK,
-    id: 'answer'
-  }
+    id: 'answer',
+  },
 ];
 
 /*
@@ -103,7 +103,7 @@ const ProgrammingQuestionTemplateTab: React.FC<Props> = props => {
 
     const editorSelect = (
       currentEditor: QuestionEditor,
-      handleSelect: (i: QuestionEditor) => void
+      handleSelect: (i: QuestionEditor) => void,
     ) => (
       <QuestionEditorSelect
         className={Classes.MINIMAL}
@@ -140,7 +140,7 @@ const ProgrammingQuestionTemplateTab: React.FC<Props> = props => {
         <AceEditor
           className="react-ace"
           editorProps={{
-            $blockScrolling: Infinity
+            $blockScrolling: Infinity,
           }}
           fontSize={14}
           highlightActiveLine={false}

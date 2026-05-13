@@ -7,15 +7,15 @@ const translations = {
     clickTestcase: '点击下面的每个测试用例以使用编辑器中的程序执行它。',
     executeAll: '要一次性执行所有测试用例，请在此选项卡处于活动状态时评估编辑器中的程序。',
     backgroundInfo: '绿色或红色背景分别表示测试用例通过或失败。',
-    privateTestcases: '私有测试用例（仅在评分时对工作人员可见）具有灰色背景。'
+    privateTestcases: '私有测试用例（仅在评分时对工作人员可见）具有灰色背景。',
   },
   headers: {
     testcase: '测试用例',
     expected: '预期结果',
     actual: '实际结果',
     sn: '序号',
-    status: '测试用例状态'
-  }
+    status: '测试用例状态',
+  },
 };
 
 export default translations;

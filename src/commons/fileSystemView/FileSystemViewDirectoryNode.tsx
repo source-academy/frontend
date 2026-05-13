@@ -31,7 +31,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
   basePath,
   directoryName,
   indentationLevel,
-  refreshParentDirectory
+  refreshParentDirectory,
 }) => {
   const fullPath = path.join(basePath, directoryName);
 
@@ -72,7 +72,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
       ),
       positiveIntent: 'danger',
       positiveLabel: 'Proceed',
-      negativeLabel: 'Cancel'
+      negativeLabel: 'Cancel',
     }).then((shouldProceed: boolean) => {
       if (!shouldProceed) {
         return;
@@ -101,7 +101,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
               different name.
             </p>
           ),
-          label: 'OK'
+          label: 'OK',
         }).then(() => {});
         return;
       }
@@ -129,7 +129,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
               choose a different name.
             </p>
           ),
-          label: 'OK'
+          label: 'OK',
         }).then(() => {});
         return;
       }

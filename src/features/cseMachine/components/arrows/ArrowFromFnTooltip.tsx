@@ -38,7 +38,7 @@ class FnLeftCircleAnchor extends Visible {
 class FnTooltipAnchor extends Visible {
   constructor(
     private readonly getRect: () => TooltipRect,
-    private readonly getSourceX: () => number
+    private readonly getSourceX: () => number,
   ) {
     super();
   }

@@ -28,28 +28,28 @@ const unknownTag = 'unknown';
 
 vi.mock('src/commons/utils/Constants', () => ({
   default: {
-    sicpBackendUrl: 'https://source-academy.github.io/sicp/'
+    sicpBackendUrl: 'https://source-academy.github.io/sicp/',
   },
   Links: {
-    sourceDocs: ''
-  }
+    sourceDocs: '',
+  },
 }));
 
 vi.mock('src/pages/sicp/subcomponents/CodeSnippet', () => ({
   default: (props: CodeSnippetProps) => {
     return <div>Code Snippet</div>;
-  }
+  },
 }));
 
 const mockData = {
   text: {
     tag: textTag,
-    body: 'Mock Text'
+    body: 'Mock Text',
   },
   listItem: {
     tag: 'LI',
-    child: [{ tag: textTag, body: 'Mock Text' }]
-  }
+    child: [{ tag: textTag, body: 'Mock Text' }],
+  },
 };
 
 const mockRef = { current: {} };
@@ -70,7 +70,7 @@ const testTagSuccessful = (obj: JsonType, tag: string, text: string = '') => {
 const objWithText = (obj: JsonType, text: string) => {
   return {
     obj: obj,
-    text: text
+    text: text,
   };
 };
 
@@ -122,7 +122,7 @@ describe('Parse epigraph', () => {
   const withDate = objWithText({ child: child, date: date }, 'with date');
   const withAll = objWithText(
     { child: child, author: author, title: title, date: date },
-    'with all'
+    'with all',
   );
 
   const objsToTest = [withNone, withAuthor, withTitle, withDate, withAll];
@@ -132,13 +132,13 @@ describe('Parse epigraph', () => {
 describe('Parse table', () => {
   const tag = tableTag;
   const td = {
-    child: [mockData['text']]
+    child: [mockData['text']],
   };
   const tr = {
-    child: [td, td]
+    child: [td, td],
   };
   const obj = {
-    child: [tr, tr]
+    child: [tr, tr],
   };
 
   testTagSuccessful(obj, tag);
@@ -166,42 +166,42 @@ describe('Parse snippet', () => {
   const base = {
     id: 'id',
     program: program,
-    body: body
+    body: body,
   };
 
   const objWithoutPrepend = objWithText(
     {
-      ...base
+      ...base,
     },
-    'without prepend'
+    'without prepend',
   );
   const objWithoutPrependWithOutput = objWithText(
     {
       ...base,
-      output: output
+      output: output,
     },
-    'without prepend with output'
+    'without prepend with output',
   );
   const objWithPrepend = objWithText(
     {
       ...base,
-      prependLength: 1
+      prependLength: 1,
     },
-    'with prepend'
+    'with prepend',
   );
   const objNoEval = objWithText(
     {
       ...base,
-      eval: false
+      eval: false,
     },
-    'no eval'
+    'no eval',
   );
   const objLatex = objWithText(
     {
       ...base,
-      latex: true
+      latex: true,
     },
-    'with latex'
+    'with latex',
   );
 
   const objsToTest = [
@@ -209,7 +209,7 @@ describe('Parse snippet', () => {
     objWithPrepend,
     objWithoutPrependWithOutput,
     objNoEval,
-    objLatex
+    objLatex,
   ];
 
   objsToTest.forEach(obj => testTagSuccessful(obj['obj'], tag, obj['text']));
@@ -225,53 +225,53 @@ describe('Parse figures', () => {
   const withoutPrepend = lzString.compressToEncodedURIComponent(body);
   const snippet = {
     withoutPrepend: withoutPrepend,
-    body: body
+    body: body,
   };
 
   // table
   const td = {
-    child: [mockData['text']]
+    child: [mockData['text']],
   };
   const tr = {
-    child: [td, td]
+    child: [td, td],
   };
   const table = {
-    child: [tr, tr]
+    child: [tr, tr],
   };
 
   const base = {
     id: 'id',
     captionName: 'name',
-    captionBody: [mockData['text']]
+    captionBody: [mockData['text']],
   };
   const image = objWithText(
     {
       ...base,
-      src: src
+      src: src,
     },
-    'with image'
+    'with image',
   );
   const imageWithScale = objWithText(
     {
       ...base,
       src: src,
-      scale: scale
+      scale: scale,
     },
-    'with image and scale'
+    'with image and scale',
   );
   const withSnippet = objWithText(
     {
       ...base,
-      snippet: snippet
+      snippet: snippet,
     },
-    'with snippet'
+    'with snippet',
   );
   const withTable = objWithText(
     {
       ...base,
-      table: table
+      table: table,
     },
-    'with table'
+    'with table',
   );
 
   const objsToTest = [image, imageWithScale, withSnippet, withTable];
@@ -283,7 +283,7 @@ describe('Parse footnote', () => {
   const href = '';
   const obj = {
     href: href,
-    child: [mockData['text']]
+    child: [mockData['text']],
   };
 
   testTagSuccessful({ ...obj, count: 1 }, tag, 'count is 1');
@@ -293,10 +293,10 @@ describe('Parse footnote', () => {
 describe('Parse latex', () => {
   const tag = latexTag;
   const inline = {
-    body: '$test$'
+    body: '$test$',
   };
   const block = {
-    body: '\\[test\\]'
+    body: '\\[test\\]',
   };
 
   testTagSuccessful(inline, tag, 'inline');
@@ -310,7 +310,7 @@ describe('Parse links', () => {
   const obj = {
     id: 'id',
     body: body,
-    href: href
+    href: href,
   };
 
   tag.forEach(tag => {
@@ -322,7 +322,7 @@ describe('Parse reference', () => {
   const tag = referenceTag;
   const child = [mockData['text']];
   const obj = {
-    child: child
+    child: child,
   };
 
   testTagSuccessful(obj, tag);

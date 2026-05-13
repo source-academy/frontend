@@ -28,7 +28,7 @@ import chapConstants, { chapterIndexStyle, chapterTitleStyle } from './ChapterSe
 export function createChapter(
   scene: ChapterSelect,
   { title, imageUrl }: GameChapter,
-  index: number
+  index: number,
 ) {
   const [x, y] = getCoorByChapter(index);
   const chapterContainer = new Phaser.GameObjects.Container(scene, x, y);
@@ -39,7 +39,7 @@ export function createChapter(
   // Chapter Preview
   const chapterPreview = new Phaser.GameObjects.Image(scene, 0, 0, imageUrl).setDisplaySize(
     chapConstants.imageRect.width,
-    chapConstants.imageRect.height
+    chapConstants.imageRect.height,
   );
 
   // Chapter Frame + blue tint
@@ -47,7 +47,7 @@ export function createChapter(
     scene,
     chapConstants.frame.xOffset,
     chapConstants.frame.yOffset,
-    ImageAssets.chapterSelectFrame.key
+    ImageAssets.chapterSelectFrame.key,
   ).setScale(0.99 * chapConstants.imageScale.x, 0.99 * chapConstants.imageScale.y);
 
   // Chapter completed rectangle
@@ -57,7 +57,7 @@ export function createChapter(
     chapConstants.chapComplete.y,
     chapConstants.imageRect.width,
     chapConstants.chapComplete.height,
-    0
+    0,
   )
     .setOrigin(0.5)
     .setAlpha(0.7)
@@ -69,7 +69,7 @@ export function createChapter(
     scene,
     chapConstants.chapComplete.text,
     { x: 0, y: chapConstants.chapComplete.y, oriX: 0.5, oriY: 0.5 },
-    chapterIndexStyle
+    chapterIndexStyle,
   ).setVisible(chapterDone);
 
   // Chapter Action Popup
@@ -77,13 +77,13 @@ export function createChapter(
     scene,
     chapConstants.resetButton.xOffset + 8,
     chapConstants.resetButton.yOffset - 20,
-    'Reset progress'
+    'Reset progress',
   );
   const chapterContinueHover = new CommonTextHover(
     scene,
     chapConstants.playButton.xOffset + 8,
     chapConstants.playButton.yOffset - 20,
-    'Play/Continue'
+    'Play/Continue',
   );
 
   // Chapter Actions
@@ -91,7 +91,7 @@ export function createChapter(
     assetKey: ImageAssets.chapterRepeatButton.key,
     onUp: async () => await callGameManagerOnTxtLoad(false, index, 0),
     onHover: () => chapterRepeatHover.setVisible(true),
-    onOut: () => chapterRepeatHover.setVisible(false)
+    onOut: () => chapterRepeatHover.setVisible(false),
   })
     .setPosition(chapConstants.resetButton.xOffset, chapConstants.resetButton.yOffset)
     .setScale(chapConstants.buttons.scale);
@@ -104,7 +104,7 @@ export function createChapter(
     assetKey: ImageAssets.chapterContinueButton.key,
     onUp: async () => await callGameManagerOnTxtLoad(true, index, lastCheckpointPlayed),
     onHover: () => chapterContinueHover.setVisible(true),
-    onOut: () => chapterContinueHover.setVisible(false)
+    onOut: () => chapterContinueHover.setVisible(false),
   })
     .setPosition(chapConstants.playButton.xOffset, chapConstants.playButton.yOffset)
     .setScale(chapConstants.buttons.scale);
@@ -114,14 +114,14 @@ export function createChapter(
     scene,
     `Chapter ${index}`,
     chapConstants.indexTextConfig,
-    chapterIndexStyle
+    chapterIndexStyle,
   );
 
   const chapterTitleText = createBitmapText(
     scene,
     title,
     chapConstants.titleTextConfig,
-    chapterTitleStyle
+    chapterTitleStyle,
   );
 
   const chapterAccessible =
@@ -133,7 +133,7 @@ export function createChapter(
     0,
     chapConstants.imageRect.width,
     chapConstants.imageRect.height,
-    0
+    0,
   )
     .setOrigin(0.5)
     .setAlpha(chapterAccessible ? 0 : 0.8)
@@ -150,7 +150,7 @@ export function createChapter(
     chapterContinueHover,
     chapterIndexText,
     chapterTitleText,
-    blackTint
+    blackTint,
   ]);
 
   return chapterContainer;

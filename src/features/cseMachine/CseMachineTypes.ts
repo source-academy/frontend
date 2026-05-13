@@ -1,6 +1,6 @@
 import {
   EnvTree as EnvironmentTree,
-  EnvTreeNode as EnvironmentTreeNode
+  EnvTreeNode as EnvironmentTreeNode,
 } from 'js-slang/dist/createContext';
 import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
 import type { Environment } from 'js-slang/dist/types';

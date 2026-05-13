@@ -10,7 +10,7 @@ const LanguageDirectoryActions = createActions('directory/languages', {
   /** Set selected language; evaluatorId optional (defaults to first available) */
   setSelectedLanguage: (languageId: string, evaluatorId?: string) => ({ languageId, evaluatorId }),
   /** Set selected evaluator explicitly */
-  setSelectedEvaluator: (evaluatorId: string) => ({ evaluatorId })
+  setSelectedEvaluator: (evaluatorId: string) => ({ evaluatorId }),
 });
 
 export default LanguageDirectoryActions;

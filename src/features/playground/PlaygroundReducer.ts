@@ -8,7 +8,7 @@ import {
   playgroundConfigLanguage,
   playgroundUpdateGitHubSaveInfo,
   playgroundUpdatePersistenceFile,
-  updateShortURL
+  updateShortURL,
 } from './PlaygroundActions';
 import type { PlaygroundState } from './PlaygroundTypes';
 
@@ -31,5 +31,5 @@ export const PlaygroundReducer: Reducer<PlaygroundState, SourceActionType> = cre
       .addCase(playgroundConfigLanguage, (state, action) => {
         state.languageConfig = action.payload;
       });
-  }
+  },
 );

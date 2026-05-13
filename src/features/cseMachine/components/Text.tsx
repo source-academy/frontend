@@ -13,7 +13,7 @@ import {
   getTextWidth,
   isSourceObject,
   setHoveredCursor,
-  setUnhoveredCursor
+  setUnhoveredCursor,
 } from '../CseMachineUtils';
 import { Frame } from './Frame';
 import { Visible } from './Visible';
@@ -40,7 +40,7 @@ export const defaultOptions: TextOptions = {
   isStringIdentifiable: false, // if true, contain strings within double quotation marks "". Default is false
   faded: false, // if true, draws text with a lighter shade
   hidden: false, // if true, hides the text when only when first drawn
-  bindingType: 'none' // if > 0, add colon or equal sign to the end of the text (given from binding)
+  bindingType: 'none', // if > 0, add colon or equal sign to the end of the text (given from binding)
 };
 
 /** this class encapsulates a string to be drawn onto the canvas */
@@ -59,7 +59,7 @@ export class Text extends Visible implements IHoverable {
     x: number,
     y: number,
     /** additional options (for customization of text) */
-    options: Partial<TextOptions> = {}
+    options: Partial<TextOptions> = {},
   ) {
     super();
     this._x = x;
@@ -149,7 +149,7 @@ export class Text extends Visible implements IHoverable {
       fontSize: this.options.fontSize,
       fontStyle: this.options.fontStyle,
       fill: this.options.faded ? fadedTextColor() : defaultTextColor(),
-      visible: !this.options.hidden
+      visible: !this.options.hidden,
     };
     return (
       <Fragment key={Layout.key++}>

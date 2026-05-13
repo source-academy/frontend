@@ -3,7 +3,7 @@ import { createActions } from 'src/commons/redux/utils';
 import type {
   ContestLeaderboardRow,
   LeaderboardContestDetails,
-  LeaderboardRow
+  LeaderboardRow,
 } from './LeaderboardTypes';
 
 const LeaderboardActions = createActions('leaderboard', {
@@ -11,12 +11,12 @@ const LeaderboardActions = createActions('leaderboard', {
   saveOverallLeaderboardXP: (payload: { rows: LeaderboardRow[]; userCount: number }) => payload,
   getAllContestScores: (assessmentId: number, visibleEntries: number) => ({
     assessmentId,
-    visibleEntries
+    visibleEntries,
   }),
   saveAllContestScores: (contestScore: ContestLeaderboardRow[]) => contestScore,
   getAllContestPopularVotes: (assessmentId: number, visibleEntries: number) => ({
     assessmentId,
-    visibleEntries
+    visibleEntries,
   }),
   saveAllContestPopularVotes: (contestPopularVote: ContestLeaderboardRow[]) => contestPopularVote,
   getCode: 0,
@@ -25,7 +25,7 @@ const LeaderboardActions = createActions('leaderboard', {
   getContests: 0,
   saveContests: (contests: LeaderboardContestDetails[]) => contests,
   setWorkspaceInitialRun: (contestID: number) => contestID,
-  resetWorkspaceInitialRun: (contestID: number) => contestID
+  resetWorkspaceInitialRun: (contestID: number) => contestID,
 });
 
 export default LeaderboardActions;

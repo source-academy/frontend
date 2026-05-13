@@ -5,7 +5,7 @@ import {
   type Assessment,
   type AssessmentOverview,
   AssessmentStatuses,
-  ProgressStatuses
+  ProgressStatuses,
 } from '../../../assessment/AssessmentTypes';
 import type { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import CommonsActions from '../../actions/CommonsActions';
@@ -17,7 +17,7 @@ import { SessionsReducer } from '../SessionsReducer';
 test('LOG_OUT works correctly on default session', () => {
   const action = {
     type: CommonsActions.logOut.type,
-    payload: {}
+    payload: {},
   } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
@@ -32,14 +32,14 @@ test('SET_TOKEN sets accessToken and refreshToken correctly', () => {
     type: SessionActions.setTokens.type,
     payload: {
       accessToken,
-      refreshToken
-    }
+      refreshToken,
+    },
   } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
-    ...action.payload
+    ...action.payload,
   });
 });
 
@@ -54,27 +54,27 @@ test('SET_USER works correctly', () => {
         courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         viewable: true,
-        role: Role.Student
+        role: Role.Student,
       },
       {
         courseId: 2,
         courseName: `CS2030S Programming Methodology II (AY20/21 Sem 2)`,
         courseShortName: `CS2030S`,
         viewable: true,
-        role: Role.Staff
-      }
-    ]
+        role: Role.Staff,
+      },
+    ],
   };
 
   const action = {
     type: SessionActions.setUser.type,
-    payload
+    payload,
   } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
-    ...payload
+    ...payload,
   });
 });
 
@@ -88,17 +88,17 @@ test('SET_COURSE_CONFIGURATION works correctly', () => {
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help text',
-    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
+    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others'],
   };
   const action = {
     type: SessionActions.setCourseConfiguration.type,
-    payload
+    payload,
   } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
-    ...payload
+    ...payload,
   });
 });
 
@@ -108,7 +108,7 @@ test('SET_COURSE_REGISTRATION works correctly', () => {
     group: '42D',
     gameState: {
       collectibles: {},
-      completed_quests: []
+      completed_quests: [],
     } as GameState,
     courseId: 1,
     grade: 1,
@@ -116,19 +116,19 @@ test('SET_COURSE_REGISTRATION works correctly', () => {
     xp: 1,
     story: {
       story: '',
-      playStory: false
+      playStory: false,
     } as Story,
-    agreedToReseach: true
+    agreedToReseach: true,
   };
   const action = {
     type: SessionActions.setCourseRegistration.type,
-    payload
+    payload,
   } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
-    ...payload
+    ...payload,
   });
 });
 
@@ -148,7 +148,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       isMinigame: false,
       hasTokenCounter: false,
       hasVotingFeatures: false,
-      isAutosaveEnabled: true
+      isAutosaveEnabled: true,
     },
     {
       assessmentConfigId: 1,
@@ -164,7 +164,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       isMinigame: false,
       hasTokenCounter: false,
       hasVotingFeatures: false,
-      isAutosaveEnabled: true
+      isAutosaveEnabled: true,
     },
     {
       assessmentConfigId: 1,
@@ -180,19 +180,19 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       isMinigame: false,
       hasTokenCounter: false,
       hasVotingFeatures: false,
-      isAutosaveEnabled: true
-    }
+      isAutosaveEnabled: true,
+    },
   ];
 
   const action = {
     type: SessionActions.setAssessmentConfigurations.type,
-    payload
+    payload,
   } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
-    assessmentConfigurations: payload
+    assessmentConfigurations: payload,
   });
 });
 
@@ -203,26 +203,26 @@ test('SET_ADMIN_PANEL_COURSE_REGISTRATIONS works correctly', () => {
       courseId: 1,
       name: 'Bob',
       username: 'E1234567',
-      role: Role.Student
+      role: Role.Student,
     },
     {
       courseRegId: 2,
       courseId: 1,
       name: 'Avenger',
       username: 'E7654321',
-      role: Role.Staff
-    }
+      role: Role.Staff,
+    },
   ];
 
   const action = {
     type: SessionActions.setAdminPanelCourseRegistrations.type,
-    payload
+    payload,
   } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
-    userCourseRegistrations: payload
+    userCourseRegistrations: payload,
   });
 });
 
@@ -230,13 +230,13 @@ test('SET_GITHUB_ACCESS_TOKEN works correctly', () => {
   const token = 'githubAccessToken';
   const action = {
     type: SessionActions.setGitHubAccessToken.type,
-    payload: token
+    payload: token,
   } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
-    githubAccessToken: token
+    githubAccessToken: token,
   });
 });
 
@@ -249,7 +249,7 @@ const assessmentTest1: Assessment = {
   longSummary: 'long summary here',
   missionPDF: 'www.google.com',
   questions: [],
-  title: 'first assessment'
+  title: 'first assessment',
 };
 
 const assessmentTest2: Assessment = {
@@ -260,7 +260,7 @@ const assessmentTest2: Assessment = {
   longSummary: 'another long summary',
   missionPDF: 'www.comp.nus.edu.sg',
   questions: [],
-  title: 'updated first assessment'
+  title: 'updated first assessment',
 };
 
 const assessmentTest3: Assessment = {
@@ -271,13 +271,13 @@ const assessmentTest3: Assessment = {
   longSummary: 'another long summary here',
   missionPDF: 'www.yahoo.com',
   questions: [],
-  title: 'path'
+  title: 'path',
 };
 
 test('UPDATE_ASSESSMENT works correctly in inserting assessment', () => {
   const action = {
     type: SessionActions.updateAssessment.type,
-    payload: assessmentTest1
+    payload: assessmentTest1,
   } as const;
   const resultMap = SessionsReducer(defaultSession, action).assessments;
 
@@ -290,12 +290,12 @@ test('UPDATE_ASSESSMENT works correctly in inserting assessment and retains old 
 
   const newDefaultSession: SessionState = {
     ...defaultSession,
-    assessments
+    assessments,
   };
 
   const action = {
     type: SessionActions.updateAssessment.type,
-    payload: assessmentTest2
+    payload: assessmentTest2,
   } as const;
   const resultMap = SessionsReducer(newDefaultSession, action).assessments;
 
@@ -309,11 +309,11 @@ test('UPDATE_ASSESSMENT works correctly in updating assessment', () => {
 
   const newDefaultSession = {
     ...defaultSession,
-    assessments
+    assessments,
   };
   const action = {
     type: SessionActions.updateAssessment.type,
-    payload: assessmentTest2
+    payload: assessmentTest2,
   } as const;
   const resultMap = SessionsReducer(newDefaultSession, action).assessments;
 
@@ -340,8 +340,8 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     isGradingPublished: false,
     maxTeamSize: 5,
     hasVotingFeatures: false,
-    hoursBeforeEarlyXpDecay: 0
-  }
+    hoursBeforeEarlyXpDecay: 0,
+  },
 ];
 
 const assessmentOverviewsTest2: AssessmentOverview[] = [
@@ -364,40 +364,40 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false,
-    hoursBeforeEarlyXpDecay: 0
-  }
+    hoursBeforeEarlyXpDecay: 0,
+  },
 ];
 
 test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in inserting assessment overviews', () => {
   const action = {
     type: SessionActions.updateAssessmentOverviews.type,
-    payload: assessmentOverviewsTest1
+    payload: assessmentOverviewsTest1,
   } as const;
 
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
-    assessmentOverviews: assessmentOverviewsTest1
+    assessmentOverviews: assessmentOverviewsTest1,
   });
 });
 
 test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in updating assessment overviews', () => {
   const newDefaultSession = {
     ...defaultSession,
-    assessmentOverviews: assessmentOverviewsTest1
+    assessmentOverviews: assessmentOverviewsTest1,
   };
   const assessmentOverviewsPayload = [...assessmentOverviewsTest2, ...assessmentOverviewsTest1];
   const action = {
     type: SessionActions.updateAssessmentOverviews.type,
-    payload: assessmentOverviewsPayload
+    payload: assessmentOverviewsPayload,
   } as const;
 
   const result: SessionState = SessionsReducer(newDefaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
-    assessmentOverviews: assessmentOverviewsPayload
+    assessmentOverviews: assessmentOverviewsPayload,
   });
 });
 
@@ -414,14 +414,14 @@ const gradingTest1: GradingQuery = {
       student: {
         name: 'test student',
         username: 'E0123456',
-        id: 234
+        id: 234,
       },
       grade: {
         xp: 100,
         xpAdjustment: 0,
-        comments: 'Well done. Please try the quest!'
-      }
-    }
+        comments: 'Well done. Please try the quest!',
+      },
+    },
   ],
   assessment: {
     coverPicture: 'test string',
@@ -431,8 +431,8 @@ const gradingTest1: GradingQuery = {
     story: 'test string',
     summaryLong: 'test string',
     summaryShort: 'test string',
-    title: 'test string'
-  }
+    title: 'test string',
+  },
 };
 
 const gradingTest2: GradingQuery = {
@@ -447,14 +447,14 @@ const gradingTest2: GradingQuery = {
       student: {
         name: 'another test student',
         username: 'E0000000',
-        id: 345
+        id: 345,
       },
       grade: {
         xp: 500,
         xpAdjustment: 20,
-        comments: 'Good job! All the best for the finals.'
-      }
-    }
+        comments: 'Good job! All the best for the finals.',
+      },
+    },
   ],
   assessment: {
     coverPicture: 'another test string',
@@ -464,8 +464,8 @@ const gradingTest2: GradingQuery = {
     story: 'another test string',
     summaryLong: 'another test string',
     summaryShort: 'another test string',
-    title: 'another test string'
-  }
+    title: 'another test string',
+  },
 };
 
 test('UPDATE_GRADING works correctly in inserting gradings', () => {
@@ -474,8 +474,8 @@ test('UPDATE_GRADING works correctly in inserting gradings', () => {
     type: SessionActions.updateGrading.type,
     payload: {
       submissionId,
-      grading: gradingTest1
-    }
+      grading: gradingTest1,
+    },
   } as const;
 
   const gradingMap = SessionsReducer(defaultSession, action).gradings;
@@ -490,15 +490,15 @@ test('UPDATE_GRADING works correctly in inserting gradings and retains old data'
 
   const newDefaultSession = {
     ...defaultSession,
-    gradings
+    gradings,
   };
 
   const action = {
     type: SessionActions.updateGrading.type,
     payload: {
       submissionId: submissionId2,
-      grading: gradingTest2
-    }
+      grading: gradingTest2,
+    },
   } as const;
 
   const gradingMap = SessionsReducer(newDefaultSession, action).gradings;
@@ -512,15 +512,15 @@ test('UPDATE_GRADING works correctly in updating gradings', () => {
   gradings[submissionId] = gradingTest1;
   const newDefaultSession = {
     ...defaultSession,
-    gradings
+    gradings,
   };
 
   const action = {
     type: SessionActions.updateGrading.type,
     payload: {
       submissionId,
-      grading: gradingTest2
-    }
+      grading: gradingTest2,
+    },
   } as const;
 
   const gradingMap = SessionsReducer(newDefaultSession, action).gradings;
@@ -550,8 +550,8 @@ const gradingOverviewTest1: GradingOverview[] = [
     isGradingPublished: false,
     groupName: 'group',
     questionCount: 4,
-    gradedCount: 2
-  }
+    gradedCount: 2,
+  },
 ];
 
 const gradingOverviewTest2: GradingOverview[] = [
@@ -576,8 +576,8 @@ const gradingOverviewTest2: GradingOverview[] = [
     isGradingPublished: false,
     groupName: 'another group',
     questionCount: 3,
-    gradedCount: 3
-  }
+    gradedCount: 3,
+  },
 ];
 
 test('UPDATE_GRADING_OVERVIEWS works correctly in inserting grading overviews', () => {
@@ -585,14 +585,14 @@ test('UPDATE_GRADING_OVERVIEWS works correctly in inserting grading overviews', 
     type: SessionActions.updateGradingOverviews.type,
     payload: {
       count: gradingOverviewTest1.length,
-      data: gradingOverviewTest1
-    }
+      data: gradingOverviewTest1,
+    },
   } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result.gradingOverviews).toEqual({
     count: gradingOverviewTest1.length,
-    data: gradingOverviewTest1
+    data: gradingOverviewTest1,
   });
 });
 
@@ -601,16 +601,16 @@ test('UPDATE_GRADING_OVERVIEWS works correctly in updating grading overviews', (
     ...defaultSession,
     gradingOverviews: {
       count: gradingOverviewTest1.length,
-      data: gradingOverviewTest1
-    }
+      data: gradingOverviewTest1,
+    },
   };
   const gradingOverviewsPayload = {
     count: gradingOverviewTest1.length + gradingOverviewTest2.length,
-    data: [...gradingOverviewTest2, ...gradingOverviewTest1]
+    data: [...gradingOverviewTest2, ...gradingOverviewTest1],
   };
   const action = {
     type: SessionActions.updateGradingOverviews.type,
-    payload: gradingOverviewsPayload
+    payload: gradingOverviewsPayload,
   } as const;
   const result: SessionState = SessionsReducer(newDefaultSession, action);
 
@@ -624,20 +624,20 @@ test('UPDATE_NOTIFICATIONS works correctly in updating notifications', () => {
       type: 'new',
       assessment_id: 1,
       assessment_type: 'Mission',
-      assessment_title: 'The Secret to Streams'
+      assessment_title: 'The Secret to Streams',
     },
     {
       id: 2,
       type: 'new',
       assessment_id: 2,
       assessment_type: 'Sidequest',
-      assessment_title: 'A sample Sidequest'
-    }
+      assessment_title: 'A sample Sidequest',
+    },
   ];
 
   const action = {
     type: SessionActions.updateNotifications.type,
-    payload: notifications
+    payload: notifications,
   } as const;
 
   const result: SessionState = SessionsReducer(defaultSession, action);

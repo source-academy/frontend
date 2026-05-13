@@ -49,7 +49,7 @@ export default class BoundingBoxParser {
       width: parseInt(width),
       height: parseInt(height),
       isInteractive: false,
-      interactionId: bboxId
+      interactionId: bboxId,
     };
 
     Parser.validator.registerId(bboxId);

@@ -21,7 +21,7 @@ const TeamFormationForm: React.FC = () => {
   const { courseId, students, assessmentOverviews, teamFormationOverviews } = useSession();
   const dispatch = useDispatch();
   const [selectedAssessment, setSelectedAssessment] = useState<AssessmentOverview | undefined>(
-    undefined
+    undefined,
   );
   const [teams, setTeams] = useState<OptionType[][]>([[]]);
   const navigate = useNavigate();
@@ -31,12 +31,12 @@ const TeamFormationForm: React.FC = () => {
   useEffect(() => {
     if (teamId) {
       const existingTeam: TeamFormationOverview | undefined = teamFormationOverviews?.find(
-        team => team.teamId.toString() === teamId
+        team => team.teamId.toString() === teamId,
       );
 
       if (existingTeam) {
         const existingAssessment: AssessmentOverview | undefined = assessmentOverviews?.find(
-          assessment => assessment.id === existingTeam.assessmentId
+          assessment => assessment.id === existingTeam.assessmentId,
         );
         setSelectedAssessment(existingAssessment);
 
@@ -47,8 +47,8 @@ const TeamFormationForm: React.FC = () => {
                 ?.filter(student => existingTeam.studentIds.includes(student.userId))
                 .map(student => ({
                   label: student.name,
-                  value: student
-                })) as OptionType[]
+                  value: student,
+                })) as OptionType[],
           )
           .slice(0, 1);
         setTeams(existingTeams);
@@ -59,7 +59,7 @@ const TeamFormationForm: React.FC = () => {
   const handleTeamChange = (
     index: number,
     selectedOption: MultiValue<OptionType>,
-    actionMeta: ActionMeta<OptionType>
+    actionMeta: ActionMeta<OptionType>,
   ) => {
     const updatedTeams = [...teams];
     updatedTeams[index] = selectedOption as unknown as OptionType[];
@@ -124,7 +124,7 @@ const TeamFormationForm: React.FC = () => {
               id="assessment"
               options={assessmentOverviews?.map(assessment => ({
                 label: assessment.title,
-                value: assessment
+                value: assessment,
               }))}
               value={
                 selectedAssessment
@@ -160,14 +160,14 @@ const TeamFormationForm: React.FC = () => {
                 id={`team-${index}`}
                 options={students?.map(student => ({
                   label: student.name,
-                  value: student
+                  value: student,
                 }))}
                 isMulti
                 isSearchable
                 value={t}
                 onChange={(
                   selectedOption: MultiValue<OptionType>,
-                  actionMeta: ActionMeta<OptionType>
+                  actionMeta: ActionMeta<OptionType>,
                 ) => handleTeamChange(index, selectedOption, actionMeta)}
                 className={classes['form-select']}
               />

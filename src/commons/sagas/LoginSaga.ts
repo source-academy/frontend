@@ -27,7 +27,7 @@ const LoginSaga = combineSagaHandlers({
   },
   [CommonsActions.logOut.type]: function* () {
     yield call(setUser, null);
-  }
+  },
 });
 
 export default LoginSaga;

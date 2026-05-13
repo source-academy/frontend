@@ -13,7 +13,7 @@ const translations = {
     Quests: 'Ǫûéşţş',
     Paths: 'Ƥáţĥş',
     Contests: 'Ċőñţéşţş',
-    Others: 'Őţĥéŕş'
+    Others: 'Őţĥéŕş',
   },
   dropdown: {
     'My Courses': 'Mÿ Côûrsês',
@@ -21,8 +21,8 @@ const translations = {
     Logout: 'Lôgôût',
     Settings: 'Sêttîñgs',
     About: 'Âbôût',
-    Help: 'Hêlp'
-  }
+    Help: 'Hêlp',
+  },
 };
 
 export default translations;

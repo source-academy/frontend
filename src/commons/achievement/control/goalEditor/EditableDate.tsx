@@ -28,7 +28,7 @@ const EditableDate: React.FC<Props> = ({ type, date, changeDate }) => {
           background: '#fff',
           maxWidth: 'max-content',
           padding: '0.25em',
-          textAlign: 'center'
+          textAlign: 'center',
         }}
         title={`${type}`}
       >

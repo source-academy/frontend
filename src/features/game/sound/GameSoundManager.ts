@@ -116,7 +116,7 @@ class GameSoundManager {
       const vol = soundAsset.config.volume !== undefined ? soundAsset.config.volume : 1;
       this.getBaseSoundManager().play(soundAsset.key, {
         ...soundAsset.config,
-        volume: vol * this.sfxVol
+        volume: vol * this.sfxVol,
       });
     }
   }
@@ -164,7 +164,7 @@ class GameSoundManager {
     try {
       this.currBgMusic = this.getBaseSoundManager().add(soundAsset.key, {
         ...soundAsset.config,
-        volume: bgmVol * this.bgmVol
+        volume: bgmVol * this.bgmVol,
       }) as Phaser.Sound.WebAudioSound;
       this.currBgMusicKey = soundAsset.key;
 
@@ -183,12 +183,12 @@ class GameSoundManager {
    */
   private fadeOutAndDestroyMusic(
     sound: Phaser.Sound.BaseSound,
-    fadeDuration: number = bgMusicFadeDuration
+    fadeDuration: number = bgMusicFadeDuration,
   ) {
     this.getCurrentScene().tweens.add({
       targets: sound,
       ...musicFadeOutTween,
-      duration: fadeDuration
+      duration: fadeDuration,
     });
 
     // TODO: fix `TypeError: Cannot read property 'disconnect' of null` error

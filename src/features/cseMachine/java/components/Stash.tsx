@@ -29,7 +29,7 @@ export class Stash extends Visible {
         stashItemX,
         stashItemText,
         stashItemStroke,
-        stashItemReference
+        stashItemReference,
       );
 
       this._stashItems.push(currStashItem);

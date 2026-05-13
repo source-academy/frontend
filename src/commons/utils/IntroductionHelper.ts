@@ -40,7 +40,7 @@ const generateSourceDocsLink = (sourceChapter: Chapter, sourceVariant: Variant) 
 
   return `You have chosen the sublanguage [_${styliseSublanguage(
     sourceChapter,
-    sourceVariant
+    sourceVariant,
   )}_](${sourceDocsLink}).`;
 };
 

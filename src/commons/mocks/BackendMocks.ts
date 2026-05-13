@@ -5,7 +5,7 @@ import DashboardActions from 'src/features/dashboard/DashboardActions';
 import type {
   GradingOverviews,
   GradingQuery,
-  GradingQuestion
+  GradingQuestion,
 } from '../../features/grading/GradingTypes';
 import { SortStates } from '../../features/grading/GradingTypes';
 import SessionActions from '../application/actions/SessionActions';
@@ -14,18 +14,18 @@ import {
   Role,
   type SALanguage,
   styliseSublanguage,
-  SupportedLanguage
+  SupportedLanguage,
 } from '../application/ApplicationTypes';
 import type { AdminPanelCourseRegistration, Tokens } from '../application/types/SessionTypes';
 import {
   type AssessmentOverview,
   AssessmentStatuses,
   ProgressStatuses,
-  type Question
+  type Question,
 } from '../assessment/AssessmentTypes';
 import type {
   Notification,
-  NotificationFilterFunction
+  NotificationFilterFunction,
 } from '../notificationBadge/NotificationBadgeTypes';
 import { routerNavigate } from '../sagas/BackendSaga';
 import { actions } from '../utils/ActionsHelper';
@@ -33,7 +33,7 @@ import { showSuccessMessage, showWarningMessage } from '../utils/notifications/N
 import {
   mockAssessmentConfigurations,
   mockAssessmentOverviews,
-  mockAssessments
+  mockAssessments,
 } from './AssessmentMocks';
 import { mockFetchGrading, mockFetchGradingOverview, mockGradingSummary } from './GradingMocks';
 import {
@@ -41,7 +41,7 @@ import {
   mockCreateTeam,
   mockDeleteTeam,
   mockFetchTeamFormationOverview,
-  mockUpdateTeam
+  mockUpdateTeam,
 } from './TeamFormationMocks';
 import {
   mockAdminPanelCourseRegistrations,
@@ -49,7 +49,7 @@ import {
   mockCourseRegistrations,
   mockFetchStudents,
   mockNotifications,
-  mockUser
+  mockUser,
 } from './UserMocks';
 
 // TODO: Removal/implementation pending on outcome of
@@ -60,14 +60,14 @@ export function* mockBackendSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.fetchAuth>) {
       const tokens: Tokens = {
         accessToken: 'accessToken',
-        refreshToken: 'refreshToken'
+        refreshToken: 'refreshToken',
       };
 
       yield put(actions.setTokens(tokens));
       yield mockGetUserAndCourse();
       const courseId: number = yield select((state: OverallState) => state.session.courseId!);
       yield routerNavigate(`/courses/${courseId}`);
-    }
+    },
   );
 
   const mockGetUserAndCourse = function* () {
@@ -80,10 +80,10 @@ export function* mockBackendSaga(): SagaIterator {
       variant: courseConfiguration.sourceVariant,
       displayName: styliseSublanguage(
         courseConfiguration.sourceChapter,
-        courseConfiguration.sourceVariant
+        courseConfiguration.sourceVariant,
       ),
       mainLanguage: SupportedLanguage.JAVASCRIPT,
-      supports: {}
+      supports: {},
     };
 
     yield put(actions.setUser(user));
@@ -110,7 +110,7 @@ export function* mockBackendSaga(): SagaIterator {
       const { assessmentId: id } = action.payload;
       const assessment = mockAssessments[id - 1];
       yield put(actions.updateAssessment({ ...assessment }));
-    }
+    },
   );
 
   yield takeEvery(
@@ -120,10 +120,10 @@ export function* mockBackendSaga(): SagaIterator {
       const answer = action.payload.answer;
       // Now, update the answer for the question in the assessment in the store
       const assessmentId = yield select(
-        (state: OverallState) => state.workspaces.assessment.currentAssessment!
+        (state: OverallState) => state.workspaces.assessment.currentAssessment!,
       );
       const assessment = yield select(
-        (state: OverallState) => state.session.assessments[assessmentId]
+        (state: OverallState) => state.session.assessments[assessmentId],
       );
       const newQuestions = assessment.questions.slice().map((question: Question) => {
         if (question.id === questionId) {
@@ -133,12 +133,12 @@ export function* mockBackendSaga(): SagaIterator {
       });
       const newAssessment = {
         ...assessment,
-        questions: newQuestions
+        questions: newQuestions,
       };
       yield put(actions.updateAssessment(newAssessment));
       yield put(actions.updateSaveStatus('assessment', 'saved'));
       return yield put(actions.updateHasUnsavedChanges('assessment', false));
-    }
+    },
   );
 
   yield takeEvery(
@@ -148,7 +148,7 @@ export function* mockBackendSaga(): SagaIterator {
 
       // Update the status of the assessment overview in the store
       const overviews: AssessmentOverview[] = yield select(
-        (state: OverallState) => state.session.assessmentOverviews
+        (state: OverallState) => state.session.assessmentOverviews,
       );
       const newOverviews = overviews.map(overview => {
         if (overview.id === assessmentId) {
@@ -159,7 +159,7 @@ export function* mockBackendSaga(): SagaIterator {
 
       yield call(showSuccessMessage, 'Submitted!', 2000);
       return yield put(actions.updateAssessmentOverviews(newOverviews));
-    }
+    },
   );
 
   yield takeEvery(
@@ -169,7 +169,7 @@ export function* mockBackendSaga(): SagaIterator {
       const { filterToGroup, pageParams, filterParams, allColsSortStates } = action.payload;
       const sortedBy = {
         sortBy: allColsSortStates.sortBy,
-        sortDirection: ''
+        sortDirection: '',
       };
 
       Object.keys(allColsSortStates.currentState).forEach(key => {
@@ -184,12 +184,12 @@ export function* mockBackendSaga(): SagaIterator {
       });
 
       const gradingOverviews = yield call(() =>
-        mockFetchGradingOverview(accessToken, filterToGroup, pageParams, filterParams, sortedBy)
+        mockFetchGradingOverview(accessToken, filterToGroup, pageParams, filterParams, sortedBy),
       );
       if (gradingOverviews !== null) {
         yield put(actions.updateGradingOverviews(gradingOverviews));
       }
-    }
+    },
   );
 
   yield takeEvery(
@@ -198,12 +198,12 @@ export function* mockBackendSaga(): SagaIterator {
       const accessToken = yield select((state: OverallState) => state.session.accessToken);
       const filterToGroup = action.payload;
       const teamFormationOverviews = yield call(() =>
-        mockFetchTeamFormationOverview(accessToken, filterToGroup)
+        mockFetchTeamFormationOverview(accessToken, filterToGroup),
       );
       if (teamFormationOverviews !== null) {
         yield put(actions.updateTeamFormationOverviews([...teamFormationOverviews]));
       }
-    }
+    },
   );
 
   yield takeEvery(
@@ -213,12 +213,12 @@ export function* mockBackendSaga(): SagaIterator {
       const { assessment, teams } = action.payload;
 
       const teamFormationOverviews = yield call(() =>
-        mockCreateTeam(accessToken, assessment.id, assessment.title, assessment.type, teams)
+        mockCreateTeam(accessToken, assessment.id, assessment.title, assessment.type, teams),
       );
       if (teamFormationOverviews !== null) {
         yield put(actions.updateTeamFormationOverviews([...teamFormationOverviews]));
       }
-    }
+    },
   );
 
   yield takeEvery(
@@ -228,12 +228,12 @@ export function* mockBackendSaga(): SagaIterator {
       const { assessment, file } = action.payload;
 
       const teamFormationOverviews = yield call(() =>
-        mockBulkUploadTeam(accessToken, assessment.id, assessment.title, assessment.type, file)
+        mockBulkUploadTeam(accessToken, assessment.id, assessment.title, assessment.type, file),
       );
       if (teamFormationOverviews !== null) {
         yield put(actions.updateTeamFormationOverviews([...teamFormationOverviews]));
       }
-    }
+    },
   );
 
   yield takeEvery(
@@ -243,12 +243,19 @@ export function* mockBackendSaga(): SagaIterator {
       const { teamId, assessment, teams } = action.payload;
 
       const teamFormationOverviews = yield call(() =>
-        mockUpdateTeam(accessToken, teamId, assessment.id, assessment.title, assessment.type, teams)
+        mockUpdateTeam(
+          accessToken,
+          teamId,
+          assessment.id,
+          assessment.title,
+          assessment.type,
+          teams,
+        ),
       );
       if (teamFormationOverviews !== null) {
         yield put(actions.updateTeamFormationOverviews([...teamFormationOverviews]));
       }
-    }
+    },
   );
 
   yield takeEvery(
@@ -261,7 +268,7 @@ export function* mockBackendSaga(): SagaIterator {
       if (teamFormationOverviews !== null) {
         yield put(actions.updateTeamFormationOverviews([...teamFormationOverviews]));
       }
-    }
+    },
   );
 
   yield takeEvery(
@@ -272,7 +279,7 @@ export function* mockBackendSaga(): SagaIterator {
       if (students !== null) {
         yield put(actions.updateStudents([...students]));
       }
-    }
+    },
   );
 
   yield takeEvery(
@@ -284,7 +291,7 @@ export function* mockBackendSaga(): SagaIterator {
       if (grading !== null) {
         yield put(actions.updateGrading(submissionId, grading));
       }
-    }
+    },
   );
 
   yield takeEvery(
@@ -295,12 +302,13 @@ export function* mockBackendSaga(): SagaIterator {
         (state: OverallState) =>
           state.session.gradingOverviews || {
             count: 0,
-            data: []
-          }
+            data: [],
+          },
       );
       const index = overviews.data.findIndex(
         overview =>
-          overview.submissionId === submissionId && overview.progress === ProgressStatuses.submitted
+          overview.submissionId === submissionId &&
+          overview.progress === ProgressStatuses.submitted,
       );
       if (index === -1) {
         yield call(showWarningMessage, '400: Bad Request');
@@ -314,11 +322,11 @@ export function* mockBackendSaga(): SagaIterator {
       });
       yield call(showSuccessMessage, 'Unsubmit successful!', 1000);
       yield put(actions.updateGradingOverviews({ ...overviews, data: newOverviews }));
-    }
+    },
   );
 
   const sendGrade = function* (
-    action: ReturnType<typeof actions.submitGrading | typeof actions.submitGradingAndContinue>
+    action: ReturnType<typeof actions.submitGrading | typeof actions.submitGradingAndContinue>,
   ): any {
     const role: Role = yield select((state: OverallState) => state.session.role!);
     if (role === Role.Student) {
@@ -328,7 +336,7 @@ export function* mockBackendSaga(): SagaIterator {
     const { submissionId, questionId, xpAdjustment, comments } = action.payload;
     // Now, update the grade for the question in the Grading in the store
     const grading: GradingQuery = yield select(
-      (state: OverallState) => state.session.gradings[submissionId]
+      (state: OverallState) => state.session.gradings[submissionId],
     );
     const newGrading = grading.answers.slice().map((gradingQuestion: GradingQuestion) => {
       if (gradingQuestion.question.id === questionId) {
@@ -336,7 +344,7 @@ export function* mockBackendSaga(): SagaIterator {
           xpAdjustment,
           xp: gradingQuestion.grade.xp,
           comments,
-          gradedAt: new Date().toISOString()
+          gradedAt: new Date().toISOString(),
         };
       }
       return gradingQuestion;
@@ -345,21 +353,21 @@ export function* mockBackendSaga(): SagaIterator {
       actions.updateGrading(submissionId, {
         answers: newGrading,
         assessment: grading.assessment,
-        enable_llm_grading: false
-      })
+        enable_llm_grading: false,
+      }),
     );
     yield call(showSuccessMessage, 'Submitted!', 1000);
   };
 
   const sendGradeAndContinue = function* (
-    action: ReturnType<typeof actions.submitGradingAndContinue>
+    action: ReturnType<typeof actions.submitGradingAndContinue>,
   ): any {
     const { submissionId } = action.payload;
     yield* sendGrade(action);
 
     const [currentQuestion, courseId] = yield select((state: OverallState) => [
       state.workspaces.grading.currentQuestion,
-      state.session.courseId!
+      state.session.courseId!,
     ]);
     /**
      * Move to next question for grading: this only works because the
@@ -370,7 +378,7 @@ export function* mockBackendSaga(): SagaIterator {
      * GradingWorkspace will cause a redirect back to '/courses/${courseId}/grading'
      */
     yield routerNavigate(
-      `/courses/${courseId}/grading/${submissionId}/${(currentQuestion || 0) + 1}`
+      `/courses/${courseId}/grading/${submissionId}/${(currentQuestion || 0) + 1}`,
     );
   };
 
@@ -382,7 +390,7 @@ export function* mockBackendSaga(): SagaIterator {
     SessionActions.fetchNotifications.type,
     function* (action: ReturnType<typeof actions.fetchNotifications>) {
       yield put(actions.updateNotifications([...mockNotifications]));
-    }
+    },
   );
 
   yield takeEvery(
@@ -391,7 +399,7 @@ export function* mockBackendSaga(): SagaIterator {
       const notificationFilter: NotificationFilterFunction | undefined = action.payload.withFilter;
 
       const notifications: Notification[] = yield select(
-        (state: OverallState) => state.session.notifications
+        (state: OverallState) => state.session.notifications,
       );
 
       let notificationsToAcknowledge = notifications;
@@ -407,11 +415,11 @@ export function* mockBackendSaga(): SagaIterator {
       const ids = notificationsToAcknowledge.map(n => n.id);
 
       const newNotifications: Notification[] = notifications.filter(
-        notification => !ids.includes(notification.id)
+        notification => !ids.includes(notification.id),
       );
 
       yield put(actions.updateNotifications(newNotifications));
-    }
+    },
   );
 
   yield takeEvery(
@@ -430,14 +438,14 @@ export function* mockBackendSaga(): SagaIterator {
           variant: courseConfiguration.sourceVariant,
           displayName: styliseSublanguage(
             courseConfiguration.sourceChapter,
-            courseConfiguration.sourceVariant
+            courseConfiguration.sourceVariant,
           ),
           mainLanguage: SupportedLanguage.JAVASCRIPT,
-          supports: {}
-        })
+          supports: {},
+        }),
       );
       yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
-    }
+    },
   );
 
   yield takeEvery(
@@ -447,7 +455,7 @@ export function* mockBackendSaga(): SagaIterator {
 
       yield put(actions.setCourseConfiguration(courseConfig));
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
-    }
+    },
   );
 
   yield takeEvery(
@@ -457,17 +465,17 @@ export function* mockBackendSaga(): SagaIterator {
 
       yield put(actions.setAssessmentConfigurations(assessmentConfig));
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
-    }
+    },
   );
 
   yield takeEvery(
     SessionActions.fetchAdminPanelCourseRegistrations.type,
     function* (action: ReturnType<typeof actions.fetchAdminPanelCourseRegistrations>) {
       const courseRegistrations: AdminPanelCourseRegistration[] = [
-        ...mockAdminPanelCourseRegistrations
+        ...mockAdminPanelCourseRegistrations,
       ];
       yield put(actions.setAdminPanelCourseRegistrations(courseRegistrations));
-    }
+    },
   );
 
   yield takeEvery(DashboardActions.fetchGroupGradingSummary.type, function* () {

@@ -6,7 +6,7 @@ const notificationMission: Notification = {
   type: 'new',
   assessment_id: 1,
   assessment_type: 'Missions',
-  assessment_title: 'Mission_1'
+  assessment_title: 'Mission_1',
 };
 
 const notificationSidequest: Notification = {
@@ -14,7 +14,7 @@ const notificationSidequest: Notification = {
   type: 'published_grading',
   assessment_id: 2,
   assessment_type: 'Quests',
-  assessment_title: 'Quest_1'
+  assessment_title: 'Quest_1',
 };
 
 const notificationPath: Notification = {
@@ -22,7 +22,7 @@ const notificationPath: Notification = {
   type: 'published_grading',
   assessment_id: 3,
   assessment_type: 'Paths',
-  assessment_title: 'Path_1'
+  assessment_title: 'Path_1',
 };
 
 const notificationContest: Notification = {
@@ -30,7 +30,7 @@ const notificationContest: Notification = {
   type: 'unsubmitted',
   assessment_id: 4,
   assessment_type: 'Contests',
-  assessment_title: 'Contest_1'
+  assessment_title: 'Contest_1',
 };
 
 const notificationSubmissionMission: Notification = {
@@ -39,7 +39,7 @@ const notificationSubmissionMission: Notification = {
   assessment_id: 1,
   assessment_type: 'Missions',
   assessment_title: 'Mission_1',
-  submission_id: 1
+  submission_id: 1,
 };
 
 const notificationSubmissionSidequest: Notification = {
@@ -48,7 +48,7 @@ const notificationSubmissionSidequest: Notification = {
   assessment_id: 2,
   assessment_type: 'Quests',
   assessment_title: 'Quest_1',
-  submission_id: 2
+  submission_id: 2,
 };
 
 const notifications: Notification[] = [
@@ -57,7 +57,7 @@ const notifications: Notification[] = [
   notificationPath,
   notificationContest,
   notificationSubmissionMission,
-  notificationSubmissionSidequest
+  notificationSubmissionSidequest,
 ];
 
 test('filterNotificationsByAssessment works properly', () => {

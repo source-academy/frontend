@@ -36,15 +36,15 @@ const validateAdminPaths = (hrefs: string[], exist: boolean = true) =>
   });
 
 const mockProps = {
-  assessmentTypes
+  assessmentTypes,
 };
 
 const renderNav = (role: Role) => {
   const store = mockInitialStore({
     session: {
       role,
-      courseId
-    }
+      courseId,
+    },
   });
 
   return render(
@@ -52,7 +52,7 @@ const renderNav = (role: Role) => {
       <MemoryRouter>
         <AcademyNavigationBar {...mockProps} />
       </MemoryRouter>
-    </Provider>
+    </Provider>,
   );
 };
 

@@ -27,7 +27,7 @@ export default class GameDialogueStorageManager {
     }
     const newDialogue = {
       speaker: this.getSpeakerName(newSpeakerDetail),
-      line: newLine
+      line: newLine,
     };
     this.dialogueStorage.push(newDialogue);
   }

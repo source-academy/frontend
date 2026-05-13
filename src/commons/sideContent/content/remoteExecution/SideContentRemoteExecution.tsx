@@ -5,7 +5,7 @@ import {
   MenuDivider,
   MenuItem,
   NonIdealState,
-  Spinner
+  Spinner,
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { useCallback, useEffect, useState } from 'react';
@@ -20,7 +20,7 @@ import PeripheralContainer from 'src/features/remoteExecution/PeripheralContaine
 import RemoteExecutionAddDeviceDialog from 'src/features/remoteExecution/RemoteExecutionDeviceDialog';
 import {
   ev3PeripheralToComponentMap,
-  ev3SensorModeToValueTransformerMap
+  ev3SensorModeToValueTransformerMap,
 } from 'src/features/remoteExecution/RemoteExecutionEv3Types';
 import type { Device, DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
 
@@ -69,7 +69,7 @@ const sensorPorts = ['port1', 'port2', 'port3', 'port4'] as const;
 
 const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = props => {
   const [dialogState, setDialogState] = useState<Device | true | undefined>(
-    props.secretParams ? true : undefined
+    props.secretParams ? true : undefined,
   );
   const [secretParams, setSecretParams] = useState(props.secretParams);
 
@@ -87,8 +87,8 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
       dispatch(
         actions.remoteExecUpdateSession({
           ...currentSession,
-          workspace: props.workspace
-        })
+          workspace: props.workspace,
+        }),
       );
     }
   }, [currentSession, dispatch, props.workspace]);
@@ -104,7 +104,7 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
       // note the double () => - this function is a destructor
       dispatch(actions.remoteExecDisconnect());
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleDelete = useCallback(
@@ -115,7 +115,7 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
         positiveLabel: 'Delete',
         positiveIntent: 'danger',
         negativeLabel: 'No',
-        icon: 'trash'
+        icon: 'trash',
       });
       if (!confirm) {
         return;
@@ -131,7 +131,7 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
       }
       dispatch(actions.remoteExecFetchDevices());
     },
-    [dispatch, isConnected]
+    [dispatch, isConnected],
   );
 
   if (!isLoggedIn) {
@@ -201,7 +201,7 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
               textAlign: 'center',
               maxWidth: 480,
               marginInline: 'auto',
-              marginBlock: '2rem'
+              marginBlock: '2rem',
             }}
           >
             <div className="sa-remote-execution row">

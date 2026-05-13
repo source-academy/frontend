@@ -5,7 +5,7 @@ import {
   Spinner,
   SpinnerSize,
   Text,
-  Tooltip
+  Tooltip,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { createRef, PureComponent } from 'react';

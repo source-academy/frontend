@@ -5,13 +5,13 @@ import SicpToc from '../SicpToc';
 
 test('Sicp toc renders correctly', async () => {
   const props = {
-    handleCloseToc: () => {}
+    handleCloseToc: () => {},
   };
 
   const tree = await renderTreeJson(
     <MemoryRouter>
       <SicpToc {...props} />
-    </MemoryRouter>
+    </MemoryRouter>,
   );
   expect(tree).toMatchSnapshot();
 });

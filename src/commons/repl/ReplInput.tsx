@@ -99,26 +99,26 @@ export const ReplInput: React.FC<ReplInputProps> = props => {
             name: 'browseHistoryDown',
             bindKey: {
               win: 'Down',
-              mac: 'Down'
+              mac: 'Down',
             },
-            exec: execBrowseHistoryDown
+            exec: execBrowseHistoryDown,
           },
           {
             name: 'browseHistoryUp',
             bindKey: {
               win: 'Up',
-              mac: 'Up'
+              mac: 'Up',
             },
-            exec: execBrowseHistoryUp
+            exec: execBrowseHistoryUp,
           },
           {
             name: 'evaluate',
             bindKey: {
               win: 'Shift-Enter',
-              mac: 'Shift-Enter'
+              mac: 'Shift-Enter',
             },
-            exec: execEvaluate
-          }
+            exec: execEvaluate,
+          },
         ]}
         minLines={1}
         maxLines={20}
@@ -127,7 +127,7 @@ export const ReplInput: React.FC<ReplInputProps> = props => {
         showGutter={false}
         showPrintMargin={false}
         setOptions={{
-          fontFamily: "'Inconsolata', 'Consolas', monospace"
+          fontFamily: "'Inconsolata', 'Consolas', monospace",
         }}
         ref={replInput}
       />

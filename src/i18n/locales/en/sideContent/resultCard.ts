@@ -3,7 +3,7 @@ const translations = {
   syntax: '[SYNTAX] Line {{line}}: {{errorExplanation}}',
   runtime: '[RUNTIME] Line {{line}}: {{errorExplanation}}',
   systemError: '[SYSTEM] {{errorMessage}}',
-  unknown: '[UNKNOWN] Autograder error: type {{errorType}}'
+  unknown: '[UNKNOWN] Autograder error: type {{errorType}}',
 };
 
 export default translations;

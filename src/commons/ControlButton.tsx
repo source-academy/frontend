@@ -15,7 +15,7 @@ const defaultOptions = {
   fullWidth: false,
   iconOnRight: false,
   intent: Intent.NONE,
-  minimal: true
+  minimal: true,
 };
 
 type Props = {
@@ -31,7 +31,7 @@ const ControlButton: React.FC<Props> = ({
   icon,
   onClick,
   options = {},
-  isDisabled = false
+  isDisabled = false,
 }) => {
   const buttonOptions: ButtonOptions = { ...defaultOptions, ...options };
   const iconElement = icon && <Icon icon={icon} color={buttonOptions.iconColor} />;

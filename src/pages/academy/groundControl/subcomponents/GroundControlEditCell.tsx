@@ -39,7 +39,7 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
       handleAssessmentChangeDate(
         id,
         forOpenDate ? newDate.toISOString() : openAt,
-        forOpenDate ? closeAt : newDate.toISOString()
+        forOpenDate ? closeAt : newDate.toISOString(),
       );
       handleCloseDialog();
     }
@@ -53,7 +53,7 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
 
   const handleDateChange = useCallback(
     (selectedDate: string | null) => setNewDate(dayjs(selectedDate)),
-    []
+    [],
   );
   const handleDateError = useCallback(() => {
     // Reset date to current date if user enters an invalid date string

@@ -42,14 +42,14 @@ class MainMenu extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.spaceshipBg.key
+      ImageAssets.spaceshipBg.key,
     ).setDisplaySize(screenSize.x, screenSize.y);
     const blackOverlay = blackScreen(this).setAlpha(0.15);
     const saBanner = new Phaser.GameObjects.Image(
       this,
       MainMenuConstants.saBanner.x,
       MainMenuConstants.saBanner.y,
-      ImageAssets.saBanner.key
+      ImageAssets.saBanner.key,
     ).setAlpha(0.7);
     this.getLayerManager().addToLayer(Layer.Background, backgroundImg);
     this.getLayerManager().addToLayer(Layer.Background, blackOverlay);
@@ -67,7 +67,7 @@ class MainMenu extends Phaser.Scene {
     const buttonPositions = calcTableFormatPos({
       direction: Direction.Column,
       numOfItems: buttons.length,
-      maxYSpace: MainMenuConstants.button.ySpace
+      maxYSpace: MainMenuConstants.button.ySpace,
     });
 
     optionsContainer.add(
@@ -76,9 +76,9 @@ class MainMenu extends Phaser.Scene {
           button.text,
           buttonPositions[index][0] + MainMenuConstants.banner.xHide,
           buttonPositions[index][1],
-          button.callback
-        )
-      )
+          button.callback,
+        ),
+      ),
     );
 
     this.getLayerManager().addToLayer(Layer.UI, optionsContainer);
@@ -98,13 +98,13 @@ class MainMenu extends Phaser.Scene {
     const tweenOnHover = (target: Phaser.GameObjects.Container) => {
       this.tweens.add({
         targets: target,
-        ...MainMenuConstants.onFocusTween
+        ...MainMenuConstants.onFocusTween,
       });
     };
     const tweenOffHover = (target: Phaser.GameObjects.Container) => {
       this.tweens.add({
         targets: target,
-        ...MainMenuConstants.outFocusTween
+        ...MainMenuConstants.outFocusTween,
       });
     };
 
@@ -117,7 +117,7 @@ class MainMenu extends Phaser.Scene {
       onUp: callback,
       onHover: () => tweenOnHover(optButton),
       onOut: () => tweenOffHover(optButton),
-      onHoverEffect: false
+      onHoverEffect: false,
     }).setPosition(xPos, yPos);
 
     return optButton;
@@ -134,36 +134,36 @@ class MainMenu extends Phaser.Scene {
         callback: () => {
           this.getLayerManager().clearAllLayers();
           this.scene.start('ChapterSelect');
-        }
+        },
       },
       {
         text: MainMenuConstants.text.awards,
         callback: () => {
           this.getLayerManager().clearAllLayers();
           this.scene.start('AwardsHall');
-        }
+        },
       },
       {
         text: MainMenuConstants.text.studentRoom,
         callback: () => {
           this.getLayerManager().clearAllLayers();
           this.scene.start('RoomPreview');
-        }
+        },
       },
       {
         text: MainMenuConstants.text.settings,
         callback: () => {
           this.getLayerManager().clearAllLayers();
           this.scene.start('Settings');
-        }
+        },
       },
       {
         text: MainMenuConstants.text.bindings,
         callback: () => {
           this.getLayerManager().clearAllLayers();
           this.scene.start('Bindings');
-        }
-      }
+        },
+      },
     ];
   }
   public getLayerManager = () => mandatory(this.layerManager);

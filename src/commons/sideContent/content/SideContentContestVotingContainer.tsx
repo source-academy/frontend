@@ -19,7 +19,7 @@ const SideContentContestVotingContainer: React.FC<SideContentContestVotingContai
   canSave,
   contestEntries,
   handleSave,
-  handleContestEntryClick
+  handleContestEntryClick,
 }) => {
   const [isValid, setIsValid] = useState(true);
   const [votingSubmission, setVotingSubmission] = useState<ContestEntry[]>([]);
@@ -37,7 +37,7 @@ const SideContentContestVotingContainer: React.FC<SideContentContestVotingContai
   const handleVotingSubmissionChange = (submissionId: number, score: number): void => {
     // update the votes
     const updatedSubmission = votingSubmission.map(vote =>
-      vote.submission_id === submissionId ? { ...vote, score: score } : vote
+      vote.submission_id === submissionId ? { ...vote, score: score } : vote,
     );
     setVotingSubmission(updatedSubmission);
     const noNull = submissionHasNoNull(updatedSubmission);

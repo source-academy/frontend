@@ -23,10 +23,10 @@ import { useBeforeUnload, useBlocker } from 'react-router';
 // the tradeoffs are right for your users.
 function usePrompt(
   message: string | null | undefined | false,
-  { beforeUnload }: { beforeUnload?: boolean } = {}
+  { beforeUnload }: { beforeUnload?: boolean } = {},
 ) {
   const blocker = useBlocker(
-    useCallback(() => (typeof message === 'string' ? !window.confirm(message) : false), [message])
+    useCallback(() => (typeof message === 'string' ? !window.confirm(message) : false), [message]),
   );
   const prevState = useRef(blocker.state);
   useEffect(() => {
@@ -44,9 +44,9 @@ function usePrompt(
           event.returnValue = message;
         }
       },
-      [message, beforeUnload]
+      [message, beforeUnload],
     ),
-    { capture: true }
+    { capture: true },
   );
 }
 

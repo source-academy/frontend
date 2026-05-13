@@ -17,7 +17,7 @@ const SideContentFaceapiDisplay: React.FC = () => {
     takePhoto: () => any,
     resetPhoto: () => any,
     canvasId: string,
-    canvasHeight: number
+    canvasHeight: number,
   ) => (
     <div className="sa-video-header">
       <div className="sa-video-header-element">

@@ -17,7 +17,7 @@ import {
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
-  setUnhoveredStyle
+  setUnhoveredStyle,
 } from '../CseMachineUtils';
 import { ControlItemComponent } from './ControlItemComponent';
 import { Visible } from './Visible';
@@ -29,7 +29,7 @@ export class ControlStack extends Visible implements IHoverable {
   constructor(
     /** the control object */
     readonly control: Control,
-    readonly chapter: Chapter
+    readonly chapter: Chapter,
   ) {
     super();
     this._x = ControlStashConfig.ControlPosX;
@@ -64,7 +64,7 @@ export class ControlStack extends Visible implements IHoverable {
         i,
         highlightOnHover,
         unhighlightOnHover,
-        this.chapter
+        this.chapter,
       );
       this._height += component.height();
       i += 1;
@@ -93,7 +93,7 @@ export class ControlStack extends Visible implements IHoverable {
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: 12,
       fontStyle: ControlStashConfig.FontStyle,
-      fontVariant: ControlStashConfig.FontVariant
+      fontVariant: ControlStashConfig.FontVariant,
     };
     return (
       <>

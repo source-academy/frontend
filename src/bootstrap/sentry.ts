@@ -4,7 +4,7 @@ import {
   createRoutesFromChildren,
   matchRoutes,
   useLocation,
-  useNavigationType
+  useNavigationType,
 } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
 import { store } from 'src/pages/createStore';
@@ -23,10 +23,10 @@ export const initializeSentryLogging = () => {
         useLocation,
         useNavigationType,
         createRoutesFromChildren,
-        matchRoutes
+        matchRoutes,
       }),
-      Sentry.replayIntegration()
-    ]
+      Sentry.replayIntegration(),
+    ],
   });
   const userId = store.getState().session.userId;
   Sentry.setUser(typeof userId !== 'undefined' ? { id: userId.toString() } : null);

@@ -10,7 +10,7 @@ import {
   javaLanguages,
   type SALanguage,
   sourceLanguages,
-  styliseSublanguage
+  styliseSublanguage,
 } from '../application/ApplicationTypes';
 import Constants from '../utils/Constants';
 import { useTypedSelector } from '../utils/Hooks';
@@ -26,7 +26,7 @@ type Props = {
 const chapterListRenderer: ItemListRenderer<SALanguage> = ({
   itemsParentRef,
   renderItem,
-  items
+  items,
 }) => {
   const defaultChoices = items.filter(({ variant }) => variant === Variant.DEFAULT);
   const variantChoices = items.filter(({ variant }) => variant !== Variant.DEFAULT);
@@ -68,7 +68,7 @@ const LegacyControlBarChapterSelect: React.FC<Props> = ({
   sourceChapter,
   sourceVariant,
   handleChapterSelect = () => {},
-  disabled = false
+  disabled = false,
 }) => {
   const selectedLang = useTypedSelector(store => store.playground.languageConfig.mainLanguage);
 
@@ -78,7 +78,7 @@ const LegacyControlBarChapterSelect: React.FC<Props> = ({
     // for public deployments. HTML, while sandboxed, is treated the same way to be safe.
     // See https://github.com/source-academy/frontend/pull/2460#issuecomment-1528759912
     ...(Constants.playgroundOnly ? [fullJSLanguage, fullTSLanguage, htmlLanguage] : []),
-    ...javaLanguages
+    ...javaLanguages,
   ];
 
   return (

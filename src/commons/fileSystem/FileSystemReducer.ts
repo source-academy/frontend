@@ -11,5 +11,5 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
     builder.addCase(setInBrowserFileSystem, (state, action) => {
       state.inBrowserFileSystem = action.payload.inBrowserFileSystem;
     });
-  }
+  },
 );

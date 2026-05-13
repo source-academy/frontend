@@ -106,24 +106,24 @@ export default class RoomPreview extends Phaser.Scene {
     await Promise.all(
       Array.from(this.preloadImageMap).map(async ([key, path]) => {
         await loadImage(this, key, path);
-      })
+      }),
     );
     await Promise.all(
       Array.from(this.preloadSoundMap).map(async ([key, path]) => {
         await loadSound(this, key, path);
-      })
+      }),
     );
     await Promise.all(
       Array.from(this.preloadSpritesheetMap).map(async ([key, [path, config]]) => {
         await loadSpritesheet(this, key, path, config);
-      })
+      }),
     );
 
     const roomRefreshHover = new CommonTextHover(
       this,
       RoomConstants.refreshButton.x - 200,
       RoomConstants.refreshButton.y - 30,
-      'Refresh Room'
+      'Refresh Room',
     );
 
     const refreshButton = createButton(this, {
@@ -137,7 +137,7 @@ export default class RoomPreview extends Phaser.Scene {
         this.scene.restart();
       },
       onHover: () => roomRefreshHover.setVisible(true),
-      onOut: () => roomRefreshHover.setVisible(false)
+      onOut: () => roomRefreshHover.setVisible(false),
     }).setPosition(RoomConstants.refreshButton.x, RoomConstants.refreshButton.y);
 
     // Execute create
@@ -186,8 +186,8 @@ export default class RoomPreview extends Phaser.Scene {
         preloadSpritesheetMap: this.preloadSpritesheetMap,
         remotePath: (file: string) => toS3Path(file, true),
         screenSize: screenSize,
-        createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key)
-      }
+        createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key),
+      },
     };
   }
 
@@ -209,7 +209,7 @@ export default class RoomPreview extends Phaser.Scene {
         } else {
           await this.getPhaseManager().pushPhase(GamePhaseType.EscapeMenu);
         }
-      }
+      },
     );
     this.getInputManager().registerKeyboardListener(
       Phaser.Input.Keyboard.KeyCodes.TAB,
@@ -222,7 +222,7 @@ export default class RoomPreview extends Phaser.Scene {
         } else {
           await this.getPhaseManager().pushPhase(GamePhaseType.Dashboard);
         }
-      }
+      },
     );
   }
 
@@ -279,17 +279,17 @@ export default class RoomPreview extends Phaser.Scene {
 
     sprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
     sprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
-      verifCont.setVisible(true)
+      verifCont.setVisible(true),
     );
     sprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () =>
-      verifCont.setVisible(false)
+      verifCont.setVisible(false),
     );
     sprite.addListener(
       Phaser.Input.Events.GAMEOBJECT_POINTER_MOVE,
       (pointer: Phaser.Input.Pointer) => {
         verifCont.x = pointer.x + 10;
         verifCont.y = pointer.y - 10;
-      }
+      },
     );
     return sprite;
   }
@@ -302,7 +302,7 @@ export default class RoomPreview extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      this.getDefaultBackgroundKey()
+      this.getDefaultBackgroundKey(),
     );
     resizeOverflow(backgroundAsset, screenSize.x, screenSize.y);
 
@@ -340,17 +340,17 @@ export default class RoomPreview extends Phaser.Scene {
     this.escapeManager = new GameEscapeManager(this);
     this.collectibleManager = new GameAwardsManager(
       this,
-      SourceAcademyGame.getInstance().getUserStateManager().getCollectibles
+      SourceAcademyGame.getInstance().getUserStateManager().getCollectibles,
     );
     this.achievementManager = new GameAwardsManager(
       this,
-      SourceAcademyGame.getInstance().getUserStateManager().getAchievements
+      SourceAcademyGame.getInstance().getUserStateManager().getAchievements,
     );
     this.toolbarManager = new GameToolbarManager(this);
     this.dashboardManager = new GameDashboardManager(
       this,
       [DashboardPage.Collectibles, DashboardPage.Achievements],
-      [this.collectibleManager, this.achievementManager]
+      [this.collectibleManager, this.achievementManager],
     );
   }
 

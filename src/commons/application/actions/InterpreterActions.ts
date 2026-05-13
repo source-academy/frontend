@@ -7,50 +7,50 @@ import type { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 const InterpreterActions = createActions('interpreter', {
   handleConsoleLog: (workspaceLocation: WorkspaceLocation, ...logString: string[]) => ({
     logString,
-    workspaceLocation
+    workspaceLocation,
   }),
   appendInterpreterResult: (value: Value, workspaceLocation: WorkspaceLocation) => ({
     type: 'result',
     value,
-    workspaceLocation
+    workspaceLocation,
   }),
   evalInterpreterSuccess: (value: Value, workspaceLocation: WorkspaceLocation) => ({
     type: 'result',
     value,
-    workspaceLocation
+    workspaceLocation,
   }),
   evalTestcaseSuccess: (value: Value, workspaceLocation: WorkspaceLocation, index: number) => ({
     type: 'result',
     value,
     workspaceLocation,
-    index
+    index,
   }),
   evalTestcaseFailure: (value: Value, workspaceLocation: WorkspaceLocation, index: number) => ({
     type: 'errors',
     value,
     workspaceLocation,
-    index
+    index,
   }),
   evalInterpreterError: (errors: SourceError[], workspaceLocation: WorkspaceLocation) => ({
     type: 'errors',
     errors,
-    workspaceLocation
+    workspaceLocation,
   }),
   appendInterpreterError: (errors: SourceError[], workspaceLocation: WorkspaceLocation) => ({
     type: 'errors',
     errors,
-    workspaceLocation
+    workspaceLocation,
   }),
   setIsRunning: (isRunning: boolean, workspaceLocation: WorkspaceLocation) => ({
     isRunning,
-    workspaceLocation
+    workspaceLocation,
   }),
   beginInterruptExecution: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   endInterruptExecution: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   beginDebuggerPause: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   endDebuggerPause: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   debuggerResume: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
-  debuggerReset: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation })
+  debuggerReset: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
 });
 
 // For compatibility with existing code (actions helper)

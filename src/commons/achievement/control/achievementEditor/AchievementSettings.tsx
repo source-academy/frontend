@@ -22,7 +22,7 @@ const AchievementSettings: React.FC<Props> = ({
   changePosition,
   changePrerequisiteUuids,
   changeIsVariableXp,
-  editableAchievement
+  editableAchievement,
 }) => {
   const { uuid, cardBackground, goalUuids, position, prerequisiteUuids, isVariableXp } =
     editableAchievement;

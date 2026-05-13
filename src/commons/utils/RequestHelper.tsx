@@ -49,7 +49,7 @@ export const request = async (
   path: string,
   method: RequestMethod,
   opts: RequestOptions,
-  rawUrl?: string
+  rawUrl?: string,
 ): Promise<Response | null> => {
   if (Constants.forwardLoadBalancerCookies) {
     // Always attach cookies to every API call
@@ -105,7 +105,7 @@ export const request = async (
       }
 
       showWarningMessage(
-        opts.errorMessage ? opts.errorMessage : getResponseErrorMessage(retriedResp)
+        opts.errorMessage ? opts.errorMessage : getResponseErrorMessage(retriedResp),
       );
       return null;
     } catch (err) {
@@ -116,7 +116,7 @@ export const request = async (
         showWarningMessage(
           promptReloginMessage,
           -1, // force toast to not timeout
-          userSessionExpiredNotificationKey
+          userSessionExpiredNotificationKey,
         );
       } else {
         store.dispatch(actions.logOut());
@@ -136,7 +136,7 @@ export const request = async (
 
 export const generateApiCallHeadersAndFetchOptions = (
   method: RequestMethod,
-  opts: RequestOptions
+  opts: RequestOptions,
 ) => {
   const headers = new Headers();
   if (!opts.noHeaderAccept) {

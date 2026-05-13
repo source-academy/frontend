@@ -44,7 +44,7 @@ export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
     const Mode = function (this: any) {
       this.HighlightRules = highlightRules;
       this.foldingRules = new (acequire(data.foldingRules.hookFrom).FoldMode)(
-        ...data.foldingRules.args
+        ...data.foldingRules.args,
       );
       this.$behavior = this.$defaultBehaviour;
     };
@@ -66,7 +66,7 @@ export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
       ['exports', 'module'],
       function (require: never, exports: { Mode: typeof Mode }) {
         exports.Mode = Mode;
-      }
+      },
     );
     this.currentMode = data.id;
   }

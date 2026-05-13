@@ -2,7 +2,7 @@ import {
   OverlayToaster,
   type OverlayToasterProps,
   Position,
-  type Toaster
+  type Toaster,
 } from '@blueprintjs/core';
 import { createRoot } from 'react-dom/client';
 
@@ -20,10 +20,10 @@ const createToaster = async (props?: OverlayToasterProps) => {
   // Workaround no top-level await
   notification = await OverlayToaster.createAsync(props, {
     // See https://github.com/palantir/blueprint/issues/5212#issuecomment-1881229199
-    domRenderer: (toaster, containerElement) => createRoot(containerElement).render(toaster)
+    domRenderer: (toaster, containerElement) => createRoot(containerElement).render(toaster),
   });
 };
 
 createToaster({
-  position: Position.TOP
+  position: Position.TOP,
 });

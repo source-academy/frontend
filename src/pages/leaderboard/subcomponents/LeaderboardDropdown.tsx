@@ -6,10 +6,10 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 const LeaderboardDropdown: React.FC = () => {
   const enableOverallLeaderboard = useTypedSelector(
-    store => store.session.enableOverallLeaderboard
+    store => store.session.enableOverallLeaderboard,
   );
   const enableContestLeaderboard = useTypedSelector(
-    store => store.session.enableContestLeaderboard
+    store => store.session.enableContestLeaderboard,
   );
   const crid = useTypedSelector(store => store.session.courseId);
   const baseLink = `/courses/${crid}/leaderboard`;

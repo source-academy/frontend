@@ -11,5 +11,5 @@ export const DashboardReducer: Reducer<DashboardState, SourceActionType> = creat
     builder.addCase(updateGroupGradingSummary, (state, action) => {
       state.gradingSummary = action.payload;
     });
-  }
+  },
 );

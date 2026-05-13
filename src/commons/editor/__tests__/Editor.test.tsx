@@ -20,7 +20,7 @@ test('Editor renders correctly', async () => {
     handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => {},
     handleSetSharedbConnected: () => {},
     handleUpdateHasUnsavedChanges: hasUnsavedChanges => {},
-    handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
+    handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
   };
   const Element: React.FC = () => (
     <Provider store={mockInitialStore()}>

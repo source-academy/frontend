@@ -12,14 +12,14 @@ import Constants from '../../commons/utils/Constants';
 
 const providers = [...Constants.otherAuthProviders.entries()].map(([id, { name }]) => ({
   id,
-  name
+  name,
 }));
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
   const handleLogin = useCallback(
     (providerId: string) => dispatch(SessionActions.login(providerId)),
-    [dispatch]
+    [dispatch],
   );
   const navigate = useNavigate();
 
@@ -55,7 +55,7 @@ const LoginPage: React.FC = () => {
 const LoginButton = ({
   handleClick,
   id,
-  name
+  name,
 }: {
   handleClick: (id: string) => void;
   id: string;

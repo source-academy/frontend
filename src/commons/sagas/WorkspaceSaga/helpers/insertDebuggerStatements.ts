@@ -39,7 +39,7 @@ export function* insertDebuggerStatements(
   workspaceLocation: WorkspaceLocation,
   code: string,
   breakpoints: string[],
-  context: Context
+  context: Context,
 ): Generator<StrictEffect, string, any> {
   // Check for initial syntax errors.
   if (isSourceLanguage(context.chapter)) {

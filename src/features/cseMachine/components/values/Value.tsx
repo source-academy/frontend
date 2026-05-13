@@ -32,7 +32,7 @@ export const FunctionTooltipLabels = ({
   strokeColor,
   textColor,
   labelRef,
-  revealLabelRef
+  revealLabelRef,
 }: FunctionTooltipLabelsProps): React.ReactNode => (
   <>
     <KonvaLabel

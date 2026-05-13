@@ -4,7 +4,7 @@ import {
   type IMCQQuestion,
   type Question,
   QuestionTypes,
-  type Testcase
+  type Testcase,
 } from '../../commons/assessment/AssessmentTypes';
 import { showWarningMessage } from '../../commons/utils/notifications/NotificationsHelper';
 
@@ -17,7 +17,7 @@ export const onClickProgress = (
   deferredNavigate: () => void,
   question: Question,
   testcases: Testcase[],
-  isBlocked: boolean
+  isBlocked: boolean,
 ) => {
   return () => {
     if (!isBlocked) {

@@ -55,7 +55,7 @@ async function uploadLogs(cadetLoggerUrl: string, accessToken: string, logs: Log
   const fetchOpts = {
     method: 'POST',
     headers,
-    body: JSON.stringify(logs)
+    body: JSON.stringify(logs),
   };
   const resp = await fetch(cadetLoggerUrl, fetchOpts);
   if (!resp.ok) {

@@ -38,7 +38,7 @@ class Parser {
       map: new GameMap(),
       startingLoc: '',
       objectives: new GameObjective(),
-      tasks: new GameTask()
+      tasks: new GameTask(),
     };
 
     Parser.validator = new ParserValidator();

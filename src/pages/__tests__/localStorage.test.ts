@@ -24,20 +24,20 @@ const mockShortDefaultState: SavedState = {
     enableContestLeaderboard: defaultState.session.enableContestLeaderboard,
     moduleHelpText: defaultState.session.moduleHelpText,
     assetsPrefix: defaultState.session.assetsPrefix,
-    assessmentConfigurations: defaultState.session.assessmentConfigurations
+    assessmentConfigurations: defaultState.session.assessmentConfigurations,
   },
   achievements: defaultState.achievement.achievements,
   featureFlags: defaultState.featureFlags.modifiedFlags,
   playgroundIsFolderModeEnabled: defaultState.workspaces.playground.isFolderModeEnabled,
   playgroundActiveEditorTabIndex: {
-    value: defaultState.workspaces.playground.activeEditorTabIndex
+    value: defaultState.workspaces.playground.activeEditorTabIndex,
   },
   playgroundEditorTabs: defaultState.workspaces.playground.editorTabs,
   playgroundIsEditorAutorun: defaultState.workspaces.playground.isEditorAutorun,
   playgroundSourceChapter: defaultState.workspaces.playground.context.chapter,
   playgroundSourceVariant: defaultState.workspaces.playground.context.variant,
   playgroundLanguage: defaultState.playground.languageConfig,
-  playgroundExternalLibrary: defaultState.workspaces.playground.externalLibrary
+  playgroundExternalLibrary: defaultState.workspaces.playground.externalLibrary,
 };
 
 describe('loadStoredState() function', () => {
@@ -56,7 +56,7 @@ describe('saveState() function', () => {
   test('Runs normally', () => {
     saveState(defaultState);
     expect(localStorage.getItem('storedState')).toBe(
-      compressToUTF16(JSON.stringify(mockShortDefaultState))
+      compressToUTF16(JSON.stringify(mockShortDefaultState)),
     );
     localStorage.removeItem('storedState');
   });

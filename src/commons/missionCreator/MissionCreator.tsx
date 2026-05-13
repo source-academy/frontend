@@ -9,14 +9,14 @@ import {
   type Assessment,
   type AssessmentOverview,
   assessmentTemplate,
-  overviewTemplate
+  overviewTemplate,
 } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import {
   makeEntireAssessment,
   retrieveLocalAssessment,
   storeLocalAssessment,
-  storeLocalAssessmentOverview
+  storeLocalAssessmentOverview,
 } from '../XMLParser/XMLParserHelper';
 
 type Props = {
@@ -30,7 +30,7 @@ const MissionCreator: React.FC<Props> = props => {
   const dispatch = useDispatch();
   const newAssessment = useCallback(
     (assessment: Assessment) => dispatch(SessionActions.updateAssessment(assessment)),
-    [dispatch]
+    [dispatch],
   );
 
   useEffect(() => {

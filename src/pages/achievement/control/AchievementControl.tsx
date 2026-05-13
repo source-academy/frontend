@@ -11,7 +11,7 @@ import AchievementActions from '../../../features/achievement/AchievementActions
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import type {
   AchievementItem,
-  GoalDefinition
+  GoalDefinition,
 } from '../../../features/achievement/AchievementTypes';
 
 const AchievementControl: React.FC = () => {
@@ -22,7 +22,7 @@ const AchievementControl: React.FC = () => {
     handleGetAchievements,
     handleGetOwnGoals,
     handleRemoveAchievement,
-    handleRemoveGoal
+    handleRemoveGoal,
   } = useMemo(
     () => ({
       handleBulkUpdateAchievements: (achievement: AchievementItem[]) =>
@@ -33,18 +33,18 @@ const AchievementControl: React.FC = () => {
       handleGetOwnGoals: () => dispatch(AchievementActions.getOwnGoals()),
       handleRemoveAchievement: (uuid: string) =>
         dispatch(AchievementActions.removeAchievement(uuid)),
-      handleRemoveGoal: (uuid: string) => dispatch(AchievementActions.removeGoal(uuid))
+      handleRemoveGoal: (uuid: string) => dispatch(AchievementActions.removeGoal(uuid)),
     }),
-    [dispatch]
+    [dispatch],
   );
 
   const [initialAchievements, initialGoals] = useTypedSelector(state => [
     state.achievement.achievements,
-    state.achievement.goals
+    state.achievement.goals,
   ]);
   const inferencer = useMemo(
     () => new AchievementInferencer(initialAchievements, initialGoals),
-    [initialAchievements, initialGoals]
+    [initialAchievements, initialGoals],
   );
 
   /**

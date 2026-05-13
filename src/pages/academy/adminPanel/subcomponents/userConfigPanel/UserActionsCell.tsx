@@ -5,7 +5,7 @@ import {
   DialogFooter,
   Intent,
   Popover,
-  Position
+  Position,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useCallback, useState } from 'react';

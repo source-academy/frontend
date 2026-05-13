@@ -80,7 +80,7 @@ export const loadSpritesheet = (
   scene: Phaser.Scene,
   assetKey: AssetKey,
   assetPath: AssetPath,
-  config: any
+  config: any,
 ) =>
   new Promise<AssetKey>(resolve => {
     if (scene.textures.get(assetKey).key !== '__MISSING') {

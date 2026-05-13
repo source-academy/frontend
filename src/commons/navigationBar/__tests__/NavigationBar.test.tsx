@@ -16,7 +16,7 @@ const renderNav = (store: any) =>
           <NavigationBar />
         </MemoryRouter>
       </WorkspaceSettingsContext.Provider>
-    </Provider>
+    </Provider>,
   );
 
 describe('NavigationBar', () => {
@@ -24,8 +24,8 @@ describe('NavigationBar', () => {
     const store = mockInitialStore({
       session: {
         role: undefined,
-        name: undefined
-      }
+        name: undefined,
+      },
     });
 
     const tree = renderNav(store);
@@ -41,19 +41,19 @@ describe('NavigationBar', () => {
         courseShortName: 'CS1101S',
         assessmentConfigurations: [
           {
-            type: 'Missions'
+            type: 'Missions',
           } as any,
           {
-            type: 'Quests'
+            type: 'Quests',
           } as any,
           {
-            type: 'Paths'
+            type: 'Paths',
           } as any,
           {
-            type: 'Contests'
-          } as any
-        ]
-      }
+            type: 'Contests',
+          } as any,
+        ],
+      },
     });
 
     const tree = renderNav(store);
@@ -65,8 +65,8 @@ describe('NavigationBar', () => {
       session: {
         role: undefined,
         name: 'Bob',
-        courseId: undefined
-      }
+        courseId: undefined,
+      },
     });
 
     const tree = renderNav(store);

@@ -28,7 +28,7 @@ const EditableTime: React.FC<Props> = ({ type, time, changeTime }) => {
           background: '#fff',
           maxWidth: 'max-content',
           padding: '0.25em',
-          textAlign: 'center'
+          textAlign: 'center',
         }}
         title={`${type}`}
       >

@@ -34,9 +34,9 @@ class GameToolbarManager {
         this.createToolbarButton(
           ToolbarConstants.firstButton.x - ToolbarConstants.xOffset * index,
           ToolbarConstants.firstButton.y,
-          buttonConfig
-        )
-      )
+          buttonConfig,
+        ),
+      ),
     );
     return toolbarContainer;
   }
@@ -52,7 +52,7 @@ class GameToolbarManager {
   private createToolbarButton(xPos: number, yPos: number, buttonConfig: ToolbarButtonConfig) {
     return createButton(this.scene, {
       assetKey: buttonConfig.assetKey,
-      onUp: buttonConfig.onUp(this.scene)
+      onUp: buttonConfig.onUp(this.scene),
     }).setPosition(xPos, yPos);
   }
 

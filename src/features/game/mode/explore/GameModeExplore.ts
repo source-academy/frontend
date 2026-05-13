@@ -40,8 +40,8 @@ class GameModeExplore implements IGameUI {
       gameManager,
       async () =>
         await GameGlobalAPI.getInstance().restoreLocation(
-          GameGlobalAPI.getInstance().getCurrLocId()
-        )
+          GameGlobalAPI.getInstance().getCurrLocId(),
+        ),
     );
     exploreMenuContainer.add(leaveButton);
     return exploreMenuContainer;
@@ -71,7 +71,7 @@ class GameModeExplore implements IGameUI {
 
     gameManager.tweens.add({
       targets: this.uiContainer,
-      ...entryTweenProps
+      ...entryTweenProps,
     });
 
     // Change default icon
@@ -98,7 +98,7 @@ class GameModeExplore implements IGameUI {
 
       gameManager.tweens.add({
         targets: this.uiContainer,
-        ...exitTweenProps
+        ...exitTweenProps,
       });
 
       await sleep(500);

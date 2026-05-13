@@ -2,7 +2,7 @@ import type {
   AchievementGoal,
   AchievementItem,
   GoalDefinition,
-  GoalMeta
+  GoalMeta,
 } from '../../../features/achievement/AchievementTypes';
 import { GoalType } from '../../../features/achievement/AchievementTypes';
 
@@ -11,7 +11,7 @@ export const backendifyGoalDefinition = (goal: GoalDefinition) => ({
   meta: goal.meta,
   text: goal.text,
   type: goal.meta.type,
-  uuid: goal.uuid
+  uuid: goal.uuid,
 });
 
 export const frontendifyAchievementGoal = (goal: any) =>
@@ -25,12 +25,12 @@ export const frontendifyAchievementGoal = (goal: any) =>
           release: goal.meta.release ? new Date(goal.meta.release) : undefined,
           deadline: goal.meta.deadline ? new Date(goal.meta.deadline) : undefined,
           observeFrom: goal.meta.observeFrom ? new Date(goal.meta.observeFrom) : undefined,
-          observeTo: goal.meta.observeTo ? new Date(goal.meta.observeTo) : undefined
+          observeTo: goal.meta.observeTo ? new Date(goal.meta.observeTo) : undefined,
         }
       : goal.meta) as GoalMeta,
     count: goal.count,
     targetCount: goal.targetCount,
-    completed: goal.count >= goal.targetCount
+    completed: goal.count >= goal.targetCount,
   }) as AchievementGoal;
 
 export const frontendifyAchievementItem = (achievement: any) =>
@@ -49,12 +49,12 @@ export const frontendifyAchievementItem = (achievement: any) =>
     view: {
       coverImage: achievement.view.coverImage || '',
       completionText: achievement.view.completionText || '',
-      description: achievement.view.description || ''
-    }
+      description: achievement.view.description || '',
+    },
   }) as AchievementItem;
 
 export const backendifyAchievementItem = (achievement: AchievementItem) => ({
   ...achievement,
   deadline: achievement.deadline ? achievement.deadline : null,
-  release: achievement.release ? achievement.release : null
+  release: achievement.release ? achievement.release : null,
 });

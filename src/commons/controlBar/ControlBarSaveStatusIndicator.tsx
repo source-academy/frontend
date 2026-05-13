@@ -17,18 +17,18 @@ const statusConfig: Record<Exclude<SaveStatus, 'idle'>, StatusConfig> = {
   saving: {
     label: 'Saving',
     icon: <Spinner size={SpinnerSize.SMALL} />,
-    intent: Intent.NONE
+    intent: Intent.NONE,
   },
   saved: {
     label: 'Saved',
     icon: IconNames.TICK,
-    intent: Intent.SUCCESS
+    intent: Intent.SUCCESS,
   },
   saveFailed: {
     label: 'Saving failed',
     icon: IconNames.WARNING_SIGN,
-    intent: Intent.DANGER
-  }
+    intent: Intent.DANGER,
+  },
 };
 
 const ControlBarSaveStatusIndicator: React.FC<Props> = ({ saveStatus }) => {

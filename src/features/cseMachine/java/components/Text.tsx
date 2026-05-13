@@ -10,7 +10,7 @@ export class Text extends Visible {
   constructor(
     private readonly _text: string,
     x: number,
-    y: number
+    y: number,
   ) {
     super();
 
@@ -36,7 +36,7 @@ export class Text extends Visible {
       fontFamily: Config.FontFamily,
       fontSize: Config.FontSize,
       fontStyle: Config.FontStyle,
-      fill: defaultTextColor()
+      fill: defaultTextColor(),
     };
 
     return (

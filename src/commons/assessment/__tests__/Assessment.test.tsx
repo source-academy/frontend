@@ -21,12 +21,12 @@ const mockAssessmentConfig: AssessmentConfiguration = {
   hasVotingFeatures: false,
   hoursBeforeEarlyXpDecay: 48,
   earlySubmissionXp: 200,
-  isAutosaveEnabled: true
+  isAutosaveEnabled: true,
 };
 
 const getOverriddenStore = ({
   assessmentOverviews,
-  role
+  role,
 }: {
   assessmentOverviews?: AssessmentOverview[];
   role?: Role;
@@ -34,14 +34,14 @@ const getOverriddenStore = ({
   mockInitialStore({
     session: {
       assessmentOverviews,
-      role
-    }
+      role,
+    },
   });
 
 const createTestComponent = (mockStore: Store<OverallState>) => {
   const router = createMemoryRouter(
     [{ path: '/assessment', element: <Assessment />, loader: () => mockAssessmentConfig }],
-    { initialEntries: ['/assessment'] }
+    { initialEntries: ['/assessment'] },
   );
   return (
     <Provider store={mockStore}>
@@ -73,7 +73,7 @@ test('Assessment page with 0 missions renders correctly', async () => {
 test('Assessment page with multiple loaded missions renders correctly', async () => {
   const mockStore = getOverriddenStore({
     assessmentOverviews: mockAssessmentOverviews,
-    role: Role.Staff
+    role: Role.Staff,
   });
   const app = createTestComponent(mockStore);
 
@@ -86,7 +86,7 @@ test('Assessment page with multiple loaded missions renders correctly', async ()
 test('Assessment page does not show attempt Button for upcoming assessments for student user', async () => {
   const mockStore = getOverriddenStore({
     assessmentOverviews: mockAssessmentOverviews,
-    role: Role.Student
+    role: Role.Student,
   });
   const app = createTestComponent(mockStore);
 

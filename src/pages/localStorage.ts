@@ -76,20 +76,20 @@ export const saveState = (state: OverallState) => {
         moduleHelpText: state.session.moduleHelpText,
         assetsPrefix: state.session.assetsPrefix,
         assessmentConfigurations: state.session.assessmentConfigurations,
-        githubAccessToken: state.session.githubAccessToken
+        githubAccessToken: state.session.githubAccessToken,
       },
       achievements: state.achievement.achievements,
       featureFlags: state.featureFlags.modifiedFlags,
       playgroundIsFolderModeEnabled: state.workspaces.playground.isFolderModeEnabled,
       playgroundActiveEditorTabIndex: {
-        value: state.workspaces.playground.activeEditorTabIndex
+        value: state.workspaces.playground.activeEditorTabIndex,
       },
       playgroundEditorTabs: state.workspaces.playground.editorTabs,
       playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun,
       playgroundSourceChapter: state.workspaces.playground.context.chapter,
       playgroundSourceVariant: state.workspaces.playground.context.variant,
       playgroundLanguage: state.playground.languageConfig,
-      playgroundExternalLibrary: state.workspaces.playground.externalLibrary
+      playgroundExternalLibrary: state.workspaces.playground.externalLibrary,
     };
     const serialized = compressToUTF16(JSON.stringify(stateToBeSaved));
     localStorage.setItem('storedState', serialized);

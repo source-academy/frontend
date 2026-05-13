@@ -9,7 +9,7 @@ import {
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
-  setUnhoveredStyle
+  setUnhoveredStyle,
 } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 
@@ -102,7 +102,7 @@ export class Arrow extends Visible implements IHoverable {
       const maxSpaceRadius = Math.min(segment1Length / 2, segment2Length / 2, terminalAllowance);
       const desiredRadius = Math.min(
         Config.ArrowCornerRadius,
-        maxSpaceRadius * Config.ArrowSmallBendRadiusScale
+        maxSpaceRadius * Config.ArrowSmallBendRadiusScale,
       );
       const br =
         maxSpaceRadius >= Config.ArrowMinCornerRadius

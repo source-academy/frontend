@@ -21,7 +21,7 @@ const EditTeamSizeCell: React.FC<Props> = ({ data, onTeamSizeChange }) => {
       }
       onTeamSizeChange(data.id, size);
     },
-    [data.id, teamSize, onTeamSizeChange]
+    [data.id, teamSize, onTeamSizeChange],
   );
 
   const handleIncrement = () => {

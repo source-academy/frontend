@@ -75,7 +75,7 @@ export class CseMachine {
       const { x: pointerX, y: pointerY } = stage.getPointerPosition();
       const mousePointTo = {
         x: (pointerX - stage.x()) / oldScale,
-        y: (pointerY - stage.y()) / oldScale
+        y: (pointerY - stage.y()) / oldScale,
       };
 
       // zoom in or zoom out
@@ -92,7 +92,7 @@ export class CseMachine {
         if (typeof event !== 'boolean') {
           const newPos = {
             x: pointerX - mousePointTo.x * newScale,
-            y: pointerY - mousePointTo.y * newScale
+            y: pointerY - mousePointTo.y * newScale,
           };
           stage.position(newPos);
           stage.batchDraw();
@@ -109,7 +109,7 @@ export class CseMachine {
           style={{
             width: window.innerWidth - 50,
             height: window.innerHeight - 150,
-            overflow: 'hidden'
+            overflow: 'hidden',
           }}
         >
           <div
@@ -118,7 +118,7 @@ export class CseMachine {
               width: Config.CanvasMinWidth,
               height: Config.CanvasMinHeight,
               overflow: 'hidden',
-              backgroundColor: defaultBackgroundColor()
+              backgroundColor: defaultBackgroundColor(),
             }}
           >
             <Stage

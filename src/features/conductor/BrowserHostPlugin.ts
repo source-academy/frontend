@@ -23,13 +23,13 @@ export class BrowserHostPlugin extends BasicHostPlugin {
     conduit: IConduit,
     channels: IChannel<any>[],
     onRequestFile: (fileName: string) => Promise<string | undefined>,
-    onRequestLoadPlugin: (pluginName: string) => void
+    onRequestLoadPlugin: (pluginName: string) => void,
   ) {
     super(conduit, channels);
     this.__onRequestFile = onRequestFile;
     this.__onRequestLoadPlugin = onRequestLoadPlugin;
     const resultChannel = channels.find(
-      (channel): channel is IChannel<IResultMessage> => channel.name === '__result'
+      (channel): channel is IChannel<IResultMessage> => channel.name === '__result',
     );
     resultChannel?.subscribe(resultMessage => this.receiveResult?.(resultMessage.result));
   }

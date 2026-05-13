@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 
 import type {
   PersistenceFile,
-  PersistenceState
+  PersistenceState,
 } from '../../features/persistence/PersistenceTypes';
 import ControlButton from '../ControlButton';
 import { useResponsive } from '../utils/Hooks';
@@ -11,7 +11,7 @@ import { useResponsive } from '../utils/Hooks';
 const stateToIntent: { [state in PersistenceState]: Intent } = {
   INACTIVE: Intent.NONE,
   SAVED: Intent.PRIMARY,
-  DIRTY: Intent.WARNING
+  DIRTY: Intent.WARNING,
 };
 
 type Props = {

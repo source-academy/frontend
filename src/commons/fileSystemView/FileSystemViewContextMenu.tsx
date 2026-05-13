@@ -21,7 +21,7 @@ const FileSystemViewContextMenu: React.FC<Props> = ({
   createNewDirectory,
   open,
   rename,
-  remove
+  remove,
 }) => {
   const [menuProps, toggleMenu] = useMenuState();
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });

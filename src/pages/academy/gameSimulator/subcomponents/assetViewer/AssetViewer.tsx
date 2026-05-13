@@ -6,7 +6,7 @@ import { useRequest } from 'src/commons/utils/Hooks';
 import {
   deleteS3File,
   fetchAssetPaths,
-  s3AssetFolders
+  s3AssetFolders,
 } from 'src/features/gameSimulator/GameSimulatorService';
 
 import AssetViewerPreview from './AssetViewerPreview';
@@ -32,7 +32,7 @@ const AssetViewer: React.FC = () => {
         alert(
           confirm
             ? await deleteS3File(filePath)
-            : 'Please double check before deleting an asset!\nThere is NO undoing this action!'
+            : 'Please double check before deleting an asset!\nThere is NO undoing this action!',
         );
       };
       return (

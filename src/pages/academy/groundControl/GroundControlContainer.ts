@@ -21,9 +21,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleUnpublishGradingAll: GroundControlActions.unpublishGradingAll,
       handleFetchCourseConfigs: SessionActions.fetchCourseConfig,
       handleConfigureAssessment: GroundControlActions.configureAssessment,
-      handleAssignEntriesForVoting: GroundControlActions.assignEntriesForVoting
+      handleAssignEntriesForVoting: GroundControlActions.assignEntriesForVoting,
     },
-    dispatch
+    dispatch,
   );
 
 const GroundControlContainer = connect(mapStateToProps, mapDispatchToProps)(GroundControl);

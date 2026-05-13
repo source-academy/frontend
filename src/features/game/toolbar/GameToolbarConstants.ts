@@ -22,7 +22,7 @@ const buttonConfigs: ToolbarButtonConfig[] = [
       } else {
         await phaseManager.pushPhase(GamePhaseType.EscapeMenu);
       }
-    }
+    },
   },
   {
     // Dashboard button
@@ -36,14 +36,14 @@ const buttonConfigs: ToolbarButtonConfig[] = [
       } else {
         await phaseManager.pushPhase(GamePhaseType.Dashboard);
       }
-    }
-  }
+    },
+  },
 ];
 
 const ToolbarConstants = {
   firstButton: { x: screenSize.x - 37, y: 37 },
   xOffset: 64,
-  buttonConfigs
+  buttonConfigs,
 };
 
 export default ToolbarConstants;

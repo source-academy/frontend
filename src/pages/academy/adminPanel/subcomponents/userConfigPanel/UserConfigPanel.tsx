@@ -19,7 +19,7 @@ const defaultColumnDefs: ColDef = {
   flex: 1,
   filter: true,
   resizable: true,
-  sortable: true
+  sortable: true,
 };
 
 /**
@@ -33,7 +33,7 @@ const UserConfigPanel: React.FC<Props> = props => {
   const gridApi = useRef<GridApi>(null);
 
   const userCourseRegistrations = props.userCourseRegistrations?.map(e =>
-    !e.name ? { ...e, name: '(user has yet to log in)' } : e
+    !e.name ? { ...e, name: '(user has yet to log in)' } : e,
   );
 
   const columnDefs: ColDef<AdminPanelCourseRegistration>[] = [
@@ -46,19 +46,19 @@ const UserConfigPanel: React.FC<Props> = props => {
       cellRenderer: RolesCell,
       cellRendererParams: {
         courseRegId: props.courseRegId,
-        handleUpdateUserRole: props.handleUpdateUserRole
-      }
+        handleUpdateUserRole: props.handleUpdateUserRole,
+      },
     },
     {
       headerName: 'Actions',
       field: 'actions' as any,
       cellRenderer: UserActionsCell,
       cellRendererParams: {
-        handleDeleteUserFromCourse: props.handleDeleteUserFromCourse
+        handleDeleteUserFromCourse: props.handleDeleteUserFromCourse,
       },
       filter: false,
-      resizable: false
-    }
+      resizable: false,
+    },
   ];
 
   const onGridReady = (params: GridReadyEvent) => {
@@ -92,7 +92,7 @@ const UserConfigPanel: React.FC<Props> = props => {
           onClick={() => {
             gridApi.current?.exportDataAsCsv({
               fileName: `SA Users (${new Date().toISOString()}).csv`,
-              columnKeys: ['name', 'username', 'group', 'role']
+              columnKeys: ['name', 'username', 'group', 'role'],
             });
           }}
         />

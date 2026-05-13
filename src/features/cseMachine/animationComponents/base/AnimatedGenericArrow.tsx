@@ -13,7 +13,7 @@ type PathArrowSharedConfig = Omit<SharedProperties<PathConfig, ArrowConfig>, 'wi
 
 export class AnimatedGenericArrow<
   Source extends Visible,
-  Target extends Visible
+  Target extends Visible,
 > extends AnimatableTo<PathArrowSharedConfig> {
   private pathComponent: AnimatedPathComponent;
   private arrowComponent: AnimatedArrowComponent;
@@ -25,7 +25,7 @@ export class AnimatedGenericArrow<
 
   constructor(
     private arrow: GenericArrow<Source, Target>,
-    props?: PathArrowSharedConfig
+    props?: PathArrowSharedConfig,
   ) {
     super();
     this._x = arrow.x();
@@ -35,13 +35,13 @@ export class AnimatedGenericArrow<
     this.pathComponent = new AnimatedPathComponent({
       stroke: !arrow.isLive ? fadedStrokeColor() : defaultStrokeColor(),
       data: arrow.path(),
-      ...props
+      ...props,
     });
     this.pathComponent.addListener(this.onPropsChange);
     this.arrowComponent = new AnimatedArrowComponent({
       fill: !arrow.isLive ? fadedStrokeColor() : defaultStrokeColor(),
       points: arrow.points.slice(arrow.points.length - 4),
-      ...props
+      ...props,
     });
   }
 
@@ -65,7 +65,7 @@ export class AnimatedGenericArrow<
   async animateTo(to: Partial<PathArrowSharedConfig>, animationConfig?: AnimationConfig) {
     await Promise.all([
       this.animatePathTo(to, animationConfig),
-      this.animateArrowTo(to, animationConfig)
+      this.animateArrowTo(to, animationConfig),
     ]);
   }
 

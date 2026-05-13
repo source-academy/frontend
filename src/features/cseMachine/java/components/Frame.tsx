@@ -29,7 +29,7 @@ export class Frame extends Visible implements IHoverable {
 
     readonly tooltip?: string,
     readonly highlightOnHover?: () => void,
-    readonly unhighlightOnHover?: () => void
+    readonly unhighlightOnHover?: () => void,
   ) {
     super();
 
@@ -97,7 +97,7 @@ export class Frame extends Visible implements IHoverable {
       fontFamily: ControlStashConfig.FontFamily.toString(),
       fontSize: Number(ControlStashConfig.FontSize),
       fontStyle: ControlStashConfig.FontStyle.toString(),
-      fontVariant: ControlStashConfig.FontVariant.toString()
+      fontVariant: ControlStashConfig.FontVariant.toString(),
     };
 
     return (
@@ -127,7 +127,7 @@ export class Frame extends Visible implements IHoverable {
             this._y + this.name.height(),
             this.parent.x() + Config.FramePaddingX / 2,
             // TODO WHY NEED TO ADD NAME HEIGHT?
-            this.parent.y() + this.parent.height() + this.name?.height()
+            this.parent.y() + this.parent.height() + this.name?.height(),
           ).draw()}
 
         {/* Frame tooltip */}

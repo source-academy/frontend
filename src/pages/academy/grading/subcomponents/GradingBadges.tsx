@@ -23,11 +23,11 @@ const Badge: React.FC<BadgeProps> = props => {
     <div
       className={classNames(
         badgeClasses['grading-badge'],
-        badgeClasses[`grading-badge-${props.size ?? 'sm'}`]
+        badgeClasses[`grading-badge-${props.size ?? 'sm'}`],
       )}
       style={{
         color: props.color?.[1] ?? '#000000',
-        backgroundColor: props.color ? props.color[0] + '40' : ''
+        backgroundColor: props.color ? props.color[0] + '40' : '',
       }}
     >
       {props.icon}
@@ -46,7 +46,7 @@ const AVAILABLE_COLORS = {
   red: ['#f87171', '#b91c1c'],
   gray: ['#9ca3af', '#374151'],
   purple: ['#c084fc', '#7e22ce'],
-  blue: ['#93c5fd', '#2563eb']
+  blue: ['#93c5fd', '#2563eb'],
 } as const;
 
 const BADGE_COLORS = Object.freeze({
@@ -64,7 +64,7 @@ const BADGE_COLORS = Object.freeze({
   // grading status
   [ProgressStatuses.submitted]: AVAILABLE_COLORS.yellow,
   [ProgressStatuses.graded]: AVAILABLE_COLORS.green,
-  [ProgressStatuses.published]: AVAILABLE_COLORS.blue
+  [ProgressStatuses.published]: AVAILABLE_COLORS.blue,
 });
 
 // For supporting tables that still use Tremor & Tanstack (e.g TeamFormationBadges since they copied the old tanstack grading code)
@@ -84,7 +84,7 @@ const BADGE_COLORS_LEGACY = Object.freeze({
   // grading status
   [ProgressStatuses.submitted]: 'yellow',
   [ProgressStatuses.graded]: 'green',
-  [ProgressStatuses.published]: 'blue'
+  [ProgressStatuses.published]: 'blue',
 });
 
 function getBadgeColorFromLabel(label: string) {

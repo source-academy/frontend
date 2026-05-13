@@ -14,7 +14,7 @@ import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
 import {
   gameSimulatorMenuAssets,
   gameSimulatorMenuConstants,
-  gameSimulatorMenuOptStyle
+  gameSimulatorMenuOptStyle,
 } from './GameSimulatorConstants';
 import { GameSimulatorState } from './GameSimulatorTypes';
 
@@ -37,13 +37,13 @@ class GameSimulatorMenu extends Phaser.Scene {
 
     addLoadingScreen(this);
     Object.values(ImageAssets).forEach(asset =>
-      this.load.image(asset.key, toS3Path(asset.path, false))
+      this.load.image(asset.key, toS3Path(asset.path, false)),
     );
     Object.values(gameSimulatorMenuAssets).forEach(asset =>
-      this.load.image(asset.key, toS3Path(asset.path, false))
+      this.load.image(asset.key, toS3Path(asset.path, false)),
     );
     Object.values(FontAssets).forEach(asset =>
-      this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath)
+      this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath),
     );
     SourceAcademyGame.getInstance().getSoundManager().loadSoundAssetMap(SoundAssets);
   }
@@ -66,7 +66,7 @@ class GameSimulatorMenu extends Phaser.Scene {
       maxXSpace: gameSimulatorMenuConstants.optButton.xSpace,
       maxYSpace: gameSimulatorMenuConstants.optButton.ySpace,
       numItemLimit: gameSimulatorMenuConstants.maxOptButtonsRow,
-      redistributeLast: true
+      redistributeLast: true,
     });
 
     optionsContainer.add(
@@ -75,9 +75,9 @@ class GameSimulatorMenu extends Phaser.Scene {
           button.text,
           buttonPositions[index][0],
           buttonPositions[index][1],
-          button.callback
-        )
-      )
+          button.callback,
+        ),
+      ),
     );
     this.getLayerManager().addToLayer(Layer.UI, optionsContainer);
   }
@@ -88,20 +88,20 @@ class GameSimulatorMenu extends Phaser.Scene {
         text: 'Simulate Chapters',
         callback: () => {
           SourceAcademyGame.getInstance().setGameSimState(GameSimulatorState.CHAPTERSIMULATOR);
-        }
+        },
       },
       {
         text: 'Publish / Edit Chapters',
         callback: () => {
           SourceAcademyGame.getInstance().setGameSimState(GameSimulatorState.CHAPTERPUBLISHER);
-        }
+        },
       },
       {
         text: 'View / Upload Assets',
         callback: () => {
           SourceAcademyGame.getInstance().setGameSimState(GameSimulatorState.ASSETVIEWER);
-        }
-      }
+        },
+      },
     ];
   }
 
@@ -111,7 +111,7 @@ class GameSimulatorMenu extends Phaser.Scene {
       message: text,
       textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
       bitMapTextStyle: gameSimulatorMenuOptStyle,
-      onUp: callback
+      onUp: callback,
     }).setPosition(xPos, yPos);
   }
 
@@ -135,7 +135,7 @@ class GameSimulatorMenu extends Phaser.Scene {
     this.scene.start('GameManager', {
       gameCheckpoint,
       chapterNum: -1,
-      checkpointNum: -1
+      checkpointNum: -1,
     });
   }
 
@@ -144,14 +144,14 @@ class GameSimulatorMenu extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      gameSimulatorMenuAssets.gameSimBg.key
+      gameSimulatorMenuAssets.gameSimBg.key,
     );
     backgroundImg.setDisplaySize(screenSize.x, screenSize.y);
     const backgroundUnderlay = new Phaser.GameObjects.Image(
       this,
       screenCenter.x,
       screenCenter.y,
-      gameSimulatorMenuAssets.blueUnderlay.key
+      gameSimulatorMenuAssets.blueUnderlay.key,
     ).setAlpha(0.5);
     this.getLayerManager().addToLayer(Layer.Background, backgroundImg);
     this.getLayerManager().addToLayer(Layer.Background, backgroundUnderlay);

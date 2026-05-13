@@ -6,7 +6,7 @@ describe('Sicp latex renders', () => {
   test('correctly block', async () => {
     const props = {
       math: '1+1',
-      inline: false
+      inline: false,
     };
 
     const tree = await renderTree(<SicpLatex {...props} />);
@@ -16,7 +16,7 @@ describe('Sicp latex renders', () => {
   test('correctly inline', async () => {
     const props = {
       math: '1+1',
-      inline: true
+      inline: true,
     };
 
     const tree = await renderTree(<SicpLatex {...props} />);

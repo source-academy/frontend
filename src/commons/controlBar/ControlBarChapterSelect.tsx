@@ -27,7 +27,7 @@ const ControlBarChapterSelect: React.FC<Props> = ({
   sourceChapter,
   sourceVariant,
   handleChapterSelect = () => {},
-  disabled = false
+  disabled = false,
 }) => {
   const dispatch = useDispatch();
   const directoryEnabled = useFeature(flagConductorEnable);
@@ -54,7 +54,7 @@ const ControlBarChapterSelect: React.FC<Props> = ({
   const evaluatorListRenderer: ItemListRenderer<IEvaluatorDefinition> = ({
     itemsParentRef,
     renderItem,
-    items
+    items,
   }) => (
     <Menu ulRef={itemsParentRef} style={{ display: 'flex', flexDirection: 'column' }}>
       {items.map(renderItem)}

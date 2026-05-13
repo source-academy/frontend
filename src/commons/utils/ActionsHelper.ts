@@ -41,7 +41,7 @@ export const actions = {
   ...SideContentActions,
   ...FeatureFlagsActions,
   ...LanguageDirectoryActions,
-  ...PluginDirectoryActions
+  ...PluginDirectoryActions,
 };
 
 export type SourceActionType = ActionType<typeof actions>;

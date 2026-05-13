@@ -63,7 +63,7 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
     async (fileName: string) => currentFiles[fileName],
     (_pluginName: string) => {
       // TODO: implement dynamic plugin loading
-    }
+    },
   );
 
   return {
@@ -73,7 +73,7 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
     conduit,
     setFiles: (files: Record<string, string>) => {
       currentFiles = files;
-    }
+    },
   };
 }
 
@@ -118,7 +118,7 @@ export function* preloadConductorEvaluatorSaga(path?: string): SagaIterator {
  * The returned conductor is consumed from the cache and should be terminated by the caller.
  */
 export function* getPreparedConductorSaga(
-  options?: GetPreparedConductorOptions
+  options?: GetPreparedConductorOptions,
 ): SagaIterator<{ hostPlugin: BrowserHostPlugin; conduit: IConduit }> {
   if (!currentEvaluatorPath) {
     throw Error('no evaluator path selected');

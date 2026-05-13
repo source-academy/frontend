@@ -17,19 +17,19 @@ export class EnvironmentAnimation extends Animatable {
 
   constructor(
     prevFrame: Frame,
-    private currFrame: Frame
+    private currFrame: Frame,
   ) {
     super();
     const currFramePosition = getNodePosition(currFrame);
     this.tempRect = new AnimatedRectComponent({
       ...currFramePosition,
-      cornerRadius: Config.FrameCornerRadius
+      cornerRadius: Config.FrameCornerRadius,
     });
     const prevFramePosition = getNodePosition(prevFrame);
     this.frameAnimation = new AnimatedRectComponent({
       ...prevFramePosition,
       cornerRadius: Config.FrameCornerRadius,
-      stroke: defaultActiveColor()
+      stroke: defaultActiveColor(),
     });
   }
 
@@ -52,7 +52,7 @@ export class EnvironmentAnimation extends Animatable {
       y: oldPosition.y - strokeIncrease / 2,
       height: oldPosition.height + strokeIncrease,
       width: oldPosition.width + strokeIncrease,
-      strokeWidth: strokeWidth + strokeIncrease
+      strokeWidth: strokeWidth + strokeIncrease,
     });
     // move frame border to correct position
     const newPosition = getNodePosition(this.currFrame);
@@ -61,9 +61,9 @@ export class EnvironmentAnimation extends Animatable {
         x: newPosition.x - strokeIncrease / 2,
         y: newPosition.y - strokeIncrease / 2,
         height: newPosition.height + strokeIncrease,
-        width: newPosition.width + strokeIncrease
+        width: newPosition.width + strokeIncrease,
       },
-      { duration: 1.2 }
+      { duration: 1.2 },
     );
     this.tempRect.ref.current?.hide();
     await this.frameAnimation.animateTo({ ...newPosition, strokeWidth }, { duration: 1 });

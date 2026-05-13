@@ -6,7 +6,7 @@ import {
   Intent,
   NonIdealState,
   Spinner,
-  SpinnerSize
+  SpinnerSize,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
@@ -76,7 +76,7 @@ const VersionHistoryPanel: React.FC<Props> = ({
   onClose,
   onSelectVersion,
   onRestore,
-  onRename
+  onRename,
 }) => {
   const groups = useMemo(() => groupVersions(versions), [versions]);
 
@@ -115,7 +115,7 @@ const VersionHistoryPanel: React.FC<Props> = ({
       aria-pressed={version.id === selectedVersion?.id}
       className={classNames(styles.item, {
         [styles.itemSelected]: version.id === selectedVersion?.id,
-        [styles.itemNested]: nested
+        [styles.itemNested]: nested,
       })}
       onClick={() => onSelectVersion(version)}
       onKeyDown={e => {
@@ -161,8 +161,8 @@ const VersionHistoryPanel: React.FC<Props> = ({
           aria-expanded={isExpanded}
           className={classNames(styles.groupHeader, {
             [styles.groupHeaderContainsSelected]: group.versions.some(
-              v => v.id === selectedVersion?.id
-            )
+              v => v.id === selectedVersion?.id,
+            ),
           })}
           onClick={() => toggleGroup(group.id)}
           onKeyDown={e => {
@@ -190,7 +190,7 @@ const VersionHistoryPanel: React.FC<Props> = ({
           </div>
           <span
             className={classNames(styles.groupChevron, {
-              [styles.groupChevronOpen]: isExpanded
+              [styles.groupChevronOpen]: isExpanded,
             })}
           >
             ›

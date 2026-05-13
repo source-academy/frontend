@@ -8,7 +8,7 @@ import {
   defaultGoalProgress,
   type GoalDefinition,
   type GoalProgress,
-  GoalType
+  GoalType,
 } from '../../../features/achievement/AchievementTypes';
 import { showDangerMessage } from '../../utils/notifications/NotificationsHelper';
 import { isExpired, isReleased } from './DateHelper';
@@ -79,7 +79,7 @@ class AchievementInferencer {
     meta: { type: GoalType.MANUAL, targetCount: 0 },
     count: 0,
     targetCount: 0,
-    completed: false
+    completed: false,
   };
 
   /**
@@ -97,7 +97,7 @@ class AchievementInferencer {
     prerequisiteUuids: [],
     goalUuids: [],
     cardBackground: 'invalid',
-    view: { coverImage: 'invalid', description: 'invalid', completionText: 'invalid' }
+    view: { coverImage: 'invalid', description: 'invalid', completionText: 'invalid' },
   };
 
   /**
@@ -350,14 +350,14 @@ class AchievementInferencer {
         ...definition,
         count: 1,
         targetCount: 1,
-        completed: true
+        completed: true,
       });
     } else {
       this.goalList.set(definition.uuid, {
         ...definition,
         count: 0,
         targetCount: 1,
-        completed: false
+        completed: false,
       });
     }
 
@@ -423,7 +423,7 @@ class AchievementInferencer {
 
     const sanitizeNode = (node: AchievementNode) => {
       const newPrerequisiteUuids = node.achievement.prerequisiteUuids.filter(
-        uuid => uuid !== targetUuid
+        uuid => uuid !== targetUuid,
       );
       node.achievement.prerequisiteUuids = newPrerequisiteUuids;
 
@@ -624,7 +624,7 @@ class AchievementInferencer {
   public getTotalXp() {
     return this.getAllCompletedAchievements().reduce(
       (totalXp, achievement) => totalXp + this.getAchievementXp(achievement.uuid),
-      0
+      0,
     );
   }
 
@@ -718,7 +718,7 @@ class AchievementInferencer {
   public listAvailablePrerequisiteUuids(uuid: string) {
     return this.getAllAchievementUuids().filter(
       target =>
-        target !== uuid && !this.isDescendant(uuid, target) && !this.isDescendant(target, uuid)
+        target !== uuid && !this.isDescendant(uuid, target) && !this.isDescendant(target, uuid),
     );
   }
 
@@ -762,7 +762,7 @@ class AchievementInferencer {
   private constructNodeList(achievements: AchievementItem[]) {
     const nodeList = new Map<string, AchievementNode>();
     achievements.forEach(achievement =>
-      nodeList.set(achievement.uuid, new AchievementNode(cloneDeep(achievement)))
+      nodeList.set(achievement.uuid, new AchievementNode(cloneDeep(achievement))),
     );
     return nodeList;
   }
@@ -824,7 +824,7 @@ class AchievementInferencer {
     // Comparator of two deadlines
     const compareDeadlines = (
       displayDeadline: Date | undefined,
-      currentDeadline: Date | undefined
+      currentDeadline: Date | undefined,
     ) => {
       if (currentDeadline === undefined || isExpired(currentDeadline)) {
         // currentDeadline undefined or expired, nothing change
@@ -860,7 +860,7 @@ class AchievementInferencer {
     const { goalUuids, isVariableXp } = node.achievement;
     const allGoalsCompleted = goalUuids.reduce(
       (completion, goalUuid) => completion && this.getGoal(goalUuid).completed,
-      true
+      true,
     );
     node.xp = allGoalsCompleted
       ? isVariableXp
@@ -882,7 +882,7 @@ class AchievementInferencer {
       const num = goalUuids.reduce((count, goalUuid) => count + this.getGoal(goalUuid).count, 0);
       const denom = goalUuids.reduce(
         (count, goalUuid) => count + this.getGoal(goalUuid).targetCount,
-        0
+        0,
       );
       node.progressFrac = Math.min(denom === 0 ? 0 : num / denom, 1);
     }
@@ -939,7 +939,7 @@ class AchievementInferencer {
       const newPosition = anchorAchievement.position;
       if (newPosition !== anchorPosition) {
         const misplacedAchievement = this.getAllAchievements().find(
-          achievement => achievement.position === anchorPosition
+          achievement => achievement.position === anchorPosition,
         );
         if (misplacedAchievement) {
           misplacedAchievement.position = newPosition;

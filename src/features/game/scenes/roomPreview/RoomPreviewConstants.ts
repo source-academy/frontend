@@ -35,7 +35,7 @@ function update() {}
 export const verifiedStyle: BitmapFontStyle = {
   key: FontAssets.pixelFont.key,
   size: 20,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 export const RoomConstants = {
@@ -43,5 +43,5 @@ export const RoomConstants = {
   verifiedText: 'VERIFIED',
   tag: { width: 128, height: 50 },
   hoverTagTextConfig: { x: 64, y: 0, oriX: 0.5, oriY: 0.55 },
-  refreshButton: { x: 0.95 * screenSize.x, y: 0.92 * screenSize.y }
+  refreshButton: { x: 0.95 * screenSize.x, y: 0.92 * screenSize.y },
 };

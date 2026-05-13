@@ -16,6 +16,6 @@ export function createEmptyLocation(): GameLocation {
     objects: new Set([]),
     boundingBoxes: new Set([]),
     bgmKey: '',
-    characters: new Set([])
+    characters: new Set([]),
   };
 }

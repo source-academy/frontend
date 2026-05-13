@@ -33,7 +33,7 @@ export const handleReplActions = (builder: ActionReducerMapBuilder<WorkspaceMana
       state[workspaceLocation].replHistory = {
         browseIndex: newIndex,
         records: newRecords,
-        originalValue: ''
+        originalValue: '',
       };
     })
     .addCase(WorkspaceActions.browseReplHistoryUp, (state, action) => {
@@ -58,7 +58,7 @@ export const handleReplActions = (builder: ActionReducerMapBuilder<WorkspaceMana
         state[workspaceLocation].replHistory = {
           browseIndex: newIndex,
           records: newRecords,
-          originalValue
+          originalValue,
         };
         return;
       }
@@ -84,13 +84,13 @@ export const handleReplActions = (builder: ActionReducerMapBuilder<WorkspaceMana
       const workspaceLocation = getWorkspaceLocation(action);
       // CodeOutput properties exist in parallel with workspaceLocation
       const newOutput: InterpreterOutput[] = state[workspaceLocation].output.concat(
-        action.payload as CodeOutput
+        action.payload as CodeOutput,
       );
 
       let newReplHistoryRecords: string[];
       if (action.payload.value !== '') {
         newReplHistoryRecords = [action.payload.value].concat(
-          state[workspaceLocation].replHistory.records
+          state[workspaceLocation].replHistory.records,
         );
       } else {
         newReplHistoryRecords = state[workspaceLocation].replHistory.records;

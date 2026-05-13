@@ -13,10 +13,10 @@ const translations = {
     a: 'a: 移动到第一步',
     e: 'e: 移动到最后一步',
     f: 'f: 移动到下一步',
-    b: 'b: 移动到上一步'
+    b: 'b: 移动到上一步',
   },
   shortcutsNote: '请注意，这些快捷键仅在浏览器焦点位于此选项卡时有效。',
-  label: 'CSE 机器'
+  label: 'CSE 机器',
 };
 
 export default translations;

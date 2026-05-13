@@ -29,7 +29,7 @@ class GameBoundingBoxManager implements StateObserver {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.BBox]);
     const bboxIdsToRender = GameGlobalAPI.getInstance().getGameItemsInLocation(
       GameItemType.boundingBoxes,
-      locationId
+      locationId,
     );
 
     // Refresh mapping
@@ -59,7 +59,7 @@ class GameBoundingBoxManager implements StateObserver {
       sprite: bboxSprite,
       clickArea: bboxSprite,
       actionIds,
-      interactionId
+      interactionId,
     };
   }
 

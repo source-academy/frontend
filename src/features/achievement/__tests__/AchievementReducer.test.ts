@@ -8,7 +8,7 @@ test('SAVE_ACHIEVEMENTS works correctly on default achievements', () => {
   const achievementItems: AchievementItem[] = [];
   const action = {
     type: AchievementActions.saveAchievements.type,
-    payload: achievementItems
+    payload: achievementItems,
   } as const;
   const result: AchievementState = AchievementReducer(defaultAchievement, action);
 

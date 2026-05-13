@@ -9,18 +9,18 @@ type ModuleFunctions = Record<string, any>;
 
 export async function makeCCompilerConfig(
   program: string,
-  context: Context
+  context: Context,
 ): Promise<CCompilerConfig> {
   const externalFunctions = await loadModulesUsedInCProgram(program, context);
   return {
     printFunction: (v: string) => {
       if (typeof (window as any).__REDUX_STORE__ !== 'undefined') {
         (window as any).__REDUX_STORE__.dispatch(
-          InterpreterActions.handleConsoleLog(context.externalContext, v)
+          InterpreterActions.handleConsoleLog(context.externalContext, v),
         );
       }
     },
-    externalFunctions
+    externalFunctions,
   };
 }
 
@@ -33,7 +33,7 @@ export let specialCReturnObject: any = null;
  */
 export async function loadModulesUsedInCProgram(
   program: string,
-  context: Context
+  context: Context,
 ): Promise<ModuleFunctions> {
   const allModuleFunctions: ModuleFunctions = {};
   const regexp = /<[a-z0-9_]+>/g;
@@ -43,7 +43,7 @@ export async function loadModulesUsedInCProgram(
   }
 
   const modulesToLoad = new Set(
-    includedModules.map(m => m.slice(1, m.length - 1)).filter(m => modulesAvailableForC.has(m))
+    includedModules.map(m => m.slice(1, m.length - 1)).filter(m => modulesAvailableForC.has(m)),
   );
 
   const manifest = await memoizedGetModuleManifestAsync();
@@ -55,7 +55,7 @@ export async function loadModulesUsedInCProgram(
     sourceModulesToImport[name] = { name, ...manifest[name] };
   }
   const loadedModules = await loadSourceModules(sourceModulesToImport, context, {
-    loadTabs: true
+    loadTabs: true,
   });
   Object.values(loadedModules).forEach(functions => {
     Object.entries(functions).forEach(([name, func]) => {

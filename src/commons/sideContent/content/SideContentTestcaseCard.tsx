@@ -25,7 +25,7 @@ const SideContentTestcaseCard: React.FC<Props> = props => {
       correct: isEvaluated && isEqual,
       wrong: isEvaluated && !isEqual,
       // opaque and secret testcases will be greyed in the GradingWorkspace
-      secret: testcase.type === TestcaseTypes.secret || testcase.type === TestcaseTypes.opaque
+      secret: testcase.type === TestcaseTypes.secret || testcase.type === TestcaseTypes.opaque,
     };
   }, [testcase]);
 

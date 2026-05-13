@@ -128,7 +128,7 @@ for (let i = 1; ; ++i) {
 }
 
 const featureFlags = {
-  enableSicpChatbot: isTrue(process.env.REACT_APP_FEATURE_ENABLE_SICP_CHATBOT)
+  enableSicpChatbot: isTrue(process.env.REACT_APP_FEATURE_ENABLE_SICP_CHATBOT),
 };
 
 export enum Links {
@@ -150,7 +150,7 @@ export enum Links {
 
   ecmaScript_2021 = 'https://262.ecma-international.org/12.0/',
 
-  vscode = 'vscode://source-academy.source-academy/sso'
+  vscode = 'vscode://source-academy.source-academy/sso',
 }
 
 const Constants = {
@@ -190,7 +190,7 @@ const Constants = {
   workspaceSettingsLocalStorageKey,
   collabSessionIdLocalStorageKey,
   caFulfillmentLevel,
-  featureFlags
+  featureFlags,
 };
 
 export default Constants;

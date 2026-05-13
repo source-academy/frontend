@@ -24,7 +24,7 @@ export default class GameAnimationManager {
    */
   public createImage(
     image: ImageAsset,
-    assetKey: AssetKey
+    assetKey: AssetKey,
   ): Phaser.GameObjects.Image | Phaser.GameObjects.Sprite {
     switch (image.type) {
       case AssetType.Sprite:
@@ -36,7 +36,7 @@ export default class GameAnimationManager {
           this.game,
           image?.config?.centreX || 0,
           image?.config?.centreY || 0,
-          assetKey
+          assetKey,
         );
         break;
     }
@@ -91,17 +91,17 @@ export default class GameAnimationManager {
         this.game,
         image.config?.centreX || 0,
         image.config?.centreY || 0,
-        image.path
+        image.path,
       );
       const config = {
         key: image.path,
         frames: this.game.anims.generateFrameNumbers(image.path, {
           start: startFrame,
           end: image.config?.endFrame || 0,
-          first: 0
+          first: 0,
         }),
         frameRate: frameRate,
-        repeat: -1
+        repeat: -1,
       };
       this.game.anims.create(config);
       this.animationInstanceMap.set(image.key, sprite);

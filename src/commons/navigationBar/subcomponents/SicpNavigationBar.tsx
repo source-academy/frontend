@@ -10,7 +10,7 @@ import {
   NavbarGroup,
   Position,
   Tag,
-  Text
+  Text,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Omnibar } from '@blueprintjs/select';
@@ -74,7 +74,7 @@ const SicpNavigationBar: React.FC = () => {
     hasBackdrop: true,
     isOpen: isTocOpen,
     position: Position.LEFT,
-    usePortal: false
+    usePortal: false,
   };
 
   // this section responsible for the search
@@ -96,7 +96,7 @@ const SicpNavigationBar: React.FC = () => {
       return {
         indexTrie: emptyTrie,
         textTrie: emptyTrie,
-        idToContentMap: {}
+        idToContentMap: {},
       } as SearchData;
     }
 
@@ -188,7 +188,7 @@ const SicpNavigationBar: React.FC = () => {
     }
     const pre = words.slice(0, -1).join(' ');
     const results = sentenceSearch(pre).map(id =>
-      rewritedSearchData.idToContentMap[id].toLowerCase()
+      rewritedSearchData.idToContentMap[id].toLowerCase(),
     );
     const answers: string[] = [];
     while (answers.length < n && results.length > 0) {
@@ -369,7 +369,7 @@ const SicpNavigationBar: React.FC = () => {
       case 'index':
         setSearchResults(
           // Supposed to be IndexSearchResult[], but typing can be improved with further, future refactoring
-          processIndexSearchResults(search(result, rewritedSearchData.indexTrie)) as any[]
+          processIndexSearchResults(search(result, rewritedSearchData.indexTrie)) as any[],
         );
         break;
     }
@@ -382,7 +382,7 @@ const SicpNavigationBar: React.FC = () => {
         isOpen={isOmnibarOpen}
         inputProps={{
           disabled: omnibarMode === 'submenu',
-          placeholder: `${omnibarMode.charAt(0).toUpperCase()}${omnibarMode.slice(1)} Search...`
+          placeholder: `${omnibarMode.charAt(0).toUpperCase()}${omnibarMode.slice(1)} Search...`,
         }}
         overlayProps={{ className: Classes.OVERLAY_SCROLL_CONTAINER }}
         onClose={() => setIsOmnibarOpen(false)}

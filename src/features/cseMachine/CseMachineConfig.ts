@@ -95,9 +95,9 @@ export const Config = Object.freeze({
 
   UnassignedData: '',
   GlobalFrameDefaultText: ':::pre-declared names::',
-  GlobalEnvId: '-1'
+  GlobalEnvId: '-1',
 });
 
 export const ShapeDefaultProps = Object.freeze({
-  preventDefault: false
+  preventDefault: false,
 });

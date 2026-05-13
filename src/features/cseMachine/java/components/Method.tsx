@@ -13,7 +13,7 @@ import {
   getTextHeight,
   getTextWidth,
   setHoveredCursor,
-  setUnhoveredCursor
+  setUnhoveredCursor,
 } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 
@@ -26,7 +26,7 @@ export class Method extends Visible implements IHoverable {
   constructor(
     x: number,
     y: number,
-    private readonly _method: ECE.Closure
+    private readonly _method: ECE.Closure,
   ) {
     super();
 

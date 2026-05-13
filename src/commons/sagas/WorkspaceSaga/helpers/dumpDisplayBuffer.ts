@@ -5,7 +5,7 @@ import DisplayBufferService from '../../../utils/DisplayBufferService';
 import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 
 export function* dumpDisplayBuffer(
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
 ): Generator<StrictEffect, void, any> {
   yield put(actions.handleConsoleLog(workspaceLocation, ...DisplayBufferService.dump()));
 }

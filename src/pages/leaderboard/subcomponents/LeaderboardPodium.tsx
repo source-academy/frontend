@@ -2,7 +2,7 @@ import 'src/styles/Leaderboard.scss';
 
 import type {
   ContestLeaderboardRow,
-  LeaderboardRow
+  LeaderboardRow,
 } from 'src/features/leaderboard/LeaderboardTypes';
 
 type Props =

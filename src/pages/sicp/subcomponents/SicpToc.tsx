@@ -37,7 +37,7 @@ const SicpToc: React.FC<TocProps> = props => {
       }
       navigate('/sicpjs/' + String(node.nodeData));
     },
-    [navigate, props]
+    [navigate, props],
   );
 
   return (

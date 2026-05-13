@@ -28,7 +28,7 @@ export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined
     t($ => $.gradingCsv.xpAdjustment),
     t($ => $.gradingCsv.currentXpExclBonus),
     t($ => $.gradingCsv.maxXp),
-    t($ => $.gradingCsv.bonusXp)
+    t($ => $.gradingCsv.bonusXp),
   ];
 
   const content = new Blob(
@@ -49,13 +49,13 @@ export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined
             e.xpAdjustment,
             e.currentXp,
             e.maxXp,
-            e.xpBonus
+            e.xpBonus,
           ]
             .map(field => `"${field}"`) // wrap each field in double quotes in case it contains a comma
-            .join(',') + '\n'
-      )
+            .join(',') + '\n',
+      ),
     ],
-    { type: 'text/csv' }
+    { type: 'text/csv' },
   );
   const fileName = `SA submissions (${new Date().toISOString()}).csv`;
 
@@ -71,8 +71,8 @@ export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined
     new MouseEvent('click', {
       bubbles: false,
       cancelable: true,
-      view: win
-    })
+      view: win,
+    }),
   );
 
   document.body.removeChild(element);
@@ -114,7 +114,7 @@ export const unpublishedToBackendParams = (showAll: boolean) => {
   return {
     status: AssessmentStatuses.submitted,
     isManuallyGraded: true,
-    isGradingPublished: false
+    isGradingPublished: false,
   };
 };
 
@@ -128,7 +128,7 @@ export const backendParamsToProgressStatus = (
   isGradingPublished: boolean,
   submissionStatus: AssessmentStatus,
   numGraded: number,
-  numQuestions: number
+  numQuestions: number,
 ): ProgressStatus => {
   if (!isManuallyGraded) {
     return ProgressStatuses.autograded;
@@ -147,28 +147,28 @@ export const progressStatusToBackendParams = (progress: ProgressStatus) => {
   switch (progress) {
     case ProgressStatuses.autograded:
       return {
-        isManuallyGraded: false
+        isManuallyGraded: false,
       };
     case ProgressStatuses.published:
       return {
         isManuallyGraded: true,
         isGradingPublished: true,
         isFullyGraded: true,
-        status: AssessmentStatuses.submitted
+        status: AssessmentStatuses.submitted,
       };
     case ProgressStatuses.graded:
       return {
         isManuallyGraded: true,
         isGradingPublished: false,
         isFullyGraded: true,
-        status: AssessmentStatuses.submitted
+        status: AssessmentStatuses.submitted,
       };
     case ProgressStatuses.submitted:
       return {
         isManuallyGraded: true,
         isGradingPublished: false,
         isFullyGraded: false,
-        status: AssessmentStatuses.submitted
+        status: AssessmentStatuses.submitted,
       };
     default:
       // 'attempted' work may have been previously graded and then unsubmitted
@@ -176,7 +176,7 @@ export const progressStatusToBackendParams = (progress: ProgressStatus) => {
       return {
         isManuallyGraded: true,
         isGradingPublished: false,
-        status: progress as AssessmentStatus
+        status: progress as AssessmentStatus,
       };
   }
 };

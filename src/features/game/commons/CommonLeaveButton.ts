@@ -9,7 +9,7 @@ const backTextYPos = -screenCenter.y * 0.975;
 const backButtonStyle: BitmapFontStyle = {
   key: FontAssets.zektonDarkFont.key,
   size: 25,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 /**
@@ -35,7 +35,7 @@ class CommonLeaveButton extends Phaser.GameObjects.Container {
       message: message,
       textConfig: { x: 0, y: backTextYPos, oriX: 0.5, oriY: 0.25 },
       bitMapTextStyle: backButtonStyle,
-      onUp: callback
+      onUp: callback,
     }).setPosition(screenCenter.x, screenCenter.y);
     this.add(leaveButton);
   }

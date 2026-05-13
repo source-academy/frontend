@@ -2,7 +2,7 @@ import { Chapter, Variant } from 'js-slang/dist/langs';
 import { mockStudents } from 'src/commons/mocks/UserMocks';
 import {
   paginationToBackendParams,
-  unpublishedToBackendParams
+  unpublishedToBackendParams,
 } from 'src/features/grading/GradingUtils';
 import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
 
@@ -14,7 +14,7 @@ import {
   type AssessmentConfiguration,
   type AssessmentOverview,
   AssessmentStatuses,
-  ProgressStatuses
+  ProgressStatuses,
 } from '../../../assessment/AssessmentTypes';
 import type { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { type GameState, Role, type Story } from '../../ApplicationTypes';
@@ -27,8 +27,8 @@ test('acknowledgeNotifications generates correct action object', () => {
   expect(action).toEqual({
     type: SessionActions.acknowledgeNotifications.type,
     payload: {
-      withFilter: undefined
-    }
+      withFilter: undefined,
+    },
   });
 });
 
@@ -37,7 +37,7 @@ test('fetchAuth generates correct action object', () => {
   const action = SessionActions.fetchAuth(code);
   expect(action).toEqual({
     type: SessionActions.fetchAuth.type,
-    payload: { code }
+    payload: { code },
   });
 });
 
@@ -45,7 +45,7 @@ test('fetchUserAndCourse generates correct action object', () => {
   const action = SessionActions.fetchUserAndCourse();
   expect(action).toEqual({
     type: SessionActions.fetchUserAndCourse.type,
-    payload: {}
+    payload: {},
   });
 });
 
@@ -53,7 +53,7 @@ test('fetchCourseConfig generates correct action object', () => {
   const action = SessionActions.fetchCourseConfig();
   expect(action).toEqual({
     type: SessionActions.fetchCourseConfig.type,
-    payload: {}
+    payload: {},
   });
 });
 
@@ -62,7 +62,7 @@ test('fetchAssessment generates correct action object', () => {
   const action = SessionActions.fetchAssessment(id);
   expect(action).toEqual({
     type: SessionActions.fetchAssessment.type,
-    payload: { assessmentId: id }
+    payload: { assessmentId: id },
   });
 });
 
@@ -70,7 +70,7 @@ test('fetchAssessmentOverviews generates correct action object', () => {
   const action = SessionActions.fetchAssessmentOverviews();
   expect(action).toEqual({
     type: SessionActions.fetchAssessmentOverviews.type,
-    payload: {}
+    payload: {},
   });
 });
 
@@ -79,7 +79,7 @@ test('fetchGrading generates correct action object', () => {
   const action = SessionActions.fetchGrading(submissionId);
   expect(action).toEqual({
     type: SessionActions.fetchGrading.type,
-    payload: submissionId
+    payload: submissionId,
   });
 });
 
@@ -92,8 +92,8 @@ test('fetchGradingOverviews generates correct default action object', () => {
       publishedFilter: unpublishedToBackendParams(false),
       pageParams: paginationToBackendParams(0, 10),
       filterParams: {},
-      allColsSortStates: { currentState: freshSortState, sortBy: '' }
-    }
+      allColsSortStates: { currentState: freshSortState, sortBy: '' },
+    },
   });
 });
 
@@ -108,7 +108,7 @@ test('fetchGradingOverviews generates correct action object', () => {
     publishedFilter,
     pageParams,
     filterParams,
-    allColsSortStates
+    allColsSortStates,
   );
   expect(action).toEqual({
     type: SessionActions.fetchGradingOverviews.type,
@@ -117,8 +117,8 @@ test('fetchGradingOverviews generates correct action object', () => {
       publishedFilter: publishedFilter,
       pageParams: pageParams,
       filterParams: filterParams,
-      allColsSortStates: allColsSortStates
-    }
+      allColsSortStates: allColsSortStates,
+    },
   });
 });
 
@@ -126,7 +126,7 @@ test('fetchTeamFormationOverviews generates correct default action object', () =
   const action = SessionActions.fetchTeamFormationOverviews();
   expect(action).toEqual({
     type: SessionActions.fetchTeamFormationOverviews.type,
-    payload: true
+    payload: true,
   });
 });
 
@@ -135,7 +135,7 @@ test('fetchTeamFormationOverviews generates correct action object', () => {
   const action = SessionActions.fetchTeamFormationOverviews(filterToGroup);
   expect(action).toEqual({
     type: SessionActions.fetchTeamFormationOverviews.type,
-    payload: filterToGroup
+    payload: filterToGroup,
   });
 });
 
@@ -143,7 +143,7 @@ test('fetchStudents generates correct action object', () => {
   const action = SessionActions.fetchStudents();
   expect(action).toEqual({
     type: SessionActions.fetchStudents.type,
-    payload: {}
+    payload: {},
   });
 });
 
@@ -152,7 +152,7 @@ test('fetchNotifications generates correct action object', () => {
 
   expect(action).toEqual({
     type: SessionActions.fetchNotifications.type,
-    payload: {}
+    payload: {},
   });
 });
 
@@ -160,7 +160,7 @@ test('login action generates correct action object', () => {
   const action = SessionActions.login('provider');
   expect(action).toEqual({
     type: SessionActions.login.type,
-    payload: 'provider'
+    payload: 'provider',
   });
 });
 
@@ -172,8 +172,8 @@ test('setTokens generates correct action object', () => {
     type: SessionActions.setTokens.type,
     payload: {
       accessToken,
-      refreshToken
-    }
+      refreshToken,
+    },
   });
 });
 
@@ -188,21 +188,21 @@ test('setUser generates correct action object', () => {
         courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Admin,
-        viewable: true
+        viewable: true,
       },
       {
         courseId: 2,
         courseName: `CS2030S Programming Methodology II (AY20/21 Sem 2)`,
         courseShortName: `CS2030S`,
         role: Role.Staff,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   };
   const action = SessionActions.setUser(user);
   expect(action).toEqual({
     type: SessionActions.setUser.type,
-    payload: user
+    payload: user,
   });
 });
 
@@ -216,12 +216,12 @@ test('setCourseConfiguration generates correct action object', () => {
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help text',
-    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
+    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others'],
   };
   const action = SessionActions.setCourseConfiguration(courseConfig);
   expect(action).toEqual({
     type: SessionActions.setCourseConfiguration.type,
-    payload: courseConfig
+    payload: courseConfig,
   });
 });
 
@@ -232,7 +232,7 @@ test('setCourseRegistration generates correct action object', () => {
     group: '42D',
     gameState: {
       collectibles: {},
-      completed_quests: []
+      completed_quests: [],
     } as GameState,
     courseId: 1,
     grade: 1,
@@ -240,14 +240,14 @@ test('setCourseRegistration generates correct action object', () => {
     xp: 1,
     story: {
       story: '',
-      playStory: false
+      playStory: false,
     } as Story,
-    agreedToResearch: true
+    agreedToResearch: true,
   };
   const action = SessionActions.setCourseRegistration(courseRegistration);
   expect(action).toEqual({
     type: SessionActions.setCourseRegistration.type,
-    payload: courseRegistration
+    payload: courseRegistration,
   });
 });
 
@@ -264,7 +264,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
-      isAutosaveEnabled: true
+      isAutosaveEnabled: true,
     },
     {
       assessmentConfigId: 2,
@@ -277,7 +277,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
-      isAutosaveEnabled: true
+      isAutosaveEnabled: true,
     },
     {
       assessmentConfigId: 3,
@@ -290,13 +290,13 @@ test('setAssessmentConfigurations generates correct action object', () => {
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
-      isAutosaveEnabled: true
-    }
+      isAutosaveEnabled: true,
+    },
   ];
   const action = SessionActions.setAssessmentConfigurations(assesmentConfigurations);
   expect(action).toEqual({
     type: SessionActions.setAssessmentConfigurations.type,
-    payload: assesmentConfigurations
+    payload: assesmentConfigurations,
   });
 });
 
@@ -307,20 +307,20 @@ test('setAdminPanelCourseRegistrations generates correct action object', async (
       courseId: 1,
       name: 'Bob',
       username: 'test/bob123',
-      role: Role.Student
+      role: Role.Student,
     },
     {
       courseRegId: 2,
       courseId: 1,
       name: 'Avenger',
       username: 'test/avenger456',
-      role: Role.Staff
-    }
+      role: Role.Staff,
+    },
   ];
   const action = SessionActions.setAdminPanelCourseRegistrations(userCourseRegistrations);
   expect(action).toEqual({
     type: SessionActions.setAdminPanelCourseRegistrations.type,
-    payload: userCourseRegistrations
+    payload: userCourseRegistrations,
   });
 });
 
@@ -339,7 +339,7 @@ test('setGitHubAccessToken generates correct action object', () => {
   const action = SessionActions.setGitHubAccessToken(authToken);
   expect(action).toEqual({
     type: SessionActions.setGitHubAccessToken.type,
-    payload: authToken
+    payload: authToken,
   });
 });
 
@@ -351,8 +351,8 @@ test('submitAnswer generates correct action object', () => {
     type: SessionActions.submitAnswer.type,
     payload: {
       id,
-      answer
-    }
+      answer,
+    },
   });
 });
 
@@ -361,7 +361,7 @@ test('submitAssessment generates correct action object', () => {
   const action = SessionActions.submitAssessment(id);
   expect(action).toEqual({
     type: SessionActions.submitAssessment.type,
-    payload: id
+    payload: id,
   });
 });
 
@@ -376,8 +376,8 @@ test('submitGrading generates correct action object with default values', () => 
       submissionId,
       questionId,
       xpAdjustment: 0,
-      comments: undefined
-    }
+      comments: undefined,
+    },
   });
 });
 
@@ -392,8 +392,8 @@ test('submitGradingAndContinue generates correct action object with default valu
       submissionId,
       questionId,
       xpAdjustment: 0,
-      comments: undefined
-    }
+      comments: undefined,
+    },
   });
 });
 
@@ -409,8 +409,8 @@ test('submitGrading generates correct action object', () => {
       submissionId,
       questionId,
       xpAdjustment,
-      comments
-    }
+      comments,
+    },
   });
 });
 
@@ -423,7 +423,7 @@ test('submitGradingAndContinue generates correct action object', () => {
     submissionId,
     questionId,
     xpAdjustment,
-    comments
+    comments,
   );
   expect(action).toEqual({
     type: SessionActions.submitGradingAndContinue.type,
@@ -431,8 +431,8 @@ test('submitGradingAndContinue generates correct action object', () => {
       submissionId,
       questionId,
       xpAdjustment,
-      comments
-    }
+      comments,
+    },
   });
 });
 
@@ -441,7 +441,7 @@ test('reautogradeSubmission generates correct action object', () => {
   const action = SessionActions.reautogradeSubmission(submissionId);
   expect(action).toEqual({
     type: SessionActions.reautogradeSubmission.type,
-    payload: submissionId
+    payload: submissionId,
   });
 });
 
@@ -451,7 +451,7 @@ test('reautogradeAnswer generates correct action object', () => {
   const action = SessionActions.reautogradeAnswer(submissionId, questionId);
   expect(action).toEqual({
     type: SessionActions.reautogradeAnswer.type,
-    payload: { submissionId, questionId }
+    payload: { submissionId, questionId },
   });
 });
 
@@ -461,8 +461,8 @@ test('unsubmitSubmission generates correct action object', () => {
   expect(action).toEqual({
     type: SessionActions.unsubmitSubmission.type,
     payload: {
-      submissionId
-    }
+      submissionId,
+    },
   });
 });
 
@@ -486,13 +486,13 @@ test('updateAssessmentOverviews generates correct action object', () => {
       isGradingPublished: false,
       maxTeamSize: 1,
       hasVotingFeatures: false,
-      hoursBeforeEarlyXpDecay: 0
-    }
+      hoursBeforeEarlyXpDecay: 0,
+    },
   ];
   const action = SessionActions.updateAssessmentOverviews(overviews);
   expect(action).toEqual({
     type: SessionActions.updateAssessmentOverviews.type,
-    payload: overviews
+    payload: overviews,
   });
 });
 
@@ -505,13 +505,13 @@ test('updateAssessment generates correct action object', () => {
     longSummary: 'long summary here',
     missionPDF: 'www.google.com',
     questions: [],
-    title: 'first assessment'
+    title: 'first assessment',
   };
 
   const action = SessionActions.updateAssessment(assessment);
   expect(action).toEqual({
     type: SessionActions.updateAssessment.type,
-    payload: assessment
+    payload: assessment,
   });
 });
 
@@ -540,15 +540,15 @@ test('updateGradingOverviews generates correct action object', () => {
         groupName: 'group',
         submissionStatus: AssessmentStatuses.attempting,
         questionCount: 6,
-        gradedCount: 0
-      }
-    ]
+        gradedCount: 0,
+      },
+    ],
   };
 
   const action = SessionActions.updateGradingOverviews(overviews);
   expect(action).toEqual({
     type: SessionActions.updateGradingOverviews.type,
-    payload: overviews
+    payload: overviews,
   });
 });
 
@@ -558,7 +558,7 @@ test('updateStudents generates correct action object', () => {
   const action = SessionActions.updateStudents(students);
   expect(action).toEqual({
     type: SessionActions.updateStudents.type,
-    payload: students
+    payload: students,
   });
 });
 
@@ -569,13 +569,13 @@ test('updateTeamFormationOverview generates correct action object', () => {
     assessmentName: 'Mission 1',
     assessmentType: 'Missions',
     studentIds: [0],
-    studentNames: ['Mark Henry']
+    studentNames: ['Mark Henry'],
   };
 
   const action = SessionActions.updateTeamFormationOverview(overview);
   expect(action).toEqual({
     type: SessionActions.updateTeamFormationOverview.type,
-    payload: overview
+    payload: overview,
   });
 });
 
@@ -587,14 +587,14 @@ test('updateTeamFormationOverviews generates correct action object', () => {
       assessmentName: 'Mission 2',
       assessmentType: 'Missions',
       studentIds: [0],
-      studentNames: ['Mark Henry']
-    }
+      studentNames: ['Mark Henry'],
+    },
   ];
 
   const action = SessionActions.updateTeamFormationOverviews(overviews);
   expect(action).toEqual({
     type: SessionActions.updateTeamFormationOverviews.type,
-    payload: overviews
+    payload: overviews,
   });
 });
 
@@ -609,7 +609,7 @@ test('updateGrading generates correct action object', async () => {
         student: {
           name: 'test student',
           username: 'E0123456',
-          id: 234
+          id: 234,
         },
         grade: {
           xp: 100,
@@ -617,13 +617,13 @@ test('updateGrading generates correct action object', async () => {
           comments: 'Well done.',
           grader: {
             name: 'HARTIN MENZ',
-            id: 100
+            id: 100,
           },
-          gradedAt: '2019-08-16T13:26:32+00:00'
+          gradedAt: '2019-08-16T13:26:32+00:00',
         },
         autogradingResults: [],
-        autoGradingStatus: 'N/A'
-      }
+        autoGradingStatus: 'N/A',
+      },
     ],
     enable_llm_grading: false,
     assessment: {
@@ -634,8 +634,8 @@ test('updateGrading generates correct action object', async () => {
       story: 'story here',
       summaryLong: 'long summary here',
       summaryShort: 'short summary here',
-      title: 'assessment title here'
-    }
+      title: 'assessment title here',
+    },
   };
 
   const action = SessionActions.updateGrading(submissionId, grading);
@@ -643,8 +643,8 @@ test('updateGrading generates correct action object', async () => {
     type: SessionActions.updateGrading.type,
     payload: {
       submissionId,
-      grading
-    }
+      grading,
+    },
   });
 });
 
@@ -655,22 +655,22 @@ test('updateNotifications generates correct action object', () => {
       type: 'new',
       assessment_id: 1,
       assessment_type: 'Mission',
-      assessment_title: 'The Secret to Streams'
+      assessment_title: 'The Secret to Streams',
     },
     {
       id: 2,
       type: 'new',
       assessment_id: 2,
       assessment_type: 'Sidequest',
-      assessment_title: 'A sample Sidequest'
-    }
+      assessment_title: 'A sample Sidequest',
+    },
   ];
 
   const action = SessionActions.updateNotifications(notifications);
 
   expect(action).toEqual({
     type: SessionActions.updateNotifications.type,
-    payload: notifications
+    payload: notifications,
   });
 });
 
@@ -679,7 +679,7 @@ test('updateLatestViewedCourse generates correct action object', () => {
   const action = SessionActions.updateLatestViewedCourse(courseId);
   expect(action).toEqual({
     type: SessionActions.updateLatestViewedCourse.type,
-    payload: { courseId }
+    payload: { courseId },
   });
 });
 
@@ -693,12 +693,12 @@ test('updateCourseConfig generates correct action object', () => {
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help text',
-    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
+    assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others'],
   };
   const action = SessionActions.updateCourseConfig(courseConfig);
   expect(action).toEqual({
     type: SessionActions.updateCourseConfig.type,
-    payload: courseConfig
+    payload: courseConfig,
   });
 });
 
@@ -706,7 +706,7 @@ test('fetchAssessmentConfig generates correct action object', () => {
   const action = SessionActions.fetchAssessmentConfigs();
   expect(action).toEqual({
     type: SessionActions.fetchAssessmentConfigs.type,
-    payload: {}
+    payload: {},
   });
 });
 
@@ -723,7 +723,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
-      isAutosaveEnabled: true
+      isAutosaveEnabled: true,
     },
     {
       assessmentConfigId: 2,
@@ -736,7 +736,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
-      isAutosaveEnabled: true
+      isAutosaveEnabled: true,
     },
     {
       assessmentConfigId: 3,
@@ -749,7 +749,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
-      isAutosaveEnabled: true
+      isAutosaveEnabled: true,
     },
     {
       assessmentConfigId: 4,
@@ -762,7 +762,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
-      isAutosaveEnabled: true
+      isAutosaveEnabled: true,
     },
     {
       assessmentConfigId: 5,
@@ -775,7 +775,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 0,
       earlySubmissionXp: 0,
-      isAutosaveEnabled: true
+      isAutosaveEnabled: true,
     },
     {
       assessmentConfigId: 6,
@@ -788,13 +788,13 @@ test('updateAssessmentTypes generates correct action object', () => {
       hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
-      isAutosaveEnabled: true
-    }
+      isAutosaveEnabled: true,
+    },
   ];
   const action = SessionActions.updateAssessmentConfigs(assessmentConfigs);
   expect(action).toEqual({
     type: SessionActions.updateAssessmentConfigs.type,
-    payload: assessmentConfigs
+    payload: assessmentConfigs,
   });
 });
 
@@ -810,12 +810,12 @@ test('deleteAssessmentConfig generates correct action object', () => {
     hasVotingFeatures: false,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200,
-    isAutosaveEnabled: true
+    isAutosaveEnabled: true,
   };
   const action = SessionActions.deleteAssessmentConfig(assessmentConfig);
   expect(action).toEqual({
     type: SessionActions.deleteAssessmentConfig.type,
-    payload: assessmentConfig
+    payload: assessmentConfig,
   });
 });
 
@@ -823,7 +823,7 @@ test('fetchAdminPanelCourseRegistrations generates correct action object', () =>
   const action = SessionActions.fetchAdminPanelCourseRegistrations();
   expect(action).toEqual({
     type: SessionActions.fetchAdminPanelCourseRegistrations.type,
-    payload: {}
+    payload: {},
   });
 });
 
@@ -833,7 +833,7 @@ test('updateUserRole generates correct action object', () => {
   const action = SessionActions.updateUserRole(courseRegId, role);
   expect(action).toEqual({
     type: SessionActions.updateUserRole.type,
-    payload: { courseRegId, role }
+    payload: { courseRegId, role },
   });
 });
 
@@ -842,7 +842,7 @@ test('updateCourseResearchAgreement generates correct action object', () => {
   const action = SessionActions.updateCourseResearchAgreement(agreedToResearch);
   expect(action).toEqual({
     type: SessionActions.updateCourseResearchAgreement.type,
-    payload: { agreedToResearch }
+    payload: { agreedToResearch },
   });
 });
 
@@ -851,6 +851,6 @@ test('deleteUserCourseRegistration generates correct action object', () => {
   const action = SessionActions.deleteUserCourseRegistration(courseRegId);
   expect(action).toEqual({
     type: SessionActions.deleteUserCourseRegistration.type,
-    payload: { courseRegId }
+    payload: { courseRegId },
   });
 });

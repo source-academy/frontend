@@ -5,7 +5,7 @@ import {
   Intent,
   NonIdealState,
   Spinner,
-  SpinnerSize
+  SpinnerSize,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { type ColDef, type GridApi, type GridReadyEvent, themeBalham } from 'ag-grid-community';
@@ -39,7 +39,7 @@ export type DispatchProps = {
     id: number,
     hasVotingFeatures: boolean,
     hasTokenCounter: boolean,
-    isAutosaveEnabled: boolean
+    isAutosaveEnabled: boolean,
   ) => void;
   handleAssignEntriesForVoting: (id: number) => void;
   handleFetchCourseConfigs: () => void;
@@ -50,7 +50,7 @@ const defaultColumnDefs: ColDef = {
   minWidth: 70,
   filter: true,
   resizable: true,
-  sortable: true
+  sortable: true,
 };
 
 const GroundControl: React.FC<Props> = props => {
@@ -67,8 +67,8 @@ const GroundControl: React.FC<Props> = props => {
     gridApi.applyColumnState({
       state: [
         { colId: 'openAt', sort: 'desc' },
-        { colId: 'closeAt', sort: 'desc' }
-      ]
+        { colId: 'closeAt', sort: 'desc' },
+      ],
     });
   };
 
@@ -86,15 +86,15 @@ const GroundControl: React.FC<Props> = props => {
       filter: 'agDateColumnFilter',
       filterParams: {
         comparator: dateFilterComparator,
-        inRangeInclusive: true
+        inRangeInclusive: true,
       },
       sortingOrder: ['desc', 'asc', null],
       cellRenderer: EditCell,
       cellRendererParams: {
         handleAssessmentChangeDate: props.handleAssessmentChangeDate,
-        forOpenDate: true
+        forOpenDate: true,
       },
-      flex: 3
+      flex: 3,
     },
     {
       headerName: 'Close Date',
@@ -102,35 +102,35 @@ const GroundControl: React.FC<Props> = props => {
       filter: 'agDateColumnFilter',
       filterParams: {
         comparator: dateFilterComparator,
-        inRangeInclusive: true
+        inRangeInclusive: true,
       },
       sortingOrder: ['desc', 'asc', null],
       cellRenderer: EditCell,
       cellRendererParams: {
         handleAssessmentChangeDate: props.handleAssessmentChangeDate,
-        forOpenDate: false
+        forOpenDate: false,
       },
-      flex: 3
+      flex: 3,
     },
     {
       headerName: 'Max Team Size',
       field: 'maxTeamSize',
       cellRenderer: EditTeamSizeCell,
       cellRendererParams: {
-        onTeamSizeChange: props.handleAssessmentChangeTeamSize
-      }
+        onTeamSizeChange: props.handleAssessmentChangeTeamSize,
+      },
     },
     {
       headerName: 'Published',
       field: 'placeholderPublish' as any,
       cellRenderer: PublishCell,
       cellRendererParams: {
-        handlePublishAssessment: props.handlePublishAssessment
+        handlePublishAssessment: props.handlePublishAssessment,
       },
       filter: false,
       resizable: false,
       sortable: false,
-      cellStyle: { padding: 0 }
+      cellStyle: { padding: 0 },
     },
     {
       headerName: 'Grading',
@@ -138,12 +138,12 @@ const GroundControl: React.FC<Props> = props => {
       cellRenderer: ReleaseGradingCell,
       cellRendererParams: {
         handlePublishGradingAll: props.handlePublishGradingAll,
-        handleUnpublishGradingAll: props.handleUnpublishGradingAll
+        handleUnpublishGradingAll: props.handleUnpublishGradingAll,
       },
       filter: false,
       resizable: false,
       sortable: false,
-      cellStyle: { padding: 0 }
+      cellStyle: { padding: 0 },
     },
     {
       headerName: 'Actions',
@@ -161,13 +161,13 @@ const GroundControl: React.FC<Props> = props => {
         );
       },
       cellRendererParams: {
-        handleDeleteAssessment: props.handleDeleteAssessment
+        handleDeleteAssessment: props.handleDeleteAssessment,
       },
       filter: false,
       resizable: false,
       sortable: false,
-      cellStyle: { padding: 0 }
-    }
+      cellStyle: { padding: 0 },
+    },
   ];
 
   const controls = (

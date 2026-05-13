@@ -7,7 +7,7 @@ import type {
   ControlItem,
   EnvInstr,
   Instr,
-  UnOpInstr
+  UnOpInstr,
 } from 'js-slang/dist/cse-machine/types';
 import { InstrType } from 'js-slang/dist/cse-machine/types';
 import { Chapter } from 'js-slang/dist/langs';
@@ -51,7 +51,7 @@ import type {
   ReferenceType,
   SourceObject,
   StreamFn,
-  Unassigned
+  Unassigned,
 } from './CseMachineTypes';
 import { isContinuation } from './utils/continuation';
 class AssertionError extends Error {
@@ -282,7 +282,7 @@ function pushEnvFromData(
   value: any,
   pushEnv: (e: Env | null | undefined) => void,
   markLiveObject?: (id: string) => void,
-  visitedObjects = new Set<any>()
+  visitedObjects = new Set<any>(),
 ) {
   if (!value || visitedObjects.has(value)) return;
   visitedObjects.add(value);
@@ -312,7 +312,7 @@ function pushEnvFromData(
 /** Returns environment id and object id that are reachable from root environments */
 function markReachableEnvs(
   envTree: EnvTree,
-  rootIds: Set<string>
+  rootIds: Set<string>,
 ): { liveEnvIds: Set<string>; liveObjectIds: Set<string> } {
   const visited = new Set<string>();
   const liveObjectIds = new Set<string>();
@@ -482,7 +482,7 @@ export function isMainReference(value: Value, reference: ReferenceType) {
   }
   const valueEnv = value.data.environment;
   const mainReference = value.references.find(r =>
-    isEnvEqual(r instanceof ArrayUnit ? r.parent.data.environment : r.frame.environment, valueEnv)
+    isEnvEqual(r instanceof ArrayUnit ? r.parent.data.environment : r.frame.environment, valueEnv),
   );
   return reference === mainReference;
 }
@@ -523,7 +523,7 @@ const context = canvas.getContext('2d');
  */
 export function getTextWidth(
   text: string,
-  font: string = `${Config.FontStyle} ${Config.FontSize}px ${Config.FontFamily}`
+  font: string = `${Config.FontStyle} ${Config.FontSize}px ${Config.FontFamily}`,
 ): number {
   if (!context || !text) {
     return 0;
@@ -537,7 +537,7 @@ export function getTextWidth(
         context.measureText(accText).width > context.measureText(currValue).width
           ? accText
           : currValue,
-      ''
+      '',
     );
   const metrics = context.measureText(longestLine);
   return Math.round(metrics.width);
@@ -556,7 +556,7 @@ export function getTextHeight(
   text: string,
   width: number,
   font: string = `${Config.FontStyle} ${Config.FontSize}px ${Config.FontFamily}`,
-  fontSize: number = Config.FontSize
+  fontSize: number = Config.FontSize,
 ): number {
   if (!context || !text) {
     return 0;
@@ -626,7 +626,7 @@ export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): v
     node.setAttrs({
       stroke: node.attrs.stroke ? Config.HoverColor : node.attrs.stroke,
       fill: node.attrs.fill ? Config.HoverColor : node.attrs.fill,
-      ...hoveredAttrs
+      ...hoveredAttrs,
     });
   });
 }
@@ -649,7 +649,7 @@ export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}
           ? defaultTextColor()
           : defaultStrokeColor()
         : node.attrs.fill,
-      ...unhoveredAttrs
+      ...unhoveredAttrs,
     });
   });
 }
@@ -684,7 +684,7 @@ function findObjects(
   environment: Env,
   set: Set<DataArray | Closure>,
   array: any[],
-  visited = new Set<any[]>() // needed to track circular references
+  visited = new Set<any[]>(), // needed to track circular references
 ): void {
   if (visited.has(array)) return;
   visited.add(array);
@@ -819,7 +819,7 @@ const appendSuffixWithinWidth = (line: string, suffix: string, maxWidth: number)
 export const truncateFunctionTooltip = (
   tooltip: string,
   maxWidth: number,
-  maxHeight: number
+  maxHeight: number,
 ): string => {
   const truncatedTooltip = truncateText(tooltip, maxWidth, maxHeight);
 
@@ -862,7 +862,7 @@ export function getControlItemComponent(
   index: number,
   highlightOnHover: () => void,
   unhighlightOnHover: () => void,
-  chapter: Chapter
+  chapter: Chapter,
 ): ControlItemComponent {
   const topItem = CseMachine.getStackTruncated()
     ? index === Math.min(Layout.control.size() - 1, 9)
@@ -890,7 +890,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       }
       case 'Literal': {
@@ -904,7 +904,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       }
       default: {
@@ -915,7 +915,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       }
     }
@@ -928,7 +928,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.WHILE:
         return new ControlItemComponent(
@@ -937,7 +937,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.FOR:
         return new ControlItemComponent(
@@ -946,7 +946,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.ASSIGNMENT: {
         const assmtInstr = controlItem as AssmtInstr;
@@ -956,7 +956,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       }
       case InstrType.UNARY_OP: {
@@ -967,7 +967,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       }
       case InstrType.BINARY_OP: {
@@ -978,7 +978,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       }
       case InstrType.POP:
@@ -988,7 +988,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.APPLICATION: {
         const appInstr = controlItem as AppInstr;
@@ -998,7 +998,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       }
       case InstrType.BRANCH:
@@ -1008,7 +1008,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.ENVIRONMENT: {
         const envInstr = controlItem as EnvInstr;
@@ -1024,8 +1024,8 @@ export function getControlItemComponent(
               accum
                 ? accum
                 : level.frames.find(frame => frame.environment?.id === getEnvId(envInstr.env)),
-            undefined
-          )
+            undefined,
+          ),
         );
       }
       case InstrType.ARRAY_LITERAL: {
@@ -1037,7 +1037,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       }
       case InstrType.ARRAY_ACCESS:
@@ -1047,7 +1047,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.ARRAY_ASSIGNMENT:
         return new ControlItemComponent(
@@ -1056,7 +1056,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.ARRAY_LENGTH:
         return new ControlItemComponent(
@@ -1065,7 +1065,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.CONTINUE:
         return new ControlItemComponent(
@@ -1074,7 +1074,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.CONTINUE_MARKER:
         return new ControlItemComponent(
@@ -1083,7 +1083,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.BREAK:
         return new ControlItemComponent(
@@ -1092,7 +1092,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.BREAK_MARKER:
         return new ControlItemComponent(
@@ -1101,7 +1101,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.MARKER:
         return new ControlItemComponent(
@@ -1110,7 +1110,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.SPREAD:
         return new ControlItemComponent(
@@ -1119,7 +1119,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       default:
         return new ControlItemComponent(
@@ -1128,7 +1128,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
     }
   }
@@ -1138,7 +1138,7 @@ export function getStashItemComponent(
   stashItem: StashValue,
   stackHeight: number,
   index: number,
-  _chapter: Chapter
+  _chapter: Chapter,
 ): StashItemComponent {
   let arrowTo: ArrayValue | FnValue | GlobalFnValue | ContValue | undefined;
   if (isFunction(stashItem) || isDataArray(stashItem || isContinuation(stashItem))) {

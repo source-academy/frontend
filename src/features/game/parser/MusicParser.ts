@@ -28,9 +28,9 @@ export default class MusicParser {
         path: assetPath,
         config: {
           volume: parseFloat(volume),
-          loop: soundType === GameSoundType.BGM
+          loop: soundType === GameSoundType.BGM,
         },
-        soundType
+        soundType,
       });
 
       if (soundType === GameSoundType.BGM && musicIndex === 0) {

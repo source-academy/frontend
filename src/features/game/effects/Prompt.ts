@@ -17,7 +17,7 @@ const PromptConstants = {
   textConfig: { x: 15, y: -15, oriX: 0.5, oriY: 0.5 },
   y: 100,
   width: 450,
-  yInterval: 100
+  yInterval: 100,
 };
 
 const textStyle = {
@@ -26,13 +26,13 @@ const textStyle = {
   fill: Color.offWhite,
   align: 'right',
   lineSpacing: 10,
-  wordWrap: { width: PromptConstants.width - PromptConstants.textPad * 2 }
+  wordWrap: { width: PromptConstants.width - PromptConstants.textPad * 2 },
 };
 
 const promptOptStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 25,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 /**
@@ -46,7 +46,7 @@ const promptOptStyle: BitmapFontStyle = {
 export async function promptWithChoices(
   scene: Phaser.Scene,
   text: string,
-  choices: string[]
+  choices: string[],
 ): Promise<number> {
   const promptContainer = new Phaser.GameObjects.Container(scene, 0, 0);
 
@@ -58,7 +58,7 @@ export async function promptWithChoices(
     screenSize.x - PromptConstants.textPad,
     PromptConstants.y,
     text,
-    textStyle
+    textStyle,
   ).setOrigin(1.0, 0.0);
   const promptHeaderBg = new Phaser.GameObjects.Rectangle(
     scene,
@@ -67,7 +67,7 @@ export async function promptWithChoices(
     PromptConstants.width * promptPartitions,
     header.getBounds().bottom * 0.5 + PromptConstants.textPad,
     HexColor.darkBlue,
-    0.8
+    0.8,
   ).setOrigin(1.0, 0.0);
   const promptBg = new Phaser.GameObjects.Rectangle(
     scene,
@@ -76,7 +76,7 @@ export async function promptWithChoices(
     PromptConstants.width * promptPartitions,
     promptHeaderBg.getBounds().bottom * 0.5 + (promptHeight + 0.5) * PromptConstants.yInterval,
     HexColor.lightBlue,
-    0.2
+    0.2,
   ).setOrigin(1.0, 0.0);
 
   promptContainer.add([promptBg, promptHeaderBg, header]);
@@ -84,7 +84,7 @@ export async function promptWithChoices(
   const buttonPositions = calcListFormatPos({
     numOfItems: choices.length,
     xSpacing: 0,
-    ySpacing: PromptConstants.yInterval
+    ySpacing: PromptConstants.yInterval,
   });
 
   GameGlobalAPI.getInstance().addToLayer(Layer.UI, promptContainer);
@@ -100,16 +100,16 @@ export async function promptWithChoices(
           onUp: () => {
             promptContainer.destroy();
             resolve(index);
-          }
+          },
         }).setPosition(
           screenSize.x -
             PromptConstants.width / 2 -
             PromptConstants.width * (promptPartitions - Math.floor(index / 5) - 1),
           (buttonPositions[index][1] % (5 * PromptConstants.yInterval)) +
             promptHeaderBg.getBounds().bottom +
-            75
-        )
-      )
+            75,
+        ),
+      ),
     );
   });
 
@@ -119,7 +119,7 @@ export async function promptWithChoices(
   scene.add.tween({
     targets: promptContainer,
     alpha: 1,
-    ...rightSideEntryTweenProps
+    ...rightSideEntryTweenProps,
   });
   await sleep(rightSideEntryTweenProps.duration);
 
@@ -130,7 +130,7 @@ export async function promptWithChoices(
   scene.add.tween({
     targets: promptContainer,
     alpha: 1,
-    ...rightSideExitTweenProps
+    ...rightSideExitTweenProps,
   });
 
   await sleep(rightSideExitTweenProps.duration);

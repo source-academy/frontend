@@ -13,7 +13,7 @@ export class FunctionTreeNode extends DrawableTreeNode {
     y: number,
     parentX: number,
     parentY: number,
-    colorIndex: number
+    colorIndex: number,
   ): React.ReactElement {
     this._drawable = (
       <Group key={x + ', ' + y}>
@@ -23,12 +23,12 @@ export class FunctionTreeNode extends DrawableTreeNode {
             {...{
               from: {
                 x: parentX + Config.BoxWidth / 2,
-                y: parentY + Config.BoxHeight / 2
+                y: parentY + Config.BoxHeight / 2,
               },
               to: {
                 x,
-                y
-              }
+                y,
+              },
             }}
           ></ArrowDrawable>
         )}

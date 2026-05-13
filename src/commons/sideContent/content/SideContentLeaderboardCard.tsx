@@ -12,7 +12,7 @@ type Props = {
 const SideContentLeaderboardCard: React.FC<Props> = ({
   handleContestEntryClick,
   contestEntry,
-  rank
+  rank,
 }) => {
   return (
     <div className={classNames('LeaderboardCard')}>

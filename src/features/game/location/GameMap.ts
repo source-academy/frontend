@@ -160,7 +160,7 @@ class GameMap {
   public getAssetKeyFromId(id: AnyId): AssetKey {
     return mandatory(
       this.objects.get(id)?.assetKey || this.locations.get(id)?.assetKey,
-      `Id ${id} not found!`
+      `Id ${id} not found!`,
     );
   }
 }

@@ -30,7 +30,7 @@ const AssessmentInteractButton: React.FC<Props> = ({ overview }) => {
         variant="minimal"
         onClick={() =>
           dispatch(
-            SessionActions.acknowledgeNotifications(filterNotificationsByAssessment(overview.id))
+            SessionActions.acknowledgeNotifications(filterNotificationsByAssessment(overview.id)),
           )
         }
       >
@@ -48,7 +48,7 @@ type ButtonConfiguration = {
 };
 
 const createButtonConfiguration = (
-  overviewStatus: AssessmentOverview['status']
+  overviewStatus: AssessmentOverview['status'],
 ): ButtonConfiguration => {
   let icon: IconName;
   let label: string;
