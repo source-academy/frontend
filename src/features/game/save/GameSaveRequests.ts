@@ -4,7 +4,7 @@ import Constants from 'src/commons/utils/Constants';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { courseId } from '../utils/GameUtils';
 import { createEmptySaveState } from './GameSaveHelper';
-import { FullSaveState } from './GameSaveTypes';
+import type { FullSaveState } from './GameSaveTypes';
 
 /**
  * This function saves data to the backend under user's game state.

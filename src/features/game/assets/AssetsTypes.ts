@@ -1,4 +1,4 @@
-import { AssetKey, AssetPath } from '../commons/CommonTypes';
+import type { AssetKey, AssetPath } from '../commons/CommonTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 
 export type AssetMap<T> = {

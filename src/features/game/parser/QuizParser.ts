@@ -1,5 +1,5 @@
 import { GameItemType } from '../location/GameMapTypes';
-import { Option, Question, Quiz } from '../quiz/GameQuizType';
+import type { Option, Question, Quiz } from '../quiz/GameQuizType';
 import StringUtils from '../utils/StringUtils';
 import DialogueParser from './DialogueParser';
 import Parser from './Parser';

@@ -1,7 +1,7 @@
 import FontAssets from '../assets/FontAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants, screenCenter } from '../commons/CommonConstants';
-import { BitmapFontStyle, IBaseScene } from '../commons/CommonTypes';
+import type { BitmapFontStyle, IBaseScene } from '../commons/CommonTypes';
 import dialogueConstants from '../dialogue/GameDialogueConstants';
 import DialogueRenderer from '../dialogue/GameDialogueRenderer';
 import { keyboardShortcuts } from '../input/GameInputConstants';

@@ -1,6 +1,6 @@
 import FontAssets from '../assets/FontAssets';
 import { screenSize } from '../commons/CommonConstants';
-import { BitmapFontStyle } from '../commons/CommonTypes';
+import type { BitmapFontStyle } from '../commons/CommonTypes';
 import { Color } from '../utils/StyleUtils';
 
 export const startPrompt = {

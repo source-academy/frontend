@@ -1,6 +1,6 @@
-import { SoundAsset } from '../assets/AssetsTypes';
+import type { SoundAsset } from '../assets/AssetsTypes';
 import SoundAssets from '../assets/SoundAssets';
-import { ItemId } from '../commons/CommonTypes';
+import type { ItemId } from '../commons/CommonTypes';
 import { GameItemType } from '../location/GameMapTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 import Parser from './Parser';

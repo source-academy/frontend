@@ -1,7 +1,7 @@
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
-import { FullSaveState, GameSaveState } from './GameSaveTypes';
+import type { FullSaveState, GameSaveState } from './GameSaveTypes';
 
 /**
  * Function that saves game data as a 'snapshot' in FullSaveState

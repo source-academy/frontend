@@ -1,5 +1,5 @@
 import ImageAssets from '../../assets/ImageAssets';
-import { AwardProperty } from '../../awards/GameAwardsTypes';
+import type { AwardProperty } from '../../awards/GameAwardsTypes';
 import { HexColor } from '../../utils/StyleUtils';
 import {
   awardHoverDescStyle,

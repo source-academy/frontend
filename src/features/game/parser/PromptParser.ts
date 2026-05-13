@@ -1,4 +1,4 @@
-import { Prompt } from '../dialogue/GameDialogueTypes';
+import type { Prompt } from '../dialogue/GameDialogueTypes';
 import StringUtils from '../utils/StringUtils';
 
 /**
