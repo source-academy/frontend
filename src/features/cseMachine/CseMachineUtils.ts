@@ -1,5 +1,5 @@
 import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
-import {
+import type {
   AppInstr,
   ArrLitInstr,
   AssmtInstr,
@@ -7,11 +7,11 @@ import {
   ControlItem,
   EnvInstr,
   Instr,
-  InstrType,
   UnOpInstr
 } from 'js-slang/dist/cse-machine/types';
+import { InstrType } from 'js-slang/dist/cse-machine/types';
 import { Chapter } from 'js-slang/dist/langs';
-import { Environment, Value as StashValue } from 'js-slang/dist/types';
+import type { Environment, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
@@ -35,7 +35,7 @@ import { Value } from './components/values/Value';
 import CseMachine from './CseMachine';
 import { Config } from './CseMachineConfig';
 import { Layout } from './CseMachineLayout';
-import {
+import type {
   BuiltInFn,
   Closure,
   Data,

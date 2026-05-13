@@ -1,4 +1,4 @@
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
 import { createRef, Fragment } from 'react';
 import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
@@ -6,7 +6,7 @@ import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-k
 import CseMachine from '../CseMachine';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { Data, IHoverable } from '../CseMachineTypes';
+import type { Data, IHoverable } from '../CseMachineTypes';
 import {
   defaultTextColor,
   fadedTextColor,

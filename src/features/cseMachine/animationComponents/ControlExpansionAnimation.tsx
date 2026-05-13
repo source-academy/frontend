@@ -2,7 +2,7 @@ import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
 import { defaultActiveColor, defaultStrokeColor } from '../CseMachineUtils';
-import { Animatable, AnimationConfig } from './base/Animatable';
+import { Animatable, type AnimationConfig } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
 

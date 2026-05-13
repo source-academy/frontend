@@ -12,14 +12,14 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
-import {
+import type {
   AutogradingResult,
   IMCQQuestion,
   Library,
   Question,
-  QuestionTypes,
   Testcase
 } from '../../../../commons/assessment/AssessmentTypes';
+import { QuestionTypes } from '../../../../commons/assessment/AssessmentTypes';
 import type { ControlBarProps } from '../../../../commons/controlBar/ControlBar';
 import ControlBarClearButton from '../../../../commons/controlBar/ControlBarClearButton';
 import ControlBarEvalButton from '../../../../commons/controlBar/ControlBarEvalButton';
@@ -30,21 +30,24 @@ import ControlBarRunButton from '../../../../commons/controlBar/ControlBarRunBut
 import ControlBarVersionHistoryButton from '../../../../commons/controlBar/ControlBarVersionHistoryButton';
 import VersionHistoryPanel from '../../../../commons/controlBar/VersionHistoryPanel';
 import { convertEditorTabStateToProps } from '../../../../commons/editor/EditorContainer';
-import { Position } from '../../../../commons/editor/EditorTypes';
+import type { Position } from '../../../../commons/editor/EditorTypes';
 import Markdown from '../../../../commons/Markdown';
 import SideContentAutograder from '../../../../commons/sideContent/content/SideContentAutograder';
 import SideContentToneMatrix from '../../../../commons/sideContent/content/SideContentToneMatrix';
-import { SideContentProps } from '../../../../commons/sideContent/SideContent';
+import type { SideContentProps } from '../../../../commons/sideContent/SideContent';
 import { useSideContent } from '../../../../commons/sideContent/SideContentHelper';
-import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
-import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
 import {
-  type CodeVersion,
-  type CodeVersionMetadata,
+  type SideContentTab,
+  SideContentType
+} from '../../../../commons/sideContent/SideContentTypes';
+import Workspace, { type WorkspaceProps } from '../../../../commons/workspace/Workspace';
+import type {
+  CodeVersion,
+  CodeVersionMetadata,
   WorkspaceLocation,
   WorkspaceState
 } from '../../../../commons/workspace/WorkspaceTypes';
-import { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
+import type { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditor';
 
 const workspaceLocation: WorkspaceLocation = 'grading';

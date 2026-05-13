@@ -11,7 +11,7 @@ import {
   defaultStrokeColor,
   getTextWidth
 } from '../CseMachineUtils';
-import { Animatable, AnimationConfig } from './base/Animatable';
+import { Animatable, type AnimationConfig } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
