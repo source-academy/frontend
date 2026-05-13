@@ -1,4 +1,4 @@
-import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import { setEditorSessionId, setSharedbConnected } from '../CollabEditingActions';
 
 const gradingWorkspace: WorkspaceLocation = 'grading';

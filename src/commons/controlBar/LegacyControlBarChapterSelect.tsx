@@ -1,6 +1,6 @@
 import { Button, Menu, MenuItem, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
+import { type ItemListRenderer, type ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 
 import {
@@ -8,7 +8,7 @@ import {
   fullTSLanguage,
   htmlLanguage,
   javaLanguages,
-  SALanguage,
+  type SALanguage,
   sourceLanguages,
   styliseSublanguage
 } from '../application/ApplicationTypes';

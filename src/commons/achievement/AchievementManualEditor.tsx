@@ -1,8 +1,8 @@
 import { Button, Checkbox, MenuItem, NumericInput } from '@blueprintjs/core';
-import { ItemPredicate, ItemRenderer, Select } from '@blueprintjs/select';
+import { type ItemPredicate, type ItemRenderer, Select } from '@blueprintjs/select';
 import { useContext, useEffect, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
-import {
+import type {
   AchievementGoal,
   AchievementUser,
   GoalProgress

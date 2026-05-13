@@ -1,7 +1,7 @@
 import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
 
 import { createActions } from '../redux/utils';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 const CollabEditingActions = createActions('collabEditing', {
   setEditorSessionId: (workspaceLocation: WorkspaceLocation, editorSessionId: string) => ({

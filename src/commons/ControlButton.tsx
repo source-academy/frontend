@@ -1,4 +1,4 @@
-import { AnchorButton, Button, Icon, IconName, Intent } from '@blueprintjs/core';
+import { AnchorButton, Button, Icon, type IconName, Intent } from '@blueprintjs/core';
 
 type ButtonOptions = {
   className: string;

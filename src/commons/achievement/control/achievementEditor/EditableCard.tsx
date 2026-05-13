@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash';
 import { useContext, useMemo, useReducer, useState } from 'react';
 
 import { AchievementContext } from '../../../../features/achievement/AchievementConstants';
-import {
+import type {
   AchievementItem,
   AchievementView
 } from '../../../../features/achievement/AchievementTypes';

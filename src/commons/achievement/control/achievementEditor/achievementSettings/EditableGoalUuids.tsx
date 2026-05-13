@@ -1,9 +1,10 @@
 import { MenuItem } from '@blueprintjs/core';
-import { ItemPredicate, ItemRenderer, MultiSelect } from '@blueprintjs/select';
+import type { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
+import { MultiSelect } from '@blueprintjs/select';
 import { without } from 'lodash';
 import { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
-import { AchievementGoal } from 'src/features/achievement/AchievementTypes';
+import type { AchievementGoal } from 'src/features/achievement/AchievementTypes';
 
 type Props = {
   changeGoalUuids: (goalUuids: string[]) => void;

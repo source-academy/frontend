@@ -2,7 +2,7 @@ import {
   cardBackgroundUrl,
   coverImageUrl
 } from '../../../../features/achievement/AchievementConstants';
-import {
+import type {
   AchievementItem,
   AchievementView
 } from '../../../../features/achievement/AchievementTypes';

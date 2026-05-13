@@ -1,7 +1,12 @@
 import { Button, MenuItem, NumericInput, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemRenderer, Select } from '@blueprintjs/select';
-import { EventMeta, EventType, GoalMeta } from 'src/features/achievement/AchievementTypes';
+import type { ItemRenderer } from '@blueprintjs/select';
+import { Select } from '@blueprintjs/select';
+import {
+  type EventMeta,
+  EventType,
+  type GoalMeta
+} from 'src/features/achievement/AchievementTypes';
 
 import EditableDate from '../EditableDate';
 import EditableTime from '../EditableTime';
