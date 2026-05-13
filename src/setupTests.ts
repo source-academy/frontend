@@ -20,6 +20,9 @@ vi.mock('java-slang', () => {
   };
 });
 
+// Mock phaser to prevent phaser3spectorjs from loading and breaking ace editor regex
+vi.mock('phaser', () => ({}));
+
 // Fix for react-router v7 and vitest
 // https://stackoverflow.com/a/79332264
 
