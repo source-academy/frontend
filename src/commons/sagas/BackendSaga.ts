@@ -4,7 +4,6 @@ import { all, call, fork, put, select } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import DashboardActions from 'src/features/dashboard/DashboardActions';
 import GroundControlActions from 'src/features/groundControl/GroundControlActions';
-import { postNewStoriesUsers } from 'src/features/stories/storiesComponents/BackendAccess';
 import type { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
@@ -180,13 +179,6 @@ const newBackendSagaOne = combineSagaHandlers({
       yield put(actions.setCourseRegistration(courseRegistration));
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-
-      if (courseConfiguration.enableStories) {
-        yield put(actions.getStoriesUser());
-        // TODO: Fetch associated stories group ID
-      } else {
-        yield put(actions.clearStoriesUserAndGroup());
-      }
     }
   },
   [SessionActions.fetchCourseConfig.type]: function* () {
@@ -194,13 +186,6 @@ const newBackendSagaOne = combineSagaHandlers({
     const { config }: { config: CourseConfiguration | null } = yield call(getCourseConfig, tokens);
     if (config) {
       yield put(actions.setCourseConfiguration(config));
-
-      if (config.enableStories) {
-        yield put(actions.getStoriesUser());
-        // TODO: Fetch associated stories group ID
-      } else {
-        yield put(actions.clearStoriesUserAndGroup());
-      }
     }
   },
   [SessionActions.fetchAssessmentOverviews.type]: function* () {
@@ -762,13 +747,6 @@ const newBackendSagaTwo = combineSagaHandlers({
     yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
     yield put(actions.setCourseRegistration(courseRegistration));
 
-    if (courseConfiguration.enableStories) {
-      yield put(actions.getStoriesUser());
-      // TODO: Fetch associated stories group ID
-    } else {
-      yield put(actions.clearStoriesUserAndGroup());
-    }
-
     yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
   },
   [SessionActions.updateCourseConfig.type]: function* (action) {
@@ -778,13 +756,6 @@ const newBackendSagaTwo = combineSagaHandlers({
     const resp: Response | null = yield call(putCourseConfig, tokens, courseConfig);
     if (!resp || !resp.ok) {
       return yield handleResponseError(resp);
-    }
-
-    if (courseConfig.enableStories) {
-      yield put(actions.getStoriesUser());
-      // TODO: Fetch associated stories group ID
-    } else {
-      yield put(actions.clearStoriesUserAndGroup());
     }
 
     yield put(actions.setCourseConfiguration(courseConfig));
@@ -874,13 +845,6 @@ const newBackendSagaTwo = combineSagaHandlers({
     yield put(actions.setUser(user));
     yield put(actions.setCourseRegistration({ role: Role.Student }));
 
-    if (courseConfiguration.enableStories) {
-      yield put(actions.getStoriesUser());
-      // TODO: Fetch associated stories group ID
-    } else {
-      yield put(actions.clearStoriesUserAndGroup());
-    }
-
     const placeholderAssessmentConfig: AssessmentConfiguration[] = [
       {
         type: 'Missions',
@@ -921,15 +885,6 @@ const newBackendSagaTwo = combineSagaHandlers({
 
     yield put(actions.fetchAdminPanelCourseRegistrations());
     yield call(showSuccessMessage, 'Users added!');
-  },
-  [AcademyActions.addNewStoriesUsersToCourse.type]: function* (action) {
-    const tokens: Tokens = yield selectTokens();
-    const { users, provider } = action.payload;
-
-    yield call(postNewStoriesUsers, tokens, users, provider);
-
-    // TODO: Refresh the list of story users
-    //       once that page is implemented
   },
   [SessionActions.updateCourseResearchAgreement.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();

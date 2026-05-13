@@ -92,10 +92,6 @@ function loadStore(loadedStore: SavedState | undefined) {
             : defaultState.workspaces.playground.context.variant
         }
       }
-    },
-    stories: {
-      ...defaultState.stories,
-      ...loadedStore.stories
     }
   };
 }

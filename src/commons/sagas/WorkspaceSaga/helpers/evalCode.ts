@@ -20,7 +20,6 @@ import { EventType } from '../../../../features/achievement/AchievementTypes';
 import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHostPlugin';
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
-import StoriesActions from '../../../../features/stories/StoriesActions';
 import { type OverallState } from '../../../application/ApplicationTypes';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
@@ -31,7 +30,7 @@ import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { getPreparedConductorSaga } from '../../helpers/conductorEvaluatorCache';
 import { getEvaluatorDefinitionSaga } from '../../LanguageDirectorySaga';
-import { selectStoryEnv, selectWorkspace } from '../../SafeEffects';
+import { selectWorkspace } from '../../SafeEffects';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
 import { updateInspector } from './updateInspector';
 
@@ -165,8 +164,7 @@ export function* evalCodeSaga(
   context: Context,
   execTime: number,
   actionType: string,
-  workspaceLocation: WorkspaceLocation,
-  storyEnv?: string
+  workspaceLocation: WorkspaceLocation
 ): SagaIterator {
   if (yield select(selectConductorEnable)) {
     return yield call(
@@ -176,15 +174,13 @@ export function* evalCodeSaga(
       context,
       execTime,
       workspaceLocation,
-      actionType,
-      storyEnv
+      actionType
     );
   }
   context.runtime.debuggerOn =
     (actionType === WorkspaceActions.evalEditor.type ||
       actionType === InterpreterActions.debuggerResume.type) &&
     context.chapter > 2;
-  const isStoriesBlock = actionType === actions.evalStory.type || workspaceLocation === 'stories';
 
   function* getWorkspaceData() {
     const workspace = yield* selectWorkspace(workspaceLocation);
@@ -199,17 +195,6 @@ export function* evalCodeSaga(
         currentStep: updateCse ? -1 : currentStep,
         cseIsActive: usingCse,
         needUpdateCse: updateCse,
-        substIsActive: usingSubst
-      };
-    }
-
-    if (isStoriesBlock) {
-      const { usingSubst } = yield* selectStoryEnv(storyEnv!);
-      return {
-        ...commons,
-        currentStep: -1,
-        cseIsActive: false,
-        needUpdateCse: false,
         substIsActive: usingSubst
       };
     }
@@ -335,47 +320,39 @@ export function* evalCodeSaga(
     yield put(actions.updateLastDebuggerResult(result, workspaceLocation));
   }
 
-  // do not highlight for stories
-  if (!isStoriesBlock) {
-    yield call(updateInspector, workspaceLocation);
-  }
+  yield call(updateInspector, workspaceLocation);
 
   if (result.status === 'suspended-cse-eval') {
     yield put(actions.endDebuggerPause(workspaceLocation));
     yield put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation));
     return;
   } else if (result.status !== 'finished') {
-    yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
-    if (!isStoriesBlock) {
-      const specialError = checkSpecialError(context.errors);
-      if (specialError !== null) {
-        switch (specialError) {
-          case 'source_academy_interrupt': {
-            yield* handleSourceAcademyInterrupt(context, entrypointCode, workspaceLocation);
-            break;
-          }
-          // This should not happen but we check just in case
-          default: {
-            yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
-          }
+    yield* dumpDisplayBuffer(workspaceLocation);
+    const specialError = checkSpecialError(context.errors);
+    if (specialError !== null) {
+      switch (specialError) {
+        case 'source_academy_interrupt': {
+          yield* handleSourceAcademyInterrupt(context, entrypointCode, workspaceLocation);
+          break;
         }
-      } else {
-        yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
-        // enable the CSE machine visualizer during errors
-        if (context.executionMethod === 'cse-machine' && needUpdateCse) {
-          yield put(actions.updateStepsTotal(context.runtime.envStepsTotal + 1, workspaceLocation));
-          yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
-          yield put(
-            actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation)
-          );
-          yield put(
-            actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation)
-          );
+        // This should not happen but we check just in case
+        default: {
+          yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
         }
       }
     } else {
-      // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
-      yield put(actions.evalStoryError(context.errors, storyEnv!));
+      yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
+      // enable the CSE machine visualizer during errors
+      if (context.executionMethod === 'cse-machine' && needUpdateCse) {
+        yield put(actions.updateStepsTotal(context.runtime.envStepsTotal + 1, workspaceLocation));
+        yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
+        yield put(
+          actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation)
+        );
+        yield put(
+          actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation)
+        );
+      }
     }
 
     const events = context.errors.length > 0 ? [EventType.ERROR] : [];
@@ -384,7 +361,7 @@ export function* evalCodeSaga(
     return;
   }
 
-  yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
+  yield* dumpDisplayBuffer(workspaceLocation);
 
   // Change token count if its assessment and EVAL_EDITOR
   if (actionType === WorkspaceActions.evalEditor.type && workspaceLocation === 'assessment') {
@@ -395,12 +372,7 @@ export function* evalCodeSaga(
 
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== EVAL_SILENT) {
-    if (!isStoriesBlock) {
-      yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
-    } else {
-      // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
-      yield put(actions.evalStorySuccess(result.value, storyEnv!));
-    }
+    yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
   }
 
   const lastDebuggerResult = yield select(
@@ -425,18 +397,6 @@ export function* evalCodeSaga(
       )
     );
   }
-  if (isStoriesBlock) {
-    yield put(
-      // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
-      StoriesActions.notifyStoriesEvaluated(
-        result,
-        lastDebuggerResult,
-        entrypointCode,
-        context,
-        storyEnv!
-      )
-    );
-  }
 
   // The first time the code is executed using the explicit control evaluator,
   // the total number of steps and the breakpoints are updated in the CSE Machine slider.
@@ -450,13 +410,7 @@ export function* evalCodeSaga(
   }
   // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful
   if (context.executionMethod === 'cse-machine') {
-    if (workspaceLocation !== 'stories') {
-      yield put(actions.removeSideContentAlert(SideContentType.introduction, workspaceLocation));
-    } else {
-      yield put(
-        actions.removeSideContentAlert(SideContentType.introduction, `stories.${storyEnv!}`)
-      );
-    }
+    yield put(actions.removeSideContentAlert(SideContentType.introduction, workspaceLocation));
   }
 }
 

@@ -17,7 +17,6 @@ const sourceAcademyDeploymentName = isTest
   : process.env.REACT_APP_DEPLOYMENT_NAME || 'Source Academy';
 const showResearchPrompt = isTest || isTrue(process.env.REACT_APP_SHOW_RESEARCH_PROMPT);
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
-const storiesBackendUrl = process.env.REACT_APP_STORIES_BACKEND_URL;
 const cadetLoggerUrl = isTest ? undefined : process.env.REACT_APP_CADET_LOGGER;
 const cadetLoggerInterval = parseInt(process.env.REACT_APP_CADET_LOGGER_INTERVAL || '10000', 10);
 const useBackend = !isTest && isTrue(process.env.REACT_APP_USE_BACKEND);
@@ -160,7 +159,6 @@ const Constants = {
   sourceAcademyDeploymentName,
   showResearchPrompt,
   backendUrl,
-  storiesBackendUrl,
   cadetLoggerUrl,
   useBackend,
   forwardLoadBalancerCookies,

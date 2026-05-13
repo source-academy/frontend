@@ -21,7 +21,6 @@ const mockShortDefaultState: SavedState = {
     enableAchievements: defaultState.session.enableAchievements,
     enableOverallLeaderboard: defaultState.session.enableOverallLeaderboard,
     enableContestLeaderboard: defaultState.session.enableContestLeaderboard,
-    enableStories: defaultState.session.enableStories,
     moduleHelpText: defaultState.session.moduleHelpText,
     assetsPrefix: defaultState.session.assetsPrefix,
     assessmentConfigurations: defaultState.session.assessmentConfigurations
@@ -37,12 +36,7 @@ const mockShortDefaultState: SavedState = {
   playgroundSourceChapter: defaultState.workspaces.playground.context.chapter,
   playgroundSourceVariant: defaultState.workspaces.playground.context.variant,
   playgroundLanguage: defaultState.playground.languageConfig,
-  playgroundExternalLibrary: defaultState.workspaces.playground.externalLibrary,
-  stories: {
-    userId: defaultState.stories.userId,
-    groupId: defaultState.stories.groupId,
-    role: defaultState.stories.role
-  }
+  playgroundExternalLibrary: defaultState.workspaces.playground.externalLibrary
 };
 
 describe('loadStoredState() function', () => {

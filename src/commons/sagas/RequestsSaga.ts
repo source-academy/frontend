@@ -212,7 +212,7 @@ export const postCreateCourse = async (
 ): Promise<Response | null> => {
   const resp = await request(`config/create`, 'POST', {
     ...tokens,
-    body: { ...courseConfig },
+    body: { ...courseConfig, enableStories: false },
     noHeaderAccept: true
   });
 
@@ -1433,7 +1433,7 @@ export const putCourseConfig = async (
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/config`, 'PUT', {
     ...tokens,
-    body: courseConfig,
+    body: { ...courseConfig, enableStories: false },
     noHeaderAccept: true
   });
 
