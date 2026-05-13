@@ -45,7 +45,6 @@ const CourseConfigPanel: React.FC<Props> = props => {
     enableContestLeaderboard,
     topLeaderboardDisplay,
     topContestLeaderboardDisplay,
-    enableStories,
     enableLlmGrading,
     moduleHelpText,
     llmApiKey,
@@ -322,16 +321,6 @@ const CourseConfigPanel: React.FC<Props> = props => {
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
                 enableAchievements: (e.target as HTMLInputElement).checked
-              })
-            }
-          />
-          <Switch
-            checked={enableStories}
-            label="Enable Stories"
-            onChange={e =>
-              props.setCourseConfiguration({
-                ...props.courseConfiguration,
-                enableStories: (e.target as HTMLInputElement).checked
               })
             }
           />

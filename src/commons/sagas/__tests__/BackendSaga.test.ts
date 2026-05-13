@@ -134,7 +134,6 @@ const mockCourseConfiguration1: CourseConfiguration = {
   enableAchievements: true,
   enableOverallLeaderboard: true,
   enableContestLeaderboard: true,
-  enableStories: false,
   topLeaderboardDisplay: 100,
   topContestLeaderboardDisplay: 10,
   sourceChapter: Chapter.SOURCE_1,
@@ -170,7 +169,6 @@ const mockCourseConfiguration2: CourseConfiguration = {
   enableContestLeaderboard: true,
   topLeaderboardDisplay: 100,
   topContestLeaderboardDisplay: 10,
-  enableStories: false,
   sourceChapter: Chapter.SOURCE_4,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
@@ -956,7 +954,6 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
     enableContestLeaderboard: true,
     topLeaderboardDisplay: 100,
     topContestLeaderboardDisplay: 10,
-    enableStories: false,
     sourceChapter: Chapter.SOURCE_4,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help',
@@ -1055,7 +1052,6 @@ describe('Test CREATE_COURSE action', () => {
     enableAchievements: true,
     enableOverallLeaderboard: true,
     enableContestLeaderboard: true,
-    enableStories: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text'
@@ -1174,8 +1170,6 @@ describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
       .silentRun();
   });
 });
-
-// TODO: Test addNewStoriesUsersToCourse
 
 describe('Test UPDATE_USER_ROLE action', () => {
   const courseRegId = 2;

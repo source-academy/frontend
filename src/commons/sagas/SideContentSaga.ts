@@ -1,6 +1,5 @@
 import type { Action, AnyAction } from '@reduxjs/toolkit';
 import { put, race, select, take } from 'redux-saga/effects';
-import StoriesActions from 'src/features/stories/StoriesActions';
 
 import { combineSagaHandlers } from '../redux/utils';
 import SideContentActions from '../sideContent/SideContentActions';
@@ -28,11 +27,8 @@ const selectSelectedTab = (
   workspaceLocation: SideContentLocation
 ): SideContentType | undefined => {
   const sideContentState = (state.sideContent ?? state) as SideContentManagerState;
-  const [location, storyEnv] = getLocation(workspaceLocation);
-
-  return location === 'stories'
-    ? sideContentState.stories[storyEnv]?.selectedTab
-    : sideContentState[location]?.selectedTab;
+  const [location] = getLocation(workspaceLocation);
+  return sideContentState[location]?.selectedTab;
 };
 
 const SideContentSaga = combineSagaHandlers({
@@ -87,7 +83,7 @@ const SideContentSaga = combineSagaHandlers({
     yield put(SideContentActions.endAlertSideContent(id, workspaceLocation));
   },
   [WorkspaceActions.notifyProgramEvaluated.type]: function* (action) {
-    if (!action.payload.workspaceLocation || action.payload.workspaceLocation === 'stories') return;
+    if (!action.payload.workspaceLocation) return;
 
     const debuggerContext = {
       result: action.payload.result,
@@ -99,9 +95,6 @@ const SideContentSaga = combineSagaHandlers({
     yield put(
       SideContentActions.spawnSideContent(action.payload.workspaceLocation, debuggerContext)
     );
-  },
-  [StoriesActions.notifyStoriesEvaluated.type]: function* (action) {
-    yield put(SideContentActions.spawnSideContent(`stories.${action.payload.env}`, action.payload));
   }
 });
 

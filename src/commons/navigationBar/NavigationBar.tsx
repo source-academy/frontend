@@ -100,7 +100,6 @@ const NavigationBar: React.FC = () => {
     enableAchievements,
     enableOverallLeaderboard,
     enableContestLeaderboard,
-    enableStories,
     assessmentConfigurations
   } = useSession();
   const assessmentTypes = useMemo(
@@ -141,13 +140,6 @@ const NavigationBar: React.FC = () => {
         disabled: !(isEnrolledInACourse && enableAchievements)
       },
       {
-        to: `/courses/${courseId}/stories`,
-        icon: IconNames.GIT_REPO,
-        text: 'Stories',
-        // TODO: Enable for public deployment
-        disabled: !(isEnrolledInACourse && enableStories)
-      },
-      {
         to: `/courses/${courseId}/leaderboard`,
         icon: IconNames.TIMELINE_BAR_CHART,
         text: 'Leaderboard',
@@ -157,7 +149,6 @@ const NavigationBar: React.FC = () => {
   }, [
     courseId,
     isEnrolledInACourse,
-    enableStories,
     isLoggedIn,
     enableAchievements,
     enableContestLeaderboard,
@@ -334,13 +325,6 @@ const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
     icon: IconNames.BOOK,
     text: 'SICP JS'
   }
-  // {
-  //   to: '/stories',
-  //   icon: IconNames.GIT_REPO,
-  //   text: 'Stories',
-  //   // TODO: Enable for public deployment
-  //   disabled: true
-  // }
 ];
 
 export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {

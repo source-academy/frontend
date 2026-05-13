@@ -63,10 +63,6 @@ function generateDefaultWorkspace(payload: any = {}): WorkspaceManagerState {
     sicp: {
       ...defaultWorkspaceManager.sicp,
       ...cloneDeep(payload)
-    },
-    stories: {
-      ...defaultWorkspaceManager.stories,
-      ...cloneDeep(payload)
     }
   };
 }

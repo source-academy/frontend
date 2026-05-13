@@ -6,7 +6,6 @@ const translations = {
     Grading: 'Ĝŗáďíñĝ',
     'Game Simulator': 'Ĝámé Śímûļáţőŗ',
     'Admin Panel': 'Áďmíñ Ƥáñéļ',
-    Stories: 'Šţőŗíéş',
     Playground: 'Ƥļáÿğŕőûñď',
     'SICP JS': 'ŠĨĆƤ ĴŚ',
     Achievements: 'Ãčĥíéṽéḿéñţş',

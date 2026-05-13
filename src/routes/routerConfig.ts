@@ -36,15 +36,6 @@ const NotFound = () => import('../pages/notFound/NotFound');
 const Welcome = () => import('../pages/welcome/Welcome');
 const Academy = () => import('../pages/academy/Academy');
 const MissionControl = () => import('../pages/missionControl/MissionControl');
-const EditStory = async () => {
-  const { EditStoryComponent } = await import('../pages/stories/Story');
-  return { Component: EditStoryComponent };
-};
-const ViewStory = async () => {
-  const { ViewStoryComponent } = await import('../pages/stories/Story');
-  return { Component: ViewStoryComponent };
-};
-const Stories = () => import('../pages/stories/Stories');
 const Features = () => import('../pages/featureFlags/FeatureFlags');
 
 const commonChildrenRoutes: RouteObject[] = [
@@ -140,10 +131,6 @@ export const getFullAcademyRouterConfig = ({
         ensureUserAndRole({ path: 'courses/:courseId/*', lazy: Academy, children: academyRoutes }),
         ensureUserAndRole({ path: 'playground/:playgroundCode?', lazy: Playground }),
         { path: 'mission-control/:assessmentId?/:questionId?', lazy: MissionControl },
-        ensureUserAndRole({ path: 'courses/:courseId/stories/new', lazy: EditStory }),
-        ensureUserAndRole({ path: 'courses/:courseId/stories/view/:id', lazy: ViewStory }),
-        ensureUserAndRole({ path: 'courses/:courseId/stories/edit/:id', lazy: EditStory }),
-        ensureUserAndRole({ path: 'courses/:courseId/stories', lazy: Stories }),
         ...commonChildrenRoutes,
         { path: '*', lazy: NotFound }
       ]

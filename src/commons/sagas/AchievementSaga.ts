@@ -146,10 +146,8 @@ const AchievementSaga = combineSagaHandlers({
     );
     if (workspaceLocation !== undefined && eventNames.find(e => e === EventType.ERROR)) {
       const selectedTab: SideContentType | undefined = yield select((state: OverallState) => {
-        const [loc, storyEnv] = getLocation(workspaceLocation);
-        return loc === 'stories'
-          ? state.sideContent.stories[storyEnv].selectedTab
-          : state.sideContent[loc].selectedTab;
+        const [loc] = getLocation(workspaceLocation);
+        return state.sideContent[loc].selectedTab;
       });
 
       if (

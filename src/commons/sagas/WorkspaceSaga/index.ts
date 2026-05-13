@@ -54,14 +54,7 @@ import {
 
 const WorkspaceSaga = combineSagaHandlers({
   [WorkspaceActions.addHtmlConsoleError.type]: function* (action) {
-    // TODO: Do not use if-else logic
-    if (!action.payload.storyEnv) {
-      yield put(
-        actions.handleConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
-      );
-    } else {
-      yield put(actions.handleStoriesConsoleLog(action.payload.storyEnv, action.payload.errorMsg));
-    }
+    yield put(actions.handleConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg));
   },
   [WorkspaceActions.toggleFolderMode.type]: function* (action) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -365,7 +358,6 @@ const WorkspaceSaga = combineSagaHandlers({
   },
   [WorkspaceActions.evalTestcase.type]: function* (action) {
     const workspaceLocation = action.payload.workspaceLocation;
-    if (workspaceLocation === 'stories') return;
 
     yield put(actions.addEvent([EventType.RUN_TESTCASE], workspaceLocation));
     const index = action.payload.testcaseId;
@@ -408,7 +400,7 @@ const WorkspaceSaga = combineSagaHandlers({
       yield put(actions.beginClearContext(workspaceLocation, library, false));
       yield put(actions.clearReplOutput(workspaceLocation));
       yield put(actions.debuggerReset(workspaceLocation));
-      if (workspaceLocation !== 'stories') yield put(actions.resetSideContent(workspaceLocation));
+      yield put(actions.resetSideContent(workspaceLocation));
       yield call(
         showSuccessMessage,
         `Switched to ${styliseSublanguage(newChapter, newVariant)}`,

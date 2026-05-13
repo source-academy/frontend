@@ -23,7 +23,7 @@ import type {
   NotificationFilterFunction
 } from '../../notificationBadge/NotificationBadgeTypes';
 import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
-import { Role, StoriesRole } from '../ApplicationTypes';
+import { Role } from '../ApplicationTypes';
 import type {
   AdminPanelCourseRegistration,
   CourseRegistration,
@@ -147,9 +147,7 @@ const SessionActions = createActions('session', {
   fetchAdminPanelCourseRegistrations: () => ({}),
   updateUserRole: (courseRegId: number, role: Role) => ({ courseRegId, role }),
   deleteUserCourseRegistration: (courseRegId: number) => ({ courseRegId }),
-  updateCourseResearchAgreement: (agreedToResearch: boolean) => ({ agreedToResearch }),
-  updateStoriesUserRole: (userId: number, role: StoriesRole) => ({ userId, role }),
-  deleteStoriesUserUserGroups: (userId: number) => ({ userId })
+  updateCourseResearchAgreement: (agreedToResearch: boolean) => ({ agreedToResearch })
 });
 
 // For compatibility with existing code (actions helper)

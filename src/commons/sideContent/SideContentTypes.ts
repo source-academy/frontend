@@ -34,7 +34,6 @@ export enum SideContentType {
   testcases = 'testcases',
   toneMatrix = 'tone_matrix',
   htmlDisplay = 'html_display',
-  storiesRun = 'stories_run',
   upload = 'upload'
 }
 
@@ -83,18 +82,12 @@ export type ModuleSideContent = {
   toSpawn?: (context: DebuggerContext) => boolean;
 };
 
-export type NonStoryWorkspaceLocation = Exclude<WorkspaceLocation, 'stories'>;
-export type StoryWorkspaceLocation = `stories.${string}`;
-export type SideContentManagerState = Record<NonStoryWorkspaceLocation, SideContentState> & {
-  stories: Record<string, SideContentState>;
-};
+export type SideContentManagerState = Record<WorkspaceLocation, SideContentState>;
 
 /**
  * A SideContentLocation specifier is an extension of the WorkspaceLocation type
- * that includes a specification for story workspaces
- * Story Envs should be specified in the following format: ``stories.${env}``
  */
-export type SideContentLocation = NonStoryWorkspaceLocation | StoryWorkspaceLocation;
+export type SideContentLocation = WorkspaceLocation;
 
 export type SideContentState = {
   height?: number;
