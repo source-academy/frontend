@@ -1,13 +1,11 @@
-import { AutoCompleteEntry } from '@sourceacademy/autocomplete';
+import type { AutoCompleteEntry } from '@sourceacademy/autocomplete';
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { type Context, findDeclaration, getNames } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import Phaser from 'phaser';
 import type { EventChannel } from 'redux-saga';
-import { call, put, select, take } from 'redux-saga/effects';
-import { race } from 'redux-saga/effects';
-import { delay } from 'redux-saga/effects';
+import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import AutoCompletePlugin from 'src/features/conductor/AutocompletePlugin';
 import { BrowserHostPlugin } from 'src/features/conductor/BrowserHostPlugin';
 
