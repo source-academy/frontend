@@ -17,8 +17,8 @@ const DialogueConstants = {
   skipButton: {
     x: screenSize.x - 62.5, // X Position
     y: screenSize.y * 0.73, // Y Position
-    size: 45 // Width and Height
-  }
+    size: 45, // Width and Height
+  },
 };
 
 export const textTypeWriterStyle = {

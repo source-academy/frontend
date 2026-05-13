@@ -51,11 +51,11 @@ export default class DialogueManager {
       assetKey: ImageAssets.skipButton.key,
       onUp: async () => {
         await this.triggerSkip();
-      }
+      },
     }).setPosition(DialogueConstants.skipButton.x, DialogueConstants.skipButton.y);
     (this.skipButton.getAt(0) as Phaser.GameObjects.Sprite).setDisplaySize(
       DialogueConstants.skipButton.size,
-      DialogueConstants.skipButton.size
+      DialogueConstants.skipButton.size,
     );
     dialogueContainer.add(this.skipButton);
 
@@ -94,7 +94,7 @@ export default class DialogueManager {
       'up',
       async () => {
         await this.triggerSkip();
-      }
+      },
     );
 
     // Dialogue Box Mouse Click
@@ -134,7 +134,7 @@ export default class DialogueManager {
         gameManager,
         'Skip remaining dialogue?',
         ['Yes', 'No'],
-        Layer.Dialogue
+        Layer.Dialogue,
       );
 
       this.getInputManager().enableKeyboardInput(true);
@@ -274,7 +274,7 @@ export default class DialogueManager {
       // Prevents skipping by using the "s" keyboard shortcut
       this.getInputManager().clearKeyboardListeners([
         keyboardShortcuts.Next,
-        keyboardShortcuts.SkipDialogue
+        keyboardShortcuts.SkipDialogue,
       ]);
       resolve();
     } else if (!this.isSkipping && !this.isDialoguePromptActive) {

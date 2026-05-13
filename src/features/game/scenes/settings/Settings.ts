@@ -88,19 +88,19 @@ class Settings extends Phaser.Scene {
     this.sfxVolumeRadioButtons = this.createOptRadioOptions(
       SettingsConstants.volContainerOpts,
       sfxVolIdx,
-      optHeaderPos[0][1]
+      optHeaderPos[0][1],
     );
     // Create BGM Radio Buttons
     this.bgmVolumeRadioButtons = this.createOptRadioOptions(
       SettingsConstants.volContainerOpts,
       bgmVolIdx,
-      optHeaderPos[1][1]
+      optHeaderPos[1][1],
     );
     // Create Skip Confirm Radio Buttons
     this.skipConfirmRadioButtons = this.createOptRadioOptions(
       ['ON', 'OFF'],
       skipConfirmIdx,
-      optHeaderPos[2][1]
+      optHeaderPos[2][1],
     );
 
     // Create apply settings button
@@ -200,7 +200,7 @@ class Settings extends Phaser.Scene {
     await this.getSaveManager().saveSettings({
       bgmVolume: bgmVol,
       sfxVolume: sfxVol,
-      skipConfirm: skipConfirmVal
+      skipConfirm: skipConfirmVal,
     });
 
     // Apply settings

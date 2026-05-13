@@ -87,23 +87,23 @@ class GameEscapeManager implements IGameUI {
     this.sfxVolumeRadioButtons = this.createSettingsRadioOptions(
       SettingsConstants.volContainerOpts,
       sfxVolIdx,
-      settingsPos[0][1]
+      settingsPos[0][1],
     );
     // BGM Radio buttons
     this.bgmVolumeRadioButtons = this.createSettingsRadioOptions(
       SettingsConstants.volContainerOpts,
       bgmVolIdx,
-      settingsPos[1][1]
+      settingsPos[1][1],
     );
     this.skipConfirmRadioButtons = this.createSettingsRadioOptions(
       EscapeConstants.skipConfirmOpts,
       skipConfirmIdx,
-      settingsPos[2][1]
+      settingsPos[2][1],
     );
     escapeMenuContainer.add([
       this.sfxVolumeRadioButtons,
       this.bgmVolumeRadioButtons,
-      this.skipConfirmRadioButtons
+      this.skipConfirmRadioButtons,
     ]);
 
     // Get all the buttons

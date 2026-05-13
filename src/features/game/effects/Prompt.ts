@@ -47,7 +47,7 @@ export async function promptWithChoices(
   scene: Phaser.Scene,
   text: string,
   choices: string[],
-  targetLayer: Layer = Layer.UI
+  targetLayer: Layer = Layer.UI,
 ): Promise<number> {
   const promptContainer = new Phaser.GameObjects.Container(scene, 0, 0);
 
