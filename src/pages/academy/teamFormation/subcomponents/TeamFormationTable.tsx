@@ -1,4 +1,4 @@
-import { Button, HTMLTable, Icon as BpIcon, InputGroup } from '@blueprintjs/core';
+import { Button, HTMLTable, Icon, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import type { Column, ColumnFilter, ColumnFiltersState, Row } from '@tanstack/react-table';
 import {
@@ -131,7 +131,7 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
       >
         <GradingFlex alignItems="center" style={{ columnGap: '0.5rem' }}>
           <GradingFlex alignItems="center" style={{ columnGap: '0.5rem', height: '1.75rem' }}>
-            <BpIcon icon={IconNames.FILTER_LIST} />
+            <Icon icon={IconNames.FILTER_LIST} />
             <GradingText>
               {columnFilters.length > 0
                 ? 'Filters: '
