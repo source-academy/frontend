@@ -1,7 +1,7 @@
 import { HTMLSelect, Popover, Position } from '@blueprintjs/core';
 import { useCallback } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
+import type { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
 
 type Props = {
   data: AdminPanelCourseRegistration;

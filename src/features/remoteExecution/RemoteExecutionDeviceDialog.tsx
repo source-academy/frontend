@@ -23,7 +23,8 @@ import {
   useField,
   validateNotEmpty
 } from '../../commons/utils/FormHelper';
-import { Device, deviceTypes } from './RemoteExecutionTypes';
+import type { Device } from './RemoteExecutionTypes';
+import { deviceTypes } from './RemoteExecutionTypes';
 
 type Props = {
   isOpen: boolean;

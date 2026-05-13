@@ -1,6 +1,6 @@
-import { ColDef } from 'ag-grid-community';
+import type { ColDef } from 'ag-grid-community';
 
-import {
+import type {
   AssessmentStatus,
   AssessmentType,
   AutogradingResult,
@@ -10,7 +10,7 @@ import {
   Question,
   Testcase
 } from '../../commons/assessment/AssessmentTypes';
-import { Notification } from '../../commons/notificationBadge/NotificationBadgeTypes';
+import type { Notification } from '../../commons/notificationBadge/NotificationBadgeTypes';
 
 export enum ColumnFields {
   assessmentName = 'assessmentName',

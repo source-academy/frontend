@@ -1,7 +1,8 @@
-import { createReducer, Reducer } from '@reduxjs/toolkit';
+import type { Reducer } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
 
 import { defaultPlayground } from '../../commons/application/ApplicationTypes';
-import { SourceActionType } from '../../commons/utils/ActionsHelper';
+import type { SourceActionType } from '../../commons/utils/ActionsHelper';
 import {
   changeQueryString,
   playgroundConfigLanguage,
@@ -9,7 +10,7 @@ import {
   playgroundUpdatePersistenceFile,
   updateShortURL
 } from './PlaygroundActions';
-import { PlaygroundState } from './PlaygroundTypes';
+import type { PlaygroundState } from './PlaygroundTypes';
 
 export const PlaygroundReducer: Reducer<PlaygroundState, SourceActionType> = createReducer(
   defaultPlayground,

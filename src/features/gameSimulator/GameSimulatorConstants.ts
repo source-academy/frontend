@@ -1,8 +1,9 @@
 import * as Phaser from 'phaser';
-import { AssetMap, AssetType, ImageAsset } from 'src/features/game/assets/AssetsTypes';
+import type { AssetMap, ImageAsset } from 'src/features/game/assets/AssetsTypes';
+import { AssetType } from 'src/features/game/assets/AssetsTypes';
 import FontAssets from 'src/features/game/assets/FontAssets';
 import { screenSize } from 'src/features/game/commons/CommonConstants';
-import { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
+import type { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
 
 import CheckpointTransition from '../game/scenes/checkpointTransition/CheckpointTransition';
 import GameManager from '../game/scenes/gameManager/GameManager';

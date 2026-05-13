@@ -3,7 +3,7 @@ import { type ColDef, type GridApi, type GridReadyEvent, themeBalham } from 'ag-
 import { AgGridReact } from 'ag-grid-react';
 import { useRef } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
+import type { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
 
 import RolesCell from './RolesCell';
 import UserActionsCell from './UserActionsCell';

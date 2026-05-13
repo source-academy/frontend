@@ -6,11 +6,9 @@ import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import AchievementActions from 'src/features/achievement/AchievementActions';
 import { saveData } from 'src/features/game/save/GameSaveRequests';
-import { FullSaveState } from 'src/features/game/save/GameSaveTypes';
-import SourceAcademyGame, {
-  AccountInfo,
-  createSourceAcademyGame
-} from 'src/features/game/SourceAcademyGame';
+import type { FullSaveState } from 'src/features/game/save/GameSaveTypes';
+import type { AccountInfo } from 'src/features/game/SourceAcademyGame';
+import SourceAcademyGame, { createSourceAcademyGame } from 'src/features/game/SourceAcademyGame';
 
 const Game: React.FC = () => {
   const session = useTypedSelector(state => state.session);

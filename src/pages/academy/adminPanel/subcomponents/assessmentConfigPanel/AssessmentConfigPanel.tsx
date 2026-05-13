@@ -18,9 +18,9 @@ import {
   useRef,
   useState
 } from 'react';
-import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
+import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
-import { WithImperativeApi } from 'src/commons/utils/TypeHelper';
+import type { WithImperativeApi } from 'src/commons/utils/TypeHelper';
 
 import BooleanCell from './BooleanCell';
 import DeleteRowCell from './DeleteRowCell';

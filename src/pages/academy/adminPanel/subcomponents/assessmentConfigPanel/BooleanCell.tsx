@@ -1,8 +1,8 @@
 import { Switch } from '@blueprintjs/core';
-import { IRowNode } from 'ag-grid-community';
+import type { IRowNode } from 'ag-grid-community';
 import { useCallback } from 'react';
-import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
-import { KeysOfType } from 'src/commons/utils/TypeHelper';
+import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
+import type { KeysOfType } from 'src/commons/utils/TypeHelper';
 
 type Props = {
   data: AssessmentConfiguration;
