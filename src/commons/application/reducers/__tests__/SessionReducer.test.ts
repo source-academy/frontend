@@ -1,17 +1,17 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
 
-import { GradingOverview, GradingQuery } from '../../../../features/grading/GradingTypes';
+import type { GradingOverview, GradingQuery } from '../../../../features/grading/GradingTypes';
 import {
-  Assessment,
-  AssessmentOverview,
+  type Assessment,
+  type AssessmentOverview,
   AssessmentStatuses,
   ProgressStatuses
 } from '../../../assessment/AssessmentTypes';
-import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
+import type { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import CommonsActions from '../../actions/CommonsActions';
 import SessionActions from '../../actions/SessionActions';
-import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
-import { SessionState } from '../../types/SessionTypes';
+import { defaultSession, type GameState, Role, type Story } from '../../ApplicationTypes';
+import type { SessionState } from '../../types/SessionTypes';
 import { SessionsReducer } from '../SessionsReducer';
 
 test('LOG_OUT works correctly on default session', () => {
