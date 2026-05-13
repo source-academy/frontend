@@ -2,7 +2,7 @@ import { FnValue } from '../../components/values/FnValue';
 import { GlobalFnValue } from '../../components/values/GlobalFnValue';
 import { Config } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
-import { StepsArray } from '../../CseMachineTypes';
+import type { StepsArray } from '../../CseMachineTypes';
 import { ControlItemComponent } from '../ControlItemComponent';
 import { Frame } from '../Frame';
 import { ContValue } from '../values/ContValue';

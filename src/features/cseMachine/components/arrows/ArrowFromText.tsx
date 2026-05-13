@@ -1,5 +1,5 @@
 import { Config } from '../../CseMachineConfig';
-import { StepsArray } from '../../CseMachineTypes';
+import type { StepsArray } from '../../CseMachineTypes';
 import { Frame } from '../Frame';
 import { Text } from '../Text';
 import { ArrayValue } from '../values/ArrayValue';

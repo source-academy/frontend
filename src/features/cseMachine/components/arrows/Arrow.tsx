@@ -1,4 +1,4 @@
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 
 import { ArrayUnit } from '../ArrayUnit';
 import { ControlItemComponent } from '../ControlItemComponent';
