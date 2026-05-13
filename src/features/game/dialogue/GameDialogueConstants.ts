@@ -14,6 +14,11 @@ const DialogueConstants = {
   },
   text: { xPad: 100, yPad: 70 },
   speakerTextConfig: { x: 320, y: 745, oriX: 0.5, oriY: 0.5 },
+  skipButton: {
+    x: screenSize.x - 62.5, // X Position
+    y: screenSize.y * 0.73, // Y Position
+    size: 45, // Width and Height
+  },
 };
 
 export const textTypeWriterStyle = {

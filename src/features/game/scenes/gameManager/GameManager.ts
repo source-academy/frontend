@@ -266,6 +266,7 @@ class GameManager extends Phaser.Scene {
 
     //Reset the actionJustSaved flag
     this.actionJustSaved = false;
+
     // Transition to the new location
     await blackFade(this, 300, 500, async () => {
       await this.getLayerManager().clearAllLayers();
@@ -280,7 +281,10 @@ class GameManager extends Phaser.Scene {
     if (this.actionJustSaved) {
       return;
     }
+
+    await GameGlobalAPI.getInstance().saveGame();
   }
+
   /**
    * Change location to the location cannot reach from current scene
    *

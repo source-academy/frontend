@@ -15,6 +15,7 @@ const ImageAssets: AssetMap<ImageAsset> = {
   topButton: { type: AssetType.Image, key: 'top-button', path: '/ui/topButton.png' },
   speechBox: { type: AssetType.Image, key: 'speechBox', path: '/ui/speechbox.png' },
   speakerBox: { type: AssetType.Image, key: 'speakerBox', path: '/ui/speakerBox.png' },
+  skipButton: { type: AssetType.Image, key: 'skip-button', path: '/ui/skip-button.png' },
   defaultLocationImg: {
     type: AssetType.Image,
     key: 'loc-default',

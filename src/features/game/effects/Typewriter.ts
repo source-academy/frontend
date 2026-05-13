@@ -53,7 +53,16 @@ export function Typewriter(
     }, typeWriterInterval);
   };
 
-  return { container: textSprite, changeLine, clearTyping };
+  const finishTyping = () => {
+    clearTyping();
+
+    if (line) {
+      textSprite.text = line;
+      charPointer = line.length;
+    }
+  };
+
+  return { container: textSprite, changeLine, clearTyping, finishTyping };
 }
 
 export default Typewriter;
