@@ -50,8 +50,12 @@ const MonacoEditor: React.FC<EditorProps> = props => {
           onChange={handleChange}
           options={{
             fontFamily: "'Inconsolata', 'Consolas', monospace",
-            fontSize: 16,
+            fontSize: 17,
+            folding: false,
+            glyphMargin: false,
             hover: { enabled: false },
+            lineHeight: 17,
+            lineNumbersMinChars: 4,
             minimap: { enabled: false },
             readOnly: props.sessionDetails?.readOnly ?? false,
             renderLineHighlight: 'none',
