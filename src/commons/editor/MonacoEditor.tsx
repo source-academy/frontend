@@ -50,18 +50,12 @@ const MonacoEditor: React.FC<EditorProps> = props => {
           language={getLanguage(props)}
           onChange={handleChange}
           options={{
-            /* acceptSuggestionOnEnter: 'off', */
             fontFamily: "'Inconsolata', 'Consolas', monospace",
-            fontSize: 17,
+            fontSize: 16,
             hover: { enabled: false },
             minimap: { enabled: false },
-            /* parameterHints: { enabled: false }, */
-            /* quickSuggestions: false, */
             readOnly: props.sessionDetails?.readOnly ?? false,
             scrollBeyondLastLine: false,
-            /* suggestOnTriggerCharacters: false, */
-            /* tabCompletion: 'off', */
-            /* wordBasedSuggestions: 'off' */
           }}
           theme="source"
           value={props.editorValue}
