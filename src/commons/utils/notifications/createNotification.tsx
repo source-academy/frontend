@@ -1,4 +1,9 @@
-import { OverlayToaster, OverlayToasterProps, Position, Toaster } from '@blueprintjs/core';
+import {
+  OverlayToaster,
+  type OverlayToasterProps,
+  Position,
+  type Toaster
+} from '@blueprintjs/core';
 import { createRoot } from 'react-dom/client';
 
 /**

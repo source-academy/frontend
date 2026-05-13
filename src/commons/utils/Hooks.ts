@@ -1,10 +1,10 @@
 import { useMediaQuery } from '@mantine/hooks';
 import { useEffect, useMemo, useState } from 'react';
 // eslint-disable-next-line no-restricted-imports
-import { TypedUseSelectorHook, useSelector } from 'react-redux';
+import { type TypedUseSelectorHook, useSelector } from 'react-redux';
 
-import { OverallState } from '../application/ApplicationTypes';
-import { Tokens } from '../application/types/SessionTypes';
+import type { OverallState } from '../application/ApplicationTypes';
+import type { Tokens } from '../application/types/SessionTypes';
 import Constants from './Constants';
 import { readLocalStorage, setLocalStorage } from './LocalStorageHelper';
 

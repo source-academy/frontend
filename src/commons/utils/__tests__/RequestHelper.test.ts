@@ -1,8 +1,8 @@
 import { postRefresh } from 'src/commons/sagas/RequestsSaga';
 import { store } from 'src/pages/createStore';
-import { Mock, vi } from 'vitest';
+import { type Mock, vi } from 'vitest';
 
-import { Tokens } from '../../application/types/SessionTypes';
+import type { Tokens } from '../../application/types/SessionTypes';
 import { actions } from '../ActionsHelper';
 import Constants from '../Constants';
 import { showWarningMessage } from '../notifications/NotificationsHelper';
@@ -14,7 +14,7 @@ import {
   networkErrorNotificationKey,
   promptReloginMessage,
   request,
-  RequestMethod,
+  type RequestMethod,
   userSessionExpiredNotificationKey
 } from '../RequestHelper';
 

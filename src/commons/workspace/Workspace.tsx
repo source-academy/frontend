@@ -1,17 +1,18 @@
 import { Button, FocusStyleManager, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useFullscreenElement } from '@mantine/hooks';
-import { Enable, NumberSize, Resizable, ResizableProps, ResizeCallback } from 're-resizable';
-import { Direction } from 're-resizable/lib/resizer';
+import type { Enable, NumberSize, ResizableProps, ResizeCallback } from 're-resizable';
+import { Resizable } from 're-resizable';
+import type { Direction } from 're-resizable/lib/resizer';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
-import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
-import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
+import ControlBar, { type ControlBarProps } from '../controlBar/ControlBar';
+import EditorContainer, { type EditorContainerProps } from '../editor/EditorContainer';
+import McqChooser, { type McqChooserProps } from '../mcqChooser/McqChooser';
 import { Prompt } from '../ReactRouterPrompt';
-import Repl, { ReplProps } from '../repl/Repl';
-import SideBar, { SideBarTab } from '../sideBar/SideBar';
-import SideContent, { SideContentProps } from '../sideContent/SideContent';
+import Repl, { type ReplProps } from '../repl/Repl';
+import SideBar, { type SideBarTab } from '../sideBar/SideBar';
+import SideContent, { type SideContentProps } from '../sideContent/SideContent';
 import { useDimensions, useTypedSelector } from '../utils/Hooks';
 
 export type WorkspaceProps = {

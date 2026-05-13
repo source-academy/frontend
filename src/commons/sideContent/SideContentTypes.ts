@@ -1,6 +1,6 @@
-import { IconName } from '@blueprintjs/core';
+import type { IconName } from '@blueprintjs/core';
 
-import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 export enum SideContentType {
   autograder = 'autograder',

@@ -1,10 +1,13 @@
-import { type IconName, Intent } from '@blueprintjs/core';
+import type { IconName } from '@blueprintjs/core';
+import { Intent } from '@blueprintjs/core';
 import { createElement, createRef, PureComponent } from 'react';
 import { createRoot } from 'react-dom/client';
 
-import { ConfirmDialog, ConfirmDialogProps } from '../dialogs/ConfirmDialog';
-import { PromptDialog, PromptDialogProps } from '../dialogs/PromptDialog';
-import { PropsType } from './TypeHelper';
+import type { ConfirmDialogProps } from '../dialogs/ConfirmDialog';
+import { ConfirmDialog } from '../dialogs/ConfirmDialog';
+import type { PromptDialogProps } from '../dialogs/PromptDialog';
+import { PromptDialog } from '../dialogs/PromptDialog';
+import type { PropsType } from './TypeHelper';
 
 // The below is based off the Blueprint Toaster:
 // https://github.com/palantir/blueprint/blob/develop/packages/core/src/components/toast/toaster.tsx

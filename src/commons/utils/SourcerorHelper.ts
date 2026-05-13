@@ -1,4 +1,4 @@
-import { Context } from 'js-slang/dist/types';
+import type { Context } from 'js-slang/dist/types';
 
 import InterpreterActions from '../application/actions/InterpreterActions';
 

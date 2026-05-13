@@ -2,23 +2,20 @@ import { Chapter } from 'js-slang/dist/langs';
 import { Builder } from 'xml2js';
 
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import {
+import type {
   Assessment,
   AssessmentOverview,
-  AssessmentStatuses,
   AssessmentType,
   BaseQuestion,
-  emptyLibrary,
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
   MCQChoice,
   Question,
-  Testcase,
-  TestcaseTypes
+  Testcase
 } from '../assessment/AssessmentTypes';
-import {
-  EDITING_ID,
+import { AssessmentStatuses, emptyLibrary, TestcaseTypes } from '../assessment/AssessmentTypes';
+import type {
   XmlParseStrCProblem,
   XmlParseStrDeployment,
   XmlParseStrOverview,
@@ -28,6 +25,7 @@ import {
   XmlParseStrTask,
   XmlParseStrTestcase
 } from './XMLParserTypes';
+import { EDITING_ID } from './XMLParserTypes';
 
 const capitalizeFirstLetter = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);

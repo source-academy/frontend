@@ -2,7 +2,7 @@ import { Button } from '@blueprintjs/core';
 import {
   closestCenter,
   DndContext,
-  DragEndEvent,
+  type DragEndEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,

@@ -1,6 +1,6 @@
-import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 
-import { BooleanExpression } from './ExpressionTypes';
+import type { BooleanExpression } from './ExpressionTypes';
 
 export enum AchievementStatus {
   ACTIVE = 'ACTIVE', // deadline not over and not completed

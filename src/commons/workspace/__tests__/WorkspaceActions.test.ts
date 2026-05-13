@@ -3,14 +3,14 @@ import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActi
 
 import {
   createDefaultWorkspace,
-  SALanguage,
+  type SALanguage,
   SupportedLanguage
 } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
-import { Library } from '../../assessment/AssessmentTypes';
-import { HighlightedLines } from '../../editor/EditorTypes';
+import type { Library } from '../../assessment/AssessmentTypes';
+import type { HighlightedLines } from '../../editor/EditorTypes';
 import WorkspaceActions from '../WorkspaceActions';
-import { EditorTabState, WorkspaceLocation } from '../WorkspaceTypes';
+import type { EditorTabState, WorkspaceLocation } from '../WorkspaceTypes';
 
 const assessmentWorkspace: WorkspaceLocation = 'assessment';
 const gradingWorkspace: WorkspaceLocation = 'grading';

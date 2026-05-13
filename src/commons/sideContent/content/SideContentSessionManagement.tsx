@@ -15,7 +15,7 @@ import { showSuccessMessage } from 'src/commons/utils/notifications/Notification
 import classes from 'src/styles/SideContentSessionManagement.module.scss';
 
 import { beginAlertSideContent } from '../SideContentActions';
-import { SideContentLocation, SideContentType } from '../SideContentTypes';
+import { type SideContentLocation, SideContentType } from '../SideContentTypes';
 
 interface AdminViewProps {
   users: Record<string, SharedbAceUser>;
