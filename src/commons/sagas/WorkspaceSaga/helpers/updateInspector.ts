@@ -1,12 +1,12 @@
 import { Chapter } from 'js-slang/dist/langs';
-import { SagaIterator } from 'redux-saga';
+import type { SagaIterator } from 'redux-saga';
 import { put, select } from 'redux-saga/effects';
 
-import { OverallState } from '../../../application/ApplicationTypes';
+import type { OverallState } from '../../../application/ApplicationTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import { visualizeJavaCseMachine } from '../../../utils/JavaHelper';
 import { visualizeCseMachine } from '../../../utils/JsSlangHelper';
-import { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 
 export function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
   try {

@@ -1,10 +1,10 @@
 import { stringify } from 'js-slang/dist/utils/stringify';
 
 import {
-  IMCQQuestion,
-  Question,
+  type IMCQQuestion,
+  type Question,
   QuestionTypes,
-  Testcase
+  type Testcase
 } from '../../commons/assessment/AssessmentTypes';
 import { showWarningMessage } from '../../commons/utils/notifications/NotificationsHelper';
 

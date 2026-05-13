@@ -1,5 +1,5 @@
+import type { TabId } from '@blueprintjs/core';
 import * as bpcore from '@blueprintjs/core';
-import { TabId } from '@blueprintjs/core';
 import * as bpicons from '@blueprintjs/icons';
 import * as jsslang from 'js-slang';
 import * as jsslangDist from 'js-slang/dist';
@@ -16,13 +16,13 @@ import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../utils/Hooks';
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
 import { visitSideContent } from './SideContentActions';
-import {
+import type {
   ModuleSideContent,
   SideContentLocation,
   SideContentState,
-  SideContentTab,
-  SideContentType
+  SideContentTab
 } from './SideContentTypes';
+import { SideContentType } from './SideContentTypes';
 
 const requireProvider = (x: string) => {
   const exports = {

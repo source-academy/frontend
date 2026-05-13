@@ -2,15 +2,12 @@ import { EditableText } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
 import { useContext, useMemo, useReducer, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
-import { GoalDefinition, GoalMeta } from 'src/features/achievement/AchievementTypes';
+import type { GoalDefinition, GoalMeta } from 'src/features/achievement/AchievementTypes';
 
 import ItemDeleter from '../common/ItemDeleter';
 import ItemSaver from '../common/ItemSaver';
-import {
-  EditableGoalAction as Action,
-  EditableGoalActionType as ActionType,
-  EditableGoalState as State
-} from './EditableGoalTypes';
+import type { EditableGoalAction as Action, EditableGoalState as State } from './EditableGoalTypes';
+import { EditableGoalActionType as ActionType } from './EditableGoalTypes';
 import EditableMeta from './EditableMeta';
 
 const init = (goal: GoalDefinition): State => {

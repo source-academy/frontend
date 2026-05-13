@@ -1,6 +1,6 @@
 import { Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Chapter } from 'js-slang/dist/langs';
-import { Value } from 'js-slang/dist/types';
+import type { Value } from 'js-slang/dist/types';
 
 import CseMachine from '../CseMachine';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';

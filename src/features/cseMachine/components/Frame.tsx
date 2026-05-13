@@ -6,7 +6,7 @@ import CseMachine from '../CseMachine';
 import { CseAnimation } from '../CseMachineAnimation';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
+import type { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   defaultActiveColor,
   defaultBackgroundColor,

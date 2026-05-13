@@ -1,13 +1,14 @@
 import 'src/styles/Leaderboard.scss';
 
-import { ColDef, IDatasource, themeAlpine } from 'ag-grid-community';
+import type { ColDef, IDatasource } from 'ag-grid-community';
+import { themeAlpine } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import default_avatar from 'src/assets/default-avatar.jpg';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
-import { LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
+import type { LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 
 import leaderboardBackground from '../../../assets/leaderboard_background.jpg';
 import LeaderboardDropdown from './LeaderboardDropdown';

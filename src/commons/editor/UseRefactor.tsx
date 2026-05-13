@@ -2,7 +2,7 @@ import { Range } from 'ace-builds';
 import { createContext, getAllOccurrencesInScope } from 'js-slang';
 import { useCallback } from 'react';
 
-import { EditorHook } from './Editor';
+import type { EditorHook } from './Editor';
 
 // EditorHook structure:
 // EditorHooks grant access to 4 things:

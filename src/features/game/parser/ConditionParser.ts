@@ -1,4 +1,4 @@
-import { ActionCondition } from '../action/GameActionTypes';
+import type { ActionCondition } from '../action/GameActionTypes';
 import { GameItemType } from '../location/GameMapTypes';
 import { GameStateStorage } from '../state/GameStateTypes';
 import StringUtils from '../utils/StringUtils';

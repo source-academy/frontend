@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { useCallback, useState } from 'react';
 import { DateInput } from 'src/commons/DateTimePickers';
 
-import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
 import { showWarningMessage } from '../../../../commons/utils/notifications/NotificationsHelper';
 

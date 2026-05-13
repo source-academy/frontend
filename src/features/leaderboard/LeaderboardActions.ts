@@ -1,6 +1,6 @@
 import { createActions } from 'src/commons/redux/utils';
 
-import {
+import type {
   ContestLeaderboardRow,
   LeaderboardContestDetails,
   LeaderboardRow

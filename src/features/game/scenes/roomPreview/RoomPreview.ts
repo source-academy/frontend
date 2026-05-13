@@ -1,4 +1,5 @@
-import { Context, runInContext } from 'js-slang';
+import type { Context } from 'js-slang';
+import { runInContext } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { createContext } from 'src/commons/utils/JsSlangHelper';
 
@@ -7,7 +8,7 @@ import { getAwardProp } from '../../awards/GameAwardsHelper';
 import GameAwardsManager from '../../awards/GameAwardsManager';
 import { Constants, screenCenter, screenSize } from '../../commons/CommonConstants';
 import CommonTextHover from '../../commons/CommonTextHover';
-import { ItemId } from '../../commons/CommonTypes';
+import type { ItemId } from '../../commons/CommonTypes';
 import GameDashboardManager from '../../dashboard/GameDashboardManager';
 import { DashboardPage } from '../../dashboard/GameDashboardTypes';
 import { addLoadingScreen } from '../../effects/LoadingScreen';

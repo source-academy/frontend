@@ -1,8 +1,8 @@
 import FontAssets from '../assets/FontAssets';
 import { Constants, screenSize } from '../commons/CommonConstants';
-import { BitmapFontStyle } from '../commons/CommonTypes';
+import type { BitmapFontStyle } from '../commons/CommonTypes';
 import { Color } from '../utils/StyleUtils';
-import { AwardProperty } from './GameAwardsTypes';
+import type { AwardProperty } from './GameAwardsTypes';
 
 export const listBannerTextStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,

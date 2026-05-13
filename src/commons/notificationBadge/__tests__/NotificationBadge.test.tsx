@@ -8,7 +8,7 @@ import {
   filterNotificationsBySubmission,
   filterNotificationsByType
 } from '../NotificationBadgeHelper';
-import { Notification } from '../NotificationBadgeTypes';
+import type { Notification } from '../NotificationBadgeTypes';
 
 const notifications: Notification[] = [
   {

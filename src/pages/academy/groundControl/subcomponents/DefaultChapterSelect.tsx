@@ -8,7 +8,7 @@ import {
   MenuItem
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
+import { type ItemListRenderer, type ItemRenderer, Select } from '@blueprintjs/select';
 import { Variant } from 'js-slang/dist/langs';
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -16,7 +16,7 @@ import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 
 import {
-  SALanguage,
+  type SALanguage,
   sourceLanguages,
   styliseSublanguage
 } from '../../../../commons/application/ApplicationTypes';

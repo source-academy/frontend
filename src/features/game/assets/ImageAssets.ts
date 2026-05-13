@@ -1,4 +1,5 @@
-import { AssetMap, AssetType, ImageAsset } from './AssetsTypes';
+import type { AssetMap, ImageAsset } from './AssetsTypes';
+import { AssetType } from './AssetsTypes';
 
 const ImageAssets: AssetMap<ImageAsset> = {
   // Commons Asset

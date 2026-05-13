@@ -1,4 +1,4 @@
-import { SagaIterator } from 'redux-saga';
+import type { SagaIterator } from 'redux-saga';
 import { call, debounce, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
 
 import SessionActions from '../../../application/actions/SessionActions';

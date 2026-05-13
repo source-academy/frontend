@@ -2,7 +2,7 @@ import { Button } from '@blueprintjs/core';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useTokens } from 'src/commons/utils/Hooks';
 import { continueChat, initChat } from 'src/features/sicp/chatCompletion/api';
-import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
+import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import classes from 'src/styles/Chatbot.module.scss';
 import { v4 as uuid } from 'uuid';
 

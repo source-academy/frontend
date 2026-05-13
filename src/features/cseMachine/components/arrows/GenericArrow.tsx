@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { createRef } from 'react';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
@@ -7,7 +7,7 @@ import CseMachine from '../../CseMachine';
 import { CseAnimation } from '../../CseMachineAnimation';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { ArrowOriginFilterKey, IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
+import type { ArrowOriginFilterKey, IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
 import { defaultStrokeColor, fadedStrokeColor } from '../../CseMachineUtils';
 import { Visible } from '../Visible';
 import { arrowSelection } from './ArrowSelection';

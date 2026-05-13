@@ -1,5 +1,5 @@
 import SoundAssets from '../assets/SoundAssets';
-import { ItemId } from '../commons/CommonTypes';
+import type { ItemId } from '../commons/CommonTypes';
 import { promptWithChoices } from '../effects/Prompt';
 import { keyboardShortcuts } from '../input/GameInputConstants';
 import GameInputManager from '../input/GameInputManager';

@@ -4,7 +4,7 @@ import { t } from 'i18next';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SideContentTab, SideContentType } from '../SideContentTypes';
+import { type SideContentTab, SideContentType } from '../SideContentTypes';
 
 export type UploadResult = {
   [key: string]: any;

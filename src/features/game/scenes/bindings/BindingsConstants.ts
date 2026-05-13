@@ -1,6 +1,6 @@
 import FontAssets from '../../assets/FontAssets';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
-import { BitmapFontStyle } from '../../commons/CommonTypes';
+import type { BitmapFontStyle } from '../../commons/CommonTypes';
 
 export const BindingConstants = {
   keyTextConfig: { x: screenCenter.x - 100, y: 0, oriX: 0.5, oriY: 0.5 },

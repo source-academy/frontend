@@ -32,7 +32,7 @@ import type {
 import { KeyboardCommand } from '../../features/eventLogging/EventLoggingTypes';
 import SessionActions from '../application/actions/SessionActions';
 import { defaultWorkspaceManager } from '../application/ApplicationTypes';
-import {
+import type {
   AssessmentConfiguration,
   AutogradingResult,
   ContestEntry,
@@ -40,9 +40,9 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
-  QuestionTypes,
   Testcase
 } from '../assessment/AssessmentTypes';
+import { QuestionTypes } from '../assessment/AssessmentTypes';
 import type { ControlBarProps } from '../controlBar/ControlBar';
 import ControlBarChapterSelect from '../controlBar/ControlBarChapterSelect';
 import ControlBarClearButton from '../controlBar/ControlBarClearButton';
@@ -59,31 +59,31 @@ import VersionHistoryPanel from '../controlBar/VersionHistoryPanel';
 import ControlButton from '../ControlButton';
 import {
   convertEditorTabStateToProps,
-  NormalEditorContainerProps
+  type NormalEditorContainerProps
 } from '../editor/EditorContainer';
-import { Position } from '../editor/EditorTypes';
+import type { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
-import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/MobileSideContent';
-import MobileWorkspace, { MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
+import type { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/MobileSideContent';
+import MobileWorkspace, { type MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
 import SideContentAutograder from '../sideContent/content/SideContentAutograder';
 import SideContentContestLeaderboard from '../sideContent/content/SideContentContestLeaderboard';
 import SideContentContestVotingContainer from '../sideContent/content/SideContentContestVotingContainer';
 import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
-import { SideContentProps } from '../sideContent/SideContent';
+import type { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight } from '../sideContent/SideContentActions';
 import { useSideContent } from '../sideContent/SideContentHelper';
-import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import { type SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { useResponsive, useTypedSelector } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import { assertType } from '../utils/TypeHelper';
-import Workspace, { WorkspaceProps } from '../workspace/Workspace';
+import Workspace, { type WorkspaceProps } from '../workspace/Workspace';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 import {
   type CodeVersion,
   type CodeVersionMetadata,
-  WorkspaceLocation,
-  WorkspaceState
+  type WorkspaceLocation,
+  type WorkspaceState
 } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 

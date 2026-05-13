@@ -2,12 +2,13 @@ import { Button } from '@blueprintjs/core';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Form, useNavigate, useParams } from 'react-router';
-import Select, { ActionMeta, MultiValue } from 'react-select';
+import type { ActionMeta, MultiValue } from 'react-select';
+import Select from 'react-select';
 import SessionActions from 'src/commons/application/actions/SessionActions';
-import { User } from 'src/commons/application/types/SessionTypes';
-import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import type { User } from 'src/commons/application/types/SessionTypes';
+import type { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import { useSession } from 'src/commons/utils/Hooks';
-import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
+import type { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 import classes from 'src/styles/TeamFormation.module.scss';
 
 export type OptionType = {

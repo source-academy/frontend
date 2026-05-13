@@ -1,6 +1,6 @@
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { GameStateStorage } from '../state/GameStateTypes';
-import { ActionCondition } from './GameActionTypes';
+import type { ActionCondition } from './GameActionTypes';
 
 /**
  * This class checks for whether if-conditions are satisfied,

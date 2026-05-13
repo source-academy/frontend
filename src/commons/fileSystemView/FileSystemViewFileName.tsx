@@ -1,4 +1,4 @@
-import { FSModule } from 'browserfs/dist/node/core/FS';
+import type { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -6,7 +6,7 @@ import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import { sendAdminStoryRequest, sendAssetRequest, sendStoryRequest } from './GameSimulatorRequest';
-import { ChapterDetail } from './GameSimulatorTypes';
+import type { ChapterDetail } from './GameSimulatorTypes';
 
 /**
  * List of all folders to fetch S3 assets from

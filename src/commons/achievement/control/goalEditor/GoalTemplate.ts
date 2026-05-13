@@ -1,11 +1,10 @@
-import {
+import type {
   AchievementGoal,
-  EventType,
   GoalDefinition,
   GoalMeta,
-  GoalProgress,
-  GoalType
+  GoalProgress
 } from 'src/features/achievement/AchievementTypes';
+import { EventType, GoalType } from 'src/features/achievement/AchievementTypes';
 
 export const metaTemplate = (type: GoalType): GoalMeta => {
   switch (type) {

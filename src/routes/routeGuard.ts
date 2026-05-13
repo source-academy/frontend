@@ -1,5 +1,6 @@
-import { LoaderFunctionArgs, redirect, RouteObject } from 'react-router';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
+import type { LoaderFunctionArgs, RouteObject } from 'react-router';
+import { redirect } from 'react-router';
+import type { OverallState } from 'src/commons/application/ApplicationTypes';
 import { store } from 'src/pages/createStore';
 
 type RouteFilter = boolean | ((state: OverallState) => boolean);

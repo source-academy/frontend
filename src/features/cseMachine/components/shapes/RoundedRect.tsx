@@ -1,4 +1,4 @@
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Shape } from 'react-konva';
 
 import { ShapeDefaultProps } from '../../CseMachineConfig';

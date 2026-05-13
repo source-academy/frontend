@@ -1,7 +1,7 @@
 import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { RunnerStatus } from '@sourceacademy/conductor/types';
-import { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
+import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import { tokenizer } from 'acorn';
 import { type Context, interrupt, type Result, resume, runFilesInContext } from 'js-slang';
 import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';

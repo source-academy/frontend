@@ -1,4 +1,5 @@
-import { Conduit, IConduit } from '@sourceacademy/conductor/conduit';
+import type { IConduit } from '@sourceacademy/conductor/conduit';
+import { Conduit } from '@sourceacademy/conductor/conduit';
 
 import AutoCompletePlugin from './AutocompletePlugin';
 import { BrowserHostPlugin } from './BrowserHostPlugin';

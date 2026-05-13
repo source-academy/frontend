@@ -1,13 +1,13 @@
 import { Button, MenuItem, Tooltip } from '@blueprintjs/core';
-import { ItemRenderer, Select } from '@blueprintjs/select';
-import {
+import { type ItemRenderer, Select } from '@blueprintjs/select';
+import type {
   AssessmentMeta,
   BinaryMeta,
   EventMeta,
   GoalMeta,
-  GoalType,
   ManualMeta
 } from 'src/features/achievement/AchievementTypes';
+import { GoalType } from 'src/features/achievement/AchievementTypes';
 
 import { metaTemplate } from './GoalTemplate';
 import EditableAssessmentMeta from './metaDetails/EditableAssessmentMeta';

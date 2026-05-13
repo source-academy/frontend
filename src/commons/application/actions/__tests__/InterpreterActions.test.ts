@@ -1,4 +1,4 @@
-import { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import InterpreterActions from '../InterpreterActions';
 
 const assessmentWorkspace: WorkspaceLocation = 'assessment';

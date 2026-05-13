@@ -1,9 +1,10 @@
-import { createReducer, Reducer } from '@reduxjs/toolkit';
-import { SourceActionType } from 'src/commons/utils/ActionsHelper';
+import type { Reducer } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
+import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
 import { defaultLeaderboard } from '../../commons/application/ApplicationTypes';
 import LeaderboardActions from './LeaderboardActions';
-import { LeaderboardState } from './LeaderboardTypes';
+import type { LeaderboardState } from './LeaderboardTypes';
 
 export const LeaderboardReducer: Reducer<LeaderboardState, SourceActionType> = createReducer(
   defaultLeaderboard,

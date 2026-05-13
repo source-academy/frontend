@@ -1,4 +1,4 @@
-import { Card, Icon, IconName } from '@blueprintjs/core';
+import { Card, Icon, type IconName } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { useState } from 'react';
 

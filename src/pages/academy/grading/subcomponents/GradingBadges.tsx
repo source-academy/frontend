@@ -1,8 +1,9 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { ProgressStatus, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
-import { ColumnFilter } from 'src/features/grading/GradingTypes';
+import type { ProgressStatus } from 'src/commons/assessment/AssessmentTypes';
+import { ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
+import type { ColumnFilter } from 'src/features/grading/GradingTypes';
 import classes from 'src/styles/Grading.module.scss';
 import badgeClasses from 'src/styles/GradingBadges.module.scss';
 

@@ -1,6 +1,6 @@
 import { createActions } from 'src/commons/redux/utils';
 
-import { GradingSummary } from './DashboardTypes';
+import type { GradingSummary } from './DashboardTypes';
 
 const DashboardActions = createActions('dashboard', {
   fetchGroupGradingSummary: () => ({}),

@@ -1,11 +1,11 @@
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { createRef, Fragment } from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
 import { ShapeDefaultProps } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
-import { IHoverable } from '../../CseMachineTypes';
+import type { IHoverable } from '../../CseMachineTypes';
 import {
   defaultActiveColor,
   defaultTextColor,

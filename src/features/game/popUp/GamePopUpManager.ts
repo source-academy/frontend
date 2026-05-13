@@ -1,7 +1,8 @@
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants } from '../commons/CommonConstants';
-import { GamePosition, GameSize, ItemId } from '../commons/CommonTypes';
+import type { ItemId } from '../commons/CommonTypes';
+import { GamePosition, GameSize } from '../commons/CommonTypes';
 import { scrollEntry, scrollExit } from '../effects/ScrollEffect';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';

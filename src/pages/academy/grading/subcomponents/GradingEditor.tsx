@@ -4,7 +4,7 @@ import {
   Divider,
   H3,
   Icon,
-  IconName,
+  type IconName,
   Intent,
   NumericInput,
   Position,
@@ -12,9 +12,10 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useEffect, useMemo, useState } from 'react';
-import ReactMde, { ReactMdeProps } from 'react-mde';
+import type { ReactMdeProps } from 'react-mde';
+import ReactMde from 'react-mde';
 import { useDispatch } from 'react-redux';
-import { AutogradingResult, LLMPrompt } from 'src/commons/assessment/AssessmentTypes';
+import type { AutogradingResult, LLMPrompt } from 'src/commons/assessment/AssessmentTypes';
 import { useTokens } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../../../../commons/application/actions/SessionActions';

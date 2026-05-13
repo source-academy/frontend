@@ -5,11 +5,8 @@ import {
   coverImageUrl
 } from '../../../features/achievement/AchievementConstants';
 import { GoalType } from '../../../features/achievement/AchievementTypes';
-import {
-  AssessmentConfiguration,
-  AssessmentOverview,
-  AssessmentStatuses
-} from '../../assessment/AssessmentTypes';
+import type { AssessmentConfiguration, AssessmentOverview } from '../../assessment/AssessmentTypes';
+import { AssessmentStatuses } from '../../assessment/AssessmentTypes';
 import AchievementInferencer from './AchievementInferencer';
 import { isExpired, isReleased } from './DateHelper';
 

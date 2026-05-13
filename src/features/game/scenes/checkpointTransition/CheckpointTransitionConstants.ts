@@ -1,6 +1,6 @@
 import FontAssets from '../../assets/FontAssets';
 import { screenCenter } from '../../commons/CommonConstants';
-import { BitmapFontStyle } from '../../commons/CommonTypes';
+import type { BitmapFontStyle } from '../../commons/CommonTypes';
 
 export const transitionTextStyle: BitmapFontStyle = {
   key: FontAssets.alienCowsFont.key,

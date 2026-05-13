@@ -1,10 +1,10 @@
 import { Drawer, DrawerSize, NonIdealState, Spinner } from '@blueprintjs/core';
-import { IconName, IconNames } from '@blueprintjs/icons';
+import { type IconName, IconNames } from '@blueprintjs/icons';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import SessionActions from '../application/actions/SessionActions';
-import { AssessmentStatuses, AssessmentType } from '../assessment/AssessmentTypes';
+import { AssessmentStatuses, type AssessmentType } from '../assessment/AssessmentTypes';
 import Constants from '../utils/Constants';
 import { useSession } from '../utils/Hooks';
 import ProfileCard from './ProfileCard';

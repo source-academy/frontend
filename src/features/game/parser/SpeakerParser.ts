@@ -1,5 +1,5 @@
 import { AssetType } from '../assets/AssetsTypes';
-import { SpeakerDetail } from '../character/GameCharacterTypes';
+import type { SpeakerDetail } from '../character/GameCharacterTypes';
 import StringUtils from '../utils/StringUtils';
 import CharacterParser from './CharacterParser';
 import Parser from './Parser';

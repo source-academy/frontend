@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
-import {
+import type {
   ContestLeaderboardRow,
   LeaderboardContestDetails
 } from 'src/features/leaderboard/LeaderboardTypes';

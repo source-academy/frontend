@@ -1,7 +1,7 @@
 import FontAssets from '../assets/FontAssets';
 import ImageAssets from '../assets/ImageAssets';
 import { screenSize } from '../commons/CommonConstants';
-import { BitmapFontStyle } from '../commons/CommonTypes';
+import type { BitmapFontStyle } from '../commons/CommonTypes';
 
 export const taskTextStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,

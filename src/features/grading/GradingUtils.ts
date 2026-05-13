@@ -1,13 +1,10 @@
-import { ColumnFilter } from '@tanstack/react-table';
+import type { ColumnFilter } from '@tanstack/react-table';
 import { t } from 'i18next';
-import {
-  AssessmentStatus,
-  AssessmentStatuses,
-  ProgressStatus,
-  ProgressStatuses
-} from 'src/commons/assessment/AssessmentTypes';
+import type { AssessmentStatus, ProgressStatus } from 'src/commons/assessment/AssessmentTypes';
+import { AssessmentStatuses, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 
-import { ColumnFields, GradingOverview } from './GradingTypes';
+import type { GradingOverview } from './GradingTypes';
+import { ColumnFields } from './GradingTypes';
 
 export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined) => {
   if (!gradingOverviews) return;

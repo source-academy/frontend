@@ -10,7 +10,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { useCallback, useState } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
+import type { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
 import ControlButton from 'src/commons/ControlButton';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 

@@ -8,9 +8,12 @@ import {
   getAbilityBackground,
   getAbilityGlow
 } from '../../features/achievement/AchievementConstants';
-import { AchievementStatus, AchievementUser } from '../../features/achievement/AchievementTypes';
+import {
+  AchievementStatus,
+  type AchievementUser
+} from '../../features/achievement/AchievementTypes';
 import SessionActions from '../application/actions/SessionActions';
-import { Assessment } from '../assessment/AssessmentTypes';
+import type { Assessment } from '../assessment/AssessmentTypes';
 import { useTypedSelector } from '../utils/Hooks';
 import AchievementCommentCard from './AchievementCommentCard';
 import { prettifyDate } from './utils/DateHelper';

@@ -1,7 +1,7 @@
 import { createActions } from 'src/commons/redux/utils';
 
-import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
-import { Device, DeviceSession } from './RemoteExecutionTypes';
+import type { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import type { Device, DeviceSession } from './RemoteExecutionTypes';
 
 const RemoteExecutionActions = createActions('remoteExecution', {
   remoteExecFetchDevices: () => ({}),

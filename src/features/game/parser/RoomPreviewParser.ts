@@ -1,4 +1,4 @@
-import { AssetPath, ItemId } from '../commons/CommonTypes';
+import type { AssetPath, ItemId } from '../commons/CommonTypes';
 import { toS3Path } from '../utils/GameUtils';
 import StringUtils from '../utils/StringUtils';
 

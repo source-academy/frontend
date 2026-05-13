@@ -22,11 +22,11 @@ import {
   ev3PeripheralToComponentMap,
   ev3SensorModeToValueTransformerMap
 } from 'src/features/remoteExecution/RemoteExecutionEv3Types';
-import { Device, DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
+import type { Device, DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
 
 import { actions } from '../../../utils/ActionsHelper';
 import { useTypedSelector } from '../../../utils/Hooks';
-import { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import DeviceMenuItemButtons from './DeviceMenuItemButtons';
 
 interface SideContentRemoteExecutionProps {

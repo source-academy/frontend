@@ -1,7 +1,7 @@
 import Konva from 'konva';
 import { createRef } from 'react';
 
-import { IVisible } from '../CseMachineTypes';
+import type { IVisible } from '../CseMachineTypes';
 
 /**
  * class to implement the IVisible interface, used by all components.

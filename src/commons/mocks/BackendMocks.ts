@@ -1,29 +1,29 @@
-import { SagaIterator } from 'redux-saga';
+import type { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 import DashboardActions from 'src/features/dashboard/DashboardActions';
 
-import {
+import type {
   GradingOverviews,
   GradingQuery,
-  GradingQuestion,
-  SortStates
+  GradingQuestion
 } from '../../features/grading/GradingTypes';
+import { SortStates } from '../../features/grading/GradingTypes';
 import SessionActions from '../application/actions/SessionActions';
 import {
-  OverallState,
+  type OverallState,
   Role,
-  SALanguage,
+  type SALanguage,
   styliseSublanguage,
   SupportedLanguage
 } from '../application/ApplicationTypes';
-import { AdminPanelCourseRegistration, Tokens } from '../application/types/SessionTypes';
+import type { AdminPanelCourseRegistration, Tokens } from '../application/types/SessionTypes';
 import {
-  AssessmentOverview,
+  type AssessmentOverview,
   AssessmentStatuses,
   ProgressStatuses,
-  Question
+  type Question
 } from '../assessment/AssessmentTypes';
-import {
+import type {
   Notification,
   NotificationFilterFunction
 } from '../notificationBadge/NotificationBadgeTypes';

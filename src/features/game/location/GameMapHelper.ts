@@ -1,4 +1,4 @@
-import { GameLocation } from './GameMapTypes';
+import type { GameLocation } from './GameMapTypes';
 
 /**
  * Intialises an an empty location

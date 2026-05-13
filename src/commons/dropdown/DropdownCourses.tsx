@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { useNavigate } from 'react-router';
 
 import { Role } from '../application/ApplicationTypes';
-import { UserCourse } from '../application/types/SessionTypes';
+import type { UserCourse } from '../application/types/SessionTypes';
 
 type Props = {
   isOpen: boolean;

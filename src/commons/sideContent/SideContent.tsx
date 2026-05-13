@@ -1,4 +1,4 @@
-import { Card, Icon, Tab, TabProps, Tabs, Tooltip } from '@blueprintjs/core';
+import { Card, Icon, Tab, type TabProps, Tabs, Tooltip } from '@blueprintjs/core';
 import { cloneElement } from 'react';
 
 import { assertType } from '../utils/TypeHelper';

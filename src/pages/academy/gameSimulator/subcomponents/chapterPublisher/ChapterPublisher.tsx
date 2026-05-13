@@ -3,7 +3,7 @@ import { memo, useState } from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
 import { defaultChapter } from 'src/features/gameSimulator/GameSimulatorConstants';
 import { fetchChapters, fetchTextAssets } from 'src/features/gameSimulator/GameSimulatorService';
-import { ChapterDetail } from 'src/features/gameSimulator/GameSimulatorTypes';
+import type { ChapterDetail } from 'src/features/gameSimulator/GameSimulatorTypes';
 
 import ChapterPublisherEditor from './ChapterPublisherEditor';
 

@@ -1,13 +1,13 @@
 import { IconNames } from '@blueprintjs/icons';
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
-import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
+import type { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import Markdown from 'src/commons/Markdown';
 import SideContentRemoteExecution from 'src/commons/sideContent/content/remoteExecution/SideContentRemoteExecution';
 import SideContentSessionManagement from 'src/commons/sideContent/content/SideContentSessionManagement';
 import SideContentSubstVisualizer from 'src/commons/sideContent/content/SideContentSubstVisualizer';
 import {
-  SideContentLocation,
-  SideContentTab,
+  type SideContentLocation,
+  type SideContentTab,
   SideContentType
 } from 'src/commons/sideContent/SideContentTypes';
 

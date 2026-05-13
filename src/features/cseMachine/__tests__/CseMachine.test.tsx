@@ -11,7 +11,7 @@ import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import CseMachine from '../CseMachine';
 import { Config } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { Env, EnvTree } from '../CseMachineTypes';
+import type { Env, EnvTree } from '../CseMachineTypes';
 import { isMainReference } from '../CseMachineUtils';
 
 function isArray(x: any): x is any[] {

@@ -1,6 +1,7 @@
 import { AnchorButton, Icon } from '@blueprintjs/core';
 import { useRef, useState } from 'react';
-import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
+import type { DraggableData, DraggableEvent } from 'react-draggable';
+import Draggable from 'react-draggable';
 import pixelLogo from 'src/assets/pixel.jpg';
 import { useSession } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/RagChatbot.module.scss';

@@ -1,4 +1,4 @@
-import { Assessment, IProgrammingQuestion } from 'src/commons/assessment/AssessmentTypes';
+import type { Assessment, IProgrammingQuestion } from 'src/commons/assessment/AssessmentTypes';
 import { getAssessment, getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 
 import ImageAssets from '../../assets/ImageAssets';

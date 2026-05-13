@@ -1,7 +1,7 @@
 import { memoize } from 'lodash';
 import { type LoaderFunction, redirect, replace, type RouteObject } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
+import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 import { assessmentRegExp, gradingRegExp, teamRegExp } from 'src/features/academy/AcademyTypes';
 import { GuardedRoute } from 'src/routes/routeGuard';

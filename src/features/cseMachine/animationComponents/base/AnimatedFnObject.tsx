@@ -1,11 +1,11 @@
-import { CircleConfig } from 'konva/lib/shapes/Circle';
+import type { CircleConfig } from 'konva/lib/shapes/Circle';
 import { Group } from 'react-konva';
 
 import { FnValue } from '../../components/values/FnValue';
 import { GlobalFnValue } from '../../components/values/GlobalFnValue';
 import { Config } from '../../CseMachineConfig';
 import { defaultBackgroundColor, defaultStrokeColor } from '../../CseMachineUtils';
-import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
+import { Animatable, AnimatableTo, type AnimationConfig } from './Animatable';
 import { AnimatedCircleComponent } from './AnimationComponents';
 
 export class AnimatedFnObject extends AnimatableTo<CircleConfig> {

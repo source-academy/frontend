@@ -5,12 +5,11 @@ import { useSession } from 'src/commons/utils/Hooks';
 import AcademyActions from 'src/features/academy/AcademyActions';
 
 import SessionActions from '../../../commons/application/actions/SessionActions';
-import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
+import type { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import AddUserPanel from './subcomponents/AddUserPanel';
-import AssessmentConfigPanel, {
-  ImperativeAssessmentConfigPanel
-} from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
+import type { ImperativeAssessmentConfigPanel } from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
+import AssessmentConfigPanel from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 import PixelbotConfigPanel from './subcomponents/PixelbotConfigPanel';
 import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';

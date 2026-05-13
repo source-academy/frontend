@@ -1,6 +1,6 @@
 import ImageAssets from '../../assets/ImageAssets';
 import { getAwardProps } from '../../awards/GameAwardsHelper';
-import { AwardProperty } from '../../awards/GameAwardsTypes';
+import type { AwardProperty } from '../../awards/GameAwardsTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { Constants, screenCenter, screenSize } from '../../commons/CommonConstants';
 import { addLoadingScreen } from '../../effects/LoadingScreen';

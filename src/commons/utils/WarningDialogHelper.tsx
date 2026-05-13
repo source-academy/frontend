@@ -1,4 +1,4 @@
-import { showSimpleConfirmDialog, SimpleConfirmDialogProps } from './DialogHelper';
+import { showSimpleConfirmDialog, type SimpleConfirmDialogProps } from './DialogHelper';
 import { showWarningMessage } from './notifications/NotificationsHelper';
 
 // Full JS

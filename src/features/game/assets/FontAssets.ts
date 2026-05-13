@@ -1,4 +1,4 @@
-import { AssetMap, FontAsset } from './AssetsTypes';
+import type { AssetMap, FontAsset } from './AssetsTypes';
 
 const FontAssets: AssetMap<FontAsset> = {
   zektonFont: {

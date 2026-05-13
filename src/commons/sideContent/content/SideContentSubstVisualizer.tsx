@@ -12,12 +12,12 @@ import {
   Pre,
   Slider
 } from '@blueprintjs/core';
-import { getHotkeyHandler, HotkeyItem } from '@mantine/hooks';
+import { getHotkeyHandler, type HotkeyItem } from '@mantine/hooks';
 import classNames from 'classnames';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
-import { IStepperPropContents } from 'js-slang/dist/tracer';
-import { StepperBaseNode } from 'js-slang/dist/tracer/interface';
-import { StepperExpression } from 'js-slang/dist/tracer/nodes';
+import type { IStepperPropContents } from 'js-slang/dist/tracer';
+import type { StepperBaseNode } from 'js-slang/dist/tracer/interface';
+import type { StepperExpression } from 'js-slang/dist/tracer/nodes';
 import { StepperArrayExpression } from 'js-slang/dist/tracer/nodes/Expression/ArrayExpression';
 import { StepperArrowFunctionExpression } from 'js-slang/dist/tracer/nodes/Expression/ArrowFunctionExpression';
 import { StepperBinaryExpression } from 'js-slang/dist/tracer/nodes/Expression/BinaryExpression';
@@ -42,7 +42,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { beginAlertSideContent } from '../SideContentActions';
-import { SideContentLocation, SideContentType } from '../SideContentTypes';
+import { type SideContentLocation, SideContentType } from '../SideContentTypes';
 
 const SubstDefaultText = () => {
   const { t } = useTranslation('sideContent', { keyPrefix: 'substVisualizer' });

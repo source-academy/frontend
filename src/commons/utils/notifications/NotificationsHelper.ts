@@ -1,4 +1,4 @@
-import { Intent, ToastProps } from '@blueprintjs/core';
+import { Intent, type ToastProps } from '@blueprintjs/core';
 
 import { notification } from './createNotification';
 

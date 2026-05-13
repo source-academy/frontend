@@ -1,6 +1,6 @@
 import type { Context } from 'js-slang';
 import { random } from 'lodash';
-import { call, put, select, StrictEffect } from 'redux-saga/effects';
+import { call, put, select, type StrictEffect } from 'redux-saga/effects';
 
 import type { OverallState } from '../../../application/ApplicationTypes';
 import { actions } from '../../../utils/ActionsHelper';

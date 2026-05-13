@@ -1,6 +1,6 @@
 import FontAssets from '../../assets/FontAssets';
 import { screenSize } from '../../commons/CommonConstants';
-import { BitmapFontStyle } from '../../commons/CommonTypes';
+import type { BitmapFontStyle } from '../../commons/CommonTypes';
 
 export const roomDefaultCode = `
 import { prepend_remote_url, get_screen_width, get_screen_height, load_image, create_image, create_text, create_rect, add, set_display_size, set_alpha, set_origin } from 'game';

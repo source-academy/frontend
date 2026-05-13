@@ -1,11 +1,11 @@
-import { Text, TextConfig } from 'konva/lib/shapes/Text';
+import { Text, type TextConfig } from 'konva/lib/shapes/Text';
 import { createRef, Fragment } from 'react';
 import { Text as KonvaText } from 'react-konva';
 
 import CseMachine from '../CseMachine';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { Data } from '../CseMachineTypes';
+import type { Data } from '../CseMachineTypes';
 import {
   defaultBackgroundColor,
   defaultStrokeColor,

@@ -9,7 +9,10 @@ import AchievementInferencer from '../../../commons/achievement/utils/Achievemen
 import { Prompt } from '../../../commons/ReactRouterPrompt';
 import AchievementActions from '../../../features/achievement/AchievementActions';
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
-import { AchievementItem, GoalDefinition } from '../../../features/achievement/AchievementTypes';
+import type {
+  AchievementItem,
+  GoalDefinition
+} from '../../../features/achievement/AchievementTypes';
 
 const AchievementControl: React.FC = () => {
   const dispatch = useDispatch();

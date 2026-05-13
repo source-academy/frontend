@@ -16,16 +16,16 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import SessionActions from '../application/actions/SessionActions';
-import {
+import type {
   Assessment,
   AssessmentOverview,
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
   Question,
-  QuestionTypes,
   Testcase
 } from '../assessment/AssessmentTypes';
+import { QuestionTypes } from '../assessment/AssessmentTypes';
 import type { ControlBarProps } from '../controlBar/ControlBar';
 import ControlBarClearButton from '../controlBar/ControlBarClearButton';
 import ControlBarEvalButton from '../controlBar/ControlBarEvalButton';
@@ -45,16 +45,17 @@ import MCQQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorksp
 import ProgrammingQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentProgrammingQuestionTemplateTab';
 import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentTextAreaContent';
 import { convertEditorTabStateToProps } from '../editor/EditorContainer';
-import { Position } from '../editor/EditorTypes';
+import type { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
-import { SideContentProps } from '../sideContent/SideContent';
+import type { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight } from '../sideContent/SideContentActions';
-import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import type { SideContentTab } from '../sideContent/SideContentTypes';
+import { SideContentType } from '../sideContent/SideContentTypes';
 import { useTypedSelector } from '../utils/Hooks';
-import Workspace, { WorkspaceProps } from '../workspace/Workspace';
+import Workspace, { type WorkspaceProps } from '../workspace/Workspace';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+import type { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import {
   retrieveLocalAssessment,
   storeLocalAssessment,

@@ -1,7 +1,10 @@
 import { ButtonGroup, Classes, Intent, Popover, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 
-import { PersistenceFile, PersistenceState } from '../../features/persistence/PersistenceTypes';
+import type {
+  PersistenceFile,
+  PersistenceState
+} from '../../features/persistence/PersistenceTypes';
 import ControlButton from '../ControlButton';
 import { useResponsive } from '../utils/Hooks';
 

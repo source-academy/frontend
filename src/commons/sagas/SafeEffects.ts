@@ -5,7 +5,7 @@ import {
   type ForkEffect,
   type HelperWorkerParameters,
   select,
-  SelectEffect,
+  type SelectEffect,
   takeEvery,
   takeLatest,
   takeLeading

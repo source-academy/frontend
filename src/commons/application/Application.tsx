@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router';
 import Messages, {
-  MessageType,
+  type MessageType,
   MessageTypeNames,
   sendToWebview
 } from 'src/features/vscode/messages';

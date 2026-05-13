@@ -1,4 +1,4 @@
-import { getHotkeyHandler, HotkeyItem } from '@mantine/hooks';
+import { getHotkeyHandler, type HotkeyItem } from '@mantine/hooks';
 
 type HotKeysProps = {
   bindings: HotkeyItem[];

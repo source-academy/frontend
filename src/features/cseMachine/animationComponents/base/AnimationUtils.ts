@@ -1,7 +1,7 @@
 import { Binding } from '../../components/Binding';
 import { Frame } from '../../components/Frame';
 import { Visible } from '../../components/Visible';
-import { AnimationConfig } from './Animatable';
+import type { AnimationConfig } from './Animatable';
 
 export function getNodeDimensions(item: Visible) {
   return {

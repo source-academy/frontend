@@ -1,6 +1,6 @@
 import ImageAssets from '../assets/ImageAssets';
 import { screenSize } from '../commons/CommonConstants';
-import { AssetKey, IBaseScene } from '../commons/CommonTypes';
+import type { AssetKey, IBaseScene } from '../commons/CommonTypes';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 
 export type ToolbarButtonConfig = {

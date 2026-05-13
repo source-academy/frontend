@@ -1,4 +1,4 @@
-import { AchievementItem, AchievementView } from 'src/features/achievement/AchievementTypes';
+import type { AchievementItem, AchievementView } from 'src/features/achievement/AchievementTypes';
 
 export enum EditableCardActionType {
   CHANGE_CARD_BACKGROUND = 'CHANGE_CARD_BACKGROUND',

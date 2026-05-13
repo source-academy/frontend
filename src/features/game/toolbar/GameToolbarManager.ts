@@ -1,7 +1,8 @@
-import { IBaseScene } from '../commons/CommonTypes';
+import type { IBaseScene } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { createButton } from '../utils/ButtonUtils';
-import ToolbarConstants, { ToolbarButtonConfig } from './GameToolbarConstants';
+import type { ToolbarButtonConfig } from './GameToolbarConstants';
+import ToolbarConstants from './GameToolbarConstants';
 
 /**
  * Manager for the toolbar buttons in the top right corner of the screen

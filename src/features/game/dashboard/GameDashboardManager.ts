@@ -1,7 +1,7 @@
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
-import { IBaseScene, IGameUI } from '../commons/CommonTypes';
+import type { IBaseScene, IGameUI } from '../commons/CommonTypes';
 import { fadeAndDestroy } from '../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
 import { Layer } from '../layer/GameLayerTypes';
@@ -11,7 +11,8 @@ import { createButton } from '../utils/ButtonUtils';
 import { sleep } from '../utils/GameUtils';
 import { calcListFormatPos } from '../utils/StyleUtils';
 import DashboardConstants, { pageBannerTextStyle } from './GameDashboardConstants';
-import { DashboardPage, DashboardPageManager } from './GameDashboardTypes';
+import type { DashboardPageManager } from './GameDashboardTypes';
+import { DashboardPage } from './GameDashboardTypes';
 
 /**
  * Manager for the dashboard.

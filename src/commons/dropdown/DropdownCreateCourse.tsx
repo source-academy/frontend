@@ -20,7 +20,7 @@ import AcademyActions from 'src/features/academy/AcademyActions';
 
 import { CourseHelpTextEditorTab } from '../../pages/academy/adminPanel/subcomponents/CourseConfigPanel';
 import { sourceLanguages } from '../application/ApplicationTypes';
-import { UpdateCourseConfiguration } from '../application/types/SessionTypes';
+import type { UpdateCourseConfiguration } from '../application/types/SessionTypes';
 import Markdown from '../Markdown';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 

@@ -9,20 +9,24 @@ import {
   Tooltip
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { HotkeyItem } from '@mantine/hooks';
+import type { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
 import { t } from 'i18next';
 import { Component } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { connect, MapDispatchToProps } from 'react-redux';
+import { connect, type MapDispatchToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
-import { Step } from '../../../features/dataVisualizer/dataVisualizerTypes';
+import type { Step } from '../../../features/dataVisualizer/dataVisualizerTypes';
 import { Links } from '../../utils/Constants';
 import { beginAlertSideContent } from '../SideContentActions';
-import { SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
+import {
+  type SideContentLocation,
+  type SideContentTab,
+  SideContentType
+} from '../SideContentTypes';
 import { ItalicLink } from './SideContentCseMachine';
 
 type State = {

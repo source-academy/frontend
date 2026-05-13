@@ -1,4 +1,4 @@
-import { GoalDefinition, GoalMeta } from 'src/features/achievement/AchievementTypes';
+import type { GoalDefinition, GoalMeta } from 'src/features/achievement/AchievementTypes';
 
 export enum EditableGoalActionType {
   CHANGE_META = 'CHANGE_META',

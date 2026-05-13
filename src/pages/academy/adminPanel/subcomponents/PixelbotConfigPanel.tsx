@@ -14,7 +14,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/PixelbotConfig.module.scss';
 
-import {
+import type {
   Tokens,
   UpdateCourseConfiguration
 } from '../../../../commons/application/types/SessionTypes';

@@ -1,5 +1,5 @@
 import { Config } from './Config';
-import { Data, Step } from './dataVisualizerTypes';
+import type { Data, Step } from './dataVisualizerTypes';
 import { Tree } from './tree/Tree';
 import { DataTreeNode } from './tree/TreeNode';
 

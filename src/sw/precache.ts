@@ -1,6 +1,6 @@
 // Adapted from https://github.com/yeori/precaching-striping/blob/main/src/plugins/PrecacheStriping.ts
 
-import { RouteHandler, RouteMatchCallback, WorkboxPlugin } from 'workbox-core';
+import type { RouteHandler, RouteMatchCallback, WorkboxPlugin } from 'workbox-core';
 import {
   PrecacheController,
   type PrecacheEntry,

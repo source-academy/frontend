@@ -1,5 +1,5 @@
 import { Constants } from '../commons/CommonConstants';
-import { IGameUI } from '../commons/CommonTypes';
+import type { IGameUI } from '../commons/CommonTypes';
 import GameInputManager from '../input/GameInputManager';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { GamePhaseType, GameTerminalPhaseType } from './GamePhaseTypes';

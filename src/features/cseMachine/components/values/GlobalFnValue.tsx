@@ -1,4 +1,4 @@
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
 import { createRef, Fragment } from 'react';
 import { Circle, Group } from 'react-konva';
@@ -6,7 +6,7 @@ import { Circle, Group } from 'react-konva';
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { GlobalFn, IHoverable } from '../../CseMachineTypes';
+import type { GlobalFn, IHoverable } from '../../CseMachineTypes';
 import {
   defaultStrokeColor,
   defaultTextColor,

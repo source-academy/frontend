@@ -1,7 +1,7 @@
-import { AssetMap, SoundAsset } from '../assets/AssetsTypes';
+import type { AssetMap, SoundAsset } from '../assets/AssetsTypes';
 import { Constants } from '../commons/CommonConstants';
-import { AssetKey, AssetPath } from '../commons/CommonTypes';
-import { SettingsJson } from '../save/GameSaveTypes';
+import type { AssetKey, AssetPath } from '../commons/CommonTypes';
+import type { SettingsJson } from '../save/GameSaveTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { mandatory, toS3Path } from '../utils/GameUtils';
 import { bgMusicFadeDuration, musicFadeOutTween } from './GameSoundTypes';

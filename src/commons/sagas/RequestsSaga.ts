@@ -1,33 +1,33 @@
 import { call } from 'redux-saga/effects';
 import { backendParamsToProgressStatus } from 'src/features/grading/GradingUtils';
-import {
+import type {
   ContestLeaderboardRow,
   LeaderboardContestDetails,
   LeaderboardRow
 } from 'src/features/leaderboard/LeaderboardTypes';
-import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
+import type { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
-import {
+import type {
   AchievementGoal,
   AchievementItem,
   AchievementUser,
   GoalDefinition,
   GoalProgress
 } from '../../features/achievement/AchievementTypes';
-import { GradingSummary } from '../../features/dashboard/DashboardTypes';
-import {
+import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
+import type {
   GradingAnswer,
   GradingOverview,
   GradingOverviews,
   GradingQuery,
   GradingQuestion
 } from '../../features/grading/GradingTypes';
-import {
+import type {
   Device,
   WebSocketEndpointInformation
 } from '../../features/remoteExecution/RemoteExecutionTypes';
-import { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
-import { UsernameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
+import type { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
+import type { UsernameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
 import { store } from '../../pages/createStore';
 import {
   backendifyAchievementItem,
@@ -37,7 +37,7 @@ import {
 } from '../achievement/utils/AchievementBackender';
 import { Role } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import {
+import type {
   AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
@@ -45,17 +45,17 @@ import {
   UpdateCourseConfiguration,
   User
 } from '../application/types/SessionTypes';
-import {
+import type {
   Assessment,
   AssessmentConfiguration,
   AssessmentOverview,
   ContestEntry,
   IContestVotingQuestion,
   IProgrammingQuestion,
-  QuestionType,
-  QuestionTypes
+  QuestionType
 } from '../assessment/AssessmentTypes';
-import { Notification } from '../notificationBadge/NotificationBadgeTypes';
+import { QuestionTypes } from '../assessment/AssessmentTypes';
+import type { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { castLibrary } from '../utils/CastBackend';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';

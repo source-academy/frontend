@@ -3,7 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { Assessment, mcqTemplate, programmingTemplate } from '../assessment/AssessmentTypes';
+import type { Assessment } from '../assessment/AssessmentTypes';
+import { mcqTemplate, programmingTemplate } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
 

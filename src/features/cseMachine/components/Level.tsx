@@ -4,7 +4,7 @@ import CseMachine from '../CseMachine';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { Layout } from '../CseMachineLayout';
-import { EnvTreeNode } from '../CseMachineTypes';
+import type { EnvTreeNode } from '../CseMachineTypes';
 import { Frame } from './Frame';
 import { Visible } from './Visible';
 

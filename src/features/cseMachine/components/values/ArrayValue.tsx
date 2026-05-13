@@ -1,10 +1,10 @@
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Group } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { DataArray, IHoverable, ReferenceType } from '../../CseMachineTypes';
+import type { DataArray, IHoverable, ReferenceType } from '../../CseMachineTypes';
 import { isMainReference } from '../../CseMachineUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayUnit } from '../ArrayUnit';

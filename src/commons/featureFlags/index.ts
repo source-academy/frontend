@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { SagaIterator } from 'redux-saga';
+import type { SagaIterator } from 'redux-saga';
 
 import { FeatureFlag } from './FeatureFlag';
 

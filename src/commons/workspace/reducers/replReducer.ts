@@ -1,10 +1,10 @@
-import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
+import type { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
-import { CodeOutput, InterpreterOutput } from '../../application/ApplicationTypes';
+import type { CodeOutput, InterpreterOutput } from '../../application/ApplicationTypes';
 import Constants from '../../utils/Constants';
 import WorkspaceActions from '../WorkspaceActions';
 import { getWorkspaceLocation } from '../WorkspaceReducer';
-import { WorkspaceManagerState } from '../WorkspaceTypes';
+import type { WorkspaceManagerState } from '../WorkspaceTypes';
 
 export const handleReplActions = (builder: ActionReducerMapBuilder<WorkspaceManagerState>) => {
   builder

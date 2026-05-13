@@ -1,9 +1,9 @@
 import { Octokit } from '@octokit/rest';
-import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
-import { DeepPartial } from '@reduxjs/toolkit';
+import type { GetResponseTypeFromEndpointMethod } from '@octokit/types';
+import type { DeepPartial } from '@reduxjs/toolkit';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react';
-import { Mock, vi } from 'vitest';
+import { type Mock, vi } from 'vitest';
 
 import {
   checkIfFileCanBeOpened,

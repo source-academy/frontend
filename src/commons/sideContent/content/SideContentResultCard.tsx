@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
-import { AutogradingError, AutogradingResult } from '../../assessment/AssessmentTypes';
+import type { AutogradingError, AutogradingResult } from '../../assessment/AssessmentTypes';
 
 const buildErrorString = (
   t: TFunction<'sideContent', 'resultCard'>,

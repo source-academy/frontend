@@ -11,7 +11,7 @@ import {
   SwitchCard
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { BlueprintIcons_16Id } from '@blueprintjs/icons/lib/esm/generated/16px/blueprint-icons-16';
+import type { BlueprintIcons_16Id } from '@blueprintjs/icons/lib/esm/generated/16px/blueprint-icons-16';
 import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 

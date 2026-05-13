@@ -1,12 +1,12 @@
 import Konva from 'konva';
-import { AnimationFn } from 'konva/lib/types';
-import { Arrow, Circle, KonvaNodeComponent, Line, Path, Rect, Text } from 'react-konva';
+import type { AnimationFn } from 'konva/lib/types';
+import { Arrow, Circle, type KonvaNodeComponent, Line, Path, Rect, Text } from 'react-konva';
 
 import { CseAnimation } from '../../CseMachineAnimation';
 import { Config } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { defaultStrokeColor, defaultTextColor } from '../../CseMachineUtils';
-import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
+import { Animatable, AnimatableTo, type AnimationConfig } from './Animatable';
 import { lerp } from './AnimationUtils';
 
 type AnimationData<KonvaConfig extends Konva.NodeConfig> = {

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
 import { useSession } from 'src/commons/utils/Hooks';
-import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
+import type { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 
 import TeamFormationTable from './TeamFormationTable';
 

@@ -18,7 +18,7 @@ import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabE
 import { parseModeString } from '../utils/AceHelper';
 import { useSession } from '../utils/Hooks';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
-import { EditorHook } from './Editor';
+import type { EditorHook } from './Editor';
 
 // EditorHook structure:
 // EditorHooks grant access to 4 things:

@@ -1,17 +1,16 @@
 import { Chapter } from 'js-slang/dist/langs';
 
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import {
+import type {
   Assessment,
   AssessmentConfiguration,
   AssessmentOverview,
-  AssessmentStatuses,
   IContestVotingQuestion,
   IMCQQuestion,
   IProgrammingQuestion,
-  Library,
-  TestcaseTypes
+  Library
 } from '../assessment/AssessmentTypes';
+import { AssessmentStatuses, TestcaseTypes } from '../assessment/AssessmentTypes';
 
 export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
   [

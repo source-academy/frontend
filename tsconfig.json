@@ -22,6 +22,7 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "verbatimModuleSyntax": true,
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {

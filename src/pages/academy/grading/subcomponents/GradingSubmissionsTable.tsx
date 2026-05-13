@@ -1,6 +1,7 @@
 import { Button, H6, Icon, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { CellClickedEvent, ColDef, themeQuartz } from 'ag-grid-community';
+import type { CellClickedEvent, ColDef } from 'ag-grid-community';
+import { themeQuartz } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
@@ -12,20 +13,18 @@ import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
-import {
-  ColumnFields,
+import type {
   ColumnFieldsKeys,
   ColumnFilter,
   ColumnFiltersState,
-  ColumnName,
   ColumnNameKeys,
   GradingColumnVisibility,
   GradingSubmissionTableProps,
   IGradingTableProperties,
   IGradingTableRow,
-  SortStateProperties,
-  SortStates
+  SortStateProperties
 } from 'src/features/grading/GradingTypes';
+import { ColumnFields, ColumnName, SortStates } from 'src/features/grading/GradingTypes';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 import classes from 'src/styles/Grading.module.scss';
 

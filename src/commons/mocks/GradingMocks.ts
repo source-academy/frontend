@@ -1,5 +1,5 @@
-import { GradingSummary } from '../../features/dashboard/DashboardTypes';
-import {
+import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
+import type {
   GradingAnswer,
   GradingAssessment,
   GradingOverview,
@@ -9,7 +9,7 @@ import { Role } from '../application/ApplicationTypes';
 import {
   AssessmentStatuses,
   ProgressStatuses,
-  Testcase,
+  type Testcase,
   TestcaseTypes
 } from '../assessment/AssessmentTypes';
 import { mockLibrary } from './AssessmentMocks';

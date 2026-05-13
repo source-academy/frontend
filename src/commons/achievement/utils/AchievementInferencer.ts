@@ -2,12 +2,12 @@ import { cloneDeep, uniq } from 'lodash';
 import { v4 } from 'uuid';
 
 import {
-  AchievementGoal,
-  AchievementItem,
+  type AchievementGoal,
+  type AchievementItem,
   AchievementStatus,
   defaultGoalProgress,
-  GoalDefinition,
-  GoalProgress,
+  type GoalDefinition,
+  type GoalProgress,
   GoalType
 } from '../../../features/achievement/AchievementTypes';
 import { showDangerMessage } from '../../utils/notifications/NotificationsHelper';

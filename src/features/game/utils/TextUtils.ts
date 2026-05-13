@@ -1,4 +1,4 @@
-import { BitmapFontStyle, TextConfig } from '../commons/CommonTypes';
+import type { BitmapFontStyle, TextConfig } from '../commons/CommonTypes';
 
 /**
  * Create bitmap text with the given style.

@@ -1,22 +1,19 @@
-import { Button, HTMLTable, Icon as BpIcon, InputGroup } from '@blueprintjs/core';
+import { Button, HTMLTable, Icon, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import type { Column, ColumnFilter, ColumnFiltersState, Row } from '@tanstack/react-table';
 import {
-  Column,
-  ColumnFilter,
-  ColumnFiltersState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  Row,
   useReactTable
 } from '@tanstack/react-table';
 import { Fragment, useState } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
 import { objectKeys } from 'src/commons/utils/TypeHelper';
-import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
+import type { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 
 import { AssessmentTypeBadge } from '../../grading/subcomponents/GradingBadges';
 import TeamFormationFilters from '../../teamFormation/subcomponents/TeamFormationFilters';
@@ -134,7 +131,7 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
       >
         <GradingFlex alignItems="center" style={{ columnGap: '0.5rem' }}>
           <GradingFlex alignItems="center" style={{ columnGap: '0.5rem', height: '1.75rem' }}>
-            <BpIcon icon={IconNames.FILTER_LIST} />
+            <Icon icon={IconNames.FILTER_LIST} />
             <GradingText>
               {columnFilters.length > 0
                 ? 'Filters: '

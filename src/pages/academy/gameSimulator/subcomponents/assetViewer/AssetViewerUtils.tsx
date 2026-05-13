@@ -1,4 +1,4 @@
-import { TreeNodeInfo } from '@blueprintjs/core';
+import type { TreeNodeInfo } from '@blueprintjs/core';
 import { set } from 'lodash';
 
 type Tree = Record<any, any> | string[] | any;

@@ -1,4 +1,4 @@
-import { TaskDetail } from '../task/GameTaskTypes';
+import type { TaskDetail } from '../task/GameTaskTypes';
 import StringUtils from '../utils/StringUtils';
 import Parser from './Parser';
 

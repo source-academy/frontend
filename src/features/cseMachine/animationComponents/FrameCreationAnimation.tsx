@@ -12,7 +12,7 @@ import { CseAnimation } from '../CseMachineAnimation';
 import { Config } from '../CseMachineConfig';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { defaultActiveColor, defaultStrokeColor, isEnvEqual } from '../CseMachineUtils';
-import { Animatable, AnimationConfig } from './base/Animatable';
+import { Animatable, type AnimationConfig } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
 import { getNodeDimensions, getNodeLocation, getNodePosition } from './base/AnimationUtils';

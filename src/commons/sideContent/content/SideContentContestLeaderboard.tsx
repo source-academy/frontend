@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ContestEntry } from '../../assessment/AssessmentTypes';
+import type { ContestEntry } from '../../assessment/AssessmentTypes';
 import { SideContentType } from '../SideContentTypes';
 import SideContentLeaderboardCard from './SideContentLeaderboardCard';
 

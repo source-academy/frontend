@@ -1,5 +1,5 @@
 import GradingFlex from 'src/commons/grading/GradingFlex';
-import { ColumnFilter, ColumnFiltersState } from 'src/features/grading/GradingTypes';
+import type { ColumnFilter, ColumnFiltersState } from 'src/features/grading/GradingTypes';
 
 import { FilterBadge } from './GradingBadges';
 

@@ -1,8 +1,8 @@
-import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
+import type { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
 import InterpreterActions from '../../application/actions/InterpreterActions';
 import { getWorkspaceLocation } from '../WorkspaceReducer';
-import { WorkspaceManagerState } from '../WorkspaceTypes';
+import type { WorkspaceManagerState } from '../WorkspaceTypes';
 
 export const handleDebuggerActions = (builder: ActionReducerMapBuilder<WorkspaceManagerState>) => {
   builder

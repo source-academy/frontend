@@ -1,5 +1,5 @@
 import ImageAssets from '../../assets/ImageAssets';
-import { GameChapter } from '../../chapter/GameChapterTypes';
+import type { GameChapter } from '../../chapter/GameChapterTypes';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import CommonTextHover from '../../commons/CommonTextHover';
 import SourceAcademyGame from '../../SourceAcademyGame';

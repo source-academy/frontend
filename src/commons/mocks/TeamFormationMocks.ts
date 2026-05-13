@@ -1,6 +1,6 @@
-import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
+import type { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
-import { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
+import type { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
 import { Role } from '../application/ApplicationTypes';
 import { mockFetchRole, mockFetchStudents } from './UserMocks';
 

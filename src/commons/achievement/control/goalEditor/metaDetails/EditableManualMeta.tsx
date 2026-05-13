@@ -1,6 +1,6 @@
 import { NumericInput, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { GoalMeta, ManualMeta } from 'src/features/achievement/AchievementTypes';
+import type { GoalMeta, ManualMeta } from 'src/features/achievement/AchievementTypes';
 
 type Props = {
   changeMeta: (meta: GoalMeta) => void;

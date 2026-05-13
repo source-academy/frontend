@@ -1,6 +1,6 @@
 import SoundAssets from '../assets/SoundAssets';
 import { Constants, screenCenter } from '../commons/CommonConstants';
-import { ILayeredScene } from '../commons/CommonTypes';
+import type { ILayeredScene } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { sleep } from '../utils/GameUtils';

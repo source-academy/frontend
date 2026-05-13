@@ -2,7 +2,7 @@ import { Ace, Range as AceRange } from 'ace-builds';
 import { createContext, getAllOccurrencesInScope, getScope } from 'js-slang';
 import { useCallback, useRef } from 'react';
 
-import { EditorHook } from './Editor';
+import type { EditorHook } from './Editor';
 
 const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
   const propsRef = useRef(inProps);

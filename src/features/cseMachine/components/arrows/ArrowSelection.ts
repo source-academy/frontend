@@ -1,4 +1,4 @@
-import { IVisible } from '../../CseMachineTypes';
+import type { IVisible } from '../../CseMachineTypes';
 import type { GenericArrow } from './GenericArrow';
 
 /** Manages arrow selection state */

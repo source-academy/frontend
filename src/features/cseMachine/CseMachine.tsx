@@ -1,11 +1,16 @@
-import { Context } from 'js-slang';
+import type { Context } from 'js-slang';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { parse } from 'js-slang/dist/parser/parser';
 
 import { arrowSelection } from './components/arrows/ArrowSelection';
 import { CseAnimation } from './CseMachineAnimation';
-import { Layout, LayoutCache } from './CseMachineLayout';
-import { ArrowOriginFilterKey, ArrowOriginFilters, EnvTree, EnvTreeNode } from './CseMachineTypes';
+import { Layout, type LayoutCache } from './CseMachineLayout';
+import type {
+  ArrowOriginFilterKey,
+  ArrowOriginFilters,
+  EnvTree,
+  EnvTreeNode
+} from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
 
 type SetVis = (vis: React.ReactNode) => void;

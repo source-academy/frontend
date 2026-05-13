@@ -1,6 +1,6 @@
 import {
-  AchievementGoal,
-  AchievementItem,
+  type AchievementGoal,
+  type AchievementItem,
   GoalType
 } from '../../features/achievement/AchievementTypes';
 import { AND, EventTypes } from '../../features/achievement/ExpressionTypes';

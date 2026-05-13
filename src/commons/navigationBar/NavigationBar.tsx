@@ -12,12 +12,12 @@ import {
   Popover,
   Position
 } from '@blueprintjs/core';
-import { IconName, IconNames } from '@blueprintjs/icons';
+import { type IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { useMemo, useState } from 'react';
 import { Translation } from 'react-i18next';
 import { type Location, NavLink, Route, useLocation } from 'react-router';
-import { i18nDefaultLangKeys } from 'src/i18n/i18next';
+import type { i18nDefaultLangKeys } from 'src/i18n/i18next';
 import { SentryRoutes } from 'src/routes/routerConfig';
 import classes from 'src/styles/NavigationBar.module.scss';
 

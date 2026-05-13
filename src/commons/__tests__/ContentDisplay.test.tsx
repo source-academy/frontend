@@ -1,4 +1,4 @@
-import ContentDisplay, { ContentDisplayProps } from '../ContentDisplay';
+import ContentDisplay, { type ContentDisplayProps } from '../ContentDisplay';
 import { renderTreeJson } from '../utils/TestUtils';
 
 const mockProps: ContentDisplayProps = {

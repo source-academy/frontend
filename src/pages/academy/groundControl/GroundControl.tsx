@@ -13,7 +13,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { useState } from 'react';
 import { useSession } from 'src/commons/utils/Hooks';
 
-import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelect';
 import ConfigureCell from './subcomponents/GroundControlConfigureCell';

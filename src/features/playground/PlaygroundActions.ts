@@ -1,7 +1,7 @@
-import { SALanguage } from 'src/commons/application/ApplicationTypes';
+import type { SALanguage } from 'src/commons/application/ApplicationTypes';
 import { createActions } from 'src/commons/redux/utils';
 
-import { PersistenceFile } from '../persistence/PersistenceTypes';
+import type { PersistenceFile } from '../persistence/PersistenceTypes';
 
 const PlaygroundActions = createActions('playground', {
   generateLzString: () => ({}),

@@ -1,7 +1,7 @@
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
-import { AchievementGoal } from 'src/features/achievement/AchievementTypes';
+import type { AchievementGoal } from 'src/features/achievement/AchievementTypes';
 
-import { ItemId } from '../commons/CommonTypes';
+import type { ItemId } from '../commons/CommonTypes';
 import { promptWithChoices } from '../effects/Prompt';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame, { GameType } from '../SourceAcademyGame';

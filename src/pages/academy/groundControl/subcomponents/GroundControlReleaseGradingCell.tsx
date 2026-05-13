@@ -1,8 +1,9 @@
 import { Button, Dialog, DialogBody, DialogFooter, Intent, Tooltip } from '@blueprintjs/core';
-import { IconName, IconNames } from '@blueprintjs/icons';
+import type { IconName } from '@blueprintjs/icons';
+import { IconNames } from '@blueprintjs/icons';
 import { useCallback, useMemo, useState } from 'react';
 
-import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
 
 type MassPublishFn = (id: number) => void;

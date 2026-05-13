@@ -1,8 +1,8 @@
 import { Callout, ProgressBar } from '@blueprintjs/core';
-import { IconName } from '@blueprintjs/icons';
+import type { IconName } from '@blueprintjs/icons';
 import { NavLink } from 'react-router';
 
-import { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
+import type { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 
 type Props = {

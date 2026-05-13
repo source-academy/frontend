@@ -1,11 +1,11 @@
-import { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
+import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
 import { getEvaluatorDefinition } from '@sourceacademy/language-directory/dist/util';
 import { call, fork, put, select } from 'redux-saga/effects';
 import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import { selectDirectoryLanguageUrl } from 'src/features/directory/flagDirectoryLanguageUrl';
 
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
-import { LanguageDirectoryState } from '../../features/directory/LanguageDirectoryTypes';
+import type { LanguageDirectoryState } from '../../features/directory/LanguageDirectoryTypes';
 import type { OverallState } from '../application/ApplicationTypes';
 import { combineSagaHandlers } from '../redux/utils';
 import { preloadConductorEvaluatorSaga } from './helpers/conductorEvaluatorCache';

@@ -1,10 +1,10 @@
 import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Chapter } from 'js-slang/dist/langs';
-import { Frame } from 'js-slang/dist/types';
+import type { Frame } from 'js-slang/dist/types';
 import { Group as KonvaGroupNode } from 'konva/lib/Group';
 import { Layer as KonvaLayerNode } from 'konva/lib/Layer';
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Stage } from 'konva/lib/Stage';
 import { createRef } from 'react';
 import {
@@ -31,7 +31,7 @@ import CseMachine from './CseMachine';
 import { CseAnimation } from './CseMachineAnimation';
 import { Config, ShapeDefaultProps } from './CseMachineConfig';
 import { ControlStashConfig } from './CseMachineControlStashConfig'; // Added for offset
-import {
+import type {
   Data,
   DataArray,
   EnvTree,

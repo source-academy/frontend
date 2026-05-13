@@ -1,7 +1,7 @@
-import { Reducer } from '@reduxjs/toolkit';
+import type { Reducer } from '@reduxjs/toolkit';
 
 import { defaultSideContent, defaultSideContentManager } from '../application/ApplicationTypes';
-import { SourceActionType } from '../utils/ActionsHelper';
+import type { SourceActionType } from '../utils/ActionsHelper';
 import {
   changeSideContentHeight,
   endAlertSideContent,
@@ -11,7 +11,7 @@ import {
   visitSideContent
 } from './SideContentActions';
 import { getDynamicTabs, getLocation, getTabId } from './SideContentHelper';
-import { SideContentManagerState, SideContentState } from './SideContentTypes';
+import type { SideContentManagerState, SideContentState } from './SideContentTypes';
 
 export const SideContentReducer: Reducer<SideContentManagerState, SourceActionType> = (
   state: SideContentManagerState = defaultSideContentManager,

@@ -1,4 +1,4 @@
-import { GameChapter } from '../../chapter/GameChapterTypes';
+import type { GameChapter } from '../../chapter/GameChapterTypes';
 import SourceAcademyGame, { GameType } from '../../SourceAcademyGame';
 import { sleep } from '../../utils/GameUtils';
 import { createBitmapText } from '../../utils/TextUtils';

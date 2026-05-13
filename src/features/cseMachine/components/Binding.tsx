@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import CseMachine from '../CseMachine';
 import { Config } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { Data } from '../CseMachineTypes';
+import type { Data } from '../CseMachineTypes';
 import { isDummyKey, isMainReference } from '../CseMachineUtils';
 import { ArrowFromText } from './arrows/ArrowFromText';
 import { GenericArrow } from './arrows/GenericArrow';
