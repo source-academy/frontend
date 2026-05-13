@@ -1,7 +1,7 @@
 import { InputGroup, Intent } from '@blueprintjs/core';
 import { useEffect, useRef, useState } from 'react';
 
-import { ConfirmDialog, ConfirmDialogProps } from './ConfirmDialog';
+import { ConfirmDialog, type ConfirmDialogProps } from './ConfirmDialog';
 
 export interface PromptDialogProps<T> extends Omit<
   ConfirmDialogProps<T>,

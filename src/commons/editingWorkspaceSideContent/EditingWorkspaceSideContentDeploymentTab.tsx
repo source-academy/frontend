@@ -1,15 +1,20 @@
 import { Button, Classes, Divider, MenuItem, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemRenderer, Select } from '@blueprintjs/select';
+import type { ItemRenderer } from '@blueprintjs/select';
+import { Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 
-import { SALanguage, sourceLanguages, styliseSublanguage } from '../application/ApplicationTypes';
 import {
-  External,
+  type SALanguage,
+  sourceLanguages,
+  styliseSublanguage
+} from '../application/ApplicationTypes';
+import {
+  type External,
   externalLibraries,
   ExternalLibraryName
 } from '../application/types/ExternalTypes';
-import { Assessment, emptyLibrary, Library } from '../assessment/AssessmentTypes';
+import { type Assessment, emptyLibrary, type Library } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';

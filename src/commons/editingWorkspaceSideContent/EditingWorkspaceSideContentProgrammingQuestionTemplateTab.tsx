@@ -1,12 +1,13 @@
-import { Button, Card, Classes, Divider, IconName, MenuItem } from '@blueprintjs/core';
+import { Button, Card, Classes, Divider, type IconName, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemRenderer, Select } from '@blueprintjs/select';
+import type { ItemRenderer } from '@blueprintjs/select';
+import { Select } from '@blueprintjs/select';
 import { useState } from 'react';
 import AceEditor from 'react-ace';
 
-import { Assessment } from '../assessment/AssessmentTypes';
+import type { Assessment } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
-import { WorkspaceState } from '../workspace/WorkspaceTypes';
+import type { WorkspaceState } from '../workspace/WorkspaceTypes';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
 type Props = {

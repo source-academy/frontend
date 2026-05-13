@@ -4,7 +4,7 @@ import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { mockTeamFormationOverviews } from 'src/commons/mocks/TeamFormationMocks';
 import AcademyActions from 'src/features/academy/AcademyActions';
-import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
+import type { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 import { vi } from 'vitest';
 
 import DashboardActions from '../../../features/dashboard/DashboardActions';
@@ -36,7 +36,7 @@ import {
 } from '../../mocks/AssessmentMocks';
 import { mockGradingSummary } from '../../mocks/GradingMocks';
 import { mockNotifications, mockStudents } from '../../mocks/UserMocks';
-import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
+import type { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { AuthProviderType, computeFrontendRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
 import {

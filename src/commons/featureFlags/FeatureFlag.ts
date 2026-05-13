@@ -1,4 +1,4 @@
-import { SagaIterator } from 'redux-saga';
+import type { SagaIterator } from 'redux-saga';
 
 export class FeatureFlag<T> {
   private readonly _flagName: string;

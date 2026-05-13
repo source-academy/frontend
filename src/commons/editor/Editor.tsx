@@ -23,14 +23,15 @@ import * as AceBuilds from 'ace-builds';
 import { Ace, require as acequire, createEditSession } from 'ace-builds';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
-import { IAceEditor } from 'react-ace/lib/types';
-import { SALanguage } from '../application/ApplicationTypes';
+import type { IAceEditorProps, IEditorProps } from 'react-ace';
+import AceEditor from 'react-ace';
+import type { IAceEditor } from 'react-ace/lib/types';
+import type { SALanguage } from '../application/ApplicationTypes';
 import { getModeString, selectMode } from '../utils/AceHelper';
 import { objectEntries } from '../utils/TypeHelper';
 import { EditorBinding } from '../WorkspaceSettingsContext';
-import { KeyFunction, keyBindings } from './EditorHotkeys';
-import { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
+import { type KeyFunction, keyBindings } from './EditorHotkeys';
+import type { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 
 // =============== Hooks ===============
 // TODO: Should further refactor into EditorBase + different variants.

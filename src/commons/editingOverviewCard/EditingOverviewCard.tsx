@@ -14,13 +14,14 @@ import {
   Text
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemRenderer, Select } from '@blueprintjs/select';
+import type { ItemRenderer } from '@blueprintjs/select';
+import { Select } from '@blueprintjs/select';
 import { useState } from 'react';
 import { NavLink } from 'react-router';
 import Textarea from 'react-textarea-autosize';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
-import { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
+import type { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
 import Constants from '../utils/Constants';

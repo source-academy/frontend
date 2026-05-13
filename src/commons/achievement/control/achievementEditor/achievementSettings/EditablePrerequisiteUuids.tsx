@@ -1,9 +1,10 @@
 import { MenuItem } from '@blueprintjs/core';
-import { ItemPredicate, ItemRenderer, MultiSelect } from '@blueprintjs/select';
+import type { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
+import { MultiSelect } from '@blueprintjs/select';
 import { without } from 'lodash';
 import { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
-import { AchievementItem } from 'src/features/achievement/AchievementTypes';
+import type { AchievementItem } from 'src/features/achievement/AchievementTypes';
 
 type Props = {
   changePrerequisiteUuids: (prerequisiteUuids: string[]) => void;

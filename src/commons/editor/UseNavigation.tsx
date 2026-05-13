@@ -4,7 +4,7 @@ import { useCallback, useRef } from 'react';
 
 import { Documentation } from '../documentation/Documentation';
 import { Links } from '../utils/Constants';
-import { EditorHook } from './Editor';
+import type { EditorHook } from './Editor';
 
 // EditorHook structure:
 // EditorHooks grant access to 4 things:

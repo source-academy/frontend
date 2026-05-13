@@ -22,7 +22,7 @@ import Messages, { sendToWebview } from 'src/features/vscode/messages';
 import SessionActions from '../application/actions/SessionActions';
 import { Role } from '../application/ApplicationTypes';
 import AssessmentWorkspace, {
-  AssessmentWorkspaceProps
+  type AssessmentWorkspaceProps
 } from '../assessmentWorkspace/AssessmentWorkspace';
 import ContentDisplay from '../ContentDisplay';
 import ControlButton from '../ControlButton';
@@ -33,10 +33,10 @@ import { convertParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
 import AssessmentOverviewCard from './AssessmentOverviewCard';
 import {
-  AssessmentConfiguration,
-  AssessmentOverview,
+  type AssessmentConfiguration,
+  type AssessmentOverview,
   AssessmentStatuses,
-  AssessmentWorkspaceParams
+  type AssessmentWorkspaceParams
 } from './AssessmentTypes';
 
 const Assessment: React.FC = () => {

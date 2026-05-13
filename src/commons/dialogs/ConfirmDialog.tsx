@@ -1,12 +1,12 @@
 import {
   Button,
-  ButtonProps,
+  type ButtonProps,
   Classes,
   Dialog,
   DialogBody,
   DialogFooter,
-  DialogProps,
-  IconName,
+  type DialogProps,
+  type IconName,
   Intent
 } from '@blueprintjs/core';
 import classNames from 'classnames';

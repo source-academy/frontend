@@ -12,11 +12,8 @@ import ItemDeleter from '../common/ItemDeleter';
 import ItemSaver from '../common/ItemSaver';
 import AchievementSettings from './AchievementSettings';
 import AchievementUuidCopier from './AchievementUuidCopier';
-import {
-  EditableCardAction as Action,
-  EditableCardActionType as ActionType,
-  EditableCardState as State
-} from './EditableCardTypes';
+import type { EditableCardAction as Action, EditableCardState as State } from './EditableCardTypes';
+import { EditableCardActionType as ActionType } from './EditableCardTypes';
 import EditableDate from './EditableDate';
 import EditableView from './EditableView';
 
