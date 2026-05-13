@@ -103,7 +103,7 @@ export default defineConfig({
         new InjectManifest({
           swSrc: './src/service-worker.ts',
           swDest: 'service-worker.js',
-          maximumFileSizeToCacheInBytes: 20 * 1024 * 1024
+          maximumFileSizeToCacheInBytes: 30 * 1024 * 1024
         })
       ];
 
