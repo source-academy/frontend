@@ -4,7 +4,6 @@ import * as bpicons from '@blueprintjs/icons';
 import * as jsslang from 'js-slang';
 import * as jsslangDist from 'js-slang/dist';
 import lodash from 'lodash';
-import phaser from 'phaser';
 // We need it to inject modules into the context
 // eslint-disable-next-line no-restricted-imports
 import * as React from 'react';
@@ -35,8 +34,7 @@ const requireProvider = (x: string) => {
     '@blueprintjs/icons': bpicons,
     'js-slang': jsslang,
     'js-slang/dist': jsslangDist,
-    lodash,
-    phaser
+    lodash
   };
 
   if (!(x in exports)) throw new Error(`Dynamic require of ${x} is not supported`);
