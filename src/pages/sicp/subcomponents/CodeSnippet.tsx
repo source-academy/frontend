@@ -29,14 +29,14 @@ const resizableProps = {
     topRight: false,
     bottomRight: false,
     bottomLeft: false,
-    topLeft: false
+    topLeft: false,
   },
   defaultSize: {
     width: '100%',
-    height: '500px'
+    height: '500px',
   },
   minHeight: '250px',
-  maxHeight: '2000px'
+  maxHeight: '2000px',
 };
 
 const CodeSnippet: React.FC<CodeSnippetProps> = props => {
@@ -57,7 +57,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
     prependLength: props.prependLength,
     isSicpEditor: true,
 
-    handleCloseEditor: handleClose
+    handleCloseEditor: handleClose,
   };
 
   HighlightRulesSelector(4);
@@ -65,13 +65,13 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
 
   const closeButton = useMemo(
     () => <ControlBarCloseButton key="close" handleClose={handleClose} />,
-    [handleClose]
+    [handleClose],
   );
 
   const controlBarProps = {
     editorButtons: [],
     flowButtons: [],
-    editingWorkspaceButtons: [closeButton]
+    editingWorkspaceButtons: [closeButton],
   };
 
   return (

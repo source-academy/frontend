@@ -5,7 +5,7 @@ import {
   PrecacheController,
   type PrecacheEntry,
   PrecacheRoute,
-  type PrecacheRouteOptions
+  type PrecacheRouteOptions,
 } from 'workbox-precaching';
 import { registerRoute, Route } from 'workbox-routing';
 
@@ -56,7 +56,7 @@ export const splitByBucketSize = (bucketSize: number) =>
 const DEFAULT_OPTION: PrecacheStripingOptions = {
   optionResolver: () => undefined,
   controllerOptionResolver: () => undefined, // PrecacheControllerOptions
-  splitEntries: undefined
+  splitEntries: undefined,
 };
 
 export class PrecacheStriping {

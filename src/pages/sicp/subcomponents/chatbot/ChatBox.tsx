@@ -20,13 +20,13 @@ type Props = {
 const createInitialMessage = (): ChatMessage => ({
   id: uuid(),
   content: 'Ask me something about this paragraph!',
-  role: 'assistant'
+  role: 'assistant',
 });
 
 const createErrorMessage = (): ChatMessage => ({
   id: uuid(),
   content: 'Sorry, I am down with a cold, please try again later.',
-  role: 'assistant'
+  role: 'assistant',
 });
 
 const scrollToBottom = (ref: React.RefObject<HTMLDivElement | null>) => {
@@ -39,7 +39,7 @@ const ChatBox: React.FC<Props> = ({
   activeSnippetId,
   setActiveSnippetId,
   isExpanded,
-  toggleExpanded
+  toggleExpanded,
 }) => {
   const chatRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -81,7 +81,7 @@ const ChatBox: React.FC<Props> = ({
         sendMessage();
       }
     },
-    [isLoading, sendMessage]
+    [isLoading, sendMessage],
   );
 
   const resetChat = useCallback(() => {
@@ -92,7 +92,7 @@ const ChatBox: React.FC<Props> = ({
         if (conversationMessages && conversationMessages.length > 0) {
           const messagesWithIds = conversationMessages.map(msg => ({
             ...msg,
-            id: msg.id || uuid()
+            id: msg.id || uuid(),
           }));
           setMessages(messagesWithIds);
         } else {
@@ -181,7 +181,7 @@ type MessageRendererProps = {
 const MessageRenderer: React.FC<MessageRendererProps> = ({
   message,
   activeSnippetId,
-  setActiveSnippetId
+  setActiveSnippetId,
 }) => {
   const content = message.content;
   const messageId = message.id;
@@ -205,7 +205,7 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
               <br />
             </Fragment>
           ))}
-        </div>
+        </div>,
       );
     }
 
@@ -225,7 +225,7 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
           activeSnippetId={activeSnippetId}
           setActiveSnippet={setActiveSnippetId}
           language={lang}
-        />
+        />,
       );
     } else {
       // For other languages, just show syntax highlighting without run capability
@@ -236,7 +236,7 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
           style={{
             margin: '0.5em 0',
             borderRadius: '4px',
-            overflow: 'hidden'
+            overflow: 'hidden',
           }}
         >
           <ChatbotCodeSnippet
@@ -247,7 +247,7 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
             setActiveSnippet={setActiveSnippetId}
             language={lang}
           />
-        </div>
+        </div>,
       );
     }
 
@@ -264,7 +264,7 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
             <br />
           </Fragment>
         ))}
-      </div>
+      </div>,
     );
   }
 

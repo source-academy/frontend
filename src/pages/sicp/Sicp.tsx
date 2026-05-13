@@ -16,7 +16,7 @@ import {
   readSicpSectionLocalStorage,
   setSicpSectionLocalStorage,
   SICP_CACHE_KEY,
-  SICP_INDEX
+  SICP_INDEX,
 } from 'src/features/sicp/utils/SicpUtils';
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
@@ -30,7 +30,7 @@ const extension = '.json';
 // Context to determine which code snippet is active
 export const CodeSnippetContext = createContext({
   active: '0',
-  setActive: (x: string) => {}
+  setActive: (x: string) => {},
 });
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
@@ -82,7 +82,7 @@ const Sicp: React.FC = () => {
 
     parent.scrollTo({
       behavior: 'smooth',
-      top: ref.offsetTop - relativeTop
+      top: ref.offsetTop - relativeTop,
     });
   };
 

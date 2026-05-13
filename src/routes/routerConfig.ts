@@ -42,7 +42,7 @@ const commonChildrenRoutes: RouteObject[] = [
   { path: 'contributors', lazy: Contributors },
   { path: 'callback/github', lazy: GitHubCallback },
   { path: 'sicpjs/:section?', lazy: Sicp },
-  { path: 'features', lazy: Features }
+  { path: 'features', lazy: Features },
 ];
 
 export const playgroundOnlyRouterConfig: RouteObject[] = [
@@ -53,16 +53,16 @@ export const playgroundOnlyRouterConfig: RouteObject[] = [
       { index: true, loader: () => replace('/playground') },
       { path: 'playground', lazy: Playground },
       ...commonChildrenRoutes,
-      { path: '*', lazy: NotFound }
-    ]
-  }
+      { path: '*', lazy: NotFound },
+    ],
+  },
 ];
 
 export const getFullAcademyRouterConfig = ({
   name,
   isLoggedIn,
   courseId,
-  academyRoutes = []
+  academyRoutes = [],
 }: {
   name?: string;
   isLoggedIn: boolean;
@@ -101,7 +101,7 @@ export const getFullAcademyRouterConfig = ({
       path: 'nus_login',
       lazy: Login,
       loader: () => (Constants.hasNusAuthProviders ? null : redirect('/login')),
-      children: [{ path: '', lazy: NusLogin }]
+      children: [{ path: '', lazy: NusLogin }],
     },
     {
       path: '*',
@@ -109,22 +109,22 @@ export const getFullAcademyRouterConfig = ({
       children: [
         {
           index: true,
-          loader: () => homePageRedirect() || replace(`/courses/${courseId}`)
+          loader: () => homePageRedirect() || replace(`/courses/${courseId}`),
         },
         {
           path: 'login',
           lazy: Login,
           loader: () => (Constants.hasOtherAuthProviders ? null : redirect('/nus_login')),
-          children: [{ path: '', lazy: LoginPage }]
+          children: [{ path: '', lazy: LoginPage }],
         },
         {
           path: 'login',
           lazy: Login,
-          children: [{ path: 'callback', lazy: LoginCallback }]
+          children: [{ path: 'callback', lazy: LoginCallback }],
         },
         {
           path: 'login',
-          children: [{ path: 'vscode_callback', lazy: LoginVscodeCallback }]
+          children: [{ path: 'vscode_callback', lazy: LoginVscodeCallback }],
         },
         { path: 'welcome', lazy: Welcome, loader: welcomeLoader },
         { path: 'courses', loader: () => redirect('/') },
@@ -132,9 +132,9 @@ export const getFullAcademyRouterConfig = ({
         ensureUserAndRole({ path: 'playground/:playgroundCode?', lazy: Playground }),
         { path: 'mission-control/:assessmentId?/:questionId?', lazy: MissionControl },
         ...commonChildrenRoutes,
-        { path: '*', lazy: NotFound }
-      ]
-    }
+        { path: '*', lazy: NotFound },
+      ],
+    },
   ];
 };
 

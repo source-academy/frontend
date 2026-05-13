@@ -7,7 +7,7 @@ test('Sicp index page', async () => {
   const tree = await renderTreeJson(
     <MemoryRouter>
       <SicpIndexPage />
-    </MemoryRouter>
+    </MemoryRouter>,
   );
   expect(tree).toMatchSnapshot();
 });

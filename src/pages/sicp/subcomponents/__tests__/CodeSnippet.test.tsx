@@ -14,7 +14,7 @@ describe('Sicp Code Snippet', () => {
       output: output,
       id: 'id',
       initialEditorValueHash: program,
-      prependLength: 1
+      prependLength: 1,
     };
 
     const tree = render(<CodeSnippet {...props} />);
@@ -27,7 +27,7 @@ describe('Sicp Code Snippet', () => {
       output: output,
       id: 'id',
       initialEditorValueHash: program,
-      prependLength: 0
+      prependLength: 0,
     };
 
     const tree = render(<CodeSnippet {...props} />);

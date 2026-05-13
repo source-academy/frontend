@@ -25,7 +25,7 @@ const clampPosition = (
   x: number,
   y: number,
   chatOpen: boolean,
-  expanded: boolean
+  expanded: boolean,
 ): { x: number; y: number } => {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
@@ -41,7 +41,7 @@ const clampPosition = (
 
   return {
     x: Math.min(maxX, Math.max(minX, x)),
-    y: Math.min(maxY, Math.max(minY, y))
+    y: Math.min(maxY, Math.max(minY, y)),
   };
 };
 
