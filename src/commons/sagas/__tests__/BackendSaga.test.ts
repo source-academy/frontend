@@ -1175,8 +1175,6 @@ describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
   });
 });
 
-// TODO: Test addNewStoriesUsersToCourse
-
 describe('Test UPDATE_USER_ROLE action', () => {
   const courseRegId = 2;
   const role = Role.Staff;
