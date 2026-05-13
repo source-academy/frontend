@@ -11,7 +11,7 @@ export function createDialogueBox(scene: Phaser.Scene) {
     scene,
     screenCenter.x,
     screenCenter.y,
-    ImageAssets.speechBox.key
+    ImageAssets.speechBox.key,
   ).setAlpha(0.9);
   return dialogueBox;
 }
@@ -23,12 +23,12 @@ export function createDialogueBox(scene: Phaser.Scene) {
  */
 export function createTypewriter(
   scene: Phaser.Scene,
-  style: Phaser.Types.GameObjects.Text.TextStyle
+  style: Phaser.Types.GameObjects.Text.TextStyle,
 ) {
   const typewriter = Typewriter(scene, {
     x: dialogueConstants.rect.x + dialogueConstants.text.xPad,
     y: dialogueConstants.rect.y + dialogueConstants.text.yPad,
-    textStyle: style
+    textStyle: style,
   });
   return typewriter;
 }

@@ -8,18 +8,17 @@ import {
   Icon,
   NonIdealState,
   Spinner,
-  SpinnerSize
+  SpinnerSize,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { Links } from 'src/commons/utils/Constants';
-import { useSession } from 'src/commons/utils/Hooks';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import { parseQuery } from 'src/commons/utils/QueryHelper';
 import classes from 'src/styles/Login.module.scss';
 
@@ -32,7 +31,7 @@ const LoginVscodeCallback: React.FC = () => {
   const {
     code,
     provider: providerId,
-    'client-request-id': clientRequestId
+    'client-request-id': clientRequestId,
   } = parseQuery(location.search);
   const isVscode = useTypedSelector(state => state.vscode.isVscode);
   const { access_token: accessToken, refresh_token: refreshToken } = parseQuery(location.search);
@@ -63,8 +62,8 @@ const LoginVscodeCallback: React.FC = () => {
       dispatch(
         SessionActions.setTokens({
           accessToken: accessToken,
-          refreshToken: refreshToken
-        })
+          refreshToken: refreshToken,
+        }),
       );
       dispatch(SessionActions.fetchUserAndCourse());
       navigate('/welcome');
@@ -78,7 +77,7 @@ const LoginVscodeCallback: React.FC = () => {
       <Card elevation={Elevation.FOUR}>
         <div>
           <NonIdealState
-            description={t('Logging In')}
+            description={t($ => $['Logging In'])}
             icon={<Spinner size={SpinnerSize.LARGE} />}
           />
         </div>

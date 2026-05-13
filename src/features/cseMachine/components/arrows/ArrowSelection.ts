@@ -1,4 +1,4 @@
-import { IVisible } from '../../CseMachineTypes';
+import type { IVisible } from '../../CseMachineTypes';
 import type { GenericArrow } from './GenericArrow';
 
 /** Manages arrow selection state */
@@ -16,6 +16,7 @@ class ArrowSelectionManager {
   clearSelection(): GenericArrow<IVisible, IVisible> | null {
     const oldArrow = this.selectedArrow;
     this.selectedArrow = null;
+    oldArrow?.setNormalStyle();
     return oldArrow;
   }
 

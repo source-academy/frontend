@@ -1,10 +1,10 @@
 import { createContext, hasDeclaration } from 'js-slang';
 import { Variant } from 'js-slang/dist/langs';
-import React from 'react';
+import { useCallback, useRef } from 'react';
 
 import { Documentation } from '../documentation/Documentation';
 import { Links } from '../utils/Constants';
-import { EditorHook } from './Editor';
+import type { EditorHook } from './Editor';
 
 // EditorHook structure:
 // EditorHooks grant access to 4 things:
@@ -14,10 +14,10 @@ import { EditorHook } from './Editor';
 // reactAceRef is the underlying reactAce instance for hooking.
 
 const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
-  const propsRef = React.useRef(inProps);
+  const propsRef = useRef(inProps);
   propsRef.current = inProps;
 
-  const handleNavigate = React.useCallback(() => {
+  const handleNavigate = useCallback(() => {
     const editor = reactAceRef.current!.editor;
     const pos = editor.selection.getCursor();
     const token = editor.session.getTokenAt(pos.row, pos.column);
@@ -33,7 +33,7 @@ const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) 
     if (
       hasDeclaration(editor.getValue(), createContext(sourceChapter), {
         line: newPos.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
-        column: newPos.column
+        column: newPos.column,
       })
     ) {
       return;

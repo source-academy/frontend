@@ -10,11 +10,11 @@ import {
   NavbarGroup,
   Position,
   Tag,
-  Text
+  Text,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Omnibar } from '@blueprintjs/select';
-import React from 'react';
+import { useMemo, useState } from 'react';
 import Latex from 'react-latex-next';
 import { useNavigate, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
@@ -28,7 +28,7 @@ type IndexSearchResult = { text: string; order: string; id: string; hasSubindex:
 
 const SicpNavigationBar: React.FC = () => {
   // this section responsible for the travel and table of content
-  const [isTocOpen, setIsTocOpen] = React.useState(false);
+  const [isTocOpen, setIsTocOpen] = useState(false);
   const { section } = useParams<{ section: string }>();
   const navigate = useNavigate();
   const prev = getPrev(section!);
@@ -74,7 +74,7 @@ const SicpNavigationBar: React.FC = () => {
     hasBackdrop: true,
     isOpen: isTocOpen,
     position: Position.LEFT,
-    usePortal: false
+    usePortal: false,
   };
 
   // this section responsible for the search
@@ -96,7 +96,7 @@ const SicpNavigationBar: React.FC = () => {
       return {
         indexTrie: emptyTrie,
         textTrie: emptyTrie,
-        idToContentMap: {}
+        idToContentMap: {},
       } as SearchData;
     }
 
@@ -188,7 +188,7 @@ const SicpNavigationBar: React.FC = () => {
     }
     const pre = words.slice(0, -1).join(' ');
     const results = sentenceSearch(pre).map(id =>
-      rewritedSearchData.idToContentMap[id].toLowerCase()
+      rewritedSearchData.idToContentMap[id].toLowerCase(),
     );
     const answers: string[] = [];
     while (answers.length < n && results.length > 0) {
@@ -214,7 +214,7 @@ const SicpNavigationBar: React.FC = () => {
   }
 
   // fetch search catalog only once
-  const rewritedSearchData: SearchData = React.useMemo(fetchSearchData, []);
+  const rewritedSearchData: SearchData = useMemo(fetchSearchData, []);
 
   const focusResult = (result: string, query: string): React.ReactNode => {
     result = result.replaceAll('\n', ' ').toLowerCase();
@@ -305,11 +305,11 @@ const SicpNavigationBar: React.FC = () => {
     );
   };
 
-  const [isOmnibarOpen, setIsOmnibarOpen] = React.useState(false);
-  const [omnibarMode, setOmnibarMode] = React.useState<'text' | 'index' | 'submenu'>('text');
-  const [previousMode, setPreviousMode] = React.useState<'text' | 'index' | null>(null);
-  const [query, setQuery] = React.useState('');
-  const [searchResults, setSearchResults] = React.useState<string[]>([]);
+  const [isOmnibarOpen, setIsOmnibarOpen] = useState(false);
+  const [omnibarMode, setOmnibarMode] = useState<'text' | 'index' | 'submenu'>('text');
+  const [previousMode, setPreviousMode] = useState<'text' | 'index' | null>(null);
+  const [query, setQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<string[]>([]);
 
   const initTextSearch = () => {
     setOmnibarMode('text');
@@ -369,7 +369,7 @@ const SicpNavigationBar: React.FC = () => {
       case 'index':
         setSearchResults(
           // Supposed to be IndexSearchResult[], but typing can be improved with further, future refactoring
-          processIndexSearchResults(search(result, rewritedSearchData.indexTrie)) as any[]
+          processIndexSearchResults(search(result, rewritedSearchData.indexTrie)) as any[],
         );
         break;
     }
@@ -382,7 +382,7 @@ const SicpNavigationBar: React.FC = () => {
         isOpen={isOmnibarOpen}
         inputProps={{
           disabled: omnibarMode === 'submenu',
-          placeholder: `${omnibarMode.charAt(0).toUpperCase()}${omnibarMode.slice(1)} Search...`
+          placeholder: `${omnibarMode.charAt(0).toUpperCase()}${omnibarMode.slice(1)} Search...`,
         }}
         overlayProps={{ className: Classes.OVERLAY_SCROLL_CONTAINER }}
         onClose={() => setIsOmnibarOpen(false)}

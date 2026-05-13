@@ -10,14 +10,14 @@ import {
   NavbarGroup,
   NavbarHeading,
   Popover,
-  Position
+  Position,
 } from '@blueprintjs/core';
-import { IconName, IconNames } from '@blueprintjs/icons';
+import { type IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Translation } from 'react-i18next';
 import { type Location, NavLink, Route, useLocation } from 'react-router';
-import { i18nDefaultLangKeys } from 'src/i18n/i18next';
+import type { i18nDefaultLangKeys } from 'src/i18n/i18next';
 import { SentryRoutes } from 'src/routes/routerConfig';
 import classes from 'src/styles/NavigationBar.module.scss';
 
@@ -28,7 +28,7 @@ import Constants from '../utils/Constants';
 import { useResponsive, useSession } from '../utils/Hooks';
 import AcademyNavigationBar, {
   assessmentTypesToNavlinkInfo,
-  getAcademyNavbarRightInfo
+  getAcademyNavbarRightInfo,
 } from './subcomponents/AcademyNavigationBar';
 import NavigationBarLangSelectButton from './subcomponents/NavigationBarLangSelectButton';
 import SicpNavigationBar from './subcomponents/SicpNavigationBar';
@@ -100,13 +100,11 @@ const NavigationBar: React.FC = () => {
     enableAchievements,
     enableOverallLeaderboard,
     enableContestLeaderboard,
-    enableSourcecast,
-    enableStories,
-    assessmentConfigurations
+    assessmentConfigurations,
   } = useSession();
   const assessmentTypes = useMemo(
     () => assessmentConfigurations?.map(c => c.type),
-    [assessmentConfigurations]
+    [assessmentConfigurations],
   );
 
   FocusStyleManager.onlyShowFocusOnTabs();
@@ -116,77 +114,62 @@ const NavigationBar: React.FC = () => {
       assessmentTypesToNavlinkInfo({
         assessmentTypes,
         courseId,
-        isEnrolledInACourse
+        isEnrolledInACourse,
       }),
-    [assessmentTypes, courseId, isEnrolledInACourse]
+    [assessmentTypes, courseId, isEnrolledInACourse],
   );
 
   const fullAcademyNavbarLeftCommonInfo: NavbarEntryInfo[] = useMemo(() => {
     return [
       {
-        to: `/courses/${courseId}/sourcecast`,
-        icon: IconNames.MUSIC,
-        text: 'Sourcecast',
-        disabled: !(isEnrolledInACourse && enableSourcecast)
-      },
-      {
         to: '/playground',
         icon: IconNames.CODE,
         text: 'Playground',
-        disabled: !isEnrolledInACourse
+        disabled: !isEnrolledInACourse,
       },
       {
         to: '/sicpjs',
         icon: IconNames.BOOK,
         text: 'SICP JS',
-        disabled: !isLoggedIn
+        disabled: !isLoggedIn,
       },
       {
         to: `/courses/${courseId}/achievements`,
         icon: IconNames.MOUNTAIN,
         text: 'Achievements',
-        disabled: !(isEnrolledInACourse && enableAchievements)
-      },
-      {
-        to: `/courses/${courseId}/stories`,
-        icon: IconNames.GIT_REPO,
-        text: 'Stories',
-        // TODO: Enable for public deployment
-        disabled: !(isEnrolledInACourse && enableStories)
+        disabled: !(isEnrolledInACourse && enableAchievements),
       },
       {
         to: `/courses/${courseId}/leaderboard`,
         icon: IconNames.TIMELINE_BAR_CHART,
         text: 'Leaderboard',
-        disabled: !(isEnrolledInACourse && (enableContestLeaderboard || enableOverallLeaderboard))
-      }
+        disabled: !(isEnrolledInACourse && (enableContestLeaderboard || enableOverallLeaderboard)),
+      },
     ];
   }, [
     courseId,
     isEnrolledInACourse,
-    enableSourcecast,
-    enableStories,
     isLoggedIn,
     enableAchievements,
     enableContestLeaderboard,
-    enableOverallLeaderboard
+    enableOverallLeaderboard,
   ]);
 
   const fullAcademyMobileNavbarLeftAdditionalInfo = useMemo(
     () => getAcademyNavbarRightInfo({ isEnrolledInACourse, courseId, role }),
-    [isEnrolledInACourse, courseId, role]
+    [isEnrolledInACourse, courseId, role],
   );
 
   const fullAcademyMobileNavbarLeftInfoWithAssessments: NavbarEntryInfo[] = useMemo(() => {
     return [
       ...fullAcademyNavbarLeftAssessmentsInfo,
       ...fullAcademyNavbarLeftCommonInfo,
-      ...fullAcademyMobileNavbarLeftAdditionalInfo
+      ...fullAcademyMobileNavbarLeftAdditionalInfo,
     ];
   }, [
     fullAcademyNavbarLeftAssessmentsInfo,
     fullAcademyNavbarLeftCommonInfo,
-    fullAcademyMobileNavbarLeftAdditionalInfo
+    fullAcademyMobileNavbarLeftAdditionalInfo,
   ]);
 
   const renderPlaygroundOnlyNavbarLeftDesktop = () => (
@@ -205,7 +188,7 @@ const NavigationBar: React.FC = () => {
     const entries = assessmentTypesToNavlinkInfo({
       assessmentTypes,
       courseId,
-      isEnrolledInACourse
+      isEnrolledInACourse,
     });
 
     const desktopNavbarLeftPopoverContent = (
@@ -221,9 +204,8 @@ const NavigationBar: React.FC = () => {
       '/playground',
       '/sicpjs',
       '/contributors',
-      `/courses/${courseId}/sourcecast`,
       `/courses/${courseId}/achievements`,
-      `/courses/${courseId}/leaderboard`
+      `/courses/${courseId}/leaderboard`,
     ];
     const enableDesktopPopover =
       courseId != null && !!topNavbarNavlinks.find(x => location.pathname.startsWith(x));
@@ -274,7 +256,7 @@ const NavigationBar: React.FC = () => {
       <NavLink
         className={({ isActive }) =>
           classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
-            [Classes.ACTIVE]: isActive
+            [Classes.ACTIVE]: isActive,
           })
         }
         to="/contributors"
@@ -300,7 +282,7 @@ const NavigationBar: React.FC = () => {
           'NavigationBar',
           'primary-navbar',
           classes['primary-navbar'],
-          Classes.DARK
+          Classes.DARK,
         )}
       >
         {Constants.playgroundOnly
@@ -316,7 +298,6 @@ const NavigationBar: React.FC = () => {
       <SentryRoutes>
         <Route path="/playground/*" element={null} />
         <Route path="/contributors" element={null} />
-        <Route path="/courses/:courseId/sourcecast" element={null} />
         <Route path="/courses/:courseId/achievements" element={null} />
         <Route path="/courses/:courseId/leaderboard/*" element={null} />
         <Route path="/sicpjs/:section?" element={<SicpNavigationBar />} />
@@ -337,20 +318,13 @@ const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
   {
     to: '/playground',
     icon: IconNames.CODE,
-    text: 'Playground'
+    text: 'Playground',
   },
   {
     to: '/sicpjs',
     icon: IconNames.BOOK,
-    text: 'SICP JS'
-  }
-  // {
-  //   to: '/stories',
-  //   icon: IconNames.GIT_REPO,
-  //   text: 'Stories',
-  //   // TODO: Enable for public deployment
-  //   disabled: true
-  // }
+    text: 'SICP JS',
+  },
 ];
 
 export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
@@ -367,8 +341,8 @@ export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
         {!shouldHide && (
           <Translation ns="commons" keyPrefix="navigationBar">
             {t =>
-              t(props.text as keyof i18nDefaultLangKeys['commons']['navigationBar'], {
-                defaultValue: props.text
+              t($ => $[props.text as keyof i18nDefaultLangKeys['commons']['navigationBar']], {
+                defaultValue: props.text,
               })
             }
           </Translation>
@@ -397,8 +371,8 @@ const MobileNavLink: React.FC<
       <Button minimal large icon={props.icon}>
         <Translation ns="commons" keyPrefix="navigationBar">
           {t =>
-            t(props.text as keyof i18nDefaultLangKeys['commons']['navigationBar'], {
-              defaultValue: props.text
+            t($ => $[props.text as keyof i18nDefaultLangKeys['commons']['navigationBar']], {
+              defaultValue: props.text,
             })
           }
         </Translation>

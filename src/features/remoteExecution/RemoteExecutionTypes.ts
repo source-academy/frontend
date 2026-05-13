@@ -1,9 +1,9 @@
 import { SlingClient } from '@sourceacademy/sling-client';
 import { Chapter } from 'js-slang/dist/langs';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
-import { Ev3DevicePeripherals } from './RemoteExecutionEv3Types';
+import type { Ev3DevicePeripherals } from './RemoteExecutionEv3Types';
 
 export interface Device {
   id: number;
@@ -86,13 +86,13 @@ export const deviceTypes: DeviceType[] = [
       'ev3_ledRightGreen',
       'ev3_ledRightRed',
       'ev3_ledGetBrightness',
-      'ev3_ledSetBrightness'
+      'ev3_ledSetBrightness',
     ],
     languageChapter: Chapter.SOURCE_3,
-    deviceLibraryName: ExternalLibraryName.EV3
-  }
+    deviceLibraryName: ExternalLibraryName.EV3,
+  },
 ];
 
 export const deviceTypesById: Map<string, DeviceType> = new Map(
-  deviceTypes.map(type => [type.id, type])
+  deviceTypes.map(type => [type.id, type]),
 );

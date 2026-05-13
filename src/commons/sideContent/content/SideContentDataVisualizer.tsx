@@ -1,19 +1,32 @@
-import { Button, Card, Classes } from '@blueprintjs/core';
+import {
+  AnchorButton,
+  Button,
+  ButtonGroup,
+  Card,
+  Checkbox,
+  Classes,
+  Icon,
+  Tooltip,
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { HotkeyItem } from '@mantine/hooks';
+import type { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
 import { t } from 'i18next';
-import React from 'react';
+import { Component } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { connect, MapDispatchToProps } from 'react-redux';
+import { connect, type MapDispatchToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
-import { Step } from '../../../features/dataVisualizer/dataVisualizerTypes';
+import type { Step } from '../../../features/dataVisualizer/dataVisualizerTypes';
 import { Links } from '../../utils/Constants';
 import { beginAlertSideContent } from '../SideContentActions';
-import { SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
+import {
+  type SideContentLocation,
+  type SideContentTab,
+  SideContentType,
+} from '../SideContentTypes';
 import { ItalicLink } from './SideContentCseMachine';
 
 type State = {
@@ -34,7 +47,7 @@ type DispatchProps = {
  * data_data function in Source. It adds a listener to the DataVisualizer singleton
  * which updates the steps list via setState whenever new steps are added.
  */
-class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchProps, State> {
+class SideContentDataVisualizerBase extends Component<OwnProps & DispatchProps, State> {
   constructor(props: any) {
     super(props);
     this.state = { steps: [], currentStep: 0 };
@@ -55,7 +68,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
 
     const hotkeyBindings: HotkeyItem[] = [
       ['ArrowLeft', this.onPrevButtonClick],
-      ['ArrowRight', this.onNextButtonClick]
+      ['ArrowRight', this.onNextButtonClick],
     ];
 
     return (
@@ -68,13 +81,13 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                marginBottom: 10
+                marginBottom: 10,
               }}
             >
               <Button
                 style={{
                   position: 'absolute',
-                  left: 0
+                  left: 0,
                 }}
                 large={true}
                 outlined={true}
@@ -91,7 +104,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
               <Button
                 style={{
                   position: 'absolute',
-                  right: 0
+                  right: 0,
                 }}
                 large={true}
                 outlined={true}
@@ -110,7 +123,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
               style={{
                 display: 'flex',
                 flexDirection: 'row',
-                overflowX: 'auto'
+                overflowX: 'auto',
               }}
             >
               {step?.map((elem, i) => (
@@ -134,6 +147,93 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
           ) : (
             <DataVisualizerDefaultText />
           )}
+          {this.state.steps.length > 0 && (
+            <>
+              <ButtonGroup>
+                <Tooltip content="Original View" position="top">
+                  <AnchorButton
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    onMouseUp={() => {
+                      DataVisualizer.setMode('normal');
+                      DataVisualizer.redraw();
+                      this.onViewModeClick(this.state.currentStep);
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <Icon icon="grid-view" />
+                      <Checkbox
+                        checked={DataVisualizer.getNormalMode()}
+                        style={{ marginTop: 7 }}
+                        tabIndex={-1}
+                        aria-hidden="true"
+                      />
+                    </div>
+                  </AnchorButton>
+                </Tooltip>
+              </ButtonGroup>
+
+              <Tooltip content="Binary Tree View" position="top">
+                <AnchorButton
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginLeft: 10,
+                  }}
+                  onMouseUp={() => {
+                    DataVisualizer.setMode('binTree');
+                    DataVisualizer.redraw();
+                    this.onViewModeClick(this.state.currentStep);
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Icon
+                      icon="one-to-many"
+                      style={{ transform: 'rotate(90deg)', marginLeft: 6 }}
+                    />
+                    <Checkbox
+                      checked={DataVisualizer.getBinTreeMode()}
+                      style={{ marginTop: 7 }}
+                      tabIndex={-1}
+                      aria-hidden="true"
+                    />
+                  </div>
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip content="General Tree View" position="top">
+                <AnchorButton
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginLeft: 10,
+                  }}
+                  onMouseUp={() => {
+                    DataVisualizer.setMode('tree');
+                    DataVisualizer.redraw();
+                    this.onViewModeClick(this.state.currentStep);
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Icon icon="diagram-tree" />
+                    <Checkbox
+                      checked={DataVisualizer.getTreeMode()}
+                      style={{ marginTop: 7 }}
+                      tabIndex={-1}
+                      aria-hidden="true"
+                    />
+                  </div>
+                </AnchorButton>
+              </Tooltip>
+            </>
+          )}
         </div>
       </HotKeys>
     );
@@ -152,39 +252,45 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
       return { currentStep: Math.min(finalStep, state.currentStep + 1) };
     });
   };
+
+  private onViewModeClick = (prevStep: number) => {
+    this.setState(() => {
+      return { currentStep: prevStep };
+    });
+  };
 }
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) =>
   bindActionCreators(
     {
       alertSideContent: () =>
-        beginAlertSideContent(SideContentType.dataVisualizer, props.workspaceLocation)
+        beginAlertSideContent(SideContentType.dataVisualizer, props.workspaceLocation),
     },
-    dispatch
+    dispatch,
   );
 
 export const SideContentDataVisualizer = connect(
   null,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(SideContentDataVisualizerBase);
 
 const makeDataVisualizerTabFrom = (location: SideContentLocation): SideContentTab => ({
-  label: t('sideContent:dataVisualizer.label'),
+  label: t($ => $.dataVisualizer.label, { ns: 'sideContent' }),
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer workspaceLocation={location} />,
-  id: SideContentType.dataVisualizer
+  id: SideContentType.dataVisualizer,
 });
 
 const DataVisualizerDefaultText: React.FC = () => {
   const { t } = useTranslation('sideContent', { keyPrefix: 'dataVisualizer' });
   return (
     <p id="data-visualizer-default-text" className={Classes.RUNNING_TEXT}>
-      {t('defaultText')}
+      {t($ => $.defaultText)}
       <br />
       <br />
       <Trans
         ns="sideContent"
-        i18nKey="dataVisualizer.instructions"
+        i18nKey={$ => $.dataVisualizer.instructions}
         components={[
           <code>
             draw_data(x<sub>1</sub>, x<sub>2</sub>, ... x<sub>n</sub>)
@@ -195,14 +301,14 @@ const DataVisualizerDefaultText: React.FC = () => {
           <code>
             k<sup>th</sup>
           </code>,
-          <code>n</code>
+          <code>n</code>,
         ]}
       />
       <br />
       <br />
       <Trans
         ns="sideContent"
-        i18nKey="dataVisualizer.reference"
+        i18nKey={$ => $.dataVisualizer.reference}
         components={[<ItalicLink href={Links.textbookChapter2_2} />]}
       />
     </p>

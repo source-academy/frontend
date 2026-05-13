@@ -8,16 +8,16 @@ import SideContentContestVotingContainer from '../content/SideContentContestVoti
 const mockContestEntries = [
   {
     submission_id: 1,
-    answer: { code: "display('hello world')" }
+    answer: { code: "display('hello world')" },
   },
   {
     submission_id: 2,
-    answer: { code: 'function test() { return 1; }' }
+    answer: { code: 'function test() { return 1; }' },
   },
   {
     submission_id: 3,
-    answer: { code: 'return null' }
-  }
+    answer: { code: 'return null' },
+  },
 ];
 
 const mockedHandleContestEntryClick = vi.fn();
@@ -27,7 +27,7 @@ const mockProps = {
   handleContestEntryClick: mockedHandleContestEntryClick,
   handleSave: mockedHandleSave,
   canSave: true,
-  contestEntries: mockContestEntries
+  contestEntries: mockContestEntries,
 };
 
 const element = <SideContentContestVotingContainer {...mockProps} />;

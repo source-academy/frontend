@@ -1,7 +1,7 @@
 import { memoize } from 'lodash';
 import { type LoaderFunction, redirect, replace, type RouteObject } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
+import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 import { assessmentRegExp, gradingRegExp, teamRegExp } from 'src/features/academy/AcademyTypes';
 import { GuardedRoute } from 'src/routes/routeGuard';
@@ -9,14 +9,13 @@ import { GuardedRoute } from 'src/routes/routeGuard';
 import { store } from '../createStore';
 import {
   contestLeaderboardLoader,
-  leaderboardLoader
+  leaderboardLoader,
 } from '../leaderboard/subcomponents/leaderboardUtils';
 
 const notFoundPath = 'not_found';
 
 const Assessment = () => import('../../commons/assessment/Assessment');
 const Game = () => import('./game/Game');
-const Sourcecast = () => import('../sourcecast/Sourcecast');
 const Achievement = () => import('../achievement/Achievement');
 const OverallLeaderboard = () => import('../leaderboard/subcomponents/OverallLeaderboard');
 const ContestLeaderboardWrapper = () =>
@@ -33,9 +32,9 @@ const buildAssessmentRoutes = memoize(
         acc[assessmentTypeLink(config.type)] = config;
         return acc;
       },
-      {}
+      {},
     );
-  }
+  },
 );
 
 const getCommonAcademyRoutes = (): RouteObject[] => {
@@ -76,9 +75,8 @@ const getCommonAcademyRoutes = (): RouteObject[] => {
     {
       path: `:assessmentConfigType/${assessmentRegExp}`,
       lazy: Assessment,
-      loader: assessmentLoader
+      loader: assessmentLoader,
     },
-    { path: 'sourcecast/:sourcecastId?', lazy: Sourcecast },
     { path: 'achievements/*', lazy: Achievement },
     {
       path: 'leaderboard',
@@ -88,17 +86,16 @@ const getCommonAcademyRoutes = (): RouteObject[] => {
         {
           path: 'contests/:contestId?/:leaderboardType',
           loader: contestLeaderboardLoader,
-          lazy: ContestLeaderboardWrapper
-        }
-      ]
+          lazy: ContestLeaderboardWrapper,
+        },
+      ],
     },
-    { path: '*', lazy: NotFound }
+    { path: '*', lazy: NotFound },
   ];
 };
 
 const GroundControl = () => import('./groundControl/GroundControl');
 const Grading = () => import('./grading/Grading');
-const Sourcereel = () => import('./sourcereel/Sourcereel');
 const GameSimulator = () => import('./gameSimulator/GameSimulator');
 const TeamFormation = () => import('./teamFormation/TeamFormation');
 const TeamFormationForm = () => import('./teamFormation/subcomponents/TeamFormationForm');
@@ -107,27 +104,26 @@ const Dashboard = () => import('./dashboard/Dashboard');
 
 const staffRoutes: RouteObject[] = [
   { path: `grading/${gradingRegExp}`, lazy: Grading },
-  { path: 'sourcereel', lazy: Sourcereel },
   { path: 'gamesimulator', lazy: GameSimulator },
   { path: 'teamformation', lazy: TeamFormation },
   { path: 'teamformation/create', lazy: TeamFormationForm },
   { path: `teamformation/edit/${teamRegExp}`, lazy: TeamFormationForm },
   { path: 'teamformation/import', lazy: TeamFormationImport },
-  { path: 'dashboard', lazy: Dashboard }
+  { path: 'dashboard', lazy: Dashboard },
 ].map(r =>
   new GuardedRoute(r)
     .check(s => {
       const role = s.session.role;
       return role === Role.Staff || role === Role.Admin;
     }, notFoundPath)
-    .build()
+    .build(),
 );
 
 const AdminPanel = () => import('./adminPanel/AdminPanel');
 
 const adminRoutes: RouteObject[] = [
   { path: 'groundcontrol', lazy: GroundControl },
-  { path: 'adminpanel', lazy: AdminPanel }
+  { path: 'adminpanel', lazy: AdminPanel },
 ].map(r => new GuardedRoute(r).check(s => s.session.role === Role.Admin, notFoundPath).build());
 
 export const getAcademyRoutes = (): RouteObject[] => {

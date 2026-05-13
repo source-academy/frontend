@@ -1,21 +1,14 @@
-import React from 'react';
-
-import { Assessment } from '../assessment/AssessmentTypes';
+import type { Assessment } from '../assessment/AssessmentTypes';
 import { limitNumberRange } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 
-type GradingTabProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   updateAssessment: (assessment: Assessment) => void;
-};
-
-type StateProps = {
   assessment: Assessment;
   path: Array<string | number>;
 };
 
-const GradingTab: React.FC<GradingTabProps> = props => {
+const GradingTab: React.FC<Props> = props => {
   const textareaContent = (path: Array<string | number>) => {
     return (
       <TextAreaContent

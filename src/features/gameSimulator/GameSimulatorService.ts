@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import { sendAdminStoryRequest, sendAssetRequest, sendStoryRequest } from './GameSimulatorRequest';
-import { ChapterDetail } from './GameSimulatorTypes';
+import type { ChapterDetail } from './GameSimulatorTypes';
 
 /**
  * List of all folders to fetch S3 assets from
@@ -14,14 +14,14 @@ export const s3AssetFolders = [
   'ui',
   'sfx',
   'bgm',
-  'stories'
+  'stories',
 ];
 
 export function obtainTextAssets(assetPaths: string[]) {
   return assetPaths
     .filter(assetPath => assetPath.startsWith('stories') && assetPath.endsWith('txt'))
     .map(
-      assetPath => assetPath.slice(8) // remove /stories
+      assetPath => assetPath.slice(8), // remove /stories
     );
 }
 
@@ -37,7 +37,7 @@ export async function fetchAssetPaths(): Promise<string[]> {
     s3AssetFolders.map(async folderName => {
       const files = await fetchFolder(folderName);
       return files.length ? files : [`${folderName}`];
-    })
+    }),
   );
   return files.reduce((combinedList, newList) => combinedList.concat(newList), []);
 }
@@ -50,7 +50,7 @@ export async function fetchAssetPaths(): Promise<string[]> {
  */
 async function fetchFolder(folderName: string) {
   const response = await sendAssetRequest(folderName, 'GET', {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   });
   return response.status === 200 ? response.json() : [];
 }
@@ -79,7 +79,7 @@ export async function uploadAssetsToS3(fileList: FileList, folderName: string) {
     Array.from(fileList).map(async file => {
       const response = await uploadAssetToS3(file, folderName);
       return file.name + ' => ' + response;
-    })
+    }),
   );
   return responses.join('\n');
 }
@@ -99,7 +99,7 @@ export async function uploadAssetToS3(file: File, folderName: string) {
     `${folderName}/${file.name}`,
     'POST',
     {},
-    { body: formData, mode: 'cors' }
+    { body: formData, mode: 'cors' },
   );
 
   return response ? response.text() : '';
@@ -127,11 +127,11 @@ export async function updateChapterRequest(id: string, body: object) {
     id,
     'POST',
     {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     {
-      body: JSON.stringify(body)
-    }
+      body: JSON.stringify(body),
+    },
   );
   return response.status === 200 ? 'Chapter successfully created/updated' : response.text();
 }

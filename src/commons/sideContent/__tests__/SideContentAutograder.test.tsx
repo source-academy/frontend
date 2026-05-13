@@ -1,12 +1,14 @@
 import { render, screen } from '@testing-library/react';
-import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/errors/base';
-import { act } from 'react';
-import { shallowRender } from 'src/commons/utils/TestUtils';
+import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors/base';
 
-import { AutogradingResult, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
+import {
+  type AutogradingResult,
+  type Testcase,
+  TestcaseTypes,
+} from '../../assessment/AssessmentTypes';
 import { mockGradingAnswer } from '../../mocks/GradingMocks';
 import SideContentAutograder, {
-  SideContentAutograderProps
+  type SideContentAutograderProps,
 } from '../content/SideContentAutograder';
 
 const mockErrors: SourceError[] = [
@@ -19,8 +21,8 @@ const mockErrors: SourceError[] = [
     },
     elaborate() {
       return `Name a not declared.`;
-    }
-  }
+    },
+  },
 ];
 
 // The five testcases have statuses: correct, (none), correct, incorrect and error
@@ -29,7 +31,7 @@ const mockPublicTestcases: Testcase[] = [
   { program: `fibonacci(2);`, score: 1, answer: `2` },
   { program: `fibonacci(3);`, score: 1, answer: `2`, result: 2 },
   { program: `fibonacci(4);`, score: 2, answer: `3`, result: 4 },
-  { program: `fibonacci(5);`, score: 3, answer: `5`, errors: mockErrors }
+  { program: `fibonacci(5);`, score: 3, answer: `5`, errors: mockErrors },
 ].map(proto => {
   return { ...proto, type: TestcaseTypes.public };
 });
@@ -39,7 +41,7 @@ const publicTestcaseCardClasses = [
   'AutograderCard',
   'AutograderCard correct',
   'AutograderCard wrong',
-  'AutograderCard wrong'
+  'AutograderCard wrong',
 ];
 
 // The four opaque testcases have statuses: (none), correct, incorrect and error
@@ -47,7 +49,7 @@ const mockOpaqueTestcases: Testcase[] = [
   { program: `add(3, 0);`, score: 1, answer: `3` },
   { program: `add(5, 2);`, score: 1, answer: `7`, result: 7 },
   { program: `add(-6, 6);`, score: 2, answer: `0`, result: 12 },
-  { program: `add(-4, -7);`, score: 3, answer: `-11`, errors: mockErrors }
+  { program: `add(-4, -7);`, score: 3, answer: `-11`, errors: mockErrors },
 ].map(proto => {
   return { ...proto, type: TestcaseTypes.opaque };
 });
@@ -62,7 +64,7 @@ const mockSecretTestcases: Testcase[] = [
   { program: `is_prime(2);`, score: 1, answer: `true` },
   { program: `is_prime(3);`, score: 1, answer: `true`, result: true },
   { program: `is_prime(4);`, score: 2, answer: `false`, result: true },
-  { program: `is_prime(5);`, score: 3, answer: `true`, errors: mockErrors }
+  { program: `is_prime(5);`, score: 3, answer: `true`, errors: mockErrors },
 ].map(proto => {
   return { ...proto, type: TestcaseTypes.secret };
 });
@@ -77,7 +79,7 @@ const resultCardClasses = [
   'ResultCard wrong',
   'ResultCard wrong',
   'ResultCard wrong',
-  'ResultCard wrong'
+  'ResultCard wrong',
 ];
 
 test('Autograder renders placeholders correctly when testcases and results are empty', async () => {
@@ -85,13 +87,11 @@ test('Autograder renders placeholders correctly when testcases and results are e
     autogradingResults: [],
     testcases: [],
     workspaceLocation: 'assessment',
-    handleTestcaseEval: (testcaseId: number) => {}
+    handleTestcaseEval: (testcaseId: number) => {},
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
-
-  await act(() => render(app));
+  const { asFragment } = render(app);
+  expect(asFragment()).toMatchSnapshot();
 
   // Both noResults <div>s are rendered (one under 'Testcases', other under 'Autograder Results')
   expect(screen.queryAllByTestId('noResults')).toHaveLength(2);
@@ -110,13 +110,11 @@ test('Autograder renders public testcases with different statuses correctly', as
     autogradingResults: [],
     testcases: mockPublicTestcases,
     workspaceLocation: 'assessment',
-    handleTestcaseEval: (testcaseId: number) => {}
+    handleTestcaseEval: (testcaseId: number) => {},
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
-
-  await act(() => render(app));
+  const { asFragment } = render(app);
+  expect(asFragment()).toMatchSnapshot();
 
   // Expect only the header <div> for testcases section to be rendered
   expect(screen.queryAllByTestId('testcases-header')).toHaveLength(1);
@@ -146,7 +144,7 @@ test('Autograder renders public testcases with different statuses correctly', as
     'No Answer',
     '2',
     '4',
-    'Line 3: Name a not declared.'
+    'Line 3: Name a not declared.',
   ]);
 });
 
@@ -155,13 +153,11 @@ test('Autograder renders opaque testcases with different statuses correctly in A
     autogradingResults: [],
     testcases: mockOpaqueTestcases,
     workspaceLocation: 'assessment',
-    handleTestcaseEval: (testcaseId: number) => {}
+    handleTestcaseEval: (testcaseId: number) => {},
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
-
-  await act(() => render(app));
+  const { asFragment } = render(app);
+  expect(asFragment()).toMatchSnapshot();
 
   // No autograder result Card components should be rendered
   expect(screen.queryAllByTestId('ResultCard')).toHaveLength(0);
@@ -184,13 +180,11 @@ test('Autograder renders opaque testcases with different statuses correctly in G
     autogradingResults: [],
     testcases: mockOpaqueTestcases,
     workspaceLocation: 'grading',
-    handleTestcaseEval: (testcaseId: number) => {}
+    handleTestcaseEval: (testcaseId: number) => {},
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
-
-  await act(() => render(app));
+  const { asFragment } = render(app);
+  expect(asFragment()).toMatchSnapshot();
 
   // No autograder result Card components should be rendered
   expect(screen.queryAllByTestId('ResultCard')).toHaveLength(0);
@@ -206,7 +200,7 @@ test('Autograder renders opaque testcases with different statuses correctly in G
     'No Answer',
     '7',
     '12',
-    'Line 3: Name a not declared.'
+    'Line 3: Name a not declared.',
   ]);
 });
 
@@ -215,13 +209,11 @@ test('Autograder renders secret testcases with different statuses correctly', as
     autogradingResults: [],
     testcases: mockSecretTestcases,
     workspaceLocation: 'grading',
-    handleTestcaseEval: (testcaseId: number) => {}
+    handleTestcaseEval: (testcaseId: number) => {},
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
-
-  await act(() => render(app));
+  const { asFragment } = render(app);
+  expect(asFragment()).toMatchSnapshot();
 
   // Expect only the header <div> for testcases section to be rendered
   expect(screen.queryAllByTestId('testcases-header')).toHaveLength(1);
@@ -245,7 +237,7 @@ test('Autograder renders secret testcases with different statuses correctly', as
     'No Answer',
     'true',
     'true',
-    'Line 3: Name a not declared.'
+    'Line 3: Name a not declared.',
   ]);
 });
 
@@ -254,13 +246,11 @@ test('Autograder renders autograder results with different statuses correctly', 
     autogradingResults: mockAutogradingResults,
     testcases: [],
     workspaceLocation: 'assessment',
-    handleTestcaseEval: (testcaseId: number) => {}
+    handleTestcaseEval: (testcaseId: number) => {},
   };
   const app = <SideContentAutograder {...props} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
-
-  await act(() => render(app));
+  const { asFragment } = render(app);
+  expect(asFragment()).toMatchSnapshot();
 
   // Expect only the header <div> for autograder results section to be rendered
   expect(screen.queryAllByTestId('testcases-header')).toHaveLength(0);
@@ -300,7 +290,7 @@ test('Autograder renders autograder results with different statuses correctly', 
       'ERROR',
       '',
       '[TIMEOUT] Submission exceeded time limit for this test case.\n\n' +
-        '[SYNTAX] Line 2: Missing semicolon at the end of statement'
-    ]
+        '[SYNTAX] Line 2: Missing semicolon at the end of statement',
+    ],
   ]);
 });

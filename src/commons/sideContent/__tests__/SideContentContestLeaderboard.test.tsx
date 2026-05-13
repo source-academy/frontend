@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react';
-import { shallowRender } from 'src/commons/utils/TestUtils';
 import { vi } from 'vitest';
 
 import SideContentContestLeaderboard from '../content/SideContentContestLeaderboard';
@@ -12,41 +11,39 @@ const mockLeaderboardEntries = [
     submission_id: 1,
     answer: { code: "display('hello world')" },
     final_score: 100,
-    student_name: 'student_1'
+    student_name: 'student_1',
   },
   {
     submission_id: 2,
     answer: { code: 'function test() { return 1; }' },
     final_score: 90,
-    student_name: 'student_2'
+    student_name: 'student_2',
   },
   {
     submission_id: 3,
     answer: { code: 'function test() { return 1; }' },
     final_score: 80,
-    student_name: 'student_3'
-  }
+    student_name: 'student_3',
+  },
 ];
 
 const mockProps = {
   handleContestEntryClick: () => {},
   orderedContestEntries: mockLeaderboardEntries,
-  leaderboardType: SideContentType.scoreLeaderboard
+  leaderboardType: SideContentType.scoreLeaderboard,
 };
 
 // Basic snapshot testing to catch unexpected changes
 test('SideContentContestLeaderboard matches snapshot', () => {
-  const contestLeaderboardComponentRender = shallowRender(
-    <SideContentContestLeaderboard {...mockProps} />
-  );
-  expect(contestLeaderboardComponentRender).toMatchSnapshot();
+  const { asFragment } = render(<SideContentContestLeaderboard {...mockProps} />);
+  expect(asFragment()).toMatchSnapshot();
 });
 
 test('SideContentContestLeaderboard component renders correct number of entries.', async () => {
   const contestVotingContainer = <SideContentContestLeaderboard {...mockProps} />;
   await act(() => render(contestVotingContainer));
   expect(screen.getAllByTestId('SideContentLeaderboardCard')).toHaveLength(
-    mockLeaderboardEntries.length
+    mockLeaderboardEntries.length,
   );
 });
 
@@ -65,7 +62,7 @@ test('Clicking the contest entry updates the editor for score leaderboard.', asy
   const mockProps = {
     handleContestEntryClick: mockedHandleContestEntryClick,
     orderedContestEntries: mockLeaderboardEntries,
-    leaderboardType: SideContentType.scoreLeaderboard
+    leaderboardType: SideContentType.scoreLeaderboard,
   };
 
   const contestVotingContainer = <SideContentContestLeaderboard {...mockProps} />;

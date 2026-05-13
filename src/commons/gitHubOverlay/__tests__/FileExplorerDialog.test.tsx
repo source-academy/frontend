@@ -1,9 +1,9 @@
 import { Octokit } from '@octokit/rest';
-import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
-import { DeepPartial } from '@reduxjs/toolkit';
+import type { GetResponseTypeFromEndpointMethod } from '@octokit/types';
+import type { DeepPartial } from '@reduxjs/toolkit';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react';
-import { Mock, vi } from 'vitest';
+import { type Mock, vi } from 'vitest';
 
 import {
   checkIfFileCanBeOpened,
@@ -13,7 +13,7 @@ import {
   getGitHubOctokitInstance,
   openFileInEditor,
   performCreatingSave,
-  performOverwritingSave
+  performOverwritingSave,
 } from '../../../features/github/GitHubUtils';
 import FileExplorerDialog from '../FileExplorerDialog';
 import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';
@@ -39,7 +39,7 @@ test('Selecting close causes onSubmit to be called with empty string', async () 
         pickerType={pickerType}
         repoName={repoName}
         editorContent={''}
-      />
+      />,
     );
   });
 
@@ -68,7 +68,7 @@ test('Opening folder for first time causes child files to be loaded', async () =
         pickerType={pickerType}
         repoName={repoName}
         editorContent={''}
-      />
+      />,
     );
   });
 
@@ -101,7 +101,7 @@ test('Closing folder hides child files', async () => {
         pickerType={pickerType}
         repoName={repoName}
         editorContent={''}
-      />
+      />,
     );
   });
 
@@ -145,7 +145,7 @@ test('Opening folder for second time does not cause child files to be loaded', a
         pickerType={pickerType}
         repoName={repoName}
         editorContent={''}
-      />
+      />,
     );
   });
 
@@ -183,7 +183,7 @@ test('Opening folder for second time does not cause child files to be loaded', a
 test('Opening folder in editor leads to appropriate function being called', async () => {
   const checkIfFileCanBeOpenedMock = checkIfFileCanBeOpened as Mock<typeof checkIfFileCanBeOpened>;
   checkIfFileCanBeOpenedMock.mockImplementation(
-    async (octokit: Octokit, loginID: string, repoName: string, filePath: string) => true
+    async (octokit: Octokit, loginID: string, repoName: string, filePath: string) => true,
   );
 
   const checkIfUserAgreesToOverwriteEditorDataMock = checkIfUserAgreesToOverwriteEditorData as Mock<
@@ -193,7 +193,7 @@ test('Opening folder in editor leads to appropriate function being called', asyn
 
   const openFileInEditorMock = openFileInEditor as Mock<typeof openFileInEditor>;
   openFileInEditorMock.mockImplementation(
-    async (octokit: Octokit, loginID: string, repoName: string, filePath: string) => {}
+    async (octokit: Octokit, loginID: string, repoName: string, filePath: string) => {},
   );
 
   const octokit = getOctokitInstanceMock();
@@ -209,7 +209,7 @@ test('Opening folder in editor leads to appropriate function being called', asyn
         pickerType={pickerType}
         repoName={repoName}
         editorContent={''}
-      />
+      />,
     );
   });
 
@@ -228,7 +228,7 @@ test('Performing creating save leads to appropriate function being called', asyn
   checkIfFileCanBeSavedAndGetSaveTypeMock.mockImplementation(
     async (octokit: Octokit, loginID: string, repoName: string, filePath: string) => {
       return { canBeSaved: true, saveType: 'Create' };
-    }
+    },
   );
 
   const performCreatingSaveMock = performCreatingSave as Mock<typeof performCreatingSave>;
@@ -241,8 +241,8 @@ test('Performing creating save leads to appropriate function being called', asyn
       githubName: string | null,
       githubEmail: string | null,
       commitMessage: string,
-      content: string | null
-    ) => {}
+      content: string | null,
+    ) => {},
   );
 
   const octokit = getOctokitInstanceMock();
@@ -258,7 +258,7 @@ test('Performing creating save leads to appropriate function being called', asyn
         pickerType={pickerType}
         repoName={repoName}
         editorContent={''}
-      />
+      />,
     );
   });
 
@@ -279,7 +279,7 @@ test('Performing ovewriting save leads to appropriate function being called', as
   checkIfFileCanBeSavedAndGetSaveTypeMock.mockImplementation(
     async (octokit: Octokit, loginID: string, repoName: string, filePath: string) => {
       return { canBeSaved: true, saveType: 'Overwrite' };
-    }
+    },
   );
 
   const checkIfUserAgreesToPerformOverwritingSaveMock =
@@ -298,8 +298,8 @@ test('Performing ovewriting save leads to appropriate function being called', as
       githubName: string | null,
       githubEmail: string | null,
       commitMessage: string,
-      content: string | null
-    ) => {}
+      content: string | null,
+    ) => {},
   );
 
   const octokit = getOctokitInstanceMock();
@@ -315,7 +315,7 @@ test('Performing ovewriting save leads to appropriate function being called', as
         pickerType={pickerType}
         repoName={repoName}
         editorContent={''}
-      />
+      />,
     );
   });
 
@@ -335,15 +335,15 @@ function getOctokitInstanceMock() {
         const contentResponse = generateGetContentResponse();
         contentResponse.data = [
           generateGitHubSubDirectory('TestFile', 'file', 'TestFile'),
-          generateGitHubSubDirectory('TestFolder', 'dir', 'TestFolder')
+          generateGitHubSubDirectory('TestFolder', 'dir', 'TestFolder'),
           // TODO: Remove any
         ] as any;
         return contentResponse;
-      }) as any
+      }) as any,
     },
     users: {
-      getAuthenticated: vi.fn().mockResolvedValue(generateGetAuthenticatedResponse()) as any
-    }
+      getAuthenticated: vi.fn().mockResolvedValue(generateGetAuthenticatedResponse()) as any,
+    },
   } satisfies DeepPartial<Octokit> as Octokit;
 }
 
@@ -367,9 +367,9 @@ function generateGetContentResponse() {
       _links: {
         self: '',
         git: null,
-        html: null
-      }
-    }
+        html: null,
+      },
+    },
   } satisfies GetResponseTypeFromEndpointMethod<Octokit['repos']['getContent']>;
 }
 
@@ -387,8 +387,8 @@ function generateGitHubSubDirectory(name: string, type: 'file' | 'dir', path: st
     _links: {
       self: '',
       git: null,
-      html: null
-    }
+      html: null,
+    },
     // TODO: Remove partial
   } satisfies Partial<GetResponseTypeFromEndpointMethod<Octokit['repos']['getContent']>['data']>;
 }
@@ -426,10 +426,10 @@ function generateGetAuthenticatedResponse() {
       subscriptions_url: 'dummy',
       type: 'dummy',
       updated_at: 'dummy',
-      url: 'dummy'
+      url: 'dummy',
     },
     headers: {},
     status: 200,
-    url: 'www.eh'
+    url: 'www.eh',
   } satisfies GetResponseTypeFromEndpointMethod<Octokit['users']['getAuthenticated']>;
 }

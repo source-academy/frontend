@@ -13,7 +13,7 @@ type Props = {
 const AssignEntriesButton: React.FC<Props> = ({
   handleAssignEntriesForVoting,
   assessmentId,
-  isVotingPublished
+  isVotingPublished,
 }) => {
   const [confirmAssignEntries, setConfirmAssignEntries] = useState(false);
 

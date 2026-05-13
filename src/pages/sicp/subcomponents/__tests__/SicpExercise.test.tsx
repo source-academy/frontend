@@ -15,7 +15,7 @@ describe('Sicp exercise renders', () => {
     const props = {
       title: 'Title',
       body: <div>body</div>,
-      solution: <div>solution</div>
+      solution: <div>solution</div>,
     };
 
     const tree = await renderTreeJson(<SicpExercise {...props} />);
@@ -27,7 +27,7 @@ describe('Sicp exercise renders', () => {
     const props = {
       title: 'Title',
       body: <div>body</div>,
-      solution: <div>{solution}</div>
+      solution: <div>{solution}</div>,
     };
 
     const { container } = render(<SicpExercise {...props} />);
@@ -39,13 +39,13 @@ describe('Sicp exercise renders', () => {
     const props = {
       title: 'Title',
       body: <div>body</div>,
-      solution: undefined
+      solution: undefined,
     };
 
     const { container } = render(<SicpExercise {...props} />);
     await user.click(screen.getByRole('button'));
     expect(container.querySelector('.sicp-solution')?.textContent).toEqual(
-      render(noSolutionPlaceholder).container.textContent
+      render(noSolutionPlaceholder).container.textContent,
     );
   });
 });

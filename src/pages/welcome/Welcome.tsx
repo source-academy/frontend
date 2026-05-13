@@ -16,26 +16,26 @@ const Welcome: React.FC = () => {
       <Card className="fullpage-content">
         <div className={styles.fullpage}>
           <div>
-            <H2>{t('welcome.title', { sourceAcademyDeploymentName })}</H2>
+            <H2>{t($ => $.welcome.title, { sourceAcademyDeploymentName })}</H2>
             <div>
               <Trans
-                i18nKey="welcome.loggedInMessage"
+                i18nKey={$ => $.welcome.loggedInMessage}
                 components={[<strong />]}
                 tOptions={{ name, sourceAcademyDeploymentName }}
               />
             </div>
             <div className={styles['fullpage-content']}>
               <UL className={styles['text-left']}>
-                <li>{t('welcome.enrollmentMessage')}</li>
+                <li>{t($ => $.welcome.enrollmentMessage)}</li>
                 <li>
                   <Trans
-                    i18nKey="welcome.resourcesForLearners"
+                    i18nKey={$ => $.welcome.resourcesForLearners}
                     components={[<ItalicLink href={Links.resourcesForLearners} />]}
                   />
                 </li>
                 <li>
                   <Trans
-                    i18nKey="welcome.resourcesForEducators"
+                    i18nKey={$ => $.welcome.resourcesForEducators}
                     components={[<ItalicLink href={Links.resourcesForEducators} />]}
                   />
                 </li>

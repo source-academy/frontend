@@ -1,6 +1,7 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import SourceAcademyGame, { AccountInfo, GameType } from 'src/features/game/SourceAcademyGame';
+import type { AccountInfo } from 'src/features/game/SourceAcademyGame';
+import SourceAcademyGame, { GameType } from 'src/features/game/SourceAcademyGame';
 import { gameSimulatorConfig } from 'src/features/gameSimulator/GameSimulatorConstants';
 import { GameSimulatorState } from 'src/features/gameSimulator/GameSimulatorTypes';
 
@@ -26,11 +27,9 @@ const createGameSimulatorGame = () => {
  */
 const GameSimulator: React.FC = () => {
   const session = useTypedSelector(state => state.session);
-  const [gameSimulatorState, setGameSimulatorState] = React.useState<string>(
-    GameSimulatorState.DEFAULT
-  );
+  const [gameSimulatorState, setGameSimulatorState] = useState<string>(GameSimulatorState.DEFAULT);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const game = createGameSimulatorGame();
     game.setGameSimStateSetter(setGameSimulatorState);
     return () => {
@@ -40,12 +39,12 @@ const GameSimulator: React.FC = () => {
     };
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     SourceAcademyGame.getInstance().setAccountInfo({
       accessToken: session.accessToken,
       refreshToken: session.refreshToken,
       role: session.role,
-      name: session.name
+      name: session.name,
     } as AccountInfo);
   }, [session]);
 

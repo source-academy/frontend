@@ -17,7 +17,6 @@ const sourceAcademyDeploymentName = isTest
   : process.env.REACT_APP_DEPLOYMENT_NAME || 'Source Academy';
 const showResearchPrompt = isTest || isTrue(process.env.REACT_APP_SHOW_RESEARCH_PROMPT);
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
-const storiesBackendUrl = process.env.REACT_APP_STORIES_BACKEND_URL;
 const cadetLoggerUrl = isTest ? undefined : process.env.REACT_APP_CADET_LOGGER;
 const cadetLoggerInterval = parseInt(process.env.REACT_APP_CADET_LOGGER_INTERVAL || '10000', 10);
 const useBackend = !isTest && isTrue(process.env.REACT_APP_USE_BACKEND);
@@ -129,7 +128,7 @@ for (let i = 1; ; ++i) {
 }
 
 const featureFlags = {
-  enableSicpChatbot: isTrue(process.env.REACT_APP_FEATURE_ENABLE_SICP_CHATBOT)
+  enableSicpChatbot: isTrue(process.env.REACT_APP_FEATURE_ENABLE_SICP_CHATBOT),
 };
 
 export enum Links {
@@ -151,7 +150,7 @@ export enum Links {
 
   ecmaScript_2021 = 'https://262.ecma-international.org/12.0/',
 
-  vscode = 'vscode://source-academy.source-academy/sso'
+  vscode = 'vscode://source-academy.source-academy/sso',
 }
 
 const Constants = {
@@ -160,7 +159,6 @@ const Constants = {
   sourceAcademyDeploymentName,
   showResearchPrompt,
   backendUrl,
-  storiesBackendUrl,
   cadetLoggerUrl,
   useBackend,
   forwardLoadBalancerCookies,
@@ -192,7 +190,7 @@ const Constants = {
   workspaceSettingsLocalStorageKey,
   collabSessionIdLocalStorageKey,
   caFulfillmentLevel,
-  featureFlags
+  featureFlags,
 };
 
 export default Constants;

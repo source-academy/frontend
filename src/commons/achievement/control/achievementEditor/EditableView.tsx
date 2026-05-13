@@ -1,7 +1,7 @@
 import { Button, Dialog, EditableText, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useState } from 'react';
-import { AchievementView } from 'src/features/achievement/AchievementTypes';
+import { useState } from 'react';
+import type { AchievementView } from 'src/features/achievement/AchievementTypes';
 
 type Props = {
   changeView: (view: AchievementView) => void;

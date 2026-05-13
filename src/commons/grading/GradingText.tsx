@@ -1,10 +1,9 @@
 import { Classes, Text } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React from 'react';
 
 const defaultStyles: React.CSSProperties = {
   width: 'max-content',
-  margin: 'auto 0'
+  margin: 'auto 0',
 };
 
 type Props = {

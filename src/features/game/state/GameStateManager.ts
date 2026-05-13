@@ -1,18 +1,20 @@
-import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
-import { GameCheckpoint } from '../chapter/GameChapterTypes';
-import { GamePosition, ItemId } from '../commons/CommonTypes';
+import type { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
+import type { GameCheckpoint } from '../chapter/GameChapterTypes';
+import type { ItemId } from '../commons/CommonTypes';
+import { GamePosition } from '../commons/CommonTypes';
 import GameMap from '../location/GameMap';
-import { GameItemType, LocationId } from '../location/GameMapTypes';
-import { GameMode } from '../mode/GameModeTypes';
+import type { LocationId } from '../location/GameMapTypes';
+import { GameItemType } from '../location/GameMapTypes';
+import type { GameMode } from '../mode/GameModeTypes';
 import GameObjective from '../objective/GameObjective';
-import { ObjectProperty } from '../objects/GameObjectTypes';
+import type { ObjectProperty } from '../objects/GameObjectTypes';
 import { convertMapToArray } from '../save/GameSaveHelper';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
 import GameTask from '../task/GameTask';
-import { TaskDetail } from '../task/GameTaskTypes';
+import type { TaskDetail } from '../task/GameTaskTypes';
 import { mandatory } from '../utils/GameUtils';
-import { StateObserver } from './GameStateTypes';
+import type { StateObserver } from './GameStateTypes';
 
 /**
  * Manages all states related to story, chapter, or checkpoint;

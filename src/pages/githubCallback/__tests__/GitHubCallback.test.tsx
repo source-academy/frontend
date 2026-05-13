@@ -1,24 +1,24 @@
 import { render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { Route, Routes, StaticRouter } from 'react-router';
-import { Mock, vi } from 'vitest';
+import { type Mock, vi } from 'vitest';
 
 import Constants from '../../../commons/utils/Constants';
 import { exchangeAccessCode } from '../../../features/github/GitHubUtils';
 import GitHubCallback from '../GitHubCallback';
 
-function renderWithLocation(element: JSX.Element, location: string) {
+function renderWithLocation(element: React.ReactElement, location: string) {
   return render(
     <StaticRouter location={location}>
       <Routes>
         <Route path={urlWithoutCode} element={element} />
       </Routes>
-    </StaticRouter>
+    </StaticRouter>,
   );
 }
 
 vi.mock('../../../features/github/GitHubUtils', () => ({
-  exchangeAccessCode: vi.fn()
+  exchangeAccessCode: vi.fn(),
 }));
 
 describe('empty client ID', () => {
@@ -38,7 +38,7 @@ describe('empty client ID', () => {
     expect(exchangeAccessCodeMock).toBeCalledTimes(0);
 
     await screen.findByText(
-      'Client ID not included with deployment. Please try again or contact the website administrator.'
+      'Client ID not included with deployment. Please try again or contact the website administrator.',
     );
   });
 });
@@ -60,7 +60,7 @@ describe('nonempty client ID', () => {
     expect(exchangeAccessCodeMock).toBeCalledTimes(0);
 
     await screen.findByText(
-      'Access code not found in callback URL. Please try again or contact the website administrator.'
+      'Access code not found in callback URL. Please try again or contact the website administrator.',
     );
 
     exchangeAccessCodeMock.mockRestore();
@@ -76,7 +76,7 @@ describe('nonempty client ID', () => {
     expect(exchangeAccessCodeMock).toBeCalledTimes(1);
 
     await screen.findByText(
-      'Connection with server was denied, or incorrect payload received. Please try again or contact the website administrator.'
+      'Connection with server was denied, or incorrect payload received. Please try again or contact the website administrator.',
     );
     exchangeAccessCodeMock.mockRestore();
   });
@@ -88,7 +88,7 @@ describe('nonempty client ID', () => {
     const closeWindowMock = vi.spyOn(window, 'close');
     closeWindowMock.mockImplementation(() => {});
 
-    act(() => {
+    await act(async () => {
       renderWithLocation(<GitHubCallback />, urlWithCode);
     });
 

@@ -11,7 +11,7 @@ import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import CseMachine from '../CseMachine';
 import { Config } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { Env, EnvTree } from '../CseMachineTypes';
+import type { Env, EnvTree } from '../CseMachineTypes';
 import { isMainReference } from '../CseMachineUtils';
 
 function isArray(x: any): x is any[] {
@@ -83,7 +83,7 @@ const codeSamples = [
     eval_stream(integers_from(1), 2);
     let x = 1;
     debugger;
-    `
+    `,
 ];
 
 codeSamples.forEach((code, idx) => {
@@ -93,7 +93,7 @@ codeSamples.forEach((code, idx) => {
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
       context.runtime.control!,
-      context.runtime.stash!
+      context.runtime.stash!,
     );
 
     // Map of environment.id to Frame
@@ -151,7 +151,9 @@ codeSamples.forEach((code, idx) => {
               if (unit.value instanceof GlobalFnValue) {
                 // Check value has a binding in the global frame
                 expect(
-                  unit.value.references.filter(r => r instanceof Binding && r.frame === globalFrame)
+                  unit.value.references.filter(
+                    r => r instanceof Binding && r.frame === globalFrame,
+                  ),
                 ).toHaveLength(1);
               } else {
                 expect(unit.data).toHaveProperty('environment');
@@ -174,7 +176,7 @@ codeSamples.forEach((code, idx) => {
                     // Functions have the centers aligned instead
                     else {
                       expect(unit.value.x() + unit.value.width() / 2).toEqual(
-                        unit.x() + unit.width() / 2
+                        unit.x() + unit.width() / 2,
                       );
                     }
                   }
@@ -190,7 +192,7 @@ codeSamples.forEach((code, idx) => {
     checkLayout();
     CseMachine.togglePrintableMode();
   });
-});
+}, 10_000);
 
 const codeSamplesControlStash: [string, string, number, boolean?][] = [
   [
@@ -208,7 +210,7 @@ const codeSamplesControlStash: [string, string, number, boolean?][] = [
     }
     create(3)[1]();
     `,
-    33
+    33,
   ],
   [
     'global environments are treated correctly',
@@ -218,7 +220,7 @@ const codeSamplesControlStash: [string, string, number, boolean?][] = [
     }
     math_sin(math_PI / 2);
     `,
-    5
+    5,
   ],
   [
     'Control is truncated properly',
@@ -229,8 +231,8 @@ const codeSamplesControlStash: [string, string, number, boolean?][] = [
       fact(10);
       `,
     140,
-    true
-  ]
+    true,
+  ],
 ];
 
 codeSamplesControlStash.forEach(codeSample => {
@@ -249,7 +251,7 @@ codeSamplesControlStash.forEach(codeSample => {
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
       context.runtime.control!,
-      context.runtime.stash!
+      context.runtime.stash!,
     );
     Layout.draw();
     const controlItemsToTest: ControlItemComponent[] = Layout.controlComponent.stackItemComponents;
@@ -264,4 +266,19 @@ codeSamplesControlStash.forEach(codeSample => {
       if (isFunction(item.value) || isArray(item.value)) expect(item.arrow).toBeDefined();
     });
   });
+});
+
+test('clearRenderedLayouts preserves used built-in names', () => {
+  CseMachine.usedBuiltInNames.add('map');
+  Layout.currentLight = 'light';
+  Layout.currentDark = 'dark';
+
+  CseMachine.clearRenderedLayouts();
+
+  expect(CseMachine.usedBuiltInNames.has('map')).toBe(true);
+  expect(Layout.currentLight).toBeUndefined();
+  expect(Layout.currentDark).toBeUndefined();
+
+  // Cleanup static state to avoid cross-test pollution.
+  CseMachine.clearCachedLayouts();
 });

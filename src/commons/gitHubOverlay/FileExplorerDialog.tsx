@@ -8,12 +8,12 @@ import {
   InputGroup,
   Intent,
   Tree,
-  TreeNodeInfo
+  type TreeNodeInfo,
 } from '@blueprintjs/core';
 import { Octokit } from '@octokit/rest';
-import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
+import type { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   checkIfFileCanBeOpened,
@@ -22,7 +22,7 @@ import {
   checkIfUserAgreesToPerformOverwritingSave,
   openFileInEditor,
   performCreatingSave,
-  performOverwritingSave
+  performOverwritingSave,
 } from '../../features/github/GitHubUtils';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
@@ -120,7 +120,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
         props.octokit,
         githubLoginID,
         props.repoName,
-        filePath
+        filePath,
       );
 
       if (canBeSaved) {
@@ -133,7 +133,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
             githubName,
             githubEmail,
             commitMessage,
-            props.editorContent
+            props.editorContent,
           );
         }
 
@@ -146,7 +146,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
             githubName,
             githubEmail,
             commitMessage,
-            props.editorContent
+            props.editorContent,
           );
         }
       }
@@ -157,7 +157,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
   async function handleNodeClick(
     treeNode: TreeNodeInfo<GitHubFileNodeData>,
     _nodePath: number[],
-    e: React.MouseEvent<HTMLElement>
+    e: React.MouseEvent<HTMLElement>,
   ) {
     const originallySelected = treeNode.isSelected;
 
@@ -175,7 +175,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
       repoFiles,
       treeNode,
       allNodesCallback,
-      specificNodeCallback
+      specificNodeCallback,
     );
 
     if (newRepoFiles !== null) {
@@ -188,7 +188,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
       repoFiles,
       treeNode,
       (node: TreeNodeInfo<GitHubFileNodeData>) => {},
-      (node: TreeNodeInfo<GitHubFileNodeData>) => (node.isExpanded = false)
+      (node: TreeNodeInfo<GitHubFileNodeData>) => (node.isExpanded = false),
     );
 
     if (newRepoFiles !== null) {
@@ -207,11 +207,11 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
         if (node.nodeData !== undefined && !node.nodeData.childrenRetrieved) {
           node.childNodes = await GitHubTreeNodeCreator.getChildNodes(
             props.repoName,
-            node.nodeData.filePath
+            node.nodeData.filePath,
           );
           node.nodeData.childrenRetrieved = true;
         }
-      }
+      },
     );
 
     if (newRepoFiles !== null) {
@@ -223,7 +223,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
     treeNodes: TreeNodeInfo<GitHubFileNodeData>[],
     treeNodeToEdit: TreeNodeInfo<GitHubFileNodeData>,
     allNodesCallback: (node: TreeNodeInfo<GitHubFileNodeData>) => void,
-    specificNodeCallback: (node: TreeNodeInfo<GitHubFileNodeData>) => void
+    specificNodeCallback: (node: TreeNodeInfo<GitHubFileNodeData>) => void,
   ) {
     if (treeNodes === null) {
       return null;
@@ -245,7 +245,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
           clonedNode.childNodes,
           treeNodeToEdit,
           allNodesCallback,
-          specificNodeCallback
+          specificNodeCallback,
         );
 
         if (newChildNodes !== null) {

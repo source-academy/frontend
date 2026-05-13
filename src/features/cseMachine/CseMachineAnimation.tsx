@@ -1,8 +1,9 @@
-import { AppInstr, ArrLitInstr, AssmtInstr, InstrType } from 'js-slang/dist/cse-machine/types';
-import { Node } from 'js-slang/dist/types';
+import type { AppInstr, ArrLitInstr, AssmtInstr } from 'js-slang/dist/cse-machine/types';
+import { InstrType } from 'js-slang/dist/cse-machine/types';
+import type { Node } from 'js-slang/dist/types';
 import { Layer } from 'konva/lib/Layer';
 import { Easings } from 'konva/lib/Tween';
-import React from 'react';
+import { createRef } from 'react';
 
 import { ArrayAccessAnimation } from './animationComponents/ArrayAccessAnimation';
 import { ArrayAssignmentAnimation } from './animationComponents/ArrayAssignmentAnimation';
@@ -33,10 +34,12 @@ export class CseAnimation {
   static readonly defaultDuration = 300;
   static readonly defaultEasing = Easings.StrongEaseInOut;
   private static animationEnabled = false;
+  private static hideReferenceArrows = false;
+  private static hiddenFrameIds = new Set<string>();
   private static currentFrame: Frame;
   private static previousFrame: Frame;
 
-  static layerRef = React.createRef<Layer>();
+  static layerRef = createRef<Layer>();
   static getLayer(): Layer | null {
     return this.layerRef.current;
   }
@@ -47,6 +50,26 @@ export class CseAnimation {
 
   static disableAnimations(): void {
     CseAnimation.animationEnabled = false;
+  }
+
+  static setHideReferenceArrows(shouldHide: boolean): void {
+    CseAnimation.hideReferenceArrows = shouldHide;
+  }
+
+  static shouldHideReferenceArrows(): boolean {
+    return CseAnimation.hideReferenceArrows;
+  }
+
+  static setHiddenFrameIds(frameIds: Iterable<string>): void {
+    CseAnimation.hiddenFrameIds = new Set(frameIds);
+  }
+
+  static clearHiddenFrameIds(): void {
+    CseAnimation.hiddenFrameIds.clear();
+  }
+
+  static shouldHideFrame(frameId: string): boolean {
+    return CseAnimation.hiddenFrameIds.has(frameId);
   }
 
   static setCurrentFrame(frame: Frame) {
@@ -78,49 +101,49 @@ export class CseAnimation {
           CseAnimation.handleNode(node.body[0]);
         } else {
           CseAnimation.animations.push(
-            new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+            new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems()),
           );
           if (
             !isEnvEqual(
               CseAnimation.currentFrame.environment,
-              CseAnimation.previousFrame.environment
+              CseAnimation.previousFrame.environment,
             )
           ) {
             CseAnimation.animations.push(
-              new FrameCreationAnimation(lastControlComponent, CseAnimation.currentFrame)
+              new FrameCreationAnimation(lastControlComponent, CseAnimation.currentFrame),
             );
           }
         }
         break;
       case 'Literal':
         CseAnimation.animations.push(
-          new ControlToStashAnimation(lastControlComponent, currStashComponent!)
+          new ControlToStashAnimation(lastControlComponent, currStashComponent!),
         );
         break;
       case 'ArrowFunctionExpression':
         CseAnimation.animations.push(
-          new ControlToStashAnimation(lastControlComponent, currStashComponent!)
+          new ControlToStashAnimation(lastControlComponent, currStashComponent!),
         );
         break;
       case 'Identifier':
         // Special case for 'undefined' identifier
         if (node.name === 'undefined') {
           CseAnimation.animations.push(
-            new ControlToStashAnimation(lastControlComponent, currStashComponent!)
+            new ControlToStashAnimation(lastControlComponent, currStashComponent!),
           );
         } else {
           CseAnimation.animations.push(
             new LookupAnimation(
               lastControlComponent,
               currStashComponent!,
-              ...lookupBinding(CseAnimation.currentFrame, node.name)
-            )
+              ...lookupBinding(CseAnimation.currentFrame, node.name),
+            ),
           );
         }
         break;
       case 'SpreadElement':
         CseAnimation.animations.push(
-          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems()),
         );
         break;
       case 'AssignmentExpression':
@@ -137,7 +160,7 @@ export class CseAnimation {
       case 'FunctionDeclaration':
       case 'WhileStatement':
         CseAnimation.animations.push(
-          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems()),
         );
         break;
       case 'ExpressionStatement':
@@ -168,7 +191,7 @@ export class CseAnimation {
         case InstrType.APPLICATION: {
           const appInstr = lastControlItem as AppInstr;
           const fnStashItem = Layout.previousStashComponent.stashItemComponents.at(
-            -appInstr.numOfArgs - 1
+            -appInstr.numOfArgs - 1,
           )!;
           const fn = fnStashItem.value;
           if (isBuiltInFn(fn) || isStreamFn(fn)) {
@@ -176,8 +199,8 @@ export class CseAnimation {
               new InstructionApplicationAnimation(
                 lastControlComponent,
                 Layout.previousStashComponent.stashItemComponents.slice(-appInstr.numOfArgs - 1),
-                currStashComponent!
-              )
+                currStashComponent!,
+              ),
             );
             break;
           }
@@ -189,8 +212,8 @@ export class CseAnimation {
               CseAnimation.getNewControlItems(),
               fnStashItem,
               Layout.previousStashComponent.stashItemComponents.slice(-appInstr.numOfArgs),
-              frameCreated ? CseAnimation.currentFrame : undefined
-            )
+              frameCreated ? CseAnimation.currentFrame : undefined,
+            ),
           );
           break;
         }
@@ -200,8 +223,8 @@ export class CseAnimation {
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.at(-2)!,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
-              Layout.stashComponent.stashItemComponents.at(-1)!
-            )
+              Layout.stashComponent.stashItemComponents.at(-1)!,
+            ),
           );
           break;
         case InstrType.ARRAY_ASSIGNMENT: {
@@ -213,8 +236,8 @@ export class CseAnimation {
               Layout.values.get(arrayItem.value.id) as ArrayValue,
               Layout.previousStashComponent.stashItemComponents.at(-2)!,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
-              Layout.stashComponent.stashItemComponents.at(-1)!
-            )
+              Layout.stashComponent.stashItemComponents.at(-1)!,
+            ),
           );
           break;
         }
@@ -224,8 +247,8 @@ export class CseAnimation {
             new InstructionApplicationAnimation(
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.slice(-arrSize),
-              currStashComponent!
-            )
+              currStashComponent!,
+            ),
           );
           break;
         }
@@ -234,8 +257,8 @@ export class CseAnimation {
             new AssignmentAnimation(
               lastControlComponent,
               currStashComponent!,
-              ...lookupBinding(CseAnimation.currentFrame, (lastControlItem as AssmtInstr).symbol)
-            )
+              ...lookupBinding(CseAnimation.currentFrame, (lastControlItem as AssmtInstr).symbol),
+            ),
           );
           break;
         case InstrType.BINARY_OP:
@@ -244,8 +267,8 @@ export class CseAnimation {
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.at(-2)!,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
-              currStashComponent!
-            )
+              currStashComponent!,
+            ),
           );
           break;
         case InstrType.BRANCH:
@@ -255,13 +278,13 @@ export class CseAnimation {
             new BranchAnimation(
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
-              CseAnimation.getNewControlItems()
-            )
+              CseAnimation.getNewControlItems(),
+            ),
           );
           break;
         case InstrType.ENVIRONMENT:
           CseAnimation.animations.push(
-            new EnvironmentAnimation(CseAnimation.previousFrame, CseAnimation.currentFrame)
+            new EnvironmentAnimation(CseAnimation.previousFrame, CseAnimation.currentFrame),
           );
           break;
         case InstrType.POP:
@@ -276,8 +299,8 @@ export class CseAnimation {
               new PopAnimation(
                 lastControlComponent,
                 Layout.previousStashComponent.stashItemComponents.at(-1)!,
-                lastStashIsUndefined ? currStashComponent : undefined
-              )
+                lastStashIsUndefined ? currStashComponent : undefined,
+              ),
             );
           }
           break;
@@ -286,8 +309,8 @@ export class CseAnimation {
             new UnaryOperationAnimation(
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
-              currStashComponent!
-            )
+              currStashComponent!,
+            ),
           );
           break;
         case InstrType.SPREAD: {
@@ -315,8 +338,8 @@ export class CseAnimation {
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
               resultItems!,
-              currCallInstr!
-            )
+              currCallInstr!,
+            ),
           );
           break;
         }

@@ -1,17 +1,15 @@
 import { Control } from 'js-slang/dist/cse-machine/interpreter';
-import { ControlItem, Instr } from 'js-slang/dist/cse-machine/types';
+import type { ControlItem, Instr } from 'js-slang/dist/cse-machine/types';
 import { Chapter } from 'js-slang/dist/langs';
-import { StatementSequence } from 'js-slang/dist/types';
-import { Node } from 'js-slang/dist/types';
-import { KonvaEventObject } from 'konva/lib/Node';
-import React from 'react';
+import type { Node, StatementSequence } from 'js-slang/dist/types';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Label, Tag, Text } from 'react-konva';
 
 import CseMachine from '../CseMachine';
 import { Config } from '../CseMachineConfig';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { Layout } from '../CseMachineLayout';
-import { IHoverable } from '../CseMachineTypes';
+import type { IHoverable } from '../CseMachineTypes';
 import {
   defaultStrokeColor,
   defaultTextColor,
@@ -19,7 +17,7 @@ import {
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
-  setUnhoveredStyle
+  setUnhoveredStyle,
 } from '../CseMachineUtils';
 import { ControlItemComponent } from './ControlItemComponent';
 import { Visible } from './Visible';
@@ -31,7 +29,7 @@ export class ControlStack extends Visible implements IHoverable {
   constructor(
     /** the control object */
     readonly control: Control,
-    readonly chapter: Chapter
+    readonly chapter: Chapter,
   ) {
     super();
     this._x = ControlStashConfig.ControlPosX;
@@ -66,7 +64,7 @@ export class ControlStack extends Visible implements IHoverable {
         i,
         highlightOnHover,
         unhighlightOnHover,
-        this.chapter
+        this.chapter,
       );
       this._height += component.height();
       i += 1;
@@ -95,7 +93,7 @@ export class ControlStack extends Visible implements IHoverable {
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: 12,
       fontStyle: ControlStashConfig.FontStyle,
-      fontVariant: ControlStashConfig.FontVariant
+      fontVariant: ControlStashConfig.FontVariant,
     };
     return (
       <>

@@ -5,27 +5,21 @@ import {
   Spinner,
   SpinnerSize,
   Text,
-  Tooltip
+  Tooltip,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
+import { createRef, PureComponent } from 'react';
 import CopyToClipboard from 'src/commons/utils/CopyToClipboard';
 
 import ControlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 
-type ControlBarShareButtonProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   handleGenerateLz?: () => void;
   handleShortenURL: (s: string) => void;
   handleUpdateShortURL: (s: string) => void;
-};
-
-type StateProps = {
   queryString?: string;
   shortURL?: string;
-  key: string;
   isSicp?: boolean;
 };
 
@@ -34,15 +28,15 @@ type State = {
   isLoading: boolean;
 };
 
-export class ControlBarShareButton extends React.PureComponent<ControlBarShareButtonProps, State> {
-  private shareInputElem: React.RefObject<HTMLInputElement>;
+class ControlBarShareButton extends PureComponent<Props, State> {
+  private shareInputElem: React.RefObject<HTMLInputElement | null>;
 
-  constructor(props: ControlBarShareButtonProps) {
+  constructor(props: Props) {
     super(props);
     this.selectShareInputText = this.selectShareInputText.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.toggleButton = this.toggleButton.bind(this);
-    this.shareInputElem = React.createRef();
+    this.shareInputElem = createRef();
     this.state = { keyword: '', isLoading: false };
   }
 
@@ -116,7 +110,7 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
     );
   }
 
-  public componentDidUpdate(prevProps: ControlBarShareButtonProps) {
+  public componentDidUpdate(prevProps: Props) {
     if (this.props.shortURL !== prevProps.shortURL) {
       this.setState({ keyword: '', isLoading: false });
     }
@@ -143,3 +137,5 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
     }
   }
 }
+
+export default ControlBarShareButton;

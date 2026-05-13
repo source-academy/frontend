@@ -9,13 +9,13 @@ import {
   Icon,
   Intent,
   Popover,
-  Position
+  Position,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { type ColDef, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { uniqBy } from 'lodash';
-import React from 'react';
+import { useState } from 'react';
 import { useCSVReader } from 'react-papaparse';
 import { Role } from 'src/commons/application/ApplicationTypes';
 
@@ -34,19 +34,19 @@ export type UsernameRoleGroup = {
 const columnDefs: ColDef<UsernameRoleGroup>[] = [
   { headerName: 'Username', field: 'username' },
   { headerName: 'Role', field: 'role' },
-  { headerName: 'Group', field: 'group' }
+  { headerName: 'Group', field: 'group' },
 ];
 
 const defaultColumnDefs: ColDef = {
   flex: 1,
   filter: true,
   resizable: true,
-  sortable: true
+  sortable: true,
 };
 
 const AddUserPanel: React.FC<Props> = props => {
-  const [users, setUsers] = React.useState<UsernameRoleGroup[]>([]);
-  const [invalidCsvMsg, setInvalidCsvMsg] = React.useState<string | JSX.Element>('');
+  const [users, setUsers] = useState<UsernameRoleGroup[]>([]);
+  const [invalidCsvMsg, setInvalidCsvMsg] = useState<string | React.ReactElement>('');
   const { CSVReader } = useCSVReader();
 
   const grid = (
@@ -66,7 +66,7 @@ const AddUserPanel: React.FC<Props> = props => {
   );
 
   const htmlSelectOptions = [...Constants.authProviders.entries()].map(([id, _]) => id);
-  const [provider, setProvider] = React.useState(htmlSelectOptions[0]);
+  const [provider, setProvider] = useState(htmlSelectOptions[0]);
 
   const validateCsvInput = (results: any) => {
     const { data, errors }: { data: string[][]; errors: any[] } = results;
@@ -74,7 +74,7 @@ const AddUserPanel: React.FC<Props> = props => {
     // react-papaparse upload errors
     if (errors.length) {
       setInvalidCsvMsg(
-        'Error detected while uploading the CSV file! Please recheck the file and try again.'
+        'Error detected while uploading the CSV file! Please recheck the file and try again.',
       );
       return;
     }
@@ -106,14 +106,14 @@ const AddUserPanel: React.FC<Props> = props => {
             </div>
             <br />
             <div>(please hover over the question mark above for more details)</div>
-          </>
+          </>,
         );
         return;
       }
       // Invalid role specified
       if (!Object.values(Role).includes(data[i][1] as Role)) {
         setInvalidCsvMsg(
-          `Invalid role (line ${i})! Please ensure that the second column of each entry contains one of the following: 'admin, staff, student'`
+          `Invalid role (line ${i})! Please ensure that the second column of each entry contains one of the following: 'admin, staff, student'`,
         );
         return;
       }
@@ -123,7 +123,7 @@ const AddUserPanel: React.FC<Props> = props => {
       processed.push({
         username: e[0],
         role: e[1] as Role,
-        group: e[2]
+        group: e[2],
       });
     });
 
@@ -157,7 +157,7 @@ const AddUserPanel: React.FC<Props> = props => {
                 onUploadAccepted={(results: any) => validateCsvInput(results)}
                 config={{
                   delimiter: ',',
-                  skipEmptyLines: true
+                  skipEmptyLines: true,
                 }}
               >
                 {({ getRootProps, acceptedFile, ProgressBar, getRemoveFileProps }: any) => (

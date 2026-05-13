@@ -4,7 +4,7 @@ import CommonsActions from 'src/commons/application/actions/CommonsActions';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import {
   setEditorSessionId,
-  setSharedbConnected
+  setSharedbConnected,
 } from 'src/commons/collabEditing/CollabEditingActions';
 
 import {
@@ -13,7 +13,7 @@ import {
   defaultWorkspaceManager,
   type InterpreterOutput,
   type ResultOutput,
-  type RunningOutput
+  type RunningOutput,
 } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { type Library, type Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
@@ -27,7 +27,7 @@ import type {
   PlaygroundWorkspaceState,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
-  WorkspaceManagerState
+  WorkspaceManagerState,
 } from '../WorkspaceTypes';
 
 const playgroundWorkspace: WorkspaceLocation = 'playground';
@@ -36,9 +36,7 @@ const locations: ReadonlyArray<WorkspaceLocation> = [
   'assessment',
   'grading',
   'playground',
-  'sourcecast',
-  'sourcereel',
-  'sicp'
+  'sicp',
 ] as const;
 
 function generateActions<T>(func: (loc: WorkspaceLocation) => T) {
@@ -52,32 +50,20 @@ function generateDefaultWorkspace(payload: any = {}): WorkspaceManagerState {
   return {
     assessment: {
       ...defaultWorkspaceManager.assessment,
-      ...cloneDeep(payload)
+      ...cloneDeep(payload),
     },
     grading: {
       ...defaultWorkspaceManager.grading,
-      ...cloneDeep(payload)
+      ...cloneDeep(payload),
     },
     playground: {
       ...defaultWorkspaceManager.playground,
-      ...cloneDeep(payload)
-    },
-    sourcecast: {
-      ...defaultWorkspaceManager.sourcecast,
-      ...cloneDeep(payload)
-    },
-    sourcereel: {
-      ...defaultWorkspaceManager.sourcereel,
-      ...cloneDeep(payload)
+      ...cloneDeep(payload),
     },
     sicp: {
       ...defaultWorkspaceManager.sicp,
-      ...cloneDeep(payload)
+      ...cloneDeep(payload),
     },
-    stories: {
-      ...defaultWorkspaceManager.stories,
-      ...cloneDeep(payload)
-    }
   };
 }
 
@@ -89,7 +75,7 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
     const replHistory = {
       browseIndex: 1,
       records,
-      originalValue
+      originalValue,
     };
 
     const replDownDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ replHistory });
@@ -105,9 +91,9 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
           replValue: replHistory.records[0],
           replHistory: {
             ...replHistory,
-            browseIndex: 0
-          }
-        }
+            browseIndex: 0,
+          },
+        },
       });
 
       // no earlier records left, should set replValue to last value before browsing
@@ -120,9 +106,9 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
           replHistory: {
             browseIndex: null,
             records,
-            originalValue: ''
-          }
-        }
+            originalValue: '',
+          },
+        },
       });
     });
   });
@@ -133,7 +119,7 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
     const replHistory = {
       browseIndex: null,
       records,
-      originalValue
+      originalValue,
     };
 
     const replDownDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ replHistory });
@@ -153,12 +139,12 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
 
     const replHistory = {
       browseIndex: null,
-      records
+      records,
     };
 
     const replUpDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       replHistory,
-      replValue
+      replValue,
     });
     const actions = generateActions(WorkspaceActions.browseReplHistoryUp);
 
@@ -173,9 +159,9 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
           replHistory: {
             records,
             browseIndex: 0,
-            originalValue: replValue
-          }
-        }
+            originalValue: replValue,
+          },
+        },
       });
 
       // should advance browseIndex and update replValue
@@ -188,9 +174,9 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
           replHistory: {
             records,
             browseIndex: 1,
-            originalValue: replValue
-          }
-        }
+            originalValue: replValue,
+          },
+        },
       });
 
       // Should return unchanged state as we are at end of array
@@ -203,9 +189,9 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
           replHistory: {
             records,
             browseIndex: 1,
-            originalValue: replValue
-          }
-        }
+            originalValue: replValue,
+          },
+        },
       });
     });
   });
@@ -218,8 +204,8 @@ describe('CHANGE_EXTERNAL_LIBRARY', () => {
       type: WorkspaceActions.changeExternalLibrary.type,
       payload: {
         newExternal,
-        workspaceLocation: playgroundWorkspace
-      }
+        workspaceLocation: playgroundWorkspace,
+      },
     } as const;
 
     const result = WorkspaceReducer(defaultWorkspaceManager, playgroundAction);
@@ -227,8 +213,8 @@ describe('CHANGE_EXTERNAL_LIBRARY', () => {
       ...defaultWorkspaceManager,
       playground: {
         ...defaultWorkspaceManager.playground,
-        externalLibrary: newExternal
-      }
+        externalLibrary: newExternal,
+      },
     });
   });
 });
@@ -246,8 +232,8 @@ describe('CLEAR_REPL_INPUT', () => {
         ...clearReplDefaultState,
         [location]: {
           ...clearReplDefaultState[location],
-          replValue: ''
-        }
+          replValue: '',
+        },
       });
     });
   });
@@ -266,8 +252,8 @@ describe('CLEAR_REPL_OUTPUT', () => {
         ...clearReplDefaultState,
         [location]: {
           ...clearReplDefaultState[location],
-          output: []
-        }
+          output: [],
+        },
       });
     });
   });
@@ -279,13 +265,13 @@ describe('CLEAR_REPL_OUTPUT_LAST', () => {
       {
         type: 'result',
         value: 'undefined',
-        consoleLogs: ['hello', 'world']
+        consoleLogs: ['hello', 'world'],
       },
       {
         type: 'result',
         value: 420,
-        consoleLogs: ['these', 'are', 'display', 'calls']
-      }
+        consoleLogs: ['these', 'are', 'display', 'calls'],
+      },
     ];
     const clearReplLastPriorState: WorkspaceManagerState = generateDefaultWorkspace({ output });
     const actions = generateActions(WorkspaceActions.clearReplOutputLast);
@@ -297,8 +283,8 @@ describe('CLEAR_REPL_OUTPUT_LAST', () => {
         ...clearReplLastPriorState,
         [location]: {
           ...clearReplLastPriorState[location],
-          output: [output[0]]
-        }
+          output: [output[0]],
+        },
       });
     });
   });
@@ -310,7 +296,7 @@ describe('DEBUG_RESET', () => {
     const isDebugging = true;
     const debugResetDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       isRunning,
-      isDebugging
+      isDebugging,
     });
     const actions = generateActions(InterpreterActions.debuggerReset);
 
@@ -322,8 +308,8 @@ describe('DEBUG_RESET', () => {
         [location]: {
           ...debugResetDefaultState[location],
           isRunning: false,
-          isDebugging: false
-        }
+          isDebugging: false,
+        },
       });
     });
   });
@@ -333,7 +319,7 @@ describe('DEBUG_RESUME', () => {
   test('sets isRunning to true and isDebugging to false', () => {
     const isDebugging = true;
     const debugResumeDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
-      isDebugging
+      isDebugging,
     });
     const actions = generateActions(InterpreterActions.debuggerResume);
 
@@ -345,8 +331,8 @@ describe('DEBUG_RESUME', () => {
         [location]: {
           ...debugResumeDefaultState[location],
           isRunning: true,
-          isDebugging: false
-        }
+          isDebugging: false,
+        },
       });
     });
   });
@@ -362,15 +348,15 @@ describe('END_CLEAR_CONTEXT', () => {
       ['testBooleanUndefined', undefined],
       ['testBooleanNull', null],
       ['testObject', { a: 1, b: 2 }],
-      ['testArray', [1, 2, 'a', 'b']]
+      ['testArray', [1, 2, 'a', 'b']],
     ];
     const library: Library = {
       chapter: Chapter.SOURCE_4,
       external: {
         name: 'SOUNDS' as ExternalLibraryName,
-        symbols: []
+        symbols: [],
       },
-      globals: mockGlobals
+      globals: mockGlobals,
     };
 
     const actions = generateActions(l => WorkspaceActions.endClearContext(library, l));
@@ -382,7 +368,7 @@ describe('END_CLEAR_CONTEXT', () => {
         library.chapter,
         library.external.symbols,
         location,
-        Variant.DEFAULT
+        Variant.DEFAULT,
       );
 
       // Note: we stringify because context contains functions which cause
@@ -394,9 +380,9 @@ describe('END_CLEAR_CONTEXT', () => {
             ...defaultWorkspaceManager[location],
             context,
             globals: mockGlobals,
-            externalLibrary: 'SOUNDS' as const
-          }
-        })
+            externalLibrary: 'SOUNDS' as const,
+          },
+        }),
       );
     });
   });
@@ -416,8 +402,8 @@ describe('END_DEBUG_PAUSE', () => {
         [location]: {
           ...debugPauseDefaultState[location],
           isRunning: false,
-          isDebugging: true
-        }
+          isDebugging: true,
+        },
       });
     });
   });
@@ -429,7 +415,7 @@ describe('END_INTERRUPT_EXECUTION', () => {
     const isDebugging = true;
     const interruptExecutionDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       isRunning,
-      isDebugging
+      isDebugging,
     });
     const actions = generateActions(InterpreterActions.endInterruptExecution);
 
@@ -441,8 +427,8 @@ describe('END_INTERRUPT_EXECUTION', () => {
         [location]: {
           ...interruptExecutionDefaultState[location],
           isRunning: false,
-          isDebugging: false
-        }
+          isDebugging: false,
+        },
       });
     });
   });
@@ -452,7 +438,7 @@ describe('EVAL_EDITOR', () => {
   test('sets isRunning to true and isDebugging to false', () => {
     const isDebugging = true;
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
-      isDebugging
+      isDebugging,
     });
     const actions = generateActions(WorkspaceActions.evalEditor);
 
@@ -464,8 +450,8 @@ describe('EVAL_EDITOR', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: true,
-          isDebugging: false
-        }
+          isDebugging: false,
+        },
       });
     });
   });
@@ -474,12 +460,12 @@ describe('EVAL_EDITOR', () => {
 // Test data for EVAL_INTERPRETER_ERROR, EVAL_INTERPRETER_SUCCESS, EVAL_TESTCASE_SUCCESS and HANDLE_CONSOLE_OUTPUT
 const outputWithRunningOutput: RunningOutput[] = [
   { type: 'running', consoleLogs: ['console-log-test'] },
-  { type: 'running', consoleLogs: ['console-log-test-2'] }
+  { type: 'running', consoleLogs: ['console-log-test-2'] },
 ];
 
 const outputWithRunningAndCodeOutput: InterpreterOutput[] = [
   { type: 'running', consoleLogs: ['console-log-test'] },
-  { type: 'code', value: 'sample code' }
+  { type: 'code', value: 'sample code' },
 ];
 
 describe('EVAL_INTERPRETER_ERROR', () => {
@@ -490,7 +476,7 @@ describe('EVAL_INTERPRETER_ERROR', () => {
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningOutput,
       isRunning,
-      isDebugging
+      isDebugging,
     });
     const actions = generateActions(l => InterpreterActions.evalInterpreterError([], l));
 
@@ -505,9 +491,9 @@ describe('EVAL_INTERPRETER_ERROR', () => {
           isDebugging: false,
           output: [
             { ...outputWithRunningOutput[0] },
-            { type: 'errors', errors: [], consoleLogs: ['console-log-test-2'] }
-          ]
-        }
+            { type: 'errors', errors: [], consoleLogs: ['console-log-test-2'] },
+          ],
+        },
       });
     });
   });
@@ -518,7 +504,7 @@ describe('EVAL_INTERPRETER_ERROR', () => {
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput,
       isRunning,
-      isDebugging
+      isDebugging,
     });
 
     const actions = generateActions(l => InterpreterActions.evalInterpreterError([], l));
@@ -535,9 +521,9 @@ describe('EVAL_INTERPRETER_ERROR', () => {
           output: [
             { ...outputWithRunningAndCodeOutput[0] },
             { ...outputWithRunningAndCodeOutput[1] },
-            { type: 'errors', errors: [], consoleLogs: [] }
-          ]
-        }
+            { type: 'errors', errors: [], consoleLogs: [] },
+          ],
+        },
       });
     });
   });
@@ -552,7 +538,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningOutput,
       isRunning,
-      editorTabs: [{ highlightedLines, breakpoints }]
+      editorTabs: [{ highlightedLines, breakpoints }],
     });
 
     const actions = generateActions(l => InterpreterActions.evalInterpreterSuccess(undefined, l));
@@ -567,9 +553,9 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
           isRunning: false,
           output: [
             { ...outputWithRunningOutput[0] },
-            { type: 'result', consoleLogs: ['console-log-test-2'], value: undefined }
-          ]
-        }
+            { type: 'result', consoleLogs: ['console-log-test-2'], value: undefined },
+          ],
+        },
       });
     });
   });
@@ -582,13 +568,13 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput,
       isRunning,
-      editorTabs: [{ highlightedLines, breakpoints }]
+      editorTabs: [{ highlightedLines, breakpoints }],
     });
 
     const expectedOutput: ResultOutput = {
       type: 'result',
       consoleLogs: [],
-      value: undefined
+      value: undefined,
     };
 
     const actions = generateActions(l => InterpreterActions.evalInterpreterSuccess(undefined, l));
@@ -604,9 +590,36 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
           output: [
             { ...outputWithRunningAndCodeOutput[0] },
             { ...outputWithRunningAndCodeOutput[1] },
-            expectedOutput
-          ]
-        }
+            expectedOutput,
+          ],
+        },
+      });
+    });
+  });
+});
+
+describe('APPEND_INTERPRETER_RESULT', () => {
+  test('updates output without changing isRunning', () => {
+    const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
+      output: outputWithRunningOutput,
+      isRunning: true,
+    });
+
+    const actions = generateActions(l => InterpreterActions.appendInterpreterResult(undefined, l));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(evalEditorDefaultState, action);
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...evalEditorDefaultState,
+        [location]: {
+          ...evalEditorDefaultState[location],
+          isRunning: true,
+          output: [
+            { ...outputWithRunningOutput[0] },
+            { type: 'result', consoleLogs: ['console-log-test-2'], value: undefined },
+          ],
+        },
       });
     });
   });
@@ -623,8 +636,58 @@ describe('EVAL_REPL', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          isRunning: true
-        }
+          isRunning: true,
+        },
+      });
+    });
+  });
+});
+
+describe('SET_IS_RUNNING', () => {
+  test('sets isRunning to the provided value', () => {
+    const actions = generateActions(l => InterpreterActions.setIsRunning(false, l));
+
+    actions.forEach(action => {
+      const initialState: WorkspaceManagerState = generateDefaultWorkspace({ isRunning: true });
+      const result = WorkspaceReducer(initialState, action);
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
+
+      expect(result).toEqual({
+        ...initialState,
+        [location]: {
+          ...initialState[location],
+          isRunning: false,
+        },
+      });
+    });
+  });
+});
+
+describe('APPEND_INTERPRETER_ERROR', () => {
+  test('updates output without changing isRunning or isDebugging', () => {
+    const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
+      output: outputWithRunningAndCodeOutput,
+      isRunning: true,
+      isDebugging: true,
+    });
+
+    const actions = generateActions(l => InterpreterActions.appendInterpreterError([], l));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(evalEditorDefaultState, action);
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
+      expect(result).toEqual({
+        ...evalEditorDefaultState,
+        [location]: {
+          ...evalEditorDefaultState[location],
+          isRunning: true,
+          isDebugging: true,
+          output: [
+            { ...outputWithRunningAndCodeOutput[0] },
+            { ...outputWithRunningAndCodeOutput[1] },
+            { type: 'errors', errors: [], consoleLogs: [] },
+          ],
+        },
       });
     });
   });
@@ -633,12 +696,12 @@ describe('EVAL_REPL', () => {
 // Test data for EVAL_TESTCASE_FAILURE and EVAL_TESTCASE_SUCCESS
 const outputWithCodeAndRunningOutput: InterpreterOutput[] = [
   { type: 'code', value: 'sample code' },
-  { type: 'running', consoleLogs: ['console-log-test'] }
+  { type: 'running', consoleLogs: ['console-log-test'] },
 ];
 
 const outputWithCodeOutput: CodeOutput[] = [
   { type: 'code', value: 'code 1' },
-  { type: 'code', value: 'code 2' }
+  { type: 'code', value: 'code 2' },
 ];
 
 const editorTestcases: Testcase[] = [
@@ -646,21 +709,21 @@ const editorTestcases: Testcase[] = [
     type: TestcaseTypes.public,
     answer: 'abc',
     score: 10,
-    program: 'test program'
+    program: 'test program',
   },
   {
     type: TestcaseTypes.public,
     answer: 'def',
     score: 20,
-    program: 'another program'
-  }
+    program: 'another program',
+  },
 ];
 
 describe('EVAL_TESTCASE_FAILURE', () => {
   test('sets editorTestcases correctly', () => {
     const value = 'test-value-failure';
     const evalFailureDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
-      editorTestcases
+      editorTestcases,
     });
     const actions = generateActions(l => InterpreterActions.evalTestcaseFailure(value, l, 1));
 
@@ -673,9 +736,9 @@ describe('EVAL_TESTCASE_FAILURE', () => {
           ...evalFailureDefaultState[location],
           editorTestcases: [
             { ...editorTestcases[0] },
-            { ...editorTestcases[1], result: undefined, errors: value }
-          ]
-        }
+            { ...editorTestcases[1], result: undefined, errors: value },
+          ],
+        },
       });
     });
   });
@@ -688,7 +751,7 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
     const testcaseSuccessDefaultState = generateDefaultWorkspace({
       output: outputWithCodeAndRunningOutput,
       isRunning,
-      editorTestcases
+      editorTestcases,
     });
 
     const actions = generateActions(l => InterpreterActions.evalTestcaseSuccess(value, l, 1));
@@ -704,9 +767,9 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
           output: outputWithCodeAndRunningOutput,
           editorTestcases: [
             { ...editorTestcases[0] },
-            { ...editorTestcases[1], result: value, errors: undefined }
-          ]
-        }
+            { ...editorTestcases[1], result: value, errors: undefined },
+          ],
+        },
       });
     });
   });
@@ -717,7 +780,7 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
     const testcaseSuccessDefaultState = generateDefaultWorkspace({
       output: outputWithCodeOutput,
       isRunning,
-      editorTestcases
+      editorTestcases,
     });
 
     const actions = generateActions(l => InterpreterActions.evalTestcaseSuccess(value, l, 0));
@@ -733,9 +796,9 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
           output: outputWithCodeOutput,
           editorTestcases: [
             { ...editorTestcases[0], result: value, errors: undefined },
-            { ...editorTestcases[1] }
-          ]
-        }
+            { ...editorTestcases[1] },
+          ],
+        },
       });
     });
   });
@@ -759,10 +822,10 @@ describe('HANDLE_CONSOLE_LOG', () => {
             { ...outputWithRunningOutput[0] },
             {
               ...outputWithRunningOutput[1],
-              consoleLogs: outputWithRunningOutput[1].consoleLogs.concat(logString)
-            }
-          ]
-        }
+              consoleLogs: outputWithRunningOutput[1].consoleLogs.concat(logString),
+            },
+          ],
+        },
       });
     });
   });
@@ -770,7 +833,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
   test('works correctly with other output', () => {
     const logString = 'test-log-string-2';
     const consoleLogDefaultState = generateDefaultWorkspace({
-      output: outputWithRunningAndCodeOutput
+      output: outputWithRunningAndCodeOutput,
     });
     const actions = generateActions(l => InterpreterActions.handleConsoleLog(l, logString));
 
@@ -783,9 +846,9 @@ describe('HANDLE_CONSOLE_LOG', () => {
           ...consoleLogDefaultState[location],
           output: outputWithRunningAndCodeOutput.concat({
             type: 'running',
-            consoleLogs: [logString]
-          })
-        }
+            consoleLogs: [logString],
+          }),
+        },
       });
     });
   });
@@ -803,8 +866,8 @@ describe('HANDLE_CONSOLE_LOG', () => {
         ...consoleLogDefaultState,
         [location]: {
           ...consoleLogDefaultState[location],
-          output: [{ type: 'running', consoleLogs: [logString] }]
-        }
+          output: [{ type: 'running', consoleLogs: [logString] }],
+        },
       });
     });
   });
@@ -820,9 +883,9 @@ describe('LOG_OUT', () => {
           ...defaultPlaygroundState.editorTabs[0],
           highlightedLines: [
             [1, 2],
-            [3, 4]
-          ]
-        }
+            [3, 4],
+          ],
+        },
       ],
       externalLibrary: 'NONE' as ExternalLibraryName,
       replValue: 'test repl value here',
@@ -834,23 +897,23 @@ describe('LOG_OUT', () => {
       currentStep: -1,
       stepsTotal: 0,
       breakpointSteps: [],
-      changepointSteps: []
+      changepointSteps: [],
     };
 
     const logoutDefaultState: WorkspaceManagerState = {
       ...defaultWorkspaceManager,
-      playground: newPlayground
+      playground: newPlayground,
     };
 
     const playgroundAction = {
       type: CommonsActions.logOut.type,
-      payload: {}
+      payload: {},
     } as const;
 
     const result = WorkspaceReducer(logoutDefaultState, playgroundAction);
     expect(result).toEqual({
       ...defaultWorkspaceManager,
-      playground: newPlayground
+      playground: newPlayground,
     });
   });
 });
@@ -858,7 +921,7 @@ describe('LOG_OUT', () => {
 describe('RESET_TESTCASE', () => {
   test('correctly resets the targeted testcase to its default state', () => {
     const resetTestcaseDefaultState = generateDefaultWorkspace({
-      editorTestcases
+      editorTestcases,
     });
 
     const actions = generateActions(l => WorkspaceActions.resetTestcase(l, 1));
@@ -871,9 +934,9 @@ describe('RESET_TESTCASE', () => {
           ...resetTestcaseDefaultState[location],
           editorTestcases: [
             { ...editorTestcases[0] },
-            { ...editorTestcases[1], result: undefined, errors: undefined }
-          ]
-        }
+            { ...editorTestcases[1], result: undefined, errors: undefined },
+          ],
+        },
       });
     });
   });
@@ -887,14 +950,14 @@ describe('RESET_WORKSPACE', () => {
       editorTabs: [
         {
           highlightedLines: [[1], [10]],
-          breakpoints: ['1', '3']
-        }
+          breakpoints: ['1', '3'],
+        },
       ],
-      replValue: 'test repl value'
+      replValue: 'test repl value',
     };
 
     const actions = generateActions(l =>
-      WorkspaceActions.resetWorkspace(l, workspaceOptions as any)
+      WorkspaceActions.resetWorkspace(l, workspaceOptions as any),
     );
 
     actions.forEach(action => {
@@ -910,9 +973,9 @@ describe('RESET_WORKSPACE', () => {
             ...defaultWorkspaceManager[location],
             ...newContext,
             ...workspaceOptions,
-            context: newContext.context
-          }
-        })
+            context: newContext.context,
+          },
+        }),
       );
     });
   });
@@ -922,11 +985,11 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
   test('works correctly and pops replHistory when exceeding MAX_BROWSE_INDEX', () => {
     const replHistory = {
       browseIndex: null,
-      records: Array.from(Array(Constants.maxBrowseIndex), (x, index) => index + '') // Create an array with size MAX_BROWSE_INDEX
+      records: Array.from(Array(Constants.maxBrowseIndex), (x, index) => index + ''), // Create an array with size MAX_BROWSE_INDEX
     };
 
     const inputToOutputDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
-      replHistory
+      replHistory,
     });
     const newOutput = 'new-output-test';
 
@@ -946,14 +1009,14 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
             {
               type: 'code',
               workspaceLocation: location,
-              value: newOutput
-            }
+              value: newOutput,
+            },
           ],
           replHistory: {
             ...replHistory,
-            records: newArray
-          }
-        }
+            records: newArray,
+          },
+        },
       });
     });
   });
@@ -961,10 +1024,10 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
   test('works correctly with empty newOutput value', () => {
     const replHistory = {
       browseIndex: null,
-      records: ['record-1', 'record-2']
+      records: ['record-1', 'record-2'],
     };
     const inputToOutputDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
-      replHistory
+      replHistory,
     });
     const newOutput = '';
 
@@ -978,8 +1041,8 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
         [location]: {
           ...inputToOutputDefaultState[location],
           output: [{ type: 'code', workspaceLocation: location, value: newOutput }],
-          replHistory
-        }
+          replHistory,
+        },
       });
     });
   });
@@ -997,8 +1060,8 @@ describe('SET_EDITOR_SESSION_ID', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          editorSessionId
-        }
+          editorSessionId,
+        },
       });
     });
   });
@@ -1016,8 +1079,8 @@ describe('SET_SHAREDB_CONNECTED', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          sharedbConnected: connected
-        }
+          sharedbConnected: connected,
+        },
       });
     });
   });
@@ -1034,8 +1097,8 @@ describe('TOGGLE_EDITOR_AUTORUN', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          isEditorAutorun: true
-        }
+          isEditorAutorun: true,
+        },
       });
 
       result = WorkspaceReducer(result, action);
@@ -1043,8 +1106,8 @@ describe('TOGGLE_EDITOR_AUTORUN', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          isEditorAutorun: false
-        }
+          isEditorAutorun: false,
+        },
       });
     });
   });
@@ -1056,7 +1119,7 @@ describe('UPDATE_CURRENT_ASSESSMENT_ID', () => {
     const questionId = 7;
     const assessmentAction = {
       type: WorkspaceActions.updateCurrentAssessmentId.type,
-      payload: { assessmentId, questionId }
+      payload: { assessmentId, questionId },
     } as const;
 
     const result = WorkspaceReducer(defaultWorkspaceManager, assessmentAction);
@@ -1065,8 +1128,8 @@ describe('UPDATE_CURRENT_ASSESSMENT_ID', () => {
       assessment: {
         ...defaultWorkspaceManager.assessment,
         currentAssessment: assessmentId,
-        currentQuestion: questionId
-      }
+        currentQuestion: questionId,
+      },
     });
   });
 });
@@ -1077,7 +1140,7 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
     const questionId = 8;
     const assessmentAction = {
       type: WorkspaceActions.updateCurrentSubmissionId.type,
-      payload: { submissionId, questionId }
+      payload: { submissionId, questionId },
     } as const;
 
     const result = WorkspaceReducer(defaultWorkspaceManager, assessmentAction);
@@ -1086,8 +1149,8 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
       grading: {
         ...defaultWorkspaceManager.grading,
         currentSubmission: submissionId,
-        currentQuestion: questionId
-      }
+        currentQuestion: questionId,
+      },
     });
   });
 });
@@ -1104,8 +1167,8 @@ describe('SET_FOLDER_MODE', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          isFolderModeEnabled
-        }
+          isFolderModeEnabled,
+        },
       });
     });
   });
@@ -1116,24 +1179,24 @@ describe('UPDATE_ACTIVE_EDITOR_TAB_INDEX', () => {
     {
       value: 'Hello World!',
       highlightedLines: [],
-      breakpoints: []
+      breakpoints: [],
     },
     {
       value: 'Goodbye World!',
       highlightedLines: [],
-      breakpoints: []
-    }
+      breakpoints: [],
+    },
   ];
 
   test('throws an error if the active editor tab index is negative', () => {
     const activeEditorTabIndex = -1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.updateActiveEditorTabIndex(l, activeEditorTabIndex)
+      WorkspaceActions.updateActiveEditorTabIndex(l, activeEditorTabIndex),
     );
 
     actions.forEach(action => {
@@ -1146,11 +1209,11 @@ describe('UPDATE_ACTIVE_EDITOR_TAB_INDEX', () => {
     const activeEditorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.updateActiveEditorTabIndex(l, activeEditorTabIndex)
+      WorkspaceActions.updateActiveEditorTabIndex(l, activeEditorTabIndex),
     );
 
     actions.forEach(action => {
@@ -1164,9 +1227,9 @@ describe('UPDATE_ACTIVE_EDITOR_TAB_INDEX', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex,
-            editorTabs
-          }
-        })
+            editorTabs,
+          },
+        }),
       );
     });
   });
@@ -1175,11 +1238,11 @@ describe('UPDATE_ACTIVE_EDITOR_TAB_INDEX', () => {
     const activeEditorTabIndex = 2;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.updateActiveEditorTabIndex(l, activeEditorTabIndex)
+      WorkspaceActions.updateActiveEditorTabIndex(l, activeEditorTabIndex),
     );
 
     actions.forEach(action => {
@@ -1191,7 +1254,7 @@ describe('UPDATE_ACTIVE_EDITOR_TAB_INDEX', () => {
 
 describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
   const activeEditorTabOptions: Partial<EditorTabState> = {
-    value: 'Goodbye World!'
+    value: 'Goodbye World!',
   };
 
   test('overrides the active editor tab correctly', () => {
@@ -1209,18 +1272,18 @@ describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
         {
           value: 'Hello World!',
           highlightedLines: [],
-          breakpoints: []
+          breakpoints: [],
         },
         {
           value: 'Goodbye World!',
           highlightedLines: [],
-          breakpoints: []
-        }
-      ]
+          breakpoints: [],
+        },
+      ],
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.updateActiveEditorTab(l, activeEditorTabOptions)
+      WorkspaceActions.updateActiveEditorTab(l, activeEditorTabOptions),
     );
 
     actions.forEach(action => {
@@ -1240,17 +1303,17 @@ describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
               {
                 value: 'Hello World!',
                 highlightedLines: [],
-                breakpoints: []
+                breakpoints: [],
               },
               {
                 ...activeEditorTabOptions,
                 highlightedLines: [],
-                breakpoints: []
-              }
+                breakpoints: [],
+              },
             ],
-            context: newContext.context
-          }
-        })
+            context: newContext.context,
+          },
+        }),
       );
     });
   });
@@ -1258,11 +1321,11 @@ describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
   test('does nothing when there is no active editor tab', () => {
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: null,
-      editorTabs: []
+      editorTabs: [],
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.updateActiveEditorTab(l, activeEditorTabOptions)
+      WorkspaceActions.updateActiveEditorTab(l, activeEditorTabOptions),
     );
 
     actions.forEach(action => {
@@ -1276,12 +1339,12 @@ describe('UPDATE_EDITOR_VALUE', () => {
   const zerothEditorTab: EditorTabState = {
     value: 'Hello World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const firstEditorTab: EditorTabState = {
     value: 'Goodbye World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
   const newEditorValue = 'The quick brown fox jumps over the lazy dog.';
@@ -1290,11 +1353,11 @@ describe('UPDATE_EDITOR_VALUE', () => {
     const editorTabIndex = -1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.updateEditorValue(l, editorTabIndex, newEditorValue)
+      WorkspaceActions.updateEditorValue(l, editorTabIndex, newEditorValue),
     );
 
     actions.forEach(action => {
@@ -1307,11 +1370,11 @@ describe('UPDATE_EDITOR_VALUE', () => {
     const editorTabIndex = 2;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.updateEditorValue(l, editorTabIndex, newEditorValue)
+      WorkspaceActions.updateEditorValue(l, editorTabIndex, newEditorValue),
     );
 
     actions.forEach(action => {
@@ -1324,11 +1387,11 @@ describe('UPDATE_EDITOR_VALUE', () => {
     const editorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.updateEditorValue(l, editorTabIndex, newEditorValue)
+      WorkspaceActions.updateEditorValue(l, editorTabIndex, newEditorValue),
     );
 
     actions.forEach(action => {
@@ -1338,8 +1401,8 @@ describe('UPDATE_EDITOR_VALUE', () => {
         ...defaultWorkspaceState,
         [location]: {
           ...defaultWorkspaceState[location],
-          editorTabs: [zerothEditorTab, { ...firstEditorTab, value: newEditorValue }]
-        }
+          editorTabs: [zerothEditorTab, { ...firstEditorTab, value: newEditorValue }],
+        },
       });
     });
   });
@@ -1349,12 +1412,12 @@ describe('UPDATE_EDITOR_BREAKPOINTS', () => {
   const zerothEditorTab: EditorTabState = {
     value: 'Hello World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const firstEditorTab: EditorTabState = {
     value: 'Goodbye World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
   const newBreakpoints = [null, null, 'ace_breakpoint', null, 'ace_breakpoint'] as string[];
@@ -1363,11 +1426,11 @@ describe('UPDATE_EDITOR_BREAKPOINTS', () => {
     const editorTabIndex = -1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.setEditorBreakpoint(l, editorTabIndex, newBreakpoints)
+      WorkspaceActions.setEditorBreakpoint(l, editorTabIndex, newBreakpoints),
     );
 
     actions.forEach(action => {
@@ -1380,11 +1443,11 @@ describe('UPDATE_EDITOR_BREAKPOINTS', () => {
     const editorTabIndex = 2;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.setEditorBreakpoint(l, editorTabIndex, newBreakpoints)
+      WorkspaceActions.setEditorBreakpoint(l, editorTabIndex, newBreakpoints),
     );
 
     actions.forEach(action => {
@@ -1397,11 +1460,11 @@ describe('UPDATE_EDITOR_BREAKPOINTS', () => {
     const editorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.setEditorBreakpoint(l, editorTabIndex, newBreakpoints)
+      WorkspaceActions.setEditorBreakpoint(l, editorTabIndex, newBreakpoints),
     );
 
     actions.forEach(action => {
@@ -1411,8 +1474,8 @@ describe('UPDATE_EDITOR_BREAKPOINTS', () => {
         ...defaultWorkspaceState,
         [location]: {
           ...defaultWorkspaceState[location],
-          editorTabs: [zerothEditorTab, { ...firstEditorTab, breakpoints: newBreakpoints }]
-        }
+          editorTabs: [zerothEditorTab, { ...firstEditorTab, breakpoints: newBreakpoints }],
+        },
       });
     });
   });
@@ -1422,28 +1485,28 @@ describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
   const zerothEditorTab: EditorTabState = {
     value: 'Hello World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const firstEditorTab: EditorTabState = {
     value: 'Goodbye World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
   const newHighlightedLines: HighlightedLines[] = [
     [1, 3],
-    [6, 9]
+    [6, 9],
   ];
 
   test('throws an error if the editor tab index is negative', () => {
     const editorTabIndex = -1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.setEditorHighlightedLines(l, editorTabIndex, newHighlightedLines)
+      WorkspaceActions.setEditorHighlightedLines(l, editorTabIndex, newHighlightedLines),
     );
 
     actions.forEach(action => {
@@ -1456,11 +1519,11 @@ describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
     const editorTabIndex = 2;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.setEditorHighlightedLines(l, editorTabIndex, newHighlightedLines)
+      WorkspaceActions.setEditorHighlightedLines(l, editorTabIndex, newHighlightedLines),
     );
 
     actions.forEach(action => {
@@ -1473,11 +1536,11 @@ describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
     const editorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.setEditorHighlightedLines(l, editorTabIndex, newHighlightedLines)
+      WorkspaceActions.setEditorHighlightedLines(l, editorTabIndex, newHighlightedLines),
     );
 
     actions.forEach(action => {
@@ -1489,9 +1552,9 @@ describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
           ...defaultWorkspaceState[location],
           editorTabs: [
             zerothEditorTab,
-            { ...firstEditorTab, highlightedLines: newHighlightedLines }
-          ]
-        }
+            { ...firstEditorTab, highlightedLines: newHighlightedLines },
+          ],
+        },
       });
     });
   });
@@ -1501,28 +1564,28 @@ describe('MOVE_CURSOR', () => {
   const zerothEditorTab: EditorTabState = {
     value: 'Hello World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const firstEditorTab: EditorTabState = {
     value: 'Goodbye World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
   const newCursorPosition: Position = {
     row: 2,
-    column: 5
+    column: 5,
   };
 
   test('throws an error if the editor tab index is negative', () => {
     const editorTabIndex = -1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.moveCursor(l, editorTabIndex, newCursorPosition)
+      WorkspaceActions.moveCursor(l, editorTabIndex, newCursorPosition),
     );
 
     actions.forEach(action => {
@@ -1535,11 +1598,11 @@ describe('MOVE_CURSOR', () => {
     const editorTabIndex = 2;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.moveCursor(l, editorTabIndex, newCursorPosition)
+      WorkspaceActions.moveCursor(l, editorTabIndex, newCursorPosition),
     );
     actions.forEach(action => {
       const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
@@ -1551,11 +1614,11 @@ describe('MOVE_CURSOR', () => {
     const editorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.moveCursor(l, editorTabIndex, newCursorPosition)
+      WorkspaceActions.moveCursor(l, editorTabIndex, newCursorPosition),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -1564,8 +1627,8 @@ describe('MOVE_CURSOR', () => {
         ...defaultWorkspaceState,
         [location]: {
           ...defaultWorkspaceState[location],
-          editorTabs: [zerothEditorTab, { ...firstEditorTab, newCursorPosition }]
-        }
+          editorTabs: [zerothEditorTab, { ...firstEditorTab, newCursorPosition }],
+        },
       });
     });
   });
@@ -1576,13 +1639,13 @@ describe('ADD_EDITOR_TAB', () => {
     filePath: '/helloworld.js',
     value: 'Hello World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const firstEditorTab: EditorTabState = {
     filePath: '/goodbyeworld.js',
     value: 'Goodbye World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
 
@@ -1591,7 +1654,7 @@ describe('ADD_EDITOR_TAB', () => {
     const editorValue = 'The quick brown fox jumped over the lazy pomeranian.';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l => WorkspaceActions.addEditorTab(l, filePath, editorValue));
@@ -1610,10 +1673,10 @@ describe('ADD_EDITOR_TAB', () => {
             editorTabs: [
               zerothEditorTab,
               firstEditorTab,
-              { filePath, value: editorValue, highlightedLines: [], breakpoints: [] }
-            ]
-          }
-        })
+              { filePath, value: editorValue, highlightedLines: [], breakpoints: [] },
+            ],
+          },
+        }),
       );
     });
   });
@@ -1623,7 +1686,7 @@ describe('ADD_EDITOR_TAB', () => {
     const editorValue = 'The quick brown fox jumped over the lazy pomeranian.';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l => WorkspaceActions.addEditorTab(l, filePath, editorValue));
@@ -1638,9 +1701,9 @@ describe('ADD_EDITOR_TAB', () => {
           ...defaultWorkspaceState,
           [location]: {
             ...defaultWorkspaceState[location],
-            activeEditorTabIndex: 1
-          }
-        })
+            activeEditorTabIndex: 1,
+          },
+        }),
       );
     });
   });
@@ -1650,28 +1713,28 @@ describe('SHIFT_EDITOR_TAB', () => {
   const zerothEditorTab: EditorTabState = {
     value: 'Hello World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const firstEditorTab: EditorTabState = {
     value: 'Goodbye World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const secondEditorTab: EditorTabState = {
     value: 'Hello World Again!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const thirdEditorTab: EditorTabState = {
     value: 'Goodbye World Again!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const editorTabs: EditorTabState[] = [
     zerothEditorTab,
     firstEditorTab,
     secondEditorTab,
-    thirdEditorTab
+    thirdEditorTab,
   ];
 
   test('throws an error if the previous editor tab index is negative', () => {
@@ -1679,11 +1742,11 @@ describe('SHIFT_EDITOR_TAB', () => {
     const newEditorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.shiftEditorTab(l, previousEditorTabIndex, newEditorTabIndex)
+      WorkspaceActions.shiftEditorTab(l, previousEditorTabIndex, newEditorTabIndex),
     );
     actions.forEach(action => {
       const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
@@ -1696,16 +1759,16 @@ describe('SHIFT_EDITOR_TAB', () => {
     const newEditorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.shiftEditorTab(l, previousEditorTabIndex, newEditorTabIndex)
+      WorkspaceActions.shiftEditorTab(l, previousEditorTabIndex, newEditorTabIndex),
     );
     actions.forEach(action => {
       const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
       expect(resultThunk).toThrow(
-        'Previous editor tab index must have a corresponding editor tab!'
+        'Previous editor tab index must have a corresponding editor tab!',
       );
     });
   });
@@ -1715,11 +1778,11 @@ describe('SHIFT_EDITOR_TAB', () => {
     const newEditorTabIndex = -1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.shiftEditorTab(l, previousEditorTabIndex, newEditorTabIndex)
+      WorkspaceActions.shiftEditorTab(l, previousEditorTabIndex, newEditorTabIndex),
     );
     actions.forEach(action => {
       const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
@@ -1732,11 +1795,11 @@ describe('SHIFT_EDITOR_TAB', () => {
     const newEditorTabIndex = 4;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.shiftEditorTab(l, previousEditorTabIndex, newEditorTabIndex)
+      WorkspaceActions.shiftEditorTab(l, previousEditorTabIndex, newEditorTabIndex),
     );
     actions.forEach(action => {
       const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
@@ -1749,11 +1812,11 @@ describe('SHIFT_EDITOR_TAB', () => {
     const newEditorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.shiftEditorTab(l, previousEditorTabIndex, newEditorTabIndex)
+      WorkspaceActions.shiftEditorTab(l, previousEditorTabIndex, newEditorTabIndex),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -1765,9 +1828,9 @@ describe('SHIFT_EDITOR_TAB', () => {
           ...defaultWorkspaceState,
           [location]: {
             ...defaultWorkspaceState[location],
-            editorTabs: [zerothEditorTab, secondEditorTab, firstEditorTab, thirdEditorTab]
-          }
-        })
+            editorTabs: [zerothEditorTab, secondEditorTab, firstEditorTab, thirdEditorTab],
+          },
+        }),
       );
     });
   });
@@ -1777,11 +1840,11 @@ describe('SHIFT_EDITOR_TAB', () => {
     const newEditorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: previousEditorTabIndex,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.shiftEditorTab(l, previousEditorTabIndex, newEditorTabIndex)
+      WorkspaceActions.shiftEditorTab(l, previousEditorTabIndex, newEditorTabIndex),
     );
 
     actions.forEach(action => {
@@ -1795,9 +1858,9 @@ describe('SHIFT_EDITOR_TAB', () => {
           [location]: {
             ...defaultWorkspaceState[location],
             activeEditorTabIndex: newEditorTabIndex,
-            editorTabs: [zerothEditorTab, secondEditorTab, firstEditorTab, thirdEditorTab]
-          }
-        })
+            editorTabs: [zerothEditorTab, secondEditorTab, firstEditorTab, thirdEditorTab],
+          },
+        }),
       );
     });
   });
@@ -1807,12 +1870,12 @@ describe('REMOVE_EDITOR_TAB', () => {
   const zerothEditorTab: EditorTabState = {
     value: 'Hello World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const firstEditorTab: EditorTabState = {
     value: 'Goodbye World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
 
@@ -1820,7 +1883,7 @@ describe('REMOVE_EDITOR_TAB', () => {
     const editorTabIndex = -1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l => WorkspaceActions.removeEditorTab(l, editorTabIndex));
@@ -1834,7 +1897,7 @@ describe('REMOVE_EDITOR_TAB', () => {
     const editorTabIndex = 2;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l => WorkspaceActions.removeEditorTab(l, editorTabIndex));
@@ -1848,7 +1911,7 @@ describe('REMOVE_EDITOR_TAB', () => {
     const editorTabIndex = 0;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs: [zerothEditorTab]
+      editorTabs: [zerothEditorTab],
     });
 
     const actions = generateActions(l => WorkspaceActions.removeEditorTab(l, editorTabIndex));
@@ -1863,9 +1926,9 @@ describe('REMOVE_EDITOR_TAB', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: null,
-            editorTabs: []
-          }
-        })
+            editorTabs: [],
+          },
+        }),
       );
     });
   });
@@ -1874,7 +1937,7 @@ describe('REMOVE_EDITOR_TAB', () => {
     const editorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l => WorkspaceActions.removeEditorTab(l, editorTabIndex));
@@ -1889,9 +1952,9 @@ describe('REMOVE_EDITOR_TAB', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: 0,
-            editorTabs: [zerothEditorTab]
-          }
-        })
+            editorTabs: [zerothEditorTab],
+          },
+        }),
       );
     });
   });
@@ -1900,7 +1963,7 @@ describe('REMOVE_EDITOR_TAB', () => {
     const editorTabIndex = 0;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 1,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l => WorkspaceActions.removeEditorTab(l, editorTabIndex));
@@ -1915,9 +1978,9 @@ describe('REMOVE_EDITOR_TAB', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: 0,
-            editorTabs: [firstEditorTab]
-          }
-        })
+            editorTabs: [firstEditorTab],
+          },
+        }),
       );
     });
   });
@@ -1926,7 +1989,7 @@ describe('REMOVE_EDITOR_TAB', () => {
     const editorTabIndex = 0;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l => WorkspaceActions.removeEditorTab(l, editorTabIndex));
@@ -1941,9 +2004,9 @@ describe('REMOVE_EDITOR_TAB', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: 0,
-            editorTabs: [firstEditorTab]
-          }
-        })
+            editorTabs: [firstEditorTab],
+          },
+        }),
       );
     });
   });
@@ -1952,7 +2015,7 @@ describe('REMOVE_EDITOR_TAB', () => {
     const editorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 1,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l => WorkspaceActions.removeEditorTab(l, editorTabIndex));
@@ -1967,9 +2030,9 @@ describe('REMOVE_EDITOR_TAB', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: 0,
-            editorTabs: [zerothEditorTab]
-          }
-        })
+            editorTabs: [zerothEditorTab],
+          },
+        }),
       );
     });
   });
@@ -1980,13 +2043,13 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
     filePath: '/a.js',
     value: 'Hello World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const firstEditorTab: EditorTabState = {
     filePath: '/b.js',
     value: 'Goodbye World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
 
@@ -1994,11 +2057,11 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
     const removedFilePath = '/c.js';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.removeEditorTabForFile(l, removedFilePath)
+      WorkspaceActions.removeEditorTabForFile(l, removedFilePath),
     );
 
     actions.forEach(action => {
@@ -2013,11 +2076,11 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
     const removedFilePath = '/a.js';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs: [zerothEditorTab]
+      editorTabs: [zerothEditorTab],
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.removeEditorTabForFile(l, removedFilePath)
+      WorkspaceActions.removeEditorTabForFile(l, removedFilePath),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2030,9 +2093,9 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: null,
-            editorTabs: []
-          }
-        })
+            editorTabs: [],
+          },
+        }),
       );
     });
   });
@@ -2041,11 +2104,11 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
     const removedFilePath = '/b.js';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.removeEditorTabForFile(l, removedFilePath)
+      WorkspaceActions.removeEditorTabForFile(l, removedFilePath),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2058,9 +2121,9 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: 0,
-            editorTabs: [zerothEditorTab]
-          }
-        })
+            editorTabs: [zerothEditorTab],
+          },
+        }),
       );
     });
   });
@@ -2069,11 +2132,11 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
     const removedFilePath = '/a.js';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 1,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.removeEditorTabForFile(l, removedFilePath)
+      WorkspaceActions.removeEditorTabForFile(l, removedFilePath),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2086,9 +2149,9 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: 0,
-            editorTabs: [firstEditorTab]
-          }
-        })
+            editorTabs: [firstEditorTab],
+          },
+        }),
       );
     });
   });
@@ -2097,11 +2160,11 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
     const removedFilePath = '/a.js';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.removeEditorTabForFile(l, removedFilePath)
+      WorkspaceActions.removeEditorTabForFile(l, removedFilePath),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2114,9 +2177,9 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: 0,
-            editorTabs: [firstEditorTab]
-          }
-        })
+            editorTabs: [firstEditorTab],
+          },
+        }),
       );
     });
   });
@@ -2125,11 +2188,11 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
     const removedFilePath = '/b.js';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 1,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.removeEditorTabForFile(l, removedFilePath)
+      WorkspaceActions.removeEditorTabForFile(l, removedFilePath),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2142,9 +2205,9 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: 0,
-            editorTabs: [zerothEditorTab]
-          }
-        })
+            editorTabs: [zerothEditorTab],
+          },
+        }),
       );
     });
   });
@@ -2155,42 +2218,42 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
     filePath: '/dir1/dir3/a.js',
     value: 'Hello World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const firstEditorTab: EditorTabState = {
     filePath: '/dir1/dir2/a.js',
     value: 'Hello World Again!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const secondEditorTab: EditorTabState = {
     filePath: '/dir1/b.js',
     value: 'Goodbye World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const thirdEditorTab: EditorTabState = {
     filePath: '/dir1/dir2/b.js',
     value: 'Goodbye World Again!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const editorTabs: EditorTabState[] = [
     zerothEditorTab,
     firstEditorTab,
     secondEditorTab,
-    thirdEditorTab
+    thirdEditorTab,
   ];
 
   test('does nothing if there are no editor tabs that correspond to the removed directory path', () => {
     const removedDirectoryPath = '/dir3';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.removeEditorTabsForDirectory(l, removedDirectoryPath)
+      WorkspaceActions.removeEditorTabsForDirectory(l, removedDirectoryPath),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2204,11 +2267,11 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
     const removedDirectoryPath = '/dir1';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.removeEditorTabsForDirectory(l, removedDirectoryPath)
+      WorkspaceActions.removeEditorTabsForDirectory(l, removedDirectoryPath),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2221,9 +2284,9 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: null,
-            editorTabs: []
-          }
-        })
+            editorTabs: [],
+          },
+        }),
       );
     });
   });
@@ -2232,11 +2295,11 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
     const removedDirectoryPath = '/dir1/dir2';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.removeEditorTabsForDirectory(l, removedDirectoryPath)
+      WorkspaceActions.removeEditorTabsForDirectory(l, removedDirectoryPath),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2249,9 +2312,9 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: 0,
-            editorTabs: [zerothEditorTab, secondEditorTab]
-          }
-        })
+            editorTabs: [zerothEditorTab, secondEditorTab],
+          },
+        }),
       );
     });
   });
@@ -2260,11 +2323,11 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
     const removedDirectoryPath = '/dir1/dir2';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 2,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.removeEditorTabsForDirectory(l, removedDirectoryPath)
+      WorkspaceActions.removeEditorTabsForDirectory(l, removedDirectoryPath),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2277,9 +2340,9 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: 1,
-            editorTabs: [zerothEditorTab, secondEditorTab]
-          }
-        })
+            editorTabs: [zerothEditorTab, secondEditorTab],
+          },
+        }),
       );
     });
   });
@@ -2288,11 +2351,11 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
     const removedDirectoryPath = '/dir1/dir3';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 1,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.removeEditorTabsForDirectory(l, removedDirectoryPath)
+      WorkspaceActions.removeEditorTabsForDirectory(l, removedDirectoryPath),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2305,9 +2368,9 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: 0,
-            editorTabs: [firstEditorTab, secondEditorTab, thirdEditorTab]
-          }
-        })
+            editorTabs: [firstEditorTab, secondEditorTab, thirdEditorTab],
+          },
+        }),
       );
     });
   });
@@ -2316,11 +2379,11 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
     const removedDirectoryPath = '/dir1/dir2';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 1,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.removeEditorTabsForDirectory(l, removedDirectoryPath)
+      WorkspaceActions.removeEditorTabsForDirectory(l, removedDirectoryPath),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2333,9 +2396,9 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             activeEditorTabIndex: 0,
-            editorTabs: [zerothEditorTab, secondEditorTab]
-          }
-        })
+            editorTabs: [zerothEditorTab, secondEditorTab],
+          },
+        }),
       );
     });
   });
@@ -2346,13 +2409,13 @@ describe('RENAME_EDITOR_TAB_FOR_FILE', () => {
     filePath: '/a.js',
     value: 'Hello World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const firstEditorTab: EditorTabState = {
     filePath: '/b.js',
     value: 'Goodbye World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
 
@@ -2360,11 +2423,11 @@ describe('RENAME_EDITOR_TAB_FOR_FILE', () => {
     const oldFilePath = '/c.js';
     const newFilePath = '/d.js';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.renameEditorTabForFile(l, oldFilePath, newFilePath)
+      WorkspaceActions.renameEditorTabForFile(l, oldFilePath, newFilePath),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2379,11 +2442,11 @@ describe('RENAME_EDITOR_TAB_FOR_FILE', () => {
     const newFilePath = '/d.js';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.renameEditorTabForFile(l, oldFilePath, newFilePath)
+      WorkspaceActions.renameEditorTabForFile(l, oldFilePath, newFilePath),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2395,9 +2458,9 @@ describe('RENAME_EDITOR_TAB_FOR_FILE', () => {
           ...defaultWorkspaceState,
           [location]: {
             ...defaultWorkspaceManager[location],
-            editorTabs: [zerothEditorTab, { ...firstEditorTab, filePath: newFilePath }]
-          }
-        })
+            editorTabs: [zerothEditorTab, { ...firstEditorTab, filePath: newFilePath }],
+          },
+        }),
       );
     });
   });
@@ -2408,18 +2471,18 @@ describe('RENAME_EDITOR_TABS_FOR_DIRECTORY', () => {
     filePath: '/dir1/a.js',
     value: 'Hello World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const firstEditorTab: EditorTabState = {
     filePath: '/dir2/b.js',
     value: 'Goodbye World!',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const secondEditorTab: EditorTabState = {
     value: 'The quick brown fox jumped over the lazy pomeranian.',
     highlightedLines: [],
-    breakpoints: []
+    breakpoints: [],
   };
   const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab, secondEditorTab];
 
@@ -2427,11 +2490,11 @@ describe('RENAME_EDITOR_TABS_FOR_DIRECTORY', () => {
     const oldDirectoryPath = '/dir3';
     const newDirectoryPath = '/dir4';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.renameEditorTabsForDirectory(l, oldDirectoryPath, newDirectoryPath)
+      WorkspaceActions.renameEditorTabsForDirectory(l, oldDirectoryPath, newDirectoryPath),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2445,11 +2508,11 @@ describe('RENAME_EDITOR_TABS_FOR_DIRECTORY', () => {
     const oldDirectoryPath = '/dir2';
     const newDirectoryPath = '/dir4';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
-      editorTabs
+      editorTabs,
     });
 
     const actions = generateActions(l =>
-      WorkspaceActions.renameEditorTabsForDirectory(l, oldDirectoryPath, newDirectoryPath)
+      WorkspaceActions.renameEditorTabsForDirectory(l, oldDirectoryPath, newDirectoryPath),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2465,12 +2528,12 @@ describe('RENAME_EDITOR_TABS_FOR_DIRECTORY', () => {
               zerothEditorTab,
               {
                 ...firstEditorTab,
-                filePath: firstEditorTab.filePath?.replace(oldDirectoryPath, newDirectoryPath)
+                filePath: firstEditorTab.filePath?.replace(oldDirectoryPath, newDirectoryPath),
               },
-              secondEditorTab
-            ]
-          }
-        })
+              secondEditorTab,
+            ],
+          },
+        }),
       );
     });
   });
@@ -2480,7 +2543,7 @@ describe('UPDATE_HAS_UNSAVED_CHANGES', () => {
   test('sets hasUnsavedChanges correctly', () => {
     const hasUnsavedChanges = true;
     const actions = generateActions(l =>
-      WorkspaceActions.updateHasUnsavedChanges(l, hasUnsavedChanges)
+      WorkspaceActions.updateHasUnsavedChanges(l, hasUnsavedChanges),
     );
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
@@ -2489,8 +2552,8 @@ describe('UPDATE_HAS_UNSAVED_CHANGES', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          hasUnsavedChanges: true
-        }
+          hasUnsavedChanges: true,
+        },
       });
     });
   });
@@ -2508,8 +2571,8 @@ describe('UPDATE_REPL_VALUE', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          replValue: newReplValue
-        }
+          replValue: newReplValue,
+        },
       });
     });
   });
@@ -2519,7 +2582,7 @@ describe('TOGGLE_USING_SUBST', () => {
   test('sets usingSubst correctly', () => {
     const usingSubst = true;
     const actions = generateActions(l =>
-      WorkspaceActions.toggleUsingSubst(usingSubst, l as WorkspaceLocationsWithTools)
+      WorkspaceActions.toggleUsingSubst(usingSubst, l as WorkspaceLocationsWithTools),
     );
 
     actions.forEach(action => {
@@ -2532,13 +2595,346 @@ describe('TOGGLE_USING_SUBST', () => {
               ...defaultWorkspaceManager,
               [location]: {
                 ...defaultWorkspaceManager[location],
-                usingSubst: true
-              }
+                usingSubst: true,
+              },
             }
           : { ...defaultWorkspaceManager };
 
       expect(result).toEqual(expectedResult);
     });
+  });
+});
+
+// Version History Reducer Tests
+
+describe('FETCH_VERSION_HISTORY', () => {
+  test('sets isLoading to true when fetching version history', () => {
+    const actions = generateActions(l => WorkspaceActions.fetchVersionHistory(l));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
+
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          versionHistory: {
+            ...defaultWorkspaceManager[location].versionHistory,
+            isLoading: true,
+          },
+        },
+      });
+    });
+  });
+});
+
+describe('RECEIVE_VERSION_HISTORY', () => {
+  test('updates versions and sets isLoading to false', () => {
+    const versions = [
+      {
+        id: 'v1',
+        code: 'const x = 1;',
+        timestamp: 1234567890,
+        name: 'Version 1',
+      },
+      {
+        id: 'v2',
+        code: 'const x = 2;',
+        timestamp: 1234567900,
+      },
+    ];
+
+    const actions = generateActions(l => WorkspaceActions.receiveVersionHistory(l, versions));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
+
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          versionHistory: {
+            ...defaultWorkspaceManager[location].versionHistory,
+            versions,
+            isLoading: false,
+          },
+        },
+      });
+    });
+  });
+
+  test('handles empty versions array', () => {
+    const versions: any[] = [];
+    const actions = generateActions(l => WorkspaceActions.receiveVersionHistory(l, versions));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
+
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          versionHistory: {
+            ...defaultWorkspaceManager[location].versionHistory,
+            versions: [],
+            isLoading: false,
+          },
+        },
+      });
+    });
+  });
+});
+
+describe('RESTORE_VERSION', () => {
+  test('restores version code to active editor tab', () => {
+    const versionId = 'v1';
+    const versionCode = 'const restored = true;';
+
+    // Create a state with version history
+    const stateWithVersions: WorkspaceManagerState = {
+      ...defaultWorkspaceManager,
+      assessment: {
+        ...defaultWorkspaceManager.assessment,
+        activeEditorTabIndex: 0,
+        editorTabs: [
+          {
+            value: 'const old = false;',
+            highlightedLines: [],
+            breakpoints: [],
+          },
+        ],
+        versionHistory: {
+          versions: [
+            {
+              id: versionId,
+              timestamp: 1234567890,
+              name: 'Test Version',
+            },
+          ],
+          selectedVersion: null,
+          selectedVersionCode: null,
+          isLoadingCode: false,
+          isLoading: false,
+          isHistoryPanelOpen: false,
+          isAutoSaving: false,
+        },
+      },
+    };
+
+    const action = WorkspaceActions.restoreVersion(
+      'assessment',
+      versionId,
+      'Test Version',
+      1234567890,
+      versionCode,
+    );
+    const result = WorkspaceReducer(stateWithVersions, action);
+
+    expect(result.assessment.editorTabs[0].value).toEqual(versionCode);
+  });
+
+  test('does not restore if no active editor tab', () => {
+    const versionId = 'v1';
+    const versionCode = 'const restored = true;';
+
+    const stateWithNoActiveTab: WorkspaceManagerState = {
+      ...defaultWorkspaceManager,
+      assessment: {
+        ...defaultWorkspaceManager.assessment,
+        activeEditorTabIndex: null,
+      },
+    };
+
+    const action = WorkspaceActions.restoreVersion(
+      'assessment',
+      versionId,
+      undefined,
+      1234567890,
+      versionCode,
+    );
+    const result = WorkspaceReducer(stateWithNoActiveTab, action);
+
+    // State should remain unchanged - no active tab to restore to
+    expect(result.assessment.activeEditorTabIndex).toBeNull();
+  });
+});
+
+describe('TOGGLE_HISTORY_PANEL', () => {
+  test('toggles isHistoryPanelOpen from false to true', () => {
+    const actions = generateActions(l => WorkspaceActions.toggleHistoryPanel(l));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
+
+      expect(result).toEqual({
+        ...defaultWorkspaceManager,
+        [location]: {
+          ...defaultWorkspaceManager[location],
+          versionHistory: {
+            ...defaultWorkspaceManager[location].versionHistory,
+            isHistoryPanelOpen: true,
+          },
+        },
+      });
+    });
+  });
+
+  test('toggles isHistoryPanelOpen from true to false', () => {
+    const stateWithPanelOpen: WorkspaceManagerState = {
+      ...defaultWorkspaceManager,
+      assessment: {
+        ...defaultWorkspaceManager.assessment,
+        versionHistory: {
+          ...defaultWorkspaceManager.assessment.versionHistory,
+          isHistoryPanelOpen: true,
+        },
+      },
+    };
+
+    const action = WorkspaceActions.toggleHistoryPanel('assessment');
+    const result = WorkspaceReducer(stateWithPanelOpen, action);
+
+    expect(result.assessment.versionHistory.isHistoryPanelOpen).toBe(false);
+  });
+});
+
+describe('NAME_VERSION', () => {
+  test('updates version name correctly', () => {
+    const versionId = 'v1';
+    const newName = 'Final Version';
+
+    const stateWithVersions: WorkspaceManagerState = {
+      ...defaultWorkspaceManager,
+      assessment: {
+        ...defaultWorkspaceManager.assessment,
+        versionHistory: {
+          versions: [
+            {
+              id: versionId,
+              timestamp: 1234567890,
+            },
+            {
+              id: 'v2',
+              timestamp: 1234567900,
+            },
+          ],
+          selectedVersion: null,
+          selectedVersionCode: null,
+          isLoadingCode: false,
+          isLoading: false,
+          isHistoryPanelOpen: false,
+          isAutoSaving: false,
+        },
+      },
+    };
+
+    const action = WorkspaceActions.nameVersion('assessment', versionId, newName);
+    const result = WorkspaceReducer(stateWithVersions, action);
+
+    const updatedVersion = result.assessment.versionHistory.versions.find(v => v.id === versionId);
+    expect(updatedVersion?.name).toEqual(newName);
+
+    // Other versions should remain unchanged
+    const otherVersion = result.assessment.versionHistory.versions.find(v => v.id === 'v2');
+    expect(otherVersion?.name).toBeUndefined();
+  });
+
+  test('does not update if version not found', () => {
+    const versionId = 'non-existent';
+    const newName = 'Should Not Apply';
+
+    const stateWithVersions: WorkspaceManagerState = {
+      ...defaultWorkspaceManager,
+      assessment: {
+        ...defaultWorkspaceManager.assessment,
+        versionHistory: {
+          versions: [
+            {
+              id: 'v1',
+              timestamp: 1234567890,
+            },
+          ],
+          selectedVersion: null,
+          selectedVersionCode: null,
+          isLoadingCode: false,
+          isLoading: false,
+          isHistoryPanelOpen: false,
+          isAutoSaving: false,
+        },
+      },
+    };
+
+    const action = WorkspaceActions.nameVersion('assessment', versionId, newName);
+    const result = WorkspaceReducer(stateWithVersions, action);
+
+    // Version should not have the new name
+    const version = result.assessment.versionHistory.versions.find(v => v.id === 'v1');
+    expect(version?.name).toBeUndefined();
+  });
+
+  test('can clear version name by setting it to empty string', () => {
+    const versionId = 'v1';
+    const newName = '';
+
+    const stateWithVersions: WorkspaceManagerState = {
+      ...defaultWorkspaceManager,
+      assessment: {
+        ...defaultWorkspaceManager.assessment,
+        versionHistory: {
+          versions: [
+            {
+              id: versionId,
+              timestamp: 1234567890,
+              name: 'Old Name',
+            },
+          ],
+          selectedVersion: null,
+          selectedVersionCode: null,
+          isLoadingCode: false,
+          isLoading: false,
+          isHistoryPanelOpen: false,
+          isAutoSaving: false,
+        },
+      },
+    };
+
+    const action = WorkspaceActions.nameVersion('assessment', versionId, newName);
+    const result = WorkspaceReducer(stateWithVersions, action);
+
+    const updatedVersion = result.assessment.versionHistory.versions.find(v => v.id === versionId);
+    expect(updatedVersion?.name).toEqual('');
+  });
+});
+
+describe('UPDATE_SAVE_STATUS', () => {
+  test('sets saveStatus to saving on workspace', () => {
+    const actions = generateActions(l => WorkspaceActions.updateSaveStatus(l, 'saving'));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const workspaceLocation = action.payload.workspaceLocation;
+      expect(result[workspaceLocation].saveStatus).toEqual('saving');
+    });
+  });
+
+  test('sets saveStatus to saved on workspace', () => {
+    const actions = generateActions(l => WorkspaceActions.updateSaveStatus(l, 'saved'));
+
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceManager, action);
+      const workspaceLocation = action.payload.workspaceLocation;
+      expect(result[workspaceLocation].saveStatus).toEqual('saved');
+    });
+  });
+
+  test('sets saveStatus to saveFailed on workspace', () => {
+    const action = WorkspaceActions.updateSaveStatus('assessment', 'saveFailed');
+    const result = WorkspaceReducer(defaultWorkspaceManager, action);
+    expect(result.assessment.saveStatus).toEqual('saveFailed');
   });
 });
 

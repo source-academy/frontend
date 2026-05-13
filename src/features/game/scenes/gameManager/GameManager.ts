@@ -1,13 +1,14 @@
 import GameActionManager from '../../action/GameActionManager';
 import GameAnimationManager from '../../animations/GameAnimationManager';
-import { AssetType, ImageAsset } from '../../assets/AssetsTypes';
+import type { ImageAsset } from '../../assets/AssetsTypes';
+import { AssetType } from '../../assets/AssetsTypes';
 import GameAwardsManager from '../../awards/GameAwardsManager';
 import GameBackgroundManager from '../../background/GameBackgroundManager';
 import GameBBoxManager from '../../boundingBoxes/GameBoundingBoxManager';
-import { GameCheckpoint } from '../../chapter/GameChapterTypes';
+import type { GameCheckpoint } from '../../chapter/GameChapterTypes';
 import GameCharacterManager from '../../character/GameCharacterManager';
 import { Constants } from '../../commons/CommonConstants';
-import { AssetKey } from '../../commons/CommonTypes';
+import type { AssetKey } from '../../commons/CommonTypes';
 import GameDashboardManager from '../../dashboard/GameDashboardManager';
 import { DashboardPage } from '../../dashboard/GameDashboardTypes';
 import GameDialogueManager from '../../dialogue/GameDialogueManager';
@@ -19,10 +20,9 @@ import { keyboardShortcuts } from '../../input/GameInputConstants';
 import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import { LocationId } from '../../location/GameMapTypes';
-import { GameItemType } from '../../location/GameMapTypes';
+import type { LocationId } from '../../location/GameMapTypes';
 import GameLogManager from '../../log/GameLogManager';
-import { GameMode } from '../../mode/GameModeTypes';
+import TopicListManager from '../../mode/talk/TopicListManager';
 import GameObjectManager from '../../objects/GameObjectManager';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
@@ -32,6 +32,7 @@ import SourceAcademyGame from '../../SourceAcademyGame';
 import GameStateManager from '../../state/GameStateManager';
 import GameTaskLogManager from '../../task/GameTaskLogManager';
 import GameToolbarManager from '../../toolbar/GameToolbarManager';
+import TooltipManager from '../../tooltip/TooltipManager';
 import { mandatory, sleep, toS3Path } from '../../utils/GameUtils';
 import GameGlobalAPI from './GameGlobalAPI';
 import { createGamePhases } from './GameManagerHelper';
@@ -77,6 +78,8 @@ class GameManager extends Phaser.Scene {
   private taskLogManager?: GameTaskLogManager;
   private dashboardManager?: GameDashboardManager;
   private quizManager?: GameQuizManager;
+  private topicManager?: TopicListManager;
+  private tooltipManager?: TooltipManager;
   private actionJustSaved: boolean = false;
 
   constructor() {
@@ -108,11 +111,11 @@ class GameManager extends Phaser.Scene {
     this.escapeManager = new GameEscapeManager(this);
     this.collectibleManager = new GameAwardsManager(
       this,
-      SourceAcademyGame.getInstance().getUserStateManager().getCollectibles
+      SourceAcademyGame.getInstance().getUserStateManager().getCollectibles,
     );
     this.achievementManager = new GameAwardsManager(
       this,
-      SourceAcademyGame.getInstance().getUserStateManager().getAchievements
+      SourceAcademyGame.getInstance().getUserStateManager().getAchievements,
     );
     this.logManager = new GameLogManager(this);
     this.dialogueStorageManager = new GameDialogueStorageManager();
@@ -124,11 +127,13 @@ class GameManager extends Phaser.Scene {
         DashboardPage.Log,
         DashboardPage.Tasks,
         DashboardPage.Collectibles,
-        DashboardPage.Achievements
+        DashboardPage.Achievements,
       ],
-      [this.logManager, this.taskLogManager, this.collectibleManager, this.achievementManager]
+      [this.logManager, this.taskLogManager, this.collectibleManager, this.achievementManager],
     );
     this.quizManager = new GameQuizManager();
+    this.topicManager = new TopicListManager();
+    this.tooltipManager = new TooltipManager();
   }
 
   //////////////////////
@@ -139,14 +144,11 @@ class GameManager extends Phaser.Scene {
     addLoadingScreen(this);
     this.getPhaseManager().setInterruptCheckCallback(
       (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
-        this.transitionChecker(prevPhase, newPhase)
+        this.transitionChecker(prevPhase, newPhase),
     );
     this.getPhaseManager().setInterruptCallback(
-      async (prevPhase: GamePhaseType, newPhase: GamePhaseType) => await this.checkpointTransition()
-    );
-    this.getPhaseManager().setCallback(
       async (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
-        await this.handleCharacterLayer(prevPhase, newPhase)
+        await this.checkpointTransition(),
     );
     this.preloadLocationsAssets();
     this.bindKeyboardTriggers();
@@ -193,6 +195,8 @@ class GameManager extends Phaser.Scene {
 
   public async create() {
     GameGlobalAPI.getInstance().hideLayer(Layer.Character);
+    // add a tooltip to the scene to be used as needed
+    this.getTooltipManager().addTooltip();
     await this.changeLocationTo(this.currentLocationId, true);
   }
 
@@ -228,26 +232,24 @@ class GameManager extends Phaser.Scene {
     if (startAction) {
       // Execute fast forward actions
       await this.getActionManager().fastForwardGameActions(
-        this.getStateManager().getTriggeredStateChangeActions()
+        this.getStateManager().getTriggeredStateChangeActions(),
       );
       // Game start actions
       await this.getActionManager().processGameActions(
-        this.getStateManager().getGameMap().getGameStartActions()
+        this.getStateManager().getGameMap().getGameStartActions(),
       );
+      // By default, change the mode into Explore
+      if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Sequence)) {
+        await this.getPhaseManager().swapPhase(GamePhaseType.Explore);
+      }
     }
 
     // Location cutscene
     await this.getActionManager().processGameActions(gameLocation.actionIds);
 
     // Location notification
-    if (this.getStateManager().hasLocationNotif(locationId)) {
-      await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
-      this.getStateManager().removeLocationNotif(locationId);
-    }
-
-    if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Sequence)) {
-      await this.getPhaseManager().swapPhase(GamePhaseType.Menu);
-    }
+    await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
+    this.getStateManager().removeLocationNotif(locationId);
   }
 
   /**
@@ -260,6 +262,7 @@ class GameManager extends Phaser.Scene {
    */
   public async changeLocationTo(locationId: LocationId, startAction: boolean = false) {
     this.currentLocationId = locationId;
+    this.getTooltipManager().hideTooltip();
 
     //Reset the actionJustSaved flag
     this.actionJustSaved = false;
@@ -283,65 +286,34 @@ class GameManager extends Phaser.Scene {
   }
 
   /**
+   * Change location to the location cannot reach from current scene
+   *
+   * @param locationId id of the current location
+   */
+  public async restoreLocation(locationId: LocationId) {
+    const gameLocation = GameGlobalAPI.getInstance().getLocationAtId(locationId);
+    this.changeLocationTo(gameLocation.back, true);
+  }
+  /**
    * Bind escape menu, dashboard, and mode selections to keyboard triggers.
    */
   private bindKeyboardTriggers() {
     this.getInputManager().registerKeyboardListener(keyboardShortcuts.Menu, 'up', async () => {
       if (this.getPhaseManager().isCurrentPhaseTerminal()) {
-        await this.getPhaseManager().popPhase();
+        await this.getPhaseManager().swapPhase(GamePhaseType.Explore);
       } else {
         await this.getPhaseManager().pushPhase(GamePhaseType.EscapeMenu);
       }
     });
     this.getInputManager().registerKeyboardListener(keyboardShortcuts.Dashboard, 'up', async () => {
       if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Dashboard)) {
-        await this.getPhaseManager().popPhase();
+        await this.getPhaseManager().swapPhase(GamePhaseType.Explore);
       } else if (this.getPhaseManager().isCurrentPhaseTerminal()) {
         await this.getPhaseManager().swapPhase(GamePhaseType.Dashboard);
       } else {
         await this.getPhaseManager().pushPhase(GamePhaseType.Dashboard);
       }
     });
-    this.registerMenuKeyboardListener(
-      keyboardShortcuts.Explore,
-      GameMode.Explore,
-      GamePhaseType.Explore
-    );
-    this.registerMenuKeyboardListener(keyboardShortcuts.Move, GameMode.Move, GamePhaseType.Move);
-    this.registerMenuKeyboardListener(keyboardShortcuts.Talk, GameMode.Talk, GamePhaseType.Talk);
-  }
-
-  /**
-   * Helper function to register keyboard listeners for mode selections.
-   */
-  private registerMenuKeyboardListener(shortcut: number, mode: GameMode, phase: GamePhaseType) {
-    this.getInputManager().registerKeyboardListener(shortcut, 'up', async () => {
-      const modes = this.getCurrentLocationModes();
-      if (modes.includes(mode) && this.getPhaseManager().isCurrentPhase(GamePhaseType.Menu)) {
-        await this.getPhaseManager().pushPhase(phase);
-      } else if (this.getPhaseManager().isCurrentPhase(phase)) {
-        await this.getPhaseManager().swapPhase(GamePhaseType.Menu);
-      }
-    });
-  }
-
-  /**
-   * the same method from GameModeMenu to get the available modes under current location
-   */
-  private getCurrentLocationModes() {
-    const currLocId = this.currentLocationId;
-    let latestModesInLoc = this.getStateManager().getLocationModes(currLocId);
-    const talkTopics = GameGlobalAPI.getInstance().getGameItemsInLocation(
-      GameItemType.talkTopics,
-      currLocId
-    );
-
-    // Remove talk mode if there is no talk topics
-    if (talkTopics.length === 0) {
-      latestModesInLoc = latestModesInLoc.filter(mode => mode !== GameMode.Talk);
-    }
-
-    return latestModesInLoc;
   }
 
   /**
@@ -391,7 +363,7 @@ class GameManager extends Phaser.Scene {
     this.hasTransitioned = true;
 
     await this.getActionManager().processGameActions(
-      this.getStateManager().getGameMap().getCheckpointCompleteActions()
+      this.getStateManager().getGameMap().getCheckpointCompleteActions(),
     );
 
     // Reset input and cursor, in case it is changed after story complete actions
@@ -407,27 +379,6 @@ class GameManager extends Phaser.Scene {
 
     // Start the next Checkpoint
     this.scene.start('CheckpointTransition');
-  }
-
-  /**
-   * Handle when character layer should be shown and hidden.
-   * Character layer should only be shown when student is at
-   * Menu Mode.
-   *
-   * This method is passed to the phase manager, to be executed on
-   * every phase transition.
-   *
-   * @param prevPhase previous phase to transition from
-   * @param newPhase new phase to transition to
-   */
-  public async handleCharacterLayer(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
-    if (prevPhase === GamePhaseType.Menu) {
-      GameGlobalAPI.getInstance().fadeOutLayer(Layer.Character);
-    }
-
-    if (newPhase === GamePhaseType.Menu) {
-      GameGlobalAPI.getInstance().fadeInLayer(Layer.Character);
-    }
   }
 
   public getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
@@ -452,6 +403,8 @@ class GameManager extends Phaser.Scene {
   public getTaskLogManager = () => mandatory(this.taskLogManager);
   public getDashboardManager = () => mandatory(this.dashboardManager);
   public getQuizManager = () => mandatory(this.quizManager);
+  public getTopicManager = () => mandatory(this.topicManager);
+  public getTooltipManager = () => mandatory(this.tooltipManager);
 }
 
 export default GameManager;

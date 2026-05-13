@@ -1,5 +1,3 @@
-import React from 'react';
-
 import EditorTab from './EditorTab';
 import { getShortestUniqueFilePaths } from './utils';
 
@@ -16,11 +14,11 @@ const EditorTabContainer: React.FC<Props> = ({
   filePaths,
   activeEditorTabIndex,
   setActiveEditorTabIndex,
-  removeEditorTabByIndex
+  removeEditorTabByIndex,
 }) => {
   const handleHorizontalScroll = (e: React.WheelEvent<HTMLDivElement>) => {
     e.currentTarget.scrollTo({
-      left: e.currentTarget.scrollLeft + e.deltaY
+      left: e.currentTarget.scrollLeft + e.deltaY,
     });
   };
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Line as KonvaLine } from 'react-konva';
 
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
@@ -15,6 +14,14 @@ export class ArrayNullUnit extends Visible {
     this._y = reference.y();
     this._height = reference.height();
     this._width = reference.width();
+  }
+
+  setX(x: number): void {
+    this._x = x;
+  }
+
+  setY(y: number): void {
+    this._y = y;
   }
 
   draw(): React.ReactNode {

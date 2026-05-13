@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, Card, Divider, Elevation, H1, H3 } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
@@ -11,7 +11,7 @@ import sourceAcademyLogo from '../../assets/SA.jpg';
 
 const nusProviders = [...Constants.nusAuthProviders.entries()].map(([id, { name }]) => ({
   id,
-  name
+  name,
 }));
 
 const NUS_LOGO =
@@ -24,7 +24,7 @@ const NusLogin: React.FC = () => {
   const dispatch = useDispatch();
   const handleLogin = useCallback(
     (providerId: string) => dispatch(SessionActions.login(providerId)),
-    [dispatch]
+    [dispatch],
   );
   const navigate = useNavigate();
 

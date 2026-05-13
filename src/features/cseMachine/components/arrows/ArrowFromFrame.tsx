@@ -1,6 +1,6 @@
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { StepsArray } from '../../CseMachineTypes';
+import type { StepsArray } from '../../CseMachineTypes';
 import { Frame } from '../Frame';
 import { GenericArrow } from './GenericArrow';
 
@@ -13,6 +13,10 @@ export class ArrowFromFrame extends GenericArrow<Frame, Frame> {
 
   protected updateIsLive(): void {
     this.isLive = this.source.environment && Layout.liveEnvIDs.has(this.source.environment.id);
+  }
+
+  protected getOriginFilterKey() {
+    return 'frame' as const;
   }
 
   protected calculateSteps() {

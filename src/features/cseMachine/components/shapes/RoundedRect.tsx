@@ -1,5 +1,4 @@
-import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Shape } from 'react-konva';
 
 import { ShapeDefaultProps } from '../../CseMachineConfig';
@@ -11,9 +10,11 @@ interface Props {
   height: number;
   cornerRadius: { upperLeft: number; lowerLeft: number; upperRight: number; lowerRight: number };
   stroke: string;
+  fill?: string;
+  listening?: boolean;
   fillEnabled: boolean;
   hitStrokeWidth: number;
-  forwardRef: RefObject<any>;
+  forwardRef: React.RefObject<any>;
   onMouseEnter?: ({ currentTarget }: KonvaEventObject<MouseEvent>) => void;
   onMouseLeave?: ({ currentTarget }: KonvaEventObject<MouseEvent>) => void;
   onClick?: ({ currentTarget }: KonvaEventObject<MouseEvent>) => void;

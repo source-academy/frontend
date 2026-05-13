@@ -8,11 +8,11 @@ import {
   NumericInput,
   Section,
   SectionCard,
-  SwitchCard
+  SwitchCard,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { BlueprintIcons_16Id } from '@blueprintjs/icons/lib/esm/generated/16px/blueprint-icons-16';
-import React, { ChangeEventHandler, MouseEvent, PropsWithChildren, useRef, useState } from 'react';
+import type { BlueprintIcons_16Id } from '@blueprintjs/icons/lib/esm/generated/16px/blueprint-icons-16';
+import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { FeatureFlagsActions } from '../../commons/featureFlags';
@@ -20,7 +20,10 @@ import { FeatureFlag } from '../../commons/featureFlags/FeatureFlag';
 import { publicFlags } from '../../commons/featureFlags/publicFlags';
 import { useTypedSelector } from '../../commons/utils/Hooks';
 
-type FlagCardProps<T> = PropsWithChildren<{ flag: FeatureFlag<T>; modifiedFlag: T | undefined }>;
+type FlagCardProps<T> = React.PropsWithChildren<{
+  flag: FeatureFlag<T>;
+  modifiedFlag: T | undefined;
+}>;
 
 const BooleanFlagCard: React.FC<FlagCardProps<boolean>> = ({ flag, modifiedFlag }) => {
   const currentFlag = modifiedFlag ?? flag.defaultValue;
@@ -28,7 +31,7 @@ const BooleanFlagCard: React.FC<FlagCardProps<boolean>> = ({ flag, modifiedFlag 
 
   const dispatch = useDispatch();
 
-  const onChange: ChangeEventHandler<HTMLInputElement> = e => {
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = e => {
     dispatch(FeatureFlagsActions.setFlag({ featureFlag: flag, value: !currentFlag }));
   };
 
@@ -94,7 +97,7 @@ const UnknownFlagCard: React.FC<FlagCardProps<unknown>> = ({ flag, modifiedFlag,
 };
 
 export function whichCard(
-  flag: FeatureFlag<any>
+  flag: FeatureFlag<any>,
 ): [BlueprintIcons_16Id, React.FC<FlagCardProps<any>>] {
   switch (typeof flag.defaultValue) {
     case 'boolean':
@@ -112,7 +115,7 @@ const FeatureFlagSection: React.FC<FlagCardProps<any> & { icon: BlueprintIcons_1
   flag,
   modifiedFlag,
   children,
-  icon
+  icon,
 }) => {
   const dispatch = useDispatch();
 
@@ -121,14 +124,14 @@ const FeatureFlagSection: React.FC<FlagCardProps<any> & { icon: BlueprintIcons_1
 
   const isModified = modifiedFlag !== undefined;
 
-  const onReset = (e: MouseEvent) => {
+  const onReset = (e: React.MouseEvent) => {
     dispatch(FeatureFlagsActions.resetFlag({ featureFlag: flag }));
     e.stopPropagation();
   };
 
   const collapseProps = {
     isOpen: isOpen,
-    onToggle: toggleIsOpen
+    onToggle: toggleIsOpen,
   };
 
   return (

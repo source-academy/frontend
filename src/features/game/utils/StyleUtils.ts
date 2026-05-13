@@ -17,7 +17,7 @@ export const Color = {
   maroon: '#142B2E',
   black: '#000000',
   purple: '#dd33dd',
-  paleYellow: '#f6ffbd'
+  paleYellow: '#f6ffbd',
 };
 
 const hex = (str: string) => parseInt(str.slice(1), 16);
@@ -34,7 +34,7 @@ type TableFormatPosConfig = {
 
 export enum Direction {
   Row = 'Row',
-  Column = 'Column'
+  Column = 'Column',
 }
 
 /**
@@ -59,7 +59,7 @@ export function calcTableFormatPos({
   maxXSpace = screenSize.x,
   maxYSpace = screenSize.y,
   numItemLimit = 0,
-  redistributeLast = true
+  redistributeLast = true,
 }: TableFormatPosConfig): Array<[number, number]> {
   let itemsPerList = numItemLimit || numOfItems;
   const numOfLists = Math.ceil(numOfItems / itemsPerList);
@@ -75,11 +75,11 @@ export function calcTableFormatPos({
     return direction === Direction.Row
       ? [
           indexToCoordinate(screenSize.x, maxXSpace, itemIndexInList, itemsPerList),
-          indexToCoordinate(screenSize.y, maxYSpace, listIndex, numOfLists)
+          indexToCoordinate(screenSize.y, maxYSpace, listIndex, numOfLists),
         ]
       : [
           indexToCoordinate(screenSize.x, maxXSpace, listIndex, numOfLists),
-          indexToCoordinate(screenSize.y, maxYSpace, itemIndexInList, itemsPerList)
+          indexToCoordinate(screenSize.y, maxYSpace, itemIndexInList, itemsPerList),
         ];
   });
 }
@@ -88,7 +88,7 @@ function indexToCoordinate(
   screenSpace: number,
   listSpace: number,
   index: number,
-  maxItems: number
+  maxItems: number,
 ) {
   const partitionSpace = listSpace / maxItems;
   return (screenSpace - listSpace + partitionSpace) / 2 + partitionSpace * index;

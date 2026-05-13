@@ -38,13 +38,6 @@ export default defineConfig({
       //   inlineProcessEnv.REACT_APP_SW_EXCLUDE_REGEXES = undefined;
       // }
 
-      // const injectManifestPlugin = config.plugins.find(
-      //   plugin => plugin.constructor.name === 'InjectManifest'
-      // );
-      // if (injectManifestPlugin) {
-      //   injectManifestPlugin.config.maximumFileSizeToCacheInBytes = 20 * 1024 * 1024;
-      // }
-
       // // add rules to pack WASM (for Sourceror)
       // const wasmExtensionRegExp = /\.wasm$/;
       // config.resolve.extensions.push('.wasm');
@@ -61,32 +54,6 @@ export default defineConfig({
       // };
       // config.output.webassemblyModuleFilename = 'static/[hash].module.wasm';
 
-      // // Polyfill Node.js core modules.
-      // // An empty implementation (false) is provided when there is no browser equivalent.
-      // config.resolve.fallback = {
-      //   child_process: false,
-      //   constants: require.resolve('constants-browserify'),
-      //   fs: false,
-      //   http: require.resolve('stream-http'),
-      //   https: require.resolve('https-browserify'),
-      //   os: require.resolve('os-browserify/browser'),
-      //   'path/posix': require.resolve('path-browserify'),
-      //   'process/browser': require.resolve('process/browser'),
-      //   stream: require.resolve('stream-browserify'),
-      //   timers: require.resolve('timers-browserify'),
-      //   url: require.resolve('url/')
-      // };
-
-      // // workaround .mjs files by Acorn
-      // config.module.rules.push({
-      //   test: /\.mjs$/,
-      //   include: /node_modules/,
-      //   type: 'javascript/auto',
-      //   resolve: {
-      //     fullySpecified: false
-      //   }
-      // });
-
       config.ignoreWarnings = [
         (warning: any) => {
           // Ignore the warnings that occur because js-slang uses dynamic imports
@@ -99,41 +66,21 @@ export default defineConfig({
             warning.message
           );
         }
-
-        // {
-        //   // Ignore warnings for dependencies that do not ship with a source map.
-        //   // This is because we cannot do anything about our dependencies.
-        //   module: /node_modules/,
-        //   message: /Failed to parse source map/
-        // },
-        // [
       ];
-
-      // config.plugins = [
-      //   ...config.plugins,
-      //   // Make environment variables available in the browser by polyfilling the 'process' Node.js module.
-      //   new webpack.ProvidePlugin({
-      //     process: 'process/browser'
-      //   }),
-      //   // Make the 'buffer' Node.js module available in the browser.
-      //   new webpack.ProvidePlugin({
-      //     Buffer: ['buffer', 'Buffer']
-      //   })
-      // ];
 
       config.plugins = [
         ...config.plugins,
         new InjectManifest({
           swSrc: './src/service-worker.ts',
           swDest: 'service-worker.js',
-          maximumFileSizeToCacheInBytes: 20 * 1024 * 1024
+          maximumFileSizeToCacheInBytes: 30 * 1024 * 1024
         })
       ];
 
       // Workaround to suppress warnings caused by ts-morph in js-slang
-      // if (config.module) {
-      //   config.module.noParse = /node_modules\/@ts-morph\/common\/dist\/typescript\.js$/;
-      // }
+      if (config.module) {
+        config.module.noParse = /node_modules\/@ts-morph\/common\/dist\/typescript\.js$/;
+      }
 
       return config;
     }

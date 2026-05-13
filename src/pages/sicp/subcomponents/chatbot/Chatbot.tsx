@@ -1,9 +1,10 @@
 import { AnchorButton, Icon } from '@blueprintjs/core';
-import * as React from 'react';
-import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { DraggableData, DraggableEvent } from 'react-draggable';
+import Draggable from 'react-draggable';
 import logo from 'src/assets/SA.jpg';
 import { useSession } from 'src/commons/utils/Hooks';
-import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
+import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import classes from 'src/styles/Chatbot.module.scss';
 
 import ChatBox from './ChatBox';
@@ -24,7 +25,7 @@ const clampPosition = (
   x: number,
   y: number,
   chatOpen: boolean,
-  expanded: boolean
+  expanded: boolean,
 ): { x: number; y: number } => {
   const vw = window.innerWidth;
   const vh = window.innerHeight;
@@ -40,24 +41,24 @@ const clampPosition = (
 
   return {
     x: Math.min(maxX, Math.max(minX, x)),
-    y: Math.min(maxY, Math.max(minY, y))
+    y: Math.min(maxY, Math.max(minY, y)),
   };
 };
 
 const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
-  const [isPop, setPop] = React.useState(false);
-  const [isDivVisible, setIsDivVisible] = React.useState(false);
-  const [tipsMessage, setTipsMessage] = React.useState('You can click me for a chat');
-  const [activeSnippetId, setActiveSnippetId] = React.useState('');
-  const [isExpanded, setIsExpanded] = React.useState(false);
-  const [position, setPosition] = React.useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = React.useState(false);
+  const [isPop, setPop] = useState(false);
+  const [isDivVisible, setIsDivVisible] = useState(false);
+  const [tipsMessage, setTipsMessage] = useState('You can click me for a chat');
+  const [activeSnippetId, setActiveSnippetId] = useState('');
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
   const { isLoggedIn } = useSession();
-  const nodeRef = React.useRef<HTMLDivElement>(null);
+  const nodeRef = useRef<HTMLDivElement>(null);
 
   const isSnippetOpen = activeSnippetId !== '';
 
-  const toggleExpanded = React.useCallback(() => {
+  const toggleExpanded = useCallback(() => {
     setIsExpanded(prev => {
       const next = !prev;
       setPosition(pos => clampPosition(pos.x, pos.y, true, next));
@@ -79,7 +80,7 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleResize = () => {
       setPosition(pos => clampPosition(pos.x, pos.y, isPop, isExpanded));
     };
@@ -153,6 +154,19 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
                 toggleExpanded={toggleExpanded}
               />
             )}
+            <AnchorButton
+              className={classes['bot-button']}
+              onMouseEnter={() => !isDragging && setIsDivVisible(true)}
+              onMouseLeave={() => setIsDivVisible(false)}
+              onClick={togglePop}
+              icon={
+                <Icon
+                  icon={
+                    <img src={logo} className={classes['iSA']} alt="SA Logo" draggable={false} />
+                  }
+                />
+              }
+            />
           </div>
         </Draggable>
       )}

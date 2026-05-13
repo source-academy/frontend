@@ -1,18 +1,19 @@
-import { LoaderFunctionArgs, redirect, RouteObject } from 'react-router';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
+import type { LoaderFunctionArgs, RouteObject } from 'react-router';
+import { redirect } from 'react-router';
+import type { OverallState } from 'src/commons/application/ApplicationTypes';
 import { store } from 'src/pages/createStore';
 
 type RouteFilter = boolean | ((state: OverallState) => boolean);
 
 const routeGuard = (
   route: RouteObject,
-  allowConditions: Array<[RouteFilter, string?]> = []
+  allowConditions: Array<[RouteFilter, string?]> = [],
 ): RouteObject => {
   const boolFilters: Array<[(state: OverallState) => boolean, string]> = allowConditions.map(
     ([condition, path = '/']) => [
       typeof condition === 'boolean' ? () => condition : condition,
-      path
-    ]
+      path,
+    ],
   );
   return {
     ...route,
@@ -27,14 +28,14 @@ const routeGuard = (
         return null;
       }
       return route.loader(args);
-    }
+    },
   };
 };
 
 export class GuardedRoute {
   constructor(
     private route: RouteObject,
-    private filters?: Array<[RouteFilter, string?]>
+    private filters?: Array<[RouteFilter, string?]>,
   ) {
     this.route = route;
     this.filters = filters ?? [];

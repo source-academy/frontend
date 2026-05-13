@@ -1,13 +1,14 @@
-import { SourceError } from 'js-slang/dist/errors/base';
-import { Chapter, LanguageOptions, Variant } from 'js-slang/dist/langs';
+import type { SourceError } from 'js-slang/dist/errors/base';
+import { Chapter, type LanguageOptions, Variant } from 'js-slang/dist/langs';
 
-import { ExternalLibrary, ExternalLibraryName } from '../application/types/ExternalTypes';
+import type { ExternalLibrary } from '../application/types/ExternalTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
 
 export enum AssessmentStatuses {
   attempting = 'attempting',
   attempted = 'attempted',
   not_attempted = 'not_attempted',
-  submitted = 'submitted'
+  submitted = 'submitted',
 }
 export type AssessmentStatus = keyof typeof AssessmentStatuses;
 
@@ -21,7 +22,7 @@ export enum ProgressStatuses {
   attempted = 'attempted',
   submitted = 'submitted',
   graded = 'graded',
-  published = 'published'
+  published = 'published',
 }
 
 export type ProgressStatus = keyof typeof ProgressStatuses;
@@ -39,14 +40,14 @@ export enum TestcaseTypes {
   // These are rendered with a placeholder by the Autograder
   opaque = 'opaque',
   // These should only exist in the grading workspace for submissions
-  secret = 'secret'
+  secret = 'secret',
 }
 export type TestcaseType = keyof typeof TestcaseTypes;
 
 export enum QuestionTypes {
   programming = 'programming',
   mcq = 'mcq',
-  voting = 'voting'
+  voting = 'voting',
 }
 export type QuestionType = keyof typeof QuestionTypes;
 
@@ -68,6 +69,7 @@ export type AssessmentOverview = {
   isPublished?: boolean; // refers to assessment as a whole being published
   hasVotingFeatures: boolean;
   hasTokenCounter?: boolean;
+  isAutosaveEnabled?: boolean;
   isVotingPublished?: boolean;
   maxXp: number;
   earlySubmissionXp: number;
@@ -112,6 +114,7 @@ export type AssessmentConfiguration = {
   earlySubmissionXp: number;
   hasTokenCounter: boolean;
   hasVotingFeatures: boolean;
+  isAutosaveEnabled: boolean;
 };
 
 export interface IProgrammingQuestion extends BaseQuestion {
@@ -234,9 +237,9 @@ export const emptyLibrary = (): Library => {
     chapter: -1,
     external: {
       name: 'NONE' as ExternalLibraryName,
-      symbols: []
+      symbols: [],
     },
-    globals: []
+    globals: [],
   };
 };
 
@@ -245,9 +248,9 @@ export const normalLibrary = (): Library => {
     chapter: Chapter.SOURCE_1,
     external: {
       name: 'NONE' as ExternalLibraryName,
-      symbols: []
+      symbols: [],
     },
-    globals: []
+    globals: [],
   };
 };
 
@@ -271,7 +274,7 @@ export const overviewTemplate = (): AssessmentOverview => {
     xp: 0,
     maxTeamSize: 1,
     hasVotingFeatures: false,
-    hoursBeforeEarlyXpDecay: 0
+    hoursBeforeEarlyXpDecay: 0,
   };
 };
 
@@ -292,7 +295,7 @@ export const programmingTemplate = (): IProgrammingQuestion => {
     type: 'programming',
     xp: 0,
     maxXp: 0,
-    blocking: false
+    blocking: false,
   };
 };
 
@@ -301,7 +304,7 @@ export const testcaseTemplate = (): Testcase => {
     type: TestcaseTypes.public,
     answer: '',
     score: 0,
-    program: ''
+    program: '',
   };
 };
 
@@ -312,20 +315,20 @@ export const mcqTemplate = (): IMCQQuestion => {
     choices: [
       {
         content: 'A',
-        hint: null
+        hint: null,
       },
       {
         content: 'B',
-        hint: null
+        hint: null,
       },
       {
         content: 'C',
-        hint: null
+        hint: null,
       },
       {
         content: 'D',
-        hint: null
-      }
+        hint: null,
+      },
     ],
     id: 2,
     library: emptyLibrary(),
@@ -334,7 +337,7 @@ export const mcqTemplate = (): IMCQQuestion => {
     solution: 0,
     xp: 0,
     maxXp: 0,
-    blocking: false
+    blocking: false,
   };
 };
 
@@ -347,6 +350,6 @@ export const assessmentTemplate = (): Assessment => {
     longSummary: 'Insert mission briefing here',
     missionPDF: 'www.google.com',
     questions: [programmingTemplate()],
-    title: 'Insert title here'
+    title: 'Insert title here',
   };
 };

@@ -1,5 +1,4 @@
-import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import type { KonvaEventObject } from 'konva/lib/Node';
 
 import { ArrayUnit } from '../ArrayUnit';
 import { ControlItemComponent } from '../ControlItemComponent';
@@ -26,7 +25,7 @@ export abstract class Arrow {
   abstract onClick(e: KonvaEventObject<MouseEvent>): void;
   abstract source: Visible;
   abstract target: Visible | undefined;
-  abstract ref: RefObject<any>;
+  abstract ref: React.RefObject<any>;
   abstract x(): number;
   abstract y(): number;
   abstract height(): number;
@@ -36,11 +35,14 @@ export abstract class Arrow {
   abstract isLive: boolean;
 
   /** factory method that returns the corresponding arrow depending on where the arrow is `from` */
-  public static from(source: Visible): GenericArrow<Visible, Visible> {
+  public static from(
+    source: Visible,
+    sourceFrame?: Pick<Frame, 'x' | 'y' | 'width' | 'height'>,
+  ): GenericArrow<Visible, Visible> {
     if (source instanceof Frame) return new ArrowFromFrame(source);
     if (source instanceof FnValue || source instanceof GlobalFnValue || source instanceof ContValue)
       return new ArrowFromFn(source);
-    if (source instanceof Text) return new ArrowFromText(source);
+    if (source instanceof Text) return new ArrowFromText(source, sourceFrame!);
     if (source instanceof ArrayUnit) return new ArrowFromArrayUnit(source);
     if (source instanceof ControlItemComponent) return new ArrowFromControlItemComponent(source);
     if (source instanceof StashItemComponent) return new ArrowFromStashItemComponent(source);

@@ -1,16 +1,16 @@
-import { Dispatch, Store } from '@reduxjs/toolkit';
+import type { Dispatch, Store } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
-import { FSModule } from 'browserfs/dist/node/core/FS';
+import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { Chapter } from 'js-slang/dist/langs';
 import { act } from 'react';
 import { Provider } from 'react-redux';
-import { createMemoryRouter, RouteObject, RouterProvider } from 'react-router';
+import { createMemoryRouter, type RouteObject, RouterProvider } from 'react-router';
 import {
   defaultEditorValue,
   defaultPlayground,
-  OverallState
+  type OverallState,
 } from 'src/commons/application/ApplicationTypes';
-import { Router } from 'src/commons/application/types/CommonsTypes';
+import type { Router } from 'src/commons/application/types/CommonsTypes';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import { createStore } from 'src/pages/createStore';
 import { vi } from 'vitest';
@@ -20,6 +20,13 @@ import Playground, { handleHash } from '../Playground';
 // Mock inspector
 (window as any).Inspector = vi.fn();
 (window as any).Inspector.highlightClean = vi.fn();
+
+// Mock BlueprintJS Slider due to a bug in initial state causing invalid CSS
+// to be generated: `style="left: calc(-0px + (% * nan));"`
+vi.mock('@blueprintjs/core', async importOriginal => ({
+  ...(await importOriginal()),
+  Slider: (props: any) => <div data-testid="mock-slider">{props.children}</div>,
+}));
 
 // Using @testing-library/react to render snapshot instead of react-test-renderer
 // as the useRefs require the notion of React DOM
@@ -51,15 +58,15 @@ describe('Playground tests', () => {
               <Playground />
             </WorkspaceSettingsContext.Provider>
           </Provider>
-        )
-      }
+        ),
+      },
     ];
   });
 
   test('Playground renders correctly', async () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ['/playground'],
-      initialIndex: 0
+      initialIndex: 0,
     });
 
     const tree = await renderTree(router);
@@ -72,7 +79,7 @@ describe('Playground tests', () => {
   test('Playground with link renders correctly', async () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ['/playground#chap=2&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA'],
-      initialIndex: 0
+      initialIndex: 0,
     });
 
     const tree = await renderTree(router);
@@ -94,14 +101,14 @@ describe('Playground tests', () => {
         testHash,
         {
           handleChapterSelect: mockHandleChapterSelect,
-          handleChangeExecTime: mockHandleChangeExecTime
+          handleChangeExecTime: mockHandleChangeExecTime,
         },
         'playground',
         // We cannot make use of 'dispatch' & BrowserFS in test cases. However, the
         // behaviour being tested here does not actually invoke either of these. As
         // a workaround, we pass in 'undefined' instead & cast to the expected types.
         undefined as unknown as Dispatch,
-        undefined as unknown as FSModule
+        undefined as unknown as FSModule,
       );
 
       expect(mockHandleEditorValueChanged).not.toHaveBeenCalled();

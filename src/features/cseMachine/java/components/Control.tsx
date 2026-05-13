@@ -56,7 +56,7 @@ export class Control extends Visible {
         controlItemReference,
         controlItemTooltip,
         highlightOnHover,
-        unhighlightOnHover
+        unhighlightOnHover,
       );
 
       this._controlItems.push(currControlItem);

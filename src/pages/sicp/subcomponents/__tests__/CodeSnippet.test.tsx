@@ -1,5 +1,5 @@
+import { render } from '@testing-library/react';
 import lzString from 'lz-string';
-import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import CodeSnippet from '../CodeSnippet';
 
@@ -14,11 +14,11 @@ describe('Sicp Code Snippet', () => {
       output: output,
       id: 'id',
       initialEditorValueHash: program,
-      prependLength: 1
+      prependLength: 1,
     };
 
-    const tree = shallowRender(<CodeSnippet {...props} />);
-    expect(tree).toMatchSnapshot();
+    const tree = render(<CodeSnippet {...props} />);
+    expect(tree.asFragment()).toMatchSnapshot();
   });
 
   test('renders correctly without prepend', () => {
@@ -27,10 +27,10 @@ describe('Sicp Code Snippet', () => {
       output: output,
       id: 'id',
       initialEditorValueHash: program,
-      prependLength: 0
+      prependLength: 0,
     };
 
-    const tree = shallowRender(<CodeSnippet {...props} />);
-    expect(tree).toMatchSnapshot();
+    const tree = render(<CodeSnippet {...props} />);
+    expect(tree.asFragment()).toMatchSnapshot();
   });
 });

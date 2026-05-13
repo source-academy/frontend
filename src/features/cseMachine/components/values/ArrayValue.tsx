@@ -1,11 +1,10 @@
-import { KonvaEventObject } from 'konva/lib/Node';
-import React from 'react';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Group } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { DataArray, IHoverable, ReferenceType } from '../../CseMachineTypes';
+import type { DataArray, IHoverable, ReferenceType } from '../../CseMachineTypes';
 import { isMainReference } from '../../CseMachineUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayUnit } from '../ArrayUnit';
@@ -31,7 +30,7 @@ export class ArrayValue extends Value implements IHoverable {
     /** underlying values this array contains */
     readonly data: DataArray,
     /** what this value is being referenced by */
-    firstReference: ReferenceType
+    firstReference: ReferenceType,
   ) {
     super();
     Layout.memoizeValue(data, this);
@@ -46,11 +45,13 @@ export class ArrayValue extends Value implements IHoverable {
       this.enclosingFrame = newReference.frame;
       // check for whether cache already has x cooridnates
       const ghostX = Layout.getGhostFrameX(newReference.frame.environment.id);
-      // If frame x cooridnates exists in cache, use it. Otherwise, fallback to current (live) X.
+      const ghostY = Layout.getGhostFrameY(newReference.frame.environment.id);
+      // If frame x coordinates exists in cache, use it. Otherwise, fallback to current (live) X.
       const frameX = ghostX !== undefined ? ghostX : newReference.frame.x();
+      const frameY = ghostY !== undefined ? ghostY : newReference.frame.y();
       this._x = frameX + newReference.frame.width() + Config.FrameMarginX;
-
-      this._y = newReference.y();
+      const relativeOffset = newReference.y() - newReference.frame.y();
+      this._y = frameY + relativeOffset;
     } else {
       if (newReference.isLastUnit) {
         this._x = newReference.x() + Config.DataUnitWidth * 2;
@@ -100,13 +101,23 @@ export class ArrayValue extends Value implements IHoverable {
         this.totalWidth = Math.max(
           this.totalWidth,
           childWidth +
-            (i === this.data.length - 1 ? (i + 2) * Config.DataUnitWidth : i * Config.DataUnitWidth)
+            (i === this.data.length - 1
+              ? (i + 2) * Config.DataUnitWidth
+              : i * Config.DataUnitWidth),
         );
         this.totalHeight = Math.max(this.totalHeight, bottomY - unit.y());
       }
 
       this.units[i] = unit;
     }
+  }
+
+  setArrowSourceHighlightedStyle(): void {
+    this.units.forEach(unit => unit.setArrowSourceHighlightedStyle());
+  }
+
+  setArrowSourceNormalStyle(): void {
+    this.units.forEach(unit => unit.setArrowSourceNormalStyle());
   }
 
   isEnclosingFrameLive(): boolean {
@@ -150,6 +161,7 @@ export class ArrayValue extends Value implements IHoverable {
       <Group
         key={Layout.key++}
         ref={this.ref}
+        listening={true}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
       >

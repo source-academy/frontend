@@ -29,7 +29,7 @@ const root = createRoot(rootContainer);
 console.log(
   `%cSource Academy ${Constants.sourceAcademyEnvironment}-${Constants.sourceAcademyVersion}; ` +
     `Please visit ${Links.githubIssues} to report bugs or issues.`,
-  'font-weight: bold;'
+  'font-weight: bold;',
 );
 
 setModulesStaticURL(Constants.moduleBackendUrl);
@@ -44,7 +44,7 @@ createInBrowserFileSystem(store)
         <OverlaysProvider>
           <ApplicationWrapper />
         </OverlaysProvider>
-      </Provider>
+      </Provider>,
     );
   });
 
@@ -64,9 +64,9 @@ registerServiceWorker({
           Refresh now
         </Button>
       </div>,
-      0
+      0,
     );
-  }
+  },
 });
 
 if (Constants.cadetLoggerUrl) {

@@ -1,6 +1,7 @@
 import { AnimType, AssetType } from '../assets/AssetsTypes';
-import { GameItemType, LocationId } from '../location/GameMapTypes';
-import { ObjectProperty } from '../objects/GameObjectTypes';
+import type { LocationId } from '../location/GameMapTypes';
+import { GameItemType } from '../location/GameMapTypes';
+import type { ObjectProperty } from '../objects/GameObjectTypes';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
 import Parser from './Parser';
@@ -27,6 +28,8 @@ export default class ObjectParser {
       if (body.length) {
         object.isInteractive = true;
         object.actionIds = ActionParser.parseActions(body);
+        object.isDoor = ActionParser.haveMoveAction(body, object);
+        object.isChat = ActionParser.haveTopicAction(body);
       }
     });
   }
@@ -68,7 +71,7 @@ export default class ObjectParser {
 
     const [objectId, shortPath, x, y, width, height, type, frame] = StringUtils.splitByChar(
       objectDetails,
-      ','
+      ',',
     );
     Parser.validator.registerId(objectId);
 
@@ -79,7 +82,10 @@ export default class ObjectParser {
       width: parseInt(width) || undefined,
       height: parseInt(height) || undefined,
       isInteractive: false,
-      interactionId: objectId
+      interactionId: objectId,
+      isDoor: false,
+      isChat: false,
+      leadTo: '',
     };
 
     Parser.checkpoint.map.addMapAsset(this.objectAssetKey(shortPath), {
@@ -92,8 +98,8 @@ export default class ObjectParser {
         centreX: 0,
         centreY: 0,
         endFrame: parseInt(frame) - 1 || 0,
-        animType: AnimType.Object
-      }
+        animType: AnimType.Object,
+      },
     });
 
     Parser.checkpoint.map.setItemInMap(GameItemType.objects, objectId, objectProperty);

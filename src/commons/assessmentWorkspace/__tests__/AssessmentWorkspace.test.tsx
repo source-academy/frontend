@@ -3,13 +3,12 @@ import { act } from 'react';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
-import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { assertType } from 'src/commons/utils/TypeHelper';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import { vi } from 'vitest';
 
 import { mockAssessments } from '../../mocks/AssessmentMocks';
-import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace';
+import AssessmentWorkspace, { type AssessmentWorkspaceProps } from '../AssessmentWorkspace';
 
 const defaultProps = assertType<AssessmentWorkspaceProps>()({
   assessmentId: 0,
@@ -26,50 +25,51 @@ const defaultProps = assertType<AssessmentWorkspaceProps>()({
     hasTokenCounter: false,
     hasVotingFeatures: false,
     hoursBeforeEarlyXpDecay: 48,
-    earlySubmissionXp: 200
+    earlySubmissionXp: 200,
+    isAutosaveEnabled: true,
   },
   fromContestLeaderboard: false,
-  questionId: 0
+  questionId: 0,
 });
 
 const mockUndefinedAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
-  ...defaultProps
+  ...defaultProps,
 };
 
 const mockProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
   assessmentId: 1,
-  questionId: 0
+  questionId: 0,
 };
 
 const mockClosedProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...mockProgrammingAssessmentWorkspaceProps,
-  canSave: false
+  canSave: false,
 };
 
 const mockGradedProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
   assessmentId: 4,
-  questionId: 0
+  questionId: 0,
 };
 
 const mockMcqAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
   assessmentId: 1,
-  questionId: 2
+  questionId: 2,
 };
 
 // set questionId to index 0 since contest voting only has 1 question
 const mockContestVotingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...defaultProps,
   assessmentId: 7,
-  questionId: 0
+  questionId: 0,
 };
 
 const mockStore = mockInitialStore({
   session: {
-    assessments: Object.fromEntries(mockAssessments.map(assessment => [assessment.id, assessment]))
-  }
+    assessments: Object.fromEntries(mockAssessments.map(assessment => [assessment.id, assessment])),
+  },
 });
 
 const createMemoryRouterWithRoutes = (props: AssessmentWorkspaceProps) => {
@@ -84,14 +84,14 @@ const createMemoryRouterWithRoutes = (props: AssessmentWorkspaceProps) => {
             <AssessmentWorkspace {...props} />
           </WorkspaceSettingsContext.Provider>
         </Provider>
-      )
-    }
+      ),
+    },
   ];
   return (
     <RouterProvider
       router={createMemoryRouter(routes, {
         initialEntries: ['/courses/1/missions/1/0'],
-        initialIndex: 0
+        initialIndex: 0,
       })}
     />
   );
@@ -113,10 +113,9 @@ const getContestVotingTab = (tree: HTMLElement) => tree.querySelector('.ContestE
 describe('AssessmentWorkspace', () => {
   test('AssessmentWorkspace page "loading" content renders correctly', async () => {
     const app = createMemoryRouterWithRoutes(mockUndefinedAssessmentWorkspaceProps);
-    const tree = await renderTreeJson(app);
-    expect(tree).toMatchSnapshot();
+    const { asFragment } = render(app);
+    expect(asFragment()).toMatchSnapshot();
 
-    render(app);
     screen.getByText('Getting mission ready...');
   });
 

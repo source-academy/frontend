@@ -8,7 +8,7 @@ import {
   type AchievementUser,
   EventType,
   type GoalDefinition,
-  type GoalProgress
+  type GoalProgress,
 } from './AchievementTypes';
 
 const AchievementActions = createActions('achievement', {
@@ -24,12 +24,12 @@ const AchievementActions = createActions('achievement', {
   updateOwnGoalProgress: (progress: GoalProgress) => progress,
   addEvent: (eventNames: EventType[], workspaceLocation?: SideContentLocation) => ({
     workspaceLocation,
-    eventNames
+    eventNames,
   }),
   handleEvent: (loggedEvents: EventType[][]) => loggedEvents,
   updateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) => ({
     studentCourseRegId,
-    progress
+    progress,
   }),
   /**
    * Note: This updates the frontend Achievement Redux store.
@@ -50,7 +50,7 @@ const AchievementActions = createActions('achievement', {
    * Note: This updates the frontend Achievement Redux store.
    * Please refer to AchievementReducer to find out more.
    */
-  saveUserAssessmentOverviews: (assessmentOverviews: AssessmentOverview[]) => assessmentOverviews
+  saveUserAssessmentOverviews: (assessmentOverviews: AssessmentOverview[]) => assessmentOverviews,
 });
 
 // For compatibility with existing code (actions helper)

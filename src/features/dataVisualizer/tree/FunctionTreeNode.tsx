@@ -8,7 +8,13 @@ import { DrawableTreeNode } from './DrawableTreeNode';
  * Represents a node corresponding to a Source (and Javascript) function.
  */
 export class FunctionTreeNode extends DrawableTreeNode {
-  createDrawable(x: number, y: number, parentX: number, parentY: number): JSX.Element {
+  createDrawable(
+    x: number,
+    y: number,
+    parentX: number,
+    parentY: number,
+    colorIndex: number,
+  ): React.ReactElement {
     this._drawable = (
       <Group key={x + ', ' + y}>
         <FunctionDrawable {...{ x, y }}></FunctionDrawable>
@@ -17,12 +23,12 @@ export class FunctionTreeNode extends DrawableTreeNode {
             {...{
               from: {
                 x: parentX + Config.BoxWidth / 2,
-                y: parentY + Config.BoxHeight / 2
+                y: parentY + Config.BoxHeight / 2,
               },
               to: {
                 x,
-                y
-              }
+                y,
+              },
             }}
           ></ArrowDrawable>
         )}

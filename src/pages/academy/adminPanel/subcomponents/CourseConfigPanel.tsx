@@ -10,19 +10,19 @@ import {
   Switch,
   Tab,
   Tabs,
-  TextArea
+  TextArea,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
+import { useCallback, useState } from 'react';
 import { useResponsive } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/CourseConfig.module.scss';
 
-import { UpdateCourseConfiguration } from '../../../../commons/application/types/SessionTypes';
+import type { UpdateCourseConfiguration } from '../../../../commons/application/types/SessionTypes';
 import Markdown from '../../../../commons/Markdown';
 
 export enum CourseHelpTextEditorTab {
   WRITE = 'WRITE',
-  PREVIEW = 'PREVIEW'
+  PREVIEW = 'PREVIEW',
 }
 
 type Props = {
@@ -33,7 +33,7 @@ type Props = {
 const CourseConfigPanel: React.FC<Props> = props => {
   const { isMobileBreakpoint } = useResponsive();
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
-    React.useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
+    useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
 
   const {
     courseName,
@@ -45,14 +45,12 @@ const CourseConfigPanel: React.FC<Props> = props => {
     enableContestLeaderboard,
     topLeaderboardDisplay,
     topContestLeaderboardDisplay,
-    enableSourcecast,
-    enableStories,
     enableLlmGrading,
     moduleHelpText,
     llmApiKey,
     llmModel,
     llmApiUrl,
-    llmCourseLevelPrompt
+    llmCourseLevelPrompt,
   } = props.courseConfiguration;
 
   const writePanel = (
@@ -64,7 +62,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
       onChange={e =>
         props.setCourseConfiguration({
           ...props.courseConfiguration,
-          moduleHelpText: e.target.value
+          moduleHelpText: e.target.value,
         })
       }
     />
@@ -76,18 +74,18 @@ const CourseConfigPanel: React.FC<Props> = props => {
     </div>
   );
 
-  const onChangeTabs = React.useCallback(
+  const onChangeTabs = useCallback(
     (
       newTabId: CourseHelpTextEditorTab,
       prevTabId: CourseHelpTextEditorTab,
-      event: React.MouseEvent<HTMLElement>
+      event: React.MouseEvent<HTMLElement>,
     ) => {
       if (newTabId === prevTabId) {
         return;
       }
       setCourseHelpTextSelectedTab(newTabId);
     },
-    [setCourseHelpTextSelectedTab]
+    [setCourseHelpTextSelectedTab],
   );
 
   return (
@@ -108,7 +106,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
               onChange={e =>
                 props.setCourseConfiguration({
                   ...props.courseConfiguration,
-                  courseName: e.target.value
+                  courseName: e.target.value,
                 })
               }
             />
@@ -125,7 +123,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
               onChange={e =>
                 props.setCourseConfiguration({
                   ...props.courseConfiguration,
-                  courseShortName: e.target.value
+                  courseShortName: e.target.value,
                 })
               }
             />
@@ -155,7 +153,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
               onChange={e =>
                 props.setCourseConfiguration({
                   ...props.courseConfiguration,
-                  topLeaderboardDisplay: Number(e.target.value)
+                  topLeaderboardDisplay: Number(e.target.value),
                 })
               }
             />
@@ -172,7 +170,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
               onChange={e =>
                 props.setCourseConfiguration({
                   ...props.courseConfiguration,
-                  topContestLeaderboardDisplay: Number(e.target.value)
+                  topContestLeaderboardDisplay: Number(e.target.value),
                 })
               }
             />
@@ -195,7 +193,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
                   onChange={e =>
                     props.setCourseConfiguration({
                       ...props.courseConfiguration,
-                      llmModel: e.target.value
+                      llmModel: e.target.value,
                     })
                   }
                 />
@@ -213,7 +211,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
                   onChange={e =>
                     props.setCourseConfiguration({
                       ...props.courseConfiguration,
-                      llmApiUrl: e.target.value
+                      llmApiUrl: e.target.value,
                     })
                   }
                 />
@@ -231,7 +229,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
                   onChange={e =>
                     props.setCourseConfiguration({
                       ...props.courseConfiguration,
-                      llmApiKey: e.target.value
+                      llmApiKey: e.target.value,
                     })
                   }
                 />
@@ -286,7 +284,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
                   onChange={e =>
                     props.setCourseConfiguration({
                       ...props.courseConfiguration,
-                      llmCourseLevelPrompt: e.target.value
+                      llmCourseLevelPrompt: e.target.value,
                     })
                   }
                 />
@@ -302,7 +300,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
             onChange={e =>
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
-                viewable: (e.target as HTMLInputElement).checked
+                viewable: (e.target as HTMLInputElement).checked,
               })
             }
           />
@@ -312,7 +310,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
             onChange={e =>
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
-                enableGame: (e.target as HTMLInputElement).checked
+                enableGame: (e.target as HTMLInputElement).checked,
               })
             }
           />
@@ -322,27 +320,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
             onChange={e =>
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
-                enableAchievements: (e.target as HTMLInputElement).checked
-              })
-            }
-          />
-          <Switch
-            checked={enableSourcecast}
-            label="Enable Sourcecast"
-            onChange={e =>
-              props.setCourseConfiguration({
-                ...props.courseConfiguration,
-                enableSourcecast: (e.target as HTMLInputElement).checked
-              })
-            }
-          />
-          <Switch
-            checked={enableStories}
-            label="Enable Stories"
-            onChange={e =>
-              props.setCourseConfiguration({
-                ...props.courseConfiguration,
-                enableStories: (e.target as HTMLInputElement).checked
+                enableAchievements: (e.target as HTMLInputElement).checked,
               })
             }
           />
@@ -352,7 +330,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
             onChange={e =>
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
-                enableLlmGrading: (e.target as HTMLInputElement).checked
+                enableLlmGrading: (e.target as HTMLInputElement).checked,
               })
             }
           />
@@ -362,7 +340,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
             onChange={e =>
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
-                enableOverallLeaderboard: (e.target as HTMLInputElement).checked
+                enableOverallLeaderboard: (e.target as HTMLInputElement).checked,
               })
             }
           />
@@ -372,7 +350,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
             onChange={e =>
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
-                enableContestLeaderboard: (e.target as HTMLInputElement).checked
+                enableContestLeaderboard: (e.target as HTMLInputElement).checked,
               })
             }
           />

@@ -26,7 +26,7 @@ export const selectMode = (chapter: Chapter, variant: Variant, library: string) 
       chapter,
       variant,
       library,
-      Documentation.externalLibraries[library]
+      Documentation.externalLibraries[library],
     );
   }
   ModeSelector(chapter, variant, library);
@@ -36,7 +36,6 @@ import 'ace-builds/src-noconflict/mode-c_cpp';
 import 'ace-builds/src-noconflict/mode-html';
 import 'ace-builds/src-noconflict/mode-java';
 import 'ace-builds/src-noconflict/mode-javascript';
-import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/mode-typescript';
 import 'js-slang/dist/editors/ace/theme/source';
 
@@ -47,12 +46,6 @@ export const getModeString = (chapter: Chapter, variant: Variant, library: strin
       return 'html';
     case Chapter.FULL_TS:
       return 'typescript';
-    case Chapter.PYTHON_1:
-    case Chapter.PYTHON_2:
-    case Chapter.PYTHON_3:
-    case Chapter.PYTHON_4:
-    case Chapter.FULL_PYTHON:
-      return 'python';
     case Chapter.FULL_JAVA:
       return 'java';
     case Chapter.FULL_C:
@@ -63,7 +56,7 @@ export const getModeString = (chapter: Chapter, variant: Variant, library: strin
 };
 
 export const parseModeString = (
-  modeString: string
+  modeString: string,
 ): { chapter: Chapter; variant: Variant; library: ExternalLibraryName } => {
   switch (modeString) {
     case 'html':
@@ -72,25 +65,19 @@ export const parseModeString = (
       return {
         chapter: Chapter.FULL_TS,
         variant: Variant.DEFAULT,
-        library: ExternalLibraryName.NONE
-      };
-    case 'python':
-      return {
-        chapter: Chapter.PYTHON_1,
-        variant: Variant.DEFAULT,
-        library: ExternalLibraryName.NONE
+        library: ExternalLibraryName.NONE,
       };
     case 'java':
       return {
         chapter: Chapter.FULL_JAVA,
         variant: Variant.DEFAULT,
-        library: ExternalLibraryName.NONE
+        library: ExternalLibraryName.NONE,
       };
     case 'c_cpp':
       return {
         chapter: Chapter.FULL_C,
         variant: Variant.DEFAULT,
-        library: ExternalLibraryName.NONE
+        library: ExternalLibraryName.NONE,
       };
     default: {
       const matches = modeString.match(/source(-?\d+)([a-z-]+)([A-Z]+)/);
@@ -110,7 +97,7 @@ export const parseModeString = (
         variant: Variant[variant as keyof typeof Variant] || Variant.DEFAULT,
         library:
           ExternalLibraryName[externalLibraryName as keyof typeof ExternalLibraryName] ||
-          ExternalLibraryName.NONE
+          ExternalLibraryName.NONE,
       };
     }
   }

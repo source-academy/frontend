@@ -1,5 +1,3 @@
-import '@tremor/react/dist/esm/tremor.css';
-
 import { Button } from '@blueprintjs/core';
 import { useState } from 'react';
 import { FileUploader } from 'react-drag-drop-files';
@@ -7,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Form, useNavigate } from 'react-router';
 import Select from 'react-select';
 import SessionActions from 'src/commons/application/actions/SessionActions';
-import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/TeamFormation.module.scss';
 
@@ -19,7 +17,7 @@ const TeamFormationImport: React.FC = () => {
   const { courseId, students } = useTypedSelector(state => state.session);
   const assessmentOverviews = useTypedSelector(state => state.session.assessmentOverviews);
   const [selectedAssessment, setSelectedAssessment] = useState<AssessmentOverview | undefined>(
-    undefined
+    undefined,
   );
   let maxNoOfStudents: number | undefined = selectedAssessment ? selectedAssessment.maxTeamSize : 0;
 
@@ -64,7 +62,7 @@ const TeamFormationImport: React.FC = () => {
               id="assessment"
               options={assessmentOverviews?.map(assessment => ({
                 label: assessment.title,
-                value: assessment
+                value: assessment,
               }))}
               value={
                 selectedAssessment

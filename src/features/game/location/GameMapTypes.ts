@@ -1,6 +1,6 @@
-import { IGameActionable } from '../action/GameActionTypes';
-import { AssetKey, ItemId } from '../commons/CommonTypes';
-import { GameMode } from '../mode/GameModeTypes';
+import type { IGameActionable } from '../action/GameActionTypes';
+import type { AssetKey, ItemId } from '../commons/CommonTypes';
+import type { GameMode } from '../mode/GameModeTypes';
 
 /**
  * ID that identifies a location
@@ -31,6 +31,7 @@ export type GameLocation = IGameActionable & {
   previewKey: AssetKey | null;
   modes: Set<GameMode>;
   navigation: Set<LocationId>;
+  back: LocationId;
   talkTopics: Set<ItemId>;
   objects: Set<ItemId>;
   boundingBoxes: Set<ItemId>;
@@ -49,5 +50,5 @@ export enum GameItemType {
   actions = 'actions',
   bgmKey = 'bgmKey',
   collectibles = 'collectibles',
-  quizzes = 'quizzes'
+  quizzes = 'quizzes',
 }

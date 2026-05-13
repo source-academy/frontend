@@ -1,15 +1,14 @@
-import '@tremor/react/dist/esm/tremor.css';
-
 import { Button } from '@blueprintjs/core';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Form, useNavigate, useParams } from 'react-router';
-import Select, { ActionMeta, MultiValue } from 'react-select';
+import type { ActionMeta, MultiValue } from 'react-select';
+import Select from 'react-select';
 import SessionActions from 'src/commons/application/actions/SessionActions';
-import { User } from 'src/commons/application/types/SessionTypes';
-import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import type { User } from 'src/commons/application/types/SessionTypes';
+import type { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import { useSession } from 'src/commons/utils/Hooks';
-import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
+import type { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 import classes from 'src/styles/TeamFormation.module.scss';
 
 export type OptionType = {
@@ -22,7 +21,7 @@ const TeamFormationForm: React.FC = () => {
   const { courseId, students, assessmentOverviews, teamFormationOverviews } = useSession();
   const dispatch = useDispatch();
   const [selectedAssessment, setSelectedAssessment] = useState<AssessmentOverview | undefined>(
-    undefined
+    undefined,
   );
   const [teams, setTeams] = useState<OptionType[][]>([[]]);
   const navigate = useNavigate();
@@ -32,12 +31,12 @@ const TeamFormationForm: React.FC = () => {
   useEffect(() => {
     if (teamId) {
       const existingTeam: TeamFormationOverview | undefined = teamFormationOverviews?.find(
-        team => team.teamId.toString() === teamId
+        team => team.teamId.toString() === teamId,
       );
 
       if (existingTeam) {
         const existingAssessment: AssessmentOverview | undefined = assessmentOverviews?.find(
-          assessment => assessment.id === existingTeam.assessmentId
+          assessment => assessment.id === existingTeam.assessmentId,
         );
         setSelectedAssessment(existingAssessment);
 
@@ -48,8 +47,8 @@ const TeamFormationForm: React.FC = () => {
                 ?.filter(student => existingTeam.studentIds.includes(student.userId))
                 .map(student => ({
                   label: student.name,
-                  value: student
-                })) as OptionType[]
+                  value: student,
+                })) as OptionType[],
           )
           .slice(0, 1);
         setTeams(existingTeams);
@@ -60,7 +59,7 @@ const TeamFormationForm: React.FC = () => {
   const handleTeamChange = (
     index: number,
     selectedOption: MultiValue<OptionType>,
-    actionMeta: ActionMeta<OptionType>
+    actionMeta: ActionMeta<OptionType>,
   ) => {
     const updatedTeams = [...teams];
     updatedTeams[index] = selectedOption as unknown as OptionType[];
@@ -125,7 +124,7 @@ const TeamFormationForm: React.FC = () => {
               id="assessment"
               options={assessmentOverviews?.map(assessment => ({
                 label: assessment.title,
-                value: assessment
+                value: assessment,
               }))}
               value={
                 selectedAssessment
@@ -161,14 +160,14 @@ const TeamFormationForm: React.FC = () => {
                 id={`team-${index}`}
                 options={students?.map(student => ({
                   label: student.name,
-                  value: student
+                  value: student,
                 }))}
                 isMulti
                 isSearchable
                 value={t}
                 onChange={(
                   selectedOption: MultiValue<OptionType>,
-                  actionMeta: ActionMeta<OptionType>
+                  actionMeta: ActionMeta<OptionType>,
                 ) => handleTeamChange(index, selectedOption, actionMeta)}
                 className={classes['form-select']}
               />

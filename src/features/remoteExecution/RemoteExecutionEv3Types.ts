@@ -7,7 +7,7 @@ import SensorUltrasonic from 'src/assets/sUltrasonic.svg';
 
 export enum Ev3MotorTypes {
   LARGE = 'lego-ev3-l-motor',
-  MEDIUM = 'lego-ev3-m-motor'
+  MEDIUM = 'lego-ev3-m-motor',
 }
 
 export type Ev3MotorData = {
@@ -17,7 +17,7 @@ export type Ev3MotorData = {
 };
 
 enum Ev3TouchSensorModes {
-  TOUCH = 'TOUCH'
+  TOUCH = 'TOUCH',
 }
 
 type Ev3TouchSensorData = {
@@ -28,7 +28,7 @@ type Ev3TouchSensorData = {
 
 enum Ev3GyroSensorModes {
   ANGLE = 'GYRO-ANG',
-  RATE = 'GYRO-RATE'
+  RATE = 'GYRO-RATE',
 }
 
 type Ev3GyroSensorAngleData = {
@@ -53,7 +53,7 @@ enum Ev3ColorSensorColorValues {
   YELLOW,
   RED,
   WHITE,
-  BROWN
+  BROWN,
 }
 
 export const ev3ColorSensorColorValueToLabelMap = Object.freeze({
@@ -64,13 +64,13 @@ export const ev3ColorSensorColorValueToLabelMap = Object.freeze({
   [Ev3ColorSensorColorValues.YELLOW]: 'Yellow',
   [Ev3ColorSensorColorValues.RED]: 'Red',
   [Ev3ColorSensorColorValues.WHITE]: 'White',
-  [Ev3ColorSensorColorValues.BROWN]: 'Brown'
+  [Ev3ColorSensorColorValues.BROWN]: 'Brown',
 });
 
 enum Ev3ColorSensorModes {
   COLOR = 'COL-COLOR',
   REFLECTED_LIGHT = 'COL-REFLECT',
-  AMBIENT_LIGHT = 'COL-AMBIENT'
+  AMBIENT_LIGHT = 'COL-AMBIENT',
 }
 
 type Ev3ColorSensorColorData = {
@@ -95,7 +95,7 @@ type Ev3ColorSensorData =
   | Ev3ColorSensorReflectedLightIntensityData;
 
 enum Ev3UltrasonicSensorModes {
-  DISTANCE_CM = 'US-DIST-CM'
+  DISTANCE_CM = 'US-DIST-CM',
 }
 
 type Ev3UltrasonicSensorData = {
@@ -108,7 +108,7 @@ export enum Ev3SensorTypes {
   COLOR_SENSOR = 'lego-ev3-color',
   GYRO_SENSOR = 'lego-ev3-gyro',
   TOUCH_SENSOR = 'lego-ev3-touch',
-  ULTRASONIC_SENSOR = 'lego-ev3-us'
+  ULTRASONIC_SENSOR = 'lego-ev3-us',
 }
 
 export type Ev3SensorData = {
@@ -129,14 +129,14 @@ export const ev3SensorModeToValueTransformerMap: {
   [Ev3ColorSensorModes.COLOR]: (value: Ev3ColorSensorColorData['value']) =>
     `Color: ${ev3ColorSensorColorValueToLabelMap[value]}`,
   [Ev3ColorSensorModes.REFLECTED_LIGHT]: (
-    value: Ev3ColorSensorReflectedLightIntensityData['value']
+    value: Ev3ColorSensorReflectedLightIntensityData['value'],
   ) => `Reflected Light: ${value}`,
   [Ev3GyroSensorModes.ANGLE]: (value: Ev3GyroSensorAngleData['value']) => `Angle: ${value}°`,
   [Ev3GyroSensorModes.RATE]: (value: Ev3GyroSensorRateData['value']) => `Rate: ${value}°/s`,
   [Ev3TouchSensorModes.TOUCH]: (value: Ev3TouchSensorData['value']) =>
     `Touch: ${value ? 'Yes' : 'No'}`,
   [Ev3UltrasonicSensorModes.DISTANCE_CM]: (value: Ev3UltrasonicSensorData['value']) =>
-    `Dist: ${value / 10}cm`
+    `Dist: ${value / 10}cm`,
 });
 
 type DateNumber = number;
@@ -164,5 +164,5 @@ export const ev3PeripheralToComponentMap: {
   [Ev3SensorTypes.TOUCH_SENSOR]: SensorTouch,
   [Ev3SensorTypes.ULTRASONIC_SENSOR]: SensorUltrasonic,
   [Ev3MotorTypes.LARGE]: MotorL,
-  [Ev3MotorTypes.MEDIUM]: MotorM
+  [Ev3MotorTypes.MEDIUM]: MotorM,
 });

@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import type { Location } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
-import { shallowRender } from 'src/commons/utils/TestUtils';
+import { renderTree } from 'src/commons/utils/TestUtils';
 import { vi } from 'vitest';
 
 import Sicp from '../Sicp';
@@ -10,17 +10,17 @@ import Sicp from '../Sicp';
 vi.mock('react-router', () => ({
   useParams: vi.fn().mockReturnValue({ section: 'index' }),
   useNavigate: vi.fn().mockReturnValue(vi.fn()),
-  useLocation: vi.fn().mockReturnValue({} as Location)
+  useLocation: vi.fn().mockReturnValue({} as Location),
 }));
 
 describe('Sicp renders', () => {
-  test('correctly', () => {
+  test('correctly', async () => {
     const sicp = (
       <Provider store={mockInitialStore()}>
         <Sicp />
       </Provider>
     );
-    const tree = shallowRender(sicp);
+    const tree = await renderTree(sicp);
     expect(tree).toMatchSnapshot();
   });
 

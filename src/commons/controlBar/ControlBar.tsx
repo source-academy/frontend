@@ -1,11 +1,10 @@
 import { Classes } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React from 'react';
 
 export type ControlBarProps = {
-  editorButtons: Array<JSX.Element | null>;
-  flowButtons?: Array<JSX.Element | null>;
-  editingWorkspaceButtons?: Array<JSX.Element | null>;
+  editorButtons: Array<React.ReactElement | null>;
+  flowButtons?: Array<React.ReactElement | null>;
+  editingWorkspaceButtons?: Array<React.ReactElement | null>;
 };
 
 const ControlBar: React.FC<ControlBarProps> = props => {

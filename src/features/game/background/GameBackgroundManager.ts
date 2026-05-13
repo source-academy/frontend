@@ -1,8 +1,8 @@
-import { ImageAsset } from '../assets/AssetsTypes';
+import type { ImageAsset } from '../assets/AssetsTypes';
 import { screenSize } from '../commons/CommonConstants';
-import { AssetKey } from '../commons/CommonTypes';
+import type { AssetKey } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
-import { LocationId } from '../location/GameMapTypes';
+import type { LocationId } from '../location/GameMapTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { resizeOverflow } from '../utils/SpriteUtils';
 

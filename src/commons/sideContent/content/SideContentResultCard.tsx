@@ -1,28 +1,27 @@
 import { Card, Elevation, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
 import type { TFunction } from 'i18next';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AutogradingError, AutogradingResult } from '../../assessment/AssessmentTypes';
+import type { AutogradingError, AutogradingResult } from '../../assessment/AssessmentTypes';
 
 const buildErrorString = (
   t: TFunction<'sideContent', 'resultCard'>,
-  errors: AutogradingError[]
+  errors: AutogradingError[],
 ) => {
   return errors
     .map(error => {
       switch (error.errorType) {
         case 'timeout':
-          return t('timeout');
+          return t($ => $.timeout);
         case 'syntax':
-          return t('syntax', { line: error.line, errorExplanation: error.errorExplanation });
+          return t($ => $.syntax, { line: error.line, errorExplanation: error.errorExplanation });
         case 'runtime':
-          return t('runtime', { line: error.line, errorExplanation: error.errorExplanation });
+          return t($ => $.runtime, { line: error.line, errorExplanation: error.errorExplanation });
         case 'systemError':
-          return t('systemError', { errorMessage: error.errorMessage });
+          return t($ => $.systemError, { errorMessage: error.errorMessage });
         default:
-          return t('unknown', { errorType: error.errorType });
+          return t($ => $.unknown, { errorType: error.errorType });
       }
     })
     .join('\n\n');

@@ -2,21 +2,21 @@ import 'katex/dist/katex.min.css';
 
 import { Button, Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React, { useRef, useState } from 'react';
+import { createContext, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
-import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
+import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 import {
   readSicpSectionLocalStorage,
   setSicpSectionLocalStorage,
   SICP_CACHE_KEY,
-  SICP_INDEX
+  SICP_INDEX,
 } from 'src/features/sicp/utils/SicpUtils';
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
@@ -28,9 +28,9 @@ const baseUrl = Constants.sicpBackendUrl + 'json/';
 const extension = '.json';
 
 // Context to determine which code snippet is active
-export const CodeSnippetContext = React.createContext({
+export const CodeSnippetContext = createContext({
   active: '0',
-  setActive: (x: string) => {}
+  setActive: (x: string) => {},
 });
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
@@ -82,12 +82,12 @@ const Sicp: React.FC = () => {
 
     parent.scrollTo({
       behavior: 'smooth',
-      top: ref.offsetTop - relativeTop
+      top: ref.offsetTop - relativeTop,
     });
   };
 
   // Handle loading of latest viewed section and fetch json data
-  React.useEffect(() => {
+  useEffect(() => {
     if (!section) {
       /**
        * Handles rerouting to the latest viewed section when clicking from
@@ -141,7 +141,7 @@ const Sicp: React.FC = () => {
   }, [section, navigate]);
 
   // Scroll to correct position
-  React.useEffect(() => {
+  useEffect(() => {
     if (loading) {
       return;
     }
@@ -153,7 +153,7 @@ const Sicp: React.FC = () => {
   }, [location.hash, loading]);
 
   // Close all active code snippet when new page is loaded
-  React.useEffect(() => {
+  useEffect(() => {
     setActive('0');
   }, [data]);
 
@@ -192,10 +192,20 @@ const Sicp: React.FC = () => {
             <SicpIndexPage />
           ) : (
             <div className="sicp-content">
-              <Link to="#begin" ref={ref => (refs.current['#begin'] = ref)} />
+              <Link
+                to="#begin"
+                ref={ref => {
+                  refs.current['#begin'] = ref;
+                }}
+              />
               {data}
               {navigationButtons}
-              <Link to="#end" ref={ref => (refs.current['#end'] = ref)} />
+              <Link
+                to="#end"
+                ref={ref => {
+                  refs.current['#end'] = ref;
+                }}
+              />
             </div>
           )}
         </CodeSnippetContext.Provider>

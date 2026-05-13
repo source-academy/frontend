@@ -6,6 +6,7 @@ export const Config = {
   Stroke: 'white',
   Fill: 'white',
 
+  NWidth: 90,
   BoxWidth: 45,
   BoxMinWidth: 15, // Set to half of BoxHeight for empty arrays following CseMachineConfig
   BoxHeight: 30,
@@ -24,5 +25,5 @@ export const Config = {
   ArrowMarginBottom: 15,
   ArrowMarginHorizontal: 15,
 
-  MaxTextLength: 20
+  MaxTextLength: 20,
 };

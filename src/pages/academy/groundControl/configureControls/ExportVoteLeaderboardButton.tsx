@@ -1,5 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
-import { createGrid, GridOptions } from 'ag-grid-community';
+import { createGrid, type GridOptions } from 'ag-grid-community';
 import ControlButton from 'src/commons/ControlButton';
 import { getPopularVoteLeaderboard } from 'src/commons/sagas/RequestsSaga';
 import { useTokens, useTypedSelector } from 'src/commons/utils/Hooks';
@@ -17,12 +17,12 @@ const ExportVoteLeaderboardButton: React.FC<Props> = ({ assessmentId }) => {
     const popularVoteLeaderboard = await getPopularVoteLeaderboard(
       assessmentId,
       visibleEntries,
-      tokens
+      tokens,
     );
     const gridContainer = document.createElement('div');
     const gridOptions: GridOptions = {
       rowData: popularVoteLeaderboard,
-      columnDefs: [{ field: 'student_name' }, { field: 'answer' }, { field: 'final_score' }]
+      columnDefs: [{ field: 'student_name' }, { field: 'answer' }, { field: 'final_score' }],
     };
     const api = createGrid(gridContainer, gridOptions);
     api.exportDataAsCsv();

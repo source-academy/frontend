@@ -2,16 +2,16 @@ import { render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
-import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
+import { type OverallState, Role } from 'src/commons/application/ApplicationTypes';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
-import { assertType, DeepPartial } from 'src/commons/utils/TypeHelper';
+import { assertType, type DeepPartial } from 'src/commons/utils/TypeHelper';
 
-import { AssessmentConfiguration, AssessmentStatuses } from '../../assessment/AssessmentTypes';
+import { type AssessmentConfiguration, AssessmentStatuses } from '../../assessment/AssessmentTypes';
 import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';
-import Profile, { ProfileProps } from '../Profile';
+import Profile, { type ProfileProps } from '../Profile';
 
 const mockNoClosedAssessmentOverviews = mockAssessmentOverviews.filter(
-  item => item.status !== AssessmentStatuses.submitted
+  item => item.status !== AssessmentStatuses.submitted,
 );
 
 const assessmentConfigurations: AssessmentConfiguration[] = [
@@ -19,7 +19,7 @@ const assessmentConfigurations: AssessmentConfiguration[] = [
   'Quests',
   'Paths',
   'Contests',
-  'Others'
+  'Others',
 ].map((c, i) => ({
   assessmentConfigId: i,
   type: c,
@@ -30,13 +30,14 @@ const assessmentConfigurations: AssessmentConfiguration[] = [
   hasTokenCounter: false,
   hasVotingFeatures: false,
   hoursBeforeEarlyXpDecay: 0,
-  earlySubmissionXp: 0
+  earlySubmissionXp: 0,
+  isAutosaveEnabled: true,
 }));
 
 const createProfileWithStore = (storeOverrides?: DeepPartial<OverallState>) => {
   const props = assertType<ProfileProps>()({
     isOpen: true,
-    onClose: () => {}
+    onClose: () => {},
   });
   const mockStore = mockInitialStore(storeOverrides);
 
@@ -56,8 +57,8 @@ test('Profile renders correctly when there are no closed assessments', async () 
       role: Role.Student,
       courseId: 1,
       assessmentOverviews: mockNoClosedAssessmentOverviews,
-      assessmentConfigurations
-    }
+      assessmentConfigurations,
+    },
   });
   await act(() => render(profile));
 
@@ -65,7 +66,7 @@ test('Profile renders correctly when there are no closed assessments', async () 
   const placeholders = screen.getAllByTestId('profile-placeholder');
   expect(placeholders).toHaveLength(1);
   expect(placeholders[0].textContent).toEqual(
-    'There are no closed assessments to render grade and XP of.'
+    'There are no closed assessments to render grade and XP of.',
   );
 
   // Expect none of the other wrapper HTML <div> elements to be rendered
@@ -81,8 +82,8 @@ test('Profile renders correctly when there are closed and graded, or closed and 
       role: Role.Staff,
       courseId: 1,
       assessmentOverviews: mockAssessmentOverviews,
-      assessmentConfigurations
-    }
+      assessmentConfigurations,
+    },
   });
   await act(() => render(profile));
 
@@ -93,7 +94,7 @@ test('Profile renders correctly when there are closed and graded, or closed and 
   ['profile-spinner', 'profile-type', 'profile-total-value', 'profile-percentage'].forEach(
     testId => {
       expect(screen.queryAllByTestId(testId)).toHaveLength(1);
-    }
+    },
   );
 
   const numProfileCards = mockAssessmentOverviews.filter(item => item.isGradingPublished).length;
@@ -103,7 +104,7 @@ test('Profile renders correctly when there are closed and graded, or closed and 
     'profile-summary-callout',
     'profile-xp-details',
     'profile-title',
-    'profile-value'
+    'profile-value',
   ].forEach(testId => {
     expect(screen.queryAllByTestId(testId)).toHaveLength(numProfileCards);
   });

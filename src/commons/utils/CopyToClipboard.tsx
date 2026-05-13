@@ -22,15 +22,15 @@ function CopyToClipboard({ children, text, onCopy }: Props) {
       }
       onCopy?.(text, success);
       // Get original onClick handler if any
-      const originalOnClick = children?.props.onClick;
+      const originalOnClick = (children?.props as any)?.onClick;
       if (typeof originalOnClick === 'function') {
         originalOnClick(e);
       }
     },
-    [onCopy, text, children?.props]
+    [onCopy, text, children?.props],
   );
 
-  return children ? cloneElement(children, { onClick: handleClick }) : null;
+  return children ? cloneElement(children as any, { onClick: handleClick }) : null;
 }
 
 export default CopyToClipboard;

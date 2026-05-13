@@ -1,7 +1,7 @@
-import commons from './commons.json';
-import login from './login.json';
+import commons from './commons';
+import login from './login';
 
 export default {
   commons,
-  login
+  login,
 };

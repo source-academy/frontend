@@ -9,11 +9,11 @@ import {
   Position,
   Spinner,
   Text,
-  Tooltip
+  Tooltip,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { sortBy } from 'lodash';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useLoaderData, useParams } from 'react-router';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
@@ -22,7 +22,7 @@ import Messages, { sendToWebview } from 'src/features/vscode/messages';
 import SessionActions from '../application/actions/SessionActions';
 import { Role } from '../application/ApplicationTypes';
 import AssessmentWorkspace, {
-  AssessmentWorkspaceProps
+  type AssessmentWorkspaceProps,
 } from '../assessmentWorkspace/AssessmentWorkspace';
 import ContentDisplay from '../ContentDisplay';
 import ControlButton from '../ControlButton';
@@ -33,10 +33,10 @@ import { convertParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
 import AssessmentOverviewCard from './AssessmentOverviewCard';
 import {
-  AssessmentConfiguration,
-  AssessmentOverview,
+  type AssessmentConfiguration,
+  type AssessmentOverview,
   AssessmentStatuses,
-  AssessmentWorkspaceParams
+  type AssessmentWorkspaceParams,
 } from './AssessmentTypes';
 
 const Assessment: React.FC = () => {
@@ -58,10 +58,10 @@ const Assessment: React.FC = () => {
             closeAt: oa.closeAt,
             id: oa.id,
             isPublished: oa.isPublished,
-            title: oa.title
+            title: oa.title,
           })),
-          courseId
-        )
+          courseId,
+        ),
       );
     }
   }, [assessmentOverviewsUnfiltered, courseId]);
@@ -104,7 +104,7 @@ const Assessment: React.FC = () => {
   const assessmentConfigToLoad = useLoaderData() as AssessmentConfiguration;
   const assessmentOverviews = useMemo(
     () => assessmentOverviewsUnfiltered?.filter(ao => ao.type === assessmentConfigToLoad.type),
-    [assessmentConfigToLoad.type, assessmentOverviewsUnfiltered]
+    [assessmentConfigToLoad.type, assessmentOverviewsUnfiltered],
   );
 
   const fromLeaderboard: boolean = useTypedSelector(store => store.leaderboard.code) ? true : false;
@@ -138,13 +138,13 @@ const Assessment: React.FC = () => {
         role !== Role.Student ||
         (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt)),
       assessmentConfiguration: assessmentConfigToLoad,
-      fromContestLeaderboard: fromLeaderboard
+      fromContestLeaderboard: fromLeaderboard,
     };
     return <AssessmentWorkspace {...assessmentWorkspaceProps} />;
   }
 
   // Otherwise, render a list of assOwnProps
-  let display: JSX.Element;
+  let display: React.ReactElement;
   if (assessmentOverviews === undefined) {
     display = <NonIdealState description="Fetching assessment..." icon={<Spinner />} />;
   } else if (assessmentOverviews.length === 0) {
@@ -162,7 +162,7 @@ const Assessment: React.FC = () => {
           renderGradingTooltip={false}
           makeSubmissionButton={makeSubmissionButton}
         />
-      )
+      ),
     );
 
     /** Opened assessments, that are released and can be attempted. */
@@ -171,7 +171,7 @@ const Assessment: React.FC = () => {
       beforeNow(overview.openAt) &&
       overview.status !== AssessmentStatuses.submitted;
     const openedCards = sortAssessments(
-      assessmentOverviews.filter(overview => isOverviewOpened(overview))
+      assessmentOverviews.filter(overview => isOverviewOpened(overview)),
     ).map(overview => (
       <AssessmentOverviewCard
         key={overview.id}
@@ -185,8 +185,8 @@ const Assessment: React.FC = () => {
     /** Closed assessments, that are past the due date or cannot be attempted further. */
     const closedCards = sortAssessments(
       assessmentOverviews.filter(
-        overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview)
-      )
+        overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview),
+      ),
     ).map(overview => (
       <AssessmentOverviewCard
         key={overview.id}

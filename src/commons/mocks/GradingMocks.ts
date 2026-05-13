@@ -1,16 +1,16 @@
-import { GradingSummary } from '../../features/dashboard/DashboardTypes';
-import {
+import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
+import type {
   GradingAnswer,
   GradingAssessment,
   GradingOverview,
-  GradingQuery
+  GradingQuery,
 } from '../../features/grading/GradingTypes';
 import { Role } from '../application/ApplicationTypes';
 import {
   AssessmentStatuses,
   ProgressStatuses,
-  Testcase,
-  TestcaseTypes
+  type Testcase,
+  TestcaseTypes,
 } from '../assessment/AssessmentTypes';
 import { mockLibrary } from './AssessmentMocks';
 import { mockFetchRole } from './UserMocks';
@@ -37,7 +37,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     isGradingPublished: true,
     groupName: '1D',
     questionCount: 6,
-    gradedCount: 6
+    gradedCount: 6,
   },
   {
     xpAdjustment: -2,
@@ -60,7 +60,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     isGradingPublished: false,
     groupName: '1F',
     questionCount: 6,
-    gradedCount: 2
+    gradedCount: 2,
   },
   {
     xpAdjustment: 4,
@@ -83,8 +83,8 @@ export const mockGradingOverviews: GradingOverview[] = [
     isGradingPublished: false,
     groupName: '1F',
     questionCount: 0,
-    gradedCount: 0
-  }
+    gradedCount: 0,
+  },
 ];
 
 /**
@@ -101,7 +101,7 @@ export const mockFetchGradingOverview = (
   group: boolean,
   pageParams: { offset: number; pageSize: number },
   backendParams: object,
-  sortedBy: { sortBy: string; sortDirection: string }
+  sortedBy: { sortBy: string; sortDirection: string },
 ): GradingOverview[] | null => {
   // mocks backend role fetching
   const permittedRoles: Role[] = [Role.Admin, Role.Staff];
@@ -114,7 +114,7 @@ export const mockFetchGradingOverview = (
       : mockGradingOverviews.sort((subX: GradingOverview, subY: GradingOverview) =>
           subX.assessmentId !== subY.assessmentId
             ? subY.assessmentId - subX.assessmentId
-            : subY.submissionId - subX.submissionId
+            : subY.submissionId - subX.submissionId,
         );
   }
 };
@@ -123,7 +123,7 @@ export const mockTestcases: Testcase[] = [
   { type: TestcaseTypes.public, program: `remainder(12, 7);`, score: 1, answer: `5` },
   { type: TestcaseTypes.public, program: `remainder(6, 1);`, score: 2, answer: `0` },
   { type: TestcaseTypes.opaque, program: `remainder(-15, 6);`, score: 2, answer: `-3` },
-  { type: TestcaseTypes.opaque, program: `remainder(17, 23) === 17;`, score: 2, answer: `true` }
+  { type: TestcaseTypes.opaque, program: `remainder(17, 23) === 17;`, score: 2, answer: `true` },
 ];
 
 export const mockGradingAnswer: GradingAnswer = [
@@ -159,53 +159,53 @@ function remainder(n, d) {
       maxXp: 1000,
       grader: {
         name: 'avenger',
-        id: 1
+        id: 1,
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
       autogradingResults: [
         {
-          resultType: 'pass'
+          resultType: 'pass',
         },
         {
           resultType: 'fail',
           expected: '8',
-          actual: '5'
+          actual: '5',
         },
         {
           resultType: 'error',
           errors: [
             {
-              errorType: 'dummyErrorType'
-            }
-          ]
+              errorType: 'dummyErrorType',
+            },
+          ],
         },
         {
           resultType: 'error',
           errors: [
             {
               errorType: 'systemError',
-              errorMessage: "Cannot read property 'getUniformLocation' of null"
-            }
-          ]
+              errorMessage: "Cannot read property 'getUniformLocation' of null",
+            },
+          ],
         },
         {
           resultType: 'error',
           errors: [
             {
-              errorType: 'timeout'
+              errorType: 'timeout',
             },
             {
               errorType: 'syntax',
               line: 2,
               location: 'student',
               errorLine: 'return (n - d) < 0 ? n : remainder(n - d, d)',
-              errorExplanation: 'Missing semicolon at the end of statement'
-            }
-          ]
-        }
+              errorExplanation: 'Missing semicolon at the end of statement',
+            },
+          ],
+        },
       ],
-      blocking: false
+      blocking: false,
     },
     grade: {
       xpAdjustment: 0,
@@ -237,15 +237,15 @@ _italics_
       `,
       grader: {
         name: 'HARTIN MENZ',
-        id: 100
+        id: 100,
       },
-      gradedAt: '2019-08-16T13:26:32+00:00'
+      gradedAt: '2019-08-16T13:26:32+00:00',
     },
     student: {
       name: 'Al Gorithm',
       username: 'E0123456',
-      id: 0
-    }
+      id: 0,
+    },
   },
   {
     id: 1,
@@ -267,36 +267,36 @@ _italics_
       maxXp: 200,
       grader: {
         name: 'avenger',
-        id: 1
+        id: 1,
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
       autogradingResults: [
         {
-          resultType: 'pass'
+          resultType: 'pass',
         },
         {
           resultType: 'fail',
           expected: '8',
-          actual: '5'
+          actual: '5',
         },
         {
           resultType: 'error',
           errors: [
             {
-              errorType: 'timeout'
+              errorType: 'timeout',
             },
             {
               errorType: 'syntax',
               line: 1,
               location: 'student',
               errorLine: 'function fibonacci(n) {',
-              errorExplanation: 'Just kidding!'
-            }
-          ]
-        }
+              errorExplanation: 'Just kidding!',
+            },
+          ],
+        },
       ],
-      blocking: false
+      blocking: false,
     },
     grade: {
       xpAdjustment: 0,
@@ -335,13 +335,13 @@ New message from **Avenger**!
 #### Upcoming Tasks
 - [] Meet Avenger Avenger at Level X-05
 - [] Open the Pod Bay Doors
-      `
+      `,
     },
     student: {
       name: 'Al Gorithm',
       username: 'E0000000',
-      id: 0
-    }
+      id: 0,
+    },
   },
   {
     id: 2,
@@ -361,20 +361,20 @@ New message from **Avenger**!
       choices: [
         {
           content: 'A',
-          hint: 'hint A'
+          hint: 'hint A',
         },
         {
           content: 'B',
-          hint: 'hint B'
+          hint: 'hint B',
         },
         {
           content: 'C',
-          hint: 'hint C'
+          hint: 'hint C',
         },
         {
           content: 'D',
-          hint: 'hint D'
-        }
+          hint: 'hint D',
+        },
       ],
       id: 2,
       library: mockLibrary,
@@ -382,47 +382,47 @@ New message from **Avenger**!
       maxXp: 100,
       grader: {
         name: 'avenger',
-        id: 1
+        id: 1,
       },
       gradedAt: '2038-06-18T05:24:26.026Z',
       xp: 1,
       autogradingResults: [
         {
-          resultType: 'pass'
+          resultType: 'pass',
         },
         {
           resultType: 'fail',
           expected: '8',
-          actual: '5'
+          actual: '5',
         },
         {
           resultType: 'error',
           errors: [
             {
-              errorType: 'timeout'
+              errorType: 'timeout',
             },
             {
               errorType: 'syntax',
               line: 1,
               location: 'student',
               errorLine: 'function fibonacci(n) {',
-              errorExplanation: 'Just kidding!'
-            }
-          ]
-        }
+              errorExplanation: 'Just kidding!',
+            },
+          ],
+        },
       ],
-      blocking: false
+      blocking: false,
     },
     grade: {
       xpAdjustment: 0,
-      xp: 50
+      xp: 50,
     },
     student: {
       name: 'Al Gorithm',
       username: 'E0000000',
-      id: 0
-    }
-  }
+      id: 0,
+    },
+  },
 ];
 
 export const mockGradingAssessment: GradingAssessment = {
@@ -441,13 +441,13 @@ Starring: Source Academy`,
   summaryLong:
     'This is the long summary of the assessment. It is a very very very very long summary',
   summaryShort: 'This is short summary',
-  title: 'Assessment 1: Some Title'
+  title: 'Assessment 1: Some Title',
 };
 
 export const mockGradingQuery: GradingQuery = {
   answers: mockGradingAnswer,
   assessment: mockGradingAssessment,
-  enable_llm_grading: false
+  enable_llm_grading: false,
 };
 
 /**
@@ -458,7 +458,7 @@ export const mockGradingQuery: GradingQuery = {
  */
 export const mockFetchGrading = (
   accessToken: string,
-  submissionId: number
+  submissionId: number,
 ): GradingQuery | null => {
   // mocks backend role fetching
   const permittedRoles: Role[] = [Role.Admin, Role.Staff];
@@ -477,7 +477,7 @@ export const mockGradingSummary: GradingSummary = {
     'ungradedMissions',
     'submittedMissions',
     'ungradedQuests',
-    'submittedQuests'
+    'submittedQuests',
   ],
   rows: [
     {
@@ -486,7 +486,7 @@ export const mockGradingSummary: GradingSummary = {
       ungradedMissions: 123,
       submittedMissions: 200,
       ungradedQuests: 100,
-      submittedQuests: 117
+      submittedQuests: 117,
     },
     {
       group: 'Mock Group 2',
@@ -494,7 +494,7 @@ export const mockGradingSummary: GradingSummary = {
       ungradedMissions: 1232,
       submittedMissions: 205430,
       ungradedQuests: 345,
-      submittedQuests: 11547
+      submittedQuests: 11547,
     },
     {
       group: 'Mock Group 3',
@@ -502,7 +502,7 @@ export const mockGradingSummary: GradingSummary = {
       ungradedMissions: 1532,
       submittedMissions: 22200,
       ungradedQuests: 134500,
-      submittedQuests: 6777
-    }
-  ]
+      submittedQuests: 6777,
+    },
+  ],
 };

@@ -1,4 +1,4 @@
-import { AssessmentType } from '../../commons/assessment/AssessmentTypes';
+import type { AssessmentType } from '../../commons/assessment/AssessmentTypes';
 
 /**
  * Information on a Team, for a particular student submission

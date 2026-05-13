@@ -1,6 +1,5 @@
 import { Dialog, DialogBody } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 import { Links } from '../utils/Constants';
 

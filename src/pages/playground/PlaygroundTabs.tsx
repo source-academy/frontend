@@ -1,19 +1,19 @@
 import { IconNames } from '@blueprintjs/icons';
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
-import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
+import type { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import Markdown from 'src/commons/Markdown';
 import SideContentRemoteExecution from 'src/commons/sideContent/content/remoteExecution/SideContentRemoteExecution';
 import SideContentSessionManagement from 'src/commons/sideContent/content/SideContentSessionManagement';
 import SideContentSubstVisualizer from 'src/commons/sideContent/content/SideContentSubstVisualizer';
 import {
-  SideContentLocation,
-  SideContentTab,
-  SideContentType
+  type SideContentLocation,
+  type SideContentTab,
+  SideContentType,
 } from 'src/commons/sideContent/SideContentTypes';
 
 export const mobileOnlyTabIds: readonly SideContentType[] = [
   SideContentType.mobileEditor,
-  SideContentType.mobileEditorRun
+  SideContentType.mobileEditorRun,
 ];
 export const desktopOnlyTabIds: readonly SideContentType[] = [SideContentType.introduction];
 
@@ -21,13 +21,13 @@ export const makeIntroductionTabFrom = (content: string): SideContentTab => ({
   label: 'Introduction',
   iconName: IconNames.HOME,
   body: <Markdown content={content} openLinksInNewWindow={true} />,
-  id: SideContentType.introduction
+  id: SideContentType.introduction,
 });
 
 export const makeSessionManagementTabFrom = (
   users: Record<string, SharedbAceUser>,
   playgroundCode: string,
-  readOnly: boolean
+  readOnly: boolean,
 ): SideContentTab => ({
   label: 'Session Management',
   iconName: IconNames.PEOPLE,
@@ -39,12 +39,12 @@ export const makeSessionManagementTabFrom = (
       workspaceLocation="playground"
     />
   ),
-  id: SideContentType.sessionManagement
+  id: SideContentType.sessionManagement,
 });
 
 export const makeRemoteExecutionTabFrom = (
   deviceSecret: string | undefined,
-  callback: React.Dispatch<React.SetStateAction<string | undefined>>
+  callback: React.Dispatch<React.SetStateAction<string | undefined>>,
 ): SideContentTab => ({
   label: 'Remote Execution',
   iconName: IconNames.SATELLITE,
@@ -55,12 +55,12 @@ export const makeRemoteExecutionTabFrom = (
       callbackFunction={callback}
     />
   ),
-  id: SideContentType.remoteExecution
+  id: SideContentType.remoteExecution,
 });
 
 export const makeSubstVisualizerTabFrom = (
   workspaceLocation: SideContentLocation,
-  output: InterpreterOutput[]
+  output: InterpreterOutput[],
 ): SideContentTab => {
   const processStepperOutput = (output: InterpreterOutput[]) => {
     const editorOutput = output[0];
@@ -87,6 +87,6 @@ export const makeSubstVisualizerTabFrom = (
         content={processStepperOutput(output)}
       />
     ),
-    id: SideContentType.substVisualizer
+    id: SideContentType.substVisualizer,
   };
 };

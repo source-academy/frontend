@@ -7,10 +7,10 @@ import {
   DialogFooter,
   Intent,
   Radio,
-  RadioGroup
+  RadioGroup,
 } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 

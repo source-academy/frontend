@@ -1,7 +1,7 @@
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
-import { IBaseScene, IGameUI } from '../commons/CommonTypes';
+import type { IBaseScene, IGameUI } from '../commons/CommonTypes';
 import { fadeAndDestroy } from '../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
 import { Layer } from '../layer/GameLayerTypes';
@@ -11,7 +11,8 @@ import { createButton } from '../utils/ButtonUtils';
 import { sleep } from '../utils/GameUtils';
 import { calcListFormatPos } from '../utils/StyleUtils';
 import DashboardConstants, { pageBannerTextStyle } from './GameDashboardConstants';
-import { DashboardPage, DashboardPageManager } from './GameDashboardTypes';
+import type { DashboardPageManager } from './GameDashboardTypes';
+import { DashboardPage } from './GameDashboardTypes';
 
 /**
  * Manager for the dashboard.
@@ -92,7 +93,7 @@ class GameDashboardManager implements IGameUI {
         this.scene,
         bannerPos[chosenIdx][0],
         bannerPos[chosenIdx][1] + DashboardConstants.page.yStart,
-        ImageAssets.awardsPageChosen.key
+        ImageAssets.awardsPageChosen.key,
       );
       this.pageChosenContainer = new Phaser.GameObjects.Container(this.scene, 0, 0, [bannerChosen]);
       this.uiContainer.add(this.pageChosenContainer);
@@ -111,7 +112,7 @@ class GameDashboardManager implements IGameUI {
       0,
       screenSize.x,
       4 * screenSize.y,
-      0
+      0,
     )
       .setAlpha(0.7)
       .setInteractive();
@@ -123,7 +124,7 @@ class GameDashboardManager implements IGameUI {
     const pageOptButtons = this.pages.map((page, pageIndex) => {
       return {
         text: page,
-        callback: () => this.setPage(pageIndex)
+        callback: () => this.setPage(pageIndex),
       };
     });
     const pageOptButtonPositions = this.getPageOptPositions();
@@ -133,9 +134,9 @@ class GameDashboardManager implements IGameUI {
           button.text,
           pageOptButtonPositions[index][0],
           pageOptButtonPositions[index][1] + DashboardConstants.page.yStart,
-          button.callback
-        )
-      )
+          button.callback,
+        ),
+      ),
     );
 
     // Add back button
@@ -156,7 +157,7 @@ class GameDashboardManager implements IGameUI {
     return calcListFormatPos({
       numOfItems: Object.keys(DashboardPage).length,
       xSpacing: 0,
-      ySpacing: DashboardConstants.page.ySpace
+      ySpacing: DashboardConstants.page.ySpace,
     });
   }
 
@@ -176,7 +177,7 @@ class GameDashboardManager implements IGameUI {
       message: text,
       textConfig: DashboardConstants.pageTextConfig,
       bitMapTextStyle: pageBannerTextStyle,
-      onUp: callback
+      onUp: callback,
     }).setPosition(xPos, yPos);
   }
 
@@ -200,7 +201,7 @@ class GameDashboardManager implements IGameUI {
     this.scene.tweens.add({
       targets: [this.uiContainer, this.pageMask.geometryMask],
       ...entryTweenProps,
-      y: screenCenter.y
+      y: screenCenter.y,
     });
   }
 
@@ -220,7 +221,7 @@ class GameDashboardManager implements IGameUI {
 
       this.scene.tweens.add({
         targets: [this.uiContainer, this.pageMask.geometryMask],
-        ...exitTweenProps
+        ...exitTweenProps,
       });
 
       await sleep(exitTweenProps.duration);

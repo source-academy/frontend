@@ -1,26 +1,26 @@
 import { Binding } from '../../components/Binding';
 import { Frame } from '../../components/Frame';
 import { Visible } from '../../components/Visible';
-import { AnimationConfig } from './Animatable';
+import type { AnimationConfig } from './Animatable';
 
 export function getNodeDimensions(item: Visible) {
   return {
     height: item.height(),
-    width: item.width()
+    width: item.width(),
   };
 }
 
 export function getNodeLocation(item: Visible) {
   return {
     x: item.x(),
-    y: item.y()
+    y: item.y(),
   };
 }
 
 export function getNodePosition(item: Visible) {
   return {
     ...getNodeDimensions(item),
-    ...getNodeLocation(item)
+    ...getNodeLocation(item),
   };
 }
 
@@ -40,7 +40,7 @@ export function lookupBinding(currFrame: Frame, bindingName: string): [Frame, Bi
   }
   // this line should never be reached as long as the interpreter works correctly
   throw new Error(
-    `Error: Binding with name "${bindingName}" cannot be found within the environment!`
+    `Error: Binding with name "${bindingName}" cannot be found within the environment!`,
   );
 }
 
@@ -58,7 +58,7 @@ function parseHexColor(color: string): [number, number, number] {
   return [
     parseInt(color.slice(1, 3), 16),
     parseInt(color.slice(3, 5), 16),
-    parseInt(color.slice(5, 7), 16)
+    parseInt(color.slice(5, 7), 16),
   ];
 }
 
@@ -79,13 +79,13 @@ function lerpColor(
   delta: number,
   startColor: string | undefined,
   endColor: string,
-  easingFn: NonNullable<AnimationConfig['easing']>
+  easingFn: NonNullable<AnimationConfig['easing']>,
 ): `#${string}` {
   if (!startColor) return endColor as `#${string}`;
   const startRgb = parseHexColor(startColor);
   const endRgb = parseHexColor(endColor);
   const rgb = Array.from({ length: 3 }, (_, i) =>
-    Math.round(easingFn(delta, startRgb[i], endRgb[i] - startRgb[i], 1))
+    Math.round(easingFn(delta, startRgb[i], endRgb[i] - startRgb[i], 1)),
   );
   return convertRgbToHex(rgb as [number, number, number]);
 }
@@ -100,7 +100,7 @@ export function lerp(
   property: string,
   startValue: any,
   endValue: any,
-  easingFn: NonNullable<AnimationConfig['easing']>
+  easingFn: NonNullable<AnimationConfig['easing']>,
 ): any {
   if (startValue === endValue) return endValue;
   if (typeof endValue === 'number') {

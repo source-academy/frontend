@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { AchievementUser } from 'src/features/achievement/AchievementTypes';
+import type { AchievementUser } from 'src/features/achievement/AchievementTypes';
 
 import SessionActions from '../application/actions/SessionActions';
 import { useTypedSelector } from '../utils/Hooks';

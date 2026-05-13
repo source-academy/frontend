@@ -1,12 +1,12 @@
 import { ECE } from 'java-slang';
-import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import type { KonvaEventObject } from 'konva/lib/Node';
+import { createRef } from 'react';
 import { Group, Label, Rect, Tag, Text as KonvaText } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
-import { IHoverable } from '../../CseMachineTypes';
+import type { IHoverable } from '../../CseMachineTypes';
 import { defaultTextColor, setHoveredCursor, setUnhoveredCursor } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 import { Arrow } from './Arrow';
@@ -15,7 +15,7 @@ import { Method } from './Method';
 import { Text } from './Text';
 
 export class Frame extends Visible implements IHoverable {
-  readonly tooltipRef: RefObject<any>;
+  readonly tooltipRef: React.RefObject<any>;
 
   readonly bindings: Binding[] = [];
   readonly name: Text;
@@ -29,7 +29,7 @@ export class Frame extends Visible implements IHoverable {
 
     readonly tooltip?: string,
     readonly highlightOnHover?: () => void,
-    readonly unhighlightOnHover?: () => void
+    readonly unhighlightOnHover?: () => void,
   ) {
     super();
 
@@ -59,7 +59,7 @@ export class Frame extends Visible implements IHoverable {
         b.setArrowToX(this._x + this._width + Config.FramePaddingX);
       });
 
-    this.tooltipRef = React.createRef();
+    this.tooltipRef = createRef();
   }
 
   setWidth(width: number) {
@@ -97,7 +97,7 @@ export class Frame extends Visible implements IHoverable {
       fontFamily: ControlStashConfig.FontFamily.toString(),
       fontSize: Number(ControlStashConfig.FontSize),
       fontStyle: ControlStashConfig.FontStyle.toString(),
-      fontVariant: ControlStashConfig.FontVariant.toString()
+      fontVariant: ControlStashConfig.FontVariant.toString(),
     };
 
     return (
@@ -127,7 +127,7 @@ export class Frame extends Visible implements IHoverable {
             this._y + this.name.height(),
             this.parent.x() + Config.FramePaddingX / 2,
             // TODO WHY NEED TO ADD NAME HEIGHT?
-            this.parent.y() + this.parent.height() + this.name?.height()
+            this.parent.y() + this.parent.height() + this.name?.height(),
           ).draw()}
 
         {/* Frame tooltip */}

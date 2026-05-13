@@ -9,14 +9,14 @@ global.ResizeObserver = require('resize-observer-polyfill');
 
 vi.mock('./commons/utils/notifications/createNotification', () => ({
   notification: {
-    show: vi.fn()
-  }
+    show: vi.fn(),
+  },
 }));
 
 vi.mock('java-slang', () => {
   return {
     compileFromSource: () => '',
-    typeCheck: () => ({ hasTypeErrors: false, errorMsgs: [] })
+    typeCheck: () => ({ hasTypeErrors: false, errorMsgs: [] }),
   };
 });
 
@@ -38,7 +38,7 @@ window.matchMedia =
     return {
       matches: false,
       addListener: function () {},
-      removeListener: function () {}
+      removeListener: function () {},
     };
   };
 

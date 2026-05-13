@@ -1,4 +1,4 @@
-import { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import InterpreterActions from '../InterpreterActions';
 
 const assessmentWorkspace: WorkspaceLocation = 'assessment';
@@ -12,8 +12,8 @@ test('handleConsoleLog generates correct action object', () => {
     type: InterpreterActions.handleConsoleLog.type,
     payload: {
       logString: [logString],
-      workspaceLocation: assessmentWorkspace
-    }
+      workspaceLocation: assessmentWorkspace,
+    },
   });
 });
 
@@ -25,8 +25,21 @@ test('evalInterpreterSuccess generates correct action object', () => {
     payload: {
       type: 'result',
       value,
-      workspaceLocation: gradingWorkspace
-    }
+      workspaceLocation: gradingWorkspace,
+    },
+  });
+});
+
+test('appendInterpreterResult generates correct action object', () => {
+  const value = 'value';
+  const action = InterpreterActions.appendInterpreterResult(value, gradingWorkspace);
+  expect(action).toEqual({
+    type: InterpreterActions.appendInterpreterResult.type,
+    payload: {
+      type: 'result',
+      value,
+      workspaceLocation: gradingWorkspace,
+    },
   });
 });
 
@@ -40,8 +53,8 @@ test('evalTestcaseSuccess generates correct action object', () => {
       type: 'result',
       value,
       workspaceLocation: playgroundWorkspace,
-      index
-    }
+      index,
+    },
   });
 });
 
@@ -53,8 +66,32 @@ test('evalInterpreterError generates correct action object', () => {
     payload: {
       type: 'errors',
       errors,
-      workspaceLocation: assessmentWorkspace
-    }
+      workspaceLocation: assessmentWorkspace,
+    },
+  });
+});
+
+test('appendInterpreterError generates correct action object', () => {
+  const errors: any = [];
+  const action = InterpreterActions.appendInterpreterError(errors, assessmentWorkspace);
+  expect(action).toEqual({
+    type: InterpreterActions.appendInterpreterError.type,
+    payload: {
+      type: 'errors',
+      errors,
+      workspaceLocation: assessmentWorkspace,
+    },
+  });
+});
+
+test('setIsRunning generates correct action object', () => {
+  const action = InterpreterActions.setIsRunning(false, playgroundWorkspace);
+  expect(action).toEqual({
+    type: InterpreterActions.setIsRunning.type,
+    payload: {
+      isRunning: false,
+      workspaceLocation: playgroundWorkspace,
+    },
   });
 });
 
@@ -63,8 +100,8 @@ test('beginInterruptExecution generates correct action object', () => {
   expect(action).toEqual({
     type: InterpreterActions.beginInterruptExecution.type,
     payload: {
-      workspaceLocation: gradingWorkspace
-    }
+      workspaceLocation: gradingWorkspace,
+    },
   });
 });
 
@@ -73,8 +110,8 @@ test('endInterruptExecution generates correct action object', () => {
   expect(action).toEqual({
     type: InterpreterActions.endInterruptExecution.type,
     payload: {
-      workspaceLocation: playgroundWorkspace
-    }
+      workspaceLocation: playgroundWorkspace,
+    },
   });
 });
 
@@ -83,8 +120,8 @@ test('beginDebuggerPause generates correct action object', () => {
   expect(action).toEqual({
     type: InterpreterActions.beginDebuggerPause.type,
     payload: {
-      workspaceLocation: assessmentWorkspace
-    }
+      workspaceLocation: assessmentWorkspace,
+    },
   });
 });
 
@@ -93,8 +130,8 @@ test('endDebuggerPause generates correct action object', () => {
   expect(action).toEqual({
     type: InterpreterActions.endDebuggerPause.type,
     payload: {
-      workspaceLocation: gradingWorkspace
-    }
+      workspaceLocation: gradingWorkspace,
+    },
   });
 });
 
@@ -103,8 +140,8 @@ test('debuggerResume generates correct action object', () => {
   expect(action).toEqual({
     type: InterpreterActions.debuggerResume.type,
     payload: {
-      workspaceLocation: playgroundWorkspace
-    }
+      workspaceLocation: playgroundWorkspace,
+    },
   });
 });
 
@@ -113,7 +150,7 @@ test('debuggerReset generates correct action object', () => {
   expect(action).toEqual({
     type: InterpreterActions.debuggerReset.type,
     payload: {
-      workspaceLocation: assessmentWorkspace
-    }
+      workspaceLocation: assessmentWorkspace,
+    },
   });
 });

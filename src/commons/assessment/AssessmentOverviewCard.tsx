@@ -1,5 +1,5 @@
 import { Card, Elevation, H4, H6, Icon, Intent, Position, Text, Tooltip } from '@blueprintjs/core';
-import { IconName, IconNames } from '@blueprintjs/icons';
+import { type IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import classes from 'src/styles/Academy.module.scss';
 
@@ -10,7 +10,7 @@ import { filterNotificationsByAssessment } from '../notificationBadge/Notificati
 import { beforeNow, getPrettyDate, getPrettyDateAfterHours } from '../utils/DateHelper';
 import { useResponsive } from '../utils/Hooks';
 import AssessmentInteractButton from './AssessmentInteractButton';
-import { AssessmentOverview } from './AssessmentTypes';
+import type { AssessmentOverview } from './AssessmentTypes';
 
 type AssessmentOverviewCardProps = {
   /** The assessment overview to display */
@@ -18,7 +18,7 @@ type AssessmentOverviewCardProps = {
   /** Will only render the attempt button if true, regardless of attempt status. */
   renderAttemptButton: boolean;
   renderGradingTooltip: boolean;
-  makeSubmissionButton: (overview: AssessmentOverview) => JSX.Element;
+  makeSubmissionButton: (overview: AssessmentOverview) => React.ReactElement;
 };
 
 /** A card to display `AssessmentOverview`s. */
@@ -26,7 +26,7 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
   overview,
   renderAttemptButton,
   renderGradingTooltip,
-  makeSubmissionButton
+  makeSubmissionButton,
 }) => {
   const { isMobileBreakpoint } = useResponsive();
   return (
@@ -81,7 +81,7 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
               <Text className="listing-due-date">
                 <Icon className="listing-due-icon" size={12} icon={IconNames.CALENDAR} />
                 {`${beforeNow(overview.openAt) ? 'Opened' : 'Opens'}: ${getPrettyDate(
-                  overview.openAt
+                  overview.openAt,
                 )}`}
               </Text>
               {beforeNow(overview.openAt) && (
@@ -104,13 +104,13 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
 type AssessmentOverviewCardTitleProps = {
   overview: AssessmentOverview;
   renderProgressStatus: boolean;
-  makeSubmissionButton: (overview: AssessmentOverview) => JSX.Element;
+  makeSubmissionButton: (overview: AssessmentOverview) => React.ReactElement;
 };
 
 const AssessmentOverviewCardTitle: React.FC<AssessmentOverviewCardTitleProps> = ({
   overview,
   renderProgressStatus,
-  makeSubmissionButton
+  makeSubmissionButton,
 }) => (
   <div className="listing-header">
     <Text ellipsize={true}>

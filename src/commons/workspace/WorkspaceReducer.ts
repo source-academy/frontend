@@ -1,8 +1,7 @@
 import { createReducer, type Reducer } from '@reduxjs/toolkit';
-import { castDraft } from 'immer';
+import { castDraft, type Draft } from 'immer';
+import { type SourceError } from 'js-slang/dist/errors/base';
 
-import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
-import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
 import { logOut } from '../application/actions/CommonsActions';
 import InterpreterActions from '../application/actions/InterpreterActions';
 import {
@@ -11,13 +10,13 @@ import {
   type ErrorOutput,
   type InterpreterOutput,
   type NotificationOutput,
-  type ResultOutput
+  type ResultOutput,
 } from '../application/ApplicationTypes';
 import {
   setEditorSessionId,
   setSessionDetails,
   setSharedbConnected,
-  setUpdateUserRoleCallback
+  setUpdateUserRoleCallback,
 } from '../collabEditing/CollabEditingActions';
 import type { SourceActionType } from '../utils/ActionsHelper';
 import { createContext } from '../utils/JsSlangHelper';
@@ -42,34 +41,8 @@ export const getWorkspaceLocation = (action: any): WorkspaceLocation => {
  */
 export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
   state = defaultWorkspaceManager,
-  action
+  action,
 ) => {
-  const workspaceLocation = getWorkspaceLocation(action);
-  switch (workspaceLocation) {
-    case 'sourcecast': {
-      const sourcecastState = SourcecastReducer(state.sourcecast, action);
-      if (sourcecastState === state.sourcecast) {
-        break;
-      }
-      return {
-        ...state,
-        sourcecast: sourcecastState
-      };
-    }
-    case 'sourcereel': {
-      const sourcereelState = SourcereelReducer(state.sourcereel, action);
-      if (sourcereelState === state.sourcereel) {
-        break;
-      }
-      return {
-        ...state,
-        sourcereel: sourcereelState
-      };
-    }
-    default:
-      break;
-  }
-
   // state = oldWorkspaceReducer(state, action);
   state = newWorkspaceReducer(state, action);
   return state;
@@ -80,6 +53,90 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
   handleCseAndStepperActions(builder);
   handleReplActions(builder);
   handleDebuggerActions(builder);
+
+  function applyInterpreterResultOutput(
+    state: Draft<WorkspaceManagerState>,
+    workspaceLocation: WorkspaceLocation,
+    value: unknown,
+    shouldStopRunning: boolean,
+  ) {
+    const tokens = state[workspaceLocation].tokenCount;
+    const newOutputEntry: Partial<ResultOutput> = {
+      type: 'result',
+      value,
+    };
+
+    const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
+    let newOutput: InterpreterOutput[];
+
+    if (lastOutput !== undefined && lastOutput.type === 'running') {
+      const newOutputEntryWithLogs = {
+        consoleLogs: lastOutput.consoleLogs,
+        ...newOutputEntry,
+      } as ResultOutput;
+      const notificationOutputs: NotificationOutput[] = [];
+      if (state[workspaceLocation].hasTokenCounter) {
+        notificationOutputs.push({
+          consoleLog: `This program has ${tokens} tokens.`,
+          type: 'notification',
+        });
+      }
+      const customNotification = state[workspaceLocation].customNotification;
+      if (customNotification !== '') {
+        notificationOutputs.push({
+          consoleLog: customNotification,
+          type: 'notification',
+        });
+      }
+      newOutput = state[workspaceLocation].output
+        .slice(0, -1)
+        .concat([...notificationOutputs, newOutputEntryWithLogs]);
+    } else {
+      newOutput = state[workspaceLocation].output.concat({
+        consoleLogs: [],
+        ...newOutputEntry,
+      } as ResultOutput);
+    }
+
+    state[workspaceLocation].output = newOutput;
+    if (shouldStopRunning) {
+      state[workspaceLocation].isRunning = false;
+    }
+  }
+
+  function applyInterpreterErrorOutput(
+    state: Draft<WorkspaceManagerState>,
+    workspaceLocation: WorkspaceLocation,
+    errors: SourceError[],
+    shouldStopRunning: boolean,
+    shouldStopDebugging: boolean,
+  ) {
+    const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
+    let newOutput: InterpreterOutput[];
+
+    if (lastOutput !== undefined && lastOutput.type === 'running') {
+      newOutput = state[workspaceLocation].output.slice(0, -1).concat({
+        type: 'errors',
+        errors,
+        consoleLogs: lastOutput.consoleLogs,
+      } as ErrorOutput);
+    } else {
+      newOutput = state[workspaceLocation].output.concat({
+        type: 'errors',
+        errors,
+        consoleLogs: [],
+      } as ErrorOutput);
+    }
+
+    state[workspaceLocation].output = newOutput;
+    if (shouldStopRunning) {
+      state[workspaceLocation].isRunning = false;
+    }
+    if (shouldStopDebugging) {
+      state[workspaceLocation].isDebugging = false;
+    }
+  }
+
   builder
     .addCase(WorkspaceActions.setTokenCount, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -102,11 +159,11 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
             action.payload.library.external.symbols,
             workspaceLocation,
             action.payload.library.variant,
-            action.payload.library.languageOptions
+            action.payload.library.languageOptions,
           ),
           globals: action.payload.library.globals,
-          externalLibrary: action.payload.library.external.name
-        }
+          externalLibrary: action.payload.library.external.name,
+        },
       };
     })
     .addCase(WorkspaceActions.changeExternalLibrary, (state, action) => {
@@ -127,12 +184,12 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         // New block of output.
         newOutput = state[workspaceLocation].output.concat({
           type: 'running',
-          consoleLogs: [...action.payload.logString]
+          consoleLogs: [...action.payload.logString],
         });
       } else {
         const updatedLastOutput = {
           type: lastOutput.type,
-          consoleLogs: lastOutput.consoleLogs.concat(action.payload.logString)
+          consoleLogs: lastOutput.consoleLogs.concat(action.payload.logString),
         };
         newOutput = state[workspaceLocation].output.slice(0, -1);
         newOutput.push(updatedLastOutput);
@@ -145,7 +202,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const playgroundWorkspace = state.playground;
       return castDraft({
         ...defaultWorkspaceManager,
-        playground: playgroundWorkspace
+        playground: playgroundWorkspace,
       });
     })
     .addCase(WorkspaceActions.enableTokenCounter, (state, action) => {
@@ -161,48 +218,13 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       state[workspaceLocation].isRunning = true;
       state[workspaceLocation].isDebugging = false;
     })
+    .addCase(InterpreterActions.appendInterpreterResult, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      applyInterpreterResultOutput(state, workspaceLocation, action.payload.value, false);
+    })
     .addCase(InterpreterActions.evalInterpreterSuccess, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
-      const tokens = state[workspaceLocation].tokenCount;
-      const newOutputEntry: Partial<ResultOutput> = {
-        type: action.payload.type as 'result',
-        value: action.payload.value
-      };
-
-      const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
-      let newOutput: InterpreterOutput[];
-
-      if (lastOutput !== undefined && lastOutput.type === 'running') {
-        const newOutputEntryWithLogs = {
-          consoleLogs: lastOutput.consoleLogs,
-          ...newOutputEntry
-        } as ResultOutput;
-        const notificationOutputs: NotificationOutput[] = [];
-        if (state[workspaceLocation].hasTokenCounter) {
-          notificationOutputs.push({
-            consoleLog: `This program has ${tokens} tokens.`,
-            type: 'notification'
-          });
-        }
-        const customNotification = state[workspaceLocation].customNotification;
-        if (customNotification !== '') {
-          notificationOutputs.push({
-            consoleLog: customNotification,
-            type: 'notification'
-          });
-        }
-        newOutput = state[workspaceLocation].output
-          .slice(0, -1)
-          .concat([...notificationOutputs, newOutputEntryWithLogs]);
-      } else {
-        newOutput = state[workspaceLocation].output.concat({
-          consoleLogs: [],
-          ...newOutputEntry
-        } as ResultOutput);
-      }
-
-      state[workspaceLocation].output = newOutput;
-      state[workspaceLocation].isRunning = false;
+      applyInterpreterResultOutput(state, workspaceLocation, action.payload.value, true);
     })
     .addCase(InterpreterActions.evalTestcaseSuccess, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -217,29 +239,17 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       testcase.result = undefined;
       testcase.errors = action.payload.value;
     })
+    .addCase(InterpreterActions.appendInterpreterError, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      applyInterpreterErrorOutput(state, workspaceLocation, action.payload.errors, false, false);
+    })
     .addCase(InterpreterActions.evalInterpreterError, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
-
-      const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
-      let newOutput: InterpreterOutput[];
-
-      if (lastOutput !== undefined && lastOutput.type === 'running') {
-        newOutput = state[workspaceLocation].output.slice(0, -1).concat({
-          type: action.payload.type,
-          errors: action.payload.errors,
-          consoleLogs: lastOutput.consoleLogs
-        } as ErrorOutput);
-      } else {
-        newOutput = state[workspaceLocation].output.concat({
-          type: action.payload.type,
-          errors: action.payload.errors,
-          consoleLogs: []
-        } as ErrorOutput);
-      }
-
-      state[workspaceLocation].output = newOutput;
-      state[workspaceLocation].isRunning = false;
-      state[workspaceLocation].isDebugging = false;
+      applyInterpreterErrorOutput(state, workspaceLocation, action.payload.errors, true, true);
+    })
+    .addCase(InterpreterActions.setIsRunning, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].isRunning = action.payload.isRunning;
     })
     /**
      * Called to signal the end of an interruption,
@@ -278,8 +288,8 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         [workspaceLocation]: {
           ...state[workspaceLocation],
           ...createDefaultWorkspace(workspaceLocation),
-          ...action.payload.workspaceOptions
-        }
+          ...action.payload.workspaceOptions,
+        },
       };
     })
     /**
@@ -294,8 +304,8 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          ...action.payload.workspaceOptions
-        }
+          ...action.payload.workspaceOptions,
+        },
       };
     })
     .addCase(WorkspaceActions.increaseRequestCounter, state => {
@@ -319,9 +329,9 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
           ...state[workspaceLocation],
           sessionDetails: {
             ...state[workspaceLocation].sessionDetails,
-            ...action.payload.sessionDetails
-          }
-        }
+            ...action.payload.sessionDetails,
+          },
+        },
       };
     })
     .addCase(WorkspaceActions.setIsEditorReadonly, (state, action) => {
@@ -358,8 +368,8 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          hasUnsavedChanges: action.payload.hasUnsavedChanges
-        }
+          hasUnsavedChanges: action.payload.hasUnsavedChanges,
+        },
       };
     })
     .addCase(WorkspaceActions.updateSublanguage, (state, action) => {
@@ -396,5 +406,56 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(setUpdateUserRoleCallback, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].updateUserRoleCallback = action.payload.updateUserRoleCallback;
+    })
+    .addCase(WorkspaceActions.fetchVersionHistory, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].versionHistory.isLoading = true;
+    })
+    .addCase(WorkspaceActions.receiveVersionHistory, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].versionHistory.versions = action.payload.versions;
+      state[workspaceLocation].versionHistory.isLoading = false;
+    })
+    .addCase(WorkspaceActions.selectVersion, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].versionHistory.selectedVersion = action.payload.version;
+      state[workspaceLocation].versionHistory.selectedVersionCode = null;
+      state[workspaceLocation].versionHistory.isLoadingCode = action.payload.version !== null;
+    })
+    .addCase(WorkspaceActions.receiveVersionCode, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      const versionHistory = state[workspaceLocation].versionHistory;
+      if (versionHistory.selectedVersion?.id !== action.payload.versionId) return;
+      versionHistory.selectedVersionCode = action.payload.code;
+      versionHistory.isLoadingCode = false;
+    })
+    .addCase(WorkspaceActions.restoreVersion, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      const workspace = state[workspaceLocation];
+      if (workspace.activeEditorTabIndex !== null) {
+        workspace.editorTabs[workspace.activeEditorTabIndex].value = action.payload.code;
+      }
+    })
+    .addCase(WorkspaceActions.toggleHistoryPanel, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].versionHistory.isHistoryPanelOpen =
+        !state[workspaceLocation].versionHistory.isHistoryPanelOpen;
+    })
+    .addCase(WorkspaceActions.nameVersion, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      const version = state[workspaceLocation].versionHistory.versions.find(
+        v => v.id === action.payload.versionId,
+      );
+      if (version) {
+        version.name = action.payload.name;
+      }
+    })
+    .addCase(WorkspaceActions.updateSaveStatus, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].saveStatus = action.payload.saveStatus;
+    })
+    .addCase(WorkspaceActions.setIsAutoSaving, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].versionHistory.isAutoSaving = action.payload.isAutoSaving;
     });
 });

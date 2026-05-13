@@ -1,7 +1,7 @@
 import { Button, Dialog, Tooltip } from '@blueprintjs/core';
-import { TimePicker } from '@blueprintjs/datetime';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { prettifyTime } from 'src/commons/achievement/utils/DateHelper';
+import { TimePicker } from 'src/commons/DateTimePickers';
 
 type Props = {
   type: string;
@@ -28,7 +28,7 @@ const EditableTime: React.FC<Props> = ({ type, time, changeTime }) => {
           background: '#fff',
           maxWidth: 'max-content',
           padding: '0.25em',
-          textAlign: 'center'
+          textAlign: 'center',
         }}
         title={`${type}`}
       >

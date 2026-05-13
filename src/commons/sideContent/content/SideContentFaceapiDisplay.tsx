@@ -1,6 +1,5 @@
 import { Button, Divider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 const SideContentFaceapiDisplay: React.FC = () => {
@@ -18,7 +17,7 @@ const SideContentFaceapiDisplay: React.FC = () => {
     takePhoto: () => any,
     resetPhoto: () => any,
     canvasId: string,
-    canvasHeight: number
+    canvasHeight: number,
   ) => (
     <div className="sa-video-header">
       <div className="sa-video-header-element">
@@ -27,7 +26,7 @@ const SideContentFaceapiDisplay: React.FC = () => {
           style={{ height: 20 }}
           icon={IconNames.CAMERA}
           onClick={takePhoto}
-          text={t('takePicture')}
+          text={t($ => $.takePicture)}
         />
       </div>
       <Divider />
@@ -41,7 +40,7 @@ const SideContentFaceapiDisplay: React.FC = () => {
           style={{ height: 20 }}
           icon={IconNames.RESET}
           onClick={resetPhoto}
-          text={t('reset')}
+          text={t($ => $.reset)}
         />
       </div>
     </div>

@@ -1,40 +1,40 @@
+import { render } from '@testing-library/react';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { shallowRender } from 'src/commons/utils/TestUtils';
 
-import {
+import type {
   CodeOutput,
   ErrorOutput,
   InterpreterOutput,
   ResultOutput,
-  RunningOutput
+  RunningOutput,
 } from '../../application/ApplicationTypes';
 import { mockTypeError } from '../../mocks/ContextMocks';
 import Repl, { Output } from '../Repl';
 
 const mockRunningOutput: RunningOutput = {
   type: 'running',
-  consoleLogs: ['a', 'bb', 'cccccccccccccccccccccccccccccccc', 'd']
+  consoleLogs: ['a', 'bb', 'cccccccccccccccccccccccccccccccc', 'd'],
 };
 
 const mockCodeOutput: CodeOutput = {
   type: 'code',
-  value: "display('');"
+  value: "display('');",
 };
 
 const mockResultOutput: ResultOutput = {
   type: 'result',
   value: 42,
-  consoleLogs: []
+  consoleLogs: [],
 };
 
 const mockErrorOutput: ErrorOutput = {
   type: 'errors',
   errors: [mockTypeError()],
-  consoleLogs: []
+  consoleLogs: [],
 };
 
-test('Repl renders correctly', () => {
+test('Repl renders correctly', async () => {
   const props = {
     handleBrowseHistoryDown: () => {},
     handleBrowseHistoryUp: () => {},
@@ -46,59 +46,51 @@ test('Repl renders correctly', () => {
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     externalLibrary: ExternalLibraryName.NONE,
-    replButtons: []
+    replButtons: [],
   };
-  const app = <Repl {...props} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
+  const { asFragment } = render(<Repl {...props} />);
+  expect(asFragment()).toMatchSnapshot();
 });
 
-test('Code output renders correctly', () => {
-  const app = <Output {...{ output: mockCodeOutput }} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
+test('Code output renders correctly', async () => {
+  const { asFragment } = render(<Output {...{ output: mockCodeOutput }} />);
+  expect(asFragment()).toMatchSnapshot();
 });
 
-test('Running output renders correctly', () => {
-  const app = <Output {...{ output: mockRunningOutput }} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
+test('Running output renders correctly', async () => {
+  const { asFragment } = render(<Output {...{ output: mockRunningOutput }} />);
+  expect(asFragment()).toMatchSnapshot();
 });
 
-test('Result output (no consoleLogs) renders correctly', () => {
-  const app = <Output {...{ output: mockResultOutput }} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
+test('Result output (no consoleLogs) renders correctly', async () => {
+  const { asFragment } = render(<Output {...{ output: mockResultOutput }} />);
+  expect(asFragment()).toMatchSnapshot();
 });
 
-test('Result output (with consoleLogs) renders correctly', () => {
+test('Result output (with consoleLogs) renders correctly', async () => {
   const props = {
     ...mockResultOutput,
-    consoleLogs: mockRunningOutput.consoleLogs
+    consoleLogs: mockRunningOutput.consoleLogs,
   };
-  const app = <Output {...{ output: props }} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
+  const { asFragment } = render(<Output {...{ output: props }} />);
+  expect(asFragment()).toMatchSnapshot();
 });
 
-test('Error output (no consoleLogs) renders correctly', () => {
-  const app = <Output {...{ output: mockErrorOutput }} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
+test('Error output (no consoleLogs) renders correctly', async () => {
+  const { asFragment } = render(<Output {...{ output: mockErrorOutput }} />);
+  expect(asFragment()).toMatchSnapshot();
 });
 
-test('Error output (with consoleLogs) renders correctly', () => {
+test('Error output (with consoleLogs) renders correctly', async () => {
   const props = {
     ...mockErrorOutput,
-    consoleLogs: mockRunningOutput.consoleLogs
+    consoleLogs: mockRunningOutput.consoleLogs,
   };
-  const app = <Output {...{ output: props }} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
+  const { asFragment } = render(<Output {...{ output: props }} />);
+  expect(asFragment()).toMatchSnapshot();
 });
 
-test('Empty output renders an empty card', () => {
-  const app = <Output {...{ output: {} as InterpreterOutput }} />;
-  const tree = shallowRender(app);
-  expect(tree).toMatchSnapshot();
+test('Empty output renders an empty card', async () => {
+  const { asFragment } = render(<Output {...{ output: {} as InterpreterOutput }} />);
+  expect(asFragment()).toMatchSnapshot();
 });

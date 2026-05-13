@@ -1,6 +1,5 @@
 import { NumericInput, Tooltip } from '@blueprintjs/core';
-import React from 'react';
-import { AssessmentMeta, GoalMeta } from 'src/features/achievement/AchievementTypes';
+import type { AssessmentMeta, GoalMeta } from 'src/features/achievement/AchievementTypes';
 
 type Props = {
   assessmentMeta: AssessmentMeta;

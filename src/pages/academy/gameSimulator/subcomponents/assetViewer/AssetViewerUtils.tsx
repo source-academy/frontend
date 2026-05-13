@@ -1,4 +1,4 @@
-import { TreeNodeInfo } from '@blueprintjs/core';
+import type { TreeNodeInfo } from '@blueprintjs/core';
 import { set } from 'lodash';
 
 type Tree = Record<any, any> | string[] | any;
@@ -20,8 +20,8 @@ type Tree = Record<any, any> | string[] | any;
  */
 export function convertAssetPathsToTree(
   assetPaths: string[],
-  iconRenderer: (pathName: string) => JSX.Element,
-  rootFolders: string[] = []
+  iconRenderer: (pathName: string) => React.ReactElement,
+  rootFolders: string[] = [],
 ): TreeNodeInfo[] {
   const assetObj: Tree = {};
   assetPaths.forEach(assetPath => set(assetObj, assetPath.split('/'), 'FILE'));
@@ -41,7 +41,7 @@ export function convertAssetPathsToTree(
         childNodes:
           assetObj[file] === 'FILE'
             ? undefined
-            : convertAssetObjectsToTree([...parentFolders, file], assetObj[file])
+            : convertAssetObjectsToTree([...parentFolders, file], assetObj[file]),
       };
     });
   };

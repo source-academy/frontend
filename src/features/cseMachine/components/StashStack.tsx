@@ -1,7 +1,6 @@
 import { Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Chapter } from 'js-slang/dist/langs';
-import { Value } from 'js-slang/dist/types';
-import React from 'react';
+import type { Value } from 'js-slang/dist/types';
 
 import CseMachine from '../CseMachine';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
@@ -16,7 +15,7 @@ export class StashStack extends Visible {
   constructor(
     /** the stash object */
     readonly stash: Stash,
-    readonly chapter: Chapter
+    readonly chapter: Chapter,
   ) {
     super();
     this._x = ControlStashConfig.StashPosX;

@@ -1,6 +1,6 @@
-import { IconName } from '@blueprintjs/core';
+import type { IconName } from '@blueprintjs/core';
 
-import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 export enum SideContentType {
   autograder = 'autograder',
@@ -30,13 +30,11 @@ export enum SideContentType {
   missionMetadata = 'mission_metadata',
   mobileEditor = 'mobile_editor',
   mobileEditorRun = 'mobile_editor_run',
-  sourcereel = 'sourcereel',
   substVisualizer = 'subst_visualiser',
   testcases = 'testcases',
   toneMatrix = 'tone_matrix',
   htmlDisplay = 'html_display',
-  storiesRun = 'stories_run',
-  upload = 'upload'
+  upload = 'upload',
 }
 
 /**
@@ -58,7 +56,7 @@ export enum SideContentType {
 export type SideContentTab = {
   label: string;
   iconName: IconName;
-  body: JSX.Element | null;
+  body: React.ReactElement | null;
   id?: SideContentType;
   disabled?: boolean;
 };
@@ -80,22 +78,16 @@ export type SideContentTab = {
 export type ModuleSideContent = {
   label: string;
   iconName: IconName;
-  body: (props: any) => JSX.Element;
+  body: (props: any) => React.ReactElement;
   toSpawn?: (context: DebuggerContext) => boolean;
 };
 
-export type NonStoryWorkspaceLocation = Exclude<WorkspaceLocation, 'stories'>;
-export type StoryWorkspaceLocation = `stories.${string}`;
-export type SideContentManagerState = Record<NonStoryWorkspaceLocation, SideContentState> & {
-  stories: Record<string, SideContentState>;
-};
+export type SideContentManagerState = Record<WorkspaceLocation, SideContentState>;
 
 /**
  * A SideContentLocation specifier is an extension of the WorkspaceLocation type
- * that includes a specification for story workspaces
- * Story Envs should be specified in the following format: ``stories.${env}``
  */
-export type SideContentLocation = NonStoryWorkspaceLocation | StoryWorkspaceLocation;
+export type SideContentLocation = WorkspaceLocation;
 
 export type SideContentState = {
   height?: number;
@@ -107,7 +99,7 @@ export type SideContentState = {
 export type ChangeTabsCallback = (
   newId: SideContentType,
   oldId: SideContentType,
-  event: React.MouseEvent<HTMLElement>
+  event: React.MouseEvent<HTMLElement>,
 ) => void;
 
 export type SideContentDispatchProps = {

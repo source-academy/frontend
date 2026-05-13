@@ -1,7 +1,6 @@
 import { type ColDef, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { startCase } from 'lodash';
-import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
@@ -12,7 +11,7 @@ const defaultColumnDefs: ColDef = {
   flex: 1,
   filter: true,
   resizable: true,
-  sortable: true
+  sortable: true,
 };
 
 const Dashboard: React.FC = () => {
@@ -22,7 +21,7 @@ const Dashboard: React.FC = () => {
   const columnDefs = gradingSummary.cols.map(e => {
     return {
       headerName: startCase(e),
-      field: e
+      field: e,
     };
   });
 

@@ -2,14 +2,14 @@ import 'src/styles/Leaderboard.scss';
 
 import { type ColDef, themeAlpine } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
-import {
+import type {
   ContestLeaderboardRow,
-  LeaderboardContestDetails
+  LeaderboardContestDetails,
 } from 'src/features/leaderboard/LeaderboardTypes';
 
 import default_avatar from '../../../assets/default-avatar.jpg';
@@ -26,17 +26,17 @@ type Props = {
 
 const ContestLeaderboard: React.FC<Props> = ({
   type,
-  contest: { contest_id: contestId, title: contestName }
+  contest: { contest_id: contestId, title: contestName },
 }) => {
   const courseID = useTypedSelector(store => store.session.courseId);
   const visibleEntries = useTypedSelector(
-    store => store.session?.topContestLeaderboardDisplay ?? 10
+    store => store.session?.topContestLeaderboardDisplay ?? 10,
   );
   const dispatch = useDispatch();
 
   // Retrieve Contest Score Data from store
   const rankedLeaderboard: ContestLeaderboardRow[] = useTypedSelector(store =>
-    type === 'score' ? store.leaderboard.contestScore : store.leaderboard.contestPopularVote
+    type === 'score' ? store.leaderboard.contestScore : store.leaderboard.contestPopularVote,
   );
 
   useEffect(() => {
@@ -90,7 +90,7 @@ const ContestLeaderboard: React.FC<Props> = ({
           const rank = params.value;
           const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
           return `${rank} ${medal}`;
-        }
+        },
       },
       {
         field: 'avatar',
@@ -105,7 +105,7 @@ const ContestLeaderboard: React.FC<Props> = ({
             onError={e => (e.currentTarget.src = default_avatar)}
             style={{ width: '40px', height: '40px', borderRadius: '50%' }}
           />
-        )
+        ),
       },
       { field: 'name', headerName: 'Name', flex: 520, sortable: true },
       {
@@ -113,7 +113,7 @@ const ContestLeaderboard: React.FC<Props> = ({
         headerName: 'Score',
         flex: 154,
         sortable: true,
-        valueFormatter: params => params.value?.toFixed(2)
+        valueFormatter: params => params.value?.toFixed(2),
       },
       {
         field: 'code',
@@ -131,11 +131,11 @@ const ContestLeaderboard: React.FC<Props> = ({
           >
             🔗 Open Code
           </a>
-        )
-      }
+        ),
+      },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [],
   );
 
   return (

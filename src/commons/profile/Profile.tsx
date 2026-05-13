@@ -1,10 +1,10 @@
 import { Drawer, DrawerSize, NonIdealState, Spinner } from '@blueprintjs/core';
-import { IconName, IconNames } from '@blueprintjs/icons';
-import React, { useEffect, useState } from 'react';
+import { type IconName, IconNames } from '@blueprintjs/icons';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import SessionActions from '../application/actions/SessionActions';
-import { AssessmentStatuses, AssessmentType } from '../assessment/AssessmentTypes';
+import { AssessmentStatuses, type AssessmentType } from '../assessment/AssessmentTypes';
 import Constants from '../utils/Constants';
 import { useSession } from '../utils/Hooks';
 import ProfileCard from './ProfileCard';
@@ -16,7 +16,7 @@ type OwnProps = {
   onClose: () => void;
 };
 
-const Profile: React.FC<ProfileProps> = props => {
+const Profile = (props => {
   // FIXME: `xp` is actually of type number | undefined here!
   // Fix the session type, then remove the typecast below
   const {
@@ -27,7 +27,7 @@ const Profile: React.FC<ProfileProps> = props => {
     assessmentOverviews,
     assessmentConfigurations,
     xp,
-    courseId
+    courseId,
   } = useSession();
 
   const dispatch = useDispatch();
@@ -45,7 +45,7 @@ const Profile: React.FC<ProfileProps> = props => {
   }, [isEnrolledInACourse, dispatch, xp]);
 
   const [isLoaded, setIsLoaded] = useState(
-    isLoggedIn && isEnrolledInACourse && assessmentOverviews
+    isLoggedIn && isEnrolledInACourse && assessmentOverviews,
   );
 
   useEffect(() => {
@@ -53,14 +53,14 @@ const Profile: React.FC<ProfileProps> = props => {
   }, [assessmentOverviews, isLoggedIn, isEnrolledInACourse]);
 
   // Render
-  let content: JSX.Element;
+  let content: React.ReactElement;
 
   if (!isLoaded) {
     content = <NonIdealState description="Loading..." icon={<Spinner />} />;
   } else {
     // Check if there are any closed assessments, else render a placeholder <div>
     const numClosed = assessmentOverviews!.filter(
-      item => item.status === AssessmentStatuses.submitted
+      item => item.status === AssessmentStatuses.submitted,
     ).length;
 
     const userXp = xp || 0;
@@ -109,7 +109,7 @@ const Profile: React.FC<ProfileProps> = props => {
           IconNames.LIGHTBULB,
           IconNames.PREDICTIVE_ANALYSIS,
           IconNames.COMPARISON,
-          IconNames.MANUAL
+          IconNames.MANUAL,
         ];
         if (assessmentConfigurations) {
           const index = assessmentConfigurations.findIndex(c => c.type === assessmentType);
@@ -188,6 +188,6 @@ const Profile: React.FC<ProfileProps> = props => {
       {content}
     </Drawer>
   );
-};
+}) satisfies React.FC<ProfileProps>;
 
 export default Profile;

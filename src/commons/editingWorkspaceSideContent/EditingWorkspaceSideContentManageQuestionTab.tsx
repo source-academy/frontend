@@ -1,25 +1,21 @@
 import { Button, Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { Assessment, mcqTemplate, programmingTemplate } from '../assessment/AssessmentTypes';
+import type { Assessment } from '../assessment/AssessmentTypes';
+import { mcqTemplate, programmingTemplate } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
 
-type ManageQuestionTabProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   updateAssessment: (assessment: Assessment) => void;
-};
-
-type StateProps = {
   assessment: Assessment;
   hasUnsavedChanges: boolean;
   questionId: number;
 };
 
-const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
+const ManageQuestionTab: React.FC<Props> = props => {
   const navigate = useNavigate();
   const [showSaveOverlay, setShowSaveOverlay] = useState(false);
   const [modifyAssessment, setModifyAssessment] = useState<VoidFunction>(() => {});
@@ -31,7 +27,7 @@ const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
           label="Clone"
           icon={IconNames.DOCUMENT}
           onClick={confirmSave(
-            makeQuestion(() => deepCopy(props.assessment.questions[index]), index)
+            makeQuestion(() => deepCopy(props.assessment.questions[index]), index),
           )}
         />
         <ControlButton

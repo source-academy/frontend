@@ -1,11 +1,11 @@
 import { Button, Checkbox, MenuItem, NumericInput } from '@blueprintjs/core';
-import { ItemPredicate, ItemRenderer, Select } from '@blueprintjs/select';
-import React, { useContext, useEffect, useState } from 'react';
+import { type ItemPredicate, type ItemRenderer, Select } from '@blueprintjs/select';
+import { useContext, useEffect, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
-import {
+import type {
   AchievementGoal,
   AchievementUser,
-  GoalProgress
+  GoalProgress,
 } from 'src/features/achievement/AchievementTypes';
 
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
@@ -24,7 +24,7 @@ const userRenderer: ItemRenderer<AchievementUser> = (user, { handleClick }) => (
 const userPredicate: ItemPredicate<AchievementUser> = (query, item) =>
   [item.name, item.username, item.group].reduce(
     (acc: boolean, x) => (x ? acc || x.toLowerCase().includes(query.toLowerCase()) : acc),
-    false
+    false,
   );
 
 export function updateGoalProcessed() {
@@ -51,7 +51,7 @@ const AchievementManualEditor: React.FC<Props> = props => {
               ? user1.name.localeCompare(user2.name)
               : user1.name == null
                 ? 1 // user1.name is null, user1 > user2
-                : -1 // user2.name is null, user1 < user2
+                : -1, // user2.name is null, user1 < user2
         )
       : props.users
           .filter(user => user.group === studio)
@@ -61,7 +61,7 @@ const AchievementManualEditor: React.FC<Props> = props => {
                 ? user1.name.localeCompare(user2.name)
                 : user1.name == null
                   ? 1 // user1.name is null, user1 > user2
-                  : -1 // user2.name is null, user1 < user2
+                  : -1, // user2.name is null, user1 < user2
           );
 
   useEffect(() => {
@@ -84,7 +84,7 @@ const AchievementManualEditor: React.FC<Props> = props => {
         uuid: goal.uuid,
         count: count < 0 ? 0 : Math.floor(count),
         targetCount: goal.targetCount,
-        completed: count >= goal.targetCount
+        completed: count >= goal.targetCount,
       };
       updateGoalProgress(selectedUser.courseRegId, progress);
     } else {

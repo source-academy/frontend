@@ -6,8 +6,8 @@ vi.mock('../data/toc-navigation.json', () => ({
   default: {
     '1': { next: '2' },
     '2': { next: '3', prev: '1' },
-    '3': { prev: '2' }
-  }
+    '3': { prev: '2' },
+  },
 }));
 
 describe('Table of contents helper', () => {

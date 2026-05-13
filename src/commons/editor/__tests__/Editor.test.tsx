@@ -1,9 +1,11 @@
-import { shallowRender } from 'src/commons/utils/TestUtils';
+import { Provider } from 'react-redux';
+import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
+import { renderTree } from 'src/commons/utils/TestUtils';
 
-import Editor, { EditorProps } from '../Editor';
-import { Position } from '../EditorTypes';
+import Editor, { type EditorProps } from '../Editor';
+import type { Position } from '../EditorTypes';
 
-test('Editor renders correctly', () => {
+test('Editor renders correctly', async () => {
   const props: EditorProps = {
     editorTabIndex: 0,
     breakpoints: [],
@@ -18,9 +20,13 @@ test('Editor renders correctly', () => {
     handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => {},
     handleSetSharedbConnected: () => {},
     handleUpdateHasUnsavedChanges: hasUnsavedChanges => {},
-    handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
+    handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
   };
-  const Element: React.FC = () => <Editor {...props} />;
-  const tree = shallowRender(<Element />);
+  const Element: React.FC = () => (
+    <Provider store={mockInitialStore()}>
+      <Editor {...props} />
+    </Provider>
+  );
+  const tree = await renderTree(<Element />);
   expect(tree).toMatchSnapshot();
 });

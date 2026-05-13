@@ -1,16 +1,16 @@
 import { Classes, Icon, Tab, Tabs, Tooltip } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React from 'react';
-import { SideContentProps } from 'src/commons/sideContent/SideContent';
+import { cloneElement, memo } from 'react';
+import type { SideContentProps } from 'src/commons/sideContent/SideContent';
 import { generateIconId } from 'src/commons/sideContent/SideContentHelper';
 import SideContentProvider from 'src/commons/sideContent/SideContentProvider';
 
-import { ControlBarProps } from '../../controlBar/ControlBar';
+import type { ControlBarProps } from '../../controlBar/ControlBar';
 import {
-  ChangeTabsCallback,
-  SideContentLocation,
-  SideContentTab,
-  SideContentType
+  type ChangeTabsCallback,
+  type SideContentLocation,
+  type SideContentTab,
+  SideContentType,
 } from '../../sideContent/SideContentTypes';
 import { propsAreEqual } from '../../utils/MemoizeHelper';
 import MobileControlBar from './MobileControlBar';
@@ -26,7 +26,7 @@ type MobileControlBarProps = {
 const renderTab = (tab: SideContentTab, isIOS: boolean) => {
   const iconSize = 20;
   const tabId = tab.id === undefined ? tab.label : tab.id;
-  const tabTitle: JSX.Element = (
+  const tabTitle: React.ReactElement = (
     <Tooltip
       content={tab.label}
       onOpening={() => {
@@ -71,14 +71,8 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
     const renderPanel = (tab: SideContentTab, workspaceLocation?: SideContentLocation) => {
       if (!tab.body) return;
 
-      const tabBody: JSX.Element = workspaceLocation
-        ? {
-            ...tab.body,
-            props: {
-              ...tab.body.props,
-              workspaceLocation
-            }
-          }
+      const tabBody: React.ReactElement = workspaceLocation
+        ? cloneElement(tab.body, { workspaceLocation } as any)
         : tab.body;
 
       // Render the other panels only when their corresponding tab is selected
@@ -122,4 +116,4 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
   );
 };
 
-export default React.memo(MobileSideContent, propsAreEqual);
+export default memo(MobileSideContent, propsAreEqual);

@@ -1,9 +1,9 @@
-import { createReducer, Reducer } from '@reduxjs/toolkit';
+import { createReducer, type Reducer } from '@reduxjs/toolkit';
 
 import { defaultFileSystem } from '../application/ApplicationTypes';
-import { SourceActionType } from '../utils/ActionsHelper';
+import type { SourceActionType } from '../utils/ActionsHelper';
 import { setInBrowserFileSystem } from './FileSystemActions';
-import { FileSystemState } from './FileSystemTypes';
+import type { FileSystemState } from './FileSystemTypes';
 
 export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = createReducer(
   defaultFileSystem,
@@ -11,5 +11,5 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
     builder.addCase(setInBrowserFileSystem, (state, action) => {
       state.inBrowserFileSystem = action.payload.inBrowserFileSystem;
     });
-  }
+  },
 );

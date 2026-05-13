@@ -1,7 +1,7 @@
 import { Card, Classes, Elevation, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import classNames from 'classnames';
 import Cookies from 'js-cookie';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
@@ -51,7 +51,7 @@ const LoginCallback: React.FC = () => {
       <Card elevation={Elevation.FOUR}>
         <div>
           <NonIdealState
-            description={t('Logging In')}
+            description={t($ => $['Logging In'])}
             icon={<Spinner size={SpinnerSize.LARGE} />}
           />
         </div>

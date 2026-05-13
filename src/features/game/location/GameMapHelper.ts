@@ -1,4 +1,4 @@
-import { GameLocation } from './GameMapTypes';
+import type { GameLocation } from './GameMapTypes';
 
 /**
  * Intialises an an empty location
@@ -11,10 +11,11 @@ export function createEmptyLocation(): GameLocation {
     previewKey: null,
     modes: new Set([]),
     navigation: new Set([]),
+    back: '',
     talkTopics: new Set([]),
     objects: new Set([]),
     boundingBoxes: new Set([]),
     bgmKey: '',
-    characters: new Set([])
+    characters: new Set([]),
   };
 }

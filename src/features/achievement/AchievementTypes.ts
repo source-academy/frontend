@@ -1,18 +1,18 @@
-import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 
-import { BooleanExpression } from './ExpressionTypes';
+import type { BooleanExpression } from './ExpressionTypes';
 
 export enum AchievementStatus {
   ACTIVE = 'ACTIVE', // deadline not over and not completed
   COMPLETED = 'COMPLETED', // completed, regardless of deadline
   EXPIRED = 'EXPIRED', // deadline over and not completed
-  UNRELEASED = 'UNRELEASED' // release date not reached yet
+  UNRELEASED = 'UNRELEASED', // release date not reached yet
 }
 
 export enum FilterStatus {
   ALL = 'ALL', // show all achievements
   ACTIVE = 'ACTIVE', // show active achievements only
-  COMPLETED = 'COMPLETED' // show completed achievements only
+  COMPLETED = 'COMPLETED', // show completed achievements only
 }
 
 /**
@@ -81,21 +81,21 @@ export type GoalProgress = {
 export const defaultGoalProgress = {
   count: 0,
   targetCount: 1,
-  completed: false
+  completed: false,
 };
 
 export enum GoalType {
   MANUAL = 'Manual',
   EVENT = 'Event',
   ASSESSMENT = 'Assessment (unsupported)',
-  BINARY = 'Binary (unsupported)'
+  BINARY = 'Binary (unsupported)',
 }
 
 export enum EventType {
   NONE = 'None', // This is just for the purposes of a default value
   RUN_CODE = 'Run Code',
   ERROR = 'Error',
-  RUN_TESTCASE = 'Run Testcase'
+  RUN_TESTCASE = 'Run Testcase',
 }
 
 export type GoalMeta = AssessmentMeta | BinaryMeta | ManualMeta | EventMeta;
