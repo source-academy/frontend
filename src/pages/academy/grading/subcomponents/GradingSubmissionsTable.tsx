@@ -313,7 +313,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     // We ignore the dependency on rowData purposely as we setRowData above.
     // If not, it could cause a double execution, which is a bit expensive.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requestCounter, submissions, courseId, gridRef.current?.api]);
+  }, [requestCounter, submissions, courseId]);
 
   const columns = useMemo(() => generateCols(filterMode), [filterMode]);
 
