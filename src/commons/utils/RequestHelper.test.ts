@@ -21,7 +21,7 @@ import {
 global.fetch = vi.fn();
 const fetchMock = fetch as Mock;
 
-vi.mock('../utils/notifications/NotificationsHelper', () => ({
+vi.mock('./notifications/NotificationsHelper', () => ({
   showWarningMessage: vi.fn(),
 }));
 const showWarningMessageSpy = showWarningMessage as Mock<typeof showWarningMessage>;
