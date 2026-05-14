@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import PlaygroundActions from '../PlaygroundActions';
+import PlaygroundActions from './PlaygroundActions';
 
 test('generateLzString generates correct action object', () => {
   const action = PlaygroundActions.generateLzString();

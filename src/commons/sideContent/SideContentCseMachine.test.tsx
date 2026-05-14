@@ -6,9 +6,9 @@ import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { expect, test, vi } from 'vitest';
 
-import { mockContext } from '../../mocks/ContextMocks';
-import { visualizeCseMachine } from '../../utils/JsSlangHelper';
-import { SideContentCseMachine } from '../content/SideContentCseMachine';
+import { mockContext } from '../mocks/ContextMocks';
+import { visualizeCseMachine } from '../utils/JsSlangHelper';
+import { SideContentCseMachine } from './content/SideContentCseMachine';
 
 // Mock BlueprintJS Slider due to a bug in initial state causing invalid CSS
 // to be generated: `style="left: calc(-0px + (% * nan));"`

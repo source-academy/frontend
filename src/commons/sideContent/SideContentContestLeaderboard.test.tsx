@@ -3,8 +3,8 @@ import userEvent from '@testing-library/user-event';
 import { act } from 'react';
 import { expect, test, vi } from 'vitest';
 
-import SideContentContestLeaderboard from '../content/SideContentContestLeaderboard';
-import { SideContentType } from '../SideContentTypes';
+import SideContentContestLeaderboard from './content/SideContentContestLeaderboard';
+import { SideContentType } from './SideContentTypes';
 
 const mockLeaderboardEntries = [
   {

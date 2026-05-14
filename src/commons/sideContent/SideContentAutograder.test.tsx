@@ -6,11 +6,11 @@ import {
   type AutogradingResult,
   type Testcase,
   TestcaseTypes,
-} from '../../assessment/AssessmentTypes';
-import { mockGradingAnswer } from '../../mocks/GradingMocks';
+} from '../assessment/AssessmentTypes';
+import { mockGradingAnswer } from '../mocks/GradingMocks';
 import SideContentAutograder, {
   type SideContentAutograderProps,
-} from '../content/SideContentAutograder';
+} from './content/SideContentAutograder';
 
 const mockErrors: SourceError[] = [
   {

@@ -5,8 +5,8 @@ import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { describe, expect, test, vi } from 'vitest';
 
-import { SideContentHtmlDisplay } from '../content/SideContentHtmlDisplay';
-import type { SideContentLocation } from '../SideContentTypes';
+import { SideContentHtmlDisplay } from './content/SideContentHtmlDisplay';
+import type { SideContentLocation } from './SideContentTypes';
 
 const Component = (props: React.ComponentProps<typeof SideContentHtmlDisplay>) => {
   const store = mockInitialStore();

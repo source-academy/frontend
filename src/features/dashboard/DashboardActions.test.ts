@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import DashboardActions from '../DashboardActions';
-import type { GradingSummary } from '../DashboardTypes';
+import DashboardActions from './DashboardActions';
+import type { GradingSummary } from './DashboardTypes';
 
 test('fetchGroupGradingSummary generates correct action object', () => {
   const action = DashboardActions.fetchGroupGradingSummary();

@@ -3,7 +3,7 @@ import { act } from 'react';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { expect, test, vi } from 'vitest';
 
-import SideContentContestVotingContainer from '../content/SideContentContestVotingContainer';
+import SideContentContestVotingContainer from './content/SideContentContestVotingContainer';
 
 const mockContestEntries = [
   {

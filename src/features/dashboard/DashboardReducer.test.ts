@@ -1,9 +1,9 @@
 import { expect, test } from 'vitest';
 
-import { defaultDashboard } from '../../../commons/application/ApplicationTypes';
-import DashboardActions from '../DashboardActions';
-import { DashboardReducer } from '../DashboardReducer';
-import type { DashboardState, GradingSummary } from '../DashboardTypes';
+import { defaultDashboard } from '../../commons/application/ApplicationTypes';
+import DashboardActions from './DashboardActions';
+import { DashboardReducer } from './DashboardReducer';
+import type { DashboardState, GradingSummary } from './DashboardTypes';
 
 const gradingSummaryTest1: GradingSummary = {
   cols: [
