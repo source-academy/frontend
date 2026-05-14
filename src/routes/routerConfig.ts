@@ -36,7 +36,7 @@ const NotFound = () => import('../pages/notFound/NotFound');
 const Welcome = () => import('../new_routes/welcome');
 const Academy = () => import('../new_routes/courses/[courseId]/_layout');
 const MissionControl = () => import('../new_routes/mission-control/[assessmentId]/[questionId]');
-const Features = () => import('../pages/featureFlags/FeatureFlags');
+const Features = () => import('../new_routes/features');
 
 const commonChildrenRoutes: RouteObject[] = [
   { path: 'contributors', lazy: Contributors },
