@@ -3,9 +3,7 @@ import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { createStore } from 'src/pages/createStore';
 import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from 'src/routes/routerConfig';
-import { describe, expect, test } from 'vitest';
-
-import { mockInitialStore } from '../mocks/StoreMocks';
+import { beforeEach, describe, expect, test } from 'vitest';
 
 // JSDOM does not implement window.matchMedia, so we have to mock it.
 window.matchMedia =
@@ -19,15 +17,20 @@ window.matchMedia =
   };
 
 describe('ApplicationWrapper', () => {
+  let store = createStore();
+  beforeEach(() => {
+    store = createStore();
+  });
+
   test('ApplicationWrapper renders NotFound on unknown routes (Full Academy)', async () => {
-    const routerConfig = getFullAcademyRouterConfig();
+    const routerConfig = getFullAcademyRouterConfig({
+      name: 'Bob',
+      isLoggedIn: true,
+      courseId: 1,
+    });
 
     const app = (
-      <Provider
-        store={mockInitialStore({
-          session: { name: 'Bob', courseId: 1 },
-        })}
-      >
+      <Provider store={store}>
         <RouterProvider
           router={createMemoryRouter(routerConfig, { initialEntries: ['/unknown'] })}
         />
@@ -42,7 +45,7 @@ describe('ApplicationWrapper', () => {
     const routerConfig = playgroundOnlyRouterConfig;
 
     const app = (
-      <Provider store={createStore()}>
+      <Provider store={store}>
         <RouterProvider
           router={createMemoryRouter(routerConfig, { initialEntries: ['/unknown'] })}
         />
