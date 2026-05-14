@@ -1,5 +1,6 @@
 import { runInContext } from 'js-slang/dist/';
 import createContext from 'js-slang/dist/createContext';
+import { expect, test } from 'vitest';
 
 import { Binding } from '../components/Binding';
 import { ControlItemComponent } from '../components/ControlItemComponent';

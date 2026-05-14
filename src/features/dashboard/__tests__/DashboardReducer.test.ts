@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { defaultDashboard } from '../../../commons/application/ApplicationTypes';
 import DashboardActions from '../DashboardActions';
 import { DashboardReducer } from '../DashboardReducer';

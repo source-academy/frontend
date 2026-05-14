@@ -1,5 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
+import { expect, test } from 'vitest';
 
 import {
   createDefaultWorkspace,

@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import type { Location } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTree } from 'src/commons/utils/TestUtils';
-import { vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 
 import { Component as Sicp } from '../../../new_routes/sicpjs/[section]';
 

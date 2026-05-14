@@ -1,5 +1,6 @@
 import { MemoryRouter } from 'react-router';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
+import { expect, test } from 'vitest';
 
 import SicpIndexPage from '../../subcomponents/SicpIndexPage';
 

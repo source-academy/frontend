@@ -1,3 +1,5 @@
+import { describe, expect, test } from 'vitest';
+
 import { deepFilter } from '../TestUtils';
 
 describe('deepFilter', () => {

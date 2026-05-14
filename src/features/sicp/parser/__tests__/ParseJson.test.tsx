@@ -2,7 +2,7 @@ import lzString from 'lz-string';
 import { BrowserRouter } from 'react-router';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import type { CodeSnippetProps } from 'src/pages/sicp/subcomponents/CodeSnippet';
-import { vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 
 import type { JsonType } from '../ParseJson';
 import { parseArr, ParseJsonError, parseObj, processingFunctions } from '../ParseJson';

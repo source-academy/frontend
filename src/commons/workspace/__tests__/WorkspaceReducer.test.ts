@@ -6,6 +6,7 @@ import {
   setEditorSessionId,
   setSharedbConnected,
 } from 'src/commons/collabEditing/CollabEditingActions';
+import { describe, expect, test } from 'vitest';
 
 import {
   type CodeOutput,

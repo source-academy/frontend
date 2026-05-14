@@ -1,4 +1,5 @@
 import { compressToUTF16 } from 'lz-string';
+import { describe, expect, test } from 'vitest';
 
 import { defaultState } from '../../commons/application/ApplicationTypes';
 import type { SavedState } from '../localStorage';

@@ -1,4 +1,5 @@
 import { renderTree } from 'src/commons/utils/TestUtils';
+import { describe, expect, test } from 'vitest';
 
 import SicpLatex from '../SicpLatex';
 

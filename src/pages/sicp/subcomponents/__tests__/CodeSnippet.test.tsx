@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import lzString from 'lz-string';
 import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
-import { vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 
 import CodeSnippet from '../CodeSnippet';
 

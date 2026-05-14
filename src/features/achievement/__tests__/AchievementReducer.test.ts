@@ -1,4 +1,5 @@
 import { defaultAchievement } from 'src/commons/application/ApplicationTypes';
+import { expect, test } from 'vitest';
 
 import AchievementActions from '../AchievementActions';
 import { AchievementReducer } from '../AchievementReducer';

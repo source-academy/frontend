@@ -1,5 +1,6 @@
 import Konva from 'konva';
 import * as ReactKonva from 'react-konva';
+import { expect, test } from 'vitest';
 
 import type { AnimationConfig } from '../animationComponents/base/Animatable';
 import { AnimatableTo } from '../animationComponents/base/Animatable';

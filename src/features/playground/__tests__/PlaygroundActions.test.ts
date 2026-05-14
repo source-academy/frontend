@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import PlaygroundActions from '../PlaygroundActions';
 
 test('generateLzString generates correct action object', () => {
