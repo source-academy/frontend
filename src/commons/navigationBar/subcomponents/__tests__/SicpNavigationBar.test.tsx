@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import { vi } from 'vitest';
+import { expect, test, vi } from 'vitest';
 
 import SicpNavigationBar from '../SicpNavigationBar';
 

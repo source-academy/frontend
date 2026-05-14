@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
-import { type Mock, vi } from 'vitest';
+import { expect, type Mock, test, vi } from 'vitest';
 
 import { showWarningMessage } from '../../utils/notifications/NotificationsHelper';
 import RepositoryDialog from '../RepositoryDialog';

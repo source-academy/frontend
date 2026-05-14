@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
-import { vi } from 'vitest';
+import { describe, expect, it, test, vi } from 'vitest';
 
 import { Role } from '../../application/ApplicationTypes';
 import NavigationBar from '../NavigationBar';

@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { Provider, useDispatch } from 'react-redux';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
-import { type Mock, vi } from 'vitest';
+import { beforeEach, describe, expect, type Mock, test, vi } from 'vitest';
 
 import ResearchAgreementPrompt from '../ResearchAgreementPrompt';
 

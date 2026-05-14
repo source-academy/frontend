@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
+import { describe, expect, test } from 'vitest';
 
 import NotificationBadge from '../NotificationBadge';
 import {

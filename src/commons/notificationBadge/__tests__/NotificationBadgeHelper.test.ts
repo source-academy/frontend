@@ -1,3 +1,5 @@
+import { describe, expect, test } from 'vitest';
+
 import * as NotificationHelpers from '../NotificationBadgeHelper';
 import type { Notification } from '../NotificationBadgeTypes';
 

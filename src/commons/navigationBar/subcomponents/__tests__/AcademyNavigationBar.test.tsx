@@ -2,6 +2,7 @@ import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
+import { expect, test } from 'vitest';
 
 import { Role } from '../../../application/ApplicationTypes';
 import AcademyNavigationBar from '../AcademyNavigationBar';
