@@ -140,9 +140,8 @@ function SicpLayout() {
     }
 
     const hash = location.hash;
-    const ref = refs.current[hash];
-
-    scrollRefIntoView(ref, parentRef);
+    const elem = (document.querySelector(hash) as HTMLElement | null) ?? refs.current[hash];
+    scrollRefIntoView(elem, parentRef);
   }, [loading, location.hash]);
 
   return (
