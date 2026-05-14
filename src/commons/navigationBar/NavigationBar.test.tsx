@@ -5,8 +5,8 @@ import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import { describe, expect, it, test, vi } from 'vitest';
 
-import { Role } from '../../application/ApplicationTypes';
-import NavigationBar from '../NavigationBar';
+import { Role } from '../application/ApplicationTypes';
+import NavigationBar from './NavigationBar';
 
 const renderNav = (store: any) =>
   render(

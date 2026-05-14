@@ -4,10 +4,10 @@ import type { DeepPartial } from 'src/commons/utils/TypeHelper';
 import type { Mock } from 'vitest';
 import { expect, test, vi } from 'vitest';
 
-import { getGitHubOctokitInstance } from '../../../features/github/GitHubUtils';
-import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';
+import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
+import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 
-vi.mock('../../../features/github/GitHubUtils');
+vi.mock('../../features/github/GitHubUtils');
 
 test('Test generate first level of a repo', async () => {
   const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as Mock<

@@ -8,7 +8,7 @@ import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import { expect, test, vi } from 'vitest';
 
-import Dropdown from '../Dropdown';
+import Dropdown from './Dropdown';
 
 const getMockedStore = ({
   name,

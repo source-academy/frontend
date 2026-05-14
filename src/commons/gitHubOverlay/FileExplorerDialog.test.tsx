@@ -14,11 +14,11 @@ import {
   openFileInEditor,
   performCreatingSave,
   performOverwritingSave,
-} from '../../../features/github/GitHubUtils';
-import FileExplorerDialog from '../FileExplorerDialog';
-import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';
+} from '../../features/github/GitHubUtils';
+import FileExplorerDialog from './FileExplorerDialog';
+import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 
-vi.mock('../../../features/github/GitHubUtils');
+vi.mock('../../features/github/GitHubUtils');
 
 test('Selecting close causes onSubmit to be called with empty string', async () => {
   const octokit = getOctokitInstanceMock();
