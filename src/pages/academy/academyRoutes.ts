@@ -9,7 +9,7 @@ import {
 import { Role } from 'src/commons/application/ApplicationTypes';
 import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
-import { assessmentRegExp, gradingRegExp, teamRegExp } from 'src/features/academy/AcademyTypes';
+import { assessmentRegExp } from 'src/features/academy/AcademyTypes';
 import { GuardedRoute } from 'src/routes/routeGuard';
 
 import { store } from '../createStore';
@@ -117,12 +117,11 @@ const ensureRoleOneOf = (...roles: Role[]) =>
 const staffRoutes: RouteObject = {
   middleware: [ensureRoleOneOf(Role.Staff, Role.Admin)],
   children: createRoutes({
-    [`grading/${gradingRegExp}`]: () => import('./grading/Grading'),
+    'grading/:submissionId?/:questionId?': () => import('./grading/Grading'),
     gamesimulator: () => import('./gameSimulator/GameSimulator'),
     teamformation: () => import('./teamFormation/TeamFormation'),
     'teamformation/create': () => import('./teamFormation/subcomponents/TeamFormationForm'),
-    [`teamformation/edit/${teamRegExp}`]: () =>
-      import('./teamFormation/subcomponents/TeamFormationForm'),
+    'teamformation/edit/:teamId?': () => import('./teamFormation/subcomponents/TeamFormationForm'),
     'teamformation/import': () => import('./teamFormation/subcomponents/TeamFormationImport'),
     dashboard: () => import('./dashboard/Dashboard'),
   }),
