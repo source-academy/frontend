@@ -29,7 +29,7 @@ const LoginCallback = () => import('../pages/login/LoginCallback');
 const LoginVscodeCallback = () => import('../pages/login/LoginVscodeCallback');
 const NusLogin = () => import('../pages/login/NusLogin');
 const Contributors = () => import('../pages/contributors/Contributors');
-const GitHubCallback = () => import('../pages/githubCallback/GitHubCallback');
+const GitHubCallback = () => import('../new_routes/callback/github');
 const Sicp = () => import('../pages/sicp/Sicp');
 const Playground = () => import('../pages/playground/Playground');
 const NotFound = () => import('../pages/notFound/NotFound');
