@@ -1,6 +1,6 @@
 import { Card } from '@blueprintjs/core';
-import MonacoReactEditor from '@monaco-editor/react';
-import { useCallback } from 'react';
+import MonacoReactEditor, { type OnMount } from '@monaco-editor/react';
+import { useCallback, useRef } from 'react';
 
 import type { EditorProps } from './Editor';
 import { SOURCE_MONACO_THEME } from './monaco/setupMonaco';
@@ -30,6 +30,9 @@ const getLanguage = ({ filePath, mode }: Pick<EditorProps, 'filePath' | 'mode'>)
 };
 
 const MonacoEditor: React.FC<EditorProps> = props => {
+  const handleEditorEvalRef = useRef(props.handleEditorEval);
+  handleEditorEvalRef.current = props.handleEditorEval;
+
   const handleChange = useCallback(
     (value: string | undefined, event: unknown) => {
       const newValue = value ?? '';
@@ -40,6 +43,12 @@ const MonacoEditor: React.FC<EditorProps> = props => {
     [props],
   );
 
+  const handleMount = useCallback<OnMount>((editor, monaco) => {
+    editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
+      handleEditorEvalRef.current();
+    });
+  }, []);
+
   return (
     <Card className="Editor">
       <div className="row editor-react-ace" data-testid="Editor" id="editor-react-ace">
@@ -48,6 +57,7 @@ const MonacoEditor: React.FC<EditorProps> = props => {
           height="100%"
           language={getLanguage(props)}
           onChange={handleChange}
+          onMount={handleMount}
           options={{
             fontFamily: "'Inconsolata', 'Consolas', monospace",
             fontSize: 17,
