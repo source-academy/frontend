@@ -15,7 +15,7 @@ import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSe
 import { createStore } from 'src/pages/createStore';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-import Playground, { handleHash } from '../Playground';
+import Playground, { handleHash } from './Playground';
 
 // Mock inspector
 (window as any).Inspector = vi.fn();

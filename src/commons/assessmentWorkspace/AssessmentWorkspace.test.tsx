@@ -7,8 +7,8 @@ import { assertType } from 'src/commons/utils/TypeHelper';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import { describe, expect, test, vi } from 'vitest';
 
-import { mockAssessments } from '../../mocks/AssessmentMocks';
-import AssessmentWorkspace, { type AssessmentWorkspaceProps } from '../AssessmentWorkspace';
+import { mockAssessments } from '../mocks/AssessmentMocks';
+import AssessmentWorkspace, { type AssessmentWorkspaceProps } from './AssessmentWorkspace';
 
 const defaultProps = assertType<AssessmentWorkspaceProps>()({
   assessmentId: 0,

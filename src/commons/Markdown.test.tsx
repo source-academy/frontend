@@ -1,10 +1,10 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { expect, test } from 'vitest';
 
-import { getLanguageConfig } from '../application/ApplicationTypes';
-import Markdown from '../Markdown';
-import { generateLanguageIntroduction } from '../utils/IntroductionHelper';
-import { renderTreeJson } from '../utils/TestUtils';
+import { getLanguageConfig } from './application/ApplicationTypes';
+import Markdown from './Markdown';
+import { generateLanguageIntroduction } from './utils/IntroductionHelper';
+import { renderTreeJson } from './utils/TestUtils';
 
 const mockProps = (sourceChapter: Chapter, sourceVariant: Variant) => {
   return {

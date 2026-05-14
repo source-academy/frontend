@@ -15,21 +15,21 @@ import {
   type InterpreterOutput,
   type ResultOutput,
   type RunningOutput,
-} from '../../application/ApplicationTypes';
-import { ExternalLibraryName } from '../../application/types/ExternalTypes';
-import { type Library, type Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
-import type { HighlightedLines, Position } from '../../editor/EditorTypes';
-import Constants from '../../utils/Constants';
-import { createContext } from '../../utils/JsSlangHelper';
-import WorkspaceActions from '../WorkspaceActions';
-import { WorkspaceReducer } from '../WorkspaceReducer';
+} from '../application/ApplicationTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { type Library, type Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
+import type { HighlightedLines, Position } from '../editor/EditorTypes';
+import Constants from '../utils/Constants';
+import { createContext } from '../utils/JsSlangHelper';
+import WorkspaceActions from './WorkspaceActions';
+import { WorkspaceReducer } from './WorkspaceReducer';
 import type {
   EditorTabState,
   PlaygroundWorkspaceState,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
   WorkspaceManagerState,
-} from '../WorkspaceTypes';
+} from './WorkspaceTypes';
 
 const playgroundWorkspace: WorkspaceLocation = 'playground';
 const sicpWorkspace: WorkspaceLocation = 'sicp';

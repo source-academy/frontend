@@ -6,12 +6,12 @@ import {
   createDefaultWorkspace,
   type SALanguage,
   SupportedLanguage,
-} from '../../application/ApplicationTypes';
-import { ExternalLibraryName } from '../../application/types/ExternalTypes';
-import type { Library } from '../../assessment/AssessmentTypes';
-import type { HighlightedLines } from '../../editor/EditorTypes';
-import WorkspaceActions from '../WorkspaceActions';
-import type { EditorTabState, WorkspaceLocation } from '../WorkspaceTypes';
+} from '../application/ApplicationTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import type { Library } from '../assessment/AssessmentTypes';
+import type { HighlightedLines } from '../editor/EditorTypes';
+import WorkspaceActions from './WorkspaceActions';
+import type { EditorTabState, WorkspaceLocation } from './WorkspaceTypes';
 
 const assessmentWorkspace: WorkspaceLocation = 'assessment';
 const gradingWorkspace: WorkspaceLocation = 'grading';

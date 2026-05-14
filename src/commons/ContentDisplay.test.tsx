@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import ContentDisplay, { type ContentDisplayProps } from '../ContentDisplay';
-import { renderTreeJson } from '../utils/TestUtils';
+import ContentDisplay, { type ContentDisplayProps } from './ContentDisplay';
+import { renderTreeJson } from './utils/TestUtils';
 
 const mockProps: ContentDisplayProps = {
   display: <div> Test Content </div>,
