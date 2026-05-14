@@ -4,9 +4,9 @@ import { ItalicLink } from 'src/commons/sideContent/content/SideContentCseMachin
 import Constants, { Links } from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 
-import styles from './Welcome.module.scss';
+import styles from '../pages/welcome/Welcome.module.scss';
 
-const Welcome: React.FC = () => {
+function WelcomePage() {
   const { t } = useTranslation();
   const { name } = useSession();
 
@@ -46,11 +46,8 @@ const Welcome: React.FC = () => {
       </Card>
     </div>
   );
-};
+}
 
 // react-router lazy loading
 // https://reactrouter.com/en/main/route/lazy
-export const Component = Welcome;
-Component.displayName = 'Welcome';
-
-export default Welcome;
+export const Component = WelcomePage;

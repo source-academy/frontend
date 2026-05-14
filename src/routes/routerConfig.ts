@@ -33,7 +33,7 @@ const GitHubCallback = () => import('../new_routes/callback/github');
 const Sicp = () => import('../pages/sicp/Sicp');
 const Playground = () => import('../pages/playground/Playground');
 const NotFound = () => import('../pages/notFound/NotFound');
-const Welcome = () => import('../pages/welcome/Welcome');
+const Welcome = () => import('../new_routes/welcome');
 const Academy = () => import('../pages/academy/Academy');
 const MissionControl = () => import('../pages/missionControl/MissionControl');
 const Features = () => import('../pages/featureFlags/FeatureFlags');
