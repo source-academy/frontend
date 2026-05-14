@@ -58,7 +58,7 @@ const MonacoEditor: React.FC<EditorProps> = props => {
             lineNumbersMinChars: 4,
             minimap: { enabled: false },
             readOnly: props.sessionDetails?.readOnly ?? false,
-            renderLineHighlight: 'none',
+            renderLineHighlight: 'gutter',
             scrollBeyondLastLine: false,
           }}
           theme={SOURCE_MONACO_THEME}
