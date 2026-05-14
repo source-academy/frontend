@@ -25,24 +25,24 @@ const reactRestrictedImports = [
   'SetStateAction',
   'PropsWithChildren',
   'ChangeEvent',
-  'ChangeEventHandler'
+  'ChangeEventHandler',
 ];
 
 const restrictedImports = [
   ...reactRestrictedImports.map(importName => ({
     name: 'react',
     importNames: [importName],
-    message: `Use the fully qualified name React.${importName} instead of importing ${importName} directly.`
+    message: `Use the fully qualified name React.${importName} instead of importing ${importName} directly.`,
   })),
   {
     name: 'react-redux',
     importNames: [
       // TODO: Create typed hook for useDispatch
       // "useDispatch",
-      'useSelector'
+      'useSelector',
     ],
-    message: 'Use the typed hook "useTypedSelector" instead.'
-  }
+    message: 'Use the typed hook "useTypedSelector" instead.',
+  },
 ];
 
 export default tseslint.config(
@@ -52,18 +52,18 @@ export default tseslint.config(
   // TODO: Enable when ready
   {
     plugins: {
-      'react-refresh': reactRefresh
+      'react-refresh': reactRefresh,
     },
     rules: {
-      'react-refresh/only-export-components': 'warn'
-    }
+      'react-refresh/only-export-components': 'warn',
+    },
   },
   reactHooksPlugin.configs.flat['recommended-latest'],
   {
     files: ['**/*.ts*'],
     plugins: {
       react: reactPlugin,
-      'simple-import-sort': simpleImportSort
+      'simple-import-sort': simpleImportSort,
     },
     rules: {
       'react-hooks/globals': 'warn', // TODO: Fix and delete (default is error)
@@ -93,18 +93,18 @@ export default tseslint.config(
           types: {
             'React.FunctionComponent': {
               message: 'Use React.FC instead',
-              fixWith: 'React.FC'
-            }
-          }
-        }
+              fixWith: 'React.FC',
+            },
+          },
+        },
       ],
-      'simple-import-sort/imports': 'error'
-    }
+      'simple-import-sort/imports': 'error',
+    },
   },
   {
     files: ['**/*.tsx', '**/*.ts'],
     rules: {
-      'no-restricted-imports': ['error', ...restrictedImports]
-    }
-  }
+      'no-restricted-imports': ['error', ...restrictedImports],
+    },
+  },
 );
