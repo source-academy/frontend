@@ -83,6 +83,5 @@ const sourceTheme: monaco.editor.IStandaloneThemeData = {
 };
 
 monaco.editor.defineTheme(SOURCE_MONACO_THEME, sourceTheme);
-monaco.editor.setTheme(SOURCE_MONACO_THEME);
 
 loader.config({ monaco });
