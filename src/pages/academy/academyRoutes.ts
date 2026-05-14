@@ -122,7 +122,7 @@ const commonAcademyRoutes: RouteObject[] = [
       },
     ],
   },
-  { path: notFoundPath, lazy: NotFound },
+  { path: '*', lazy: NotFound },
 ];
 
 function createRoutes(routeMap: Record<string, RouteObject['lazy']>): RouteObject[] {
