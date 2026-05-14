@@ -1,9 +1,9 @@
 // @ts-check
 
 import eslint from '@eslint/js';
-import reactPlugin from 'eslint-plugin-react';
+import react from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
+import { reactRefresh } from 'eslint-plugin-react-refresh';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import tseslint from 'typescript-eslint';
 
@@ -49,20 +49,22 @@ export default tseslint.config(
   { ignores: ['eslint.config.js', '**/*.snap'] },
   eslint.configs.recommended,
   tseslint.configs.recommended,
+  { settings: { react: { version: 'detect' } } },
+  react.configs.flat.recommended,
+  react.configs.flat['jsx-runtime'],
+  reactHooksPlugin.configs.flat['recommended-latest'],
   // TODO: Enable when ready
   {
     plugins: {
-      'react-refresh': reactRefresh,
+      'react-refresh': reactRefresh.plugin,
     },
     rules: {
       'react-refresh/only-export-components': 'warn',
     },
   },
-  reactHooksPlugin.configs.flat['recommended-latest'],
   {
     files: ['**/*.ts*'],
     plugins: {
-      react: reactPlugin,
       'simple-import-sort': simpleImportSort,
     },
     rules: {
