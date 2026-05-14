@@ -1,8 +1,6 @@
-import * as Sentry from '@sentry/react';
-import { type MiddlewareFunction, redirect, replace, type RouteObject, Routes } from 'react-router';
+import { type MiddlewareFunction, redirect, replace, type RouteObject } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
-
-import { GuardedRoute } from './routeGuard';
+import { store } from 'src/pages/createStore';
 
 /**
  * Partial migration to be compatible with react-router v6.4 data loader APIs.
@@ -79,13 +77,6 @@ export const getFullAcademyRouterConfig = ({
     return null;
   }) satisfies MiddlewareFunction;
 
-  const ensureUserAndRole = (r: RouteObject) => {
-    return new GuardedRoute(r)
-      .check(s => s.session.name !== undefined, '/login')
-      .check(s => s.session.role !== undefined, '/welcome')
-      .build();
-  };
-
   const homePageRedirect = (() => {
     if (!isLoggedIn) {
       throw redirect('/login');
@@ -154,8 +145,24 @@ export const getFullAcademyRouterConfig = ({
             },
           ],
         },
-        ensureUserAndRole({ path: 'courses/:courseId/*', lazy: Academy, children: academyRoutes }),
-        ensureUserAndRole({ path: 'playground/:playgroundCode?', lazy: Playground }),
+        {
+          middleware: [
+            () => {
+              const state = store.getState();
+              if (!state.session.name) {
+                throw redirect('/login');
+              }
+              if (state.session.role == undefined) {
+                throw redirect('/welcome');
+              }
+              return null;
+            },
+          ],
+          children: [
+            { path: 'courses/:courseId/*', lazy: Academy, children: academyRoutes },
+            { path: 'playground/:playgroundCode?', lazy: Playground },
+          ],
+        },
         { path: 'mission-control/:assessmentId?/:questionId?', lazy: MissionControl },
         ...commonChildrenRoutes,
         { path: '*', lazy: NotFound },
@@ -163,5 +170,3 @@ export const getFullAcademyRouterConfig = ({
     },
   ];
 };
-
-export const SentryRoutes = Sentry.withSentryReactRouterV7Routing(Routes);

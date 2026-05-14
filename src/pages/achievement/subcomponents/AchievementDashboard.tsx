@@ -192,4 +192,5 @@ const AchievementDashboard: React.FC = () => {
   );
 };
 
-export default AchievementDashboard;
+export const Component = AchievementDashboard;
+Component.displayName = 'AchievementDashboard';
