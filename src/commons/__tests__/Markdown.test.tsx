@@ -1,4 +1,5 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
+import { expect, test } from 'vitest';
 
 import { getLanguageConfig } from '../application/ApplicationTypes';
 import Markdown from '../Markdown';

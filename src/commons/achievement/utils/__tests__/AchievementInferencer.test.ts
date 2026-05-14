@@ -1,6 +1,7 @@
 import { mockAchievements, mockGoals } from 'src/commons/mocks/AchievementMocks';
 import type { AchievementGoal, AchievementItem } from 'src/features/achievement/AchievementTypes';
 import { AchievementStatus, GoalType } from 'src/features/achievement/AchievementTypes';
+import { describe, expect, test } from 'vitest';
 
 import AchievementInferencer from '../AchievementInferencer';
 

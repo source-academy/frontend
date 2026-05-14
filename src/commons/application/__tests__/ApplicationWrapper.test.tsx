@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { createStore } from 'src/pages/createStore';
 import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from 'src/routes/routerConfig';
+import { beforeEach, describe, expect, test } from 'vitest';
 
 // JSDOM does not implement window.matchMedia, so we have to mock it.
 window.matchMedia =
