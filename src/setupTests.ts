@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom/vitest';
 import 'src/i18n/i18n';
 
-import { vi } from 'vitest';
+import { cleanup } from '@testing-library/react';
+import { afterEach, vi } from 'vitest';
 
 // Mock ResizeObserver in tests
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -44,3 +45,9 @@ window.matchMedia =
 
 // JSDOM does not implement scrollIntoView, so we have to mock it.
 window.HTMLElement.prototype.scrollIntoView = function () {};
+
+// Needed when using RTL without Vitest globals
+// https://testing-library.com/docs/react-testing-library/setup#auto-cleanup-in-vitest
+afterEach(() => {
+  cleanup();
+});
