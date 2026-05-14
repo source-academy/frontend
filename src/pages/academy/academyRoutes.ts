@@ -15,7 +15,7 @@ import {
 const notFoundPath = 'not_found';
 
 const Assessment = () => import('../../commons/assessment/Assessment');
-const Game = () => import('./game/Game');
+const Game = () => import('../../new_routes/courses/[courseId]/game');
 const Achievement = () => import('../achievement/Achievement');
 const OverallLeaderboard = () => import('../leaderboard/subcomponents/OverallLeaderboard');
 const ContestLeaderboardWrapper = () =>
