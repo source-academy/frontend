@@ -18,7 +18,7 @@ import {
   leaderboardLoader,
 } from '../leaderboard/subcomponents/leaderboardUtils';
 
-const notFoundPath = 'not_found';
+const notFoundPath = 'not-found';
 
 const Assessment = () => import('../../commons/assessment/Assessment');
 const Game = () => import('../../new_routes/courses/[courseId]/game');
