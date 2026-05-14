@@ -8,24 +8,27 @@ const Playground = () => import('../pages/playground/Playground');
 const NotFound = () => import('../new_routes/not-found');
 const MissionControl = () => import('../new_routes/mission-control/[assessmentId]/[questionId]');
 
-const commonChildrenRoutes: RouteObject[] = [
-  { path: 'contributors', lazy: () => import('../new_routes/contributors') },
-  { path: 'callback/github', lazy: () => import('../new_routes/callback/github') },
-  {
-    path: 'sicpjs',
-    lazy: () => import('../new_routes/sicpjs/_layout'),
-    children: [{ path: ':section', lazy: () => import('../new_routes/sicpjs/[section]') }],
-  },
-  { path: 'features', lazy: () => import('../new_routes/features') },
-];
+const commonRoutes: RouteObject = {
+  lazy: RootLayout,
+  children: [
+    { path: 'contributors', lazy: () => import('../new_routes/contributors') },
+    { path: 'callback/github', lazy: () => import('../new_routes/callback/github') },
+    {
+      path: 'sicpjs',
+      lazy: () => import('../new_routes/sicpjs/_layout'),
+      children: [{ path: ':section', lazy: () => import('../new_routes/sicpjs/[section]') }],
+    },
+    { path: 'features', lazy: () => import('../new_routes/features') },
+  ],
+};
 
 export const playgroundOnlyRouterConfig: RouteObject[] = [
+  commonRoutes,
   {
     lazy: RootLayout,
     children: [
       { index: true, loader: () => replace('/playground') },
       { path: 'playground', lazy: Playground },
-      ...commonChildrenRoutes,
       { path: '*', lazy: NotFound },
     ],
   },
@@ -104,6 +107,7 @@ export const getFullAcademyRouterConfig = ({
   }) satisfies MiddlewareFunction;
 
   return [
+    commonRoutes,
     ...loginRoutes,
     {
       lazy: RootLayout,
@@ -153,7 +157,6 @@ export const getFullAcademyRouterConfig = ({
           ],
         },
         { path: 'mission-control/:assessmentId?/:questionId?', lazy: MissionControl },
-        ...commonChildrenRoutes,
         { path: '*', lazy: NotFound },
       ],
     },
