@@ -8,7 +8,7 @@ import {
 import { flagMonacoEditorEnable } from 'src/features/monaco/flagMonacoEditorEnable';
 import { vi } from 'vitest';
 
-import EditorContainer, { EditorContainerProps } from '../EditorContainer';
+import EditorContainer, { type EditorContainerProps } from '../EditorContainer';
 
 vi.mock('../MonacoEditor', () => ({
   default: (props: any) => (

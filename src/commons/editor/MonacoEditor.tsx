@@ -2,7 +2,7 @@ import { Card } from '@blueprintjs/core';
 import MonacoReactEditor from '@monaco-editor/react';
 import { useCallback } from 'react';
 
-import { EditorProps } from './Editor';
+import type { EditorProps } from './Editor';
 import { SOURCE_MONACO_THEME } from './monaco/setupMonaco';
 
 const languageByExtension: Record<string, string> = {

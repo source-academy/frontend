@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 
-import { EditorProps } from '../Editor';
+import type { EditorProps } from '../Editor';
 import MonacoEditor from '../MonacoEditor';
 
 vi.mock('monaco-editor', () => ({
