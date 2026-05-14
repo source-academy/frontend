@@ -8,14 +8,14 @@ import { useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import classes from 'src/styles/Login.module.scss';
 
-import Constants from '../../commons/utils/Constants';
+import Constants from '../commons/utils/Constants';
 
 const providers = [...Constants.otherAuthProviders.entries()].map(([id, { name }]) => ({
   id,
   name,
 }));
 
-const LoginPage: React.FC = () => {
+function LoginPage() {
   const dispatch = useDispatch();
   const handleLogin = useCallback(
     (providerId: string) => dispatch(SessionActions.login(providerId)),
@@ -50,7 +50,7 @@ const LoginPage: React.FC = () => {
       </Card>
     </div>
   );
-};
+}
 
 const LoginButton = ({
   handleClick,
@@ -75,6 +75,3 @@ const LoginButton = ({
 // react-router lazy loading
 // https://reactrouter.com/en/main/route/lazy
 export const Component = LoginPage;
-Component.displayName = 'LoginPage';
-
-export default LoginPage;

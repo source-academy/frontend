@@ -24,7 +24,7 @@ import { GuardedRoute } from './routeGuard';
 
 const Application = () => import('../commons/application/Application');
 const Login = () => import('../pages/login/Login');
-const LoginPage = () => import('../pages/login/LoginPage');
+const LoginPage = () => import('../new_routes/login');
 const LoginCallback = () => import('../pages/login/LoginCallback');
 const LoginVscodeCallback = () => import('../pages/login/LoginVscodeCallback');
 const NusLogin = () => import('../pages/login/NusLogin');
