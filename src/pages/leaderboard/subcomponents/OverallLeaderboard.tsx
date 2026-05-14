@@ -158,8 +158,6 @@ const OverallLeaderboard: React.FC = () => {
   );
 };
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = OverallLeaderboard;
 Component.displayName = 'OverallLeaderboard';
 

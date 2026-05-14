@@ -14,6 +14,4 @@ function ContributorsPage() {
   );
 }
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = ContributorsPage;

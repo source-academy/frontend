@@ -52,8 +52,6 @@ const Dashboard: React.FC = () => {
   );
 };
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = Dashboard;
 Component.displayName = 'Dashboard';
 

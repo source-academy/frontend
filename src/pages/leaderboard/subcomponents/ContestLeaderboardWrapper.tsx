@@ -14,8 +14,6 @@ const ContestLeaderboardWrapper: React.FC = () => {
   return contest ? <ContestLeaderboard type={type!} contest={contest} /> : <NotFound />;
 };
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = ContestLeaderboardWrapper;
 Component.displayName = 'ContestLeaderboardWrapper';
 

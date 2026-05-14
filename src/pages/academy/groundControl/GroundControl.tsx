@@ -264,8 +264,6 @@ const dateFilterComparator = (filterDate: Date, cellValue: string) => {
   return cellDate < filterDate ? -1 : cellDate > filterDate ? 1 : 0;
 };
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = GroundControl;
 Component.displayName = 'GroundControl';
 
