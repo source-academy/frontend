@@ -32,7 +32,7 @@ const DeleteCell: React.FC<Props> = ({ handleDeleteAssessment, data }) => {
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         title="Deleting assessment"
-        canOutsideClickClose={true}
+        canOutsideClickClose
       >
         <DialogBody>
           <p>

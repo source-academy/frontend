@@ -20,7 +20,7 @@ export const desktopOnlyTabIds: readonly SideContentType[] = [SideContentType.in
 export const makeIntroductionTabFrom = (content: string): SideContentTab => ({
   label: 'Introduction',
   iconName: IconNames.HOME,
-  body: <Markdown content={content} openLinksInNewWindow={true} />,
+  body: <Markdown content={content} openLinksInNewWindow />,
   id: SideContentType.introduction,
 });
 

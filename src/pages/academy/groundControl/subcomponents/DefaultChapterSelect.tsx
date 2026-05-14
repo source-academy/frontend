@@ -82,11 +82,11 @@ const DefaultChapterSelect: React.FC = () => {
 
   const dialog = (
     <Dialog
-      canEscapeKeyClose={true}
-      canOutsideClickClose={true}
+      canEscapeKeyClose
+      canOutsideClickClose
       className="change-default-lang-dialog"
       icon={IconNames.ERROR}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={isDialogOpen}
       onClose={handleCloseDialog}
       title="Updating default Source sublanguage"

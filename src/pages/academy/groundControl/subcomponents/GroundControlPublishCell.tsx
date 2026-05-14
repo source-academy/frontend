@@ -31,7 +31,7 @@ const PublishCell: React.FC<Props> = ({ data, handlePublishAssessment }) => {
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         title={`${isPublished ? 'Unpublish' : 'Publish'} assessment`}
-        canOutsideClickClose={true}
+        canOutsideClickClose
       >
         <DialogBody>
           <p>

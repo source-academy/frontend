@@ -94,7 +94,7 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         title={change}
-        canOutsideClickClose={true}
+        canOutsideClickClose
       >
         <DialogBody>
           <p>
