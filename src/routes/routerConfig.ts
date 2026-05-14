@@ -17,7 +17,11 @@ const MissionControl = () => import('../new_routes/mission-control/[assessmentId
 const commonChildrenRoutes: RouteObject[] = [
   { path: 'contributors', lazy: () => import('../new_routes/contributors') },
   { path: 'callback/github', lazy: () => import('../new_routes/callback/github') },
-  { path: 'sicpjs/:section?', lazy: () => import('../new_routes/sicpjs/[section]') },
+  {
+    path: 'sicpjs',
+    lazy: () => import('../new_routes/sicpjs/_layout'),
+    children: [{ path: ':section?', lazy: () => import('../new_routes/sicpjs/[section]') }],
+  },
   { path: 'features', lazy: () => import('../new_routes/features') },
 ];
 
