@@ -62,68 +62,66 @@ const homePageRedirect = (() => {
   return null;
 }) satisfies MiddlewareFunction;
 
-const getCommonAcademyRoutes = (): RouteObject[] => {
-  return [
-    {
-      index: true,
-      middleware: [
-        homePageRedirect,
-        () => {
-          throw replace(notFoundPath);
-        },
-      ],
-    },
-    {
-      path: 'game',
-      middleware: [
-        () => {
-          const state = store.getState();
-          if (!state.session.enableGame) {
-            throw redirect(notFoundPath);
-          }
-          return null;
-        },
-      ],
-      lazy: Game,
-    },
-    {
-      path: `:assessmentConfigType/${assessmentRegExp}`,
-      middleware: [checkAssessmentTypeMiddleware],
-      lazy: Assessment,
-    },
-    {
-      path: 'achievements',
-      children: [
-        { index: true, lazy: () => import('../achievement/subcomponents/AchievementDashboard') },
-        {
-          path: 'control',
-          lazy: () => import('../achievement/control/AchievementControl'),
-          middleware: [ensureRoleOneOf(Role.Staff, Role.Admin)],
-        },
-      ],
-    },
-    {
-      path: 'leaderboard',
-      loader: leaderboardLoader,
-      children: [
-        { path: 'overall', lazy: OverallLeaderboard },
-        {
-          path: 'contests/:contestId?/:leaderboardType',
-          loader: contestLeaderboardLoader,
-          lazy: ContestLeaderboardWrapper,
-        },
-      ],
-    },
-    { path: '*', lazy: NotFound },
-  ];
-};
+const commonAcademyRoutes: RouteObject[] = [
+  {
+    index: true,
+    middleware: [
+      homePageRedirect,
+      () => {
+        throw replace(notFoundPath);
+      },
+    ],
+  },
+  {
+    path: 'game',
+    middleware: [
+      () => {
+        const state = store.getState();
+        if (!state.session.enableGame) {
+          throw redirect(notFoundPath);
+        }
+        return null;
+      },
+    ],
+    lazy: Game,
+  },
+  {
+    path: `:assessmentConfigType/${assessmentRegExp}`,
+    middleware: [checkAssessmentTypeMiddleware],
+    lazy: Assessment,
+  },
+  {
+    path: 'achievements',
+    children: [
+      { index: true, lazy: () => import('../achievement/subcomponents/AchievementDashboard') },
+      {
+        path: 'control',
+        lazy: () => import('../achievement/control/AchievementControl'),
+        middleware: [ensureRoleOneOf(Role.Staff, Role.Admin)],
+      },
+    ],
+  },
+  {
+    path: 'leaderboard',
+    loader: leaderboardLoader,
+    children: [
+      { path: 'overall', lazy: OverallLeaderboard },
+      {
+        path: 'contests/:contestId?/:leaderboardType',
+        loader: contestLeaderboardLoader,
+        lazy: ContestLeaderboardWrapper,
+      },
+    ],
+  },
+  { path: '*', lazy: NotFound },
+];
 
-const createRoutes = (routeMap: Record<string, RouteObject['lazy']>): RouteObject[] => {
+function createRoutes(routeMap: Record<string, RouteObject['lazy']>): RouteObject[] {
   return Object.entries(routeMap).map(([path, lazy]) => ({ path, lazy }));
-};
+}
 
-const ensureRoleOneOf = (...roles: Role[]) =>
-  (() => {
+function ensureRoleOneOf(...roles: Role[]) {
+  return (() => {
     const state = store.getState();
     const role = state.session.role;
     if (!role || !roles.includes(role)) {
@@ -131,6 +129,7 @@ const ensureRoleOneOf = (...roles: Role[]) =>
     }
     return null;
   }) satisfies MiddlewareFunction;
+}
 
 const staffRoutes: RouteObject = {
   middleware: [ensureRoleOneOf(Role.Staff, Role.Admin)],
@@ -154,5 +153,5 @@ const adminRoutes: RouteObject = {
 };
 
 export const getAcademyRoutes = (): RouteObject[] => {
-  return [...getCommonAcademyRoutes(), staffRoutes, adminRoutes];
+  return [...commonAcademyRoutes, staffRoutes, adminRoutes];
 };
