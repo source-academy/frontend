@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { expect, test, vi } from 'vitest';
 
-import VersionHistoryPanel from '../VersionHistoryPanel';
+import VersionHistoryPanel from './VersionHistoryPanel';
 
 vi.mock('../AceDiffViewer', () => ({
   default: () => <div data-testid="ace-diff-viewer" />,

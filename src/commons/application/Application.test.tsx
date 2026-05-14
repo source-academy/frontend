@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { expect, test } from 'vitest';
 
-import Application from '../Application';
+import Application from './Application';
 
 test('Application renders correctly', () => {
   const store = mockInitialStore({

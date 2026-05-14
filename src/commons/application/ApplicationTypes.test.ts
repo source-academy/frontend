@@ -1,7 +1,7 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { describe, expect, test } from 'vitest';
 
-import { ALL_LANGUAGES, getLanguageConfig, sourceLanguages } from '../ApplicationTypes';
+import { ALL_LANGUAGES, getLanguageConfig, sourceLanguages } from './ApplicationTypes';
 
 describe('getLanguageConfig', () => {
   test('works for existing variants', () => {
