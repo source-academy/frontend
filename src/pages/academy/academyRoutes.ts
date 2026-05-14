@@ -22,7 +22,6 @@ const notFoundPath = 'not_found';
 
 const Assessment = () => import('../../commons/assessment/Assessment');
 const Game = () => import('../../new_routes/courses/[courseId]/game');
-const Achievement = () => import('../achievement/Achievement');
 const OverallLeaderboard = () => import('../leaderboard/subcomponents/OverallLeaderboard');
 const ContestLeaderboardWrapper = () =>
   import('../leaderboard/subcomponents/ContestLeaderboardWrapper');
@@ -83,7 +82,17 @@ const getCommonAcademyRoutes = (): RouteObject[] => {
       lazy: Assessment,
       loader: assessmentLoader,
     },
-    { path: 'achievements/*', lazy: Achievement },
+    {
+      path: 'achievements',
+      children: [
+        { index: true, lazy: () => import('../achievement/subcomponents/AchievementDashboard') },
+        {
+          path: 'control',
+          lazy: () => import('../achievement/control/AchievementControl'),
+          middleware: [ensureRoleOneOf(Role.Staff, Role.Admin)],
+        },
+      ],
+    },
     {
       path: 'leaderboard',
       loader: leaderboardLoader,
