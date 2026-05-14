@@ -15,7 +15,6 @@ const TeamFormationDashboard: React.FC<Props> = ({ teams }) => {
   const { group } = useSession();
   const navigate = useNavigate();
 
-  const teamData = teams;
   return (
     <Card>
       <GradingFlex
@@ -29,7 +28,7 @@ const TeamFormationDashboard: React.FC<Props> = ({ teams }) => {
           <Button onClick={() => navigate('import')}>Import Team</Button>
         </GradingFlex>
       </GradingFlex>
-      <TeamFormationTable group={group} teams={teamData} />
+      <TeamFormationTable group={group} teams={teams} />
     </Card>
   );
 };
