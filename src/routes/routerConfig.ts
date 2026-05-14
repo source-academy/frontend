@@ -32,7 +32,7 @@ const Contributors = () => import('../new_routes/contributors');
 const GitHubCallback = () => import('../new_routes/callback/github');
 const Sicp = () => import('../new_routes/sicpjs/[section]');
 const Playground = () => import('../pages/playground/Playground');
-const NotFound = () => import('../pages/notFound/NotFound');
+const NotFound = () => import('../new_routes/not-found');
 const Welcome = () => import('../new_routes/welcome');
 const Academy = () => import('../new_routes/courses/[courseId]/_layout');
 const MissionControl = () => import('../new_routes/mission-control/[assessmentId]/[questionId]');
