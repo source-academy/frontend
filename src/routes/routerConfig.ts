@@ -4,12 +4,8 @@ import { store } from 'src/pages/createStore';
 
 const RootLayout = () => import('../new_routes/_layout');
 const Login = () => import('../pages/login/Login');
-const LoginVscodeCallback = () => import('../new_routes/login/vscode_callback');
-const NusLogin = () => import('../new_routes/nus_login');
 const Playground = () => import('../pages/playground/Playground');
 const NotFound = () => import('../new_routes/not-found');
-const Welcome = () => import('../new_routes/welcome');
-const Academy = () => import('../new_routes/courses/[courseId]/_layout');
 const MissionControl = () => import('../new_routes/mission-control/[assessmentId]/[questionId]');
 
 const commonChildrenRoutes: RouteObject[] = [
@@ -78,7 +74,7 @@ export const getFullAcademyRouterConfig = ({
           throw redirect('/login');
         },
       ],
-      children: [{ path: '', lazy: NusLogin }],
+      children: [{ path: '', lazy: () => import('../new_routes/nus_login') }],
     },
     {
       lazy: RootLayout,
@@ -113,9 +109,15 @@ export const getFullAcademyRouterConfig = ({
         },
         {
           path: 'login',
-          children: [{ path: 'vscode_callback', lazy: LoginVscodeCallback }],
+          children: [
+            { path: 'vscode_callback', lazy: () => import('../new_routes/login/vscode_callback') },
+          ],
         },
-        { path: 'welcome', lazy: Welcome, middleware: [welcomeMiddleware] },
+        {
+          path: 'welcome',
+          middleware: [welcomeMiddleware],
+          lazy: () => import('../new_routes/welcome'),
+        },
         {
           path: 'courses',
           middleware: [
@@ -138,7 +140,11 @@ export const getFullAcademyRouterConfig = ({
             },
           ],
           children: [
-            { path: 'courses/:courseId/*', lazy: Academy, children: academyRoutes },
+            {
+              path: 'courses/:courseId/*',
+              lazy: () => import('../new_routes/courses/[courseId]/_layout'),
+              children: academyRoutes,
+            },
             { path: 'playground/:playgroundCode?', lazy: Playground },
           ],
         },
