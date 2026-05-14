@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/react';
-import { redirect, replace, type RouteObject, Routes } from 'react-router';
+import { type MiddlewareFunction, redirect, replace, type RouteObject, Routes } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
 
 import { GuardedRoute } from './routeGuard';
@@ -69,7 +69,7 @@ export const getFullAcademyRouterConfig = ({
   courseId?: number | null;
   academyRoutes?: RouteObject[];
 }): RouteObject[] => {
-  const welcomeLoader = () => {
+  const welcomeMiddleware = (() => {
     if (name === undefined) {
       return redirect('/login');
     }
@@ -77,7 +77,7 @@ export const getFullAcademyRouterConfig = ({
       return redirect(`/courses/${courseId}`);
     }
     return null;
-  };
+  }) satisfies MiddlewareFunction;
 
   const ensureUserAndRole = (r: RouteObject) => {
     return new GuardedRoute(r)
@@ -126,7 +126,7 @@ export const getFullAcademyRouterConfig = ({
           path: 'login',
           children: [{ path: 'vscode_callback', lazy: LoginVscodeCallback }],
         },
-        { path: 'welcome', lazy: Welcome, loader: welcomeLoader },
+        { path: 'welcome', lazy: Welcome, middleware: [welcomeMiddleware] },
         { path: 'courses', loader: () => redirect('/') },
         ensureUserAndRole({ path: 'courses/:courseId/*', lazy: Academy, children: academyRoutes }),
         ensureUserAndRole({ path: 'playground/:playgroundCode?', lazy: Playground }),
