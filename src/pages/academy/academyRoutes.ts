@@ -152,6 +152,4 @@ const adminRoutes: RouteObject = {
   }),
 };
 
-export const getAcademyRoutes = (): RouteObject[] => {
-  return [...commonAcademyRoutes, staffRoutes, adminRoutes];
-};
+export const academyRoutes: RouteObject[] = [...commonAcademyRoutes, staffRoutes, adminRoutes];

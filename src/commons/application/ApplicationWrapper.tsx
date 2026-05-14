@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router';
-import { getAcademyRoutes } from 'src/pages/academy/academyRoutes';
+import { academyRoutes } from 'src/pages/academy/academyRoutes';
 
 import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from '../../routes/routerConfig';
 import { getHealth } from '../sagas/RequestsSaga';
@@ -31,8 +31,6 @@ const ApplicationWrapper: React.FC = () => {
     }
   }, []);
 
-  const academyRoutes = useMemo(() => getAcademyRoutes(), []);
-
   const router = useMemo(() => {
     const routerConfig = Constants.playgroundOnly
       ? playgroundOnlyRouterConfig
@@ -42,7 +40,7 @@ const ApplicationWrapper: React.FC = () => {
     dispatch(updateReactRouter(r));
 
     return r;
-  }, [name, isLoggedIn, courseId, academyRoutes, dispatch]);
+  }, [name, isLoggedIn, courseId, dispatch]);
 
   if (!isApiHealthy) {
     return (
