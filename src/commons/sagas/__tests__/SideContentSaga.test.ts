@@ -10,7 +10,7 @@ import {
   SideContentType,
 } from 'src/commons/sideContent/SideContentTypes';
 import { actions } from 'src/commons/utils/ActionsHelper';
-import { type Mock, vi } from 'vitest';
+import { describe, expect, type Mock, test, vi } from 'vitest';
 
 import SideContentSaga from '../SideContentSaga';
 

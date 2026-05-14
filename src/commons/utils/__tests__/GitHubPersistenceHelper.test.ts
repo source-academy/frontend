@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import { generateOctokitInstance } from '../GitHubPersistenceHelper';
 
 test('Octokit instance is generated with input auth value', async () => {

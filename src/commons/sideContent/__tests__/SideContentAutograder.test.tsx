@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors/base';
+import { expect, test } from 'vitest';
 
 import {
   type AutogradingResult,

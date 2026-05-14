@@ -3,7 +3,7 @@ import { stringify } from 'js-slang/dist/utils/stringify';
 import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
-import { vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 
 import { SideContentHtmlDisplay } from '../content/SideContentHtmlDisplay';
 import type { SideContentLocation } from '../SideContentTypes';

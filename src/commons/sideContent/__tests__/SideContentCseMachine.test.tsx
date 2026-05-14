@@ -4,6 +4,7 @@ import { act } from 'react';
 import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
+import { expect, test, vi } from 'vitest';
 
 import { mockContext } from '../../mocks/ContextMocks';
 import { visualizeCseMachine } from '../../utils/JsSlangHelper';
