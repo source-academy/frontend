@@ -75,8 +75,8 @@ const UserConfigPanel: React.FC<Props> = props => {
         onGridReady={onGridReady}
         rowData={userCourseRegistrations}
         rowHeight={36}
-        suppressCellFocus={true}
-        suppressMovableColumns={true}
+        suppressCellFocus
+        suppressMovableColumns
         pagination
       />
     </div>

@@ -261,7 +261,7 @@ const Assessment: React.FC = () => {
     <Dialog
       className="betcha-dialog"
       icon={IconNames.ERROR}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={betchaAssessment !== null}
       onClose={setBetchaAssessmentNull}
       title="Finalise submission?"

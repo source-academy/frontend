@@ -427,7 +427,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
                   interactionKind="hover"
                   placement="bottom"
                   usePortal={popoverDepth === 0}
-                  lazy={true}
+                  lazy
                   popoverClassName="stepper-popover"
                   content={
                     <FunctionDefinitionPopoverContent
@@ -458,7 +458,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
             interactionKind="hover"
             placement="bottom"
             usePortal={popoverDepth === 0}
-            lazy={true}
+            lazy
             content={
               <FunctionDefinitionPopoverContent
                 node={node}

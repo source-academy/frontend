@@ -114,7 +114,7 @@ const DeploymentTab: React.FC<Props> = props => {
         path={path}
         processResults={removeSpaces}
         updateAssessment={props.updateAssessment}
-        useRawValue={true}
+        useRawValue
       />
     );
   };
@@ -126,7 +126,7 @@ const DeploymentTab: React.FC<Props> = props => {
         assessment={props.assessment}
         path={pathVal}
         updateAssessment={handleGlobalValueUpdate(i)}
-        useRawValue={true}
+        useRawValue
       />
     );
   };

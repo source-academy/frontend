@@ -36,7 +36,7 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
           <NotificationBadge
             className="badge"
             notificationFilter={filterNotificationsByAssessment(overview.id)}
-            large={true}
+            large
           />
           <img
             alt="Assessment"
@@ -113,7 +113,7 @@ const AssessmentOverviewCardTitle: React.FC<AssessmentOverviewCardTitleProps> = 
   makeSubmissionButton,
 }) => (
   <div className="listing-header">
-    <Text ellipsize={true}>
+    <Text ellipsize>
       <H4 className="listing-title">
         {overview.title}
         {overview.private ? (

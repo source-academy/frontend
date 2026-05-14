@@ -144,7 +144,7 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
           <Icon icon={IconNames.HELP} />
         </Tooltip>
       </Button>
-      <Collapse isOpen={showsTestcases} keepChildrenMounted={true}>
+      <Collapse isOpen={showsTestcases} keepChildrenMounted>
         {testcaseCards}
       </Collapse>
       {collapseButton(
@@ -152,7 +152,7 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
         showsResults,
         toggleResults,
       )}
-      <Collapse isOpen={showsResults} keepChildrenMounted={true}>
+      <Collapse isOpen={showsResults} keepChildrenMounted>
         {resultCards}
       </Collapse>
     </div>

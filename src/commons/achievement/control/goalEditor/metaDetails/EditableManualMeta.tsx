@@ -16,7 +16,7 @@ const EditableManualMeta: React.FC<Props> = ({ changeMeta, manualMeta }) => {
   return (
     <Tooltip content="Target Count">
       <NumericInput
-        allowNumericCharactersOnly={true}
+        allowNumericCharactersOnly
         leftIcon={IconNames.BANK_ACCOUNT}
         min={0}
         onValueChange={changeTargetCount}

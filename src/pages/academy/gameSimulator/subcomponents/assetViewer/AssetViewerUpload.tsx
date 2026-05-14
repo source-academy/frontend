@@ -46,7 +46,7 @@ const AssetViewerUpload: React.FC = () => {
       {s3AssetFolders.map(folder => (
         <MenuItem onClick={handleChangeUploadFolder} id={folder} key={folder} text={folder} />
       ))}
-      <MenuItem onClick={showSpecifyFolder} text="Custom Folder"></MenuItem>
+      <MenuItem onClick={showSpecifyFolder} text="Custom Folder" />
     </Menu>
   );
   return (

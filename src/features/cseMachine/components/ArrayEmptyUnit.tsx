@@ -36,7 +36,7 @@ export class ArrayEmptyUnit extends Visible {
         width={this.width()}
         height={this.height()}
         fill={defaultBackgroundColor()}
-        fillEnabled={true}
+        fillEnabled
         stroke={strokeColor}
         listening={false}
         ref={this.ref}

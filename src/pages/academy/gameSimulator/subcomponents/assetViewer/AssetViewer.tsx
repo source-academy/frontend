@@ -61,7 +61,7 @@ const AssetViewer: React.FC = () => {
   return (
     <>
       <h3>View / Upload Assets</h3>
-      <Tabs animate={true} id="assetviewer" renderActiveTabPanelOnly={true}>
+      <Tabs animate id="assetviewer" renderActiveTabPanelOnly>
         <Tab
           id="view"
           title="View Assets"

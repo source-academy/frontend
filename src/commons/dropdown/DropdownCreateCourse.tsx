@@ -93,7 +93,7 @@ const DropdownCreateCourse = (props => {
     <Dialog
       className="create-course"
       icon={IconNames.ADD}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       canOutsideClickClose={false}
       isOpen={props.isOpen}
       onClose={props.onClose}
@@ -156,7 +156,7 @@ const DropdownCreateCourse = (props => {
             <TextArea
               id="moduleHelpText"
               className="input-textarea"
-              fill={true}
+              fill
               value={courseConfig.moduleHelpText}
               onChange={e =>
                 setCourseConfig({

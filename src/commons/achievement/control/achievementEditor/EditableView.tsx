@@ -32,21 +32,21 @@ const EditableView: React.FC<Props> = ({ changeView, view }) => {
         <div style={{ padding: '0 0.5em' }}>
           <h3>Cover Image</h3>
           <EditableText
-            multiline={true}
+            multiline
             onChange={changeCoverImage}
             placeholder="Enter cover image URL here"
             value={coverImage}
           />
           <h3>Description</h3>
           <EditableText
-            multiline={true}
+            multiline
             onChange={changeDescription}
             placeholder="Enter description here"
             value={description}
           />
           <h3>Completion Text</h3>
           <EditableText
-            multiline={true}
+            multiline
             onChange={changeCompletionText}
             placeholder="Enter completion text here"
             value={completionText}

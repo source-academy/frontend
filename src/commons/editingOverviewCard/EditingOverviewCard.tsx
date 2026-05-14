@@ -72,7 +72,7 @@ export const EditingOverviewCard: React.FC<Props> = props => {
 
   const makeEditingOverviewTextarea = (field: keyof AssessmentOverview) => (
     <Textarea
-      autoFocus={true}
+      autoFocus
       className={'editing-textarea'}
       onChange={handleEditOverview}
       onBlur={saveEditOverview(field)}
@@ -140,7 +140,7 @@ export const EditingOverviewCard: React.FC<Props> = props => {
 
   const makeEditingOverviewCardTitle = (overview: AssessmentOverview, title: string) => (
     <div className="row listing-title">
-      <Text ellipsize={true} className={'col-xs-10'}>
+      <Text ellipsize className={'col-xs-10'}>
         <H4 onClick={toggleEditField('title')}>
           {editingOverviewField === 'title'
             ? makeEditingOverviewTextarea('title')
@@ -171,7 +171,7 @@ export const EditingOverviewCard: React.FC<Props> = props => {
       canOutsideClickClose={false}
       className="assessment-reset"
       icon={IconNames.WRENCH}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={showOptionsOverlay}
       onClose={toggleOptionsOverlay}
       title="Other options"

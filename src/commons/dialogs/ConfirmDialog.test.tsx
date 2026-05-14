@@ -23,7 +23,7 @@ const CHOICES: ConfirmDialogProps<string>['choices'] = [
 const RESPONSE_FN = vi.fn((...args) => console.log(args));
 
 const element = (
-  <ConfirmDialog choices={CHOICES} onResponse={RESPONSE_FN} contents={CONTENTS} isOpen={true} />
+  <ConfirmDialog choices={CHOICES} onResponse={RESPONSE_FN} contents={CONTENTS} isOpen />
 );
 
 const makeEscapeEvent = () =>

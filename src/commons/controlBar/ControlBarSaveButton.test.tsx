@@ -9,12 +9,12 @@ test('renders save button', () => {
 });
 
 test('renders save button with unsaved changes', () => {
-  render(<ControlButtonSaveButton key="save" hasUnsavedChanges={true} onClickSave={vi.fn()} />);
+  render(<ControlButtonSaveButton key="save" hasUnsavedChanges onClickSave={vi.fn()} />);
   expect(screen.getByText('Save')).toBeDefined();
 });
 
 test('renders disabled save button', () => {
-  render(<ControlButtonSaveButton key="save" isDisabled={true} onClickSave={vi.fn()} />);
+  render(<ControlButtonSaveButton key="save" isDisabled onClickSave={vi.fn()} />);
   const button = screen.getByRole('button');
   expect(button).toBeDefined();
 });

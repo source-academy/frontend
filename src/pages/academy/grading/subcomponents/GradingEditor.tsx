@@ -330,7 +330,7 @@ const GradingEditor: React.FC<Props> = props => {
                 size="small"
                 variant="minimal"
                 onClick={onClickReautogradeAnswer}
-              ></Button>
+               />
             </div>
           </div>
           <div className="xp-adjustment">
@@ -341,7 +341,7 @@ const GradingEditor: React.FC<Props> = props => {
                 onValueChange={onXpAdjustmentInputChange}
                 value={xpAdjustmentInput || ''}
                 buttonPosition={Position.RIGHT}
-                fill={true}
+                fill
                 placeholder={xpPlaceholder}
                 intent={totalXp < 0 || totalXp > props.maxXp ? Intent.DANGER : Intent.NONE}
                 min={0 - props.initialXp}

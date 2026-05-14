@@ -45,7 +45,7 @@ const MCQQuestionTemplateTab: React.FC<Props> = props => {
       return (
         <TextAreaContent
           assessment={props.assessment}
-          isNumber={true}
+          isNumber
           path={path}
           processResults={limitNumberRange(range[0], range[1])}
           updateAssessment={props.updateAssessment}

@@ -41,8 +41,8 @@ const NotificationBadge: React.FC<Props> = props => {
         <Tag
           className="row badge-tag"
           key={`${notification.id}`}
-          minimal={true}
-          multiline={true}
+          minimal
+          multiline
           onRemove={onRemove}
         >
           {makeNotificationMessage(notification.type)}
@@ -60,7 +60,7 @@ const NotificationBadge: React.FC<Props> = props => {
         placement={Position.RIGHT}
         hoverOpenDelay={50}
         hoverCloseDelay={50}
-        lazy={true}
+        lazy
       >
         {notificationIcon}
       </Popover>

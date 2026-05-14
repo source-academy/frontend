@@ -19,7 +19,7 @@ export class ArrayTreeNode extends DrawableTreeNode {
     let color = '';
     color = colorIndex === -1 ? 'black' : this.Colors[colorIndex % this.Colors.length];
     const arrayProps = { nodes: this.children ?? [], x, y, color };
-    const arrayDrawable = <ArrayDrawable {...arrayProps}></ArrayDrawable>;
+    const arrayDrawable = <ArrayDrawable {...arrayProps} />;
 
     this._drawable = (
       <Group key={x + ', ' + y}>
@@ -39,7 +39,7 @@ export class ArrayTreeNode extends DrawableTreeNode {
                     : y,
               },
             }}
-          ></ArrowDrawable>
+           />
         )}
       </Group>
     );

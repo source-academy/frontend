@@ -338,10 +338,10 @@ const AssessmentConfigPanel: WithImperativeApi<
           onGridReady={onGridReady}
           rowData={tableState.current}
           rowHeight={36}
-          rowDragManaged={true}
-          suppressCellFocus={true}
-          suppressMovableColumns={true}
-          suppressPaginationPanel={true}
+          rowDragManaged
+          suppressCellFocus
+          suppressMovableColumns
+          suppressPaginationPanel
           onRowDragMove={onRowDragMove}
           onRowDragLeave={onRowDragLeaveOrEnd}
           onRowDragEnd={onRowDragLeaveOrEnd}

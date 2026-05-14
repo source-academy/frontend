@@ -455,7 +455,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                     }}
                     icon="eraser"
                     disabled={this.state.clearDeadFrames || !this.state.visualization}
-                  ></AnchorButton>
+                   />
                 </Tooltip>
                 <Tooltip content="Print" compact>
                   <AnchorButton
@@ -493,7 +493,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
             <Output output={slice} key={index} usingSubst={false} isHtml={false} />
           ))
         ) : (
-          <div></div>
+          <div />
         )}
         {this.state.visualization ? (
           this.state.stepLimitExceeded ? (
@@ -513,7 +513,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
           <CseMachineDefaultText isJava={this.isJava()} />
         )}
         <ButtonGroup
-          vertical={true}
+          vertical
           style={{ position: 'absolute', bottom: '20px', right: '20px' }}
         >
           <Button

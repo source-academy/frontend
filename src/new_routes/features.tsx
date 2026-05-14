@@ -138,7 +138,7 @@ function FeatureFlagSection({
       collapsible
       collapseProps={collapseProps}
       rightElement={
-        isModified ? <Button icon={IconNames.RESET} onClick={onReset}></Button> : undefined
+        isModified ? <Button icon={IconNames.RESET} onClick={onReset} /> : undefined
       }
       icon={icon}
     >

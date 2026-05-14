@@ -199,7 +199,7 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
         <TextArea
           id="pixelbotRoutingPrompt"
           className={classes['prompt-textarea']}
-          fill={true}
+          fill
           readOnly={!editingRouting}
           value={editingRouting ? routingDraft : routingDisplay}
           onChange={e => setRoutingDraft(e.target.value)}
@@ -228,8 +228,8 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
           <TextArea
             id="pixelbotDocumentMap"
             className={classes['document-map-textarea']}
-            fill={true}
-            readOnly={true}
+            fill
+            readOnly
             value={documentMap}
           />
         )}
@@ -254,7 +254,7 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
         <TextArea
           id="pixelbotAnswerPrompt"
           className={classes['prompt-textarea']}
-          fill={true}
+          fill
           readOnly={!editingAnswer}
           value={editingAnswer ? answerDraft : answerDisplay}
           onChange={e => setAnswerDraft(e.target.value)}

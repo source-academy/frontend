@@ -178,7 +178,7 @@ const Profile = (props => {
     <Drawer
       className="profile"
       icon={IconNames.USER}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={props.isOpen}
       onClose={props.onClose}
       title="User Profile"

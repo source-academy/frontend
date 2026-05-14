@@ -47,13 +47,13 @@ const EditableGoalUuids: React.FC<Props> = ({ changeGoalUuids, goalUuids }) => {
     <MultiSelect<AchievementGoal>
       itemRenderer={goalRenderer}
       items={[...availableGoals].map(uuid => inferencer.getGoal(uuid))}
-      noResults={<MenuItem disabled={true} text="No available goal" />}
+      noResults={<MenuItem disabled text="No available goal" />}
       onItemSelect={goal => selectGoal(goal.uuid)}
       selectedItems={[...selectedGoals].map(uuid => inferencer.getGoal(uuid))}
       tagInputProps={{ onRemove: text => removeGoal(getUuid(text!.toString())) }}
       tagRenderer={goal => goal.text}
       itemPredicate={goalPredicate}
-      resetOnSelect={true}
+      resetOnSelect
     />
   );
 };

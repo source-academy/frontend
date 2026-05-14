@@ -56,13 +56,13 @@ const EditablePrerequisiteUuids: React.FC<Props> = ({
     <MultiSelect<AchievementItem>
       itemRenderer={prerequisiteRenderer}
       items={[...availablePrereqs].map(uuid => inferencer.getAchievement(uuid))}
-      noResults={<MenuItem disabled={true} text="No available achievement" />}
+      noResults={<MenuItem disabled text="No available achievement" />}
       onItemSelect={achievement => selectPrereq(achievement.uuid)}
       selectedItems={[...selectedPrereqs].map(uuid => inferencer.getAchievement(uuid))}
       tagInputProps={{ onRemove: title => removePrereq(getUuid(title!.toString())) }}
       tagRenderer={achievement => achievement.title}
       itemPredicate={prerequisitePredicate}
-      resetOnSelect={true}
+      resetOnSelect
     />
   );
 };

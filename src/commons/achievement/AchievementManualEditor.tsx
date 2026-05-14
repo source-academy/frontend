@@ -100,12 +100,12 @@ const AchievementManualEditor: React.FC<Props> = props => {
       <div className="editor-section">
         <h3>User: </h3>
         <Select<AchievementUser>
-          filterable={true}
+          filterable
           items={users}
           itemRenderer={userRenderer}
           itemPredicate={userPredicate}
           onItemSelect={changeSelectedUser}
-          noResults={<MenuItem disabled={true} text="No matching user" />}
+          noResults={<MenuItem disabled text="No matching user" />}
         >
           <Button
             variant="outlined"
@@ -118,12 +118,12 @@ const AchievementManualEditor: React.FC<Props> = props => {
       <div className="editor-section">
         <h3>Goal: </h3>
         <Select<AchievementGoal>
-          filterable={true}
+          filterable
           items={manualAchievements}
           itemRenderer={goalRenderer}
           itemPredicate={goalPredicate}
           onItemSelect={changeGoal}
-          noResults={<MenuItem disabled={true} text="No matching goal" />}
+          noResults={<MenuItem disabled text="No matching goal" />}
         >
           <Button variant="outlined" text={goal ? goal.text : 'No Goal Selected'} color="White" />
         </Select>
@@ -134,7 +134,7 @@ const AchievementManualEditor: React.FC<Props> = props => {
         <NumericInput
           value={count}
           min={0}
-          allowNumericCharactersOnly={true}
+          allowNumericCharactersOnly
           minorStepSize={null}
           placeholder="Count"
           onValueChange={changeCount}

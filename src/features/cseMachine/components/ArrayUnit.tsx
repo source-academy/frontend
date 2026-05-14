@@ -130,7 +130,7 @@ export class ArrayUnit extends Visible {
           fill={defaultBackgroundColor()}
           listening={false}
           hitStrokeWidth={Config.DataHitStrokeWidth}
-          fillEnabled={true}
+          fillEnabled
           cornerRadius={cornerRadius}
           forwardRef={this.ref}
         />

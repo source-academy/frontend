@@ -32,7 +32,7 @@ const EditableTime: React.FC<Props> = ({ type, time, changeTime }) => {
         }}
         title={`${type}`}
       >
-        <TimePicker onChange={changeTime} showArrowButtons={true} value={time} />
+        <TimePicker onChange={changeTime} showArrowButtons value={time} />
         <Button onClick={() => changeTime(undefined)} text={`Remove ${type}`} />
       </Dialog>
     </>

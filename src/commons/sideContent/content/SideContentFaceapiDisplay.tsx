@@ -53,7 +53,7 @@ const SideContentFaceapiDisplay: React.FC = () => {
         <video
           id="video"
           style={{ position: 'absolute' }}
-          autoPlay={true}
+          autoPlay
           width={333}
           height={250}
         />

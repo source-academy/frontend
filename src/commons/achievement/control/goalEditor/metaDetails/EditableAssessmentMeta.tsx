@@ -21,7 +21,7 @@ const EditableAssessmentMeta: React.FC<Props> = ({ assessmentMeta, changeMeta })
     <>
       <Tooltip content="Assessment Number">
         <NumericInput
-          allowNumericCharactersOnly={true}
+          allowNumericCharactersOnly
           onValueChange={changeAssessmentNumber}
           placeholder="Enter assessment number here"
           value={assessmentNumber}
@@ -29,7 +29,7 @@ const EditableAssessmentMeta: React.FC<Props> = ({ assessmentMeta, changeMeta })
       </Tooltip>
       <Tooltip content="Required Completion Percentage">
         <NumericInput
-          allowNumericCharactersOnly={true}
+          allowNumericCharactersOnly
           max={100}
           min={0}
           onValueChange={changeRequiredCompletion}

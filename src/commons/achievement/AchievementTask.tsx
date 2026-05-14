@@ -82,7 +82,7 @@ const AchievementTask: React.FC<Props> = ({ uuid, filterStatus, focusState }) =>
             shouldRender={isInFilter(uuid)}
             toggleDropdown={toggleDropdown}
           />
-          <Collapse isOpen={isDropdownOpen} keepChildrenMounted={true}>
+          <Collapse isOpen={isDropdownOpen} keepChildrenMounted>
             <div className="prerequisite-container">
               {prerequisiteUuids.map(prerequisiteUuid => (
                 <div className="prerequisite" key={prerequisiteUuid}>
@@ -92,7 +92,7 @@ const AchievementTask: React.FC<Props> = ({ uuid, filterStatus, focusState }) =>
                       borderBottom: `1px solid ${taskColor}`,
                       borderLeft: `1px solid ${taskColor}`,
                     }}
-                  ></div>
+                   />
                   <AchievementCard
                     uuid={prerequisiteUuid}
                     focusState={focusState}

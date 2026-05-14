@@ -35,8 +35,8 @@ const Dashboard: React.FC = () => {
           defaultColDef={defaultColumnDefs}
           rowData={gradingSummary.rows}
           rowHeight={30}
-          suppressCellFocus={true}
-          suppressMovableColumns={true}
+          suppressCellFocus
+          suppressMovableColumns
         />
       </div>
     </div>

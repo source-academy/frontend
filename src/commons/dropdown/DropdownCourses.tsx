@@ -29,7 +29,7 @@ const DropdownCourses = (({ isOpen, onClose, courses, courseId }) => {
   return (
     <Dialog
       icon={IconNames.PROPERTIES}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={isOpen}
       onClose={onClose}
       title="My Courses"

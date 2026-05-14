@@ -996,7 +996,7 @@ It is safe to close this window.`}
     <Dialog
       className="assessment-reset"
       icon={IconNames.ERROR}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={showResetTemplateOverlay}
       onClose={closeOverlay}
       title="Confirmation: Reset editor?"

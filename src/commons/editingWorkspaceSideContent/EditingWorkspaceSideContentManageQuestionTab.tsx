@@ -112,7 +112,7 @@ const ManageQuestionTab: React.FC<Props> = props => {
     <Dialog
       className="assessment-reset"
       icon={IconNames.ERROR}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={showSaveOverlay}
       title="Confirmation: Save unsaved changes?"
     >

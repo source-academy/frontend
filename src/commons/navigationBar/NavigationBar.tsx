@@ -358,7 +358,7 @@ export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
       {props.hasNotifications && (
         <NotificationBadge
           notificationFilter={filterNotificationsByType(props.text)}
-          disableHover={true}
+          disableHover
         />
       )}
     </NavLink>
@@ -387,7 +387,7 @@ const MobileNavLink: React.FC<
       {props.hasNotifications && (
         <NotificationBadge
           notificationFilter={filterNotificationsByType(props.text)}
-          disableHover={true}
+          disableHover
         />
       )}
     </NavLink>

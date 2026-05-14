@@ -743,7 +743,7 @@ export class Layout {
                     y={0}
                     width={Layout.width()}
                     height={Layout.height()}
-                    fillEnabled={true}
+                    fillEnabled
                     strokeEnabled={false}
                     key={Layout.key++}
                     listening={false}

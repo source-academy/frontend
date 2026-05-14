@@ -82,7 +82,7 @@ const EditableEventMeta: React.FC<Props> = ({ changeMeta, eventMeta }) => {
       </Tooltip>
       <Tooltip content="Target Count">
         <NumericInput
-          allowNumericCharactersOnly={true}
+          allowNumericCharactersOnly
           leftIcon={IconNames.LOCATE}
           min={0}
           onValueChange={changeTargetCount}

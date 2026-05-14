@@ -33,7 +33,7 @@ function LoginPage() {
           </H4>
         </div>
         <div>
-          <ButtonGroup fill={true} vertical={true}>
+          <ButtonGroup fill vertical>
             {Constants.hasNusAuthProviders && (
               <LoginButton
                 handleClick={() => navigate('/nus_login')}
