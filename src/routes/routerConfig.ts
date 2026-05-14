@@ -71,10 +71,10 @@ export const getFullAcademyRouterConfig = ({
 }): RouteObject[] => {
   const welcomeMiddleware = (() => {
     if (name === undefined) {
-      return redirect('/login');
+      throw redirect('/login');
     }
     if (courseId !== null && courseId !== undefined) {
-      return redirect(`/courses/${courseId}`);
+      throw redirect(`/courses/${courseId}`);
     }
     return null;
   }) satisfies MiddlewareFunction;
@@ -86,21 +86,28 @@ export const getFullAcademyRouterConfig = ({
       .build();
   };
 
-  const homePageRedirect = () => {
+  const homePageRedirect = (() => {
     if (!isLoggedIn) {
-      return redirect('/login');
+      throw redirect('/login');
     }
     if (courseId === null) {
-      return redirect('/welcome');
+      throw redirect('/welcome');
     }
     return null;
-  };
+  }) satisfies MiddlewareFunction;
 
   return [
     {
       path: 'nus_login',
       lazy: Login,
-      loader: () => (Constants.hasNusAuthProviders ? null : redirect('/login')),
+      middleware: [
+        () => {
+          if (Constants.hasNusAuthProviders) {
+            return null;
+          }
+          throw redirect('/login');
+        },
+      ],
       children: [{ path: '', lazy: NusLogin }],
     },
     {
@@ -109,12 +116,24 @@ export const getFullAcademyRouterConfig = ({
       children: [
         {
           index: true,
-          loader: () => homePageRedirect() || replace(`/courses/${courseId}`),
+          middleware: [
+            homePageRedirect,
+            () => {
+              throw replace(`/courses/${courseId}`);
+            },
+          ],
         },
         {
           path: 'login',
           lazy: Login,
-          loader: () => (Constants.hasOtherAuthProviders ? null : redirect('/nus_login')),
+          middleware: [
+            () => {
+              if (Constants.hasOtherAuthProviders) {
+                return null;
+              }
+              throw redirect('/nus_login');
+            },
+          ],
           children: [{ path: '', lazy: LoginPage }],
         },
         {
@@ -127,7 +146,14 @@ export const getFullAcademyRouterConfig = ({
           children: [{ path: 'vscode_callback', lazy: LoginVscodeCallback }],
         },
         { path: 'welcome', lazy: Welcome, middleware: [welcomeMiddleware] },
-        { path: 'courses', loader: () => redirect('/') },
+        {
+          path: 'courses',
+          middleware: [
+            () => {
+              throw redirect('/');
+            },
+          ],
+        },
         ensureUserAndRole({ path: 'courses/:courseId/*', lazy: Academy, children: academyRoutes }),
         ensureUserAndRole({ path: 'playground/:playgroundCode?', lazy: Playground }),
         { path: 'mission-control/:assessmentId?/:questionId?', lazy: MissionControl },
