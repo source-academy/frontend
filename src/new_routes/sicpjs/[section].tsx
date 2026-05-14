@@ -21,8 +21,8 @@ import {
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
-import Chatbot from './subcomponents/chatbot/Chatbot';
-import SicpIndexPage from './subcomponents/SicpIndexPage';
+import Chatbot from '../../pages/sicp/subcomponents/chatbot/Chatbot';
+import SicpIndexPage from '../../pages/sicp/subcomponents/SicpIndexPage';
 
 const baseUrl = Constants.sicpBackendUrl + 'json/';
 const extension = '.json';
@@ -35,7 +35,7 @@ export const CodeSnippetContext = createContext({
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
-const Sicp: React.FC = () => {
+function SicpPage() {
   const [data, setData] = useState(<></>);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState('0');
@@ -215,11 +215,8 @@ const Sicp: React.FC = () => {
       )}
     </div>
   );
-};
+}
 
 // react-router lazy loading
 // https://reactrouter.com/en/main/route/lazy
-export const Component = Sicp;
-Component.displayName = 'Sicp';
-
-export default Sicp;
+export const Component = SicpPage;
