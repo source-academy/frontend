@@ -455,7 +455,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                     }}
                     icon="eraser"
                     disabled={this.state.clearDeadFrames || !this.state.visualization}
-                   />
+                  />
                 </Tooltip>
                 <Tooltip content="Print" compact>
                   <AnchorButton
@@ -512,10 +512,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
         ) : (
           <CseMachineDefaultText isJava={this.isJava()} />
         )}
-        <ButtonGroup
-          vertical
-          style={{ position: 'absolute', bottom: '20px', right: '20px' }}
-        >
+        <ButtonGroup vertical style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
           <Button
             icon="plus"
             disabled={!this.state.visualization}
