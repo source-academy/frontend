@@ -27,7 +27,7 @@ const NotificationBadge: React.FC<Props> = props => {
   }
 
   const notificationIcon = (
-    <Tag intent={Intent.DANGER} round={true} large={props.large} data-testid="NotificationBadge">
+    <Tag intent={Intent.DANGER} round large={props.large} data-testid="NotificationBadge">
       {notifications.length}
     </Tag>
   );
