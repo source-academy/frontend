@@ -5,7 +5,7 @@ import { type Mock, vi } from 'vitest';
 
 import Constants from '../../../commons/utils/Constants';
 import { exchangeAccessCode } from '../../../features/github/GitHubUtils';
-import GitHubCallback from '../GitHubCallback';
+import { Component as GitHubCallback } from '../../../new_routes/callback/github';
 
 function renderWithLocation(element: React.ReactElement, location: string) {
   return render(

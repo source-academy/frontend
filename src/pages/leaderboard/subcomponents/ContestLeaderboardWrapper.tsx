@@ -1,7 +1,7 @@
 import { useParams } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
-import NotFound from '../../notFound/NotFound';
+import { Component as NotFound } from '../../../new_routes/not-found';
 import ContestLeaderboard from './ContestLeaderboard';
 
 const ContestLeaderboardWrapper: React.FC = () => {

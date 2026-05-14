@@ -20,7 +20,7 @@ const Achievement = () => import('../achievement/Achievement');
 const OverallLeaderboard = () => import('../leaderboard/subcomponents/OverallLeaderboard');
 const ContestLeaderboardWrapper = () =>
   import('../leaderboard/subcomponents/ContestLeaderboardWrapper');
-const NotFound = () => import('../notFound/NotFound');
+const NotFound = () => import('../../new_routes/not-found');
 
 // Memoized for efficiency. Relies on immutability of Redux store to ensure
 // that `assessmentConfigurations` is not mutated, thereby ensuring correct
