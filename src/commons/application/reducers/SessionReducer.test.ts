@@ -1,19 +1,19 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { expect, test, vi } from 'vitest';
 
-import type { GradingOverview, GradingQuery } from '../../../../features/grading/GradingTypes';
+import type { GradingOverview, GradingQuery } from '../../../features/grading/GradingTypes';
 import {
   type Assessment,
   type AssessmentOverview,
   AssessmentStatuses,
   ProgressStatuses,
-} from '../../../assessment/AssessmentTypes';
-import type { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
-import CommonsActions from '../../actions/CommonsActions';
-import SessionActions from '../../actions/SessionActions';
-import { defaultSession, type GameState, Role, type Story } from '../../ApplicationTypes';
-import type { SessionState } from '../../types/SessionTypes';
-import { SessionsReducer } from '../SessionsReducer';
+} from '../../assessment/AssessmentTypes';
+import type { Notification } from '../../notificationBadge/NotificationBadgeTypes';
+import CommonsActions from '../actions/CommonsActions';
+import SessionActions from '../actions/SessionActions';
+import { defaultSession, type GameState, Role, type Story } from '../ApplicationTypes';
+import type { SessionState } from '../types/SessionTypes';
+import { SessionsReducer } from './SessionsReducer';
 
 test('LOG_OUT works correctly on default session', () => {
   const action = {

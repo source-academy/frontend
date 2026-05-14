@@ -3,7 +3,7 @@ import type { AchievementGoal, AchievementItem } from 'src/features/achievement/
 import { AchievementStatus, GoalType } from 'src/features/achievement/AchievementTypes';
 import { describe, expect, test } from 'vitest';
 
-import AchievementInferencer from '../AchievementInferencer';
+import AchievementInferencer from './AchievementInferencer';
 
 // NOTE: changed to not raise errors due to id changing to uuid. Some tests likely will not work.
 // Especially those that depend on the sorting of the achievements. These have been commented out.

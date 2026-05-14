@@ -7,20 +7,20 @@ import {
 import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { expect, test, vi } from 'vitest';
 
-import type { GradingOverviews, GradingQuery } from '../../../../features/grading/GradingTypes';
-import { ColumnFields } from '../../../../features/grading/GradingTypes';
-import type { TeamFormationOverview } from '../../../../features/teamFormation/TeamFormationTypes';
+import type { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
+import { ColumnFields } from '../../../features/grading/GradingTypes';
+import type { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
 import {
   type Assessment,
   type AssessmentConfiguration,
   type AssessmentOverview,
   AssessmentStatuses,
   ProgressStatuses,
-} from '../../../assessment/AssessmentTypes';
-import type { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
-import { type GameState, Role, type Story } from '../../ApplicationTypes';
-import type { User } from '../../types/SessionTypes';
-import SessionActions from '../SessionActions';
+} from '../../assessment/AssessmentTypes';
+import type { Notification } from '../../notificationBadge/NotificationBadgeTypes';
+import { type GameState, Role, type Story } from '../ApplicationTypes';
+import type { User } from '../types/SessionTypes';
+import SessionActions from './SessionActions';
 
 test('acknowledgeNotifications generates correct action object', () => {
   const action = SessionActions.acknowledgeNotifications();

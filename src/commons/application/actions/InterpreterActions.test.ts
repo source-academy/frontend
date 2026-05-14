@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
-import InterpreterActions from '../InterpreterActions';
+import type { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
+import InterpreterActions from './InterpreterActions';
 
 const assessmentWorkspace: WorkspaceLocation = 'assessment';
 const gradingWorkspace: WorkspaceLocation = 'grading';

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import CommonsActions from '../CommonsActions';
+import CommonsActions from './CommonsActions';
 
 test('logOut generates correct action object', () => {
   const action = CommonsActions.logOut();
