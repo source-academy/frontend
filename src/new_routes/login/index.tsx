@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import classes from 'src/styles/Login.module.scss';
 
-import Constants from '../commons/utils/Constants';
+import Constants from '../../commons/utils/Constants';
 
 const providers = [...Constants.otherAuthProviders.entries()].map(([id, { name }]) => ({
   id,
