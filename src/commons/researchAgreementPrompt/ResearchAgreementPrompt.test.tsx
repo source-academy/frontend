@@ -6,7 +6,7 @@ import SessionActions from 'src/commons/application/actions/SessionActions';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { beforeEach, describe, expect, type Mock, test, vi } from 'vitest';
 
-import ResearchAgreementPrompt from '../ResearchAgreementPrompt';
+import ResearchAgreementPrompt from './ResearchAgreementPrompt';
 
 vi.mock('react-redux', async () => ({
   ...(await vi.importActual('react-redux')),

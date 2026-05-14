@@ -4,8 +4,8 @@ import { MemoryRouter } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { expect, test } from 'vitest';
 
-import { Role } from '../../../application/ApplicationTypes';
-import AcademyNavigationBar from '../AcademyNavigationBar';
+import { Role } from '../../application/ApplicationTypes';
+import AcademyNavigationBar from './AcademyNavigationBar';
 
 const assessmentTypes = ['Missions', 'Quests', 'Paths', 'Contests', 'Others'];
 const staffRoutes = ['grading', 'gamesimulator', 'dashboard', 'teamformation'];

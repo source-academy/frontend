@@ -3,13 +3,13 @@ import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { describe, expect, test } from 'vitest';
 
-import NotificationBadge from '../NotificationBadge';
+import NotificationBadge from './NotificationBadge';
 import {
   filterNotificationsByAssessment,
   filterNotificationsBySubmission,
   filterNotificationsByType,
-} from '../NotificationBadgeHelper';
-import type { Notification } from '../NotificationBadgeTypes';
+} from './NotificationBadgeHelper';
+import type { Notification } from './NotificationBadgeTypes';
 
 const notifications: Notification[] = [
   {

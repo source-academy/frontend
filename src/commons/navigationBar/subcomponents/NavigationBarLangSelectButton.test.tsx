@@ -3,10 +3,10 @@ import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { SupportedLanguage } from '../../../../commons/application/ApplicationTypes';
-import { renderTreeJson } from '../../../../commons/utils/TestUtils';
-import { createStore } from '../../../../pages/createStore';
-import NavigationBarLangSelectButton from '../NavigationBarLangSelectButton';
+import { SupportedLanguage } from '../../../commons/application/ApplicationTypes';
+import { renderTreeJson } from '../../../commons/utils/TestUtils';
+import { createStore } from '../../../pages/createStore';
+import NavigationBarLangSelectButton from './NavigationBarLangSelectButton';
 
 // Mock inspector
 (window as any).Inspector = vi.fn();

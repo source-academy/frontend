@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { expect, test, vi } from 'vitest';
 
-import SicpNavigationBar from '../SicpNavigationBar';
+import SicpNavigationBar from './SicpNavigationBar';
 
 vi.mock('react-router', async () => ({
   ...(await vi.importActual('react-router')),

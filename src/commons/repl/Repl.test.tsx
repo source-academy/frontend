@@ -9,9 +9,9 @@ import type {
   InterpreterOutput,
   ResultOutput,
   RunningOutput,
-} from '../../application/ApplicationTypes';
-import { mockTypeError } from '../../mocks/ContextMocks';
-import Repl, { Output } from '../Repl';
+} from '../application/ApplicationTypes';
+import { mockTypeError } from '../mocks/ContextMocks';
+import Repl, { Output } from './Repl';
 
 const mockRunningOutput: RunningOutput = {
   type: 'running',
