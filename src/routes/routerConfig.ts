@@ -7,7 +7,6 @@ import { createRoutes } from './routeUtils';
 const RootLayout = () => import('../new_routes/_layout');
 const Login = () => import('../pages/login/Login');
 const Playground = () => import('../pages/playground/Playground');
-const NotFound = () => import('../new_routes/not-found');
 const MissionControl = () => import('../new_routes/mission-control/[assessmentId]/[questionId]');
 
 const commonRoutes: RouteObject = {
@@ -17,6 +16,7 @@ const commonRoutes: RouteObject = {
       contributors: () => import('../new_routes/contributors'),
       'callback/github': () => import('../new_routes/callback/github'),
       features: () => import('../new_routes/features'),
+      '*': () => import('../new_routes/not-found'),
     }),
     {
       path: 'sicpjs',
@@ -33,7 +33,6 @@ export const playgroundOnlyRouterConfig: RouteObject[] = [
     children: [
       { index: true, loader: () => replace('/playground') },
       { path: 'playground', lazy: Playground },
-      { path: '*', lazy: NotFound },
     ],
   },
 ];
@@ -161,7 +160,6 @@ export const getFullAcademyRouterConfig = ({
           ],
         },
         { path: 'mission-control/:assessmentId?/:questionId?', lazy: MissionControl },
-        { path: '*', lazy: NotFound },
       ],
     },
   ];
