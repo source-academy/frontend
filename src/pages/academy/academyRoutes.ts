@@ -1,16 +1,9 @@
 import { memoize } from 'lodash';
-import {
-  type LoaderFunction,
-  type MiddlewareFunction,
-  redirect,
-  replace,
-  type RouteObject,
-} from 'react-router';
+import { type MiddlewareFunction, redirect, replace, type RouteObject } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 import { assessmentRegExp } from 'src/features/academy/AcademyTypes';
-import { GuardedRoute } from 'src/routes/routeGuard';
 
 import { store } from '../createStore';
 import {
@@ -42,45 +35,61 @@ const buildAssessmentRoutes = memoize(
   },
 );
 
+const checkAssessmentTypeMiddleware = (({ params }) => {
+  const { assessmentConfigurations } = store.getState().session;
+  const assessmentRoutes = buildAssessmentRoutes(assessmentConfigurations);
+
+  const requestedType = params['assessmentConfigType'];
+  for (const type of Object.keys(assessmentRoutes)) {
+    if (requestedType == type) {
+      return assessmentRoutes[type];
+    }
+  }
+  throw redirect(notFoundPath);
+}) satisfies MiddlewareFunction;
+
+const homePageRedirect = (() => {
+  const { role, enableGame, assessmentConfigurations } = store.getState().session;
+  if (enableGame) {
+    throw redirect('game');
+  }
+  if (assessmentConfigurations && assessmentConfigurations.length > 0) {
+    throw redirect(`${assessmentTypeLink(assessmentConfigurations[0].type)}`);
+  }
+  if (role === Role.Admin) {
+    throw redirect('adminpanel');
+  }
+  return null;
+}) satisfies MiddlewareFunction;
+
 const getCommonAcademyRoutes = (): RouteObject[] => {
-  const assessmentLoader = (({ params }) => {
-    const { assessmentConfigurations } = store.getState().session;
-    const assessmentRoutes = buildAssessmentRoutes(assessmentConfigurations);
-
-    const requestedType = params['assessmentConfigType'];
-    for (const type of Object.keys(assessmentRoutes)) {
-      if (requestedType == type) {
-        return assessmentRoutes[type];
-      }
-    }
-    return redirect(notFoundPath);
-  }) satisfies LoaderFunction;
-
-  const homePageRedirect = () => {
-    const { role, enableGame, assessmentConfigurations } = store.getState().session;
-    if (enableGame) {
-      return redirect('game');
-    }
-    if (assessmentConfigurations && assessmentConfigurations.length > 0) {
-      return redirect(`${assessmentTypeLink(assessmentConfigurations[0].type)}`);
-    }
-    if (role === Role.Admin) {
-      return redirect('adminpanel');
-    }
-    return null;
-  };
-
-  const gameRoute = new GuardedRoute({ path: 'game', lazy: Game })
-    .check(s => !!s.session.enableGame, notFoundPath)
-    .build();
-
   return [
-    gameRoute,
-    { path: '', loader: () => homePageRedirect() || replace(notFoundPath) },
+    {
+      index: true,
+      middleware: [
+        homePageRedirect,
+        () => {
+          throw replace(notFoundPath);
+        },
+      ],
+    },
+    {
+      path: 'game',
+      middleware: [
+        () => {
+          const state = store.getState();
+          if (!state.session.enableGame) {
+            throw redirect(notFoundPath);
+          }
+          return null;
+        },
+      ],
+      lazy: Game,
+    },
     {
       path: `:assessmentConfigType/${assessmentRegExp}`,
+      middleware: [checkAssessmentTypeMiddleware],
       lazy: Assessment,
-      loader: assessmentLoader,
     },
     {
       path: 'achievements',
