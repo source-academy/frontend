@@ -90,7 +90,7 @@ export const getFullAcademyRouterConfig = ({
     if (!isLoggedIn) {
       throw redirect('/login');
     }
-    if (courseId === null) {
+    if (courseId == null) {
       throw redirect('/welcome');
     }
     return null;
