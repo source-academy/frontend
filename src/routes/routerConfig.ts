@@ -2,6 +2,8 @@ import { type MiddlewareFunction, redirect, replace, type RouteObject } from 're
 import Constants from 'src/commons/utils/Constants';
 import { store } from 'src/pages/createStore';
 
+import { createRoutes } from './routeUtils';
+
 const RootLayout = () => import('../new_routes/_layout');
 const Login = () => import('../pages/login/Login');
 const Playground = () => import('../pages/playground/Playground');
@@ -11,14 +13,16 @@ const MissionControl = () => import('../new_routes/mission-control/[assessmentId
 const commonRoutes: RouteObject = {
   lazy: RootLayout,
   children: [
-    { path: 'contributors', lazy: () => import('../new_routes/contributors') },
-    { path: 'callback/github', lazy: () => import('../new_routes/callback/github') },
+    ...createRoutes({
+      contributors: () => import('../new_routes/contributors'),
+      'callback/github': () => import('../new_routes/callback/github'),
+      features: () => import('../new_routes/features'),
+    }),
     {
       path: 'sicpjs',
       lazy: () => import('../new_routes/sicpjs/_layout'),
       children: [{ path: ':section', lazy: () => import('../new_routes/sicpjs/[section]') }],
     },
-    { path: 'features', lazy: () => import('../new_routes/features') },
   ],
 };
 
