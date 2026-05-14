@@ -34,7 +34,7 @@ const Sicp = () => import('../pages/sicp/Sicp');
 const Playground = () => import('../pages/playground/Playground');
 const NotFound = () => import('../pages/notFound/NotFound');
 const Welcome = () => import('../new_routes/welcome');
-const Academy = () => import('../pages/academy/Academy');
+const Academy = () => import('../new_routes/courses/[courseId]/_layout');
 const MissionControl = () => import('../pages/missionControl/MissionControl');
 const Features = () => import('../pages/featureFlags/FeatureFlags');
 

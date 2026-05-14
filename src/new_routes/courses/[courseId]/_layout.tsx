@@ -8,11 +8,11 @@ import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/Academy.module.scss';
 
-import SessionActions from '../../commons/application/actions/SessionActions';
-import { numberRegExp } from '../../features/academy/AcademyTypes';
-import RagChatbot from './ragChatbot/RagChatbot';
+import SessionActions from '../../../commons/application/actions/SessionActions';
+import { numberRegExp } from '../../../features/academy/AcademyTypes';
+import RagChatbot from '../../../pages/academy/ragChatbot/RagChatbot';
 
-const Academy: React.FC = () => {
+function Academy() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(SessionActions.fetchStudents());
@@ -31,9 +31,9 @@ const Academy: React.FC = () => {
       <RagChatbot />
     </div>
   );
-};
+}
 
-const CourseSelectingAcademy: React.FC = () => {
+function CourseSelectingAcademy() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { courseId } = useSession();
@@ -66,11 +66,8 @@ const CourseSelectingAcademy: React.FC = () => {
       </Card>
     </div>
   );
-};
+}
 
 // react-router lazy loading
 // https://reactrouter.com/en/main/route/lazy
 export const Component = CourseSelectingAcademy;
-Component.displayName = 'Academy';
-
-export default CourseSelectingAcademy;
