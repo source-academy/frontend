@@ -19,41 +19,38 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 // Mock createStore to prevent Immer auto-freeze from freezing defaultWorkspaceManager.
 // Importing RequestsSaga triggers store creation via createStore, and due to ES module
 // hoisting, rootReducer initializes (freezing shared state) before setAutoFreeze(false) runs.
-vi.mock('../../../pages/createStore', () => ({
+vi.mock('../../pages/createStore', () => ({
   store: { getState: () => ({ session: {} }) },
   createStore: vi.fn(),
 }));
 
-import InterpreterActions from '../../application/actions/InterpreterActions';
-import SessionActions from '../../application/actions/SessionActions';
+import InterpreterActions from '../application/actions/InterpreterActions';
+import SessionActions from '../application/actions/SessionActions';
 import {
   defaultState,
   fullJSLanguage,
   fullTSLanguage,
   type OverallState,
-} from '../../application/ApplicationTypes';
-import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
+} from '../application/ApplicationTypes';
+import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   type Library,
   type Testcase,
   type TestcaseType,
   TestcaseTypes,
-} from '../../assessment/AssessmentTypes';
-import { mockRuntimeContext } from '../../mocks/ContextMocks';
-import { mockTestcases } from '../../mocks/GradingMocks';
-import {
-  showSuccessMessage,
-  showWarningMessage,
-} from '../../utils/notifications/NotificationsHelper';
-import WorkspaceActions from '../../workspace/WorkspaceActions';
-import type { WorkspaceLocation, WorkspaceState } from '../../workspace/WorkspaceTypes';
-import { getVersionHistory, updateVersionName } from '../RequestsSaga';
-import workspaceSaga from '../WorkspaceSaga';
-import { evalCodeSaga } from '../WorkspaceSaga/helpers/evalCode';
-import { evalEditorSaga } from '../WorkspaceSaga/helpers/evalEditor';
-import { evalTestCode } from '../WorkspaceSaga/helpers/evalTestCode';
-import { runTestCase } from '../WorkspaceSaga/helpers/runTestCase';
-import { watchSavingStatus } from '../WorkspaceSaga/helpers/versionHistory';
+} from '../assessment/AssessmentTypes';
+import { mockRuntimeContext } from '../mocks/ContextMocks';
+import { mockTestcases } from '../mocks/GradingMocks';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
+import WorkspaceActions from '../workspace/WorkspaceActions';
+import type { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+import { getVersionHistory, updateVersionName } from './RequestsSaga';
+import workspaceSaga from './WorkspaceSaga';
+import { evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
+import { evalEditorSaga } from './WorkspaceSaga/helpers/evalEditor';
+import { evalTestCode } from './WorkspaceSaga/helpers/evalTestCode';
+import { runTestCase } from './WorkspaceSaga/helpers/runTestCase';
+import { watchSavingStatus } from './WorkspaceSaga/helpers/versionHistory';
 
 vi.mock('src/features/cseMachine/CseMachine', async importOriginal => {
   const actual: any = await importOriginal();
