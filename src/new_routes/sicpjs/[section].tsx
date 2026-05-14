@@ -166,7 +166,7 @@ function SicpPage() {
       ref={parentRef}
     >
       <SicpErrorBoundary>
-        <CodeSnippetProvider>
+        <CodeSnippetProvider key={section}>
           {loading ? (
             <div className="sicp-content">{loadingComponent}</div>
           ) : section === 'index' ? (
