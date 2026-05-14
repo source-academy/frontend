@@ -2,12 +2,12 @@ import { Variant } from 'js-slang/dist/langs';
 import { compressToUTF16 } from 'lz-string';
 import { describe, expect, test } from 'vitest';
 
-import type { OverallState } from '../../commons/application/ApplicationTypes';
-import { defaultLanguageConfig, defaultState } from '../../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import Constants from '../../commons/utils/Constants';
-import { createStore } from '../createStore';
-import type { SavedState } from '../localStorage';
+import type { OverallState } from '../commons/application/ApplicationTypes';
+import { defaultLanguageConfig, defaultState } from '../commons/application/ApplicationTypes';
+import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
+import Constants from '../commons/utils/Constants';
+import { createStore } from './createStore';
+import type { SavedState } from './localStorage';
 
 const mockChangedStoredState: SavedState = {
   achievements: [],

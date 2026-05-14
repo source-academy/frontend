@@ -3,7 +3,7 @@ import lzString from 'lz-string';
 import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
 import { describe, expect, test, vi } from 'vitest';
 
-import CodeSnippet from '../CodeSnippet';
+import CodeSnippet from './CodeSnippet';
 
 describe('Sicp Code Snippet', () => {
   vi.mock('react-redux', async importActual => ({

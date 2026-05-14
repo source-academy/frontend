@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { beforeEach, describe, expect, test } from 'vitest';
 
-import SicpExercise, { noSolutionPlaceholder } from '../SicpExercise';
+import SicpExercise, { noSolutionPlaceholder } from './SicpExercise';
 
 describe('Sicp exercise renders', () => {
   let user: UserEvent;

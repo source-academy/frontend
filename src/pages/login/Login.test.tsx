@@ -6,10 +6,10 @@ import SessionActions from 'src/commons/application/actions/SessionActions';
 import type { OverallState } from 'src/commons/application/ApplicationTypes';
 import { beforeEach, describe, expect, type Mock, test, vi } from 'vitest';
 
-import { mockInitialStore } from '../../../commons/mocks/StoreMocks';
-import { Component as LoginCallback } from '../../../new_routes/login/callback';
-import { Component as LoginPage } from '../../../new_routes/login/index';
-import Login from '../Login';
+import { mockInitialStore } from '../../commons/mocks/StoreMocks';
+import { Component as LoginCallback } from '../../new_routes/login/callback';
+import { Component as LoginPage } from '../../new_routes/login/index';
+import Login from './Login';
 
 vi.mock('react-redux', async () => ({
   ...(await vi.importActual('react-redux')),
@@ -18,7 +18,7 @@ vi.mock('react-redux', async () => ({
 const useDispatchMock = useDispatch as Mock;
 const dispatchMock = vi.fn();
 
-vi.mock('../../../commons/utils/Constants', () => {
+vi.mock('../../commons/utils/Constants', () => {
   return {
     __esModule: true,
     default: {

@@ -1,9 +1,9 @@
-import { defaultAchievement } from 'src/commons/application/ApplicationTypes';
 import { expect, test } from 'vitest';
 
-import AchievementActions from '../AchievementActions';
-import { AchievementReducer } from '../AchievementReducer';
-import type { AchievementItem, AchievementState } from '../AchievementTypes';
+import { defaultAchievement } from '../../commons/application/ApplicationTypes';
+import AchievementActions from './AchievementActions';
+import { AchievementReducer } from './AchievementReducer';
+import type { AchievementItem, AchievementState } from './AchievementTypes';
 
 test('SAVE_ACHIEVEMENTS works correctly on default achievements', () => {
   const achievementItems: AchievementItem[] = [];

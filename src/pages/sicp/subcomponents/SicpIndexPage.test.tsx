@@ -2,16 +2,12 @@ import { MemoryRouter } from 'react-router';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { expect, test } from 'vitest';
 
-import SicpToc from '../SicpToc';
+import SicpIndexPage from './SicpIndexPage';
 
-test('Sicp toc renders correctly', async () => {
-  const props = {
-    handleCloseToc: () => {},
-  };
-
+test('Sicp index page', async () => {
   const tree = await renderTreeJson(
     <MemoryRouter>
-      <SicpToc {...props} />
+      <SicpIndexPage />
     </MemoryRouter>,
   );
   expect(tree).toMatchSnapshot();

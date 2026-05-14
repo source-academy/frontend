@@ -3,9 +3,9 @@ import { act } from 'react';
 import { Route, Routes, StaticRouter } from 'react-router';
 import { beforeAll, describe, expect, type Mock, test, vi } from 'vitest';
 
-import Constants from '../../../commons/utils/Constants';
-import { exchangeAccessCode } from '../../../features/github/GitHubUtils';
-import { Component as GitHubCallback } from '../../../new_routes/callback/github';
+import Constants from '../../commons/utils/Constants';
+import { exchangeAccessCode } from '../../features/github/GitHubUtils';
+import { Component as GitHubCallback } from '../../new_routes/callback/github';
 
 function renderWithLocation(element: React.ReactElement, location: string) {
   return render(

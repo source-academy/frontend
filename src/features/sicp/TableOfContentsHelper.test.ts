@@ -1,8 +1,8 @@
 import { describe, expect, test, vi } from 'vitest';
 
-import { getNext, getPrev } from '../TableOfContentsHelper';
+import { getNext, getPrev } from './TableOfContentsHelper';
 
-vi.mock('../data/toc-navigation.json', () => ({
+vi.mock('./data/toc-navigation.json', () => ({
   default: {
     '1': { next: '2' },
     '2': { next: '3', prev: '1' },

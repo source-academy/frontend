@@ -1,7 +1,7 @@
 import { renderTree } from 'src/commons/utils/TestUtils';
 import { describe, expect, test } from 'vitest';
 
-import SicpLatex from '../SicpLatex';
+import SicpLatex from './SicpLatex';
 
 describe('Sicp latex renders', () => {
   test('correctly block', async () => {

@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 
-import { mockAchievements } from '../../../commons/mocks/AchievementMocks';
-import AchievementActions from '../AchievementActions';
+import { mockAchievements } from '../../commons/mocks/AchievementMocks';
+import AchievementActions from './AchievementActions';
 
 test('saveAchievements generates correct action object', () => {
   const action = AchievementActions.saveAchievements([]);
