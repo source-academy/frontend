@@ -20,6 +20,7 @@ function WelcomePage() {
             <div>
               <Trans
                 i18nKey={$ => $.welcome.loggedInMessage}
+                // eslint-disable-next-line react/jsx-key
                 components={[<strong />]}
                 tOptions={{ name, sourceAcademyDeploymentName }}
               />
@@ -30,12 +31,14 @@ function WelcomePage() {
                 <li>
                   <Trans
                     i18nKey={$ => $.welcome.resourcesForLearners}
+                    // eslint-disable-next-line react/jsx-key
                     components={[<ItalicLink href={Links.resourcesForLearners} />]}
                   />
                 </li>
                 <li>
                   <Trans
                     i18nKey={$ => $.welcome.resourcesForEducators}
+                    // eslint-disable-next-line react/jsx-key
                     components={[<ItalicLink href={Links.resourcesForEducators} />]}
                   />
                 </li>

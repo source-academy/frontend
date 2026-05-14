@@ -709,6 +709,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
 function CustomASTRenderer(props: IStepperPropContents): React.ReactNode {
   const getDisplayedNode = useCallback((): React.ReactNode => {
     function markerStyleWrapper(node: StepperBaseNode) {
+      // eslint-disable-next-line react/display-name
       return (renderNode: React.ReactNode) => {
         if (props.markers === undefined) {
           return renderNode;

@@ -35,6 +35,7 @@ export const convertEditorTabStateToProps = (
 
 const createNormalEditorTab =
   (editorProps: Omit<EditorProps, keyof EditorTabStateProps>) =>
+  // eslint-disable-next-line react/display-name
   (editorTabStateProps: EditorTabStateProps) => {
     return <Editor {...editorProps} {...editorTabStateProps} />;
   };

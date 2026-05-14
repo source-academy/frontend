@@ -45,6 +45,7 @@ const chapterListRenderer: ItemListRenderer<SALanguage> = ({
 
 const chapterRenderer: (isFolderModeEnabled: boolean) => ItemRenderer<SALanguage> =
   (isFolderModeEnabled: boolean) =>
+  // eslint-disable-next-line react/display-name
   (lang, { handleClick }) => {
     const isDisabled = isFolderModeEnabled && lang.chapter === Chapter.SOURCE_1;
     const tooltipContent = isDisabled
