@@ -338,10 +338,10 @@ const AssessmentConfigPanel: WithImperativeApi<
           onGridReady={onGridReady}
           rowData={tableState.current}
           rowHeight={36}
-          rowDragManaged={true}
-          suppressCellFocus={true}
-          suppressMovableColumns={true}
-          suppressPaginationPanel={true}
+          rowDragManaged
+          suppressCellFocus
+          suppressMovableColumns
+          suppressPaginationPanel
           onRowDragMove={onRowDragMove}
           onRowDragLeave={onRowDragLeaveOrEnd}
           onRowDragEnd={onRowDragLeaveOrEnd}
@@ -366,6 +366,7 @@ const AssessmentConfigPanel: WithImperativeApi<
     );
   },
 );
+AssessmentConfigPanel.displayName = 'AssessmentConfigPanel';
 
 function moveInArray(arr: any[], fromIndex: number, toIndex: number): void {
   const element = arr[fromIndex];

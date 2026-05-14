@@ -24,7 +24,7 @@ const RESPONSE_FN = vi.fn((...args) => console.log(args));
 const VALUE = ' rpouiweytiogurtdsuiobgfh ';
 
 const element = (
-  <PromptDialog choices={CHOICES} onResponse={RESPONSE_FN} contents={CONTENTS} isOpen={true} />
+  <PromptDialog choices={CHOICES} onResponse={RESPONSE_FN} contents={CONTENTS} isOpen />
 );
 
 const setInputValue = (mountedDialog: RenderResult, value: string) => {

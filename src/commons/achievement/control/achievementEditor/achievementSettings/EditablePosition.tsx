@@ -14,20 +14,19 @@ const EditablePosition: React.FC<Props> = ({ changePosition, position }) => {
   const maxPosition = inferencer.listTaskUuids().length + 1;
   const positionOptions = [...Array(maxPosition + 1).keys()]; // [0..maxPosition + 1]
 
-  const PositionSelect = Select.ofType<number>();
   const positionRenderer: ItemRenderer<number> = (position, { handleClick }) => (
     <MenuItem key={position} onClick={handleClick} text={position} />
   );
 
   return (
-    <PositionSelect
+    <Select<number>
       filterable={false}
       itemRenderer={positionRenderer}
       items={positionOptions}
       onItemSelect={changePosition}
     >
       <Button text={position} />
-    </PositionSelect>
+    </Select>
   );
 };
 

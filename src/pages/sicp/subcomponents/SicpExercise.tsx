@@ -31,7 +31,7 @@ const SicpExercise: React.FC<Props> = props => {
       <b>{props.title}</b>
       <div>{props.body}</div>
       <div className="sicp-button-container">
-        <Button onClick={onClick} large={true} className="sicp-show-solution-button">
+        <Button onClick={onClick} size="large" className="sicp-show-solution-button">
           {isOpen ? 'Hide Solution' : 'Show Solution'}
         </Button>
       </div>

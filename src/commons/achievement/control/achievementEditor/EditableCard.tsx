@@ -225,7 +225,7 @@ const EditableCard: React.FC<Props> = ({
             <NumericInput
               value={xp}
               min={0}
-              allowNumericCharactersOnly={true}
+              allowNumericCharactersOnly
               leftIcon={IconNames.TRENDING_UP}
               placeholder="XP"
               onValueChange={changeXp}

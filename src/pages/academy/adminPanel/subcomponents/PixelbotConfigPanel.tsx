@@ -153,8 +153,8 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
           <div>
             <div className={classes['section-title']}>Feedback URL</div>
             <div className={classes['section-helper']}>
-              Set a URL where users can submit feedback. A small "Any feedback?" link will appear in
-              the top-right corner of the navigation bar.
+              Set a URL where users can submit feedback. A small &ldquo;Any feedback?&rdquo; link
+              will appear in the top-right corner of the navigation bar.
             </div>
           </div>
         </div>
@@ -199,7 +199,7 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
         <TextArea
           id="pixelbotRoutingPrompt"
           className={classes['prompt-textarea']}
-          fill={true}
+          fill
           readOnly={!editingRouting}
           value={editingRouting ? routingDraft : routingDisplay}
           onChange={e => setRoutingDraft(e.target.value)}
@@ -228,8 +228,8 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
           <TextArea
             id="pixelbotDocumentMap"
             className={classes['document-map-textarea']}
-            fill={true}
-            readOnly={true}
+            fill
+            readOnly
             value={documentMap}
           />
         )}
@@ -254,7 +254,7 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
         <TextArea
           id="pixelbotAnswerPrompt"
           className={classes['prompt-textarea']}
-          fill={true}
+          fill
           readOnly={!editingAnswer}
           value={editingAnswer ? answerDraft : answerDisplay}
           onChange={e => setAnswerDraft(e.target.value)}

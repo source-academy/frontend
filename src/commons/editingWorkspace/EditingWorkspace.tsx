@@ -212,7 +212,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     <Dialog
       className="assessment-reset"
       icon={IconNames.ERROR}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={showResetTemplateOverlay}
       title="Confirmation: Reset editor?"
     >
@@ -225,7 +225,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             <ControlButton
               label="Cancel"
               onClick={() => setShowResetTemplateOverlay(false)}
-              options={{ minimal: false }}
+              options={{ variant: 'default' }}
             />
             <ControlButton
               label="Confirm"
@@ -238,7 +238,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
                 handleRefreshLibrary();
                 resetWorkspaceValues();
               }}
-              options={{ minimal: false, intent: Intent.DANGER }}
+              options={{ variant: 'default', intent: Intent.DANGER }}
             />
           </>
         }
@@ -436,7 +436,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
               handleRefreshLibrary={handleRefreshLibrary}
               pathToLibrary={['questions', questionId, 'library']}
               updateAssessment={updateEditAssessmentState}
-              isOptionalDeployment={true}
+              isOptionalDeployment
             />
           ),
           id: SideContentType.editorLocalDeployment,
@@ -452,7 +452,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
               pathToLibrary={['questions', questionId, 'graderLibrary']}
               pathToCopy={['questions', questionId, 'library']}
               updateAssessment={updateEditAssessmentState}
-              isOptionalDeployment={true}
+              isOptionalDeployment
             />
           ),
           id: SideContentType.editorLocalGraderDeployment,
@@ -546,7 +546,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
               handleRefreshLibrary={handleRefreshLibrary}
               pathToLibrary={['graderDeployment']}
               updateAssessment={updateEditAssessmentState}
-              isOptionalDeployment={true}
+              isOptionalDeployment
             />
           ),
           id: SideContentType.editorGlobalGraderDeployment,

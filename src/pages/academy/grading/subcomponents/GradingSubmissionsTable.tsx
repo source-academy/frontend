@@ -313,7 +313,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     // We ignore the dependency on rowData purposely as we setRowData above.
     // If not, it could cause a double execution, which is a bit expensive.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requestCounter, submissions, courseId, gridRef.current?.api]);
+  }, [requestCounter, submissions, courseId]);
 
   const columns = useMemo(() => generateCols(filterMode), [filterMode]);
 
@@ -369,7 +369,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         </GradingFlex>
 
         <Button
-          minimal={true}
+          variant="minimal"
           className={classNames(
             classes['grading-filter-btn'],
             filterMode && classes['grading-filter-btn-on'],
@@ -383,7 +383,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           className="grading-search-input"
           placeholder="Search by assessment name"
           leftIcon="search"
-          large={true}
+          size="large"
           value={searchQuery}
           onChange={handleSearchQueryUpdate}
         />

@@ -23,7 +23,6 @@ type Props = {
 const EditableMeta: React.FC<Props> = ({ changeMeta, meta }) => {
   const { type } = meta;
 
-  const TypeSelect = Select.ofType<GoalType>();
   const typeRenderer: ItemRenderer<GoalType> = (type, { handleClick }) => (
     <MenuItem key={type} onClick={handleClick} text={type} />
   );
@@ -50,14 +49,14 @@ const EditableMeta: React.FC<Props> = ({ changeMeta, meta }) => {
   return (
     <>
       <Tooltip content="Change Goal Type">
-        <TypeSelect
+        <Select<GoalType>
           filterable={false}
           itemRenderer={typeRenderer}
           items={Object.values(GoalType)}
           onItemSelect={changeType}
         >
           <Button variant="outlined" text={type} />
-        </TypeSelect>
+        </Select>
       </Tooltip>
       {editableMetaDetails(type)}
     </>

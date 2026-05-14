@@ -166,7 +166,7 @@ const Grading: React.FC = () => {
                   Submissions
                 </GradingText>
                 <Button
-                  minimal
+                  variant="minimal"
                   icon={IconNames.EXPORT}
                   onClick={() => {
                     const tokens = {
@@ -191,7 +191,7 @@ const Grading: React.FC = () => {
                 selectedValue={showAllSubmissions}
                 onClick={setShowAllSubmissions}
                 popoverProps={{ position: Position.BOTTOM }}
-                buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+                buttonProps={{ variant: 'minimal', endIcon: 'caret-down' }}
               />
               <GradingText>submissions from</GradingText>
               <SimpleDropdown
@@ -199,7 +199,7 @@ const Grading: React.FC = () => {
                 selectedValue={showUserGroups}
                 onClick={setShowUserGroups}
                 popoverProps={{ position: Position.BOTTOM }}
-                buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+                buttonProps={{ variant: 'minimal', endIcon: 'caret-down' }}
               />
               <GradingText>showing</GradingText>
               <SimpleDropdown
@@ -207,12 +207,12 @@ const Grading: React.FC = () => {
                 selectedValue={pageSize}
                 onClick={setPageSize}
                 popoverProps={{ position: Position.BOTTOM }}
-                buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+                buttonProps={{ variant: 'minimal', endIcon: 'caret-down' }}
               />
               <GradingText>entries per page.</GradingText>
               <Button
                 className={animateRefresh ? 'grading-refresh-loop' : ''}
-                minimal
+                variant="minimal"
                 style={{ padding: 0 }}
                 onClick={e => {
                   setRefreshQueried(true);

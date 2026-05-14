@@ -58,8 +58,8 @@ const AddUserPanel: React.FC<Props> = props => {
         defaultColDef={defaultColumnDefs}
         rowData={users}
         rowHeight={36}
-        suppressCellFocus={true}
-        suppressMovableColumns={true}
+        suppressCellFocus
+        suppressMovableColumns
         pagination
       />
     </div>

@@ -251,15 +251,19 @@ const DataVisualizerDefaultText: React.FC = () => {
         ns="sideContent"
         i18nKey={$ => $.dataVisualizer.instructions}
         components={[
+          // eslint-disable-next-line react/jsx-key
           <code>
             draw_data(x<sub>1</sub>, x<sub>2</sub>, ... x<sub>n</sub>)
           </code>,
+          // eslint-disable-next-line react/jsx-key
           <code>
             x<sub>k</sub>
           </code>,
+          // eslint-disable-next-line react/jsx-key
           <code>
             k<sup>th</sup>
           </code>,
+          // eslint-disable-next-line react/jsx-key
           <code>n</code>,
         ]}
       />
@@ -268,6 +272,7 @@ const DataVisualizerDefaultText: React.FC = () => {
       <Trans
         ns="sideContent"
         i18nKey={$ => $.dataVisualizer.reference}
+        // eslint-disable-next-line react/jsx-key
         components={[<ItalicLink href={Links.textbookChapter2_2} />]}
       />
     </p>

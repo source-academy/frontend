@@ -17,7 +17,7 @@ export class FunctionTreeNode extends DrawableTreeNode {
   ): React.ReactElement {
     this._drawable = (
       <Group key={x + ', ' + y}>
-        <FunctionDrawable {...{ x, y }}></FunctionDrawable>
+        <FunctionDrawable {...{ x, y }} />
         {(parentX !== x || parentY !== y) && (
           <ArrowDrawable
             {...{
@@ -30,7 +30,7 @@ export class FunctionTreeNode extends DrawableTreeNode {
                 y,
               },
             }}
-          ></ArrowDrawable>
+          />
         )}
       </Group>
     );

@@ -264,7 +264,7 @@ const VersionHistoryPanel: React.FC<Props> = ({
     <Drawer
       className={classNames(styles.drawer, Classes.DARK)}
       icon={IconNames.HISTORY}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={isOpen}
       onClose={onClose}
       title="Version History"

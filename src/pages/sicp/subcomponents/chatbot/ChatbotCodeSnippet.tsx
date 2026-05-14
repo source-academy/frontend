@@ -70,7 +70,7 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
   return (
     <>
       <Overlay2
-        hasBackdrop={true}
+        hasBackdrop
         isOpen={isActive}
         transitionDuration={0}
         backdropProps={{
@@ -88,7 +88,7 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
       </Overlay2>
       <Card
         className={classes['snippet-closed']}
-        interactive={true}
+        interactive
         elevation={Elevation.TWO}
         onClick={handleOpen}
       >

@@ -51,7 +51,7 @@ const ChapterSimulatorTextLoader: React.FC<StorageProps> = ({ storageName, s3Txt
   return (
     <div className="LeftAlign">
       <hr />
-      <Tabs id="Tabs" key="vertical" renderActiveTabPanelOnly={true}>
+      <Tabs id="Tabs" key="vertical" renderActiveTabPanelOnly>
         <Tab id="own" title="Local" panel={uploadButton} />
         <Tab id="s3" title="S3" panel={chooseS3Txt} />
       </Tabs>

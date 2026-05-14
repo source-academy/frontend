@@ -94,7 +94,7 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         title={change}
-        canOutsideClickClose={true}
+        canOutsideClickClose
       >
         <DialogBody>
           <p>
@@ -109,13 +109,13 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
                 label="Cancel"
                 icon={IconNames.CROSS}
                 onClick={handleCloseDialog}
-                options={{ minimal: false }}
+                options={{ variant: 'default' }}
               />
               <ControlButton
                 label="Confirm"
                 icon={IconNames.CONFIRM}
                 onClick={handleMassPublishChange}
-                options={{ minimal: false, intent: Intent.DANGER }}
+                options={{ variant: 'default', intent: Intent.DANGER }}
               />
             </>
           }

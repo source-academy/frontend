@@ -33,7 +33,7 @@ function LoginPage() {
           </H4>
         </div>
         <div>
-          <ButtonGroup fill={true} vertical={true}>
+          <ButtonGroup fill vertical>
             {Constants.hasNusAuthProviders && (
               <LoginButton
                 handleClick={() => navigate('/nus_login')}
@@ -64,7 +64,7 @@ const LoginButton = ({
   return (
     <Button
       className={Classes.LARGE}
-      rightIcon={IconNames.LOG_IN}
+      endIcon={IconNames.LOG_IN}
       onClick={useCallback(() => handleClick(id), [handleClick, id])}
     >
       <Translation ns="login">{t => t($ => $['Log in with'], { name: name })}</Translation>

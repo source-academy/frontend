@@ -161,7 +161,7 @@ export class ArrayValue extends Value implements IHoverable {
       <Group
         key={Layout.key++}
         ref={this.ref}
-        listening={true}
+        listening
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
       >

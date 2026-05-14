@@ -114,7 +114,7 @@ const DeploymentTab: React.FC<Props> = props => {
         path={path}
         processResults={removeSpaces}
         updateAssessment={props.updateAssessment}
-        useRawValue={true}
+        useRawValue
       />
     );
   };
@@ -126,7 +126,7 @@ const DeploymentTab: React.FC<Props> = props => {
         assessment={props.assessment}
         path={pathVal}
         updateAssessment={handleGlobalValueUpdate(i)}
-        useRawValue={true}
+        useRawValue
       />
     );
   };
@@ -244,7 +244,7 @@ const chapterSelect = (
   variant: Variant = Variant.DEFAULT,
   handleSelect = (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => {},
 ) => (
-  <ChapterSelectComponent
+  <Select<SALanguage>
     className={Classes.MINIMAL}
     items={sourceLanguages}
     onItemSelect={handleSelect}
@@ -252,14 +252,12 @@ const chapterSelect = (
     filterable={false}
   >
     <Button
-      minimal
+      variant="minimal"
       text={styliseSublanguage(currentChap, variant)}
-      rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
+      endIcon={IconNames.DOUBLE_CARET_VERTICAL}
     />
-  </ChapterSelectComponent>
+  </Select>
 );
-
-const ChapterSelectComponent = Select.ofType<SALanguage>();
 
 const chapterRenderer: ItemRenderer<SALanguage> = (chap, { handleClick, modifiers, query }) => (
   <MenuItem active={false} key={chap.displayName} onClick={handleClick} text={chap.displayName} />
@@ -275,18 +273,16 @@ const externalSelect = (
   currentExternal: string,
   handleSelect: (i: External, e?: React.SyntheticEvent<HTMLElement>) => void,
 ) => (
-  <ExternalSelectComponent
+  <Select<External>
     className={Classes.MINIMAL}
     items={iExternals}
     onItemSelect={handleSelect}
     itemRenderer={externalRenderer}
     filterable={false}
   >
-    <Button variant="minimal" text={currentExternal} rightIcon={IconNames.DOUBLE_CARET_VERTICAL} />
-  </ExternalSelectComponent>
+    <Button variant="minimal" text={currentExternal} endIcon={IconNames.DOUBLE_CARET_VERTICAL} />
+  </Select>
 );
-
-const ExternalSelectComponent = Select.ofType<External>();
 
 const externalRenderer: ItemRenderer<External> = (external, { handleClick, modifiers, query }) => (
   <MenuItem active={false} key={external.key} onClick={handleClick} text={external.name} />

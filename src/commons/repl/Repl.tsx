@@ -131,7 +131,7 @@ export const Output: React.FC<OutputProps> = props => {
         </Card>
       );
     default:
-      return <Card>''</Card>;
+      return <Card>&apos;&apos;</Card>;
   }
 };
 

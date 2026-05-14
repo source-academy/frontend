@@ -93,7 +93,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
           )}
         </div>
       ) : (
-        <Card className="sicp-code-snippet-closed" interactive={true} elevation={Elevation.TWO}>
+        <Card className="sicp-code-snippet-closed" interactive elevation={Elevation.TWO}>
           <SyntaxHighlighter language="javascript" style={SourceTheme} onClick={handleOpen}>
             {body}
           </SyntaxHighlighter>

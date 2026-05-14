@@ -39,7 +39,7 @@ export const AutograderTab: React.FC<Props> = props => {
                 <TextAreaContent
                   assessment={props.assessment}
                   path={testcasePath.concat([index, 'program'])}
-                  useRawValue={true}
+                  useRawValue
                   updateAssessment={props.updateAssessment}
                 />
               </H6>
@@ -49,7 +49,7 @@ export const AutograderTab: React.FC<Props> = props => {
                 Score:
                 <TextAreaContent
                   assessment={props.assessment}
-                  isNumber={true}
+                  isNumber
                   path={testcasePath.concat([index, 'score'])}
                   updateAssessment={props.updateAssessment}
                 />
@@ -61,7 +61,7 @@ export const AutograderTab: React.FC<Props> = props => {
                 <TextAreaContent
                   assessment={props.assessment}
                   path={testcasePath.concat([index, 'answer'])}
-                  useRawValue={true}
+                  useRawValue
                   updateAssessment={props.updateAssessment}
                 />
               </H6>

@@ -134,7 +134,7 @@ function Game() {
             renderTarget={({ isOpen, ...targetProps }) => (
               <Button
                 {...targetProps}
-                minimal
+                variant="minimal"
                 icon={isFullscreen ? IconNames.MINIMIZE : IconNames.MAXIMIZE}
                 onClick={enhancedToggleFullscreen}
                 style={{ left: iconLeft, padding: iconPadding }}

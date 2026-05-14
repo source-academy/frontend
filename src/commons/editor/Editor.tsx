@@ -731,6 +731,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     </Card>
   );
 });
+EditorBase.displayName = 'EditorBase';
 
 // don't create a new list every render.
 const hooks = [useHighlighting, useNavigation, useShareAce, useRefactor];

@@ -136,7 +136,7 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
       <Button
         className="collapse-button"
         icon={showsTestcases ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
-        minimal={true}
+        variant="minimal"
         onClick={toggleTestcases}
       >
         <span>{t($ => $.testcases)}</span>
@@ -144,7 +144,7 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
           <Icon icon={IconNames.HELP} />
         </Tooltip>
       </Button>
-      <Collapse isOpen={showsTestcases} keepChildrenMounted={true}>
+      <Collapse isOpen={showsTestcases} keepChildrenMounted>
         {testcaseCards}
       </Collapse>
       {collapseButton(
@@ -152,7 +152,7 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
         showsResults,
         toggleResults,
       )}
-      <Collapse isOpen={showsResults} keepChildrenMounted={true}>
+      <Collapse isOpen={showsResults} keepChildrenMounted>
         {resultCards}
       </Collapse>
     </div>
@@ -171,7 +171,7 @@ const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) 
     label={label}
     icon={isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
     onClick={toggleFunc}
-    options={{ className: 'collapse-button', minimal: true }}
+    options={{ className: 'collapse-button', variant: 'minimal' }}
   />
 );
 

@@ -197,7 +197,7 @@ const GroundControl: React.FC = () => {
   );
 
   const dropzone = (
-    <Collapse isOpen={showDropzone} keepChildrenMounted={true}>
+    <Collapse isOpen={showDropzone} keepChildrenMounted>
       <Dropzone
         handleUploadAssessment={(file: File, forceUpdate: boolean, assessmentConfigId: number) =>
           dispatch(GroundControlActions.uploadAssessment(file, forceUpdate, assessmentConfigId))
@@ -211,16 +211,16 @@ const GroundControl: React.FC = () => {
     <div className="Grid">
       <AgGridReact
         theme={themeBalham}
-        alwaysShowHorizontalScroll={true}
+        alwaysShowHorizontalScroll
         domLayout="autoHeight"
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
         rowData={assessmentOverviews}
         rowHeight={35}
-        suppressCellFocus={true}
-        suppressMovableColumns={true}
-        suppressPaginationPanel={true}
+        suppressCellFocus
+        suppressMovableColumns
+        suppressPaginationPanel
       />
     </div>
   );

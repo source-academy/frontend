@@ -23,8 +23,6 @@ const questionEditorPaths = ['prepend', 'postpend', 'solutionTemplate', 'answer'
 
 export type QuestionEditorId = (typeof questionEditorPaths)[number];
 
-const QuestionEditorSelect = Select.ofType<QuestionEditor>();
-
 export type QuestionEditor = {
   label: string;
   icon: IconName;
@@ -105,7 +103,7 @@ const ProgrammingQuestionTemplateTab: React.FC<Props> = props => {
       currentEditor: QuestionEditor,
       handleSelect: (i: QuestionEditor) => void,
     ) => (
-      <QuestionEditorSelect
+      <Select<QuestionEditor>
         className={Classes.MINIMAL}
         items={questionEditors}
         itemRenderer={menuRenderer}
@@ -113,12 +111,12 @@ const ProgrammingQuestionTemplateTab: React.FC<Props> = props => {
         filterable={false}
       >
         <Button
-          minimal
+          variant="minimal"
           text={currentEditor.label}
           icon={IconNames.EDIT}
-          rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
+          endIcon={IconNames.DOUBLE_CARET_VERTICAL}
         />
-      </QuestionEditorSelect>
+      </Select>
     );
 
     return (

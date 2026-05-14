@@ -55,8 +55,8 @@ const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }
         <Button
           onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
           icon={IconNames.MENU}
-          large={true}
-          minimal={true}
+          size="large"
+          variant="minimal"
         />
       )}
       <NavLink
@@ -247,7 +247,7 @@ const NavigationBar: React.FC = () => {
             <NavbarHeading>
               <Button
                 className="app-title"
-                minimal
+                variant="minimal"
                 icon={IconNames.SYMBOL_DIAMOND}
                 active={highlightDesktopLogo(location)}
               >
@@ -358,7 +358,7 @@ export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
       {props.hasNotifications && (
         <NotificationBadge
           notificationFilter={filterNotificationsByType(props.text)}
-          disableHover={true}
+          disableHover
         />
       )}
     </NavLink>
@@ -387,7 +387,7 @@ const MobileNavLink: React.FC<
       {props.hasNotifications && (
         <NotificationBadge
           notificationFilter={filterNotificationsByType(props.text)}
-          disableHover={true}
+          disableHover
         />
       )}
     </NavLink>

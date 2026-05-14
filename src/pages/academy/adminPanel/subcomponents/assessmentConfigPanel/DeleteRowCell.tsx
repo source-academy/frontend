@@ -50,13 +50,13 @@ const DeleteRowCell: React.FC<Props> = ({ data, node, deleteRowHandler }) => {
                 label="Cancel"
                 icon={IconNames.CROSS}
                 onClick={() => setIsDialogOpen(false)}
-                options={{ minimal: false }}
+                options={{ variant: 'default' }}
               />
               <ControlButton
                 label="Ok"
                 icon={IconNames.TICK}
                 onClick={handleDelete}
-                options={{ minimal: false, intent: Intent.WARNING }}
+                options={{ variant: 'default', intent: Intent.WARNING }}
               />
             </>
           }

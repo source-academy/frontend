@@ -92,7 +92,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       {(isGraded || isSubmitted) && (
         <Button
           className="grading-action-icons"
-          minimal
+          variant="minimal"
           style={{ padding: 0 }}
           onClick={handleReautogradeClick}
         >
@@ -105,7 +105,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       {(isGraded || isSubmitted) && (
         <Button
           className="grading-action-icons"
-          minimal
+          variant="minimal"
           style={{ padding: 0 }}
           onClick={handleUnsubmitClick}
         >

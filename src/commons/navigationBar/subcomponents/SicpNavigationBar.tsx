@@ -398,9 +398,9 @@ const SicpNavigationBar: React.FC = () => {
                 <Text className={Classes.TEXT_MUTED} style={{ padding: 6 }}>
                   Showing results for <strong>{query}</strong>&hellip;{' '}
                   <Button
-                    small
+                    size="small"
                     intent="primary"
-                    minimal
+                    variant="minimal"
                     style={{ padding: 0, minHeight: 0, verticalAlign: 'baseline' }}
                     onClick={() => {
                       // Safe to assert non-null due to logic

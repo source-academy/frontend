@@ -40,10 +40,10 @@ const AssessmentWorkspaceGradingResult: React.FC<Props> = props => (
                 <Divider />
                 <Markdown
                   content={props.comments}
-                  simplifiedAutoLink={true}
-                  strikethrough={true}
-                  tasklists={true}
-                  openLinksInNewWindow={true}
+                  simplifiedAutoLink
+                  strikethrough
+                  tasklists
+                  openLinksInNewWindow
                 />
                 <Divider />
               </td>

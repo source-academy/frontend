@@ -140,7 +140,7 @@ const OverallLeaderboard: React.FC = () => {
       <div className="leaderboard-table-container">
         <AgGridReact
           theme={themeAlpine}
-          pagination={true}
+          pagination
           suppressCellFocus
           suppressMovableColumns
           paginationPageSizeSelector={false}

@@ -49,7 +49,7 @@ class ControlBarShareButton extends PureComponent<Props, State> {
         </Text>
       ) : this.props.isSicp ? (
         <div>
-          <input defaultValue={this.props.queryString!} readOnly={true} ref={this.shareInputElem} />
+          <input defaultValue={this.props.queryString!} readOnly ref={this.shareInputElem} />
           <Tooltip content="Copy link to clipboard">
             <CopyToClipboard text={this.props.queryString!}>
               <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectShareInputText} />
@@ -86,7 +86,7 @@ class ControlBarShareButton extends PureComponent<Props, State> {
             )
           ) : (
             <div key={this.props.shortURL}>
-              <input defaultValue={this.props.shortURL} readOnly={true} ref={this.shareInputElem} />
+              <input defaultValue={this.props.shortURL} readOnly ref={this.shareInputElem} />
               <Tooltip content="Copy link to clipboard">
                 <CopyToClipboard text={this.props.shortURL}>
                   <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectShareInputText} />

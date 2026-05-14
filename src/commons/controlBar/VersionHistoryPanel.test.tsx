@@ -31,7 +31,7 @@ const defaultProps = {
 };
 
 test('renders loading state when isLoading is true', () => {
-  render(<VersionHistoryPanel {...defaultProps} isLoading={true} />);
+  render(<VersionHistoryPanel {...defaultProps} isLoading />);
   expect(screen.getByText('Loading version history...')).toBeDefined();
 });
 

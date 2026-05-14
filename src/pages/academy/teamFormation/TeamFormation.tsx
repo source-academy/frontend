@@ -28,7 +28,7 @@ const TeamFormation: React.FC = () => {
           <TeamFormationDashboard teams={data} />
         )
       }
-      fullWidth={true}
+      fullWidth
     />
   );
 };

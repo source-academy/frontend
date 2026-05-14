@@ -40,7 +40,7 @@ const AchievementSettings: React.FC<Props> = ({
         <div style={{ padding: '0 0.5em' }}>
           <h3>Card Background</h3>
           <EditableText
-            multiline={true}
+            multiline
             onChange={changeCardBackground}
             placeholder="Enter card background URL here"
             value={cardBackground}

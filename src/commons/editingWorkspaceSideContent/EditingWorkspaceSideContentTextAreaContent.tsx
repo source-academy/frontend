@@ -51,7 +51,7 @@ export const TextAreaContent: React.FC<Props> = props => {
 
   const makeEditingTextarea = () => (
     <Textarea
-      autoFocus={true}
+      autoFocus
       className="editing-textarea"
       onChange={handleEditAssessment}
       onBlur={saveEditAssessment}
