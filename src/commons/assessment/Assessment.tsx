@@ -275,12 +275,12 @@ const Assessment: React.FC = () => {
             <ControlButton
               label="Cancel"
               onClick={setBetchaAssessmentNull}
-              options={{ minimal: false }}
+              options={{ variant: 'default' }}
             />
             <ControlButton
               label="Finalise"
               onClick={handleSubmitAssessment}
-              options={{ minimal: false, intent: Intent.DANGER }}
+              options={{ variant: 'default', intent: Intent.DANGER }}
             />
           </>
         }
@@ -305,7 +305,7 @@ const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) 
     label={label}
     icon={isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
     onClick={toggleFunc}
-    options={{ minimal: true, className: 'collapse-button' }}
+    options={{ variant: 'minimal', className: 'collapse-button' }}
   />
 );
 

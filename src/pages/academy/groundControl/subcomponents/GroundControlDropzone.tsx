@@ -111,13 +111,13 @@ const MaterialDropzone: React.FC<DropzoneProps> = props => {
           label="Yes"
           icon={IconNames.CONFIRM}
           onClick={handleConfirmForceUpdate}
-          options={{ minimal: false, intent: Intent.DANGER }}
+          options={{ variant: 'default', intent: Intent.DANGER }}
         />
         <ControlButton
           label="No"
           icon={IconNames.CROSS}
           onClick={handleCancelForceUpdate}
-          options={{ minimal: false }}
+          options={{ variant: 'default' }}
         />
       </div>
     ),
@@ -147,13 +147,13 @@ const MaterialDropzone: React.FC<DropzoneProps> = props => {
                   label="Confirm Upload"
                   icon={IconNames.UPLOAD}
                   onClick={handleConfirmUpload}
-                  options={{ minimal: false, intent: Intent.DANGER }}
+                  options={{ variant: 'default', intent: Intent.DANGER }}
                 />
                 <ControlButton
                   label="Cancel Upload"
                   icon={IconNames.DELETE}
                   onClick={handleCancelUpload}
-                  options={{ minimal: false }}
+                  options={{ variant: 'default' }}
                 />
               </div>
               <div className="dropzone-controls">

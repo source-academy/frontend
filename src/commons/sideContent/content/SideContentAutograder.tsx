@@ -171,7 +171,7 @@ const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) 
     label={label}
     icon={isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
     onClick={toggleFunc}
-    options={{ className: 'collapse-button', minimal: true }}
+    options={{ className: 'collapse-button', variant: 'minimal' }}
   />
 );
 
