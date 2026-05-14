@@ -136,7 +136,7 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
       <Button
         className="collapse-button"
         icon={showsTestcases ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
-        minimal={true}
+        variant="minimal"
         onClick={toggleTestcases}
       >
         <span>{t($ => $.testcases)}</span>
