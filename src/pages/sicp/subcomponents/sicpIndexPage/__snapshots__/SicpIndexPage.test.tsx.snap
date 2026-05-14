@@ -10,7 +10,7 @@ exports[`Sicp index page 1`] = `
     >
       <img
         alt="SICP"
-        src="http://source-academy.github.io/sicp/sicpjs.png"
+        src="https://source-academy.github.io/sicp/sicpjs.png"
       />
       <div
         class="sicp-cover-text"
@@ -462,7 +462,7 @@ exports[`Sicp index page 1`] = `
     >
       <div>
         <a
-          href="http://creativecommons.org/licenses/by-sa/4.0/"
+          href="https://creativecommons.org/licenses/by-sa/4.0/"
           rel="nofollow"
         >
           <img
@@ -475,7 +475,7 @@ exports[`Sicp index page 1`] = `
         <p>
           This work is licensed under a 
           <a
-            href="http://creativecommons.org/licenses/by-sa/4.0/"
+            href="https://creativecommons.org/licenses/by-sa/4.0/"
             rel="nofollow"
           >
             Creative Commons Attribution-ShareAlike 4.0 International License
@@ -511,7 +511,7 @@ exports[`Sicp index page 1`] = `
       <br />
       <div>
         <a
-          href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+          href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
           rel="nofollow"
         >
           <img
@@ -530,7 +530,7 @@ exports[`Sicp index page 1`] = `
           </a>
           are published by The MIT Press under a 
           <a
-            href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+            href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
             rel="nofollow"
           >
             Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License

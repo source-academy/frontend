@@ -7,15 +7,18 @@ import Messages, {
   sendToWebview,
 } from 'src/features/vscode/messages';
 
-import NavigationBar from '../navigationBar/NavigationBar';
-import Constants from '../utils/Constants';
-import { useLocalStorageState, useSession } from '../utils/Hooks';
-import WorkspaceActions from '../workspace/WorkspaceActions';
-import { defaultWorkspaceSettings, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
-import SessionActions from './actions/SessionActions';
-import VscodeActions from './actions/VscodeActions';
+import SessionActions from '../commons/application/actions/SessionActions';
+import VscodeActions from '../commons/application/actions/VscodeActions';
+import NavigationBar from '../commons/navigationBar/NavigationBar';
+import Constants from '../commons/utils/Constants';
+import { useLocalStorageState, useSession } from '../commons/utils/Hooks';
+import WorkspaceActions from '../commons/workspace/WorkspaceActions';
+import {
+  defaultWorkspaceSettings,
+  WorkspaceSettingsContext,
+} from '../commons/WorkspaceSettingsContext';
 
-const Application: React.FC = () => {
+function RootLayout() {
   const dispatch = useDispatch();
   const { isLoggedIn } = useSession();
 
@@ -163,9 +166,6 @@ const Application: React.FC = () => {
       </div>
     </WorkspaceSettingsContext.Provider>
   );
-};
+}
 
-export const Component = Application;
-Component.displayName = 'Application';
-
-export default Application;
+export const Component = RootLayout;

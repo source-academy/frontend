@@ -1,5 +1,11 @@
 import { memoize } from 'lodash';
-import { type MiddlewareFunction, redirect, replace, type RouteObject } from 'react-router';
+import {
+  type LoaderFunction,
+  type MiddlewareFunction,
+  redirect,
+  replace,
+  type RouteObject,
+} from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
@@ -35,7 +41,7 @@ const buildAssessmentRoutes = memoize(
   },
 );
 
-const checkAssessmentTypeMiddleware = (({ params }) => {
+const checkAssessmentTypeLoader = (({ params }) => {
   const { assessmentConfigurations } = store.getState().session;
   const assessmentRoutes = buildAssessmentRoutes(assessmentConfigurations);
 
@@ -45,19 +51,22 @@ const checkAssessmentTypeMiddleware = (({ params }) => {
       return assessmentRoutes[type];
     }
   }
-  throw redirect(notFoundPath);
-}) satisfies MiddlewareFunction;
+  // Note: Middleware resolves relative paths from the root,
+  // while Loader resolves relative paths from the parent route,
+  // so here, it's fine to just redirect to `not-found` without prefixing
+  return redirect(notFoundPath);
+}) satisfies LoaderFunction;
 
-const homePageRedirect = (() => {
+const homePageRedirect = (({ params: { courseId } }) => {
   const { role, enableGame, assessmentConfigurations } = store.getState().session;
   if (enableGame) {
-    throw redirect('game');
+    throw redirect(`/courses/${courseId}/game`);
   }
   if (assessmentConfigurations && assessmentConfigurations.length > 0) {
-    throw redirect(`${assessmentTypeLink(assessmentConfigurations[0].type)}`);
+    throw redirect(`/courses/${courseId}/${assessmentTypeLink(assessmentConfigurations[0].type)}`);
   }
   if (role === Role.Admin) {
-    throw redirect('adminpanel');
+    throw redirect(`/courses/${courseId}/adminpanel`);
   }
   return null;
 }) satisfies MiddlewareFunction;
@@ -67,18 +76,18 @@ const commonAcademyRoutes: RouteObject[] = [
     index: true,
     middleware: [
       homePageRedirect,
-      () => {
-        throw replace(notFoundPath);
+      ({ params: { courseId } }) => {
+        throw replace(`/courses/${courseId}/${notFoundPath}`);
       },
     ],
   },
   {
     path: 'game',
     middleware: [
-      () => {
+      ({ params: { courseId } }) => {
         const state = store.getState();
         if (!state.session.enableGame) {
-          throw redirect(notFoundPath);
+          throw redirect(`/courses/${courseId}/${notFoundPath}`);
         }
         return null;
       },
@@ -87,7 +96,7 @@ const commonAcademyRoutes: RouteObject[] = [
   },
   {
     path: `:assessmentConfigType/${assessmentRegExp}`,
-    middleware: [checkAssessmentTypeMiddleware],
+    loader: checkAssessmentTypeLoader,
     lazy: Assessment,
   },
   {
@@ -121,11 +130,11 @@ function createRoutes(routeMap: Record<string, RouteObject['lazy']>): RouteObjec
 }
 
 function ensureRoleOneOf(...roles: Role[]) {
-  return (() => {
+  return (({ params: { courseId } }) => {
     const state = store.getState();
     const role = state.session.role;
     if (role == undefined || !roles.includes(role)) {
-      throw redirect(notFoundPath);
+      throw redirect(`/courses/${courseId}/${notFoundPath}`);
     }
     return null;
   }) satisfies MiddlewareFunction;
@@ -152,6 +161,4 @@ const adminRoutes: RouteObject = {
   }),
 };
 
-export const getAcademyRoutes = (): RouteObject[] => {
-  return [...commonAcademyRoutes, staffRoutes, adminRoutes];
-};
+export const academyRoutes: RouteObject[] = [...commonAcademyRoutes, staffRoutes, adminRoutes];

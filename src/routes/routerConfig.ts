@@ -2,51 +2,32 @@ import { type MiddlewareFunction, redirect, replace, type RouteObject } from 're
 import Constants from 'src/commons/utils/Constants';
 import { store } from 'src/pages/createStore';
 
-/**
- * Partial migration to be compatible with react-router v6.4 data loader APIs.
- *
- * Note that to use data loader APIs, the routes utilizing loader functions must be defined before passing
- * them to createBrowserRouter. They cannot be defined in some child/nested <Routes /> component that can only be known
- * during render time.
- * https://stackoverflow.com/questions/73875903/react-router-route-loader-not-working-on-nested-components
- */
-
-// Conditionally allow access to route via `loader` instead of conditionally defining these routes in react-router v6.4.
-// See https://github.com/remix-run/react-router/discussions/10223#discussioncomment-5909050
-// const conditionalLoader = (condition: boolean, redirectTo: string, returnValue?: any) => () => {
-//   if (condition) {
-//     return redirect(redirectTo);
-//   }
-//   return returnValue ?? null;
-// };
-
-const Application = () => import('../commons/application/Application');
+const RootLayout = () => import('../new_routes/_layout');
 const Login = () => import('../pages/login/Login');
 const LoginPage = () => import('../new_routes/login');
 const LoginCallback = () => import('../new_routes/login/callback');
 const LoginVscodeCallback = () => import('../new_routes/login/vscode_callback');
 const NusLogin = () => import('../new_routes/nus_login');
-const Contributors = () => import('../new_routes/contributors');
-const GitHubCallback = () => import('../new_routes/callback/github');
-const Sicp = () => import('../new_routes/sicpjs/[section]');
 const Playground = () => import('../pages/playground/Playground');
 const NotFound = () => import('../new_routes/not-found');
 const Welcome = () => import('../new_routes/welcome');
 const Academy = () => import('../new_routes/courses/[courseId]/_layout');
 const MissionControl = () => import('../new_routes/mission-control/[assessmentId]/[questionId]');
-const Features = () => import('../new_routes/features');
 
 const commonChildrenRoutes: RouteObject[] = [
-  { path: 'contributors', lazy: Contributors },
-  { path: 'callback/github', lazy: GitHubCallback },
-  { path: 'sicpjs/:section?', lazy: Sicp },
-  { path: 'features', lazy: Features },
+  { path: 'contributors', lazy: () => import('../new_routes/contributors') },
+  { path: 'callback/github', lazy: () => import('../new_routes/callback/github') },
+  {
+    path: 'sicpjs',
+    lazy: () => import('../new_routes/sicpjs/_layout'),
+    children: [{ path: ':section', lazy: () => import('../new_routes/sicpjs/[section]') }],
+  },
+  { path: 'features', lazy: () => import('../new_routes/features') },
 ];
 
 export const playgroundOnlyRouterConfig: RouteObject[] = [
   {
-    path: '*',
-    lazy: Application,
+    lazy: RootLayout,
     children: [
       { index: true, loader: () => replace('/playground') },
       { path: 'playground', lazy: Playground },
@@ -102,8 +83,7 @@ export const getFullAcademyRouterConfig = ({
       children: [{ path: '', lazy: NusLogin }],
     },
     {
-      path: '*',
-      lazy: Application,
+      lazy: RootLayout,
       children: [
         {
           index: true,
