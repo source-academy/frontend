@@ -124,7 +124,7 @@ export const EditingOverviewCard: React.FC<Props> = props => {
                   : `${getPrettyDate(overview.closeAt)}`}
               </div>
             </Text>
-            <Button icon={IconNames.WRENCH} minimal={true} onClick={toggleOptionsOverlay}>
+            <Button icon={IconNames.WRENCH} variant="minimal" onClick={toggleOptionsOverlay}>
               Other Options
             </Button>
             <NavLink
@@ -152,7 +152,12 @@ export const EditingOverviewCard: React.FC<Props> = props => {
   );
 
   const makeExportButton = (overview: AssessmentOverview) => (
-    <Button icon={IconNames.EXPORT} intent={Intent.DANGER} minimal={true} onClick={handleExportXml}>
+    <Button
+      icon={IconNames.EXPORT}
+      intent={Intent.DANGER}
+      variant="minimal"
+      onClick={handleExportXml}
+    >
       Save as XML
     </Button>
   );

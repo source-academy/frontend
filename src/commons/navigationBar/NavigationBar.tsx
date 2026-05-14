@@ -55,8 +55,8 @@ const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }
         <Button
           onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
           icon={IconNames.MENU}
-          large={true}
-          minimal={true}
+          size="large"
+          variant="minimal"
         />
       )}
       <NavLink

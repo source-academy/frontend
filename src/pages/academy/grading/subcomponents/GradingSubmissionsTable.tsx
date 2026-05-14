@@ -369,7 +369,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         </GradingFlex>
 
         <Button
-          minimal={true}
+          variant="minimal"
           className={classNames(
             classes['grading-filter-btn'],
             filterMode && classes['grading-filter-btn-on'],
@@ -383,7 +383,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           className="grading-search-input"
           placeholder="Search by assessment name"
           leftIcon="search"
-          large={true}
+          size="large"
           value={searchQuery}
           onChange={handleSearchQueryUpdate}
         />
