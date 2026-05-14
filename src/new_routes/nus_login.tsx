@@ -40,7 +40,7 @@ function NusLogin() {
               className={classes['logo']}
               href="https://www.nus.edu.sg"
               target="_blank"
-              rel="noopener noreferer nofollow"
+              rel="noopener noreferrer nofollow"
             >
               <img className={classes['logo']} src={NUS_LOGO} alt="NUS" />
             </a>
