@@ -1,11 +1,6 @@
 import { memoize } from 'lodash';
-import {
-  type LoaderFunction,
-  type MiddlewareFunction,
-  redirect,
-  replace,
-  type RouteObject,
-} from 'react-router';
+import type { LoaderFunction, MiddlewareFunction, RouteObject } from 'react-router';
+import { redirect, replace } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
