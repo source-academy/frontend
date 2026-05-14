@@ -47,6 +47,36 @@ const ALL_ARROW_FILTER_KEYS: ArrowOriginFilterKey[] = [
   'stash',
 ];
 
+const calculateWidth = (editorWidthProp?: string) => {
+  const horizontalPadding = 50;
+  const maxWidth = 5000;
+  let w;
+  if (editorWidthProp === undefined) {
+    w = window.innerWidth - horizontalPadding;
+  } else {
+    w = Math.min(
+      maxWidth,
+      (window.innerWidth * (100 - parseFloat(editorWidthProp))) / 100 - horizontalPadding,
+    );
+  }
+  return Math.min(w, maxWidth);
+};
+
+const calculateHeight = (sideContentHeightProp?: number) => {
+  const verticalPadding = 150;
+  const maxHeight = 5000; // limit for visible diagram height for huge screens
+  let h;
+  if (window.innerWidth < Constants.mobileBreakpoint) {
+    // mobile mode
+    h = window.innerHeight - verticalPadding;
+  } else if (sideContentHeightProp === undefined) {
+    h = window.innerHeight - verticalPadding;
+  } else {
+    h = sideContentHeightProp - verticalPadding;
+  }
+  return Math.min(h, maxHeight);
+};
+
 type Props = {
   workspaceLocation: WorkspaceLocation;
   editorWidth?: string;
@@ -110,36 +140,6 @@ const SideContentCseMachine: React.FC<Props> = ({
     },
     [dispatch, workspaceLocation],
   );
-
-  const calculateWidth = useCallback((editorWidthProp?: string) => {
-    const horizontalPadding = 50;
-    const maxWidth = 5000;
-    let w;
-    if (editorWidthProp === undefined) {
-      w = window.innerWidth - horizontalPadding;
-    } else {
-      w = Math.min(
-        maxWidth,
-        (window.innerWidth * (100 - parseFloat(editorWidthProp))) / 100 - horizontalPadding,
-      );
-    }
-    return Math.min(w, maxWidth);
-  }, []);
-
-  const calculateHeight = useCallback((sideContentHeightProp?: number) => {
-    const verticalPadding = 150;
-    const maxHeight = 5000; // limit for visible diagram height for huge screens
-    let h;
-    if (window.innerWidth < Constants.mobileBreakpoint) {
-      // mobile mode
-      h = window.innerHeight - verticalPadding;
-    } else if (sideContentHeightProp === undefined) {
-      h = window.innerHeight - verticalPadding;
-    } else {
-      h = sideContentHeightProp - verticalPadding;
-    }
-    return Math.min(h, maxHeight);
-  }, []);
 
   const sliderRelease = useCallback(
     (newValue: number) => {
