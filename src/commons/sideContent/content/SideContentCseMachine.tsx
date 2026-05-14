@@ -171,6 +171,27 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     return Math.min(height, maxHeight);
   }
 
+  private sliderRelease = (newValue: number) => {
+    if (newValue === this.props.stepsTotal) {
+      this.setState({ lastStep: true });
+    } else {
+      this.setState({ lastStep: false });
+    }
+    this.props.handleEditorEval();
+  };
+
+  private sliderShift = (newValue: number) => {
+    if (this.state.clearDeadFrames) {
+      CseMachine.setClearDeadFrames(false);
+      CseMachine.clearLiveLayouts();
+      CseMachine.redraw();
+    }
+    this.props.handleStepUpdate(newValue);
+    this.setState((state: State) => {
+      return { value: newValue, clearDeadFrames: false };
+    });
+  };
+
   handleResize = debounce(() => {
     const newWidth = this.calculateWidth(this.props.editorWidth);
     const newHeight = this.calculateHeight(this.props.sideContentHeight);
@@ -220,6 +241,95 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       }
     }
   }
+
+  private stepPrevious = () => {
+    if (this.state.value !== 0) {
+      this.sliderShift(this.state.value - 1);
+      this.sliderRelease(this.state.value - 1);
+    }
+  };
+
+  private stepNext = () => {
+    const lastStepValue = this.props.stepsTotal;
+    if (this.state.value !== lastStepValue) {
+      this.sliderShift(this.state.value + 1);
+      this.sliderRelease(this.state.value + 1);
+      CseAnimation.enableAnimations();
+    }
+  };
+
+  private stepFirst = () => {
+    // Move to the first step
+    this.sliderShift(0);
+    this.sliderRelease(0);
+  };
+
+  private stepLast = (lastStepValue: number) => () => {
+    // Move to the last step
+    this.sliderShift(lastStepValue);
+    this.sliderRelease(lastStepValue);
+  };
+
+  private stepNextBreakpoint = () => {
+    for (const step of this.props.breakpointSteps) {
+      if (step > this.state.value) {
+        this.sliderShift(step);
+        this.sliderRelease(step);
+        return;
+      }
+    }
+    this.sliderShift(this.props.stepsTotal);
+    this.sliderRelease(this.props.stepsTotal);
+  };
+
+  private stepPrevBreakpoint = () => {
+    for (let i = this.props.breakpointSteps.length - 1; i >= 0; i--) {
+      const step = this.props.breakpointSteps[i];
+      if (step < this.state.value) {
+        this.sliderShift(step);
+        this.sliderRelease(step);
+        return;
+      }
+    }
+    this.sliderShift(0);
+    this.sliderRelease(0);
+  };
+
+  private stepNextChangepoint = () => {
+    for (const step of this.props.changepointSteps) {
+      if (step > this.state.value) {
+        this.sliderShift(step);
+        this.sliderRelease(step);
+        return;
+      }
+    }
+    this.sliderShift(this.props.stepsTotal);
+    this.sliderRelease(this.props.stepsTotal);
+  };
+
+  private stepPrevChangepoint = () => {
+    for (let i = this.props.changepointSteps.length - 1; i >= 0; i--) {
+      const step = this.props.changepointSteps[i];
+      if (step < this.state.value) {
+        this.sliderShift(step);
+        this.sliderRelease(step);
+        return;
+      }
+    }
+    this.sliderShift(0);
+    this.sliderRelease(0);
+  };
+
+  private toggleArrowFilter = (origin: ArrowOriginFilterKey) => {
+    const filters = CseMachine.getArrowOriginFilters();
+    CseMachine.setArrowOriginVisible(origin, !filters[origin]);
+    this.refreshArrowFilters();
+  };
+
+  private setAllArrowFilters = (visible: boolean) => {
+    CseMachine.setAllArrowOriginsVisible(visible);
+    this.refreshArrowFilters();
+  };
 
   public render() {
     const arrowFilters = CseMachine.getArrowOriginFilters();
@@ -539,116 +649,6 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     } else {
       Layout.zoomStage(isZoomIn, multiplier);
     }
-  };
-
-  private sliderRelease = (newValue: number) => {
-    if (newValue === this.props.stepsTotal) {
-      this.setState({ lastStep: true });
-    } else {
-      this.setState({ lastStep: false });
-    }
-    this.props.handleEditorEval();
-  };
-
-  private sliderShift = (newValue: number) => {
-    if (this.state.clearDeadFrames) {
-      CseMachine.setClearDeadFrames(false);
-      CseMachine.clearLiveLayouts();
-      CseMachine.redraw();
-    }
-    this.props.handleStepUpdate(newValue);
-    this.setState((state: State) => {
-      return { value: newValue, clearDeadFrames: false };
-    });
-  };
-
-  private stepPrevious = () => {
-    if (this.state.value !== 0) {
-      this.sliderShift(this.state.value - 1);
-      this.sliderRelease(this.state.value - 1);
-    }
-  };
-
-  private stepNext = () => {
-    const lastStepValue = this.props.stepsTotal;
-    if (this.state.value !== lastStepValue) {
-      this.sliderShift(this.state.value + 1);
-      this.sliderRelease(this.state.value + 1);
-      CseAnimation.enableAnimations();
-    }
-  };
-
-  private stepFirst = () => {
-    // Move to the first step
-    this.sliderShift(0);
-    this.sliderRelease(0);
-  };
-
-  private stepLast = (lastStepValue: number) => () => {
-    // Move to the last step
-    this.sliderShift(lastStepValue);
-    this.sliderRelease(lastStepValue);
-  };
-
-  private stepNextBreakpoint = () => {
-    for (const step of this.props.breakpointSteps) {
-      if (step > this.state.value) {
-        this.sliderShift(step);
-        this.sliderRelease(step);
-        return;
-      }
-    }
-    this.sliderShift(this.props.stepsTotal);
-    this.sliderRelease(this.props.stepsTotal);
-  };
-
-  private stepPrevBreakpoint = () => {
-    for (let i = this.props.breakpointSteps.length - 1; i >= 0; i--) {
-      const step = this.props.breakpointSteps[i];
-      if (step < this.state.value) {
-        this.sliderShift(step);
-        this.sliderRelease(step);
-        return;
-      }
-    }
-    this.sliderShift(0);
-    this.sliderRelease(0);
-  };
-
-  private stepNextChangepoint = () => {
-    for (const step of this.props.changepointSteps) {
-      if (step > this.state.value) {
-        this.sliderShift(step);
-        this.sliderRelease(step);
-        return;
-      }
-    }
-    this.sliderShift(this.props.stepsTotal);
-    this.sliderRelease(this.props.stepsTotal);
-  };
-
-  private stepPrevChangepoint = () => {
-    for (let i = this.props.changepointSteps.length - 1; i >= 0; i--) {
-      const step = this.props.changepointSteps[i];
-      if (step < this.state.value) {
-        this.sliderShift(step);
-        this.sliderRelease(step);
-        return;
-      }
-    }
-    this.sliderShift(0);
-    this.sliderRelease(0);
-  };
-
-  private toggleArrowFilter = (origin: ArrowOriginFilterKey) => {
-    const filters = CseMachine.getArrowOriginFilters();
-    CseMachine.setArrowOriginVisible(origin, !filters[origin]);
-    this.refreshArrowFilters();
-  };
-
-  private setAllArrowFilters = (visible: boolean) => {
-    CseMachine.setAllArrowOriginsVisible(visible);
-    this.refreshArrowFilters();
   };
 
   private refreshArrowFilters = () => {
