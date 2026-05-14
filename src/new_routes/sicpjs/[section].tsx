@@ -14,7 +14,7 @@ function SicpPage() {
     navigate('/sicpjs/' + sect);
   };
 
-  // `section` is defined due to the navigate logic in the useEffect above
+  // `section` is defined due to the route configuration
   const navigationButtons = (
     <div className="sicp-navigation-buttons">
       {getPrev(section!) && (
