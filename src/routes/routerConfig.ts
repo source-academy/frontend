@@ -2,37 +2,78 @@ import { type MiddlewareFunction, redirect, replace, type RouteObject } from 're
 import Constants from 'src/commons/utils/Constants';
 import { store } from 'src/pages/createStore';
 
+import { createRoutes } from './routeUtils';
+
 const RootLayout = () => import('../new_routes/_layout');
 const Login = () => import('../pages/login/Login');
-const LoginPage = () => import('../new_routes/login');
-const LoginCallback = () => import('../new_routes/login/callback');
-const LoginVscodeCallback = () => import('../new_routes/login/vscode_callback');
-const NusLogin = () => import('../new_routes/nus_login');
 const Playground = () => import('../pages/playground/Playground');
-const NotFound = () => import('../new_routes/not-found');
-const Welcome = () => import('../new_routes/welcome');
-const Academy = () => import('../new_routes/courses/[courseId]/_layout');
 const MissionControl = () => import('../new_routes/mission-control/[assessmentId]/[questionId]');
 
-const commonChildrenRoutes: RouteObject[] = [
-  { path: 'contributors', lazy: () => import('../new_routes/contributors') },
-  { path: 'callback/github', lazy: () => import('../new_routes/callback/github') },
-  {
-    path: 'sicpjs',
-    lazy: () => import('../new_routes/sicpjs/_layout'),
-    children: [{ path: ':section', lazy: () => import('../new_routes/sicpjs/[section]') }],
-  },
-  { path: 'features', lazy: () => import('../new_routes/features') },
-];
+const commonRoutes: RouteObject = {
+  lazy: RootLayout,
+  children: [
+    ...createRoutes({
+      contributors: () => import('../new_routes/contributors'),
+      'callback/github': () => import('../new_routes/callback/github'),
+      features: () => import('../new_routes/features'),
+      '*': () => import('../new_routes/not-found'),
+    }),
+    {
+      path: 'sicpjs',
+      lazy: () => import('../new_routes/sicpjs/_layout'),
+      children: [{ path: ':section', lazy: () => import('../new_routes/sicpjs/[section]') }],
+    },
+  ],
+};
 
 export const playgroundOnlyRouterConfig: RouteObject[] = [
+  commonRoutes,
   {
     lazy: RootLayout,
     children: [
       { index: true, loader: () => replace('/playground') },
       { path: 'playground', lazy: Playground },
-      ...commonChildrenRoutes,
-      { path: '*', lazy: NotFound },
+    ],
+  },
+];
+
+const loginRoutes: RouteObject[] = [
+  {
+    path: 'nus_login',
+    lazy: Login,
+    middleware: [
+      () => {
+        if (Constants.hasNusAuthProviders) {
+          return null;
+        }
+        throw redirect('/login');
+      },
+    ],
+    children: [{ index: true, lazy: () => import('../new_routes/nus_login') }],
+  },
+  {
+    lazy: RootLayout,
+    children: [
+      { path: 'login/vscode_callback', lazy: () => import('../new_routes/login/vscode_callback') },
+      {
+        path: 'login',
+        lazy: Login,
+        children: [
+          {
+            index: true,
+            middleware: [
+              () => {
+                if (Constants.hasOtherAuthProviders) {
+                  return null;
+                }
+                throw redirect('/nus_login');
+              },
+            ],
+            lazy: () => import('../new_routes/login'),
+          },
+          { path: 'callback', lazy: () => import('../new_routes/login/callback') },
+        ],
+      },
     ],
   },
 ];
@@ -69,19 +110,8 @@ export const getFullAcademyRouterConfig = ({
   }) satisfies MiddlewareFunction;
 
   return [
-    {
-      path: 'nus_login',
-      lazy: Login,
-      middleware: [
-        () => {
-          if (Constants.hasNusAuthProviders) {
-            return null;
-          }
-          throw redirect('/login');
-        },
-      ],
-      children: [{ path: '', lazy: NusLogin }],
-    },
+    commonRoutes,
+    ...loginRoutes,
     {
       lazy: RootLayout,
       children: [
@@ -95,28 +125,10 @@ export const getFullAcademyRouterConfig = ({
           ],
         },
         {
-          path: 'login',
-          lazy: Login,
-          middleware: [
-            () => {
-              if (Constants.hasOtherAuthProviders) {
-                return null;
-              }
-              throw redirect('/nus_login');
-            },
-          ],
-          children: [{ path: '', lazy: LoginPage }],
+          path: 'welcome',
+          middleware: [welcomeMiddleware],
+          lazy: () => import('../new_routes/welcome'),
         },
-        {
-          path: 'login',
-          lazy: Login,
-          children: [{ path: 'callback', lazy: LoginCallback }],
-        },
-        {
-          path: 'login',
-          children: [{ path: 'vscode_callback', lazy: LoginVscodeCallback }],
-        },
-        { path: 'welcome', lazy: Welcome, middleware: [welcomeMiddleware] },
         {
           path: 'courses',
           middleware: [
@@ -139,13 +151,15 @@ export const getFullAcademyRouterConfig = ({
             },
           ],
           children: [
-            { path: 'courses/:courseId/*', lazy: Academy, children: academyRoutes },
+            {
+              path: 'courses/:courseId',
+              lazy: () => import('../new_routes/courses/[courseId]/_layout'),
+              children: academyRoutes,
+            },
             { path: 'playground/:playgroundCode?', lazy: Playground },
           ],
         },
         { path: 'mission-control/:assessmentId?/:questionId?', lazy: MissionControl },
-        ...commonChildrenRoutes,
-        { path: '*', lazy: NotFound },
       ],
     },
   ];

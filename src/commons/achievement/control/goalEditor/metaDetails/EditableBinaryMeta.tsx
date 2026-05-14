@@ -138,7 +138,7 @@ const EditableBinaryMeta: React.FC<Props> = ({ binaryMeta, changeMeta }) => {
                 items={['AND', 'OR']}
                 onItemSelect={value => changeJoinerArray(value, (idx - 1) / 2)}
               >
-                <Button minimal={true} outlined={true} text={op} />
+                <Button variant="outlined" text={op} />
               </JoinerSelect>
             </Tooltip>
           )
@@ -161,7 +161,7 @@ const EditableBinaryMeta: React.FC<Props> = ({ binaryMeta, changeMeta }) => {
       </Tooltip>
       {generateConditions()}
       <br />
-      <Button minimal={true} outlined={true} text="Add Condition" onClick={addCondition} />
+      <Button variant="outlined" text="Add Condition" onClick={addCondition} />
     </>
   );
 };

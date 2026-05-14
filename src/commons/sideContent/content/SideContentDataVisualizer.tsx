@@ -86,8 +86,8 @@ const SideContentDataVisualizer: React.FC<Props> = ({ workspaceLocation }) => {
                 position: 'absolute',
                 left: 0,
               }}
-              large={true}
-              outlined={true}
+              size="large"
+              variant="outlined"
               icon={IconNames.ARROW_LEFT}
               onClick={onPrevButtonClick}
               disabled={firstStep}
@@ -103,8 +103,8 @@ const SideContentDataVisualizer: React.FC<Props> = ({ workspaceLocation }) => {
                 position: 'absolute',
                 right: 0,
               }}
-              large={true}
-              outlined={true}
+              size="large"
+              variant="outlined"
               icon={IconNames.ARROW_RIGHT}
               onClick={onNextButtonClick}
               disabled={finalStep}

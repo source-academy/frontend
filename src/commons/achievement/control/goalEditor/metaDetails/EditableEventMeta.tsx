@@ -64,7 +64,7 @@ const EditableEventMeta: React.FC<Props> = ({ changeMeta, eventMeta }) => {
           itemRenderer={eventRenderer}
           onItemSelect={changeIndexEventName(index)}
         >
-          <Button outlined={true} text={eventName} />
+          <Button variant="outlined" text={eventName} />
         </EventSelect>
       </Tooltip>
     ));
@@ -79,7 +79,7 @@ const EditableEventMeta: React.FC<Props> = ({ changeMeta, eventMeta }) => {
     <>
       {generateEventNames()}
       <Tooltip content="Add Event">
-        <Button outlined={true} text={'Add Event'} onClick={addEvent} />
+        <Button variant="outlined" text={'Add Event'} onClick={addEvent} />
       </Tooltip>
       <Tooltip content="Target Count">
         <NumericInput

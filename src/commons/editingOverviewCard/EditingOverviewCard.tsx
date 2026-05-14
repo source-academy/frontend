@@ -213,7 +213,7 @@ export const EditingOverviewCard: React.FC<Props> = props => {
       itemRenderer={assessmentTypeRenderer}
       filterable={false}
     >
-      <Button minimal text={assessmentType} rightIcon={IconNames.DOUBLE_CARET_VERTICAL} />
+      <Button variant="minimal" text={assessmentType} rightIcon={IconNames.DOUBLE_CARET_VERTICAL} />
     </AssessmentTypeSelectComponent>
   );
 

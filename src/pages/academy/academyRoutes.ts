@@ -1,15 +1,11 @@
 import { memoize } from 'lodash';
-import {
-  type LoaderFunction,
-  type MiddlewareFunction,
-  redirect,
-  replace,
-  type RouteObject,
-} from 'react-router';
+import type { LoaderFunction, MiddlewareFunction, RouteObject } from 'react-router';
+import { redirect, replace } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 import { assessmentRegExp } from 'src/features/academy/AcademyTypes';
+import { createRoutes } from 'src/routes/routeUtils';
 
 import { store } from '../createStore';
 import {
@@ -124,10 +120,6 @@ const commonAcademyRoutes: RouteObject[] = [
   },
   { path: '*', lazy: NotFound },
 ];
-
-function createRoutes(routeMap: Record<string, RouteObject['lazy']>): RouteObject[] {
-  return Object.entries(routeMap).map(([path, lazy]) => ({ path, lazy }));
-}
 
 function ensureRoleOneOf(...roles: Role[]) {
   return (({ params: { courseId } }) => {

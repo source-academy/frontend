@@ -110,7 +110,7 @@ export default class StringUtils {
   public static splitToLines(text: string): string[] {
     return text
       .split('\n')
-      .map(line => line.trimRight())
+      .map(line => line.trimEnd())
       .filter(line => line !== '');
   }
 
@@ -126,7 +126,7 @@ export default class StringUtils {
   public static splitToLinesAndRemoveComments(text: string): string[] {
     return this.removeMultiLineComments(text.split('\n'), '/*', '*/')
       .map(line => this.removeSingleLineComment(line, '//'))
-      .map(line => line.trimRight())
+      .map(line => line.trimEnd())
       .filter(line => line !== '');
   }
 

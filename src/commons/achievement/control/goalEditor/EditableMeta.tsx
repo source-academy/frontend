@@ -56,7 +56,7 @@ const EditableMeta: React.FC<Props> = ({ changeMeta, meta }) => {
           items={Object.values(GoalType)}
           onItemSelect={changeType}
         >
-          <Button minimal={true} outlined={true} text={type} />
+          <Button variant="outlined" text={type} />
         </TypeSelect>
       </Tooltip>
       {editableMetaDetails(type)}

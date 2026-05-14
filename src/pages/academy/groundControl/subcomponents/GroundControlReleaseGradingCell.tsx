@@ -87,7 +87,7 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
   return (
     <>
       <Tooltip content={change} placement="top">
-        <Button minimal key={keyID} onClick={handleOpenDialog} icon={icon} />
+        <Button variant="minimal" key={keyID} onClick={handleOpenDialog} icon={icon} />
       </Tooltip>
       <Dialog
         icon={IconNames.WARNING_SIGN}
