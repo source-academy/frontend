@@ -330,7 +330,7 @@ const GradingEditor: React.FC<Props> = props => {
                 size="small"
                 variant="minimal"
                 onClick={onClickReautogradeAnswer}
-               />
+              />
             </div>
           </div>
           <div className="xp-adjustment">

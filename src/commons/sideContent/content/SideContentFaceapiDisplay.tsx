@@ -50,13 +50,7 @@ const SideContentFaceapiDisplay: React.FC = () => {
   return (
     <div className="sa-video">
       <div className="sa-video-element">
-        <video
-          id="video"
-          style={{ position: 'absolute' }}
-          autoPlay
-          width={333}
-          height={250}
-        />
+        <video id="video" style={{ position: 'absolute' }} autoPlay width={333} height={250} />
 
         <canvas
           id="canvas"

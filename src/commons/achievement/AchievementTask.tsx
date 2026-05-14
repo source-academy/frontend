@@ -92,7 +92,7 @@ const AchievementTask: React.FC<Props> = ({ uuid, filterStatus, focusState }) =>
                       borderBottom: `1px solid ${taskColor}`,
                       borderLeft: `1px solid ${taskColor}`,
                     }}
-                   />
+                  />
                   <AchievementCard
                     uuid={prerequisiteUuid}
                     focusState={focusState}

@@ -32,7 +32,7 @@ const ArrowDrawable: React.FC<Props> = props => {
         stroke={Config.Stroke}
         strokeWidth={Config.StrokeWidth}
         preventDefault={false}
-       />
+      />
     );
   } else {
     // OriginalView
@@ -51,7 +51,7 @@ const ArrowDrawable: React.FC<Props> = props => {
         stroke={Config.Stroke}
         strokeWidth={Config.StrokeWidth}
         preventDefault={false}
-       />
+      />
     );
   }
 };

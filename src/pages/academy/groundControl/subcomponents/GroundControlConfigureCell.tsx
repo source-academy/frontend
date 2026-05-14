@@ -158,7 +158,7 @@ const ConfigureCell: React.FC<Props> = ({
               options={{ variant: 'default', intent: Intent.PRIMARY }}
             />
           }
-         />
+        />
       </Dialog>
     </>
   );

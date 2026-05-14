@@ -39,7 +39,7 @@ export class ArrayTreeNode extends DrawableTreeNode {
                     : y,
               },
             }}
-           />
+          />
         )}
       </Group>
     );

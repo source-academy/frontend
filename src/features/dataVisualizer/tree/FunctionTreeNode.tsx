@@ -30,7 +30,7 @@ export class FunctionTreeNode extends DrawableTreeNode {
                 y,
               },
             }}
-           />
+          />
         )}
       </Group>
     );
