@@ -606,7 +606,7 @@ test('updateGrading generates correct action object', async () => {
       {
         id: 0,
         prompts: [],
-        question: await vi.importMock('../../../../features/grading/GradingTypes'),
+        question: await vi.importMock('../../../features/grading/GradingTypes'),
         student: {
           name: 'test student',
           username: 'E0123456',

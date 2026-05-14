@@ -411,7 +411,7 @@ const gradingTest1: GradingQuery = {
       prompts: [],
       autogradingResults: [],
       autoGradingStatus: 'N/A',
-      question: await vi.importMock('../../../../features/grading/GradingTypes'),
+      question: await vi.importMock('../../../features/grading/GradingTypes'),
       student: {
         name: 'test student',
         username: 'E0123456',
@@ -444,7 +444,7 @@ const gradingTest2: GradingQuery = {
       prompts: [],
       autogradingResults: [],
       autoGradingStatus: 'N/A',
-      question: await vi.importMock('../../../../features/grading/GradingTypes'),
+      question: await vi.importMock('../../../features/grading/GradingTypes'),
       student: {
         name: 'another test student',
         username: 'E0000000',

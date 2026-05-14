@@ -17,7 +17,7 @@ function renderWithLocation(element: React.ReactElement, location: string) {
   );
 }
 
-vi.mock('../../../features/github/GitHubUtils', () => ({
+vi.mock('../../features/github/GitHubUtils', () => ({
   exchangeAccessCode: vi.fn(),
 }));
 
