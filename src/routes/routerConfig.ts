@@ -2,7 +2,7 @@ import { type MiddlewareFunction, redirect, replace, type RouteObject } from 're
 import Constants from 'src/commons/utils/Constants';
 import { store } from 'src/pages/createStore';
 
-const Application = () => import('../commons/application/Application');
+const RootLayout = () => import('../new_routes/_layout');
 const Login = () => import('../pages/login/Login');
 const LoginPage = () => import('../new_routes/login');
 const LoginCallback = () => import('../new_routes/login/callback');
@@ -23,8 +23,7 @@ const commonChildrenRoutes: RouteObject[] = [
 
 export const playgroundOnlyRouterConfig: RouteObject[] = [
   {
-    path: '*',
-    lazy: Application,
+    lazy: RootLayout,
     children: [
       { index: true, loader: () => replace('/playground') },
       { path: 'playground', lazy: Playground },
@@ -80,8 +79,7 @@ export const getFullAcademyRouterConfig = ({
       children: [{ path: '', lazy: NusLogin }],
     },
     {
-      path: '*',
-      lazy: Application,
+      lazy: RootLayout,
       children: [
         {
           index: true,

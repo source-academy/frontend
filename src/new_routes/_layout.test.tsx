@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { expect, test } from 'vitest';
 
-import Application from './Application';
+import { Component as RootLayout } from './_layout';
 
 test('Application renders correctly', () => {
   const store = mockInitialStore({
@@ -16,7 +16,7 @@ test('Application renders correctly', () => {
   const app = (
     <Provider store={store}>
       <MemoryRouter>
-        <Application />
+        <RootLayout />
       </MemoryRouter>
     </Provider>
   );
