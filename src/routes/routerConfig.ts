@@ -31,6 +31,47 @@ export const playgroundOnlyRouterConfig: RouteObject[] = [
   },
 ];
 
+const loginRoutes: RouteObject[] = [
+  {
+    path: 'nus_login',
+    lazy: Login,
+    middleware: [
+      () => {
+        if (Constants.hasNusAuthProviders) {
+          return null;
+        }
+        throw redirect('/login');
+      },
+    ],
+    children: [{ index: true, lazy: () => import('../new_routes/nus_login') }],
+  },
+  {
+    lazy: RootLayout,
+    children: [
+      { path: 'login/vscode_callback', lazy: () => import('../new_routes/login/vscode_callback') },
+      {
+        path: 'login',
+        lazy: Login,
+        children: [
+          {
+            index: true,
+            middleware: [
+              () => {
+                if (Constants.hasOtherAuthProviders) {
+                  return null;
+                }
+                throw redirect('/nus_login');
+              },
+            ],
+            lazy: () => import('../new_routes/login'),
+          },
+          { path: 'callback', lazy: () => import('../new_routes/login/callback') },
+        ],
+      },
+    ],
+  },
+];
+
 export const getFullAcademyRouterConfig = ({
   name,
   isLoggedIn,
@@ -63,19 +104,7 @@ export const getFullAcademyRouterConfig = ({
   }) satisfies MiddlewareFunction;
 
   return [
-    {
-      path: 'nus_login',
-      lazy: Login,
-      middleware: [
-        () => {
-          if (Constants.hasNusAuthProviders) {
-            return null;
-          }
-          throw redirect('/login');
-        },
-      ],
-      children: [{ path: '', lazy: () => import('../new_routes/nus_login') }],
-    },
+    ...loginRoutes,
     {
       lazy: RootLayout,
       children: [
@@ -86,31 +115,6 @@ export const getFullAcademyRouterConfig = ({
             () => {
               throw replace(`/courses/${courseId}`);
             },
-          ],
-        },
-        {
-          path: 'login',
-          lazy: Login,
-          children: [
-            {
-              index: true,
-              middleware: [
-                () => {
-                  if (Constants.hasOtherAuthProviders) {
-                    return null;
-                  }
-                  throw redirect('/nus_login');
-                },
-              ],
-              lazy: () => import('../new_routes/login'),
-            },
-            { path: 'callback', lazy: () => import('../new_routes/login/callback') },
-          ],
-        },
-        {
-          path: 'login',
-          children: [
-            { path: 'vscode_callback', lazy: () => import('../new_routes/login/vscode_callback') },
           ],
         },
         {
