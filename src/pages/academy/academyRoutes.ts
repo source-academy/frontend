@@ -10,6 +10,7 @@ import { Role } from 'src/commons/application/ApplicationTypes';
 import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 import { assessmentRegExp } from 'src/features/academy/AcademyTypes';
+import { createRoutes } from 'src/routes/routeUtils';
 
 import { store } from '../createStore';
 import {
@@ -124,10 +125,6 @@ const commonAcademyRoutes: RouteObject[] = [
   },
   { path: '*', lazy: NotFound },
 ];
-
-function createRoutes(routeMap: Record<string, RouteObject['lazy']>): RouteObject[] {
-  return Object.entries(routeMap).map(([path, lazy]) => ({ path, lazy }));
-}
 
 function ensureRoleOneOf(...roles: Role[]) {
   return (({ params: { courseId } }) => {
