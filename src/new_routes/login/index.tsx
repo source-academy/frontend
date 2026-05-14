@@ -15,7 +15,7 @@ const providers = [...Constants.otherAuthProviders.entries()].map(([id, { name }
   name,
 }));
 
-const LoginPage: React.FC = () => {
+function LoginPage() {
   const dispatch = useDispatch();
   const handleLogin = useCallback(
     (providerId: string) => dispatch(SessionActions.login(providerId)),
@@ -50,7 +50,7 @@ const LoginPage: React.FC = () => {
       </Card>
     </div>
   );
-};
+}
 
 const LoginButton = ({
   handleClick,
@@ -72,9 +72,4 @@ const LoginButton = ({
   );
 };
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = LoginPage;
-Component.displayName = 'LoginPage';
-
-export default LoginPage;

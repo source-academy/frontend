@@ -14,18 +14,17 @@ import { IconNames } from '@blueprintjs/icons';
 import type { BlueprintIcons_16Id } from '@blueprintjs/icons/lib/esm/generated/16px/blueprint-icons-16';
 import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-
-import { FeatureFlagsActions } from '../../commons/featureFlags';
-import { FeatureFlag } from '../../commons/featureFlags/FeatureFlag';
-import { publicFlags } from '../../commons/featureFlags/publicFlags';
-import { useTypedSelector } from '../../commons/utils/Hooks';
+import { FeatureFlagsActions } from 'src/commons/featureFlags';
+import { FeatureFlag } from 'src/commons/featureFlags/FeatureFlag';
+import { publicFlags } from 'src/commons/featureFlags/publicFlags';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 type FlagCardProps<T> = React.PropsWithChildren<{
   flag: FeatureFlag<T>;
   modifiedFlag: T | undefined;
 }>;
 
-const BooleanFlagCard: React.FC<FlagCardProps<boolean>> = ({ flag, modifiedFlag }) => {
+function BooleanFlagCard({ flag, modifiedFlag }: FlagCardProps<boolean>) {
   const currentFlag = modifiedFlag ?? flag.defaultValue;
   const isModified = modifiedFlag !== undefined;
 
@@ -40,9 +39,9 @@ const BooleanFlagCard: React.FC<FlagCardProps<boolean>> = ({ flag, modifiedFlag 
       {isModified ? <b>{String(currentFlag)}</b> : String(currentFlag)}
     </SwitchCard>
   );
-};
+}
 
-const NumberFlagCard: React.FC<FlagCardProps<number>> = ({ flag, modifiedFlag }) => {
+function NumberFlagCard({ flag, modifiedFlag }: FlagCardProps<number>) {
   const currentFlag = modifiedFlag ?? flag.defaultValue;
   const isModified = modifiedFlag !== undefined;
 
@@ -66,9 +65,9 @@ const NumberFlagCard: React.FC<FlagCardProps<number>> = ({ flag, modifiedFlag })
       />
     </Card>
   );
-};
+}
 
-const StringFlagCard: React.FC<FlagCardProps<string>> = ({ flag, modifiedFlag }) => {
+function StringFlagCard({ flag, modifiedFlag }: FlagCardProps<string>) {
   const currentFlag = modifiedFlag ?? flag.defaultValue;
   const isModified = modifiedFlag !== undefined;
 
@@ -90,15 +89,13 @@ const StringFlagCard: React.FC<FlagCardProps<string>> = ({ flag, modifiedFlag })
       {inputField}
     </Card>
   );
-};
+}
 
-const UnknownFlagCard: React.FC<FlagCardProps<unknown>> = ({ flag, modifiedFlag, children }) => {
+function UnknownFlagCard({ children }: FlagCardProps<unknown>) {
   return <Card interactive>{children}</Card>;
-};
+}
 
-export function whichCard(
-  flag: FeatureFlag<any>,
-): [BlueprintIcons_16Id, React.FC<FlagCardProps<any>>] {
+function whichCard(flag: FeatureFlag<any>): [BlueprintIcons_16Id, React.FC<FlagCardProps<any>>] {
   switch (typeof flag.defaultValue) {
     case 'boolean':
       return [IconNames.SWITCH, BooleanFlagCard];
@@ -111,12 +108,12 @@ export function whichCard(
   }
 }
 
-const FeatureFlagSection: React.FC<FlagCardProps<any> & { icon: BlueprintIcons_16Id }> = ({
+function FeatureFlagSection({
   flag,
   modifiedFlag,
   children,
   icon,
-}) => {
+}: FlagCardProps<any> & { icon: BlueprintIcons_16Id }) {
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -150,9 +147,9 @@ const FeatureFlagSection: React.FC<FlagCardProps<any> & { icon: BlueprintIcons_1
       </SectionCard>
     </Section>
   );
-};
+}
 
-export const FeatureFlags: React.FC = () => {
+function FeatureFlagsPage() {
   const flags = useTypedSelector(store => store.featureFlags.modifiedFlags);
 
   const cards = publicFlags.map(flag => {
@@ -167,8 +164,6 @@ export const FeatureFlags: React.FC = () => {
     );
   });
 
-  // TODO: search bar to filter public flags and view hidden flags
-
   return (
     <div className="fullpage">
       <Card
@@ -180,7 +175,6 @@ export const FeatureFlags: React.FC = () => {
       </Card>
     </div>
   );
-};
+}
 
-export const Component = FeatureFlags;
-Component.displayName = 'Feature Flags';
+export const Component = FeatureFlagsPage;

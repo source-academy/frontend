@@ -1,9 +1,16 @@
 import { render } from '@testing-library/react';
 import lzString from 'lz-string';
+import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
+import { vi } from 'vitest';
 
 import CodeSnippet from '../CodeSnippet';
 
 describe('Sicp Code Snippet', () => {
+  vi.mock('react-redux', async importActual => ({
+    ...(await importActual()),
+    useDispatch: () => vi.fn(),
+  }));
+
   const body = 'const a = 1;\na+1;';
   const output = '2';
   const program = lzString.compressToEncodedURIComponent(body);
@@ -17,7 +24,11 @@ describe('Sicp Code Snippet', () => {
       prependLength: 1,
     };
 
-    const tree = render(<CodeSnippet {...props} />);
+    const tree = render(
+      <CodeSnippetProvider>
+        <CodeSnippet {...props} />
+      </CodeSnippetProvider>,
+    );
     expect(tree.asFragment()).toMatchSnapshot();
   });
 
@@ -30,7 +41,11 @@ describe('Sicp Code Snippet', () => {
       prependLength: 0,
     };
 
-    const tree = render(<CodeSnippet {...props} />);
+    const tree = render(
+      <CodeSnippetProvider>
+        <CodeSnippet {...props} />
+      </CodeSnippetProvider>,
+    );
     expect(tree.asFragment()).toMatchSnapshot();
   });
 });

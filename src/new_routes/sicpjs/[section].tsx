@@ -2,14 +2,13 @@ import 'katex/dist/katex.min.css';
 
 import { Button, Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import classNames from 'classnames';
-import { createContext, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
-import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
+import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 import {
@@ -21,24 +20,17 @@ import {
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
-import Chatbot from './subcomponents/chatbot/Chatbot';
-import SicpIndexPage from './subcomponents/SicpIndexPage';
+import Chatbot from '../../pages/sicp/subcomponents/chatbot/Chatbot';
+import SicpIndexPage from '../../pages/sicp/subcomponents/SicpIndexPage';
 
 const baseUrl = Constants.sicpBackendUrl + 'json/';
 const extension = '.json';
 
-// Context to determine which code snippet is active
-export const CodeSnippetContext = createContext({
-  active: '0',
-  setActive: (x: string) => {},
-});
-
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
-const Sicp: React.FC = () => {
+function SicpPage() {
   const [data, setData] = useState(<></>);
   const [loading, setLoading] = useState(false);
-  const [active, setActive] = useState('0');
   const { section } = useParams<{ section: string }>();
   const parentRef = useRef<HTMLDivElement>(null);
   const refs = useRef<Record<string, HTMLElement | null>>({});
@@ -152,17 +144,6 @@ const Sicp: React.FC = () => {
     scrollRefIntoView(ref);
   }, [location.hash, loading]);
 
-  // Close all active code snippet when new page is loaded
-  useEffect(() => {
-    setActive('0');
-  }, [data]);
-
-  const dispatch = useDispatch();
-  const handleSnippetEditorOpen = (s: string) => {
-    setActive(s);
-    dispatch(WorkspaceActions.resetWorkspace('sicp'));
-    dispatch(WorkspaceActions.toggleUsingSubst(false, 'sicp'));
-  };
   const handleNavigation = (sect: string) => {
     navigate('/sicpjs/' + sect);
   };
@@ -185,7 +166,8 @@ const Sicp: React.FC = () => {
       ref={parentRef}
     >
       <SicpErrorBoundary>
-        <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
+        {/* Close all active code snippet when new page is loaded */}
+        <CodeSnippetProvider key={section}>
           {loading ? (
             <div className="sicp-content">{loadingComponent}</div>
           ) : section === 'index' ? (
@@ -208,18 +190,13 @@ const Sicp: React.FC = () => {
               />
             </div>
           )}
-        </CodeSnippetContext.Provider>
+        </CodeSnippetProvider>
       </SicpErrorBoundary>
       {isLoggedIn && Constants.featureFlags.enableSicpChatbot && (
         <Chatbot getSection={getSection} getText={getText} />
       )}
     </div>
   );
-};
+}
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
-export const Component = Sicp;
-Component.displayName = 'Sicp';
-
-export default Sicp;
+export const Component = SicpPage;

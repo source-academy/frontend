@@ -14,7 +14,7 @@ import * as GitHubUtils from '../../features/github/GitHubUtils';
  * This page will complete the OAuth workflow by sending the access code the back-end to retrieve the auth-token.
  * The auth-token is then broadcasted back to the main browser page.
  */
-const GitHubCallback: React.FC = () => {
+function GitHubCallbackPage() {
   const location = useLocation();
   const accessCode = parseQuery(location.search).code;
 
@@ -54,7 +54,7 @@ const GitHubCallback: React.FC = () => {
       <NonIdealState description="Logging In..." icon={<Spinner size={SpinnerSize.LARGE} />} />
     </div>
   );
-};
+}
 
 async function retrieveAuthTokenUpdatePage(
   accessCode: string,
@@ -72,7 +72,6 @@ async function retrieveAuthTokenUpdatePage(
   let response: any;
 
   try {
-    // This line might throw syntax error if the payload received is in the wrong format
     response = await responseObject.json();
 
     if (typeof response.access_token === 'undefined') {
@@ -84,13 +83,11 @@ async function retrieveAuthTokenUpdatePage(
   }
 
   try {
-    // Send auth token back to the main browser page
     const broadcastChannel = new BroadcastChannel('GitHubOAuthAccessToken');
     broadcastChannel.postMessage(response.access_token);
     window.close();
   } catch (err) {
-    // This block should not be reached during normal running of code
-    // However, BroadcastChannel does not exist in the test environment
+    // BroadcastChannel does not exist in the test environment
   }
 }
 
@@ -102,9 +99,4 @@ function Failure({ title, children }: { title: string; children: string }) {
   );
 }
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
-export const Component = GitHubCallback;
-Component.displayName = 'GitHubCallback';
-
-export default GitHubCallback;
+export const Component = GitHubCallbackPage;

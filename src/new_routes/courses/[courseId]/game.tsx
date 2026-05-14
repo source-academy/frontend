@@ -10,7 +10,7 @@ import type { FullSaveState } from 'src/features/game/save/GameSaveTypes';
 import type { AccountInfo } from 'src/features/game/SourceAcademyGame';
 import SourceAcademyGame, { createSourceAcademyGame } from 'src/features/game/SourceAcademyGame';
 
-const Game: React.FC = () => {
+function Game() {
   const session = useTypedSelector(state => state.session);
   const dispatch = useDispatch();
 
@@ -171,11 +171,6 @@ const Game: React.FC = () => {
       )}
     </>
   );
-};
+}
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = Game;
-Component.displayName = 'Game';
-
-export default Game;

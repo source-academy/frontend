@@ -11,7 +11,7 @@ import classes from 'src/styles/Login.module.scss';
 
 import { parseQuery } from '../../commons/utils/QueryHelper';
 
-const LoginCallback: React.FC = () => {
+function LoginCallback() {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -58,13 +58,8 @@ const LoginCallback: React.FC = () => {
       </Card>
     </div>
   );
-};
+}
 
 const samlRedirectJwtCookieKey = 'jwts';
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = LoginCallback;
-Component.displayName = 'LoginCallback';
-
-export default LoginCallback;

@@ -7,9 +7,9 @@ import type { OverallState } from 'src/commons/application/ApplicationTypes';
 import { type Mock, vi } from 'vitest';
 
 import { mockInitialStore } from '../../../commons/mocks/StoreMocks';
+import { Component as LoginCallback } from '../../../new_routes/login/callback';
+import { Component as LoginPage } from '../../../new_routes/login/index';
 import Login from '../Login';
-import LoginCallback from '../LoginCallback';
-import LoginPage from '../LoginPage';
 
 vi.mock('react-redux', async () => ({
   ...(await vi.importActual('react-redux')),

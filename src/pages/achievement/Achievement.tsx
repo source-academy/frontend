@@ -3,7 +3,7 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { SentryRoutes } from 'src/routes/routerConfig';
 
 import { Role } from '../../commons/application/ApplicationTypes';
-import NotFound from '../notFound/NotFound';
+import { Component as NotFound } from '../../new_routes/not-found';
 import AchievementControl from './control/AchievementControl';
 import AchievementDashboard from './subcomponents/AchievementDashboard';
 
@@ -22,8 +22,6 @@ const Achievement: React.FC = () => {
   );
 };
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = Achievement;
 Component.displayName = 'Achievement';
 

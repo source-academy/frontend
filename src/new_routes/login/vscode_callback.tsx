@@ -22,7 +22,7 @@ import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import { parseQuery } from 'src/commons/utils/QueryHelper';
 import classes from 'src/styles/Login.module.scss';
 
-const LoginVscodeCallback: React.FC = () => {
+function LoginVscodeCallback() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -108,11 +108,6 @@ const LoginVscodeCallback: React.FC = () => {
       </Card>
     </div>
   );
-};
+}
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = LoginVscodeCallback;
-Component.displayName = 'LoginVscodeCallback';
-
-export default LoginVscodeCallback;

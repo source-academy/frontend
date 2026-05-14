@@ -5,7 +5,7 @@ import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTree } from 'src/commons/utils/TestUtils';
 import { vi } from 'vitest';
 
-import Sicp from '../Sicp';
+import { Component as Sicp } from '../../../new_routes/sicpjs/[section]';
 
 vi.mock('react-router', () => ({
   useParams: vi.fn().mockReturnValue({ section: 'index' }),

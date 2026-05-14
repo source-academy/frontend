@@ -1,7 +1,7 @@
 import { useParams } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
-import NotFound from '../../notFound/NotFound';
+import { Component as NotFound } from '../../../new_routes/not-found';
 import ContestLeaderboard from './ContestLeaderboard';
 
 const ContestLeaderboardWrapper: React.FC = () => {
@@ -14,8 +14,6 @@ const ContestLeaderboardWrapper: React.FC = () => {
   return contest ? <ContestLeaderboard type={type!} contest={contest} /> : <NotFound />;
 };
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = ContestLeaderboardWrapper;
 Component.displayName = 'ContestLeaderboardWrapper';
 

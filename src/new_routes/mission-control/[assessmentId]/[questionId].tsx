@@ -5,18 +5,18 @@ import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import academyClasses from 'src/styles/Academy.module.scss';
 
-import { AssessmentStatuses } from '../../commons/assessment/AssessmentTypes';
-import ContentDisplay from '../../commons/ContentDisplay';
-import { EditingOverviewCard } from '../../commons/editingOverviewCard/EditingOverviewCard';
+import { AssessmentStatuses } from '../../../commons/assessment/AssessmentTypes';
+import ContentDisplay from '../../../commons/ContentDisplay';
+import { EditingOverviewCard } from '../../../commons/editingOverviewCard/EditingOverviewCard';
 import EditingWorkspace, {
   type EditingWorkspaceProps,
-} from '../../commons/editingWorkspace/EditingWorkspace';
-import MissionCreator from '../../commons/missionCreator/MissionCreator';
-import Constants from '../../commons/utils/Constants';
-import { convertParamToInt } from '../../commons/utils/ParamParseHelper';
-import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
+} from '../../../commons/editingWorkspace/EditingWorkspace';
+import MissionCreator from '../../../commons/missionCreator/MissionCreator';
+import Constants from '../../../commons/utils/Constants';
+import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
+import { retrieveLocalAssessmentOverview } from '../../../commons/XMLParser/XMLParserHelper';
 
-const MissionControl: React.FC = () => {
+function MissionControl() {
   const { assessmentConfigurations } = useSession();
   const assessmentTypes = assessmentConfigurations?.map(e => e.type) || [];
 
@@ -76,11 +76,6 @@ const MissionControl: React.FC = () => {
       <ContentDisplay display={display} />
     </div>
   );
-};
+}
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = MissionControl;
-Component.displayName = 'MissionControl';
-
-export default MissionControl;
