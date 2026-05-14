@@ -4,7 +4,7 @@ import { Button } from '@blueprintjs/core';
 import { Link, useNavigate, useOutletContext, useParams } from 'react-router';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 
-import SicpIndexPage from '../../pages/sicp/subcomponents/SicpIndexPage';
+import SicpIndexPage from '../../pages/sicp/subcomponents/sicpIndexPage/SicpIndexPage';
 
 function SicpPage() {
   const { section } = useParams<{ section: string }>();
