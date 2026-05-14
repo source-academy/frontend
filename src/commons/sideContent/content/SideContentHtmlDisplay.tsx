@@ -72,4 +72,5 @@ const makeHtmlDisplayTabFrom = (
   ),
   id: SideContentType.htmlDisplay,
 });
-export { makeHtmlDisplayTabFrom as default, type Props as SideContentHtmlDisplayProps };
+
+export default makeHtmlDisplayTabFrom;
