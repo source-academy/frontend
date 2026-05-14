@@ -1,9 +1,9 @@
 import { BFSRequire } from 'browserfs';
 import { describe, expect, test } from 'vitest';
 
-import { defaultFileSystem } from '../../application/ApplicationTypes';
-import { FileSystemReducer } from '../FileSystemReducer';
-import { SET_IN_BROWSER_FILE_SYSTEM } from '../FileSystemTypes';
+import { defaultFileSystem } from '../application/ApplicationTypes';
+import { FileSystemReducer } from './FileSystemReducer';
+import { SET_IN_BROWSER_FILE_SYSTEM } from './FileSystemTypes';
 
 describe('SET_IN_BROWSER_FILE_SYSTEM', () => {
   test('sets inBrowserFileSystem', () => {

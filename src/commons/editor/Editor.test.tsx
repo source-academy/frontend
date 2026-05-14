@@ -3,8 +3,8 @@ import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTree } from 'src/commons/utils/TestUtils';
 import { expect, test } from 'vitest';
 
-import Editor, { type EditorProps } from '../Editor';
-import type { Position } from '../EditorTypes';
+import Editor, { type EditorProps } from './Editor';
+import type { Position } from './EditorTypes';
 
 test('Editor renders correctly', async () => {
   const props: EditorProps = {

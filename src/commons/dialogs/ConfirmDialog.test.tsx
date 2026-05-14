@@ -2,8 +2,8 @@ import { Intent } from '@blueprintjs/core';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { expect, test, vi } from 'vitest';
 
-import type { ConfirmDialogProps } from '../ConfirmDialog';
-import { ConfirmDialog } from '../ConfirmDialog';
+import type { ConfirmDialogProps } from './ConfirmDialog';
+import { ConfirmDialog } from './ConfirmDialog';
 
 const TEXT1 = 'Random';
 const TEXT2 = 'content';

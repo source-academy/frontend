@@ -7,9 +7,9 @@ import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { assertType, type DeepPartial } from 'src/commons/utils/TypeHelper';
 import { expect, test } from 'vitest';
 
-import { type AssessmentConfiguration, AssessmentStatuses } from '../../assessment/AssessmentTypes';
-import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';
-import Profile, { type ProfileProps } from '../Profile';
+import { type AssessmentConfiguration, AssessmentStatuses } from '../assessment/AssessmentTypes';
+import { mockAssessmentOverviews } from '../mocks/AssessmentMocks';
+import Profile, { type ProfileProps } from './Profile';
 
 const mockNoClosedAssessmentOverviews = mockAssessmentOverviews.filter(
   item => item.status !== AssessmentStatuses.submitted,

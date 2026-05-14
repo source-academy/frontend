@@ -1,8 +1,8 @@
 import { BFSRequire } from 'browserfs';
 import { expect, test } from 'vitest';
 
-import { setInBrowserFileSystem } from '../FileSystemActions';
-import { SET_IN_BROWSER_FILE_SYSTEM } from '../FileSystemTypes';
+import { setInBrowserFileSystem } from './FileSystemActions';
+import { SET_IN_BROWSER_FILE_SYSTEM } from './FileSystemTypes';
 
 test('setInBrowserFileSystem generates correct action object', () => {
   const inBrowserFileSystem = BFSRequire('fs');

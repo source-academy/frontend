@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getShortestUniqueFilePaths } from '../../tabs/utils';
+import { getShortestUniqueFilePaths } from './utils';
 
 describe('getShortestUniqueFilePaths', () => {
   it('returns the shortest unique file paths', () => {
