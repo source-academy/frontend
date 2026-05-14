@@ -1,14 +1,16 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
+
+type CodeSnippetContextState = {
+  active: string;
+  setActive: (x: string) => void;
+};
 
 /**
  * Context to determine which code snippet is active
  */
-const CodeSnippetContext = createContext({
-  active: '0',
-  setActive: (x: string) => {},
-});
+const CodeSnippetContext = createContext<CodeSnippetContextState | null>(null);
 
 export function useCodeSnippetContext() {
   const ctx = useContext(CodeSnippetContext);
@@ -30,12 +32,6 @@ export function CodeSnippetProvider({ children }: { children: React.ReactNode })
     },
     [dispatch],
   );
-
-  // Close all active code snippet when new page is loaded
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setActive('0');
-  }, []);
 
   return (
     <CodeSnippetContext.Provider value={{ active, setActive: handleSnippetEditorOpen }}>

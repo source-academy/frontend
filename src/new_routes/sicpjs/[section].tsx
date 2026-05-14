@@ -166,6 +166,7 @@ function SicpPage() {
       ref={parentRef}
     >
       <SicpErrorBoundary>
+        {/* Close all active code snippet when new page is loaded */}
         <CodeSnippetProvider key={section}>
           {loading ? (
             <div className="sicp-content">{loadingComponent}</div>
