@@ -44,7 +44,7 @@ const buildAssessmentRoutes = memoize(
 );
 
 const getCommonAcademyRoutes = (): RouteObject[] => {
-  const assessmentLoader: LoaderFunction = ({ params }) => {
+  const assessmentLoader = (({ params }) => {
     const { assessmentConfigurations } = store.getState().session;
     const assessmentRoutes = buildAssessmentRoutes(assessmentConfigurations);
 
@@ -55,7 +55,7 @@ const getCommonAcademyRoutes = (): RouteObject[] => {
       }
     }
     return redirect(notFoundPath);
-  };
+  }) satisfies LoaderFunction;
 
   const homePageRedirect = () => {
     const { role, enableGame, assessmentConfigurations } = store.getState().session;
@@ -100,6 +100,10 @@ const getCommonAcademyRoutes = (): RouteObject[] => {
   ];
 };
 
+const createRoutes = (routeMap: Record<string, RouteObject['lazy']>): RouteObject[] => {
+  return Object.entries(routeMap).map(([path, lazy]) => ({ path, lazy }));
+};
+
 const ensureRoleOneOf = (...roles: Role[]) =>
   (() => {
     const state = store.getState();
@@ -110,31 +114,29 @@ const ensureRoleOneOf = (...roles: Role[]) =>
     return null;
   }) satisfies MiddlewareFunction;
 
-const staffRoutes: RouteObject[] = [
-  { path: `grading/${gradingRegExp}`, lazy: () => import('./grading/Grading') },
-  { path: 'gamesimulator', lazy: () => import('./gameSimulator/GameSimulator') },
-  { path: 'teamformation', lazy: () => import('./teamFormation/TeamFormation') },
-  {
-    path: 'teamformation/create',
-    lazy: () => import('./teamFormation/subcomponents/TeamFormationForm'),
-  },
-  {
-    path: `teamformation/edit/${teamRegExp}`,
-    lazy: () => import('./teamFormation/subcomponents/TeamFormationForm'),
-  },
-  {
-    path: 'teamformation/import',
-    lazy: () => import('./teamFormation/subcomponents/TeamFormationImport'),
-  },
-  { path: 'dashboard', lazy: () => import('./dashboard/Dashboard') },
-].map(r => ({ ...r, middleware: [ensureRoleOneOf(Role.Staff, Role.Admin)] }));
+const staffRoutes: RouteObject = {
+  middleware: [ensureRoleOneOf(Role.Staff, Role.Admin)],
+  children: createRoutes({
+    [`grading/${gradingRegExp}`]: () => import('./grading/Grading'),
+    gamesimulator: () => import('./gameSimulator/GameSimulator'),
+    teamformation: () => import('./teamFormation/TeamFormation'),
+    'teamformation/create': () => import('./teamFormation/subcomponents/TeamFormationForm'),
+    [`teamformation/edit/${teamRegExp}`]: () =>
+      import('./teamFormation/subcomponents/TeamFormationForm'),
+    'teamformation/import': () => import('./teamFormation/subcomponents/TeamFormationImport'),
+    dashboard: () => import('./dashboard/Dashboard'),
+  }),
+};
 
-const adminRoutes: RouteObject[] = [
-  { path: 'groundcontrol', lazy: () => import('./groundControl/GroundControl') },
-  { path: 'adminpanel', lazy: () => import('./adminPanel/AdminPanel') },
-].map(r => ({ ...r, middleware: [ensureRoleOneOf(Role.Admin)] }));
+const adminRoutes: RouteObject = {
+  middleware: [ensureRoleOneOf(Role.Admin)],
+  children: createRoutes({
+    groundcontrol: () => import('./groundControl/GroundControl'),
+    adminpanel: () => import('./adminPanel/AdminPanel'),
+  }),
+};
 
 export const getAcademyRoutes = (): RouteObject[] => {
-  const routes: RouteObject[] = [...getCommonAcademyRoutes(), ...staffRoutes, ...adminRoutes];
+  const routes: RouteObject[] = [...getCommonAcademyRoutes(), staffRoutes, adminRoutes];
   return routes;
 };
