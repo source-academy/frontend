@@ -16,7 +16,7 @@ import classNames from 'classnames';
 import { t } from 'i18next';
 import { Chapter } from 'js-slang/dist/langs';
 import { debounce } from 'lodash';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
@@ -97,7 +97,13 @@ const SideContentCseMachine: React.FC<Props> = ({
   const [clearDeadFrames, setClearDeadFrames] = useState(false);
   const [arrowFilterOpen, setArrowFilterOpen] = useState(false);
 
+  const valueRef = useRef(-1);
+  const breakpointStepsRef = useRef<number[]>([]);
+  const changepointStepsRef = useRef<number[]>([]);
+  const clearDeadFramesRef = useRef(false);
   const isInitializedRef = useRef(false);
+  const prevUpdateCseRef = useRef(false);
+  const stepsTotalRef = useRef(0);
 
   const [loc] = getLocation(workspaceLocation);
   const workspace = useTypedSelector(
@@ -114,6 +120,26 @@ const SideContentCseMachine: React.FC<Props> = ({
   const machineOutput = workspace.output;
 
   const isJava = chapter === Chapter.FULL_JAVA;
+
+  useEffect(() => {
+    valueRef.current = value;
+  }, [value]);
+
+  useEffect(() => {
+    breakpointStepsRef.current = breakpointSteps;
+  }, [breakpointSteps]);
+
+  useEffect(() => {
+    changepointStepsRef.current = changepointSteps;
+  }, [changepointSteps]);
+
+  useEffect(() => {
+    clearDeadFramesRef.current = clearDeadFrames;
+  }, [clearDeadFrames]);
+
+  useEffect(() => {
+    stepsTotalRef.current = stepsTotal;
+  }, [stepsTotal]);
 
   const handleEditorEval = useCallback(() => {
     dispatch(WorkspaceActions.evalEditor(workspaceLocation));
@@ -145,28 +171,29 @@ const SideContentCseMachine: React.FC<Props> = ({
 
   const sliderRelease = useCallback(
     (newValue: number) => {
-      if (newValue === stepsTotal) {
+      if (newValue === stepsTotalRef.current) {
         setLastStep(true);
       } else {
         setLastStep(false);
       }
       handleEditorEval();
     },
-    [stepsTotal, handleEditorEval],
+    [handleEditorEval],
   );
 
   const sliderShift = useCallback(
     (newValue: number) => {
-      if (clearDeadFrames) {
+      if (clearDeadFramesRef.current) {
         CseMachine.setClearDeadFrames(false);
         CseMachine.clearLiveLayouts();
         CseMachine.redraw();
       }
       handleStepUpdate(newValue);
+      valueRef.current = newValue;
       setValue(newValue);
       setClearDeadFrames(false);
     },
-    [clearDeadFrames, handleStepUpdate],
+    [handleStepUpdate],
   );
 
   useEffect(() => {
@@ -177,16 +204,16 @@ const SideContentCseMachine: React.FC<Props> = ({
 
     if (isJava) {
       JavaCseMachine.init(
-        visualization => setVisualization(visualization),
+        newVisualization => setVisualization(newVisualization),
         (segments: [number, number][]) => {
           setEditorHighlightedLines(0, segments);
         },
       );
     } else {
       CseMachine.init(
-        visualization => {
-          setVisualization(visualization);
-          if (visualization) {
+        newVisualization => {
+          setVisualization(newVisualization);
+          if (newVisualization) {
             handleAlertSideContent();
           }
           CseAnimation.playAnimation();
@@ -200,7 +227,7 @@ const SideContentCseMachine: React.FC<Props> = ({
         },
         // We shouldn't be able to move slider to a step number beyond the step limit
         isControlEmpty => {
-          const isAtLastStep = value === stepsTotal;
+          const isAtLastStep = valueRef.current === stepsTotalRef.current;
           setStepLimitExceeded(!isControlEmpty && isAtLastStep);
         },
       );
@@ -230,7 +257,7 @@ const SideContentCseMachine: React.FC<Props> = ({
   ]);
 
   useEffect(() => {
-    if (updateCse) {
+    if (prevUpdateCseRef.current && !updateCse) {
       CseMachine.resetArrowOriginFilters();
       setArrowFilterOpen(false);
       sliderShift(0);
@@ -241,6 +268,7 @@ const SideContentCseMachine: React.FC<Props> = ({
         CseMachine.clearCse();
       }
     }
+    prevUpdateCseRef.current = updateCse;
   }, [updateCse, isJava, sliderShift, sliderRelease]);
 
   useEffect(() => {
@@ -252,30 +280,30 @@ const SideContentCseMachine: React.FC<Props> = ({
   }, [isJava]);
 
   const stepPrevious = useCallback(() => {
-    if (value !== 0) {
-      sliderShift(value - 1);
-      sliderRelease(value - 1);
+    const currentValue = valueRef.current;
+    if (currentValue !== 0) {
+      sliderShift(currentValue - 1);
+      sliderRelease(currentValue - 1);
     }
-  }, [value, sliderShift, sliderRelease]);
+  }, [sliderShift, sliderRelease]);
 
   const stepNext = useCallback(() => {
-    const lastStepValue = stepsTotal;
-    if (value !== lastStepValue) {
-      sliderShift(value + 1);
-      sliderRelease(value + 1);
+    const currentValue = valueRef.current;
+    const lastStepValue = stepsTotalRef.current;
+    if (currentValue !== lastStepValue) {
+      sliderShift(currentValue + 1);
+      sliderRelease(currentValue + 1);
       CseAnimation.enableAnimations();
     }
-  }, [value, stepsTotal, sliderShift, sliderRelease]);
+  }, [sliderShift, sliderRelease]);
 
   const stepFirst = useCallback(() => {
-    // Move to the first step
     sliderShift(0);
     sliderRelease(0);
   }, [sliderShift, sliderRelease]);
 
   const stepLast = useCallback(
     (lastStepValue: number) => () => {
-      // Move to the last step
       sliderShift(lastStepValue);
       sliderRelease(lastStepValue);
     },
@@ -283,21 +311,25 @@ const SideContentCseMachine: React.FC<Props> = ({
   );
 
   const stepNextBreakpoint = useCallback(() => {
-    for (const step of breakpointSteps) {
-      if (step > value) {
+    const currentValue = valueRef.current;
+    const steps = breakpointStepsRef.current;
+    for (const step of steps) {
+      if (step > currentValue) {
         sliderShift(step);
         sliderRelease(step);
         return;
       }
     }
-    sliderShift(stepsTotal);
-    sliderRelease(stepsTotal);
-  }, [breakpointSteps, value, sliderShift, sliderRelease, stepsTotal]);
+    sliderShift(stepsTotalRef.current);
+    sliderRelease(stepsTotalRef.current);
+  }, [sliderShift, sliderRelease]);
 
   const stepPrevBreakpoint = useCallback(() => {
-    for (let i = breakpointSteps.length - 1; i >= 0; i--) {
-      const step = breakpointSteps[i];
-      if (step < value) {
+    const currentValue = valueRef.current;
+    const steps = breakpointStepsRef.current;
+    for (let i = steps.length - 1; i >= 0; i--) {
+      const step = steps[i];
+      if (step < currentValue) {
         sliderShift(step);
         sliderRelease(step);
         return;
@@ -305,24 +337,28 @@ const SideContentCseMachine: React.FC<Props> = ({
     }
     sliderShift(0);
     sliderRelease(0);
-  }, [breakpointSteps, value, sliderShift, sliderRelease]);
+  }, [sliderShift, sliderRelease]);
 
   const stepNextChangepoint = useCallback(() => {
-    for (const step of changepointSteps) {
-      if (step > value) {
+    const currentValue = valueRef.current;
+    const steps = changepointStepsRef.current;
+    for (const step of steps) {
+      if (step > currentValue) {
         sliderShift(step);
         sliderRelease(step);
         return;
       }
     }
-    sliderShift(stepsTotal);
-    sliderRelease(stepsTotal);
-  }, [changepointSteps, value, sliderShift, sliderRelease, stepsTotal]);
+    sliderShift(stepsTotalRef.current);
+    sliderRelease(stepsTotalRef.current);
+  }, [sliderShift, sliderRelease]);
 
   const stepPrevChangepoint = useCallback(() => {
-    for (let i = changepointSteps.length - 1; i >= 0; i--) {
-      const step = changepointSteps[i];
-      if (step < value) {
+    const currentValue = valueRef.current;
+    const steps = changepointStepsRef.current;
+    for (let i = steps.length - 1; i >= 0; i--) {
+      const step = steps[i];
+      if (step < currentValue) {
         sliderShift(step);
         sliderRelease(step);
         return;
@@ -330,7 +366,7 @@ const SideContentCseMachine: React.FC<Props> = ({
     }
     sliderShift(0);
     sliderRelease(0);
-  }, [changepointSteps, value, sliderShift, sliderRelease]);
+  }, [sliderShift, sliderRelease]);
 
   const toggleArrowFilter = useCallback((origin: ArrowOriginFilterKey) => {
     const filters = CseMachine.getArrowOriginFilters();
