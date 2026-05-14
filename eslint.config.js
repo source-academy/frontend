@@ -46,7 +46,7 @@ const restrictedImports = [
 ];
 
 export default tseslint.config(
-  { ignores: ['eslint.config.js', '**/*.snap'] },
+  { ignores: ['build', 'node_modules', 'eslint.config.js', '**/*.snap'] },
   eslint.configs.recommended,
   tseslint.configs.recommended,
   { settings: { react: { version: 'detect' } } },
