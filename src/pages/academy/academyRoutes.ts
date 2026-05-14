@@ -51,6 +51,9 @@ const checkAssessmentTypeLoader = (({ params }) => {
       return assessmentRoutes[type];
     }
   }
+  // Note: Middleware resolves relative paths from the root,
+  // while Loader resolves relative paths from the parent route,
+  // so here, it's fine to just redirect to `not-found` without prefixing
   return redirect(notFoundPath);
 }) satisfies LoaderFunction;
 
