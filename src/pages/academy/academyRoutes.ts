@@ -1,5 +1,11 @@
 import { memoize } from 'lodash';
-import { type MiddlewareFunction, redirect, replace, type RouteObject } from 'react-router';
+import {
+  type LoaderFunction,
+  type MiddlewareFunction,
+  redirect,
+  replace,
+  type RouteObject,
+} from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
@@ -35,7 +41,7 @@ const buildAssessmentRoutes = memoize(
   },
 );
 
-const checkAssessmentTypeMiddleware = (({ params }) => {
+const checkAssessmentTypeLoader = (({ params }) => {
   const { assessmentConfigurations } = store.getState().session;
   const assessmentRoutes = buildAssessmentRoutes(assessmentConfigurations);
 
@@ -45,8 +51,8 @@ const checkAssessmentTypeMiddleware = (({ params }) => {
       return assessmentRoutes[type];
     }
   }
-  throw redirect(notFoundPath);
-}) satisfies MiddlewareFunction;
+  return redirect(notFoundPath);
+}) satisfies LoaderFunction;
 
 const homePageRedirect = (() => {
   const { role, enableGame, assessmentConfigurations } = store.getState().session;
@@ -87,7 +93,7 @@ const commonAcademyRoutes: RouteObject[] = [
   },
   {
     path: `:assessmentConfigType/${assessmentRegExp}`,
-    middleware: [checkAssessmentTypeMiddleware],
+    loader: checkAssessmentTypeLoader,
     lazy: Assessment,
   },
   {
