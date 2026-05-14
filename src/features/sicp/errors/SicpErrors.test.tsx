@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react';
 import { renderTree } from 'src/commons/utils/TestUtils';
 import { describe, expect, test } from 'vitest';
 
-import getSicpError, { SicpErrorType } from '../SicpErrors';
+import getSicpError, { SicpErrorType } from './SicpErrors';
 
 describe('Sicp errors:', () => {
   test('unexpected error renders correctly', async () => {

@@ -4,8 +4,8 @@ import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import type { CodeSnippetProps } from 'src/pages/sicp/subcomponents/CodeSnippet';
 import { describe, expect, test, vi } from 'vitest';
 
-import type { JsonType } from '../ParseJson';
-import { parseArr, ParseJsonError, parseObj, processingFunctions } from '../ParseJson';
+import type { JsonType } from './ParseJson';
+import { parseArr, ParseJsonError, parseObj, processingFunctions } from './ParseJson';
 
 // Tags to process
 const headingTags = ['SUBHEADING', 'SUBSUBHEADING'];

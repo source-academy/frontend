@@ -2,10 +2,10 @@ import Konva from 'konva';
 import * as ReactKonva from 'react-konva';
 import { expect, test } from 'vitest';
 
-import type { AnimationConfig } from '../animationComponents/base/Animatable';
-import { AnimatableTo } from '../animationComponents/base/Animatable';
-import { AnimationComponent } from '../animationComponents/base/AnimationComponents';
-import { CseAnimation } from '../CseMachineAnimation';
+import type { AnimationConfig } from './animationComponents/base/Animatable';
+import { AnimatableTo } from './animationComponents/base/Animatable';
+import { AnimationComponent } from './animationComponents/base/AnimationComponents';
+import { CseAnimation } from './CseMachineAnimation';
 
 const mockStage = new Konva.Stage({
   container: document.createElement('div'),

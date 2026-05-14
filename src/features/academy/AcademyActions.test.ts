@@ -4,7 +4,7 @@ import type { UpdateCourseConfiguration } from 'src/commons/application/types/Se
 import type { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 import { expect, test } from 'vitest';
 
-import AcademyActions from '../AcademyActions';
+import AcademyActions from './AcademyActions';
 
 test('addNewUsersToCourse generates correct action object', () => {
   const users: UsernameRoleGroup[] = [

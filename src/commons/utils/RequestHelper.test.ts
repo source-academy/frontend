@@ -2,10 +2,10 @@ import { postRefresh } from 'src/commons/sagas/RequestsSaga';
 import { store } from 'src/pages/createStore';
 import { beforeEach, describe, expect, type Mock, test, vi } from 'vitest';
 
-import type { Tokens } from '../../application/types/SessionTypes';
-import { actions } from '../ActionsHelper';
-import Constants from '../Constants';
-import { showWarningMessage } from '../notifications/NotificationsHelper';
+import type { Tokens } from '../application/types/SessionTypes';
+import { actions } from './ActionsHelper';
+import Constants from './Constants';
+import { showWarningMessage } from './notifications/NotificationsHelper';
 import {
   autoLogoutMessage,
   generateApiCallHeadersAndFetchOptions,
@@ -16,18 +16,18 @@ import {
   request,
   type RequestMethod,
   userSessionExpiredNotificationKey,
-} from '../RequestHelper';
+} from './RequestHelper';
 
 global.fetch = vi.fn();
 const fetchMock = fetch as Mock;
 
-vi.mock('../../utils/notifications/NotificationsHelper', () => ({
+vi.mock('../utils/notifications/NotificationsHelper', () => ({
   showWarningMessage: vi.fn(),
 }));
 const showWarningMessageSpy = showWarningMessage as Mock<typeof showWarningMessage>;
-vi.mock('../../sagas/RequestsSaga');
+vi.mock('../sagas/RequestsSaga');
 const postRefreshSpy = postRefresh as Mock<typeof postRefresh>;
-vi.mock('../../../pages/createStore', () => ({
+vi.mock('../../pages/createStore', () => ({
   store: {
     dispatch: vi.fn(),
   },
