@@ -38,7 +38,7 @@ const ChapterSimulator: React.FC = () => {
       />
       <br />
       <br />
-      <b>Choose a Default Variables ("Default Checkpoint") file (Optional):</b>
+      <b>Choose a Default Variables (&ldquo;Default Checkpoint&rdquo;) file (Optional):</b>
       <ChapterSimulatorTextLoader
         s3TxtFiles={textAssets}
         storageName={gameSimulatorMenuConstants.gameTxtStorageName.defaultChapter}

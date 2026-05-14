@@ -153,8 +153,8 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
           <div>
             <div className={classes['section-title']}>Feedback URL</div>
             <div className={classes['section-helper']}>
-              Set a URL where users can submit feedback. A small "Any feedback?" link will appear in
-              the top-right corner of the navigation bar.
+              Set a URL where users can submit feedback. A small &ldquo;Any feedback?&rdquo; link
+              will appear in the top-right corner of the navigation bar.
             </div>
           </div>
         </div>

@@ -366,6 +366,7 @@ const AssessmentConfigPanel: WithImperativeApi<
     );
   },
 );
+AssessmentConfigPanel.displayName = 'AssessmentConfigPanel';
 
 function moveInArray(arr: any[], fromIndex: number, toIndex: number): void {
   const element = arr[fromIndex];

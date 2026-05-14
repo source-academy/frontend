@@ -254,13 +254,13 @@ const CourseConfigPanel: React.FC<Props> = props => {
 
                           <code>
                             Your output must include only the comment suggestions, separated
-                            exclusively by triple pipes ("|||") with no spaces before or after the
-                            pipes, and without any additional formatting, bullet points, or extra
-                            text.
+                            exclusively by triple pipes (&ldquo;|||&rdquo;) with no spaces before or
+                            after the pipes, and without any additional formatting, bullet points,
+                            or extra text.
                             <br />
                             <br />
-                            For example: "This is a good answer.|||This is a bad answer.|||This is a
-                            great answer.
+                            For example: &ldquo;This is a good answer.|||This is a bad
+                            answer.|||This is a great answer.&rdquo;
                           </code>
                         </div>
                       }

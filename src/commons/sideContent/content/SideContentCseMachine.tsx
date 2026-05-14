@@ -745,11 +745,13 @@ const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
           <Trans
             ns="sideContent"
             i18nKey={$ => $.cseMachine.csecDescription}
+            // eslint-disable-next-line react/jsx-key
             components={[<ItalicLink href={Links.textbookChapter3_2} />]}
           />{' '}
           <Trans
             ns="sideContent"
             i18nKey={$ => $.cseMachine.javaCsec}
+            // eslint-disable-next-line react/jsx-key
             components={[<ItalicLink href={`${Links.sourceDocs}java_csec/`} />]}
           />
         </span>
@@ -758,6 +760,7 @@ const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
           <Trans
             ns="sideContent"
             i18nKey={$ => $.cseMachine.cseDescription}
+            // eslint-disable-next-line react/jsx-key
             components={[<ItalicLink href={Links.textbookChapter3_2} />]}
           />
         </span>

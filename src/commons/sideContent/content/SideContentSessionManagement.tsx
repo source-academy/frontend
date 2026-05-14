@@ -151,7 +151,7 @@ const SideContentSessionManagement: React.FC<Props> = ({
     <div className={classes['table-container']}>
       <span className={classes['span']}>
         This is the session management tab. Add users by sharing the session code. If you are the
-        owner of this session, you can manage users' access levels from the table below.
+        owner of this session, you can manage users&apos; access levels from the table below.
       </span>
       <br />
       <span className={classes['span']}>

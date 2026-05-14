@@ -96,7 +96,7 @@ function LoginVscodeCallback() {
           <p>
             Click <b>Open link</b> on the dialog shown by your browser.
           </p>
-          <p>If you don't see a dialog, click the button below.</p>
+          <p>If you don&apos;t see a dialog, click the button below.</p>
           <div>
             <ButtonGroup fill>
               <Button onClick={launchVscode} className={Classes.LARGE}>
