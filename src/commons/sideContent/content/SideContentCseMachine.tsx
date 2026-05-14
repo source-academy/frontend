@@ -90,12 +90,14 @@ const SideContentCseMachine: React.FC<Props> = ({
 }) => {
   const [visualization, setVisualization] = useState<React.ReactNode>(null);
   const [value, setValue] = useState(-1);
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
+  const [width] = useState(() => calculateWidth(editorWidth));
+  const [height] = useState(() => calculateHeight(sideContentHeight));
   const [, setLastStep] = useState(false);
   const [stepLimitExceeded, setStepLimitExceeded] = useState(false);
   const [clearDeadFrames, setClearDeadFrames] = useState(false);
   const [arrowFilterOpen, setArrowFilterOpen] = useState(false);
+
+  const isInitializedRef = useRef(false);
 
   const [loc] = getLocation(workspaceLocation);
   const workspace = useTypedSelector(
@@ -168,41 +170,11 @@ const SideContentCseMachine: React.FC<Props> = ({
   );
 
   useEffect(() => {
-    const newWidth = calculateWidth(editorWidth);
-    const newHeight = calculateHeight(sideContentHeight);
-    if (newWidth !== width || newHeight !== height) {
-      setWidth(newWidth);
-      setHeight(newHeight);
-      CseMachine.updateDimensions(newWidth, newHeight);
+    if (isInitializedRef.current) {
+      return;
     }
-  }, [calculateWidth, calculateHeight, editorWidth, sideContentHeight, width, height]);
+    isInitializedRef.current = true;
 
-  useEffect(() => {
-    const newWidth = calculateWidth(editorWidth);
-    const newHeight = calculateHeight(sideContentHeight);
-    setWidth(newWidth);
-    setHeight(newHeight);
-
-    const resizeHandler = debounce(() => {
-      const w = calculateWidth(editorWidth);
-      const h = calculateHeight(sideContentHeight);
-      if (w !== width || h !== height) {
-        setWidth(w);
-        setHeight(h);
-        CseMachine.updateDimensions(w, h);
-      }
-    }, 300);
-
-    window.addEventListener('resize', resizeHandler);
-    CseMachine.redraw();
-
-    return () => {
-      resizeHandler.cancel();
-      window.removeEventListener('resize', resizeHandler);
-    };
-  }, [calculateWidth, calculateHeight, editorWidth, sideContentHeight, width, height]);
-
-  useEffect(() => {
     if (isJava) {
       JavaCseMachine.init(
         visualization => setVisualization(visualization),
@@ -233,7 +205,29 @@ const SideContentCseMachine: React.FC<Props> = ({
         },
       );
     }
-  }, [isJava, width, height, stepsTotal, value, handleAlertSideContent, setEditorHighlightedLines]);
+
+    const resizeHandler = debounce(() => {
+      const w = calculateWidth(editorWidth);
+      const h = calculateHeight(sideContentHeight);
+      CseMachine.updateDimensions(w, h);
+    }, 300);
+
+    window.addEventListener('resize', resizeHandler);
+    CseMachine.redraw();
+
+    return () => {
+      resizeHandler.cancel();
+      window.removeEventListener('resize', resizeHandler);
+    };
+  }, [
+    isJava,
+    width,
+    height,
+    editorWidth,
+    sideContentHeight,
+    handleAlertSideContent,
+    setEditorHighlightedLines,
+  ]);
 
   useEffect(() => {
     if (updateCse) {
