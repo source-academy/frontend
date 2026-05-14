@@ -63,6 +63,15 @@ export default tseslint.config(
     },
   },
   {
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      'react/prop-types': 'off',
+      'react/jsx-boolean-value': ['warn', 'never', { always: ['value'] }],
+      'react/self-closing-comp': 'error',
+      'no-restricted-imports': ['error', ...restrictedImports],
+    },
+  },
+  {
     files: ['**/*.ts*'],
     plugins: {
       'simple-import-sort': simpleImportSort,
@@ -101,12 +110,6 @@ export default tseslint.config(
         },
       ],
       'simple-import-sort/imports': 'error',
-    },
-  },
-  {
-    files: ['**/*.tsx', '**/*.ts'],
-    rules: {
-      'no-restricted-imports': ['error', ...restrictedImports],
     },
   },
 );
