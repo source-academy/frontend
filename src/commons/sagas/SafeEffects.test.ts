@@ -3,7 +3,7 @@ import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { describe, expect, test, vi } from 'vitest';
 
-import { wrapSaga } from '../SafeEffects';
+import { wrapSaga } from './SafeEffects';
 
 vi.mock('@sentry/react', async importOriginal => ({
   ...(await importOriginal()),

@@ -7,45 +7,42 @@ import AcademyActions from 'src/features/academy/AcademyActions';
 import type { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 import { describe, expect, test, vi } from 'vitest';
 
-import DashboardActions from '../../../features/dashboard/DashboardActions';
-import SessionActions from '../../application/actions/SessionActions';
+import DashboardActions from '../../features/dashboard/DashboardActions';
+import SessionActions from '../application/actions/SessionActions';
 import {
   type GameState,
   Role,
   type SALanguage,
   type Story,
   SupportedLanguage,
-} from '../../application/ApplicationTypes';
+} from '../application/ApplicationTypes';
 import type {
   AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
   UpdateCourseConfiguration,
   User,
-} from '../../application/types/SessionTypes';
+} from '../application/types/SessionTypes';
 import {
   type Assessment,
   type AssessmentConfiguration,
   AssessmentStatuses,
   type Question,
-} from '../../assessment/AssessmentTypes';
+} from '../assessment/AssessmentTypes';
 import {
   mockAssessmentOverviews,
   mockAssessmentQuestions,
   mockAssessments,
-} from '../../mocks/AssessmentMocks';
-import { mockGradingSummary } from '../../mocks/GradingMocks';
-import { mockNotifications, mockStudents } from '../../mocks/UserMocks';
-import type { Notification } from '../../notificationBadge/NotificationBadgeTypes';
-import { AuthProviderType, computeFrontendRedirectUri } from '../../utils/AuthHelper';
-import Constants from '../../utils/Constants';
-import {
-  showSuccessMessage,
-  showWarningMessage,
-} from '../../utils/notifications/NotificationsHelper';
-import WorkspaceActions from '../../workspace/WorkspaceActions';
-import type { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
-import BackendSaga from '../BackendSaga';
+} from '../mocks/AssessmentMocks';
+import { mockGradingSummary } from '../mocks/GradingMocks';
+import { mockNotifications, mockStudents } from '../mocks/UserMocks';
+import type { Notification } from '../notificationBadge/NotificationBadgeTypes';
+import { AuthProviderType, computeFrontendRedirectUri } from '../utils/AuthHelper';
+import Constants from '../utils/Constants';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
+import WorkspaceActions from '../workspace/WorkspaceActions';
+import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import BackendSaga from './BackendSaga';
 import {
   getAssessment,
   getAssessmentConfigs,
@@ -72,7 +69,7 @@ import {
   putNewUsers,
   putUserRole,
   removeUserCourseRegistration,
-} from '../RequestsSaga';
+} from './RequestsSaga';
 
 // ----------------------------------------
 // Constants to use for testing

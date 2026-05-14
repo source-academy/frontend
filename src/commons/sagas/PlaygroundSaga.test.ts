@@ -5,21 +5,18 @@ import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { describe, test } from 'vitest';
 
-import PlaygroundActions from '../../../features/playground/PlaygroundActions';
+import PlaygroundActions from '../../features/playground/PlaygroundActions';
 import {
   createDefaultWorkspace,
   defaultState,
   defaultWorkspaceManager,
   getDefaultFilePath,
   type OverallState,
-} from '../../application/ApplicationTypes';
-import { ExternalLibraryName } from '../../application/types/ExternalTypes';
-import Constants from '../../utils/Constants';
-import {
-  showSuccessMessage,
-  showWarningMessage,
-} from '../../utils/notifications/NotificationsHelper';
-import PlaygroundSaga, { shortenURLRequest } from '../PlaygroundSaga';
+} from '../application/ApplicationTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import Constants from '../utils/Constants';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
+import PlaygroundSaga, { shortenURLRequest } from './PlaygroundSaga';
 
 describe('Playground saga tests', () => {
   Constants.urlShortenerBase = 'http://url-shortener.com/';

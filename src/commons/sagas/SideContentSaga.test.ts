@@ -12,7 +12,7 @@ import {
 import { actions } from 'src/commons/utils/ActionsHelper';
 import { describe, expect, type Mock, test, vi } from 'vitest';
 
-import SideContentSaga from '../SideContentSaga';
+import SideContentSaga from './SideContentSaga';
 
 vi.mock('src/commons/sideContent/SideContentHelper', async () => ({
   ...(await vi.importActual('src/commons/sideContent/SideContentHelper')),
