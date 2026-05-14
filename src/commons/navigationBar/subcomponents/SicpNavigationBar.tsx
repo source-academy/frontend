@@ -449,8 +449,8 @@ const SicpNavigationBar: React.FC = () => {
         }}
       />
       <Navbar className="SicpNavigationBar secondary-navbar">
-        <NavbarGroup align={Alignment.LEFT}>{tocButton}</NavbarGroup>
-        <NavbarGroup align={Alignment.RIGHT}>{[prevButton, nextButton]}</NavbarGroup>
+        <NavbarGroup align={Alignment.START}>{tocButton}</NavbarGroup>
+        <NavbarGroup align={Alignment.END}>{[prevButton, nextButton]}</NavbarGroup>
         <NavbarGroup align={Alignment.CENTER}>{searchWrapper}</NavbarGroup>
       </Navbar>
       <Drawer {...drawerProps} className="sicp-toc-drawer">

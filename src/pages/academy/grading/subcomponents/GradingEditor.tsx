@@ -325,7 +325,12 @@ const GradingEditor: React.FC<Props> = props => {
             <div>Autograder XP:</div>
             <div>
               {`${props.initialXp} / ${props.maxXp}`}{' '}
-              <Button icon="refresh" small minimal onClick={onClickReautogradeAnswer}></Button>
+              <Button
+                icon="refresh"
+                size="small"
+                variant="minimal"
+                onClick={onClickReautogradeAnswer}
+              ></Button>
             </div>
           </div>
           <div className="xp-adjustment">

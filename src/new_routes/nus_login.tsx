@@ -55,7 +55,7 @@ function NusLogin() {
             elevation={Elevation.ZERO}
           >
             <H1>Login</H1>
-            <ButtonGroup large vertical className={classes['buttons-wrapper']}>
+            <ButtonGroup size="large" vertical className={classes['buttons-wrapper']}>
               {nusProviders.map(({ id, name }) => (
                 <Button intent="primary" key={id} onClick={() => handleLogin(id)}>
                   {name}
@@ -64,7 +64,7 @@ function NusLogin() {
               {Constants.hasOtherAuthProviders && (
                 <Button
                   intent="primary"
-                  outlined
+                  variant="outlined"
                   className={classes['outlined']}
                   onClick={() => navigate('/login')}
                 >

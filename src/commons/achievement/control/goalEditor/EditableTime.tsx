@@ -18,7 +18,7 @@ const EditableTime: React.FC<Props> = ({ type, time, changeTime }) => {
   return (
     <>
       <Tooltip content={hoverText}>
-        <Button minimal={true} onClick={toggleOpen} outlined={true}>{`${type}`}</Button>
+        <Button variant="outlined" onClick={toggleOpen}>{`${type}`}</Button>
       </Tooltip>
       <Dialog
         isCloseButtonShown={false}

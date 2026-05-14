@@ -56,7 +56,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   });
 
   const sideBarResizableProps = (): ResizableProps & {
-    ref: React.MutableRefObject<Resizable | null>;
+    ref: React.RefObject<Resizable | null>;
   } => {
     const onResizeStop: ResizeCallback = (
       event: MouseEvent | TouchEvent,

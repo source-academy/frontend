@@ -50,7 +50,7 @@ const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }
   const { courseShortName, courseId } = useSession();
 
   return (
-    <NavbarGroup align={Alignment.LEFT}>
+    <NavbarGroup align={Alignment.START}>
       {renderDrawer && (
         <Button
           onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
@@ -64,7 +64,7 @@ const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }
         to={Constants.playgroundOnly ? '/' : courseId == null ? '/welcome' : `/courses/${courseId}`}
       >
         <NavbarHeading>
-          <Button className="app-title" minimal icon={IconNames.SYMBOL_DIAMOND}>
+          <Button className="app-title" variant="minimal" icon={IconNames.SYMBOL_DIAMOND}>
             {courseShortName || Constants.sourceAcademyDeploymentName}
           </Button>
         </NavbarHeading>
@@ -190,7 +190,7 @@ const NavigationBar: React.FC = () => {
   ]);
 
   const renderPlaygroundOnlyNavbarLeftDesktop = () => (
-    <NavbarGroup align={Alignment.LEFT}>
+    <NavbarGroup align={Alignment.START}>
       {playgroundOnlyNavbarLeftInfo.map((entry, i) => (
         <DesktopNavLink key={i} {...entry} />
       ))}
@@ -232,7 +232,7 @@ const NavigationBar: React.FC = () => {
     };
 
     return (
-      <NavbarGroup align={Alignment.LEFT}>
+      <NavbarGroup align={Alignment.START}>
         <Popover
           position={Position.BOTTOM_RIGHT}
           interactionKind="hover"
@@ -268,7 +268,7 @@ const NavigationBar: React.FC = () => {
   );
 
   const commonNavbarRight = (
-    <NavbarGroup align={Alignment.RIGHT}>
+    <NavbarGroup align={Alignment.END}>
       <NavigationBarLangSelectButton />
       <NavLink
         className={({ isActive }) =>
@@ -344,7 +344,7 @@ export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
       key={props.text}
       title={props.text}
     >
-      <Button minimal icon={props.icon}>
+      <Button variant="minimal" icon={props.icon}>
         {!shouldHide && (
           <Translation ns="commons" keyPrefix="navigationBar">
             {t =>
@@ -375,7 +375,7 @@ const MobileNavLink: React.FC<
       onClick={props.handleClick}
       key={props.text}
     >
-      <Button minimal large icon={props.icon}>
+      <Button variant="minimal" size="large" icon={props.icon}>
         <Translation ns="commons" keyPrefix="navigationBar">
           {t =>
             t($ => $[props.text as keyof i18nDefaultLangKeys['commons']['navigationBar']], {

@@ -110,7 +110,7 @@ const AchievementManualEditor: React.FC<Props> = props => {
           noResults={<MenuItem disabled={true} text="No matching user" />}
         >
           <Button
-            outlined={true}
+            variant="outlined"
             text={selectedUser ? selectedUser.name || selectedUser.username : 'No User Selected'}
             color="White"
           />
@@ -127,7 +127,7 @@ const AchievementManualEditor: React.FC<Props> = props => {
           onItemSelect={changeGoal}
           noResults={<MenuItem disabled={true} text="No matching goal" />}
         >
-          <Button outlined={true} text={goal ? goal.text : 'No Goal Selected'} color="White" />
+          <Button variant="outlined" text={goal ? goal.text : 'No Goal Selected'} color="White" />
         </GoalSelect>
       </div>
 
@@ -144,7 +144,7 @@ const AchievementManualEditor: React.FC<Props> = props => {
       </div>
 
       <div className="editor-section">
-        <Button outlined={true} text="Update Goal" onClick={updateGoal} intent="primary" />
+        <Button variant="outlined" text="Update Goal" onClick={updateGoal} intent="primary" />
       </div>
 
       <div className="editor-section">

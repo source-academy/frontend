@@ -85,7 +85,7 @@ const RemoteExecutionDeviceDialog: React.FC<Props> = ({
 
   const scanButton = (
     <Tooltip content="Scan QR Code">
-      <Button minimal icon="clip" onClick={() => setShowScanner(() => !showScanner)} />
+      <Button variant="minimal" icon="clip" onClick={() => setShowScanner(() => !showScanner)} />
     </Tooltip>
   );
 
