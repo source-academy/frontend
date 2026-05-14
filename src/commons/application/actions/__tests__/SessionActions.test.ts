@@ -5,6 +5,7 @@ import {
   unpublishedToBackendParams,
 } from 'src/features/grading/GradingUtils';
 import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
+import { expect, test, vi } from 'vitest';
 
 import type { GradingOverviews, GradingQuery } from '../../../../features/grading/GradingTypes';
 import { ColumnFields } from '../../../../features/grading/GradingTypes';

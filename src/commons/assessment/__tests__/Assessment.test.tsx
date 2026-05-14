@@ -6,6 +6,7 @@ import { type OverallState, Role } from 'src/commons/application/ApplicationType
 import { mockAssessmentOverviews } from 'src/commons/mocks/AssessmentMocks';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
+import { expect, test } from 'vitest';
 
 import Assessment from '../Assessment';
 import type { AssessmentConfiguration, AssessmentOverview } from '../AssessmentTypes';

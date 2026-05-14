@@ -5,7 +5,7 @@ import { createMemoryRouter, RouterProvider } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { assertType } from 'src/commons/utils/TypeHelper';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
-import { vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 
 import { mockAssessments } from '../../mocks/AssessmentMocks';
 import AssessmentWorkspace, { type AssessmentWorkspaceProps } from '../AssessmentWorkspace';

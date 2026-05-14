@@ -1,6 +1,6 @@
 import { Intent } from '@blueprintjs/core';
 import { fireEvent, render, type RenderResult, screen } from '@testing-library/react';
-import { vi } from 'vitest';
+import { expect, test, vi } from 'vitest';
 
 import { PromptDialog, type PromptDialogProps } from '../PromptDialog';
 

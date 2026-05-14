@@ -1,4 +1,5 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
+import { expect, test, vi } from 'vitest';
 
 import type { GradingOverview, GradingQuery } from '../../../../features/grading/GradingTypes';
 import {

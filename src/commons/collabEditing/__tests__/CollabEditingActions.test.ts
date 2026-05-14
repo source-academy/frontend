@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest';
+
 import type { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import { setEditorSessionId, setSharedbConnected } from '../CollabEditingActions';
 

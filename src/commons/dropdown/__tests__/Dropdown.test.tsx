@@ -6,7 +6,7 @@ import type { UserCourse } from 'src/commons/application/types/SessionTypes';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
-import { vi } from 'vitest';
+import { expect, test, vi } from 'vitest';
 
 import Dropdown from '../Dropdown';
 

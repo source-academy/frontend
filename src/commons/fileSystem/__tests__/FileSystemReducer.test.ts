@@ -1,4 +1,5 @@
 import { BFSRequire } from 'browserfs';
+import { describe, expect, test } from 'vitest';
 
 import { defaultFileSystem } from '../../application/ApplicationTypes';
 import { FileSystemReducer } from '../FileSystemReducer';

@@ -3,7 +3,7 @@ import type { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import type { DeepPartial } from '@reduxjs/toolkit';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react';
-import { type Mock, vi } from 'vitest';
+import { expect, type Mock, test, vi } from 'vitest';
 
 import {
   checkIfFileCanBeOpened,
