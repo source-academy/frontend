@@ -1,5 +1,6 @@
 import { type MiddlewareFunction, redirect, replace, type RouteObject } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
+import { academyRoutes } from 'src/pages/academy/academyRoutes';
 import { store } from 'src/pages/createStore';
 
 /**
@@ -56,32 +57,25 @@ export const playgroundOnlyRouterConfig: RouteObject[] = [
   },
 ];
 
-export const getFullAcademyRouterConfig = ({
-  name,
-  isLoggedIn,
-  courseId,
-  academyRoutes = [],
-}: {
-  name?: string;
-  isLoggedIn: boolean;
-  courseId?: number | null;
-  academyRoutes?: RouteObject[];
-}): RouteObject[] => {
+export const getFullAcademyRouterConfig = (): RouteObject[] => {
   const welcomeMiddleware = (() => {
-    if (name === undefined) {
+    const session = store.getState().session;
+    if (session.name === undefined) {
       throw redirect('/login');
     }
-    if (courseId !== null && courseId !== undefined) {
-      throw redirect(`/courses/${courseId}`);
+    if (session.courseId !== null && session.courseId !== undefined) {
+      throw redirect(`/courses/${session.courseId}`);
     }
     return null;
   }) satisfies MiddlewareFunction;
 
   const homePageRedirect = (() => {
+    const session = store.getState().session;
+    const isLoggedIn = typeof session.name === 'string';
     if (!isLoggedIn) {
       throw redirect('/login');
     }
-    if (courseId == null) {
+    if (session.courseId == null) {
       throw redirect('/welcome');
     }
     return null;
@@ -110,7 +104,8 @@ export const getFullAcademyRouterConfig = ({
           middleware: [
             homePageRedirect,
             () => {
-              throw replace(`/courses/${courseId}`);
+              const session = store.getState().session;
+              throw replace(`/courses/${session.courseId}`);
             },
           ],
         },

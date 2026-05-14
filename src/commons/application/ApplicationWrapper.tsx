@@ -1,16 +1,14 @@
 import { Classes, NonIdealState } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as Sentry from '@sentry/react';
+import { wrapCreateBrowserRouterV7 } from '@sentry/react';
 import classNames from 'classnames';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router';
-import { academyRoutes } from 'src/pages/academy/academyRoutes';
 
 import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from '../../routes/routerConfig';
 import { getHealth } from '../sagas/RequestsSaga';
 import Constants from '../utils/Constants';
-import { useSession } from '../utils/Hooks';
 import { updateReactRouter } from './actions/CommonsActions';
 
 /**
@@ -22,7 +20,6 @@ import { updateReactRouter } from './actions/CommonsActions';
  */
 const ApplicationWrapper: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoggedIn, name, courseId } = useSession();
   const [isApiHealthy, setIsApiHealthy] = useState(true);
 
   useEffect(() => {
@@ -34,13 +31,13 @@ const ApplicationWrapper: React.FC = () => {
   const router = useMemo(() => {
     const routerConfig = Constants.playgroundOnly
       ? playgroundOnlyRouterConfig
-      : getFullAcademyRouterConfig({ name, isLoggedIn, courseId, academyRoutes });
+      : getFullAcademyRouterConfig();
 
-    const r = Sentry.wrapCreateBrowserRouterV7(createBrowserRouter)(routerConfig);
+    const r = wrapCreateBrowserRouterV7(createBrowserRouter)(routerConfig);
     dispatch(updateReactRouter(r));
 
     return r;
-  }, [name, isLoggedIn, courseId, dispatch]);
+  }, [dispatch]);
 
   if (!isApiHealthy) {
     return (
