@@ -3,7 +3,7 @@ import { expect, test, vi } from 'vitest';
 
 import VersionHistoryPanel from './VersionHistoryPanel';
 
-vi.mock('../AceDiffViewer', () => ({
+vi.mock('./AceDiffViewer', () => ({
   default: () => <div data-testid="ace-diff-viewer" />,
 }));
 
