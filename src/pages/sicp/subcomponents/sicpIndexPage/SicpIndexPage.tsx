@@ -9,7 +9,7 @@ function SicpIndexPage() {
   return (
     <div className="sicp-index-page">
       <div className="sicp-cover">
-        <img src="http://source-academy.github.io/sicp/sicpjs.png" alt="SICP" />
+        <img src="https://source-academy.github.io/sicp/sicpjs.png" alt="SICP" />
         <div className="sicp-cover-text">
           <SicpTitle />
           <SicpAuthors />

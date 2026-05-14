@@ -2,14 +2,14 @@ function SicpLicenses() {
   return (
     <div className="sicp-licenses">
       <div>
-        <a href="http://creativecommons.org/licenses/by-sa/4.0/" rel="nofollow">
+        <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="nofollow">
           <img src="https://licensebuttons.net/l/by-sa/4.0/88x31.png" alt="CC BY-SA 4.0" />
         </a>
       </div>
       <div>
         <p>
           This work is licensed under a{' '}
-          <a href="http://creativecommons.org/licenses/by-sa/4.0/" rel="nofollow">
+          <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="nofollow">
             Creative Commons Attribution-ShareAlike 4.0 International License
           </a>
           .
@@ -36,7 +36,7 @@ function SicpLicenses() {
       </div>
       <br />
       <div>
-        <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" rel="nofollow">
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="nofollow">
           <img src="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png" alt="CC BY-NC-SA 4.0" />
         </a>
       </div>
@@ -49,7 +49,7 @@ function SicpLicenses() {
             Print and Kindle versions of this work{' '}
           </a>
           are published by The MIT Press under a{' '}
-          <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" rel="nofollow">
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="nofollow">
             Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
           </a>
           .
