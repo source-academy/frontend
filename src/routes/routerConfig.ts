@@ -145,7 +145,7 @@ export const getFullAcademyRouterConfig = ({
           ],
           children: [
             {
-              path: 'courses/:courseId/*',
+              path: 'courses/:courseId',
               lazy: () => import('../new_routes/courses/[courseId]/_layout'),
               children: academyRoutes,
             },
