@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { act } from 'react';
-import { Route, Routes, StaticRouter } from 'react-router';
+import { createMemoryRouter, RouterProvider } from 'react-router';
 import { beforeAll, describe, expect, type Mock, test, vi } from 'vitest';
 
 import Constants from '../../commons/utils/Constants';
@@ -9,11 +9,11 @@ import { Component as GitHubCallback } from '../../new_routes/callback/github';
 
 function renderWithLocation(element: React.ReactElement, location: string) {
   return render(
-    <StaticRouter location={location}>
-      <Routes>
-        <Route path={urlWithoutCode} element={element} />
-      </Routes>
-    </StaticRouter>,
+    <RouterProvider
+      router={createMemoryRouter([{ path: urlWithoutCode, element }], {
+        initialEntries: [location],
+      })}
+    />,
   );
 }
 
