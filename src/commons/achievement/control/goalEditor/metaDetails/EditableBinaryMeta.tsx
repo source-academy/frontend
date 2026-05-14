@@ -12,7 +12,6 @@ import { AND, type BooleanExpression, OR } from 'src/features/achievement/Expres
  */
 
 type Joiner = 'AND' | 'OR';
-const JoinerSelect = Select.ofType<Joiner>();
 const joinerRenderer: ItemRenderer<Joiner> = (joiner, { handleClick }) => (
   <MenuItem key={joiner} onClick={handleClick} text={joiner} />
 );
@@ -132,14 +131,14 @@ const EditableBinaryMeta: React.FC<Props> = ({ binaryMeta, changeMeta }) => {
           ) : (
             // the button to choose the joiner to use
             <Tooltip content="And/Or">
-              <JoinerSelect
+              <Select<Joiner>
                 filterable={false}
                 itemRenderer={joinerRenderer}
                 items={['AND', 'OR']}
                 onItemSelect={value => changeJoinerArray(value, (idx - 1) / 2)}
               >
                 <Button variant="outlined" text={op} />
-              </JoinerSelect>
+              </Select>
             </Tooltip>
           )
         }

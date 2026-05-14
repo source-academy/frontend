@@ -166,7 +166,7 @@ const Grading: React.FC = () => {
                   Submissions
                 </GradingText>
                 <Button
-                  minimal
+                  variant="minimal"
                   icon={IconNames.EXPORT}
                   onClick={() => {
                     const tokens = {
@@ -212,7 +212,7 @@ const Grading: React.FC = () => {
               <GradingText>entries per page.</GradingText>
               <Button
                 className={animateRefresh ? 'grading-refresh-loop' : ''}
-                minimal
+                variant="minimal"
                 style={{ padding: 0 }}
                 onClick={e => {
                   setRefreshQueried(true);

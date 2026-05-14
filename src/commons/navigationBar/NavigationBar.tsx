@@ -247,7 +247,7 @@ const NavigationBar: React.FC = () => {
             <NavbarHeading>
               <Button
                 className="app-title"
-                minimal
+                variant="minimal"
                 icon={IconNames.SYMBOL_DIAMOND}
                 active={highlightDesktopLogo(location)}
               >

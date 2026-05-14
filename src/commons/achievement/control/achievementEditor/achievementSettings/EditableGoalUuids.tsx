@@ -20,7 +20,6 @@ const EditableGoalUuids: React.FC<Props> = ({ changeGoalUuids, goalUuids }) => {
 
   const getUuid = (text: string) => inferencer.getUuidByText(text);
 
-  const GoalSelect = MultiSelect.ofType<AchievementGoal>();
   const goalRenderer: ItemRenderer<AchievementGoal> = (goal, { handleClick }) => (
     <MenuItem key={goal.uuid} onClick={handleClick} text={goal.text} />
   );
@@ -45,7 +44,7 @@ const EditableGoalUuids: React.FC<Props> = ({ changeGoalUuids, goalUuids }) => {
   };
 
   return (
-    <GoalSelect
+    <MultiSelect<AchievementGoal>
       itemRenderer={goalRenderer}
       items={[...availableGoals].map(uuid => inferencer.getGoal(uuid))}
       noResults={<MenuItem disabled={true} text="No available goal" />}

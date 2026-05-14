@@ -333,8 +333,8 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                       <div style={{ padding: '8px 10px', minWidth: '210px' }}>
                         <div style={{ marginBottom: '8px', fontWeight: 600 }}>Filter Arrows</div>
                         <Button
-                          small
-                          minimal
+                          size="small"
+                          variant="minimal"
                           onClick={() => this.setAllArrowFilters(!areAllArrowFiltersSelected)}
                           style={{ marginBottom: '8px' }}
                         >

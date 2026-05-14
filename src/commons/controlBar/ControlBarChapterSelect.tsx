@@ -12,8 +12,6 @@ import { useFeature } from '../featureFlags/useFeature';
 import { useTypedSelector } from '../utils/Hooks';
 import LegacyControlBarChapterSelect from './LegacyControlBarChapterSelect';
 
-const EvaluatorSelectComponent = Select.ofType<IEvaluatorDefinition>();
-
 type Props = {
   handleChapterSelect?: (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => void;
   isFolderModeEnabled: boolean;
@@ -70,7 +68,7 @@ const ControlBarChapterSelect: React.FC<Props> = ({
   };
 
   return (
-    <EvaluatorSelectComponent
+    <Select<IEvaluatorDefinition>
       items={evaluators}
       onItemSelect={onSelectEvaluator}
       itemRenderer={evaluatorRenderer}
@@ -79,13 +77,13 @@ const ControlBarChapterSelect: React.FC<Props> = ({
       disabled={disabled}
     >
       <Button
-        minimal
+        variant="minimal"
         text={selectedEvaluator ? selectedEvaluator.name : 'Select Evaluator'}
-        rightIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
+        endIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
         data-testid="ControlBarEvaluatorSelect"
         disabled={disabled}
       />
-    </EvaluatorSelectComponent>
+    </Select>
   );
 };
 

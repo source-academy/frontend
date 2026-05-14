@@ -61,8 +61,6 @@ const chapterRenderer: (isFolderModeEnabled: boolean) => ItemRenderer<SALanguage
     );
   };
 
-const ChapterSelectComponent = Select.ofType<SALanguage>();
-
 const LegacyControlBarChapterSelect: React.FC<Props> = ({
   isFolderModeEnabled,
   sourceChapter,
@@ -82,7 +80,7 @@ const LegacyControlBarChapterSelect: React.FC<Props> = ({
   ];
 
   return (
-    <ChapterSelectComponent
+    <Select<SALanguage>
       items={choices.filter(({ mainLanguage }) => mainLanguage === selectedLang)}
       onItemSelect={handleChapterSelect}
       itemRenderer={chapterRenderer(isFolderModeEnabled)}
@@ -91,12 +89,12 @@ const LegacyControlBarChapterSelect: React.FC<Props> = ({
       disabled={disabled}
     >
       <Button
-        minimal
+        variant="minimal"
         text={styliseSublanguage(sourceChapter, sourceVariant)}
-        rightIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
+        endIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
         disabled={disabled}
       />
-    </ChapterSelectComponent>
+    </Select>
   );
 };
 

@@ -10,14 +10,12 @@ import type {
 
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
-const GoalSelect = Select.ofType<AchievementGoal>();
 const goalRenderer: ItemRenderer<AchievementGoal> = (goal, { handleClick }) => (
   <MenuItem key={goal.uuid} onClick={handleClick} text={goal.text} />
 );
 const goalPredicate: ItemPredicate<AchievementGoal> = (query, item) =>
   item.text.toLowerCase().includes(query.toLowerCase());
 
-const UserSelect = Select.ofType<AchievementUser>();
 const userRenderer: ItemRenderer<AchievementUser> = (user, { handleClick }) => (
   <MenuItem key={user.courseRegId} onClick={handleClick} text={user.name || user.username} />
 );
@@ -101,7 +99,7 @@ const AchievementManualEditor: React.FC<Props> = props => {
     <div className="achievement-manual-editor">
       <div className="editor-section">
         <h3>User: </h3>
-        <UserSelect
+        <Select<AchievementUser>
           filterable={true}
           items={users}
           itemRenderer={userRenderer}
@@ -114,12 +112,12 @@ const AchievementManualEditor: React.FC<Props> = props => {
             text={selectedUser ? selectedUser.name || selectedUser.username : 'No User Selected'}
             color="White"
           />
-        </UserSelect>
+        </Select>
       </div>
 
       <div className="editor-section">
         <h3>Goal: </h3>
-        <GoalSelect
+        <Select<AchievementGoal>
           filterable={true}
           items={manualAchievements}
           itemRenderer={goalRenderer}
@@ -128,7 +126,7 @@ const AchievementManualEditor: React.FC<Props> = props => {
           noResults={<MenuItem disabled={true} text="No matching goal" />}
         >
           <Button variant="outlined" text={goal ? goal.text : 'No Goal Selected'} color="White" />
-        </GoalSelect>
+        </Select>
       </div>
 
       <div className="editor-section">

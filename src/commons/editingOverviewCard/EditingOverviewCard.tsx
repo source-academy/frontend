@@ -206,15 +206,15 @@ export const EditingOverviewCard: React.FC<Props> = props => {
     assessmentType: AssessmentType,
     handleSelect = (i: AssessmentType, e?: React.SyntheticEvent<HTMLElement>) => {},
   ) => (
-    <AssessmentTypeSelectComponent
+    <Select<AssessmentType>
       className={Classes.MINIMAL}
       items={props.assessmentTypes}
       onItemSelect={handleSelect}
       itemRenderer={assessmentTypeRenderer}
       filterable={false}
     >
-      <Button variant="minimal" text={assessmentType} rightIcon={IconNames.DOUBLE_CARET_VERTICAL} />
-    </AssessmentTypeSelectComponent>
+      <Button variant="minimal" text={assessmentType} endIcon={IconNames.DOUBLE_CARET_VERTICAL} />
+    </Select>
   );
 
   return (
@@ -232,8 +232,6 @@ const createPlaceholder = (str: string): string => {
     return str;
   }
 };
-
-const AssessmentTypeSelectComponent = Select.ofType<AssessmentType>();
 
 const assessmentTypeRenderer: ItemRenderer<AssessmentType> = (
   assessmentType,
