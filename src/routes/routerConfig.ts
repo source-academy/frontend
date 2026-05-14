@@ -4,8 +4,6 @@ import { store } from 'src/pages/createStore';
 
 const RootLayout = () => import('../new_routes/_layout');
 const Login = () => import('../pages/login/Login');
-const LoginPage = () => import('../new_routes/login');
-const LoginCallback = () => import('../new_routes/login/callback');
 const LoginVscodeCallback = () => import('../new_routes/login/vscode_callback');
 const NusLogin = () => import('../new_routes/nus_login');
 const Playground = () => import('../pages/playground/Playground');
@@ -97,20 +95,21 @@ export const getFullAcademyRouterConfig = ({
         {
           path: 'login',
           lazy: Login,
-          middleware: [
-            () => {
-              if (Constants.hasOtherAuthProviders) {
-                return null;
-              }
-              throw redirect('/nus_login');
+          children: [
+            {
+              index: true,
+              middleware: [
+                () => {
+                  if (Constants.hasOtherAuthProviders) {
+                    return null;
+                  }
+                  throw redirect('/nus_login');
+                },
+              ],
+              lazy: () => import('../new_routes/login'),
             },
+            { path: 'callback', lazy: () => import('../new_routes/login/callback') },
           ],
-          children: [{ path: '', lazy: LoginPage }],
-        },
-        {
-          path: 'login',
-          lazy: Login,
-          children: [{ path: 'callback', lazy: LoginCallback }],
         },
         {
           path: 'login',
