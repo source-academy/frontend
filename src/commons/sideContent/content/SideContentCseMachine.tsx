@@ -331,6 +331,14 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     this.refreshArrowFilters();
   };
 
+  private zoomStage = (isZoomIn: boolean, multiplier: number) => {
+    if (this.isJava()) {
+      JavaCseMachine.zoomStage(isZoomIn, multiplier);
+    } else {
+      Layout.zoomStage(isZoomIn, multiplier);
+    }
+  };
+
   public render() {
     const arrowFilters = CseMachine.getArrowOriginFilters();
     const areAllArrowFiltersSelected = ALL_ARROW_FILTER_KEYS.every(key => arrowFilters[key]);
@@ -642,14 +650,6 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       </HotKeys>
     );
   }
-
-  private zoomStage = (isZoomIn: boolean, multiplier: number) => {
-    if (this.isJava()) {
-      JavaCseMachine.zoomStage(isZoomIn, multiplier);
-    } else {
-      Layout.zoomStage(isZoomIn, multiplier);
-    }
-  };
 
   private refreshArrowFilters = () => {
     CseMachine.clearRenderedLayouts();
