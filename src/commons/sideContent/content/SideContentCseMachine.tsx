@@ -12,20 +12,17 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import type { HotkeyItem } from '@mantine/hooks';
-import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
 import { t } from 'i18next';
 import { Chapter } from 'js-slang/dist/langs';
 import { debounce } from 'lodash';
-import { Component } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { connect, type MapDispatchToProps, type MapStateToProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
-import {
-  type PlaygroundWorkspaceState,
-  type WorkspaceLocation,
-} from 'src/commons/workspace/WorkspaceTypes';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import { ClearDeadFramesAnimation } from 'src/features/cseMachine/animationComponents/ClearDeadFramesAnimation';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
@@ -34,7 +31,6 @@ import type { ArrowOriginFilterKey } from 'src/features/cseMachine/CseMachineTyp
 import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
-import type { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
 import type { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
@@ -51,668 +47,612 @@ const ALL_ARROW_FILTER_KEYS: ArrowOriginFilterKey[] = [
   'stash',
 ];
 
-type State = {
-  visualization: React.ReactNode;
-  value: number;
-  height: number;
-  width: number;
-  lastStep: boolean;
-  stepLimitExceeded: boolean;
-  chapter: Chapter;
-  clearDeadFrames: boolean;
-  arrowFilterOpen: boolean;
-};
-
-type CseMachineProps = OwnProps & StateProps & DispatchProps;
-
-type StateProps = {
+type Props = {
+  workspaceLocation: WorkspaceLocation;
   editorWidth?: string;
   sideContentHeight?: number;
-  stepsTotal: number;
-  currentStep: number;
-  breakpointSteps: number[];
-  changepointSteps: number[];
-  needCseUpdate: boolean;
-  machineOutput: InterpreterOutput[];
-  chapter: Chapter;
 };
 
-type OwnProps = {
-  workspaceLocation: WorkspaceLocation;
-};
+const SideContentCseMachine: React.FC<Props> = ({
+  workspaceLocation,
+  editorWidth,
+  sideContentHeight,
+}) => {
+  const [visualization, setVisualization] = useState<React.ReactNode>(null);
+  const [value, setValue] = useState(-1);
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+  const [, setLastStep] = useState(false);
+  const [stepLimitExceeded, setStepLimitExceeded] = useState(false);
+  const [clearDeadFrames, setClearDeadFrames] = useState(false);
+  const [arrowFilterOpen, setArrowFilterOpen] = useState(false);
 
-type DispatchProps = {
-  handleStepUpdate: (steps: number) => void;
-  handleEditorEval: () => void;
-  setEditorHighlightedLines: (
-    editorTabIndex: number,
-    newHighlightedLines: HighlightedLines[],
-  ) => void;
-  handleAlertSideContent: () => void;
-};
+  const [loc] = getLocation(workspaceLocation);
+  const workspace = useTypedSelector(
+    store => store.workspaces[loc === 'sicp' ? 'sicp' : 'playground'],
+  );
 
-class SideContentCseMachineBase extends Component<CseMachineProps, State> {
-  constructor(props: CseMachineProps) {
-    super(props);
-    this.state = {
-      visualization: null,
-      value: -1,
-      width: this.calculateWidth(props.editorWidth),
-      height: this.calculateHeight(props.sideContentHeight),
-      lastStep: false,
-      stepLimitExceeded: false,
-      chapter: props.chapter,
-      clearDeadFrames: false,
-      arrowFilterOpen: false,
+  const dispatch = useDispatch();
+
+  const chapter = workspace.context.chapter;
+  const stepsTotal = workspace.stepsTotal;
+  const breakpointSteps = workspace.breakpointSteps;
+  const changepointSteps = workspace.changepointSteps;
+  const updateCse = workspace.updateCse;
+  const machineOutput = workspace.output;
+
+  const isJava = chapter === Chapter.FULL_JAVA;
+
+  const handleEditorEval = useCallback(() => {
+    dispatch(WorkspaceActions.evalEditor(workspaceLocation));
+  }, [dispatch, workspaceLocation]);
+
+  const handleStepUpdate = useCallback(
+    (steps: number) => {
+      dispatch(WorkspaceActions.updateCurrentStep(steps, workspaceLocation));
+    },
+    [dispatch, workspaceLocation],
+  );
+
+  const handleAlertSideContent = useCallback(() => {
+    dispatch(beginAlertSideContent(SideContentType.cseMachine, workspaceLocation));
+  }, [dispatch, workspaceLocation]);
+
+  const setEditorHighlightedLines = useCallback(
+    (editorTabIndex: number, newHighlightedLines: HighlightedLines[]) => {
+      dispatch(
+        WorkspaceActions.setEditorHighlightedLinesControl(
+          workspaceLocation,
+          editorTabIndex,
+          newHighlightedLines,
+        ),
+      );
+    },
+    [dispatch, workspaceLocation],
+  );
+
+  const calculateWidth = useCallback((editorWidthProp?: string) => {
+    const horizontalPadding = 50;
+    const maxWidth = 5000;
+    let w;
+    if (editorWidthProp === undefined) {
+      w = window.innerWidth - horizontalPadding;
+    } else {
+      w = Math.min(
+        maxWidth,
+        (window.innerWidth * (100 - parseFloat(editorWidthProp))) / 100 - horizontalPadding,
+      );
+    }
+    return Math.min(w, maxWidth);
+  }, []);
+
+  const calculateHeight = useCallback((sideContentHeightProp?: number) => {
+    const verticalPadding = 150;
+    const maxHeight = 5000; // limit for visible diagram height for huge screens
+    let h;
+    if (window.innerWidth < Constants.mobileBreakpoint) {
+      // mobile mode
+      h = window.innerHeight - verticalPadding;
+    } else if (sideContentHeightProp === undefined) {
+      h = window.innerHeight - verticalPadding;
+    } else {
+      h = sideContentHeightProp - verticalPadding;
+    }
+    return Math.min(h, maxHeight);
+  }, []);
+
+  const sliderRelease = useCallback(
+    (newValue: number) => {
+      if (newValue === stepsTotal) {
+        setLastStep(true);
+      } else {
+        setLastStep(false);
+      }
+      handleEditorEval();
+    },
+    [stepsTotal, handleEditorEval],
+  );
+
+  const sliderShift = useCallback(
+    (newValue: number) => {
+      if (clearDeadFrames) {
+        CseMachine.setClearDeadFrames(false);
+        CseMachine.clearLiveLayouts();
+        CseMachine.redraw();
+      }
+      handleStepUpdate(newValue);
+      setValue(newValue);
+      setClearDeadFrames(false);
+    },
+    [clearDeadFrames, handleStepUpdate],
+  );
+
+  useEffect(() => {
+    const newWidth = calculateWidth(editorWidth);
+    const newHeight = calculateHeight(sideContentHeight);
+    if (newWidth !== width || newHeight !== height) {
+      setWidth(newWidth);
+      setHeight(newHeight);
+      CseMachine.updateDimensions(newWidth, newHeight);
+    }
+  }, [calculateWidth, calculateHeight, editorWidth, sideContentHeight, width, height]);
+
+  useEffect(() => {
+    const newWidth = calculateWidth(editorWidth);
+    const newHeight = calculateHeight(sideContentHeight);
+    setWidth(newWidth);
+    setHeight(newHeight);
+
+    const resizeHandler = debounce(() => {
+      const w = calculateWidth(editorWidth);
+      const h = calculateHeight(sideContentHeight);
+      if (w !== width || h !== height) {
+        setWidth(w);
+        setHeight(h);
+        CseMachine.updateDimensions(w, h);
+      }
+    }, 300);
+
+    window.addEventListener('resize', resizeHandler);
+    CseMachine.redraw();
+
+    return () => {
+      resizeHandler.cancel();
+      window.removeEventListener('resize', resizeHandler);
     };
-    if (this.isJava()) {
+  }, [calculateWidth, calculateHeight, editorWidth, sideContentHeight, width, height]);
+
+  useEffect(() => {
+    if (isJava) {
       JavaCseMachine.init(
-        visualization => this.setState({ visualization }),
+        visualization => setVisualization(visualization),
         (segments: [number, number][]) => {
-          props.setEditorHighlightedLines(0, segments);
+          setEditorHighlightedLines(0, segments);
         },
       );
     } else {
       CseMachine.init(
         visualization => {
-          this.setState({ visualization }, () => CseAnimation.playAnimation());
-          if (visualization) this.props.handleAlertSideContent();
+          setVisualization(visualization);
+          if (visualization) {
+            handleAlertSideContent();
+          }
+          CseAnimation.playAnimation();
         },
-        this.state.width,
-        this.state.height,
+        width,
+        height,
         (segments: [number, number][]) => {
           // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
           // This comment is copied over from workspace saga
-          props.setEditorHighlightedLines(0, segments);
+          setEditorHighlightedLines(0, segments);
         },
         // We shouldn't be able to move slider to a step number beyond the step limit
         isControlEmpty => {
-          const isAtLastStep = this.state.value === this.props.stepsTotal;
-
-          this.setState({
-            stepLimitExceeded: !isControlEmpty && isAtLastStep,
-          });
+          const isAtLastStep = value === stepsTotal;
+          setStepLimitExceeded(!isControlEmpty && isAtLastStep);
         },
       );
     }
-  }
+  }, [isJava, width, height, stepsTotal, value, handleAlertSideContent, setEditorHighlightedLines]);
 
-  private isJava(): boolean {
-    return this.props.chapter === Chapter.FULL_JAVA;
-  }
-
-  private calculateWidth(editorWidth?: string) {
-    const horizontalPadding = 50;
-    const maxWidth = 5000; // limit for visible diagram width for huge screens
-    let width;
-    if (editorWidth === undefined) {
-      width = window.innerWidth - horizontalPadding;
-    } else {
-      width = Math.min(
-        maxWidth,
-        (window.innerWidth * (100 - parseFloat(editorWidth))) / 100 - horizontalPadding,
-      );
-    }
-    return Math.min(width, maxWidth);
-  }
-
-  private calculateHeight(sideContentHeight?: number) {
-    const verticalPadding = 150;
-    const maxHeight = 5000; // limit for visible diagram height for huge screens
-    let height;
-    if (window.innerWidth < Constants.mobileBreakpoint) {
-      // mobile mode
-      height = window.innerHeight - verticalPadding;
-    } else if (sideContentHeight === undefined) {
-      height = window.innerHeight - verticalPadding;
-    } else {
-      height = sideContentHeight - verticalPadding;
-    }
-    return Math.min(height, maxHeight);
-  }
-
-  private sliderRelease = (newValue: number) => {
-    if (newValue === this.props.stepsTotal) {
-      this.setState({ lastStep: true });
-    } else {
-      this.setState({ lastStep: false });
-    }
-    this.props.handleEditorEval();
-  };
-
-  private sliderShift = (newValue: number) => {
-    if (this.state.clearDeadFrames) {
-      CseMachine.setClearDeadFrames(false);
-      CseMachine.clearLiveLayouts();
-      CseMachine.redraw();
-    }
-    this.props.handleStepUpdate(newValue);
-    this.setState((state: State) => {
-      return { value: newValue, clearDeadFrames: false };
-    });
-  };
-
-  handleResize = debounce(() => {
-    const newWidth = this.calculateWidth(this.props.editorWidth);
-    const newHeight = this.calculateHeight(this.props.sideContentHeight);
-    if (newWidth !== this.state.width || newHeight !== this.state.height) {
-      this.setState({
-        height: newHeight,
-        width: newWidth,
-      });
-      CseMachine.updateDimensions(newWidth, newHeight);
-    }
-  }, 300);
-
-  componentDidMount() {
-    this.handleResize();
-    window.addEventListener('resize', this.handleResize);
-    CseMachine.redraw();
-  }
-
-  componentWillUnmount() {
-    this.handleResize.cancel();
-    window.removeEventListener('resize', this.handleResize);
-    if (!this.isJava()) {
+  useEffect(() => {
+    if (updateCse) {
       CseMachine.resetArrowOriginFilters();
-    }
-  }
-
-  componentDidUpdate(prevProps: {
-    editorWidth?: string;
-    sideContentHeight?: number;
-    stepsTotal: number;
-    needCseUpdate: boolean;
-  }) {
-    if (
-      prevProps.sideContentHeight !== this.props.sideContentHeight ||
-      prevProps.editorWidth !== this.props.editorWidth
-    ) {
-      this.handleResize();
-    }
-    if (prevProps.needCseUpdate && !this.props.needCseUpdate) {
-      CseMachine.resetArrowOriginFilters();
-      this.setState({ arrowFilterOpen: false });
-      this.stepFirst();
-      if (this.isJava()) {
+      setArrowFilterOpen(false);
+      sliderShift(0);
+      sliderRelease(0);
+      if (isJava) {
         JavaCseMachine.clearCse();
       } else {
         CseMachine.clearCse();
       }
     }
-  }
+  }, [updateCse, isJava, sliderShift, sliderRelease]);
 
-  private stepPrevious = () => {
-    if (this.state.value !== 0) {
-      this.sliderShift(this.state.value - 1);
-      this.sliderRelease(this.state.value - 1);
+  useEffect(() => {
+    return () => {
+      if (!isJava) {
+        CseMachine.resetArrowOriginFilters();
+      }
+    };
+  }, [isJava]);
+
+  const stepPrevious = useCallback(() => {
+    if (value !== 0) {
+      sliderShift(value - 1);
+      sliderRelease(value - 1);
     }
-  };
+  }, [value, sliderShift, sliderRelease]);
 
-  private stepNext = () => {
-    const lastStepValue = this.props.stepsTotal;
-    if (this.state.value !== lastStepValue) {
-      this.sliderShift(this.state.value + 1);
-      this.sliderRelease(this.state.value + 1);
+  const stepNext = useCallback(() => {
+    const lastStepValue = stepsTotal;
+    if (value !== lastStepValue) {
+      sliderShift(value + 1);
+      sliderRelease(value + 1);
       CseAnimation.enableAnimations();
     }
-  };
+  }, [value, stepsTotal, sliderShift, sliderRelease]);
 
-  private stepFirst = () => {
+  const stepFirst = useCallback(() => {
     // Move to the first step
-    this.sliderShift(0);
-    this.sliderRelease(0);
-  };
+    sliderShift(0);
+    sliderRelease(0);
+  }, [sliderShift, sliderRelease]);
 
-  private stepLast = (lastStepValue: number) => () => {
-    // Move to the last step
-    this.sliderShift(lastStepValue);
-    this.sliderRelease(lastStepValue);
-  };
-
-  private stepNextBreakpoint = () => {
-    for (const step of this.props.breakpointSteps) {
-      if (step > this.state.value) {
-        this.sliderShift(step);
-        this.sliderRelease(step);
-        return;
-      }
-    }
-    this.sliderShift(this.props.stepsTotal);
-    this.sliderRelease(this.props.stepsTotal);
-  };
-
-  private stepPrevBreakpoint = () => {
-    for (let i = this.props.breakpointSteps.length - 1; i >= 0; i--) {
-      const step = this.props.breakpointSteps[i];
-      if (step < this.state.value) {
-        this.sliderShift(step);
-        this.sliderRelease(step);
-        return;
-      }
-    }
-    this.sliderShift(0);
-    this.sliderRelease(0);
-  };
-
-  private stepNextChangepoint = () => {
-    for (const step of this.props.changepointSteps) {
-      if (step > this.state.value) {
-        this.sliderShift(step);
-        this.sliderRelease(step);
-        return;
-      }
-    }
-    this.sliderShift(this.props.stepsTotal);
-    this.sliderRelease(this.props.stepsTotal);
-  };
-
-  private stepPrevChangepoint = () => {
-    for (let i = this.props.changepointSteps.length - 1; i >= 0; i--) {
-      const step = this.props.changepointSteps[i];
-      if (step < this.state.value) {
-        this.sliderShift(step);
-        this.sliderRelease(step);
-        return;
-      }
-    }
-    this.sliderShift(0);
-    this.sliderRelease(0);
-  };
-
-  private toggleArrowFilter = (origin: ArrowOriginFilterKey) => {
-    const filters = CseMachine.getArrowOriginFilters();
-    CseMachine.setArrowOriginVisible(origin, !filters[origin]);
-    this.refreshArrowFilters();
-  };
-
-  private setAllArrowFilters = (visible: boolean) => {
-    CseMachine.setAllArrowOriginsVisible(visible);
-    this.refreshArrowFilters();
-  };
-
-  private zoomStage = (isZoomIn: boolean, multiplier: number) => {
-    if (this.isJava()) {
-      JavaCseMachine.zoomStage(isZoomIn, multiplier);
-    } else {
-      Layout.zoomStage(isZoomIn, multiplier);
-    }
-  };
-
-  public render() {
-    const arrowFilters = CseMachine.getArrowOriginFilters();
-    const areAllArrowFiltersSelected = ALL_ARROW_FILTER_KEYS.every(key => arrowFilters[key]);
-    const hotkeyBindings: HotkeyItem[] = this.state.visualization
-      ? [
-          ['a', this.stepFirst],
-          ['f', this.stepNext],
-          ['b', this.stepPrevious],
-          ['e', this.stepLast(this.props.stepsTotal)],
-        ]
-      : [
-          ['a', () => {}],
-          ['f', () => {}],
-          ['b', () => {}],
-          ['e', () => {}],
-        ];
-
-    const currentStep = Math.max(0, this.state.value);
-    const isAtFirstStep = currentStep < 1;
-    const isAtLastStep = currentStep >= this.props.stepsTotal;
-    const isNavDisabled = !this.state.visualization;
-
-    return (
-      <HotKeys
-        bindings={hotkeyBindings}
-        style={{
-          maxHeight: '100%',
-          overflow: this.state.visualization ? 'hidden' : 'auto',
-        }}
-      >
-        <div className={classNames('sa-substituter', Classes.DARK)}>
-          <Slider
-            disabled={!this.state.visualization}
-            min={0}
-            max={this.props.stepsTotal}
-            onChange={this.sliderShift}
-            onRelease={this.sliderRelease}
-            value={this.state.value < 0 ? 0 : this.state.value}
-          />
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: this.isJava() ? 'center' : 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            {!this.isJava() && (
-              <ButtonGroup>
-                <Tooltip content="Control and Stash" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        CseMachine.toggleControlStash();
-                        CseMachine.redraw();
-                      }
-                    }}
-                    icon="layers"
-                    disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      checked={CseMachine.getControlStash()}
-                      disabled={!this.state.visualization}
-                      style={{ margin: 0 }}
-                    />
-                  </AnchorButton>
-                </Tooltip>
-                <Tooltip content="Truncate Control" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        CseMachine.toggleStackTruncated();
-                        CseMachine.redraw();
-                      }
-                    }}
-                    icon="minimize"
-                    disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      checked={CseMachine.getStackTruncated()}
-                      disabled={!this.state.visualization}
-                      style={{ margin: 0 }}
-                    />
-                  </AnchorButton>
-                </Tooltip>
-
-                <Tooltip content="Alignment" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        CseMachine.toggleCenterAlignment();
-                        CseMachine.redraw();
-                      }
-                    }}
-                    icon="eye-open"
-                    disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      checked={CseMachine.getCenterAlignment()}
-                      disabled={!this.state.visualization}
-                      style={{ margin: 0 }}
-                    />
-                  </AnchorButton>
-                </Tooltip>
-                <Tooltip content="Filter Arrows" compact>
-                  <Popover
-                    isOpen={this.state.arrowFilterOpen}
-                    onInteraction={nextOpen => this.setState({ arrowFilterOpen: nextOpen })}
-                    position={Position.BOTTOM_LEFT}
-                    content={
-                      <div style={{ padding: '8px 10px', minWidth: '210px' }}>
-                        <div style={{ marginBottom: '8px', fontWeight: 600 }}>Filter Arrows</div>
-                        <Button
-                          small
-                          minimal
-                          onClick={() => this.setAllArrowFilters(!areAllArrowFiltersSelected)}
-                          style={{ marginBottom: '8px' }}
-                        >
-                          {areAllArrowFiltersSelected ? 'Deselect all' : 'Select all'}
-                        </Button>
-                        <Checkbox
-                          checked={arrowFilters.text}
-                          label="From text"
-                          onChange={() => this.toggleArrowFilter('text')}
-                        />
-                        <Checkbox
-                          checked={arrowFilters.frame}
-                          label="From frames"
-                          onChange={() => this.toggleArrowFilter('frame')}
-                        />
-                        <Checkbox
-                          checked={arrowFilters.function}
-                          label="From function objects"
-                          onChange={() => this.toggleArrowFilter('function')}
-                        />
-                        <Checkbox
-                          checked={arrowFilters.array}
-                          label="From arrays"
-                          onChange={() => this.toggleArrowFilter('array')}
-                        />
-                        <Checkbox
-                          checked={arrowFilters.control}
-                          label="From control"
-                          onChange={() => this.toggleArrowFilter('control')}
-                        />
-                        <Checkbox
-                          checked={arrowFilters.stash}
-                          label="From stash"
-                          onChange={() => this.toggleArrowFilter('stash')}
-                        />
-                      </div>
-                    }
-                  >
-                    <AnchorButton icon="flow-branch" disabled={!this.state.visualization} />
-                  </Popover>
-                </Tooltip>
-              </ButtonGroup>
-            )}
-            <ButtonGroup>
-              <Button
-                disabled={isNavDisabled || isAtFirstStep}
-                icon="double-chevron-left"
-                onClick={this.stepPrevBreakpoint}
-              />
-              <Button
-                disabled={isNavDisabled || isAtFirstStep}
-                icon="chevron-left"
-                onClick={
-                  this.isJava() || CseMachine.getControlStash()
-                    ? this.stepPrevious
-                    : this.stepPrevChangepoint
-                }
-              />
-              <Button
-                disabled={isNavDisabled || isAtLastStep}
-                icon="chevron-right"
-                onClick={
-                  this.isJava() || CseMachine.getControlStash()
-                    ? this.stepNext
-                    : this.stepNextChangepoint
-                }
-              />
-              <Button
-                disabled={isNavDisabled || isAtLastStep}
-                icon="double-chevron-right"
-                onClick={this.stepNextBreakpoint}
-              />
-            </ButtonGroup>
-
-            {!this.isJava() && (
-              <ButtonGroup>
-                <Tooltip content="Clear Dead Frames" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        const prevLevels = Layout.levels;
-                        this.setState(
-                          prevState => ({
-                            clearDeadFrames: true,
-                          }),
-                          () => {
-                            CseMachine.setClearDeadFrames(this.state.clearDeadFrames);
-                            CseMachine.clearLiveLayouts();
-
-                            // Temporarily store the original draw function
-                            const originalDraw = Layout.draw;
-
-                            // Overriding because the animations are causing
-                            // Konva objects to not be drawn
-                            Layout.draw = () => {
-                              try {
-                                const currLevels = Layout.levels;
-                                const changedFramePairs = computeFramesCoordChange(
-                                  prevLevels,
-                                  currLevels,
-                                );
-                                if (changedFramePairs.length > 0) {
-                                  CseAnimation.animations.push(
-                                    new ClearDeadFramesAnimation(changedFramePairs),
-                                  );
-                                  CseAnimation.enableAnimations();
-                                }
-
-                                return originalDraw.apply(Layout);
-                              } finally {
-                                Layout.draw = originalDraw;
-                              }
-                            };
-                            CseMachine.redraw();
-                          },
-                        );
-                      }
-                    }}
-                    icon="eraser"
-                    disabled={this.state.clearDeadFrames || !this.state.visualization}
-                  ></AnchorButton>
-                </Tooltip>
-                <Tooltip content="Print" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        CseMachine.togglePrintableMode();
-                        CseMachine.redraw();
-                      }
-                    }}
-                    icon="print"
-                    disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      disabled={!this.state.visualization}
-                      checked={CseMachine.getPrintableMode()}
-                      style={{ margin: 0 }}
-                    />
-                  </AnchorButton>
-                </Tooltip>
-                <Tooltip content="Save" compact>
-                  <AnchorButton
-                    icon="floppy-disk"
-                    disabled={!this.state.visualization}
-                    onClick={Layout.exportImage}
-                  />
-                </Tooltip>
-              </ButtonGroup>
-            )}
-          </div>
-        </div>{' '}
-        {this.state.visualization &&
-        this.props.machineOutput.length &&
-        this.props.machineOutput[0].type === 'errors' ? (
-          this.props.machineOutput.map((slice, index) => (
-            <Output output={slice} key={index} usingSubst={false} isHtml={false} />
-          ))
-        ) : (
-          <div></div>
-        )}
-        {this.state.visualization ? (
-          this.state.stepLimitExceeded ? (
-            <div
-              id="cse-machine-default-text"
-              className={Classes.RUNNING_TEXT}
-              data-testid="cse-machine-default-text"
-            >
-              Maximum number of steps exceeded.
-              <Divider />
-              Please increase the step limit if you would like to see futher evaluation.
-            </div>
-          ) : (
-            this.state.visualization
-          )
-        ) : (
-          <CseMachineDefaultText isJava={this.isJava()} />
-        )}
-        <ButtonGroup
-          vertical={true}
-          style={{ position: 'absolute', bottom: '20px', right: '20px' }}
-        >
-          <Button
-            icon="plus"
-            disabled={!this.state.visualization}
-            onClick={() => this.zoomStage(true, 5)}
-            style={{ marginBottom: '5px', borderRadius: '3px' }}
-          />
-          <Button
-            icon="minus"
-            disabled={!this.state.visualization}
-            onClick={() => this.zoomStage(false, 5)}
-            style={{ borderRadius: '3px' }}
-          />
-        </ButtonGroup>
-      </HotKeys>
-    );
-  }
-
-  private refreshArrowFilters = () => {
-    CseMachine.clearRenderedLayouts();
-    CseMachine.redraw();
-    this.forceUpdate();
-  };
-}
-
-const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
-  state: OverallState,
-  ownProps: OwnProps,
-) => {
-  let workspace: PlaygroundWorkspaceState;
-  const [loc] = getLocation(ownProps.workspaceLocation);
-
-  switch (loc) {
-    case 'sicp': {
-      workspace = state.workspaces.sicp;
-      break;
-    }
-    default: {
-      workspace = state.workspaces.playground;
-      break;
-    }
-  }
-
-  return {
-    ...ownProps,
-    stepsTotal: workspace.stepsTotal,
-    currentStep: workspace.currentStep,
-    breakpointSteps: workspace.breakpointSteps,
-    changepointSteps: workspace.changepointSteps,
-    needCseUpdate: workspace.updateCse,
-    machineOutput: workspace.output,
-    chapter: workspace.context.chapter,
-  };
-};
-
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) =>
-  bindActionCreators(
-    {
-      handleEditorEval: () => WorkspaceActions.evalEditor(props.workspaceLocation),
-      handleStepUpdate: (steps: number) =>
-        WorkspaceActions.updateCurrentStep(steps, props.workspaceLocation),
-      handleAlertSideContent: () =>
-        beginAlertSideContent(SideContentType.cseMachine, props.workspaceLocation),
-      setEditorHighlightedLines: (
-        editorTabIndex: number,
-        newHighlightedLines: HighlightedLines[],
-      ) =>
-        WorkspaceActions.setEditorHighlightedLinesControl(
-          props.workspaceLocation,
-          editorTabIndex,
-          newHighlightedLines,
-        ),
+  const stepLast = useCallback(
+    (lastStepValue: number) => () => {
+      // Move to the last step
+      sliderShift(lastStepValue);
+      sliderRelease(lastStepValue);
     },
-    dispatch,
+    [sliderShift, sliderRelease],
   );
 
-export const SideContentCseMachine = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SideContentCseMachineBase);
+  const stepNextBreakpoint = useCallback(() => {
+    for (const step of breakpointSteps) {
+      if (step > value) {
+        sliderShift(step);
+        sliderRelease(step);
+        return;
+      }
+    }
+    sliderShift(stepsTotal);
+    sliderRelease(stepsTotal);
+  }, [breakpointSteps, value, sliderShift, sliderRelease, stepsTotal]);
+
+  const stepPrevBreakpoint = useCallback(() => {
+    for (let i = breakpointSteps.length - 1; i >= 0; i--) {
+      const step = breakpointSteps[i];
+      if (step < value) {
+        sliderShift(step);
+        sliderRelease(step);
+        return;
+      }
+    }
+    sliderShift(0);
+    sliderRelease(0);
+  }, [breakpointSteps, value, sliderShift, sliderRelease]);
+
+  const stepNextChangepoint = useCallback(() => {
+    for (const step of changepointSteps) {
+      if (step > value) {
+        sliderShift(step);
+        sliderRelease(step);
+        return;
+      }
+    }
+    sliderShift(stepsTotal);
+    sliderRelease(stepsTotal);
+  }, [changepointSteps, value, sliderShift, sliderRelease, stepsTotal]);
+
+  const stepPrevChangepoint = useCallback(() => {
+    for (let i = changepointSteps.length - 1; i >= 0; i--) {
+      const step = changepointSteps[i];
+      if (step < value) {
+        sliderShift(step);
+        sliderRelease(step);
+        return;
+      }
+    }
+    sliderShift(0);
+    sliderRelease(0);
+  }, [changepointSteps, value, sliderShift, sliderRelease]);
+
+  const toggleArrowFilter = useCallback((origin: ArrowOriginFilterKey) => {
+    const filters = CseMachine.getArrowOriginFilters();
+    CseMachine.setArrowOriginVisible(origin, !filters[origin]);
+    CseMachine.clearRenderedLayouts();
+    CseMachine.redraw();
+  }, []);
+
+  const setAllArrowFilters = useCallback((visible: boolean) => {
+    CseMachine.setAllArrowOriginsVisible(visible);
+    CseMachine.clearRenderedLayouts();
+    CseMachine.redraw();
+  }, []);
+
+  const zoomStage = useCallback(
+    (isZoomIn: boolean, multiplier: number) => {
+      if (isJava) {
+        JavaCseMachine.zoomStage(isZoomIn, multiplier);
+      } else {
+        Layout.zoomStage(isZoomIn, multiplier);
+      }
+    },
+    [isJava],
+  );
+
+  const arrowFilters = CseMachine.getArrowOriginFilters();
+  const areAllArrowFiltersSelected = ALL_ARROW_FILTER_KEYS.every(key => arrowFilters[key]);
+  const hotkeyBindings: HotkeyItem[] = visualization
+    ? [
+        ['a', stepFirst],
+        ['f', stepNext],
+        ['b', stepPrevious],
+        ['e', stepLast(stepsTotal)],
+      ]
+    : [
+        ['a', () => {}],
+        ['f', () => {}],
+        ['b', () => {}],
+        ['e', () => {}],
+      ];
+
+  const currentStepVal = Math.max(0, value);
+  const isAtFirstStep = currentStepVal < 1;
+  const isAtLastStep = currentStepVal >= stepsTotal;
+  const isNavDisabled = !visualization;
+
+  return (
+    <HotKeys
+      bindings={hotkeyBindings}
+      style={{
+        maxHeight: '100%',
+        overflow: visualization ? 'hidden' : 'auto',
+      }}
+    >
+      <div className={classNames('sa-substituter', Classes.DARK)}>
+        <Slider
+          disabled={!visualization}
+          min={0}
+          max={stepsTotal}
+          onChange={sliderShift}
+          onRelease={sliderRelease}
+          value={value < 0 ? 0 : value}
+        />
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: isJava ? 'center' : 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          {!isJava && (
+            <ButtonGroup>
+              <Tooltip content="Control and Stash" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (visualization) {
+                      CseMachine.toggleControlStash();
+                      CseMachine.redraw();
+                    }
+                  }}
+                  icon="layers"
+                  disabled={!visualization}
+                >
+                  <Checkbox
+                    checked={CseMachine.getControlStash()}
+                    disabled={!visualization}
+                    style={{ margin: 0 }}
+                  />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip content="Truncate Control" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (visualization) {
+                      CseMachine.toggleStackTruncated();
+                      CseMachine.redraw();
+                    }
+                  }}
+                  icon="minimize"
+                  disabled={!visualization}
+                >
+                  <Checkbox
+                    checked={CseMachine.getStackTruncated()}
+                    disabled={!visualization}
+                    style={{ margin: 0 }}
+                  />
+                </AnchorButton>
+              </Tooltip>
+
+              <Tooltip content="Alignment" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (visualization) {
+                      CseMachine.toggleCenterAlignment();
+                      CseMachine.redraw();
+                    }
+                  }}
+                  icon="eye-open"
+                  disabled={!visualization}
+                >
+                  <Checkbox
+                    checked={CseMachine.getCenterAlignment()}
+                    disabled={!visualization}
+                    style={{ margin: 0 }}
+                  />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip content="Filter Arrows" compact>
+                <Popover
+                  isOpen={arrowFilterOpen}
+                  onInteraction={nextOpen => setArrowFilterOpen(nextOpen)}
+                  position={Position.BOTTOM_LEFT}
+                  content={
+                    <div style={{ padding: '8px 10px', minWidth: '210px' }}>
+                      <div style={{ marginBottom: '8px', fontWeight: 600 }}>Filter Arrows</div>
+                      <Button
+                        small
+                        minimal
+                        onClick={() => setAllArrowFilters(!areAllArrowFiltersSelected)}
+                        style={{ marginBottom: '8px' }}
+                      >
+                        {areAllArrowFiltersSelected ? 'Deselect all' : 'Select all'}
+                      </Button>
+                      <Checkbox
+                        checked={arrowFilters.text}
+                        label="From text"
+                        onChange={() => toggleArrowFilter('text')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.frame}
+                        label="From frames"
+                        onChange={() => toggleArrowFilter('frame')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.function}
+                        label="From function objects"
+                        onChange={() => toggleArrowFilter('function')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.array}
+                        label="From arrays"
+                        onChange={() => toggleArrowFilter('array')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.control}
+                        label="From control"
+                        onChange={() => toggleArrowFilter('control')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.stash}
+                        label="From stash"
+                        onChange={() => toggleArrowFilter('stash')}
+                      />
+                    </div>
+                  }
+                >
+                  <AnchorButton icon="flow-branch" disabled={!visualization} />
+                </Popover>
+              </Tooltip>
+            </ButtonGroup>
+          )}
+          <ButtonGroup>
+            <Button
+              disabled={isNavDisabled || isAtFirstStep}
+              icon="double-chevron-left"
+              onClick={stepPrevBreakpoint}
+            />
+            <Button
+              disabled={isNavDisabled || isAtFirstStep}
+              icon="chevron-left"
+              onClick={isJava || CseMachine.getControlStash() ? stepPrevious : stepPrevChangepoint}
+            />
+            <Button
+              disabled={isNavDisabled || isAtLastStep}
+              icon="chevron-right"
+              onClick={isJava || CseMachine.getControlStash() ? stepNext : stepNextChangepoint}
+            />
+            <Button
+              disabled={isNavDisabled || isAtLastStep}
+              icon="double-chevron-right"
+              onClick={stepNextBreakpoint}
+            />
+          </ButtonGroup>
+
+          {!isJava && (
+            <ButtonGroup>
+              <Tooltip content="Clear Dead Frames" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (visualization) {
+                      const prevLevels = Layout.levels;
+                      setClearDeadFrames(true);
+                      CseMachine.setClearDeadFrames(true);
+                      CseMachine.clearLiveLayouts();
+
+                      // Temporarily store the original draw function
+                      const originalDraw = Layout.draw;
+
+                      // Overriding because the animations are causing
+                      // Konva objects to not be drawn
+                      Layout.draw = () => {
+                        try {
+                          const currLevels = Layout.levels;
+                          const changedFramePairs = computeFramesCoordChange(
+                            prevLevels,
+                            currLevels,
+                          );
+                          if (changedFramePairs.length > 0) {
+                            CseAnimation.animations.push(
+                              new ClearDeadFramesAnimation(changedFramePairs),
+                            );
+                            CseAnimation.enableAnimations();
+                          }
+
+                          return originalDraw.apply(Layout);
+                        } finally {
+                          Layout.draw = originalDraw;
+                        }
+                      };
+                      CseMachine.redraw();
+                    }
+                  }}
+                  icon="eraser"
+                  disabled={clearDeadFrames || !visualization}
+                ></AnchorButton>
+              </Tooltip>
+              <Tooltip content="Print" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (visualization) {
+                      CseMachine.togglePrintableMode();
+                      CseMachine.redraw();
+                    }
+                  }}
+                  icon="print"
+                  disabled={!visualization}
+                >
+                  <Checkbox
+                    disabled={!visualization}
+                    checked={CseMachine.getPrintableMode()}
+                    style={{ margin: 0 }}
+                  />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip content="Save" compact>
+                <AnchorButton
+                  icon="floppy-disk"
+                  disabled={!visualization}
+                  onClick={Layout.exportImage}
+                />
+              </Tooltip>
+            </ButtonGroup>
+          )}
+        </div>
+      </div>{' '}
+      {visualization && machineOutput.length && machineOutput[0].type === 'errors' ? (
+        machineOutput.map((slice, index) => (
+          <Output output={slice} key={index} usingSubst={false} isHtml={false} />
+        ))
+      ) : (
+        <div></div>
+      )}
+      {visualization ? (
+        stepLimitExceeded ? (
+          <div
+            id="cse-machine-default-text"
+            className={Classes.RUNNING_TEXT}
+            data-testid="cse-machine-default-text"
+          >
+            Maximum number of steps exceeded.
+            <Divider />
+            Please increase the step limit if you would like to see futher evaluation.
+          </div>
+        ) : (
+          visualization
+        )
+      ) : (
+        <CseMachineDefaultText isJava={isJava} />
+      )}
+      <ButtonGroup vertical={true} style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
+        <Button
+          icon="plus"
+          disabled={!visualization}
+          onClick={() => zoomStage(true, 5)}
+          style={{ marginBottom: '5px', borderRadius: '3px' }}
+        />
+        <Button
+          icon="minus"
+          disabled={!visualization}
+          onClick={() => zoomStage(false, 5)}
+          style={{ borderRadius: '3px' }}
+        />
+      </ButtonGroup>
+    </HotKeys>
+  );
+};
 
 const makeCseMachineTabFrom = (location: WorkspaceLocation): SideContentTab => ({
   label: t($ => $.cseMachine.label, { ns: 'sideContent' }),
