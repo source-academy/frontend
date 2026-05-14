@@ -26,7 +26,7 @@ const Application = () => import('../commons/application/Application');
 const Login = () => import('../pages/login/Login');
 const LoginPage = () => import('../new_routes/login');
 const LoginCallback = () => import('../pages/login/LoginCallback');
-const LoginVscodeCallback = () => import('../pages/login/LoginVscodeCallback');
+const LoginVscodeCallback = () => import('../new_routes/login/vscode_callback');
 const NusLogin = () => import('../pages/login/NusLogin');
 const Contributors = () => import('../pages/contributors/Contributors');
 const GitHubCallback = () => import('../new_routes/callback/github');
