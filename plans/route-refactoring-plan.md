@@ -2,22 +2,52 @@
 
 ## Objective
 
-Refactor pages to follow modern file-based routing conventions under `src/new_routes/`, where file names mirror URL paths. Dynamic segments use `[param]` naming, and shared layouts are prefixed with `_`.
+Organize routes under `src/new_routes/` following file-based URL conventions. File names mirror URL paths (e.g., `folder/[id].tsx` for params), dynamic segments use `[param]` naming, and shared layouts are prefixed with `_`. Route configuration, guards, and loaders remain in `routerConfig.ts` - this is purely file reorganization.
+
+## Component Export Style
+
+Each route file re-exports the component from `src/pages/` with a named `Component` export:
+
+```tsx
+import { LoginPage } from 'src/pages/login/LoginPage';
+
+function LoginPageComponent() {
+  return <LoginPage />;
+}
+
+export const Component = LoginPageComponent;
+```
+
+**Rules:**
+
+- No `React.FC` or arrow function components
+- Use function declarations (`function Name()`)
+- No default exports - must use named `Component` export
+- No route guards - handled in router config
+- No loaders - handled in router config
+- No Outlet or wrapper logic
+
+## File Naming Conventions
+
+| Pattern | Example | Use Case |
+|---------|---------|----------|
+| `[param]` | `[courseId].tsx` | Dynamic path parameters |
+| `[param]?` | Handled in component | Optional parameters |
+| `_layout` | `_layout.tsx` | Shared layout (only if wrapper logic needed) |
+| `index` | `index.tsx` | Folder-index routes |
 
 ## Route Structure Mapping
 
-### Current Routes Analysis
+### Top-Level Routes (`routerConfig.ts`)
 
-**From `routerConfig.ts` (top-level routes):**
-
-| Current Path | New File Location |
-|-------------|-------------------|
-| `/nus_login` | `nus_login/_layout.tsx` + `nus_login/index.tsx` |
-| `/login` | `login/_layout.tsx` + `login/index.tsx` |
+| URL Path | New File Location |
+|----------|-----------------|
+| `/nus_login` | `nus_login/index.tsx` |
+| `/login` | `login/index.tsx` |
 | `/login/callback` | `login/callback.tsx` |
 | `/login/vscode_callback` | `login/vscode_callback.tsx` |
 | `/welcome` | `welcome.tsx` |
-| `/courses/:courseId/*` | `courses/[courseId]/_layout.tsx` + nested routes |
+| `/courses/:courseId/*` | `courses/[courseId]/...` |
 | `/playground/:playgroundCode?` | `playground/[playgroundCode].tsx` |
 | `/mission-control/:assessmentId?/:questionId?` | `mission-control/[assessmentId]/[questionId].tsx` |
 | `/contributors` | `contributors.tsx` |
@@ -25,20 +55,20 @@ Refactor pages to follow modern file-based routing conventions under `src/new_ro
 | `/sicpjs/:section?` | `sicpjs/[section].tsx` |
 | `/features` | `features.tsx` |
 
-**From `academyRoutes.ts` (academy nested routes):**
+### Academy Routes (`academyRoutes.ts`)
 
-| Current Path | New File Location |
-|-------------|-------------------|
-| `/courses/:courseId` (index) | `courses/[courseId]/index.tsx` (redirects to game/assessment) |
+| URL Path | New File Location |
+|----------|-----------------|
+| `/courses/:courseId` (index) | `courses/[courseId]/index.tsx` |
 | `/courses/:courseId/game` | `courses/[courseId]/game.tsx` |
 | `/courses/:courseId/:assessmentConfigType/:assessmentId` | `courses/[courseId]/[assessmentConfigType]/[assessmentId].tsx` |
-| `/courses/:courseId/achievements/*` | `courses/[courseId]/achievements/...` |
-| `/courses/:courseId/leaderboard` | `courses/[courseId]/leaderboard/_layout.tsx` |
+| `/courses/:courseId/achievements/*` | `courses/[courseId]/achievements/[...].tsx` |
+| `/courses/:courseId/leaderboard` | `courses/[courseId]/leaderboard/index.tsx` |
 | `/courses/:courseId/leaderboard/overall` | `courses/[courseId]/leaderboard/overall.tsx` |
 | `/courses/:courseId/leaderboard/contests/:contestId?/:leaderboardType` | `courses/[courseId]/leaderboard/contests/[contestId]/[leaderboardType].tsx` |
 | `/courses/:courseId/grading/:submissionId` | `courses/[courseId]/grading/[submissionId].tsx` |
 | `/courses/:courseId/gamesimulator` | `courses/[courseId]/gamesimulator.tsx` |
-| `/courses/:courseId/teamformation` | `courses/[courseId]/teamformation/_layout.tsx` |
+| `/courses/:courseId/teamformation` | `courses/[courseId]/teamformation/index.tsx` |
 | `/courses/:courseId/teamformation/create` | `courses/[courseId]/teamformation/create.tsx` |
 | `/courses/:courseId/teamformation/edit/:teamId` | `courses/[courseId]/teamformation/edit/[teamId].tsx` |
 | `/courses/:courseId/teamformation/import` | `courses/[courseId]/teamformation/import.tsx` |
@@ -50,101 +80,59 @@ Refactor pages to follow modern file-based routing conventions under `src/new_ro
 
 ```
 src/new_routes/
-├── _layout.tsx                    # Root layout (Application wrapper)
-├── index.tsx                      # Root redirect based on auth state
 ├── nus_login/
-│   ├── _layout.tsx               # Auth layout for NUS login
-│   └── index.tsx                 # NusLogin component
+│   └── index.tsx                  # NusLogin
 ├── login/
-│   ├── _layout.tsx               # Auth layout with provider redirect
-│   ├── index.tsx                 # LoginPage component
-│   ├── callback.tsx               # LoginCallback component
-│   └── vscode_callback.tsx       # LoginVscodeCallback component
-├── welcome.tsx                    # Welcome page
+│   ├── index.tsx                  # LoginPage
+│   ├── callback.tsx                # LoginCallback
+│   └── vscode_callback.tsx         # LoginVscodeCallback
+├── welcome.tsx                     # Welcome
 ├── playground/
-│   └── [playgroundCode].tsx       # Playground with optional code param
+│   └── [playgroundCode].tsx        # Playground (optional param)
 ├── mission-control/
 │   └── [assessmentId]/
-│       └── [questionId].tsx       # MissionControl with optional params
+│       └── [questionId].tsx        # MissionControl (optional params)
 ├── courses/
 │   └── [courseId]/
-│       ├── _layout.tsx            # Academy layout with auth guards
-│       ├── index.tsx              # Academy index (redirect to game/assessment)
-│       ├── game.tsx               # Game component (guarded: enableGame)
+│       ├── index.tsx               # Academy index
+│       ├── game.tsx                # Game
 │       ├── [assessmentConfigType]/
-│       │   └── [assessmentId].tsx # Assessment component
+│       │   └── [assessmentId].tsx   # Assessment
 │       ├── achievements/
-│       │   └── [...].tsx          # Achievement catch-all
+│       │   └── [...].tsx            # Achievement
 │       ├── leaderboard/
-│       │   ├── _layout.tsx        # Leaderboard layout with loader
-│       │   ├── overall.tsx        # OverallLeaderboard
+│       │   ├── index.tsx            # Leaderboard
+│       │   ├── overall.tsx         # OverallLeaderboard
 │       │   └── contests/
 │       │       └── [contestId]/
 │       │           └── [leaderboardType].tsx  # ContestLeaderboardWrapper
 │       ├── grading/
-│       │   └── [submissionId].tsx  # Grading component (Staff/Admin only)
-│       ├── gamesimulator.tsx      # GameSimulator (Staff/Admin only)
+│       │   └── [submissionId].tsx   # Grading
+│       ├── gamesimulator.tsx       # GameSimulator
 │       ├── teamformation/
-│       │   ├── _layout.tsx        # TeamFormation layout
-│       │   ├── index.tsx          # TeamFormation main
+│       │   ├── index.tsx           # TeamFormation
 │       │   ├── create.tsx          # TeamFormationForm
 │       │   ├── edit/
-│       │   │   └── [teamId].tsx   # TeamFormationForm for editing
+│       │   │   └── [teamId].tsx    # TeamFormationForm
 │       │   └── import.tsx          # TeamFormationImport
-│       ├── dashboard.tsx          # Dashboard (Staff/Admin only)
-│       ├── groundcontrol.tsx      # GroundControl (Admin only)
-│       └── adminpanel.tsx         # AdminPanel (Admin only)
-├── contributors.tsx                # Contributors page
+│       ├── dashboard.tsx           # Dashboard
+│       ├── groundcontrol.tsx       # GroundControl
+│       └── adminpanel.tsx          # AdminPanel
+├── contributors.tsx                # Contributors
 ├── callback/
 │   └── github.tsx                  # GitHubCallback
 ├── sicpjs/
-│   └── [section].tsx               # Sicp with optional section param
-├── features.tsx                    # FeatureFlags page
-└── notFound.tsx                    # NotFound page
-```
-
-## Naming Conventions
-
-| Convention | Example | Use Case |
-|------------|---------|----------|
-| `[param]` | `[courseId].tsx` | Dynamic path parameters |
-| `[param]?` | `[section].tsx` | Optional parameters (handled in component) |
-| `[...rest]` | `[...].tsx` | Catch-all/catch-remaining segments |
-| `_layout` | `_layout.tsx` | Shared layout for multiple routes in folder |
-| `_authLayout` | `_authLayout.tsx` | Named layout when multiple layouts exist |
-| `index` | `index.tsx` | Folder-index routes (same as folder path) |
-
-## Route Guards Integration
-
-Each route file will include its guard logic:
-
-```tsx
-// Example: game.tsx (guarded route)
-import { GuardedRoute } from 'src/routes/routeGuard';
-
-export const gameRoute = new GuardedRoute({
-  path: 'game',
-  lazy: () => import('src/pages/academy/game/Game'),
-})
-  .check(s => !!s.session.enableGame, notFoundPath)
-  .build();
+│   └── [section].tsx               # Sicp (optional section)
+├── features.tsx                    # FeatureFlags
+└── notFound.tsx                    # NotFound
 ```
 
 ## Implementation Steps
 
-1. **Create root structure**: `_layout.tsx`, `index.tsx`, `notFound.tsx`
-2. **Create auth routes**: `nus_login/`, `login/` with layouts
-3. **Create public routes**: `welcome.tsx`, `playground/`, `contributors.tsx`, etc.
+1. **Create `src/new_routes/` directory**
+2. **Create login routes**: `nus_login/`, `login/`
+3. **Create public routes**: `welcome.tsx`, `playground/`, `contributors.tsx`, `callback/`, `sicpjs/`, `features.tsx`
 4. **Create academy routes**: `courses/[courseId]/` with all sub-routes
 5. **Create leaderboard sub-structure**: `leaderboard/` with nested contest routes
 6. **Create teamformation sub-structure**: `teamformation/` with create/edit/import
-7. **Apply route guards**: Add guard checks to staff/admin routes
-8. **Update routerConfig**: Point to new route structure
-9. **Verify all routes**: Ensure every existing route is represented
-
-## Migration Notes
-
-- Keep existing components in `src/pages/` - only reorganize routes
-- Route guards (GuardedRoute) remain in `src/routes/routeGuard.ts`
-- Academy routes use `assessmentRegExp`, `gradingRegExp`, `teamRegExp` from `AcademyTypes`
-- The root `Application` component wraps the main layout
+7. **Verify all routes**: Ensure every existing route is represented
