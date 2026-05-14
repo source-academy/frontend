@@ -80,8 +80,6 @@ const DefaultChapterSelect: React.FC = () => {
     [],
   );
 
-  const DefaultChapterSelectComponent = Select.ofType<SALanguage>();
-
   const dialog = (
     <Dialog
       canEscapeKeyClose={true}
@@ -118,18 +116,18 @@ const DefaultChapterSelect: React.FC = () => {
 
   return (
     <>
-      <DefaultChapterSelectComponent
+      <Select<SALanguage>
         items={sourceLanguages}
         onItemSelect={handleOpenDialog}
         itemRenderer={chapterRenderer}
         itemListRenderer={chapterListRenderer}
         filterable={false}
       >
-        <Button rightIcon={IconNames.DOUBLE_CARET_VERTICAL}>
+        <Button endIcon={IconNames.DOUBLE_CARET_VERTICAL}>
           <span className="hidden-xs hidden-sm">Default sublanguage: </span>
           <span>{styliseSublanguage(sourceChapter, sourceVariant)}</span>
         </Button>
-      </DefaultChapterSelectComponent>
+      </Select>
       {dialog}
     </>
   );
