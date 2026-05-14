@@ -5,13 +5,10 @@ import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { vi } from 'vitest';
 
-import {
-  SideContentHtmlDisplay,
-  type SideContentHtmlDisplayProps,
-} from '../content/SideContentHtmlDisplay';
+import { SideContentHtmlDisplay } from '../content/SideContentHtmlDisplay';
 import type { SideContentLocation } from '../SideContentTypes';
 
-const Component = (props: SideContentHtmlDisplayProps) => {
+const Component = (props: React.ComponentProps<typeof SideContentHtmlDisplay>) => {
   const store = mockInitialStore();
   return (
     <Provider store={store}>
