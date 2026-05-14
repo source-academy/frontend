@@ -90,7 +90,7 @@ const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }
 function useSecondaryNavbarType() {
   const isPlayground = useMatch('/playground/*');
   const isContributors = useMatch('/contributors');
-  const isAchievements = useMatch('/courses/:courseId/achievements');
+  const isAchievements = useMatch('/courses/:courseId/achievements/*');
   const isLeaderboard = useMatch('/courses/:courseId/leaderboard/*');
   const isSicp = useMatch('/sicpjs/:section?');
 

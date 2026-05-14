@@ -124,7 +124,7 @@ function ensureRoleOneOf(...roles: Role[]) {
   return (() => {
     const state = store.getState();
     const role = state.session.role;
-    if (!role || !roles.includes(role)) {
+    if (role == undefined || !roles.includes(role)) {
       throw redirect(notFoundPath);
     }
     return null;

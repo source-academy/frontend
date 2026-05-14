@@ -152,7 +152,7 @@ export const getFullAcademyRouterConfig = ({
               if (!state.session.name) {
                 throw redirect('/login');
               }
-              if (!state.session.role) {
+              if (state.session.role == undefined) {
                 throw redirect('/welcome');
               }
               return null;
