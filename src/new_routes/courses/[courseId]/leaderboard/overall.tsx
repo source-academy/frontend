@@ -10,10 +10,10 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import type { LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 
-import leaderboardBackground from '../../../assets/leaderboard_background.jpg';
-import LeaderboardDropdown from './LeaderboardDropdown';
-import LeaderboardExportButton from './LeaderboardExportButton';
-import LeaderboardPodium from './LeaderboardPodium';
+import leaderboardBackground from '../../../../../assets/leaderboard_background.jpg';
+import LeaderboardDropdown from '../../../../pages/leaderboard/subcomponents/LeaderboardDropdown';
+import LeaderboardExportButton from '../../../../pages/leaderboard/subcomponents/LeaderboardExportButton';
+import LeaderboardPodium from '../../../../pages/leaderboard/subcomponents/LeaderboardPodium';
 
 // Set sample profile pictures (Seeded random)
 export function convertToRandomNumber(id: string): number {
@@ -57,7 +57,7 @@ const columnDefs: ColDef<LeaderboardRow>[] = [
   { field: 'xp', headerName: 'XP', flex: 414, sortable: true },
 ];
 
-const OverallLeaderboard: React.FC = () => {
+function OverallLeaderboard() {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -156,9 +156,6 @@ const OverallLeaderboard: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export const Component = OverallLeaderboard;
-Component.displayName = 'OverallLeaderboard';
-
-export default OverallLeaderboard;

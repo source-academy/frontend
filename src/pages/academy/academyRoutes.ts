@@ -17,7 +17,7 @@ const notFoundPath = 'not-found';
 
 const Assessment = () => import('../../commons/assessment/Assessment');
 const Game = () => import('../../new_routes/courses/[courseId]/game');
-const OverallLeaderboard = () => import('../leaderboard/subcomponents/OverallLeaderboard');
+const OverallLeaderboard = () => import('../../new_routes/courses/[courseId]/leaderboard/overall');
 const ContestLeaderboardWrapper = () =>
   import('../leaderboard/subcomponents/ContestLeaderboardWrapper');
 const NotFound = () => import('../../new_routes/not-found');
