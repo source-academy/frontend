@@ -140,7 +140,8 @@ const staffRoutes: RouteObject = {
     teamformation: () => import('./teamFormation/TeamFormation'),
     'teamformation/create': () => import('./teamFormation/subcomponents/TeamFormationForm'),
     'teamformation/edit/:teamId?': () => import('./teamFormation/subcomponents/TeamFormationForm'),
-    'teamformation/import': () => import('./teamFormation/subcomponents/TeamFormationImport'),
+    'teamformation/import': () =>
+      import('../../new_routes/courses/[courseId]/teamformation/import'),
     dashboard: () => import('../../new_routes/courses/[courseId]/dashboard'),
   }),
 };
