@@ -136,7 +136,7 @@ const staffRoutes: RouteObject = {
   middleware: [ensureRoleOneOf(Role.Staff, Role.Admin)],
   children: createRoutes({
     'grading/:submissionId?/:questionId?': () => import('./grading/Grading'),
-    gamesimulator: () => import('./gameSimulator/GameSimulator'),
+    gamesimulator: () => import('../../new_routes/courses/[courseId]/gamesimulator'),
     teamformation: () => import('./teamFormation/TeamFormation'),
     'teamformation/create': () => import('./teamFormation/subcomponents/TeamFormationForm'),
     'teamformation/edit/:teamId?': () => import('./teamFormation/subcomponents/TeamFormationForm'),
