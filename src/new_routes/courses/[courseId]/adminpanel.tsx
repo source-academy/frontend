@@ -7,12 +7,12 @@ import AcademyActions from 'src/features/academy/AcademyActions';
 import SessionActions from '../../../commons/application/actions/SessionActions';
 import type { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
-import AddUserPanel from './subcomponents/AddUserPanel';
-import type { ImperativeAssessmentConfigPanel } from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
-import AssessmentConfigPanel from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
-import CourseConfigPanel from './subcomponents/CourseConfigPanel';
-import PixelbotConfigPanel from './subcomponents/PixelbotConfigPanel';
-import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
+import AddUserPanel from '../../../pages/academy/adminPanel/subcomponents/AddUserPanel';
+import type { ImperativeAssessmentConfigPanel } from '../../../pages/academy/adminPanel/subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
+import AssessmentConfigPanel from '../../../pages/academy/adminPanel/subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
+import CourseConfigPanel from '../../../pages/academy/adminPanel/subcomponents/CourseConfigPanel';
+import PixelbotConfigPanel from '../../../pages/academy/adminPanel/subcomponents/PixelbotConfigPanel';
+import UserConfigPanel from '../../../pages/academy/adminPanel/subcomponents/userConfigPanel/UserConfigPanel';
 
 const defaultCourseConfig: UpdateCourseConfiguration = {
   courseName: '',
@@ -35,7 +35,7 @@ const defaultCourseConfig: UpdateCourseConfiguration = {
   feedbackUrl: '',
 };
 
-const AdminPanel: React.FC = () => {
+function AdminPanel() {
   const [hasChangesCourseConfig, setHasChangesCourseConfig] = useState(false);
   const [hasChangesAssessmentConfig, setHasChangesAssessmentConfig] = useState(false);
   const [courseConfiguration, setCourseConfiguration] = useState(defaultCourseConfig);
@@ -203,9 +203,6 @@ const AdminPanel: React.FC = () => {
   );
 
   return <ContentDisplay display={data} fullWidth={false} />;
-};
+}
 
 export const Component = AdminPanel;
-Component.displayName = 'AdminPanel';
-
-export default AdminPanel;

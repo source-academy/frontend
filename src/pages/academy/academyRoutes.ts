@@ -149,7 +149,7 @@ const adminRoutes: RouteObject = {
   middleware: [ensureRoleOneOf(Role.Admin)],
   children: createRoutes({
     groundcontrol: () => import('./groundControl/GroundControl'),
-    adminpanel: () => import('./adminPanel/AdminPanel'),
+    adminpanel: () => import('../../new_routes/courses/[courseId]/adminpanel'),
   }),
 };
 
