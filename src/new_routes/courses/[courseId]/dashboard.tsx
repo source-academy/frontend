@@ -14,7 +14,7 @@ const defaultColumnDefs: ColDef = {
   sortable: true,
 };
 
-const Dashboard: React.FC = () => {
+function Dashboard() {
   const dispatch = useDispatch();
   const gradingSummary = useTypedSelector(state => state.dashboard.gradingSummary);
 
@@ -50,9 +50,6 @@ const Dashboard: React.FC = () => {
       />
     </div>
   );
-};
+}
 
 export const Component = Dashboard;
-Component.displayName = 'Dashboard';
-
-export default Dashboard;
