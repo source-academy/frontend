@@ -137,7 +137,7 @@ const staffRoutes: RouteObject = {
   children: createRoutes({
     'grading/:submissionId?/:questionId?': () => import('./grading/Grading'),
     gamesimulator: () => import('../../new_routes/courses/[courseId]/gamesimulator'),
-    teamformation: () => import('./teamFormation/TeamFormation'),
+    teamformation: () => import('../../new_routes/courses/[courseId]/teamformation'),
     'teamformation/create': () => import('./teamFormation/subcomponents/TeamFormationForm'),
     'teamformation/edit/:teamId?': () => import('./teamFormation/subcomponents/TeamFormationForm'),
     'teamformation/import': () =>
