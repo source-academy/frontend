@@ -148,7 +148,7 @@ const staffRoutes: RouteObject = {
 const adminRoutes: RouteObject = {
   middleware: [ensureRoleOneOf(Role.Admin)],
   children: createRoutes({
-    groundcontrol: () => import('./groundControl/GroundControl'),
+    groundcontrol: () => import('../../new_routes/courses/[courseId]/groundcontrol'),
     adminpanel: () => import('../../new_routes/courses/[courseId]/adminpanel'),
   }),
 };

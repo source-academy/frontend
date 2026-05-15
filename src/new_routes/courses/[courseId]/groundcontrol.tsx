@@ -18,14 +18,14 @@ import SessionActions from '../../../commons/application/actions/SessionActions'
 import type { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import GroundControlActions from '../../../features/groundControl/GroundControlActions';
-import DefaultChapterSelect from './subcomponents/DefaultChapterSelect';
-import ConfigureCell from './subcomponents/GroundControlConfigureCell';
-import DeleteCell from './subcomponents/GroundControlDeleteCell';
-import Dropzone from './subcomponents/GroundControlDropzone';
-import EditCell from './subcomponents/GroundControlEditCell';
-import EditTeamSizeCell from './subcomponents/GroundControlEditTeamSizeCell';
-import PublishCell from './subcomponents/GroundControlPublishCell';
-import ReleaseGradingCell from './subcomponents/GroundControlReleaseGradingCell';
+import DefaultChapterSelect from '../../../pages/academy/groundControl/subcomponents/DefaultChapterSelect';
+import ConfigureCell from '../../../pages/academy/groundControl/subcomponents/GroundControlConfigureCell';
+import DeleteCell from '../../../pages/academy/groundControl/subcomponents/GroundControlDeleteCell';
+import Dropzone from '../../../pages/academy/groundControl/subcomponents/GroundControlDropzone';
+import EditCell from '../../../pages/academy/groundControl/subcomponents/GroundControlEditCell';
+import EditTeamSizeCell from '../../../pages/academy/groundControl/subcomponents/GroundControlEditTeamSizeCell';
+import PublishCell from '../../../pages/academy/groundControl/subcomponents/GroundControlPublishCell';
+import ReleaseGradingCell from '../../../pages/academy/groundControl/subcomponents/GroundControlReleaseGradingCell';
 
 const defaultColumnDefs: ColDef = {
   flex: 2,
@@ -35,7 +35,7 @@ const defaultColumnDefs: ColDef = {
   sortable: true,
 };
 
-const GroundControl: React.FC = () => {
+function GroundControl() {
   const [showDropzone, setShowDropzone] = useState(false);
   const { assessmentOverviews, assessmentConfigurations } = useSession();
   const dispatch = useDispatch();
@@ -254,7 +254,7 @@ const GroundControl: React.FC = () => {
       <ContentDisplay display={content} loadContentDispatch={loadContent} />
     </div>
   );
-};
+}
 
 /*
  *  Reference: https://www.ag-grid.com/javascript-grid-filter-date/#date-filter-comparator
@@ -265,6 +265,3 @@ const dateFilterComparator = (filterDate: Date, cellValue: string) => {
 };
 
 export const Component = GroundControl;
-Component.displayName = 'GroundControl';
-
-export default GroundControl;
