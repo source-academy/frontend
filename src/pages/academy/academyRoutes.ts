@@ -11,15 +11,15 @@ import { store } from '../createStore';
 import {
   contestLeaderboardLoader,
   leaderboardLoader,
-} from '../leaderboard/subcomponents/leaderboardUtils';
+} from '../leaderboard/subcomponents/LeaderboardUtils';
 
 const notFoundPath = 'not-found';
 
 const Assessment = () => import('../../commons/assessment/Assessment');
 const Game = () => import('../../new_routes/courses/[courseId]/game');
-const OverallLeaderboard = () => import('../leaderboard/subcomponents/OverallLeaderboard');
+const OverallLeaderboard = () => import('../../new_routes/courses/[courseId]/leaderboard/overall');
 const ContestLeaderboardWrapper = () =>
-  import('../leaderboard/subcomponents/ContestLeaderboardWrapper');
+  import('../../new_routes/courses/[courseId]/leaderboard/contests/[contestId]/[leaderboardType]');
 const NotFound = () => import('../../new_routes/not-found');
 
 // Memoized for efficiency. Relies on immutability of Redux store to ensure
@@ -136,20 +136,21 @@ const staffRoutes: RouteObject = {
   middleware: [ensureRoleOneOf(Role.Staff, Role.Admin)],
   children: createRoutes({
     'grading/:submissionId?/:questionId?': () => import('./grading/Grading'),
-    gamesimulator: () => import('./gameSimulator/GameSimulator'),
-    teamformation: () => import('./teamFormation/TeamFormation'),
+    gamesimulator: () => import('../../new_routes/courses/[courseId]/gamesimulator'),
+    teamformation: () => import('../../new_routes/courses/[courseId]/teamformation'),
     'teamformation/create': () => import('./teamFormation/subcomponents/TeamFormationForm'),
     'teamformation/edit/:teamId?': () => import('./teamFormation/subcomponents/TeamFormationForm'),
-    'teamformation/import': () => import('./teamFormation/subcomponents/TeamFormationImport'),
-    dashboard: () => import('./dashboard/Dashboard'),
+    'teamformation/import': () =>
+      import('../../new_routes/courses/[courseId]/teamformation/import'),
+    dashboard: () => import('../../new_routes/courses/[courseId]/dashboard'),
   }),
 };
 
 const adminRoutes: RouteObject = {
   middleware: [ensureRoleOneOf(Role.Admin)],
   children: createRoutes({
-    groundcontrol: () => import('./groundControl/GroundControl'),
-    adminpanel: () => import('./adminPanel/AdminPanel'),
+    groundcontrol: () => import('../../new_routes/courses/[courseId]/groundcontrol'),
+    adminpanel: () => import('../../new_routes/courses/[courseId]/adminpanel'),
   }),
 };
 

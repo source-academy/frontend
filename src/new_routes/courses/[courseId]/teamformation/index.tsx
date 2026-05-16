@@ -1,10 +1,10 @@
 import { NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { useSession } from 'src/commons/utils/Hooks';
 
-import ContentDisplay from '../../../commons/ContentDisplay';
-import TeamFormationDashboard from './subcomponents/TeamFormationDashboard';
+import ContentDisplay from '../../../../commons/ContentDisplay';
+import TeamFormationDashboard from '../../../../pages/academy/teamFormation/subcomponents/TeamFormationDashboard';
 
-const TeamFormation: React.FC = () => {
+function TeamFormation() {
   const { teamFormationOverviews } = useSession();
   const data =
     teamFormationOverviews?.map(e =>
@@ -31,9 +31,6 @@ const TeamFormation: React.FC = () => {
       fullWidth
     />
   );
-};
+}
 
 export const Component = TeamFormation;
-Component.displayName = 'TeamFormation';
-
-export default TeamFormation;

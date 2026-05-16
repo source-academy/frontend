@@ -5,9 +5,9 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import Constants from 'src/commons/utils/Constants';
-import classes from 'src/pages/login/NusLogin.module.scss';
 
 import sourceAcademyLogo from '../assets/SA.jpg';
+import classes from './nus_login.module.scss';
 
 const nusProviders = [...Constants.nusAuthProviders.entries()].map(([id, { name }]) => ({
   id,

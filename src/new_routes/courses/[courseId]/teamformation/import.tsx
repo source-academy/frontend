@@ -9,11 +9,11 @@ import type { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes'
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/TeamFormation.module.scss';
 
-const TeamFormationImport: React.FC = () => {
+function TeamFormationImport() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const fileTypes = ['XLSX', 'XLS'];
-  const [file, setFile] = useState<File | null>(null); // Specify the type of 'file'
+  const [file, setFile] = useState<File | null>(null);
   const { courseId, students } = useTypedSelector(state => state.session);
   const assessmentOverviews = useTypedSelector(state => state.session.assessmentOverviews);
   const [selectedAssessment, setSelectedAssessment] = useState<AssessmentOverview | undefined>(
@@ -105,9 +105,6 @@ const TeamFormationImport: React.FC = () => {
       </Form>
     </div>
   );
-};
+}
 
 export const Component = TeamFormationImport;
-Component.displayName = 'TeamFormationImport';
-
-export default TeamFormationImport;

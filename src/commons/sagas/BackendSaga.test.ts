@@ -4,7 +4,7 @@ import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { mockTeamFormationOverviews } from 'src/commons/mocks/TeamFormationMocks';
 import AcademyActions from 'src/features/academy/AcademyActions';
-import type { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
+import type { UsernameRoleGroup } from 'src/features/adminPanel/subcomponents/AddUserPanel';
 import { describe, expect, test, vi } from 'vitest';
 
 import DashboardActions from '../../features/dashboard/DashboardActions';

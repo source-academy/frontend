@@ -17,7 +17,7 @@ import leaderboard_background from '../../../assets/leaderboard_background.jpg';
 import LeaderboardDropdown from './LeaderboardDropdown';
 import LeaderboardExportButton from './LeaderboardExportButton';
 import LeaderboardPodium from './LeaderboardPodium';
-import { convertToRandomNumber } from './OverallLeaderboard';
+import { convertToRandomNumber } from './LeaderboardUtils';
 
 type Props = {
   type: 'score' | 'popularvote';

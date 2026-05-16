@@ -17,8 +17,8 @@ import classes from 'src/styles/PixelbotConfig.module.scss';
 import type {
   Tokens,
   UpdateCourseConfiguration,
-} from '../../../../commons/application/types/SessionTypes';
-import { getPixelbotDocumentMap } from '../../../../commons/sagas/RequestsSaga';
+} from '../../../commons/application/types/SessionTypes';
+import { getPixelbotDocumentMap } from '../../../commons/sagas/RequestsSaga';
 
 type Props = {
   courseConfiguration: UpdateCourseConfiguration;

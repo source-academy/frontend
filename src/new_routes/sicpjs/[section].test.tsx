@@ -5,7 +5,7 @@ import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTree } from 'src/commons/utils/TestUtils';
 import { describe, expect, test, vi } from 'vitest';
 
-import { Component as Sicp } from '../../new_routes/sicpjs/[section]';
+import { Component as Sicp } from './[section]';
 
 vi.mock('react-router', async importActual => ({
   ...(await importActual()),

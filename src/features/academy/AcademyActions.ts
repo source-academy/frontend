@@ -1,6 +1,6 @@
 import type { UpdateCourseConfiguration } from 'src/commons/application/types/SessionTypes';
 import { createActions } from 'src/commons/redux/utils';
-import type { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
+import type { UsernameRoleGroup } from 'src/features/adminPanel/subcomponents/AddUserPanel';
 
 const AcademyActions = createActions('academy', {
   createCourse: (courseConfig: UpdateCourseConfiguration) => courseConfig,

@@ -5,9 +5,9 @@ import SourceAcademyGame, { GameType } from 'src/features/game/SourceAcademyGame
 import { gameSimulatorConfig } from 'src/features/gameSimulator/GameSimulatorConstants';
 import { GameSimulatorState } from 'src/features/gameSimulator/GameSimulatorTypes';
 
-import AssetViewer from './subcomponents/assetViewer/AssetViewer';
-import ChapterPublisher from './subcomponents/chapterPublisher/ChapterPublisher';
-import ChapterSimulator from './subcomponents/chapterSimulator/ChapterSimulator';
+import AssetViewer from '../../../features/gameSimulator/subcomponents/assetViewer/AssetViewer';
+import ChapterPublisher from '../../../features/gameSimulator/subcomponents/chapterPublisher/ChapterPublisher';
+import ChapterSimulator from '../../../features/gameSimulator/subcomponents/chapterSimulator/ChapterSimulator';
 
 const createGameSimulatorGame = () => {
   return new SourceAcademyGame(gameSimulatorConfig, GameType.Simulator);
@@ -25,7 +25,7 @@ const createGameSimulatorGame = () => {
  * simulator phaser game, so that the GameSimulatorMenu buttons
  * are able to control what is shown on the Game Simulator panel.
  */
-const GameSimulator: React.FC = () => {
+function GameSimulator() {
   const session = useTypedSelector(state => state.session);
   const [gameSimulatorState, setGameSimulatorState] = useState<string>(GameSimulatorState.DEFAULT);
 
@@ -59,9 +59,6 @@ const GameSimulator: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export const Component = GameSimulator;
-Component.displayName = 'GameSimulator';
-
-export default GameSimulator;

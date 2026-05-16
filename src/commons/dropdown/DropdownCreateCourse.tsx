@@ -18,7 +18,7 @@ import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import AcademyActions from 'src/features/academy/AcademyActions';
 
-import { CourseHelpTextEditorTab } from '../../pages/academy/adminPanel/subcomponents/CourseConfigPanel';
+import { CourseHelpTextEditorTab } from '../../features/adminPanel/subcomponents/CourseConfigPanel';
 import { sourceLanguages } from '../application/ApplicationTypes';
 import type { UpdateCourseConfiguration } from '../application/types/SessionTypes';
 import Markdown from '../Markdown';

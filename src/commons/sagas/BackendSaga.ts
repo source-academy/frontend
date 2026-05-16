@@ -2,9 +2,9 @@ import _ from 'lodash';
 import type { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
+import type { UsernameRoleGroup } from 'src/features/adminPanel/subcomponents/AddUserPanel';
 import DashboardActions from 'src/features/dashboard/DashboardActions';
 import GroundControlActions from 'src/features/groundControl/GroundControlActions';
-import type { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import {
