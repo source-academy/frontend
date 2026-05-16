@@ -23,6 +23,17 @@ Continue migrating remaining page files from `src/pages/` and `src/commons/` to 
 | `src/pages/notFound/NotFound.tsx` | `NotFound` | `src/new_routes/not-found.tsx` |
 | `src/pages/academy/Academy.tsx` | `Academy` | `src/new_routes/courses/[courseId]/_layout.tsx` |
 | `src/pages/academy/game/Game.tsx` | `Game` | `src/new_routes/courses/[courseId]/game.tsx` |
+| `src/pages/academy/grading/Grading.tsx` | `Grading` | `src/new_routes/courses/[courseId]/grading/[submissionId].tsx` |
+| `src/pages/academy/gameSimulator/GameSimulator.tsx` | `GameSimulator` | `src/new_routes/courses/[courseId]/gamesimulator.tsx` |
+| `src/pages/academy/teamFormation/TeamFormation.tsx` | `TeamFormation` | `src/new_routes/courses/[courseId]/teamformation.tsx` |
+| `src/pages/academy/teamFormation/subcomponents/TeamFormationForm.tsx` | `TeamFormationForm` (create) | `src/new_routes/courses/[courseId]/teamformation/create.tsx` |
+| `src/pages/academy/teamFormation/subcomponents/TeamFormationForm.tsx` | `TeamFormationForm` (edit) | `src/new_routes/courses/[courseId]/teamformation/edit/[teamId].tsx` |
+| `src/pages/academy/teamFormation/subcomponents/TeamFormationImport.tsx` | `TeamFormationImport` | `src/new_routes/courses/[courseId]/teamformation/import.tsx` |
+| `src/pages/academy/dashboard/Dashboard.tsx` | `Dashboard` | `src/new_routes/courses/[courseId]/dashboard.tsx` |
+| `src/pages/academy/groundControl/GroundControl.tsx` | `GroundControl` | `src/new_routes/courses/[courseId]/groundcontrol.tsx` |
+| `src/pages/academy/adminPanel/AdminPanel.tsx` | `AdminPanel` | `src/new_routes/courses/[courseId]/adminpanel.tsx` |
+| `src/pages/leaderboard/subcomponents/OverallLeaderboard.tsx` | `OverallLeaderboard` | `src/new_routes/courses/[courseId]/leaderboard/overall.tsx` |
+| `src/pages/leaderboard/subcomponents/ContestLeaderboardWrapper.tsx` | `ContestLeaderboardWrapper` | `src/new_routes/courses/[courseId]/leaderboard/contests/[contestId]/[leaderboardType].tsx` |
 
 ### Current Directory Structure
 
@@ -45,7 +56,24 @@ src/new_routes/
 ├── courses/
 │   └── [courseId]/
 │       ├── _layout.tsx             # Course selecting layout
-│       └── game.tsx                # /courses/:courseId/game
+│       ├── game.tsx                # /courses/:courseId/game
+│       ├── grading/
+│       │   └── [submissionId].tsx   # /courses/:courseId/grading/:submissionId
+│       ├── gamesimulator.tsx        # /courses/:courseId/gamesimulator
+│       ├── teamformation.tsx       # /courses/:courseId/teamformation
+│       ├── teamformation/
+│       │   ├── create.tsx           # /courses/:courseId/teamformation/create
+│       │   ├── edit/
+│       │   │   └── [teamId].tsx     # /courses/:courseId/teamformation/edit/:teamId
+│       │   └── import.tsx           # /courses/:courseId/teamformation/import
+│       ├── dashboard.tsx            # /courses/:courseId/dashboard
+│       ├── groundcontrol.tsx        # /courses/:courseId/groundcontrol
+│       ├── adminpanel.tsx           # /courses/:courseId/adminpanel
+│       └── leaderboard/
+│           ├── overall.tsx           # /courses/:courseId/leaderboard/overall
+│           └── contests/
+│               └── [contestId]/
+│                   └── [leaderboardType].tsx  # /courses/:courseId/leaderboard/contests/:contestId/:leaderboardType
 ├── callback/
 │   └── github.tsx                  # /callback/github
 └── sicpjs/
@@ -53,79 +81,17 @@ src/new_routes/
     └── [section].tsx                # /sicpjs/:section
 ```
 
-## Remaining Tasks
+## Pending Tasks
 
-### 1. Migrate Grading → `src/new_routes/courses/[courseId]/grading/[submissionId].tsx`
+All academy routes have been migrated. Remaining work:
 
-- **Source**: `src/pages/academy/grading/Grading.tsx`
-- **File rename**: `Grading.tsx` → `grading.tsx`
-- **Export**: `export const Component = Grading;`
-
-### 2. Migrate GameSimulator → `src/new_routes/courses/[courseId]/gamesimulator.tsx`
-
-- **Source**: `src/pages/academy/gameSimulator/GameSimulator.tsx`
-- **File rename**: `GameSimulator.tsx` → `gamesimulator.tsx`
-- **Export**: `export const Component = GameSimulator;`
-
-### 3. Migrate TeamFormation → `src/new_routes/courses/[courseId]/teamformation.tsx`
-
-- **Source**: `src/pages/academy/teamFormation/TeamFormation.tsx`
-- **File rename**: `TeamFormation.tsx` → `teamformation.tsx`
-- **Export**: `export const Component = TeamFormation;`
-
-### 4. Migrate TeamFormationForm → Two routes
-
-**Create** → `src/new_routes/courses/[courseId]/teamformation/create.tsx`
-
-- **Source**: `src/pages/academy/teamFormation/subcomponents/TeamFormationForm.tsx` (create mode)
-- **File rename**: `TeamFormationForm.tsx` → `create.tsx`
-- **Export**: `export const Component = TeamFormationForm;`
-
-**Edit** → `src/new_routes/courses/[courseId]/teamformation/edit/[teamId].tsx`
-
-- **Source**: `src/pages/academy/teamFormation/subcomponents/TeamFormationForm.tsx` (edit mode)
-- **File rename**: `TeamFormationForm.tsx` → `edit/[teamId].tsx`
-- **Export**: `export const Component = TeamFormationForm;`
-
-### 5. Migrate TeamFormationImport → `src/new_routes/courses/[courseId]/teamformation/import.tsx`
-
-- **Source**: `src/pages/academy/teamFormation/subcomponents/TeamFormationImport.tsx`
-- **File rename**: `TeamFormationImport.tsx` → `import.tsx`
-- **Export**: `export const Component = TeamFormationImport;`
-
-### 6. Migrate Dashboard → `src/new_routes/courses/[courseId]/dashboard.tsx`
-
-- **Source**: `src/pages/academy/dashboard/Dashboard.tsx`
-- **File rename**: `Dashboard.tsx` → `dashboard.tsx`
-- **Export**: `export const Component = Dashboard;`
-
-### 7. Migrate GroundControl → `src/new_routes/courses/[courseId]/groundcontrol.tsx`
-
-- **Source**: `src/pages/academy/groundControl/GroundControl.tsx`
-- **File rename**: `GroundControl.tsx` → `groundcontrol.tsx`
-- **Export**: `export const Component = GroundControl;`
-
-### 8. Migrate AdminPanel → `src/new_routes/courses/[courseId]/adminpanel.tsx`
-
-- **Source**: `src/pages/academy/adminPanel/AdminPanel.tsx`
-- **File rename**: `AdminPanel.tsx` → `adminpanel.tsx`
-- **Export**: `export const Component = AdminPanel;`
-
-### 9. Migrate OverallLeaderboard → `src/new_routes/courses/[courseId]/leaderboard/overall.tsx`
-
-- **Source**: `src/pages/leaderboard/subcomponents/OverallLeaderboard.tsx`
-- **File rename**: `OverallLeaderboard.tsx` → `overall.tsx`
-- **Export**: `export const Component = OverallLeaderboard;`
-
-### 10. Migrate ContestLeaderboardWrapper → `src/new_routes/courses/[courseId]/leaderboard/contests/[contestId]/[leaderboardType].tsx`
-
-- **Source**: `src/pages/leaderboard/subcomponents/ContestLeaderboardWrapper.tsx`
-- **File rename**: `ContestLeaderboardWrapper.tsx` → `contest_leaderboard.tsx`
-- **Export**: `export const Component = ContestLeaderboardWrapper;`
+1. **Update `academyRoutes.ts`** - Already done ✅
+2. **Clean up old files** - Pending (delete migrated files from `src/pages/academy/` and `src/pages/leaderboard/`)
+3. **Verify routes work** - Run the application to test
 
 ## Component Export Style (Required)
 
-All migrated components MUST follow this pattern (file name changes, component name stays the same):
+All migrated components follow this pattern (file name changes, component name stays the same):
 
 ```tsx
 function Grading() {
@@ -145,25 +111,24 @@ export const Component = Grading;
 
 ## Import Updates
 
-After migration, update `src/pages/academy/academyRoutes.ts` to point to new locations:
+`src/pages/academy/academyRoutes.ts` has been updated to point to new locations:
 
 ```typescript
-// Before
-const Grading = () => import('./grading/Grading');
-
-// After
 const Grading = () => import('../../new_routes/courses/[courseId]/grading/[submissionId]');
+const GameSimulator = () => import('../../new_routes/courses/[courseId]/gamesimulator');
+const TeamFormation = () => import('../../new_routes/courses/[courseId]/teamformation');
+// etc.
 ```
 
 ## Execution Order
 
-1. Create directory structure under `src/new_routes/courses/[courseId]/`
-2. Migrate Grading
-3. Migrate GameSimulator
-4. Migrate TeamFormation and its subcomponents
-5. Migrate Dashboard
-6. Migrate GroundControl
-7. Migrate AdminPanel
-8. Migrate leaderboard components
-9. Update academyRoutes.ts imports
-10. Delete old files after verification
+1. ✅ Create directory structure under `src/new_routes/courses/[courseId]/`
+2. ✅ Migrate Grading
+3. ✅ Migrate GameSimulator
+4. ✅ Migrate TeamFormation and its subcomponents
+5. ✅ Migrate Dashboard
+6. ✅ Migrate GroundControl
+7. ✅ Migrate AdminPanel
+8. ✅ Migrate leaderboard components
+9. ✅ Update academyRoutes.ts imports
+10. ⏳ Delete old files after verification
