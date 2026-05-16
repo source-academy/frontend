@@ -1,7 +1,7 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import type { UpdateCourseConfiguration } from 'src/commons/application/types/SessionTypes';
-import type { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
+import type { UsernameRoleGroup } from 'src/features/adminPanel/subcomponents/AddUserPanel';
 import { expect, test } from 'vitest';
 
 import AcademyActions from './AcademyActions';
