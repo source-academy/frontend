@@ -11,7 +11,7 @@ import { store } from '../createStore';
 import {
   contestLeaderboardLoader,
   leaderboardLoader,
-} from '../leaderboard/subcomponents/leaderboardUtils';
+} from '../leaderboard/subcomponents/LeaderboardUtils';
 
 const notFoundPath = 'not-found';
 
