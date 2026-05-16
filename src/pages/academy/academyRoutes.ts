@@ -19,7 +19,7 @@ const Assessment = () => import('../../commons/assessment/Assessment');
 const Game = () => import('../../new_routes/courses/[courseId]/game');
 const OverallLeaderboard = () => import('../../new_routes/courses/[courseId]/leaderboard/overall');
 const ContestLeaderboardWrapper = () =>
-  import('../leaderboard/subcomponents/ContestLeaderboardWrapper');
+  import('../../new_routes/courses/[courseId]/leaderboard/contests/[contestId]/[leaderboardType]');
 const NotFound = () => import('../../new_routes/not-found');
 
 // Memoized for efficiency. Relies on immutability of Redux store to ensure
