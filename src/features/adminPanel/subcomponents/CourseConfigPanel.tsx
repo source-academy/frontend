@@ -17,8 +17,8 @@ import { useCallback, useState } from 'react';
 import { useResponsive } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/CourseConfig.module.scss';
 
-import type { UpdateCourseConfiguration } from '../../../../commons/application/types/SessionTypes';
-import Markdown from '../../../../commons/Markdown';
+import type { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
+import Markdown from '../../../commons/Markdown';
 
 export enum CourseHelpTextEditorTab {
   WRITE = 'WRITE',

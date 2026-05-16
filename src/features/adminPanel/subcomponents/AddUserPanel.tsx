@@ -19,7 +19,7 @@ import { useState } from 'react';
 import { useCSVReader } from 'react-papaparse';
 import { Role } from 'src/commons/application/ApplicationTypes';
 
-import Constants from '../../../../commons/utils/Constants';
+import Constants from '../../../commons/utils/Constants';
 
 type Props = {
   handleAddNewUsersToCourse: (users: UsernameRoleGroup[], provider: string) => void;

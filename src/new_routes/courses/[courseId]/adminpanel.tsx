@@ -7,12 +7,12 @@ import AcademyActions from 'src/features/academy/AcademyActions';
 import SessionActions from '../../../commons/application/actions/SessionActions';
 import type { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
-import AddUserPanel from '../../../pages/academy/adminPanel/subcomponents/AddUserPanel';
-import type { ImperativeAssessmentConfigPanel } from '../../../pages/academy/adminPanel/subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
-import AssessmentConfigPanel from '../../../pages/academy/adminPanel/subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
-import CourseConfigPanel from '../../../pages/academy/adminPanel/subcomponents/CourseConfigPanel';
-import PixelbotConfigPanel from '../../../pages/academy/adminPanel/subcomponents/PixelbotConfigPanel';
-import UserConfigPanel from '../../../pages/academy/adminPanel/subcomponents/userConfigPanel/UserConfigPanel';
+import AddUserPanel from '../../../features/adminPanel/subcomponents/AddUserPanel';
+import type { ImperativeAssessmentConfigPanel } from '../../../features/adminPanel/subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
+import AssessmentConfigPanel from '../../../features/adminPanel/subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
+import CourseConfigPanel from '../../../features/adminPanel/subcomponents/CourseConfigPanel';
+import PixelbotConfigPanel from '../../../features/adminPanel/subcomponents/PixelbotConfigPanel';
+import UserConfigPanel from '../../../features/adminPanel/subcomponents/userConfigPanel/UserConfigPanel';
 
 const defaultCourseConfig: UpdateCourseConfiguration = {
   courseName: '',

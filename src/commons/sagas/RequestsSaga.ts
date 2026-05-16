@@ -14,6 +14,7 @@ import type {
   GoalDefinition,
   GoalProgress,
 } from '../../features/achievement/AchievementTypes';
+import type { UsernameRoleGroup } from '../../features/adminPanel/subcomponents/AddUserPanel';
 import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import type {
   GradingAnswer,
@@ -27,7 +28,6 @@ import type {
   WebSocketEndpointInformation,
 } from '../../features/remoteExecution/RemoteExecutionTypes';
 import type { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
-import type { UsernameRoleGroup } from '../../pages/academy/adminPanel/subcomponents/AddUserPanel';
 import { store } from '../../pages/createStore';
 import {
   backendifyAchievementItem,
