@@ -5,9 +5,9 @@ import SourceAcademyGame, { GameType } from 'src/features/game/SourceAcademyGame
 import { gameSimulatorConfig } from 'src/features/gameSimulator/GameSimulatorConstants';
 import { GameSimulatorState } from 'src/features/gameSimulator/GameSimulatorTypes';
 
-import AssetViewer from '../../../pages/academy/gameSimulator/subcomponents/assetViewer/AssetViewer';
-import ChapterPublisher from '../../../pages/academy/gameSimulator/subcomponents/chapterPublisher/ChapterPublisher';
-import ChapterSimulator from '../../../pages/academy/gameSimulator/subcomponents/chapterSimulator/ChapterSimulator';
+import AssetViewer from '../../../features/gameSimulator/subcomponents/assetViewer/AssetViewer';
+import ChapterPublisher from '../../../features/gameSimulator/subcomponents/chapterPublisher/ChapterPublisher';
+import ChapterSimulator from '../../../features/gameSimulator/subcomponents/chapterSimulator/ChapterSimulator';
 
 const createGameSimulatorGame = () => {
   return new SourceAcademyGame(gameSimulatorConfig, GameType.Simulator);
