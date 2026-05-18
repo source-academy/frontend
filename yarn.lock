@@ -4380,32 +4380,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ag-charts-types@npm:13.2.1":
-  version: 13.2.1
-  resolution: "ag-charts-types@npm:13.2.1"
-  checksum: 10c0/2a5c69354c2dbefdb4d6c65531cbd9931ba02bbc637dd60f53cb004f64328d2ffc5542e04955ccb3a9b17d57b0351b0852163b0c7c01c9685246c3ec2ccb8e06
+"ag-charts-types@npm:13.3.0":
+  version: 13.3.0
+  resolution: "ag-charts-types@npm:13.3.0"
+  checksum: 10c0/d1bc8fd964408228580f02c16e22cf2f85f6373dacbab24ceebf1f5f4f825cd00b851cf97fd049733def3fa599e987bb1de90f9e7d8ef66e24f6a834696d6a4d
   languageName: node
   linkType: hard
 
-"ag-grid-community@npm:35.2.1, ag-grid-community@npm:^35.0.0":
-  version: 35.2.1
-  resolution: "ag-grid-community@npm:35.2.1"
+"ag-grid-community@npm:35.3.0, ag-grid-community@npm:^35.0.0":
+  version: 35.3.0
+  resolution: "ag-grid-community@npm:35.3.0"
   dependencies:
-    ag-charts-types: "npm:13.2.1"
-  checksum: 10c0/e75c5c8cf43aad10d74456549c414f6a88ba456fa1ce919913fbe9f944c6621dcdbe86e84a3f8faaf7c48c7695a8de402b9e63472bdf001e3c52b3d1199c9813
+    ag-charts-types: "npm:13.3.0"
+  checksum: 10c0/a3331aa6078bd675d4733f375cb9698a0f3fd96eecfbf665d57e6dc4389722c3ed64daba904d23a65f3711c4d3cffb610da35905f1c0df1b4b72be2d73fb3583
   languageName: node
   linkType: hard
 
 "ag-grid-react@npm:^35.0.0":
-  version: 35.2.1
-  resolution: "ag-grid-react@npm:35.2.1"
+  version: 35.3.0
+  resolution: "ag-grid-react@npm:35.3.0"
   dependencies:
-    ag-grid-community: "npm:35.2.1"
+    ag-grid-community: "npm:35.3.0"
     prop-types: "npm:^15.8.1"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/b096a20da431d432525691db1282e898089afb9ed485c6ae5cf88a44d8e09392f7b8a742614cf9b09de1645d8403d0ca2a9a70daaf927eb4d6c2d0ed96d05582
+  checksum: 10c0/e72f055b8e14138002a4ce1cef44eafced4279ee8e132189606b8afaceb1f30f761eba2c27b24f1d9637d07e3a46c717aa5d25ee1fc5be2f19d9a2ffe661971b
   languageName: node
   linkType: hard
 
@@ -6066,14 +6066,14 @@ __metadata:
   linkType: hard
 
 "dompurify@npm:^3.2.4":
-  version: 3.4.2
-  resolution: "dompurify@npm:3.4.2"
+  version: 3.4.5
+  resolution: "dompurify@npm:3.4.5"
   dependencies:
     "@types/trusted-types": "npm:^2.0.7"
   dependenciesMeta:
     "@types/trusted-types":
       optional: true
-  checksum: 10c0/23ab3ab079480a49e1426c4ee7279e393913fa7f2193c4142a5be54d4163dbdd969558675876c6b8bbcbf2ad5d1bc3e00bf902acf142fff12e50274a65ae95b3
+  checksum: 10c0/4bcc953b0f33c61f07fd1b928342dd301dd94401a6058bff7cb47abd57892c797abe6d03118aa8056b36ea067bfe460324bea37fcaf57c0d906ed48e7ac32020
   languageName: node
   linkType: hard
 
