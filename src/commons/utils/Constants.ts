@@ -69,7 +69,6 @@ const getProviderScreen = (prefix: string, i: number): 'default' | 'nus' => {
   const screen = process.env[`${prefix}${i}_SHOW_FOR_SCREEN`]?.trim().toLowerCase();
   return screen === 'nus' ? 'nus' : 'default';
 };
-};
 
 for (let i = 1; ; ++i) {
   const id = process.env[`REACT_APP_OAUTH2_PROVIDER${i}`];
