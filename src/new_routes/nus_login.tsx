@@ -58,7 +58,7 @@ function NusLogin() {
                   {name}
                 </Button>
               ))}
-              {Constants.hasOtherAuthProviders && (
+              {Constants.hasDefaultAuthProviders && (
                 <Button
                   intent="primary"
                   variant="outlined"

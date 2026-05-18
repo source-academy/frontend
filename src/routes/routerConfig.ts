@@ -63,7 +63,7 @@ const loginRoutes: RouteObject[] = [
             index: true,
             middleware: [
               () => {
-                if (Constants.hasOtherAuthProviders) {
+                if (Constants.hasDefaultAuthProviders) {
                   return null;
                 }
                 throw redirect('/nus_login');
