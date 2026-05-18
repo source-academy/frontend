@@ -66,8 +66,9 @@ const authProviders: Map<string, AuthProvider> = new Map();
 
 // Helper to read screen configuration, defaulting to 'default'
 const getProviderScreen = (prefix: string, i: number): 'default' | 'nus' => {
-  const screen = process.env[`${prefix}${i}_SHOW_FOR_SCREEN`];
+  const screen = process.env[`${prefix}${i}_SHOW_FOR_SCREEN`]?.trim().toLowerCase();
   return screen === 'nus' ? 'nus' : 'default';
+};
 };
 
 for (let i = 1; ; ++i) {
