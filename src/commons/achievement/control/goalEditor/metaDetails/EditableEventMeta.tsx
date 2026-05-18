@@ -11,7 +11,6 @@ import {
 import EditableDate from '../EditableDate';
 import EditableTime from '../EditableTime';
 
-const EventSelect = Select.ofType<EventType>();
 const eventRenderer: ItemRenderer<EventType> = (eventName, { handleClick }) => (
   <MenuItem key={eventName} onClick={handleClick} text={eventName} />
 );
@@ -58,14 +57,14 @@ const EditableEventMeta: React.FC<Props> = ({ changeMeta, eventMeta }) => {
   const generateEventNames = () => {
     return eventNames.map((eventName, index) => (
       <Tooltip content={'Change event type ' + index} key={index}>
-        <EventSelect
+        <Select<EventType>
           filterable={false}
           items={Object.values(EventType)}
           itemRenderer={eventRenderer}
           onItemSelect={changeIndexEventName(index)}
         >
-          <Button outlined={true} text={eventName} />
-        </EventSelect>
+          <Button variant="outlined" text={eventName} />
+        </Select>
       </Tooltip>
     ));
   };
@@ -79,11 +78,11 @@ const EditableEventMeta: React.FC<Props> = ({ changeMeta, eventMeta }) => {
     <>
       {generateEventNames()}
       <Tooltip content="Add Event">
-        <Button outlined={true} text={'Add Event'} onClick={addEvent} />
+        <Button variant="outlined" text={'Add Event'} onClick={addEvent} />
       </Tooltip>
       <Tooltip content="Target Count">
         <NumericInput
-          allowNumericCharactersOnly={true}
+          allowNumericCharactersOnly
           leftIcon={IconNames.LOCATE}
           min={0}
           onValueChange={changeTargetCount}

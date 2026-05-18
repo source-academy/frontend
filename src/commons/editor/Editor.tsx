@@ -51,7 +51,7 @@ export type EditorHook = (
   inProps: Readonly<EditorProps>,
   outProps: IAceEditorProps,
   keyBindings: EditorKeyBindingHandlers,
-  reactAceRef: React.MutableRefObject<AceEditor | null>,
+  reactAceRef: React.RefObject<AceEditor | null>,
 ) => void;
 
 export type EditorProps = DispatchProps & EditorStateProps & EditorTabStateProps & OnEvent;
@@ -351,7 +351,7 @@ const moveCursor = (editor: AceEditor['editor'], position: Position) => {
 };
 
 const EditorBase = memo((props: EditorProps & LocalStateProps) => {
-  const reactAceRef: React.MutableRefObject<AceEditor | null> = useRef(null);
+  const reactAceRef: React.RefObject<AceEditor | null> = useRef(null);
   const [filePath, setFilePath] = useState<string | undefined>(undefined);
 
   // Refs for things that technically shouldn't change... but just in case.
@@ -731,6 +731,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     </Card>
   );
 });
+EditorBase.displayName = 'EditorBase';
 
 // don't create a new list every render.
 const hooks = [useHighlighting, useNavigation, useShareAce, useRefactor];

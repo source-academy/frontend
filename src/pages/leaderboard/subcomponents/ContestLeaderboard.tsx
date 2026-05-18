@@ -17,7 +17,7 @@ import leaderboard_background from '../../../assets/leaderboard_background.jpg';
 import LeaderboardDropdown from './LeaderboardDropdown';
 import LeaderboardExportButton from './LeaderboardExportButton';
 import LeaderboardPodium from './LeaderboardPodium';
-import { convertToRandomNumber } from './OverallLeaderboard';
+import { convertToRandomNumber } from './LeaderboardUtils';
 
 type Props = {
   type: 'score' | 'popularvote';
@@ -165,7 +165,7 @@ const ContestLeaderboard: React.FC<Props> = ({
         />
       </div>
 
-      <div className="table-gap"></div>
+      <div className="table-gap" />
 
       {/* Honourable Mentions */}
       <div className="leaderboard-table-container">
@@ -176,7 +176,7 @@ const ContestLeaderboard: React.FC<Props> = ({
           columnDefs={columnDefs}
           domLayout="autoHeight"
           rowHeight={60}
-          pagination={true}
+          pagination
           paginationPageSize={10}
           paginationPageSizeSelector={[10, 25, 50]}
         />

@@ -5,10 +5,10 @@ import { store } from 'src/pages/createStore';
 
 import type { Tokens } from '../application/types/SessionTypes';
 import { postRefresh } from '../sagas/RequestsSaga';
-import type { MockResponse } from './__tests__/RequestHelper.test';
 import { actions } from './ActionsHelper';
 import Constants from './Constants';
 import { dismiss, showWarningMessage } from './notifications/NotificationsHelper';
+import type { MockResponse } from './RequestHelper.test';
 
 /**
  * @property accessToken - backend access token

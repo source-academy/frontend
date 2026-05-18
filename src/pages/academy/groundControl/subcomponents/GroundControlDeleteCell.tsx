@@ -32,7 +32,7 @@ const DeleteCell: React.FC<Props> = ({ handleDeleteAssessment, data }) => {
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         title="Deleting assessment"
-        canOutsideClickClose={true}
+        canOutsideClickClose
       >
         <DialogBody>
           <p>
@@ -49,13 +49,13 @@ const DeleteCell: React.FC<Props> = ({ handleDeleteAssessment, data }) => {
                 label="Cancel"
                 icon={IconNames.CROSS}
                 onClick={handleCloseDialog}
-                options={{ minimal: false }}
+                options={{ variant: 'default' }}
               />
               <ControlButton
                 label="Confirm"
                 icon={IconNames.TRASH}
                 onClick={handleDelete}
-                options={{ minimal: false, intent: Intent.DANGER }}
+                options={{ variant: 'default', intent: Intent.DANGER }}
               />
             </>
           }

@@ -87,14 +87,14 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
   return (
     <>
       <Tooltip content={change} placement="top">
-        <Button minimal key={keyID} onClick={handleOpenDialog} icon={icon} />
+        <Button variant="minimal" key={keyID} onClick={handleOpenDialog} icon={icon} />
       </Tooltip>
       <Dialog
         icon={IconNames.WARNING_SIGN}
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         title={change}
-        canOutsideClickClose={true}
+        canOutsideClickClose
       >
         <DialogBody>
           <p>
@@ -109,13 +109,13 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
                 label="Cancel"
                 icon={IconNames.CROSS}
                 onClick={handleCloseDialog}
-                options={{ minimal: false }}
+                options={{ variant: 'default' }}
               />
               <ControlButton
                 label="Confirm"
                 icon={IconNames.CONFIRM}
                 onClick={handleMassPublishChange}
-                options={{ minimal: false, intent: Intent.DANGER }}
+                options={{ variant: 'default', intent: Intent.DANGER }}
               />
             </>
           }

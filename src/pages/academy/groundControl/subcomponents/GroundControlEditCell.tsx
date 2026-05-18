@@ -87,7 +87,7 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         title="Updating assessment settings"
-        canOutsideClickClose={true}
+        canOutsideClickClose
       >
         <DialogBody>
           <p>{forOpenDate ? 'Opening' : 'Closing'} date and time:</p>
@@ -100,13 +100,13 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
                 label="Cancel"
                 icon={IconNames.CROSS}
                 onClick={handleCloseDialog}
-                options={{ minimal: false }}
+                options={{ variant: 'default' }}
               />
               <ControlButton
                 label="Confirm"
                 icon={IconNames.TICK}
                 onClick={handleUpdateDate}
-                options={{ minimal: false, intent: Intent.DANGER }}
+                options={{ variant: 'default', intent: Intent.DANGER }}
               />
             </>
           }

@@ -51,6 +51,7 @@ export const generateCols = (filterMode: boolean) => {
             component: GradingFilterable,
             params: {
               value: params.data.assessmentType,
+              // eslint-disable-next-line react/jsx-key
               children: [<AssessmentTypeBadge type={params.data.assessmentType} />],
               filterMode: filterMode,
             },
@@ -127,6 +128,7 @@ export const generateCols = (filterMode: boolean) => {
             component: GradingFilterable,
             params: {
               value: params.data.progressStatus,
+              // eslint-disable-next-line react/jsx-key
               children: [<ProgressStatusBadge progress={params.data.progressStatus} />],
               filterMode: filterMode,
             },

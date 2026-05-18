@@ -153,7 +153,7 @@ export async function checkIfUserAgreesToOverwriteEditorData() {
     contents: (
       <div>
         <p>Warning: opening this file will overwrite the text data in the editor.</p>
-        <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
+        <p>Please click &ldquo;Confirm&rdquo; to continue, or &ldquo;Cancel&rdquo; to go back.</p>
       </div>
     ),
     negativeLabel: 'Cancel',
@@ -167,7 +167,7 @@ export async function checkIfUserAgreesToPerformOverwritingSave() {
     contents: (
       <div>
         <p>Warning: You are saving over an existing file in the repository.</p>
-        <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
+        <p>Please click &ldquo;Confirm&rdquo; to continue, or &ldquo;Cancel&rdquo; to go back.</p>
       </div>
     ),
     negativeLabel: 'Cancel',

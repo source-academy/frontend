@@ -32,12 +32,12 @@ const AcademyNavigationBar: React.FC<Props> = ({ assessmentTypes }) => {
 
   return (
     <Navbar className="NavigationBar secondary-navbar">
-      <NavbarGroup align={Alignment.LEFT}>
+      <NavbarGroup align={Alignment.START}>
         {leftEntries.map((entry, i) => (
           <DesktopNavLink key={i} {...entry} />
         ))}
       </NavbarGroup>
-      <NavbarGroup align={Alignment.RIGHT}>
+      <NavbarGroup align={Alignment.END}>
         {rightEntries.map((entry, i) => (
           <DesktopNavLink key={i} {...entry} />
         ))}

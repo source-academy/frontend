@@ -313,7 +313,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     // We ignore the dependency on rowData purposely as we setRowData above.
     // If not, it could cause a double execution, which is a bit expensive.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requestCounter, submissions, courseId, gridRef.current?.api]);
+  }, [requestCounter, submissions, courseId]);
 
   const columns = useMemo(() => generateCols(filterMode), [filterMode]);
 
@@ -369,7 +369,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         </GradingFlex>
 
         <Button
-          minimal={true}
+          variant="minimal"
           className={classNames(
             classes['grading-filter-btn'],
             filterMode && classes['grading-filter-btn-on'],
@@ -383,7 +383,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           className="grading-search-input"
           placeholder="Search by assessment name"
           leftIcon="search"
-          large={true}
+          size="large"
           value={searchQuery}
           onChange={handleSearchQueryUpdate}
         />
@@ -440,15 +440,15 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         style={{ width: '100%', columnGap: '5px' }}
       >
         <Button
-          small
-          minimal
+          size="small"
+          variant="minimal"
           icon={IconNames.DOUBLE_CHEVRON_LEFT}
           onClick={() => setPage(0)}
           disabled={page <= 0 || isLoading}
         />
         <Button
-          small
-          minimal
+          size="small"
+          variant="minimal"
           icon={IconNames.ARROW_LEFT}
           onClick={() => setPage(page - 1)}
           disabled={page <= 0 || isLoading}
@@ -457,15 +457,15 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           Page {maxPage + 1 === 0 ? 0 : page + 1} of {maxPage + 1}
         </H6>
         <Button
-          small
-          minimal
+          size="small"
+          variant="minimal"
           icon={IconNames.ARROW_RIGHT}
           onClick={() => setPage(page + 1)}
           disabled={page >= maxPage || isLoading}
         />
         <Button
-          small
-          minimal
+          size="small"
+          variant="minimal"
           icon={IconNames.DOUBLE_CHEVRON_RIGHT}
           onClick={() => setPage(maxPage)}
           disabled={page >= maxPage || isLoading}

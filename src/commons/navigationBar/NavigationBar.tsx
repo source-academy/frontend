@@ -16,9 +16,8 @@ import { type IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { useMemo, useState } from 'react';
 import { Translation } from 'react-i18next';
-import { type Location, NavLink, Route, useLocation } from 'react-router';
+import { type Location, NavLink, useLocation, useMatch } from 'react-router';
 import type { i18nDefaultLangKeys } from 'src/i18n/i18next';
-import { SentryRoutes } from 'src/routes/routerConfig';
 import classes from 'src/styles/NavigationBar.module.scss';
 
 import Dropdown from '../dropdown/Dropdown';
@@ -51,13 +50,13 @@ const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }
   const { courseShortName, courseId } = useSession();
 
   return (
-    <NavbarGroup align={Alignment.LEFT}>
+    <NavbarGroup align={Alignment.START}>
       {renderDrawer && (
         <Button
           onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
           icon={IconNames.MENU}
-          large={true}
-          minimal={true}
+          size="large"
+          variant="minimal"
         />
       )}
       <NavLink
@@ -65,7 +64,7 @@ const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }
         to={Constants.playgroundOnly ? '/' : courseId == null ? '/welcome' : `/courses/${courseId}`}
       >
         <NavbarHeading>
-          <Button className="app-title" minimal icon={IconNames.SYMBOL_DIAMOND}>
+          <Button className="app-title" variant="minimal" icon={IconNames.SYMBOL_DIAMOND}>
             {courseShortName || Constants.sourceAcademyDeploymentName}
           </Button>
         </NavbarHeading>
@@ -87,6 +86,24 @@ const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }
     </NavbarGroup>
   );
 };
+
+function useSecondaryNavbarType() {
+  const isPlayground = useMatch('/playground/*');
+  const isContributors = useMatch('/contributors');
+  const isAchievements = useMatch('/courses/:courseId/achievements/*');
+  const isLeaderboard = useMatch('/courses/:courseId/leaderboard/*');
+  const isSicp = useMatch('/sicpjs/:section?');
+
+  const isHidden = isPlayground || isContributors || isAchievements || isLeaderboard;
+
+  if (isSicp) {
+    return 'sicp';
+  } else if (isHidden) {
+    return 'hidden';
+  } else {
+    return 'academy';
+  }
+}
 
 const NavigationBar: React.FC = () => {
   const { isMobileBreakpoint } = useResponsive();
@@ -173,7 +190,7 @@ const NavigationBar: React.FC = () => {
   ]);
 
   const renderPlaygroundOnlyNavbarLeftDesktop = () => (
-    <NavbarGroup align={Alignment.LEFT}>
+    <NavbarGroup align={Alignment.START}>
       {playgroundOnlyNavbarLeftInfo.map((entry, i) => (
         <DesktopNavLink key={i} {...entry} />
       ))}
@@ -215,7 +232,7 @@ const NavigationBar: React.FC = () => {
     };
 
     return (
-      <NavbarGroup align={Alignment.LEFT}>
+      <NavbarGroup align={Alignment.START}>
         <Popover
           position={Position.BOTTOM_RIGHT}
           interactionKind="hover"
@@ -230,7 +247,7 @@ const NavigationBar: React.FC = () => {
             <NavbarHeading>
               <Button
                 className="app-title"
-                minimal
+                variant="minimal"
                 icon={IconNames.SYMBOL_DIAMOND}
                 active={highlightDesktopLogo(location)}
               >
@@ -251,7 +268,7 @@ const NavigationBar: React.FC = () => {
   );
 
   const commonNavbarRight = (
-    <NavbarGroup align={Alignment.RIGHT}>
+    <NavbarGroup align={Alignment.END}>
       <NavigationBarLangSelectButton />
       <NavLink
         className={({ isActive }) =>
@@ -274,7 +291,7 @@ const NavigationBar: React.FC = () => {
       <Dropdown />
     </NavbarGroup>
   );
-
+  const navbarType = useSecondaryNavbarType();
   return (
     <>
       <Navbar
@@ -295,21 +312,11 @@ const NavigationBar: React.FC = () => {
         {commonNavbarRight}
       </Navbar>
 
-      <SentryRoutes>
-        <Route path="/playground/*" element={null} />
-        <Route path="/contributors" element={null} />
-        <Route path="/courses/:courseId/achievements" element={null} />
-        <Route path="/courses/:courseId/leaderboard/*" element={null} />
-        <Route path="/sicpjs/:section?" element={<SicpNavigationBar />} />
-        <Route
-          path="*"
-          element={
-            !Constants.playgroundOnly && isEnrolledInACourse && !isMobileBreakpoint ? (
-              <AcademyNavigationBar assessmentTypes={assessmentTypes} />
-            ) : null
-          }
-        />
-      </SentryRoutes>
+      {navbarType === 'hidden' ? null : navbarType === 'sicp' ? (
+        <SicpNavigationBar />
+      ) : !Constants.playgroundOnly && isEnrolledInACourse && !isMobileBreakpoint ? (
+        <AcademyNavigationBar assessmentTypes={assessmentTypes} />
+      ) : null}
     </>
   );
 };
@@ -337,7 +344,7 @@ export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
       key={props.text}
       title={props.text}
     >
-      <Button minimal icon={props.icon}>
+      <Button variant="minimal" icon={props.icon}>
         {!shouldHide && (
           <Translation ns="commons" keyPrefix="navigationBar">
             {t =>
@@ -351,7 +358,7 @@ export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
       {props.hasNotifications && (
         <NotificationBadge
           notificationFilter={filterNotificationsByType(props.text)}
-          disableHover={true}
+          disableHover
         />
       )}
     </NavLink>
@@ -368,7 +375,7 @@ const MobileNavLink: React.FC<
       onClick={props.handleClick}
       key={props.text}
     >
-      <Button minimal large icon={props.icon}>
+      <Button variant="minimal" size="large" icon={props.icon}>
         <Translation ns="commons" keyPrefix="navigationBar">
           {t =>
             t($ => $[props.text as keyof i18nDefaultLangKeys['commons']['navigationBar']], {
@@ -380,7 +387,7 @@ const MobileNavLink: React.FC<
       {props.hasNotifications && (
         <NotificationBadge
           notificationFilter={filterNotificationsByType(props.text)}
-          disableHover={true}
+          disableHover
         />
       )}
     </NavLink>

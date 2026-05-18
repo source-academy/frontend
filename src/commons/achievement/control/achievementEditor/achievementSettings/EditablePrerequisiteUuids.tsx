@@ -29,7 +29,6 @@ const EditablePrerequisiteUuids: React.FC<Props> = ({
 
   const getUuid = (title: string) => inferencer.getUuidByTitle(title);
 
-  const PrerequisiteSelect = MultiSelect.ofType<AchievementItem>();
   const prerequisiteRenderer: ItemRenderer<AchievementItem> = (achievement, { handleClick }) => (
     <MenuItem key={achievement.uuid} onClick={handleClick} text={achievement.title} />
   );
@@ -54,16 +53,16 @@ const EditablePrerequisiteUuids: React.FC<Props> = ({
   };
 
   return (
-    <PrerequisiteSelect
+    <MultiSelect<AchievementItem>
       itemRenderer={prerequisiteRenderer}
       items={[...availablePrereqs].map(uuid => inferencer.getAchievement(uuid))}
-      noResults={<MenuItem disabled={true} text="No available achievement" />}
+      noResults={<MenuItem disabled text="No available achievement" />}
       onItemSelect={achievement => selectPrereq(achievement.uuid)}
       selectedItems={[...selectedPrereqs].map(uuid => inferencer.getAchievement(uuid))}
       tagInputProps={{ onRemove: title => removePrereq(getUuid(title!.toString())) }}
       tagRenderer={achievement => achievement.title}
       itemPredicate={prerequisitePredicate}
-      resetOnSelect={true}
+      resetOnSelect
     />
   );
 };

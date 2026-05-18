@@ -31,7 +31,7 @@ const PublishCell: React.FC<Props> = ({ data, handlePublishAssessment }) => {
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         title={`${isPublished ? 'Unpublish' : 'Publish'} assessment`}
-        canOutsideClickClose={true}
+        canOutsideClickClose
       >
         <DialogBody>
           <p>
@@ -54,13 +54,13 @@ const PublishCell: React.FC<Props> = ({ data, handlePublishAssessment }) => {
                 label="Cancel"
                 icon={IconNames.CROSS}
                 onClick={handleCloseDialog}
-                options={{ minimal: false }}
+                options={{ variant: 'default' }}
               />
               <ControlButton
                 label="Confirm"
                 icon={IconNames.CONFIRM}
                 onClick={handleTogglePublished}
-                options={{ minimal: false, intent: Intent.DANGER }}
+                options={{ variant: 'default', intent: Intent.DANGER }}
               />
             </>
           }

@@ -39,6 +39,7 @@ export const convertEditorTabStateToProps = (
 
 const createNormalEditorTab =
   (editorProps: Omit<EditorProps, keyof EditorTabStateProps>, useMonacoEditor: boolean) =>
+  // eslint-disable-next-line react/display-name
   (editorTabStateProps: EditorTabStateProps) => {
     const editorPropsWithTab = { ...editorProps, ...editorTabStateProps };
     return useMonacoEditor ? (

@@ -333,8 +333,8 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                       <div style={{ padding: '8px 10px', minWidth: '210px' }}>
                         <div style={{ marginBottom: '8px', fontWeight: 600 }}>Filter Arrows</div>
                         <Button
-                          small
-                          minimal
+                          size="small"
+                          variant="minimal"
                           onClick={() => this.setAllArrowFilters(!areAllArrowFiltersSelected)}
                           style={{ marginBottom: '8px' }}
                         >
@@ -455,7 +455,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                     }}
                     icon="eraser"
                     disabled={this.state.clearDeadFrames || !this.state.visualization}
-                  ></AnchorButton>
+                  />
                 </Tooltip>
                 <Tooltip content="Print" compact>
                   <AnchorButton
@@ -493,7 +493,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
             <Output output={slice} key={index} usingSubst={false} isHtml={false} />
           ))
         ) : (
-          <div></div>
+          <div />
         )}
         {this.state.visualization ? (
           this.state.stepLimitExceeded ? (
@@ -512,10 +512,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
         ) : (
           <CseMachineDefaultText isJava={this.isJava()} />
         )}
-        <ButtonGroup
-          vertical={true}
-          style={{ position: 'absolute', bottom: '20px', right: '20px' }}
-        >
+        <ButtonGroup vertical style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
           <Button
             icon="plus"
             disabled={!this.state.visualization}
@@ -745,11 +742,13 @@ const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
           <Trans
             ns="sideContent"
             i18nKey={$ => $.cseMachine.csecDescription}
+            // eslint-disable-next-line react/jsx-key
             components={[<ItalicLink href={Links.textbookChapter3_2} />]}
           />{' '}
           <Trans
             ns="sideContent"
             i18nKey={$ => $.cseMachine.javaCsec}
+            // eslint-disable-next-line react/jsx-key
             components={[<ItalicLink href={`${Links.sourceDocs}java_csec/`} />]}
           />
         </span>
@@ -758,6 +757,7 @@ const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
           <Trans
             ns="sideContent"
             i18nKey={$ => $.cseMachine.cseDescription}
+            // eslint-disable-next-line react/jsx-key
             components={[<ItalicLink href={Links.textbookChapter3_2} />]}
           />
         </span>

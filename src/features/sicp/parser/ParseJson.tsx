@@ -40,7 +40,7 @@ export type JsonType = {
   prependLength?: number;
 };
 
-type RefType = React.MutableRefObject<Record<string, HTMLElement | null>>;
+type RefType = React.RefObject<Record<string, HTMLElement | null>>;
 type AnchorLinkType = {
   children: React.ReactNode;
   id: string | undefined;

@@ -112,7 +112,7 @@ const ManageQuestionTab: React.FC<Props> = props => {
     <Dialog
       className="assessment-reset"
       icon={IconNames.ERROR}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={showSaveOverlay}
       title="Confirmation: Save unsaved changes?"
     >
@@ -125,7 +125,7 @@ const ManageQuestionTab: React.FC<Props> = props => {
             <ControlButton
               label="Cancel"
               onClick={() => setShowSaveOverlay(false)}
-              options={{ minimal: false }}
+              options={{ variant: 'default' }}
             />
             <ControlButton
               label="Confirm"
@@ -133,7 +133,7 @@ const ManageQuestionTab: React.FC<Props> = props => {
                 modifyAssessment();
                 setShowSaveOverlay(false);
               }}
-              options={{ minimal: false, intent: Intent.DANGER }}
+              options={{ variant: 'default', intent: Intent.DANGER }}
             />
           </>
         }
@@ -148,7 +148,7 @@ const ManageQuestionTab: React.FC<Props> = props => {
         <div key={index}>
           Question {index + 1}
           <br />
-          <Button className="mcq-option col-xs-12" minimal={true}>
+          <Button className="mcq-option col-xs-12" variant="minimal">
             <Markdown
               content={q.content.length > 200 ? q.content.substring(0, 300) + '...' : q.content}
             />

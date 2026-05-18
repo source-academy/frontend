@@ -45,6 +45,7 @@ const chapterListRenderer: ItemListRenderer<SALanguage> = ({
 
 const chapterRenderer: (isFolderModeEnabled: boolean) => ItemRenderer<SALanguage> =
   (isFolderModeEnabled: boolean) =>
+  // eslint-disable-next-line react/display-name
   (lang, { handleClick }) => {
     const isDisabled = isFolderModeEnabled && lang.chapter === Chapter.SOURCE_1;
     const tooltipContent = isDisabled
@@ -60,8 +61,6 @@ const chapterRenderer: (isFolderModeEnabled: boolean) => ItemRenderer<SALanguage
       </Tooltip>
     );
   };
-
-const ChapterSelectComponent = Select.ofType<SALanguage>();
 
 const LegacyControlBarChapterSelect: React.FC<Props> = ({
   isFolderModeEnabled,
@@ -82,7 +81,7 @@ const LegacyControlBarChapterSelect: React.FC<Props> = ({
   ];
 
   return (
-    <ChapterSelectComponent
+    <Select<SALanguage>
       items={choices.filter(({ mainLanguage }) => mainLanguage === selectedLang)}
       onItemSelect={handleChapterSelect}
       itemRenderer={chapterRenderer(isFolderModeEnabled)}
@@ -91,12 +90,12 @@ const LegacyControlBarChapterSelect: React.FC<Props> = ({
       disabled={disabled}
     >
       <Button
-        minimal
+        variant="minimal"
         text={styliseSublanguage(sourceChapter, sourceVariant)}
-        rightIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
+        endIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
         disabled={disabled}
       />
-    </ChapterSelectComponent>
+    </Select>
   );
 };
 

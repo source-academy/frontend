@@ -80,15 +80,13 @@ const DefaultChapterSelect: React.FC = () => {
     [],
   );
 
-  const DefaultChapterSelectComponent = Select.ofType<SALanguage>();
-
   const dialog = (
     <Dialog
-      canEscapeKeyClose={true}
-      canOutsideClickClose={true}
+      canEscapeKeyClose
+      canOutsideClickClose
       className="change-default-lang-dialog"
       icon={IconNames.ERROR}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={isDialogOpen}
       onClose={handleCloseDialog}
       title="Updating default Source sublanguage"
@@ -103,12 +101,12 @@ const DefaultChapterSelect: React.FC = () => {
             <ControlButton
               label="Cancel"
               onClick={handleCloseDialog}
-              options={{ minimal: false }}
+              options={{ variant: 'default' }}
             />
             <ControlButton
               label="Confirm"
               onClick={handleConfirmDialog}
-              options={{ minimal: false, intent: Intent.DANGER }}
+              options={{ variant: 'default', intent: Intent.DANGER }}
             />
           </>
         }
@@ -118,18 +116,18 @@ const DefaultChapterSelect: React.FC = () => {
 
   return (
     <>
-      <DefaultChapterSelectComponent
+      <Select<SALanguage>
         items={sourceLanguages}
         onItemSelect={handleOpenDialog}
         itemRenderer={chapterRenderer}
         itemListRenderer={chapterListRenderer}
         filterable={false}
       >
-        <Button rightIcon={IconNames.DOUBLE_CARET_VERTICAL}>
+        <Button endIcon={IconNames.DOUBLE_CARET_VERTICAL}>
           <span className="hidden-xs hidden-sm">Default sublanguage: </span>
           <span>{styliseSublanguage(sourceChapter, sourceVariant)}</span>
         </Button>
-      </DefaultChapterSelectComponent>
+      </Select>
       {dialog}
     </>
   );

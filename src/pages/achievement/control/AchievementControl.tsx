@@ -104,4 +104,5 @@ const AchievementControl: React.FC = () => {
   );
 };
 
-export default AchievementControl;
+export const Component = AchievementControl;
+Component.displayName = 'AchievementControl';

@@ -76,7 +76,7 @@ const ConfigureCell: React.FC<Props> = ({
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         title="Configuring assessment"
-        canOutsideClickClose={true}
+        canOutsideClickClose
       >
         <DialogBody>
           <p>
@@ -155,10 +155,10 @@ const ConfigureCell: React.FC<Props> = ({
               label="Save"
               icon={IconNames.UPLOAD}
               onClick={handleConfigure}
-              options={{ minimal: false, intent: Intent.PRIMARY }}
+              options={{ variant: 'default', intent: Intent.PRIMARY }}
             />
           }
-        ></DialogFooter>
+        />
       </Dialog>
     </>
   );

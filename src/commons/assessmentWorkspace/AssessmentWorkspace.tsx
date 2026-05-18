@@ -996,7 +996,7 @@ It is safe to close this window.`}
     <Dialog
       className="assessment-reset"
       icon={IconNames.ERROR}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={showResetTemplateOverlay}
       onClose={closeOverlay}
       title="Confirmation: Reset editor?"
@@ -1008,7 +1008,7 @@ It is safe to close this window.`}
       <DialogFooter
         actions={
           <>
-            <ControlButton label="Cancel" onClick={closeOverlay} options={{ minimal: false }} />
+            <ControlButton label="Cancel" onClick={closeOverlay} options={{ variant: 'default' }} />
             <ControlButton
               label="Confirm"
               onClick={() => {
@@ -1028,7 +1028,7 @@ It is safe to close this window.`}
                   );
                 }
               }}
-              options={{ minimal: false, intent: Intent.DANGER }}
+              options={{ variant: 'default', intent: Intent.DANGER }}
             />
           </>
         }

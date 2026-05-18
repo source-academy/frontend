@@ -102,7 +102,7 @@ const SideContentContestLeaderboard: React.FC<SideContentContestLeaderboardProps
       <Button
         className="collapse-button"
         icon={showLeaderboard ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
-        minimal={true}
+        variant="minimal"
         onClick={() => setShowLeaderboard(!showLeaderboard)}
       >
         <span>{leaderboardTitle}</span>

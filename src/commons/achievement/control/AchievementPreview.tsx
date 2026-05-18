@@ -31,7 +31,7 @@ const AchievementPreview: React.FC<Props> = ({ awaitPublish, publishChanges }) =
         <Button
           className="command-button"
           icon={viewMode && IconNames.ARROW_LEFT}
-          rightIcon={!viewMode && IconNames.ARROW_RIGHT}
+          endIcon={!viewMode && IconNames.ARROW_RIGHT}
           text={viewMode ? 'Task' : 'View'}
           onClick={toggleMode}
         />

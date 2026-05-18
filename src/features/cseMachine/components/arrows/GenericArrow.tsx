@@ -56,7 +56,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   }
 
   private attachArrowRef = (node: Konva.Group | null) => {
-    (this.ref as React.MutableRefObject<Konva.Group | null>).current = node;
+    (this.ref as React.RefObject<Konva.Group | null>).current = node;
   };
 
   path(): string {

@@ -92,7 +92,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       {(isGraded || isSubmitted) && (
         <Button
           className="grading-action-icons"
-          minimal
+          variant="minimal"
           style={{ padding: 0 }}
           onClick={handleReautogradeClick}
         >
@@ -105,7 +105,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       {(isGraded || isSubmitted) && (
         <Button
           className="grading-action-icons"
-          minimal
+          variant="minimal"
           style={{ padding: 0 }}
           onClick={handleUnsubmitClick}
         >
@@ -116,7 +116,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       )}
 
       {isGraded && (
-        <Button className="grading-action-icons" minimal onClick={handlePublishClick}>
+        <Button className="grading-action-icons" variant="minimal" onClick={handlePublishClick}>
           <Tooltip position={Position.TOP} content="Publish">
             <Icon icon={IconNames.SEND_TO_GRAPH} />
           </Tooltip>
@@ -124,7 +124,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       )}
 
       {isPublished && (
-        <Button className="grading-action-icons" minimal onClick={handleUnpublishClick}>
+        <Button className="grading-action-icons" variant="minimal" onClick={handleUnpublishClick}>
           <Tooltip position={Position.TOP} content="Unpublish">
             <Icon icon={IconNames.EXCLUDE_ROW} />
           </Tooltip>

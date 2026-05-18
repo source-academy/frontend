@@ -56,7 +56,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   });
 
   const sideBarResizableProps = (): ResizableProps & {
-    ref: React.MutableRefObject<Resizable | null>;
+    ref: React.RefObject<Resizable | null>;
   } => {
     const onResizeStop: ResizeCallback = (
       event: MouseEvent | TouchEvent,
@@ -230,7 +230,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
                 portalContainer={fullscreenContainerRef.current || undefined}
               >
                 <Button
-                  minimal
+                  variant="minimal"
                   icon={isFullscreen ? IconNames.MINIMIZE : IconNames.MAXIMIZE}
                   onClick={toggleFullscreen}
                 />

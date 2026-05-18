@@ -45,7 +45,7 @@ const McqChooser: React.FC<McqChooserProps> = ({ mcq, handleMCQSubmit }) => {
           isActive && hasSolution ? (isSolution ? Intent.SUCCESS : Intent.DANGER) : Intent.NONE
         }
         onClick={handleClick}
-        minimal
+        variant="minimal"
       >
         <Markdown content={choice.content} />
       </Button>

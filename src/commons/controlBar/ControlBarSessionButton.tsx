@@ -146,7 +146,7 @@ function ControlBarSessionButtons(props: Props) {
               }}
             >
               <FormGroup subLabel="Invite other users to this session">
-                <input value={sessionId} readOnly={true} />
+                <input value={sessionId} readOnly />
               </FormGroup>
               <CopyToClipboard
                 text={sessionId}

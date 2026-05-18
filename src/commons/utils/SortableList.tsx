@@ -36,6 +36,7 @@ const SortableItem = memo(({ id }: SortableItemProps) => {
     </div>
   );
 });
+SortableItem.displayName = 'SortableItem';
 
 type SortableListProps = {
   items: string[];
@@ -60,6 +61,7 @@ export const SortableList = memo(({ items, onSortEnd }: SortableListProps) => {
     </DndContext>
   );
 });
+SortableList.displayName = 'SortableList';
 
 export const useSortableList = () => {
   const [items, setItems] = useState<string[]>([]);

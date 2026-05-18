@@ -18,12 +18,12 @@ export default defineConfig({
       enable: process.env.NODE_ENV === 'development',
       eslintPluginOptions: {
         cwd: __dirname,
-        configType: 'flat'
-      }
-    })
+        configType: 'flat',
+      },
+    }),
   ],
   server: {
-    port: 8000
+    port: 8000,
   },
   tools: {
     // TODO: See if still needed
@@ -63,9 +63,9 @@ export default defineConfig({
 
           if (!/js-slang\/dist\/modules\/loader\/loaders.js/.test(moduleName)) return false;
           return /Critical dependency: the request of a dependency is an expression/.test(
-            warning.message
+            warning.message,
           );
-        }
+        },
       ];
 
       config.plugins = [
@@ -73,8 +73,8 @@ export default defineConfig({
         new InjectManifest({
           swSrc: './src/service-worker.ts',
           swDest: 'service-worker.js',
-          maximumFileSizeToCacheInBytes: 30 * 1024 * 1024
-        })
+          maximumFileSizeToCacheInBytes: 30 * 1024 * 1024,
+        }),
       ];
 
       // Workaround to suppress warnings caused by ts-morph in js-slang
@@ -83,22 +83,22 @@ export default defineConfig({
       }
 
       return config;
-    }
+    },
   },
   source: {
     define: {
       ...publicVars,
-      'process.env': JSON.stringify(rawPublicVars)
-    }
+      'process.env': JSON.stringify(rawPublicVars),
+    },
   },
   html: {
     template: './public/index.html',
-    favicon: './public/icons/favicon.ico'
+    favicon: './public/icons/favicon.ico',
   },
   output: {
     distPath: {
-      root: './build'
+      root: './build',
     },
-    sourceMap: true
-  }
+    sourceMap: true,
+  },
 });

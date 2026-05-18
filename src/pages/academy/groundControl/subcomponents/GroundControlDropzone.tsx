@@ -111,13 +111,13 @@ const MaterialDropzone: React.FC<DropzoneProps> = props => {
           label="Yes"
           icon={IconNames.CONFIRM}
           onClick={handleConfirmForceUpdate}
-          options={{ minimal: false, intent: Intent.DANGER }}
+          options={{ variant: 'default', intent: Intent.DANGER }}
         />
         <ControlButton
           label="No"
           icon={IconNames.CROSS}
           onClick={handleCancelForceUpdate}
-          options={{ minimal: false }}
+          options={{ variant: 'default' }}
         />
       </div>
     ),
@@ -126,14 +126,14 @@ const MaterialDropzone: React.FC<DropzoneProps> = props => {
 
   return (
     <>
-      <Card elevation={Elevation.TWO} interactive={true}>
+      <Card elevation={Elevation.TWO} interactive>
         <div {...getRootProps({ className: classList })}>
           <input {...getInputProps()} />
-          <p>Drag 'n' drop a file here, or click to select a file</p>
+          <p>Drag and drop a file here, or click to select a file</p>
         </div>
       </Card>
       {file && (
-        <Card className="dropzone-prompt" elevation={Elevation.TWO} interactive={true}>
+        <Card className="dropzone-prompt" elevation={Elevation.TWO} interactive>
           <h3>{file?.name}</h3>
           {!isWarningShown && (
             <>
@@ -147,13 +147,13 @@ const MaterialDropzone: React.FC<DropzoneProps> = props => {
                   label="Confirm Upload"
                   icon={IconNames.UPLOAD}
                   onClick={handleConfirmUpload}
-                  options={{ minimal: false, intent: Intent.DANGER }}
+                  options={{ variant: 'default', intent: Intent.DANGER }}
                 />
                 <ControlButton
                   label="Cancel Upload"
                   icon={IconNames.DELETE}
                   onClick={handleCancelUpload}
-                  options={{ minimal: false }}
+                  options={{ variant: 'default' }}
                 />
               </div>
               <div className="dropzone-controls">

@@ -12,7 +12,6 @@ import { AND, type BooleanExpression, OR } from 'src/features/achievement/Expres
  */
 
 type Joiner = 'AND' | 'OR';
-const JoinerSelect = Select.ofType<Joiner>();
 const joinerRenderer: ItemRenderer<Joiner> = (joiner, { handleClick }) => (
   <MenuItem key={joiner} onClick={handleClick} text={joiner} />
 );
@@ -115,7 +114,7 @@ const EditableBinaryMeta: React.FC<Props> = ({ binaryMeta, changeMeta }) => {
               <Tooltip content="Condition">
                 <EditableText
                   onChange={value => changeConditionArray(value, idx / 2)}
-                  multiline={true}
+                  multiline
                   placeholder="Enter condition here"
                   value={op}
                 />
@@ -132,14 +131,14 @@ const EditableBinaryMeta: React.FC<Props> = ({ binaryMeta, changeMeta }) => {
           ) : (
             // the button to choose the joiner to use
             <Tooltip content="And/Or">
-              <JoinerSelect
+              <Select<Joiner>
                 filterable={false}
                 itemRenderer={joinerRenderer}
                 items={['AND', 'OR']}
                 onItemSelect={value => changeJoinerArray(value, (idx - 1) / 2)}
               >
-                <Button minimal={true} outlined={true} text={op} />
-              </JoinerSelect>
+                <Button variant="outlined" text={op} />
+              </Select>
             </Tooltip>
           )
         }
@@ -151,7 +150,7 @@ const EditableBinaryMeta: React.FC<Props> = ({ binaryMeta, changeMeta }) => {
     <>
       <Tooltip content="Target Count">
         <NumericInput
-          allowNumericCharactersOnly={true}
+          allowNumericCharactersOnly
           leftIcon={IconNames.BANK_ACCOUNT}
           min={0}
           onValueChange={changeTargetCount}
@@ -161,7 +160,7 @@ const EditableBinaryMeta: React.FC<Props> = ({ binaryMeta, changeMeta }) => {
       </Tooltip>
       {generateConditions()}
       <br />
-      <Button minimal={true} outlined={true} text="Add Condition" onClick={addCondition} />
+      <Button variant="outlined" text="Add Condition" onClick={addCondition} />
     </>
   );
 };

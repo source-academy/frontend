@@ -261,7 +261,7 @@ const Assessment: React.FC = () => {
     <Dialog
       className="betcha-dialog"
       icon={IconNames.ERROR}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={betchaAssessment !== null}
       onClose={setBetchaAssessmentNull}
       title="Finalise submission?"
@@ -275,12 +275,12 @@ const Assessment: React.FC = () => {
             <ControlButton
               label="Cancel"
               onClick={setBetchaAssessmentNull}
-              options={{ minimal: false }}
+              options={{ variant: 'default' }}
             />
             <ControlButton
               label="Finalise"
               onClick={handleSubmitAssessment}
-              options={{ minimal: false, intent: Intent.DANGER }}
+              options={{ variant: 'default', intent: Intent.DANGER }}
             />
           </>
         }
@@ -305,12 +305,10 @@ const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) 
     label={label}
     icon={isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
     onClick={toggleFunc}
-    options={{ minimal: true, className: 'collapse-button' }}
+    options={{ variant: 'minimal', className: 'collapse-button' }}
   />
 );
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = Assessment;
 Component.displayName = 'Assessment';
 
