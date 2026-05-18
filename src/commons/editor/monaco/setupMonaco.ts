@@ -17,7 +17,7 @@ const aceSourceColors = {
   lineNumberForeground: '#8091A0',
   printMarginBackground: '#555555',
   selectionBackground: '#B36539BF',
-  widgetBorder: '#555555'
+  widgetBorder: '#555555',
 } as const;
 
 type MonacoEnvironmentGlobal = typeof globalThis & {
@@ -29,9 +29,9 @@ type MonacoEnvironmentGlobal = typeof globalThis & {
 (self as MonacoEnvironmentGlobal).MonacoEnvironment = {
   getWorker: () => {
     return new Worker(new URL('monaco-editor/esm/vs/editor/editor.worker.js', import.meta.url), {
-      type: 'module'
+      type: 'module',
     });
-  }
+  },
 };
 
 const sourceTheme: monaco.editor.IStandaloneThemeData = {
@@ -45,7 +45,7 @@ const sourceTheme: monaco.editor.IStandaloneThemeData = {
     { token: 'number', foreground: 'FF628C' },
     { token: 'string', foreground: 'FF628C' },
     { token: 'type', foreground: 'FFEE80' },
-    { token: 'variable', foreground: 'CCCCCC' }
+    { token: 'variable', foreground: 'CCCCCC' },
   ],
   colors: {
     'editor.background': aceSourceColors.editorBackground,
@@ -78,8 +78,8 @@ const sourceTheme: monaco.editor.IStandaloneThemeData = {
     'editorSuggestWidgetStatus.foreground': '#CED9E0',
     'scrollbarSlider.background': '#6B839A66',
     'scrollbarSlider.hoverBackground': '#6B839A99',
-    'scrollbarSlider.activeBackground': '#6B839ACC'
-  }
+    'scrollbarSlider.activeBackground': '#6B839ACC',
+  },
 };
 
 monaco.editor.defineTheme(SOURCE_MONACO_THEME, sourceTheme);

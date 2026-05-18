@@ -8,5 +8,5 @@ export const publicFlags: FeatureFlag<any>[] = [
   flagConductorEnable,
   flagDirectoryLanguageUrl,
   flagDirectoryPluginUrl,
-  flagMonacoEditorEnable
+  flagMonacoEditorEnable,
 ];

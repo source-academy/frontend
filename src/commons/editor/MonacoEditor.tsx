@@ -18,7 +18,7 @@ const languageByExtension: Record<string, string> = {
   jsx: 'javascript',
   py: 'python',
   ts: 'typescript',
-  tsx: 'typescript'
+  tsx: 'typescript',
 };
 
 const getLanguage = ({ filePath, mode }: Pick<EditorProps, 'filePath' | 'mode'>): string => {
@@ -37,7 +37,7 @@ const MonacoEditor: React.FC<EditorProps> = props => {
       props.handleUpdateHasUnsavedChanges?.(true);
       props.onChange?.(newValue, event);
     },
-    [props]
+    [props],
   );
 
   return (
