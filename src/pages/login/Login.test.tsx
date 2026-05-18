@@ -22,7 +22,7 @@ vi.mock('../../commons/utils/Constants', () => {
   return {
     __esModule: true,
     default: {
-      otherAuthProviders: new Map([['luminus', { name: 'LumiNUS' }]]),
+      defaultAuthProviders: new Map([['luminus', { name: 'LumiNUS' }]]),
       defaultSourceChapter: 4,
       defaultSourceVariant: 'default',
     },
