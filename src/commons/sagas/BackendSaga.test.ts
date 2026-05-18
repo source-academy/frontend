@@ -285,6 +285,7 @@ describe('Test FETCH_AUTH action', () => {
     endpoint: `https://test/?client_id=${clientId}`,
     isDefault: true,
     type: AuthProviderType.OAUTH2,
+    screen: 'default',
   });
   const redirectUrl = computeFrontendRedirectUri(providerId);
 
