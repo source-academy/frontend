@@ -15,7 +15,7 @@ const nusProviders = [...Constants.nusAuthProviders.entries()].map(([id, { name 
 }));
 
 const NUS_LOGO = '/nus_logo.png';
-const BLUE_BG = '/nus_login_bg.svg';
+const BLUE_BG = '/nus_login_background.svg';
 
 function NusLogin() {
   const dispatch = useDispatch();
