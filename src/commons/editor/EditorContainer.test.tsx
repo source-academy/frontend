@@ -3,14 +3,14 @@ import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import {
   defaultWorkspaceSettings,
-  WorkspaceSettingsContext
+  WorkspaceSettingsContext,
 } from 'src/commons/WorkspaceSettingsContext';
 import { flagMonacoEditorEnable } from 'src/features/monaco/flagMonacoEditorEnable';
-import { vi } from 'vitest';
+import { expect, test, vi } from 'vitest';
 
-import EditorContainer, { EditorContainerProps } from '../EditorContainer';
+import EditorContainer, { type EditorContainerProps } from './EditorContainer';
 
-vi.mock('../MonacoEditor', () => ({
+vi.mock('./MonacoEditor', () => ({
   default: (props: any) => (
     <textarea
       data-testid="MonacoEditorMock"
@@ -18,7 +18,7 @@ vi.mock('../MonacoEditor', () => ({
       readOnly={props.sessionDetails?.readOnly ?? false}
       value={props.editorValue}
     />
-  )
+  ),
 }));
 
 const createProps = (overrides: Partial<EditorContainerProps> = {}): EditorContainerProps => ({
@@ -30,8 +30,8 @@ const createProps = (overrides: Partial<EditorContainerProps> = {}): EditorConta
       editorTabIndex: 0,
       editorValue: 'const x = 1;',
       filePath: '/program.js',
-      highlightedLines: []
-    }
+      highlightedLines: [],
+    },
   ],
   editorVariant: 'normal',
   handleDeclarationNavigate: () => {},
@@ -44,17 +44,17 @@ const createProps = (overrides: Partial<EditorContainerProps> = {}): EditorConta
   removeEditorTabByIndex: () => {},
   sessionDetails: null,
   setActiveEditorTabIndex: () => {},
-  ...overrides
+  ...overrides,
 });
 
 const renderEditorContainer = (
   props: EditorContainerProps,
-  featureFlags: Record<string, any> = {}
+  featureFlags: Record<string, any> = {},
 ) => {
   const store = mockInitialStore({
     featureFlags: {
-      modifiedFlags: featureFlags
-    }
+      modifiedFlags: featureFlags,
+    },
   });
 
   return render(
@@ -62,7 +62,7 @@ const renderEditorContainer = (
       <WorkspaceSettingsContext.Provider value={[defaultWorkspaceSettings, () => {}]}>
         <EditorContainer {...props} />
       </WorkspaceSettingsContext.Provider>
-    </Provider>
+    </Provider>,
   );
 };
 
@@ -74,7 +74,7 @@ test('EditorContainer renders Ace editor path when Monaco flag is off', () => {
 
 test('EditorContainer renders Monaco editor path when Monaco flag is on', async () => {
   renderEditorContainer(createProps(), {
-    [flagMonacoEditorEnable.flagName]: true
+    [flagMonacoEditorEnable.flagName]: true,
   });
   expect(await screen.findByTestId('MonacoEditorMock')).toBeTruthy();
 });
@@ -83,15 +83,15 @@ test('Monaco editor path forwards value changes with the active editor tab index
   const handleEditorValueChange = vi.fn();
   renderEditorContainer(
     createProps({
-      handleEditorValueChange
+      handleEditorValueChange,
     }),
     {
-      [flagMonacoEditorEnable.flagName]: true
-    }
+      [flagMonacoEditorEnable.flagName]: true,
+    },
   );
 
   fireEvent.change(await screen.findByTestId('MonacoEditorMock'), {
-    target: { value: 'const y = 2;' }
+    target: { value: 'const y = 2;' },
   });
 
   expect(handleEditorValueChange).toHaveBeenCalledWith(0, 'const y = 2;');

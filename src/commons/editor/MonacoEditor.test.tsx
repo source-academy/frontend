@@ -1,13 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
+import { expect, test, vi } from 'vitest';
 
-import { EditorProps } from '../Editor';
-import MonacoEditor from '../MonacoEditor';
+import type { EditorProps } from './Editor';
+import MonacoEditor from './MonacoEditor';
 
 vi.mock('monaco-editor', () => ({
   editor: {
-    defineTheme: vi.fn()
-  }
+    defineTheme: vi.fn(),
+  },
 }));
 
 vi.mock('@monaco-editor/react', () => ({
@@ -21,8 +21,8 @@ vi.mock('@monaco-editor/react', () => ({
     />
   ),
   loader: {
-    config: vi.fn()
-  }
+    config: vi.fn(),
+  },
 }));
 
 const createProps = (overrides: Partial<EditorProps> = {}): EditorProps => ({
@@ -38,7 +38,7 @@ const createProps = (overrides: Partial<EditorProps> = {}): EditorProps => ({
   highlightedLines: [],
   isEditorAutorun: false,
   sessionDetails: null,
-  ...overrides
+  ...overrides,
 });
 
 test('MonacoEditor renders the Monaco React editor wrapper', () => {
@@ -59,13 +59,13 @@ test('MonacoEditor forwards changes to workspace handlers', () => {
       {...createProps({
         handleEditorValueChange,
         handleUpdateHasUnsavedChanges,
-        onChange
+        onChange,
       })}
-    />
+    />,
   );
 
   fireEvent.change(screen.getByTestId('MonacoReactEditorMock'), {
-    target: { value: 'const y = 2;' }
+    target: { value: 'const y = 2;' },
   });
 
   expect(handleEditorValueChange).toHaveBeenCalledWith(0, 'const y = 2;');
@@ -80,10 +80,10 @@ test('MonacoEditor passes session readonly state to Monaco', () => {
         sessionDetails: {
           docId: 'doc-id',
           owner: false,
-          readOnly: true
-        }
+          readOnly: true,
+        },
       })}
-    />
+    />,
   );
 
   expect(screen.getByTestId('MonacoReactEditorMock').hasAttribute('readonly')).toBe(true);
