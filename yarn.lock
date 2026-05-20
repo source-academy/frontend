@@ -5,23 +5,23 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@aaroon/workbox-rspack-plugin@npm:^0.3.2":
-  version: 0.3.3
-  resolution: "@aaroon/workbox-rspack-plugin@npm:0.3.3"
+"@aaroon/workbox-rspack-plugin@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@aaroon/workbox-rspack-plugin@npm:1.0.0"
   dependencies:
     fast-json-stable-stringify: "npm:^2.1.0"
     pathe: "npm:^1.1.2"
     pretty-bytes: "npm:^6.1.1"
     workbox-build: "npm:^7.4.0"
   peerDependencies:
-    "@rsbuild/core": ">=0.4.11"
-    "@rspack/core": ">=0.5.6"
+    "@rsbuild/core": ^1.0.0 || ^2.0.0
+    "@rspack/core": ^1.0.0 || ^2.0.0
   peerDependenciesMeta:
     "@rsbuild/core":
       optional: true
     "@rspack/core":
       optional: true
-  checksum: 10c0/e73d8552e160a589540a493216af02c56dd6fb537138ae94286f56212da99a4cf32fea0d7fa6f01220062c91205c6bb2a49f8a52943217488d77f508c42ddd97
+  checksum: 10c0/2bf407770ac7bb9441ac8c1e76029011ee3e11759bba9d6695373136745b585a3f77a6e2d6740f607ef76bc28cdff0c4a0079b1d611abbb0e4736222a7ddd136
   languageName: node
   linkType: hard
 
@@ -6969,7 +6969,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "frontend@workspace:."
   dependencies:
-    "@aaroon/workbox-rspack-plugin": "npm:^0.3.2"
+    "@aaroon/workbox-rspack-plugin": "npm:^1.0.0"
     "@babel/core": "npm:^7.24.5"
     "@babel/plugin-proposal-private-property-in-object": "npm:^7.21.11"
     "@babel/preset-typescript": "npm:^7.24.1"
