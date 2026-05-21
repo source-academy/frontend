@@ -13,7 +13,7 @@ type Props = {
 const AssignEntriesButton: React.FC<Props> = ({
   handleAssignEntriesForVoting,
   assessmentId,
-  isVotingPublished
+  isVotingPublished,
 }) => {
   const [confirmAssignEntries, setConfirmAssignEntries] = useState(false);
 
@@ -47,10 +47,10 @@ const AssignEntriesButton: React.FC<Props> = ({
             Are you sure you want to <b>{isVotingPublished ? 're-assign' : 'assign'} entries?</b>
           </p>
           <ButtonGroup>
-            <Button small intent="success" onClick={handleConfirmAssign}>
+            <Button size="small" intent="success" onClick={handleConfirmAssign}>
               Assign
             </Button>
-            <Button small intent="danger" onClick={handleCancelAssign}>
+            <Button size="small" intent="danger" onClick={handleCancelAssign}>
               Cancel
             </Button>
           </ButtonGroup>

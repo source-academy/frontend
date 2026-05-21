@@ -1,4 +1,4 @@
-import { TaskDetail } from '../task/GameTaskTypes';
+import type { TaskDetail } from '../task/GameTaskTypes';
 import StringUtils from '../utils/StringUtils';
 import Parser from './Parser';
 
@@ -32,7 +32,7 @@ export default class TasksParser {
         taskId: taskId,
         title: title,
         description: desc,
-        visible: false
+        visible: false,
       };
       tasks.push(newTask);
     });

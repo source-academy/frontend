@@ -34,9 +34,9 @@ export const getShortestUniqueFilePaths = (originalFilePaths: string[]): string[
       ...segments,
       // It is necessary to remove empty segments to deal with the very first '/' in
       // file paths.
-      [filePath]: filePath.split(pathlib.sep).filter(segment => segment !== '')
+      [filePath]: filePath.split(pathlib.sep).filter(segment => segment !== ''),
     }),
-    {}
+    {},
   );
 
   for (
@@ -49,7 +49,7 @@ export const getShortestUniqueFilePaths = (originalFilePaths: string[]): string[
     // shortened file path. We then store the mapping from the shortened file path
     // to any original file path which transforms into it.
     const shortenedToOriginalFilePaths: Record<string, string[]> = Object.entries(
-      filePathSegments
+      filePathSegments,
     ).reduce<typeof shortenedToOriginalFilePaths>(
       (filePaths, [originalFilePath, filePathSegments]) => {
         // Note that if there are fewer path segments than the number being sliced,
@@ -57,10 +57,10 @@ export const getShortestUniqueFilePaths = (originalFilePaths: string[]): string[
         const shortenedFilePath = '/' + filePathSegments.slice(-numOfPathSegments).join('/');
         return {
           ...filePaths,
-          [shortenedFilePath]: (filePaths[shortenedFilePath] ?? []).concat(originalFilePath)
+          [shortenedFilePath]: (filePaths[shortenedFilePath] ?? []).concat(originalFilePath),
         };
       },
-      {}
+      {},
     );
     // Each shortened file path that only has a single corresponding original file
     // path is added to the unique shortened file paths record and their entry in
@@ -75,7 +75,7 @@ export const getShortestUniqueFilePaths = (originalFilePaths: string[]): string[
         originalToUniqueShortenedFilePaths[originalFilePath] = shortenedFilePath;
         // Remove the file path's segments from the next iteration.
         delete filePathSegments[originalFilePath];
-      }
+      },
     );
   }
 

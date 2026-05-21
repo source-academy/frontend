@@ -7,7 +7,7 @@ const translations = {
   mainClass: '主类必须命名为 Main 并作为 Main.class 上传。',
   chooseFiles: '选择文件...',
   filesUploaded: '文件已上传。',
-  label: '上传文件'
+  label: '上传文件',
 };
 
 export default translations;

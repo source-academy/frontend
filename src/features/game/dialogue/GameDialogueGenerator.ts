@@ -1,5 +1,5 @@
 import GameActionConditionChecker from '../action/GameActionConditionChecker';
-import { DialogueLine, DialogueObject, PartName } from './GameDialogueTypes';
+import type { DialogueLine, DialogueObject, PartName } from './GameDialogueTypes';
 
 /**
  * Class for keeping track of which line, action, and speaker has to be shown next
@@ -31,7 +31,7 @@ export default class DialogueGenerator {
     if (dialogueLine.goto) {
       let currPart: string | null = dialogueLine.goto.part;
       const conditionCheck = await GameActionConditionChecker.checkAllConditionsSatisfied(
-        dialogueLine.goto.conditions
+        dialogueLine.goto.conditions,
       );
       if (!conditionCheck) {
         currPart = dialogueLine.goto.altPart;
@@ -57,5 +57,13 @@ export default class DialogueGenerator {
   public updateCurrPart(goto: PartName) {
     this.currPart = goto;
     this.currLineNum = 0;
+  }
+
+  public peekNextLine(): DialogueLine | null {
+    const lines = this.dialogueContent.get(this.currPart);
+    if (!lines || !lines[this.currLineNum]) {
+      return null;
+    }
+    return lines[this.currLineNum];
   }
 }

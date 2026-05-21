@@ -1,15 +1,15 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { FSModule } from 'browserfs/dist/node/core/FS';
+import type { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
-import React from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import classes from 'src/styles/FileSystemView.module.scss';
 
 import { rmdirRecursively } from '../fileSystem/utils';
 import { showSimpleConfirmDialog, showSimpleErrorDialog } from '../utils/DialogHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
@@ -31,15 +31,15 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
   basePath,
   directoryName,
   indentationLevel,
-  refreshParentDirectory
+  refreshParentDirectory,
 }) => {
   const fullPath = path.join(basePath, directoryName);
 
-  const [isExpanded, setIsExpanded] = React.useState(false);
-  const [isEditing, setIsEditing] = React.useState(false);
-  const [isAddingNewFile, setIsAddingNewFile] = React.useState(false);
-  const [isAddingNewDirectory, setIsAddingNewDirectory] = React.useState(false);
-  const [fileSystemViewListKey, setFileSystemViewListKey] = React.useState(0);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isAddingNewFile, setIsAddingNewFile] = useState(false);
+  const [isAddingNewDirectory, setIsAddingNewDirectory] = useState(false);
+  const [fileSystemViewListKey, setFileSystemViewListKey] = useState(0);
   const dispatch = useDispatch();
 
   const toggleIsExpanded = () => {
@@ -72,7 +72,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
       ),
       positiveIntent: 'danger',
       positiveLabel: 'Proceed',
-      negativeLabel: 'Cancel'
+      negativeLabel: 'Cancel',
     }).then((shouldProceed: boolean) => {
       if (!shouldProceed) {
         return;
@@ -101,7 +101,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
               different name.
             </p>
           ),
-          label: 'OK'
+          label: 'OK',
         }).then(() => {});
         return;
       }
@@ -129,7 +129,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
               choose a different name.
             </p>
           ),
-          label: 'OK'
+          label: 'OK',
         }).then(() => {});
         return;
       }

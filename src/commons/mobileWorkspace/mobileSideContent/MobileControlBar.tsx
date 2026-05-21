@@ -1,7 +1,7 @@
 import { Button, Popover } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 
-import { ControlBarProps } from '../../controlBar/ControlBar';
+import type { ControlBarProps } from '../../controlBar/ControlBar';
 
 const MobileControlBar: React.FC<ControlBarProps> = props => {
   const controlBarMenu = (
@@ -14,7 +14,7 @@ const MobileControlBar: React.FC<ControlBarProps> = props => {
 
   return (
     <Popover content={controlBarMenu} autoFocus={false}>
-      <Button minimal icon={IconNames.COG} className="mobile-control-bar-button" />
+      <Button variant="minimal" icon={IconNames.COG} className="mobile-control-bar-button" />
     </Popover>
   );
 };

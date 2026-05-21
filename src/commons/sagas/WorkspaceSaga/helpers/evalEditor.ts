@@ -1,7 +1,8 @@
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { Variant } from 'js-slang/dist/langs';
-import { call, put, select, StrictEffect } from 'redux-saga/effects';
+import { call, put, select, type StrictEffect } from 'redux-saga/effects';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
+import CseMachine from 'src/features/cseMachine/CseMachine';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import type { DeviceSession } from '../../../../features/remoteExecution/RemoteExecutionTypes';
@@ -18,21 +19,21 @@ import { evalCodeSaga } from './evalCode';
 import { insertDebuggerStatements } from './insertDebuggerStatements';
 
 export function* evalEditorSaga(
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
 ): Generator<StrictEffect, void, any> {
   const {
     activeEditorTabIndex,
     programPrependValue: prepend,
     editorTabs,
     execTime,
-    isFolderModeEnabled
+    isFolderModeEnabled,
   } = yield* selectWorkspace(workspaceLocation);
 
   const [fileSystem, remoteExecutionSession]: [FSModule, DeviceSession | undefined] = yield select(
     (state: OverallState) => [
       state.fileSystem.inBrowserFileSystem,
-      state.session.remoteExecutionSession
-    ]
+      state.session.remoteExecutionSession,
+    ],
   );
 
   if (activeEditorTabIndex === null) {
@@ -45,7 +46,7 @@ export function* evalEditorSaga(
     files = yield call(retrieveFilesInWorkspaceAsRecord, workspaceLocation, fileSystem);
   } else {
     files = {
-      [defaultFilePath]: editorTabs[activeEditorTabIndex].value
+      [defaultFilePath]: editorTabs[activeEditorTabIndex].value,
     };
   }
   const entrypointFilePath = editorTabs[activeEditorTabIndex].filePath ?? defaultFilePath;
@@ -60,8 +61,13 @@ export function* evalEditorSaga(
     yield* clearContext(workspaceLocation, entrypointCode);
     yield put(actions.clearReplOutput(workspaceLocation));
     const context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context
+      (state: OverallState) => state.workspaces[workspaceLocation].context,
     );
+
+    if (context.executionMethod === 'cse-machine') {
+      CseMachine.resetArrowOriginFilters();
+      CseMachine.clearRenderedLayouts();
+    }
 
     // Insert debugger statements at the lines of the program with a breakpoint.
     for (const editorTab of editorTabs) {
@@ -72,7 +78,7 @@ export function* evalEditorSaga(
         workspaceLocation,
         code,
         breakpoints,
-        context
+        context,
       );
     }
 
@@ -81,7 +87,7 @@ export function* evalEditorSaga(
       const elevatedContext = makeElevatedContext(context);
       const prependFilePath = '/prepend.js';
       const prependFiles = {
-        [prependFilePath]: prepend
+        [prependFilePath]: prepend,
       };
       if (context.variant !== Variant.TYPED) {
         yield call(
@@ -91,7 +97,7 @@ export function* evalEditorSaga(
           elevatedContext,
           execTime,
           EVAL_SILENT,
-          workspaceLocation
+          workspaceLocation,
         );
       }
 
@@ -112,7 +118,7 @@ export function* evalEditorSaga(
       context,
       execTime,
       WorkspaceActions.evalEditor.type,
-      workspaceLocation
+      workspaceLocation,
     );
   }
 }

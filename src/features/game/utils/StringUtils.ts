@@ -47,7 +47,7 @@ export default class StringUtils {
    */
   public static mapByHeader(
     lines: string[],
-    isHeaderFunction: (line: string) => boolean
+    isHeaderFunction: (line: string) => boolean,
   ): Map<string, string[]> {
     const map = new Map<string, string[]>();
     if (!isHeaderFunction(lines[0])) {
@@ -110,7 +110,7 @@ export default class StringUtils {
   public static splitToLines(text: string): string[] {
     return text
       .split('\n')
-      .map(line => line.trimRight())
+      .map(line => line.trimEnd())
       .filter(line => line !== '');
   }
 
@@ -126,7 +126,7 @@ export default class StringUtils {
   public static splitToLinesAndRemoveComments(text: string): string[] {
     return this.removeMultiLineComments(text.split('\n'), '/*', '*/')
       .map(line => this.removeSingleLineComment(line, '//'))
-      .map(line => line.trimRight())
+      .map(line => line.trimEnd())
       .filter(line => line !== '');
   }
 
@@ -149,7 +149,7 @@ export default class StringUtils {
   public static removeSingleLineComment(
     text: string,
     commentChars: string,
-    removeAfter: boolean = true
+    removeAfter: boolean = true,
   ) {
     const commentIndex = text.indexOf(commentChars);
     return commentIndex === -1
@@ -189,7 +189,7 @@ export default class StringUtils {
   public static removeMultiLineComments(
     lines: string[],
     openCommentChars: string,
-    closeCommentChars: string
+    closeCommentChars: string,
   ): string[] {
     const newLines = [];
     let commentOpen = false;

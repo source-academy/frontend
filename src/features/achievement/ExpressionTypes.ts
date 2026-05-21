@@ -19,7 +19,7 @@ type Conditional =
 export enum EventTypes {
   ACHIEVEMENT = 'achievement',
   ASSESSMENT_GRADING = 'assessment-grading',
-  ASSESSMENT_SUBMISSION = 'assessment-submission'
+  ASSESSMENT_SUBMISSION = 'assessment-submission',
 }
 
 interface ConditionalBase {
@@ -49,13 +49,13 @@ interface AssessmentSubmissionConditional extends ConditionalBase {
 export function AND(...operands: BooleanExpression[]): BooleanExpression {
   return {
     type: 'AND',
-    operands
+    operands,
   };
 }
 
 export function OR(...operands: BooleanExpression[]): BooleanExpression {
   return {
     type: 'OR',
-    operands
+    operands,
   };
 }

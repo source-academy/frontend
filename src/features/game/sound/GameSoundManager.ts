@@ -1,7 +1,7 @@
-import { AssetMap, SoundAsset } from '../assets/AssetsTypes';
+import type { AssetMap, SoundAsset } from '../assets/AssetsTypes';
 import { Constants } from '../commons/CommonConstants';
-import { AssetKey, AssetPath } from '../commons/CommonTypes';
-import { SettingsJson } from '../save/GameSaveTypes';
+import type { AssetKey, AssetPath } from '../commons/CommonTypes';
+import type { SettingsJson } from '../save/GameSaveTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { mandatory, toS3Path } from '../utils/GameUtils';
 import { bgMusicFadeDuration, musicFadeOutTween } from './GameSoundTypes';
@@ -116,7 +116,7 @@ class GameSoundManager {
       const vol = soundAsset.config.volume !== undefined ? soundAsset.config.volume : 1;
       this.getBaseSoundManager().play(soundAsset.key, {
         ...soundAsset.config,
-        volume: vol * this.sfxVol
+        volume: vol * this.sfxVol,
       });
     }
   }
@@ -164,7 +164,7 @@ class GameSoundManager {
     try {
       this.currBgMusic = this.getBaseSoundManager().add(soundAsset.key, {
         ...soundAsset.config,
-        volume: bgmVol * this.bgmVol
+        volume: bgmVol * this.bgmVol,
       }) as Phaser.Sound.WebAudioSound;
       this.currBgMusicKey = soundAsset.key;
 
@@ -183,12 +183,12 @@ class GameSoundManager {
    */
   private fadeOutAndDestroyMusic(
     sound: Phaser.Sound.BaseSound,
-    fadeDuration: number = bgMusicFadeDuration
+    fadeDuration: number = bgMusicFadeDuration,
   ) {
     this.getCurrentScene().tweens.add({
       targets: sound,
       ...musicFadeOutTween,
-      duration: fadeDuration
+      duration: fadeDuration,
     });
 
     // TODO: fix `TypeError: Cannot read property 'disconnect' of null` error

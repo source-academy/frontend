@@ -1,14 +1,14 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { FSModule } from 'browserfs/dist/node/core/FS';
+import type { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
-import React from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
@@ -28,9 +28,9 @@ const FileSystemViewFileNode: React.FC<Props> = ({
   basePath,
   fileName,
   indentationLevel,
-  refreshDirectory
+  refreshDirectory,
 }) => {
-  const [isEditing, setIsEditing] = React.useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const dispatch = useDispatch();
 
   const fullPath = path.join(basePath, fileName);
@@ -63,7 +63,7 @@ const FileSystemViewFileNode: React.FC<Props> = ({
       ),
       positiveIntent: 'danger',
       positiveLabel: 'Proceed',
-      negativeLabel: 'Cancel'
+      negativeLabel: 'Cancel',
     }).then((shouldProceed: boolean) => {
       if (!shouldProceed) {
         return;

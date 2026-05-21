@@ -1,5 +1,5 @@
 import { Config } from '../../CseMachineConfig';
-import { StepsArray } from '../../CseMachineTypes';
+import type { StepsArray } from '../../CseMachineTypes';
 import { ArrayUnit } from '../ArrayUnit';
 import { ArrayValue } from '../values/ArrayValue';
 import { ContValue } from '../values/ContValue';
@@ -19,13 +19,34 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
     this.isLive = this.source.parent.isEnclosingFrameLive();
   }
 
+  protected getOriginFilterKey() {
+    return 'array' as const;
+  }
+
+  protected getSourceFrameBounds() {
+    return {
+      x: this.source.x(),
+      y: this.source.y(),
+      width: this.source.width(),
+      height: this.source.height(),
+    };
+  }
+
+  protected getSourceFrameSegmentPath(): string {
+    const rect = this.getSourceFrameBounds();
+    if (!rect) {
+      return '';
+    }
+    return this.getPathPrefixUntilFirstBoundaryExit(rect);
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
     if (!to) return [];
 
     const steps: StepsArray = [
-      (x, y) => [x + Config.DataUnitWidth / 2, y + Config.DataUnitHeight / 2]
+      (x, y) => [x + Config.DataUnitWidth / 2, y + Config.DataUnitHeight / 2],
     ];
 
     if (to instanceof FnValue || to instanceof GlobalFnValue || to instanceof ContValue) {
@@ -51,7 +72,7 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
         // Straight arrow that points directly to the target
         steps.push(() => [
           to.x() + Config.DataUnitWidth / 2,
-          to.y() + (from.y() > to.y() ? Config.DataUnitHeight : 0)
+          to.y() + (from.y() > to.y() ? Config.DataUnitHeight : 0),
         ]);
       }
     }

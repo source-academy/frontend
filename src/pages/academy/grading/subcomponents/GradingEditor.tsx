@@ -4,30 +4,30 @@ import {
   Divider,
   H3,
   Icon,
-  IconName,
+  type IconName,
   Intent,
   NumericInput,
   Position,
-  Pre
+  Pre,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useEffect, useMemo, useState } from 'react';
-import ReactMde, { ReactMdeProps } from 'react-mde';
+import { useEffect, useMemo, useState } from 'react';
+import type { ReactMdeProps } from 'react-mde';
+import ReactMde from 'react-mde';
 import { useDispatch } from 'react-redux';
-import { AutogradingResult, LLMPrompt } from 'src/commons/assessment/AssessmentTypes';
+import type { AutogradingResult, LLMPrompt } from 'src/commons/assessment/AssessmentTypes';
 import { useTokens } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../../../../commons/application/actions/SessionActions';
 import ControlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
 import { Prompt } from '../../../../commons/ReactRouterPrompt';
-import { postGenerateComments } from '../../../../commons/sagas/RequestsSaga';
-import { saveFinalComment } from '../../../../commons/sagas/RequestsSaga';
+import { postGenerateComments, saveFinalComment } from '../../../../commons/sagas/RequestsSaga';
 import { getPrettyDate } from '../../../../commons/utils/DateHelper';
 import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper';
 import {
   showSuccessMessage,
-  showWarningMessage
+  showWarningMessage,
 } from '../../../../commons/utils/notifications/NotificationsHelper';
 import { convertParamToInt } from '../../../../commons/utils/ParamParseHelper';
 import GradingCommentSelector from './GradingCommentSelector';
@@ -36,7 +36,7 @@ type GradingSaveFunction = (
   submissionId: number,
   questionId: number,
   xpAdjustment: number | undefined,
-  comments?: string
+  comments?: string,
 ) => void;
 
 type Props = {
@@ -71,13 +71,13 @@ const GradingEditor: React.FC<Props> = props => {
         handleGradingSave: (...args) => dispatch(SessionActions.submitGrading(...args)),
         handleGradingSaveAndContinue: (...args) =>
           dispatch(SessionActions.submitGradingAndContinue(...args)),
-        handleReautogradeAnswer: (...args) => dispatch(SessionActions.reautogradeAnswer(...args))
+        handleReautogradeAnswer: (...args) => dispatch(SessionActions.reautogradeAnswer(...args)),
       }) satisfies {
         handleGradingSave: GradingSaveFunction;
         handleGradingSaveAndContinue: GradingSaveFunction;
         handleReautogradeAnswer: (submissionId: number, questionId: number) => void;
       },
-    [dispatch]
+    [dispatch],
   );
 
   /**
@@ -87,7 +87,7 @@ const GradingEditor: React.FC<Props> = props => {
    * so as to allow input such as the '-' character.
    */
   const [xpAdjustmentInput, setXpAdjustmentInput] = useState<string | null>(
-    props.xpAdjustment.toString()
+    props.xpAdjustment.toString(),
   );
   /**
    * The text in the react-mde editor, that will be saved
@@ -170,7 +170,7 @@ const GradingEditor: React.FC<Props> = props => {
       await postSaveFinalComment(editorValue);
       if (xp < 0 || xp > props.maxXp) {
         showWarningMessage(
-          `XP ${xp.toString()} is out of bounds. Maximum xp is ${props.maxXp.toString()}.`
+          `XP ${xp.toString()} is out of bounds. Maximum xp is ${props.maxXp.toString()}.`,
         );
         return;
       } else {
@@ -186,7 +186,7 @@ const GradingEditor: React.FC<Props> = props => {
     submissionId: number,
     questionId: number,
     xpAdjustment: number | undefined,
-    comments?: string
+    comments?: string,
   ) => {
     const callback = (): void => {
       handleGradingSaveAndContinue(submissionId, questionId, xpAdjustment, comments!);
@@ -205,7 +205,7 @@ const GradingEditor: React.FC<Props> = props => {
         </>
       ),
       positiveLabel: 'Reautograde',
-      positiveIntent: 'danger'
+      positiveIntent: 'danger',
     });
     if (confirm) {
       handleReautogradeAnswer(props.submissionId, props.questionId);
@@ -252,7 +252,7 @@ const GradingEditor: React.FC<Props> = props => {
         strikethrough
         tasklists
         openLinksInNewWindow
-      />
+      />,
     );
 
   const copyComposedPromptToClipboard = () => {
@@ -261,7 +261,7 @@ const GradingEditor: React.FC<Props> = props => {
         .map(prompt => {
           return `**${prompt.role} Prompt**\n\n${prompt.content}`;
         })
-        .join('\n\n')
+        .join('\n\n'),
     );
     showSuccessMessage('Composed prompt copied to clipboard!', 2000);
   };
@@ -272,17 +272,17 @@ const GradingEditor: React.FC<Props> = props => {
   const saveButtonOpts = {
     intent: hasUnsavedChanges || isNewQuestion ? Intent.WARNING : Intent.NONE,
     minimal: !hasUnsavedChanges && !isNewQuestion,
-    className: gradingEditorButtonClass
+    className: gradingEditorButtonClass,
   };
   const discardButtonOpts = {
     intent: hasUnsavedChanges ? Intent.DANGER : Intent.NONE,
     minimal: !hasUnsavedChanges,
-    className: gradingEditorButtonClass
+    className: gradingEditorButtonClass,
   };
   const saveAndContinueButtonOpts = {
     intent: hasUnsavedChanges || isNewQuestion ? Intent.SUCCESS : Intent.NONE,
     minimal: !hasUnsavedChanges && !isNewQuestion,
-    className: gradingEditorButtonClass
+    className: gradingEditorButtonClass,
   };
   const onTabChange = (tab: ReactMdeProps['selectedTab']) => setSelectedTab(tab);
 
@@ -325,7 +325,12 @@ const GradingEditor: React.FC<Props> = props => {
             <div>Autograder XP:</div>
             <div>
               {`${props.initialXp} / ${props.maxXp}`}{' '}
-              <Button icon="refresh" small minimal onClick={onClickReautogradeAnswer}></Button>
+              <Button
+                icon="refresh"
+                size="small"
+                variant="minimal"
+                onClick={onClickReautogradeAnswer}
+              />
             </div>
           </div>
           <div className="xp-adjustment">
@@ -336,7 +341,7 @@ const GradingEditor: React.FC<Props> = props => {
                 onValueChange={onXpAdjustmentInputChange}
                 value={xpAdjustmentInput || ''}
                 buttonPosition={Position.RIGHT}
-                fill={true}
+                fill
                 placeholder={xpPlaceholder}
                 intent={totalXp < 0 || totalXp > props.maxXp ? Intent.DANGER : Intent.NONE}
                 min={0 - props.initialXp}
@@ -484,7 +489,7 @@ const mdeToBlueprintIconMap: Readonly<Record<string, readonly [IconName, string?
   image: [IconNames.MEDIA, 'Image'],
   'unordered-list': [IconNames.UNGROUP_OBJECTS, 'Bullets'],
   'ordered-list': [IconNames.NUMBERED_LIST, 'Numbering'],
-  'checked-list': [IconNames.SQUARE, 'Checkboxes']
+  'checked-list': [IconNames.SQUARE, 'Checkboxes'],
 } as const;
 
 /**
@@ -516,7 +521,7 @@ const mdeToBlueprintIconMapping = (name: string): { iconName: IconName; title?: 
     default:
       // For unknown icons, a question mark icon is returned
       return {
-        iconName: IconNames.HELP
+        iconName: IconNames.HELP,
       };
   }
 };

@@ -1,11 +1,11 @@
 import FontAssets from '../../assets/FontAssets';
 import { screenCenter } from '../../commons/CommonConstants';
-import { BitmapFontStyle } from '../../commons/CommonTypes';
+import type { BitmapFontStyle } from '../../commons/CommonTypes';
 
 export const transitionTextStyle: BitmapFontStyle = {
   key: FontAssets.alienCowsFont.key,
   size: 80,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 const tweenDuration = 1500;
@@ -17,13 +17,13 @@ const CheckpointConstants = {
   entryTween: {
     alpha: 1,
     duration: tweenDuration,
-    ease: 'Power2'
+    ease: 'Power2',
   },
   exitTween: {
     alpha: 0,
     duration: tweenDuration,
-    ease: 'Power2'
-  }
+    ease: 'Power2',
+  },
 };
 
 export default CheckpointConstants;

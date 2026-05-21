@@ -2,7 +2,7 @@ import Constants from '../utils/Constants';
 
 const protocolMap = Object.freeze({
   'http:': 'ws:',
-  'https:': 'wss:'
+  'https:': 'wss:',
 });
 
 export function getSessionUrl(sessionId: string, ws?: boolean): string {
@@ -22,7 +22,7 @@ export function getPlaygroundSessionUrl(sessionId: string): string {
 }
 
 export async function getDocInfoFromSessionId(
-  sessionId: string
+  sessionId: string,
 ): Promise<{ docId: string; defaultReadOnly: boolean } | null> {
   const resp = await fetch(getSessionUrl(sessionId));
 
@@ -34,17 +34,19 @@ export async function getDocInfoFromSessionId(
 }
 
 export async function createNewSession(
-  contents: string
+  contents: string,
 ): Promise<{ docId: string; sessionId: string }> {
   const resp = await fetch(Constants.sharedbBackendUrl, {
     method: 'POST',
     body: JSON.stringify({ contents }),
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json' },
   });
 
   if (!resp || !resp.ok) {
     throw new Error(
-      resp ? `Could not create new session: ${await resp.text()}` : 'Unknown error creating session'
+      resp
+        ? `Could not create new session: ${await resp.text()}`
+        : 'Unknown error creating session',
     );
   }
 
@@ -55,12 +57,12 @@ export async function changeDefaultEditable(sessionId: string, defaultReadOnly: 
   const resp = await fetch(getSessionUrl(sessionId), {
     method: 'PATCH',
     body: JSON.stringify({ defaultReadOnly }),
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json' },
   });
 
   if (!resp || !resp.ok) {
     throw new Error(
-      resp ? `Could not update session: ${await resp.text()}` : 'Unknown error updating session'
+      resp ? `Could not update session: ${await resp.text()}` : 'Unknown error updating session',
     );
   }
 

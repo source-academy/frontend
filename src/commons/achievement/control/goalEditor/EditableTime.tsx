@@ -1,7 +1,7 @@
 import { Button, Dialog, Tooltip } from '@blueprintjs/core';
-import { TimePicker } from '@blueprintjs/datetime';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { prettifyTime } from 'src/commons/achievement/utils/DateHelper';
+import { TimePicker } from 'src/commons/DateTimePickers';
 
 type Props = {
   type: string;
@@ -18,7 +18,7 @@ const EditableTime: React.FC<Props> = ({ type, time, changeTime }) => {
   return (
     <>
       <Tooltip content={hoverText}>
-        <Button minimal={true} onClick={toggleOpen} outlined={true}>{`${type}`}</Button>
+        <Button variant="outlined" onClick={toggleOpen}>{`${type}`}</Button>
       </Tooltip>
       <Dialog
         isCloseButtonShown={false}
@@ -28,11 +28,11 @@ const EditableTime: React.FC<Props> = ({ type, time, changeTime }) => {
           background: '#fff',
           maxWidth: 'max-content',
           padding: '0.25em',
-          textAlign: 'center'
+          textAlign: 'center',
         }}
         title={`${type}`}
       >
-        <TimePicker onChange={changeTime} showArrowButtons={true} value={time} />
+        <TimePicker onChange={changeTime} showArrowButtons value={time} />
         <Button onClick={() => changeTime(undefined)} text={`Remove ${type}`} />
       </Dialog>
     </>

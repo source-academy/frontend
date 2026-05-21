@@ -1,6 +1,5 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 const stringifyXp = (xp: number, isBonus: boolean) => {
   return (isBonus ? 'Total ' : '') + xp + ' XP';

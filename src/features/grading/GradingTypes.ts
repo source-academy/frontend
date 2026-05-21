@@ -1,6 +1,6 @@
-import { ColDef } from 'ag-grid-community';
+import type { ColDef } from 'ag-grid-community';
 
-import {
+import type {
   AssessmentStatus,
   AssessmentType,
   AutogradingResult,
@@ -8,9 +8,9 @@ import {
   MCQChoice,
   ProgressStatus,
   Question,
-  Testcase
+  Testcase,
 } from '../../commons/assessment/AssessmentTypes';
-import { Notification } from '../../commons/notificationBadge/NotificationBadgeTypes';
+import type { Notification } from '../../commons/notificationBadge/NotificationBadgeTypes';
 
 export enum ColumnFields {
   assessmentName = 'assessmentName',
@@ -20,7 +20,7 @@ export enum ColumnFields {
   groupName = 'groupName',
   progressStatus = 'progressStatus',
   xp = 'xp',
-  actionsIndex = 'actionsIndex'
+  actionsIndex = 'actionsIndex',
 }
 
 export type ColumnFieldsKeys = keyof typeof ColumnFields;
@@ -28,7 +28,7 @@ export type ColumnFieldsKeys = keyof typeof ColumnFields;
 export enum SortStates {
   ASC = 'sort-asc',
   DESC = 'sort-desc',
-  NONE = 'sort'
+  NONE = 'sort',
 }
 
 /**
@@ -119,7 +119,7 @@ export enum ColumnName {
   groupName = 'Group',
   progressStatus = 'Progress',
   xp = 'Raw XP (+Bonus)',
-  actionsIndex = 'Actions'
+  actionsIndex = 'Actions',
 }
 
 export type ColumnNameKeys = keyof typeof ColumnName;

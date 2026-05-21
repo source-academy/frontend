@@ -1,4 +1,4 @@
-import React from 'react';
+import { PureComponent } from 'react';
 import { Line } from 'react-konva';
 
 import { Config } from '../Config';
@@ -14,7 +14,7 @@ type NullProps = {
  *
  *  Used in conjunction with ArrayDrawable.
  */
-class NullDrawable extends React.PureComponent<NullProps> {
+class NullDrawable extends PureComponent<NullProps> {
   render() {
     return (
       <Line

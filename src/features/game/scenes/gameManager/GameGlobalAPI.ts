@@ -1,25 +1,27 @@
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 
-import { GameAction } from '../../action/GameActionTypes';
-import { SoundAsset } from '../../assets/AssetsTypes';
+import type { GameAction } from '../../action/GameActionTypes';
+import type { SoundAsset } from '../../assets/AssetsTypes';
 import { getAwardProp } from '../../awards/GameAwardsHelper';
-import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
-import { Character, SpeakerDetail } from '../../character/GameCharacterTypes';
-import { AssetKey, GamePosition, GameSize, ItemId } from '../../commons/CommonTypes';
-import { Dialogue } from '../../dialogue/GameDialogueTypes';
+import type { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
+import type { Character, SpeakerDetail } from '../../character/GameCharacterTypes';
+import type { AssetKey, ItemId } from '../../commons/CommonTypes';
+import { GamePosition, GameSize } from '../../commons/CommonTypes';
+import type { Dialogue } from '../../dialogue/GameDialogueTypes';
 import { displayMiniMessage } from '../../effects/MiniMessage';
 import { displayNotification } from '../../effects/Notification';
 import { promptWithChoices } from '../../effects/Prompt';
-import { Layer } from '../../layer/GameLayerTypes';
-import { AnyId, GameItemType, GameLocation, LocationId } from '../../location/GameMapTypes';
-import { GameMode } from '../../mode/GameModeTypes';
-import { ObjectProperty } from '../../objects/GameObjectTypes';
+import type { Layer } from '../../layer/GameLayerTypes';
+import type { AnyId, GameLocation, LocationId } from '../../location/GameMapTypes';
+import { GameItemType } from '../../location/GameMapTypes';
+import type { GameMode } from '../../mode/GameModeTypes';
+import type { ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
-import { Quiz } from '../../quiz/GameQuizType';
-import { SettingsJson } from '../../save/GameSaveTypes';
+import type { Quiz } from '../../quiz/GameQuizType';
+import type { SettingsJson } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
-import { StateObserver, UserStateType } from '../../state/GameStateTypes';
-import { TaskDetail } from '../../task/GameTaskTypes';
+import type { StateObserver, UserStateType } from '../../state/GameStateTypes';
+import type { TaskDetail } from '../../task/GameTaskTypes';
 import { courseId, mandatory } from '../../utils/GameUtils';
 import GameManager from './GameManager';
 
@@ -156,7 +158,7 @@ class GameGlobalAPI {
   public getAllActivatables() {
     return [
       ...this.getGameManager().getObjectManager().getActivatables(),
-      ...this.getGameManager().getBBoxManager().getActivatables()
+      ...this.getGameManager().getBBoxManager().getActivatables(),
     ];
   }
 
@@ -460,15 +462,15 @@ class GameGlobalAPI {
     const response = await promptWithChoices(
       GameGlobalAPI.getInstance().getGameManager(),
       `Are you ready for the challenge?`,
-      ['Yes', 'No']
+      ['Yes', 'No'],
     );
     if (response === 0) {
       const assessments = await getAssessmentOverviews(
-        SourceAcademyGame.getInstance().getAccountInfo()
+        SourceAcademyGame.getInstance().getAccountInfo(),
       );
       if (assessments) {
         const { id, type } = assessments.filter(
-          assessment => assessment.number === assessmentId
+          assessment => assessment.number === assessmentId,
         )[0];
         window.open(`/courses/${courseId()}/${type.toLowerCase()}/${id}/0`, 'blank');
         window.focus();
@@ -487,7 +489,7 @@ class GameGlobalAPI {
   public createCharacterSprite(
     characterId: ItemId,
     overrideExpression?: string,
-    overridePosition?: GamePosition
+    overridePosition?: GamePosition,
   ) {
     return this.getGameManager()
       .getCharacterManager()

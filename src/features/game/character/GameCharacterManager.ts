@@ -1,10 +1,11 @@
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
 import { screenSize } from '../commons/CommonConstants';
-import { GamePosition, ItemId } from '../commons/CommonTypes';
+import type { GamePosition, ItemId } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
-import { GameItemType, LocationId } from '../location/GameMapTypes';
-import { StateObserver } from '../state/GameStateTypes';
+import type { LocationId } from '../location/GameMapTypes';
+import { GameItemType } from '../location/GameMapTypes';
+import type { StateObserver } from '../state/GameStateTypes';
 import { resize } from '../utils/SpriteUtils';
 import CharConstants from './GameCharacterConstants';
 
@@ -28,7 +29,7 @@ export default class CharacterManager implements StateObserver {
   public renderCharacterLayerContainer(locationId: LocationId): void {
     const idsToRender = GameGlobalAPI.getInstance().getGameItemsInLocation(
       GameItemType.characters,
-      locationId
+      locationId,
     );
 
     // Refresh mapping
@@ -49,7 +50,7 @@ export default class CharacterManager implements StateObserver {
   public createCharacterSprite(
     characterId: ItemId,
     overrideExpression?: string,
-    overridePosition?: GamePosition
+    overridePosition?: GamePosition,
   ) {
     const character = GameGlobalAPI.getInstance().getCharacterById(characterId);
     const { defaultPosition, defaultExpression, expressions, scale } = character;
@@ -60,7 +61,7 @@ export default class CharacterManager implements StateObserver {
       GameGlobalAPI.getInstance().getGameManager(),
       characterXPosition,
       screenSize.y,
-      assetKey
+      assetKey,
     ).setOrigin(0.5, 1);
 
     resize(characterSprite, CharConstants.charWidth * scale);

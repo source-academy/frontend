@@ -2,19 +2,21 @@ import { FocusStyleManager } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useMediaQuery } from '@mantine/hooks';
 import { Ace } from 'ace-builds';
-import React, { useCallback, useEffect, useState } from 'react';
-import { DraggableEvent } from 'react-draggable';
+import { useCallback, useEffect, useState } from 'react';
+import type { DraggableEvent } from 'react-draggable';
 
 import ControlBar from '../controlBar/ControlBar';
-import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
-import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
+import EditorContainer, { type EditorContainerProps } from '../editor/EditorContainer';
+import McqChooser, { type McqChooserProps } from '../mcqChooser/McqChooser';
 import { Prompt } from '../ReactRouterPrompt';
-import { ReplProps } from '../repl/Repl';
-import { SideBarTab } from '../sideBar/SideBar';
-import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import type { ReplProps } from '../repl/Repl';
+import type { SideBarTab } from '../sideBar/SideBar';
+import { type SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import DraggableRepl from './DraggableRepl';
 import MobileKeyboard from './MobileKeyboard';
-import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/MobileSideContent';
+import MobileSideContent, {
+  type MobileSideContentProps,
+} from './mobileSideContent/MobileSideContent';
 
 export type MobileWorkspaceProps = {
   editorContainerProps?: EditorContainerProps; // Either editorProps or mcqProps must be provided
@@ -43,7 +45,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     if (props.mobileSideContentProps.workspaceLocation === 'assessment') {
       document.documentElement.style.setProperty(
         '--mobile-panel-height',
-        'calc(100% - 100px - 1.1rem)'
+        'calc(100% - 100px - 1.1rem)',
       );
     }
 
@@ -65,7 +67,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       const metaViewport = document.querySelector('meta[name=viewport]');
       metaViewport!.setAttribute(
         'content',
-        'height=' + window.innerHeight + ', width=device-width'
+        'height=' + window.innerHeight + ', width=device-width',
       );
     }
 
@@ -76,7 +78,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         const metaViewport = document.querySelector('meta[name=viewport]');
         metaViewport!.setAttribute(
           'content',
-          'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'
+          'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0',
         );
       }
       handleHideRepl();
@@ -100,7 +102,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       onBlur: (event, editor?) => {
         props.onBlur?.(event, editor);
         clearTargetKeyboardInput();
-      }
+      },
     };
   };
 
@@ -114,18 +116,12 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       onBlur: () => {
         props.onBlur?.();
         clearTargetKeyboardInput();
-      }
+      },
     };
   };
 
   const createWorkspaceInput = () => {
     if (props.editorContainerProps) {
-      const editorContainerProps = {
-        ...props.editorContainerProps
-      };
-      if (editorContainerProps.editorVariant === 'sourcecast') {
-        editorContainerProps.setDraggableReplPosition = () => handleShowRepl(-100);
-      }
       return <EditorContainer {...enableMobileKeyboardForEditor(props.editorContainerProps)} />;
     } else {
       return <McqChooser {...props.mcqProps!} />;
@@ -156,7 +152,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const onDrag = (e: DraggableEvent, position: { x: number; y: number }): void => {
     document.documentElement.style.setProperty(
       '--mobile-repl-height',
-      Math.max(-position.y, 0) + 'px'
+      Math.max(-position.y, 0) + 'px',
     );
     setDraggableReplPosition(position);
   };
@@ -208,7 +204,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         setIsDraggableReplDisabled(false);
       }
     },
-    [handleEditorEval]
+    [handleEditorEval],
   );
 
   const onChange = props.mobileSideContentProps.onChange;
@@ -216,12 +212,12 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     (
       newTabId: SideContentType,
       prevTabId: SideContentType,
-      event: React.MouseEvent<HTMLElement>
+      event: React.MouseEvent<HTMLElement>,
     ) => {
       onChange(newTabId, prevTabId, event);
       handleTabChangeForRepl(newTabId, prevTabId);
     },
-    [handleTabChangeForRepl, onChange]
+    [handleTabChangeForRepl, onChange],
   );
 
   // Convert sidebar tabs with a side content tab ID into side content tabs.
@@ -235,13 +231,13 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         beforeDynamicTabs: [
           ...sideBarTabs,
           mobileEditorTab,
-          ...(props.mobileSideContentProps.tabs?.beforeDynamicTabs ?? [])
+          ...(props.mobileSideContentProps.tabs?.beforeDynamicTabs ?? []),
         ],
         afterDynamicTabs: [
           ...(props.mobileSideContentProps.tabs?.afterDynamicTabs ?? []),
-          mobileRunTab
-        ]
-      }
+          mobileRunTab,
+        ],
+      },
     };
   }, [onSideContentTabChange, props.mobileSideContentProps, sideBarTabs]);
 
@@ -283,12 +279,12 @@ const mobileEditorTab: SideContentTab = {
   label: 'Editor',
   iconName: IconNames.EDIT,
   body: null,
-  id: SideContentType.mobileEditor
+  id: SideContentType.mobileEditor,
 };
 
 const mobileRunTab: SideContentTab = {
   label: 'Run',
   iconName: IconNames.PLAY,
   body: null,
-  id: SideContentType.mobileEditorRun
+  id: SideContentType.mobileEditorRun,
 };

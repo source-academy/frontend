@@ -1,19 +1,14 @@
 import { Button, Collapse, Icon, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ContestEntry } from '../../assessment/AssessmentTypes';
+import type { ContestEntry } from '../../assessment/AssessmentTypes';
 import { SideContentType } from '../SideContentTypes';
 import SideContentLeaderboardCard from './SideContentLeaderboardCard';
 
-export type SideContentContestLeaderboardProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+export type SideContentContestLeaderboardProps = {
   handleContestEntryClick: (submissionId: number, answer: string) => void;
-};
-
-type StateProps = {
   orderedContestEntries: ContestEntry[];
   leaderboardType: SideContentType;
 };
@@ -63,11 +58,11 @@ const SideContentContestLeaderboard: React.FC<SideContentContestLeaderboardProps
       <div className="leaderboard-header">
         {columnHeader(
           'header-entryid',
-          t($ => $.headers.studentName)
+          t($ => $.headers.studentName),
         )}
         {columnHeader(
           'header-entryrank',
-          t($ => $.headers.rank)
+          t($ => $.headers.rank),
         )}
         {columnHeader(
           'header-score',
@@ -75,7 +70,7 @@ const SideContentContestLeaderboard: React.FC<SideContentContestLeaderboardProps
             ? t($ => $.headers.score.calculated)
             : leaderboardType === SideContentType.popularVoteLeaderboard
               ? t($ => $.headers.score.popularity)
-              : t($ => $.headers.score.default)
+              : t($ => $.headers.score.default),
         )}
       </div>
     );
@@ -99,7 +94,7 @@ const SideContentContestLeaderboard: React.FC<SideContentContestLeaderboardProps
         )}
       </div>
     ),
-    [handleContestEntryClick, orderedContestEntries, contestEntryHeader, t]
+    [handleContestEntryClick, orderedContestEntries, contestEntryHeader, t],
   );
 
   return (
@@ -107,7 +102,7 @@ const SideContentContestLeaderboard: React.FC<SideContentContestLeaderboardProps
       <Button
         className="collapse-button"
         icon={showLeaderboard ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
-        minimal={true}
+        variant="minimal"
         onClick={() => setShowLeaderboard(!showLeaderboard)}
       >
         <span>{leaderboardTitle}</span>

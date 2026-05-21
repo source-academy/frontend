@@ -1,16 +1,16 @@
 import { Octokit } from '@octokit/rest';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 
-import { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
-import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
-import { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
-import {
+import type { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
+import type { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
+import type { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
+import type {
   Assessment,
   AssessmentConfiguration,
-  AssessmentOverview
+  AssessmentOverview,
 } from '../../assessment/AssessmentTypes';
-import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
-import { GameState, Role, Story } from '../ApplicationTypes';
+import type { Notification } from '../../notificationBadge/NotificationBadgeTypes';
+import type { GameState, Role, Story } from '../ApplicationTypes';
 
 export type SessionState = {
   // Tokens
@@ -37,12 +37,13 @@ export type SessionState = {
   readonly viewable?: boolean;
   readonly enableGame?: boolean;
   readonly enableAchievements?: boolean;
-  readonly enableSourcecast?: boolean;
-  readonly enableStories?: boolean;
   readonly enableLlmGrading?: boolean;
   readonly llmModel?: string;
   readonly llmApiUrl?: string;
   readonly llmCourseLevelPrompt?: string;
+  readonly pixelbotRoutingPrompt?: string;
+  readonly pixelbotAnswerPrompt?: string;
+  readonly feedbackUrl?: string;
   readonly enableOverallLeaderboard?: boolean;
   readonly enableContestLeaderboard?: boolean;
   readonly topLeaderboardDisplay?: number;
@@ -111,8 +112,6 @@ export type CourseConfiguration = {
   viewable: boolean;
   enableGame: boolean;
   enableAchievements: boolean;
-  enableSourcecast: boolean;
-  enableStories: boolean;
   enableLlmGrading?: boolean;
   enableOverallLeaderboard: boolean;
   enableContestLeaderboard: boolean;
@@ -125,6 +124,9 @@ export type CourseConfiguration = {
   llmModel?: string;
   llmApiUrl?: string;
   llmCourseLevelPrompt?: string;
+  pixelbotRoutingPrompt?: string;
+  pixelbotAnswerPrompt?: string;
+  feedbackUrl?: string;
 };
 
 export type AdminPanelCourseRegistration = {

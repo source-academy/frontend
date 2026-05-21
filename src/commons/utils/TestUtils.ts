@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import React, { act } from 'react';
+import { act } from 'react';
 
 export const renderTree = async (element: React.ReactElement) => {
   const app = render(element);
@@ -19,7 +19,7 @@ export const renderTreeJson = async (element: React.ReactElement) => {
 export function deepFilter<T>(
   nestedObject: T,
   matchFn: (e: T) => boolean,
-  getChildren: (e: T) => T[] | undefined
+  getChildren: (e: T) => T[] | undefined,
 ) {
   const matches: any[] = [];
 

@@ -5,36 +5,51 @@ import {
   Checkbox,
   Classes,
   Divider,
+  Popover,
+  Position,
   Slider,
-  Tooltip
+  Tooltip,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { HotkeyItem } from '@mantine/hooks';
+import type { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
 import { t } from 'i18next';
 import { Chapter } from 'js-slang/dist/langs';
 import { debounce } from 'lodash';
-import React from 'react';
+import { Component } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { connect, type MapDispatchToProps, type MapStateToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
-import type { PlaygroundWorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+import {
+  type PlaygroundWorkspaceState,
+  type WorkspaceLocation,
+} from 'src/commons/workspace/WorkspaceTypes';
 import { ClearDeadFramesAnimation } from 'src/features/cseMachine/animationComponents/ClearDeadFramesAnimation';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
 import { Layout } from 'src/features/cseMachine/CseMachineLayout';
+import type { ArrowOriginFilterKey } from 'src/features/cseMachine/CseMachineTypes';
 import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
-import { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
-import { HighlightedLines } from '../../editor/EditorTypes';
+import type { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
+import type { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
 import { beginAlertSideContent } from '../SideContentActions';
 import { getLocation } from '../SideContentHelper';
-import { NonStoryWorkspaceLocation, SideContentTab, SideContentType } from '../SideContentTypes';
+import { type SideContentTab, SideContentType } from '../SideContentTypes';
+
+const ALL_ARROW_FILTER_KEYS: ArrowOriginFilterKey[] = [
+  'text',
+  'frame',
+  'function',
+  'array',
+  'control',
+  'stash',
+];
 
 type State = {
   visualization: React.ReactNode;
@@ -45,6 +60,7 @@ type State = {
   stepLimitExceeded: boolean;
   chapter: Chapter;
   clearDeadFrames: boolean;
+  arrowFilterOpen: boolean;
 };
 
 type CseMachineProps = OwnProps & StateProps & DispatchProps;
@@ -62,7 +78,7 @@ type StateProps = {
 };
 
 type OwnProps = {
-  workspaceLocation: NonStoryWorkspaceLocation;
+  workspaceLocation: WorkspaceLocation;
 };
 
 type DispatchProps = {
@@ -70,12 +86,12 @@ type DispatchProps = {
   handleEditorEval: () => void;
   setEditorHighlightedLines: (
     editorTabIndex: number,
-    newHighlightedLines: HighlightedLines[]
+    newHighlightedLines: HighlightedLines[],
   ) => void;
   handleAlertSideContent: () => void;
 };
 
-class SideContentCseMachineBase extends React.Component<CseMachineProps, State> {
+class SideContentCseMachineBase extends Component<CseMachineProps, State> {
   constructor(props: CseMachineProps) {
     super(props);
     this.state = {
@@ -86,14 +102,15 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
       lastStep: false,
       stepLimitExceeded: false,
       chapter: props.chapter,
-      clearDeadFrames: false
+      clearDeadFrames: false,
+      arrowFilterOpen: false,
     };
     if (this.isJava()) {
       JavaCseMachine.init(
         visualization => this.setState({ visualization }),
         (segments: [number, number][]) => {
           props.setEditorHighlightedLines(0, segments);
-        }
+        },
       );
     } else {
       CseMachine.init(
@@ -113,9 +130,9 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
           const isAtLastStep = this.state.value === this.props.stepsTotal;
 
           this.setState({
-            stepLimitExceeded: !isControlEmpty && isAtLastStep
+            stepLimitExceeded: !isControlEmpty && isAtLastStep,
           });
-        }
+        },
       );
     }
   }
@@ -133,7 +150,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
     } else {
       width = Math.min(
         maxWidth,
-        (window.innerWidth * (100 - parseFloat(editorWidth))) / 100 - horizontalPadding
+        (window.innerWidth * (100 - parseFloat(editorWidth))) / 100 - horizontalPadding,
       );
     }
     return Math.min(width, maxWidth);
@@ -160,7 +177,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
     if (newWidth !== this.state.width || newHeight !== this.state.height) {
       this.setState({
         height: newHeight,
-        width: newWidth
+        width: newWidth,
       });
       CseMachine.updateDimensions(newWidth, newHeight);
     }
@@ -175,6 +192,9 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   componentWillUnmount() {
     this.handleResize.cancel();
     window.removeEventListener('resize', this.handleResize);
+    if (!this.isJava()) {
+      CseMachine.resetArrowOriginFilters();
+    }
   }
 
   componentDidUpdate(prevProps: {
@@ -190,6 +210,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
       this.handleResize();
     }
     if (prevProps.needCseUpdate && !this.props.needCseUpdate) {
+      CseMachine.resetArrowOriginFilters();
+      this.setState({ arrowFilterOpen: false });
       this.stepFirst();
       if (this.isJava()) {
         JavaCseMachine.clearCse();
@@ -200,18 +222,20 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   }
 
   public render() {
+    const arrowFilters = CseMachine.getArrowOriginFilters();
+    const areAllArrowFiltersSelected = ALL_ARROW_FILTER_KEYS.every(key => arrowFilters[key]);
     const hotkeyBindings: HotkeyItem[] = this.state.visualization
       ? [
           ['a', this.stepFirst],
           ['f', this.stepNext],
           ['b', this.stepPrevious],
-          ['e', this.stepLast(this.props.stepsTotal)]
+          ['e', this.stepLast(this.props.stepsTotal)],
         ]
       : [
           ['a', () => {}],
           ['f', () => {}],
           ['b', () => {}],
-          ['e', () => {}]
+          ['e', () => {}],
         ];
 
     const currentStep = Math.max(0, this.state.value);
@@ -224,7 +248,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
         bindings={hotkeyBindings}
         style={{
           maxHeight: '100%',
-          overflow: this.state.visualization ? 'hidden' : 'auto'
+          overflow: this.state.visualization ? 'hidden' : 'auto',
         }}
       >
         <div className={classNames('sa-substituter', Classes.DARK)}>
@@ -240,7 +264,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
             style={{
               display: 'flex',
               justifyContent: this.isJava() ? 'center' : 'space-between',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             {!this.isJava() && (
@@ -300,6 +324,58 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     />
                   </AnchorButton>
                 </Tooltip>
+                <Tooltip content="Filter Arrows" compact>
+                  <Popover
+                    isOpen={this.state.arrowFilterOpen}
+                    onInteraction={nextOpen => this.setState({ arrowFilterOpen: nextOpen })}
+                    position={Position.BOTTOM_LEFT}
+                    content={
+                      <div style={{ padding: '8px 10px', minWidth: '210px' }}>
+                        <div style={{ marginBottom: '8px', fontWeight: 600 }}>Filter Arrows</div>
+                        <Button
+                          size="small"
+                          variant="minimal"
+                          onClick={() => this.setAllArrowFilters(!areAllArrowFiltersSelected)}
+                          style={{ marginBottom: '8px' }}
+                        >
+                          {areAllArrowFiltersSelected ? 'Deselect all' : 'Select all'}
+                        </Button>
+                        <Checkbox
+                          checked={arrowFilters.text}
+                          label="From text"
+                          onChange={() => this.toggleArrowFilter('text')}
+                        />
+                        <Checkbox
+                          checked={arrowFilters.frame}
+                          label="From frames"
+                          onChange={() => this.toggleArrowFilter('frame')}
+                        />
+                        <Checkbox
+                          checked={arrowFilters.function}
+                          label="From function objects"
+                          onChange={() => this.toggleArrowFilter('function')}
+                        />
+                        <Checkbox
+                          checked={arrowFilters.array}
+                          label="From arrays"
+                          onChange={() => this.toggleArrowFilter('array')}
+                        />
+                        <Checkbox
+                          checked={arrowFilters.control}
+                          label="From control"
+                          onChange={() => this.toggleArrowFilter('control')}
+                        />
+                        <Checkbox
+                          checked={arrowFilters.stash}
+                          label="From stash"
+                          onChange={() => this.toggleArrowFilter('stash')}
+                        />
+                      </div>
+                    }
+                  >
+                    <AnchorButton icon="flow-branch" disabled={!this.state.visualization} />
+                  </Popover>
+                </Tooltip>
               </ButtonGroup>
             )}
             <ButtonGroup>
@@ -342,7 +418,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                         const prevLevels = Layout.levels;
                         this.setState(
                           prevState => ({
-                            clearDeadFrames: true
+                            clearDeadFrames: true,
                           }),
                           () => {
                             CseMachine.setClearDeadFrames(this.state.clearDeadFrames);
@@ -358,11 +434,11 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                                 const currLevels = Layout.levels;
                                 const changedFramePairs = computeFramesCoordChange(
                                   prevLevels,
-                                  currLevels
+                                  currLevels,
                                 );
                                 if (changedFramePairs.length > 0) {
                                   CseAnimation.animations.push(
-                                    new ClearDeadFramesAnimation(changedFramePairs)
+                                    new ClearDeadFramesAnimation(changedFramePairs),
                                   );
                                   CseAnimation.enableAnimations();
                                 }
@@ -373,13 +449,13 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                               }
                             };
                             CseMachine.redraw();
-                          }
+                          },
                         );
                       }
                     }}
                     icon="eraser"
                     disabled={this.state.clearDeadFrames || !this.state.visualization}
-                  ></AnchorButton>
+                  />
                 </Tooltip>
                 <Tooltip content="Print" compact>
                   <AnchorButton
@@ -417,7 +493,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
             <Output output={slice} key={index} usingSubst={false} isHtml={false} />
           ))
         ) : (
-          <div></div>
+          <div />
         )}
         {this.state.visualization ? (
           this.state.stepLimitExceeded ? (
@@ -436,10 +512,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
         ) : (
           <CseMachineDefaultText isJava={this.isJava()} />
         )}
-        <ButtonGroup
-          vertical={true}
-          style={{ position: 'absolute', bottom: '20px', right: '20px' }}
-        >
+        <ButtonGroup vertical style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
           <Button
             icon="plus"
             disabled={!this.state.visualization}
@@ -563,20 +636,33 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
     this.sliderShift(0);
     this.sliderRelease(0);
   };
+
+  private toggleArrowFilter = (origin: ArrowOriginFilterKey) => {
+    const filters = CseMachine.getArrowOriginFilters();
+    CseMachine.setArrowOriginVisible(origin, !filters[origin]);
+    this.refreshArrowFilters();
+  };
+
+  private setAllArrowFilters = (visible: boolean) => {
+    CseMachine.setAllArrowOriginsVisible(visible);
+    this.refreshArrowFilters();
+  };
+
+  private refreshArrowFilters = () => {
+    CseMachine.clearRenderedLayouts();
+    CseMachine.redraw();
+    this.forceUpdate();
+  };
 }
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
   state: OverallState,
-  ownProps: OwnProps
+  ownProps: OwnProps,
 ) => {
   let workspace: PlaygroundWorkspaceState;
   const [loc] = getLocation(ownProps.workspaceLocation);
 
   switch (loc) {
-    // case 'stories': {
-    //   workspace = state.stories.envs[storyEnv]
-    //   break
-    // }
     case 'sicp': {
       workspace = state.workspaces.sicp;
       break;
@@ -595,7 +681,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     changepointSteps: workspace.changepointSteps,
     needCseUpdate: workspace.updateCse,
     machineOutput: workspace.output,
-    chapter: workspace.context.chapter
+    chapter: workspace.context.chapter,
   };
 };
 
@@ -609,32 +695,32 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
         beginAlertSideContent(SideContentType.cseMachine, props.workspaceLocation),
       setEditorHighlightedLines: (
         editorTabIndex: number,
-        newHighlightedLines: HighlightedLines[]
+        newHighlightedLines: HighlightedLines[],
       ) =>
         WorkspaceActions.setEditorHighlightedLinesControl(
           props.workspaceLocation,
           editorTabIndex,
-          newHighlightedLines
-        )
+          newHighlightedLines,
+        ),
     },
-    dispatch
+    dispatch,
   );
 
 export const SideContentCseMachine = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(SideContentCseMachineBase);
 
-const makeCseMachineTabFrom = (location: NonStoryWorkspaceLocation): SideContentTab => ({
+const makeCseMachineTabFrom = (location: WorkspaceLocation): SideContentTab => ({
   label: t($ => $.cseMachine.label, { ns: 'sideContent' }),
   iconName: IconNames.GLOBE,
   body: <SideContentCseMachine workspaceLocation={location} />,
-  id: SideContentType.cseMachine
+  id: SideContentType.cseMachine,
 });
 
 export const ItalicLink: React.FC<{ href: string; children?: React.ReactNode }> = ({
   href,
-  children
+  children,
 }) => {
   return (
     <a href={href} rel="noopener noreferrer" target="_blank">
@@ -656,11 +742,13 @@ const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
           <Trans
             ns="sideContent"
             i18nKey={$ => $.cseMachine.csecDescription}
+            // eslint-disable-next-line react/jsx-key
             components={[<ItalicLink href={Links.textbookChapter3_2} />]}
           />{' '}
           <Trans
             ns="sideContent"
             i18nKey={$ => $.cseMachine.javaCsec}
+            // eslint-disable-next-line react/jsx-key
             components={[<ItalicLink href={`${Links.sourceDocs}java_csec/`} />]}
           />
         </span>
@@ -669,6 +757,7 @@ const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
           <Trans
             ns="sideContent"
             i18nKey={$ => $.cseMachine.cseDescription}
+            // eslint-disable-next-line react/jsx-key
             components={[<ItalicLink href={Links.textbookChapter3_2} />]}
           />
         </span>

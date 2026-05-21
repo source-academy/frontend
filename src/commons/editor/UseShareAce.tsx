@@ -3,13 +3,13 @@ import '@convergencelabs/ace-collab-ext/dist/css/ace-collab-ext.css';
 import {
   AceMultiCursorManager,
   AceMultiSelectionManager,
-  AceRadarView
+  AceRadarView,
 } from '@convergencelabs/ace-collab-ext';
 import * as Sentry from '@sentry/react';
 import sharedbAce from '@sourceacademy/sharedb-ace';
 import type SharedbAceBinding from '@sourceacademy/sharedb-ace/binding';
 import { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
-import React from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { getLanguageConfig } from '../application/ApplicationTypes';
@@ -18,7 +18,7 @@ import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabE
 import { parseModeString } from '../utils/AceHelper';
 import { useSession } from '../utils/Hooks';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
-import { EditorHook } from './Editor';
+import type { EditorHook } from './Editor';
 
 // EditorHook structure:
 // EditorHooks grant access to 4 things:
@@ -32,14 +32,14 @@ const color = getColor();
 const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
   // use a ref to refer to any other props so that we run the effect below
   // *only* when the editorSessionId or sessionDetails changes
-  const propsRef = React.useRef(inProps);
+  const propsRef = useRef(inProps);
   propsRef.current = inProps;
 
   const { editorSessionId, sessionDetails } = inProps;
   const { name, userId } = useSession();
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!editorSessionId || !sessionDetails) {
       return;
     }
@@ -53,7 +53,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     const user = {
       name: name || 'Unnamed user',
       color,
-      role: collabEditorAccess
+      role: collabEditorAccess,
     };
 
     const editor = reactAceRef.current!.editor;
@@ -74,7 +74,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     const ShareAce = new sharedbAce(sessionDetails.docId, {
       user,
       WsUrl: getSessionUrl(editorSessionId, true),
-      namespace: 'sa'
+      namespace: 'sa',
     });
 
     const updateUsers = (binding: SharedbAceBinding) => {
@@ -87,8 +87,8 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
         // Change in role, update readOnly status in sessionDetails
         dispatch(
           CollabEditingActions.setSessionDetails('playground', {
-            readOnly: binding.connectedUsers[myUserId].role === CollabEditingAccess.VIEWER
-          })
+            readOnly: binding.connectedUsers[myUserId].role === CollabEditingAccess.VIEWER,
+          }),
         );
       }
     };
@@ -103,25 +103,25 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
         {
           cursorManager,
           selectionManager,
-          radarManager
+          radarManager,
         },
         {
           languageSelectHandler: (language: string) => {
             const { chapter, variant } = parseModeString(language);
             propsRef.current.updateLanguageCallback?.(getLanguageConfig(chapter, variant), null);
-          }
-        }
+          },
+        },
       );
       propsRef.current.handleSetSharedbConnected!(true);
       dispatch(
-        CollabEditingActions.setUpdateUserRoleCallback('playground', binding.changeUserRole)
+        CollabEditingActions.setUpdateUserRoleCallback('playground', binding.changeUserRole),
       );
 
       // Disables editor in a read-only session
       editor.setReadOnly(sessionDetails.readOnly);
       navigator.clipboard.writeText(editorSessionId).then(() => {
         showSuccessMessage(
-          `You have joined a session as ${sessionDetails.readOnly ? 'a viewer' : 'an editor'}. Copied to clipboard: ${editorSessionId}`
+          `You have joined a session as ${sessionDetails.readOnly ? 'a viewer' : 'an editor'}. Copied to clipboard: ${editorSessionId}`,
         );
       });
 

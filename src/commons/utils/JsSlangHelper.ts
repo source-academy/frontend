@@ -1,6 +1,5 @@
-/* tslint:disable: ban-types*/
 import createSlangContext, { defineBuiltin, importBuiltins } from 'js-slang/dist/createContext';
-import { type Chapter, LanguageOptions, Variant } from 'js-slang/dist/langs';
+import { type Chapter, type LanguageOptions, Variant } from 'js-slang/dist/langs';
 import { type Context, type CustomBuiltIns, type Value } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { difference, keys } from 'lodash';
@@ -95,7 +94,11 @@ export function visualizeCseMachine({ context }: { context: Context }) {
   try {
     CseMachine.drawCse(context);
   } catch (err) {
-    console.error(err);
+    // Saga/unit tests may execute without mounting the CSE side content, so this
+    // initialization error is expected and should be treated as a no-op.
+    if (err instanceof Error && err.message === 'CSE machine not initialized') {
+      return;
+    }
     throw new Error('CSE machine is not enabled');
   }
 }
@@ -137,7 +140,7 @@ export const externalBuiltIns = {
   rawDisplay,
   prompt: cadetPrompt,
   alert: cadetAlert,
-  visualiseList: visualizeData
+  visualiseList: visualizeData,
 };
 
 /**
@@ -150,16 +153,23 @@ export function createContext<T>(
   externals: string[],
   externalContext: T,
   variant: Variant = Variant.DEFAULT,
-  languageOptions?: LanguageOptions
+  languageOptions?: LanguageOptions,
 ) {
-  return createSlangContext<T>(
+  const context = createSlangContext<T>(
     chapter,
     variant,
     languageOptions,
     externals,
     externalContext,
-    externalBuiltIns
+    externalBuiltIns,
   );
+  // js-slang's createContext initializes `moduleContexts` as a lazy-init Proxy
+  // that writes to its target on every property read. Redux Toolkit (Immer)
+  // freezes state, after which the proxy's `get` trap throws
+  // "Cannot add property ..., object is not extensible" for any unknown key
+  // (e.g. JSON.stringify probing `toJSON`). Replace with a plain object.
+  context.moduleContexts = {};
+  return context;
 }
 
 // Assumes that the grader doesn't need additional external libraries apart from the standard
@@ -191,7 +201,7 @@ export function makeElevatedContext(context: Context) {
         return fakeFrame;
       }
       return target[prop as keyof typeof target];
-    }
+    },
   });
 
   const proxyEnvs = new Proxy(context.runtime.environments, {
@@ -200,7 +210,7 @@ export function makeElevatedContext(context: Context) {
         return proxyGlobalEnv;
       }
       return target[prop as keyof typeof target];
-    }
+    },
   });
 
   const proxyRuntime = new Proxy(context.runtime, {
@@ -209,7 +219,7 @@ export function makeElevatedContext(context: Context) {
         return proxyEnvs;
       }
       return target[prop as keyof typeof target];
-    }
+    },
   });
 
   const elevatedContext = new Proxy(context, {
@@ -222,7 +232,7 @@ export function makeElevatedContext(context: Context) {
         default:
           return target[prop as keyof typeof target];
       }
-    }
+    },
   });
 
   loadStandardLibraries(elevatedContext, externalBuiltIns);
@@ -249,7 +259,7 @@ export function getRestoreExtraMethodsString(removed: string[], unblockKey: stri
 export function getBlockExtraMethodsString(toRemove: string[]) {
   return toRemove
     .map(x =>
-      x === 'makeUndefinedErrorFunction' ? '' : `const ${x} = makeUndefinedErrorFunction('${x}');`
+      x === 'makeUndefinedErrorFunction' ? '' : `const ${x} = makeUndefinedErrorFunction('${x}');`,
     )
     .join('\n');
 }
@@ -259,7 +269,7 @@ export function getBlockExtraMethodsStringTypedVariant(toRemove: string[]) {
     .map(x =>
       x === 'makeUndefinedErrorFunction'
         ? ''
-        : `const ${x} : string = makeUndefinedErrorFunction('${x}');`
+        : `const ${x} : string = makeUndefinedErrorFunction('${x}');`,
     )
     .join('\n');
 }

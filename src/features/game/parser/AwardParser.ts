@@ -1,5 +1,5 @@
-import { AwardProperty } from '../awards/GameAwardsTypes';
-import { ItemId } from '../commons/CommonTypes';
+import type { AwardProperty } from '../awards/GameAwardsTypes';
+import type { ItemId } from '../commons/CommonTypes';
 import { toS3Path } from '../utils/GameUtils';
 import StringUtils from '../utils/StringUtils';
 
@@ -41,7 +41,7 @@ class AwardParser {
       const [assetKey, assetPath, title, description] = StringUtils.splitWithLimit(
         awardProperties[0],
         ',',
-        3
+        3,
       );
       AwardParser.awardsMapping.set(id, {
         id,
@@ -49,7 +49,7 @@ class AwardParser {
         assetPath: toS3Path(assetPath, true),
         title,
         description,
-        completed: true
+        completed: true,
       });
     });
   }

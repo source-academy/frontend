@@ -1,11 +1,11 @@
 import { Intent, Popover, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core';
-import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import SessionActions from '../application/actions/SessionActions';
 import { useSession } from '../utils/Hooks';
 import { filterNotificationsById } from './NotificationBadgeHelper';
-import { Notification, NotificationType, NotificationTypes } from './NotificationBadgeTypes';
+import type { Notification, NotificationType } from './NotificationBadgeTypes';
+import { NotificationTypes } from './NotificationBadgeTypes';
 
 type Props = {
   className?: string;
@@ -27,7 +27,7 @@ const NotificationBadge: React.FC<Props> = props => {
   }
 
   const notificationIcon = (
-    <Tag intent={Intent.DANGER} round={true} large={props.large} data-testid="NotificationBadge">
+    <Tag intent={Intent.DANGER} round large={props.large} data-testid="NotificationBadge">
       {notifications.length}
     </Tag>
   );
@@ -41,8 +41,8 @@ const NotificationBadge: React.FC<Props> = props => {
         <Tag
           className="row badge-tag"
           key={`${notification.id}`}
-          minimal={true}
-          multiline={true}
+          minimal
+          multiline
           onRemove={onRemove}
         >
           {makeNotificationMessage(notification.type)}
@@ -60,7 +60,7 @@ const NotificationBadge: React.FC<Props> = props => {
         placement={Position.RIGHT}
         hoverOpenDelay={50}
         hoverCloseDelay={50}
-        lazy={true}
+        lazy
       >
         {notificationIcon}
       </Popover>

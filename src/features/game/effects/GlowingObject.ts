@@ -33,7 +33,7 @@ export default class GlowingImage {
     y: number,
     assetKey: string,
     width?: number,
-    height?: number
+    height?: number,
   ) {
     this.scene = scene;
     this.container = new Phaser.GameObjects.Container(scene, x, y);

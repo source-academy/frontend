@@ -3,5 +3,5 @@ import login from './login';
 
 export default {
   commons,
-  login
+  login,
 };

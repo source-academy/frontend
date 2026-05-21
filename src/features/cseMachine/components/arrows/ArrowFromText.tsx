@@ -1,5 +1,5 @@
 import { Config } from '../../CseMachineConfig';
-import { StepsArray } from '../../CseMachineTypes';
+import type { StepsArray } from '../../CseMachineTypes';
 import { Frame } from '../Frame';
 import { Text } from '../Text';
 import { ArrayValue } from '../values/ArrayValue';
@@ -10,7 +10,7 @@ import { GenericArrow } from './GenericArrow';
 export class ArrowFromText extends GenericArrow<Text, Value> {
   constructor(
     from: Text,
-    private readonly sourceFrame: Pick<Frame, 'x' | 'y' | 'width' | 'height'>
+    private readonly sourceFrame: Pick<Frame, 'x' | 'y' | 'width' | 'height'>,
   ) {
     super(from);
     this.isLive = from.options.faded === undefined ? true : !from.options.faded; // Text items are always live
@@ -29,8 +29,20 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
       x: this.sourceFrame.x(),
       y: this.sourceFrame.y(),
       width: this.sourceFrame.width(),
-      height: this.sourceFrame.height()
+      height: this.sourceFrame.height(),
     };
+  }
+
+  /**
+   * Only render the initial in-frame prefix above the source frame.
+   * Once the arrow exits the frame for the first time, the rest should stay under frames.
+   */
+  protected getSourceFrameSegmentPath(): string {
+    const rect = this.getSourceFrameBounds();
+    if (!rect) {
+      return '';
+    }
+    return this.getPathPrefixUntilFirstBoundaryExit(rect);
   }
 
   protected calculateSteps() {

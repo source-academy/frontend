@@ -1,13 +1,13 @@
 import Konva from 'konva';
-import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import type { KonvaEventObject } from 'konva/lib/Node';
+import { createRef } from 'react';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
 import { CseAnimation } from '../../CseMachineAnimation';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { ArrowOriginFilterKey, IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
+import type { ArrowOriginFilterKey, IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
 import { defaultStrokeColor, fadedStrokeColor } from '../../CseMachineUtils';
 import { Visible } from '../Visible';
 import { arrowSelection } from './ArrowSelection';
@@ -23,10 +23,10 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   target: Target | undefined;
   faded: boolean = false;
   protected _visible: boolean = true;
-  private pathRef: RefObject<Konva.Path | null> = React.createRef();
-  private sourceSegmentPathRef: RefObject<Konva.Path | null> = React.createRef();
-  private sourceSegmentGroupRef: RefObject<Konva.Group | null> = React.createRef();
-  private arrowHeadRef: RefObject<Konva.Arrow | null> = React.createRef();
+  private pathRef: React.RefObject<Konva.Path | null> = createRef();
+  private sourceSegmentPathRef: React.RefObject<Konva.Path | null> = createRef();
+  private sourceSegmentGroupRef: React.RefObject<Konva.Group | null> = createRef();
+  private arrowHeadRef: React.RefObject<Konva.Arrow | null> = createRef();
 
   // Check if this arrow is selected
   protected isSelected(): boolean {
@@ -56,7 +56,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   }
 
   private attachArrowRef = (node: Konva.Group | null) => {
-    (this.ref as React.MutableRefObject<Konva.Group | null>).current = node;
+    (this.ref as React.RefObject<Konva.Group | null>).current = node;
   };
 
   path(): string {
@@ -84,7 +84,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
 
     const points = this.calculateSteps().reduce<Array<number>>(
       (acc, step) => [...acc, ...step(acc[acc.length - 2], acc[acc.length - 1])],
-      [this.source.x(), this.source.y()]
+      [this.source.x(), this.source.y()],
     );
     points.splice(0, 2);
 
@@ -120,7 +120,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
         const isLastCorner = n + 6 >= points.length;
         const minTerminalStraightLength = Math.max(
           Config.ArrowHeadSize,
-          Config.ArrowMinCornerRadius
+          Config.ArrowMinCornerRadius,
         );
         const terminalAllowance = isLastCorner
           ? Math.max(0, segment2Length - minTerminalStraightLength)
@@ -128,7 +128,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
         const maxSpaceRadius = Math.min(segment1Length / 2, segment2Length / 2, terminalAllowance);
         const desiredRadius = Math.min(
           Config.ArrowCornerRadius,
-          maxSpaceRadius * Config.ArrowSmallBendRadiusScale
+          maxSpaceRadius * Config.ArrowSmallBendRadiusScale,
         );
         const br =
           maxSpaceRadius >= Config.ArrowMinCornerRadius
@@ -287,9 +287,124 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     return null;
   }
 
+  /**
+   * Path used for the source-frame overlay segment. Subclasses may override
+   * to draw only a prefix of the full arrow path.
+   */
+  protected getSourceFrameSegmentPath(): string {
+    return this.path();
+  }
+
+  /**
+   * Returns a path prefix that starts at the first point and ends when the polyline
+   * exits the given rectangle for the first time.
+   */
+  protected getPathPrefixUntilFirstBoundaryExit(rect: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  }): string {
+    if (this.points.length < 4) {
+      return '';
+    }
+
+    const left = rect.x;
+    const right = rect.x + rect.width;
+    const top = rect.y;
+    const bottom = rect.y + rect.height;
+    const epsilon = 1e-6;
+
+    const isInside = (x: number, y: number) =>
+      x >= left - epsilon && x <= right + epsilon && y >= top - epsilon && y <= bottom + epsilon;
+
+    const intersectWithRectBoundary = (
+      x1: number,
+      y1: number,
+      x2: number,
+      y2: number,
+    ): [number, number] | null => {
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      const candidates: Array<{ t: number; x: number; y: number }> = [];
+
+      const pushCandidate = (t: number, x: number, y: number) => {
+        if (t < -epsilon || t > 1 + epsilon) {
+          return;
+        }
+        if (
+          x < left - epsilon ||
+          x > right + epsilon ||
+          y < top - epsilon ||
+          y > bottom + epsilon
+        ) {
+          return;
+        }
+        candidates.push({ t, x, y });
+      };
+
+      if (Math.abs(dx) > epsilon) {
+        const tLeft = (left - x1) / dx;
+        pushCandidate(tLeft, left, y1 + tLeft * dy);
+
+        const tRight = (right - x1) / dx;
+        pushCandidate(tRight, right, y1 + tRight * dy);
+      }
+
+      if (Math.abs(dy) > epsilon) {
+        const tTop = (top - y1) / dy;
+        pushCandidate(tTop, x1 + tTop * dx, top);
+
+        const tBottom = (bottom - y1) / dy;
+        pushCandidate(tBottom, x1 + tBottom * dx, bottom);
+      }
+
+      const forward = candidates
+        .filter(candidate => candidate.t > epsilon)
+        .sort((a, b) => a.t - b.t)[0];
+      return forward ? [forward.x, forward.y] : null;
+    };
+
+    const polyline: Array<[number, number]> = [];
+    for (let i = 0; i < this.points.length; i += 2) {
+      polyline.push([this.points[i], this.points[i + 1]]);
+    }
+
+    const [startX, startY] = polyline[0];
+    if (!isInside(startX, startY)) {
+      return '';
+    }
+
+    const prefix: Array<[number, number]> = [[startX, startY]];
+
+    for (let i = 0; i < polyline.length - 1; i++) {
+      const [x1, y1] = polyline[i];
+      const [x2, y2] = polyline[i + 1];
+      const insideEnd = isInside(x2, y2);
+
+      if (insideEnd) {
+        prefix.push([x2, y2]);
+        continue;
+      }
+
+      const boundaryPoint = intersectWithRectBoundary(x1, y1, x2, y2);
+      if (boundaryPoint) {
+        prefix.push(boundaryPoint);
+      }
+      break;
+    }
+
+    if (prefix.length < 2) {
+      return '';
+    }
+
+    return prefix.map(([x, y], index) => `${index === 0 ? 'M' : 'L'} ${x} ${y}`).join(' ');
+  }
+
   private drawSourceFrameSegment(stroke: string, interactive: boolean): React.ReactNode {
     const rect = this.getSourceFrameBounds();
-    if (!rect || !this.path()) return null;
+    const segmentPath = this.getSourceFrameSegmentPath();
+    if (!rect || !segmentPath) return null;
 
     return (
       <KonvaGroup
@@ -306,7 +421,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
           {...ShapeDefaultProps}
           key={Layout.key++}
           ref={this.sourceSegmentPathRef}
-          data={this.path()}
+          data={segmentPath}
           stroke={stroke}
           strokeWidth={this.isSelected() ? Config.ArrowHoveredStrokeWidth : Config.ArrowStrokeWidth}
           listening={interactive}
@@ -342,6 +457,9 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
       return null;
     }
     if (Layout.clearDeadFrames && !this.isLive) {
+      return null;
+    }
+    if (!CseMachine.isArrowOriginVisible(this.getOriginFilterKey())) {
       return null;
     }
 
@@ -380,7 +498,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
           pointerWidth={this.isSelected() ? Config.ArrowHoveredHeadSize : Config.ArrowHeadSize}
           key={Layout.key++}
         />
-      </KonvaGroup>
+      </KonvaGroup>,
     );
 
     return this.drawSourceFrameSegment(stroke, interactive);

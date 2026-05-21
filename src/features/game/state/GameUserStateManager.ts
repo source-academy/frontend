@@ -1,7 +1,7 @@
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
-import { AchievementGoal } from 'src/features/achievement/AchievementTypes';
+import type { AchievementGoal } from 'src/features/achievement/AchievementTypes';
 
-import { ItemId } from '../commons/CommonTypes';
+import type { ItemId } from '../commons/CommonTypes';
 import { promptWithChoices } from '../effects/Prompt';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
@@ -28,7 +28,7 @@ export default class GameUserStateManager {
     await this.loadAchievements();
     await this.loadAssessments();
     this.collectibles = new Set(
-      SourceAcademyGame.getInstance().getSaveManager().getLoadedUserState().collectibles
+      SourceAcademyGame.getInstance().getSaveManager().getLoadedUserState().collectibles,
     );
   }
 
@@ -49,13 +49,13 @@ export default class GameUserStateManager {
    */
   public async loadAssessments() {
     const assessments = await getAssessmentOverviews(
-      SourceAcademyGame.getInstance().getAccountInfo()
+      SourceAcademyGame.getInstance().getAccountInfo(),
     );
     this.assessments = new Set(
       (assessments || [])
         .filter(assessment => assessment.status === 'submitted')
         .sort((a, b) => (a.closeAt <= b.closeAt ? -1 : 1))
-        .map(assessment => assessment.number || assessment.id.toString())
+        .map(assessment => assessment.number || assessment.id.toString()),
     );
   }
 
@@ -74,7 +74,7 @@ export default class GameUserStateManager {
       const response = await promptWithChoices(
         GameGlobalAPI.getInstance().getGameManager(),
         `${StringUtils.capitalize(userStateType)} ${id}?`,
-        ['Yes', 'No']
+        ['Yes', 'No'],
       );
       return response === 0;
     }
@@ -96,7 +96,7 @@ export default class GameUserStateManager {
       const achievementUuid = achievement.uuid.toString();
       const isCompleted = achievement.goalUuids.reduce(
         (result, goalUuid) => result && !!goalMapping.get(goalUuid)?.completed,
-        true
+        true,
       );
       const awardProp = awardsMapping.get(achievementUuid);
 

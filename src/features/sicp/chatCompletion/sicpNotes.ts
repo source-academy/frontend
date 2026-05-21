@@ -1,4 +1,4 @@
-import { SicpSection } from './chatCompletion';
+import type { SicpSection } from './chatCompletion';
 
 const sicpNotes: Partial<Record<SicpSection, string>> = {};
 

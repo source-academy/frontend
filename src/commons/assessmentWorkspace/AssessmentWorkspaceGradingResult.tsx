@@ -1,5 +1,4 @@
 import { Divider, HTMLTable, Text } from '@blueprintjs/core';
-import React from 'react';
 
 import Markdown from '../Markdown';
 import { getPrettyDate } from '../utils/DateHelper';
@@ -41,10 +40,10 @@ const AssessmentWorkspaceGradingResult: React.FC<Props> = props => (
                 <Divider />
                 <Markdown
                   content={props.comments}
-                  simplifiedAutoLink={true}
-                  strikethrough={true}
-                  tasklists={true}
-                  openLinksInNewWindow={true}
+                  simplifiedAutoLink
+                  strikethrough
+                  tasklists
+                  openLinksInNewWindow
                 />
                 <Divider />
               </td>

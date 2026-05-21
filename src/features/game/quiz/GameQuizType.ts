@@ -1,5 +1,5 @@
-import { SpeakerDetail } from '../character/GameCharacterTypes';
-import { DialogueObject } from '../dialogue/GameDialogueTypes';
+import type { SpeakerDetail } from '../character/GameCharacterTypes';
+import type { DialogueObject } from '../dialogue/GameDialogueTypes';
 
 export type Quiz = {
   questions: Question[];

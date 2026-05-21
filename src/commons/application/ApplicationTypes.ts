@@ -1,5 +1,5 @@
 import { type SourceError } from 'js-slang/dist/errors/base';
-import { Chapter, Language, Variant } from 'js-slang/dist/langs';
+import { Chapter, type Language, Variant } from 'js-slang/dist/langs';
 import { type Value } from 'js-slang/dist/types';
 
 import type { AchievementState } from '../../features/achievement/AchievementTypes';
@@ -8,11 +8,9 @@ import type { LanguageDirectoryState } from '../../features/directory/LanguageDi
 import type { PluginDirectoryState } from '../../features/directory/PluginDirectoryTypes';
 import type { LeaderboardState } from '../../features/leaderboard/LeaderboardTypes';
 import type { PlaygroundState } from '../../features/playground/PlaygroundTypes';
-import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
-import type { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
 import { freshSortState } from '../../pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
-import { defaultFeatureFlags, FeatureFlagsState } from '../featureFlags';
+import { defaultFeatureFlags, type FeatureFlagsState } from '../featureFlags';
 import type { FileSystemState } from '../fileSystem/FileSystemTypes';
 import type { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
@@ -21,12 +19,12 @@ import type {
   DebuggerContext,
   WorkspaceLocation,
   WorkspaceManagerState,
-  WorkspaceState
+  WorkspaceState,
 } from '../workspace/WorkspaceTypes';
 import type { RouterState } from './types/CommonsTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
 import type { SessionState } from './types/SessionTypes';
-import type { VscodeState as VscodeState } from './types/VscodeTypes';
+import type { VscodeState } from './types/VscodeTypes';
 
 export type OverallState = {
   readonly router: RouterState;
@@ -34,7 +32,6 @@ export type OverallState = {
   readonly leaderboard: LeaderboardState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
-  readonly stories: StoriesState;
   readonly workspaces: WorkspaceManagerState;
   readonly dashboard: DashboardState;
   readonly featureFlags: FeatureFlagsState;
@@ -119,28 +116,19 @@ export type InterpreterOutput =
 export enum Role {
   Student = 'student',
   Staff = 'staff',
-  Admin = 'admin'
-}
-
-// Must match https://github.com/source-academy/stories-backend/blob/main/internal/enums/groups/role.go
-export enum StoriesRole {
-  Standard = 'member',
-  Moderator = 'moderator',
-  Admin = 'admin'
+  Admin = 'admin',
 }
 
 export enum SupportedLanguage {
   JAVASCRIPT = 'JavaScript',
-  PYTHON = 'Python',
   JAVA = 'Java',
-  C = 'C'
+  C = 'C',
 }
 
 export const SUPPORTED_LANGUAGES = [
   SupportedLanguage.JAVASCRIPT,
-  SupportedLanguage.PYTHON,
   SupportedLanguage.JAVA,
-  SupportedLanguage.C
+  SupportedLanguage.C,
 ];
 
 /**
@@ -167,7 +155,7 @@ const variantDisplay: Map<Variant, string> = new Map([
   [Variant.TYPED, 'Typed'],
   [Variant.WASM, 'WebAssembly'],
   [Variant.NATIVE, 'Native'],
-  [Variant.EXPLICIT_CONTROL, 'Explicit-Control']
+  [Variant.EXPLICIT_CONTROL, 'Explicit-Control'],
 ]);
 
 export const fullJSLanguage: SALanguage = {
@@ -175,7 +163,7 @@ export const fullJSLanguage: SALanguage = {
   variant: Variant.DEFAULT,
   displayName: 'full JavaScript',
   mainLanguage: SupportedLanguage.JAVASCRIPT,
-  supports: { dataVisualizer: true, repl: true }
+  supports: { dataVisualizer: true, repl: true },
 };
 
 export const fullTSLanguage: SALanguage = {
@@ -183,7 +171,7 @@ export const fullTSLanguage: SALanguage = {
   variant: Variant.DEFAULT,
   displayName: 'full TypeScript',
   mainLanguage: SupportedLanguage.JAVASCRIPT,
-  supports: { dataVisualizer: true, repl: true }
+  supports: { dataVisualizer: true, repl: true },
 };
 
 export const htmlLanguage: SALanguage = {
@@ -191,24 +179,12 @@ export const htmlLanguage: SALanguage = {
   variant: Variant.DEFAULT,
   displayName: 'HTML',
   mainLanguage: SupportedLanguage.JAVASCRIPT,
-  supports: {}
+  supports: {},
 };
 
 export function isCseVariant(variant: Variant): boolean {
   return variant == Variant.EXPLICIT_CONTROL;
 }
-
-const pySubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
-  { chapter: Chapter.PYTHON_1, variant: Variant.DEFAULT, displayName: 'Python \xa71' }
-  //{ chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },
-  //{ chapter: Chapter.PYTHON_3, variant: Variant.DEFAULT, displayName: 'Python \xa73' },
-  //{ chapter: Chapter.PYTHON_4, variant: Variant.DEFAULT, displayName: 'Python \xa74' }
-  //{ chapter: Chapter.FULL_PYTHON, variant: Variant.DEFAULT, displayName: 'Full Python' }
-];
-
-export const pyLanguages: SALanguage[] = pySubLanguages.map(sublang => {
-  return { ...sublang, mainLanguage: SupportedLanguage.PYTHON, supports: { repl: true } };
-});
 
 export const javaLanguages: SALanguage[] = [
   {
@@ -216,8 +192,8 @@ export const javaLanguages: SALanguage[] = [
     variant: Variant.DEFAULT,
     displayName: 'Java',
     mainLanguage: SupportedLanguage.JAVA,
-    supports: { cseMachine: true }
-  }
+    supports: { cseMachine: true },
+  },
 ];
 export const cLanguages: SALanguage[] = [
   {
@@ -225,8 +201,8 @@ export const cLanguages: SALanguage[] = [
     variant: Variant.DEFAULT,
     displayName: 'C',
     mainLanguage: SupportedLanguage.C,
-    supports: {}
-  }
+    supports: {},
+  },
 ];
 
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
@@ -250,7 +226,7 @@ const sourceSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant'>> = [
   { chapter: Chapter.SOURCE_4, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_4, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_4, variant: Variant.NATIVE },
-  { chapter: Chapter.SOURCE_4, variant: Variant.EXPLICIT_CONTROL }
+  { chapter: Chapter.SOURCE_4, variant: Variant.EXPLICIT_CONTROL },
 ];
 
 export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
@@ -278,7 +254,7 @@ export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
     ...sublang,
     displayName: `Source \xa7${chapter} ${variantDisplay.get(variant) ?? ''}`.trim(),
     mainLanguage: SupportedLanguage.JAVASCRIPT,
-    supports: supportedFeatures
+    supports: supportedFeatures,
   };
 });
 
@@ -290,17 +266,16 @@ export const ALL_LANGUAGES: readonly SALanguage[] = [
   fullJSLanguage,
   fullTSLanguage,
   htmlLanguage,
-  ...pyLanguages,
   ...javaLanguages,
-  ...cLanguages
+  ...cLanguages,
 ];
 // TODO: Remove this function once logic has been fully migrated
 export const getLanguageConfig = (
   chapter: Chapter,
-  variant: Variant = Variant.DEFAULT
+  variant: Variant = Variant.DEFAULT,
 ): SALanguage => {
   const languageConfig = ALL_LANGUAGES.find(
-    lang => lang.chapter === chapter && lang.variant === variant
+    lang => lang.chapter === chapter && lang.variant === variant,
   );
   if (!languageConfig) {
     throw new Error(`Language config not found for chapter ${chapter} variant ${variant}`);
@@ -313,15 +288,15 @@ export const defaultRouter: RouterState = null;
 export const defaultDashboard: DashboardState = {
   gradingSummary: {
     cols: [],
-    rows: []
-  }
+    rows: [],
+  },
 };
 
 export const defaultAchievement: AchievementState = {
   achievements: [],
   goals: [],
   users: [],
-  assessmentOverviews: []
+  assessmentOverviews: [],
 };
 
 export const defaultLeaderboard: LeaderboardState = {
@@ -330,14 +305,14 @@ export const defaultLeaderboard: LeaderboardState = {
   contestPopularVote: [],
   code: '',
   contests: [],
-  initialRun: {}
+  initialRun: {},
 };
 
 const getDefaultLanguageConfig = (): SALanguage => {
   const languageConfig = ALL_LANGUAGES.find(
     sublang =>
       sublang.chapter === Constants.defaultSourceChapter &&
-      sublang.variant === Constants.defaultSourceVariant
+      sublang.variant === Constants.defaultSourceVariant,
   );
   if (!languageConfig) {
     throw new Error('Cannot find language config to match default chapter and variant');
@@ -348,7 +323,7 @@ export const defaultLanguageConfig: SALanguage = getDefaultLanguageConfig();
 
 export const defaultPlayground: PlaygroundState = {
   githubSaveInfo: { repoName: '', filePath: '' },
-  languageConfig: defaultLanguageConfig
+  languageConfig: defaultLanguageConfig,
 };
 
 export const defaultEditorValue = '// Type your program in here!';
@@ -365,7 +340,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
     Constants.defaultSourceChapter,
     [],
     workspaceLocation,
-    Constants.defaultSourceVariant
+    Constants.defaultSourceVariant,
   ),
   isFolderModeEnabled: false,
   activeEditorTabIndex: 0,
@@ -374,10 +349,10 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
       filePath: ['playground', 'sicp'].includes(workspaceLocation)
         ? getDefaultFilePath(workspaceLocation)
         : undefined,
-      value: ['playground', 'sourcecast'].includes(workspaceLocation) ? defaultEditorValue : '',
+      value: ['playground'].includes(workspaceLocation) ? defaultEditorValue : '',
       highlightedLines: [],
-      breakpoints: []
-    }
+      breakpoints: [],
+    },
   ],
   programPrependValue: '',
   programPostpendValue: '',
@@ -391,7 +366,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   replHistory: {
     browseIndex: null,
     records: [],
-    originalValue: ''
+    originalValue: '',
   },
   replValue: '',
   hasTokenCounter: false,
@@ -407,7 +382,17 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   debuggerContext: {} as DebuggerContext,
   lastDebuggerResult: undefined,
   files: {},
-  updateUserRoleCallback: () => {}
+  updateUserRoleCallback: () => {},
+  versionHistory: {
+    versions: [],
+    selectedVersion: null,
+    selectedVersionCode: null,
+    isLoadingCode: false,
+    isLoading: false,
+    isHistoryPanelOpen: false,
+    isAutoSaving: false,
+  },
+  saveStatus: 'idle',
 });
 
 const defaultFileName = 'program.js';
@@ -419,12 +404,12 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     ...createDefaultWorkspace('assessment'),
     currentAssessment: undefined,
     currentQuestion: undefined,
-    hasUnsavedChanges: false
+    hasUnsavedChanges: false,
   },
   grading: {
     ...createDefaultWorkspace('grading'),
     submissionsTableFilters: {
-      columnFilters: []
+      columnFilters: [],
     },
     currentSubmission: undefined,
     currentQuestion: undefined,
@@ -435,9 +420,9 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     requestCounter: 0,
     allColsSortStates: {
       currentState: freshSortState,
-      sortBy: ''
+      sortBy: '',
     },
-    hasLoadedBefore: false
+    hasLoadedBefore: false,
   },
   playground: {
     ...createDefaultWorkspace('playground'),
@@ -455,44 +440,9 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
         filePath: getDefaultFilePath('playground'),
         value: defaultEditorValue,
         highlightedLines: [],
-        breakpoints: []
-      }
-    ]
-  },
-  sourcecast: {
-    ...createDefaultWorkspace('sourcecast'),
-    audioUrl: '',
-    codeDeltasToApply: null,
-    currentPlayerTime: 0,
-    description: null,
-    inputToApply: null,
-    playbackData: {
-      init: {
-        editorValue: '',
-        chapter: Chapter.SOURCE_1,
-        externalLibrary: ExternalLibraryName.NONE
+        breakpoints: [],
       },
-      inputs: []
-    },
-    playbackDuration: 0,
-    playbackStatus: PlaybackStatus.paused,
-    sourcecastIndex: null,
-    title: null,
-    uid: null
-  },
-  sourcereel: {
-    ...createDefaultWorkspace('sourcereel'),
-    playbackData: {
-      init: {
-        editorValue: '',
-        chapter: Chapter.SOURCE_1,
-        externalLibrary: ExternalLibraryName.NONE
-      },
-      inputs: []
-    },
-    recordingStatus: RecordingStatus.notStarted,
-    timeElapsedBeforePause: 0,
-    timeResumed: 0
+    ],
   },
   sicp: {
     ...createDefaultWorkspace('sicp'),
@@ -510,14 +460,10 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
         filePath: getDefaultFilePath('sicp'),
         value: defaultEditorValue,
         highlightedLines: [],
-        breakpoints: []
-      }
-    ]
+        breakpoints: [],
+      },
+    ],
   },
-  stories: {
-    ...createDefaultWorkspace('stories')
-    // TODO: Perhaps we can add default values?
-  }
 };
 
 export const defaultSession: SessionState = {
@@ -525,12 +471,12 @@ export const defaultSession: SessionState = {
   group: null,
   gameState: {
     completed_quests: [],
-    collectibles: {}
+    collectibles: {},
   },
   xp: 0,
   story: {
     story: '',
-    playStory: false
+    playStory: false,
   },
   assessments: {},
   assessmentOverviews: undefined,
@@ -541,39 +487,16 @@ export const defaultSession: SessionState = {
   students: undefined,
   teamFormationOverviews: undefined,
   gradings: {},
-  notifications: []
+  notifications: [],
 };
-
-export const defaultStories: StoriesState = {
-  storyList: [],
-  currentStoryId: null,
-  currentStory: null,
-  envs: {},
-  storiesUsers: []
-};
-
-export const createDefaultStoriesEnv = (
-  envName: string,
-  chapter: Chapter,
-  variant: Variant
-): StoriesEnvState => ({
-  context: createContext<string>(chapter, [], envName, variant),
-  execTime: 1000,
-  isRunning: false,
-  output: [],
-  stepLimit: 1000,
-  globals: [],
-  usingSubst: false,
-  debuggerContext: {} as DebuggerContext
-});
 
 export const defaultFileSystem: FileSystemState = {
-  inBrowserFileSystem: null
+  inBrowserFileSystem: null,
 };
 
 export const defaultSideContent: SideContentState = {
   dynamicTabs: [],
-  alerts: []
+  alerts: [],
 };
 
 export const defaultSideContentManager: SideContentManagerState = {
@@ -581,25 +504,22 @@ export const defaultSideContentManager: SideContentManagerState = {
   grading: defaultSideContent,
   playground: defaultSideContent,
   sicp: defaultSideContent,
-  sourcecast: defaultSideContent,
-  sourcereel: defaultSideContent,
-  stories: {}
 };
 
 export const defaultVscode: VscodeState = {
-  isVscode: false
+  isVscode: false,
 };
 
 export const defaultLanguageDirectory: LanguageDirectoryState = {
   selectedLanguageId: null,
   selectedEvaluatorId: null,
   languages: [],
-  languageMap: {}
+  languageMap: {},
 };
 
 export const defaultPluginDirectory: PluginDirectoryState = {
   plugins: [],
-  pluginMap: {}
+  pluginMap: {},
 };
 
 export const defaultState: OverallState = {
@@ -609,12 +529,11 @@ export const defaultState: OverallState = {
   dashboard: defaultDashboard,
   playground: defaultPlayground,
   session: defaultSession,
-  stories: defaultStories,
   workspaces: defaultWorkspaceManager,
   featureFlags: defaultFeatureFlags,
   fileSystem: defaultFileSystem,
   sideContent: defaultSideContentManager,
   vscode: defaultVscode,
   languageDirectory: defaultLanguageDirectory,
-  pluginDirectory: defaultPluginDirectory
+  pluginDirectory: defaultPluginDirectory,
 };

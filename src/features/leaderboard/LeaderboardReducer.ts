@@ -1,9 +1,10 @@
-import { createReducer, Reducer } from '@reduxjs/toolkit';
-import { SourceActionType } from 'src/commons/utils/ActionsHelper';
+import type { Reducer } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
+import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
 import { defaultLeaderboard } from '../../commons/application/ApplicationTypes';
 import LeaderboardActions from './LeaderboardActions';
-import { LeaderboardState } from './LeaderboardTypes';
+import type { LeaderboardState } from './LeaderboardTypes';
 
 export const LeaderboardReducer: Reducer<LeaderboardState, SourceActionType> = createReducer(
   defaultLeaderboard,
@@ -12,7 +13,7 @@ export const LeaderboardReducer: Reducer<LeaderboardState, SourceActionType> = c
       .addCase(LeaderboardActions.saveOverallLeaderboardXP, (state, action) => {
         state.paginatedUserXp = {
           rows: action.payload.rows || [],
-          userCount: action.payload.userCount || 0
+          userCount: action.payload.userCount || 0,
         };
       })
       .addCase(LeaderboardActions.saveAllContestScores, (state, action) => {
@@ -36,5 +37,5 @@ export const LeaderboardReducer: Reducer<LeaderboardState, SourceActionType> = c
       .addCase(LeaderboardActions.resetWorkspaceInitialRun, (state, action) => {
         state.initialRun[action.payload] = false;
       });
-  }
+  },
 );

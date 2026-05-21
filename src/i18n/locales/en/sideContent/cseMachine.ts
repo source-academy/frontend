@@ -13,10 +13,10 @@ const translations = {
     a: 'a: Move to the first step',
     e: 'e: Move to the last step',
     f: 'f: Move to the next step',
-    b: 'b: Move to the previous step'
+    b: 'b: Move to the previous step',
   },
   shortcutsNote: 'Note that these shortcuts are only active when the browser focus is on this tab.',
-  label: 'CSE Machine'
+  label: 'CSE Machine',
 };
 
 export default translations;

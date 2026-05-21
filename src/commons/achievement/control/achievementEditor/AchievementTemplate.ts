@@ -1,16 +1,16 @@
 import {
   cardBackgroundUrl,
-  coverImageUrl
+  coverImageUrl,
 } from '../../../../features/achievement/AchievementConstants';
-import {
+import type {
   AchievementItem,
-  AchievementView
+  AchievementView,
 } from '../../../../features/achievement/AchievementTypes';
 
 export const viewTemplate: AchievementView = {
   coverImage: `${coverImageUrl}/default.png`,
   description: '',
-  completionText: ''
+  completionText: '',
 };
 
 export const achievementTemplate: AchievementItem = {
@@ -23,5 +23,5 @@ export const achievementTemplate: AchievementItem = {
   prerequisiteUuids: [],
   goalUuids: [],
   cardBackground: `${cardBackgroundUrl}/default.png`,
-  view: viewTemplate
+  view: viewTemplate,
 };
