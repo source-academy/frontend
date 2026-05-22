@@ -424,7 +424,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const autorunButtonHandlers = useMemo(() => {
     return {
       handleEditorEval: () => {
+        const wasCenterAligned = CseMachine.getCenterAlignment();
         CseMachine.clearCachedLayouts();
+        if (wasCenterAligned) {
+          CseMachine.toggleCenterAlignment();
+        }
+
         // reset stepper before evaluation
         dispatch(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
         dispatch(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
@@ -438,7 +443,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
         dispatch(WorkspaceActions.evalEditor(workspaceLocation));
         CseMachine.setClearDeadFrames(false);
-        if (CseMachine.getCenterAlignment()) {
+        if (wasCenterAligned) {
           CseMachine.toggleCenterAlignment();
         }
       },
