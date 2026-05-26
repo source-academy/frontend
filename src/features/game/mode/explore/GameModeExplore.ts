@@ -3,11 +3,11 @@ import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 import SoundAssets from '../../assets/SoundAssets';
 import { Constants, screenSize } from '../../commons/CommonConstants';
 import CommonLeaveButton from '../../commons/CommonLeaveButton';
-import { IGameUI, ItemId } from '../../commons/CommonTypes';
+import type { IGameUI, ItemId } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
-import { ActivatableSprite } from '../../objects/GameObjectTypes';
+import type { ActivatableSprite } from '../../objects/GameObjectTypes';
 import { sleep } from '../../utils/GameUtils';
 import ExploreModeConstants from './GameModeExploreConstants';
 
@@ -40,8 +40,8 @@ class GameModeExplore implements IGameUI {
       gameManager,
       async () =>
         await GameGlobalAPI.getInstance().restoreLocation(
-          GameGlobalAPI.getInstance().getCurrLocId()
-        )
+          GameGlobalAPI.getInstance().getCurrLocId(),
+        ),
     );
     exploreMenuContainer.add(leaveButton);
     return exploreMenuContainer;
@@ -71,7 +71,7 @@ class GameModeExplore implements IGameUI {
 
     gameManager.tweens.add({
       targets: this.uiContainer,
-      ...entryTweenProps
+      ...entryTweenProps,
     });
 
     // Change default icon
@@ -98,7 +98,7 @@ class GameModeExplore implements IGameUI {
 
       gameManager.tweens.add({
         targets: this.uiContainer,
-        ...exitTweenProps
+        ...exitTweenProps,
       });
 
       await sleep(500);

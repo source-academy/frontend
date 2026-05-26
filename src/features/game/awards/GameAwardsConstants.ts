@@ -1,25 +1,25 @@
 import FontAssets from '../assets/FontAssets';
 import { Constants, screenSize } from '../commons/CommonConstants';
-import { BitmapFontStyle } from '../commons/CommonTypes';
+import type { BitmapFontStyle } from '../commons/CommonTypes';
 import { Color } from '../utils/StyleUtils';
-import { AwardProperty } from './GameAwardsTypes';
+import type { AwardProperty } from './GameAwardsTypes';
 
 export const listBannerTextStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 25,
-  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
+  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT,
 };
 
 export const awardTitleStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
   size: 50,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 export const awardKeyStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 18,
-  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
+  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT,
 };
 
 export const awardDescStyle = {
@@ -28,7 +28,7 @@ export const awardDescStyle = {
   fill: Color.lightBlue,
   align: 'center',
   lineSpacing: 10,
-  wordWrap: { width: 500 }
+  wordWrap: { width: 500 },
 };
 
 export const defaultAwardProp: AwardProperty = {
@@ -37,7 +37,7 @@ export const defaultAwardProp: AwardProperty = {
   assetPath: Constants.nullInteractionId,
   title: Constants.nullInteractionId,
   description: 'There is no asset associated with this award.',
-  completed: false
+  completed: false,
 };
 
 export const awardExplanation =
@@ -61,8 +61,8 @@ const AwardsConstants = {
     keyTagTextConfig: { x: previewXPos - 205, y: previewKeyYPos, oriX: 0.0, oriY: 0.5 },
     keyTextConfig: { x: previewXPos - 90, y: previewKeyYPos, oriX: 0.0, oriY: 0.5 },
     explanation: { x: previewXPos - 150, y: previewYPos + 200 },
-    titleTextConfig: { x: previewXPos + 20, y: previewYPos - 275, oriX: 0.5, oriY: 0.5 }
-  }
+    titleTextConfig: { x: previewXPos + 20, y: previewYPos - 275, oriX: 0.5, oriY: 0.5 },
+  },
 };
 
 export default AwardsConstants;

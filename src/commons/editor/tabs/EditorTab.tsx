@@ -1,7 +1,6 @@
 import { Card, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import React from 'react';
 
 type Props = {
   filePath: string;
@@ -20,7 +19,7 @@ const EditorTab: React.FC<Props> = ({ filePath, isActive, setActive, remove }) =
   return (
     <Card
       className={classNames('editor-tab', {
-        selected: isActive
+        selected: isActive,
       })}
       onClick={setActive}
     >

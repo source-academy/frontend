@@ -1,12 +1,16 @@
-import { Context } from 'js-slang';
+import type { Context } from 'js-slang';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { parse } from 'js-slang/dist/parser/parser';
-import React from 'react';
 
 import { arrowSelection } from './components/arrows/ArrowSelection';
 import { CseAnimation } from './CseMachineAnimation';
-import { Layout, LayoutCache } from './CseMachineLayout';
-import { ArrowOriginFilterKey, ArrowOriginFilters, EnvTree, EnvTreeNode } from './CseMachineTypes';
+import { Layout, type LayoutCache } from './CseMachineLayout';
+import type {
+  ArrowOriginFilterKey,
+  ArrowOriginFilters,
+  EnvTree,
+  EnvTreeNode,
+} from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
 
 type SetVis = (vis: React.ReactNode) => void;
@@ -21,7 +25,7 @@ export default class CseMachine {
     'function',
     'array',
     'control',
-    'stash'
+    'stash',
   ];
   private static readonly defaultArrowOriginFilters: ArrowOriginFilters = {
     text: true,
@@ -29,7 +33,7 @@ export default class CseMachine {
     function: true,
     array: true,
     control: true,
-    stash: true
+    stash: true,
   };
   /** callback function to update the visualization state in the SideContentCseMachine component */
   private static setVis: SetVis;
@@ -50,7 +54,7 @@ export default class CseMachine {
   private static centerAlignment: boolean = false;
   private static centerAlignmentToggled: boolean = false;
   private static arrowOriginFilters: ArrowOriginFilters = {
-    ...CseMachine.defaultArrowOriginFilters
+    ...CseMachine.defaultArrowOriginFilters,
   };
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
@@ -200,7 +204,7 @@ export default class CseMachine {
     width: number,
     height: number,
     setEditorHighlightedLines: (segments: [number, number][]) => void,
-    setIsStepLimitExceeded: SetisStepLimitExceeded
+    setIsStepLimitExceeded: SetisStepLimitExceeded,
   ) {
     Layout.visibleHeight = height;
     Layout.visibleWidth = width;
@@ -231,7 +235,7 @@ export default class CseMachine {
       context.runtime.environmentTree as EnvTree,
       context.runtime.control,
       context.runtime.stash,
-      context.chapter
+      context.chapter,
     );
 
     // Build ghost layout cache and built-in/predeclared functions cache lazily per mode, using mode-specific layout.
@@ -368,7 +372,7 @@ export default class CseMachine {
           context.runtime.environmentTree as EnvTree,
           context.runtime.control!,
           context.runtime.stash!,
-          context.chapter
+          context.chapter,
         );
         return Layout.getLayoutPositions(this.controlStash);
       };
@@ -384,7 +388,7 @@ export default class CseMachine {
         context.runtime.environmentTree as EnvTree,
         context.runtime.control,
         context.runtime.stash,
-        context.chapter
+        context.chapter,
       );
     }
 

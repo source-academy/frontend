@@ -29,7 +29,7 @@ const PlaygroundSaga = combineSagaHandlers({
     try {
       const { result, hasTimedOut } = yield race({
         result: call(shortenURLRequest, queryString, keyword),
-        hasTimedOut: delay(10000)
+        hasTimedOut: delay(10000),
       });
 
       resp = result;
@@ -52,7 +52,7 @@ const PlaygroundSaga = combineSagaHandlers({
     yield put(PlaygroundActions.updateShortURL(Constants.urlShortenerBase + resp.url.keyword));
   },
   [SideContentActions.visitSideContent.type]: function* ({
-    payload: { newId, prevId, workspaceLocation }
+    payload: { newId, prevId, workspaceLocation },
   }) {
     if (workspaceLocation !== 'playground' || newId === prevId) return;
 
@@ -63,7 +63,7 @@ const PlaygroundSaga = combineSagaHandlers({
 
     const {
       context: { chapter: playgroundSourceChapter },
-      editorTabs
+      editorTabs,
     } = yield* selectWorkspace('playground');
 
     if (prevId === SideContentType.substVisualizer) {
@@ -105,19 +105,19 @@ const PlaygroundSaga = combineSagaHandlers({
     } else {
       yield put(WorkspaceActions.toggleUsingUpload(false, workspaceLocation));
     }
-  }
+  },
 });
 
 export default PlaygroundSaga;
 
 function* updateQueryString() {
   const fileSystem: FSModule = yield select(
-    (state: OverallState) => state.fileSystem.inBrowserFileSystem
+    (state: OverallState) => state.fileSystem.inBrowserFileSystem,
   );
   const files: Record<string, string> = yield call(
     retrieveFilesInWorkspaceAsRecord,
     'playground',
-    fileSystem
+    fileSystem,
   );
 
   const {
@@ -126,7 +126,7 @@ function* updateQueryString() {
     editorTabs,
     execTime,
     externalLibrary: external,
-    isFolderModeEnabled
+    isFolderModeEnabled,
   } = yield* selectWorkspace('playground');
 
   const editorTabFilePaths = editorTabs
@@ -141,7 +141,7 @@ function* updateQueryString() {
     chap: chapter,
     variant,
     ext: external,
-    exec: execTime
+    exec: execTime,
   });
   yield put(PlaygroundActions.changeQueryString(newQueryString));
 }
@@ -152,7 +152,7 @@ function* updateQueryString() {
  */
 export async function shortenURLRequest(
   queryString: string,
-  keyword: string
+  keyword: string,
 ): Promise<Response | null> {
   const url = `${window.location.protocol}//${window.location.host}/playground#${queryString}`;
 
@@ -161,14 +161,14 @@ export async function shortenURLRequest(
     action: 'shorturl',
     format: 'json',
     keyword,
-    url
+    url,
   };
   const fetchOpts: RequestInit = {
     method: 'POST',
     body: Object.entries(params).reduce((formData, [k, v]) => {
       formData.append(k, v!);
       return formData;
-    }, new FormData())
+    }, new FormData()),
   };
 
   const resp = await fetch(`${Constants.urlShortenerBase}yourls-api.php`, fetchOpts);

@@ -1,7 +1,6 @@
 import { NumericInput, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
-import { GoalMeta, ManualMeta } from 'src/features/achievement/AchievementTypes';
+import type { GoalMeta, ManualMeta } from 'src/features/achievement/AchievementTypes';
 
 type Props = {
   changeMeta: (meta: GoalMeta) => void;
@@ -17,7 +16,7 @@ const EditableManualMeta: React.FC<Props> = ({ changeMeta, manualMeta }) => {
   return (
     <Tooltip content="Target Count">
       <NumericInput
-        allowNumericCharactersOnly={true}
+        allowNumericCharactersOnly
         leftIcon={IconNames.BANK_ACCOUNT}
         min={0}
         onValueChange={changeTargetCount}

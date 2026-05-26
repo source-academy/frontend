@@ -1,5 +1,4 @@
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 import ControlButton from '../ControlButton';
 
@@ -7,7 +6,7 @@ type Props = {
   onClick?(): any;
 };
 
-export const ControlBarSubmit: React.FC<Props> = ({ onClick }) => {
+const ControlBarSubmit: React.FC<Props> = ({ onClick }) => {
   return (
     <ControlButton
       label="Submit"
@@ -17,3 +16,5 @@ export const ControlBarSubmit: React.FC<Props> = ({ onClick }) => {
     />
   );
 };
+
+export default ControlBarSubmit;

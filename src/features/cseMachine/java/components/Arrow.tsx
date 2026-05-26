@@ -1,15 +1,15 @@
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
-import { IHoverable } from '../../CseMachineTypes';
+import type { IHoverable } from '../../CseMachineTypes';
 import {
   defaultStrokeColor,
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
-  setUnhoveredStyle
+  setUnhoveredStyle,
 } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 
@@ -102,7 +102,7 @@ export class Arrow extends Visible implements IHoverable {
       const maxSpaceRadius = Math.min(segment1Length / 2, segment2Length / 2, terminalAllowance);
       const desiredRadius = Math.min(
         Config.ArrowCornerRadius,
-        maxSpaceRadius * Config.ArrowSmallBendRadiusScale
+        maxSpaceRadius * Config.ArrowSmallBendRadiusScale,
       );
       const br =
         maxSpaceRadius >= Config.ArrowMinCornerRadius

@@ -1,6 +1,6 @@
 import { ECE } from 'java-slang';
-import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import type { KonvaEventObject } from 'konva/lib/Node';
+import { createRef } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 
 import { defaultBackgroundColor } from '../CseMachineUtils';
@@ -21,7 +21,7 @@ export class CseMachine {
   /** function to highlight editor lines */
   public static setEditorHighlightedLines: SetEditorHighlightedLines;
 
-  public static stageRef: RefObject<any> = React.createRef();
+  public static stageRef: React.RefObject<any> = createRef();
   /** scale factor for zooming and out of canvas */
   public static scaleFactor = 1.02;
 
@@ -75,7 +75,7 @@ export class CseMachine {
       const { x: pointerX, y: pointerY } = stage.getPointerPosition();
       const mousePointTo = {
         x: (pointerX - stage.x()) / oldScale,
-        y: (pointerY - stage.y()) / oldScale
+        y: (pointerY - stage.y()) / oldScale,
       };
 
       // zoom in or zoom out
@@ -92,7 +92,7 @@ export class CseMachine {
         if (typeof event !== 'boolean') {
           const newPos = {
             x: pointerX - mousePointTo.x * newScale,
-            y: pointerY - mousePointTo.y * newScale
+            y: pointerY - mousePointTo.y * newScale,
           };
           stage.position(newPos);
           stage.batchDraw();
@@ -109,7 +109,7 @@ export class CseMachine {
           style={{
             width: window.innerWidth - 50,
             height: window.innerHeight - 150,
-            overflow: 'hidden'
+            overflow: 'hidden',
           }}
         >
           <div
@@ -118,7 +118,7 @@ export class CseMachine {
               width: Config.CanvasMinWidth,
               height: Config.CanvasMinHeight,
               overflow: 'hidden',
-              backgroundColor: defaultBackgroundColor()
+              backgroundColor: defaultBackgroundColor(),
             }}
           >
             <Stage

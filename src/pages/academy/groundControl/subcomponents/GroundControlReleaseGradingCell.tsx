@@ -1,8 +1,9 @@
 import { Button, Dialog, DialogBody, DialogFooter, Intent, Tooltip } from '@blueprintjs/core';
-import { IconName, IconNames } from '@blueprintjs/icons';
-import React, { useCallback, useMemo, useState } from 'react';
+import type { IconName } from '@blueprintjs/icons';
+import { IconNames } from '@blueprintjs/icons';
+import { useCallback, useMemo, useState } from 'react';
 
-import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
 
 type MassPublishFn = (id: number) => void;
@@ -16,11 +17,11 @@ type Props = {
 const ReleaseGradingCell: React.FC<Props> = ({
   data,
   handlePublishGradingAll,
-  handleUnpublishGradingAll
+  handleUnpublishGradingAll,
 }) => {
   const cells = useMemo(
     () => massPublishingChanges(data, handlePublishGradingAll, handleUnpublishGradingAll),
-    [data, handlePublishGradingAll, handleUnpublishGradingAll]
+    [data, handlePublishGradingAll, handleUnpublishGradingAll],
   );
 
   return (
@@ -44,7 +45,7 @@ type SubProps = {
 const massPublishingChanges = (
   data: AssessmentOverview,
   publishAll: MassPublishFn,
-  unpublishAll: MassPublishFn
+  unpublishAll: MassPublishFn,
 ): SubProps[] => [
   {
     keyID: '1',
@@ -52,7 +53,7 @@ const massPublishingChanges = (
     data: data,
     change: 'Unpublish all submissions',
     description: 'Non-published submissions are not affected.',
-    icon: IconNames.CROSS_CIRCLE
+    icon: IconNames.CROSS_CIRCLE,
   },
   {
     keyID: '2',
@@ -60,8 +61,8 @@ const massPublishingChanges = (
     data: data,
     change: 'Publish all graded submissions',
     description: 'Ungraded or already-published submissions are not affected.',
-    icon: IconNames.ENDORSED
-  }
+    icon: IconNames.ENDORSED,
+  },
 ];
 
 const MassPublishingChangeCell: React.FC<SubProps> = ({
@@ -70,7 +71,7 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
   data,
   change,
   description,
-  icon
+  icon,
 }) => {
   const [isDialogOpen, setDialogState] = useState(false);
 
@@ -86,14 +87,14 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
   return (
     <>
       <Tooltip content={change} placement="top">
-        <Button minimal key={keyID} onClick={handleOpenDialog} icon={icon} />
+        <Button variant="minimal" key={keyID} onClick={handleOpenDialog} icon={icon} />
       </Tooltip>
       <Dialog
         icon={IconNames.WARNING_SIGN}
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         title={change}
-        canOutsideClickClose={true}
+        canOutsideClickClose
       >
         <DialogBody>
           <p>
@@ -108,13 +109,13 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
                 label="Cancel"
                 icon={IconNames.CROSS}
                 onClick={handleCloseDialog}
-                options={{ minimal: false }}
+                options={{ variant: 'default' }}
               />
               <ControlButton
                 label="Confirm"
                 icon={IconNames.CONFIRM}
                 onClick={handleMassPublishChange}
-                options={{ minimal: false, intent: Intent.DANGER }}
+                options={{ variant: 'default', intent: Intent.DANGER }}
               />
             </>
           }

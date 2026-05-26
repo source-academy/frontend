@@ -1,7 +1,7 @@
-import { SpeakerDetail } from '../character/GameCharacterTypes';
+import type { SpeakerDetail } from '../character/GameCharacterTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
-import { DialogueStorageLine } from './GameDialogueTypes';
+import type { DialogueStorageLine } from './GameDialogueTypes';
 
 /**
  * Class for keeping track of all dialogue and actions shown to the player, in sequence.
@@ -27,7 +27,7 @@ export default class GameDialogueStorageManager {
     }
     const newDialogue = {
       speaker: this.getSpeakerName(newSpeakerDetail),
-      line: newLine
+      line: newLine,
     };
     this.dialogueStorage.push(newDialogue);
   }

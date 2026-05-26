@@ -1,4 +1,3 @@
-import React from 'react';
 import { Rect } from 'react-konva';
 
 import { ShapeDefaultProps } from '../CseMachineConfig';
@@ -37,7 +36,7 @@ export class ArrayEmptyUnit extends Visible {
         width={this.width()}
         height={this.height()}
         fill={defaultBackgroundColor()}
-        fillEnabled={true}
+        fillEnabled
         stroke={strokeColor}
         listening={false}
         ref={this.ref}

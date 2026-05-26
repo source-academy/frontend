@@ -1,7 +1,7 @@
 import {
-  AchievementGoal,
-  AchievementItem,
-  GoalType
+  type AchievementGoal,
+  type AchievementItem,
+  GoalType,
 } from '../../features/achievement/AchievementTypes';
 import { AND, EventTypes } from '../../features/achievement/ExpressionTypes';
 
@@ -22,8 +22,8 @@ export const mockAchievements: AchievementItem[] = [
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/cover-image/default.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
-      completionText: 'Congratulations! You have completed Rune Master achievement'
-    }
+      completionText: 'Congratulations! You have completed Rune Master achievement',
+    },
   },
   {
     uuid: '1',
@@ -42,8 +42,8 @@ export const mockAchievements: AchievementItem[] = [
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/cover-image/default.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
-      completionText: 'Congratulations! You have completed Beyond the Second Dimension achievement'
-    }
+      completionText: 'Congratulations! You have completed Beyond the Second Dimension achievement',
+    },
   },
   {
     uuid: '2',
@@ -62,8 +62,8 @@ export const mockAchievements: AchievementItem[] = [
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/cover-image/default.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
-      completionText: 'Congratulations! You have completed Colorful Carpet achievement'
-    }
+      completionText: 'Congratulations! You have completed Colorful Carpet achievement',
+    },
   },
   {
     uuid: '3',
@@ -78,8 +78,8 @@ export const mockAchievements: AchievementItem[] = [
     view: {
       coverImage: '',
       description: '',
-      completionText: ''
-    }
+      completionText: '',
+    },
   },
   {
     uuid: '4',
@@ -98,8 +98,8 @@ export const mockAchievements: AchievementItem[] = [
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/cover-image/default.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
-      completionText: 'Congratulations! You have completed Curve Wizard achievement'
-    }
+      completionText: 'Congratulations! You have completed Curve Wizard achievement',
+    },
   },
   {
     uuid: '5',
@@ -118,8 +118,8 @@ export const mockAchievements: AchievementItem[] = [
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/cover-image/default.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
-      completionText: 'Congratulations! You have completed Curve Introduction achievement'
-    }
+      completionText: 'Congratulations! You have completed Curve Introduction achievement',
+    },
   },
   {
     uuid: '6',
@@ -138,8 +138,8 @@ export const mockAchievements: AchievementItem[] = [
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/cover-image/default.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
-      completionText: 'Congratulations! You have completed Curve Manipulation achievement'
-    }
+      completionText: 'Congratulations! You have completed Curve Manipulation achievement',
+    },
   },
   {
     uuid: '21',
@@ -158,8 +158,8 @@ export const mockAchievements: AchievementItem[] = [
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/cover-image/default.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
-      completionText: 'Congratulations! You have completed The Source-rer achievement'
-    }
+      completionText: 'Congratulations! You have completed The Source-rer achievement',
+    },
   },
   {
     uuid: '8',
@@ -177,8 +177,8 @@ export const mockAchievements: AchievementItem[] = [
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/cover-image/default.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
-      completionText: 'Congratulations! You have completed Power of Friendship achievement'
-    }
+      completionText: 'Congratulations! You have completed Power of Friendship achievement',
+    },
   },
   {
     uuid: '9',
@@ -196,8 +196,8 @@ export const mockAchievements: AchievementItem[] = [
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/cover-image/default.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
-      completionText: 'Congratulations! You have completed Piazza Guru achievement'
-    }
+      completionText: 'Congratulations! You have completed Piazza Guru achievement',
+    },
   },
   {
     uuid: '16',
@@ -215,8 +215,8 @@ export const mockAchievements: AchievementItem[] = [
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/cover-image/default.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
-      completionText: "Congratulations! You have completed That's the Spirit achievement"
-    }
+      completionText: "Congratulations! You have completed That's the Spirit achievement",
+    },
   },
   {
     uuid: '13',
@@ -233,9 +233,9 @@ export const mockAchievements: AchievementItem[] = [
       coverImage:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/cover-image/default.png',
       description: 'Diz for teh K00L K1dz',
-      completionText: 'U SO G00D'
-    }
-  }
+      completionText: 'U SO G00D',
+    },
+  },
 ];
 
 export const mockGoals: AchievementGoal[] = [
@@ -246,14 +246,14 @@ export const mockGoals: AchievementGoal[] = [
       type: GoalType.BINARY,
       condition: AND(
         { event: EventTypes.ASSESSMENT_GRADING, restriction: 'M2A' },
-        { event: EventTypes.ASSESSMENT_GRADING, restriction: 'M2B' }
+        { event: EventTypes.ASSESSMENT_GRADING, restriction: 'M2B' },
       ),
-      targetCount: 100
+      targetCount: 100,
     },
     count: 0,
     targetCount: 100,
     completed: false,
-    achievementUuids: ['0']
+    achievementUuids: ['0'],
   },
   {
     uuid: '1',
@@ -261,12 +261,12 @@ export const mockGoals: AchievementGoal[] = [
     meta: {
       type: GoalType.ASSESSMENT,
       assessmentNumber: 1,
-      requiredCompletionFrac: 0.5
+      requiredCompletionFrac: 0.5,
     },
     count: 213,
     targetCount: 250,
     completed: true,
-    achievementUuids: ['1']
+    achievementUuids: ['1'],
   },
   {
     uuid: '2',
@@ -274,12 +274,12 @@ export const mockGoals: AchievementGoal[] = [
     meta: {
       type: GoalType.ASSESSMENT,
       assessmentNumber: 2,
-      requiredCompletionFrac: 0.8
+      requiredCompletionFrac: 0.8,
     },
     count: 0,
     targetCount: 250,
     completed: false,
-    achievementUuids: ['2']
+    achievementUuids: ['2'],
   },
   {
     uuid: '3',
@@ -289,19 +289,19 @@ export const mockGoals: AchievementGoal[] = [
       condition: AND(
         {
           event: EventTypes.ASSESSMENT_GRADING,
-          restriction: 'M3'
+          restriction: 'M3',
         },
         {
           event: EventTypes.ASSESSMENT_GRADING,
-          restriction: 'M4A'
-        }
+          restriction: 'M4A',
+        },
       ),
-      targetCount: 100
+      targetCount: 100,
     },
     count: 0,
     targetCount: 100,
     completed: false,
-    achievementUuids: ['4']
+    achievementUuids: ['4'],
   },
   {
     uuid: '4',
@@ -309,12 +309,12 @@ export const mockGoals: AchievementGoal[] = [
     meta: {
       type: GoalType.ASSESSMENT,
       assessmentNumber: 3,
-      requiredCompletionFrac: 0.5
+      requiredCompletionFrac: 0.5,
     },
     count: 178,
     targetCount: 250,
     completed: true,
-    achievementUuids: ['5']
+    achievementUuids: ['5'],
   },
   {
     uuid: '5',
@@ -322,12 +322,12 @@ export const mockGoals: AchievementGoal[] = [
     meta: {
       type: GoalType.ASSESSMENT,
       assessmentNumber: 4,
-      requiredCompletionFrac: 0.8
+      requiredCompletionFrac: 0.8,
     },
     count: 191,
     targetCount: 250,
     completed: false,
-    achievementUuids: ['6']
+    achievementUuids: ['6'],
   },
   {
     uuid: '16',
@@ -336,14 +336,14 @@ export const mockGoals: AchievementGoal[] = [
       type: GoalType.BINARY,
       condition: {
         event: EventTypes.ASSESSMENT_SUBMISSION,
-        restriction: 'P3'
+        restriction: 'P3',
       },
-      targetCount: 100
+      targetCount: 100,
     },
     count: 100,
     targetCount: 100,
     completed: true,
-    achievementUuids: ['21']
+    achievementUuids: ['21'],
   },
   {
     uuid: '18',
@@ -351,36 +351,36 @@ export const mockGoals: AchievementGoal[] = [
     meta: {
       type: GoalType.ASSESSMENT,
       assessmentNumber: 5,
-      requiredCompletionFrac: 1
+      requiredCompletionFrac: 1,
     },
     count: 300,
     targetCount: 300,
     completed: true,
-    achievementUuids: ['21']
+    achievementUuids: ['21'],
   },
   {
     uuid: '8',
     text: 'Each Top Voted answer in Piazza gives 10 XP',
     meta: {
       type: GoalType.MANUAL,
-      targetCount: 100
+      targetCount: 100,
     },
     count: 40,
     targetCount: 100,
     completed: false,
-    achievementUuids: ['9']
+    achievementUuids: ['9'],
   },
   {
     uuid: '14',
     text: 'Submit 1 PR to Source Academy Github',
     meta: {
       type: GoalType.MANUAL,
-      targetCount: 100
+      targetCount: 100,
     },
     count: 100,
     targetCount: 100,
     completed: true,
-    achievementUuids: ['16']
+    achievementUuids: ['16'],
   },
   {
     uuid: '11',
@@ -388,11 +388,11 @@ export const mockGoals: AchievementGoal[] = [
     meta: {
       type: GoalType.BINARY,
       condition: false,
-      targetCount: 100
+      targetCount: 100,
     },
     count: 0,
     targetCount: 100,
     completed: false,
-    achievementUuids: ['13']
-  }
+    achievementUuids: ['13'],
+  },
 ];

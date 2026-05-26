@@ -1,13 +1,14 @@
 import GameActionManager from '../../action/GameActionManager';
 import GameAnimationManager from '../../animations/GameAnimationManager';
-import { AssetType, ImageAsset } from '../../assets/AssetsTypes';
+import type { ImageAsset } from '../../assets/AssetsTypes';
+import { AssetType } from '../../assets/AssetsTypes';
 import GameAwardsManager from '../../awards/GameAwardsManager';
 import GameBackgroundManager from '../../background/GameBackgroundManager';
 import GameBBoxManager from '../../boundingBoxes/GameBoundingBoxManager';
-import { GameCheckpoint } from '../../chapter/GameChapterTypes';
+import type { GameCheckpoint } from '../../chapter/GameChapterTypes';
 import GameCharacterManager from '../../character/GameCharacterManager';
 import { Constants } from '../../commons/CommonConstants';
-import { AssetKey } from '../../commons/CommonTypes';
+import type { AssetKey } from '../../commons/CommonTypes';
 import GameDashboardManager from '../../dashboard/GameDashboardManager';
 import { DashboardPage } from '../../dashboard/GameDashboardTypes';
 import GameDialogueManager from '../../dialogue/GameDialogueManager';
@@ -19,7 +20,7 @@ import { keyboardShortcuts } from '../../input/GameInputConstants';
 import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import { LocationId } from '../../location/GameMapTypes';
+import type { LocationId } from '../../location/GameMapTypes';
 import GameLogManager from '../../log/GameLogManager';
 import TopicListManager from '../../mode/talk/TopicListManager';
 import GameObjectManager from '../../objects/GameObjectManager';
@@ -110,11 +111,11 @@ class GameManager extends Phaser.Scene {
     this.escapeManager = new GameEscapeManager(this);
     this.collectibleManager = new GameAwardsManager(
       this,
-      SourceAcademyGame.getInstance().getUserStateManager().getCollectibles
+      SourceAcademyGame.getInstance().getUserStateManager().getCollectibles,
     );
     this.achievementManager = new GameAwardsManager(
       this,
-      SourceAcademyGame.getInstance().getUserStateManager().getAchievements
+      SourceAcademyGame.getInstance().getUserStateManager().getAchievements,
     );
     this.logManager = new GameLogManager(this);
     this.dialogueStorageManager = new GameDialogueStorageManager();
@@ -126,9 +127,9 @@ class GameManager extends Phaser.Scene {
         DashboardPage.Log,
         DashboardPage.Tasks,
         DashboardPage.Collectibles,
-        DashboardPage.Achievements
+        DashboardPage.Achievements,
       ],
-      [this.logManager, this.taskLogManager, this.collectibleManager, this.achievementManager]
+      [this.logManager, this.taskLogManager, this.collectibleManager, this.achievementManager],
     );
     this.quizManager = new GameQuizManager();
     this.topicManager = new TopicListManager();
@@ -143,10 +144,11 @@ class GameManager extends Phaser.Scene {
     addLoadingScreen(this);
     this.getPhaseManager().setInterruptCheckCallback(
       (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
-        this.transitionChecker(prevPhase, newPhase)
+        this.transitionChecker(prevPhase, newPhase),
     );
     this.getPhaseManager().setInterruptCallback(
-      async (prevPhase: GamePhaseType, newPhase: GamePhaseType) => await this.checkpointTransition()
+      async (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
+        await this.checkpointTransition(),
     );
     this.preloadLocationsAssets();
     this.bindKeyboardTriggers();
@@ -230,11 +232,11 @@ class GameManager extends Phaser.Scene {
     if (startAction) {
       // Execute fast forward actions
       await this.getActionManager().fastForwardGameActions(
-        this.getStateManager().getTriggeredStateChangeActions()
+        this.getStateManager().getTriggeredStateChangeActions(),
       );
       // Game start actions
       await this.getActionManager().processGameActions(
-        this.getStateManager().getGameMap().getGameStartActions()
+        this.getStateManager().getGameMap().getGameStartActions(),
       );
       // By default, change the mode into Explore
       if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Sequence)) {
@@ -264,6 +266,7 @@ class GameManager extends Phaser.Scene {
 
     //Reset the actionJustSaved flag
     this.actionJustSaved = false;
+
     // Transition to the new location
     await blackFade(this, 300, 500, async () => {
       await this.getLayerManager().clearAllLayers();
@@ -278,7 +281,10 @@ class GameManager extends Phaser.Scene {
     if (this.actionJustSaved) {
       return;
     }
+
+    await GameGlobalAPI.getInstance().saveGame();
   }
+
   /**
    * Change location to the location cannot reach from current scene
    *
@@ -357,7 +363,7 @@ class GameManager extends Phaser.Scene {
     this.hasTransitioned = true;
 
     await this.getActionManager().processGameActions(
-      this.getStateManager().getGameMap().getCheckpointCompleteActions()
+      this.getStateManager().getGameMap().getCheckpointCompleteActions(),
     );
 
     // Reset input and cursor, in case it is changed after story complete actions

@@ -59,7 +59,7 @@ export interface IGameUI {
 export enum GamePosition {
   Left = 'Left',
   Middle = 'Middle',
-  Right = 'Right'
+  Right = 'Right',
 }
 
 /**
@@ -70,7 +70,7 @@ export enum GamePosition {
 export enum GameSize {
   Small = 'Small',
   Medium = 'Medium',
-  Large = 'Large'
+  Large = 'Large',
 }
 
 /**

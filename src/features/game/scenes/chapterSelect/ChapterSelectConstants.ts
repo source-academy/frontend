@@ -1,23 +1,23 @@
 import FontAssets from '../../assets/FontAssets';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
-import { BitmapFontStyle } from '../../commons/CommonTypes';
+import type { BitmapFontStyle } from '../../commons/CommonTypes';
 
 export const chapterIndexStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 25,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 export const chapterTitleStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 30,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 export const pageNumberStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 25,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 // These are the original chapter preview image and frame dimensions
@@ -42,24 +42,24 @@ const chapConstants = {
   pageNumberTextConfig: { x: screenCenter.x, y: screenSize.y - 30, oriX: 0.5, oriY: 0.5 },
   imageRect: {
     width: originalImageRectWidth * imageScaleX,
-    height: originalImageRectHeight * imageScaleY
+    height: originalImageRectHeight * imageScaleY,
   },
   imageScale: {
     x: imageScaleX,
-    y: imageScaleY
+    y: imageScaleY,
   },
   chapComplete: {
     y: 10,
     height: 30,
-    text: 'Chapter Completed'
+    text: 'Chapter Completed',
   },
   grid: {
     chapPerRow,
     chapPerCol,
     chapPerPage: chapPerRow * chapPerCol,
     chapGapX: 50,
-    chapGapY: 50
-  }
+    chapGapY: 50,
+  },
 };
 
 export default chapConstants;

@@ -1,26 +1,22 @@
 import { Button, FocusStyleManager, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useFullscreenElement } from '@mantine/hooks';
-import { Enable, NumberSize, Resizable, ResizableProps, ResizeCallback } from 're-resizable';
-import { Direction } from 're-resizable/lib/resizer';
-import React, { useEffect, useRef, useState } from 'react';
+import type { Enable, NumberSize, ResizableProps, ResizeCallback } from 're-resizable';
+import { Resizable } from 're-resizable';
+import type { Direction } from 're-resizable/lib/resizer';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
-import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
-import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
+import ControlBar, { type ControlBarProps } from '../controlBar/ControlBar';
+import EditorContainer, { type EditorContainerProps } from '../editor/EditorContainer';
+import McqChooser, { type McqChooserProps } from '../mcqChooser/McqChooser';
 import { Prompt } from '../ReactRouterPrompt';
-import Repl, { ReplProps } from '../repl/Repl';
-import SideBar, { SideBarTab } from '../sideBar/SideBar';
-import SideContent, { SideContentProps } from '../sideContent/SideContent';
+import Repl, { type ReplProps } from '../repl/Repl';
+import SideBar, { type SideBarTab } from '../sideBar/SideBar';
+import SideContent, { type SideContentProps } from '../sideContent/SideContent';
 import { useDimensions, useTypedSelector } from '../utils/Hooks';
 
-export type WorkspaceProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+export type WorkspaceProps = {
   handleSideContentHeightChange: (height: number) => void;
-};
-
-type StateProps = {
   // Either editorProps or mcqProps must be provided
   controlBarProps: ControlBarProps;
   editorContainerProps?: EditorContainerProps;
@@ -60,13 +56,13 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   });
 
   const sideBarResizableProps = (): ResizableProps & {
-    ref: React.MutableRefObject<Resizable | null>;
+    ref: React.RefObject<Resizable | null>;
   } => {
     const onResizeStop: ResizeCallback = (
       event: MouseEvent | TouchEvent,
       direction: Direction,
       elementRef: HTMLElement,
-      delta: NumberSize
+      delta: NumberSize,
     ) => {
       const sideBarWidth = elementRef.clientWidth;
       if (sideBarWidth !== sideBarCollapsedWidth) {
@@ -84,9 +80,9 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       ref: sideBarResizable,
       size: {
         width: isSideBarRendered && isSideBarExpanded ? expandedSideBarWidth : minWidth,
-        height: '100%'
+        height: '100%',
       },
-      defaultSize: { width: minWidth, height: '100%' }
+      defaultSize: { width: minWidth, height: '100%' },
     };
   };
 
@@ -98,7 +94,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       onResize: toggleEditorDividerDisplay,
       ref: leftParentResizable,
       defaultSize: { width: '50%', height: '100%' },
-      as: undefined as any // re-resizable bug - wrong typedef
+      as: undefined as any, // re-resizable bug - wrong typedef
     } as ResizableProps;
   };
 
@@ -110,7 +106,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       className: 'resize-side-content',
       enable: bottomResizeOnly,
       onResize: toggleDividerDisplay,
-      onResizeStop
+      onResizeStop,
     } as ResizableProps;
   };
 
@@ -118,7 +114,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
     event: MouseEvent | TouchEvent,
     direction: Direction,
     elementRef: HTMLElement,
-    delta: NumberSize
+    delta: NumberSize,
   ) => {
     const minWidthThreshold = 100;
     const sideBarWidth = elementRef.clientWidth;
@@ -193,16 +189,16 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   const {
     ref: fullscreenRef,
     toggle: toggleFullscreen,
-    fullscreen: isFullscreen
+    fullscreen: isFullscreen,
   } = useFullscreenElement<HTMLDivElement>();
 
-  const fullscreenContainerRef = React.useRef<HTMLDivElement | null>(null);
-  const setFullscreenRefs = React.useCallback(
+  const fullscreenContainerRef = useRef<HTMLDivElement | null>(null);
+  const setFullscreenRefs = useCallback(
     (node: HTMLDivElement | null) => {
       fullscreenContainerRef.current = node;
       fullscreenRef(node);
     },
-    [fullscreenRef]
+    [fullscreenRef],
   );
 
   return (
@@ -234,7 +230,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
                 portalContainer={fullscreenContainerRef.current || undefined}
               >
                 <Button
-                  minimal
+                  variant="minimal"
                   icon={isFullscreen ? IconNames.MINIMIZE : IconNames.MAXIMIZE}
                   onClick={toggleFullscreen}
                 />

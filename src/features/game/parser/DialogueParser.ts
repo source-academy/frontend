@@ -1,4 +1,9 @@
-import { Dialogue, DialogueLine, DialogueObject, PartName } from '../dialogue/GameDialogueTypes';
+import type {
+  Dialogue,
+  DialogueLine,
+  DialogueObject,
+  PartName,
+} from '../dialogue/GameDialogueTypes';
 import { GameItemType } from '../location/GameMapTypes';
 import { mapValues } from '../utils/GameUtils';
 import StringUtils from '../utils/StringUtils';
@@ -66,12 +71,12 @@ export default class DialogueParser {
   private static parseDialogueContent(dialogueBody: string[]) {
     const rawDialogueContent: Map<PartName, string[]> = StringUtils.mapByHeader(
       dialogueBody,
-      isInteger
+      isInteger,
     );
 
     const dialogueObject: Map<PartName, DialogueLine[]> = mapValues(
       rawDialogueContent,
-      this.createDialogueLines
+      this.createDialogueLines,
     );
     return dialogueObject;
   }
@@ -99,13 +104,13 @@ export default class DialogueParser {
             : [null, null];
           const conditions = conditionalsString
             ? StringUtils.splitByChar(conditionalsString, 'AND').map(condition =>
-                ConditionParser.parse(condition)
+                ConditionParser.parse(condition),
               )
             : [];
           dialogueLines[dialogueLines.length - 1].goto = {
             conditions,
             part: gotoString.split(' ')[1],
-            altPart: altPart
+            altPart: altPart,
           };
           break;
         }

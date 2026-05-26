@@ -1,8 +1,8 @@
-import React from 'react';
+import { Fragment } from 'react';
 
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { Unassigned } from '../../CseMachineTypes';
+import type { Unassigned } from '../../CseMachineTypes';
 import { getTextWidth } from '../../CseMachineUtils';
 import { Binding } from '../Binding';
 import { Text } from '../Text';
@@ -20,7 +20,7 @@ export class UnassignedValue extends Value {
     this._x = reference.x() + getTextWidth(reference.keyString) + Config.TextPaddingX;
     this._y = reference.y();
     this.text = new Text(Config.UnassignedData, this._x, this._y, {
-      isStringIdentifiable: false
+      isStringIdentifiable: false,
     });
 
     this._width = this.text.width();
@@ -45,6 +45,6 @@ export class UnassignedValue extends Value {
 
   draw(): React.ReactNode {
     this._isDrawn = true;
-    return <React.Fragment key={Layout.key++}>{this.text.draw()}</React.Fragment>;
+    return <Fragment key={Layout.key++}>{this.text.draw()}</Fragment>;
   }
 }

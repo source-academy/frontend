@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import classes from 'src/styles/AchievementCommentCard.module.scss';
 
-import { Assessment } from '../assessment/AssessmentTypes';
+import type { Assessment } from '../assessment/AssessmentTypes';
 import { useTypedSelector } from '../utils/Hooks';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
@@ -26,7 +26,7 @@ const AchievementCommentCard: React.FC<Props> = ({ assessment, showToQuestion })
       const assessmentWorkspacePath = listingPath + `/${assessment?.id.toString()}`;
       navigate(assessmentWorkspacePath + `/${questionId}`);
     },
-    [assessment?.id, assessment?.type, courseId, navigate]
+    [assessment?.id, assessment?.type, courseId, navigate],
   );
 
   return (

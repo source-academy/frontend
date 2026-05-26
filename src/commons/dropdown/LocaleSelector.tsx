@@ -6,7 +6,7 @@ import { i18nLanguageCode, resources } from 'src/i18n/locales';
 
 const languageOptions = Object.keys(resources).map(abbr => ({
   label: resources[abbr as keyof typeof resources]?.name,
-  value: abbr
+  value: abbr,
 }));
 
 const LocaleSelector: React.FC = () => {

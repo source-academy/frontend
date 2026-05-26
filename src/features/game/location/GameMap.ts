@@ -1,14 +1,15 @@
-import { GameAction } from '../action/GameActionTypes';
-import { ImageAsset, SoundAsset } from '../assets/AssetsTypes';
-import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
-import { Character } from '../character/GameCharacterTypes';
-import { AssetKey, ItemId } from '../commons/CommonTypes';
-import { Dialogue } from '../dialogue/GameDialogueTypes';
-import { GameMode } from '../mode/GameModeTypes';
-import { ObjectProperty } from '../objects/GameObjectTypes';
-import { Quiz } from '../quiz/GameQuizType';
+import type { GameAction } from '../action/GameActionTypes';
+import type { ImageAsset, SoundAsset } from '../assets/AssetsTypes';
+import type { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
+import type { Character } from '../character/GameCharacterTypes';
+import type { AssetKey, ItemId } from '../commons/CommonTypes';
+import type { Dialogue } from '../dialogue/GameDialogueTypes';
+import type { GameMode } from '../mode/GameModeTypes';
+import type { ObjectProperty } from '../objects/GameObjectTypes';
+import type { Quiz } from '../quiz/GameQuizType';
 import { mandatory } from '../utils/GameUtils';
-import { AnyId, GameItemType, GameLocation, LocationId } from './GameMapTypes';
+import type { AnyId, GameLocation, LocationId } from './GameMapTypes';
+import { GameItemType } from './GameMapTypes';
 
 /**
  * Game map is the class that encapsulates data about
@@ -159,7 +160,7 @@ class GameMap {
   public getAssetKeyFromId(id: AnyId): AssetKey {
     return mandatory(
       this.objects.get(id)?.assetKey || this.locations.get(id)?.assetKey,
-      `Id ${id} not found!`
+      `Id ${id} not found!`,
     );
   }
 }

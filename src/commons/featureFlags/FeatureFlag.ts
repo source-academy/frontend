@@ -1,4 +1,4 @@
-import { SagaIterator } from 'redux-saga';
+import type { SagaIterator } from 'redux-saga';
 
 export class FeatureFlag<T> {
   private readonly _flagName: string;
@@ -23,7 +23,7 @@ export class FeatureFlag<T> {
     flagName: string,
     defaultValue: T,
     flagDesc?: string,
-    callback?: (newValue: T) => SagaIterator
+    callback?: (newValue: T) => SagaIterator,
   ) {
     this._flagName = flagName;
     this._defaultValue = defaultValue;

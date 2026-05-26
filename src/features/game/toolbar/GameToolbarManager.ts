@@ -1,7 +1,8 @@
-import { IBaseScene } from '../commons/CommonTypes';
+import type { IBaseScene } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { createButton } from '../utils/ButtonUtils';
-import ToolbarConstants, { ToolbarButtonConfig } from './GameToolbarConstants';
+import type { ToolbarButtonConfig } from './GameToolbarConstants';
+import ToolbarConstants from './GameToolbarConstants';
 
 /**
  * Manager for the toolbar buttons in the top right corner of the screen
@@ -33,9 +34,9 @@ class GameToolbarManager {
         this.createToolbarButton(
           ToolbarConstants.firstButton.x - ToolbarConstants.xOffset * index,
           ToolbarConstants.firstButton.y,
-          buttonConfig
-        )
-      )
+          buttonConfig,
+        ),
+      ),
     );
     return toolbarContainer;
   }
@@ -51,7 +52,7 @@ class GameToolbarManager {
   private createToolbarButton(xPos: number, yPos: number, buttonConfig: ToolbarButtonConfig) {
     return createButton(this.scene, {
       assetKey: buttonConfig.assetKey,
-      onUp: buttonConfig.onUp(this.scene)
+      onUp: buttonConfig.onUp(this.scene),
     }).setPosition(xPos, yPos);
   }
 

@@ -1,9 +1,9 @@
-import { createReducer, Reducer } from '@reduxjs/toolkit';
-import { SourceActionType } from 'src/commons/utils/ActionsHelper';
+import { createReducer, type Reducer } from '@reduxjs/toolkit';
+import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
 import { defaultAchievement } from '../../commons/application/ApplicationTypes';
 import AchievementActions from './AchievementActions';
-import { AchievementState } from './AchievementTypes';
+import type { AchievementState } from './AchievementTypes';
 
 export const AchievementReducer: Reducer<AchievementState, SourceActionType> = createReducer(
   defaultAchievement,
@@ -21,5 +21,5 @@ export const AchievementReducer: Reducer<AchievementState, SourceActionType> = c
       .addCase(AchievementActions.saveUserAssessmentOverviews, (state, action) => {
         state.assessmentOverviews = action.payload;
       });
-  }
+  },
 );

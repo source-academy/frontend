@@ -1,7 +1,6 @@
 import { Button, Card, Intent } from '@blueprintjs/core';
-import React from 'react';
 
-import { IMCQQuestion } from '../assessment/AssessmentTypes';
+import type { IMCQQuestion } from '../assessment/AssessmentTypes';
 import Markdown from '../Markdown';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
@@ -46,7 +45,7 @@ const McqChooser: React.FC<McqChooserProps> = ({ mcq, handleMCQSubmit }) => {
           isActive && hasSolution ? (isSolution ? Intent.SUCCESS : Intent.DANGER) : Intent.NONE
         }
         onClick={handleClick}
-        minimal
+        variant="minimal"
       >
         <Markdown content={choice.content} />
       </Button>

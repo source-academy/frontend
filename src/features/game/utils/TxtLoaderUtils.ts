@@ -15,7 +15,7 @@ import { loadText } from './LoaderUtils';
 export async function callGameManagerOnTxtLoad(
   continueGame: boolean,
   chapterNum: number,
-  checkpointNum: number
+  checkpointNum: number,
 ) {
   const textAssets = SourceAcademyGame.getInstance().getIsUsingMock() ? MockTextAssets : TextAssets;
   const scene = SourceAcademyGame.getInstance().getCurrentSceneRef();
@@ -39,7 +39,7 @@ export async function callGameManagerOnTxtLoad(
     gameCheckpoint,
     continueGame,
     chapterNum,
-    checkpointNum
+    checkpointNum,
   });
 }
 
@@ -68,7 +68,7 @@ export async function callGameManagerForSim() {
   scene.scene.start('GameManager', {
     gameCheckpoint,
     chapterNum: -1,
-    checkpointNum: -1
+    checkpointNum: -1,
   });
   return true;
 }

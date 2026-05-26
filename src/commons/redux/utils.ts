@@ -2,7 +2,7 @@ import {
   type ActionCreatorWithOptionalPayload,
   type ActionCreatorWithoutPayload,
   type ActionCreatorWithPreparedPayload,
-  createAction
+  createAction,
 } from '@reduxjs/toolkit';
 import type { SagaIterator } from 'redux-saga';
 import { type StrictEffect, takeEvery, takeLatest, takeLeading } from 'redux-saga/effects';
@@ -19,7 +19,7 @@ import { type ActionTypeToCreator, objectEntries } from '../utils/TypeHelper';
  */
 export function createActions<BaseName extends string, BaseActions extends Record<string, any>>(
   baseName: BaseName,
-  baseActions: BaseActions
+  baseActions: BaseActions,
 ) {
   return Object.entries(baseActions).reduce(
     (res, [name, func]) => ({
@@ -27,7 +27,7 @@ export function createActions<BaseName extends string, BaseActions extends Recor
       [name]:
         typeof func === 'function'
           ? createAction(`${baseName}/${name}`, (...args: any) => ({ payload: func(...args) }))
-          : createAction(`${baseName}/${name}`)
+          : createAction(`${baseName}/${name}`),
     }),
     {} as Readonly<{
       [K in keyof BaseActions]: K extends string
@@ -39,12 +39,12 @@ export function createActions<BaseName extends string, BaseActions extends Recor
             >
           : ActionCreatorWithoutPayload<`${BaseName}/${K}`>
         : never;
-    }>
+    }>,
   );
 }
 
 type SagaHandler<T extends SourceActionType['type']> = (
-  action: ReturnType<ActionTypeToCreator<T>>
+  action: ReturnType<ActionTypeToCreator<T>>,
 ) => Generator<StrictEffect>;
 
 type SagaHandlers = {
@@ -81,7 +81,7 @@ export function combineSagaHandlers(handlers: SagaHandlers) {
 export function saferTakeEvery<
   Action extends
     | ActionCreatorWithOptionalPayload<any>
-    | ActionCreatorWithPreparedPayload<any[], any>
+    | ActionCreatorWithPreparedPayload<any[], any>,
 >(actionPattern: Action, fn: (action: ReturnType<Action>) => Generator<StrictEffect<any>>) {
   return safeTakeEvery(actionPattern.type, fn);
 }

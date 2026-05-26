@@ -1,5 +1,4 @@
 import { Button } from '@blueprintjs/core';
-import React from 'react';
 
 type Props = {
   text?: React.ReactNode;
@@ -13,8 +12,8 @@ const DeviceMenuItemButtons: React.FC<Props> = ({ text, handleDelete, handleEdit
       {text}
       <div className="edit-buttons">
         <Button
-          small
-          minimal
+          size="small"
+          variant="minimal"
           icon="edit"
           onClick={e => {
             e.stopPropagation();
@@ -22,8 +21,8 @@ const DeviceMenuItemButtons: React.FC<Props> = ({ text, handleDelete, handleEdit
           }}
         />
         <Button
-          small
-          minimal
+          size="small"
+          variant="minimal"
           intent="danger"
           icon="trash"
           onClick={e => {

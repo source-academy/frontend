@@ -1,4 +1,4 @@
-import { SagaIterator } from 'redux-saga';
+import type { SagaIterator } from 'redux-saga';
 import { all, fork } from 'redux-saga/effects';
 
 import { mockBackendSaga } from '../mocks/BackendMocks';
@@ -15,7 +15,6 @@ import PlaygroundSaga from './PlaygroundSaga';
 import PluginDirectorySaga from './PluginDirectorySaga';
 import RemoteExecutionSaga from './RemoteExecutionSaga';
 import SideContentSaga from './SideContentSaga';
-import StoriesSaga from './StoriesSaga';
 import WorkspaceSaga from './WorkspaceSaga';
 import { watchAutoSave, watchSavingStatus } from './WorkspaceSaga/helpers/versionHistory';
 
@@ -30,12 +29,11 @@ export default function* MainSaga(): SagaIterator {
     fork(PersistenceSaga),
     fork(GitHubPersistenceSaga),
     fork(RemoteExecutionSaga),
-    fork(StoriesSaga),
     fork(SideContentSaga),
     fork(FeatureFlagSaga),
     fork(LanguageDirectorySaga),
     fork(PluginDirectorySaga),
     fork(watchAutoSave),
-    fork(watchSavingStatus)
+    fork(watchSavingStatus),
   ]);
 }

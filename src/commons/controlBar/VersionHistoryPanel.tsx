@@ -6,11 +6,11 @@ import {
   Intent,
   NonIdealState,
   Spinner,
-  SpinnerSize
+  SpinnerSize,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import styles from '../../styles/VersionHistoryPanel.module.scss';
 import type { CodeVersion, CodeVersionMetadata } from '../workspace/WorkspaceTypes';
@@ -65,7 +65,7 @@ const groupVersions = (sortedNewestFirst: CodeVersionMetadata[]): VersionGroup[]
   return groups;
 };
 
-export const VersionHistoryPanel: React.FC<Props> = ({
+const VersionHistoryPanel: React.FC<Props> = ({
   versions,
   currentCode,
   isOpen,
@@ -76,7 +76,7 @@ export const VersionHistoryPanel: React.FC<Props> = ({
   onClose,
   onSelectVersion,
   onRestore,
-  onRename
+  onRename,
 }) => {
   const groups = useMemo(() => groupVersions(versions), [versions]);
 
@@ -115,7 +115,7 @@ export const VersionHistoryPanel: React.FC<Props> = ({
       aria-pressed={version.id === selectedVersion?.id}
       className={classNames(styles.item, {
         [styles.itemSelected]: version.id === selectedVersion?.id,
-        [styles.itemNested]: nested
+        [styles.itemNested]: nested,
       })}
       onClick={() => onSelectVersion(version)}
       onKeyDown={e => {
@@ -161,8 +161,8 @@ export const VersionHistoryPanel: React.FC<Props> = ({
           aria-expanded={isExpanded}
           className={classNames(styles.groupHeader, {
             [styles.groupHeaderContainsSelected]: group.versions.some(
-              v => v.id === selectedVersion?.id
-            )
+              v => v.id === selectedVersion?.id,
+            ),
           })}
           onClick={() => toggleGroup(group.id)}
           onKeyDown={e => {
@@ -190,7 +190,7 @@ export const VersionHistoryPanel: React.FC<Props> = ({
           </div>
           <span
             className={classNames(styles.groupChevron, {
-              [styles.groupChevronOpen]: isExpanded
+              [styles.groupChevronOpen]: isExpanded,
             })}
           >
             ›
@@ -264,7 +264,7 @@ export const VersionHistoryPanel: React.FC<Props> = ({
     <Drawer
       className={classNames(styles.drawer, Classes.DARK)}
       icon={IconNames.HISTORY}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={isOpen}
       onClose={onClose}
       title="Version History"
@@ -275,3 +275,5 @@ export const VersionHistoryPanel: React.FC<Props> = ({
     </Drawer>
   );
 };
+
+export default VersionHistoryPanel;

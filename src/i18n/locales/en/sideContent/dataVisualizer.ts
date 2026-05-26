@@ -6,7 +6,7 @@ const translations = {
     'The data visualizer uses box-and-pointer diagrams, as introduced in <0>Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 2, Section 2</0>.',
   label: 'Data Visualizer',
   previous: 'Previous',
-  next: 'Next'
+  next: 'Next',
 };
 
 export default translations;

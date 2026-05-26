@@ -5,7 +5,7 @@ import 'ace-diff/styles.css';
 
 import * as ace from 'ace-builds';
 import AceDiff from 'ace-diff';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 // Disable ace web workers globally (only needs to run once per module load)
 (ace.config as any).set('useWorker', false);
@@ -33,13 +33,13 @@ const AceDiffViewer: React.FC<Props> = ({ currentCode, versionCode }) => {
         left: {
           content: currentCode,
           editable: false,
-          copyLinkEnabled: false
+          copyLinkEnabled: false,
         },
         right: {
           content: versionCode,
           editable: false,
-          copyLinkEnabled: false
-        }
+          copyLinkEnabled: false,
+        },
       });
     };
 

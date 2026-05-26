@@ -1,4 +1,4 @@
-import { SagaIterator } from 'redux-saga';
+import type { SagaIterator } from 'redux-saga';
 import { call, debounce, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
 
 import SessionActions from '../../../application/actions/SessionActions';
@@ -67,7 +67,7 @@ function* getCurrentQuestionId(workspaceLocation: WorkspaceLocation) {
  * Saga to handle fetching version history
  */
 export function* fetchVersionHistorySaga(
-  action: ReturnType<typeof WorkspaceActions.fetchVersionHistory>
+  action: ReturnType<typeof WorkspaceActions.fetchVersionHistory>,
 ) {
   const { workspaceLocation, skipAutoSave } = action.payload;
 
@@ -84,7 +84,7 @@ export function* fetchVersionHistorySaga(
   // get authentication tokens from state
   const tokens: Tokens = yield select((state: OverallState) => ({
     accessToken: state.session.accessToken,
-    refreshToken: state.session.refreshToken
+    refreshToken: state.session.refreshToken,
   }));
 
   // Save current code before fetching
@@ -109,7 +109,7 @@ export function* fetchVersionHistorySaga(
  * Saga to fetch the code for a selected version
  */
 export function* selectVersionSaga(
-  action: ReturnType<typeof WorkspaceActions.selectVersion>
+  action: ReturnType<typeof WorkspaceActions.selectVersion>,
 ): SagaIterator {
   const { workspaceLocation, version } = action.payload;
 
@@ -125,14 +125,14 @@ export function* selectVersionSaga(
 
   const tokens: Tokens = yield select((state: OverallState) => ({
     accessToken: state.session.accessToken,
-    refreshToken: state.session.refreshToken
+    refreshToken: state.session.refreshToken,
   }));
 
   const versionWithCode: any | null = yield call(getVersionCode, questionId, version.id, tokens);
 
   if (versionWithCode) {
     yield put(
-      WorkspaceActions.receiveVersionCode(workspaceLocation, version.id, versionWithCode.code)
+      WorkspaceActions.receiveVersionCode(workspaceLocation, version.id, versionWithCode.code),
     );
   } else {
     yield call(showWarningMessage, 'Failed to load version code');
@@ -157,7 +157,7 @@ export function* nameVersionSaga(action: ReturnType<typeof WorkspaceActions.name
   // Get authentication tokens
   const tokens: Tokens = yield select((state: OverallState) => ({
     accessToken: state.session.accessToken,
-    refreshToken: state.session.refreshToken
+    refreshToken: state.session.refreshToken,
   }));
 
   // Call the API to update the name
@@ -174,12 +174,12 @@ export function* nameVersionSaga(action: ReturnType<typeof WorkspaceActions.name
  * Saga to handle restoring a version
  */
 export function* restoreVersionSaga(
-  action: ReturnType<typeof WorkspaceActions.restoreVersion>
+  action: ReturnType<typeof WorkspaceActions.restoreVersion>,
 ): SagaIterator {
   const {
     workspaceLocation,
     name: restoredVersionName,
-    timestamp: restoredVersionTimestamp
+    timestamp: restoredVersionTimestamp,
   } = action.payload;
 
   if (workspaceLocation !== 'assessment') {
@@ -210,7 +210,7 @@ export function* restoreVersionSaga(
   if (!newVersionCreated) {
     // Ensure save did not fail before updating unsaved changes to false
     const saveStatus: string = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].saveStatus
+      (state: OverallState) => state.workspaces[workspaceLocation].saveStatus,
     );
     if (saveStatus !== 'saveFailed') {
       yield put(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, false));
@@ -224,9 +224,9 @@ export function* restoreVersionSaga(
     received: take(
       (action: any) =>
         action.type === WorkspaceActions.receiveVersionHistory.type &&
-        action.payload.workspaceLocation === workspaceLocation
+        action.payload.workspaceLocation === workspaceLocation,
     ),
-    timeout: delay(30000)
+    timeout: delay(30000),
   });
 
   // Name the restored version as "(name)-restored"
@@ -288,7 +288,7 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
 
   // If another save is already in flight for this workspace, wait for it to finish before proceeding.
   const isAlreadySaving: boolean = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].versionHistory.isAutoSaving
+    (state: OverallState) => state.workspaces[workspaceLocation].versionHistory.isAutoSaving,
   );
   if (isAlreadySaving) {
     yield race({
@@ -296,9 +296,9 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
         (action: any) =>
           action.type === WorkspaceActions.setIsAutoSaving.type &&
           action.payload.workspaceLocation === workspaceLocation &&
-          action.payload.isAutoSaving === false
+          action.payload.isAutoSaving === false,
       ),
-      timeout: delay(30000)
+      timeout: delay(30000),
     });
   }
 
@@ -307,7 +307,7 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
   try {
     // Get the current code from the active editor tab
     const { editorTabs, activeEditorTabIndex } = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation]
+      (state: OverallState) => state.workspaces[workspaceLocation],
     );
 
     if (activeEditorTabIndex === null) {
@@ -346,9 +346,9 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
         (action: any) =>
           action.type === WorkspaceActions.updateSaveStatus.type &&
           action.payload.workspaceLocation === workspaceLocation &&
-          (action.payload.saveStatus === 'saved' || action.payload.saveStatus === 'saveFailed')
+          (action.payload.saveStatus === 'saved' || action.payload.saveStatus === 'saveFailed'),
       ),
-      timeout: delay(30000)
+      timeout: delay(30000),
     });
 
     if (!saveAction || saveAction.payload.saveStatus === 'saveFailed') {
@@ -375,7 +375,7 @@ export function* watchAutoSave() {
       const autosaveEnabled: boolean = yield call(isAutosaveEnabledForCurrentAssessment);
       if (!autosaveEnabled) return;
       yield call(performAutoSave, workspaceLocation);
-    }
+    },
   );
 }
 
@@ -392,6 +392,6 @@ export function* watchSavingStatus() {
       const autosaveEnabled: boolean = yield call(isAutosaveEnabledForCurrentAssessment);
       if (!autosaveEnabled) return;
       yield put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saving'));
-    }
+    },
   );
 }

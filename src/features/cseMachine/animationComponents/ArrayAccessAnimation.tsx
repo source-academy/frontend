@@ -1,4 +1,3 @@
-import React from 'react';
 import { Group } from 'react-konva';
 
 import { ArrayUnit } from '../components/ArrayUnit';
@@ -12,7 +11,7 @@ import {
   defaultDangerColor,
   defaultStrokeColor,
   getTextWidth,
-  isStashItemInDanger
+  isStashItemInDanger,
 } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
@@ -34,17 +33,17 @@ export class ArrayAccessAnimation extends Animatable {
     private accInstr: ControlItemComponent,
     arrayItem: StashItemComponent,
     private indexItem: StashItemComponent,
-    private resultItem: StashItemComponent
+    private resultItem: StashItemComponent,
   ) {
     super();
     this.accessorAnimation = new AnimatedTextbox(accInstr.text, getNodePosition(accInstr), {
-      rectProps: { stroke: defaultActiveColor() }
+      rectProps: { stroke: defaultActiveColor() },
     });
     this.arrayItemAnimation = new AnimatedTextbox(arrayItem.text, getNodePosition(arrayItem), {
-      rectProps: { stroke: defaultDangerColor() }
+      rectProps: { stroke: defaultDangerColor() },
     });
     this.indexItemAnimation = new AnimatedTextbox(indexItem.text, getNodePosition(indexItem), {
-      rectProps: { stroke: defaultDangerColor() }
+      rectProps: { stroke: defaultDangerColor() },
     });
     this.arrayArrowAnimation = new AnimatedGenericArrow(arrayItem.arrow!);
     // if index is out of range
@@ -71,7 +70,7 @@ export class ArrayAccessAnimation extends Animatable {
         this.resultItem.width() / 2 +
         (this.outOfRange ? this.arrayUnit.width() : 0),
       y: this.arrayUnit.y() + this.arrayUnit.height() / 2 - this.resultItem.height() / 2,
-      opacity: 0
+      opacity: 0,
     });
     if (this.resultItem.arrow) {
       this.resultArrowAnimation = new AnimatedGenericArrow(this.resultItem.arrow, { opacity: 0 });
@@ -103,10 +102,10 @@ export class ArrayAccessAnimation extends Animatable {
         this.arrayUnit.width() / 2 -
         this.indexItem.width() / 2 +
         (this.outOfRange ? this.arrayUnit.width() : 0),
-      y: this.arrayUnit.y() - this.indexItem.height() - 8
+      y: this.arrayUnit.y() - this.indexItem.height() - 8,
     };
     const indexInArrayLocation = {
-      y: this.arrayUnit.y() + this.arrayUnit.height() / 2 - this.indexItem.height() / 2
+      y: this.arrayUnit.y() + this.arrayUnit.height() / 2 - this.indexItem.height() / 2,
     };
     const resultAboveArrayLocation = { y: this.arrayUnit.y() - this.resultItem.height() - 8 };
     // move arr acc instruction and index to above array
@@ -118,12 +117,12 @@ export class ArrayAccessAnimation extends Animatable {
         {
           x: indexAboveArrayLocation.x - minInstrItemWidth,
           y: indexAboveArrayLocation.y,
-          width: minInstrItemWidth
+          width: minInstrItemWidth,
         },
-        { duration: 1.2 }
+        { duration: 1.2 },
       ),
       this.indexItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }, { duration: 1.2 }),
-      this.indexItemAnimation.animateTo(indexAboveArrayLocation, { duration: 1.2 })
+      this.indexItemAnimation.animateTo(indexAboveArrayLocation, { duration: 1.2 }),
     ]);
     // Move arr acc instruction and result on top of array, and bring result up
     await Promise.all([
@@ -132,14 +131,14 @@ export class ArrayAccessAnimation extends Animatable {
       this.indexItemAnimation.animateTo({ opacity: 0 }, { duration: 0.8 }),
       this.indexItemAnimation.animateTo(indexInArrayLocation),
       this.resultAnimation.animateTo(resultAboveArrayLocation),
-      this.resultAnimation.animateTo({ opacity: 1 }, { duration: 0.8, delay: 0.2 })
+      this.resultAnimation.animateTo({ opacity: 1 }, { duration: 0.8, delay: 0.2 }),
     ]);
     // Move result into stash
     await Promise.all([
       this.resultAnimation.animateTo(getNodeLocation(this.resultItem), { duration: 1.2 }),
       isStashItemInDanger(this.resultItem.index) &&
         this.resultAnimation.animateRectTo({ stroke: defaultDangerColor() }, { duration: 1.2 }),
-      this.resultArrowAnimation?.animateTo({ opacity: 1 }, { delay: 1 })
+      this.resultArrowAnimation?.animateTo({ opacity: 1 }, { delay: 1 }),
     ]);
     this.destroy();
   }

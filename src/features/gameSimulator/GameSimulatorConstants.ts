@@ -1,8 +1,9 @@
 import * as Phaser from 'phaser';
-import { AssetMap, AssetType, ImageAsset } from 'src/features/game/assets/AssetsTypes';
+import type { AssetMap, ImageAsset } from 'src/features/game/assets/AssetsTypes';
+import { AssetType } from 'src/features/game/assets/AssetsTypes';
 import FontAssets from 'src/features/game/assets/FontAssets';
 import { screenSize } from 'src/features/game/commons/CommonConstants';
-import { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
+import type { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
 
 import CheckpointTransition from '../game/scenes/checkpointTransition/CheckpointTransition';
 import GameManager from '../game/scenes/gameManager/GameManager';
@@ -14,29 +15,29 @@ export const gameSimulatorConfig: Phaser.Types.Core.GameConfig = {
   width: screenSize.x,
   height: screenSize.y,
   physics: {
-    default: 'arcade'
+    default: 'arcade',
   },
   scale: {
     mode: Phaser.Scale.FIT,
-    parent: 'game-display'
+    parent: 'game-display',
   },
   fps: {
-    target: 24
+    target: 24,
   },
-  scene: [GameSimulatorMenu, GameManager, CheckpointTransition]
+  scene: [GameSimulatorMenu, GameManager, CheckpointTransition],
 };
 
 export const gameSimulatorMenuAssets: AssetMap<ImageAsset> = {
   gameSimBg: {
     type: AssetType.Image,
     key: 'student-room',
-    path: '/locations/deathCube_ext/shields-down.png'
+    path: '/locations/deathCube_ext/shields-down.png',
   },
   shortButton: { type: AssetType.Image, key: 'short-button', path: '/ui/shortButton.png' },
   invertedButton: {
     type: AssetType.Image,
     key: 'inverted-button',
-    path: '/ui/invertedColorButton.png'
+    path: '/ui/invertedColorButton.png',
   },
   blueUnderlay: { type: AssetType.Image, key: 'blue-underlay', path: '/ui/blueUnderlay.png' },
   topButton: { type: AssetType.Image, key: 'top-button', path: '/ui/topButton.png' },
@@ -46,13 +47,13 @@ export const gameSimulatorMenuAssets: AssetMap<ImageAsset> = {
   handIcon: { type: AssetType.Image, key: 'hand-icon', path: '/ui/handIcon.png' },
   listIcon: { type: AssetType.Image, key: 'list-icon', path: '/ui/listIcon.png' },
   eraseIcon: { type: AssetType.Image, key: 'erase-icon', path: '/ui/eraserIcon.png' },
-  iconBg: { type: AssetType.Image, key: 'icon-bg', path: '/ui/modeIconBg.png' }
+  iconBg: { type: AssetType.Image, key: 'icon-bg', path: '/ui/modeIconBg.png' },
 };
 
 export const gameSimulatorMenuOptStyle: BitmapFontStyle = {
   key: FontAssets.zektonDarkFont.key,
   size: 35,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 export const gameSimulatorMenuConstants = {
@@ -60,8 +61,8 @@ export const gameSimulatorMenuConstants = {
   optButton: { xSpace: screenSize.x * 0.9, ySpace: screenSize.y * 0.5 },
   gameTxtStorageName: {
     defaultChapter: 'defaultChapter',
-    checkpointTxt: 'checkpointTxt'
-  }
+    checkpointTxt: 'checkpointTxt',
+  },
 };
 
 export const defaultChapter = {
@@ -71,5 +72,5 @@ export const defaultChapter = {
   openAt: new Date().toISOString(),
   closeAt: dateOneYearFromNow(new Date()).toISOString(),
   isPublished: false,
-  filenames: []
+  filenames: [],
 };

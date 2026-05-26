@@ -1,11 +1,11 @@
 // Adapted from https://github.com/yeori/precaching-striping/blob/main/src/plugins/PrecacheStriping.ts
 
-import { RouteHandler, RouteMatchCallback, WorkboxPlugin } from 'workbox-core';
+import type { RouteHandler, RouteMatchCallback, WorkboxPlugin } from 'workbox-core';
 import {
   PrecacheController,
   type PrecacheEntry,
   PrecacheRoute,
-  type PrecacheRouteOptions
+  type PrecacheRouteOptions,
 } from 'workbox-precaching';
 import { registerRoute, Route } from 'workbox-routing';
 
@@ -56,7 +56,7 @@ export const splitByBucketSize = (bucketSize: number) =>
 const DEFAULT_OPTION: PrecacheStripingOptions = {
   optionResolver: () => undefined,
   controllerOptionResolver: () => undefined, // PrecacheControllerOptions
-  splitEntries: undefined
+  splitEntries: undefined,
 };
 
 export class PrecacheStriping {

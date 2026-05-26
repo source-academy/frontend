@@ -1,5 +1,5 @@
 import { Button, Dialog, Tooltip } from '@blueprintjs/core';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { prettifyDate } from 'src/commons/achievement/utils/DateHelper';
 import { DatePicker } from 'src/commons/DateTimePickers';
 
@@ -18,7 +18,7 @@ const EditableDate: React.FC<Props> = ({ type, date, changeDate }) => {
   return (
     <>
       <Tooltip content={hoverText}>
-        <Button minimal={true} onClick={toggleOpen} outlined={true}>{`${type}`}</Button>
+        <Button variant="outlined" onClick={toggleOpen}>{`${type}`}</Button>
       </Tooltip>
       <Dialog
         isCloseButtonShown={false}
@@ -28,7 +28,7 @@ const EditableDate: React.FC<Props> = ({ type, date, changeDate }) => {
           background: '#fff',
           maxWidth: 'max-content',
           padding: '0.25em',
-          textAlign: 'center'
+          textAlign: 'center',
         }}
         title={`${type}`}
       >

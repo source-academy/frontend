@@ -2,14 +2,11 @@ import dayjs from 'dayjs';
 
 import {
   cardBackgroundUrl,
-  coverImageUrl
+  coverImageUrl,
 } from '../../../features/achievement/AchievementConstants';
 import { GoalType } from '../../../features/achievement/AchievementTypes';
-import {
-  AssessmentConfiguration,
-  AssessmentOverview,
-  AssessmentStatuses
-} from '../../assessment/AssessmentTypes';
+import type { AssessmentConfiguration, AssessmentOverview } from '../../assessment/AssessmentTypes';
+import { AssessmentStatuses } from '../../assessment/AssessmentTypes';
 import AchievementInferencer from './AchievementInferencer';
 import { isExpired, isReleased } from './DateHelper';
 
@@ -20,10 +17,10 @@ function assessmentPublished(assessmentOverview: AssessmentOverview): boolean {
 function insertFakeAchievements(
   assessmentOverviews: AssessmentOverview[],
   assessmentConfigs: AssessmentConfiguration[],
-  inferencer: AchievementInferencer
+  inferencer: AchievementInferencer,
 ) {
   const sortedOverviews = [...assessmentOverviews].sort((overview1, overview2) =>
-    dayjs(overview1.closeAt).diff(dayjs(overview2.closeAt))
+    dayjs(overview1.closeAt).diff(dayjs(overview2.closeAt)),
   );
   const length = assessmentOverviews.length;
 
@@ -52,10 +49,10 @@ function insertFakeAchievements(
           meta: {
             type: GoalType.ASSESSMENT,
             assessmentNumber: assessmentOverview.id,
-            requiredCompletionFrac: 0
-          }
+            requiredCompletionFrac: 0,
+          },
         },
-        assessmentOverview.status === AssessmentStatuses.submitted
+        assessmentOverview.status === AssessmentStatuses.submitted,
       );
 
       // goal for assessment grading
@@ -68,10 +65,10 @@ function insertFakeAchievements(
             meta: {
               type: GoalType.ASSESSMENT,
               assessmentNumber: assessmentOverview.id,
-              requiredCompletionFrac: 0
-            }
+              requiredCompletionFrac: 0,
+            },
           },
-          assessmentOverview.isGradingPublished
+          assessmentOverview.isGradingPublished,
         );
       }
 
@@ -95,8 +92,8 @@ function insertFakeAchievements(
         view: {
           coverImage: assessmentOverview.coverImage,
           description: assessmentOverview.shortSummary,
-          completionText: `XP: ${assessmentOverview.xp} / ${assessmentOverview.maxXp}`
-        }
+          completionText: `XP: ${assessmentOverview.xp} / ${assessmentOverview.maxXp}`,
+        },
       });
 
       // if completed, add the uuid into the appropriate array
@@ -132,8 +129,8 @@ function insertFakeAchievements(
       view: {
         coverImage: `${coverImageUrl}/default.png`,
         description: 'Your completed ' + assessmentType + ' are listed here!',
-        completionText: ''
-      }
+        completionText: '',
+      },
     });
   });
 }

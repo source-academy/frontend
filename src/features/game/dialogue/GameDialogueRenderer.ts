@@ -21,7 +21,7 @@ class DialogueRenderer {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     this.dialogueBox = createDialogueBox(gameManager).setInteractive({
       useHandCursor: true,
-      pixelPerfect: true
+      pixelPerfect: true,
     });
     this.typewriter = createTypewriter(gameManager, typewriterStyle);
     this.blinkingDiamond = this.drawDiamond(gameManager);
@@ -43,7 +43,7 @@ class DialogueRenderer {
       scene,
       screenSize.x - dialogueConstants.prompt.x - dialogueConstants.prompt.xPad,
       screenSize.y - dialogueConstants.prompt.y - dialogueConstants.prompt.yPad,
-      ImageAssets.diamond.key
+      ImageAssets.diamond.key,
     ).setDisplaySize(dialogueConstants.prompt.x, dialogueConstants.prompt.y);
 
     return { container: diamondSprite, clearBlink: blink(scene, diamondSprite) };
@@ -61,7 +61,11 @@ class DialogueRenderer {
    */
   public destroy() {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    this.typewriter.clearTyping();
+
+    if (this.typewriter && this.typewriter.clearTyping) {
+      this.typewriter.clearTyping();
+    }
+
     this.blinkingDiamond.clearBlink();
     this.getDialogueBox().off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
     fadeAndDestroy(gameManager, this.getDialogueContainer());
@@ -90,6 +94,12 @@ class DialogueRenderer {
    */
   public changeText(message: string) {
     this.typewriter.changeLine(message);
+  }
+
+  public finishTypewriting() {
+    if (this.typewriter && this.typewriter.finishTyping) {
+      this.typewriter.finishTyping();
+    }
   }
 }
 

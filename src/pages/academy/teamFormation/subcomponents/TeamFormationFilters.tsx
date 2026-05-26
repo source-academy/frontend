@@ -1,5 +1,4 @@
-import { ColumnFilter, ColumnFiltersState } from '@tanstack/react-table';
-import React from 'react';
+import type { ColumnFilter, ColumnFiltersState } from '@tanstack/react-table';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 
 import { FilterBadge } from './TeamFormationBadges';

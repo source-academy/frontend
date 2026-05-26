@@ -1,16 +1,18 @@
-import { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
+import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
 import { getEvaluatorDefinition } from '@sourceacademy/language-directory/dist/util';
 import { call, fork, put, select } from 'redux-saga/effects';
+import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import { selectDirectoryLanguageUrl } from 'src/features/directory/flagDirectoryLanguageUrl';
 
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
-import { LanguageDirectoryState } from '../../features/directory/LanguageDirectoryTypes';
+import type { LanguageDirectoryState } from '../../features/directory/LanguageDirectoryTypes';
 import type { OverallState } from '../application/ApplicationTypes';
 import { combineSagaHandlers } from '../redux/utils';
+import { preloadConductorEvaluatorSaga } from './helpers/conductorEvaluatorCache';
 
 export function* getLanguageDefinitionSaga() {
   const directory: LanguageDirectoryState = yield select(
-    (state: OverallState) => state.languageDirectory
+    (state: OverallState) => state.languageDirectory,
   );
   if (!directory.selectedLanguageId) return undefined;
   return directory.languageMap[directory.selectedLanguageId];
@@ -18,7 +20,7 @@ export function* getLanguageDefinitionSaga() {
 
 export function* getEvaluatorDefinitionSaga() {
   const directory: LanguageDirectoryState = yield select(
-    (state: OverallState) => state.languageDirectory
+    (state: OverallState) => state.languageDirectory,
   );
   if (!directory.selectedEvaluatorId) return undefined;
   const language: ILanguageDefinition = yield call(getLanguageDefinitionSaga);
@@ -48,7 +50,19 @@ const languageDirectoryHandlers = combineSagaHandlers({
     if (language.evaluators.length > 0) {
       yield put(LanguageDirectoryActions.setSelectedEvaluator(language.evaluators[0].id));
     }
-  }
+
+    const conductorEnabled: boolean = yield select(selectConductorEnable);
+    if (!conductorEnabled) return;
+
+    const evaluator = yield call(getEvaluatorDefinitionSaga);
+    if (!evaluator?.path) return;
+
+    try {
+      yield call(preloadConductorEvaluatorSaga, evaluator.path);
+    } catch (error) {
+      console.error('Failed to preload:', error);
+    }
+  },
 });
 
 function* LanguageDirectorySaga() {

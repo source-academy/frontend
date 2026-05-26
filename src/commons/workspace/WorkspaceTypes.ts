@@ -3,10 +3,8 @@ import type { Context } from 'js-slang';
 
 import type {
   AllColsSortStates,
-  GradingColumnVisibility
+  GradingColumnVisibility,
 } from '../../features/grading/GradingTypes';
-import type { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
-import type { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import type { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import type { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
@@ -80,16 +78,8 @@ export type WorkspaceManagerState = {
   readonly assessment: AssessmentWorkspaceState;
   readonly grading: GradingWorkspaceState;
   readonly playground: PlaygroundWorkspaceState;
-  readonly sourcecast: SourcecastWorkspaceState;
-  readonly sourcereel: SourcereelWorkspaceState;
   readonly sicp: SicpWorkspaceState;
-  readonly stories: StoriesWorkspaceState;
 };
-
-type StoriesWorkspaceAttr = {
-  // TODO: Add stories workspace attributes
-};
-type StoriesWorkspaceState = StoriesWorkspaceAttr & WorkspaceState;
 
 export type EditorTabState = {
   readonly filePath?: string;

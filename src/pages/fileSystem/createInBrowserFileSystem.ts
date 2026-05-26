@@ -1,12 +1,12 @@
-import { Store } from '@reduxjs/toolkit';
+import type { Store } from '@reduxjs/toolkit';
 import { BFSRequire, configure } from 'browserfs';
 import { ApiError } from 'browserfs/dist/node/core/api_error';
-import { FSModule } from 'browserfs/dist/node/core/FS';
+import type { FSModule } from 'browserfs/dist/node/core/FS';
 
-import { OverallState } from '../../commons/application/ApplicationTypes';
+import type { OverallState } from '../../commons/application/ApplicationTypes';
 import { setInBrowserFileSystem } from '../../commons/fileSystem/FileSystemActions';
 import { writeFileRecursively } from '../../commons/fileSystem/utils';
-import { EditorTabState, WorkspaceManagerState } from '../../commons/workspace/WorkspaceTypes';
+import type { EditorTabState, WorkspaceManagerState } from '../../commons/workspace/WorkspaceTypes';
 
 /**
  * Maps workspaces to their file system base path.
@@ -18,9 +18,6 @@ export const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> =
   grading: '',
   playground: '/playground',
   sicp: '/sicp',
-  sourcecast: '',
-  sourcereel: '',
-  stories: '' // TODO: Investigate if stories workspace base path is needed
 };
 
 export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<void> => {
@@ -32,16 +29,16 @@ export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<v
           [WORKSPACE_BASE_PATHS.playground]: {
             fs: 'IndexedDB',
             options: {
-              storeName: 'playground'
-            }
+              storeName: 'playground',
+            },
           },
           [WORKSPACE_BASE_PATHS.sicp]: {
             fs: 'IndexedDB',
             options: {
-              storeName: 'sicp'
-            }
-          }
-        }
+              storeName: 'sicp',
+            },
+          },
+        },
       },
       (err: ApiError | null | undefined) => {
         if (err) {
@@ -64,7 +61,7 @@ export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<v
         Promise.all(promises)
           .then(() => resolve())
           .catch(err => reject(err));
-      }
+      },
     );
   });
 };
@@ -76,7 +73,7 @@ type EditorTabWithFile = EditorTabState & {
 
 const createFilesForEditorTabs = async (fileSystem: FSModule, editorTabs: EditorTabState[]) => {
   const editorTabsWithFile = editorTabs.filter(
-    (editorTab): editorTab is EditorTabWithFile => editorTab.filePath !== undefined
+    (editorTab): editorTab is EditorTabWithFile => editorTab.filePath !== undefined,
   );
   const promises = editorTabsWithFile.map((editorTab): Promise<void> => {
     return new Promise((resolve, reject) => {

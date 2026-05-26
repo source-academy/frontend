@@ -1,22 +1,19 @@
-import { Button, HTMLTable, Icon as BpIcon, InputGroup } from '@blueprintjs/core';
+import { Button, HTMLTable, Icon, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import type { Column, ColumnFilter, ColumnFiltersState, Row } from '@tanstack/react-table';
 import {
-  Column,
-  ColumnFilter,
-  ColumnFiltersState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  Row,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table';
-import React, { useState } from 'react';
+import { Fragment, useState } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
 import { objectKeys } from 'src/commons/utils/TypeHelper';
-import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
+import type { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 
 import { AssessmentTypeBadge } from '../../grading/subcomponents/GradingBadges';
 import TeamFormationFilters from '../../teamFormation/subcomponents/TeamFormationFilters';
@@ -27,7 +24,7 @@ const columnHelper = createColumnHelper<TeamFormationOverview>();
 const columns = [
   columnHelper.accessor('assessmentName', {
     header: 'Assessment',
-    cell: info => <Filterable column={info.column} value={info.getValue()} />
+    cell: info => <Filterable column={info.column} value={info.getValue()} />,
   }),
   columnHelper.accessor('assessmentType', {
     header: 'Type',
@@ -35,18 +32,18 @@ const columns = [
       <Filterable column={info.column} value={info.getValue()}>
         <AssessmentTypeBadge type={info.getValue()} />
       </Filterable>
-    )
+    ),
   }),
   columnHelper.accessor('studentNames', {
     header: 'Students',
     cell: info =>
       info.getValue().map((name: string, index: number) => (
-        <React.Fragment key={index}>
+        <Fragment key={index}>
           <Filterable column={info.column} value={name}>
             {name}
           </Filterable>
           {', '}
-        </React.Fragment>
+        </Fragment>
       )),
     filterFn: (row, id: string | number, filterValue: any): boolean => {
       const rowValue = row.original[id as keyof typeof row.original];
@@ -54,7 +51,7 @@ const columns = [
         return rowValue === filterValue;
       }
       return rowValue.some(v => v === filterValue);
-    }
+    },
   }),
   columnHelper.accessor(({ teamId }) => ({ teamId }), {
     header: 'Actions',
@@ -62,8 +59,8 @@ const columns = [
     cell: info => {
       const { teamId } = info.getValue();
       return <TeamFormationActions teamId={teamId} />;
-    }
-  })
+    },
+  }),
 ];
 
 type TeamFormationTableProps = {
@@ -76,7 +73,7 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
   if (group) {
     defaultFilters.push({
       id: 'groupName',
-      value: group
+      value: group,
     });
   }
 
@@ -86,7 +83,7 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
   const globalFilterFn = (
     row: Row<TeamFormationOverview>,
     columnId: string | number,
-    filterValue: any
+    filterValue: any,
   ): boolean => {
     for (const column of objectKeys(row.original)) {
       const rowValue = row.original[column];
@@ -110,14 +107,14 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
     columns,
     state: {
       columnFilters,
-      globalFilter
+      globalFilter,
     },
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: globalFilterFn,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel()
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const handleFilterRemove = ({ id, value }: ColumnFilter) => {
@@ -134,7 +131,7 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
       >
         <GradingFlex alignItems="center" style={{ columnGap: '0.5rem' }}>
           <GradingFlex alignItems="center" style={{ columnGap: '0.5rem', height: '1.75rem' }}>
-            <BpIcon icon={IconNames.FILTER_LIST} />
+            <Icon icon={IconNames.FILTER_LIST} />
             <GradingText>
               {columnFilters.length > 0
                 ? 'Filters: '

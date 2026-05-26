@@ -1,10 +1,10 @@
 import { Card, Elevation, Overlay2 } from '@blueprintjs/core';
 import { compressToEncodedURIComponent } from 'lz-string';
-import React from 'react';
+import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
-import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
+import ControlBarCloseButton from 'src/commons/controlBar/ControlBarCloseButton';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import Playground from 'src/pages/playground/Playground';
@@ -33,7 +33,7 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
   id,
   activeSnippetId,
   setActiveSnippet,
-  language = 'javascript'
+  language = 'javascript',
 }) => {
   const dispatch = useDispatch();
 
@@ -48,7 +48,7 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
     setActiveSnippet(id);
   };
 
-  const handleClose = React.useCallback(() => {
+  const handleClose = useCallback(() => {
     setActiveSnippet('');
   }, [setActiveSnippet]);
 
@@ -56,7 +56,7 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
     initialEditorValueHash,
     prependLength: undefined,
     isSicpEditor: true,
-    handleCloseEditor: handleClose
+    handleCloseEditor: handleClose,
   };
 
   const closeButton = <ControlBarCloseButton key="close" handleClose={handleClose} />;
@@ -64,17 +64,17 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
   const controlBarProps = {
     editorButtons: [],
     flowButtons: [],
-    editingWorkspaceButtons: [closeButton]
+    editingWorkspaceButtons: [closeButton],
   };
 
   return (
     <>
       <Overlay2
-        hasBackdrop={true}
+        hasBackdrop
         isOpen={isActive}
         transitionDuration={0}
         backdropProps={{
-          style: { position: 'fixed' }
+          style: { position: 'fixed' },
         }}
       >
         <div className={classes['snippet-open']}>
@@ -88,7 +88,7 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
       </Overlay2>
       <Card
         className={classes['snippet-closed']}
-        interactive={true}
+        interactive
         elevation={Elevation.TWO}
         onClick={handleOpen}
       >

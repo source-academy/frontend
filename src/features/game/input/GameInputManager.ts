@@ -55,7 +55,7 @@ class GameInputManager {
   public registerKeyboardListener(
     key: string | number | Phaser.Input.Keyboard.Key,
     event: string | symbol,
-    callback: Function
+    callback: Function,
   ) {
     if (!this.scene.input.keyboard) return;
 

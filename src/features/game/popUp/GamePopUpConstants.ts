@@ -9,9 +9,9 @@ const PopUpConstants = {
     y: { Small: 325, Medium: 350, Large: 420 },
     scale: { Small: 0.7, Medium: 1, Large: 1.5 },
     width: 280,
-    height: 280
+    height: 280,
   },
-  tweenDuration: 300
+  tweenDuration: 300,
 };
 
 export default PopUpConstants;

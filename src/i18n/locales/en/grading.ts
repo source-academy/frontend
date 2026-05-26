@@ -12,8 +12,8 @@ const translations = {
     xpAdjustment: 'XP Adjustment',
     currentXpExclBonus: 'Current XP (excl. bonus)',
     maxXp: 'Max XP',
-    bonusXp: 'Bonus XP'
-  }
+    bonusXp: 'Bonus XP',
+  },
 };
 
 export default translations;

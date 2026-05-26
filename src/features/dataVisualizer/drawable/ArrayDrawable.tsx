@@ -1,4 +1,4 @@
-import React from 'react';
+import { PureComponent } from 'react';
 import { Group, Line, Rect, Text } from 'react-konva';
 
 import { Config } from '../Config';
@@ -17,7 +17,7 @@ type ArrayProps = {
 /**
  *  Represents an array in a tree.
  */
-class ArrayDrawable extends React.PureComponent<ArrayProps> {
+class ArrayDrawable extends PureComponent<ArrayProps> {
   render() {
     const createChildText = (node: DataTreeNode, index: number) => {
       const nodeValue = node.data;
@@ -40,7 +40,7 @@ class ArrayDrawable extends React.PureComponent<ArrayProps> {
       } else if (isEmptyList(nodeValue)) {
         const props = {
           x: index * Config.BoxWidth,
-          y: 0
+          y: 0,
         };
         return <NullDrawable key={index} {...props} />;
       } else {
@@ -73,7 +73,7 @@ class ArrayDrawable extends React.PureComponent<ArrayProps> {
             );
           })}
         {this.props.nodes.map(
-          (child, index) => child instanceof DataTreeNode && createChildText(child, index)
+          (child, index) => child instanceof DataTreeNode && createChildText(child, index),
         )}
       </Group>
     );

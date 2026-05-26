@@ -1,6 +1,6 @@
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { GameStateStorage } from '../state/GameStateTypes';
-import { ActionCondition } from './GameActionTypes';
+import type { ActionCondition } from './GameActionTypes';
 
 /**
  * This class checks for whether if-conditions are satisfied,
@@ -15,8 +15,8 @@ export default class ActionConditionChecker {
   public static async checkAllConditionsSatisfied(actionConditions: ActionCondition[]) {
     const allConditions = await Promise.all(
       actionConditions.map(
-        async actionCondition => await this.checkConditionSatisfied(actionCondition)
-      )
+        async actionCondition => await this.checkConditionSatisfied(actionCondition),
+      ),
     );
     return allConditions.every(condition => condition === true);
   }
@@ -35,7 +35,7 @@ export default class ActionConditionChecker {
         return (
           (await GameGlobalAPI.getInstance().isInUserState(
             conditionParams.userStateType,
-            conditionParams.id
+            conditionParams.id,
           )) === boolean
         );
       case GameStateStorage.ChecklistState:

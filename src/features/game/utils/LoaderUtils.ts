@@ -1,4 +1,4 @@
-import { AssetKey, AssetPath } from 'src/features/game/commons/CommonTypes';
+import type { AssetKey, AssetPath } from 'src/features/game/commons/CommonTypes';
 
 /**
  * The functions below loads assets, and and only resolves
@@ -80,7 +80,7 @@ export const loadSpritesheet = (
   scene: Phaser.Scene,
   assetKey: AssetKey,
   assetPath: AssetPath,
-  config: any
+  config: any,
 ) =>
   new Promise<AssetKey>(resolve => {
     if (scene.textures.get(assetKey).key !== '__MISSING') {

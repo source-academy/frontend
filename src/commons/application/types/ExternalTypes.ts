@@ -11,7 +11,7 @@ export type External = {
 export enum ExternalLibraryName {
   NONE = 'NONE',
   SOUNDS = 'SOUNDS',
-  EV3 = 'EV3' // Remote execution device library
+  EV3 = 'EV3', // Remote execution device library
 }
 
 export type ExternalLibrary = {
@@ -26,7 +26,7 @@ export type ExternalLibrary = {
 
 const libEntries: Array<[ExternalLibraryName, string[]]> = [
   [ExternalLibraryName.NONE, []],
-  [ExternalLibraryName.SOUNDS, []]
+  [ExternalLibraryName.SOUNDS, []],
 ];
 
 export const externalLibraries: Map<string, string[]> = new Map(libEntries);

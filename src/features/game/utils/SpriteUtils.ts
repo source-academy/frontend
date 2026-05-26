@@ -13,7 +13,7 @@
 export function resize(
   obj: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle,
   width: number,
-  height?: number
+  height?: number,
 ) {
   const ratio = obj.displayHeight / obj.displayWidth;
   if (!width) {
@@ -36,7 +36,7 @@ export function resize(
 export function resizeOverflow(
   obj: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle,
   width: number,
-  height: number
+  height: number,
 ) {
   if (obj.displayWidth > obj.displayHeight) {
     resize(obj, 0, height);
@@ -56,7 +56,7 @@ export function resizeOverflow(
 export function resizeUnderflow(
   obj: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle,
   width: number,
-  height: number
+  height: number,
 ) {
   if (obj.displayWidth > obj.displayHeight) {
     resize(obj, width);
@@ -73,7 +73,7 @@ export function resizeUnderflow(
  */
 export function multiplyDimensions(
   obj: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle,
-  factor: number
+  factor: number,
 ) {
   obj.displayWidth *= factor;
   obj.displayHeight *= factor;

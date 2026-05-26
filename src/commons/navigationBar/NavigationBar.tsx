@@ -10,15 +10,14 @@ import {
   NavbarGroup,
   NavbarHeading,
   Popover,
-  Position
+  Position,
 } from '@blueprintjs/core';
-import { IconName, IconNames } from '@blueprintjs/icons';
+import { type IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Translation } from 'react-i18next';
-import { type Location, NavLink, Route, useLocation } from 'react-router';
-import { i18nDefaultLangKeys } from 'src/i18n/i18next';
-import { SentryRoutes } from 'src/routes/routerConfig';
+import { type Location, NavLink, useLocation, useMatch } from 'react-router';
+import type { i18nDefaultLangKeys } from 'src/i18n/i18next';
 import classes from 'src/styles/NavigationBar.module.scss';
 
 import Dropdown from '../dropdown/Dropdown';
@@ -28,7 +27,7 @@ import Constants from '../utils/Constants';
 import { useResponsive, useSession } from '../utils/Hooks';
 import AcademyNavigationBar, {
   assessmentTypesToNavlinkInfo,
-  getAcademyNavbarRightInfo
+  getAcademyNavbarRightInfo,
 } from './subcomponents/AcademyNavigationBar';
 import NavigationBarLangSelectButton from './subcomponents/NavigationBarLangSelectButton';
 import SicpNavigationBar from './subcomponents/SicpNavigationBar';
@@ -51,13 +50,13 @@ const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }
   const { courseShortName, courseId } = useSession();
 
   return (
-    <NavbarGroup align={Alignment.LEFT}>
+    <NavbarGroup align={Alignment.START}>
       {renderDrawer && (
         <Button
           onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
           icon={IconNames.MENU}
-          large={true}
-          minimal={true}
+          size="large"
+          variant="minimal"
         />
       )}
       <NavLink
@@ -65,7 +64,7 @@ const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }
         to={Constants.playgroundOnly ? '/' : courseId == null ? '/welcome' : `/courses/${courseId}`}
       >
         <NavbarHeading>
-          <Button className="app-title" minimal icon={IconNames.SYMBOL_DIAMOND}>
+          <Button className="app-title" variant="minimal" icon={IconNames.SYMBOL_DIAMOND}>
             {courseShortName || Constants.sourceAcademyDeploymentName}
           </Button>
         </NavbarHeading>
@@ -88,6 +87,24 @@ const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }
   );
 };
 
+function useSecondaryNavbarType() {
+  const isPlayground = useMatch('/playground/*');
+  const isContributors = useMatch('/contributors');
+  const isAchievements = useMatch('/courses/:courseId/achievements/*');
+  const isLeaderboard = useMatch('/courses/:courseId/leaderboard/*');
+  const isSicp = useMatch('/sicpjs/:section?');
+
+  const isHidden = isPlayground || isContributors || isAchievements || isLeaderboard;
+
+  if (isSicp) {
+    return 'sicp';
+  } else if (isHidden) {
+    return 'hidden';
+  } else {
+    return 'academy';
+  }
+}
+
 const NavigationBar: React.FC = () => {
   const { isMobileBreakpoint } = useResponsive();
   const location = useLocation();
@@ -100,13 +117,11 @@ const NavigationBar: React.FC = () => {
     enableAchievements,
     enableOverallLeaderboard,
     enableContestLeaderboard,
-    enableSourcecast,
-    enableStories,
-    assessmentConfigurations
+    assessmentConfigurations,
   } = useSession();
   const assessmentTypes = useMemo(
     () => assessmentConfigurations?.map(c => c.type),
-    [assessmentConfigurations]
+    [assessmentConfigurations],
   );
 
   FocusStyleManager.onlyShowFocusOnTabs();
@@ -116,81 +131,66 @@ const NavigationBar: React.FC = () => {
       assessmentTypesToNavlinkInfo({
         assessmentTypes,
         courseId,
-        isEnrolledInACourse
+        isEnrolledInACourse,
       }),
-    [assessmentTypes, courseId, isEnrolledInACourse]
+    [assessmentTypes, courseId, isEnrolledInACourse],
   );
 
   const fullAcademyNavbarLeftCommonInfo: NavbarEntryInfo[] = useMemo(() => {
     return [
       {
-        to: `/courses/${courseId}/sourcecast`,
-        icon: IconNames.MUSIC,
-        text: 'Sourcecast',
-        disabled: !(isEnrolledInACourse && enableSourcecast)
-      },
-      {
         to: '/playground',
         icon: IconNames.CODE,
         text: 'Playground',
-        disabled: !isEnrolledInACourse
+        disabled: !isEnrolledInACourse,
       },
       {
         to: '/sicpjs',
         icon: IconNames.BOOK,
         text: 'SICP JS',
-        disabled: !isLoggedIn
+        disabled: !isLoggedIn,
       },
       {
         to: `/courses/${courseId}/achievements`,
         icon: IconNames.MOUNTAIN,
         text: 'Achievements',
-        disabled: !(isEnrolledInACourse && enableAchievements)
-      },
-      {
-        to: `/courses/${courseId}/stories`,
-        icon: IconNames.GIT_REPO,
-        text: 'Stories',
-        // TODO: Enable for public deployment
-        disabled: !(isEnrolledInACourse && enableStories)
+        disabled: !(isEnrolledInACourse && enableAchievements),
       },
       {
         to: `/courses/${courseId}/leaderboard`,
         icon: IconNames.TIMELINE_BAR_CHART,
         text: 'Leaderboard',
-        disabled: !(isEnrolledInACourse && (enableContestLeaderboard || enableOverallLeaderboard))
-      }
+        disabled: !(isEnrolledInACourse && (enableContestLeaderboard || enableOverallLeaderboard)),
+      },
     ];
   }, [
     courseId,
     isEnrolledInACourse,
-    enableSourcecast,
-    enableStories,
     isLoggedIn,
     enableAchievements,
     enableContestLeaderboard,
-    enableOverallLeaderboard
+    enableOverallLeaderboard,
   ]);
 
   const fullAcademyMobileNavbarLeftAdditionalInfo = useMemo(
     () => getAcademyNavbarRightInfo({ isEnrolledInACourse, courseId, role }),
-    [isEnrolledInACourse, courseId, role]
+    [isEnrolledInACourse, courseId, role],
   );
 
   const fullAcademyMobileNavbarLeftInfoWithAssessments: NavbarEntryInfo[] = useMemo(() => {
     return [
       ...fullAcademyNavbarLeftAssessmentsInfo,
       ...fullAcademyNavbarLeftCommonInfo,
-      ...fullAcademyMobileNavbarLeftAdditionalInfo
+      ...fullAcademyMobileNavbarLeftAdditionalInfo,
     ];
   }, [
     fullAcademyNavbarLeftAssessmentsInfo,
     fullAcademyNavbarLeftCommonInfo,
-    fullAcademyMobileNavbarLeftAdditionalInfo
+    fullAcademyMobileNavbarLeftAdditionalInfo,
   ]);
 
   const renderPlaygroundOnlyNavbarLeftDesktop = () => (
-    <NavbarGroup align={Alignment.LEFT}>
+    <NavbarGroup align={Alignment.START}>
       {playgroundOnlyNavbarLeftInfo.map((entry, i) => (
         <DesktopNavLink key={i} {...entry} />
       ))}
@@ -205,7 +205,7 @@ const NavigationBar: React.FC = () => {
     const entries = assessmentTypesToNavlinkInfo({
       assessmentTypes,
       courseId,
-      isEnrolledInACourse
+      isEnrolledInACourse,
     });
 
     const desktopNavbarLeftPopoverContent = (
@@ -221,9 +221,8 @@ const NavigationBar: React.FC = () => {
       '/playground',
       '/sicpjs',
       '/contributors',
-      `/courses/${courseId}/sourcecast`,
       `/courses/${courseId}/achievements`,
-      `/courses/${courseId}/leaderboard`
+      `/courses/${courseId}/leaderboard`,
     ];
     const enableDesktopPopover =
       courseId != null && !!topNavbarNavlinks.find(x => location.pathname.startsWith(x));
@@ -233,7 +232,7 @@ const NavigationBar: React.FC = () => {
     };
 
     return (
-      <NavbarGroup align={Alignment.LEFT}>
+      <NavbarGroup align={Alignment.START}>
         <Popover
           position={Position.BOTTOM_RIGHT}
           interactionKind="hover"
@@ -248,7 +247,7 @@ const NavigationBar: React.FC = () => {
             <NavbarHeading>
               <Button
                 className="app-title"
-                minimal
+                variant="minimal"
                 icon={IconNames.SYMBOL_DIAMOND}
                 active={highlightDesktopLogo(location)}
               >
@@ -269,12 +268,12 @@ const NavigationBar: React.FC = () => {
   );
 
   const commonNavbarRight = (
-    <NavbarGroup align={Alignment.RIGHT}>
+    <NavbarGroup align={Alignment.END}>
       <NavigationBarLangSelectButton />
       <NavLink
         className={({ isActive }) =>
           classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
-            [Classes.ACTIVE]: isActive
+            [Classes.ACTIVE]: isActive,
           })
         }
         to="/contributors"
@@ -292,7 +291,7 @@ const NavigationBar: React.FC = () => {
       <Dropdown />
     </NavbarGroup>
   );
-
+  const navbarType = useSecondaryNavbarType();
   return (
     <>
       <Navbar
@@ -300,7 +299,7 @@ const NavigationBar: React.FC = () => {
           'NavigationBar',
           'primary-navbar',
           classes['primary-navbar'],
-          Classes.DARK
+          Classes.DARK,
         )}
       >
         {Constants.playgroundOnly
@@ -313,22 +312,11 @@ const NavigationBar: React.FC = () => {
         {commonNavbarRight}
       </Navbar>
 
-      <SentryRoutes>
-        <Route path="/playground/*" element={null} />
-        <Route path="/contributors" element={null} />
-        <Route path="/courses/:courseId/sourcecast" element={null} />
-        <Route path="/courses/:courseId/achievements" element={null} />
-        <Route path="/courses/:courseId/leaderboard/*" element={null} />
-        <Route path="/sicpjs/:section?" element={<SicpNavigationBar />} />
-        <Route
-          path="*"
-          element={
-            !Constants.playgroundOnly && isEnrolledInACourse && !isMobileBreakpoint ? (
-              <AcademyNavigationBar assessmentTypes={assessmentTypes} />
-            ) : null
-          }
-        />
-      </SentryRoutes>
+      {navbarType === 'hidden' ? null : navbarType === 'sicp' ? (
+        <SicpNavigationBar />
+      ) : !Constants.playgroundOnly && isEnrolledInACourse && !isMobileBreakpoint ? (
+        <AcademyNavigationBar assessmentTypes={assessmentTypes} />
+      ) : null}
     </>
   );
 };
@@ -337,20 +325,13 @@ const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
   {
     to: '/playground',
     icon: IconNames.CODE,
-    text: 'Playground'
+    text: 'Playground',
   },
   {
     to: '/sicpjs',
     icon: IconNames.BOOK,
-    text: 'SICP JS'
-  }
-  // {
-  //   to: '/stories',
-  //   icon: IconNames.GIT_REPO,
-  //   text: 'Stories',
-  //   // TODO: Enable for public deployment
-  //   disabled: true
-  // }
+    text: 'SICP JS',
+  },
 ];
 
 export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
@@ -363,12 +344,12 @@ export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
       key={props.text}
       title={props.text}
     >
-      <Button minimal icon={props.icon}>
+      <Button variant="minimal" icon={props.icon}>
         {!shouldHide && (
           <Translation ns="commons" keyPrefix="navigationBar">
             {t =>
               t($ => $[props.text as keyof i18nDefaultLangKeys['commons']['navigationBar']], {
-                defaultValue: props.text
+                defaultValue: props.text,
               })
             }
           </Translation>
@@ -377,7 +358,7 @@ export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
       {props.hasNotifications && (
         <NotificationBadge
           notificationFilter={filterNotificationsByType(props.text)}
-          disableHover={true}
+          disableHover
         />
       )}
     </NavLink>
@@ -394,11 +375,11 @@ const MobileNavLink: React.FC<
       onClick={props.handleClick}
       key={props.text}
     >
-      <Button minimal large icon={props.icon}>
+      <Button variant="minimal" size="large" icon={props.icon}>
         <Translation ns="commons" keyPrefix="navigationBar">
           {t =>
             t($ => $[props.text as keyof i18nDefaultLangKeys['commons']['navigationBar']], {
-              defaultValue: props.text
+              defaultValue: props.text,
             })
           }
         </Translation>
@@ -406,7 +387,7 @@ const MobileNavLink: React.FC<
       {props.hasNotifications && (
         <NotificationBadge
           notificationFilter={filterNotificationsByType(props.text)}
-          disableHover={true}
+          disableHover
         />
       )}
     </NavLink>

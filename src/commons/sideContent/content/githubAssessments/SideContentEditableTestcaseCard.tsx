@@ -3,45 +3,40 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/utils/stringify';
-import React from 'react';
+import { useCallback, useMemo } from 'react';
 
-import { Testcase, TestcaseTypes } from '../../../assessment/AssessmentTypes';
+import { type Testcase, TestcaseTypes } from '../../../assessment/AssessmentTypes';
 
-type SideContentEditableTestcaseCardProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   setTestcaseProgram: (newProgram: string) => void;
   setTestcaseExpectedResult: (newExpectedResult: string) => void;
   handleTestcaseEval: (testcaseId: number) => void;
   deleteTestcase: (testcaseId: number) => void;
-};
-
-type StateProps = {
   index: number;
   testcase: Testcase;
 };
 
-const SideContentEditableTestcaseCard: React.FC<SideContentEditableTestcaseCardProps> = ({
+const SideContentEditableTestcaseCard: React.FC<Props> = ({
   index,
   testcase,
   setTestcaseProgram,
   setTestcaseExpectedResult,
   handleTestcaseEval,
-  deleteTestcase
+  deleteTestcase,
 }) => {
   // TODO (Refactor): testcase type seems unused in GitHub Assessments
-  const extraClasses = React.useMemo(() => {
+  const extraClasses = useMemo(() => {
     const isEvaluated = testcase.result !== undefined || testcase.errors;
     const isEqual = stringify(testcase.result) === testcase.answer;
 
     return {
       correct: isEvaluated && isEqual,
       wrong: isEvaluated && !isEqual,
-      secret: testcase.type === TestcaseTypes.secret || testcase.type === TestcaseTypes.opaque
+      secret: testcase.type === TestcaseTypes.secret || testcase.type === TestcaseTypes.opaque,
     };
   }, [testcase]);
 
-  const handleRunTestcase = React.useCallback(() => {
+  const handleRunTestcase = useCallback(() => {
     handleTestcaseEval(index);
   }, [index, handleTestcaseEval]);
 
@@ -59,7 +54,7 @@ const SideContentEditableTestcaseCard: React.FC<SideContentEditableTestcaseCardP
     />
   );
 
-  const answer = React.useMemo(() => {
+  const answer = useMemo(() => {
     let answer = 'No Answer';
     if (testcase.errors) {
       answer = parseError(testcase.errors);
@@ -86,7 +81,7 @@ const SideContentEditableTestcaseCard: React.FC<SideContentEditableTestcaseCardP
               value={expectedAnswer}
               onChange={(event: any) => setTestcaseExpectedResult(event.target.value)}
             />
-            <InputGroup className="testcase-actual" value={answer} readOnly={true} />
+            <InputGroup className="testcase-actual" value={answer} readOnly />
           </>
         }
         {playButton}

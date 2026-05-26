@@ -1,7 +1,7 @@
 import { InputGroup, Intent } from '@blueprintjs/core';
-import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import { ConfirmDialog, ConfirmDialogProps } from './ConfirmDialog';
+import { ConfirmDialog, type ConfirmDialogProps } from './ConfirmDialog';
 
 export interface PromptDialogProps<T> extends Omit<
   ConfirmDialogProps<T>,
@@ -15,14 +15,14 @@ export interface PromptDialogProps<T> extends Omit<
 }
 
 export function PromptDialog<T>(
-  props: PromptDialogProps<T>
+  props: PromptDialogProps<T>,
 ): React.ReactElement<PromptDialogProps<T>> {
   const { enterResponse, validationFunction } = props;
-  const inputRef = React.useRef<HTMLInputElement>(null);
-  const [isValid, setIsValid] = React.useState(
-    !validationFunction || validationFunction(props.defaultValue || '')
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [isValid, setIsValid] = useState(
+    !validationFunction || validationFunction(props.defaultValue || ''),
   );
-  React.useEffect(() => {
+  useEffect(() => {
     if (!inputRef.current) {
       return;
     }
@@ -44,8 +44,8 @@ export function PromptDialog<T>(
     ...choice,
     props: {
       ...choice.props,
-      disabled: choice.disableOnInvalid && !isValid
-    }
+      disabled: choice.disableOnInvalid && !isValid,
+    },
   }));
   const handleEnter = enterResponse
     ? (e: React.KeyboardEvent<HTMLInputElement>) => {

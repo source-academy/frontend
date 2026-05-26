@@ -1,23 +1,26 @@
-import { IconName, Intent } from '@blueprintjs/core';
-import React from 'react';
+import type { IconName } from '@blueprintjs/core';
+import { Intent } from '@blueprintjs/core';
+import { createElement, createRef, PureComponent } from 'react';
 import { createRoot } from 'react-dom/client';
 
-import { ConfirmDialog, ConfirmDialogProps } from '../dialogs/ConfirmDialog';
-import { PromptDialog, PromptDialogProps } from '../dialogs/PromptDialog';
-import { PropsType } from './TypeHelper';
+import type { ConfirmDialogProps } from '../dialogs/ConfirmDialog';
+import { ConfirmDialog } from '../dialogs/ConfirmDialog';
+import type { PromptDialogProps } from '../dialogs/PromptDialog';
+import { PromptDialog } from '../dialogs/PromptDialog';
+import type { PropsType } from './TypeHelper';
 
 // The below is based off the Blueprint Toaster:
 // https://github.com/palantir/blueprint/blob/develop/packages/core/src/components/toast/toaster.tsx
 
 interface DialogHelperState {
-  dialog: ReturnType<typeof React.createElement> | null;
+  dialog: ReturnType<typeof createElement> | null;
   dialogOnClose: (() => void) | null;
 }
 
-class DialogHelper extends React.PureComponent<{}, DialogHelperState> {
+class DialogHelper extends PureComponent<{}, DialogHelperState> {
   public state: DialogHelperState = {
     dialog: null,
-    dialogOnClose: null
+    dialogOnClose: null,
   };
 
   /**
@@ -31,7 +34,7 @@ class DialogHelper extends React.PureComponent<{}, DialogHelperState> {
     document.body.appendChild(containerElement);
     const root = createRoot(containerElement);
 
-    const dialogRef = React.createRef<DialogHelper>();
+    const dialogRef = createRef<DialogHelper>();
     root.render(<DialogHelper ref={dialogRef} />);
     return dialogRef;
   }
@@ -65,7 +68,7 @@ export function closeDialog() {
 
 export function promisifyDialog<P extends PropsType<React.Component>, R>(
   DialogComponent: React.ComponentType<P>,
-  propFn: (resolve: (response: R) => void) => P
+  propFn: (resolve: (response: R) => void) => P,
 ): Promise<R> {
   return new Promise<R>((resolve, reject) => {
     showDialog(<DialogComponent {...propFn(resolve)} />, reject);
@@ -74,12 +77,12 @@ export function promisifyDialog<P extends PropsType<React.Component>, R>(
 
 export function showConfirmDialog<T>(
   props: Omit<ConfirmDialogProps<T>, 'onResponse'> &
-    Partial<Pick<ConfirmDialogProps<T>, 'onResponse'>>
+    Partial<Pick<ConfirmDialogProps<T>, 'onResponse'>>,
 ): Promise<T> {
   return promisifyDialog<ConfirmDialogProps<T>, T>(ConfirmDialog, resolve => ({
     ...props,
     onResponse: resolve,
-    isOpen: true
+    isOpen: true,
   }));
 }
 
@@ -103,12 +106,12 @@ export function showSimpleConfirmDialog(props: SimpleConfirmDialogProps): Promis
         key: true,
         label: props.positiveLabel || 'Yes',
         intent: props.positiveIntent || Intent.SUCCESS,
-        props: { type: 'submit' }
-      }
+        props: { type: 'submit' },
+      },
     ],
     escapeResponse: false,
     icon: props.icon,
-    ...props.props
+    ...props.props,
   });
 }
 
@@ -128,12 +131,12 @@ export function showSimpleErrorDialog(props: SimpleErrorDialogProps): Promise<bo
         key: true,
         label: props.label || 'OK',
         intent: Intent.PRIMARY,
-        props: { type: 'submit' }
-      }
+        props: { type: 'submit' },
+      },
     ],
     escapeResponse: false,
     icon: 'error',
-    ...props.props
+    ...props.props,
   });
 }
 
@@ -155,14 +158,14 @@ export function showSimplePromptDialog(props: {
           key: true,
           label: props.positiveLabel || 'Accept',
           intent: Intent.SUCCESS,
-          disableOnInvalid: true
-        }
+          disableOnInvalid: true,
+        },
       ],
       escapeResponse: false,
       enterResponse: true,
       onResponse: (buttonResponse, value) => resolve({ buttonResponse, value }),
       isOpen: true,
-      ...props.props
-    })
+      ...props.props,
+    }),
   );
 }

@@ -1,7 +1,7 @@
 import FontAssets from '../assets/FontAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants, screenCenter } from '../commons/CommonConstants';
-import { BitmapFontStyle, IBaseScene } from '../commons/CommonTypes';
+import type { BitmapFontStyle, IBaseScene } from '../commons/CommonTypes';
 import dialogueConstants from '../dialogue/GameDialogueConstants';
 import DialogueRenderer from '../dialogue/GameDialogueRenderer';
 import { keyboardShortcuts } from '../input/GameInputConstants';
@@ -15,14 +15,14 @@ import { fadeAndDestroy, fadeIn } from './FadeEffect';
 const notifStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
   size: 100,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 const notifTextConfig = {
   x: screenCenter.x,
   y: dialogueConstants.rect.y + notifStyle.size * 2,
   oriX: 0.5,
-  oriY: 0.9
+  oriY: 0.9,
 };
 
 /**

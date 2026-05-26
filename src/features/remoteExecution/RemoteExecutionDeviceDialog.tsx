@@ -8,10 +8,10 @@ import {
   FormGroup,
   HTMLSelect,
   InputGroup,
-  Tooltip
+  Tooltip,
 } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React from 'react';
+import { useState } from 'react';
 import { QrReader } from 'react-qr-reader';
 import { useDispatch } from 'react-redux';
 
@@ -21,9 +21,10 @@ import {
   checkFieldValidity,
   collectFieldValues,
   useField,
-  validateNotEmpty
+  validateNotEmpty,
 } from '../../commons/utils/FormHelper';
-import { Device, deviceTypes } from './RemoteExecutionTypes';
+import type { Device } from './RemoteExecutionTypes';
+import { deviceTypes } from './RemoteExecutionTypes';
 
 type Props = {
   isOpen: boolean;
@@ -36,24 +37,24 @@ const enum FACING_MODE {
   USER = 'user',
   ENVIRONMENT = 'environment',
   LEFT = 'left',
-  RIGHT = 'right'
+  RIGHT = 'right',
 }
 
 const RemoteExecutionDeviceDialog: React.FC<Props> = ({
   isOpen,
   onClose,
   deviceToEdit,
-  defaultSecret
+  defaultSecret,
 }) => {
   const dispatch = useDispatch();
   const nameField = useField<HTMLInputElement>(validateNotEmpty);
   const typeField = useField<HTMLSelectElement>();
   const secretField = useField<HTMLInputElement>(validateNotEmpty);
 
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState<string | undefined>();
-  const [showScanner, setShowScanner] = React.useState(false);
-  const [cameraFacingMode, setCameraFacingMode] = React.useState(FACING_MODE.ENVIRONMENT);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
+  const [showScanner, setShowScanner] = useState(false);
+  const [cameraFacingMode, setCameraFacingMode] = useState(FACING_MODE.ENVIRONMENT);
 
   const onSubmit = async () => {
     const fields = collectFieldValues(nameField, typeField, secretField);
@@ -84,7 +85,7 @@ const RemoteExecutionDeviceDialog: React.FC<Props> = ({
 
   const scanButton = (
     <Tooltip content="Scan QR Code">
-      <Button minimal icon="clip" onClick={() => setShowScanner(() => !showScanner)} />
+      <Button variant="minimal" icon="clip" onClick={() => setShowScanner(() => !showScanner)} />
     </Tooltip>
   );
 
@@ -115,7 +116,7 @@ const RemoteExecutionDeviceDialog: React.FC<Props> = ({
             className={classNames(
               Classes.INPUT,
               Classes.FILL,
-              nameField.isValid || Classes.INTENT_DANGER
+              nameField.isValid || Classes.INTENT_DANGER,
             )}
             type="text"
             ref={nameField.ref}
@@ -161,7 +162,7 @@ const RemoteExecutionDeviceDialog: React.FC<Props> = ({
               textAlign: 'center',
               display: 'flex',
               flexDirection: 'column',
-              rowGap: '0.5rem'
+              rowGap: '0.5rem',
             }}
           >
             <QrReader
@@ -178,7 +179,7 @@ const RemoteExecutionDeviceDialog: React.FC<Props> = ({
                 aspectRatio: 1,
                 frameRate: { ideal: 12 },
                 deviceId: { ideal: '0' },
-                facingMode: { ideal: cameraFacingMode }
+                facingMode: { ideal: cameraFacingMode },
               }}
               containerStyle={{ width: '50%', marginInline: 'auto' }}
               videoStyle={{ borderRadius: '0.3em' }}
@@ -190,7 +191,9 @@ const RemoteExecutionDeviceDialog: React.FC<Props> = ({
                 // Need to do this to force a refresh of the scanner component
                 setShowScanner(false);
                 setCameraFacingMode(() =>
-                  cameraFacingMode === FACING_MODE.USER ? FACING_MODE.ENVIRONMENT : FACING_MODE.USER
+                  cameraFacingMode === FACING_MODE.USER
+                    ? FACING_MODE.ENVIRONMENT
+                    : FACING_MODE.USER,
                 );
                 setTimeout(() => setShowScanner(true), 1);
               }}

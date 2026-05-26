@@ -1,6 +1,6 @@
 import ImageAssets from '../../assets/ImageAssets';
 import { getAwardProps } from '../../awards/GameAwardsHelper';
-import { AwardProperty } from '../../awards/GameAwardsTypes';
+import type { AwardProperty } from '../../awards/GameAwardsTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { Constants, screenCenter, screenSize } from '../../commons/CommonConstants';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
@@ -17,7 +17,7 @@ import { createBitmapText } from '../../utils/TextUtils';
 import {
   awardBannerTextStyle,
   awardNoAssetTitleStyle,
-  AwardsHallConstants
+  AwardsHallConstants,
 } from './AwardsHallConstants';
 import { createAwardsHoverContainer } from './AwardsHallHelper';
 
@@ -62,7 +62,7 @@ class AwardsHall extends Phaser.Scene {
     const collectibleLength = this.getUserStateManager().getCollectibles().length;
     this.awardXSpace =
       Math.ceil(
-        Math.max(achievementLength, collectibleLength) / AwardsHallConstants.maxAwardsPerCol
+        Math.max(achievementLength, collectibleLength) / AwardsHallConstants.maxAwardsPerCol,
       ) * AwardsHallConstants.award.xSpace;
 
     // Scroll limit is anything that exceed the screen size
@@ -103,7 +103,7 @@ class AwardsHall extends Phaser.Scene {
       0,
       AwardsHallConstants.tileDim,
       AwardsHallConstants.tileDim,
-      ImageAssets.awardsBackground.key
+      ImageAssets.awardsBackground.key,
     ).setOrigin(0, 0.25);
     this.getLayerManager().addToLayer(Layer.Background, this.backgroundTile);
 
@@ -111,7 +111,7 @@ class AwardsHall extends Phaser.Scene {
     const banners = ['Achievements', 'Collectibles'];
     const bannerPos = calcTableFormatPos({
       direction: Direction.Column,
-      numOfItems: banners.length
+      numOfItems: banners.length,
     });
     banners.forEach((banner, index) => {
       const bannerCont = this.createBanner(banner, bannerPos[index][1]);
@@ -122,14 +122,14 @@ class AwardsHall extends Phaser.Scene {
       assetKey: ImageAssets.chapterSelectArrow.key,
       onDown: () => (this.isScrollLeft = true),
       onUp: () => (this.isScrollLeft = false),
-      onOut: () => (this.isScrollLeft = false)
+      onOut: () => (this.isScrollLeft = false),
     }).setPosition(screenCenter.x - AwardsHallConstants.arrow.xOffset, screenCenter.y);
 
     const rightArrow = createButton(this, {
       assetKey: ImageAssets.chapterSelectArrow.key,
       onDown: () => (this.isScrollRight = true),
       onUp: () => (this.isScrollRight = false),
-      onOut: () => (this.isScrollRight = false)
+      onOut: () => (this.isScrollRight = false),
     })
       .setPosition(screenCenter.x + AwardsHallConstants.arrow.xOffset, screenCenter.y)
       .setScale(-1, 1);
@@ -160,7 +160,7 @@ class AwardsHall extends Phaser.Scene {
       numItemLimit: AwardsHallConstants.maxAwardsPerCol,
       redistributeLast: false,
       maxXSpace: this.awardXSpace,
-      maxYSpace: AwardsHallConstants.award.ySpace
+      maxYSpace: AwardsHallConstants.award.ySpace,
     });
 
     // Achievement is positioned on the upper half of the screen
@@ -169,9 +169,9 @@ class AwardsHall extends Phaser.Scene {
         this.createAward(
           achievement,
           achievementsPos[index][0],
-          achievementsPos[index][1] + AwardsHallConstants.award.yStart - screenCenter.y
-        )
-      )
+          achievementsPos[index][1] + AwardsHallConstants.award.yStart - screenCenter.y,
+        ),
+      ),
     );
 
     // Collectible
@@ -182,7 +182,7 @@ class AwardsHall extends Phaser.Scene {
       numItemLimit: AwardsHallConstants.maxAwardsPerCol,
       redistributeLast: false,
       maxXSpace: this.awardXSpace,
-      maxYSpace: AwardsHallConstants.award.ySpace
+      maxYSpace: AwardsHallConstants.award.ySpace,
     });
 
     // Collectible is positioned on the lower half of the screen
@@ -191,9 +191,9 @@ class AwardsHall extends Phaser.Scene {
         this.createAward(
           collectible,
           collectiblesPos[index][0],
-          collectiblesPos[index][1] + AwardsHallConstants.award.yStart
-        )
-      )
+          collectiblesPos[index][1] + AwardsHallConstants.award.yStart,
+        ),
+      ),
     );
 
     this.getLayerManager().addToLayer(Layer.Objects, this.awardsContainer);
@@ -230,7 +230,7 @@ class AwardsHall extends Phaser.Scene {
         AwardsHallConstants.award.dim,
         AwardsHallConstants.award.dim,
         HexColor.darkBlue,
-        0.8
+        0.8,
       );
       image.setInteractive();
 
@@ -239,7 +239,7 @@ class AwardsHall extends Phaser.Scene {
         0,
         0,
         award.title,
-        awardNoAssetTitleStyle
+        awardNoAssetTitleStyle,
       ).setOrigin(0.5, 0.5);
       awardCont.add([image, text]);
     } else {
@@ -257,24 +257,24 @@ class AwardsHall extends Phaser.Scene {
       0,
       AwardsHallConstants.award.dim,
       AwardsHallConstants.award.dim,
-      0
+      0,
     ).setAlpha(award.completed ? 0 : 0.8);
     awardCont.add(blackTint);
 
     // Set up the pop up
     const hoverCont = createAwardsHoverContainer(this, award);
     image.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
-      hoverCont.setVisible(true)
+      hoverCont.setVisible(true),
     );
     image.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () =>
-      hoverCont.setVisible(false)
+      hoverCont.setVisible(false),
     );
     image.addListener(
       Phaser.Input.Events.GAMEOBJECT_POINTER_MOVE,
       (pointer: Phaser.Input.Pointer) => {
         hoverCont.x = pointer.x + 10;
         hoverCont.y = pointer.y - 10;
-      }
+      },
     );
 
     this.getLayerManager().addToLayer(Layer.UI, hoverCont);
@@ -304,13 +304,13 @@ class AwardsHall extends Phaser.Scene {
       this,
       AwardsHallConstants.banner.xOffset,
       0,
-      ImageAssets.awardsPage.key
+      ImageAssets.awardsPage.key,
     );
     const bannerText = createBitmapText(
       this,
       text,
       AwardsHallConstants.bannerTextConfig,
-      awardBannerTextStyle
+      awardBannerTextStyle,
     );
     bannerContainer.add([bannerBg, bannerText]);
     return bannerContainer;

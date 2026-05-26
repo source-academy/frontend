@@ -1,12 +1,12 @@
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
-import React, { RefObject } from 'react';
+import { createRef, Fragment } from 'react';
 import { Circle, Group } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { GlobalFn, IHoverable } from '../../CseMachineTypes';
+import type { GlobalFn, IHoverable } from '../../CseMachineTypes';
 import {
   defaultStrokeColor,
   defaultTextColor,
@@ -18,7 +18,7 @@ import {
   getTextWidth,
   setHoveredCursor,
   setUnhoveredCursor,
-  truncateFunctionTooltip
+  truncateFunctionTooltip,
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { ArrowFromFnTooltip } from '../arrows/ArrowFromFnTooltip';
@@ -42,8 +42,8 @@ export class GlobalFnValue extends Value implements IHoverable {
   readonly printDescriptionOffsetY: number;
   readonly printDescriptionBottomGap: number;
   readonly totalWidth: number;
-  readonly labelRef: RefObject<Label | null> = React.createRef();
-  readonly revealLabelRef: RefObject<Label | null> = React.createRef();
+  readonly labelRef: React.RefObject<Label | null> = createRef();
+  readonly revealLabelRef: React.RefObject<Label | null> = createRef();
 
   centerX: number;
   private isExpandedDescription: boolean = false;
@@ -55,7 +55,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     /** underlying function */
     readonly data: GlobalFn,
     /** what this value is being referenced by */
-    mainReference: Binding
+    mainReference: Binding,
   ) {
     super();
     Layout.memoizeValue(data, this);
@@ -86,13 +86,13 @@ export class GlobalFnValue extends Value implements IHoverable {
     this.exportTooltip = truncateFunctionTooltip(
       this.tooltip,
       Config.FnDescriptionMaxWidth,
-      Config.FnDescriptionMaxHeight
+      Config.FnDescriptionMaxHeight,
     );
     this.isTooltipTruncated = this.exportTooltip !== this.tooltip;
     this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));
     this.exportTooltipWidth = Math.min(
       Config.FnDescriptionMaxWidth,
-      getTextWidth(this.exportTooltip)
+      getTextWidth(this.exportTooltip),
     );
     this.printDescriptionHeight =
       getTextHeight(this.exportTooltip, Config.FnDescriptionMaxWidth) +
@@ -221,10 +221,10 @@ export class GlobalFnValue extends Value implements IHoverable {
         textColor={textColor}
         labelRef={this.labelRef}
         revealLabelRef={this.revealLabelRef}
-      />
+      />,
     );
     return (
-      <React.Fragment key={Layout.key++}>
+      <Fragment key={Layout.key++}>
         <Group
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
@@ -266,7 +266,7 @@ export class GlobalFnValue extends Value implements IHoverable {
         </Group>
         {this._arrow?.draw()}
         {this.tooltipArrow?.draw()}
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

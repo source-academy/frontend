@@ -26,7 +26,7 @@ export default class LocationDetailsParser {
         ...createEmptyLocation(),
         id,
         name,
-        assetKey: this.locationAssetKey(shortPath)
+        assetKey: this.locationAssetKey(shortPath),
       });
 
       Parser.checkpoint.map.addMapAsset(this.locationAssetKey(shortPath), {
@@ -39,8 +39,8 @@ export default class LocationDetailsParser {
           centreX: screenCenter.x,
           centreY: screenCenter.y,
           endFrame: parseInt(frame) - 1 || 0,
-          animType: AnimType.Background
-        }
+          animType: AnimType.Background,
+        },
       });
     });
   }
