@@ -210,19 +210,14 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       this.handleResize();
     }
     if (prevProps.needCseUpdate && !this.props.needCseUpdate) {
-      const preservedStep = Math.max(this.state.value, 0);
       this.setState({ arrowFilterOpen: false });
+      this.stepFirst();
 
       if (this.isJava()) {
         JavaCseMachine.clearCse();
       } else {
         CseMachine.clearCse();
       }
-
-      // Re-run the stepper at the preserved step so the display remains at the
-      // same step after editor update while still refreshing the CSE internals.
-      this.sliderShift(preservedStep);
-      this.sliderRelease(preservedStep);
     }
   }
 

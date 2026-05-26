@@ -426,9 +426,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleEditorEval: () => {
         const wasCenterAligned = CseMachine.getCenterAlignment();
         CseMachine.clearCachedLayouts();
-        if (wasCenterAligned) {
-          CseMachine.toggleCenterAlignment();
-        }
 
         // reset stepper before evaluation
         dispatch(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
@@ -443,9 +440,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
         dispatch(WorkspaceActions.evalEditor(workspaceLocation));
         CseMachine.setClearDeadFrames(false);
-        if (wasCenterAligned) {
-          CseMachine.toggleCenterAlignment();
-        }
       },
       handleInterruptEval: () =>
         dispatch(InterpreterActions.beginInterruptExecution(workspaceLocation)),
