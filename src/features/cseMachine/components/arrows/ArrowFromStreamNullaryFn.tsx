@@ -10,7 +10,7 @@ import { DottedArrow } from './DottedArrow';
 export class ArrowFromStreamNullaryFn extends DottedArrow {
   constructor(
     from: FnValue | GlobalFnValue | ContValue,
-    public offsetIndex: number = 0
+    public offsetIndex: number = 0,
   ) {
     super(from);
     this.faded = !from.isReferenced();
@@ -42,7 +42,7 @@ export class ArrowFromStreamNullaryFn extends DottedArrow {
       // creating smooth curves at the corners.
       () => [startPointX, startPointY],
       () => [midPointX, midPointY],
-      () => [endPointX, endPointY]
+      () => [endPointX, endPointY],
     ];
     return steps;
   }

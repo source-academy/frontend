@@ -122,7 +122,7 @@ export class FnValue extends Value implements IHoverable {
             targetCounts.set(pairObject, currentCount + 1);
 
             this._streamArrows.push(
-              new ArrowFromStreamNullaryFn(this).to(pairObject) as ArrowFromStreamNullaryFn
+              new ArrowFromStreamNullaryFn(this).to(pairObject) as ArrowFromStreamNullaryFn,
             );
             this._streamArrows[this._streamArrows.length - 1].draw();
           }
@@ -174,7 +174,7 @@ export class FnValue extends Value implements IHoverable {
 
     // Pass the count as the offsetIndex
     this._streamArrows?.push(
-      new ArrowFromStreamNullaryFn(this, currentCount).to(target) as ArrowFromStreamNullaryFn
+      new ArrowFromStreamNullaryFn(this, currentCount).to(target) as ArrowFromStreamNullaryFn,
     );
   }
 

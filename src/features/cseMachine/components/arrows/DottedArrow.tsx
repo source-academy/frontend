@@ -3,7 +3,7 @@ import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'rea
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { IVisible } from '../../CseMachineTypes';
+import type { IVisible } from '../../CseMachineTypes';
 import { GenericArrow } from './GenericArrow';
 
 export class DottedArrow extends GenericArrow<IVisible, IVisible> {
