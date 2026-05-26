@@ -424,7 +424,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const autorunButtonHandlers = useMemo(() => {
     return {
       handleEditorEval: () => {
-        const wasCenterAligned = CseMachine.getCenterAlignment();
         CseMachine.clearCachedLayouts();
 
         // reset stepper before evaluation
