@@ -1,6 +1,7 @@
 import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
 import type { IConduit } from '@sourceacademy/conductor/conduit';
-import { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
+import { RunnerStatus } from '@sourceacademy/conductor/types';
+import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import { tokenizer } from 'acorn';
 import { type Context, interrupt, type Result, resume, runFilesInContext } from 'js-slang';
 import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
@@ -17,11 +18,8 @@ import { makeCCompilerConfig, specialCReturnObject } from '../../../../commons/u
 import { javaRun } from '../../../../commons/utils/JavaHelper';
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHostPlugin';
-import { createConductor } from '../../../../features/conductor/createConductor';
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
-import { selectConductorEvaluatorUrl } from '../../../../features/conductor/flagConductorEvaluatorUrl';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
-import StoriesActions from '../../../../features/stories/StoriesActions';
 import { type OverallState } from '../../../application/ApplicationTypes';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
@@ -30,8 +28,9 @@ import { showWarningMessage } from '../../../utils/notifications/NotificationsHe
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import { getPreparedConductorSaga } from '../../helpers/conductorEvaluatorCache';
 import { getEvaluatorDefinitionSaga } from '../../LanguageDirectorySaga';
-import { selectStoryEnv, selectWorkspace } from '../../SafeEffects';
+import { selectWorkspace } from '../../SafeEffects';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
 import { updateInspector } from './updateInspector';
 
@@ -46,22 +45,22 @@ function toConductorSourceError(error: unknown): SourceError {
     location: {
       start: {
         line: 0,
-        column: 0
+        column: 0,
       },
       end: {
         line: 0,
-        column: 0
-      }
+        column: 0,
+      },
     },
     explain: () => message,
-    elaborate: () => ''
+    elaborate: () => '',
   };
 }
 
 async function wasm_compile_and_run(
   wasmCode: string,
   context: Context,
-  isRepl: boolean
+  isRepl: boolean,
 ): Promise<Result> {
   try {
     const wasmModule = await Sourceror.compile(wasmCode, context, isRepl);
@@ -71,7 +70,7 @@ async function wasm_compile_and_run(
       Sourceror.makePlatformImports(makeSourcerorExternalBuiltins(context), transcoder),
       transcoder,
       context,
-      isRepl
+      isRepl,
     );
     return { status: 'finished', context, value: returnedValue };
   } catch (e) {
@@ -88,15 +87,15 @@ async function cCompileAndRun(cCode: string, context: Context): Promise<Result> 
       location: {
         start: {
           line: 0,
-          column: 0
+          column: 0,
         },
         end: {
           line: 0,
-          column: 0
-        }
+          column: 0,
+        },
       },
       explain: () => errorMessage,
-      elaborate: () => ''
+      elaborate: () => '',
     });
   }
 
@@ -107,15 +106,15 @@ async function cCompileAndRun(cCode: string, context: Context): Promise<Result> 
       location: {
         start: {
           line: 0,
-          column: 0
+          column: 0,
         },
         end: {
           line: 0,
-          column: 0
-        }
+          column: 0,
+        },
       },
       explain: () => errorMessage,
-      elaborate: () => ''
+      elaborate: () => '',
     });
   }
   const cCompilerConfig = await makeCCompilerConfig(cCode, context);
@@ -125,11 +124,11 @@ async function cCompileAndRun(cCode: string, context: Context): Promise<Result> 
       // report any compilation failure
       reportCCompilationError(
         `Compilation failed with the following error(s):\n\n${compilationResult.errorMessage}`,
-        context
+        context,
       );
       return {
         status: 'error',
-        context
+        context,
       } as Result;
     }
     if (compilationResult.warnings.length > 0) {
@@ -139,16 +138,16 @@ async function cCompileAndRun(cCode: string, context: Context): Promise<Result> 
         value: {
           toReplString: () =>
             `Compilation and program execution successful with the following warning(s):\n${compilationResult.warnings.join(
-              '\n'
-            )}`
-        }
+              '\n',
+            )}`,
+        },
       };
     }
     if (specialCReturnObject === null) {
       return {
         status: 'finished',
         context,
-        value: { toReplString: () => 'Compilation and program execution successful.' }
+        value: { toReplString: () => 'Compilation and program execution successful.' },
       };
     }
     return { status: 'finished', context, value: specialCReturnObject };
@@ -166,7 +165,6 @@ export function* evalCodeSaga(
   execTime: number,
   actionType: string,
   workspaceLocation: WorkspaceLocation,
-  storyEnv?: string
 ): SagaIterator {
   if (yield select(selectConductorEnable)) {
     return yield call(
@@ -177,14 +175,12 @@ export function* evalCodeSaga(
       execTime,
       workspaceLocation,
       actionType,
-      storyEnv
     );
   }
   context.runtime.debuggerOn =
     (actionType === WorkspaceActions.evalEditor.type ||
       actionType === InterpreterActions.debuggerResume.type) &&
     context.chapter > 2;
-  const isStoriesBlock = actionType === actions.evalStory.type || workspaceLocation === 'stories';
 
   function* getWorkspaceData() {
     const workspace = yield* selectWorkspace(workspaceLocation);
@@ -199,18 +195,7 @@ export function* evalCodeSaga(
         currentStep: updateCse ? -1 : currentStep,
         cseIsActive: usingCse,
         needUpdateCse: updateCse,
-        substIsActive: usingSubst
-      };
-    }
-
-    if (isStoriesBlock) {
-      const { usingSubst } = yield* selectStoryEnv(storyEnv!);
-      return {
-        ...commons,
-        currentStep: -1,
-        cseIsActive: false,
-        needUpdateCse: false,
-        substIsActive: usingSubst
+        substIsActive: usingSubst,
       };
     }
 
@@ -219,7 +204,7 @@ export function* evalCodeSaga(
       currentStep: -1,
       cseIsActive: false,
       needUpdateCse: false,
-      substIsActive: false
+      substIsActive: false,
     };
   }
 
@@ -245,7 +230,7 @@ export function* evalCodeSaga(
         wasm_compile_and_run,
         entrypointCode,
         context,
-        actionType === WorkspaceActions.evalRepl.type
+        actionType === WorkspaceActions.evalRepl.type,
       );
     }
 
@@ -256,12 +241,12 @@ export function* evalCodeSaga(
         const {
           usingCse: isUsingCse,
           usingUpload: uploadIsActive,
-          files: uploads
+          files: uploads,
         } = yield* selectWorkspace('playground');
 
         return call(javaRun, entrypointCode, context, currentStep, isUsingCse, {
           uploadIsActive,
-          uploads
+          uploads,
         });
       }
     }
@@ -276,7 +261,7 @@ export function* evalCodeSaga(
       isFolderModeEnabled
         ? files
         : {
-            [entrypointFilePath]: files[entrypointFilePath]
+            [entrypointFilePath]: files[entrypointFilePath],
           },
       entrypointFilePath,
       context,
@@ -286,8 +271,8 @@ export function* evalCodeSaga(
         throwInfiniteLoops: true,
         useSubst: substActiveAndCorrectChapter,
         envSteps: currentStep,
-        executionMethod: cseActiveAndCorrectChapter ? 'cse-machine' : 'auto'
-      }
+        executionMethod: cseActiveAndCorrectChapter ? 'cse-machine' : 'auto',
+      },
     );
   }
 
@@ -299,7 +284,7 @@ export function* evalCodeSaga(
   const {
     result,
     interrupted,
-    paused
+    paused,
   }: {
     result: Result;
     interrupted: any;
@@ -311,7 +296,7 @@ export function* evalCodeSaga(
      * i.e the trigger for the interpreter to interrupt execution.
      */
     interrupted: take(InterpreterActions.beginInterruptExecution.type),
-    paused: take(InterpreterActions.beginDebuggerPause.type)
+    paused: take(InterpreterActions.beginDebuggerPause.type),
   });
 
   if (interrupted) {
@@ -335,47 +320,39 @@ export function* evalCodeSaga(
     yield put(actions.updateLastDebuggerResult(result, workspaceLocation));
   }
 
-  // do not highlight for stories
-  if (!isStoriesBlock) {
-    yield call(updateInspector, workspaceLocation);
-  }
+  yield call(updateInspector, workspaceLocation);
 
   if (result.status === 'suspended-cse-eval') {
     yield put(actions.endDebuggerPause(workspaceLocation));
     yield put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation));
     return;
   } else if (result.status !== 'finished') {
-    yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
-    if (!isStoriesBlock) {
-      const specialError = checkSpecialError(context.errors);
-      if (specialError !== null) {
-        switch (specialError) {
-          case 'source_academy_interrupt': {
-            yield* handleSourceAcademyInterrupt(context, entrypointCode, workspaceLocation);
-            break;
-          }
-          // This should not happen but we check just in case
-          default: {
-            yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
-          }
+    yield* dumpDisplayBuffer(workspaceLocation);
+    const specialError = checkSpecialError(context.errors);
+    if (specialError !== null) {
+      switch (specialError) {
+        case 'source_academy_interrupt': {
+          yield* handleSourceAcademyInterrupt(context, entrypointCode, workspaceLocation);
+          break;
         }
-      } else {
-        yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
-        // enable the CSE machine visualizer during errors
-        if (context.executionMethod === 'cse-machine' && needUpdateCse) {
-          yield put(actions.updateStepsTotal(context.runtime.envStepsTotal + 1, workspaceLocation));
-          yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
-          yield put(
-            actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation)
-          );
-          yield put(
-            actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation)
-          );
+        // This should not happen but we check just in case
+        default: {
+          yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
         }
       }
     } else {
-      // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
-      yield put(actions.evalStoryError(context.errors, storyEnv!));
+      yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
+      // enable the CSE machine visualizer during errors
+      if (context.executionMethod === 'cse-machine' && needUpdateCse) {
+        yield put(actions.updateStepsTotal(context.runtime.envStepsTotal + 1, workspaceLocation));
+        yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
+        yield put(
+          actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation),
+        );
+        yield put(
+          actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation),
+        );
+      }
     }
 
     const events = context.errors.length > 0 ? [EventType.ERROR] : [];
@@ -384,7 +361,7 @@ export function* evalCodeSaga(
     return;
   }
 
-  yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
+  yield* dumpDisplayBuffer(workspaceLocation);
 
   // Change token count if its assessment and EVAL_EDITOR
   if (actionType === WorkspaceActions.evalEditor.type && workspaceLocation === 'assessment') {
@@ -395,16 +372,11 @@ export function* evalCodeSaga(
 
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== EVAL_SILENT) {
-    if (!isStoriesBlock) {
-      yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
-    } else {
-      // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
-      yield put(actions.evalStorySuccess(result.value, storyEnv!));
-    }
+    yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
   }
 
   const lastDebuggerResult = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
+    (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult,
   );
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
   if (
@@ -421,20 +393,8 @@ export function* evalCodeSaga(
         lastDebuggerResult,
         entrypointCode,
         context,
-        workspaceLocation
-      )
-    );
-  }
-  if (isStoriesBlock) {
-    yield put(
-      // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
-      StoriesActions.notifyStoriesEvaluated(
-        result,
-        lastDebuggerResult,
-        entrypointCode,
-        context,
-        storyEnv!
-      )
+        workspaceLocation,
+      ),
     );
   }
 
@@ -450,19 +410,13 @@ export function* evalCodeSaga(
   }
   // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful
   if (context.executionMethod === 'cse-machine') {
-    if (workspaceLocation !== 'stories') {
-      yield put(actions.removeSideContentAlert(SideContentType.introduction, workspaceLocation));
-    } else {
-      yield put(
-        actions.removeSideContentAlert(SideContentType.introduction, `stories.${storyEnv!}`)
-      );
-    }
+    yield put(actions.removeSideContentAlert(SideContentType.introduction, workspaceLocation));
   }
 }
 
 function* handleStdout(
   hostPlugin: BrowserHostPlugin,
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
   const outputChan = eventChannel(emitter => {
     hostPlugin.receiveOutput = emitter;
@@ -484,7 +438,7 @@ function* handleStdout(
 
 function* handleResults(
   hostPlugin: BrowserHostPlugin,
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
   const resultChan = eventChannel(emitter => {
     hostPlugin.receiveResult = emitter;
@@ -495,7 +449,7 @@ function* handleResults(
   try {
     while (true) {
       const result = yield take(resultChan);
-      yield put(actions.evalInterpreterSuccess(result, workspaceLocation));
+      yield put(actions.appendInterpreterResult(result, workspaceLocation));
     }
   } finally {
     if (yield cancelled()) {
@@ -506,7 +460,7 @@ function* handleResults(
 
 function* handleErrors(
   hostPlugin: BrowserHostPlugin,
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
   const errorChan = eventChannel(emitter => {
     hostPlugin.receiveError = emitter;
@@ -517,7 +471,7 @@ function* handleErrors(
   try {
     while (true) {
       const error = yield take(errorChan);
-      yield put(actions.evalInterpreterError([toConductorSourceError(error)], workspaceLocation));
+      yield put(actions.appendInterpreterError([toConductorSourceError(error)], workspaceLocation));
     }
   } finally {
     if (yield cancelled()) {
@@ -525,11 +479,41 @@ function* handleErrors(
     }
   }
 }
+
+function* handleStatuses(
+  hostPlugin: BrowserHostPlugin,
+  workspaceLocation: WorkspaceLocation,
+): SagaIterator {
+  const statusChan = eventChannel<{ status: RunnerStatus; isActive: boolean }>(emitter => {
+    const onStatusUpdate = (status: RunnerStatus, isActive: boolean) =>
+      emitter({ status, isActive });
+    hostPlugin.receiveStatusUpdate = onStatusUpdate;
+    return () => {
+      if (hostPlugin.receiveStatusUpdate === onStatusUpdate) delete hostPlugin.receiveStatusUpdate;
+    };
+  });
+  try {
+    while (true) {
+      const { status, isActive } = yield take(statusChan);
+      if (status === RunnerStatus.RUNNING) {
+        yield put(actions.setIsRunning(isActive, workspaceLocation));
+      }
+
+      const isTerminalStatus =
+        isActive && (status === RunnerStatus.STOPPED || status === RunnerStatus.ERROR);
+
+      if (isTerminalStatus) {
+        yield put(actions.beginInterruptExecution(workspaceLocation));
+      }
+    }
+  } finally {
+    statusChan.close();
+  }
+}
 /**
  * Runs code using the evaluators in the Language Directory using the Conductor framework.
  * Invoked when the conductor.enable feature flag is enabled.
- * Fetches the evaluator from the URL specified in the language directory and creates a Conductor instance
- * to load the evaluator and run the code in a web worker.
+ * Uses a preloaded Conductor instance when available to reduce startup latency.
  */
 export function* evalCodeConductorSaga(
   files: Record<string, string>,
@@ -538,14 +522,14 @@ export function* evalCodeConductorSaga(
   execTime: number,
   workspaceLocation: WorkspaceLocation,
   actionType: string,
-  storyEnv?: string
+  storyEnv?: string,
 ): SagaIterator {
   // Wait 5 seconds for language directory to initialise before continuing evaluation
   let evaluator: IEvaluatorDefinition | undefined = yield call(getEvaluatorDefinitionSaga);
   if (!evaluator?.path) {
     const { timeout } = yield race({
       evaluatorSelected: take(LanguageDirectoryActions.setSelectedEvaluator.type),
-      timeout: call(() => new Promise(resolve => setTimeout(() => resolve(true), 5000)))
+      timeout: call(() => new Promise(resolve => setTimeout(() => resolve(true), 5000))),
     });
     if (timeout) {
       throw Error('language directory could not be loaded in time');
@@ -553,43 +537,35 @@ export function* evalCodeConductorSaga(
     evaluator = yield call(getEvaluatorDefinitionSaga);
     if (!evaluator?.path) throw Error('no evaluator');
   }
-  const overrideEvaluatorPath: string = (yield select(selectConductorEvaluatorUrl))?.trim?.() ?? '';
-  const path: string = overrideEvaluatorPath || evaluator.path;
 
-  // Download evaluator code
-  const evaluatorResponse: Response = yield call(fetch, path);
-  if (!evaluatorResponse.ok) throw Error("can't get evaluator");
-  const evaluatorBlob: Blob = yield call([evaluatorResponse, 'blob']);
-  const url: string = yield call(URL.createObjectURL, evaluatorBlob);
-
-  // Create Conductor instance ith the evaluator
+  // Reuse a preloaded conductor instance when available.
   const { hostPlugin, conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } = yield call(
-    createConductor,
-    url,
-    async (fileName: string) => files[fileName],
-    (pluginName: string) => {} // TODO: implement dynamic plugin loading
+    getPreparedConductorSaga,
+    { files, consume: true },
   );
 
   // Begin evaluation
   const stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
   const resultTask = yield fork(handleResults, hostPlugin, workspaceLocation);
   const errorTask = yield fork(handleErrors, hostPlugin, workspaceLocation);
+  const statusTask = yield fork(handleStatuses, hostPlugin, workspaceLocation);
   yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
 
   // This exit logic of this while loop might be causing an unintended infinite loop in the REPL
   while (true) {
     const { stop } = yield race({
       repl: take(actions.evalRepl.type),
-      stop: take(actions.beginInterruptExecution.type)
+      stop: take(actions.beginInterruptExecution.type),
     });
     if (stop) break;
     const code: string = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].replValue
+      (state: OverallState) => state.workspaces[workspaceLocation].replValue,
     );
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
     yield put(actions.clearReplInput(workspaceLocation));
     yield call([hostPlugin, 'sendChunk'], code);
   }
+  yield cancel(statusTask);
   yield call([conduit, 'terminate']);
   yield cancel(stdoutTask);
   yield cancel(resultTask);
@@ -597,7 +573,6 @@ export function* evalCodeConductorSaga(
   //yield put(actions.debuggerReset(workspaceLocation));
   yield put(actions.endInterruptExecution(workspaceLocation));
   console.log('killed');
-  yield call(URL.revokeObjectURL, url);
 }
 
 // Special module errors
@@ -622,10 +597,10 @@ function checkSpecialError(errors: SourceError[]): SpecialError | null {
 function* handleSourceAcademyInterrupt(
   context: Context,
   entrypointCode: string,
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
 ) {
   yield put(
-    actions.evalInterpreterSuccess('Program has been interrupted by module', workspaceLocation)
+    actions.evalInterpreterSuccess('Program has been interrupted by module', workspaceLocation),
   );
   context.errors = [];
   yield put(actions.notifyProgramEvaluated(null, null, entrypointCode, context, workspaceLocation));

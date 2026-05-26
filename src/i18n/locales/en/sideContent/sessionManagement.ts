@@ -1,6 +1,6 @@
 const translations = {
   name: 'Name',
-  role: 'Role'
+  role: 'Role',
 };
 
 export default translations;

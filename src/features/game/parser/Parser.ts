@@ -1,4 +1,4 @@
-import { GameCheckpoint } from '../chapter/GameChapterTypes';
+import type { GameCheckpoint } from '../chapter/GameChapterTypes';
 import GameMap from '../location/GameMap';
 import GameObjective from '../objective/GameObjective';
 import GameTask from '../task/GameTask';
@@ -38,7 +38,7 @@ class Parser {
       map: new GameMap(),
       startingLoc: '',
       objectives: new GameObjective(),
-      tasks: new GameTask()
+      tasks: new GameTask(),
     };
 
     Parser.validator = new ParserValidator();

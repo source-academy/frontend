@@ -1,5 +1,4 @@
 import { ECE } from 'java-slang';
-import React from 'react';
 import { Group } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
@@ -30,7 +29,7 @@ export class Stash extends Visible {
         stashItemX,
         stashItemText,
         stashItemStroke,
-        stashItemReference
+        stashItemReference,
       );
 
       this._stashItems.push(currStashItem);

@@ -2,13 +2,10 @@ const translations = {
   navigationBar: {
     'Ground Control': 'Ģŗőûñď Çőñţŗőļ',
     Dashboard: 'Ďáşħƀőáŗď',
-    Sourcereel: 'Śőûŗćéŗééļ',
     'Team Formation': 'Ťéâm Ƒőŗmáţíőñ',
     Grading: 'Ĝŗáďíñĝ',
     'Game Simulator': 'Ĝámé Śímûļáţőŗ',
     'Admin Panel': 'Áďmíñ Ƥáñéļ',
-    Stories: 'Šţőŗíéş',
-    Sourcecast: 'Šőûŗčéčáşţ',
     Playground: 'Ƥļáÿğŕőûñď',
     'SICP JS': 'ŠĨĆƤ ĴŚ',
     Achievements: 'Ãčĥíéṽéḿéñţş',
@@ -16,7 +13,7 @@ const translations = {
     Quests: 'Ǫûéşţş',
     Paths: 'Ƥáţĥş',
     Contests: 'Ċőñţéşţş',
-    Others: 'Őţĥéŕş'
+    Others: 'Őţĥéŕş',
   },
   dropdown: {
     'My Courses': 'Mÿ Côûrsês',
@@ -24,8 +21,8 @@ const translations = {
     Logout: 'Lôgôût',
     Settings: 'Sêttîñgs',
     About: 'Âbôût',
-    Help: 'Hêlp'
-  }
+    Help: 'Hêlp',
+  },
 };
 
 export default translations;

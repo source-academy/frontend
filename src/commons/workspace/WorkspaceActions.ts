@@ -3,7 +3,7 @@ import { Chapter, Variant } from 'js-slang/dist/langs';
 
 import type {
   AllColsSortStates,
-  GradingColumnVisibility
+  GradingColumnVisibility,
 } from '../../features/grading/GradingTypes';
 import type { SALanguage } from '../application/ApplicationTypes';
 import type { ExternalLibraryName } from '../application/types/ExternalTypes';
@@ -12,41 +12,43 @@ import type { HighlightedLines, Position } from '../editor/EditorTypes';
 import { createActions } from '../redux/utils';
 import type { UploadResult } from '../sideContent/content/SideContentUpload';
 import type {
+  CodeVersionMetadata,
   EditorTabState,
+  SaveStatus,
   SubmissionsTableFilters,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
-  WorkspaceState
+  WorkspaceState,
 } from './WorkspaceTypes';
 
 const newActions = createActions('workspace', {
   setTokenCount: (workspaceLocation: WorkspaceLocation, tokenCount: number) => ({
     workspaceLocation,
-    tokenCount
+    tokenCount,
   }),
   browseReplHistoryDown: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   browseReplHistoryUp: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   changeExternalLibrary: (
     newExternal: ExternalLibraryName,
-    workspaceLocation: WorkspaceLocation
+    workspaceLocation: WorkspaceLocation,
   ) => ({ newExternal, workspaceLocation }),
   changeExecTime: (execTime: number, workspaceLocation: WorkspaceLocation) => ({
     execTime,
-    workspaceLocation
+    workspaceLocation,
   }),
   changeStepLimit: (stepLimit: number, workspaceLocation: WorkspaceLocation) => ({
     stepLimit,
-    workspaceLocation
+    workspaceLocation,
   }),
   chapterSelect: (chapter: Chapter, variant: Variant, workspaceLocation: WorkspaceLocation) => ({
     chapter,
     variant,
-    workspaceLocation
+    workspaceLocation,
   }),
   externalLibrarySelect: (
     externalLibraryName: ExternalLibraryName,
     workspaceLocation: WorkspaceLocation,
-    initialise?: boolean
+    initialise?: boolean,
   ) => ({ externalLibraryName, workspaceLocation, initialise: initialise || false }),
   toggleEditorAutorun: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   /**
@@ -65,7 +67,7 @@ const newActions = createActions('workspace', {
   beginClearContext: (
     workspaceLocation: WorkspaceLocation,
     library: Library,
-    shouldInitLibrary: boolean
+    shouldInitLibrary: boolean,
   ) => ({ library, workspaceLocation, shouldInitLibrary }),
   clearReplInput: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   clearReplOutput: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
@@ -84,13 +86,13 @@ const newActions = createActions('workspace', {
    */
   endClearContext: (library: Library, workspaceLocation: WorkspaceLocation) => ({
     library,
-    workspaceLocation
+    workspaceLocation,
   }),
   evalEditor: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   evalRepl: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   evalTestcase: (workspaceLocation: WorkspaceLocation, testcaseId: number) => ({
     workspaceLocation,
-    testcaseId
+    testcaseId,
   }),
   runAllTestcases: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   toggleFolderMode: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
@@ -98,89 +100,89 @@ const newActions = createActions('workspace', {
   disableTokenCounter: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   setFolderMode: (workspaceLocation: WorkspaceLocation, isFolderModeEnabled: boolean) => ({
     workspaceLocation,
-    isFolderModeEnabled
+    isFolderModeEnabled,
   }),
   updateActiveEditorTabIndex: (
     workspaceLocation: WorkspaceLocation,
-    activeEditorTabIndex: number | null
+    activeEditorTabIndex: number | null,
   ) => ({ workspaceLocation, activeEditorTabIndex }),
   updateActiveEditorTab: (
     workspaceLocation: WorkspaceLocation,
-    activeEditorTabOptions?: Partial<EditorTabState>
+    activeEditorTabOptions?: Partial<EditorTabState>,
   ) => ({ workspaceLocation, activeEditorTabOptions }),
   updateEditorValue: (
     workspaceLocation: WorkspaceLocation,
     editorTabIndex: number,
-    newEditorValue: string
+    newEditorValue: string,
   ) => ({ workspaceLocation, editorTabIndex, newEditorValue }),
   setEditorBreakpoint: (
     workspaceLocation: WorkspaceLocation,
     editorTabIndex: number,
-    newBreakpoints: string[]
+    newBreakpoints: string[],
   ) => ({ workspaceLocation, editorTabIndex, newBreakpoints }),
   setEditorHighlightedLines: (
     workspaceLocation: WorkspaceLocation,
     editorTabIndex: number,
-    newHighlightedLines: HighlightedLines[]
+    newHighlightedLines: HighlightedLines[],
   ) => ({ workspaceLocation, editorTabIndex, newHighlightedLines }),
   setEditorHighlightedLinesControl: (
     workspaceLocation: WorkspaceLocation,
     editorTabIndex: number,
-    newHighlightedLines: HighlightedLines[]
+    newHighlightedLines: HighlightedLines[],
   ) => ({ workspaceLocation, editorTabIndex, newHighlightedLines }),
   moveCursor: (
     workspaceLocation: WorkspaceLocation,
     editorTabIndex: number,
-    newCursorPosition: Position
+    newCursorPosition: Position,
   ) => ({ workspaceLocation, editorTabIndex, newCursorPosition }),
   addEditorTab: (workspaceLocation: WorkspaceLocation, filePath: string, editorValue: string) => ({
     workspaceLocation,
     filePath,
-    editorValue
+    editorValue,
   }),
   shiftEditorTab: (
     workspaceLocation: WorkspaceLocation,
     previousEditorTabIndex: number,
-    newEditorTabIndex: number
+    newEditorTabIndex: number,
   ) => ({ workspaceLocation, previousEditorTabIndex, newEditorTabIndex }),
   removeEditorTab: (workspaceLocation: WorkspaceLocation, editorTabIndex: number) => ({
     workspaceLocation,
-    editorTabIndex
+    editorTabIndex,
   }),
   removeEditorTabForFile: (workspaceLocation: WorkspaceLocation, removedFilePath: string) => ({
     workspaceLocation,
-    removedFilePath
+    removedFilePath,
   }),
   removeEditorTabsForDirectory: (
     workspaceLocation: WorkspaceLocation,
-    removedDirectoryPath: string
+    removedDirectoryPath: string,
   ) => ({ workspaceLocation, removedDirectoryPath }),
   renameEditorTabForFile: (
     workspaceLocation: WorkspaceLocation,
     oldFilePath: string,
-    newFilePath: string
+    newFilePath: string,
   ) => ({ workspaceLocation, oldFilePath, newFilePath }),
   renameEditorTabsForDirectory: (
     workspaceLocation: WorkspaceLocation,
     oldDirectoryPath: string,
-    newDirectoryPath: string
+    newDirectoryPath: string,
   ) => ({ workspaceLocation, oldDirectoryPath, newDirectoryPath }),
   updateReplValue: (newReplValue: string, workspaceLocation: WorkspaceLocation) => ({
     newReplValue,
-    workspaceLocation
+    workspaceLocation,
   }),
   sendReplInputToOutput: (newOutput: string, workspaceLocation: WorkspaceLocation) => ({
     type: 'code',
     workspaceLocation,
-    value: newOutput
+    value: newOutput,
   }),
   resetTestcase: (workspaceLocation: WorkspaceLocation, index: number) => ({
     workspaceLocation,
-    index
+    index,
   }),
   navigateToDeclaration: (workspaceLocation: WorkspaceLocation, cursorPosition: Position) => ({
     workspaceLocation,
-    cursorPosition
+    cursorPosition,
   }),
   /**
    * Resets a workspace to its default properties.
@@ -193,28 +195,28 @@ const newActions = createActions('workspace', {
    */
   resetWorkspace: (
     workspaceLocation: WorkspaceLocation,
-    workspaceOptions?: Partial<WorkspaceState>
+    workspaceOptions?: Partial<WorkspaceState>,
   ) => ({ workspaceLocation, workspaceOptions }),
   updateWorkspace: (
     workspaceLocation: WorkspaceLocation,
-    workspaceOptions?: Partial<WorkspaceState>
+    workspaceOptions?: Partial<WorkspaceState>,
   ) => ({ workspaceLocation, workspaceOptions }),
   setIsEditorReadonly: (workspaceLocation: WorkspaceLocation, isEditorReadonly: boolean) => ({
     workspaceLocation,
-    isEditorReadonly
+    isEditorReadonly,
   }),
   updateSubmissionsTableFilters: (filters: SubmissionsTableFilters) => ({ filters }),
   updateCurrentAssessmentId: (assessmentId: number, questionId: number) => ({
     assessmentId,
-    questionId
+    questionId,
   }),
   updateCurrentSubmissionId: (submissionId: number, questionId: number) => ({
     submissionId,
-    questionId
+    questionId,
   }),
   updateHasUnsavedChanges: (workspaceLocation: WorkspaceLocation, hasUnsavedChanges: boolean) => ({
     workspaceLocation,
-    hasUnsavedChanges
+    hasUnsavedChanges,
   }),
   changeSublanguage: (sublang: SALanguage) => ({ sublang }),
   updateSublanguage: (sublang: SALanguage) => ({ sublang }),
@@ -222,70 +224,117 @@ const newActions = createActions('workspace', {
     workspaceLocation: WorkspaceLocation,
     row: number,
     column: number,
-    callback: any // TODO: define a type for this
+    callback: any, // TODO: define a type for this
   ) => ({ workspaceLocation, row, column, callback }),
   notifyProgramEvaluated: (
     result: any,
     lastDebuggerResult: any,
     code: string,
     context: Context,
-    workspaceLocation?: WorkspaceLocation
+    workspaceLocation?: WorkspaceLocation,
   ) => ({ result, lastDebuggerResult, code, context, workspaceLocation }),
   toggleUsingSubst: (usingSubst: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
     usingSubst,
-    workspaceLocation
+    workspaceLocation,
   }),
   addHtmlConsoleError: (
     errorMsg: string,
     workspaceLocation: WorkspaceLocation,
-    storyEnv?: string
+    storyEnv?: string,
   ) => ({ errorMsg, workspaceLocation, storyEnv }),
   showMcqPane: (workspaceLocation: WorkspaceLocation, options: string[]) => ({
     workspaceLocation,
-    options
+    options,
   }),
   toggleUsingCse: (usingCse: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
     usingCse,
-    workspaceLocation
+    workspaceLocation,
   }),
   toggleUpdateCse: (updateCse: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
     updateCse,
-    workspaceLocation
+    workspaceLocation,
   }),
   toggleUsingUpload: (usingUpload: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
     usingUpload,
-    workspaceLocation
+    workspaceLocation,
   }),
   updateCurrentStep: (steps: number, workspaceLocation: WorkspaceLocation) => ({
     steps,
-    workspaceLocation
+    workspaceLocation,
   }),
   updateStepsTotal: (steps: number, workspaceLocation: WorkspaceLocation) => ({
     steps,
-    workspaceLocation
+    workspaceLocation,
   }),
   updateBreakpointSteps: (breakpointSteps: number[], workspaceLocation: WorkspaceLocation) => ({
     breakpointSteps,
-    workspaceLocation
+    workspaceLocation,
   }),
   updateChangePointSteps: (changepointSteps: number[], workspaceLocation: WorkspaceLocation) => ({
     changepointSteps,
-    workspaceLocation
+    workspaceLocation,
   }),
   updateLastDebuggerResult: (lastDebuggerResult: any, workspaceLocation: WorkspaceLocation) => ({
     lastDebuggerResult,
-    workspaceLocation
+    workspaceLocation,
   }),
   uploadFiles: (files: UploadResult, workspaceLocation: WorkspaceLocation) => ({
     files,
-    workspaceLocation
+    workspaceLocation,
   }),
   // For grading table
   increaseRequestCounter: 0,
   decreaseRequestCounter: 0,
   setGradingHasLoadedBefore: () => true,
   updateAllColsSortStates: (sortStates: AllColsSortStates) => ({ sortStates }),
-  updateGradingColumnVisibility: (filters: GradingColumnVisibility) => ({ filters })
+  updateGradingColumnVisibility: (filters: GradingColumnVisibility) => ({ filters }),
+  fetchVersionHistory: (workspaceLocation: WorkspaceLocation, skipAutoSave?: boolean) => ({
+    workspaceLocation,
+    skipAutoSave: skipAutoSave ?? false,
+  }),
+  receiveVersionHistory: (
+    workspaceLocation: WorkspaceLocation,
+    versions: CodeVersionMetadata[],
+  ) => ({
+    workspaceLocation,
+    versions,
+  }),
+  selectVersion: (workspaceLocation: WorkspaceLocation, version: CodeVersionMetadata | null) => ({
+    workspaceLocation,
+    version,
+  }),
+  receiveVersionCode: (workspaceLocation: WorkspaceLocation, versionId: string, code: string) => ({
+    workspaceLocation,
+    versionId,
+    code,
+  }),
+  restoreVersion: (
+    workspaceLocation: WorkspaceLocation,
+    versionId: string,
+    name: string | null | undefined,
+    timestamp: number,
+    code: string,
+  ) => ({
+    workspaceLocation,
+    versionId,
+    name,
+    timestamp,
+    code,
+  }),
+  nameVersion: (workspaceLocation: WorkspaceLocation, versionId: string, name: string) => ({
+    workspaceLocation,
+    versionId,
+    name,
+  }),
+  toggleHistoryPanel: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
+  updateSaveStatus: (workspaceLocation: WorkspaceLocation, saveStatus: SaveStatus) => ({
+    workspaceLocation,
+    saveStatus,
+  }),
+  setIsAutoSaving: (workspaceLocation: WorkspaceLocation, isAutoSaving: boolean) => ({
+    workspaceLocation,
+    isAutoSaving,
+  }),
 });
 
 export default newActions;

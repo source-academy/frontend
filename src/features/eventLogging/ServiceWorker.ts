@@ -1,5 +1,6 @@
 /// <reference lib="webworker" />
-import { deleteRecordsUpto, getRecords, LoggedRecord } from '.';
+import type { LoggedRecord } from '.';
+import { deleteRecordsUpto, getRecords } from '.';
 import { SYNC_LOGS } from './client';
 
 declare const self: ServiceWorkerGlobalScope;
@@ -54,7 +55,7 @@ async function uploadLogs(cadetLoggerUrl: string, accessToken: string, logs: Log
   const fetchOpts = {
     method: 'POST',
     headers,
-    body: JSON.stringify(logs)
+    body: JSON.stringify(logs),
   };
   const resp = await fetch(cadetLoggerUrl, fetchOpts);
   if (!resp.ok) {

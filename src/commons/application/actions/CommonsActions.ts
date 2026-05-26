@@ -1,9 +1,9 @@
-import { Router } from 'src/commons/application/types/CommonsTypes';
+import type { Router } from 'src/commons/application/types/CommonsTypes';
 import { createActions } from 'src/commons/redux/utils';
 
 const CommonsActions = createActions('commons', {
   logOut: () => ({}),
-  updateReactRouter: (updatedRouter: Router) => updatedRouter
+  updateReactRouter: (updatedRouter: Router) => updatedRouter,
 });
 
 // For compatibility with existing code (reducer)

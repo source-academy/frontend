@@ -39,7 +39,7 @@ class Bindings extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.spaceshipBg.key
+      ImageAssets.spaceshipBg.key,
     );
     const blackOverlay = new Phaser.GameObjects.Rectangle(
       this,
@@ -47,7 +47,7 @@ class Bindings extends Phaser.Scene {
       screenCenter.y,
       screenSize.x,
       screenSize.y,
-      0
+      0,
     ).setAlpha(0.3);
     this.getLayerManager().addToLayer(Layer.Background, background);
     this.getLayerManager().addToLayer(Layer.Background, blackOverlay);
@@ -63,7 +63,7 @@ class Bindings extends Phaser.Scene {
     const bindingPositions = calcListFormatPos({
       numOfItems: bindings.length,
       xSpacing: 0,
-      ySpacing: BindingConstants.key.yInterval
+      ySpacing: BindingConstants.key.yInterval,
     });
 
     bindingsContainer.add(
@@ -76,9 +76,9 @@ class Bindings extends Phaser.Scene {
             : bindingPositions[index][0] + BindingConstants.key.xOffset,
           bindingPositions[index][1] < 450
             ? bindingPositions[index][1] + BindingConstants.key.yOffset1
-            : bindingPositions[index][1] + BindingConstants.key.yOffset2
+            : bindingPositions[index][1] + BindingConstants.key.yOffset2,
         );
-      })
+      }),
     );
     const backButton = new CommonBackButton(this, () => {
       this.getLayerManager().clearAllLayers();
@@ -96,32 +96,32 @@ class Bindings extends Phaser.Scene {
     return [
       {
         key: 'Esc',
-        text: 'Escape Menu'
+        text: 'Escape Menu',
       },
       {
         key: 'Tab',
-        text: 'Dashboard'
+        text: 'Dashboard',
       },
       {
         key: 'Space',
-        text: 'Next dialogue'
+        text: 'Next dialogue',
       },
       {
         key: 'E',
-        text: 'Explore mode'
+        text: 'Explore mode',
       },
       {
         key: 'V',
-        text: 'Move mode'
+        text: 'Move mode',
       },
       {
         key: 'T',
-        text: 'Talk mode'
+        text: 'Talk mode',
       },
       {
         key: '<Number>',
-        text: '       Select topics/locations'
-      }
+        text: '       Select topics/locations',
+      },
     ];
   }
 
@@ -142,7 +142,7 @@ class Bindings extends Phaser.Scene {
       this,
       BindingConstants.icon.x,
       0,
-      ImageAssets.squareKeyboardIcon.key
+      ImageAssets.squareKeyboardIcon.key,
     );
     switch (key) {
       case 'Tab':

@@ -1,9 +1,8 @@
-import React from 'react';
 import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
 import { defaultActiveColor, defaultStrokeColor } from '../CseMachineUtils';
-import { Animatable, AnimationConfig } from './base/Animatable';
+import { Animatable, type AnimationConfig } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
 
@@ -19,21 +18,21 @@ export class ControlExpansionAnimation extends Animatable {
 
   constructor(
     private initialItem: ControlItemComponent,
-    private targetItems: ControlItemComponent[]
+    private targetItems: ControlItemComponent[],
   ) {
     super();
     this.targetItems = [...targetItems];
     this.targetItems.sort((a, b) => a.y() - b.y());
     const initialPosition = getNodePosition(this.initialItem);
     this.initialItemAnimation = new AnimatedTextbox(initialItem.text, initialPosition, {
-      rectProps: { stroke: defaultActiveColor() }
+      rectProps: { stroke: defaultActiveColor() },
     });
     this.targetItemAnimations = this.targetItems.map((item, i) => {
       return new AnimatedTextbox(item.text, {
         ...initialPosition,
         y: initialPosition.y + (i / this.targetItems.length) * initialPosition.height,
         height: item.height(),
-        opacity: 0
+        opacity: 0,
       });
     });
   }
@@ -57,26 +56,26 @@ export class ControlExpansionAnimation extends Animatable {
       // Fade out the previous item while also changing its height for a more fluid animation
       this.initialItemAnimation.animateRectTo(
         { height: totalHeight, stroke: defaultStrokeColor() },
-        animationConfig
+        animationConfig,
       ),
       this.initialItemAnimation.animateTextTo({ y: textY }, animationConfig),
       this.initialItemAnimation.animateTo(
         { opacity: 0 },
-        { ...animationConfig, duration: fadeDuration }
+        { ...animationConfig, duration: fadeDuration },
       ),
       // Fade in the new items while also moving them from the old item's position
       ...this.targetItemAnimations.flatMap((a, i) => [
         a.animateTo({ ...getNodePosition(this.targetItems[i]) }, animationConfig),
         a.animateTo(
           { opacity: 1 },
-          { ...animationConfig, duration: fadeDuration, delay: fadeInDelay }
-        )
+          { ...animationConfig, duration: fadeDuration, delay: fadeInDelay },
+        ),
       ]),
       // Also animate the last item's rect border color to the blue border
       // which the last control item always have
       this.targetItemAnimations
         .at(-1)
-        ?.animateRectTo({ stroke: defaultActiveColor() }, animationConfig)
+        ?.animateRectTo({ stroke: defaultActiveColor() }, animationConfig),
     ]);
     this.destroy();
   }

@@ -6,8 +6,8 @@ const translations = {
     enrollmentMessage:
       'If you are enrolled in a course, check with the course staff to make sure your account is added to the course.',
     resourcesForLearners: 'Click <0>here</0> to find a course that suits your needs.',
-    resourcesForEducators: 'Click <0>here</0> for a list of resources to get started.'
-  }
+    resourcesForEducators: 'Click <0>here</0> for a list of resources to get started.',
+  },
 };
 
 export default translations;

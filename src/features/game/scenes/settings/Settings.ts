@@ -12,7 +12,7 @@ import { createBitmapText } from '../../utils/TextUtils';
 import SettingsConstants, {
   applySettingsTextStyle,
   optionHeaderTextStyle,
-  optionTextStyle
+  optionTextStyle,
 } from './SettingsConstants';
 
 /**
@@ -23,6 +23,7 @@ class Settings extends Phaser.Scene {
   private bgmVolumeRadioButtons: CommonRadioButton | undefined;
   private sfxVolumeRadioButtons: CommonRadioButton | undefined;
   private layerManager?: GameLayerManager;
+  private skipConfirmRadioButtons: CommonRadioButton | undefined;
 
   constructor() {
     super('Settings');
@@ -43,14 +44,14 @@ class Settings extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.spaceshipBg.key
+      ImageAssets.spaceshipBg.key,
     );
 
     const settingBgImg = new Phaser.GameObjects.Image(
       this,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.settingBanner.key
+      ImageAssets.settingBanner.key,
     );
     this.getLayerManager().addToLayer(Layer.Background, background);
     this.getLayerManager().addToLayer(Layer.Background, settingBgImg);
@@ -67,25 +68,40 @@ class Settings extends Phaser.Scene {
     const optHeaderPos = calcTableFormatPos({
       direction: Direction.Column,
       numOfItems: optHeader.length,
-      maxYSpace: SettingsConstants.opt.ySpace
+      maxYSpace: SettingsConstants.opt.ySpace,
     });
     optCont.add(
-      optHeader.map((header, index) => this.createOptionHeader(header, optHeaderPos[index][1]))
+      optHeader.map((header, index) => this.createOptionHeader(header, optHeaderPos[index][1])),
     );
 
     // Get user default choice
-    const { bgmVolume, sfxVolume } = this.getSaveManager().getSettings();
+    const { bgmVolume, sfxVolume, skipConfirm } = this.getSaveManager().getSettings();
     const sfxVolIdx = SettingsConstants.volContainerOpts.findIndex(
-      value => parseFloat(value) === sfxVolume
+      value => parseFloat(value) === sfxVolume,
     );
     const bgmVolIdx = SettingsConstants.volContainerOpts.findIndex(
-      value => parseFloat(value) === bgmVolume
+      value => parseFloat(value) === bgmVolume,
     );
+    const skipConfirmIdx = skipConfirm !== false ? 0 : 1;
 
     // Create SFX Radio Buttons
-    this.sfxVolumeRadioButtons = this.createOptRadioOptions(sfxVolIdx, optHeaderPos[0][1]);
+    this.sfxVolumeRadioButtons = this.createOptRadioOptions(
+      SettingsConstants.volContainerOpts,
+      sfxVolIdx,
+      optHeaderPos[0][1],
+    );
     // Create BGM Radio Buttons
-    this.bgmVolumeRadioButtons = this.createOptRadioOptions(bgmVolIdx, optHeaderPos[1][1]);
+    this.bgmVolumeRadioButtons = this.createOptRadioOptions(
+      SettingsConstants.volContainerOpts,
+      bgmVolIdx,
+      optHeaderPos[1][1],
+    );
+    // Create Skip Confirm Radio Buttons
+    this.skipConfirmRadioButtons = this.createOptRadioOptions(
+      ['ON', 'OFF'],
+      skipConfirmIdx,
+      optHeaderPos[2][1],
+    );
 
     // Create apply settings button
     const applySettingsButton = createButton(this, {
@@ -93,7 +109,7 @@ class Settings extends Phaser.Scene {
       message: 'Apply Settings',
       textConfig: { x: 0, y: 0, oriX: 0.33, oriY: 0.85 },
       bitMapTextStyle: applySettingsTextStyle,
-      onUp: () => this.applySettings()
+      onUp: () => this.applySettings(),
     }).setPosition(screenCenter.x, screenSize.y * 0.925);
 
     // Create back button to main menu
@@ -105,6 +121,7 @@ class Settings extends Phaser.Scene {
     this.getLayerManager().addToLayer(Layer.UI, optCont);
     this.getLayerManager().addToLayer(Layer.UI, this.sfxVolumeRadioButtons);
     this.getLayerManager().addToLayer(Layer.UI, this.bgmVolumeRadioButtons);
+    this.getLayerManager().addToLayer(Layer.UI, this.skipConfirmRadioButtons);
     this.getLayerManager().addToLayer(Layer.UI, applySettingsButton);
     this.getLayerManager().addToLayer(Layer.UI, backButton);
   }
@@ -113,7 +130,7 @@ class Settings extends Phaser.Scene {
    * Options header to display.
    */
   private getSettingsHeader() {
-    return ['SFX', 'BGM'];
+    return ['SFX', 'BGM', 'Skip Confirm'];
   }
 
   /**
@@ -129,13 +146,13 @@ class Settings extends Phaser.Scene {
       this,
       screenCenter.x,
       0,
-      ImageAssets.settingOption.key
+      ImageAssets.settingOption.key,
     );
     const headerText = createBitmapText(
       this,
       header,
       SettingsConstants.optHeaderTextConfig,
-      optionHeaderTextStyle
+      optionHeaderTextStyle,
     );
     optHeaderCont.add([headerDiv, headerText]);
     return optHeaderCont;
@@ -147,18 +164,18 @@ class Settings extends Phaser.Scene {
    * @param defaultChoiceIdx default choice of the radio button
    * @param yPos y position of the radio button
    */
-  private createOptRadioOptions(defaultChoiceIdx: number, yPos: number) {
+  private createOptRadioOptions(choices: string[], defaultChoiceIdx: number, yPos: number) {
     return new CommonRadioButton(
       this,
       {
-        choices: SettingsConstants.volContainerOpts,
+        choices: choices,
         defaultChoiceIdx: defaultChoiceIdx,
         maxXSpace: SettingsConstants.opt.xSpace,
         choiceTextConfig: SettingsConstants.radioButtonsTextConfig,
-        bitmapTextStyle: optionTextStyle
+        bitmapTextStyle: optionTextStyle,
       },
       SettingsConstants.opt.x,
-      -screenCenter.y + yPos
+      -screenCenter.y + yPos,
     );
   }
 
@@ -175,9 +192,16 @@ class Settings extends Phaser.Scene {
     const bgmVol = this.bgmVolumeRadioButtons
       ? parseFloat(this.bgmVolumeRadioButtons.getChosenChoice())
       : 1;
+    const skipConfirmVal = this.skipConfirmRadioButtons
+      ? this.skipConfirmRadioButtons.getChosenChoice() === 'ON'
+      : true;
 
     // Save settings
-    await this.getSaveManager().saveSettings({ bgmVolume: bgmVol, sfxVolume: sfxVol });
+    await this.getSaveManager().saveSettings({
+      bgmVolume: bgmVol,
+      sfxVolume: sfxVol,
+      skipConfirm: skipConfirmVal,
+    });
 
     // Apply settings
     SourceAcademyGame.getInstance()

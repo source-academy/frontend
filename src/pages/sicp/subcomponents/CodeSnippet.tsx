@@ -1,15 +1,14 @@
 import { Card, Elevation, Pre } from '@blueprintjs/core';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Resizable } from 're-resizable';
-import React from 'react';
+import { useCallback, useMemo } from 'react';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
-import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
+import ControlBarCloseButton from 'src/commons/controlBar/ControlBarCloseButton';
 import { useResponsive } from 'src/commons/utils/Hooks';
+import { useCodeSnippetContext } from 'src/features/sicp/CodeSnippetProvider';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import Playground from 'src/pages/playground/Playground';
-
-import { CodeSnippetContext } from '../Sicp';
 
 export type CodeSnippetProps = OwnProps;
 type OwnProps = {
@@ -29,26 +28,26 @@ const resizableProps = {
     topRight: false,
     bottomRight: false,
     bottomLeft: false,
-    topLeft: false
+    topLeft: false,
   },
   defaultSize: {
     width: '100%',
-    height: '500px'
+    height: '500px',
   },
   minHeight: '250px',
-  maxHeight: '2000px'
+  maxHeight: '2000px',
 };
 
 const CodeSnippet: React.FC<CodeSnippetProps> = props => {
   const { body, output, id } = props;
-  const context = React.useContext(CodeSnippetContext);
+  const context = useCodeSnippetContext();
   const { isMobileBreakpoint } = useResponsive();
 
   const handleOpen = () => {
     context.setActive(id);
   };
 
-  const handleClose = React.useCallback(() => {
+  const handleClose = useCallback(() => {
     context.setActive('0');
   }, [context]);
 
@@ -57,21 +56,21 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
     prependLength: props.prependLength,
     isSicpEditor: true,
 
-    handleCloseEditor: handleClose
+    handleCloseEditor: handleClose,
   };
 
   HighlightRulesSelector(4);
   ModeSelector(4);
 
-  const closeButton = React.useMemo(
+  const closeButton = useMemo(
     () => <ControlBarCloseButton key="close" handleClose={handleClose} />,
-    [handleClose]
+    [handleClose],
   );
 
   const controlBarProps = {
     editorButtons: [],
     flowButtons: [],
-    editingWorkspaceButtons: [closeButton]
+    editingWorkspaceButtons: [closeButton],
   };
 
   return (
@@ -94,7 +93,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
           )}
         </div>
       ) : (
-        <Card className="sicp-code-snippet-closed" interactive={true} elevation={Elevation.TWO}>
+        <Card className="sicp-code-snippet-closed" interactive elevation={Elevation.TWO}>
           <SyntaxHighlighter language="javascript" style={SourceTheme} onClick={handleOpen}>
             {body}
           </SyntaxHighlighter>

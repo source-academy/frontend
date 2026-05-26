@@ -1,4 +1,4 @@
-import { SagaIterator } from 'redux-saga';
+import type { SagaIterator } from 'redux-saga';
 import { select } from 'redux-saga/effects';
 
 import { FeatureFlag } from './FeatureFlag';

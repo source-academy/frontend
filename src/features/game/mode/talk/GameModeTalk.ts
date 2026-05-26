@@ -1,7 +1,7 @@
 import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
 import { screenSize } from '../../commons/CommonConstants';
-import { IGameUI, ItemId } from '../../commons/CommonTypes';
+import type { IGameUI, ItemId } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { keyboardShortcuts } from '../../input/GameInputConstants';
@@ -27,7 +27,7 @@ class GameModeTalk implements IGameUI {
   private getLatestTalkTopics() {
     return GameGlobalAPI.getInstance().getGameItemsInLocation(
       GameItemType.talkTopics,
-      GameGlobalAPI.getInstance().getCurrLocId()
+      GameGlobalAPI.getInstance().getCurrLocId(),
     );
   }
 
@@ -46,7 +46,7 @@ class GameModeTalk implements IGameUI {
     const buttonPositions = calcTableFormatPos({
       direction: Direction.Column,
       numOfItems: buttons.length,
-      maxYSpace: TalkModeConstants.button.ySpace
+      maxYSpace: TalkModeConstants.button.ySpace,
     });
 
     talkMenuContainer.add(
@@ -55,9 +55,9 @@ class GameModeTalk implements IGameUI {
           createButtonText(index + 1, button.text),
           buttonPositions[index][0],
           buttonPositions[index][1],
-          button.callback
-        )
-      )
+          button.callback,
+        ),
+      ),
     );
     // Add check for interacted talk topics
     buttons.forEach((button, index) => {
@@ -65,7 +65,7 @@ class GameModeTalk implements IGameUI {
         gameManager,
         buttonPositions[index][0],
         buttonPositions[index][1],
-        ImageAssets.talkOptCheck.key
+        ImageAssets.talkOptCheck.key,
       );
 
       const isTriggeredTopic =
@@ -97,7 +97,7 @@ class GameModeTalk implements IGameUI {
           await this.deactivateUI();
           await GameGlobalAPI.getInstance().showDialogue(dialogueId);
         },
-        interactionId: dialogueId
+        interactionId: dialogueId,
       };
     });
   }
@@ -118,7 +118,7 @@ class GameModeTalk implements IGameUI {
       message: text,
       textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.2 },
       bitMapTextStyle: talkButtonStyle,
-      onUp: callback
+      onUp: callback,
     }).setPosition(xPos, yPos);
   }
 
@@ -154,7 +154,7 @@ class GameModeTalk implements IGameUI {
 
     gameManager.tweens.add({
       targets: this.uiContainer,
-      ...entryTweenProps
+      ...entryTweenProps,
     });
     GameGlobalAPI.getInstance().playSound(SoundAssets.modeEnter.key);
   }
@@ -182,7 +182,7 @@ class GameModeTalk implements IGameUI {
 
       gameManager.tweens.add({
         targets: this.uiContainer,
-        ...exitTweenProps
+        ...exitTweenProps,
       });
 
       await sleep(500);

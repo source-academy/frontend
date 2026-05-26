@@ -1,6 +1,6 @@
 import SoundAssets from '../assets/SoundAssets';
 import { Constants } from '../commons/CommonConstants';
-import { AssetKey, BitmapFontStyle, TextConfig } from '../commons/CommonTypes';
+import type { AssetKey, BitmapFontStyle, TextConfig } from '../commons/CommonTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { createBitmapText } from './TextUtils';
 
@@ -70,8 +70,8 @@ export function createButton(
     onPointerMove = Constants.nullFunction,
     onHoverEffect = true,
     onClickSound = SoundAssets.buttonClick.key,
-    onHoverSound = SoundAssets.buttonHover.key
-  }: ButtonConfig
+    onHoverSound = SoundAssets.buttonHover.key,
+  }: ButtonConfig,
 ): Phaser.GameObjects.Container {
   const container = new Phaser.GameObjects.Container(scene, 0, 0);
 
@@ -98,7 +98,7 @@ export function createButton(
     Phaser.Input.Events.GAMEOBJECT_POINTER_MOVE,
     (pointer: Phaser.Input.Pointer, localX: number, localY: number) => {
       onPointerMove(pointer, localX, localY);
-    }
+    },
   );
 
   // Set up text

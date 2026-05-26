@@ -1,16 +1,16 @@
-import React from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 /* export interface FieldOptions {
   validationFunction?: (value: string | undefined) => boolean;
 } */
 
 export function useField<T extends HTMLInputElement | HTMLSelectElement>(
-  validationFunction?: (value: string | undefined) => boolean
+  validationFunction?: (value: string | undefined) => boolean,
 ) {
-  const ref = React.useRef<T | null>(null);
-  const [isValid, setIsValid] = React.useState(true);
+  const ref = useRef<T | null>(null);
+  const [isValid, setIsValid] = useState(true);
 
-  const validate = React.useCallback(() => {
+  const validate = useCallback(() => {
     const newIsValid = !validationFunction || validationFunction(ref.current?.value);
     if (isValid !== newIsValid) {
       setIsValid(newIsValid);
@@ -18,7 +18,7 @@ export function useField<T extends HTMLInputElement | HTMLSelectElement>(
     return newIsValid;
   }, [isValid, validationFunction]);
 
-  const onChange = React.useCallback(() => void validate(), [validate]);
+  const onChange = useCallback(() => void validate(), [validate]);
 
   return { ref, isValid, setIsValid, validate, onChange };
 }

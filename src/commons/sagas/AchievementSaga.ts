@@ -25,7 +25,7 @@ import {
   removeAchievement,
   removeGoal,
   updateGoalProgress,
-  updateOwnGoalProgress
+  updateOwnGoalProgress,
 } from './RequestsSaga';
 
 const AchievementSaga = combineSagaHandlers({
@@ -142,14 +142,12 @@ const AchievementSaga = combineSagaHandlers({
 
     const role = yield select((state: OverallState) => state.session.role);
     const enableAchievements = yield select(
-      (state: OverallState) => state.session.enableAchievements
+      (state: OverallState) => state.session.enableAchievements,
     );
     if (workspaceLocation !== undefined && eventNames.find(e => e === EventType.ERROR)) {
       const selectedTab: SideContentType | undefined = yield select((state: OverallState) => {
-        const [loc, storyEnv] = getLocation(workspaceLocation);
-        return loc === 'stories'
-          ? state.sideContent.stories[storyEnv].selectedTab
-          : state.sideContent[loc].selectedTab;
+        const [loc] = getLocation(workspaceLocation);
+        return state.sideContent[loc].selectedTab;
       });
 
       if (
@@ -157,7 +155,7 @@ const AchievementSaga = combineSagaHandlers({
         selectedTab === SideContentType.substVisualizer
       ) {
         yield put(
-          SideContentActions.beginAlertSideContent(SideContentType.introduction, workspaceLocation)
+          SideContentActions.beginAlertSideContent(SideContentType.introduction, workspaceLocation),
         );
       }
     }
@@ -227,7 +225,7 @@ const AchievementSaga = combineSagaHandlers({
     if (assessmentOverviews) {
       yield put(actions.saveUserAssessmentOverviews(assessmentOverviews));
     }
-  }
+  },
 });
 
 export default AchievementSaga;

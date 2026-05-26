@@ -1,4 +1,4 @@
-import { AssetKey, AssetPath, ItemId } from '../commons/CommonTypes';
+import type { AssetKey, AssetPath, ItemId } from '../commons/CommonTypes';
 
 export type AwardProperty = {
   id: ItemId;

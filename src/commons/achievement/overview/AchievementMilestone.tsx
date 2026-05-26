@@ -1,5 +1,3 @@
-import React from 'react';
-
 import Constants from '../../utils/Constants';
 
 type Props = {

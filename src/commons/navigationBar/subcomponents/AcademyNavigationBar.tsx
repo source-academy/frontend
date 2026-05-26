@@ -1,12 +1,12 @@
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
-import { IconName, IconNames } from '@blueprintjs/icons';
-import React, { useMemo } from 'react';
-import { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
+import { type IconName, IconNames } from '@blueprintjs/icons';
+import { useMemo } from 'react';
+import type { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
 import { useSession } from 'src/commons/utils/Hooks';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 import { Role } from '../../application/ApplicationTypes';
-import { DesktopNavLink, NavbarEntryInfo } from '../NavigationBar';
+import { DesktopNavLink, type NavbarEntryInfo } from '../NavigationBar';
 
 type Props = {
   assessmentTypes?: AssessmentType[];
@@ -18,12 +18,12 @@ const AcademyNavigationBar: React.FC<Props> = ({ assessmentTypes }) => {
 
   const leftEntries: NavbarEntryInfo[] = useMemo(
     () => assessmentTypesToNavlinkInfo({ assessmentTypes, courseId, isEnrolledInACourse }),
-    [assessmentTypes, courseId, isEnrolledInACourse]
+    [assessmentTypes, courseId, isEnrolledInACourse],
   );
 
   const rightEntries: NavbarEntryInfo[] = useMemo(
     () => getAcademyNavbarRightInfo({ isEnrolledInACourse, courseId, role }),
-    [isEnrolledInACourse, courseId, role]
+    [isEnrolledInACourse, courseId, role],
   );
 
   if (courseId === undefined || !isEnrolledInACourse) {
@@ -32,12 +32,12 @@ const AcademyNavigationBar: React.FC<Props> = ({ assessmentTypes }) => {
 
   return (
     <Navbar className="NavigationBar secondary-navbar">
-      <NavbarGroup align={Alignment.LEFT}>
+      <NavbarGroup align={Alignment.START}>
         {leftEntries.map((entry, i) => (
           <DesktopNavLink key={i} {...entry} />
         ))}
       </NavbarGroup>
-      <NavbarGroup align={Alignment.RIGHT}>
+      <NavbarGroup align={Alignment.END}>
         {rightEntries.map((entry, i) => (
           <DesktopNavLink key={i} {...entry} />
         ))}
@@ -55,13 +55,13 @@ export const icons: IconName[] = [
   IconNames.GRAPH,
   IconNames.FORM,
   IconNames.LAB_TEST,
-  IconNames.CALCULATOR
+  IconNames.CALCULATOR,
 ];
 
 export const assessmentTypesToNavlinkInfo = ({
   assessmentTypes = [],
   courseId,
-  isEnrolledInACourse
+  isEnrolledInACourse,
 }: {
   assessmentTypes?: string[];
   courseId?: number;
@@ -73,12 +73,12 @@ export const assessmentTypesToNavlinkInfo = ({
     text: assessmentType,
     disabled: !isEnrolledInACourse,
     hasNotifications: true,
-    hiddenInBreakpoints: ['xs', 'sm']
+    hiddenInBreakpoints: ['xs', 'sm'],
   }));
 
 const getStaffNavlinkInfo = ({
   courseId,
-  role
+  role,
 }: {
   courseId?: number;
   role?: Role;
@@ -92,28 +92,21 @@ const getStaffNavlinkInfo = ({
       icon: IconNames.SATELLITE,
       text: 'Ground Control',
       disabled: !isAdmin,
-      hiddenInBreakpoints: ['xs', 'sm']
+      hiddenInBreakpoints: ['xs', 'sm'],
     },
     {
       to: `/courses/${courseId}/dashboard`,
       icon: IconNames.GLOBE,
       text: 'Dashboard',
       disabled: !isStaffOrAdmin,
-      hiddenInBreakpoints: ['xs', 'sm']
-    },
-    {
-      to: `/courses/${courseId}/sourcereel`,
-      icon: IconNames.MOBILE_VIDEO,
-      text: 'Sourcereel',
-      disabled: !isStaffOrAdmin,
-      hiddenInBreakpoints: ['xs', 'sm', 'md']
+      hiddenInBreakpoints: ['xs', 'sm'],
     },
     {
       to: `/courses/${courseId}/teamformation`,
       icon: IconNames.FORM,
       text: 'Team Formation',
       disabled: !isStaffOrAdmin,
-      hiddenInBreakpoints: ['xs', 'sm', 'md']
+      hiddenInBreakpoints: ['xs', 'sm', 'md'],
     },
     {
       to: `/courses/${courseId}/grading`,
@@ -121,29 +114,29 @@ const getStaffNavlinkInfo = ({
       text: 'Grading',
       disabled: !isStaffOrAdmin,
       hasNotifications: true,
-      hiddenInBreakpoints: ['xs', 'sm', 'md']
+      hiddenInBreakpoints: ['xs', 'sm', 'md'],
     },
     {
       to: `/courses/${courseId}/gamesimulator`,
       icon: IconNames.CROWN,
       text: 'Game Simulator',
       disabled: !isStaffOrAdmin,
-      hiddenInBreakpoints: ['xs', 'sm', 'md']
+      hiddenInBreakpoints: ['xs', 'sm', 'md'],
     },
     {
       to: `/courses/${courseId}/adminpanel`,
       icon: IconNames.SETTINGS,
       text: 'Admin Panel',
       disabled: !isAdmin,
-      hiddenInBreakpoints: ['xs', 'sm', 'md', 'lg']
-    }
+      hiddenInBreakpoints: ['xs', 'sm', 'md', 'lg'],
+    },
   ];
 };
 
 export const getAcademyNavbarRightInfo = ({
   isEnrolledInACourse,
   courseId,
-  role
+  role,
 }: {
   isEnrolledInACourse: boolean;
   courseId?: number;

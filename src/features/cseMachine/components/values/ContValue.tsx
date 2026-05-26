@@ -1,21 +1,21 @@
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
-import { Environment } from 'js-slang/dist/types';
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { Environment } from 'js-slang/dist/types';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
-import React, { RefObject } from 'react';
+import { createRef, Fragment } from 'react';
 import {
   Circle,
   Group,
   Label as KonvaLabel,
   Rect,
   Tag as KonvaTag,
-  Text as KonvaText
+  Text as KonvaText,
 } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { IHoverable, ReferenceType } from '../../CseMachineTypes';
+import type { IHoverable, ReferenceType } from '../../CseMachineTypes';
 import {
   defaultStrokeColor,
   defaultTextColor,
@@ -24,7 +24,7 @@ import {
   getTextWidth,
   isMainReference,
   setHoveredCursor,
-  setUnhoveredCursor
+  setUnhoveredCursor,
 } from '../../CseMachineUtils';
 import { Continuation } from '../../utils/continuation';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
@@ -37,7 +37,7 @@ import { Value } from './Value';
 export class ContValue extends Value implements IHoverable {
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
-  readonly labelRef: RefObject<Label | null> = React.createRef();
+  readonly labelRef: React.RefObject<Label | null> = createRef();
 
   readonly tooltip: string = 'continuation';
   readonly tooltipWidth: number = getTextWidth(this.tooltip);
@@ -55,7 +55,7 @@ export class ContValue extends Value implements IHoverable {
     /** underlying continuation */
     readonly data: Continuation,
     /** what this value is being referenced by */
-    firstReference: ReferenceType
+    firstReference: ReferenceType,
   ) {
     super();
     Layout.memoizeValue(data, this);
@@ -150,7 +150,7 @@ export class ContValue extends Value implements IHoverable {
     //dont need to check isReferenced here since live is ALL we need to know
 
     return (
-      <React.Fragment key={Layout.key++}>
+      <Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>
           <Rect
             {...ShapeDefaultProps}
@@ -212,7 +212,7 @@ export class ContValue extends Value implements IHoverable {
           />
         </KonvaLabel>
         {this._arrow?.draw()}
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

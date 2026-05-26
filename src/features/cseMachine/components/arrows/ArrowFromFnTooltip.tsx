@@ -1,7 +1,5 @@
-import type { ReactNode } from 'react';
-
 import { Config } from '../../CseMachineConfig';
-import { StepsArray } from '../../CseMachineTypes';
+import type { StepsArray } from '../../CseMachineTypes';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
 import { Visible } from '../Visible';
@@ -32,7 +30,7 @@ class FnLeftCircleAnchor extends Visible {
     return Config.FnInnerRadius * 2;
   }
 
-  draw(): ReactNode {
+  draw(): React.ReactNode {
     return null;
   }
 }
@@ -40,7 +38,7 @@ class FnLeftCircleAnchor extends Visible {
 class FnTooltipAnchor extends Visible {
   constructor(
     private readonly getRect: () => TooltipRect,
-    private readonly getSourceX: () => number
+    private readonly getSourceX: () => number,
   ) {
     super();
   }
@@ -65,7 +63,7 @@ class FnTooltipAnchor extends Visible {
     return this.rect().height;
   }
 
-  draw(): ReactNode {
+  draw(): React.ReactNode {
     return null;
   }
 }

@@ -4,7 +4,7 @@ export enum GamePhaseType {
   EscapeMenu = 'EscapeMenu',
   None = 'None',
   Sequence = 'Sequence',
-  Dashboard = 'Dashboard'
+  Dashboard = 'Dashboard',
 }
 
 /**
@@ -15,5 +15,5 @@ export enum GamePhaseType {
  */
 export enum GameTerminalPhaseType {
   EscapeMenu = GamePhaseType.EscapeMenu,
-  Dashboard = GamePhaseType.Dashboard
+  Dashboard = GamePhaseType.Dashboard,
 }

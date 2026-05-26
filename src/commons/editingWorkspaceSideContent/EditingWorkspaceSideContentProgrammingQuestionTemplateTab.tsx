@@ -1,23 +1,19 @@
-import { Button, Card, Classes, Divider, IconName, MenuItem } from '@blueprintjs/core';
+import { Button, Card, Classes, Divider, type IconName, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemRenderer, Select } from '@blueprintjs/select';
-import React, { useState } from 'react';
+import type { ItemRenderer } from '@blueprintjs/select';
+import { Select } from '@blueprintjs/select';
+import { useState } from 'react';
 import AceEditor from 'react-ace';
 
-import { Assessment } from '../assessment/AssessmentTypes';
+import type { Assessment } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
-import { WorkspaceState } from '../workspace/WorkspaceTypes';
+import type { WorkspaceState } from '../workspace/WorkspaceTypes';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
-type QuestionEditorProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   updateAssessment: (assessment: Assessment) => void;
   handleEditorValueChange: (newEditorValue: string) => void;
   handleUpdateWorkspace: (options: Partial<WorkspaceState>) => void;
-};
-
-type StateProps = {
   assessment: Assessment;
   editorValue: string;
   questionId: number;
@@ -26,8 +22,6 @@ type StateProps = {
 const questionEditorPaths = ['prepend', 'postpend', 'solutionTemplate', 'answer'] as const;
 
 export type QuestionEditorId = (typeof questionEditorPaths)[number];
-
-const QuestionEditorSelect = Select.ofType<QuestionEditor>();
 
 export type QuestionEditor = {
   label: string;
@@ -39,29 +33,29 @@ const questionEditors: QuestionEditor[] = [
   {
     label: 'Prepend',
     icon: IconNames.CHEVRON_UP,
-    id: 'prepend'
+    id: 'prepend',
   },
   {
     label: 'Postpend',
     icon: IconNames.CHEVRON_DOWN,
-    id: 'postpend'
+    id: 'postpend',
   },
   {
     label: 'Solution Template',
     icon: IconNames.MANUAL,
-    id: 'solutionTemplate'
+    id: 'solutionTemplate',
   },
   {
     label: 'Suggested Answer',
     icon: IconNames.TICK,
-    id: 'answer'
-  }
+    id: 'answer',
+  },
 ];
 
 /*
  * activeEditor is the default editor to show initially
  */
-const ProgrammingQuestionTemplateTab: React.FC<QuestionEditorProps> = props => {
+const ProgrammingQuestionTemplateTab: React.FC<Props> = props => {
   const [activeEditor, setActiveEditor] = useState(questionEditors[0]);
   const [templateValue, setTemplateValue] = useState('');
   const [templateFocused, setTemplateFocused] = useState(false);
@@ -107,9 +101,9 @@ const ProgrammingQuestionTemplateTab: React.FC<QuestionEditorProps> = props => {
 
     const editorSelect = (
       currentEditor: QuestionEditor,
-      handleSelect: (i: QuestionEditor) => void
+      handleSelect: (i: QuestionEditor) => void,
     ) => (
-      <QuestionEditorSelect
+      <Select<QuestionEditor>
         className={Classes.MINIMAL}
         items={questionEditors}
         itemRenderer={menuRenderer}
@@ -117,12 +111,12 @@ const ProgrammingQuestionTemplateTab: React.FC<QuestionEditorProps> = props => {
         filterable={false}
       >
         <Button
-          minimal
+          variant="minimal"
           text={currentEditor.label}
           icon={IconNames.EDIT}
-          rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
+          endIcon={IconNames.DOUBLE_CARET_VERTICAL}
         />
-      </QuestionEditorSelect>
+      </Select>
     );
 
     return (
@@ -144,7 +138,7 @@ const ProgrammingQuestionTemplateTab: React.FC<QuestionEditorProps> = props => {
         <AceEditor
           className="react-ace"
           editorProps={{
-            $blockScrolling: Infinity
+            $blockScrolling: Infinity,
           }}
           fontSize={14}
           highlightActiveLine={false}

@@ -1,8 +1,13 @@
+import type { AutoCompleteEntry } from '@sourceacademy/autocomplete';
+import type { IConduit } from '@sourceacademy/conductor/conduit';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { type Context, findDeclaration, getNames } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import Phaser from 'phaser';
-import { call, put, select } from 'redux-saga/effects';
+import type { EventChannel } from 'redux-saga';
+import { call, delay, put, race, select, take } from 'redux-saga/effects';
+import AutoCompletePlugin from 'src/features/conductor/AutocompletePlugin';
+import { BrowserHostPlugin } from 'src/features/conductor/BrowserHostPlugin';
 
 import InterpreterActions from '../../../commons/application/actions/InterpreterActions';
 import { combineSagaHandlers } from '../../../commons/redux/utils';
@@ -15,7 +20,7 @@ import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserF
 import {
   defaultEditorValue,
   type OverallState,
-  styliseSublanguage
+  styliseSublanguage,
 } from '../../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
 import type { Library, Testcase } from '../../assessment/AssessmentTypes';
@@ -26,33 +31,33 @@ import {
   highlightClean,
   highlightCleanForControl,
   highlightLine,
-  highlightLineForControl
+  highlightLineForControl,
 } from '../../utils/JsSlangHelper';
 import {
   showSuccessMessage,
-  showWarningMessage
+  showWarningMessage,
 } from '../../utils/notifications/NotificationsHelper';
 import { showFullJSDisclaimer, showFullTSDisclaimer } from '../../utils/WarningDialogHelper';
+import { getPreparedConductorSaga } from '../helpers/conductorEvaluatorCache';
 import { selectWorkspace } from '../SafeEffects';
 import { evalCodeSaga } from './helpers/evalCode';
 import { evalEditorSaga } from './helpers/evalEditor';
 import { runTestCase } from './helpers/runTestCase';
+import {
+  fetchVersionHistorySaga,
+  nameVersionSaga,
+  restoreVersionSaga,
+  selectVersionSaga,
+} from './helpers/versionHistory';
 
 const WorkspaceSaga = combineSagaHandlers({
   [WorkspaceActions.addHtmlConsoleError.type]: function* (action) {
-    // TODO: Do not use if-else logic
-    if (!action.payload.storyEnv) {
-      yield put(
-        actions.handleConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg)
-      );
-    } else {
-      yield put(actions.handleStoriesConsoleLog(action.payload.storyEnv, action.payload.errorMsg));
-    }
+    yield put(actions.handleConsoleLog(action.payload.workspaceLocation, action.payload.errorMsg));
   },
   [WorkspaceActions.toggleFolderMode.type]: function* (action) {
     const workspaceLocation = action.payload.workspaceLocation;
     const isFolderModeEnabled: boolean = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].isFolderModeEnabled
+      (state: OverallState) => state.workspaces[workspaceLocation].isFolderModeEnabled,
     );
     yield put(actions.setFolderMode(workspaceLocation, !isFolderModeEnabled));
     const warningMessage = `Folder mode ${!isFolderModeEnabled ? 'enabled' : 'disabled'}`;
@@ -71,7 +76,7 @@ const WorkspaceSaga = combineSagaHandlers({
     if (editorTabs.length === 0) {
       const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
       const fileSystem: FSModule | null = yield select(
-        (state: OverallState) => state.fileSystem.inBrowserFileSystem
+        (state: OverallState) => state.fileSystem.inBrowserFileSystem,
       );
       // If the file system is not initialised, add an editor tab with the default editor value.
       if (fileSystem === null) {
@@ -110,7 +115,7 @@ const WorkspaceSaga = combineSagaHandlers({
 
     const filePath: string | undefined = yield select(
       (state: OverallState) =>
-        state.workspaces[workspaceLocation].editorTabs[editorTabIndex].filePath
+        state.workspaces[workspaceLocation].editorTabs[editorTabIndex].filePath,
     );
     // If the code does not have an associated file, do nothing.
     if (filePath === undefined) {
@@ -118,7 +123,7 @@ const WorkspaceSaga = combineSagaHandlers({
     }
 
     const fileSystem: FSModule | null = yield select(
-      (state: OverallState) => state.fileSystem.inBrowserFileSystem
+      (state: OverallState) => state.fileSystem.inBrowserFileSystem,
     );
     // If the file system is not initialised, do nothing.
     if (fileSystem === null) {
@@ -140,9 +145,8 @@ const WorkspaceSaga = combineSagaHandlers({
       editorTabs,
       context,
       externalLibrary: extLib,
-      programPrependValue: prepend
+      programPrependValue: prepend,
     } = yield* selectWorkspace(workspaceLocation);
-
     const editorValue = editorTabs[activeEditorTabIndex ?? 0].value;
 
     // Deal with prepended code
@@ -155,12 +159,55 @@ const WorkspaceSaga = combineSagaHandlers({
       autocompleteCode = prepend + '\n' + editorValue;
     }
 
+    if (yield select(selectConductorEnable)) {
+      const { conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } =
+        yield call(getPreparedConductorSaga);
+
+      const plugin = conduit.lookupPlugin('__autocomplete_plugin_web') as AutoCompletePlugin;
+      if (plugin) {
+        const channel: EventChannel<AutoCompleteEntry[]> = yield call(
+          [plugin, 'complete'],
+          autocompleteCode,
+          action.payload.row + prependLength,
+          action.payload.column,
+        );
+        //const names: AutoCompleteEntry[] = yield take(channel);
+        const { names, timeout }: { names?: AutoCompleteEntry[]; timeout?: true } = yield race({
+          names: take(channel),
+          timeout: delay(3000),
+        });
+
+        if (timeout || !names) {
+          console.warn('autocomplete channel timed out — runner never replied');
+          channel.close();
+          return;
+        }
+
+        yield call(
+          action.payload.callback,
+          null,
+          names.map(name => ({
+            meta: name.meta,
+            value: name.name,
+            caption: name.name,
+            docHTML: name.docHTML,
+            score: name.score ? name.score + 1000 : 1000, // Prioritize suggestions from code
+            name: undefined,
+          })),
+        );
+        channel.close();
+      } else {
+        yield call(action.payload.callback, null, []);
+      }
+      return;
+    }
+
     const [editorNames, displaySuggestions]: Awaited<ReturnType<typeof getNames>> = yield call(
       getNames,
       autocompleteCode,
       action.payload.row + prependLength,
       action.payload.column,
-      context
+      context,
     );
 
     if (!displaySuggestions) {
@@ -174,7 +221,7 @@ const WorkspaceSaga = combineSagaHandlers({
         caption: name.name,
         value: name.name,
         score: name.score ? name.score + 1000 : 1000, // Prioritize suggestions from code
-        name: undefined
+        name: undefined,
       };
     });
 
@@ -190,13 +237,13 @@ const WorkspaceSaga = combineSagaHandlers({
     yield call(
       action.payload.callback,
       null,
-      editorSuggestions.concat(builtinSuggestions, extLibSuggestions)
+      editorSuggestions.concat(builtinSuggestions, extLibSuggestions),
     );
   },
   [WorkspaceActions.toggleEditorAutorun.type]: function* (action) {
     const workspaceLocation = action.payload.workspaceLocation;
     const isEditorAutorun = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].isEditorAutorun
+      (state: OverallState) => state.workspaces[workspaceLocation].isEditorAutorun,
     );
     yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
   },
@@ -211,13 +258,13 @@ const WorkspaceSaga = combineSagaHandlers({
     yield put(actions.clearReplInput(workspaceLocation));
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
     const context: Context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context
+      (state: OverallState) => state.workspaces[workspaceLocation].context,
     );
     // Reset old context.errors
     context.errors = [];
     const codeFilePath = '/code.js';
     const codeFiles = {
-      [codeFilePath]: code
+      [codeFilePath]: code,
     };
     yield call(
       evalCodeSaga,
@@ -226,29 +273,29 @@ const WorkspaceSaga = combineSagaHandlers({
       context,
       execTime,
       WorkspaceActions.evalRepl.type,
-      workspaceLocation
+      workspaceLocation,
     );
   },
   [InterpreterActions.debuggerResume.type]: function* (action) {
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select(
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].value
+      (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].value,
     );
     const execTime: number = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].execTime
+      (state: OverallState) => state.workspaces[workspaceLocation].execTime,
     );
     yield put(actions.beginInterruptExecution(workspaceLocation));
     /** Clear the context, with the same chapter and externalSymbols as before. */
     yield put(actions.clearReplOutput(workspaceLocation));
     const context: Context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context
+      (state: OverallState) => state.workspaces[workspaceLocation].context,
     );
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
     const codeFilePath = '/code.js';
     const codeFiles = {
-      [codeFilePath]: code
+      [codeFilePath]: code,
     };
     yield call(
       evalCodeSaga,
@@ -257,13 +304,13 @@ const WorkspaceSaga = combineSagaHandlers({
       context,
       execTime,
       InterpreterActions.debuggerResume.type,
-      workspaceLocation
+      workspaceLocation,
     );
   },
   [InterpreterActions.debuggerReset.type]: function* (action) {
     const workspaceLocation = action.payload.workspaceLocation;
     const context: Context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context
+      (state: OverallState) => state.workspaces[workspaceLocation].context,
     );
     yield put(actions.clearReplOutput(workspaceLocation));
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
@@ -272,7 +319,7 @@ const WorkspaceSaga = combineSagaHandlers({
     yield put(actions.updateLastDebuggerResult(undefined, workspaceLocation));
   },
   [WorkspaceActions.setEditorHighlightedLines.type]: function* ({
-    payload: { newHighlightedLines }
+    payload: { newHighlightedLines },
   }) {
     if (newHighlightedLines.length === 0) {
       yield call(highlightClean);
@@ -290,7 +337,7 @@ const WorkspaceSaga = combineSagaHandlers({
     }
   },
   [WorkspaceActions.setEditorHighlightedLinesControl.type]: function* ({
-    payload: { newHighlightedLines }
+    payload: { newHighlightedLines },
   }) {
     if (newHighlightedLines.length === 0) {
       yield call(highlightCleanForControl);
@@ -309,7 +356,6 @@ const WorkspaceSaga = combineSagaHandlers({
   },
   [WorkspaceActions.evalTestcase.type]: function* (action) {
     const workspaceLocation = action.payload.workspaceLocation;
-    if (workspaceLocation === 'stories') return;
 
     yield put(actions.addEvent([EventType.RUN_TESTCASE], workspaceLocation));
     const index = action.payload.testcaseId;
@@ -322,13 +368,13 @@ const WorkspaceSaga = combineSagaHandlers({
       Chapter,
       string[],
       Array<[string, any]>,
-      ExternalLibraryName
+      ExternalLibraryName,
     ] = yield select((state: OverallState) => [
       state.workspaces[workspaceLocation].context.variant,
       state.workspaces[workspaceLocation].context.chapter,
       state.workspaces[workspaceLocation].context.externalSymbols,
       state.workspaces[workspaceLocation].globals,
-      state.workspaces[workspaceLocation].externalLibrary
+      state.workspaces[workspaceLocation].externalLibrary,
     ]);
 
     const chapterChanged: boolean = newChapter !== oldChapter || newVariant !== oldVariant;
@@ -345,18 +391,18 @@ const WorkspaceSaga = combineSagaHandlers({
         variant: newVariant,
         external: {
           name: externalLibraryName,
-          symbols
+          symbols,
         },
-        globals
+        globals,
       };
       yield put(actions.beginClearContext(workspaceLocation, library, false));
       yield put(actions.clearReplOutput(workspaceLocation));
       yield put(actions.debuggerReset(workspaceLocation));
-      if (workspaceLocation !== 'stories') yield put(actions.resetSideContent(workspaceLocation));
+      yield put(actions.resetSideContent(workspaceLocation));
       yield call(
         showSuccessMessage,
         `Switched to ${styliseSublanguage(newChapter, newVariant)}`,
-        1000
+        1000,
       );
     }
   },
@@ -376,20 +422,20 @@ const WorkspaceSaga = combineSagaHandlers({
     const [chapter, globals, oldExternalLibraryName]: [
       Chapter,
       Array<[string, any]>,
-      ExternalLibraryName
+      ExternalLibraryName,
     ] = yield select((state: OverallState) => [
       state.workspaces[workspaceLocation].context.chapter,
       state.workspaces[workspaceLocation].globals,
-      state.workspaces[workspaceLocation].externalLibrary
+      state.workspaces[workspaceLocation].externalLibrary,
     ]);
     const symbols = externalLibraries.get(newExternalLibraryName)!;
     const library: Library = {
       chapter,
       external: {
         name: newExternalLibraryName,
-        symbols
+        symbols,
       },
-      globals
+      globals,
     };
     if (newExternalLibraryName !== oldExternalLibraryName || action.payload.initialise) {
       yield put(actions.changeExternalLibrary(newExternalLibraryName, workspaceLocation));
@@ -419,11 +465,11 @@ const WorkspaceSaga = combineSagaHandlers({
           ...action.payload.library,
           moduleParams: {
             runes: {},
-            phaser: Phaser
-          }
+            phaser: Phaser,
+          },
         },
-        action.payload.workspaceLocation
-      )
+        action.payload.workspaceLocation,
+      ),
     );
     yield undefined;
   },
@@ -431,23 +477,23 @@ const WorkspaceSaga = combineSagaHandlers({
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select(
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].value
+      (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].value,
     );
     const context: Context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context
+      (state: OverallState) => state.workspaces[workspaceLocation].context,
     );
 
     const result = findDeclaration(code, context, {
       line: action.payload.cursorPosition.row + 1,
-      column: action.payload.cursorPosition.column
+      column: action.payload.cursorPosition.column,
     });
     if (result) {
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       yield put(
         actions.moveCursor(action.payload.workspaceLocation, 0, {
           row: result.start.line - 1,
-          column: result.start.column
-        })
+          column: result.start.column,
+        }),
       );
     }
   },
@@ -458,7 +504,7 @@ const WorkspaceSaga = combineSagaHandlers({
       yield call(evalEditorSaga, workspaceLocation);
 
       const testcases: Testcase[] = yield select(
-        (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases
+        (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases,
       );
       // Avoid displaying message if there are no testcases
       if (testcases.length > 0) {
@@ -476,8 +522,20 @@ const WorkspaceSaga = combineSagaHandlers({
           }
         }
       }
-    }
-  }
+    },
+  },
+  [WorkspaceActions.fetchVersionHistory.type]: function* (action) {
+    yield* fetchVersionHistorySaga(action);
+  },
+  [WorkspaceActions.selectVersion.type]: function* (action) {
+    yield call(selectVersionSaga, action);
+  },
+  [WorkspaceActions.nameVersion.type]: function* (action) {
+    yield* nameVersionSaga(action);
+  },
+  [WorkspaceActions.restoreVersion.type]: function* (action) {
+    yield call(restoreVersionSaga, action);
+  },
 });
 
 export default WorkspaceSaga;

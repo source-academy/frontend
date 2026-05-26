@@ -1,11 +1,11 @@
-import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import type { KonvaEventObject } from 'konva/lib/Node';
+import { createRef, Fragment } from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
 import { ShapeDefaultProps } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
-import { IHoverable } from '../../CseMachineTypes';
+import type { IHoverable } from '../../CseMachineTypes';
 import {
   defaultActiveColor,
   defaultTextColor,
@@ -14,7 +14,7 @@ import {
   setHoveredStyle,
   setUnhoveredCursor,
   setUnhoveredStyle,
-  truncateText
+  truncateText,
 } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 import { Arrow } from './Arrow';
@@ -22,7 +22,7 @@ import { Frame } from './Frame';
 
 export class ControlItem extends Visible implements IHoverable {
   private readonly _arrow: Arrow | undefined;
-  private readonly _tooltipRef: RefObject<any>;
+  private readonly _tooltipRef: React.RefObject<any>;
 
   constructor(
     y: number,
@@ -34,7 +34,7 @@ export class ControlItem extends Visible implements IHoverable {
 
     private readonly _tooltip: string,
     private readonly highlightOnHover: () => void,
-    private readonly unhighlightOnHover: () => void
+    private readonly unhighlightOnHover: () => void,
   ) {
     super();
 
@@ -46,11 +46,11 @@ export class ControlItem extends Visible implements IHoverable {
     this._text = truncateText(
       this._text,
       ControlStashConfig.ControlMaxTextWidth,
-      ControlStashConfig.ControlMaxTextHeight
+      ControlStashConfig.ControlMaxTextHeight,
     );
 
     // Tooltip.
-    this._tooltipRef = React.createRef();
+    this._tooltipRef = createRef();
 
     // Height and width.
     this._height =
@@ -65,7 +65,7 @@ export class ControlItem extends Visible implements IHoverable {
         this._y + this._height / 2,
         reference.x(),
         reference.y() + reference.height() / 2 + reference.name.height(),
-        { route: 'manhattan' }
+        { route: 'manhattan' },
       );
     }
   }
@@ -99,14 +99,14 @@ export class ControlItem extends Visible implements IHoverable {
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: ControlStashConfig.FontSize,
       fontStyle: ControlStashConfig.FontStyle,
-      fontVariant: ControlStashConfig.FontVariant
+      fontVariant: ControlStashConfig.FontVariant,
     };
     const tagProps = {
       stroke: this._stroke,
-      cornerRadius: ControlStashConfig.ControlItemCornerRadius
+      cornerRadius: ControlStashConfig.ControlItemCornerRadius,
     };
     return (
-      <React.Fragment key={CseMachine.key++}>
+      <Fragment key={CseMachine.key++}>
         {/* Text */}
         <Label
           x={this.x()}
@@ -152,7 +152,7 @@ export class ControlItem extends Visible implements IHoverable {
 
         {/* Arrow */}
         {this._arrow?.draw()}
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

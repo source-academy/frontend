@@ -3,12 +3,12 @@ const translations = {
   titles: {
     score: 'Score Leaderboard',
     popularVote: 'Popular Vote Leaderboard',
-    default: 'Contest Leaderboard'
+    default: 'Contest Leaderboard',
   },
   tooltips: {
     score: 'View the highest scoring contest entries!',
     popularVote: 'View the most popular contest entries!',
-    default: 'View the top-rated contest entries!'
+    default: 'View the top-rated contest entries!',
   },
   headers: {
     studentName: 'Student Name',
@@ -16,9 +16,9 @@ const translations = {
     score: {
       calculated: 'Calculated Score',
       popularity: 'Popularity Score',
-      default: 'Metric'
-    }
-  }
+      default: 'Metric',
+    },
+  },
 };
 
 export default translations;

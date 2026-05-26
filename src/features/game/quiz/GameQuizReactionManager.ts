@@ -1,7 +1,7 @@
 import SoundAssets from '../assets/SoundAssets';
 import DialogueGenerator from '../dialogue/GameDialogueGenerator';
 import DialogueRenderer from '../dialogue/GameDialogueRenderer';
-import { DialogueObject } from '../dialogue/GameDialogueTypes';
+import type { DialogueObject } from '../dialogue/GameDialogueTypes';
 import { promptWithChoices } from '../effects/Prompt';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
@@ -34,7 +34,7 @@ export default class GameQuizReactionManager {
 
     GameGlobalAPI.getInstance().addToLayer(
       Layer.Dialogue,
-      this.dialogueRenderer.getDialogueContainer()
+      this.dialogueRenderer.getDialogueContainer(),
     );
 
     GameGlobalAPI.getInstance().fadeInLayer(Layer.Dialogue);
@@ -71,7 +71,7 @@ export default class GameQuizReactionManager {
       const response = await promptWithChoices(
         GameGlobalAPI.getInstance().getGameManager(),
         prompt.promptTitle,
-        prompt.choices.map(choice => choice[0])
+        prompt.choices.map(choice => choice[0]),
       );
 
       this.getDialogueGenerator().updateCurrPart(prompt.choices[response][1]);

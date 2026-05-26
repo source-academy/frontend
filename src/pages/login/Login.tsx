@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 import { useSession } from 'src/commons/utils/Hooks';
 
@@ -20,8 +20,6 @@ const Login: React.FC = () => {
   return <Outlet />;
 };
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = Login;
 Component.displayName = 'Login';
 

@@ -1,4 +1,3 @@
-import type { JSX } from 'react';
 import { Group } from 'react-konva';
 
 import { Config } from '../Config';
@@ -15,12 +14,12 @@ export class ArrayTreeNode extends DrawableTreeNode {
     y: number,
     parentX: number,
     parentY: number,
-    colorIndex: number
-  ): JSX.Element {
+    colorIndex: number,
+  ): React.ReactElement {
     let color = '';
     color = colorIndex === -1 ? 'black' : this.Colors[colorIndex % this.Colors.length];
     const arrayProps = { nodes: this.children ?? [], x, y, color };
-    const arrayDrawable = <ArrayDrawable {...arrayProps}></ArrayDrawable>;
+    const arrayDrawable = <ArrayDrawable {...arrayProps} />;
 
     this._drawable = (
       <Group key={x + ', ' + y}>
@@ -30,14 +29,17 @@ export class ArrayTreeNode extends DrawableTreeNode {
             {...{
               from: {
                 x: parentX + Config.BoxWidth / 2,
-                y: parentY + Config.BoxHeight / 2
+                y: parentY + Config.BoxHeight / 2,
               },
               to: {
-                x,
-                y
-              }
+                x: parentY == y ? x - Config.BoxWidth / 2 - Config.StrokeWidth * 2 : x,
+                y:
+                  parentY == y
+                    ? parentY - Config.ArrowPointerOffsetVertical + Config.BoxHeight / 2
+                    : y,
+              },
             }}
-          ></ArrowDrawable>
+          />
         )}
       </Group>
     );

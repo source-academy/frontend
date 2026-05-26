@@ -1,9 +1,9 @@
-import { createReducer, Reducer } from '@reduxjs/toolkit';
+import { createReducer, type Reducer } from '@reduxjs/toolkit';
 
 import { defaultDashboard } from '../../commons/application/ApplicationTypes';
-import { SourceActionType } from '../../commons/utils/ActionsHelper';
+import type { SourceActionType } from '../../commons/utils/ActionsHelper';
 import { updateGroupGradingSummary } from './DashboardActions';
-import { DashboardState } from './DashboardTypes';
+import type { DashboardState } from './DashboardTypes';
 
 export const DashboardReducer: Reducer<DashboardState, SourceActionType> = createReducer(
   defaultDashboard,
@@ -11,5 +11,5 @@ export const DashboardReducer: Reducer<DashboardState, SourceActionType> = creat
     builder.addCase(updateGroupGradingSummary, (state, action) => {
       state.gradingSummary = action.payload;
     });
-  }
+  },
 );

@@ -9,7 +9,7 @@ const textHoverStyle = {
   fontSize: '15px',
   fill: Color.lightBlue,
   align: 'left',
-  wordWrap: { width: defaultTextHoverWidth - textPad }
+  wordWrap: { width: defaultTextHoverWidth - textPad },
 };
 
 /**
@@ -36,7 +36,7 @@ class CommonTextHover extends Phaser.GameObjects.Container {
     x: number,
     y: number,
     text: string,
-    maxWidth: number = defaultTextHoverWidth
+    maxWidth: number = defaultTextHoverWidth,
   ) {
     super(scene, x, y);
     this.renderTextHover(text, maxWidth);
@@ -44,7 +44,7 @@ class CommonTextHover extends Phaser.GameObjects.Container {
 
   private renderTextHover(text: string, maxWidth: number) {
     const fontSize = parseInt(
-      textHoverStyle.fontSize.substring(0, textHoverStyle.fontSize.length - 2)
+      textHoverStyle.fontSize.substring(0, textHoverStyle.fontSize.length - 2),
     );
     const width = text.length * fontSize * 0.75;
     const hoverWidth = Math.min(width, maxWidth);
@@ -55,8 +55,8 @@ class CommonTextHover extends Phaser.GameObjects.Container {
       text,
       {
         ...textHoverStyle,
-        wordWrap: { width: hoverWidth - textPad }
-      }
+        wordWrap: { width: hoverWidth - textPad },
+      },
     );
     const hoverTextBg = new Phaser.GameObjects.Rectangle(
       this.scene,
@@ -64,7 +64,7 @@ class CommonTextHover extends Phaser.GameObjects.Container {
       0,
       hoverWidth,
       hoverText.getBounds().bottom + textPad,
-      HexColor.darkBlue
+      HexColor.darkBlue,
     )
       .setOrigin(0.0, 0.0)
       .setAlpha(0.8);

@@ -1,0 +1,386 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Sicp toc renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="sicp-toc"
+  >
+    <div
+      class="bp6-tree sicp-toc-tree"
+    >
+      <ul
+        class="bp6-tree-node-list bp6-tree-root"
+      >
+        <li
+          class="bp6-tree-node"
+        >
+          <div
+            class="bp6-tree-node-content bp6-tree-node-content-0"
+          >
+            <span
+              class="bp6-tree-node-caret-none"
+            />
+            <span
+              class="bp6-tree-node-label"
+            >
+              Foreword
+            </span>
+          </div>
+          <div
+            class="bp6-collapse"
+          >
+            <div
+              aria-hidden="true"
+              class="bp6-collapse-body"
+            />
+          </div>
+        </li>
+        <li
+          class="bp6-tree-node"
+        >
+          <div
+            class="bp6-tree-node-content bp6-tree-node-content-0"
+          >
+            <span
+              class="bp6-tree-node-caret-none"
+            />
+            <span
+              class="bp6-tree-node-label"
+            >
+              Foreword to Structure and Interpretation of Computer Programs, 1984
+            </span>
+          </div>
+          <div
+            class="bp6-collapse"
+          >
+            <div
+              aria-hidden="true"
+              class="bp6-collapse-body"
+            />
+          </div>
+        </li>
+        <li
+          class="bp6-tree-node"
+        >
+          <div
+            class="bp6-tree-node-content bp6-tree-node-content-0"
+          >
+            <span
+              class="bp6-tree-node-caret-none"
+            />
+            <span
+              class="bp6-tree-node-label"
+            >
+              Preface
+            </span>
+          </div>
+          <div
+            class="bp6-collapse"
+          >
+            <div
+              aria-hidden="true"
+              class="bp6-collapse-body"
+            />
+          </div>
+        </li>
+        <li
+          class="bp6-tree-node"
+        >
+          <div
+            class="bp6-tree-node-content bp6-tree-node-content-0"
+          >
+            <span
+              class="bp6-tree-node-caret-none"
+            />
+            <span
+              class="bp6-tree-node-label"
+            >
+              Prefaces to Structure and Interpretation of Computer Programs, 1996 & 1984
+            </span>
+          </div>
+          <div
+            class="bp6-collapse"
+          >
+            <div
+              aria-hidden="true"
+              class="bp6-collapse-body"
+            />
+          </div>
+        </li>
+        <li
+          class="bp6-tree-node"
+        >
+          <div
+            class="bp6-tree-node-content bp6-tree-node-content-0"
+          >
+            <span
+              class="bp6-tree-node-caret-none"
+            />
+            <span
+              class="bp6-tree-node-label"
+            >
+              Acknowledgments
+            </span>
+          </div>
+          <div
+            class="bp6-collapse"
+          >
+            <div
+              aria-hidden="true"
+              class="bp6-collapse-body"
+            />
+          </div>
+        </li>
+        <li
+          class="bp6-tree-node"
+        >
+          <div
+            class="bp6-tree-node-content bp6-tree-node-content-0"
+          >
+            <span
+              class="bp6-icon bp6-icon-chevron-right bp6-tree-node-caret bp6-tree-node-caret-closed"
+            >
+              <svg
+                data-icon="chevron-right"
+                height="16"
+                role="img"
+                viewBox="0 0 16 16"
+                width="16"
+              >
+                <title>
+                  Expand group
+                </title>
+                <path
+                  d="m10.71 7.29-4-4a1.003 1.003 0 0 0-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 0 0 1.71.71l4-4c.18-.18.29-.43.29-.71s-.11-.53-.29-.71"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              class="bp6-tree-node-label"
+            >
+              1 Building Abstractions with Functions
+            </span>
+          </div>
+          <div
+            class="bp6-collapse"
+          >
+            <div
+              aria-hidden="true"
+              class="bp6-collapse-body"
+            />
+          </div>
+        </li>
+        <li
+          class="bp6-tree-node"
+        >
+          <div
+            class="bp6-tree-node-content bp6-tree-node-content-0"
+          >
+            <span
+              class="bp6-icon bp6-icon-chevron-right bp6-tree-node-caret bp6-tree-node-caret-closed"
+            >
+              <svg
+                data-icon="chevron-right"
+                height="16"
+                role="img"
+                viewBox="0 0 16 16"
+                width="16"
+              >
+                <title>
+                  Expand group
+                </title>
+                <path
+                  d="m10.71 7.29-4-4a1.003 1.003 0 0 0-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 0 0 1.71.71l4-4c.18-.18.29-.43.29-.71s-.11-.53-.29-.71"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              class="bp6-tree-node-label"
+            >
+              2 Building Abstractions with Data
+            </span>
+          </div>
+          <div
+            class="bp6-collapse"
+          >
+            <div
+              aria-hidden="true"
+              class="bp6-collapse-body"
+            />
+          </div>
+        </li>
+        <li
+          class="bp6-tree-node"
+        >
+          <div
+            class="bp6-tree-node-content bp6-tree-node-content-0"
+          >
+            <span
+              class="bp6-icon bp6-icon-chevron-right bp6-tree-node-caret bp6-tree-node-caret-closed"
+            >
+              <svg
+                data-icon="chevron-right"
+                height="16"
+                role="img"
+                viewBox="0 0 16 16"
+                width="16"
+              >
+                <title>
+                  Expand group
+                </title>
+                <path
+                  d="m10.71 7.29-4-4a1.003 1.003 0 0 0-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 0 0 1.71.71l4-4c.18-.18.29-.43.29-.71s-.11-.53-.29-.71"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              class="bp6-tree-node-label"
+            >
+              3 Modularity, Objects, and State
+            </span>
+          </div>
+          <div
+            class="bp6-collapse"
+          >
+            <div
+              aria-hidden="true"
+              class="bp6-collapse-body"
+            />
+          </div>
+        </li>
+        <li
+          class="bp6-tree-node"
+        >
+          <div
+            class="bp6-tree-node-content bp6-tree-node-content-0"
+          >
+            <span
+              class="bp6-icon bp6-icon-chevron-right bp6-tree-node-caret bp6-tree-node-caret-closed"
+            >
+              <svg
+                data-icon="chevron-right"
+                height="16"
+                role="img"
+                viewBox="0 0 16 16"
+                width="16"
+              >
+                <title>
+                  Expand group
+                </title>
+                <path
+                  d="m10.71 7.29-4-4a1.003 1.003 0 0 0-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 0 0 1.71.71l4-4c.18-.18.29-.43.29-.71s-.11-.53-.29-.71"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              class="bp6-tree-node-label"
+            >
+              4 Metalinguistic Abstraction
+            </span>
+          </div>
+          <div
+            class="bp6-collapse"
+          >
+            <div
+              aria-hidden="true"
+              class="bp6-collapse-body"
+            />
+          </div>
+        </li>
+        <li
+          class="bp6-tree-node"
+        >
+          <div
+            class="bp6-tree-node-content bp6-tree-node-content-0"
+          >
+            <span
+              class="bp6-icon bp6-icon-chevron-right bp6-tree-node-caret bp6-tree-node-caret-closed"
+            >
+              <svg
+                data-icon="chevron-right"
+                height="16"
+                role="img"
+                viewBox="0 0 16 16"
+                width="16"
+              >
+                <title>
+                  Expand group
+                </title>
+                <path
+                  d="m10.71 7.29-4-4a1.003 1.003 0 0 0-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 0 0 1.71.71l4-4c.18-.18.29-.43.29-.71s-.11-.53-.29-.71"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              class="bp6-tree-node-label"
+            >
+              5 Computing with Register Machines
+            </span>
+          </div>
+          <div
+            class="bp6-collapse"
+          >
+            <div
+              aria-hidden="true"
+              class="bp6-collapse-body"
+            />
+          </div>
+        </li>
+        <li
+          class="bp6-tree-node"
+        >
+          <div
+            class="bp6-tree-node-content bp6-tree-node-content-0"
+          >
+            <span
+              class="bp6-tree-node-caret-none"
+            />
+            <span
+              class="bp6-tree-node-label"
+            >
+              References
+            </span>
+          </div>
+          <div
+            class="bp6-collapse"
+          >
+            <div
+              aria-hidden="true"
+              class="bp6-collapse-body"
+            />
+          </div>
+        </li>
+        <li
+          class="bp6-tree-node"
+        >
+          <div
+            class="bp6-tree-node-content bp6-tree-node-content-0"
+          >
+            <span
+              class="bp6-tree-node-caret-none"
+            />
+            <span
+              class="bp6-tree-node-label"
+            >
+              About the SICP JS Project
+            </span>
+          </div>
+          <div
+            class="bp6-collapse"
+          >
+            <div
+              aria-hidden="true"
+              class="bp6-collapse-body"
+            />
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</DocumentFragment>
+`;

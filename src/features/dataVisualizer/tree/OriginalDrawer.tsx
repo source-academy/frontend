@@ -1,5 +1,4 @@
 import Konva from 'konva';
-import type { JSX } from 'react';
 import { Layer, Stage, Text } from 'react-konva';
 
 import { Config } from '../Config';
@@ -12,7 +11,7 @@ import {
   DataTreeNode,
   DrawableTreeNode,
   FunctionTreeNode,
-  TreeNode
+  TreeNode,
 } from './TreeNode';
 
 /**
@@ -27,7 +26,7 @@ export class OriginalDrawer {
   protected runningY: number = 0;
   protected runningX2: number = 0; // for rightCOUNTER
 
-  protected drawables: JSX.Element[];
+  protected drawables: React.ReactElement[];
   protected nodeWidths: Map<TreeNode, number>;
   public width: number = 0;
   public height: number = 0;
@@ -48,7 +47,7 @@ export class OriginalDrawer {
   /**
    * Draws a tree at x, y, by calling drawNode on the root at x, y.
    */
-  draw(x: number, y: number, key: number): JSX.Element {
+  draw(x: number, y: number, key: number): React.ReactElement {
     if (this.tree.rootNode instanceof DataTreeNode) {
       const text = toText(this.tree.rootNode.data);
       const textConfig = {
@@ -56,7 +55,7 @@ export class OriginalDrawer {
         align: 'center',
         fontStyle: 'normal',
         fontSize: 20,
-        fill: Config.Stroke
+        fill: Config.Stroke,
       };
       const konvaText = new Konva.Text(textConfig);
       this.width = konvaText.width();
@@ -100,7 +99,7 @@ export class OriginalDrawer {
     colorIndex: number,
     parentIndex: number,
     originIndex: number,
-    originX: number
+    originX: number,
   ) {
     if (node instanceof AlreadyParsedTreeNode) {
       // if its child is part of a cycle and it's been drawn, link back to that node instead
@@ -108,27 +107,27 @@ export class OriginalDrawer {
       const arrowProps = {
         from: {
           x: parentX + Config.BoxWidth / 2,
-          y: parentY + Config.BoxHeight / 2
+          y: parentY + Config.BoxHeight / 2,
         },
         to: {
           x: drawnNode.drawableX!,
-          y: drawnNode.drawableY!
-        }
+          y: drawnNode.drawableY!,
+        },
       };
 
       const isBackwardArrow = arrowProps.from.y >= arrowProps.to.y;
 
-      let arrow: JSX.Element;
+      let arrow: React.ReactElement;
 
       if (isBackwardArrow) {
         // Update the minX and minY, in case overflow to the top or left happens
         this.minX = Math.min(
           this.minX,
-          drawnNode.drawableX! - Config.ArrowMarginHorizontal - Config.StrokeWidth / 2
+          drawnNode.drawableX! - Config.ArrowMarginHorizontal - Config.StrokeWidth / 2,
         );
         this.minY = Math.min(
           this.minY,
-          drawnNode.drawableY! - Config.ArrowMarginTop - Config.StrokeWidth / 2
+          drawnNode.drawableY! - Config.ArrowMarginTop - Config.StrokeWidth / 2,
         );
         arrow = (
           <BackwardArrowDrawable key={'Arrow (back)' + parentX + x + parentY + y} {...arrowProps} />
@@ -179,7 +178,7 @@ export class OriginalDrawer {
         const nodeWidth = Math.max(
           node.children.length * Config.BoxWidth + Config.StrokeWidth,
           childrenWidth,
-          Config.BoxMinWidth + Config.StrokeWidth
+          Config.BoxMinWidth + Config.StrokeWidth,
         );
         this.nodeWidths.set(node, nodeWidth);
         return nodeWidth;

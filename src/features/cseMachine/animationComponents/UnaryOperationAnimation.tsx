@@ -1,4 +1,3 @@
-import React from 'react';
 import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
@@ -9,7 +8,7 @@ import {
   defaultDangerColor,
   defaultStrokeColor,
   getTextWidth,
-  isStashItemInDanger
+  isStashItemInDanger,
 } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
@@ -24,19 +23,19 @@ export class UnaryOperationAnimation extends Animatable {
   constructor(
     private operator: ControlItemComponent,
     private operand: StashItemComponent,
-    private result: StashItemComponent
+    private result: StashItemComponent,
   ) {
     super();
     this.operatorAnimation = new AnimatedTextbox(operator.text, getNodePosition(operator), {
-      rectProps: { stroke: defaultActiveColor() }
+      rectProps: { stroke: defaultActiveColor() },
     });
     this.operandAnimation = new AnimatedTextbox(operand.text, getNodePosition(operand), {
-      rectProps: { stroke: defaultDangerColor() }
+      rectProps: { stroke: defaultDangerColor() },
     });
     this.resultAnimation = new AnimatedTextbox(result.text, {
       ...getNodePosition(result),
       x: operand.x() + operand.width() / 2,
-      opacity: 0
+      opacity: 0,
     });
   }
 
@@ -61,20 +60,20 @@ export class UnaryOperationAnimation extends Animatable {
           x:
             this.operand.x() +
             (this.operand.x() + minOpWidth + this.operand.width()) / 2 +
-            this.result.width() / 2
+            this.result.width() / 2,
         },
-        { duration: 0 }
+        { duration: 0 },
       ),
       this.operatorAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
       this.operatorAnimation.animateTo({
         x: this.operand.x(),
         y: this.result.y(),
-        width: minOpWidth
+        width: minOpWidth,
       }),
       this.operandAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
       this.operandAnimation.animateTo({
-        x: this.operand.x() + minOpWidth
-      })
+        x: this.operand.x() + minOpWidth,
+      }),
     ]);
     const fadeDuration = 3 / 4;
     const fadeInDelay = 1 / 4;
@@ -86,10 +85,10 @@ export class UnaryOperationAnimation extends Animatable {
       this.resultAnimation.animateTo({ x: this.result.x() }),
       this.resultAnimation.animateTo(
         { opacity: 1 },
-        { duration: fadeDuration, delay: fadeInDelay }
+        { duration: fadeDuration, delay: fadeInDelay },
       ),
       isStashItemInDanger(this.result.index) &&
-        this.resultAnimation.animateRectTo({ stroke: defaultDangerColor() })
+        this.resultAnimation.animateRectTo({ stroke: defaultDangerColor() }),
     ]);
     this.destroy();
   }

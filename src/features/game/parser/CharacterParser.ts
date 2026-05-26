@@ -1,7 +1,8 @@
 import { AssetType } from '../assets/AssetsTypes';
-import { Character } from '../character/GameCharacterTypes';
-import { AssetKey, ItemId } from '../commons/CommonTypes';
-import { GameItemType, LocationId } from '../location/GameMapTypes';
+import type { Character } from '../character/GameCharacterTypes';
+import type { AssetKey, ItemId } from '../commons/CommonTypes';
+import type { LocationId } from '../location/GameMapTypes';
+import { GameItemType } from '../location/GameMapTypes';
 import StringUtils from '../utils/StringUtils';
 import Parser from './Parser';
 import ParserConverter from './ParserConverter';
@@ -20,7 +21,7 @@ export default class CharacterParser {
    */
   public static parse(locationId: LocationId, characterList: string[]) {
     characterList.forEach(characterDetails =>
-      this.parseCharacterDetails(locationId, characterDetails)
+      this.parseCharacterDetails(locationId, characterDetails),
     );
   }
 
@@ -59,7 +60,7 @@ export default class CharacterParser {
 
     const [id, name, defaultExpression, defaultPosition, scale] = StringUtils.splitByChar(
       characterDetails,
-      ','
+      ',',
     );
     Parser.validator.registerId(id);
 
@@ -71,7 +72,7 @@ export default class CharacterParser {
       expressions,
       defaultExpression,
       defaultPosition: ParserConverter.stringToPosition(defaultPosition),
-      scale: scale ? parseFloat(scale) : 1
+      scale: scale ? parseFloat(scale) : 1,
     };
 
     // Add asset key to expression map
@@ -81,7 +82,7 @@ export default class CharacterParser {
     Parser.checkpoint.map.addMapAsset(this.characterAssetKey(id, defaultExpression), {
       type: AssetType.Image,
       path: this.characterAssetPath(id, defaultExpression),
-      key: id
+      key: id,
     });
 
     // Add character to map

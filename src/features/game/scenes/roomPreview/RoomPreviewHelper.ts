@@ -1,4 +1,4 @@
-import { Assessment, IProgrammingQuestion } from 'src/commons/assessment/AssessmentTypes';
+import type { Assessment, IProgrammingQuestion } from 'src/commons/assessment/AssessmentTypes';
 import { getAssessment, getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 
 import ImageAssets from '../../assets/ImageAssets';
@@ -24,7 +24,7 @@ export async function getRoomPreviewCode(): Promise<string> {
   }
   const mission = await getAssessment(
     roomAssessmentId,
-    SourceAcademyGame.getInstance().getAccountInfo()
+    SourceAcademyGame.getInstance().getAccountInfo(),
   );
   const studentCode = getStudentRoomCode(mission);
   return studentCode;
@@ -37,10 +37,10 @@ export async function getRoomPreviewCode(): Promise<string> {
  */
 async function getRoomAssessmentId() {
   const assessments = await getAssessmentOverviews(
-    SourceAcademyGame.getInstance().getAccountInfo()
+    SourceAcademyGame.getInstance().getAccountInfo(),
   );
   const roomAssessment = (assessments || []).find(
-    assessment => assessment.number === RoomConstants.assessmentNumber
+    assessment => assessment.number === RoomConstants.assessmentNumber,
   );
   return roomAssessment ? roomAssessment.id : null;
 }
@@ -86,7 +86,7 @@ export const createVerifiedHoverContainer = (scene: RoomPreview) => {
     0,
     RoomConstants.tag.width,
     RoomConstants.tag.height,
-    HexColor.darkBlue
+    HexColor.darkBlue,
   )
     .setOrigin(0.0, 0.5)
     .setAlpha(0.8);
@@ -95,7 +95,7 @@ export const createVerifiedHoverContainer = (scene: RoomPreview) => {
     scene,
     0,
     0,
-    ImageAssets.verifiedFrame.key
+    ImageAssets.verifiedFrame.key,
   ).setOrigin(0.0, 0.5);
 
   const hoverLine = new Phaser.GameObjects.Rectangle(
@@ -104,14 +104,14 @@ export const createVerifiedHoverContainer = (scene: RoomPreview) => {
     -hoverTextBg.height * 0.5,
     hoverTextBg.width,
     hoverTextBg.height * 0.05,
-    HexColor.offWhite
+    HexColor.offWhite,
   ).setOrigin(0.0, 0.0);
 
   const hoverText = createBitmapText(
     scene,
     RoomConstants.verifiedText,
     RoomConstants.hoverTagTextConfig,
-    verifiedStyle
+    verifiedStyle,
   ).setBlendMode(Phaser.BlendModes.DIFFERENCE);
 
   scene.tweens.add({
@@ -121,7 +121,7 @@ export const createVerifiedHoverContainer = (scene: RoomPreview) => {
     duration: 2000,
     ease: 'Power0',
     yoyo: true,
-    loop: -1
+    loop: -1,
   });
 
   hoverContainer.add([hoverTextBg, hoverText, hoverLine, hoverTextFrame]);

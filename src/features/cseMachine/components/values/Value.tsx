@@ -1,8 +1,91 @@
-import React from 'react';
+import { Label } from 'konva/lib/shapes/Label';
+import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
 
-import { Data, ReferenceType } from '../../CseMachineTypes';
-import { isDummyReference } from '../../CseMachineUtils';
+import CseMachine from '../../CseMachine';
+import { Config } from '../../CseMachineConfig';
+import type { Data, ReferenceType } from '../../CseMachineTypes';
+import { defaultBackgroundColor, isDummyReference } from '../../CseMachineUtils';
 import { Visible } from '../Visible';
+
+type FunctionTooltipLabelsProps = {
+  x: number;
+  y: number;
+  radius: number;
+  printDescriptionOffsetY: number;
+  isTooltipTruncated: boolean;
+  exportTooltip: string;
+  tooltip: string;
+  strokeColor: string;
+  textColor: string;
+  labelRef: React.RefObject<Label | null>;
+  revealLabelRef: React.RefObject<Label | null>;
+};
+
+export const FunctionTooltipLabels = ({
+  x,
+  y,
+  radius,
+  printDescriptionOffsetY,
+  isTooltipTruncated,
+  exportTooltip,
+  tooltip,
+  strokeColor,
+  textColor,
+  labelRef,
+  revealLabelRef,
+}: FunctionTooltipLabelsProps): React.ReactNode => (
+  <>
+    <KonvaLabel
+      x={x + Config.TextMargin}
+      y={y + radius + Config.TextMargin + printDescriptionOffsetY}
+      visible={CseMachine.getPrintableMode()}
+      listening={false}
+      ref={labelRef}
+    >
+      <KonvaTag
+        stroke={strokeColor}
+        fill={defaultBackgroundColor()}
+        cornerRadius={Config.FrameCornerRadius}
+      />
+      <KonvaText
+        text={
+          !CseMachine.getPrintableMode() && isTooltipTruncated
+            ? `${exportTooltip}\n(click for full)`
+            : exportTooltip
+        }
+        fontFamily={Config.FontFamily}
+        fontSize={Config.FontSize}
+        fontStyle={Config.FontStyle}
+        fill={textColor}
+        padding={Config.FnTooltipTextPadding}
+        width={Config.FnDescriptionMaxWidth}
+      />
+    </KonvaLabel>
+    {!CseMachine.getPrintableMode() && isTooltipTruncated && (
+      <KonvaLabel
+        x={x + Config.TextMargin}
+        y={y + radius + Config.TextMargin}
+        visible={false}
+        listening={false}
+        ref={revealLabelRef}
+      >
+        <KonvaTag
+          stroke={strokeColor}
+          fill={defaultBackgroundColor()}
+          cornerRadius={Config.FrameCornerRadius}
+        />
+        <KonvaText
+          text={tooltip}
+          fontFamily={Config.FontFamily}
+          fontSize={Config.FontSize}
+          fontStyle={Config.FontStyle}
+          fill={textColor}
+          padding={Config.FnTooltipTextPadding}
+        />
+      </KonvaLabel>
+    )}
+  </>
+);
 
 /** the value of a `Binding` or an `ArrayUnit` */
 export abstract class Value extends Visible {

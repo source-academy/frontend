@@ -1,6 +1,7 @@
-import { ColDef, ICellRendererParams } from 'ag-grid-community';
+import type { ColDef, ICellRendererParams } from 'ag-grid-community';
 import classNames from 'classnames';
-import { ColumnFields, ColumnName, IGradingTableRow } from 'src/features/grading/GradingTypes';
+import type { IGradingTableRow } from 'src/features/grading/GradingTypes';
+import { ColumnFields, ColumnName } from 'src/features/grading/GradingTypes';
 import classes from 'src/styles/Grading.module.scss';
 
 import GradingActions from './GradingActions';
@@ -17,7 +18,7 @@ export const generateCols = (filterMode: boolean) => {
     suppressMovable: true,
     cellClass: classNames(classes['grading-def-cell'], classes['grading-def-cell-pointer']),
     headerClass: classes['grading-default-headers'],
-    flex: 1 // weight of column width
+    flex: 1, // weight of column width
   } satisfies ColDef<IGradingTableRow>;
 
   cols.push({
@@ -33,11 +34,11 @@ export const generateCols = (filterMode: boolean) => {
             component: GradingFilterable,
             params: {
               value: params.data.assessmentName,
-              filterMode: filterMode
-            }
+              filterMode: filterMode,
+            },
           }
         : undefined;
-    }
+    },
   });
 
   cols.push({
@@ -50,12 +51,13 @@ export const generateCols = (filterMode: boolean) => {
             component: GradingFilterable,
             params: {
               value: params.data.assessmentType,
+              // eslint-disable-next-line react/jsx-key
               children: [<AssessmentTypeBadge type={params.data.assessmentType} />],
-              filterMode: filterMode
-            }
+              filterMode: filterMode,
+            },
           }
         : undefined;
-    }
+    },
   });
 
   cols.push({
@@ -72,11 +74,11 @@ export const generateCols = (filterMode: boolean) => {
             component: GradingFilterable,
             params: {
               value: params.data.studentName,
-              filterMode: filterMode
-            }
+              filterMode: filterMode,
+            },
           }
         : undefined;
-    }
+    },
   });
 
   cols.push({
@@ -90,11 +92,11 @@ export const generateCols = (filterMode: boolean) => {
             component: GradingFilterable,
             params: {
               value: params.data.studentUsername,
-              filterMode: filterMode
-            }
+              filterMode: filterMode,
+            },
           }
         : undefined;
-    }
+    },
   });
 
   cols.push({
@@ -109,11 +111,11 @@ export const generateCols = (filterMode: boolean) => {
             component: GradingFilterable,
             params: {
               value: params.data.groupName,
-              filterMode: filterMode
-            }
+              filterMode: filterMode,
+            },
           }
         : undefined;
-    }
+    },
   });
 
   cols.push({
@@ -126,12 +128,13 @@ export const generateCols = (filterMode: boolean) => {
             component: GradingFilterable,
             params: {
               value: params.data.progressStatus,
+              // eslint-disable-next-line react/jsx-key
               children: [<ProgressStatusBadge progress={params.data.progressStatus} />],
-              filterMode: filterMode
-            }
+              filterMode: filterMode,
+            },
           }
         : undefined;
-    }
+    },
   });
 
   cols.push({
@@ -141,8 +144,8 @@ export const generateCols = (filterMode: boolean) => {
     cellClass: classNames(
       generalColProperties.cellClass,
       classes['grading-xp-cell'],
-      !filterMode ? classes['grading-def-cell-pointer'] : classes['grading-def-cell-selectable']
-    )
+      !filterMode ? classes['grading-def-cell-pointer'] : classes['grading-def-cell-selectable'],
+    ),
   });
 
   cols.push({
@@ -158,11 +161,11 @@ export const generateCols = (filterMode: boolean) => {
             params: {
               submissionId: params.data.actionsIndex,
               progress: params.data.progressStatus,
-              filterMode: filterMode
-            }
+              filterMode: filterMode,
+            },
           }
         : undefined;
-    }
+    },
   });
 
   return cols;

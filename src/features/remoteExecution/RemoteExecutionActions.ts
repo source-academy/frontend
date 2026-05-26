@@ -1,7 +1,7 @@
 import { createActions } from 'src/commons/redux/utils';
 
-import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
-import { Device, DeviceSession } from './RemoteExecutionTypes';
+import type { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import type { Device, DeviceSession } from './RemoteExecutionTypes';
 
 const RemoteExecutionActions = createActions('remoteExecution', {
   remoteExecFetchDevices: () => ({}),
@@ -11,9 +11,9 @@ const RemoteExecutionActions = createActions('remoteExecution', {
   remoteExecDisconnect: () => ({}),
   remoteExecRun: (files: Record<string, string>, entrypointFilePath: string) => ({
     files,
-    entrypointFilePath
+    entrypointFilePath,
   }),
-  remoteExecReplInput: (input: string) => input
+  remoteExecReplInput: (input: string) => input,
 });
 
 // For compatibility with existing code (actions helper)

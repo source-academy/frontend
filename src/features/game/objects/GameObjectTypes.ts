@@ -1,5 +1,5 @@
-import { IGameActionable } from '../action/GameActionTypes';
-import { AssetKey, ItemId, TrackInteraction } from '../commons/CommonTypes';
+import type { IGameActionable } from '../action/GameActionTypes';
+import type { AssetKey, ItemId, TrackInteraction } from '../commons/CommonTypes';
 import GlowingImage from '../effects/GlowingObject';
 
 /**

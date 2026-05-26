@@ -3,7 +3,7 @@ import SourceAcademyGame from '../SourceAcademyGame';
 import { mandatory } from '../utils/GameUtils';
 import { createEmptyGameSaveState, createEmptySaveState, gameStateToJson } from './GameSaveHelper';
 import { loadData, saveData } from './GameSaveRequests';
-import { FullSaveState, GameSaveState, SettingsJson } from './GameSaveTypes';
+import type { FullSaveState, GameSaveState, SettingsJson } from './GameSaveTypes';
 
 /**
  * The manager provides API for loading and saving data from the backend
@@ -64,7 +64,7 @@ export default class GameSaveManager {
       this.fullSaveState = gameStateToJson(
         this.fullSaveState,
         this.getChapterNum(),
-        this.getCheckpointNum()
+        this.getCheckpointNum(),
       );
       await saveData(this.fullSaveState);
     }

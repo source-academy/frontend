@@ -1,5 +1,5 @@
 import DataVisualizer from '../dataVisualizer';
-import { Data } from '../dataVisualizerTypes';
+import type { Data } from '../dataVisualizerTypes';
 import { isArray, isFunction } from '../dataVisualizerUtils';
 import { AlreadyParsedTreeNode } from './AlreadyParsedTreeNode';
 import { BinaryTreeDrawer } from './BinaryTreeDrawer';
@@ -10,7 +10,7 @@ import {
   DataTreeNode,
   DrawableTreeNode,
   FunctionTreeNode,
-  TreeNode
+  TreeNode,
 } from './TreeNode';
 
 /**

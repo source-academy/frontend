@@ -21,7 +21,7 @@ controller.precacheStriping(self.__WB_MANIFEST, 6);
 const fileExtensionRegexp = new RegExp('/[^/?]+\\.[^/]+$');
 const SW_EXCLUDE_REGEXES = process.env.REACT_APP_SW_EXCLUDE_REGEXES;
 const ignorePathnameRegexps = (JSON.parse(SW_EXCLUDE_REGEXES || '[]') as string[]).map(
-  str => new RegExp(str)
+  str => new RegExp(str),
 );
 controller.registerRoute(
   // Return false to exempt requests from being fulfilled by index.html.
@@ -49,7 +49,7 @@ controller.registerRoute(
     // Return true to signal that we want to use the handler.
     return true;
   },
-  controller.createHandlerBoundToURL((process.env.PUBLIC_URL || '') + '/index.html')
+  controller.createHandlerBoundToURL((process.env.PUBLIC_URL || '') + '/index.html'),
 );
 
 // This allows the web app to trigger skipWaiting via

@@ -1,4 +1,4 @@
-import { LocationId } from '../location/GameMapTypes';
+import type { LocationId } from '../location/GameMapTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 import StringUtils from '../utils/StringUtils';
 import Parser from './Parser';
@@ -28,9 +28,9 @@ export default class MusicParser {
         path: assetPath,
         config: {
           volume: parseFloat(volume),
-          loop: soundType === GameSoundType.BGM
+          loop: soundType === GameSoundType.BGM,
         },
-        soundType
+        soundType,
       });
 
       if (soundType === GameSoundType.BGM && musicIndex === 0) {

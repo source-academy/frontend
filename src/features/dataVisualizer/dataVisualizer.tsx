@@ -1,7 +1,5 @@
-import type { JSX } from 'react';
-
 import { Config } from './Config';
-import { Data, Step } from './dataVisualizerTypes';
+import type { Data, Step } from './dataVisualizerTypes';
 import { Tree } from './tree/Tree';
 import { DataTreeNode } from './tree/TreeNode';
 
@@ -37,7 +35,7 @@ export default class DataVisualizer {
 
   private constructor() {}
 
-  public static isBinaryTree(structures: Data[]): boolean {
+  public static isBinaryTree(structures: Data[], data: any): boolean {
     if (structures == null) {
       return true;
     }
@@ -50,7 +48,11 @@ export default class DataVisualizer {
     if (structures.length != 2 || !(structures[1] instanceof Array)) {
       return false;
     }
+    if (data != null && !(structures[0] instanceof Array) && typeof structures[0] != typeof data) {
+      return false;
+    }
     let next = structures[1];
+    data = structures[0];
 
     let ans = false;
     let count = 0;
@@ -68,30 +70,45 @@ export default class DataVisualizer {
     const left = structures[1];
     const right = structures[1][1];
     if (left instanceof Array && right instanceof Array) {
-      return ans && this.isBinaryTree(left[0]) && this.isBinaryTree(right[0]);
+      return ans && this.isBinaryTree(left[0], data) && this.isBinaryTree(right[0], data);
     } else {
       return false;
     }
   }
 
-  public static isGeneralTree(structures: Data[]): boolean {
-    if (structures == null || (structures.length == 2 && structures[1] == null)) {
+  public static isGeneralTree(structures: Data[], data: any): boolean {
+    if (structures == null) {
+      return true;
+    }
+    if (
+      data != null &&
+      !(structures[0] instanceof Array) &&
+      typeof structures[0] != typeof data &&
+      structures[0] != null
+    ) {
+      return false;
+    }
+    if (structures.length == 2 && structures[1] == null) {
+      if (structures[0] instanceof Array) {
+        return this.isGeneralTree(structures[0], data);
+      }
       return true;
     }
     if (!(structures[0] instanceof Array) && structures[1] != null) {
-      return this.isGeneralTree(structures[1]);
+      data = structures[0];
+      return this.isGeneralTree(structures[1], data);
     }
     if (structures.length != 2 || (!(structures[1] instanceof Array) && structures[1] != null)) {
       return false;
     }
-    return this.isGeneralTree(structures[1]) && this.isGeneralTree(structures[0]);
+    return this.isGeneralTree(structures[1], data) && this.isGeneralTree(structures[0], data);
   }
 
   public static initializeTreeMetaData(
     structures: Data[],
     depth: number,
     nodePos: number,
-    newNode: boolean
+    newNode: boolean,
   ): number {
     if (!(structures instanceof Array)) {
       return 0;
@@ -193,8 +210,8 @@ export default class DataVisualizer {
       DataVisualizer.isBinTree = false;
       DataVisualizer.isGenTree = false;
     } else {
-      DataVisualizer.isBinTree = this.isBinaryTree(root);
-      DataVisualizer.isGenTree = this.isGeneralTree(root);
+      DataVisualizer.isBinTree = this.isBinaryTree(root, null);
+      DataVisualizer.isGenTree = this.isGeneralTree(root, null);
       if (DataVisualizer.isBinTree || DataVisualizer.isGenTree) {
         this.initializeTreeMetaData(root, 0, 0, false);
       }
@@ -235,7 +252,7 @@ export default class DataVisualizer {
     this.steps.push(step);
   }
 
-  private createDrawing(xs: Data, key: number): JSX.Element {
+  private createDrawing(xs: Data, key: number): React.ReactElement {
     const treeDrawer = Tree.fromSourceStructure(xs).draw();
 
     // To account for overflow to the left side due to a backward arrow

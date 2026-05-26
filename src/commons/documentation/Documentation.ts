@@ -29,13 +29,13 @@ function mapExternalLibraryName(name: string): DocType {
       caption: shortenCaption(key),
       value: key,
       meta: SourceDocumentation.ext_lib[key].meta,
-      docHTML: SourceDocumentation.ext_lib[key].description
+      docHTML: SourceDocumentation.ext_lib[key].description,
     };
   } else {
     return {
       caption: shortenCaption(name),
       value: name,
-      meta: 'const'
+      meta: 'const',
     };
   }
 }
@@ -60,12 +60,12 @@ Object.entries(SourceDocumentation.builtins).forEach((chapterDoc: any) => {
       caption: shortenCaption(name),
       value: name,
       meta: info.meta,
-      docHTML: info.description
+      docHTML: info.description,
     };
   });
 });
 
 export const Documentation = {
   builtins: builtinDocumentation,
-  externalLibraries: externalLibrariesDocumentation
+  externalLibraries: externalLibrariesDocumentation,
 };

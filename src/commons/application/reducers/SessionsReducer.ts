@@ -1,15 +1,15 @@
-import { createReducer, Reducer } from '@reduxjs/toolkit';
+import { createReducer, type Reducer } from '@reduxjs/toolkit';
 import RemoteExecutionActions from 'src/features/remoteExecution/RemoteExecutionActions';
 
-import { SourceActionType } from '../../utils/ActionsHelper';
+import type { SourceActionType } from '../../utils/ActionsHelper';
 import { logOut } from '../actions/CommonsActions';
 import SessionActions from '../actions/SessionActions';
 import { defaultSession } from '../ApplicationTypes';
-import { SessionState } from '../types/SessionTypes';
+import type { SessionState } from '../types/SessionTypes';
 
 export const SessionsReducer: Reducer<SessionState, SourceActionType> = (
   state = defaultSession,
-  action
+  action,
 ) => {
   state = newSessionsReducer(state, action);
   return state;

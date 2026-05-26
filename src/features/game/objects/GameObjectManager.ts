@@ -1,11 +1,12 @@
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
-import { ItemId } from '../commons/CommonTypes';
+import type { ItemId } from '../commons/CommonTypes';
 import GlowingImage from '../effects/GlowingObject';
-import { GameItemType, LocationId } from '../location/GameMapTypes';
-import { StateObserver } from '../state/GameStateTypes';
-import { ActivatableSprite, ObjectProperty } from './GameObjectTypes';
+import type { LocationId } from '../location/GameMapTypes';
+import { GameItemType } from '../location/GameMapTypes';
+import type { StateObserver } from '../state/GameStateTypes';
+import type { ActivatableSprite, ObjectProperty } from './GameObjectTypes';
 
 /**
  * Manager that renders objects in a location
@@ -35,7 +36,7 @@ class GameObjectManager implements StateObserver {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Objects]);
     const objIdsToRender = GameGlobalAPI.getInstance().getGameItemsInLocation(
       GameItemType.objects,
-      locationId
+      locationId,
     );
 
     // Refresh mapping
@@ -113,7 +114,7 @@ class GameObjectManager implements StateObserver {
       sprite: object,
       clickArea: object.getClickArea(),
       actionIds,
-      interactionId
+      interactionId,
     };
   }
 
@@ -129,7 +130,7 @@ class GameObjectManager implements StateObserver {
     const object = this.createObject(objectProp);
     GameGlobalAPI.getInstance().addToLayer(
       Layer.Objects,
-      (object.sprite as GlowingImage).getContainer()
+      (object.sprite as GlowingImage).getContainer(),
     );
     this.objects.set(id, object);
     return true;

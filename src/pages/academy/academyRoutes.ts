@@ -1,27 +1,26 @@
 import { memoize } from 'lodash';
-import { type LoaderFunction, redirect, replace, type RouteObject } from 'react-router';
+import type { LoaderFunction, MiddlewareFunction, RouteObject } from 'react-router';
+import { redirect, replace } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
+import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
-import { assessmentRegExp, gradingRegExp, teamRegExp } from 'src/features/academy/AcademyTypes';
-import { GuardedRoute } from 'src/routes/routeGuard';
+import { assessmentRegExp } from 'src/features/academy/AcademyTypes';
+import { createRoutes } from 'src/routes/routeUtils';
 
 import { store } from '../createStore';
 import {
   contestLeaderboardLoader,
-  leaderboardLoader
-} from '../leaderboard/subcomponents/leaderboardUtils';
+  leaderboardLoader,
+} from '../leaderboard/subcomponents/LeaderboardUtils';
 
-const notFoundPath = 'not_found';
+const notFoundPath = 'not-found';
 
 const Assessment = () => import('../../commons/assessment/Assessment');
-const Game = () => import('./game/Game');
-const Sourcecast = () => import('../sourcecast/Sourcecast');
-const Achievement = () => import('../achievement/Achievement');
-const OverallLeaderboard = () => import('../leaderboard/subcomponents/OverallLeaderboard');
+const Game = () => import('../../new_routes/courses/[courseId]/game');
+const OverallLeaderboard = () => import('../../new_routes/courses/[courseId]/leaderboard/overall');
 const ContestLeaderboardWrapper = () =>
-  import('../leaderboard/subcomponents/ContestLeaderboardWrapper');
-const NotFound = () => import('../notFound/NotFound');
+  import('../../new_routes/courses/[courseId]/leaderboard/contests/[contestId]/[leaderboardType]');
+const NotFound = () => import('../../new_routes/not-found');
 
 // Memoized for efficiency. Relies on immutability of Redux store to ensure
 // that `assessmentConfigurations` is not mutated, thereby ensuring correct
@@ -33,104 +32,126 @@ const buildAssessmentRoutes = memoize(
         acc[assessmentTypeLink(config.type)] = config;
         return acc;
       },
-      {}
+      {},
     );
-  }
+  },
 );
 
-const getCommonAcademyRoutes = (): RouteObject[] => {
-  const assessmentLoader: LoaderFunction = ({ params }) => {
-    const { assessmentConfigurations } = store.getState().session;
-    const assessmentRoutes = buildAssessmentRoutes(assessmentConfigurations);
+const checkAssessmentTypeLoader = (({ params }) => {
+  const { assessmentConfigurations } = store.getState().session;
+  const assessmentRoutes = buildAssessmentRoutes(assessmentConfigurations);
 
-    const requestedType = params['assessmentConfigType'];
-    for (const type of Object.keys(assessmentRoutes)) {
-      if (requestedType == type) {
-        return assessmentRoutes[type];
-      }
+  const requestedType = params['assessmentConfigType'];
+  for (const type of Object.keys(assessmentRoutes)) {
+    if (requestedType == type) {
+      return assessmentRoutes[type];
     }
-    return redirect(notFoundPath);
-  };
+  }
+  // Note: Middleware resolves relative paths from the root,
+  // while Loader resolves relative paths from the parent route,
+  // so here, it's fine to just redirect to `not-found` without prefixing
+  return redirect(notFoundPath);
+}) satisfies LoaderFunction;
 
-  const homePageRedirect = () => {
-    const { role, enableGame, assessmentConfigurations } = store.getState().session;
-    if (enableGame) {
-      return redirect('game');
-    }
-    if (assessmentConfigurations && assessmentConfigurations.length > 0) {
-      return redirect(`${assessmentTypeLink(assessmentConfigurations[0].type)}`);
-    }
-    if (role === Role.Admin) {
-      return redirect('adminpanel');
+const homePageRedirect = (({ params: { courseId } }) => {
+  const { role, enableGame, assessmentConfigurations } = store.getState().session;
+  if (enableGame) {
+    throw redirect(`/courses/${courseId}/game`);
+  }
+  if (assessmentConfigurations && assessmentConfigurations.length > 0) {
+    throw redirect(`/courses/${courseId}/${assessmentTypeLink(assessmentConfigurations[0].type)}`);
+  }
+  if (role === Role.Admin) {
+    throw redirect(`/courses/${courseId}/adminpanel`);
+  }
+  return null;
+}) satisfies MiddlewareFunction;
+
+const commonAcademyRoutes: RouteObject[] = [
+  {
+    index: true,
+    middleware: [
+      homePageRedirect,
+      ({ params: { courseId } }) => {
+        throw replace(`/courses/${courseId}/${notFoundPath}`);
+      },
+    ],
+  },
+  {
+    path: 'game',
+    middleware: [
+      ({ params: { courseId } }) => {
+        const state = store.getState();
+        if (!state.session.enableGame) {
+          throw redirect(`/courses/${courseId}/${notFoundPath}`);
+        }
+        return null;
+      },
+    ],
+    lazy: Game,
+  },
+  {
+    path: `:assessmentConfigType/${assessmentRegExp}`,
+    loader: checkAssessmentTypeLoader,
+    lazy: Assessment,
+  },
+  {
+    path: 'achievements',
+    children: [
+      { index: true, lazy: () => import('../achievement/subcomponents/AchievementDashboard') },
+      {
+        path: 'control',
+        lazy: () => import('../achievement/control/AchievementControl'),
+        middleware: [ensureRoleOneOf(Role.Staff, Role.Admin)],
+      },
+    ],
+  },
+  {
+    path: 'leaderboard',
+    loader: leaderboardLoader,
+    children: [
+      { path: 'overall', lazy: OverallLeaderboard },
+      {
+        path: 'contests/:contestId?/:leaderboardType',
+        loader: contestLeaderboardLoader,
+        lazy: ContestLeaderboardWrapper,
+      },
+    ],
+  },
+  { path: '*', lazy: NotFound },
+];
+
+function ensureRoleOneOf(...roles: Role[]) {
+  return (({ params: { courseId } }) => {
+    const state = store.getState();
+    const role = state.session.role;
+    if (role == undefined || !roles.includes(role)) {
+      throw redirect(`/courses/${courseId}/${notFoundPath}`);
     }
     return null;
-  };
+  }) satisfies MiddlewareFunction;
+}
 
-  const gameRoute = new GuardedRoute({ path: 'game', lazy: Game })
-    .check(s => !!s.session.enableGame, notFoundPath)
-    .build();
-
-  return [
-    gameRoute,
-    { path: '', loader: () => homePageRedirect() || replace(notFoundPath) },
-    {
-      path: `:assessmentConfigType/${assessmentRegExp}`,
-      lazy: Assessment,
-      loader: assessmentLoader
-    },
-    { path: 'sourcecast/:sourcecastId?', lazy: Sourcecast },
-    { path: 'achievements/*', lazy: Achievement },
-    {
-      path: 'leaderboard',
-      loader: leaderboardLoader,
-      children: [
-        { path: 'overall', lazy: OverallLeaderboard },
-        {
-          path: 'contests/:contestId?/:leaderboardType',
-          loader: contestLeaderboardLoader,
-          lazy: ContestLeaderboardWrapper
-        }
-      ]
-    },
-    { path: '*', lazy: NotFound }
-  ];
+const staffRoutes: RouteObject = {
+  middleware: [ensureRoleOneOf(Role.Staff, Role.Admin)],
+  children: createRoutes({
+    'grading/:submissionId?/:questionId?': () => import('./grading/Grading'),
+    gamesimulator: () => import('../../new_routes/courses/[courseId]/gamesimulator'),
+    teamformation: () => import('../../new_routes/courses/[courseId]/teamformation'),
+    'teamformation/create': () => import('./teamFormation/subcomponents/TeamFormationForm'),
+    'teamformation/edit/:teamId?': () => import('./teamFormation/subcomponents/TeamFormationForm'),
+    'teamformation/import': () =>
+      import('../../new_routes/courses/[courseId]/teamformation/import'),
+    dashboard: () => import('../../new_routes/courses/[courseId]/dashboard'),
+  }),
 };
 
-const GroundControl = () => import('./groundControl/GroundControlContainer');
-const Grading = () => import('./grading/Grading');
-const Sourcereel = () => import('./sourcereel/Sourcereel');
-const GameSimulator = () => import('./gameSimulator/GameSimulator');
-const TeamFormation = () => import('./teamFormation/TeamFormation');
-const TeamFormationForm = () => import('./teamFormation/subcomponents/TeamFormationForm');
-const TeamFormationImport = () => import('./teamFormation/subcomponents/TeamFormationImport');
-const Dashboard = () => import('./dashboard/Dashboard');
-
-const staffRoutes: RouteObject[] = [
-  { path: `grading/${gradingRegExp}`, lazy: Grading },
-  { path: 'sourcereel', lazy: Sourcereel },
-  { path: 'gamesimulator', lazy: GameSimulator },
-  { path: 'teamformation', lazy: TeamFormation },
-  { path: 'teamformation/create', lazy: TeamFormationForm },
-  { path: `teamformation/edit/${teamRegExp}`, lazy: TeamFormationForm },
-  { path: 'teamformation/import', lazy: TeamFormationImport },
-  { path: 'dashboard', lazy: Dashboard }
-].map(r =>
-  new GuardedRoute(r)
-    .check(s => {
-      const role = s.session.role;
-      return role === Role.Staff || role === Role.Admin;
-    }, notFoundPath)
-    .build()
-);
-
-const AdminPanel = () => import('./adminPanel/AdminPanel');
-
-const adminRoutes: RouteObject[] = [
-  { path: 'groundcontrol', lazy: GroundControl },
-  { path: 'adminpanel', lazy: AdminPanel }
-].map(r => new GuardedRoute(r).check(s => s.session.role === Role.Admin, notFoundPath).build());
-
-export const getAcademyRoutes = (): RouteObject[] => {
-  const routes: RouteObject[] = [...getCommonAcademyRoutes(), ...staffRoutes, ...adminRoutes];
-  return routes;
+const adminRoutes: RouteObject = {
+  middleware: [ensureRoleOneOf(Role.Admin)],
+  children: createRoutes({
+    groundcontrol: () => import('../../new_routes/courses/[courseId]/groundcontrol'),
+    adminpanel: () => import('../../new_routes/courses/[courseId]/adminpanel'),
+  }),
 };
+
+export const academyRoutes: RouteObject[] = [...commonAcademyRoutes, staffRoutes, adminRoutes];

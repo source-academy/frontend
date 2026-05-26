@@ -1,4 +1,3 @@
-import React from 'react';
 import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
@@ -9,7 +8,7 @@ import {
   defaultDangerColor,
   defaultStrokeColor,
   getTextWidth,
-  isStashItemInDanger
+  isStashItemInDanger,
 } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
@@ -26,28 +25,28 @@ export class BinaryOperationAnimation extends Animatable {
     private binaryOperator: ControlItemComponent,
     leftOperand: StashItemComponent,
     private rightOperand: StashItemComponent,
-    private result: StashItemComponent
+    private result: StashItemComponent,
   ) {
     super();
     this.binaryOperatorAnimation = new AnimatedTextbox(
       binaryOperator.text,
       getNodePosition(binaryOperator),
-      { rectProps: { stroke: defaultActiveColor() } }
+      { rectProps: { stroke: defaultActiveColor() } },
     );
     this.rightOperandAnimation = new AnimatedTextbox(
       rightOperand.text,
       getNodePosition(rightOperand),
-      { rectProps: { stroke: defaultDangerColor() } }
+      { rectProps: { stroke: defaultDangerColor() } },
     );
     this.leftOperandAnimation = new AnimatedTextbox(
       leftOperand.text,
       getNodePosition(leftOperand),
-      { rectProps: { stroke: defaultDangerColor() } }
+      { rectProps: { stroke: defaultDangerColor() } },
     );
     this.resultAnimation = new AnimatedTextbox(result.text, {
       ...getNodePosition(result),
       x: rightOperand.x(),
-      opacity: 0
+      opacity: 0,
     });
   }
 
@@ -78,8 +77,8 @@ export class BinaryOperationAnimation extends Animatable {
       this.rightOperandAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
       this.rightOperandAnimation.animateTo({
         ...rightOpPosition,
-        x: rightOpPosition.x + minBinOpWidth
-      })
+        x: rightOpPosition.x + minBinOpWidth,
+      }),
     ]);
     // Merges the operators and operands together to form the result
     await Promise.all([
@@ -91,10 +90,10 @@ export class BinaryOperationAnimation extends Animatable {
       this.resultAnimation.animateTo(resultPosition),
       this.resultAnimation.animateTo(
         { opacity: 1 },
-        { duration: fadeDuration, delay: fadeInDelay }
+        { duration: fadeDuration, delay: fadeInDelay },
       ),
       isStashItemInDanger(this.result.index) &&
-        this.resultAnimation.animateRectTo({ stroke: defaultDangerColor() })
+        this.resultAnimation.animateRectTo({ stroke: defaultDangerColor() }),
     ]);
     this.destroy();
   }

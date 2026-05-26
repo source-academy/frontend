@@ -5,11 +5,10 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: 'jsdom',
-    globals: true,
     setupFiles: ['./src/setupTests.ts'],
     coverage: {
-      reporter: ['text', 'html', 'lcov']
-    }
+      reporter: ['text', 'html', 'lcov'],
+    },
   },
   resolve: {
     tsconfigPaths: true,
@@ -22,7 +21,7 @@ export default defineConfig({
       'unist-util-visit-parents/do-not-use-color': './node_modules/unist-util-visit-parents/lib',
       'vfile/do-not-use-conditional-minpath': './node_modules/vfile/lib',
       'vfile/do-not-use-conditional-minproc': './node_modules/vfile/lib',
-      'vfile/do-not-use-conditional-minurl': './node_modules/vfile/lib'
-    }
-  }
+      'vfile/do-not-use-conditional-minurl': './node_modules/vfile/lib',
+    },
+  },
 });

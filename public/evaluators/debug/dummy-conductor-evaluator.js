@@ -1,36 +1,26 @@
-/* Dummy evaluator written in class style using this.conductor.send* calls. */
-(function () {
+/* Dummy evaluator using conductor runner API */
+(async function () {
   'use strict';
 
-  const CHANNEL = {
-    CHUNK: '__chunk',
-    SERVICE: '__service',
-    STDIO: '__stdio',
-    RESULT: '__result',
-    ERROR: '__error'
-  };
-
-  const SERVICE = {
-    HELLO: 0,
-    ENTRY: 2
-  };
-
-  const ports = Object.create(null);
-  const chunkQueue = [];
-  const chunkWaiters = [];
-
-  function post(channelName, payload) {
-    const port = ports[channelName];
-    if (port) {
-      port.postMessage(payload);
-    }
+  // The worker can receive channel-attach messages before async imports resolve.
+  // Buffer and replay them once the conductor runner has been initialised.
+  const earlyMessages = [];
+  function captureEarlyMessage(event) {
+    earlyMessages.push(event);
   }
+  self.addEventListener('message', captureEarlyMessage);
+
+  const CONDUCTOR_RUNNER_URL =
+    'https://cdn.jsdelivr.net/npm/@sourceacademy/conductor@latest/dist/conductor/runner/index.js';
+  const CONDUCTOR_TYPES_URL =
+    'https://cdn.jsdelivr.net/npm/@sourceacademy/conductor@latest/dist/conductor/types/index.js';
 
   function parseResult(text) {
     const value = text.trim();
     if (value.length === 0) {
       return '';
     }
+
     try {
       return JSON.parse(value);
     } catch (e) {
@@ -38,47 +28,102 @@
     }
   }
 
-  function pushChunk(message) {
-    const waiter = chunkWaiters.shift();
-    if (waiter) {
-      waiter(message);
+  function normaliseError(err, fallbackName) {
+    if (err && typeof err === 'object') {
+      return {
+        name: typeof err.name === 'string' ? err.name : fallbackName,
+        message: typeof err.message === 'string' ? err.message : String(err)
+      };
+    }
+
+    return { name: fallbackName, message: String(err) };
+  }
+
+  let runnerConductor;
+  let activeEvaluator;
+
+  function failActiveExecution(error) {
+    if (!runnerConductor) {
       return;
     }
-    chunkQueue.push(message);
+
+    runnerConductor.sendError(normaliseError(error, 'DummyEvaluatorFatalError'));
+    activeEvaluator?.failExecution();
   }
 
-  function popChunk() {
-    if (chunkQueue.length > 0) {
-      return Promise.resolve(chunkQueue.shift());
-    }
-    return new Promise(resolve => {
-      chunkWaiters.push(resolve);
-    });
-  }
-
-  class BasicEvaluator {
+  class DummyEvaluator {
     constructor(conductor) {
       this.conductor = conductor;
+      runnerConductor = conductor;
+      activeEvaluator = this;
+      this.conductor.updateStatus(RunnerStatus.EVAL_READY, true);
+    }
+
+    beginExecution() {
+      this.conductor.updateStatus(RunnerStatus.EVAL_READY, false);
+      this.conductor.updateStatus(RunnerStatus.WAITING, false);
+      this.conductor.updateStatus(RunnerStatus.RUNNING, true);
+    }
+
+    finishExecution() {
+      this.conductor.updateStatus(RunnerStatus.RUNNING, false);
+      this.conductor.updateStatus(RunnerStatus.WAITING, true);
+    }
+
+    stopExecution() {
+      this.conductor.updateStatus(RunnerStatus.RUNNING, false);
+      this.conductor.updateStatus(RunnerStatus.WAITING, false);
+      this.conductor.updateStatus(RunnerStatus.STOPPED, true);
+    }
+
+    failExecution() {
+      this.conductor.updateStatus(RunnerStatus.RUNNING, false);
+      this.conductor.updateStatus(RunnerStatus.WAITING, false);
+      this.conductor.updateStatus(RunnerStatus.ERROR, true);
+    }
+
+    sendDisplayResult(result) {
+      this.conductor.sendResult(result);
+    }
+
+    sendDisplayError(error) {
+      this.conductor.sendError(error);
     }
 
     async startEvaluator(entryPoint) {
-      await this.evaluateFile(entryPoint, '');
+      const fileContent = await this.conductor.requestFile(entryPoint);
+      if (!fileContent) {
+        throw new Error('Cannot load entrypoint file');
+      }
+
+      this.beginExecution();
+      const shouldContinue = await this.evaluateFile(entryPoint, fileContent);
+      if (shouldContinue === false) {
+        return;
+      }
+      this.finishExecution();
+
       while (true) {
+        this.conductor.updateStatus(RunnerStatus.WAITING, true);
         const chunk = await this.conductor.requestChunk();
-        await this.evaluateChunk(chunk);
+        this.beginExecution();
+        const shouldContinue = await this.evaluateChunk(chunk);
+        if (shouldContinue === false) {
+          return;
+        }
+        this.finishExecution();
       }
     }
 
     async evaluateFile(fileName, fileContent) {
-      return this.evaluateChunk(fileContent);
-    }
-  }
-
-  class DummyEvaluator extends BasicEvaluator {
-    async evaluateFile(fileName, fileContent) {
       this.conductor.sendOutput('[dummy] output message');
-      this.conductor.sendResult('[dummy] result message');
-      this.conductor.sendError({ name: 'DummyEvaluatorError', message: '[dummy] error message' });
+      this.conductor.sendOutput(`[dummy] loaded file 1`);
+      this.conductor.sendOutput(`[dummy] loaded file 2`);
+      this.sendDisplayError({ name: 'DummyEvaluatorError', message: '[dummy] error message' });
+      this.conductor.sendOutput(`[dummy] loaded file 3`);
+      this.sendDisplayResult('[dummy] result message');
+
+      return true;
     }
 
     async evaluateChunk(chunk) {
@@ -90,89 +135,54 @@
       }
 
       if (text.startsWith('result ')) {
-        this.conductor.sendResult(parseResult(text.slice(7)));
-        return;
+        this.sendDisplayResult(parseResult(text.slice(7)));
+        return true;
       }
 
       if (text.startsWith('error ')) {
-        this.conductor.sendError({ name: 'DummyEvaluatorError', message: text.slice(6) });
-        return;
+        this.sendDisplayError({ name: 'DummyEvaluatorError', message: text.slice(6) });
+        return true;
       }
 
-      this.conductor.sendOutput('[dummy] try: output ..., result ..., error ...');
+      if (text === 'stop') {
+        this.stopExecution();
+        return false;
+      }
+
+      if (text.startsWith('fatal ')) {
+        this.sendDisplayError({ name: 'DummyEvaluatorError', message: text.slice(6) });
+        this.failExecution();
+        return false;
+      }
+
+      this.conductor.sendOutput('[dummy] try: output ..., result ..., error ..., stop, fatal ...');
+      return true;
     }
   }
 
-  const conductor = {
-    async requestChunk() {
-      const message = await popChunk();
-      return typeof message?.chunk === 'string' ? message.chunk : '';
-    },
-    sendOutput(message) {
-      post(CHANNEL.STDIO, { message: String(message) });
-    },
-    sendResult(value) {
-      post(CHANNEL.RESULT, { result: value });
-    },
-    sendError(error) {
-      post(CHANNEL.ERROR, { error });
-    }
-  };
+  const runner = await import(CONDUCTOR_RUNNER_URL);
+  const { RunnerStatus } = await import(CONDUCTOR_TYPES_URL);
+  const initialise = runner.initialise;
 
-  const evaluator = new DummyEvaluator(conductor);
-
-  function onService(message) {
-    if (!message || typeof message.type !== 'number') {
-      return;
-    }
-
-    if (message.type === SERVICE.HELLO) {
-      post(CHANNEL.SERVICE, { type: SERVICE.HELLO, data: { version: 0 } });
-      return;
-    }
-
-    if (message.type === SERVICE.ENTRY) {
-      evaluator.startEvaluator(message.data).catch(function (err) {
-        conductor.sendError({
-          name: 'DummyEvaluatorFatalError',
-          message: err && err.message ? err.message : String(err)
-        });
-      });
-    }
+  if (typeof initialise !== 'function') {
+    throw new Error('Failed to load conductor runner initialise()');
   }
 
-  self.addEventListener('message', function (event) {
-    const data = event.data;
-    if (!Array.isArray(data) || data.length !== 2) {
-      return;
-    }
-
-    const channelName = data[0];
-    const port = data[1];
-    if (typeof channelName !== 'string' || !port) {
-      return;
-    }
-
-    ports[channelName] = port;
-
-    if (channelName === CHANNEL.SERVICE) {
-      port.addEventListener('message', function (e) {
-        onService(e.data);
-      });
-      port.start();
-      return;
-    }
-
-    if (channelName === CHANNEL.CHUNK) {
-      port.addEventListener('message', function (e) {
-        pushChunk(e.data);
-      });
-      port.start();
-      return;
-    }
-
-    if (typeof port.start === 'function') {
-      port.start();
-    }
+  self.addEventListener('unhandledrejection', function (event) {
+    event.preventDefault();
+    failActiveExecution(event.reason);
   });
-})();
+
+  initialise(DummyEvaluator);
+
+  self.removeEventListener('message', captureEarlyMessage);
+  for (const event of earlyMessages) {
+    self.dispatchEvent(
+      new MessageEvent('message', {
+        data: event.data
+      })
+    );
+  }
+})().catch(function (err) {
+  console.error('Failed to bootstrap dummy conductor evaluator:', err);
+});

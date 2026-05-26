@@ -1,4 +1,4 @@
-import { AssetKey, AssetPath } from '../commons/CommonTypes';
+import type { AssetKey, AssetPath } from '../commons/CommonTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 
 export type AssetMap<T> = {
@@ -25,12 +25,12 @@ export type ImageConfig = {
 
 export enum AssetType {
   Image = 'Image',
-  Sprite = 'Sprite'
+  Sprite = 'Sprite',
 }
 
 export enum AnimType {
   Background = 'Background',
-  Object = 'Object'
+  Object = 'Object',
 }
 
 export type SoundAsset = {

@@ -4,7 +4,7 @@ import { request } from 'src/commons/utils/RequestHelper';
 import { store } from '../../../pages/createStore';
 import { toTxtPath } from '../assets/TextAssets';
 import SourceAcademyGame from '../SourceAcademyGame';
-import { GameChapter } from './GameChapterTypes';
+import type { GameChapter } from './GameChapterTypes';
 
 /**
  * Fetches all chapters from the backend
@@ -15,7 +15,7 @@ export async function fetchGameChapters(): Promise<GameChapter[]> {
   const courseId = store.getState().session.courseId;
   const response = await request(`courses/${courseId}/stories`, 'GET', {
     accessToken: SourceAcademyGame.getInstance().getAccountInfo().accessToken,
-    refreshToken: SourceAcademyGame.getInstance().getAccountInfo().refreshToken
+    refreshToken: SourceAcademyGame.getInstance().getAccountInfo().refreshToken,
   });
   if (!response) return [];
   const chapterDetails = response.status === 200 ? await response.json() : [];

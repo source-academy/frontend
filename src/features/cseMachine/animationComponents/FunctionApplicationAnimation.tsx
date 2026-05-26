@@ -1,4 +1,3 @@
-import React from 'react';
 import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
@@ -10,7 +9,7 @@ import {
   defaultActiveColor,
   defaultDangerColor,
   defaultStrokeColor,
-  getTextWidth
+  getTextWidth,
 } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
@@ -39,7 +38,7 @@ export class FunctionApplicationAnimation extends Animatable {
     private newControlItems: ControlItemComponent[],
     private closureStashItem: StashItemComponent,
     argStashItems: StashItemComponent[],
-    private functionFrame?: Frame
+    private functionFrame?: Frame,
   ) {
     super();
     const closureLocation = getNodeLocation(closureStashItem);
@@ -47,28 +46,28 @@ export class FunctionApplicationAnimation extends Animatable {
     this.callInstrAnimation = new AnimatedTextbox(
       callInstrItem.text,
       getNodePosition(callInstrItem),
-      { rectProps: { stroke: defaultActiveColor() } }
+      { rectProps: { stroke: defaultActiveColor() } },
     );
     this.stashItemAnimations = [
       new AnimatedTextbox(closureStashItem.text, getNodePosition(closureStashItem), {
-        rectProps: { stroke: defaultDangerColor() }
+        rectProps: { stroke: defaultDangerColor() },
       }),
       ...argStashItems.map(item => {
         return new AnimatedTextbox(item.text, getNodePosition(item), {
-          rectProps: { stroke: defaultDangerColor() }
+          rectProps: { stroke: defaultDangerColor() },
         });
-      })
+      }),
     ];
     this.stashArrowAnimations = [
       new AnimatedGenericArrow(closureStashItem.arrow!),
-      ...argStashItems.flatMap(item => (item.arrow ? new AnimatedGenericArrow(item.arrow) : []))
+      ...argStashItems.flatMap(item => (item.arrow ? new AnimatedGenericArrow(item.arrow) : [])),
     ];
     this.newControlItemAnimations = newControlItems.map(
-      i => new AnimatedTextbox(i.text, { ...closureLocation, opacity: 0 })
+      i => new AnimatedTextbox(i.text, { ...closureLocation, opacity: 0 }),
     );
     if (this.newControlItems[0].arrow) {
       this.envArrowAnimation = new AnimatedGenericArrow(this.newControlItems[0].arrow, {
-        opacity: 0
+        opacity: 0,
       });
     }
     if (functionFrame) {
@@ -103,13 +102,13 @@ export class FunctionApplicationAnimation extends Animatable {
       this.callInstrAnimation.animateTo({
         x: this.closureStashItem.x() - (this.isFirstStashItem ? minInstrWidth : 0),
         y: this.closureStashItem.y() + (this.isFirstStashItem ? 0 : this.closureStashItem.height()),
-        width: minInstrWidth
+        width: minInstrWidth,
       }),
-      ...this.stashItemAnimations.map(a => a.animateRectTo({ stroke: defaultStrokeColor() }))
+      ...this.stashItemAnimations.map(a => a.animateRectTo({ stroke: defaultStrokeColor() })),
     ]);
     const targetLocation = {
       x: this.functionFrame?.x() ?? this.newControlItems[0].x(),
-      y: this.functionFrame?.y() ?? this.newControlItems[0].y()
+      y: this.functionFrame?.y() ?? this.newControlItems[0].y(),
     };
     const config = { duration: 1.2 };
     const fadeDuration = 9 / 8;
@@ -121,15 +120,15 @@ export class FunctionApplicationAnimation extends Animatable {
       this.callInstrAnimation.animateTo({ opacity: 0 }, { ...config, duration: fadeDuration }),
       ...this.stashItemAnimations.flatMap(a => [
         a.animateTo(targetLocation, config),
-        a.animateTo({ opacity: 0 }, { ...config, duration: fadeDuration })
+        a.animateTo({ opacity: 0 }, { ...config, duration: fadeDuration }),
       ]),
       ...this.newControlItemAnimations.flatMap((a, i) => [
         a.animateTo(getNodePosition(this.newControlItems[i]), config),
-        a.animateTo({ opacity: 1 }, { ...config, duration: fadeDuration, delay: fadeInDelay })
+        a.animateTo({ opacity: 1 }, { ...config, duration: fadeDuration, delay: fadeInDelay }),
       ]),
       this.newControlItemAnimations.at(-1)!.animateRectTo({ stroke: defaultActiveColor() }, config),
       this.frameCreationAnimation?.animate(config),
-      this.envArrowAnimation?.animateTo({ opacity: 1 }, { delay: config.duration })
+      this.envArrowAnimation?.animateTo({ opacity: 1 }, { delay: config.duration }),
     ]);
     this.destroy();
   }

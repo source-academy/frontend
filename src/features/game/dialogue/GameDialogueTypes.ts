@@ -1,5 +1,5 @@
-import { ActionCondition, IGameActionable } from '../action/GameActionTypes';
-import { SpeakerDetail } from '../character/GameCharacterTypes';
+import type { ActionCondition, IGameActionable } from '../action/GameActionTypes';
+import type { SpeakerDetail } from '../character/GameCharacterTypes';
 
 /**
  * The label for one part/section of the dialogue

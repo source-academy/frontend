@@ -1,12 +1,12 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import path from 'path';
-import React from 'react';
+import { useState } from 'react';
 import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
 import { useTypedSelector } from '../utils/Hooks';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 import FileSystemViewList from './FileSystemViewList';
@@ -20,9 +20,9 @@ type Props = {
 const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath }) => {
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
 
-  const [isAddingNewFile, setIsAddingNewFile] = React.useState(false);
-  const [isAddingNewDirectory, setIsAddingNewDirectory] = React.useState(false);
-  const [fileSystemViewListKey, setFileSystemViewListKey] = React.useState(0);
+  const [isAddingNewFile, setIsAddingNewFile] = useState(false);
+  const [isAddingNewDirectory, setIsAddingNewDirectory] = useState(false);
+  const [fileSystemViewListKey, setFileSystemViewListKey] = useState(0);
 
   const handleCreateNewFile = () => setIsAddingNewFile(true);
   const handleCreateNewDirectory = () => setIsAddingNewDirectory(true);
@@ -49,7 +49,7 @@ const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath }) => {
               different name.
             </p>
           ),
-          label: 'OK'
+          label: 'OK',
         }).then(() => {});
         return;
       }
@@ -77,7 +77,7 @@ const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath }) => {
               a different name.
             </p>
           ),
-          label: 'OK'
+          label: 'OK',
         }).then(() => {});
         return;
       }

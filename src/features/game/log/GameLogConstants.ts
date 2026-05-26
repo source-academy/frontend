@@ -1,11 +1,11 @@
 import FontAssets from '../assets/FontAssets';
 import { screenSize } from '../commons/CommonConstants';
-import { BitmapFontStyle } from '../commons/CommonTypes';
+import type { BitmapFontStyle } from '../commons/CommonTypes';
 
 export const logTextStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 30,
-  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
+  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT,
 };
 
 const scrollbarX = screenSize.x * 0.251;
@@ -20,10 +20,10 @@ const LogConstants = {
     y: screenSize.y * 0.005,
     width: scrollbarWidth,
     height: screenSize.y * 0.73,
-    color: 0x555555
+    color: 0x555555,
   },
   scrollbarThumb: { x: scrollbarX, width: scrollbarWidth, color: 0x888888 },
-  scrollSpeed: 0.5
+  scrollSpeed: 0.5,
 };
 
 export default LogConstants;
