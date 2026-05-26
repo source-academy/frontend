@@ -924,10 +924,8 @@ export class Layout {
         }
 
         // get predetermined y coordinate
-        if (cache.framesY.has(id)) {
-          const fixedY = Layout.getGhostFrameY(id)!;
-          frame.reassignCoordinatesY(fixedY);
-        }
+        const fixedY = Layout.getGhostFrameY(id)!;
+        frame.reassignCoordinatesY(fixedY);
       });
     });
   }
