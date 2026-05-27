@@ -76,11 +76,11 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
           steps.push((x, y) => [x, y + Config.DataUnitHeight / 2]);
         }
       } else {
-        // Straight arrow that points directly to the target
-        steps.push(() => [
-          to.x() + Config.DataUnitWidth / 2,
-          to.y() + (from.y() > to.y() ? Config.DataUnitHeight : 0),
-        ]);
+        // Manhattan-routed arrow: horizontal then vertical
+        const targetX = to.x() + Config.DataUnitWidth / 2;
+        const targetY = to.y() + (from.y() > to.y() ? Config.DataUnitHeight : 0);
+        steps.push((_x, y) => [targetX, y]);
+        steps.push(() => [targetX, targetY]);
       }
     }
 
