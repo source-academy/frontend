@@ -50,7 +50,14 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
     ];
 
     if (to instanceof FnValue || to instanceof GlobalFnValue || to instanceof ContValue) {
-      steps.push(() => [from.x() < to.x() ? to.x() : to.centerX, to.y()]);
+      const sourceCenterX = from.x() + Config.DataUnitWidth / 2;
+      const targetX =
+        sourceCenterX <= to.x()
+          ? to.x()
+          : sourceCenterX >= to.x() + to.width()
+            ? to.x() + to.width()
+            : to.centerX;
+      steps.push(() => [targetX, to.y()]);
     } else if (to instanceof ArrayValue) {
       if (from.y() === to.y()) {
         if (from.isLastUnit && to.x() > from.x() && to.x() <= from.x() + Config.DataUnitWidth * 2) {
