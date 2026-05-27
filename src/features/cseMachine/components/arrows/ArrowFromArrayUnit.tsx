@@ -51,13 +51,24 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
 
     if (to instanceof FnValue || to instanceof GlobalFnValue || to instanceof ContValue) {
       const sourceCenterX = from.x() + Config.DataUnitWidth / 2;
-      const targetX =
-        sourceCenterX <= to.x()
-          ? to.x()
-          : sourceCenterX >= to.x() + to.width()
-            ? to.x() + to.width()
-            : to.centerX;
-      steps.push(() => [targetX, to.y()]);
+      const sourceCenterY = from.y() + Config.DataUnitHeight / 2;
+      if (sourceCenterX <= to.x()) {
+        // Source is to the left: vertical to circle center y, then horizontal to left edge
+        steps.push((_x, y) => [_x, to.y()]);
+        steps.push(() => [to.x(), to.y()]);
+      } else if (sourceCenterX >= to.x() + to.width()) {
+        // Source is to the right: vertical to circle center y, then horizontal to right edge
+        steps.push((_x, y) => [_x, to.y()]);
+        steps.push(() => [to.x() + to.width(), to.y()]);
+      } else {
+        // Source is horizontally within the closure shape: approach top or bottom edge vertically
+        const landY =
+          sourceCenterY <= to.y()
+            ? to.y() - Config.FnRadius // from above → top edge of circle
+            : to.y() + Config.FnRadius; // from below → bottom edge of circle
+        steps.push((_x, _y) => [to.centerX, _y]);
+        steps.push(() => [to.centerX, landY]);
+      }
     } else if (to instanceof ArrayValue) {
       if (from.y() === to.y()) {
         if (from.isLastUnit && to.x() > from.x() && to.x() <= from.x() + Config.DataUnitWidth * 2) {
