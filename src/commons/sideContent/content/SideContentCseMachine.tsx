@@ -210,9 +210,9 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       this.handleResize();
     }
     if (prevProps.needCseUpdate && !this.props.needCseUpdate) {
-      CseMachine.resetArrowOriginFilters();
       this.setState({ arrowFilterOpen: false });
       this.stepFirst();
+
       if (this.isJava()) {
         JavaCseMachine.clearCse();
       } else {
