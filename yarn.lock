@@ -2482,18 +2482,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redux-saga/core@npm:^1.4.3":
-  version: 1.4.3
-  resolution: "@redux-saga/core@npm:1.4.3"
+"@redux-saga/core@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@redux-saga/core@npm:1.5.0"
   dependencies:
     "@babel/runtime": "npm:^7.28.4"
     "@redux-saga/deferred": "npm:^1.3.1"
     "@redux-saga/delay-p": "npm:^1.3.1"
     "@redux-saga/is": "npm:^1.2.1"
     "@redux-saga/symbols": "npm:^1.2.1"
-    "@redux-saga/types": "npm:^1.3.1"
-    typescript-tuple: "npm:^2.2.1"
-  checksum: 10c0/12e2ae300ff0952f9723985ad7a6e7efae974576be83edfdd66095cd171cf454c0beda121a3fe2e62e1a021ff866a674cc7e2f09e7b3e9f792b14fa368dcc97a
+    "@redux-saga/types": "npm:^1.4.0"
+  checksum: 10c0/e258daf214bbd4867b5db27f66a16a2c96fac81700922410c287e6ed8d284ccce61b68c23e3654ddff1903b39af3b047f0606438fd9356cfd93320fcb1a6a9c6
   languageName: node
   linkType: hard
 
@@ -2534,6 +2533,13 @@ __metadata:
   version: 1.3.1
   resolution: "@redux-saga/types@npm:1.3.1"
   checksum: 10c0/50d29cad92d63cda02a141c1a1992b9f54f9efc814709b8db54e4b93293ebb09c8fff93f50bfffda4f4fa527cebcb71d68c1bb5803a2ea46fcc666d55aff5f43
+  languageName: node
+  linkType: hard
+
+"@redux-saga/types@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "@redux-saga/types@npm:1.4.0"
+  checksum: 10c0/76701690aeda8a6cf683a1160590428ff0e00a16ef6595bc6874cc1797706d6db2ddd91c0330c238d07ba4c23f780d4db2c6c556c02d2b221634478e71be1d91
   languageName: node
   linkType: hard
 
@@ -11360,12 +11366,12 @@ __metadata:
   linkType: hard
 
 "redux-saga@npm:^1.2.3":
-  version: 1.4.3
-  resolution: "redux-saga@npm:1.4.3"
+  version: 1.5.0
+  resolution: "redux-saga@npm:1.5.0"
   dependencies:
     "@babel/runtime": "npm:^7.28.4"
-    "@redux-saga/core": "npm:^1.4.3"
-  checksum: 10c0/fec982af522d42611bb511463bdd771de31f6b53eeabe6d43543e7fab8ea0da7be5d2e3f9497c9229b90b824448a04b400bf6f8d7081783e700db30898820c15
+    "@redux-saga/core": "npm:^1.5.0"
+  checksum: 10c0/e33e239e9ed04fba9567eb1d9975e13d253dd939bd25796847226ef346f89640861bcc723824f78a9ca000f5d8a486abf1bc0d6fdbaf2d00b3d54d00bbe0cc8a
   languageName: node
   linkType: hard
 
@@ -13230,15 +13236,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript-compare@npm:^0.0.2":
-  version: 0.0.2
-  resolution: "typescript-compare@npm:0.0.2"
-  dependencies:
-    typescript-logic: "npm:^0.0.0"
-  checksum: 10c0/8ac842798875fef83fa1b592de85d9ba546f72ff5554b995ee2a46e0e91c92f25e7b83780f308c85609dda9cbb5d027164479b772935d7a20b2d97e44e241ed5
-  languageName: node
-  linkType: hard
-
 "typescript-eslint@npm:^8.1.0":
   version: 8.60.0
   resolution: "typescript-eslint@npm:8.60.0"
@@ -13251,22 +13248,6 @@ __metadata:
     eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
     typescript: ">=4.8.4 <6.1.0"
   checksum: 10c0/6968de79ab61b1c56d7233260a3092daf578399117d804c46b34dcedf0317b33cd3025ba34789b8dc4567f30f6d62d0d11691c9dca278173abe91772741ab79d
-  languageName: node
-  linkType: hard
-
-"typescript-logic@npm:^0.0.0":
-  version: 0.0.0
-  resolution: "typescript-logic@npm:0.0.0"
-  checksum: 10c0/c40adbbc5debb02ede2041ef7e0165c611620ddd1257d2df237bd77eb14cc47b975218c5d842b6a9eaeebe37a6ff5bcff576a90117f32dfd60dabb7b4cd86928
-  languageName: node
-  linkType: hard
-
-"typescript-tuple@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "typescript-tuple@npm:2.2.1"
-  dependencies:
-    typescript-compare: "npm:^0.0.2"
-  checksum: 10c0/415f6b975b14437b3b55fc843a5aa9f4f6804e72a0197003882b668d52b632dfddbbde91da4b946ea877a658d5805a9fd8e761640cafd07838eee8f17195e20e
   languageName: node
   linkType: hard
 
