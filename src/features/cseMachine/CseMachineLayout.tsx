@@ -131,21 +131,11 @@ export class Layout {
   static underlayArrows: React.ReactNode[] = [];
   static overlayNodes: React.ReactNode[] = [];
 
-  // For pair creation layouts:
-  static currentDarkPairs: React.ReactNode;
-  static currentLightPairs: React.ReactNode;
-  static currentStackDarkPairs: React.ReactNode;
-  static currentStackTruncDarkPairs: React.ReactNode;
-  static currentStackLightPairs: React.ReactNode;
-  static currentStackTruncLightPairs: React.ReactNode;
-
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
   static invisiblePaddingHorizontal: number = 300;
   static scrollContainerRef: React.RefObject<HTMLDivElement | null> = createRef();
 
-  // STREAM VISUALISATION
-  static pendingFnLink: boolean = false;
   static resetUnderlayArrows() {
     Layout.underlayArrows = [];
   }
@@ -209,12 +199,6 @@ export class Layout {
     Layout.currentStackLight = undefined;
     Layout.currentStackTruncLight = undefined;
 
-    Layout.currentLightPairs = undefined;
-    Layout.currentDarkPairs = undefined;
-    Layout.currentStackDarkPairs = undefined;
-    Layout.currentStackTruncDarkPairs = undefined;
-    Layout.currentStackLightPairs = undefined;
-    Layout.currentStackTruncLightPairs = undefined;
     // clear/initialize data and value arrays
     Layout.values.clear();
     arrowSelection.clearSelection();
@@ -718,7 +702,6 @@ export class Layout {
       Layout.resetUnderlayArrows();
       Layout.resetOverlayNodes();
       const levelNodes = Layout.levels.map(level => level.draw());
-      const streamNodes = null;
       const controlNode = CseMachine.getControlStash() ? Layout.controlComponent.draw() : null;
       const stashNode = CseMachine.getControlStash() ? Layout.stashComponent.draw() : null;
       const underlayArrows = [...Layout.underlayArrows];
@@ -780,7 +763,6 @@ export class Layout {
                     listening={false}
                   />
                   <KonvaGroup ref={Layout.contentGroupRef}>
-                    {streamNodes}
                     {levelNodes}
                     {controlNode}
                     {stashNode}

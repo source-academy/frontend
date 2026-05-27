@@ -47,8 +47,8 @@ export function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIter
   } catch (e) {
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
-    // most likely harmless, we can pretty much ignore this.
-    // half of the time this comes from execution ending or a stack overflow and
-    // the context goes missing.
+    // Log rendering errors so they are not silently swallowed — the visualization
+    // simply won't update when this fires, which looks like the diagram is "stuck".
+    console.error('[updateInspector] Visualization rendering failed:', e);
   }
 }

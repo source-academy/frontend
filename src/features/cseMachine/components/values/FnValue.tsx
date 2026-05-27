@@ -27,7 +27,6 @@ import { ArrowFromFnTooltip } from '../arrows/ArrowFromFnTooltip';
 import { ArrowFromStreamNullaryFn } from '../arrows/ArrowFromStreamNullaryFn';
 import { Binding } from '../Binding';
 import { Frame } from '../Frame';
-import { ArrayValue } from './ArrayValue';
 import { FunctionTooltipLabels, Value } from './Value';
 
 /** this class encapsulates a JS Slang function (not from the global frame) that
@@ -105,32 +104,6 @@ export class FnValue extends Value implements IHoverable {
     this.printDescriptionBottomGap = Math.ceil(Config.TextPaddingY / 2);
     this.totalWidth =
       this._width + Config.TextMargin + this.exportTooltipWidth + Config.FnTooltipTextPadding * 2;
-
-    if (Layout.pendingFnLink) {
-      const thisId = (data as any).id;
-      const linkedPairs = CseMachine.getStreamLineage(thisId);
-
-      if (linkedPairs != undefined && CseMachine.getStreamLineage(thisId) != undefined) {
-        // console.log(CseMachine.getStreamLineage(thisId))
-        const targetCounts = new Map<ArrayValue, number>();
-
-        for (const pair of linkedPairs) {
-          const pairObject = Layout.values.get(pair) as ArrayValue;
-          // The pair might not be in Layout.values if it's not reachable in the current step, so we check.
-          if (pairObject instanceof ArrayValue) {
-            const currentCount = targetCounts.get(pairObject) || 0;
-            targetCounts.set(pairObject, currentCount + 1);
-
-            this._streamArrows.push(
-              new ArrowFromStreamNullaryFn(this).to(pairObject) as ArrowFromStreamNullaryFn,
-            );
-            this._streamArrows[this._streamArrows.length - 1].draw();
-          }
-        }
-      }
-
-      Layout.pendingFnLink = false;
-    }
 
     this.addReference(firstReference);
   }
@@ -265,11 +238,11 @@ export class FnValue extends Value implements IHoverable {
   }
 
   draw(): React.ReactNode {
-    const pairs = CseMachine.getStreamLineage((this.data as any).id);
+    // Update centerX before arrow geometry is computed so arrow start positions are correct.
+    this.centerX = this.x() + this.radius * 2;
     this._streamArrows = [];
     if (CseMachine.getPairCreationMode()) {
-      // Clear arrows to prevent duplicates from multiple draw calls
-
+      const pairs = CseMachine.getStreamLineage((this.data as any).id);
       if (pairs != undefined) {
         for (const pair of pairs) {
           const target = Layout.values.get(pair);
@@ -279,11 +252,6 @@ export class FnValue extends Value implements IHoverable {
         }
       }
     }
-    if (this.fnName === undefined) {
-      throw new Error('Closure has no main reference and is not initialised!');
-    }
-    //update center x accourding to the same id from cache
-    this.centerX = this.x() + this.radius * 2;
     this.enclosingFrame = Frame.getFrom(this.data.environment);
     if (this.enclosingFrame) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
