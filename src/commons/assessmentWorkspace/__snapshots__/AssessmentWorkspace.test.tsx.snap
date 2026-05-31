@@ -312,6 +312,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                     <div
                       class="ace_scrollbar ace_scrollbar-v"
                       style="display: none; width: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -323,6 +324,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                     <div
                       class="ace_scrollbar ace_scrollbar-h"
                       style="display: none; height: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -854,6 +856,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                     <div
                       class="ace_scrollbar ace_scrollbar-v"
                       style="display: none; width: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -865,6 +868,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                     <div
                       class="ace_scrollbar ace_scrollbar-h"
                       style="display: none; height: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -1638,6 +1642,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with MCQ question render
                     <div
                       class="ace_scrollbar ace_scrollbar-v"
                       style="display: none; width: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -1649,6 +1654,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with MCQ question render
                     <div
                       class="ace_scrollbar ace_scrollbar-h"
                       style="display: none; height: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -2040,6 +2046,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                     <div
                       class="ace_scrollbar ace_scrollbar-v"
                       style="display: none; width: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -2051,6 +2058,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                     <div
                       class="ace_scrollbar ace_scrollbar-h"
                       style="display: none; height: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -2525,6 +2533,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                     <div
                       class="ace_scrollbar ace_scrollbar-v"
                       style="display: none; width: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -2536,6 +2545,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                     <div
                       class="ace_scrollbar ace_scrollbar-h"
                       style="display: none; height: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -2923,6 +2933,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                     <div
                       class="ace_scrollbar ace_scrollbar-v"
                       style="display: none; width: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -2934,6 +2945,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                     <div
                       class="ace_scrollbar ace_scrollbar-h"
                       style="display: none; height: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -3408,6 +3420,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                     <div
                       class="ace_scrollbar ace_scrollbar-v"
                       style="display: none; width: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -3419,6 +3432,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                     <div
                       class="ace_scrollbar ace_scrollbar-h"
                       style="display: none; height: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -3806,6 +3820,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                     <div
                       class="ace_scrollbar ace_scrollbar-v"
                       style="display: none; width: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -3817,6 +3832,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                     <div
                       class="ace_scrollbar ace_scrollbar-h"
                       style="display: none; height: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -4507,6 +4523,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                     <div
                       class="ace_scrollbar ace_scrollbar-v"
                       style="display: none; width: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
@@ -4518,6 +4535,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                     <div
                       class="ace_scrollbar ace_scrollbar-h"
                       style="display: none; height: 20px;"
+                      tabindex="-1"
                     >
                       <div
                         class="ace_scrollbar-inner"
