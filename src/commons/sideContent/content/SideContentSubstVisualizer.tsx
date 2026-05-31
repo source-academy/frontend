@@ -44,7 +44,7 @@ import { useDispatch } from 'react-redux';
 import { beginAlertSideContent } from '../SideContentActions';
 import { type SideContentLocation, SideContentType } from '../SideContentTypes';
 
-const SubstDefaultText = () => {
+function SubstDefaultText() {
   const { t } = useTranslation('sideContent', { keyPrefix: 'substVisualizer' });
   return (
     <div>
@@ -75,15 +75,15 @@ const SubstDefaultText = () => {
       </div>
     </div>
   );
-};
+}
 
-const SubstCodeDisplay = (props: { content: string }) => {
+function SubstCodeDisplay(props: { content: string }) {
   return (
     <Card>
       <Pre className="result-output">{props.content}</Pre>
     </Card>
   );
-};
+}
 
 type SubstVisualizerPropsAST = {
   content: IStepperPropContents[];
