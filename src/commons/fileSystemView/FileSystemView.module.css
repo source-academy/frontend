@@ -1,5 +1,3 @@
-@import '_global';
-
 .file-system-view-container {
   width: 100%;
   height: 100%;
@@ -8,8 +6,8 @@
   display: flex;
   flex-direction: column;
 
-  // Remove the white space at the intersection of the x-axis & y-axis
-  // scrollbars on Chromium browsers.
+  /* Remove the white space at the intersection of the x-axis & y-axis */
+  /* scrollbars on Chromium browsers. */
   &::-webkit-scrollbar-corner {
     background: transparent;
   }
@@ -49,19 +47,19 @@
   padding: 2px 5px;
 
   &:hover {
-    background: $cadet-color-3;
+    background: var(--cadet-color-3);
   }
 }
 
 .file-system-view-input {
   width: 100%;
   background: transparent;
-  border: thin solid $cadet-color-4;
+  border: thin solid var(--cadet-color-4);
   padding: 0;
 }
 
 .file-system-view-file-name {
-  // Should be the line-width & line-style as the border of .file-system-view-input
-  // to prevent shifting of file entries in the file system view when renaming.
+  /* Should be the line-width & line-style as the border of .file-system-view-input */
+  /* to prevent shifting of file entries in the file system view when renaming. */
   border: thin solid transparent;
 }

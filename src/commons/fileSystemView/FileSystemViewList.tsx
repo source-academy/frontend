@@ -2,10 +2,10 @@ import { Spinner, SpinnerSize } from '@blueprintjs/core';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import { useEffect, useState } from 'react';
-import classes from 'src/styles/FileSystemView.module.scss';
 
 import Delay from '../delay/Delay';
 import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import classes from './FileSystemView.module.css';
 import FileSystemViewDirectoryNode from './FileSystemViewDirectoryNode';
 import FileSystemViewFileNode from './FileSystemViewFileNode';
 
