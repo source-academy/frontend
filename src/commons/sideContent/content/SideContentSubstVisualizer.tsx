@@ -90,7 +90,7 @@ type SubstVisualizerPropsAST = {
   workspaceLocation: SideContentLocation;
 };
 
-const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
+function SideContentSubstVisualizer(props: SubstVisualizerPropsAST) {
   const [stepValue, setStepValue] = useState(1);
   const lastStepValue = props.content.length;
   const hasRunCode = lastStepValue !== 0;
@@ -214,7 +214,7 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
       {hasRunCode ? <SubstCodeDisplay content={getExplanation(stepValue)} /> : null}
     </div>
   );
-};
+}
 
 /*
   Custom AST renderer for Stepper (Inspired by astring library)
@@ -276,13 +276,13 @@ interface FunctionDefinitionPopoverContentProps {
   ) => React.ReactNode;
 }
 
-const FunctionDefinitionPopoverContent: React.FC<FunctionDefinitionPopoverContentProps> = ({
+function FunctionDefinitionPopoverContent({
   node,
   styleWrapper,
   popoverDepth,
   renderNode,
   renderFunctionArguments,
-}) => {
+}: FunctionDefinitionPopoverContentProps) {
   return (
     <div className={classNames('stepper-popover', Classes.DARK)}>
       <div className="stepper-display">
@@ -301,7 +301,7 @@ const FunctionDefinitionPopoverContent: React.FC<FunctionDefinitionPopoverConten
       </div>
     </div>
   );
-};
+}
 
 /**
  * renderNode renders Stepper AST to React ReactNode

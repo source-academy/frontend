@@ -9,11 +9,7 @@ type Props = {
   rank: number;
 };
 
-function SideContentLeaderboardCard({
-  handleContestEntryClick,
-  contestEntry,
-  rank,
-}: Props) {
+function SideContentLeaderboardCard({ handleContestEntryClick, contestEntry, rank }: Props) {
   return (
     <div className={classNames('LeaderboardCard')}>
       <Card

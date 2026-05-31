@@ -55,9 +55,7 @@ function Repl(props: ReplProps) {
   );
 }
 
-const ResultOutputDisplay: React.FC<{ output: ResultOutput }> = ({
-  output: { value, consoleLogs },
-}) => {
+function ResultOutputDisplay({ output: { value, consoleLogs } }: { output: ResultOutput }) {
   const stringified = useMemo(() => stringify(value), [value]);
   if (consoleLogs.length === 0) {
     return (
@@ -73,7 +71,7 @@ const ResultOutputDisplay: React.FC<{ output: ResultOutput }> = ({
       </Card>
     );
   }
-};
+}
 
 export function Output(props: OutputProps) {
   switch (props.output.type) {
