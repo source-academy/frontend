@@ -4,8 +4,8 @@ import type { DraggableData, DraggableEvent } from 'react-draggable';
 import Draggable from 'react-draggable';
 import pixelLogo from 'src/assets/pixel.jpg';
 import { useSession } from 'src/commons/utils/Hooks';
-import classes from 'src/styles/RagChatbot.module.scss';
 
+import classes from './RagChatbot.module.css';
 import RagChatBox from './RagChatBox';
 
 const ICON_SIZE = 70;
