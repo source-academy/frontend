@@ -12,7 +12,7 @@ type Props = {
  * Represents an arrow used to connect a parent node and a child node that has been drawn before,
  * that is positioned to the top left of the parent node.
  */
-const BackwardArrowDrawable: React.FC<Props> = ({ from, to }) => {
+function BackwardArrowDrawable({ from, to }: Props) {
   /*
    *  Connects a box to a previously known box, the arrow path is more complicated.
    *
@@ -61,6 +61,6 @@ const BackwardArrowDrawable: React.FC<Props> = ({ from, to }) => {
       preventDefault={false}
     />
   );
-};
+}
 
 export default memo(BackwardArrowDrawable);

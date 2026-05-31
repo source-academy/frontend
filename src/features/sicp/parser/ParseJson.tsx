@@ -48,7 +48,7 @@ type AnchorLinkType = {
   top: number;
 };
 
-const AnchorLink: React.FC<AnchorLinkType> = ({ refs, id, children, top }) => {
+function AnchorLink({ refs, id, children, top }: AnchorLinkType) {
   return (
     <div className="sicp-anchor-link-container">
       {id && (
@@ -66,7 +66,7 @@ const AnchorLink: React.FC<AnchorLinkType> = ({ refs, id, children, top }) => {
       {children}
     </div>
   );
-};
+}
 
 const handleFootnote = (obj: JsonType, refs: RefType) => {
   return (

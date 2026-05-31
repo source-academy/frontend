@@ -12,7 +12,7 @@ type Props = {
   assessmentTypes?: AssessmentType[];
 };
 
-const AcademyNavigationBar: React.FC<Props> = ({ assessmentTypes }) => {
+function AcademyNavigationBar({ assessmentTypes }: Props) {
   const { role, courseId } = useSession();
   const isEnrolledInACourse = !!role;
 
@@ -44,7 +44,7 @@ const AcademyNavigationBar: React.FC<Props> = ({ assessmentTypes }) => {
       </NavbarGroup>
     </Navbar>
   );
-};
+}
 
 export const icons: IconName[] = [
   IconNames.FLAME,
