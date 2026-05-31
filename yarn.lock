@@ -6,8 +6,8 @@ __metadata:
   cacheKey: 10c0
 
 "@aaroon/workbox-rspack-plugin@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@aaroon/workbox-rspack-plugin@npm:1.0.0"
+  version: 1.0.1
+  resolution: "@aaroon/workbox-rspack-plugin@npm:1.0.1"
   dependencies:
     fast-json-stable-stringify: "npm:^2.1.0"
     pathe: "npm:^1.1.2"
@@ -21,7 +21,7 @@ __metadata:
       optional: true
     "@rspack/core":
       optional: true
-  checksum: 10c0/2bf407770ac7bb9441ac8c1e76029011ee3e11759bba9d6695373136745b585a3f77a6e2d6740f607ef76bc28cdff0c4a0079b1d611abbb0e4736222a7ddd136
+  checksum: 10c0/773f0953a6a02d10ba27d5588eaf9b875986e05ffb1ccac99bf6e04b1e501ce0750b43eea23f0c33d21ec89f50176d9ad582c8d5cd985cc56d12c37886769908
   languageName: node
   linkType: hard
 
