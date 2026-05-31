@@ -1,6 +1,6 @@
 import type { TreeNodeInfo } from '@blueprintjs/core';
 import { Icon, Tab, Tabs, Tooltip, Tree } from '@blueprintjs/core';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { useEffect, useState } from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
 import {

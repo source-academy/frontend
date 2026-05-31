@@ -4,7 +4,7 @@ import type { CellClickedEvent, ColDef } from 'ag-grid-community';
 import { themeQuartz } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import classNames from 'classnames';
-import { debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';

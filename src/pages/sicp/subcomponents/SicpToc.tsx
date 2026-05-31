@@ -1,5 +1,5 @@
 import { Tree, type TreeNodeInfo } from '@blueprintjs/core';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';
 

@@ -17,7 +17,7 @@ import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { Text } from 'konva/lib/shapes/Text';
-import { cloneDeep, isObject } from 'lodash';
+import { cloneDeep, isObject } from 'lodash-es';
 import classes from 'src/styles/Draggable.module.scss';
 
 import { ArrayUnit } from './components/ArrayUnit';

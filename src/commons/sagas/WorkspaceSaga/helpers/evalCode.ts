@@ -8,7 +8,7 @@ import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
 import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors/base';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import { pick } from 'lodash';
+import { pick } from 'lodash-es';
 import { eventChannel, type SagaIterator } from 'redux-saga';
 import { call, cancel, cancelled, fork, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
