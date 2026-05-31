@@ -9,7 +9,7 @@ export type McqChooserProps = {
   handleMCQSubmit: (choiceId: number) => void;
 };
 
-const McqChooser: React.FC<McqChooserProps> = ({ mcq, handleMCQSubmit }) => {
+function McqChooser({ mcq, handleMCQSubmit }: McqChooserProps) {
   const options = mcq.choices.map((choice, i) => {
     const isActive = i === mcq.answer;
     const hasSolution = mcq.solution !== undefined;
@@ -58,6 +58,6 @@ const McqChooser: React.FC<McqChooserProps> = ({ mcq, handleMCQSubmit }) => {
       </Card>
     </div>
   );
-};
+}
 
 export default McqChooser;

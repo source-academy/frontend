@@ -16,12 +16,7 @@ type Props = {
   indentationLevel: number;
 };
 
-const FileSystemViewList: React.FC<Props> = ({
-  workspaceLocation,
-  fileSystem,
-  basePath,
-  indentationLevel,
-}) => {
+function FileSystemViewList({ workspaceLocation, fileSystem, basePath, indentationLevel }: Props) {
   const [dirNames, setDirNames] = useState<string[] | undefined>(undefined);
   const [fileNames, setFileNames] = useState<string[] | undefined>(undefined);
 
@@ -105,6 +100,6 @@ const FileSystemViewList: React.FC<Props> = ({
       })}
     </div>
   );
-};
+}
 
 export default FileSystemViewList;

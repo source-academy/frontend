@@ -22,14 +22,14 @@ type Props = {
   refreshDirectory: () => void;
 };
 
-const FileSystemViewFileNode: React.FC<Props> = ({
+function FileSystemViewFileNode({
   workspaceLocation,
   fileSystem,
   basePath,
   fileName,
   indentationLevel,
   refreshDirectory,
-}) => {
+}: Props) {
   const [isEditing, setIsEditing] = useState(false);
   const dispatch = useDispatch();
 
@@ -109,6 +109,6 @@ const FileSystemViewFileNode: React.FC<Props> = ({
       </div>
     </FileSystemViewContextMenu>
   );
-};
+}
 
 export default FileSystemViewFileNode;

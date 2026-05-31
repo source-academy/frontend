@@ -19,7 +19,7 @@ export type RepositoryDialogProps = {
   onSubmit: (repoName: string) => void;
 };
 
-const RepositoryDialog: React.FC<RepositoryDialogProps> = props => {
+function RepositoryDialog(props: RepositoryDialogProps) {
   const [repoName, setRepoName] = useState('');
 
   return (
@@ -66,6 +66,6 @@ const RepositoryDialog: React.FC<RepositoryDialogProps> = props => {
       props.onSubmit(repoName);
     }
   }
-};
+}
 
 export default RepositoryDialog;
