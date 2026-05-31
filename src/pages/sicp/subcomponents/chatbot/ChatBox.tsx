@@ -5,7 +5,7 @@ import { continueChat, initChat } from 'src/features/sicp/chatCompletion/api';
 import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { v4 as uuid } from 'uuid';
 
-import classes from './Chatbot.module.scss';
+import classes from './Chatbot.module.css';
 import ChatbotCodeSnippet from './ChatbotCodeSnippet';
 
 type Props = {
