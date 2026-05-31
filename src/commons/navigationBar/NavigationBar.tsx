@@ -41,7 +41,7 @@ export type NavbarEntryInfo = {
   hiddenInBreakpoints?: ('xs' | 'sm' | 'md' | 'lg')[]; // hide text in Blueprint breakpoints
 };
 
-const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }) => {
+function MobileHamburger({ navlinks }: { navlinks: NavbarEntryInfo[] }) {
   // Don't render drawer when there are 0 navlinks in it
   const [mobileSideMenuOpen, setMobileSideMenuOpen] = useState(false);
   const shownNavlinks = navlinks.filter(e => !e.disabled);
@@ -85,7 +85,7 @@ const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }
       )}
     </NavbarGroup>
   );
-};
+}
 
 function useSecondaryNavbarType() {
   const isPlayground = useMatch('/playground/*');
@@ -105,7 +105,7 @@ function useSecondaryNavbarType() {
   }
 }
 
-const NavigationBar: React.FC = () => {
+function NavigationBar() {
   const { isMobileBreakpoint } = useResponsive();
   const location = useLocation();
   const {
@@ -319,7 +319,7 @@ const NavigationBar: React.FC = () => {
       ) : null}
     </>
   );
-};
+}
 
 const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
   {
