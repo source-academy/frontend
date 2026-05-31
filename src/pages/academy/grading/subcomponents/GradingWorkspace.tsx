@@ -50,7 +50,7 @@ import type {
 import type { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditor';
 
-const workspaceLocation: WorkspaceLocation = 'grading';
+const workspaceLocation = 'grading' satisfies WorkspaceLocation;
 const unansweredPrependValue: string = `// This answer does not have significant changes from the given solution
 // template and has thus been flagged as unanswered.
 // If you think this is wrong, please ignore and grade accordingly.
