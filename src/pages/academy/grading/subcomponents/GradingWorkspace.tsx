@@ -77,7 +77,7 @@ const getDisplayName = (
   return [''];
 };
 
-const GradingWorkspace: React.FC<Props> = props => {
+function GradingWorkspace(props: Props) {
   const navigate = useNavigate();
   const { selectedTab, setSelectedTab } = useSideContent(
     workspaceLocation,
@@ -601,6 +601,6 @@ const GradingWorkspace: React.FC<Props> = props => {
       <Workspace {...workspaceProps} />
     </div>
   );
-};
+}
 
 export default GradingWorkspace;

@@ -2,7 +2,7 @@ import { Button, Divider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useTranslation } from 'react-i18next';
 
-const SideContentFaceapiDisplay: React.FC = () => {
+function SideContentFaceapiDisplay() {
   const { t } = useTranslation('sideContent', { keyPrefix: 'faceapiDisplay' });
   const browserWindow = window as any;
 
@@ -65,6 +65,6 @@ const SideContentFaceapiDisplay: React.FC = () => {
       {makeVideoContainer(takePhotoC, resetPhotoC, 'canvas-capture-c', 20)}
     </div>
   );
-};
+}
 
 export default SideContentFaceapiDisplay;

@@ -30,7 +30,7 @@ export type WorkspaceProps = {
   sideContentIsResizeable?: boolean;
 };
 
-const Workspace: React.FC<WorkspaceProps> = props => {
+function Workspace(props: WorkspaceProps) {
   const sideBarResizable = useRef<Resizable | null>(null);
   const contentContainerDiv = useRef<HTMLDivElement>(null);
   const editorDividerDiv = useRef<HTMLDivElement>(null);
@@ -245,7 +245,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
       </div>
     </div>
   );
-};
+}
 
 const rightResizeOnly: Enable = { right: true };
 const bottomResizeOnly: Enable = { bottom: true };

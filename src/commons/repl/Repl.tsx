@@ -31,7 +31,7 @@ export type ReplProps = {
   replButtons: Array<React.ReactElement | null>;
 };
 
-const Repl: React.FC<ReplProps> = props => {
+function Repl(props: ReplProps) {
   const cards = props.output.map((slice, index) => (
     <Output
       output={slice}
@@ -53,7 +53,7 @@ const Repl: React.FC<ReplProps> = props => {
       </div>
     </div>
   );
-};
+}
 
 const ResultOutputDisplay: React.FC<{ output: ResultOutput }> = ({
   output: { value, consoleLogs },
@@ -75,7 +75,7 @@ const ResultOutputDisplay: React.FC<{ output: ResultOutput }> = ({
   }
 };
 
-export const Output: React.FC<OutputProps> = props => {
+export function Output(props: OutputProps) {
   switch (props.output.type) {
     case 'code':
       return (
@@ -133,6 +133,6 @@ export const Output: React.FC<OutputProps> = props => {
     default:
       return <Card>&apos;&apos;</Card>;
   }
-};
+}
 
 export default Repl;

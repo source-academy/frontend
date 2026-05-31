@@ -8,7 +8,7 @@ type Props = {
   assessmentId: number;
 };
 
-const ExportVoteLeaderboardButton: React.FC<Props> = ({ assessmentId }) => {
+function ExportVoteLeaderboardButton({ assessmentId }: Props) {
   const tokens = useTokens({ throwWhenEmpty: true });
   const visibleEntries = useTypedSelector(store => store.session.topContestLeaderboardDisplay);
 
@@ -38,6 +38,6 @@ const ExportVoteLeaderboardButton: React.FC<Props> = ({ assessmentId }) => {
       />
     </div>
   );
-};
+}
 
 export default ExportVoteLeaderboardButton;

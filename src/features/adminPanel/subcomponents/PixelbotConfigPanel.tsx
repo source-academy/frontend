@@ -58,7 +58,7 @@ GENERAL INSTRUCTIONS:
 - Use display or display_list instead of console.log.
 - Format your response using markdown. Use fenced code blocks with the language identifier for all code examples, e.g. \`\`\`javascript ... \`\`\`.`;
 
-const PixelbotConfigPanel: React.FC<Props> = props => {
+function PixelbotConfigPanel(props: Props) {
   const { pixelbotRoutingPrompt, pixelbotAnswerPrompt, feedbackUrl } = props.courseConfiguration;
 
   const [documentMap, setDocumentMap] = useState<string>('');
@@ -269,6 +269,6 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
       </div>
     </div>
   );
-};
+}
 
 export default PixelbotConfigPanel;

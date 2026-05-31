@@ -9,11 +9,11 @@ type Props = {
   rank: number;
 };
 
-const SideContentLeaderboardCard: React.FC<Props> = ({
+function SideContentLeaderboardCard({
   handleContestEntryClick,
   contestEntry,
   rank,
-}) => {
+}: Props) {
   return (
     <div className={classNames('LeaderboardCard')}>
       <Card
@@ -32,6 +32,6 @@ const SideContentLeaderboardCard: React.FC<Props> = ({
       </Card>
     </div>
   );
-};
+}
 
 export default SideContentLeaderboardCard;
