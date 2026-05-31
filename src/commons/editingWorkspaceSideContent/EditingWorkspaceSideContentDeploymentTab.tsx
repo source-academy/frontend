@@ -29,7 +29,7 @@ type Props = {
   isOptionalDeployment: boolean;
 };
 
-const DeploymentTab: React.FC<Props> = props => {
+function DeploymentTab(props: Props) {
   const deploymentTab = () => {
     const deploymentPath = props.pathToLibrary;
     const deployment = getValueFromPath(deploymentPath, props.assessment) as Library;
@@ -229,7 +229,7 @@ const DeploymentTab: React.FC<Props> = props => {
       </div>
     );
   }
-};
+}
 
 const removeSpaces = (str: string | number) => {
   return typeof str === 'string' ? str.replace(/\s+/g, '') : str;

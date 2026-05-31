@@ -10,7 +10,7 @@ type Props = {
   replProps: ReplProps;
 };
 
-const DraggableRepl: React.FC<Props> = props => {
+function DraggableRepl(props: Props) {
   const nodeRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -43,6 +43,6 @@ const DraggableRepl: React.FC<Props> = props => {
       </div>
     </Draggable>
   );
-};
+}
 
 export default DraggableRepl;
