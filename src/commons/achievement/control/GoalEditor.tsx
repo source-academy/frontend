@@ -10,7 +10,7 @@ type Props = {
   requestPublish: () => void;
 };
 
-const GoalEditor: React.FC<Props> = ({ requestPublish }) => {
+function GoalEditor({ requestPublish }: Props) {
   const inferencer = useContext(AchievementContext);
 
   /**
@@ -67,6 +67,6 @@ const GoalEditor: React.FC<Props> = ({ requestPublish }) => {
       <ul className="goal-container">{editableGoals}</ul>
     </div>
   );
-};
+}
 
 export default GoalEditor;

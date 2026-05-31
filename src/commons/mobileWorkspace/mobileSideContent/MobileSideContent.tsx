@@ -53,13 +53,13 @@ const renderTab = (tab: SideContentTab, isIOS: boolean) => {
   );
 };
 
-const MobileSideContent: React.FC<MobileSideContentProps> = ({
+function MobileSideContent({
   renderActiveTabPanelOnly,
   mobileControlBarProps,
   onChange,
   selectedTabId,
   ...props
-}) => {
+}: MobileSideContentProps) {
   const isIOS = /iPhone|iPod/.test(navigator.platform);
 
   /**
@@ -114,6 +114,6 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
       )}
     </SideContentProvider>
   );
-};
+}
 
 export default memo(MobileSideContent, propsAreEqual);
