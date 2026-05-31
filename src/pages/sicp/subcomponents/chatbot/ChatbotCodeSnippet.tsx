@@ -99,6 +99,6 @@ function ChatbotCodeSnippet({
       </Card>
     </>
   );
-};
+}
 
 export default ChatbotCodeSnippet;

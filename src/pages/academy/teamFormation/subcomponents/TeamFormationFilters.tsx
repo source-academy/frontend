@@ -8,7 +8,7 @@ type TeamFormationFiltersProps = {
   onFilterRemove: (filter: ColumnFilter) => void;
 };
 
-const TeamFormationFilters: React.FC<TeamFormationFiltersProps> = ({ filters, onFilterRemove }) => {
+function TeamFormationFilters({ filters, onFilterRemove }: TeamFormationFiltersProps) {
   return (
     <GradingFlex justifyContent="flex-start" style={{ columnGap: '0.25rem' }}>
       {filters.map(filter => (
@@ -16,6 +16,6 @@ const TeamFormationFilters: React.FC<TeamFormationFiltersProps> = ({ filters, on
       ))}
     </GradingFlex>
   );
-};
+}
 
 export default TeamFormationFilters;

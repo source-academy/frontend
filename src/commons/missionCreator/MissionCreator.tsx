@@ -23,7 +23,7 @@ type Props = {
   updateEditingOverview: (overview: AssessmentOverview) => void;
 };
 
-const MissionCreator: React.FC<Props> = props => {
+function MissionCreator(props: Props) {
   const [fileInputText, setFileInputText] = useState('Import XML');
   let fileReader: FileReader | undefined = undefined;
 
@@ -94,6 +94,6 @@ const MissionCreator: React.FC<Props> = props => {
       </div>
     </div>
   );
-};
+}
 
 export default MissionCreator;

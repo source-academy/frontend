@@ -26,7 +26,7 @@ export type ReplInputProps = {
   replButtons: Array<React.ReactElement | null>;
 };
 
-export const ReplInput: React.FC<ReplInputProps> = props => {
+export function ReplInput(props: ReplInputProps) {
   const { onFocus, onBlur } = props;
 
   const replInput = useRef<ReactAce>(null);
@@ -135,4 +135,4 @@ export const ReplInput: React.FC<ReplInputProps> = props => {
       {isDesktopBreakpoint && <div ref={replInputBottom} />}
     </>
   );
-};
+}
