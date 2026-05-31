@@ -14,7 +14,7 @@ export type DropzoneProps = {
   assessmentConfigurations?: AssessmentConfiguration[];
 };
 
-const MaterialDropzone: React.FC<DropzoneProps> = props => {
+function MaterialDropzone(props: DropzoneProps) {
   const [file, setFile] = useState<File | undefined>(undefined);
   const [isWarningShown, setPromptShown] = useState(false);
   const [forceUpdate, setForceUpdate] = useState(false);
@@ -168,6 +168,6 @@ const MaterialDropzone: React.FC<DropzoneProps> = props => {
       )}
     </>
   );
-};
+}
 
 export default MaterialDropzone;

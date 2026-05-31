@@ -11,7 +11,7 @@ type Props = {
   setStateHandler: (index: number, value: boolean) => void;
 };
 
-const BooleanCell: React.FC<Props> = props => {
+function BooleanCell(props: Props) {
   const { data } = props;
   const { rowIndex } = props.node;
   const checked = data[props.field];
@@ -21,6 +21,6 @@ const BooleanCell: React.FC<Props> = props => {
   }, [props, rowIndex, checked]);
 
   return <Switch checked={checked} onChange={changeHandler} />;
-};
+}
 
 export default BooleanCell;

@@ -31,11 +31,7 @@ type Props = {
   data: AssessmentOverview;
 };
 
-const ConfigureCell: React.FC<Props> = ({
-  handleConfigureAssessment,
-  handleAssignEntriesForVoting,
-  data,
-}) => {
+function ConfigureCell({ handleConfigureAssessment, handleAssignEntriesForVoting, data }: Props) {
   const [isDialogOpen, setDialogState] = useState(false);
   const [hasVotingFeatures, setHasVotingFeatures] = useState(!!data.hasVotingFeatures);
   const [hasTokenCounter, setHasTokenCounter] = useState(!!data.hasTokenCounter);
@@ -162,6 +158,6 @@ const ConfigureCell: React.FC<Props> = ({
       </Dialog>
     </>
   );
-};
+}
 
 export default ConfigureCell;

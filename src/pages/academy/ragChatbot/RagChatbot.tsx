@@ -39,7 +39,7 @@ const clampPosition = (
   };
 };
 
-const RagChatbot: React.FC = () => {
+function RagChatbot() {
   const { isLoggedIn } = useSession();
   const [isPop, setPop] = useState(false);
   const [isDivVisible, setIsDivVisible] = useState(false);
@@ -151,6 +151,6 @@ const RagChatbot: React.FC = () => {
       </Draggable>
     </div>
   );
-};
+}
 
 export default RagChatbot;
