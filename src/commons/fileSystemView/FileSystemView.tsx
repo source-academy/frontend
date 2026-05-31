@@ -2,11 +2,11 @@ import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import path from 'path';
 import { useState } from 'react';
-import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
 import { useTypedSelector } from '../utils/Hooks';
 import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import classes from './FileSystemView.module.css';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 import FileSystemViewList from './FileSystemViewList';

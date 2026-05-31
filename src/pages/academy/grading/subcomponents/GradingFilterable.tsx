@@ -1,4 +1,4 @@
-import classes from 'src/styles/Grading.module.scss';
+import classes from '../Grading.module.css';
 
 type Props = {
   value: string;

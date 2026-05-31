@@ -12,9 +12,9 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import styles from '../../styles/VersionHistoryPanel.module.scss';
 import type { CodeVersion, CodeVersionMetadata } from '../workspace/WorkspaceTypes';
 import AceDiffViewer from './AceDiffViewer';
+import styles from './VersionHistoryPanel.module.css';
 
 type Props = {
   versions: CodeVersionMetadata[];

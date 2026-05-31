@@ -1,5 +1,5 @@
 import { EditableText } from '@blueprintjs/core';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { useContext, useMemo, useReducer, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import type { GoalDefinition, GoalMeta } from 'src/features/achievement/AchievementTypes';

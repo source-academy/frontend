@@ -6,7 +6,7 @@
     {
       "rangeStrategy": "update-lockfile",
       "matchPackageNames": ["*"],
-      "minimumReleaseAge": "5 days"
+      "minimumReleaseAge": "3 days"
     },
     {
       "matchPackageNames": ["/^@blueprintjs.*/"],

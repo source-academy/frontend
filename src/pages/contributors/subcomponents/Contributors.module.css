@@ -1,12 +1,10 @@
-@import '_global';
-
-// Styling components of the ContributorsDetails
+/* Styling components of the ContributorsDetails */
 
 .outsideDetails {
   text-align: center;
 
   .contributorsDetails {
-    background-color: $cadet-color-4;
+    background-color: var(--cadet-color-4);
     display: inline-block;
     margin-top: 2%;
     margin-bottom: 2%;
@@ -64,15 +62,15 @@
   }
 }
 
-// Styling components of the ContributorsList
+/* Styling components of the ContributorsList */
 
 .containerPermalink {
-  background-color: $cadet-color-4;
+  background-color: var(--cadet-color-4);
   margin-bottom: 2%;
 }
 
 div.inPermalink {
-  background-color: $cadet-color-4;
+  background-color: var(--cadet-color-4);
   text-align: justify;
 
   div {
@@ -97,15 +95,15 @@ div.inPermalink {
 
   p {
     margin-bottom: 0.2rem;
-    color: $cadet-color-2;
+    color: var(--cadet-color-2);
   }
 
   a {
     text-decoration: none;
     font-weight: bold;
-    color: $cadet-color-1;
+    color: var(--cadet-color-1);
     &:hover {
-      color: $cadet-color-3;
+      color: var(--cadet-color-3);
     }
   }
 }
@@ -115,7 +113,7 @@ div.repoDetailsPermalink {
 
   h3 {
     margin: 0% 2% 0.5% 2%;
-    color: $cadet-color-2;
+    color: var(--cadet-color-2);
   }
 
   h3::first-letter {
@@ -125,6 +123,6 @@ div.repoDetailsPermalink {
   h5 {
     margin: 0% 2% 1% 2%;
     font-style: italic;
-    color: $cadet-color-1;
+    color: var(--cadet-color-1);
   }
 }

@@ -1,7 +1,7 @@
 import { Card, Elevation, H3, H5 } from '@blueprintjs/core';
-import classes from 'src/styles/Contributors.module.scss';
 
 import { Links } from '../../../commons/utils/Constants';
+import classes from './Contributors.module.css';
 
 const dot = <span className={classes['dot']}>&bull;</span>;
 

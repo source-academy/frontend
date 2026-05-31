@@ -5,8 +5,8 @@ import Draggable from 'react-draggable';
 import logo from 'src/assets/SA.jpg';
 import { useSession } from 'src/commons/utils/Hooks';
 import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
-import classes from 'src/styles/Chatbot.module.scss';
 
+import classes from './Chatbot.module.css';
 import ChatBox from './ChatBox';
 
 type Props = {

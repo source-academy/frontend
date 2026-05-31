@@ -7,7 +7,7 @@ import { Ace, Range } from 'ace-builds';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useStore } from 'react-redux';

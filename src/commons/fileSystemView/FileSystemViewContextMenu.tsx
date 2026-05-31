@@ -2,7 +2,8 @@ import { Classes } from '@blueprintjs/core';
 import { ControlledMenu, MenuItem, useMenuState } from '@szhsin/react-menu';
 import classNames from 'classnames';
 import { useState } from 'react';
-import classes from 'src/styles/ContextMenu.module.scss';
+
+import classes from './FileSystemViewContextMenu.module.css';
 
 type Props = {
   children?: React.ReactElement;

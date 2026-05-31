@@ -8,7 +8,8 @@ import ControlBarCloseButton from 'src/commons/controlBar/ControlBarCloseButton'
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import Playground from 'src/pages/playground/Playground';
-import classes from 'src/styles/ChatbotCodeSnippet.module.scss';
+
+import classes from './ChatbotCodeSnippet.module.css';
 
 export type ChatbotCodeSnippetProps = {
   /** The code to display and run */

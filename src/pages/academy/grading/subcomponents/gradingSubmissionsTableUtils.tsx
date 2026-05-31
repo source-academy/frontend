@@ -2,8 +2,8 @@ import type { ColDef, ICellRendererParams } from 'ag-grid-community';
 import classNames from 'classnames';
 import type { IGradingTableRow } from 'src/features/grading/GradingTypes';
 import { ColumnFields, ColumnName } from 'src/features/grading/GradingTypes';
-import classes from 'src/styles/Grading.module.scss';
 
+import classes from '../Grading.module.css';
 import GradingActions from './GradingActions';
 import { AssessmentTypeBadge, ProgressStatusBadge } from './GradingBadges';
 import GradingFilterable from './GradingFilterable';
