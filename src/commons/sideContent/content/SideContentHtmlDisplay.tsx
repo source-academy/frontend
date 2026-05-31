@@ -20,7 +20,7 @@ type Props = {
 
 const ERROR_MESSAGE_REGEX = /^Line \d+: /i;
 
-export const SideContentHtmlDisplay: React.FC<Props> = props => {
+export function SideContentHtmlDisplay(props: Props) {
   const { t } = useTranslation('sideContent', { keyPrefix: 'htmlDisplay' });
   const { content, handleAddHtmlConsoleError, workspaceLocation } = props;
   const dispatch = useDispatch();
@@ -54,7 +54,7 @@ export const SideContentHtmlDisplay: React.FC<Props> = props => {
       src="about:blank"
     />
   );
-};
+}
 
 const makeHtmlDisplayTabFrom = (
   output: ResultOutput,

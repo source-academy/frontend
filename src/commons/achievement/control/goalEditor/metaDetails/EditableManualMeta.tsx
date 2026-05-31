@@ -7,7 +7,7 @@ type Props = {
   manualMeta: ManualMeta;
 };
 
-const EditableManualMeta: React.FC<Props> = ({ changeMeta, manualMeta }) => {
+function EditableManualMeta({ changeMeta, manualMeta }: Props) {
   const { targetCount } = manualMeta;
 
   const changeTargetCount = (targetCount: number) =>
@@ -25,6 +25,6 @@ const EditableManualMeta: React.FC<Props> = ({ changeMeta, manualMeta }) => {
       />
     </Tooltip>
   );
-};
+}
 
 export default EditableManualMeta;
