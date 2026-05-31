@@ -4,8 +4,9 @@ import classNames from 'classnames';
 import type { ProgressStatus } from 'src/commons/assessment/AssessmentTypes';
 import { ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import type { ColumnFilter } from 'src/features/grading/GradingTypes';
-import classes from 'src/styles/Grading.module.scss';
 import badgeClasses from 'src/styles/GradingBadges.module.scss';
+
+import classes from '../Grading.module.css';
 
 declare const sizeValues: readonly ['xs', 'sm', 'md', 'lg', 'xl'];
 declare type Size = (typeof sizeValues)[number];

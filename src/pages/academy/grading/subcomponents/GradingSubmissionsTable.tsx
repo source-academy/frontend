@@ -26,8 +26,8 @@ import type {
 } from 'src/features/grading/GradingTypes';
 import { ColumnFields, ColumnName, SortStates } from 'src/features/grading/GradingTypes';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
-import classes from 'src/styles/Grading.module.scss';
 
+import classes from '../Grading.module.css';
 import GradingColumnCustomHeaders from './GradingColumnCustomHeaders';
 import GradingColumnFilters from './GradingColumnFilters';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
