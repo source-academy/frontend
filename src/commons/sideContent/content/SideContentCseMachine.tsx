@@ -741,18 +741,15 @@ const makeCseMachineTabFrom = (location: WorkspaceLocation): SideContentTab => (
   id: SideContentType.cseMachine,
 });
 
-export const ItalicLink: React.FC<{ href: string; children?: React.ReactNode }> = ({
-  href,
-  children,
-}) => {
+export function ItalicLink({ href, children }: { href: string; children?: React.ReactNode }) {
   return (
     <a href={href} rel="noopener noreferrer" target="_blank">
       <i>{children}</i>
     </a>
   );
-};
+}
 
-const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
+function CseMachineDefaultText({ isJava }: { isJava: boolean }) {
   const { t } = useTranslation('sideContent', { keyPrefix: 'cseMachine' });
   return (
     <div
@@ -806,6 +803,6 @@ const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
       {t($ => $.shortcutsNote)}
     </div>
   );
-};
+}
 
 export default makeCseMachineTabFrom;

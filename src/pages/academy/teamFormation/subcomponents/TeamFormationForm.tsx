@@ -17,7 +17,7 @@ export type OptionType = {
   value: User | null;
 } | null;
 
-const TeamFormationForm: React.FC = () => {
+function TeamFormationForm() {
   const { teamId } = useParams(); // Retrieve the team ID from the URL
   const { courseId, students, assessmentOverviews, teamFormationOverviews } = useSession();
   const dispatch = useDispatch();
@@ -204,9 +204,8 @@ const TeamFormationForm: React.FC = () => {
       </Form>
     </div>
   );
-};
+}
 
 export const Component = TeamFormationForm;
-Component.displayName = 'TeamFormationForm';
 
 export default TeamFormationForm;

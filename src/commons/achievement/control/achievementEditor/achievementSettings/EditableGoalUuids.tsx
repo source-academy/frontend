@@ -11,7 +11,7 @@ type Props = {
   goalUuids: string[];
 };
 
-const EditableGoalUuids: React.FC<Props> = ({ changeGoalUuids, goalUuids }) => {
+function EditableGoalUuids({ changeGoalUuids, goalUuids }: Props) {
   const inferencer = useContext(AchievementContext);
   const allGoalUuids = inferencer.getAllGoalUuids();
   const selectedUuids = goalUuids.filter(
@@ -56,6 +56,6 @@ const EditableGoalUuids: React.FC<Props> = ({ changeGoalUuids, goalUuids }) => {
       resetOnSelect
     />
   );
-};
+}
 
 export default EditableGoalUuids;

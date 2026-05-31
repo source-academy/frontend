@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
-const LeaderboardDropdown: React.FC = () => {
+function LeaderboardDropdown() {
   const enableOverallLeaderboard = useTypedSelector(
     store => store.session.enableOverallLeaderboard,
   );
@@ -40,6 +40,6 @@ const LeaderboardDropdown: React.FC = () => {
         ))}
     </select>
   );
-};
+}
 
 export default LeaderboardDropdown;

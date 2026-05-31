@@ -19,7 +19,7 @@ type Props = {
   solution: React.ReactElement | undefined;
 };
 
-const SicpExercise: React.FC<Props> = props => {
+function SicpExercise(props: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const onClick = () => {
@@ -40,6 +40,6 @@ const SicpExercise: React.FC<Props> = props => {
       </Collapse>
     </Card>
   );
-};
+}
 
 export default SicpExercise;

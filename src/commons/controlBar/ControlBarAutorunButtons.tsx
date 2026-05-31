@@ -24,7 +24,7 @@ type Props = {
   sourceChapter?: number;
 };
 
-const ControlBarAutorunButtons: React.FC<Props> = props => {
+function ControlBarAutorunButtons(props: Props) {
   const showRunButton = !props.isDebugging && (
     <ControlBarRunButton
       handleEditorEval={props.handleEditorEval}
@@ -97,6 +97,6 @@ const ControlBarAutorunButtons: React.FC<Props> = props => {
       {showDebuggerReset('Stop Debugger')}
     </>
   );
-};
+}
 
 export default ControlBarAutorunButtons;

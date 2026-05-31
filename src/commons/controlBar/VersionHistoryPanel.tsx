@@ -65,7 +65,7 @@ const groupVersions = (sortedNewestFirst: CodeVersionMetadata[]): VersionGroup[]
   return groups;
 };
 
-const VersionHistoryPanel: React.FC<Props> = ({
+function VersionHistoryPanel({
   versions,
   currentCode,
   isOpen,
@@ -77,7 +77,7 @@ const VersionHistoryPanel: React.FC<Props> = ({
   onSelectVersion,
   onRestore,
   onRename,
-}) => {
+}: Props) {
   const groups = useMemo(() => groupVersions(versions), [versions]);
 
   // Track expanded groups by id
@@ -274,6 +274,6 @@ const VersionHistoryPanel: React.FC<Props> = ({
       {content}
     </Drawer>
   );
-};
+}
 
 export default VersionHistoryPanel;

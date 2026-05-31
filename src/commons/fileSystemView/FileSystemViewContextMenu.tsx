@@ -15,7 +15,7 @@ type Props = {
   remove?: () => void;
 };
 
-const FileSystemViewContextMenu: React.FC<Props> = ({
+function FileSystemViewContextMenu({
   children,
   className,
   createNewFile,
@@ -23,7 +23,7 @@ const FileSystemViewContextMenu: React.FC<Props> = ({
   open,
   rename,
   remove,
-}) => {
+}: Props) {
   const [menuProps, toggleMenu] = useMenuState();
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
 
@@ -70,6 +70,6 @@ const FileSystemViewContextMenu: React.FC<Props> = ({
       </ControlledMenu>
     </div>
   );
-};
+}
 
 export default FileSystemViewContextMenu;

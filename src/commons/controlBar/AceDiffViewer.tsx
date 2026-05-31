@@ -15,7 +15,7 @@ type Props = {
   versionCode: string;
 };
 
-const AceDiffViewer: React.FC<Props> = ({ currentCode, versionCode }) => {
+function AceDiffViewer({ currentCode, versionCode }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const diffRef = useRef<AceDiff | null>(null);
 
@@ -86,6 +86,6 @@ const AceDiffViewer: React.FC<Props> = ({ currentCode, versionCode }) => {
   }, [currentCode, versionCode]);
 
   return <div ref={containerRef} className="ace-diff-container" />;
-};
+}
 
 export default AceDiffViewer;

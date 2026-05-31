@@ -26,13 +26,7 @@ type Props = {
   isDisabled?: boolean;
 };
 
-const ControlButton: React.FC<Props> = ({
-  label = '',
-  icon,
-  onClick,
-  options = {},
-  isDisabled = false,
-}) => {
+function ControlButton({ label = '', icon, onClick, options = {}, isDisabled = false }: Props) {
   const buttonOptions: ButtonOptions = { ...defaultOptions, ...options };
   const iconElement = icon && <Icon icon={icon} color={buttonOptions.iconColor} />;
   // Refer to #2417 and #2422 for why we conditionally
@@ -55,6 +49,6 @@ const ControlButton: React.FC<Props> = ({
       {label}
     </ButtonComponent>
   );
-};
+}
 
 export default ControlButton;

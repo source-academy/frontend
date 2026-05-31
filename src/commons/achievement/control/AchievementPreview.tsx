@@ -12,7 +12,7 @@ type Props = {
   publishChanges: () => void;
 };
 
-const AchievementPreview: React.FC<Props> = ({ awaitPublish, publishChanges }) => {
+function AchievementPreview({ awaitPublish, publishChanges }: Props) {
   const inferencer = useContext(AchievementContext);
 
   // Show AchievementView when viewMode is true, otherwise show AchievementTask
@@ -56,6 +56,6 @@ const AchievementPreview: React.FC<Props> = ({ awaitPublish, publishChanges }) =
       )}
     </div>
   );
-};
+}
 
 export default AchievementPreview;

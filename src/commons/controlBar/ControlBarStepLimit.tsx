@@ -9,7 +9,7 @@ type Props = {
   key: string;
 };
 
-const ControlBarStepLimit: React.FC<Props> = props => {
+function ControlBarStepLimit(props: Props) {
   /**
    * Scale the odd stepLimit into the next even integer.
    * Triggered when the input box lost focus.
@@ -32,6 +32,6 @@ const ControlBarStepLimit: React.FC<Props> = props => {
       />
     </Tooltip>
   );
-};
+}
 
 export default ControlBarStepLimit;

@@ -7,7 +7,7 @@ type Props = {
   assessmentId: number;
 };
 
-const CalculateContestScoreButton: React.FC<Props> = ({ assessmentId }) => {
+function CalculateContestScoreButton({ assessmentId }: Props) {
   const tokens = useTokens();
 
   return (
@@ -21,6 +21,6 @@ const CalculateContestScoreButton: React.FC<Props> = ({ assessmentId }) => {
       />
     </div>
   );
-};
+}
 
 export default CalculateContestScoreButton;

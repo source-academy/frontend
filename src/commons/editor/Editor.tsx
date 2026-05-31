@@ -736,7 +736,7 @@ EditorBase.displayName = 'EditorBase';
 // don't create a new list every render.
 const hooks = [useHighlighting, useNavigation, useShareAce, useRefactor];
 
-const Editor: React.FC<EditorProps> = (props: EditorProps) => {
+function Editor(props: EditorProps) {
   const [sessions, setSessions] = useState<Record<string, Ace.EditSession>>({});
 
   // Create new edit session.
@@ -758,6 +758,6 @@ const Editor: React.FC<EditorProps> = (props: EditorProps) => {
       hooks={hooks}
     />
   );
-};
+}
 
 export default Editor;

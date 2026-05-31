@@ -6,7 +6,7 @@ type Props = {
   filterMode: boolean;
 };
 
-const GradingFilterable: React.FC<Props> = ({ value, children, filterMode }) => {
+function GradingFilterable({ value, children, filterMode }: Props) {
   return (
     <button
       type="button"
@@ -20,6 +20,6 @@ const GradingFilterable: React.FC<Props> = ({ value, children, filterMode }) => 
       {children || value}
     </button>
   );
-};
+}
 
 export default GradingFilterable;

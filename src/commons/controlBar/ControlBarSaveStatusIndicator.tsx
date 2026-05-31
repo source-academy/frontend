@@ -31,7 +31,7 @@ const statusConfig: Record<Exclude<SaveStatus, 'idle'>, StatusConfig> = {
   },
 };
 
-const ControlBarSaveStatusIndicator: React.FC<Props> = ({ saveStatus }) => {
+function ControlBarSaveStatusIndicator({ saveStatus }: Props) {
   if (saveStatus === 'idle') {
     return null;
   }
@@ -43,6 +43,6 @@ const ControlBarSaveStatusIndicator: React.FC<Props> = ({ saveStatus }) => {
       {config.label}
     </Tag>
   );
-};
+}
 
 export default ControlBarSaveStatusIndicator;

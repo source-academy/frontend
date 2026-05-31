@@ -13,7 +13,7 @@ type Props = {
   submitOnFinish?: boolean;
 };
 
-const ControlBarNextButton: React.FC<Props> = props => {
+function ControlBarNextButton(props: Props) {
   return props.questionProgress![0] === props.questionProgress![1] ? (
     props.submitOnFinish ? (
       <ControlBarSubmit onClick={props.onClickSubmit} />
@@ -28,6 +28,6 @@ const ControlBarNextButton: React.FC<Props> = props => {
       options={{ iconOnRight: true }}
     />
   );
-};
+}
 
 export default ControlBarNextButton;

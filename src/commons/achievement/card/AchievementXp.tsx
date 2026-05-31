@@ -10,7 +10,7 @@ type Props = {
   xp: number;
 };
 
-const AchievementXp: React.FC<Props> = ({ isBonus, xp }) => {
+function AchievementXp({ isBonus, xp }: Props) {
   return (
     <div className="xp">
       {xp !== 0 && (
@@ -21,6 +21,6 @@ const AchievementXp: React.FC<Props> = ({ isBonus, xp }) => {
       )}
     </div>
   );
-};
+}
 
 export default AchievementXp;

@@ -32,7 +32,7 @@ type Props = {
   result: AutogradingResult;
 };
 
-const SideContentResultCard: React.FC<Props> = ({ index, result }) => {
+function SideContentResultCard({ index, result }: Props) {
   const { t } = useTranslation('sideContent', { keyPrefix: 'resultCard' });
   return (
     <div
@@ -57,6 +57,6 @@ const SideContentResultCard: React.FC<Props> = ({ index, result }) => {
       </Card>
     </div>
   );
-};
+}
 
 export default SideContentResultCard;

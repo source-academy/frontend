@@ -7,7 +7,7 @@ type Props = {
   removePlaceholder: () => void;
 };
 
-const FileSystemViewPlaceholderNode: React.FC<Props> = ({ processFileName, removePlaceholder }) => {
+function FileSystemViewPlaceholderNode({ processFileName, removePlaceholder }: Props) {
   const [fileName, setFileName] = useState('');
 
   const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -34,6 +34,6 @@ const FileSystemViewPlaceholderNode: React.FC<Props> = ({ processFileName, remov
       onBlur={handleInputOnBlur}
     />
   );
-};
+}
 
 export default FileSystemViewPlaceholderNode;

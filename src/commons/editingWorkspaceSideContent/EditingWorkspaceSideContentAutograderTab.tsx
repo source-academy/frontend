@@ -14,7 +14,7 @@ type Props = {
   questionId: number;
 };
 
-export const AutograderTab: React.FC<Props> = props => {
+export function AutograderTab(props: Props) {
   const addTestcase = (testcases: Testcase[]) => () => {
     testcases.push(testcaseTemplate());
     props.updateAssessment(props.assessment);
@@ -118,4 +118,4 @@ export const AutograderTab: React.FC<Props> = props => {
       />
     </div>
   );
-};
+}

@@ -97,9 +97,9 @@ export type AssessmentWorkspaceProps = {
   fromContestLeaderboard: boolean;
 };
 
-const workspaceLocation: WorkspaceLocation = 'assessment';
+const workspaceLocation = 'assessment' satisfies WorkspaceLocation;
 
-const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
+function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
   const [showOverlay, setShowOverlay] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
@@ -1130,6 +1130,6 @@ It is safe to close this window.`}
       )}
     </div>
   );
-};
+}
 
 export default AssessmentWorkspace;

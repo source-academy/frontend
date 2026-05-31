@@ -10,7 +10,7 @@ type Props = {
   data: AssessmentOverview;
 };
 
-const DeleteCell: React.FC<Props> = ({ handleDeleteAssessment, data }) => {
+function DeleteCell({ handleDeleteAssessment, data }: Props) {
   const [isDialogOpen, setDialogState] = useState(false);
 
   const handleOpenDialog = useCallback(() => setDialogState(true), []);
@@ -63,6 +63,6 @@ const DeleteCell: React.FC<Props> = ({ handleDeleteAssessment, data }) => {
       </Dialog>
     </>
   );
-};
+}
 
 export default DeleteCell;

@@ -8,7 +8,7 @@ type Props = {
   editingMode?: string;
 };
 
-const ControlBarToggleEditModeButton: React.FC<Props> = ({ toggleEditMode, editingMode }) => {
+function ControlBarToggleEditModeButton({ toggleEditMode, editingMode }: Props) {
   const editMode = editingMode === 'question' ? 'Global' : 'Question Specific';
   return (
     <Tooltip content={'Switch to ' + editMode + ' Editing Mode'}>
@@ -19,6 +19,6 @@ const ControlBarToggleEditModeButton: React.FC<Props> = ({ toggleEditMode, editi
       />
     </Tooltip>
   );
-};
+}
 
 export default ControlBarToggleEditModeButton;

@@ -14,7 +14,7 @@ type Props = {
   workspaceLocation: WorkspaceLocation;
 };
 
-const SideContentTestcaseCard: React.FC<Props> = props => {
+function SideContentTestcaseCard(props: Props) {
   const { index, testcase, handleTestcaseEval } = props;
 
   const extraClasses = useMemo(() => {
@@ -76,6 +76,6 @@ const SideContentTestcaseCard: React.FC<Props> = props => {
       </Card>
     </div>
   );
-};
+}
 
 export default SideContentTestcaseCard;

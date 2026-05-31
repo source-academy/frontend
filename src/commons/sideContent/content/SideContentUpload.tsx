@@ -29,7 +29,7 @@ type Props = {
 /**
  * This component is responsible for uploading Java class files to bypass the compiler.
  */
-const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
+function SideContentUpload({ onUpload }: Props) {
   const { t } = useTranslation('sideContent', { keyPrefix: 'upload' });
   const [count, setCount] = useState(0);
 
@@ -73,7 +73,7 @@ const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
       />
     </div>
   );
-};
+}
 
 const makeUploadTabFrom = (onUpload: (files: UploadResult) => void): SideContentTab => ({
   label: t($ => $.upload.label, { ns: 'sideContent' }),

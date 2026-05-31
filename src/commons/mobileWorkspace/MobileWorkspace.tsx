@@ -29,7 +29,7 @@ export type MobileWorkspaceProps = {
   mobileSideContentProps: MobileSideContentProps;
 };
 
-const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
+function MobileWorkspace(props: MobileWorkspaceProps) {
   const isAndroid = /Android/.test(navigator.userAgent);
   const isPortrait = useMediaQuery('(orientation: portrait)');
   const [draggableReplPosition, setDraggableReplPosition] = useState({ x: 0, y: 0 });
@@ -271,7 +271,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       <MobileKeyboard targetKeyboardInput={targetKeyboardInput} />
     </div>
   );
-};
+}
 
 export default MobileWorkspace;
 

@@ -16,14 +16,14 @@ type Props = {
   editableAchievement: AchievementItem;
 };
 
-const AchievementSettings: React.FC<Props> = ({
+function AchievementSettings({
   changeCardBackground,
   changeGoalUuids,
   changePosition,
   changePrerequisiteUuids,
   changeIsVariableXp,
   editableAchievement,
-}) => {
+}: Props) {
   const { uuid, cardBackground, goalUuids, position, prerequisiteUuids, isVariableXp } =
     editableAchievement;
 
@@ -67,6 +67,6 @@ const AchievementSettings: React.FC<Props> = ({
       </Dialog>
     </>
   );
-};
+}
 
 export default AchievementSettings;

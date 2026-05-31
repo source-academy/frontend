@@ -10,7 +10,7 @@ type Props = {
   isRunning: boolean;
 };
 
-const ControlBarEvalButton: React.FC<Props> = ({ handleReplEval, isRunning }) => {
+function ControlBarEvalButton({ handleReplEval, isRunning }: Props) {
   const conductorEnabled = useFeature(flagConductorEnable);
   const showEvalButton = conductorEnabled ? isRunning : !isRunning;
   return showEvalButton ? (
@@ -18,6 +18,6 @@ const ControlBarEvalButton: React.FC<Props> = ({ handleReplEval, isRunning }) =>
       <ControlButton label="Eval" icon={IconNames.CODE} onClick={handleReplEval} />
     </Tooltip>
   ) : null;
-};
+}
 
 export default ControlBarEvalButton;

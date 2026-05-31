@@ -45,7 +45,7 @@ const clampPosition = (
   };
 };
 
-const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
+function Chatbot({ getSection, getText }: Props) {
   const [isPop, setPop] = useState(false);
   const [isDivVisible, setIsDivVisible] = useState(false);
   const [tipsMessage, setTipsMessage] = useState('You can click me for a chat');
@@ -172,6 +172,6 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
       )}
     </div>
   );
-};
+}
 
 export default Chatbot;

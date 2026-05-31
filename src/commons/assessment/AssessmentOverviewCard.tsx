@@ -22,12 +22,12 @@ type AssessmentOverviewCardProps = {
 };
 
 /** A card to display `AssessmentOverview`s. */
-const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
+function AssessmentOverviewCard({
   overview,
   renderAttemptButton,
   renderGradingTooltip,
   makeSubmissionButton,
-}) => {
+}: AssessmentOverviewCardProps) {
   const { isMobileBreakpoint } = useResponsive();
   return (
     <div>
@@ -99,7 +99,7 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
       </Card>
     </div>
   );
-};
+}
 
 type AssessmentOverviewCardTitleProps = {
   overview: AssessmentOverview;
@@ -107,29 +107,31 @@ type AssessmentOverviewCardTitleProps = {
   makeSubmissionButton: (overview: AssessmentOverview) => React.ReactElement;
 };
 
-const AssessmentOverviewCardTitle: React.FC<AssessmentOverviewCardTitleProps> = ({
+function AssessmentOverviewCardTitle({
   overview,
   renderProgressStatus,
   makeSubmissionButton,
-}) => (
-  <div className="listing-header">
-    <Text ellipsize>
-      <H4 className="listing-title">
-        {overview.title}
-        {overview.private ? (
-          <Tooltip
-            className="listing-title-tooltip"
-            content="This assessment is password-protected."
-          >
-            <Icon icon="lock" />
-          </Tooltip>
-        ) : null}
-        {renderProgressStatus ? showGradingTooltip(overview.isGradingPublished) : null}
-      </H4>
-    </Text>
-    <div className="listing-button">{makeSubmissionButton(overview)}</div>
-  </div>
-);
+}: AssessmentOverviewCardTitleProps) {
+  return (
+    <div className="listing-header">
+      <Text ellipsize>
+        <H4 className="listing-title">
+          {overview.title}
+          {overview.private ? (
+            <Tooltip
+              className="listing-title-tooltip"
+              content="This assessment is password-protected."
+            >
+              <Icon icon="lock" />
+            </Tooltip>
+          ) : null}
+          {renderProgressStatus ? showGradingTooltip(overview.isGradingPublished) : null}
+        </H4>
+      </Text>
+      <div className="listing-button">{makeSubmissionButton(overview)}</div>
+    </div>
+  );
+}
 
 const showGradingTooltip = (isGradingPublished: boolean) => {
   let iconName: IconName;

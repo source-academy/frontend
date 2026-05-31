@@ -20,7 +20,7 @@ type Props = {
   eventMeta: EventMeta;
 };
 
-const EditableEventMeta: React.FC<Props> = ({ changeMeta, eventMeta }) => {
+function EditableEventMeta({ changeMeta, eventMeta }: Props) {
   const { eventNames, targetCount, release, deadline, observeFrom, observeTo } = eventMeta;
 
   const changeTargetCount = (targetCount: number) =>
@@ -97,6 +97,6 @@ const EditableEventMeta: React.FC<Props> = ({ changeMeta, eventMeta }) => {
       <EditableTime type="Observe To" time={observeTo} changeTime={changeObserveTo} />
     </>
   );
-};
+}
 
 export default EditableEventMeta;

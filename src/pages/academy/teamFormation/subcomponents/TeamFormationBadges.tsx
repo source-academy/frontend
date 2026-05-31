@@ -22,7 +22,7 @@ type Props = {
   onRemove: (filter: ColumnFilter) => void;
 };
 
-const FilterBadge: React.FC<Props> = ({ filter, onRemove }) => {
+function FilterBadge({ filter, onRemove }: Props) {
   let filterValue = filter.value as string;
   filterValue = filterValue.charAt(0).toUpperCase() + filterValue.slice(1);
   const legacyColor = getBadgeColorFromLabelLegacy(filterValue);
@@ -33,6 +33,6 @@ const FilterBadge: React.FC<Props> = ({ filter, onRemove }) => {
       {filterValue}
     </Button>
   );
-};
+}
 
 export { FilterBadge };

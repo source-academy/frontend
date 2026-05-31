@@ -19,7 +19,7 @@ type BadgeProps = {
   icon?: React.ReactNode;
 };
 
-const Badge: React.FC<BadgeProps> = props => {
+function Badge(props: BadgeProps) {
   return (
     <div
       className={classNames(
@@ -35,7 +35,7 @@ const Badge: React.FC<BadgeProps> = props => {
       <span className={badgeClasses['grading-badge-text']}>{props.text}</span>
     </div>
   );
-};
+}
 
 // First color is bg, second is text (text is more saturated/darker). Colors are referenced from tailwind css.
 const AVAILABLE_COLORS = {
@@ -105,7 +105,7 @@ type AssessmentTypeBadgeProps = {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 };
 
-const AssessmentTypeBadge: React.FC<AssessmentTypeBadgeProps> = ({ type, size = 'sm' }) => {
+function AssessmentTypeBadge({ type, size = 'sm' }: AssessmentTypeBadgeProps) {
   return (
     <Badge
       text={size === 'xs' ? type.charAt(0).toUpperCase() : type}
@@ -113,7 +113,7 @@ const AssessmentTypeBadge: React.FC<AssessmentTypeBadgeProps> = ({ type, size = 
       color={getBadgeColorFromLabel(type)}
     />
   );
-};
+}
 
 type ColumnFilterBadgeProps = {
   filter: string;
@@ -121,7 +121,7 @@ type ColumnFilterBadgeProps = {
   filtersName: string;
 };
 
-const ColumnFilterBadge: React.FC<ColumnFilterBadgeProps> = ({ filter, onRemove, filtersName }) => {
+function ColumnFilterBadge({ filter, onRemove, filtersName }: ColumnFilterBadgeProps) {
   return (
     <button
       type="button"
@@ -136,14 +136,14 @@ const ColumnFilterBadge: React.FC<ColumnFilterBadgeProps> = ({ filter, onRemove,
       />
     </button>
   );
-};
+}
 
 type FilterBadgeProps = {
   filter: ColumnFilter;
   onRemove: (filter: ColumnFilter) => void;
 };
 
-const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
+function FilterBadge({ filter, onRemove }: FilterBadgeProps) {
   let filterValue = filter.value as string;
   filterValue = filterValue.charAt(0).toUpperCase() + filterValue.slice(1);
   return (
@@ -160,13 +160,13 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
       />
     </button>
   );
-};
+}
 
 type ProgressStatusBadgeProps = {
   progress: ProgressStatus;
 };
 
-const ProgressStatusBadge: React.FC<ProgressStatusBadgeProps> = ({ progress }) => {
+function ProgressStatusBadge({ progress }: ProgressStatusBadgeProps) {
   const statusText = progress.charAt(0).toUpperCase() + progress.slice(1);
   const badgeIcon = (
     <Icon
@@ -185,6 +185,6 @@ const ProgressStatusBadge: React.FC<ProgressStatusBadgeProps> = ({ progress }) =
     />
   );
   return <Badge text={statusText} color={getBadgeColorFromLabel(progress)} icon={badgeIcon} />;
-};
+}
 
 export { AssessmentTypeBadge, ColumnFilterBadge, FilterBadge, ProgressStatusBadge };

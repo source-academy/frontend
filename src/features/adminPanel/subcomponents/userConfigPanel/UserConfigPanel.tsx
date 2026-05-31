@@ -29,7 +29,7 @@ const defaultColumnDefs: ColDef = {
  *   other admins can do so, to prevent a scenario where there are
  *   no admins left in a course)
  */
-const UserConfigPanel: React.FC<Props> = props => {
+function UserConfigPanel(props: Props) {
   const gridApi = useRef<GridApi>(null);
 
   const userCourseRegistrations = props.userCourseRegistrations?.map(e =>
@@ -100,6 +100,6 @@ const UserConfigPanel: React.FC<Props> = props => {
       {grid}
     </div>
   );
-};
+}
 
 export default UserConfigPanel;

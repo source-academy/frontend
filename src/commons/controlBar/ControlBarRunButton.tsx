@@ -11,7 +11,7 @@ type Props = {
   className?: string;
 };
 
-const ControlBarRunButton: React.FC<Props> = props => {
+function ControlBarRunButton(props: Props) {
   const tooltipContent = props.isEntrypointFileDefined
     ? '...or press shift-enter in the editor'
     : 'Open a file to evaluate the program with the file as the entrypoint';
@@ -26,6 +26,6 @@ const ControlBarRunButton: React.FC<Props> = props => {
       />
     </Tooltip>
   );
-};
+}
 
 export default ControlBarRunButton;

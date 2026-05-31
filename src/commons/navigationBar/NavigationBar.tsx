@@ -41,7 +41,7 @@ export type NavbarEntryInfo = {
   hiddenInBreakpoints?: ('xs' | 'sm' | 'md' | 'lg')[]; // hide text in Blueprint breakpoints
 };
 
-const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }) => {
+function MobileHamburger({ navlinks }: { navlinks: NavbarEntryInfo[] }) {
   // Don't render drawer when there are 0 navlinks in it
   const [mobileSideMenuOpen, setMobileSideMenuOpen] = useState(false);
   const shownNavlinks = navlinks.filter(e => !e.disabled);
@@ -85,7 +85,7 @@ const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }
       )}
     </NavbarGroup>
   );
-};
+}
 
 function useSecondaryNavbarType() {
   const isPlayground = useMatch('/playground/*');
@@ -105,7 +105,7 @@ function useSecondaryNavbarType() {
   }
 }
 
-const NavigationBar: React.FC = () => {
+function NavigationBar() {
   const { isMobileBreakpoint } = useResponsive();
   const location = useLocation();
   const {
@@ -319,7 +319,7 @@ const NavigationBar: React.FC = () => {
       ) : null}
     </>
   );
-};
+}
 
 const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
   {
@@ -334,7 +334,7 @@ const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
   },
 ];
 
-export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
+export function DesktopNavLink(props: NavbarEntryInfo) {
   const responsive = useResponsive();
   const shouldHide = props.hiddenInBreakpoints?.some(bp => responsive[bp]);
   return props.disabled ? null : (
@@ -363,12 +363,14 @@ export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
       )}
     </NavLink>
   );
+}
+
+type MobileNavLinkProps = NavbarEntryInfo & {
+  handleClick?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
-const MobileNavLink: React.FC<
-  NavbarEntryInfo & { handleClick?: React.MouseEventHandler<HTMLAnchorElement> }
-> = props =>
-  props.disabled ? null : (
+function MobileNavLink(props: MobileNavLinkProps) {
+  return props.disabled ? null : (
     <NavLink
       to={props.to}
       className={({ isActive }) => classNames(isActive && Classes.ACTIVE)}
@@ -392,5 +394,6 @@ const MobileNavLink: React.FC<
       )}
     </NavLink>
   );
+}
 
 export default NavigationBar;

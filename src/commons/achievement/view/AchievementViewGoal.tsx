@@ -36,13 +36,13 @@ type Props = {
   goals: AchievementGoal[];
 };
 
-const AchievementViewGoal: React.FC<Props> = ({ goals }) => {
+function AchievementViewGoal({ goals }: Props) {
   return (
     <>
       <h1 className="progress-header">Progress</h1>
       {goals.map(goal => mapGoalToJSX(goal))}
     </>
   );
-};
+}
 
 export default AchievementViewGoal;

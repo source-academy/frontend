@@ -6,8 +6,8 @@ type Props = {
   handleClose: () => void;
 };
 
-const ControlBarCloseButton: React.FC<Props> = ({ handleClose }) => {
+function ControlBarCloseButton({ handleClose }: Props) {
   return <ControlButton label="Close" icon={IconNames.CROSS} onClick={handleClose} />;
-};
+}
 
 export default ControlBarCloseButton;

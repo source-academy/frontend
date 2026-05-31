@@ -25,7 +25,7 @@ type DatePickerProps = {
   maxDate?: Date;
 };
 
-const DatePicker: React.FC<DatePickerProps> = ({
+function DatePicker({
   value,
   onChange,
   // TODO: Unused for now
@@ -35,7 +35,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   timePickerProps,
   minDate,
   maxDate,
-}) => {
+}: DatePickerProps) {
   const [selectedDatetime, setSelectedDatetime] = useState<Date | undefined>(value);
 
   useEffect(() => {
@@ -160,6 +160,6 @@ const DatePicker: React.FC<DatePickerProps> = ({
       )}
     </div>
   );
-};
+}
 
 export default DatePicker;

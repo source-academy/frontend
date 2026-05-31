@@ -61,13 +61,13 @@ const disabledFilterModeCols: string[] = [ColumnFields.xp, ColumnFields.actionsI
 
 const disabledSortCols: string[] = [ColumnFields.actionsIndex];
 
-const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
+function GradingSubmissionTable({
   showAllSubmissions,
   totalRows,
   pageSize,
   submissions,
   updateEntries,
-}) => {
+}: GradingSubmissionTableProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -473,6 +473,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       </GradingFlex>
     </>
   );
-};
+}
 
 export default GradingSubmissionTable;

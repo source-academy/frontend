@@ -59,34 +59,36 @@ const renderTab = (
   return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
 };
 
-const SideContent = ({ renderActiveTabPanelOnly, editorWidth, ...props }: SideContentProps) => (
-  <SideContentProvider {...props}>
-    {({ tabs: allTabs, alerts: tabAlerts, changeTabsCallback, selectedTab, height }) => (
-      <div className="side-content">
-        <Card>
-          <div className="side-content-tabs">
-            <Tabs
-              id="side-content-tabs"
-              onChange={changeTabsCallback}
-              renderActiveTabPanelOnly={renderActiveTabPanelOnly}
-              selectedTabId={selectedTab}
-            >
-              {allTabs.map(tab => {
-                const tabId = getTabId(tab);
-                return renderTab(
-                  tab,
-                  tabAlerts.includes(tabId),
-                  props.workspaceLocation,
-                  editorWidth,
-                  height,
-                );
-              })}
-            </Tabs>
-          </div>
-        </Card>
-      </div>
-    )}
-  </SideContentProvider>
-);
+function SideContent({ renderActiveTabPanelOnly, editorWidth, ...props }: SideContentProps) {
+  return (
+    <SideContentProvider {...props}>
+      {({ tabs: allTabs, alerts: tabAlerts, changeTabsCallback, selectedTab, height }) => (
+        <div className="side-content">
+          <Card>
+            <div className="side-content-tabs">
+              <Tabs
+                id="side-content-tabs"
+                onChange={changeTabsCallback}
+                renderActiveTabPanelOnly={renderActiveTabPanelOnly}
+                selectedTabId={selectedTab}
+              >
+                {allTabs.map(tab => {
+                  const tabId = getTabId(tab);
+                  return renderTab(
+                    tab,
+                    tabAlerts.includes(tabId),
+                    props.workspaceLocation,
+                    editorWidth,
+                    height,
+                  );
+                })}
+              </Tabs>
+            </div>
+          </Card>
+        </div>
+      )}
+    </SideContentProvider>
+  );
+}
 
 export default SideContent;

@@ -13,7 +13,7 @@ type Props = {
   tasklists?: boolean;
 };
 
-const Markdown: React.FC<Props> = props => {
+function Markdown(props: Props) {
   const converter = new Converter({
     tables: true,
     simplifiedAutoLink: props.simplifiedAutoLink,
@@ -33,6 +33,6 @@ const Markdown: React.FC<Props> = props => {
       }}
     />
   );
-};
+}
 
 export default memo(Markdown);

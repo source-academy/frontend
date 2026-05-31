@@ -5,7 +5,7 @@ type Props = {
 };
 
 // 36k XP = Level 37
-const AchievementMilestone: React.FC<Props> = ({ studentXp }) => {
+function AchievementMilestone({ studentXp }: Props) {
   return (
     <div className="milestone">
       <h3>Your Total XP</h3>
@@ -24,6 +24,6 @@ const AchievementMilestone: React.FC<Props> = ({ studentXp }) => {
       </div>
     </div>
   );
-};
+}
 
 export default AchievementMilestone;

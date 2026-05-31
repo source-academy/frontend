@@ -7,7 +7,7 @@ type Props = {
   targetKeyboardInput: Ace.Editor | null;
 };
 
-const MobileKeyboard: React.FC<Props> = props => {
+function MobileKeyboard(props: Props) {
   const nodeRef = useRef<HTMLDivElement>(null);
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
   const [buttonContent, setButtonContent] = useState('ᐸ');
@@ -162,6 +162,6 @@ const MobileKeyboard: React.FC<Props> = props => {
       </div>
     </Draggable>
   );
-};
+}
 
 export default MobileKeyboard;

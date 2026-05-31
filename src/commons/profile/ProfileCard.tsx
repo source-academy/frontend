@@ -13,7 +13,7 @@ type Props = {
   renderIcon: (category: AssessmentType) => IconName;
 };
 
-const ProfileCard: React.FC<Props> = props => {
+function ProfileCard(props: Props) {
   const { item } = props;
 
   const isInvalidXP = item.maxXp <= 0 && item.xp === 0;
@@ -55,6 +55,6 @@ const ProfileCard: React.FC<Props> = props => {
       </Callout>
     </NavLink>
   );
-};
+}
 
 export default ProfileCard;

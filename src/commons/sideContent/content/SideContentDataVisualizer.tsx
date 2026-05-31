@@ -32,7 +32,7 @@ type Props = {
   workspaceLocation: SideContentLocation;
 };
 
-const SideContentDataVisualizer: React.FC<Props> = ({ workspaceLocation }) => {
+function SideContentDataVisualizer({ workspaceLocation }: Props) {
   const dispatch = useDispatch();
   const [steps, setSteps] = useState<Step[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
@@ -231,7 +231,7 @@ const SideContentDataVisualizer: React.FC<Props> = ({ workspaceLocation }) => {
       </div>
     </HotKeys>
   );
-};
+}
 
 const makeDataVisualizerTabFrom = (location: SideContentLocation): SideContentTab => ({
   label: t($ => $.dataVisualizer.label, { ns: 'sideContent' }),
@@ -240,7 +240,7 @@ const makeDataVisualizerTabFrom = (location: SideContentLocation): SideContentTa
   id: SideContentType.dataVisualizer,
 });
 
-const DataVisualizerDefaultText: React.FC = () => {
+function DataVisualizerDefaultText() {
   const { t } = useTranslation('sideContent', { keyPrefix: 'dataVisualizer' });
   return (
     <p id="data-visualizer-default-text" className={Classes.RUNNING_TEXT}>
@@ -277,6 +277,6 @@ const DataVisualizerDefaultText: React.FC = () => {
       />
     </p>
   );
-};
+}
 
 export default makeDataVisualizerTabFrom;

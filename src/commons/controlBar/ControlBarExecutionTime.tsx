@@ -6,7 +6,7 @@ type Props = {
   execTime?: number;
 };
 
-const ControlBarExecutionTime: React.FC<Props> = props => {
+function ControlBarExecutionTime(props: Props) {
   return (
     <Tooltip content="Execution Time" placement={Position.TOP}>
       <NumericInput
@@ -18,6 +18,6 @@ const ControlBarExecutionTime: React.FC<Props> = props => {
       />
     </Tooltip>
   );
-};
+}
 
 export default ControlBarExecutionTime;

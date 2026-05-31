@@ -16,7 +16,7 @@ type Props = {
   filterMode: boolean;
 };
 
-const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filterMode }) => {
+function GradingActions({ submissionId, style, progress, filterMode }: Props) {
   const dispatch = useDispatch();
   const { courseId } = useSession();
 
@@ -132,6 +132,6 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       )}
     </GradingFlex>
   );
-};
+}
 
 export default GradingActions;

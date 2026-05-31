@@ -24,10 +24,10 @@ type Props = {
   contest: LeaderboardContestDetails;
 };
 
-const ContestLeaderboard: React.FC<Props> = ({
+function ContestLeaderboard({
   type,
   contest: { contest_id: contestId, title: contestName },
-}) => {
+}: Props) {
   const courseID = useTypedSelector(store => store.session.courseId);
   const visibleEntries = useTypedSelector(
     store => store.session?.topContestLeaderboardDisplay ?? 10,
@@ -183,6 +183,6 @@ const ContestLeaderboard: React.FC<Props> = ({
       </div>
     </div>
   );
-};
+}
 
 export default ContestLeaderboard;

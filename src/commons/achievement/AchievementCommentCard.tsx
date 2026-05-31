@@ -12,7 +12,7 @@ type Props = {
   showToQuestion: boolean;
 };
 
-const AchievementCommentCard: React.FC<Props> = ({ assessment, showToQuestion }) => {
+function AchievementCommentCard({ assessment, showToQuestion }: Props) {
   const navigate = useNavigate();
   const courseId = useTypedSelector(store => store.session.courseId);
   const toMission = useMemo(
@@ -58,6 +58,6 @@ const AchievementCommentCard: React.FC<Props> = ({ assessment, showToQuestion })
       </div>
     </div>
   );
-};
+}
 
 export default AchievementCommentCard;
