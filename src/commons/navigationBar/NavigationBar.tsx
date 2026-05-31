@@ -18,13 +18,13 @@ import { useMemo, useState } from 'react';
 import { Translation } from 'react-i18next';
 import { type Location, NavLink, useLocation, useMatch } from 'react-router';
 import type { i18nDefaultLangKeys } from 'src/i18n/i18next';
-import classes from 'src/styles/NavigationBar.module.scss';
 
 import Dropdown from '../dropdown/Dropdown';
 import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByType } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
 import { useResponsive, useSession } from '../utils/Hooks';
+import classes from './NavigationBar.module.css';
 import AcademyNavigationBar, {
   assessmentTypesToNavlinkInfo,
   getAcademyNavbarRightInfo,
