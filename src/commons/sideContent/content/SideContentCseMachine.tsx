@@ -16,7 +16,7 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
 import { t } from 'i18next';
 import { Chapter } from 'js-slang/dist/langs';
-import { debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 import { Component } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { connect, type MapDispatchToProps, type MapStateToProps } from 'react-redux';
