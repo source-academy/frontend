@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import classes from 'src/styles/FileSystemView.module.scss';
+
+import classes from './FileSystemView.module.css';
 
 type Props = {
   processFileName: (fileName: string) => void;

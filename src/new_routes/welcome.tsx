@@ -4,7 +4,7 @@ import { ItalicLink } from 'src/commons/sideContent/content/SideContentCseMachin
 import Constants, { Links } from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 
-import styles from '../pages/welcome/Welcome.module.scss';
+import styles from './welcome.module.css';
 
 function WelcomePage() {
   const { t } = useTranslation();

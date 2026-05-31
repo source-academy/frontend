@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { SortStates } from 'src/features/grading/GradingTypes';
-import classes from 'src/styles/Grading.module.scss';
 
+import classes from '../Grading.module.css';
 import { getNextSortState } from './GradingSubmissionsTable';
 
 type Props = CustomHeaderProps & {

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Navigate, useParams } from 'react-router';
 import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
-import academyClasses from 'src/styles/Academy.module.scss';
+import academyClasses from 'src/pages/academy/Academy.module.scss';
 
 import { AssessmentStatuses } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';

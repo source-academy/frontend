@@ -6,8 +6,9 @@ import type { Tokens } from 'src/commons/application/types/SessionTypes';
 import { useSession, useTokens } from 'src/commons/utils/Hooks';
 import { initRagChat, sendRagMessage } from 'src/features/ragChat/api';
 import ChatbotCodeSnippet from 'src/pages/sicp/subcomponents/chatbot/ChatbotCodeSnippet';
-import classes from 'src/styles/RagChatbot.module.scss';
 import { v4 as uuid } from 'uuid';
+
+import classes from './RagChatbot.module.css';
 
 type ChatMessage = {
   id: string;

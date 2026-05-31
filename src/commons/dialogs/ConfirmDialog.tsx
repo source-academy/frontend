@@ -10,7 +10,8 @@ import {
   Intent,
 } from '@blueprintjs/core';
 import classNames from 'classnames';
-import classes from 'src/styles/ConfirmDialog.module.scss';
+
+import classes from './ConfirmDialog.module.scss';
 
 export interface ConfirmDialogProps<T> {
   icon?: IconName;

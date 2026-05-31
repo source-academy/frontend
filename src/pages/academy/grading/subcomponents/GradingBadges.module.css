@@ -1,5 +1,3 @@
-@import '_global';
-
 .grading-badge {
   border-radius: 9999px;
   padding: 0.1rem 0.2rem;
@@ -40,9 +38,9 @@
     font-size: 1.25rem;
   }
 
-  // div: .grading-def-cell
-  // button: .grading-overview-filterable-btns
-  // TODO: This also affects .grading-overview-unfilterable-btns
+  /* div: .grading-def-cell */
+  /* button: .grading-overview-filterable-btns */
+  /* TODO: This also affects .grading-overview-unfilterable-btns */
   div:hover > button:has(&) {
     text-decoration: none !important;
     filter: brightness(0.75);

@@ -3,9 +3,9 @@ import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useTokens } from 'src/commons/utils/Hooks';
 import { continueChat, initChat } from 'src/features/sicp/chatCompletion/api';
 import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
-import classes from 'src/styles/Chatbot.module.scss';
 import { v4 as uuid } from 'uuid';
 
+import classes from './Chatbot.module.css';
 import ChatbotCodeSnippet from './ChatbotCodeSnippet';
 
 type Props = {

@@ -3,7 +3,7 @@
 exports[`NavigationBar > Renders "Not logged in" correctly 1`] = `
 <DocumentFragment>
   <div
-    class="bp6-navbar NavigationBar primary-navbar _primary-navbar_d292d6 bp6-dark"
+    class="bp6-navbar NavigationBar primary-navbar _primary-navbar_07fecd bp6-dark"
   >
     <div
       class="bp6-navbar-group bp6-align-left"
@@ -110,7 +110,7 @@ exports[`NavigationBar > Renders "Not logged in" correctly 1`] = `
 exports[`NavigationBar > Renders correctly for student with course 1`] = `
 <DocumentFragment>
   <div
-    class="bp6-navbar NavigationBar primary-navbar _primary-navbar_d292d6 bp6-dark"
+    class="bp6-navbar NavigationBar primary-navbar _primary-navbar_07fecd bp6-dark"
   >
     <div
       class="bp6-navbar-group bp6-align-left"
@@ -409,7 +409,7 @@ exports[`NavigationBar > Renders correctly for student with course 1`] = `
 exports[`NavigationBar > Renders correctly for student without course 1`] = `
 <DocumentFragment>
   <div
-    class="bp6-navbar NavigationBar primary-navbar _primary-navbar_d292d6 bp6-dark"
+    class="bp6-navbar NavigationBar primary-navbar _primary-navbar_07fecd bp6-dark"
   >
     <div
       class="bp6-navbar-group bp6-align-left"
