@@ -1,5 +1,6 @@
 import { H5, NonIdealState, Spinner } from '@blueprintjs/core';
-import styles from 'src/styles/GradingCommentSelector.module.scss';
+
+import styles from './GradingCommentSelector.module.css';
 
 type Props = {
   comments: string[];
