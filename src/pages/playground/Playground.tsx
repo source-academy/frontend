@@ -193,7 +193,7 @@ export async function handleHash(
   }
 }
 
-const Playground: React.FC<PlaygroundProps> = props => {
+function Playground(props: PlaygroundProps) {
   const { isSicpEditor } = props;
   const workspaceLocation: WorkspaceLocation = isSicpEditor ? 'sicp' : 'playground';
   const { isMobileBreakpoint } = useResponsive();
@@ -1069,9 +1069,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       <Workspace {...workspaceProps} />
     </div>
   );
-};
+}
 
 export const Component = Playground;
-Component.displayName = 'Playground';
 
 export default Playground;
