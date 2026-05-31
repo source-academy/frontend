@@ -2,7 +2,8 @@ import { Button, ButtonGroup, Icon } from '@blueprintjs/core';
 import { IconNames, InfoSign } from '@blueprintjs/icons';
 import { useCallback, useState } from 'react';
 import ControlButton from 'src/commons/ControlButton';
-import classes from 'src/styles/ConfigureControls.module.scss';
+
+import classes from './AssignEntriesButton.module.css';
 
 type Props = {
   handleAssignEntriesForVoting: (id: number) => void;
