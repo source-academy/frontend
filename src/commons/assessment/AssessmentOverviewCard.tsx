@@ -1,7 +1,6 @@
 import { Card, Elevation, H4, H6, Icon, Intent, Position, Text, Tooltip } from '@blueprintjs/core';
 import { type IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import classes from 'src/pages/academy/Academy.module.scss';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import Markdown from '../Markdown';
@@ -10,6 +9,7 @@ import { filterNotificationsByAssessment } from '../notificationBadge/Notificati
 import { beforeNow, getPrettyDate, getPrettyDateAfterHours } from '../utils/DateHelper';
 import { useResponsive } from '../utils/Hooks';
 import AssessmentInteractButton from './AssessmentInteractButton';
+import classes from './AssessmentOverviewCard.module.css';
 import type { AssessmentOverview } from './AssessmentTypes';
 
 type AssessmentOverviewCardProps = {
