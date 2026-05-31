@@ -7,7 +7,7 @@ export type ControlBarProps = {
   editingWorkspaceButtons?: Array<React.ReactElement | null>;
 };
 
-const ControlBar: React.FC<ControlBarProps> = props => {
+function ControlBar(props: ControlBarProps) {
   const editorControl = (
     <div className={classNames('ControlBar_editor', Classes.BUTTON_GROUP)}>
       {props.editorButtons}
@@ -31,6 +31,6 @@ const ControlBar: React.FC<ControlBarProps> = props => {
       {editingWorkspaceControl}
     </div>
   );
-};
+}
 
 export default ControlBar;

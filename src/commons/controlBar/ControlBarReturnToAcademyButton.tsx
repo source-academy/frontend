@@ -6,7 +6,7 @@ type Props = {
   onClick?(): any;
 };
 
-const ControlBarReturnToAcademyButton: React.FC<Props> = ({ onClick }) => {
+function ControlBarReturnToAcademyButton({ onClick }: Props) {
   return (
     <ControlButton
       label="Return to Academy"
@@ -15,6 +15,6 @@ const ControlBarReturnToAcademyButton: React.FC<Props> = ({ onClick }) => {
       options={{ iconOnRight: true }}
     />
   );
-};
+}
 
 export default ControlBarReturnToAcademyButton;

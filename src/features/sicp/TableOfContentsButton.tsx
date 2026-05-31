@@ -4,6 +4,6 @@ type TableOfContentsButtonProps = {
   handleOpenToc: () => void;
 };
 
-export const TableOfContentsButton: React.FC<TableOfContentsButtonProps> = ({ handleOpenToc }) => {
+export function TableOfContentsButton({ handleOpenToc }: TableOfContentsButtonProps) {
   return <ControlButton label="Table of Contents" onClick={handleOpenToc} />;
-};
+}
