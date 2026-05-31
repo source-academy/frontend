@@ -1,18 +1,18 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
-import classes from 'src/styles/AchievementCommentCard.module.scss';
 
 import type { Assessment } from '../assessment/AssessmentTypes';
 import { useTypedSelector } from '../utils/Hooks';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
+import classes from './AchievementCommentCard.module.css';
 
 type Props = {
   assessment: Assessment;
   showToQuestion: boolean;
 };
 
-const AchievementCommentCard: React.FC<Props> = ({ assessment, showToQuestion }) => {
+function AchievementCommentCard({ assessment, showToQuestion }: Props) {
   const navigate = useNavigate();
   const courseId = useTypedSelector(store => store.session.courseId);
   const toMission = useMemo(
@@ -58,6 +58,6 @@ const AchievementCommentCard: React.FC<Props> = ({ assessment, showToQuestion })
       </div>
     </div>
   );
-};
+}
 
 export default AchievementCommentCard;

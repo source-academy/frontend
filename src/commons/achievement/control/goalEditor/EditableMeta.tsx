@@ -20,7 +20,7 @@ type Props = {
   meta: GoalMeta;
 };
 
-const EditableMeta: React.FC<Props> = ({ changeMeta, meta }) => {
+function EditableMeta({ changeMeta, meta }: Props) {
   const { type } = meta;
 
   const typeRenderer: ItemRenderer<GoalType> = (type, { handleClick }) => (
@@ -61,6 +61,6 @@ const EditableMeta: React.FC<Props> = ({ changeMeta, meta }) => {
       {editableMetaDetails(type)}
     </>
   );
-};
+}
 
 export default EditableMeta;

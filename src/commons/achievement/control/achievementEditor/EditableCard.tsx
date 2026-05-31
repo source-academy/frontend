@@ -1,6 +1,6 @@
 import { EditableText, NumericInput, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { useContext, useMemo, useReducer, useState } from 'react';
 
 import { AchievementContext } from '../../../../features/achievement/AchievementConstants';
@@ -132,13 +132,7 @@ type Props = {
   requestPublish: () => void;
 };
 
-const EditableCard: React.FC<Props> = ({
-  uuid,
-  isNewAchievement,
-  releaseUuid,
-  removeCard,
-  requestPublish,
-}) => {
+function EditableCard({ uuid, isNewAchievement, releaseUuid, removeCard, requestPublish }: Props) {
   const inferencer = useContext(AchievementContext);
   const achievement = inferencer.getAchievement(uuid);
   const achievementClone = useMemo(() => cloneDeep(achievement), [achievement]);
@@ -252,6 +246,6 @@ const EditableCard: React.FC<Props> = ({
       </div>
     </li>
   );
-};
+}
 
 export default EditableCard;

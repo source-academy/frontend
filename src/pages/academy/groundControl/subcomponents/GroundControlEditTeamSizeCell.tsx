@@ -10,7 +10,7 @@ type Props = {
   data: AssessmentOverview;
 };
 
-const EditTeamSizeCell: React.FC<Props> = ({ data, onTeamSizeChange }) => {
+function EditTeamSizeCell({ data, onTeamSizeChange }: Props) {
   const minTeamSize = 1; // Corresponds to an individual assessment
   const teamSize = data.maxTeamSize;
 
@@ -48,6 +48,6 @@ const EditTeamSizeCell: React.FC<Props> = ({ data, onTeamSizeChange }) => {
       <Button variant="minimal" icon={IconNames.PLUS} onClick={handleIncrement} />
     </GradingFlex>
   );
-};
+}
 
 export default EditTeamSizeCell;

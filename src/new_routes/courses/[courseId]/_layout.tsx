@@ -6,7 +6,7 @@ import { Navigate, Outlet, useNavigate, useParams } from 'react-router';
 import ResearchAgreementPrompt from 'src/commons/researchAgreementPrompt/ResearchAgreementPrompt';
 import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
-import classes from 'src/styles/Academy.module.scss';
+import classes from 'src/pages/academy/Academy.module.scss';
 
 import SessionActions from '../../../commons/application/actions/SessionActions';
 import { numberRegExp } from '../../../features/academy/AcademyTypes';

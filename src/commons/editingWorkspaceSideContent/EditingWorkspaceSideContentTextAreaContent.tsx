@@ -14,7 +14,7 @@ type Props = {
   useRawValue?: boolean;
 };
 
-export const TextAreaContent: React.FC<Props> = props => {
+export function TextAreaContent(props: Props) {
   const isNumberVal = props.isNumber || false;
 
   const [isEditing, setIsEditing] = useState(false);
@@ -84,6 +84,6 @@ export const TextAreaContent: React.FC<Props> = props => {
     }
   }
   return <div onClick={toggleEditField()}>{display}</div>;
-};
+}
 
 export default TextAreaContent;

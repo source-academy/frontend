@@ -2,7 +2,8 @@ import { Button, ButtonGroup, Icon } from '@blueprintjs/core';
 import { IconNames, InfoSign } from '@blueprintjs/icons';
 import { useCallback, useState } from 'react';
 import ControlButton from 'src/commons/ControlButton';
-import classes from 'src/styles/ConfigureControls.module.scss';
+
+import classes from './AssignEntriesButton.module.css';
 
 type Props = {
   handleAssignEntriesForVoting: (id: number) => void;
@@ -10,11 +11,11 @@ type Props = {
   isVotingPublished: boolean;
 };
 
-const AssignEntriesButton: React.FC<Props> = ({
+function AssignEntriesButton({
   handleAssignEntriesForVoting,
   assessmentId,
   isVotingPublished,
-}) => {
+}: Props) {
   const [confirmAssignEntries, setConfirmAssignEntries] = useState(false);
 
   // OnClick and Handler functions for confirmation warnings when assigning entries for voting
@@ -63,6 +64,6 @@ const AssignEntriesButton: React.FC<Props> = ({
       )}
     </>
   );
-};
+}
 
 export default AssignEntriesButton;

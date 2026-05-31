@@ -40,12 +40,7 @@ const enum FACING_MODE {
   RIGHT = 'right',
 }
 
-const RemoteExecutionDeviceDialog: React.FC<Props> = ({
-  isOpen,
-  onClose,
-  deviceToEdit,
-  defaultSecret,
-}) => {
+function RemoteExecutionDeviceDialog({ isOpen, onClose, deviceToEdit, defaultSecret }: Props) {
   const dispatch = useDispatch();
   const nameField = useField<HTMLInputElement>(validateNotEmpty);
   const typeField = useField<HTMLSelectElement>();
@@ -223,6 +218,6 @@ const RemoteExecutionDeviceDialog: React.FC<Props> = ({
       />
     </Dialog>
   );
-};
+}
 
 export default RemoteExecutionDeviceDialog;

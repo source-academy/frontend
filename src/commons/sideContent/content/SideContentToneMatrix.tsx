@@ -2,7 +2,7 @@ import { Button, Classes } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { memo, useEffect, useRef } from 'react';
 
-const SideContentToneMatrix: React.FC = () => {
+function SideContentToneMatrix() {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -36,6 +36,6 @@ const SideContentToneMatrix: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default memo(SideContentToneMatrix, () => true);

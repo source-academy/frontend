@@ -14,7 +14,7 @@ type Props = {
   notificationFilter?: (notifications: Notification[]) => Notification[];
 };
 
-const NotificationBadge: React.FC<Props> = props => {
+function NotificationBadge(props: Props) {
   const dispatch = useDispatch();
   const { notifications: initialNotifications } = useSession();
 
@@ -68,7 +68,7 @@ const NotificationBadge: React.FC<Props> = props => {
   }
 
   return notificationIcon;
-};
+}
 
 const makeNotificationMessage = (type: NotificationType) => {
   switch (type) {

@@ -12,7 +12,7 @@ type Props = {
   courseId?: number;
 };
 
-const DropdownCourses = (({ isOpen, onClose, courses, courseId }) => {
+function DropdownCourses({ isOpen, onClose, courses, courseId }: Props) {
   const navigate = useNavigate();
 
   const options = courses.map(course => ({
@@ -46,6 +46,6 @@ const DropdownCourses = (({ isOpen, onClose, courses, courseId }) => {
       </DialogBody>
     </Dialog>
   );
-}) satisfies React.FC<Props>;
+}
 
 export default DropdownCourses;

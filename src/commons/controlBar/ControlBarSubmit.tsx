@@ -6,7 +6,7 @@ type Props = {
   onClick?(): any;
 };
 
-const ControlBarSubmit: React.FC<Props> = ({ onClick }) => {
+function ControlBarSubmit({ onClick }: Props) {
   return (
     <ControlButton
       label="Submit"
@@ -15,6 +15,6 @@ const ControlBarSubmit: React.FC<Props> = ({ onClick }) => {
       options={{ iconOnRight: true }}
     />
   );
-};
+}
 
 export default ControlBarSubmit;

@@ -11,7 +11,7 @@ type Props = {
   deleteRowHandler: (index: number) => void;
 };
 
-const DeleteRowCell: React.FC<Props> = ({ data, node, deleteRowHandler }) => {
+function DeleteRowCell({ data, node, deleteRowHandler }: Props) {
   const { rowIndex } = node;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -64,5 +64,6 @@ const DeleteRowCell: React.FC<Props> = ({ data, node, deleteRowHandler }) => {
       </Dialog>
     </>
   );
-};
+}
+
 export default DeleteRowCell;

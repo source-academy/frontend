@@ -10,12 +10,12 @@ type Props = {
   toggleFolderMode: () => void;
 };
 
-const ControlBarToggleFolderModeButton: React.FC<Props> = ({
+function ControlBarToggleFolderModeButton({
   isFolderModeEnabled,
   isSessionActive,
   isPersistenceActive,
   toggleFolderMode,
-}) => {
+}: Props) {
   const tooltipContent = isSessionActive
     ? 'Currently unsupported while a collaborative session is active'
     : isPersistenceActive
@@ -34,6 +34,6 @@ const ControlBarToggleFolderModeButton: React.FC<Props> = ({
       />
     </Tooltip>
   );
-};
+}
 
 export default ControlBarToggleFolderModeButton;

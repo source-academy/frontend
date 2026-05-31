@@ -20,7 +20,7 @@ import { updateReactRouter } from './actions/CommonsActions';
  * 1. Playground-only (stripped-down backendless version of SA - e.g. https://sourceacademy.org)
  * 2. Full Academy (full SA to be deployed and configured with the backend - e.g. https://sourceacademy.nus.edu.sg)
  */
-const ApplicationWrapper: React.FC = () => {
+function ApplicationWrapper() {
   const dispatch = useDispatch();
   const { isLoggedIn, name, courseId } = useSession();
   const [isApiHealthy, setIsApiHealthy] = useState(true);
@@ -55,6 +55,6 @@ const ApplicationWrapper: React.FC = () => {
   }
 
   return <RouterProvider router={router} />;
-};
+}
 
 export default ApplicationWrapper;

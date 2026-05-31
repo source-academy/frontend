@@ -10,7 +10,7 @@ type Props = {
   requestPublish: () => void;
 };
 
-const AchievementEditor: React.FC<Props> = ({ requestPublish }) => {
+function AchievementEditor({ requestPublish }: Props) {
   const inferencer = useContext(AchievementContext);
 
   /**
@@ -69,6 +69,6 @@ const AchievementEditor: React.FC<Props> = ({ requestPublish }) => {
       <ul className="achievement-container">{editableCards}</ul>
     </div>
   );
-};
+}
 
 export default AchievementEditor;

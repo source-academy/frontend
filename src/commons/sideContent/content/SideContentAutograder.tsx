@@ -20,7 +20,7 @@ export type SideContentAutograderProps = {
   workspaceLocation: WorkspaceLocation;
 };
 
-const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
+function SideContentAutograder(props: SideContentAutograderProps) {
   const { t } = useTranslation('sideContent', { keyPrefix: 'autograder' });
   const [showsTestcases, setTestcasesShown] = useState(true);
   const [showsResults, setResultsShown] = useState(true);
@@ -157,7 +157,7 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
       </Collapse>
     </div>
   );
-};
+}
 
 const columnHeader = (colClass: string, colTitle: string) => (
   <div className={colClass}>

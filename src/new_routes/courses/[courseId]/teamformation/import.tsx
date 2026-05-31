@@ -7,7 +7,8 @@ import Select from 'react-select';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import type { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import classes from 'src/styles/TeamFormation.module.scss';
+
+import classes from '../../../../pages/academy/teamFormation/subcomponents/TeamFormationForm.module.css';
 
 function TeamFormationImport() {
   const navigate = useNavigate();

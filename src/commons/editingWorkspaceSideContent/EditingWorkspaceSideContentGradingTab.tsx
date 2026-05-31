@@ -8,7 +8,7 @@ type Props = {
   path: Array<string | number>;
 };
 
-const GradingTab: React.FC<Props> = props => {
+function GradingTab(props: Props) {
   const textareaContent = (path: Array<string | number>) => {
     return (
       <TextAreaContent
@@ -27,6 +27,6 @@ const GradingTab: React.FC<Props> = props => {
       {textareaContent(props.path.concat(['maxXp']))}
     </div>
   );
-};
+}
 
 export default GradingTab;

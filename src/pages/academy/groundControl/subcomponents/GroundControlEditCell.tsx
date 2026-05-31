@@ -16,7 +16,7 @@ type Props = {
 
 const dateDisplayFormat = 'YYYY-MM-DD HH:mm:ss ZZ';
 
-const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDate }) => {
+function EditCell({ data, forOpenDate, handleAssessmentChangeDate }: Props) {
   const minDate = new Date(2010, 0, 0);
   const maxDate = new Date(2030, 11, 31);
 
@@ -114,6 +114,6 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
       </Dialog>
     </>
   );
-};
+}
 
 export default EditCell;

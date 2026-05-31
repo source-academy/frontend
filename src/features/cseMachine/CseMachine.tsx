@@ -498,7 +498,6 @@ export default class CseMachine {
   }
 
   static clearCse() {
-    CseMachine.resetArrowOriginFilters();
     if (this.setVis) {
       this.setVis(undefined);
       CseMachine.environmentTree = undefined;

@@ -20,13 +20,13 @@ type Props = {
   disabled?: boolean;
 };
 
-const ControlBarChapterSelect: React.FC<Props> = ({
+function ControlBarChapterSelect({
   isFolderModeEnabled,
   sourceChapter,
   sourceVariant,
   handleChapterSelect = () => {},
   disabled = false,
-}) => {
+}: Props) {
   const dispatch = useDispatch();
   const directoryEnabled = useFeature(flagConductorEnable);
   const selectedLanguageId = useTypedSelector(s => s.languageDirectory.selectedLanguageId);
@@ -85,6 +85,6 @@ const ControlBarChapterSelect: React.FC<Props> = ({
       />
     </Select>
   );
-};
+}
 
 export default ControlBarChapterSelect;

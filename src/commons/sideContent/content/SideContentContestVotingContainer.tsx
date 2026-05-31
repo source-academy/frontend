@@ -15,12 +15,12 @@ export type SideContentContestVotingContainerProps = {
  * Container to separate behaviour concerns from rendering concerns
  * Stores component-level voting ranking state
  */
-const SideContentContestVotingContainer: React.FC<SideContentContestVotingContainerProps> = ({
+function SideContentContestVotingContainer({
   canSave,
   contestEntries,
   handleSave,
   handleContestEntryClick,
-}) => {
+}: SideContentContestVotingContainerProps) {
   const [isValid, setIsValid] = useState(true);
   const [votingSubmission, setVotingSubmission] = useState<ContestEntry[]>([]);
 
@@ -59,6 +59,6 @@ const SideContentContestVotingContainer: React.FC<SideContentContestVotingContai
       contestEntries={votingSubmission}
     />
   );
-};
+}
 
 export default SideContentContestVotingContainer;

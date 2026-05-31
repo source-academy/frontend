@@ -10,7 +10,7 @@ type Props =
   | { type: 'contest'; data: ContestLeaderboardRow[]; outputType: 'image' }
   | { type: 'contest'; data: ContestLeaderboardRow[]; outputType: 'audio' };
 
-const LeaderboardPodium: React.FC<Props> = ({ type, data, outputType }) => {
+function LeaderboardPodium({ type, data, outputType }: Props) {
   // TODO: Retrieval of rune image/audio files from backend to be displayed on the podium
 
   return (
@@ -37,6 +37,6 @@ const LeaderboardPodium: React.FC<Props> = ({ type, data, outputType }) => {
         ))}
     </div>
   );
-};
+}
 
 export default LeaderboardPodium;

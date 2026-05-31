@@ -924,6 +924,10 @@ export class Layout {
           const currentWidth = frame.width();
           frame.reassignWidth(Math.max(currentWidth, fixedWidth));
         }
+
+        // get predetermined y coordinate
+        const fixedY = Layout.getGhostFrameY(id)!;
+        frame.reassignCoordinatesY(fixedY);
       });
     });
   }

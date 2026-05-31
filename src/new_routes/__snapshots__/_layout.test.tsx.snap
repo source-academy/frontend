@@ -6,7 +6,7 @@ exports[`Application renders correctly 1`] = `
     class="Application"
   >
     <div
-      class="bp6-navbar NavigationBar primary-navbar _primary-navbar_d292d6 bp6-dark"
+      class="bp6-navbar NavigationBar primary-navbar _primary-navbar_07fecd bp6-dark"
     >
       <div
         class="bp6-navbar-group bp6-align-left"

@@ -3,9 +3,9 @@ import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useTokens } from 'src/commons/utils/Hooks';
 import { continueChat, initChat } from 'src/features/sicp/chatCompletion/api';
 import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
-import classes from 'src/styles/Chatbot.module.scss';
 import { v4 as uuid } from 'uuid';
 
+import classes from './Chatbot.module.css';
 import ChatbotCodeSnippet from './ChatbotCodeSnippet';
 
 type Props = {
@@ -33,14 +33,14 @@ const scrollToBottom = (ref: React.RefObject<HTMLDivElement | null>) => {
   ref.current?.scrollTo({ top: ref.current?.scrollHeight });
 };
 
-const ChatBox: React.FC<Props> = ({
+function ChatBox({
   getSection,
   getText,
   activeSnippetId,
   setActiveSnippetId,
   isExpanded,
   toggleExpanded,
-}) => {
+}: Props) {
   const chatRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(() => [createInitialMessage()]);
@@ -169,7 +169,7 @@ const ChatBox: React.FC<Props> = ({
       </div>
     </div>
   );
-};
+}
 
 // Message renderer component that can render code blocks with interactive snippets
 type MessageRendererProps = {
@@ -178,11 +178,7 @@ type MessageRendererProps = {
   setActiveSnippetId: (id: string) => void;
 };
 
-const MessageRenderer: React.FC<MessageRendererProps> = ({
-  message,
-  activeSnippetId,
-  setActiveSnippetId,
-}) => {
+function MessageRenderer({ message, activeSnippetId, setActiveSnippetId }: MessageRendererProps) {
   const content = message.content;
   const messageId = message.id;
 
@@ -269,6 +265,6 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
   }
 
   return parts;
-};
+}
 
 export default ChatBox;

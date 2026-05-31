@@ -1,7 +1,7 @@
 import { MenuItem } from '@blueprintjs/core';
 import type { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
 import { MultiSelect } from '@blueprintjs/select';
-import { without } from 'lodash';
+import { without } from 'lodash-es';
 import { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import type { AchievementGoal } from 'src/features/achievement/AchievementTypes';
@@ -11,7 +11,7 @@ type Props = {
   goalUuids: string[];
 };
 
-const EditableGoalUuids: React.FC<Props> = ({ changeGoalUuids, goalUuids }) => {
+function EditableGoalUuids({ changeGoalUuids, goalUuids }: Props) {
   const inferencer = useContext(AchievementContext);
   const allGoalUuids = inferencer.getAllGoalUuids();
   const selectedUuids = goalUuids.filter(
@@ -56,6 +56,6 @@ const EditableGoalUuids: React.FC<Props> = ({ changeGoalUuids, goalUuids }) => {
       resetOnSelect
     />
   );
-};
+}
 
 export default EditableGoalUuids;

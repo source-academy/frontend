@@ -38,7 +38,7 @@ const resizableProps = {
   maxHeight: '2000px',
 };
 
-const CodeSnippet: React.FC<CodeSnippetProps> = props => {
+function CodeSnippet(props: CodeSnippetProps) {
   const { body, output, id } = props;
   const context = useCodeSnippetContext();
   const { isMobileBreakpoint } = useResponsive();
@@ -106,6 +106,6 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
       )}
     </div>
   );
-};
+}
 
 export default CodeSnippet;

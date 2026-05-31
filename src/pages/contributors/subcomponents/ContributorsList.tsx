@@ -1,11 +1,11 @@
 import { Card, Elevation, H2, H3, H5 } from '@blueprintjs/core';
 import { useEffect, useState } from 'react';
-import classes from 'src/styles/Contributors.module.scss';
 
 import type { Contributor, Repo } from '../../../features/contributors/ContributorsTypes';
+import classes from './Contributors.module.css';
 import { fetchContributors, fetchRepos } from './ContributorsGithubApi';
 
-const ContributorsList: React.FC = () => {
+function ContributorsList() {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [contributors, setContributors] = useState<Contributor[][]>([]);
 
@@ -48,6 +48,6 @@ const ContributorsList: React.FC = () => {
     <H2>Loading...</H2>
   );
   return <div>{contributorList}</div>;
-};
+}
 
 export default ContributorsList;

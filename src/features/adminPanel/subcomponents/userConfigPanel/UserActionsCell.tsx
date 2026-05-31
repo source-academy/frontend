@@ -20,7 +20,7 @@ type Props = {
   handleDeleteUserFromCourse: (courseRegId: number) => void;
 };
 
-const DeleteUserCell: React.FC<Props> = ({ data, handleDeleteUserFromCourse }) => {
+function DeleteUserCell({ data, handleDeleteUserFromCourse }: Props) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const clickHandler = () => {
@@ -91,6 +91,6 @@ const DeleteUserCell: React.FC<Props> = ({ data, handleDeleteUserFromCourse }) =
       </Dialog>
     </>
   );
-};
+}
 
 export default DeleteUserCell;

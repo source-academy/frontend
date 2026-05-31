@@ -23,15 +23,7 @@ interface Props {
 /**
  * Represents Rectangle with rounded corners, for boundary of arrays.
  */
-export const RoundedRect: React.FC<Props> = ({
-  x,
-  y,
-  width,
-  height,
-  cornerRadius,
-  forwardRef,
-  ...props
-}) => {
+export function RoundedRect({ x, y, width, height, cornerRadius, forwardRef, ...props }: Props) {
   return (
     <Shape
       sceneFunc={(context, shape) => {
@@ -55,4 +47,4 @@ export const RoundedRect: React.FC<Props> = ({
       {...props}
     />
   );
-};
+}

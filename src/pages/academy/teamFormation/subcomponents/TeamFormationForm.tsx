@@ -9,14 +9,15 @@ import type { User } from 'src/commons/application/types/SessionTypes';
 import type { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import { useSession } from 'src/commons/utils/Hooks';
 import type { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
-import classes from 'src/styles/TeamFormation.module.scss';
+
+import classes from './TeamFormationForm.module.css';
 
 export type OptionType = {
   label: string | null;
   value: User | null;
 } | null;
 
-const TeamFormationForm: React.FC = () => {
+function TeamFormationForm() {
   const { teamId } = useParams(); // Retrieve the team ID from the URL
   const { courseId, students, assessmentOverviews, teamFormationOverviews } = useSession();
   const dispatch = useDispatch();
@@ -203,9 +204,8 @@ const TeamFormationForm: React.FC = () => {
       </Form>
     </div>
   );
-};
+}
 
 export const Component = TeamFormationForm;
-Component.displayName = 'TeamFormationForm';
 
 export default TeamFormationForm;

@@ -1,5 +1,5 @@
 import { EditableText } from '@blueprintjs/core';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { useContext, useMemo, useReducer, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import type { GoalDefinition, GoalMeta } from 'src/features/achievement/AchievementTypes';
@@ -60,13 +60,7 @@ type Props = {
   requestPublish: () => void;
 };
 
-const EditableGoal: React.FC<Props> = ({
-  uuid,
-  isNewGoal,
-  releaseUuid,
-  removeCard,
-  requestPublish,
-}) => {
+function EditableGoal({ uuid, isNewGoal, releaseUuid, removeCard, requestPublish }: Props) {
   const inferencer = useContext(AchievementContext);
   const goal = inferencer.getGoalDefinition(uuid);
   const goalClone = useMemo(() => cloneDeep(goal), [goal]);
@@ -120,6 +114,6 @@ const EditableGoal: React.FC<Props> = ({
       </div>
     </li>
   );
-};
+}
 
 export default EditableGoal;

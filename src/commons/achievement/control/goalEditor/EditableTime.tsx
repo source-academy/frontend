@@ -9,7 +9,7 @@ type Props = {
   changeTime: (time?: Date) => void;
 };
 
-const EditableTime: React.FC<Props> = ({ type, time, changeTime }) => {
+function EditableTime({ type, time, changeTime }: Props) {
   const [isOpen, setOpen] = useState(false);
   const toggleOpen = () => setOpen(!isOpen);
 
@@ -37,6 +37,6 @@ const EditableTime: React.FC<Props> = ({ type, time, changeTime }) => {
       </Dialog>
     </>
   );
-};
+}
 
 export default EditableTime;
