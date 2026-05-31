@@ -81,12 +81,19 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
       }
     } else {
       const targetY = to instanceof ArrayValue ? to.y() + Config.DataUnitHeight / 2 : to.y();
-      const preTerminalX = Math.max(frameExitX, to.x() - terminalSegmentLength);
+      const preTerminalX =
+        frameExitX > to.x()
+          ? Math.max(frameExitX, to.x() + to.width() + terminalSegmentLength)
+          : Math.max(frameExitX, to.x() - terminalSegmentLength);
+
+      // If preTerminalX overshoots past the target's left edge (e.g. because frameExitX is wide),
+      // the arrow approaches from the right — land on the right edge instead of the left edge.
+      const terminalTargetX = preTerminalX > to.x() ? to.x() + to.width() : to.x();
 
       // Route text-to-array arrows with Manhattan segments, ending at array's left-center.
       steps.push((x, y) => [preTerminalX, y]);
       steps.push((x, y) => [x, targetY]);
-      steps.push((x, y) => [to.x(), y]);
+      steps.push((x, y) => [terminalTargetX, y]);
     }
 
     return steps;
