@@ -52,7 +52,7 @@ function LoginPage() {
   );
 }
 
-const LoginButton = ({
+function LoginButton({
   handleClick,
   id,
   name,
@@ -60,7 +60,7 @@ const LoginButton = ({
   handleClick: (id: string) => void;
   id: string;
   name: string;
-}) => {
+}) {
   return (
     <Button
       className={Classes.LARGE}
@@ -70,6 +70,6 @@ const LoginButton = ({
       <Translation ns="login">{t => t($ => $['Log in with'], { name: name })}</Translation>
     </Button>
   );
-};
+}
 
 export const Component = LoginPage;
