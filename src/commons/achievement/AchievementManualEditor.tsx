@@ -38,7 +38,7 @@ type Props = {
   updateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) => void;
 };
 
-const AchievementManualEditor: React.FC<Props> = props => {
+function AchievementManualEditor(props: Props) {
   const { userState, hiddenState, studio, getUsers, updateGoalProgress } = props;
   const users =
     studio === 'Staff'
@@ -154,6 +154,6 @@ const AchievementManualEditor: React.FC<Props> = props => {
       </div>
     </div>
   );
-};
+}
 
 export default AchievementManualEditor;

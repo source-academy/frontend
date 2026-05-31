@@ -9,7 +9,7 @@ type Props = {
   position: number;
 };
 
-const EditablePosition: React.FC<Props> = ({ changePosition, position }) => {
+function EditablePosition({ changePosition, position }: Props) {
   const inferencer = useContext(AchievementContext);
   const maxPosition = inferencer.listTaskUuids().length + 1;
   const positionOptions = [...Array(maxPosition + 1).keys()]; // [0..maxPosition + 1]
@@ -28,6 +28,6 @@ const EditablePosition: React.FC<Props> = ({ changePosition, position }) => {
       <Button text={position} />
     </Select>
   );
-};
+}
 
 export default EditablePosition;
