@@ -1,10 +1,14 @@
 import _ from 'lodash';
-import { useContext } from 'react';
+import { lazy, Suspense, useContext } from 'react';
+import { flagMonacoEditorEnable } from 'src/features/monaco/flagMonacoEditorEnable';
 
+import { useFeature } from '../featureFlags/useFeature';
 import type { EditorTabState } from '../workspace/WorkspaceTypes';
 import { WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import Editor, { type EditorProps, type EditorTabStateProps } from './Editor';
 import EditorTabContainer from './tabs/EditorTabContainer';
+
+const MonacoEditor = lazy(() => import('./MonacoEditor'));
 
 type OwnProps = {
   baseFilePath?: string;
@@ -34,14 +38,22 @@ export const convertEditorTabStateToProps = (
 };
 
 const createNormalEditorTab =
-  (editorProps: Omit<EditorProps, keyof EditorTabStateProps>) =>
+  (editorProps: Omit<EditorProps, keyof EditorTabStateProps>, useMonacoEditor: boolean) =>
   // eslint-disable-next-line react/display-name
   (editorTabStateProps: EditorTabStateProps) => {
-    return <Editor {...editorProps} {...editorTabStateProps} />;
+    const editorPropsWithTab = { ...editorProps, ...editorTabStateProps };
+    return useMonacoEditor ? (
+      <Suspense fallback={null}>
+        <MonacoEditor {...editorPropsWithTab} />
+      </Suspense>
+    ) : (
+      <Editor {...editorPropsWithTab} />
+    );
   };
 
 const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerProps) => {
   const [workspaceSettings] = useContext(WorkspaceSettingsContext)!;
+  const useMonacoEditor = useFeature(flagMonacoEditorEnable);
   const {
     baseFilePath,
     isFolderModeEnabled,
@@ -53,7 +65,7 @@ const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerP
   } = props;
   editorProps.editorBinding = workspaceSettings.editorBinding;
 
-  const createEditorTab = createNormalEditorTab(editorProps);
+  const createEditorTab = createNormalEditorTab(editorProps, useMonacoEditor);
 
   if (activeEditorTabIndex === null) {
     return (

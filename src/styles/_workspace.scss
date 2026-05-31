@@ -157,6 +157,10 @@ $code-color-notification: #f9f0d7;
       margin-left: -10px;
       color: red;
     }
+
+    .monaco-editor .lines-content {
+      padding-left: 5px;
+    }
   }
 
   .MCQChooser {
