@@ -7,7 +7,7 @@ import SessionActions from 'src/commons/application/actions/SessionActions';
 import Constants from 'src/commons/utils/Constants';
 
 import sourceAcademyLogo from '../assets/SA.jpg';
-import classes from './nus_login.module.scss';
+import classes from './nus_login.module.css';
 
 const nusProviders = [...Constants.nusAuthProviders.entries()].map(([id, { name }]) => ({
   id,
