@@ -10,7 +10,6 @@
 # production
 /build
 tsconfig.tsbuildinfo
-src/styles/*.css
 /.env
 
 # deployment
