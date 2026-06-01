@@ -22,25 +22,23 @@ function WelcomePage() {
               tOptions={{ name, sourceAcademyDeploymentName }}
             />
           </div>
-          <div className="fullpage-content">
-            <UL className="text-left">
-              <li>{t($ => $.welcome.enrollmentMessage)}</li>
-              <li>
-                <Trans
-                  i18nKey={$ => $.welcome.resourcesForLearners}
-                  // eslint-disable-next-line react/jsx-key
-                  components={[<ItalicLink href={Links.resourcesForLearners} />]}
-                />
-              </li>
-              <li>
-                <Trans
-                  i18nKey={$ => $.welcome.resourcesForEducators}
-                  // eslint-disable-next-line react/jsx-key
-                  components={[<ItalicLink href={Links.resourcesForEducators} />]}
-                />
-              </li>
-            </UL>
-          </div>
+          <UL className="text-left">
+            <li>{t($ => $.welcome.enrollmentMessage)}</li>
+            <li>
+              <Trans
+                i18nKey={$ => $.welcome.resourcesForLearners}
+                // eslint-disable-next-line react/jsx-key
+                components={[<ItalicLink href={Links.resourcesForLearners} />]}
+              />
+            </li>
+            <li>
+              <Trans
+                i18nKey={$ => $.welcome.resourcesForEducators}
+                // eslint-disable-next-line react/jsx-key
+                components={[<ItalicLink href={Links.resourcesForEducators} />]}
+              />
+            </li>
+          </UL>
         </div>
       </Card>
     </div>
