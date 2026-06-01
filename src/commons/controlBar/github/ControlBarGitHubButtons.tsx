@@ -24,7 +24,7 @@ type Props = {
  *
  * @param props Component properties
  */
-const ControlBarGitHubButtons: React.FC<Props> = props => {
+function ControlBarGitHubButtons(props: Props) {
   const { isMobileBreakpoint } = useResponsive();
 
   const filePath = props.githubSaveInfo.filePath || '';
@@ -108,6 +108,6 @@ const ControlBarGitHubButtons: React.FC<Props> = props => {
       </Popover>
     </Tooltip>
   );
-};
+}
 
 export default ControlBarGitHubButtons;

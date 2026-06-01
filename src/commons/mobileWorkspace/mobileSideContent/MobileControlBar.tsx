@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 
 import type { ControlBarProps } from '../../controlBar/ControlBar';
 
-const MobileControlBar: React.FC<ControlBarProps> = props => {
+function MobileControlBar(props: ControlBarProps) {
   const controlBarMenu = (
     <div className="mobile-control-bar">
       {props.editorButtons}
@@ -17,6 +17,6 @@ const MobileControlBar: React.FC<ControlBarProps> = props => {
       <Button variant="minimal" icon={IconNames.COG} className="mobile-control-bar-button" />
     </Popover>
   );
-};
+}
 
 export default MobileControlBar;

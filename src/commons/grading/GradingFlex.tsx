@@ -13,20 +13,20 @@ type Props = {
   className?: string;
 };
 
-const GradingFlex: React.FC<Props> = ({
+function GradingFlex({
   justifyContent,
   alignItems,
   flexDirection,
   children,
   style,
   className,
-}) => {
+}: Props) {
   const styles: React.CSSProperties = { ...style, justifyContent, alignItems, flexDirection };
   return (
     <div className={className} style={{ ...defaultStyles, ...styles }}>
       {children}
     </div>
   );
-};
+}
 
 export default GradingFlex;

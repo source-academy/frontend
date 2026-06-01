@@ -14,7 +14,7 @@ type Props = {
  *
  * Used with ArrayDrawable and FunctionDrawable.
  */
-const ArrowDrawable: React.FC<Props> = props => {
+function ArrowDrawable(props: Props) {
   if (DataVisualizer.getBinTreeMode() || DataVisualizer.getTreeMode()) {
     // Binary Tree View and General Tree View
     return (
@@ -54,6 +54,6 @@ const ArrowDrawable: React.FC<Props> = props => {
       />
     );
   }
-};
+}
 
 export default memo(ArrowDrawable);

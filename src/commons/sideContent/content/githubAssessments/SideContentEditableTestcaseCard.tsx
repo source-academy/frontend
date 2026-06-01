@@ -16,14 +16,14 @@ type Props = {
   testcase: Testcase;
 };
 
-const SideContentEditableTestcaseCard: React.FC<Props> = ({
+function SideContentEditableTestcaseCard({
   index,
   testcase,
   setTestcaseProgram,
   setTestcaseExpectedResult,
   handleTestcaseEval,
   deleteTestcase,
-}) => {
+}: Props) {
   // TODO (Refactor): testcase type seems unused in GitHub Assessments
   const extraClasses = useMemo(() => {
     const isEvaluated = testcase.result !== undefined || testcase.errors;
@@ -89,6 +89,6 @@ const SideContentEditableTestcaseCard: React.FC<Props> = ({
       </Card>
     </div>
   );
-};
+}
 
 export default SideContentEditableTestcaseCard;

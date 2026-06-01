@@ -10,7 +10,7 @@ type Props = {
   onClose: () => void;
 };
 
-const DropdownHelp: React.FC<Props> = props => {
+function DropdownHelp(props: Props) {
   const moduleHelpText = useTypedSelector(store => store.session.moduleHelpText);
 
   return (
@@ -41,5 +41,6 @@ const DropdownHelp: React.FC<Props> = props => {
       </DialogBody>
     </Dialog>
   );
-};
+}
+
 export default DropdownHelp;

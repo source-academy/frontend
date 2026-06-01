@@ -35,7 +35,7 @@ export type FileExplorerDialogProps = {
   onSubmit: (submitContent: string) => void;
 };
 
-const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
+function FileExplorerDialog(props: FileExplorerDialogProps) {
   const [repoFiles, setRepoFiles] = useState<TreeNodeInfo<GitHubFileNodeData>[]>([]);
   const [filePath, setFilePath] = useState('');
   const [commitMessage, setCommitMessage] = useState('');
@@ -272,6 +272,6 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
       setFilePath('.js');
     }
   }
-};
+}
 
 export default FileExplorerDialog;

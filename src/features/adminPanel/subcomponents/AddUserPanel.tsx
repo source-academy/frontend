@@ -44,7 +44,7 @@ const defaultColumnDefs: ColDef = {
   sortable: true,
 };
 
-const AddUserPanel: React.FC<Props> = props => {
+function AddUserPanel(props: Props) {
   const [users, setUsers] = useState<UsernameRoleGroup[]>([]);
   const [invalidCsvMsg, setInvalidCsvMsg] = useState<string | React.ReactElement>('');
   const { CSVReader } = useCSVReader();
@@ -285,6 +285,6 @@ const AddUserPanel: React.FC<Props> = props => {
       />
     </div>
   );
-};
+}
 
 export default AddUserPanel;

@@ -10,7 +10,7 @@ type Props = {
   saveChanges: () => void;
 };
 
-const ItemSaver: React.FC<Props> = ({ discardChanges, saveChanges }) => {
+function ItemSaver({ discardChanges, saveChanges }: Props) {
   const handleSaveChanges = () => {
     saveChanges();
     showSuccessMessage('Saved changes locally');
@@ -32,6 +32,6 @@ const ItemSaver: React.FC<Props> = ({ discardChanges, saveChanges }) => {
       </Tooltip>
     </>
   );
-};
+}
 
 export default ItemSaver;

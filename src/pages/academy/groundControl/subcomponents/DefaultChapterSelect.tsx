@@ -23,7 +23,7 @@ import {
 import ControlButton from '../../../../commons/ControlButton';
 import WorkspaceActions from '../../../../commons/workspace/WorkspaceActions';
 
-const DefaultChapterSelect: React.FC = () => {
+function DefaultChapterSelect() {
   const [chosenSublang, setSublanguage] = useState<SALanguage>(sourceLanguages[0]);
   const [isDialogOpen, setDialogState] = useState(false);
 
@@ -131,6 +131,6 @@ const DefaultChapterSelect: React.FC = () => {
       {dialog}
     </>
   );
-};
+}
 
 export default DefaultChapterSelect;

@@ -6,7 +6,7 @@ type TimePickerProps = {
   showArrowButtons?: boolean;
 };
 
-const TimePicker: React.FC<TimePickerProps> = ({ value, onChange, showArrowButtons = false }) => {
+function TimePicker({ value, onChange, showArrowButtons = false }: TimePickerProps) {
   const hours = value ? value.getHours() : 0;
   const minutes = value ? value.getMinutes() : 0;
   const seconds = value ? value.getSeconds() : 0;
@@ -88,6 +88,6 @@ const TimePicker: React.FC<TimePickerProps> = ({ value, onChange, showArrowButto
       />
     </div>
   );
-};
+}
 
 export default TimePicker;

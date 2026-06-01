@@ -13,7 +13,7 @@ type Props = {
   className?: string;
 };
 
-const GradingText: React.FC<Props> = ({ children, style, isSecondaryText, className }) => {
+function GradingText({ children, style, isSecondaryText, className }: Props) {
   return (
     <Text
       className={classNames(Classes.UI_TEXT, className, isSecondaryText && Classes.TEXT_MUTED)}
@@ -22,6 +22,6 @@ const GradingText: React.FC<Props> = ({ children, style, isSecondaryText, classN
       {children}
     </Text>
   );
-};
+}
 
 export default GradingText;

@@ -12,11 +12,7 @@ type Props = {
   prerequisiteUuids: string[];
 };
 
-const EditablePrerequisiteUuids: React.FC<Props> = ({
-  changePrerequisiteUuids,
-  uuid,
-  prerequisiteUuids,
-}) => {
+function EditablePrerequisiteUuids({ changePrerequisiteUuids, uuid, prerequisiteUuids }: Props) {
   const enablePrerequisites = false;
 
   const inferencer = useContext(AchievementContext);
@@ -65,6 +61,6 @@ const EditablePrerequisiteUuids: React.FC<Props> = ({
       resetOnSelect
     />
   );
-};
+}
 
 export default EditablePrerequisiteUuids;

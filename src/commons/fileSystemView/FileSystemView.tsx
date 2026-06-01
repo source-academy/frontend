@@ -17,7 +17,7 @@ type Props = {
   basePath: string;
 };
 
-const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath }) => {
+function FileSystemView({ workspaceLocation, basePath }: Props) {
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
 
   const [isAddingNewFile, setIsAddingNewFile] = useState(false);
@@ -128,6 +128,6 @@ const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath }) => {
       />
     </div>
   );
-};
+}
 
 export default FileSystemView;

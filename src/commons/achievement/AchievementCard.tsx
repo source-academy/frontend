@@ -15,13 +15,13 @@ type Props = {
   toggleDropdown?: () => void;
 };
 
-const AchievementCard: React.FC<Props> = ({
+function AchievementCard({
   uuid,
   focusState,
   isDropdownOpen,
   shouldRender,
   toggleDropdown,
-}) => {
+}: Props) {
   const inferencer = useContext(AchievementContext);
 
   const [focusUuid, setFocusUuid] = focusState;
@@ -76,6 +76,6 @@ const AchievementCard: React.FC<Props> = ({
       </div>
     </div>
   );
-};
+}
 
 export default AchievementCard;

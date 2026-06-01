@@ -14,7 +14,7 @@ import type {
   GoalDefinition,
 } from '../../../features/achievement/AchievementTypes';
 
-const AchievementControl: React.FC = () => {
+function AchievementControl() {
   const dispatch = useDispatch();
   const {
     handleBulkUpdateAchievements,
@@ -102,7 +102,6 @@ const AchievementControl: React.FC = () => {
       </div>
     </AchievementContext.Provider>
   );
-};
+}
 
 export const Component = AchievementControl;
-Component.displayName = 'AchievementControl';

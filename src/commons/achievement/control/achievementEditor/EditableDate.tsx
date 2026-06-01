@@ -9,7 +9,7 @@ type Props = {
   changeDate: (date?: Date) => void;
 };
 
-const EditableDate: React.FC<Props> = ({ type, date, changeDate }) => {
+function EditableDate({ type, date, changeDate }: Props) {
   const [isOpen, setOpen] = useState(false);
   const toggleOpen = () => setOpen(!isOpen);
 
@@ -41,6 +41,6 @@ const EditableDate: React.FC<Props> = ({ type, date, changeDate }) => {
       </Dialog>
     </>
   );
-};
+}
 
 export default EditableDate;

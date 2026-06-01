@@ -6,7 +6,7 @@ type Props = {
   handleEdit: React.MouseEventHandler;
 };
 
-const DeviceMenuItemButtons: React.FC<Props> = ({ text, handleDelete, handleEdit }) => {
+function DeviceMenuItemButtons({ text, handleDelete, handleEdit }: Props) {
   return (
     <>
       {text}
@@ -33,6 +33,6 @@ const DeviceMenuItemButtons: React.FC<Props> = ({ text, handleDelete, handleEdit
       </div>
     </>
   );
-};
+}
 
 export default DeviceMenuItemButtons;

@@ -9,7 +9,7 @@ type Props = {
   setContent: (content: string) => void;
 };
 
-const SideContentMarkdownEditor: React.FC<Props> = ({ allowEdits, content, setContent }) => {
+function SideContentMarkdownEditor({ allowEdits, content, setContent }: Props) {
   const [editorModeOn, setEditorModeOn] = useState(false);
 
   const node = useRef<HTMLDivElement>(null);
@@ -48,6 +48,6 @@ const SideContentMarkdownEditor: React.FC<Props> = ({ allowEdits, content, setCo
   function onEditorChange(event: any) {
     setContent(event.target.value);
   }
-};
+}
 
 export default SideContentMarkdownEditor;

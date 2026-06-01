@@ -23,13 +23,13 @@ const TIERS = [
   { name: 'D', color: 'rgb(127, 191, 255)', score: 1 },
 ];
 
-const SideContentContestVoting: React.FC<Props> = ({
+function SideContentContestVoting({
   contestEntries,
   canSave,
   isValid,
   handleContestEntryClick,
   handleVotingSubmissionChange,
-}) => {
+}: Props) {
   const { t } = useTranslation('sideContent', { keyPrefix: 'contestVoting' });
   const [showContestEntries, setShowContestEntries] = useState(true);
   const [currentDraggedItem, setCurrentDraggedItem] = useState<HTMLElement | null>(null);
@@ -224,6 +224,6 @@ const SideContentContestVoting: React.FC<Props> = ({
       </Collapse>
     </div>
   );
-};
+}
 
 export default SideContentContestVoting;

@@ -10,7 +10,7 @@ type Props = {
   handleUpdateUserRole: (courseRegId: number, role: Role) => void;
 };
 
-const RolesCell: React.FC<Props> = props => {
+function RolesCell(props: Props) {
   const { data } = props;
 
   const changeHandler = useCallback(
@@ -43,6 +43,6 @@ const RolesCell: React.FC<Props> = props => {
       />
     </Popover>
   );
-};
+}
 
 export default RolesCell;

@@ -11,7 +11,7 @@ type Props = {
   teams: TeamFormationOverview[];
 };
 
-const TeamFormationDashboard: React.FC<Props> = ({ teams }) => {
+function TeamFormationDashboard({ teams }: Props) {
   const { group } = useSession();
   const navigate = useNavigate();
 
@@ -31,6 +31,6 @@ const TeamFormationDashboard: React.FC<Props> = ({ teams }) => {
       <TeamFormationTable group={group} teams={teams} />
     </Card>
   );
-};
+}
 
 export default TeamFormationDashboard;

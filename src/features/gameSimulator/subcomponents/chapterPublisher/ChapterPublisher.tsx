@@ -12,7 +12,7 @@ import ChapterPublisherEditor from './ChapterPublisherEditor';
  *
  * @param textAssets - List of all text assets on S3 to choose from.
  */
-const ChapterPublisher: React.FC = () => {
+function ChapterPublisher() {
   const { value: textAssets } = useRequest<string[]>(fetchTextAssets, []);
   const { value: chapters } = useRequest<ChapterDetail[]>(fetchChapters, []);
 
@@ -45,6 +45,6 @@ const ChapterPublisher: React.FC = () => {
       />
     </>
   );
-};
+}
 
 export default memo(ChapterPublisher, () => true);

@@ -9,7 +9,7 @@ const languageOptions = Object.keys(resources).map(abbr => ({
   value: abbr,
 }));
 
-const LocaleSelector: React.FC = () => {
+function LocaleSelector() {
   const [currI18nLanguage, setI18nLanguage] = useState(i18n.language)!;
 
   const handleLanguageChange: React.ChangeEventHandler<HTMLSelectElement> = e => {
@@ -36,6 +36,6 @@ const LocaleSelector: React.FC = () => {
       </Tooltip>
     </FormGroup>
   );
-};
+}
 
 export default LocaleSelector;

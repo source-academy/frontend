@@ -26,7 +26,7 @@ type Props = {
   onClose: () => void;
 };
 
-const DropdownSettings: React.FC<Props> = ({ isOpen, onClose }) => {
+function DropdownSettings({ isOpen, onClose }: Props) {
   const [workspaceSettings, setWorkspaceSettings] = useContext(WorkspaceSettingsContext)!;
 
   const handleEditorBindingChange: React.ChangeEventHandler<HTMLSelectElement> = e => {
@@ -77,6 +77,6 @@ const DropdownSettings: React.FC<Props> = ({ isOpen, onClose }) => {
       </DialogBody>
     </Dialog>
   );
-};
+}
 
 export default DropdownSettings;

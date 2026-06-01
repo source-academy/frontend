@@ -42,7 +42,7 @@ type Props = {
   changeMeta: (meta: GoalMeta) => void;
 };
 
-const EditableBinaryMeta: React.FC<Props> = ({ binaryMeta, changeMeta }) => {
+function EditableBinaryMeta({ binaryMeta, changeMeta }: Props) {
   const { condition, targetCount } = binaryMeta;
 
   const joiners: string[] = [];
@@ -163,6 +163,6 @@ const EditableBinaryMeta: React.FC<Props> = ({ binaryMeta, changeMeta }) => {
       <Button variant="outlined" text="Add Condition" onClick={addCondition} />
     </>
   );
-};
+}
 
 export default EditableBinaryMeta;

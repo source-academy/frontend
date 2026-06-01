@@ -25,14 +25,14 @@ type Props = {
   refreshParentDirectory: () => void;
 };
 
-const FileSystemViewDirectoryNode: React.FC<Props> = ({
+function FileSystemViewDirectoryNode({
   workspaceLocation,
   fileSystem,
   basePath,
   directoryName,
   indentationLevel,
   refreshParentDirectory,
-}) => {
+}: Props) {
   const fullPath = path.join(basePath, directoryName);
 
   const [isExpanded, setIsExpanded] = useState(false);
@@ -199,6 +199,6 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
       )}
     </div>
   );
-};
+}
 
 export default FileSystemViewDirectoryNode;

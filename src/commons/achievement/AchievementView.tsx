@@ -26,7 +26,7 @@ type Props = {
   userState?: [AchievementUser | undefined, any];
 };
 
-const AchievementView: React.FC<Props> = ({ focusUuid, userState }) => {
+function AchievementView({ focusUuid, userState }: Props) {
   const assessmentId = !Number.isNaN(+focusUuid) && +focusUuid !== 0 ? +focusUuid : undefined;
   let courseRegId: number | undefined;
 
@@ -119,6 +119,6 @@ const AchievementView: React.FC<Props> = ({ focusUuid, userState }) => {
       )}
     </div>
   );
-};
+}
 
 export default AchievementView;

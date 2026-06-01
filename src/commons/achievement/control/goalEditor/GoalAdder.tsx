@@ -10,7 +10,7 @@ type Props = {
   setNewUuid: (uuid: string) => void;
 };
 
-const GoalAdder: React.FC<Props> = ({ allowNewUuid, setNewUuid }) => {
+function GoalAdder({ allowNewUuid, setNewUuid }: Props) {
   const inferencer = useContext(AchievementContext);
 
   const addGoal = () => setNewUuid(inferencer.insertGoalDefinition(goalDefinitionTemplate));
@@ -24,6 +24,6 @@ const GoalAdder: React.FC<Props> = ({ allowNewUuid, setNewUuid }) => {
       text="Create Goal"
     />
   );
-};
+}
 
 export default GoalAdder;

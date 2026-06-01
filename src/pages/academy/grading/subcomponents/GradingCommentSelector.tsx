@@ -8,7 +8,7 @@ type Props = {
   onSelect: (comment: string) => void;
 };
 
-const GradingCommentSelector: React.FC<Props> = props => {
+function GradingCommentSelector(props: Props) {
   return (
     <div className={styles['grading-comment-selector']}>
       <H5 className={styles['grading-comment-selector-title']}>LLM Comment Suggestions:</H5>
@@ -39,6 +39,6 @@ const GradingCommentSelector: React.FC<Props> = props => {
       )}
     </div>
   );
-};
+}
 
 export default GradingCommentSelector;

@@ -26,7 +26,7 @@ import SicpToc from '../../../pages/sicp/subcomponents/SicpToc';
 
 type IndexSearchResult = { text: string; order: string; id: string; hasSubindex: boolean };
 
-const SicpNavigationBar: React.FC = () => {
+function SicpNavigationBar() {
   // this section responsible for the travel and table of content
   const [isTocOpen, setIsTocOpen] = useState(false);
   const { section } = useParams<{ section: string }>();
@@ -458,6 +458,6 @@ const SicpNavigationBar: React.FC = () => {
       </Drawer>
     </>
   );
-};
+}
 
 export default SicpNavigationBar;

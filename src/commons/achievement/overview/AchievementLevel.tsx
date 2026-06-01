@@ -9,7 +9,7 @@ type Props = {
   studentXp: number;
 };
 
-const AchievementLevel: React.FC<Props> = ({ studentXp }) => {
+function AchievementLevel({ studentXp }: Props) {
   const [showMilestone, setShowMilestone] = useState(false);
   const displayMilestone = () => setShowMilestone(true);
   const hideMilestone = () => setShowMilestone(false);
@@ -41,6 +41,6 @@ const AchievementLevel: React.FC<Props> = ({ studentXp }) => {
       )}
     </div>
   );
-};
+}
 
 export default AchievementLevel;

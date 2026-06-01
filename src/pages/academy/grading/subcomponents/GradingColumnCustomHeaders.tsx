@@ -15,7 +15,7 @@ type Props = CustomHeaderProps & {
   disabledSortCols: string[];
 };
 
-const GradingColumnCustomHeaders: React.FC<Props> = props => {
+function GradingColumnCustomHeaders(props: Props) {
   // The values correspond to the available icons in the BlueprintJS library. "sort" means unsorted.
   const [sortState, setSortState] = useState(SortStates.NONE);
   const colsSortState = useTypedSelector(state => state.workspaces.grading.allColsSortStates);
@@ -57,6 +57,6 @@ const GradingColumnCustomHeaders: React.FC<Props> = props => {
       </div>
     </GradingFlex>
   );
-};
+}
 
 export default GradingColumnCustomHeaders;

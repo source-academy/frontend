@@ -39,7 +39,7 @@ import {
   type AssessmentWorkspaceParams,
 } from './AssessmentTypes';
 
-const Assessment: React.FC = () => {
+function Assessment() {
   const params = useParams<AssessmentWorkspaceParams>();
   const [betchaAssessment, setBetchaAssessment] = useState<AssessmentOverview | null>(null);
   const [showClosedAssessments, setShowClosedAssessments] = useState(false);
@@ -298,7 +298,7 @@ const Assessment: React.FC = () => {
       {betchaDialog}
     </div>
   );
-};
+}
 
 const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) => (
   <ControlButton
@@ -310,6 +310,5 @@ const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) 
 );
 
 export const Component = Assessment;
-Component.displayName = 'Assessment';
 
 export default Assessment;

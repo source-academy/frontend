@@ -14,11 +14,7 @@ type Props = {
   data: AssessmentOverview;
 };
 
-const ReleaseGradingCell: React.FC<Props> = ({
-  data,
-  handlePublishGradingAll,
-  handleUnpublishGradingAll,
-}) => {
+function ReleaseGradingCell({ data, handlePublishGradingAll, handleUnpublishGradingAll }: Props) {
   const cells = useMemo(
     () => massPublishingChanges(data, handlePublishGradingAll, handleUnpublishGradingAll),
     [data, handlePublishGradingAll, handleUnpublishGradingAll],
@@ -31,7 +27,7 @@ const ReleaseGradingCell: React.FC<Props> = ({
       ))}
     </>
   );
-};
+}
 
 type SubProps = {
   keyID: string;
@@ -65,14 +61,14 @@ const massPublishingChanges = (
   },
 ];
 
-const MassPublishingChangeCell: React.FC<SubProps> = ({
+function MassPublishingChangeCell({
   keyID,
   callbackFn,
   data,
   change,
   description,
   icon,
-}) => {
+}: SubProps) {
   const [isDialogOpen, setDialogState] = useState(false);
 
   const handleOpenDialog = useCallback(() => setDialogState(true), []);
@@ -123,6 +119,6 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
       </Dialog>
     </>
   );
-};
+}
 
 export default ReleaseGradingCell;

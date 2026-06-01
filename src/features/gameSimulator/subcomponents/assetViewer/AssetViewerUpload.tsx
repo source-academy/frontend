@@ -5,7 +5,7 @@ import { s3AssetFolders, uploadAssetsToS3 } from 'src/features/gameSimulator/Gam
 /**
  * This component allows uploading of new assets into the S3 asset files.
  */
-const AssetViewerUpload: React.FC = () => {
+function AssetViewerUpload() {
   const [fileList, setFileList] = useState<FileList>();
   const [uploadFolder, setUploadFolder] = useState<string>(s3AssetFolders[0]);
 
@@ -68,6 +68,6 @@ const AssetViewerUpload: React.FC = () => {
       <Button onClick={handleUploadButtonClick}>Upload</Button>
     </div>
   );
-};
+}
 
 export default AssetViewerUpload;

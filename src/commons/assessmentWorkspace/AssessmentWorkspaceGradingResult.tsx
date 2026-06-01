@@ -11,56 +11,58 @@ type Props = {
   comments?: string;
 };
 
-const AssessmentWorkspaceGradingResult: React.FC<Props> = props => (
-  <div className="GradingResult">
-    <div className="grading-result-table">
-      <HTMLTable>
-        <tbody>
-          <tr>
-            <th>XP:</th>
-            <td>
-              <Text>
-                {props.xp} / {props.maxXp}
-              </Text>
-            </td>
-          </tr>
-
-          <tr>
-            <th>Comments:</th>
-            <td>{!props.comments && <Text>None</Text>}</td>
-          </tr>
-        </tbody>
-      </HTMLTable>
-
-      {props.comments && (
+function AssessmentWorkspaceGradingResult(props: Props) {
+  return (
+    <div className="GradingResult">
+      <div className="grading-result-table">
         <HTMLTable>
           <tbody>
             <tr>
+              <th>XP:</th>
               <td>
-                <Divider />
-                <Markdown
-                  content={props.comments}
-                  simplifiedAutoLink
-                  strikethrough
-                  tasklists
-                  openLinksInNewWindow
-                />
-                <Divider />
+                <Text>
+                  {props.xp} / {props.maxXp}
+                </Text>
               </td>
+            </tr>
+
+            <tr>
+              <th>Comments:</th>
+              <td>{!props.comments && <Text>None</Text>}</td>
             </tr>
           </tbody>
         </HTMLTable>
-      )}
 
-      <br />
+        {props.comments && (
+          <HTMLTable>
+            <tbody>
+              <tr>
+                <td>
+                  <Divider />
+                  <Markdown
+                    content={props.comments}
+                    simplifiedAutoLink
+                    strikethrough
+                    tasklists
+                    openLinksInNewWindow
+                  />
+                  <Divider />
+                </td>
+              </tr>
+            </tbody>
+          </HTMLTable>
+        )}
 
-      <div className="grading-result-info">
-        <Text>
-          Graded by <b>{props.graderName}</b> on {getPrettyDate(props.gradedAt)}
-        </Text>
+        <br />
+
+        <div className="grading-result-info">
+          <Text>
+            Graded by <b>{props.graderName}</b> on {getPrettyDate(props.gradedAt)}
+          </Text>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+}
 
 export default AssessmentWorkspaceGradingResult;

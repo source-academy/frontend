@@ -62,13 +62,13 @@ const chapterRenderer: (isFolderModeEnabled: boolean) => ItemRenderer<SALanguage
     );
   };
 
-const LegacyControlBarChapterSelect: React.FC<Props> = ({
+function LegacyControlBarChapterSelect({
   isFolderModeEnabled,
   sourceChapter,
   sourceVariant,
   handleChapterSelect = () => {},
   disabled = false,
-}) => {
+}: Props) {
   const selectedLang = useTypedSelector(store => store.playground.languageConfig.mainLanguage);
 
   const choices = [
@@ -97,6 +97,6 @@ const LegacyControlBarChapterSelect: React.FC<Props> = ({
       />
     </Select>
   );
-};
+}
 
 export default LegacyControlBarChapterSelect;

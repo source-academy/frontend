@@ -71,9 +71,9 @@ export type EditingWorkspaceProps = {
   closeDate: string;
 };
 
-const workspaceLocation: WorkspaceLocation = 'assessment';
+const workspaceLocation = 'assessment' satisfies WorkspaceLocation;
 
-const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
+function EditingWorkspace(props: EditingWorkspaceProps) {
   const [assessment, setAssessment] = useState(retrieveLocalAssessment());
   const [editingMode, setEditingMode] = useState('question');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -713,7 +713,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       <Workspace {...workspaceProps} />
     </div>
   );
-};
+}
 
 function uniq(a: string[]) {
   const seen: Record<string, boolean> = {};

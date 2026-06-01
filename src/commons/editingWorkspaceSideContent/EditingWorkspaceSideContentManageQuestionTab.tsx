@@ -15,7 +15,7 @@ type Props = {
   questionId: number;
 };
 
-const ManageQuestionTab: React.FC<Props> = props => {
+function ManageQuestionTab(props: Props) {
   const navigate = useNavigate();
   const [showSaveOverlay, setShowSaveOverlay] = useState(false);
   const [modifyAssessment, setModifyAssessment] = useState<VoidFunction>(() => {});
@@ -160,7 +160,7 @@ const ManageQuestionTab: React.FC<Props> = props => {
       ))}
     </div>
   );
-};
+}
 
 const deepCopy = (arr: any) => {
   return JSON.parse(JSON.stringify(arr));

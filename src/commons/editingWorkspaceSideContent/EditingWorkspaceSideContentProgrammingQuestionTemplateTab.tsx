@@ -55,7 +55,7 @@ const questionEditors: QuestionEditor[] = [
 /*
  * activeEditor is the default editor to show initially
  */
-const ProgrammingQuestionTemplateTab: React.FC<Props> = props => {
+function ProgrammingQuestionTemplateTab(props: Props) {
   const [activeEditor, setActiveEditor] = useState(questionEditors[0]);
   const [templateValue, setTemplateValue] = useState('');
   const [templateFocused, setTemplateFocused] = useState(false);
@@ -197,6 +197,6 @@ const ProgrammingQuestionTemplateTab: React.FC<Props> = props => {
   };
 
   return programmingTab();
-};
+}
 
 export default ProgrammingQuestionTemplateTab;

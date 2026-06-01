@@ -8,7 +8,7 @@ type Props = {
   view: AchievementView;
 };
 
-const EditableView: React.FC<Props> = ({ changeView, view }) => {
+function EditableView({ changeView, view }: Props) {
   const { coverImage, description, completionText } = view;
 
   const [isOpen, setOpen] = useState(false);
@@ -55,6 +55,6 @@ const EditableView: React.FC<Props> = ({ changeView, view }) => {
       </Dialog>
     </>
   );
-};
+}
 
 export default EditableView;

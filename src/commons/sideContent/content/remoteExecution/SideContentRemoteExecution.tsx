@@ -35,7 +35,7 @@ interface SideContentRemoteExecutionProps {
   callbackFunction?: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
-const DeviceContent = ({ session }: { session?: DeviceSession }) => {
+function DeviceContent({ session }: { session?: DeviceSession }) {
   if (!session) {
     return (
       <>
@@ -62,12 +62,12 @@ const DeviceContent = ({ session }: { session?: DeviceSession }) => {
         </Callout>
       );
   }
-};
+}
 
 const motorPorts = ['portA', 'portB', 'portC', 'portD'] as const;
 const sensorPorts = ['port1', 'port2', 'port3', 'port4'] as const;
 
-const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = props => {
+function SideContentRemoteExecution(props: SideContentRemoteExecutionProps) {
   const [dialogState, setDialogState] = useState<Device | true | undefined>(
     props.secretParams ? true : undefined,
   );
@@ -236,6 +236,6 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
       )}
     </>
   );
-};
+}
 
 export default SideContentRemoteExecution;

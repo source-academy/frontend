@@ -11,11 +11,11 @@ type Props = {
   isVotingPublished: boolean;
 };
 
-const AssignEntriesButton: React.FC<Props> = ({
+function AssignEntriesButton({
   handleAssignEntriesForVoting,
   assessmentId,
   isVotingPublished,
-}) => {
+}: Props) {
   const [confirmAssignEntries, setConfirmAssignEntries] = useState(false);
 
   // OnClick and Handler functions for confirmation warnings when assigning entries for voting
@@ -64,6 +64,6 @@ const AssignEntriesButton: React.FC<Props> = ({
       )}
     </>
   );
-};
+}
 
 export default AssignEntriesButton;

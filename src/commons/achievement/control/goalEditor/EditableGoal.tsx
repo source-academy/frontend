@@ -60,13 +60,7 @@ type Props = {
   requestPublish: () => void;
 };
 
-const EditableGoal: React.FC<Props> = ({
-  uuid,
-  isNewGoal,
-  releaseUuid,
-  removeCard,
-  requestPublish,
-}) => {
+function EditableGoal({ uuid, isNewGoal, releaseUuid, removeCard, requestPublish }: Props) {
   const inferencer = useContext(AchievementContext);
   const goal = inferencer.getGoalDefinition(uuid);
   const goalClone = useMemo(() => cloneDeep(goal), [goal]);
@@ -120,6 +114,6 @@ const EditableGoal: React.FC<Props> = ({
       </div>
     </li>
   );
-};
+}
 
 export default EditableGoal;

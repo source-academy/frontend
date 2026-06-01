@@ -38,7 +38,7 @@ export const generateAchievementTasks = (
     />
   ));
 
-const AchievementDashboard: React.FC = () => {
+function AchievementDashboard() {
   // default nothing selected
   const userIdState = useState<AchievementUser | undefined>(undefined);
   const [selectedUser] = userIdState;
@@ -190,7 +190,6 @@ const AchievementDashboard: React.FC = () => {
       </div>
     </AchievementContext.Provider>
   );
-};
+}
 
 export const Component = AchievementDashboard;
-Component.displayName = 'AchievementDashboard';

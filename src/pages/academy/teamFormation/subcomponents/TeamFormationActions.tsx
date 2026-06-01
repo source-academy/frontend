@@ -12,7 +12,7 @@ type Props = {
   teamId: number;
 };
 
-const TeamFormationActions: React.FC<Props> = ({ teamId }) => {
+function TeamFormationActions({ teamId }: Props) {
   const dispatch = useDispatch();
   const { courseId } = useSession();
 
@@ -50,6 +50,6 @@ const TeamFormationActions: React.FC<Props> = ({ teamId }) => {
       </Tooltip>
     </GradingFlex>
   );
-};
+}
 
 export default TeamFormationActions;

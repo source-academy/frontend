@@ -29,13 +29,13 @@ export type ChatbotCodeSnippetProps = {
  * When closed, it shows syntax-highlighted code that's clickable.
  * When open, it shows a full Playground editor where the user can run the code.
  */
-const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
+function ChatbotCodeSnippet({
   code,
   id,
   activeSnippetId,
   setActiveSnippet,
   language = 'javascript',
-}) => {
+}: ChatbotCodeSnippetProps) {
   const dispatch = useDispatch();
 
   const isActive = activeSnippetId === id;
@@ -99,6 +99,6 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
       </Card>
     </>
   );
-};
+}
 
 export default ChatbotCodeSnippet;

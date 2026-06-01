@@ -5,7 +5,7 @@ import type { Contributor, Repo } from '../../../features/contributors/Contribut
 import classes from './Contributors.module.css';
 import { fetchContributors, fetchRepos } from './ContributorsGithubApi';
 
-const ContributorsList: React.FC = () => {
+function ContributorsList() {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [contributors, setContributors] = useState<Contributor[][]>([]);
 
@@ -48,6 +48,6 @@ const ContributorsList: React.FC = () => {
     <H2>Loading...</H2>
   );
   return <div>{contributorList}</div>;
-};
+}
 
 export default ContributorsList;

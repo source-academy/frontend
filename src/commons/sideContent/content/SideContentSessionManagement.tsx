@@ -131,12 +131,12 @@ type Props = {
   workspaceLocation: SideContentLocation;
 };
 
-const SideContentSessionManagement: React.FC<Props> = ({
+function SideContentSessionManagement({
   users,
   playgroundCode,
   readOnly,
   workspaceLocation,
-}) => {
+}: Props) {
   const { t } = useTranslation('sideContent', { keyPrefix: 'sessionManagement' });
   const dispatch = useDispatch();
 
@@ -208,6 +208,6 @@ const SideContentSessionManagement: React.FC<Props> = ({
       </div>
     </div>
   );
-};
+}
 
 export default SideContentSessionManagement;
