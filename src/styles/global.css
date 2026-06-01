@@ -6,7 +6,8 @@
 @layer theme, base, blueprint, components, utilities;
 
 @import 'tailwindcss/theme.css' layer(theme);
-@import 'tailwindcss/preflight.css' layer(base);
+/* TODO: Enable this once we are confident there are no conflicts */
+/* @import 'tailwindcss/preflight.css' layer(base); */
 
 /* TODO: Remove normalize.css since we now have Tailwind preflight */
 @import 'normalize.css/normalize.css' layer(blueprint);
