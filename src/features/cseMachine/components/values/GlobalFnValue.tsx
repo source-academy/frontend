@@ -8,6 +8,7 @@ import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import type { GlobalFn, IHoverable } from '../../CseMachineTypes';
 import {
+  defaultBackgroundColor,
   defaultStrokeColor,
   defaultTextColor,
   fadedStrokeColor,
@@ -180,16 +181,20 @@ export class GlobalFnValue extends Value implements IHoverable {
   };
 
   setArrowSourceHighlightedStyle(): void {
-    if (this.isReferenced()) {
-      this.setShapesStyle(Config.HoverColor);
-    } else {
-      this.setShapesStyle(Config.HoverDeadColor);
-    }
+    const color = this.isReferenced() ? Config.HoverColor : Config.HoverDeadColor;
+    (this.ref.current?.getChildren() ?? []).forEach((shape: any) => {
+      if (shape.attrs?.stroke) shape.stroke(color);
+      if (shape.attrs?.fill && !shape.attrs.stroke) shape.fill(color);
+    });
   }
 
   setArrowSourceNormalStyle(): void {
     const strokeColor = this.isReferenced() ? defaultStrokeColor() : fadedStrokeColor();
-    this.setShapesStyle(strokeColor);
+    (this.ref.current?.getChildren() ?? []).forEach((shape: any) => {
+      if (shape.attrs?.stroke) shape.stroke(strokeColor);
+      if (shape.attrs?.fill)
+        shape.fill(shape.attrs.stroke ? defaultBackgroundColor() : strokeColor);
+    });
   }
 
   isLive(): boolean {
@@ -238,6 +243,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             y={this.y()}
             radius={this.radius}
             stroke={strokeColor}
+            fill={defaultBackgroundColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -254,6 +260,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             y={this.y()}
             radius={this.radius}
             stroke={strokeColor}
+            fill={defaultBackgroundColor()}
           />
           <Circle
             {...ShapeDefaultProps}
