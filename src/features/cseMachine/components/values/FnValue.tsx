@@ -211,7 +211,7 @@ export class FnValue extends Value implements IHoverable {
     const color = this.isLive() ? Config.HoverColor : Config.HoverDeadColor;
     (this.ref.current?.getChildren() ?? []).forEach((shape: any) => {
       if (shape.attrs?.stroke) shape.stroke(color);
-      if (shape.attrs?.fill && !shape.attrs.stroke) shape.fill(color);
+      if (shape.attrs?.fill && !shape.attrs?.stroke) shape.fill(color);
     });
   }
 
