@@ -70,7 +70,6 @@ type DispatchProps = {
 type EditorStateProps = {
   editorSessionId: string;
   sessionDetails: { docId: string; readOnly: boolean; owner: boolean } | null;
-  isEditorAutorun: boolean;
   sourceChapter?: Chapter;
   externalLibraryName?: string;
   sourceVariant?: Variant;
@@ -461,12 +460,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     }
   }, [editor, props.newCursorPosition]);
 
-  const {
-    handleUpdateHasUnsavedChanges,
-    handleEditorValueChange,
-    isEditorAutorun,
-    handleEditorEval,
-  } = props;
+  const { handleUpdateHasUnsavedChanges, handleEditorValueChange, handleEditorEval } = props;
   const handleEditorEvalRef = useRef(handleEditorEval);
   handleEditorEvalRef.current = handleEditorEval;
 
@@ -591,22 +585,11 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
       if (handleUpdateHasUnsavedChanges) {
         handleUpdateHasUnsavedChanges(true);
       }
-      const annotations = reactAceRef.current.editor.getSession().getAnnotations();
-      if (isEditorAutorun && annotations.length === 0) {
-        handleEditorEval();
-      }
       if (onChange !== undefined) {
         onChange(newCode, delta);
       }
     },
-    [
-      handleEditorValueChange,
-      props.editorTabIndex,
-      handleUpdateHasUnsavedChanges,
-      isEditorAutorun,
-      onChange,
-      handleEditorEval,
-    ],
+    [handleEditorValueChange, props.editorTabIndex, handleUpdateHasUnsavedChanges, onChange],
   );
 
   aceEditorProps.commands = objectEntries(keyHandlers)
