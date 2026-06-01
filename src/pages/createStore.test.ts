@@ -38,7 +38,6 @@ const mockChangedStoredState: SavedState = {
       highlightedLines: [],
     },
   ],
-  playgroundIsEditorAutorun: true,
   playgroundSourceChapter: Constants.defaultSourceChapter,
   playgroundSourceVariant: Variant.DEFAULT,
   playgroundExternalLibrary: 'NONE' as ExternalLibraryName,
@@ -76,7 +75,6 @@ const mockChangedState: OverallState = {
           highlightedLines: [],
         },
       ],
-      isEditorAutorun: true,
     },
   },
 };

@@ -375,7 +375,6 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   sharedbConnected: false,
   stepLimit: 1000,
   globals: [],
-  isEditorAutorun: false,
   isRunning: false,
   isDebugging: false,
   enableDebugging: true,

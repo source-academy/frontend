@@ -178,7 +178,6 @@ const RemoteExecutionSaga = combineSagaHandlers({
     yield put(
       actions.updateWorkspace(workspace, {
         isRunning: false,
-        isEditorAutorun: false,
         isDebugging: false,
         externalLibrary: deviceType?.deviceLibraryName,
         output: [],

@@ -240,13 +240,6 @@ const WorkspaceSaga = combineSagaHandlers({
       editorSuggestions.concat(builtinSuggestions, extLibSuggestions),
     );
   },
-  [WorkspaceActions.toggleEditorAutorun.type]: function* (action) {
-    const workspaceLocation = action.payload.workspaceLocation;
-    const isEditorAutorun = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].isEditorAutorun,
-    );
-    yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
-  },
   [WorkspaceActions.evalRepl.type]: function* (action) {
     if (yield select(selectConductorEnable)) {
       return; // no-op: evalCodeConductorSaga will pick up this action and handle it from there

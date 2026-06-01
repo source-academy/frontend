@@ -14,7 +14,6 @@ test('Editor renders correctly', async () => {
     sessionDetails: null,
     editorValue: '',
     highlightedLines: [],
-    isEditorAutorun: false,
     handleDeclarationNavigate: (cursorPosition: Position) => {},
     handleEditorEval: () => {},
     handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => {},

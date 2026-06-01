@@ -27,10 +27,6 @@ test('test combineSagaHandlers', () => {
     [WorkspaceActions.toggleUsingSubst.type]: {
       takeLeading: mockTakeLeadingHandler,
     },
-    [WorkspaceActions.toggleEditorAutorun.type]: {
-      takeEvery: mockTakeEveryHandler,
-      takeLeading: mockTakeLeadingHandler,
-    },
   });
 
   testSaga(saga)
@@ -42,10 +38,6 @@ test('test combineSagaHandlers', () => {
     .takeLatest(WorkspaceActions.toggleUsingCse.type, mockTakeLatestHandler)
     .next()
     .takeLeading(WorkspaceActions.toggleUsingSubst.type, mockTakeLeadingHandler)
-    .next()
-    .takeEvery(WorkspaceActions.toggleEditorAutorun.type, mockTakeEveryHandler)
-    .next()
-    .takeLeading(WorkspaceActions.toggleEditorAutorun.type, mockTakeLeadingHandler)
     .next()
     .isDone();
 });
