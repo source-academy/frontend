@@ -1366,9 +1366,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@blueprintjs/core@npm:^6.0.0, @blueprintjs/core@npm:^6.13.0":
-  version: 6.13.0
-  resolution: "@blueprintjs/core@npm:6.13.0"
+"@blueprintjs/core@npm:^6.0.0, @blueprintjs/core@npm:^6.15.0":
+  version: 6.15.0
+  resolution: "@blueprintjs/core@npm:6.15.0"
   dependencies:
     "@blueprintjs/colors": "npm:^5.1.16"
     "@blueprintjs/icons": "npm:^6.10.0"
@@ -1389,7 +1389,7 @@ __metadata:
   bin:
     upgrade-blueprint-2.0.0-rename: scripts/upgrade-blueprint-2.0.0-rename.sh
     upgrade-blueprint-3.0.0-rename: scripts/upgrade-blueprint-3.0.0-rename.sh
-  checksum: 10c0/3a89e8f1e3cc0cdd1ee19a4982dffdbef3bb8d5a166885dc0983f7a8193d8b8940300b82b32d862f0f3c5213ff3f590c58ec2b6423d92365edcf154edc739fa0
+  checksum: 10c0/f55c325d9eb5c4e8498bfaaeb1e0a2fd5c12c761e3d662a6698d32b94919b3c35fbdb5d38637cbaf692b54aef4b884474de5da733b33b0c965252da99ddec20f
   languageName: node
   linkType: hard
 
@@ -1412,11 +1412,11 @@ __metadata:
   linkType: hard
 
 "@blueprintjs/select@npm:^6.0.0":
-  version: 6.1.11
-  resolution: "@blueprintjs/select@npm:6.1.11"
+  version: 6.2.1
+  resolution: "@blueprintjs/select@npm:6.2.1"
   dependencies:
     "@blueprintjs/colors": "npm:^5.1.16"
-    "@blueprintjs/core": "npm:^6.13.0"
+    "@blueprintjs/core": "npm:^6.15.0"
     "@blueprintjs/icons": "npm:^6.10.0"
     classnames: "npm:^2.3.1"
     tslib: "npm:~2.6.2"
@@ -1427,7 +1427,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10c0/910e30921254be686e8c887dcdf4995430c9bf382ef1a1b6eacfac001aaec883362cc0df6c7de7bb7e809484cd473a4e028763f5342db2704c822bb0bf128a37
+  checksum: 10c0/8d9bd1b70ea96bf4b3daabe2aae4a8f85e72c6e539a2c06df2a24f82e06d2b85359826bdd64f6fa8ce0b5af727dda9b1324526194a0fe87b3a1ce27bd3c96f31
   languageName: node
   linkType: hard
 
@@ -2782,8 +2782,8 @@ __metadata:
   linkType: hard
 
 "@rsbuild/plugin-eslint@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@rsbuild/plugin-eslint@npm:2.0.0"
+  version: 2.0.1
+  resolution: "@rsbuild/plugin-eslint@npm:2.0.1"
   dependencies:
     eslint-rspack-plugin: "npm:5.0.0"
   peerDependencies:
@@ -2792,13 +2792,13 @@ __metadata:
   peerDependenciesMeta:
     "@rsbuild/core":
       optional: true
-  checksum: 10c0/458fae5015bd9dff12389541c7d2c68f902d7f6a2f1b92792e3f97ea0656b74d01513d19cc2b747749671a3061266914b38a1ee4bdb25983877741d55e859477
+  checksum: 10c0/f6f218bdd6aa9ab437b8c048b1f3a1ef2ff93a807f704dea72e16bb1a7420a227686138cc87483386c22482978a64005da6dfc95d376bb2cc0b152404cfe3efd
   languageName: node
   linkType: hard
 
 "@rsbuild/plugin-node-polyfill@npm:^1.4.4":
-  version: 1.4.4
-  resolution: "@rsbuild/plugin-node-polyfill@npm:1.4.4"
+  version: 1.4.5
+  resolution: "@rsbuild/plugin-node-polyfill@npm:1.4.5"
   dependencies:
     assert: "npm:^2.1.0"
     browserify-zlib: "npm:^0.2.0"
@@ -2828,7 +2828,7 @@ __metadata:
   peerDependenciesMeta:
     "@rsbuild/core":
       optional: true
-  checksum: 10c0/333bca6305c94d5e35284c02fa31ad058bfe523edd8e3a4ed40567ceaf88775595bc020f8325d3c5db2f66ea4e3b47f32148eb684b1f8474611ac175e0d2f17d
+  checksum: 10c0/d82b517f04656ef97cda5c3a380371f4f0a7ff193ee96a6a48fc2b49928b9d7e6ca4d162c07c8d1bc0546b5e5804ccbfda67c19799b4f2f3666eab69506a867c
   languageName: node
   linkType: hard
 
@@ -4307,9 +4307,9 @@ __metadata:
   linkType: hard
 
 "ace-builds@npm:^1.36.3, ace-builds@npm:^1.4.12, ace-builds@npm:^1.42.1":
-  version: 1.43.6
-  resolution: "ace-builds@npm:1.43.6"
-  checksum: 10c0/33d0159a99650602de83b95766643b8f4f6029fc1ab582e47f7678288cae8e1c89b91747d23be42ec153a88d784fb9488935973f7a100b9093f837ac988f5c96
+  version: 1.44.0
+  resolution: "ace-builds@npm:1.44.0"
+  checksum: 10c0/c5a614b082daef1621e5392024daaa0c472275cff2ac79e85422027a9f12442fcee8ad8362eab7223d0c90feeaa84280d83991f75a64372ade4854fb4ea60291
   languageName: node
   linkType: hard
 
