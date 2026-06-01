@@ -227,35 +227,6 @@ describe('EVAL_EDITOR', () => {
   });
 });
 
-describe('TOGGLE_EDITOR_AUTORUN', () => {
-  test('calls showWarningMessage correctly when isEditorAutorun set to false', () => {
-    const workspaceLocation = 'assessment';
-    return expectSaga(workspaceSaga)
-      .withState(defaultState)
-      .call(showWarningMessage, 'Autorun Stopped', 750)
-      .dispatch({
-        type: WorkspaceActions.toggleEditorAutorun.type,
-        payload: { workspaceLocation },
-      })
-      .silentRun();
-  });
-
-  test('calls showWarningMessage correctly when isEditorAutorun set to true', () => {
-    const workspaceLocation = 'grading';
-    const isEditorAutorun = true;
-    const newDefaultState = generateDefaultState(workspaceLocation, { isEditorAutorun });
-
-    return expectSaga(workspaceSaga)
-      .withState(newDefaultState)
-      .call(showWarningMessage, 'Autorun Started', 750)
-      .dispatch({
-        type: WorkspaceActions.toggleEditorAutorun.type,
-        payload: { workspaceLocation },
-      })
-      .silentRun();
-  });
-});
-
 describe('EVAL_REPL', () => {
   test('puts beginInterruptExecution, clearReplInput, sendReplInputToOutput and calls evalCode correctly', () => {
     const workspaceLocation = 'playground';

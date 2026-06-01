@@ -50,7 +50,6 @@ const newActions = createActions('workspace', {
     workspaceLocation: WorkspaceLocation,
     initialise?: boolean,
   ) => ({ externalLibraryName, workspaceLocation, initialise: initialise || false }),
-  toggleEditorAutorun: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   /**
    * Starts the process to clear the js-slang Context
    * at a specified workspace location.
