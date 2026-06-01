@@ -2,7 +2,6 @@ import { Button, ButtonGroup, Icon } from '@blueprintjs/core';
 import { IconNames, InfoSign } from '@blueprintjs/icons';
 import { useCallback, useState } from 'react';
 import ControlButton from 'src/commons/ControlButton';
-import classes from 'src/styles/ConfigureControls.module.scss';
 
 type Props = {
   handleAssignEntriesForVoting: (id: number) => void;
@@ -10,11 +9,11 @@ type Props = {
   isVotingPublished: boolean;
 };
 
-const AssignEntriesButton: React.FC<Props> = ({
+function AssignEntriesButton({
   handleAssignEntriesForVoting,
   assessmentId,
   isVotingPublished,
-}) => {
+}: Props) {
   const [confirmAssignEntries, setConfirmAssignEntries] = useState(false);
 
   // OnClick and Handler functions for confirmation warnings when assigning entries for voting
@@ -26,9 +25,9 @@ const AssignEntriesButton: React.FC<Props> = ({
 
   return (
     <>
-      <div className={classes['current-voting-status']}>
+      <div className="max-h-[30px] flex items-center gap-1.5 ml-4">
         <InfoSign />
-        <p className={classes['voting-status-text']}>
+        <p className="mt-2.5">
           Current Voting Status: Entries have {!isVotingPublished && <b>not </b>} been assigned
         </p>
       </div>
@@ -41,9 +40,9 @@ const AssignEntriesButton: React.FC<Props> = ({
           />
         </div>
       ) : (
-        <div className={classes['confirm-assign-voting']}>
+        <div className="max-h-[30px] flex items-center gap-1.5 ml-4">
           <Icon icon="reset" />
-          <p className={classes['confirm-assign-text']}>
+          <p className="mt-[9px]">
             Are you sure you want to <b>{isVotingPublished ? 're-assign' : 'assign'} entries?</b>
           </p>
           <ButtonGroup>
@@ -57,12 +56,12 @@ const AssignEntriesButton: React.FC<Props> = ({
         </div>
       )}
       {isVotingPublished && (
-        <p className={classes['reassign-voting-warning']}>
+        <p className="text-xs ml-[38px]">
           <b>All existing votes</b> will be <b>deleted</b> upon reassigning entries!
         </p>
       )}
     </>
   );
-};
+}
 
 export default AssignEntriesButton;

@@ -1,5 +1,5 @@
 import { Tree, type TreeNodeInfo } from '@blueprintjs/core';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -14,7 +14,7 @@ type OwnProps = {
 /**
  * Table of contents of SICP.
  */
-const SicpToc: React.FC<TocProps> = props => {
+function SicpToc(props: TocProps) {
   const [sidebarContent, setSidebarContent] = useState(toc as TreeNodeInfo[]);
   const navigate = useNavigate();
 
@@ -51,6 +51,6 @@ const SicpToc: React.FC<TocProps> = props => {
       />
     </div>
   );
-};
+}
 
 export default SicpToc;

@@ -1,7 +1,7 @@
 import { MenuItem } from '@blueprintjs/core';
 import type { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
 import { MultiSelect } from '@blueprintjs/select';
-import { without } from 'lodash';
+import { without } from 'lodash-es';
 import { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import type { AchievementItem } from 'src/features/achievement/AchievementTypes';
@@ -12,11 +12,7 @@ type Props = {
   prerequisiteUuids: string[];
 };
 
-const EditablePrerequisiteUuids: React.FC<Props> = ({
-  changePrerequisiteUuids,
-  uuid,
-  prerequisiteUuids,
-}) => {
+function EditablePrerequisiteUuids({ changePrerequisiteUuids, uuid, prerequisiteUuids }: Props) {
   const enablePrerequisites = false;
 
   const inferencer = useContext(AchievementContext);
@@ -65,6 +61,6 @@ const EditablePrerequisiteUuids: React.FC<Props> = ({
       resetOnSelect
     />
   );
-};
+}
 
 export default EditablePrerequisiteUuids;

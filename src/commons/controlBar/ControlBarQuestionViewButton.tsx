@@ -8,13 +8,13 @@ type Props = {
   questionProgress: [number, number] | null;
 };
 
-const ControlBarQuestionViewButton: React.FC<Props> = ({ questionProgress }) => {
+function ControlBarQuestionViewButton({ questionProgress }: Props) {
   return (
     <ControlButton
       label={`Question ${questionProgress![0]} of ${questionProgress![1]}  `}
       isDisabled
     />
   );
-};
+}
 
 export default ControlBarQuestionViewButton;

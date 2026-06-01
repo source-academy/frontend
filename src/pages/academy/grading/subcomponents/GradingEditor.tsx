@@ -62,7 +62,7 @@ type Props = {
 
 const gradingEditorButtonClass = 'grading-editor-button';
 
-const GradingEditor: React.FC<Props> = props => {
+function GradingEditor(props: Props) {
   const dispatch = useDispatch();
   const tokens = useTokens();
   const { handleGradingSave, handleGradingSaveAndContinue, handleReautogradeAnswer } = useMemo(
@@ -476,7 +476,7 @@ const GradingEditor: React.FC<Props> = props => {
       )}
     </div>
   );
-};
+}
 
 const mdeToBlueprintIconMap: Readonly<Record<string, readonly [IconName, string?]>> = {
   header: [IconNames.HEADER, 'Header Styles'],

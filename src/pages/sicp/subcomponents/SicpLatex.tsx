@@ -4,8 +4,8 @@ type Props = {
   math: string;
 };
 
-const SicpLatex: React.FC<Props> = ({ math }) => {
+function SicpLatex({ math }: Props) {
   return <Latex>{math}</Latex>;
-};
+}
 
 export default SicpLatex;

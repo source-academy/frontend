@@ -7,7 +7,7 @@ import { Ace, Range } from 'ace-builds';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useStore } from 'react-redux';
@@ -193,7 +193,7 @@ export async function handleHash(
   }
 }
 
-const Playground: React.FC<PlaygroundProps> = props => {
+function Playground(props: PlaygroundProps) {
   const { isSicpEditor } = props;
   const workspaceLocation: WorkspaceLocation = isSicpEditor ? 'sicp' : 'playground';
   const { isMobileBreakpoint } = useResponsive();
@@ -1069,9 +1069,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       <Workspace {...workspaceProps} />
     </div>
   );
-};
+}
 
 export const Component = Playground;
-Component.displayName = 'Playground';
 
 export default Playground;

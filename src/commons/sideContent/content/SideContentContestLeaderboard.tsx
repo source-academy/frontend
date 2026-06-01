@@ -21,7 +21,7 @@ export type SideContentContestLeaderboardProps = {
  * @param props {orderedContestEntries: an ordered list by desc score of leaderboard entries to display,
  *  handleContestEntryClick: displays contest entry answer in assessment workspace editor}
  */
-const SideContentContestLeaderboard: React.FC<SideContentContestLeaderboardProps> = props => {
+function SideContentContestLeaderboard(props: SideContentContestLeaderboardProps) {
   const { t } = useTranslation('sideContent', { keyPrefix: 'contestLeaderboard' });
   const { orderedContestEntries, handleContestEntryClick, leaderboardType } = props;
   const [showLeaderboard, setShowLeaderboard] = useState(true);
@@ -115,6 +115,6 @@ const SideContentContestLeaderboard: React.FC<SideContentContestLeaderboardProps
       </Collapse>
     </div>
   );
-};
+}
 
 export default SideContentContestLeaderboard;

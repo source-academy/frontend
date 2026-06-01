@@ -13,7 +13,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -97,9 +97,9 @@ export type AssessmentWorkspaceProps = {
   fromContestLeaderboard: boolean;
 };
 
-const workspaceLocation: WorkspaceLocation = 'assessment';
+const workspaceLocation = 'assessment' satisfies WorkspaceLocation;
 
-const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
+function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
   const [showOverlay, setShowOverlay] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
@@ -1130,6 +1130,6 @@ It is safe to close this window.`}
       )}
     </div>
   );
-};
+}
 
 export default AssessmentWorkspace;

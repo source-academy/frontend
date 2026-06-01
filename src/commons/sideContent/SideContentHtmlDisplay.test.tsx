@@ -8,14 +8,14 @@ import { describe, expect, test, vi } from 'vitest';
 import { SideContentHtmlDisplay } from './content/SideContentHtmlDisplay';
 import type { SideContentLocation } from './SideContentTypes';
 
-const Component = (props: React.ComponentProps<typeof SideContentHtmlDisplay>) => {
+function Component(props: React.ComponentProps<typeof SideContentHtmlDisplay>) {
   const store = mockInitialStore();
   return (
     <Provider store={store}>
       <SideContentHtmlDisplay {...props} />
     </Provider>
   );
-};
+}
 
 test('HTML Display renders correctly', async () => {
   const mockProps = {

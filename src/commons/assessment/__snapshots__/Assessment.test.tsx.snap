@@ -25,7 +25,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                 aria-label="loading"
                 aria-valuemax="100"
                 aria-valuemin="0"
-                class="bp6-spinner"
+                class="bp6-spinner bp6-icon-muted"
                 role="progressbar"
               >
                 <div
@@ -190,7 +190,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       </div>
                     </div>
                     <div
-                      class="_listing-xp_6fa7d2"
+                      class="flex gap-2"
                     >
                       <h6
                         class="bp6-heading"
@@ -361,7 +361,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       </div>
                     </div>
                     <div
-                      class="_listing-xp_6fa7d2"
+                      class="flex gap-2"
                     >
                       <h6
                         class="bp6-heading"
@@ -558,7 +558,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       </div>
                     </div>
                     <div
-                      class="_listing-xp_6fa7d2"
+                      class="flex gap-2"
                     >
                       <h6
                         class="bp6-heading"
@@ -942,7 +942,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       </div>
                     </div>
                     <div
-                      class="_listing-xp_6fa7d2"
+                      class="flex gap-2"
                     >
                       <h6
                         class="bp6-heading"
@@ -1151,7 +1151,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       </div>
                     </div>
                     <div
-                      class="_listing-xp_6fa7d2"
+                      class="flex gap-2"
                     >
                       <h6
                         class="bp6-heading"
@@ -1348,7 +1348,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       </div>
                     </div>
                     <div
-                      class="_listing-xp_6fa7d2"
+                      class="flex gap-2"
                     >
                       <h6
                         class="bp6-heading"

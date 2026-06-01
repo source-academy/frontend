@@ -6,7 +6,7 @@ type Props = {
   filtersName: string[];
 };
 
-const GradingColumnFilters: React.FC<Props> = ({ filters, onFilterRemove, filtersName }) => {
+function GradingColumnFilters({ filters, onFilterRemove, filtersName }: Props) {
   return (
     <div>
       {filters.map((filter, index) => (
@@ -19,6 +19,6 @@ const GradingColumnFilters: React.FC<Props> = ({ filters, onFilterRemove, filter
       ))}
     </div>
   );
-};
+}
 
 export default GradingColumnFilters;

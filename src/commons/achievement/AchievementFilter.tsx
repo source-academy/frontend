@@ -9,7 +9,7 @@ type Props = {
   ownStatus: FilterStatus;
 };
 
-const AchievementFilter: React.FC<Props> = ({ filterState, icon, ownStatus }) => {
+function AchievementFilter({ filterState, icon, ownStatus }: Props) {
   const [globalStatus, setGlobalStatus] = filterState;
 
   return (
@@ -22,6 +22,6 @@ const AchievementFilter: React.FC<Props> = ({ filterState, icon, ownStatus }) =>
       <p>{ownStatus}</p>
     </div>
   );
-};
+}
 
 export default AchievementFilter;

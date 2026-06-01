@@ -128,7 +128,9 @@ export class Layout {
   static contentGroupRef: React.RefObject<KonvaGroupNode | null> = createRef();
   static animationGroupRef: React.RefObject<KonvaGroupNode | null> = createRef();
   static arrowUnderlayLayerRef: React.RefObject<KonvaLayerNode | null> = createRef();
-  static underlayArrows: React.ReactNode[] = [];
+  static liveArrowLayerRef: React.RefObject<KonvaLayerNode | null> = createRef();
+  static deadUnderlayArrows: React.ReactNode[] = [];
+  static liveUnderlayArrows: React.ReactNode[] = [];
   static overlayNodes: React.ReactNode[] = [];
 
   // buffer for faster rendering of diagram when scrolling
@@ -137,11 +139,16 @@ export class Layout {
   static scrollContainerRef: React.RefObject<HTMLDivElement | null> = createRef();
 
   static resetUnderlayArrows() {
-    Layout.underlayArrows = [];
+    Layout.deadUnderlayArrows = [];
+    Layout.liveUnderlayArrows = [];
   }
 
-  static registerUnderlayArrow(arrow: React.ReactNode) {
-    Layout.underlayArrows.push(arrow);
+  static registerUnderlayArrow(arrow: React.ReactNode, isLive: boolean = false) {
+    if (isLive) {
+      Layout.liveUnderlayArrows.push(arrow);
+    } else {
+      Layout.deadUnderlayArrows.push(arrow);
+    }
   }
 
   static resetOverlayNodes() {
@@ -703,7 +710,8 @@ export class Layout {
       const levelNodes = Layout.levels.map(level => level.draw());
       const controlNode = CseMachine.getControlStash() ? Layout.controlComponent.draw() : null;
       const stashNode = CseMachine.getControlStash() ? Layout.stashComponent.draw() : null;
-      const underlayArrows = [...Layout.underlayArrows];
+      const deadUnderlayArrows = [...Layout.deadUnderlayArrows];
+      const liveUnderlayArrows = [...Layout.liveUnderlayArrows];
       const overlayNodes = [...Layout.overlayNodes];
       const layout = (
         <div className="sa-cse-machine" data-testid="sa-cse-machine">
@@ -748,8 +756,9 @@ export class Layout {
                     key={Layout.key++}
                     listening={false}
                   />
-                  {underlayArrows}
+                  {deadUnderlayArrows}
                 </KonvaLayer>
+                <KonvaLayer ref={Layout.liveArrowLayerRef}>{liveUnderlayArrows}</KonvaLayer>
                 <KonvaLayer>
                   <KonvaRect
                     {...ShapeDefaultProps}

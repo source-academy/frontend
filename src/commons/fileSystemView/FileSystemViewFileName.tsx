@@ -2,11 +2,11 @@ import type { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import classes from './FileSystemView.module.css';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;
@@ -19,7 +19,7 @@ type Props = {
   refreshDirectory: () => void;
 };
 
-const FileSystemViewFileName: React.FC<Props> = ({
+function FileSystemViewFileName({
   workspaceLocation,
   fileSystem,
   basePath,
@@ -28,7 +28,7 @@ const FileSystemViewFileName: React.FC<Props> = ({
   isEditing,
   setIsEditing,
   refreshDirectory,
-}) => {
+}: Props) {
   const [editedFileName, setEditedFileName] = useState(fileName);
   const dispatch = useDispatch();
 
@@ -111,6 +111,6 @@ const FileSystemViewFileName: React.FC<Props> = ({
       {!isEditing && <div className={classes['file-system-view-file-name']}>{fileName}</div>}
     </>
   );
-};
+}
 
 export default FileSystemViewFileName;

@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
-import classes from 'src/styles/AchievementCommentCard.module.scss';
 
 import type { Assessment } from '../assessment/AssessmentTypes';
 import { useTypedSelector } from '../utils/Hooks';
@@ -12,7 +11,7 @@ type Props = {
   showToQuestion: boolean;
 };
 
-const AchievementCommentCard: React.FC<Props> = ({ assessment, showToQuestion }) => {
+function AchievementCommentCard({ assessment, showToQuestion }: Props) {
   const navigate = useNavigate();
   const courseId = useTypedSelector(store => store.session.courseId);
   const toMission = useMemo(
@@ -31,23 +30,25 @@ const AchievementCommentCard: React.FC<Props> = ({ assessment, showToQuestion })
 
   return (
     <div>
-      <h1 className={classes['assessment-feedback']}>Feedback</h1>
-      <div className={classes['feedback-list']}>
+      <h1 className="pl-8">Feedback</h1>
+      <div className="pl-8 pr-8">
         {assessment &&
           assessment.questions.map((question, index) => (
-            <div className={classes['assessment-comments']} key={index}>
+            <div className="flex mb-2" key={index}>
               <span>
-                <h2 className={classes['question-header']}>{'Q' + (index + 1)}</h2>
+                <h2 className="mt-0">{'Q' + (index + 1)}</h2>
               </span>
 
-              <div className={classes['box-comment']}>
+              <div className="grow block px-4 whitespace-pre-wrap [word-break:break-word]">
                 <p>{question.comments === null ? 'No Comments' : question.comments}</p>
-                <p className="xp">{'XP: ' + question.xp + '/' + question.maxXp}</p>
+                <p className="font-bold text-[orange]">
+                  {'XP: ' + question.xp + '/' + question.maxXp}
+                </p>
               </div>
 
               {showToQuestion && (
                 <button
-                  className={classes['to-assessment-button']}
+                  className="flex-none h-8 w-24 mb-4 rounded"
                   onClick={() => toMission(index)}
                 >
                   {'To Question'}
@@ -58,6 +59,6 @@ const AchievementCommentCard: React.FC<Props> = ({ assessment, showToQuestion })
       </div>
     </div>
   );
-};
+}
 
 export default AchievementCommentCard;

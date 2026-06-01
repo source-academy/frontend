@@ -35,7 +35,7 @@ type Props = {
   assessmentTypes: AssessmentType[];
 };
 
-export const EditingOverviewCard: React.FC<Props> = props => {
+export function EditingOverviewCard(props: Props) {
   const [editingOverviewField, setEditingOverviewField] = useState('');
   const [fieldValue, setFieldValue] = useState<any>('');
   const [showOptionsOverlay, setShowOptionsOverlay] = useState(false);
@@ -228,7 +228,7 @@ export const EditingOverviewCard: React.FC<Props> = props => {
       {makeEditingOverviewCard(props.overview)}
     </div>
   );
-};
+}
 
 const createPlaceholder = (str: string): string => {
   if (str.match('^(\n| )*$')) {

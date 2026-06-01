@@ -1,4 +1,4 @@
-import classes from 'src/styles/Grading.module.scss';
+import classes from '../Grading.module.css';
 
 type Props = {
   value: string;
@@ -6,7 +6,7 @@ type Props = {
   filterMode: boolean;
 };
 
-const GradingFilterable: React.FC<Props> = ({ value, children, filterMode }) => {
+function GradingFilterable({ value, children, filterMode }: Props) {
   return (
     <button
       type="button"
@@ -20,6 +20,6 @@ const GradingFilterable: React.FC<Props> = ({ value, children, filterMode }) => 
       {children || value}
     </button>
   );
-};
+}
 
 export default GradingFilterable;

@@ -1,5 +1,3 @@
-@import './_global';
-
 .snippet-open {
   inset: 0;
   margin: auto;
@@ -16,7 +14,7 @@
 
   > :global(.ControlBar) {
     display: flex;
-    background-color: $cadet-color-1;
+    background-color: var(--cadet-color-1);
     color: white;
     padding: 5px 10px;
     width: 100%;
@@ -25,7 +23,7 @@
       flex-grow: 1;
     }
 
-    // Close button text color
+    /* Close button text color */
     button {
       color: white;
 
@@ -63,7 +61,7 @@
     color: white;
     overflow-y: auto;
 
-    // Ensure right-parent contains the fullscreen button
+    /* Ensure right-parent contains the fullscreen button */
     :global(.right-parent) {
       position: relative;
     }

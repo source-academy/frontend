@@ -74,6 +74,7 @@ exports[`Editor renders correctly 1`] = `
         <div
           class="ace_scrollbar ace_scrollbar-v"
           style="display: none; width: 20px;"
+          tabindex="-1"
         >
           <div
             class="ace_scrollbar-inner"
@@ -85,6 +86,7 @@ exports[`Editor renders correctly 1`] = `
         <div
           class="ace_scrollbar ace_scrollbar-h"
           style="display: none; height: 20px;"
+          tabindex="-1"
         >
           <div
             class="ace_scrollbar-inner"

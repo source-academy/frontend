@@ -1,4 +1,4 @@
-import { memoize } from 'lodash';
+import { memoize } from 'lodash-es';
 import type { LoaderFunction, MiddlewareFunction, RouteObject } from 'react-router';
 import { redirect, replace } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';

@@ -30,7 +30,7 @@ type Props = {
   setCourseConfiguration: (courseConfiguration: UpdateCourseConfiguration) => void;
 };
 
-const CourseConfigPanel: React.FC<Props> = props => {
+function CourseConfigPanel(props: Props) {
   const { isMobileBreakpoint } = useResponsive();
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
     useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
@@ -358,6 +358,6 @@ const CourseConfigPanel: React.FC<Props> = props => {
       </div>
     </div>
   );
-};
+}
 
 export default CourseConfigPanel;

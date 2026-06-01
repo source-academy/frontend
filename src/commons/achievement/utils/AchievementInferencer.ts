@@ -1,4 +1,4 @@
-import { cloneDeep, uniq } from 'lodash';
+import { cloneDeep, uniq } from 'lodash-es';
 import { v4 } from 'uuid';
 
 import {

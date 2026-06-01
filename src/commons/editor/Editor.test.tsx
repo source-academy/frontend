@@ -23,11 +23,13 @@ test('Editor renders correctly', async () => {
     handleUpdateHasUnsavedChanges: hasUnsavedChanges => {},
     handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
   };
-  const Element: React.FC = () => (
-    <Provider store={mockInitialStore()}>
-      <Editor {...props} />
-    </Provider>
-  );
+  function Element() {
+    return (
+      <Provider store={mockInitialStore()}>
+        <Editor {...props} />
+      </Provider>
+    );
+  }
   const tree = await renderTree(<Element />);
   expect(tree).toMatchSnapshot();
 });

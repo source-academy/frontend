@@ -16,7 +16,7 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
 import { t } from 'i18next';
 import { Chapter } from 'js-slang/dist/langs';
-import { debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 import { Component } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { connect, type MapDispatchToProps, type MapStateToProps } from 'react-redux';
@@ -61,6 +61,7 @@ type State = {
   chapter: Chapter;
   clearDeadFrames: boolean;
   arrowFilterOpen: boolean;
+  sliderKey: number;
 };
 
 type CseMachineProps = OwnProps & StateProps & DispatchProps;
@@ -104,6 +105,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       chapter: props.chapter,
       clearDeadFrames: false,
       arrowFilterOpen: false,
+      sliderKey: 0,
     };
     if (this.isJava()) {
       JavaCseMachine.init(
@@ -183,15 +185,27 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     }
   }, 300);
 
+  private handleFullscreenChange = () => {
+    // Double rAF ensures the browser has completed layout after the fullscreen
+    // transition before Blueprint Slider remounts and measures its track width.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        this.setState(prev => ({ sliderKey: prev.sliderKey + 1 }));
+      });
+    });
+  };
+
   componentDidMount() {
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
+    document.addEventListener('fullscreenchange', this.handleFullscreenChange);
     CseMachine.redraw();
   }
 
   componentWillUnmount() {
     this.handleResize.cancel();
     window.removeEventListener('resize', this.handleResize);
+    document.removeEventListener('fullscreenchange', this.handleFullscreenChange);
     if (!this.isJava()) {
       CseMachine.resetArrowOriginFilters();
     }
@@ -218,6 +232,14 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       } else {
         CseMachine.clearCse();
       }
+
+      // Blueprint Slider caches its track width at mount. After a code run the
+      // tab is guaranteed visible, so force it to remount and re-measure.
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          this.setState(prev => ({ sliderKey: prev.sliderKey + 1 }));
+        });
+      });
     }
   }
 
@@ -253,6 +275,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       >
         <div className={classNames('sa-substituter', Classes.DARK)}>
           <Slider
+            key={this.state.sliderKey}
             disabled={!this.state.visualization}
             min={0}
             max={this.props.stepsTotal}
@@ -718,18 +741,15 @@ const makeCseMachineTabFrom = (location: WorkspaceLocation): SideContentTab => (
   id: SideContentType.cseMachine,
 });
 
-export const ItalicLink: React.FC<{ href: string; children?: React.ReactNode }> = ({
-  href,
-  children,
-}) => {
+export function ItalicLink({ href, children }: { href: string; children?: React.ReactNode }) {
   return (
     <a href={href} rel="noopener noreferrer" target="_blank">
       <i>{children}</i>
     </a>
   );
-};
+}
 
-const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
+function CseMachineDefaultText({ isJava }: { isJava: boolean }) {
   const { t } = useTranslation('sideContent', { keyPrefix: 'cseMachine' });
   return (
     <div
@@ -783,6 +803,6 @@ const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
       {t($ => $.shortcutsNote)}
     </div>
   );
-};
+}
 
 export default makeCseMachineTabFrom;

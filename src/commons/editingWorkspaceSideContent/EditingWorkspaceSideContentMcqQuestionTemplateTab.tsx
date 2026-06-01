@@ -12,7 +12,7 @@ type Props = {
   questionId: number;
 };
 
-const MCQQuestionTemplateTab: React.FC<Props> = props => {
+function MCQQuestionTemplateTab(props: Props) {
   const addOption = () => {
     const { assessment, questionId } = props;
     const question = assessment!.questions[questionId] as IMCQQuestion;
@@ -94,6 +94,6 @@ const MCQQuestionTemplateTab: React.FC<Props> = props => {
       </Card>
     </div>
   );
-};
+}
 
 export default MCQQuestionTemplateTab;

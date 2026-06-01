@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { sortBy } from 'lodash';
+import { sortBy } from 'lodash-es';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useLoaderData, useParams } from 'react-router';
@@ -39,7 +39,7 @@ import {
   type AssessmentWorkspaceParams,
 } from './AssessmentTypes';
 
-const Assessment: React.FC = () => {
+function Assessment() {
   const params = useParams<AssessmentWorkspaceParams>();
   const [betchaAssessment, setBetchaAssessment] = useState<AssessmentOverview | null>(null);
   const [showClosedAssessments, setShowClosedAssessments] = useState(false);
@@ -298,7 +298,7 @@ const Assessment: React.FC = () => {
       {betchaDialog}
     </div>
   );
-};
+}
 
 const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) => (
   <ControlButton
@@ -310,6 +310,5 @@ const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) 
 );
 
 export const Component = Assessment;
-Component.displayName = 'Assessment';
 
 export default Assessment;

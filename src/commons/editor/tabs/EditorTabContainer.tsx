@@ -9,13 +9,13 @@ type Props = {
   removeEditorTabByIndex: (editorTabIndex: number) => void;
 };
 
-const EditorTabContainer: React.FC<Props> = ({
+function EditorTabContainer({
   baseFilePath,
   filePaths,
   activeEditorTabIndex,
   setActiveEditorTabIndex,
   removeEditorTabByIndex,
-}) => {
+}: Props) {
   const handleHorizontalScroll = (e: React.WheelEvent<HTMLDivElement>) => {
     e.currentTarget.scrollTo({
       left: e.currentTarget.scrollLeft + e.deltaY,
@@ -38,6 +38,6 @@ const EditorTabContainer: React.FC<Props> = ({
       ))}
     </div>
   );
-};
+}
 
 export default EditorTabContainer;

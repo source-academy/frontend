@@ -1,5 +1,5 @@
 import { H5, NonIdealState, Spinner } from '@blueprintjs/core';
-import styles from 'src/styles/GradingCommentSelector.module.scss';
+import classNames from 'classnames';
 
 type Props = {
   comments: string[];
@@ -7,10 +7,16 @@ type Props = {
   onSelect: (comment: string) => void;
 };
 
-const GradingCommentSelector: React.FC<Props> = props => {
+function GradingCommentSelector(props: Props) {
   return (
-    <div className={styles['grading-comment-selector']}>
-      <H5 className={styles['grading-comment-selector-title']}>LLM Comment Suggestions:</H5>
+    <div
+      className={classNames(
+        'text-center flex! flex-col justify-center',
+        'text-sm rounded-sm bg-(--cadet-color-1)',
+        'mt-1 mb-1 p-2',
+      )}
+    >
+      <H5 className="mb-3">LLM Comment Suggestions:</H5>
 
       {props.isLoading ? (
         <NonIdealState icon={<Spinner />} />
@@ -22,7 +28,11 @@ const GradingCommentSelector: React.FC<Props> = props => {
               return (
                 <button
                   key={index}
-                  className={styles['grading-comment-selector-item']}
+                  className={classNames(
+                    'm-0.5 p-1.5 w-full cursor-pointer rounded',
+                    'bg-(--cadet-color-2) border border-(--cadet-color-3)',
+                    'hover:bg-(--cadet-color-3)',
+                  )}
                   onClick={() => {
                     props.onSelect(el);
                   }}
@@ -38,6 +48,6 @@ const GradingCommentSelector: React.FC<Props> = props => {
       )}
     </div>
   );
-};
+}
 
 export default GradingCommentSelector;

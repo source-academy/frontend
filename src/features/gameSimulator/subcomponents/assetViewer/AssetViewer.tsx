@@ -1,6 +1,6 @@
 import type { TreeNodeInfo } from '@blueprintjs/core';
 import { Icon, Tab, Tabs, Tooltip, Tree } from '@blueprintjs/core';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { useEffect, useState } from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
 import {
@@ -19,7 +19,7 @@ import { convertAssetPathsToTree, treeMap } from './AssetViewerUtils';
  * It provides a preview of all the S3 asset files in a document tree format.
  * The selected asset will be available for preview.
  */
-const AssetViewer: React.FC = () => {
+function AssetViewer() {
   const { value: assetPaths } = useRequest<string[]>(fetchAssetPaths, []);
 
   const [currentAsset, setCurrentAsset] = useState('');
@@ -78,6 +78,6 @@ const AssetViewer: React.FC = () => {
       </Tabs>
     </>
   );
-};
+}
 
 export default AssetViewer;

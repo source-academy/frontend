@@ -11,7 +11,7 @@ type Props = {
   setStateHandler: (index: number, value: number) => void;
 };
 
-const NumericCell: React.FC<Props> = props => {
+function NumericCell(props: Props) {
   const { data } = props;
   const { rowIndex } = props.node;
 
@@ -30,5 +30,6 @@ const NumericCell: React.FC<Props> = props => {
       onValueChange={changeHandler}
     />
   );
-};
+}
+
 export default NumericCell;

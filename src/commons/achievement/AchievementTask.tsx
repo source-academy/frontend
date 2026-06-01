@@ -14,7 +14,7 @@ type Props = {
   focusState: [string, any];
 };
 
-const AchievementTask: React.FC<Props> = ({ uuid, filterStatus, focusState }) => {
+function AchievementTask({ uuid, filterStatus, focusState }: Props) {
   const inferencer = useContext(AchievementContext);
   const prerequisiteUuids = [...inferencer.getImmediateChildren(uuid)];
   const taskColor = getAbilityColor();
@@ -106,6 +106,6 @@ const AchievementTask: React.FC<Props> = ({ uuid, filterStatus, focusState }) =>
       )}
     </>
   );
-};
+}
 
 export default AchievementTask;

@@ -10,7 +10,7 @@ type Props = {
   data: AssessmentOverview;
 };
 
-const PublishCell: React.FC<Props> = ({ data, handlePublishAssessment }) => {
+function PublishCell({ data, handlePublishAssessment }: Props) {
   const [isDialogOpen, setDialogState] = useState(false);
   const [isPublished] = useState(!!data.isPublished);
 
@@ -68,6 +68,6 @@ const PublishCell: React.FC<Props> = ({ data, handlePublishAssessment }) => {
       </Dialog>
     </>
   );
-};
+}
 
 export default PublishCell;

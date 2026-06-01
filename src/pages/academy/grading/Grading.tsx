@@ -41,7 +41,7 @@ const pageSizeOptions = [
   { value: 50, label: '50' },
 ];
 
-const Grading: React.FC = () => {
+function Grading() {
   const { courseId, gradingOverviews, role, group } = useSession();
   const params = useParams<{ submissionId: string; questionId: string }>();
 
@@ -237,9 +237,8 @@ const Grading: React.FC = () => {
       fullWidth
     />
   );
-};
+}
 
 export const Component = Grading;
-Component.displayName = 'Grading';
 
 export default Grading;

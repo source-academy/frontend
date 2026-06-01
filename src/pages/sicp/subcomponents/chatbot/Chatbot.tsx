@@ -5,8 +5,8 @@ import Draggable from 'react-draggable';
 import logo from 'src/assets/SA.jpg';
 import { useSession } from 'src/commons/utils/Hooks';
 import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
-import classes from 'src/styles/Chatbot.module.scss';
 
+import classes from './Chatbot.module.css';
 import ChatBox from './ChatBox';
 
 type Props = {
@@ -45,7 +45,7 @@ const clampPosition = (
   };
 };
 
-const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
+function Chatbot({ getSection, getText }: Props) {
   const [isPop, setPop] = useState(false);
   const [isDivVisible, setIsDivVisible] = useState(false);
   const [tipsMessage, setTipsMessage] = useState('You can click me for a chat');
@@ -172,6 +172,6 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
       )}
     </div>
   );
-};
+}
 
 export default Chatbot;

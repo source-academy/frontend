@@ -6,7 +6,7 @@ type Props = {
   changeMeta: (meta: GoalMeta) => void;
 };
 
-const EditableAssessmentMeta: React.FC<Props> = ({ assessmentMeta, changeMeta }) => {
+function EditableAssessmentMeta({ assessmentMeta, changeMeta }: Props) {
   const { assessmentNumber, requiredCompletionFrac } = assessmentMeta;
 
   const changeAssessmentNumber = (assessmentNumber: number) =>
@@ -40,6 +40,6 @@ const EditableAssessmentMeta: React.FC<Props> = ({ assessmentMeta, changeMeta })
       </Tooltip>
     </>
   );
-};
+}
 
 export default EditableAssessmentMeta;

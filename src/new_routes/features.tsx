@@ -3,7 +3,6 @@ import {
   Card,
   CardList,
   EditableText,
-  Elevation,
   Icon,
   NumericInput,
   Section,
@@ -18,6 +17,7 @@ import { FeatureFlagsActions } from 'src/commons/featureFlags';
 import { FeatureFlag } from 'src/commons/featureFlags/FeatureFlag';
 import { publicFlags } from 'src/commons/featureFlags/publicFlags';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { PageCard, PageWrapper } from 'src/components/ui/page';
 
 type FlagCardProps<T> = React.PropsWithChildren<{
   flag: FeatureFlag<T>;
@@ -163,15 +163,9 @@ function FeatureFlagsPage() {
   });
 
   return (
-    <div className="fullpage">
-      <Card
-        className="fullpage-content"
-        style={{ textAlign: 'initial' }}
-        elevation={Elevation.THREE}
-      >
-        {cards}
-      </Card>
-    </div>
+    <PageWrapper>
+      <PageCard style={{ textAlign: 'initial' }}>{cards}</PageCard>
+    </PageWrapper>
   );
 }
 

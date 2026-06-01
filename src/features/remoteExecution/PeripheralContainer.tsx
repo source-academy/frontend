@@ -7,7 +7,7 @@ type PeripheralContainerProps = {
   text?: string;
 };
 
-const PeripheralContainer: React.FC<PeripheralContainerProps> = ({ src, alt = 'Image', text }) => {
+function PeripheralContainer({ src, alt = 'Image', text }: PeripheralContainerProps) {
   return (
     <div className="col-xs-3">
       <div
@@ -19,6 +19,6 @@ const PeripheralContainer: React.FC<PeripheralContainerProps> = ({ src, alt = 'I
       </div>
     </div>
   );
-};
+}
 
 export default PeripheralContainer;

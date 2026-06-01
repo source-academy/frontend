@@ -8,7 +8,7 @@ type Props = {
   onFilterRemove: (filter: ColumnFilter) => void;
 };
 
-const GradingSubmissionFilters: React.FC<Props> = ({ filters, onFilterRemove }) => {
+function GradingSubmissionFilters({ filters, onFilterRemove }: Props) {
   return (
     <GradingFlex
       justifyContent="flex-start"
@@ -19,6 +19,6 @@ const GradingSubmissionFilters: React.FC<Props> = ({ filters, onFilterRemove }) 
       ))}
     </GradingFlex>
   );
-};
+}
 
 export default GradingSubmissionFilters;

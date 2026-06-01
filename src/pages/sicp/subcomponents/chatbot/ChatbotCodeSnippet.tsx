@@ -8,7 +8,8 @@ import ControlBarCloseButton from 'src/commons/controlBar/ControlBarCloseButton'
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import Playground from 'src/pages/playground/Playground';
-import classes from 'src/styles/ChatbotCodeSnippet.module.scss';
+
+import classes from './ChatbotCodeSnippet.module.css';
 
 export type ChatbotCodeSnippetProps = {
   /** The code to display and run */
@@ -28,13 +29,13 @@ export type ChatbotCodeSnippetProps = {
  * When closed, it shows syntax-highlighted code that's clickable.
  * When open, it shows a full Playground editor where the user can run the code.
  */
-const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
+function ChatbotCodeSnippet({
   code,
   id,
   activeSnippetId,
   setActiveSnippet,
   language = 'javascript',
-}) => {
+}: ChatbotCodeSnippetProps) {
   const dispatch = useDispatch();
 
   const isActive = activeSnippetId === id;
@@ -98,6 +99,6 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
       </Card>
     </>
   );
-};
+}
 
 export default ChatbotCodeSnippet;

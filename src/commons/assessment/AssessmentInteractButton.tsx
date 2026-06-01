@@ -14,7 +14,7 @@ type Props = {
   overview: AssessmentOverview;
 };
 
-const AssessmentInteractButton: React.FC<Props> = ({ overview }) => {
+function AssessmentInteractButton({ overview }: Props) {
   const courseId = useTypedSelector(state => state.session.courseId);
   const dispatch = useDispatch();
   const { icon, label, optionalLabel } = createButtonConfiguration(overview.status);
@@ -39,7 +39,7 @@ const AssessmentInteractButton: React.FC<Props> = ({ overview }) => {
       </Button>
     </NavLink>
   );
-};
+}
 
 type ButtonConfiguration = {
   icon: IconName;

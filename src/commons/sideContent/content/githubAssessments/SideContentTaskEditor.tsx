@@ -9,7 +9,7 @@ type Props = {
   setTaskDescriptions: (newList: any[]) => void;
 };
 
-const SideContentTaskEditor: React.FC<Props> = props => {
+function SideContentTaskEditor(props: Props) {
   const taskIndex = props.currentTaskNumber - 1;
   const taskDescriptions = props.taskDescriptions;
   const setTaskDescriptions = props.setTaskDescriptions;
@@ -43,6 +43,6 @@ const SideContentTaskEditor: React.FC<Props> = props => {
       />
     </div>
   );
-};
+}
 
 export default SideContentTaskEditor;

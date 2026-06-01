@@ -7,7 +7,7 @@ export type ContentDisplayProps = {
   loadContentDispatch?: () => void;
 };
 
-const ContentDisplay: React.FC<ContentDisplayProps> = props => {
+function ContentDisplay(props: ContentDisplayProps) {
   useEffect(() => {
     props.loadContentDispatch?.();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -26,6 +26,6 @@ const ContentDisplay: React.FC<ContentDisplayProps> = props => {
       </div>
     </div>
   );
-};
+}
 
 export default ContentDisplay;

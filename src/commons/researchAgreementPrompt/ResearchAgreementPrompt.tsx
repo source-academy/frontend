@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import SessionActions from '../application/actions/SessionActions';
 import Constants from '../utils/Constants';
 
-const ResearchAgreementPrompt: React.FC = () => {
+function ResearchAgreementPrompt() {
   const dispatch = useDispatch();
 
   return (
@@ -50,6 +50,6 @@ const ResearchAgreementPrompt: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+}
 
 export default ResearchAgreementPrompt;

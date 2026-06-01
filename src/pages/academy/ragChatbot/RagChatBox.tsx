@@ -6,8 +6,9 @@ import type { Tokens } from 'src/commons/application/types/SessionTypes';
 import { useSession, useTokens } from 'src/commons/utils/Hooks';
 import { initRagChat, sendRagMessage } from 'src/features/ragChat/api';
 import ChatbotCodeSnippet from 'src/pages/sicp/subcomponents/chatbot/ChatbotCodeSnippet';
-import classes from 'src/styles/RagChatbot.module.scss';
 import { v4 as uuid } from 'uuid';
+
+import classes from './RagChatbot.module.css';
 
 type ChatMessage = {
   id: string;
@@ -21,11 +22,11 @@ type RagMessageRendererProps = {
   setActiveSnippetId: (id: string) => void;
 };
 
-const RagMessageRenderer: React.FC<RagMessageRendererProps> = ({
+function RagMessageRenderer({
   message,
   activeSnippetId,
   setActiveSnippetId,
-}) => {
+}: RagMessageRendererProps) {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
@@ -56,7 +57,7 @@ const RagMessageRenderer: React.FC<RagMessageRendererProps> = ({
       {message.content}
     </ReactMarkdown>
   );
-};
+}
 
 type Props = {
   isExpanded: boolean;
@@ -81,12 +82,7 @@ const scrollToBottom = (ref: React.RefObject<HTMLDivElement | null>) => {
   ref.current?.scrollTo({ top: ref.current?.scrollHeight });
 };
 
-const RagChatBox: React.FC<Props> = ({
-  isExpanded,
-  toggleExpanded,
-  activeSnippetId,
-  setActiveSnippetId,
-}) => {
+function RagChatBox({ isExpanded, toggleExpanded, activeSnippetId, setActiveSnippetId }: Props) {
   const chatRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(() => [createInitialMessage()]);
@@ -233,6 +229,6 @@ const RagChatBox: React.FC<Props> = ({
       </div>
     </div>
   );
-};
+}
 
 export default RagChatBox;

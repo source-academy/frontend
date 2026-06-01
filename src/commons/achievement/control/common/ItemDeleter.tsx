@@ -7,7 +7,7 @@ type Props = {
   item: string;
 };
 
-const ItemDeleter: React.FC<Props> = ({ deleteItem, item }) => {
+function ItemDeleter({ deleteItem, item }: Props) {
   const confirmDelete = async () => {
     const confirm = await showSimpleConfirmDialog({
       contents: `Are you sure you want to delete '${item}' ?`,
@@ -25,6 +25,6 @@ const ItemDeleter: React.FC<Props> = ({ deleteItem, item }) => {
       <Button icon={IconNames.TRASH} intent="danger" onClick={confirmDelete} />
     </Tooltip>
   );
-};
+}
 
 export default ItemDeleter;

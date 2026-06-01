@@ -25,7 +25,7 @@ type Props = {
   collapseSideBar: () => void;
 };
 
-const SideBar: React.FC<Props> = ({ tabs, isExpanded, expandSideBar, collapseSideBar }) => {
+function SideBar({ tabs, isExpanded, expandSideBar, collapseSideBar }: Props) {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   const handleTabSelection = (tabIndex: number) => {
@@ -67,6 +67,6 @@ const SideBar: React.FC<Props> = ({ tabs, isExpanded, expandSideBar, collapseSid
       )}
     </div>
   );
-};
+}
 
 export default SideBar;

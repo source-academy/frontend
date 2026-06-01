@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { pick } from 'lodash-es';
 import { useContext } from 'react';
 
 import type { EditorTabState } from '../workspace/WorkspaceTypes';
@@ -29,7 +29,7 @@ export const convertEditorTabStateToProps = (
   return {
     editorTabIndex,
     editorValue: editorTab.value,
-    ..._.pick(editorTab, 'filePath', 'highlightedLines', 'breakpoints', 'newCursorPosition'),
+    ...pick(editorTab, 'filePath', 'highlightedLines', 'breakpoints', 'newCursorPosition'),
   };
 };
 
@@ -40,7 +40,7 @@ const createNormalEditorTab =
     return <Editor {...editorProps} {...editorTabStateProps} />;
   };
 
-const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerProps) => {
+function EditorContainer(props: EditorContainerProps) {
   const [workspaceSettings] = useContext(WorkspaceSettingsContext)!;
   const {
     baseFilePath,
@@ -80,6 +80,6 @@ const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerP
       {createEditorTab(editorTabs[activeEditorTabIndex])}
     </div>
   );
-};
+}
 
 export default EditorContainer;

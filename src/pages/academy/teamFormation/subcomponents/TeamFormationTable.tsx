@@ -68,7 +68,7 @@ type TeamFormationTableProps = {
   teams: TeamFormationOverview[];
 };
 
-const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams }) => {
+function TeamFormationTable({ group, teams }: TeamFormationTableProps) {
   const defaultFilters = [];
   if (group) {
     defaultFilters.push({
@@ -193,7 +193,7 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
       </div>
     </>
   );
-};
+}
 
 type FilterableProps = {
   column: Column<any, unknown>;
@@ -201,7 +201,7 @@ type FilterableProps = {
   children?: React.ReactNode;
 };
 
-const Filterable: React.FC<FilterableProps> = ({ column, value, children }) => {
+function Filterable({ column, value, children }: FilterableProps) {
   const handleFilterChange = () => {
     column.setFilterValue(value);
   };
@@ -211,6 +211,6 @@ const Filterable: React.FC<FilterableProps> = ({ column, value, children }) => {
       {children || value}
     </Button>
   );
-};
+}
 
 export default TeamFormationTable;

@@ -18,7 +18,7 @@ type Props = {
   contestID?: number;
 };
 
-const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) => {
+function LeaderboardExportButton({ type, contest, contestID }: Props) {
   const { role, accessToken, refreshToken } = useSession();
 
   const onExportClick = async () => {
@@ -107,6 +107,6 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) 
   ) : (
     ''
   );
-};
+}
 
 export default LeaderboardExportButton;

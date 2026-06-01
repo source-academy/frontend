@@ -4,12 +4,12 @@ import type { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import classes from 'src/styles/FileSystemView.module.scss';
 
 import { rmdirRecursively } from '../fileSystem/utils';
 import { showSimpleConfirmDialog, showSimpleErrorDialog } from '../utils/DialogHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import classes from './FileSystemView.module.css';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
@@ -25,14 +25,14 @@ type Props = {
   refreshParentDirectory: () => void;
 };
 
-const FileSystemViewDirectoryNode: React.FC<Props> = ({
+function FileSystemViewDirectoryNode({
   workspaceLocation,
   fileSystem,
   basePath,
   directoryName,
   indentationLevel,
   refreshParentDirectory,
-}) => {
+}: Props) {
   const fullPath = path.join(basePath, directoryName);
 
   const [isExpanded, setIsExpanded] = useState(false);
@@ -199,6 +199,6 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
       )}
     </div>
   );
-};
+}
 
 export default FileSystemViewDirectoryNode;

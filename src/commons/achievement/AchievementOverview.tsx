@@ -11,7 +11,7 @@ type Props = {
   userState: [AchievementUser | undefined, any];
 };
 
-const AchievementOverview: React.FC<Props> = ({ name, userState }) => {
+function AchievementOverview({ name, userState }: Props) {
   const [selectedUser] = userState;
   const crid = selectedUser?.courseRegId;
   const userCrid = useTypedSelector(store => store.session.courseRegId);
@@ -34,6 +34,6 @@ const AchievementOverview: React.FC<Props> = ({ name, userState }) => {
       <h3>{name}</h3>
     </div>
   );
-};
+}
 
 export default AchievementOverview;
