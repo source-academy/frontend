@@ -91,9 +91,9 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
         steps.push(() => [targetCX, landY + r * (sourceCenterY <= targetCY ? 1 : -1)]);
       } else {
         // From top/bottom: go to target circle center X, touch top/bottom boundary
-        const landY = sourceCenterY <= targetCY ? targetCY - 2*r : targetCY + 2*r;
-        steps.push((_x, y) => [_x, landY]);
-        steps.push((x, _y) => [targetCX, _y]);
+        const landY = sourceCenterY <= targetCY ? targetCY - 2 * r : targetCY + 2 * r;
+        steps.push((_x, _y) => [_x, landY]);
+        steps.push((_x, _y) => [targetCX, _y]);
         steps.push(() => [targetCX, landY + r * (sourceCenterY <= targetCY ? 1 : -1)]);
       }
     } else if (to instanceof ArrayValue) {
