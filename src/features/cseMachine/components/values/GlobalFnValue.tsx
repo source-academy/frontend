@@ -193,7 +193,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     (this.ref.current?.getChildren() ?? []).forEach((shape: any) => {
       if (shape.attrs?.stroke) shape.stroke(strokeColor);
       if (shape.attrs?.fill)
-        shape.fill(shape.attrs.stroke ? defaultBackgroundColor() : strokeColor);
+        shape.fill(shape.attrs?.stroke ? defaultBackgroundColor() : strokeColor);
     });
   }
 
