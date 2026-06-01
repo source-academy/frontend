@@ -65,7 +65,6 @@ export default class CseMachine {
     CseMachine.printableMode = !CseMachine.printableMode;
   }
   public static toggleControlStash(): void {
-    //CseMachine.pairCreationMode = false;
     CseMachine.controlStash = !CseMachine.controlStash;
   }
   public static toggleStackTruncated(): void {
@@ -183,7 +182,6 @@ export default class CseMachine {
   }
   public static findKeyByValueInMap(value: any) {
     for (const [key, array] of CseMachine.streamLineage.entries()) {
-      // console.log(key + array);
       if (array.includes(value)) {
         return key;
       }
@@ -435,9 +433,6 @@ export default class CseMachine {
         Layout.applyFixedPositions();
         CseAnimation.updateAnimation();
         this.setVis(Layout.draw());
-        // this.setVis(Layout.draw());
-        // console.log(Layout.currentDarkPairs);
-        // this.setVis(Layout.currentDarkPairs);
       } else if (
         CseMachine.getPrintableMode() &&
         CseMachine.getControlStash() &&
