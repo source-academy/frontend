@@ -758,9 +758,7 @@ export class Layout {
                   />
                   {deadUnderlayArrows}
                 </KonvaLayer>
-                <KonvaLayer ref={Layout.liveArrowLayerRef}>
-                  {liveUnderlayArrows}
-                </KonvaLayer>
+                <KonvaLayer ref={Layout.liveArrowLayerRef}>{liveUnderlayArrows}</KonvaLayer>
                 <KonvaLayer>
                   <KonvaRect
                     {...ShapeDefaultProps}
