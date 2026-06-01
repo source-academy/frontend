@@ -680,7 +680,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
             handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
             handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
             handlePromptAutocomplete: handlePromptAutocomplete,
-            isEditorAutorun: false,
           }
         : undefined,
     handleSideContentHeightChange: handleSideContentHeightChange,

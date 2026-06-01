@@ -342,10 +342,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].sharedbConnected = action.payload.connected;
     })
-    .addCase(WorkspaceActions.toggleEditorAutorun, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].isEditorAutorun = !state[workspaceLocation].isEditorAutorun;
-    })
     .addCase(WorkspaceActions.updateSubmissionsTableFilters, (state, action) => {
       state.grading.submissionsTableFilters = action.payload.filters;
     })
