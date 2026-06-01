@@ -1062,7 +1062,6 @@ It is safe to close this window.`}
           handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
           handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
           handlePromptAutocomplete: editorContainerHandlers.handlePromptAutocomplete,
-          isEditorAutorun: false,
           onChange: onChangeMethod,
           onCursorChange: onCursorChangeMethod,
           onSelectionChange: onSelectionChangeMethod,
