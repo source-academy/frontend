@@ -9,7 +9,6 @@ import { filterNotificationsByAssessment } from '../notificationBadge/Notificati
 import { beforeNow, getPrettyDate, getPrettyDateAfterHours } from '../utils/DateHelper';
 import { useResponsive } from '../utils/Hooks';
 import AssessmentInteractButton from './AssessmentInteractButton';
-import classes from './AssessmentOverviewCard.module.css';
 import type { AssessmentOverview } from './AssessmentTypes';
 
 type AssessmentOverviewCardProps = {
@@ -50,7 +49,7 @@ function AssessmentOverviewCard({
             renderProgressStatus={renderGradingTooltip}
             makeSubmissionButton={makeSubmissionButton}
           />
-          <div className={classes['listing-xp']}>
+          <div className="flex gap-2">
             <H6>
               {overview.isGradingPublished
                 ? `XP: ${overview.xp} / ${overview.maxXp}`

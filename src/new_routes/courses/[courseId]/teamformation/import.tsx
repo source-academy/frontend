@@ -2,13 +2,12 @@ import { Button } from '@blueprintjs/core';
 import { useState } from 'react';
 import { FileUploader } from 'react-drag-drop-files';
 import { useDispatch } from 'react-redux';
-import { Form, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import Select from 'react-select';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import type { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-
-import classes from '../../../../pages/academy/teamFormation/subcomponents/TeamFormationForm.module.css';
+import { FormContainer, FormField, FormFieldRow } from 'src/components/ui/form';
 
 function TeamFormationImport() {
   const navigate = useNavigate();
@@ -51,60 +50,52 @@ function TeamFormationImport() {
   };
 
   return (
-    <div className={classes['form-container']}>
-      <Form>
-        <h2>Import Team</h2>
-        <div className={classes['form-field-row']}>
-          <div className={classes['form-field']}>
-            <label htmlFor="assessment" className={classes['form-label']}>
-              Assessment
-            </label>
-            <Select
-              id="assessment"
-              options={assessmentOverviews?.map(assessment => ({
-                label: assessment.title,
-                value: assessment,
-              }))}
-              value={
-                selectedAssessment
-                  ? { label: selectedAssessment.title, value: selectedAssessment }
-                  : null
-              }
-              onChange={option => handleAssessmentChange(option?.value)}
-              isSearchable
-              className={classes['form-select']}
+    <FormContainer heading="Import Team">
+      <FormFieldRow>
+        <FormField label="Assessment" htmlFor="assessment">
+          <Select
+            id="assessment"
+            options={assessmentOverviews?.map(assessment => ({
+              label: assessment.title,
+              value: assessment,
+            }))}
+            value={
+              selectedAssessment
+                ? { label: selectedAssessment.title, value: selectedAssessment }
+                : null
+            }
+            onChange={option => handleAssessmentChange(option?.value)}
+            isSearchable
+          />
+        </FormField>
+        {selectedAssessment && (
+          <FormField label="Max No. Student:">
+            <input
+              type="text"
+              className="flex-1 w-full h-9 rounded text-sm transition-all"
+              value={maxNoOfStudents}
+              readOnly
+              disabled
             />
-          </div>
-          {selectedAssessment && (
-            <div className={classes['form-field']}>
-              <label className={classes['form-label']}>Max No. Student:</label>
-              <input
-                type="text"
-                className={classes['form-select']}
-                value={maxNoOfStudents}
-                readOnly
-                disabled // Make the input read-only and disabled
-              />
-            </div>
-          )}
-        </div>
+          </FormField>
+        )}
+      </FormFieldRow>
 
-        <FileUploader multiple={false} handleChange={handleChange} name="file" types={fileTypes} />
-        <p>{file ? `File name: ${file.name}` : 'No file uploaded'}</p>
+      <FileUploader multiple={false} handleChange={handleChange} name="file" types={fileTypes} />
+      <p>{file ? `File name: ${file.name}` : 'No file uploaded'}</p>
 
-        <div className={classes['form-footer']}>
-          <Button intent="danger" onClick={backToTeamDashboard}>
-            Back
+      <div className="mt-5 mb-2.5 flex justify-between items-center">
+        <Button intent="danger" onClick={backToTeamDashboard}>
+          Back
+        </Button>
+
+        <div>
+          <Button intent="success" onClick={submitForm}>
+            Submit
           </Button>
-
-          <div>
-            <Button intent="success" onClick={submitForm}>
-              Submit
-            </Button>
-          </div>
         </div>
-      </Form>
-    </div>
+      </div>
+    </FormContainer>
   );
 }
 
