@@ -143,7 +143,7 @@ export class Layout {
     Layout.liveUnderlayArrows = [];
   }
 
-  static registerUnderlayArrow(arrow: React.ReactNode, isLive: boolean) {
+  static registerUnderlayArrow(arrow: React.ReactNode, isLive: boolean = false) {
     if (isLive) {
       Layout.liveUnderlayArrows.push(arrow);
     } else {
