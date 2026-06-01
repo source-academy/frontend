@@ -9,7 +9,6 @@ import { filterNotificationsByAssessment } from '../notificationBadge/Notificati
 import { beforeNow, getPrettyDate, getPrettyDateAfterHours } from '../utils/DateHelper';
 import { useResponsive } from '../utils/Hooks';
 import AssessmentInteractButton from './AssessmentInteractButton';
-import classes from './AssessmentOverviewCard.module.css';
 import type { AssessmentOverview } from './AssessmentTypes';
 
 type AssessmentOverviewCardProps = {
