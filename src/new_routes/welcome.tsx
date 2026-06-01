@@ -4,8 +4,6 @@ import { ItalicLink } from 'src/commons/sideContent/content/SideContentCseMachin
 import Constants, { Links } from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 
-import styles from './welcome.module.css';
-
 function WelcomePage() {
   const { t } = useTranslation();
   const { name } = useSession();
@@ -14,36 +12,34 @@ function WelcomePage() {
   return (
     <div className="fullpage">
       <Card className="fullpage-content">
-        <div className={styles.fullpage}>
+        <div>
+          <H2>{t($ => $.welcome.title, { sourceAcademyDeploymentName })}</H2>
           <div>
-            <H2>{t($ => $.welcome.title, { sourceAcademyDeploymentName })}</H2>
-            <div>
-              <Trans
-                i18nKey={$ => $.welcome.loggedInMessage}
-                // eslint-disable-next-line react/jsx-key
-                components={[<strong />]}
-                tOptions={{ name, sourceAcademyDeploymentName }}
-              />
-            </div>
-            <div className={styles['fullpage-content']}>
-              <UL className={styles['text-left']}>
-                <li>{t($ => $.welcome.enrollmentMessage)}</li>
-                <li>
-                  <Trans
-                    i18nKey={$ => $.welcome.resourcesForLearners}
-                    // eslint-disable-next-line react/jsx-key
-                    components={[<ItalicLink href={Links.resourcesForLearners} />]}
-                  />
-                </li>
-                <li>
-                  <Trans
-                    i18nKey={$ => $.welcome.resourcesForEducators}
-                    // eslint-disable-next-line react/jsx-key
-                    components={[<ItalicLink href={Links.resourcesForEducators} />]}
-                  />
-                </li>
-              </UL>
-            </div>
+            <Trans
+              i18nKey={$ => $.welcome.loggedInMessage}
+              // eslint-disable-next-line react/jsx-key
+              components={[<strong />]}
+              tOptions={{ name, sourceAcademyDeploymentName }}
+            />
+          </div>
+          <div className="fullpage-content">
+            <UL className="text-left">
+              <li>{t($ => $.welcome.enrollmentMessage)}</li>
+              <li>
+                <Trans
+                  i18nKey={$ => $.welcome.resourcesForLearners}
+                  // eslint-disable-next-line react/jsx-key
+                  components={[<ItalicLink href={Links.resourcesForLearners} />]}
+                />
+              </li>
+              <li>
+                <Trans
+                  i18nKey={$ => $.welcome.resourcesForEducators}
+                  // eslint-disable-next-line react/jsx-key
+                  components={[<ItalicLink href={Links.resourcesForEducators} />]}
+                />
+              </li>
+            </UL>
           </div>
         </div>
       </Card>
