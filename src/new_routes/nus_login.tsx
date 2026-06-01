@@ -1,5 +1,4 @@
 import { Button, ButtonGroup, Card, Divider, Elevation, H1, H3 } from '@blueprintjs/core';
-import classNames from 'classnames';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -26,29 +25,32 @@ function NusLogin() {
   const navigate = useNavigate();
 
   return (
-    <div className={classes['container']}>
-      <div className={classNames('col-lg-8', 'hidden-xs', classes['unpadded'])}>
-        <img className={classes['logo']} src={BLUE_BG} alt="nusInfoBackgroundImg" />
+    <div className="flex min-h-dvh">
+      <div className="col-lg-8 hidden-xs p-0!">
+        <img className="inline-block h-full" src={BLUE_BG} alt="nusInfoBackgroundImg" />
       </div>
-      <div className={classNames('col-xs-12 col-lg-4', classes['unpadded'])}>
-        <div className={classNames('row', classes['row'])}>
-          <Card className={classes['header']} elevation={Elevation.ZERO}>
+      <div className="col-xs-12 col-lg-4 p-0!">
+        <div className="row m-0!">
+          <Card
+            className="pt-12 rounded-none shadow-none max-h-30 flex gap-3 w-full justify-center items-center"
+            elevation={Elevation.ZERO}
+          >
             <a
-              className={classes['logo']}
+              className="inline-block h-full"
               href="https://www.nus.edu.sg"
               target="_blank"
               rel="noopener noreferrer nofollow"
             >
-              <img className={classes['logo']} src={NUS_LOGO} alt="NUS" />
+              <img className="inline-block h-full" src={NUS_LOGO} alt="NUS" />
             </a>
             <Divider style={{ height: '100%' }} />
-            <img className={classes['logo']} src={sourceAcademyLogo} alt="Source Academy" />
+            <img className="inline-block h-full" src={sourceAcademyLogo} alt="Source Academy" />
             <H3 style={{ marginBottom: 0 }}>{Constants.sourceAcademyDeploymentName}</H3>
           </Card>
         </div>
-        <div className={classNames('row', classes['row'])} style={{ height: '100%' }}>
+        <div className="row m-0!" style={{ height: '100%' }}>
           <Card
-            className={classNames(classes['text-center'], classes['body'])}
+            className="text-center rounded-none shadow-none size-full space-y-4"
             elevation={Elevation.ZERO}
           >
             <H1>Login</H1>

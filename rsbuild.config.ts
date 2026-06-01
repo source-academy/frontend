@@ -5,6 +5,7 @@ import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
+import { pluginTailwindcss } from '@rsbuild/plugin-tailwindcss';
 
 const { publicVars, rawPublicVars } = loadEnv({ prefixes: ['REACT_APP_'] });
 
@@ -14,6 +15,7 @@ export default defineConfig({
     pluginSvgr({ mixedImport: true }),
     pluginNodePolyfill(),
     pluginSass(),
+    pluginTailwindcss(),
     pluginEslint({
       enable: process.env.NODE_ENV === 'development',
       eslintPluginOptions: {

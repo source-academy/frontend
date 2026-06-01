@@ -5,7 +5,6 @@ import type { Assessment } from '../assessment/AssessmentTypes';
 import { useTypedSelector } from '../utils/Hooks';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
-import classes from './AchievementCommentCard.module.css';
 
 type Props = {
   assessment: Assessment;
@@ -31,23 +30,25 @@ function AchievementCommentCard({ assessment, showToQuestion }: Props) {
 
   return (
     <div>
-      <h1 className={classes['assessment-feedback']}>Feedback</h1>
-      <div className={classes['feedback-list']}>
+      <h1 className="pl-8">Feedback</h1>
+      <div className="pl-8 pr-8">
         {assessment &&
           assessment.questions.map((question, index) => (
-            <div className={classes['assessment-comments']} key={index}>
+            <div className="flex mb-2" key={index}>
               <span>
-                <h2 className={classes['question-header']}>{'Q' + (index + 1)}</h2>
+                <h2 className="mt-0">{'Q' + (index + 1)}</h2>
               </span>
 
-              <div className={classes['box-comment']}>
+              <div className="grow block px-4 whitespace-pre-wrap [word-break:break-word]">
                 <p>{question.comments === null ? 'No Comments' : question.comments}</p>
-                <p className="xp">{'XP: ' + question.xp + '/' + question.maxXp}</p>
+                <p className="font-bold text-[orange]">
+                  {'XP: ' + question.xp + '/' + question.maxXp}
+                </p>
               </div>
 
               {showToQuestion && (
                 <button
-                  className={classes['to-assessment-button']}
+                  className="flex-none h-8 w-24 mb-4 rounded"
                   onClick={() => toMission(index)}
                 >
                   {'To Question'}
