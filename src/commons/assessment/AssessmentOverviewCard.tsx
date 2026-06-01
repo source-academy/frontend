@@ -50,7 +50,7 @@ function AssessmentOverviewCard({
             renderProgressStatus={renderGradingTooltip}
             makeSubmissionButton={makeSubmissionButton}
           />
-          <div className={classes['listing-xp']}>
+          <div className="flex gap-2">
             <H6>
               {overview.isGradingPublished
                 ? `XP: ${overview.xp} / ${overview.maxXp}`
