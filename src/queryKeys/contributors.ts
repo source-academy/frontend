@@ -14,7 +14,7 @@ export const contributors = createQueryKeys('contributors', {
     },
   },
   contributors: (repos: Repo[]) => ({
-    queryKey: [repos.map(r => r.key)],
+    queryKey: [repos.map(r => r.key).sort()],
     queryFn: async (): Promise<Contributor[][]> => {
       return fetchContributors(repos);
     },
