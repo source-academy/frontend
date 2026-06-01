@@ -1087,33 +1087,6 @@ describe('SET_SHAREDB_CONNECTED', () => {
   });
 });
 
-describe('TOGGLE_EDITOR_AUTORUN', () => {
-  test('toggles isEditorAutorun correctly', () => {
-    const actions = generateActions(WorkspaceActions.toggleEditorAutorun);
-
-    actions.forEach(action => {
-      let result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location: WorkspaceLocation = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          isEditorAutorun: true,
-        },
-      });
-
-      result = WorkspaceReducer(result, action);
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          isEditorAutorun: false,
-        },
-      });
-    });
-  });
-});
-
 describe('UPDATE_CURRENT_ASSESSMENT_ID', () => {
   test('sets currentAssessment and currentQuestion correctly', () => {
     const assessmentId = 3;

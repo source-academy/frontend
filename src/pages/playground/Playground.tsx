@@ -213,7 +213,6 @@ function Playground(props: PlaygroundProps) {
     sessionDetails,
     stepLimit,
     execTime,
-    isEditorAutorun,
     isRunning,
     isDebugging,
     output,
@@ -442,8 +441,6 @@ function Playground(props: PlaygroundProps) {
       },
       handleInterruptEval: () =>
         dispatch(InterpreterActions.beginInterruptExecution(workspaceLocation)),
-      handleToggleEditorAutorun: () =>
-        dispatch(WorkspaceActions.toggleEditorAutorun(workspaceLocation)),
       handleDebuggerPause: () => dispatch(InterpreterActions.beginDebuggerPause(workspaceLocation)),
       handleDebuggerReset: () => dispatch(InterpreterActions.debuggerReset(workspaceLocation)),
       handleDebuggerResume: () => dispatch(InterpreterActions.debuggerResume(workspaceLocation)),
@@ -464,10 +461,8 @@ function Playground(props: PlaygroundProps) {
       <ControlBarAutorunButtons
         isEntrypointFileDefined={activeEditorTabIndex !== null}
         isDebugging={isDebugging}
-        isEditorAutorun={isEditorAutorun}
         isRunning={isRunning}
         key="autorun"
-        autorunDisabled={usingRemoteExecution}
         sourceChapter={languageConfig.chapter}
         // Disable pause for non-Source languages since they cannot be paused
         pauseDisabled={usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)}
@@ -477,7 +472,6 @@ function Playground(props: PlaygroundProps) {
   }, [
     activeEditorTabIndex,
     isDebugging,
-    isEditorAutorun,
     isRunning,
     languageConfig.chapter,
     autorunButtonHandlers,
@@ -915,7 +909,6 @@ function Playground(props: PlaygroundProps) {
   const editorContainerProps: NormalEditorContainerProps = {
     editorSessionId,
     sessionDetails,
-    isEditorAutorun,
     editorVariant: 'normal',
     baseFilePath: WORKSPACE_BASE_PATHS[workspaceLocation],
     isFolderModeEnabled,

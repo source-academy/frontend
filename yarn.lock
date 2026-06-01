@@ -10981,13 +10981,13 @@ __metadata:
   linkType: hard
 
 "query-string@npm:^9.0.0":
-  version: 9.3.1
-  resolution: "query-string@npm:9.3.1"
+  version: 9.4.0
+  resolution: "query-string@npm:9.4.0"
   dependencies:
     decode-uri-component: "npm:^0.4.1"
     filter-obj: "npm:^5.1.0"
     split-on-first: "npm:^3.0.0"
-  checksum: 10c0/47f62350be7ace6d2e03d12becf5d1985731d97577963a4d8b684e166f6708cb42f63f09aa4c92931f2ee1ff57c0800a25807b95f28fd98f7064b1d06b02b07e
+  checksum: 10c0/44bf989e7f766f99165be27fcd223bbb7a8feca05cacceb8df97bef700bdc9d0a629009554c739adb19527e10813d08a615f794c2aa0de22abafa07019abfbc7
   languageName: node
   linkType: hard
 
@@ -11384,12 +11384,12 @@ __metadata:
   linkType: hard
 
 "react-simple-keyboard@npm:^3.6.27":
-  version: 3.8.216
-  resolution: "react-simple-keyboard@npm:3.8.216"
+  version: 3.8.219
+  resolution: "react-simple-keyboard@npm:3.8.219"
   peerDependencies:
     react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/c0a999de95e04610430600dbca3b228d7a30918ab1f32e4035a721a3e0ea5c730fa8308c516b78b6db3f30c2b6afe8b1c532a631a27876ee14e7a08546b89d1a
+  checksum: 10c0/13bf949b1fa3d0c40c10d57dae054b05ca718e5fd9dd655e5b44deae4221d2747594c589fc0a8c3b7d65284a59ea9c568cb0841cd891b81b10a87b83bd152418
   languageName: node
   linkType: hard
 

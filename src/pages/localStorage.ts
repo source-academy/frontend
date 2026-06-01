@@ -25,7 +25,6 @@ export type SavedState = {
   playgroundIsFolderModeEnabled: boolean;
   playgroundActiveEditorTabIndex: NullableValue<number>;
   playgroundEditorTabs: EditorTabState[];
-  playgroundIsEditorAutorun: boolean;
   playgroundSourceChapter: Chapter;
   playgroundSourceVariant: Variant;
   playgroundLanguage: SALanguage;
@@ -85,7 +84,6 @@ export const saveState = (state: OverallState) => {
         value: state.workspaces.playground.activeEditorTabIndex,
       },
       playgroundEditorTabs: state.workspaces.playground.editorTabs,
-      playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun,
       playgroundSourceChapter: state.workspaces.playground.context.chapter,
       playgroundSourceVariant: state.workspaces.playground.context.variant,
       playgroundLanguage: state.playground.languageConfig,
