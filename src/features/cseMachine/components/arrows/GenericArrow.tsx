@@ -499,6 +499,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
           key={Layout.key++}
         />
       </KonvaGroup>,
+      this.isLive,
     );
 
     return this.drawSourceFrameSegment(stroke, interactive);
