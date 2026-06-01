@@ -85,9 +85,9 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
         }
       } else if (sourceCenterX >= to.x() + to.width()) {
         // From right: bypass above/below, land on top/bottom of target circle
-        const landY = sourceCenterY <= targetCY ? targetCY - 2*r : targetCY + 2*r;
+        const landY = sourceCenterY <= targetCY ? targetCY - 2 * r : targetCY + 2 * r;
         steps.push((_x, _y) => [_x, landY]);
-        steps.push((x, _y) => [targetCX, _y]);
+        steps.push((_x, _y) => [targetCX, _y]);
         steps.push(() => [targetCX, landY + r * (sourceCenterY <= targetCY ? 1 : -1)]);
       } else {
         // From top/bottom: go to target circle center X, touch top/bottom boundary
