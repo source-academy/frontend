@@ -2873,8 +2873,8 @@ __metadata:
   linkType: hard
 
 "@rsbuild/plugin-svgr@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "@rsbuild/plugin-svgr@npm:2.0.2"
+  version: 2.0.3
+  resolution: "@rsbuild/plugin-svgr@npm:2.0.3"
   dependencies:
     "@rsbuild/plugin-react": "npm:^2.0.0"
     "@svgr/core": "npm:8.1.0"
@@ -2887,7 +2887,7 @@ __metadata:
   peerDependenciesMeta:
     "@rsbuild/core":
       optional: true
-  checksum: 10c0/cbac516ff7a6f3a613d03c72a6b2b56698a483c757284235967852843e3b41ff60723b9aa7478e8c617ae8a9b1e479f5b9df5ea2f9485aa62f3ea5729c73ba54
+  checksum: 10c0/ed27ee06a33fede8d2039f67bcb4b3d7d8b16b0a7b0e41eee0dff49709dad2d99140dedbe41b28eff1ceea36b54c2d4e17a9ef58ebbbb1d4147dabc93156c105
   languageName: node
   linkType: hard
 
