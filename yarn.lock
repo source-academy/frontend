@@ -11117,15 +11117,15 @@ __metadata:
   linkType: hard
 
 "react-draggable@npm:^4.4.5":
-  version: 4.5.0
-  resolution: "react-draggable@npm:4.5.0"
+  version: 4.6.0
+  resolution: "react-draggable@npm:4.6.0"
   dependencies:
     clsx: "npm:^2.1.1"
     prop-types: "npm:^15.8.1"
   peerDependencies:
     react: ">= 16.3.0"
     react-dom: ">= 16.3.0"
-  checksum: 10c0/6f7591fe450555218bf0d9e31984be02451bf3f678fb121f51ac0a0a645d01a1b5ea8248ef9afddcd24239028911fd88032194b9c00b30ad5ece76ea13397fc3
+  checksum: 10c0/4fc196136a86054f18a005d77a33d0bf214751b2534e38b76f8d588df865b8230b6084c1645040c243d83b191723fc133653ec372db45ab4bea0b1842c42a38a
   languageName: node
   linkType: hard
 
