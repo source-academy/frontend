@@ -48,6 +48,9 @@ export class Frame extends Visible implements IHoverable {
   public static getFrom(environment: Env): Frame | undefined {
     return Frame.envFrameMap.get(environment.id);
   }
+  public static clearMap(): void {
+    Frame.envFrameMap.clear();
+  }
 
   /** total height = frame height + frame title height */
   readonly totalHeight: number;
