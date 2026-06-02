@@ -7260,7 +7260,7 @@ __metadata:
     immer: "npm:^9.0.21"
     java-slang: "npm:^1.0.13"
     js-cookie: "npm:^3.0.5"
-    js-slang: "npm:^1.0.92"
+    js-slang: "npm:^1.0.93"
     js-yaml: "npm:^4.1.0"
     jsdom: "npm:^29.0.0"
     konva: "npm:^10.0.0"
@@ -8600,9 +8600,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-slang@npm:^1.0.92":
-  version: 1.0.92
-  resolution: "js-slang@npm:1.0.92"
+"js-slang@npm:^1.0.93":
+  version: 1.0.93
+  resolution: "js-slang@npm:1.0.93"
   dependencies:
     "@babel/parser": "npm:^7.19.4"
     "@commander-js/extra-typings": "npm:^14.0.0"
@@ -8618,7 +8618,7 @@ __metadata:
     source-map: "npm:0.7.6"
   bin:
     js-slang: dist/repl/index.js
-  checksum: 10c0/faea8ab62fa1faecf68725becfb1184a13d8163bbc18d21a14c24f709fdd657ed5b7bbc9280765ca520d554261e96b1b1591abb16406ea8aa7ddff51501ad84c
+  checksum: 10c0/fafdc08b512b69f57a172325566cae34095977e81c77de9c2a4ffe9a41be563b8db8682dcf3055e0d554f8af21c76ff64a847921e2d26cd5593948703fb020e0
   languageName: node
   linkType: hard
 
