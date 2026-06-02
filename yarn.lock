@@ -2892,8 +2892,8 @@ __metadata:
   linkType: hard
 
 "@rsbuild/plugin-tailwindcss@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@rsbuild/plugin-tailwindcss@npm:2.0.0"
+  version: 2.0.1
+  resolution: "@rsbuild/plugin-tailwindcss@npm:2.0.1"
   dependencies:
     "@tailwindcss/webpack": "npm:^4.3.0"
   peerDependencies:
@@ -2901,7 +2901,7 @@ __metadata:
   peerDependenciesMeta:
     "@rsbuild/core":
       optional: true
-  checksum: 10c0/4a31ca8e23e4fbe597189233fbb02c563100eb29970655ceed138561322174aca4178e7e82cf7732cdb1504192632867e0a9b9706d02124aeb53de78cd37fcc3
+  checksum: 10c0/835490e4ca50391b1c9cf145418c81befe64e6bcc6831372a960d251006f5f09a8fbc172189178909f302a14f68b5ea809271bfdbbd46a4d30d0bab8cf47b1c1
   languageName: node
   linkType: hard
 
