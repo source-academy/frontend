@@ -2840,8 +2840,8 @@ __metadata:
   linkType: hard
 
 "@rsbuild/plugin-react@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@rsbuild/plugin-react@npm:2.0.0"
+  version: 2.0.1
+  resolution: "@rsbuild/plugin-react@npm:2.0.1"
   dependencies:
     "@rspack/plugin-react-refresh": "npm:2.0.0"
     react-refresh: "npm:^0.18.0"
@@ -2850,7 +2850,7 @@ __metadata:
   peerDependenciesMeta:
     "@rsbuild/core":
       optional: true
-  checksum: 10c0/8d56bcdf876da942d16a279c6702b56021a133962e6ce013cfda25bd1b83053aa1ac3663408b972f7d345578eca04555ed2371d5a56057e6ee4fd4ee5362c8e1
+  checksum: 10c0/b9bb8941ca8081a7231e5b61fe071f8eda79f09ef3177b1ba4d2472ad6df749931446e0a3c71f2de930b8cdf05eac90d37d7f50f498752577516a694c2ee43e9
   languageName: node
   linkType: hard
 
