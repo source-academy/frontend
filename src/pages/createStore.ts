@@ -76,9 +76,6 @@ function loadStore(loadedStore: SavedState | undefined) {
         editorTabs: loadedStore.playgroundEditorTabs
           ? loadedStore.playgroundEditorTabs
           : defaultState.workspaces.playground.editorTabs,
-        isEditorAutorun: loadedStore.playgroundIsEditorAutorun
-          ? loadedStore.playgroundIsEditorAutorun
-          : defaultState.workspaces.playground.isEditorAutorun,
         externalLibrary: loadedStore.playgroundExternalLibrary
           ? loadedStore.playgroundExternalLibrary
           : defaultState.workspaces.playground.externalLibrary,

@@ -14,21 +14,6 @@ exports[`Playground tests > Playground renders correctly 1`] = `
         <div
           class="ControlBar_editor bp6-button-group"
         >
-          <div
-            class="Switch"
-          >
-            <label
-              class="bp6-control bp6-switch"
-            >
-              <input
-                class="bp6-control-input"
-                type="checkbox"
-              />
-              <span
-                class="bp6-control-indicator"
-              />
-            </label>
-          </div>
           <span
             class="bp6-popover-target"
           >
@@ -1644,21 +1629,6 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
         <div
           class="ControlBar_editor bp6-button-group"
         >
-          <div
-            class="Switch"
-          >
-            <label
-              class="bp6-control bp6-switch"
-            >
-              <input
-                class="bp6-control-input"
-                type="checkbox"
-              />
-              <span
-                class="bp6-control-indicator"
-              />
-            </label>
-          </div>
           <span
             class="bp6-popover-target"
           >

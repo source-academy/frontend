@@ -3,8 +3,6 @@ import { ControlledMenu, MenuItem, useMenuState } from '@szhsin/react-menu';
 import classNames from 'classnames';
 import { useState } from 'react';
 
-import classes from './FileSystemViewContextMenu.module.css';
-
 type Props = {
   children?: React.ReactElement;
   className?: string;
@@ -33,39 +31,38 @@ function FileSystemViewContextMenu({
     toggleMenu(true);
   };
 
+  const menuItems = [
+    createNewFile && { label: 'New File', onClick: createNewFile },
+    createNewDirectory && { label: 'New Directory', onClick: createNewDirectory },
+    open && { label: 'Open', onClick: open },
+    rename && { label: 'Rename', onClick: rename },
+    remove && { label: 'Delete', onClick: remove },
+  ];
+
   return (
     <div className={className} onContextMenu={onContextMenu}>
       {children}
       <ControlledMenu
-        menuClassName={classNames(Classes.CARD, Classes.DARK, classes['context-menu'])}
+        menuClassName={classNames(
+          Classes.CARD,
+          Classes.DARK,
+          'bg-(--cadet-color-1) px-px py-1 z-5',
+        )}
         {...menuProps}
         anchorPoint={anchorPoint}
         onClose={() => toggleMenu(false)}
       >
-        {createNewFile && (
-          <MenuItem className={classes['context-menu-item']} onClick={createNewFile}>
-            New File
-          </MenuItem>
-        )}
-        {createNewDirectory && (
-          <MenuItem className={classes['context-menu-item']} onClick={createNewDirectory}>
-            New Directory
-          </MenuItem>
-        )}
-        {open && (
-          <MenuItem className={classes['context-menu-item']} onClick={open}>
-            Open
-          </MenuItem>
-        )}
-        {rename && (
-          <MenuItem className={classes['context-menu-item']} onClick={rename}>
-            Rename
-          </MenuItem>
-        )}
-        {remove && (
-          <MenuItem className={classes['context-menu-item']} onClick={remove}>
-            Delete
-          </MenuItem>
+        {menuItems.map(
+          (item, index) =>
+            item && (
+              <MenuItem
+                key={index}
+                className="list-none select-none px-4 py-0.5 whitespace-nowrap hover:bg-(--cadet-color-3)"
+                onClick={item.onClick}
+              >
+                {item.label}
+              </MenuItem>
+            ),
         )}
       </ControlledMenu>
     </div>

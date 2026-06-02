@@ -104,7 +104,6 @@ export type WorkspaceState = {
   readonly isRunning: boolean;
   readonly isDebugging: boolean;
   readonly enableDebugging: boolean;
-  readonly isEditorAutorun: boolean;
   readonly isEditorReadonly: boolean;
   readonly output: InterpreterOutput[];
   readonly externalLibrary: ExternalLibraryName;

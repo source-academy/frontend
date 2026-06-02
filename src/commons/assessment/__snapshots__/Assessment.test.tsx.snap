@@ -190,7 +190,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       </div>
                     </div>
                     <div
-                      class="_listing-xp_f3441c"
+                      class="flex gap-2"
                     >
                       <h6
                         class="bp6-heading"
@@ -361,7 +361,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       </div>
                     </div>
                     <div
-                      class="_listing-xp_f3441c"
+                      class="flex gap-2"
                     >
                       <h6
                         class="bp6-heading"
@@ -558,7 +558,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       </div>
                     </div>
                     <div
-                      class="_listing-xp_f3441c"
+                      class="flex gap-2"
                     >
                       <h6
                         class="bp6-heading"
@@ -942,7 +942,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       </div>
                     </div>
                     <div
-                      class="_listing-xp_f3441c"
+                      class="flex gap-2"
                     >
                       <h6
                         class="bp6-heading"
@@ -1151,7 +1151,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       </div>
                     </div>
                     <div
-                      class="_listing-xp_f3441c"
+                      class="flex gap-2"
                     >
                       <h6
                         class="bp6-heading"
@@ -1348,7 +1348,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       </div>
                     </div>
                     <div
-                      class="_listing-xp_f3441c"
+                      class="flex gap-2"
                     >
                       <h6
                         class="bp6-heading"

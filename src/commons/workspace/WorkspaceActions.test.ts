@@ -84,16 +84,6 @@ test('externalLibrarySelect generates correct action object', () => {
   });
 });
 
-test('toggleEditorAutorun generates correct action object', () => {
-  const action = WorkspaceActions.toggleEditorAutorun(gradingWorkspace);
-  expect(action).toEqual({
-    type: WorkspaceActions.toggleEditorAutorun.type,
-    payload: {
-      workspaceLocation: gradingWorkspace,
-    },
-  });
-});
-
 test('beginClearContext generates correct action object', () => {
   const library: Library = {
     chapter: Chapter.SOURCE_4,

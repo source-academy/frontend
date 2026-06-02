@@ -4,5 +4,12 @@
   "files.insertFinalNewline": true,
   "liveServer.settings.file": "/index.html",
   "liveServer.settings.NoBrowser": true,
-  "liveServer.settings.root": "/build"
+  "liveServer.settings.root": "/build",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "always",
+    "source.fixAll.eslint": "always"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
 }

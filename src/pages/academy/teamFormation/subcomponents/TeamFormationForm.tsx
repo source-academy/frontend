@@ -1,16 +1,23 @@
 import { Button } from '@blueprintjs/core';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Form, useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import type { ActionMeta, MultiValue } from 'react-select';
 import Select from 'react-select';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import type { User } from 'src/commons/application/types/SessionTypes';
 import type { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import { useSession } from 'src/commons/utils/Hooks';
+import {
+  FormContainer,
+  FormField,
+  FormFieldRow,
+  FormFooter,
+  InputContainer,
+  RemoveButton,
+  StudentFormField,
+} from 'src/components/ui/form';
 import type { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
-
-import classes from './TeamFormationForm.module.css';
 
 export type OptionType = {
   label: string | null;
@@ -18,7 +25,7 @@ export type OptionType = {
 } | null;
 
 function TeamFormationForm() {
-  const { teamId } = useParams(); // Retrieve the team ID from the URL
+  const { teamId } = useParams();
   const { courseId, students, assessmentOverviews, teamFormationOverviews } = useSession();
   const dispatch = useDispatch();
   const [selectedAssessment, setSelectedAssessment] = useState<AssessmentOverview | undefined>(
@@ -113,96 +120,78 @@ function TeamFormationForm() {
   };
 
   return (
-    <div className={classes['form-container']}>
-      <Form>
-        <h2>{teamId ? 'Edit' : 'Create New'} Team</h2>
-        <div className={classes['form-field-row']}>
-          <div className={classes['form-field']}>
-            <label htmlFor="assessment" className={classes['form-label']}>
-              Assessment
-            </label>
-            <Select
-              id="assessment"
-              options={assessmentOverviews?.map(assessment => ({
-                label: assessment.title,
-                value: assessment,
-              }))}
-              value={
-                selectedAssessment
-                  ? { label: selectedAssessment.title, value: selectedAssessment }
-                  : null
-              }
-              onChange={option => handleAssessmentChange(option?.value)}
-              isSearchable
-              className={classes['form-select']}
+    <FormContainer heading={teamId ? 'Edit' : 'Create New'}>
+      <FormFieldRow>
+        <FormField label="Assessment" htmlFor="assessment">
+          <Select
+            id="assessment"
+            options={assessmentOverviews?.map(assessment => ({
+              label: assessment.title,
+              value: assessment,
+            }))}
+            value={
+              selectedAssessment
+                ? { label: selectedAssessment.title, value: selectedAssessment }
+                : null
+            }
+            onChange={option => handleAssessmentChange(option?.value)}
+            isSearchable
+          />
+        </FormField>
+        {selectedAssessment && (
+          <FormField label="Max No. of Students:">
+            <input
+              type="text"
+              className="flex-1 w-full h-9 rounded text-sm transition-all"
+              value={maxNoOfStudents}
+              readOnly
+              disabled
             />
-          </div>
-          {selectedAssessment && (
-            <div className={classes['form-field']}>
-              <label className={classes['form-label']}>Max No. of Students:</label>
-              <input
-                type="text"
-                className={classes['form-select']}
-                value={maxNoOfStudents}
-                readOnly
-                disabled // Make the input read-only and disabled
-              />
-            </div>
-          )}
-        </div>
+          </FormField>
+        )}
+      </FormFieldRow>
 
-        {teams.map((t, index) => (
-          <div className={classes['student-form-field']} key={index}>
-            <label htmlFor={`team-${index}`} className={classes['form-label']}>
-              Students
-            </label>
-            <div className={classes['input-container']}>
-              <Select
-                id={`team-${index}`}
-                options={students?.map(student => ({
-                  label: student.name,
-                  value: student,
-                }))}
-                isMulti
-                isSearchable
-                value={t}
-                onChange={(
-                  selectedOption: MultiValue<OptionType>,
-                  actionMeta: ActionMeta<OptionType>,
-                ) => handleTeamChange(index, selectedOption, actionMeta)}
-                className={classes['form-select']}
-              />
-              {index > 0 && (
-                <button
-                  type="button"
-                  onClick={() => removeTeam(index)}
-                  className={classes['remove-button']}
-                >
-                  Remove Team
-                </button>
-              )}
-            </div>
-          </div>
-        ))}
-        {!teamId ? (
-          <Button onClick={addAnotherTeam} intent="primary">
-            Add Another Team
+      {teams.map((t, index) => (
+        <StudentFormField label="Students" htmlFor={`team-${index}`} key={index}>
+          <InputContainer>
+            <Select
+              id={`team-${index}`}
+              options={students?.map(student => ({
+                label: student.name,
+                value: student,
+              }))}
+              isMulti
+              isSearchable
+              value={t}
+              onChange={(
+                selectedOption: MultiValue<OptionType>,
+                actionMeta: ActionMeta<OptionType>,
+              ) => handleTeamChange(index, selectedOption, actionMeta)}
+            />
+            {index > 0 && (
+              <RemoveButton onClick={() => removeTeam(index)}>Remove Team</RemoveButton>
+            )}
+          </InputContainer>
+        </StudentFormField>
+      ))}
+      {!teamId ? (
+        <Button onClick={addAnotherTeam} intent="primary">
+          Add Another Team
+        </Button>
+      ) : null}
+
+      <FormFooter>
+        <Button onClick={backToTeamDashboard} intent="danger">
+          Back
+        </Button>
+
+        <div>
+          <Button onClick={submitForm} intent="success">
+            Submit
           </Button>
-        ) : null}
-
-        <div className={classes['form-footer']}>
-          <Button onClick={backToTeamDashboard} intent="danger">
-            Back
-          </Button>
-
-          <div>
-            <Button onClick={submitForm} intent="success">
-              Submit
-            </Button>
-          </div>
         </div>
-      </Form>
-    </div>
+      </FormFooter>
+    </FormContainer>
   );
 }
 

@@ -1,0 +1,18 @@
+/* https://tailwindcss.com/docs/theme#default-theme-variables */
+/* 
+ * We extend manual Tailwind registration with additional layers
+ * to have nice interop with Blueprint
+ */
+@layer theme, base, blueprint, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+/* TODO: Enable this once we are confident there are no conflicts */
+/* @import 'tailwindcss/preflight.css' layer(base); */
+
+/* TODO: Remove normalize.css since we now have Tailwind preflight */
+@import 'normalize.css/normalize.css' layer(blueprint);
+@import '@blueprintjs/core/lib/css/blueprint.css' layer(blueprint);
+@import '@blueprintjs/select/lib/css/blueprint-select.css' layer(blueprint);
+
+/* Allow Tailwind utilities to override Blueprint styles */
+@import 'tailwindcss/utilities.css' layer(utilities);

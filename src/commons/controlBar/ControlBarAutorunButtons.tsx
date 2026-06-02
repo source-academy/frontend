@@ -1,4 +1,3 @@
-import { Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 
 import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
@@ -13,13 +12,10 @@ type Props = {
   handleDebuggerResume: () => void;
   handleEditorEval: () => void;
   handleInterruptEval: () => void;
-  handleToggleEditorAutorun?: () => void;
   isEntrypointFileDefined: boolean;
   isDebugging: boolean;
-  isEditorAutorun?: boolean;
   isRunning: boolean;
   key: string;
-  autorunDisabled?: boolean;
   pauseDisabled?: boolean;
   sourceChapter?: number;
 };
@@ -34,10 +30,6 @@ function ControlBarAutorunButtons(props: Props) {
       className={props.isRunning ? 'WaitingCursor' : undefined}
       key="run"
     />
-  );
-
-  const showAutoRunIndicator = props.isEditorAutorun && (
-    <ControlButton label="Auto" icon={IconNames.AUTOMATIC_UPDATES} />
   );
 
   // stop button does not do anything due to the blocking nature of eval methods (e.g. runInContext)
@@ -75,22 +67,13 @@ function ControlBarAutorunButtons(props: Props) {
     </>
   ) : (
     <>
-      {!props.autorunDisabled && (
-        <div className="Switch">
-          <Switch
-            label=""
-            checked={props.isEditorAutorun}
-            onChange={props.handleToggleEditorAutorun}
-          />
-        </div>
-      )}
       {conductorEnabled ? (
         <>
-          {showAutoRunIndicator || showRunButton}
+          {showRunButton}
           {showStopButton}
         </>
       ) : (
-        showAutoRunIndicator || showStopButton || showRunButton
+        showStopButton || showRunButton
       )}
       {showDebuggerPause}
       {showDebuggerResume}

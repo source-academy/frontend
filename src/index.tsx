@@ -1,4 +1,5 @@
 import 'src/i18n/i18n';
+import 'src/styles/global.css';
 import 'src/styles/index.scss';
 
 import { Button, OverlaysProvider } from '@blueprintjs/core';
