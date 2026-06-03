@@ -18,6 +18,7 @@ import classes from 'src/styles/Draggable.module.scss';
 import { arrowSelection } from './components/arrows/ArrowSelection';
 import { Binding } from './components/Binding';
 import { ControlStack } from './components/ControlStack';
+import { Frame as FrameComponent } from './components/Frame';
 import { Level } from './components/Level';
 import { StashStack } from './components/StashStack';
 import { ArrayValue } from './components/values/ArrayValue';
@@ -416,6 +417,7 @@ export class Layout {
   /** initializes grid */
   private static initializeGrid(): void {
     this.levels = [];
+    FrameComponent.clearMap();
     let frontier: EnvTreeNode[] = Layout.clearDeadFrames
       ? Layout.getVisibleChildren([Layout.globalEnvNode])
       : [Layout.globalEnvNode];
