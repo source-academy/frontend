@@ -21,6 +21,7 @@ import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHo
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { type OverallState } from '../../../application/ApplicationTypes';
+import { visitSideContent } from '../../../sideContent/SideContentActions';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import DisplayBufferService from '../../../utils/DisplayBufferService';
@@ -328,6 +329,12 @@ export function* evalCodeSaga(
     return;
   } else if (result.status !== 'finished') {
     yield* dumpDisplayBuffer(workspaceLocation);
+    if (workspaceLocation === 'sicp' || workspaceLocation === 'playground') {
+      const workspace = yield* selectWorkspace(workspaceLocation);
+      if (workspace.usingSubst || workspace.usingCse) {
+        yield put(visitSideContent(SideContentType.introduction, undefined, workspaceLocation));
+      }
+    }
     const specialError = checkSpecialError(context.errors);
     if (specialError !== null) {
       switch (specialError) {
