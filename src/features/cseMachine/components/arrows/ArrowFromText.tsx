@@ -3,6 +3,9 @@ import type { StepsArray } from '../../CseMachineTypes';
 import { Frame } from '../Frame';
 import { Text } from '../Text';
 import { ArrayValue } from '../values/ArrayValue';
+import { ContValue } from '../values/ContValue';
+import { FnValue } from '../values/FnValue';
+import { GlobalFnValue } from '../values/GlobalFnValue';
 import { Value } from '../values/Value';
 import { GenericArrow } from './GenericArrow';
 
@@ -67,12 +70,34 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
       steps.push((x, y) => [frameExitX, y]);
     }
 
+    const isFnTarget =
+      to instanceof FnValue || to instanceof GlobalFnValue || to instanceof ContValue;
+
+    // Closure geometry: targetCX = left eyeball center (Fn) or circle center (Cont).
+    // leftFaceX = leftmost point; rightFaceX = rightmost point of the closure shape.
+    const r = isFnTarget ? to.radius : 0;
+    const targetCX = isFnTarget
+      ? to instanceof ContValue
+        ? to.centerX
+        : to.centerX - to.radius
+      : 0;
+    const targetCY = isFnTarget ? to.y() : 0; // circle center Y
+    // FnValue right face = centerX + 2r; ContValue right face = centerX + r.
+    const leftFaceX = targetCX - r;
+    const rightFaceX = to instanceof ContValue ? targetCX + r : targetCX + 3 * r;
+
     if (to.x() < from.x()) {
       // Target is to the left - bend left and down/up to reach target
       if (to instanceof ArrayValue) {
         steps.push((x, y) => [x, to.y() - verticalTerminalOffset]);
         steps.push((x, y) => [to.x() + Config.DataUnitWidth / 2, y]);
         steps.push((x, y) => [x, to.y()]);
+      } else if (isFnTarget) {
+        // Approach from the right: bend up first, then left, landing on the right face.
+        steps.push((x, y) => [x, y - from.height() / 2 - Config.TextMargin]);
+        steps.push((x, y) => [rightFaceX + terminalSegmentLength, y]);
+        steps.push((x, y) => [x, targetCY]);
+        steps.push((x, y) => [rightFaceX, y]);
       } else {
         steps.push((x, y) => [x, y - from.height() / 2 - Config.TextMargin]);
         steps.push((x, y) => [to.x() + to.width() + terminalSegmentLength, y]);
@@ -83,17 +108,30 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
       const targetY = to instanceof ArrayValue ? to.y() + Config.DataUnitHeight / 2 : to.y();
       const preTerminalX =
         frameExitX > to.x()
-          ? Math.max(frameExitX, to.x() + to.width() + terminalSegmentLength)
-          : Math.max(frameExitX, to.x() - terminalSegmentLength);
+          ? Math.max(frameExitX, rightFaceX + terminalSegmentLength)
+          : Math.max(frameExitX, leftFaceX - terminalSegmentLength);
 
-      // If preTerminalX overshoots past the target's left edge (e.g. because frameExitX is wide),
-      // the arrow approaches from the right — land on the right edge instead of the left edge.
-      const terminalTargetX = preTerminalX > to.x() ? to.x() + to.width() : to.x();
+      if (isFnTarget) {
+        // Use the approach Y (horizontal segment Y) to decide which face of the circle to land on.
+        // Same level → left face; source above → top face; source below → bottom face.
+        const approachY = from.y() + from.height() / 2;
+        const [landX, landY] = ((): [number, number] => {
+          if (approachY < targetCY - r) return [targetCX, targetCY - r]; // from above: top face
+          if (approachY > targetCY + r) return [targetCX, targetCY + r]; // from below: bottom face
+          return [leftFaceX, targetCY]; // same level: left face
+        })();
+        steps.push((x, y) => [landX, y]);
+        steps.push(() => [landX, landY]);
+      } else {
+        // If preTerminalX overshoots past the target's left edge (e.g. because frameExitX is wide),
+        // the arrow approaches from the right — land on the right edge instead of the left edge.
+        const terminalTargetX = preTerminalX > to.x() ? to.x() + to.width() : to.x();
 
-      // Route text-to-array arrows with Manhattan segments, ending at array's left-center.
-      steps.push((x, y) => [preTerminalX, y]);
-      steps.push((x, y) => [x, targetY]);
-      steps.push((x, y) => [terminalTargetX, y]);
+        // Route text-to-array arrows with Manhattan segments, ending at array's left-center.
+        steps.push((x, y) => [preTerminalX, y]);
+        steps.push((x, y) => [x, targetY]);
+        steps.push((x, y) => [terminalTargetX, y]);
+      }
     }
 
     return steps;
