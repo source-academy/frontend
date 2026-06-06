@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { DraggableData, DraggableEvent } from 'react-draggable';
 import Draggable from 'react-draggable';
@@ -6,7 +7,6 @@ import { useSession } from 'src/commons/utils/Hooks';
 import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 
 import ChatbotButton from './ChatbotButton';
-import classes from './Chatbot.module.css';
 import ChatBox from './ChatBox';
 import { CHATBOT_BUTTON_DRAG_HANDLE_CLASS_NAME } from './constants';
 
@@ -118,13 +118,19 @@ function Chatbot({ getSection, getText }: Props) {
         >
           <div
             ref={nodeRef}
-            className={classes['bot-container']}
-            style={{ display: isSnippetOpen ? 'none' : 'block' }}
+            className={classNames(
+              'fixed right-0 bottom-0 z-1000 max-h-screen max-w-[100vw]',
+              isSnippetOpen ? 'hidden' : 'block',
+            )}
           >
-            <div className={classes['bot-area']}>
+            <div className="relative">
               {isDivVisible && (
-                <div className={classes['tips-box']}>
-                  <p className={classes['tips-message']}>
+                <div
+                  className={
+                    'absolute right-16.25 bottom-2.5 h-auto w-65 rounded-[5px] border border-black bg-[#f1f1f1] pr-2.5'
+                  }
+                >
+                  <p className="m-0 whitespace-normal break-normal px-2 py-1 text-right text-[13px]">
                     I am Louis, your SICP bot
                     <br />
                     {tipsMessage}

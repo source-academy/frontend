@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useRef, useState } from 'react';
 import type { DraggableData, DraggableEvent } from 'react-draggable';
 import Draggable from 'react-draggable';
@@ -7,7 +8,6 @@ import { clampPosition } from 'src/pages/sicp/subcomponents/chatbot/Chatbot';
 import ChatbotButton from 'src/pages/sicp/subcomponents/chatbot/ChatbotButton';
 import { CHATBOT_BUTTON_DRAG_HANDLE_CLASS_NAME } from 'src/pages/sicp/subcomponents/chatbot/constants';
 
-import classes from './RagChatbot.module.css';
 import RagChatBox from './RagChatBox';
 
 function RagChatbot() {
@@ -78,14 +78,21 @@ function RagChatbot() {
       >
         <div
           ref={nodeRef}
-          className={classes['bot-container']}
+          className={classNames(
+            'fixed right-0 bottom-0 z-1000 max-h-screen max-w-[100vw]',
+            isSnippetOpen ? 'hidden' : 'block',
+          )}
           style={{ display: isSnippetOpen ? 'none' : 'block' }}
         >
-          <div className={classes['bot-area']}>
+          <div className="relative">
             {isDivVisible && (
-              <div className={classes['tips-box']}>
-                <p className={classes['tips-message']}>
-                  {'I am Pixel, your CS1101S assistant'}
+              <div
+                className={
+                  'absolute right-16.25 bottom-2.5 h-auto w-65 rounded-[5px] border border-black bg-[#f1f1f1] pr-2.5'
+                }
+              >
+                <p className="m-0 whitespace-normal break-normal px-2 py-1 text-right text-[13px]">
+                  I am Pixel, your CS1101S assistant
                   <br />
                   {tipsMessage}
                 </p>
