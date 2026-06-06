@@ -30,9 +30,7 @@ export class ArrowFromStashItemComponent extends GenericArrow<
     const terminalSegmentLength = Math.max(Config.ArrowHeadSize, Config.MinTerminalSegmentLength);
     const postSourceStraightLength = Config.ArrowPostFrameStraightLength;
 
-    const steps: StepsArray = [
-      (x, y) => [x + from.width() / 2, y + from.height()],
-    ];
+    const steps: StepsArray = [(x, y) => [x + from.width() / 2, y + from.height()]];
 
     if (to instanceof FnValue || to instanceof GlobalFnValue || to instanceof ContValue) {
       const sourceBottomY = from.y() + from.height();
