@@ -1,4 +1,4 @@
-import { AnchorButton, Icon } from '@blueprintjs/core';
+import { Button, Icon } from '@blueprintjs/core';
 import classNames from 'classnames';
 
 import { CHATBOT_BUTTON_DRAG_HANDLE_CLASS_NAME } from './constants';
@@ -19,7 +19,7 @@ function FloatingChatbotButton({
   onClick,
 }: Props) {
   return (
-    <AnchorButton
+    <Button
       className={classNames(
         CHATBOT_BUTTON_DRAG_HANDLE_CLASS_NAME,
         'absolute right-2.5 bottom-2.5 flex size-12.5 cursor-grab select-none items-center justify-center rounded-full border-0 bg-transparent p-0 active:cursor-grabbing [-webkit-user-select:none]',
