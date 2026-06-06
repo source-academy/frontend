@@ -17,16 +17,6 @@
   }
 }
 
-.grading-overview-filterable-btns {
-  &:hover:not(:has(> .grading-badge)) {
-    text-decoration: underline;
-  }
-
-  &:hover:has(> .grading-badge) {
-    filter: brightness(0.75);
-  }
-}
-
 .grading-overview-unfilterable-btns,
 .grading-overview-filterable-btns {
   border-radius: 9999px;

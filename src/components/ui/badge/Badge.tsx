@@ -36,7 +36,6 @@ type Props = {
 function Badge({ children, color, size = 'sm', icon, className, textClassName }: Props) {
   return (
     <span
-      data-ui-badge=""
       className={classNames(
         'mx-auto flex w-fit max-w-full flex-row items-center justify-center gap-1.5 rounded-full whitespace-nowrap leading-normal!',
         'hover:brightness-75',
