@@ -3,42 +3,12 @@ import type { DraggableData, DraggableEvent } from 'react-draggable';
 import Draggable from 'react-draggable';
 import pixelLogo from 'src/assets/pixel.jpg';
 import { useSession } from 'src/commons/utils/Hooks';
+import { clampPosition } from 'src/pages/sicp/subcomponents/chatbot/Chatbot';
 import ChatbotButton from 'src/pages/sicp/subcomponents/chatbot/ChatbotButton';
 import { CHATBOT_BUTTON_DRAG_HANDLE_CLASS_NAME } from 'src/pages/sicp/subcomponents/chatbot/constants';
 
 import classes from './RagChatbot.module.css';
 import RagChatBox from './RagChatBox';
-
-const ICON_SIZE = 70;
-const CHAT_WIDTH = 400;
-const CHAT_HEIGHT = 450;
-const CHAT_EXPANDED_WIDTH = 700;
-const CHAT_EXPANDED_HEIGHT_VH = 0.8;
-const CHAT_EXPANDED_MAX_HEIGHT = 800;
-
-const clampPosition = (
-  x: number,
-  y: number,
-  chatOpen: boolean,
-  expanded: boolean,
-): { x: number; y: number } => {
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-
-  const containerW = chatOpen ? (expanded ? CHAT_EXPANDED_WIDTH : CHAT_WIDTH) : ICON_SIZE;
-  const expandedH = Math.min(vh * CHAT_EXPANDED_HEIGHT_VH, CHAT_EXPANDED_MAX_HEIGHT);
-  const containerH = chatOpen ? (expanded ? expandedH : CHAT_HEIGHT) + ICON_SIZE : ICON_SIZE;
-
-  const minX = containerW - vw;
-  const maxX = 0;
-  const minY = containerH - vh;
-  const maxY = 0;
-
-  return {
-    x: Math.min(maxX, Math.max(minX, x)),
-    y: Math.min(maxY, Math.max(minY, y)),
-  };
-};
 
 function RagChatbot() {
   const { isLoggedIn } = useSession();

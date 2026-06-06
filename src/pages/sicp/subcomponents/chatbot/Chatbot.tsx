@@ -22,7 +22,7 @@ const CHAT_EXPANDED_WIDTH = 700;
 const CHAT_EXPANDED_HEIGHT_VH = 0.8;
 const CHAT_EXPANDED_MAX_HEIGHT = 800;
 
-const clampPosition = (
+export const clampPosition = (
   x: number,
   y: number,
   chatOpen: boolean,
