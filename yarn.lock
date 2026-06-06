@@ -2094,6 +2094,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lukemorales/query-key-factory@npm:^1.3.4":
+  version: 1.3.4
+  resolution: "@lukemorales/query-key-factory@npm:1.3.4"
+  peerDependencies:
+    "@tanstack/query-core": ">= 4.0.0"
+    "@tanstack/react-query": ">= 4.0.0"
+  checksum: 10c0/d4e829aad970c159e3e3d6545f4f1e47d1a02621cd692bc0e13b7cc36861541e205f801d7ab8081ed8b1c8c3fd365483e1656537ef1ab165cb14743b4b1f1d6c
+  languageName: node
+  linkType: hard
+
 "@mantine/hooks@npm:^9.0.0":
   version: 9.3.0
   resolution: "@mantine/hooks@npm:9.3.0"
@@ -3698,6 +3708,24 @@ __metadata:
   peerDependencies:
     webpack: ^5
   checksum: 10c0/6231724f3b24a6321d02bdfec8ed1b1a0de71a0ca9878d4c26534b2b5f1bf537749cea640c888b96eeb081334307142999dc5c41e05ac1840bacb640afd4f9d2
+  languageName: node
+  linkType: hard
+
+"@tanstack/query-core@npm:5.100.14":
+  version: 5.100.14
+  resolution: "@tanstack/query-core@npm:5.100.14"
+  checksum: 10c0/947942b1499169b279faf4eddd570719db5d6863c89db4ec2d54e1eb3fb66a679cfa87a15c9f2e9d5de523e4bcc1782c020fba913ead461b73ecec4fdd986c59
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^5.100.14":
+  version: 5.100.14
+  resolution: "@tanstack/react-query@npm:5.100.14"
+  dependencies:
+    "@tanstack/query-core": "npm:5.100.14"
+  peerDependencies:
+    react: ^18 || ^19
+  checksum: 10c0/f124e7671f5731a88241a71a6ce7da54f0bafb960ec4107d1eb24d0fc25136d10cd02ebd68956eb0605a29e60d925e82bfb52386b25cbe2e1cb4c166017cbf2a
   languageName: node
   linkType: hard
 
@@ -7176,6 +7204,7 @@ __metadata:
     "@dnd-kit/core": "npm:^6.3.1"
     "@dnd-kit/sortable": "npm:^10.0.0"
     "@dnd-kit/utilities": "npm:^3.2.2"
+    "@lukemorales/query-key-factory": "npm:^1.3.4"
     "@mantine/hooks": "npm:^9.0.0"
     "@octokit/rest": "npm:^22.0.0"
     "@reduxjs/toolkit": "npm:^1.9.7"
@@ -7197,6 +7226,7 @@ __metadata:
     "@svgr/webpack": "npm:^8.0.0"
     "@swc/core": "npm:^1.11.22"
     "@szhsin/react-menu": "npm:^4.0.0"
+    "@tanstack/react-query": "npm:^5.100.14"
     "@tanstack/react-table": "npm:^8.9.3"
     "@testing-library/dom": "npm:^10.4.0"
     "@testing-library/jest-dom": "npm:^6.0.0"

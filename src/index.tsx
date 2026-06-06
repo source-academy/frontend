@@ -14,9 +14,9 @@ import { register as registerServiceWorker } from 'src/commons/utils/RegisterSer
 import { triggerSyncLogs } from 'src/features/eventLogging/client';
 import { store } from 'src/pages/createStore';
 
+import App from './App';
 import { initializeAgGridModules } from './bootstrap/agGrid';
 import { initializeSentryLogging } from './bootstrap/sentry';
-import ApplicationWrapper from './commons/application/ApplicationWrapper';
 import { createInBrowserFileSystem } from './pages/fileSystem/createInBrowserFileSystem';
 
 SyntaxHighlighter.registerLanguage('javascript', javascript);
@@ -43,7 +43,7 @@ createInBrowserFileSystem(store)
     root.render(
       <Provider store={store}>
         <OverlaysProvider>
-          <ApplicationWrapper />
+          <App />
         </OverlaysProvider>
       </Provider>,
     );
