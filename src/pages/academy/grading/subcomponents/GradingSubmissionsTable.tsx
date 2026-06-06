@@ -19,7 +19,7 @@ import type {
   ColumnFiltersState,
   ColumnNameKeys,
   GradingColumnVisibility,
-  GradingSubmissionTableProps,
+  GradingOverview,
   IGradingTableProperties,
   IGradingTableRow,
   SortStateProperties,
@@ -61,13 +61,21 @@ const disabledFilterModeCols: string[] = [ColumnFields.xp, ColumnFields.actionsI
 
 const disabledSortCols: string[] = [ColumnFields.actionsIndex];
 
+type Props = {
+  showAllSubmissions: boolean;
+  totalRows: number;
+  pageSize: number;
+  submissions: GradingOverview[];
+  updateEntries: (page: number, filterParams: object) => void;
+};
+
 function GradingSubmissionTable({
   showAllSubmissions,
   totalRows,
   pageSize,
   submissions,
   updateEntries,
-}: GradingSubmissionTableProps) {
+}: Props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

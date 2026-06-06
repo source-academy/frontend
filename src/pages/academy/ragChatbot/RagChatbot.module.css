@@ -1,12 +1,3 @@
-.bot-container {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  z-index: 1000;
-  max-width: 100vw;
-  max-height: 100vh;
-}
-
 .chat-container {
   position: relative;
   width: 400px;
@@ -68,62 +59,6 @@
   & > :first-child {
     margin-top: 10px;
   }
-}
-
-.bot-area {
-  position: relative;
-}
-
-.tips-box {
-  position: absolute;
-  padding-right: 10px;
-  bottom: 10px;
-  right: 65px;
-  width: 260px;
-  height: auto;
-  border: 1px solid black;
-  background-color: #f1f1f1;
-  border-radius: 5px;
-}
-
-.tips-message {
-  padding: 4px 8px;
-  margin: 0;
-  font-size: 13px;
-  text-align: right;
-  white-space: normal;
-  word-break: normal;
-}
-
-.bot-button {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  background-color: #e8e8e8;
-  border: none;
-  padding: 6px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  cursor: grab;
-  justify-content: center;
-  align-items: center;
-  user-select: none;
-  -webkit-user-select: none;
-
-  &:active {
-    cursor: grabbing;
-  }
-}
-
-.pixel-avatar {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  pointer-events: none;
-  -webkit-user-drag: none;
-  user-select: none;
 }
 
 .chat-message {

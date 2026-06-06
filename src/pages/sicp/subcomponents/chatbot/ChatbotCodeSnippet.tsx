@@ -11,7 +11,7 @@ import Playground from 'src/pages/playground/Playground';
 
 import classes from './ChatbotCodeSnippet.module.css';
 
-export type ChatbotCodeSnippetProps = {
+type Props = {
   /** The code to display and run */
   code: string;
   /** Unique ID for this snippet (used to track which is active) */
@@ -35,7 +35,7 @@ function ChatbotCodeSnippet({
   activeSnippetId,
   setActiveSnippet,
   language = 'javascript',
-}: ChatbotCodeSnippetProps) {
+}: Props) {
   const dispatch = useDispatch();
 
   const isActive = activeSnippetId === id;

@@ -5,7 +5,8 @@ import { ColumnFields, ColumnName } from 'src/features/grading/GradingTypes';
 
 import classes from '../Grading.module.css';
 import GradingActions from './GradingActions';
-import { AssessmentTypeBadge, ProgressStatusBadge } from './GradingBadges';
+import AssessmentTypeBadge from './gradingBadges/AssessmentTypeBadge';
+import ProgressStatusBadge from './gradingBadges/ProgressStatusBadge';
 import GradingFilterable from './GradingFilterable';
 
 /**

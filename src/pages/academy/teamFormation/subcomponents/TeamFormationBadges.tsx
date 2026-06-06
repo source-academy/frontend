@@ -2,7 +2,7 @@ import { Button, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import type { ColumnFilter } from '@tanstack/react-table';
 
-import { getBadgeColorFromLabelLegacy } from '../../grading/subcomponents/GradingBadges';
+import { getBadgeColorFromLabelLegacy } from '../../grading/subcomponents/gradingBadges/gradingBadgeColors';
 
 // TODO: Remove after migration is completed
 const TREMOR_TO_BLUEPRINT_INTENT: Record<string, Intent> = {

@@ -1,7 +1,7 @@
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import type { ColumnFilter, ColumnFiltersState } from 'src/features/grading/GradingTypes';
 
-import { FilterBadge } from './GradingBadges';
+import FilterBadge from './gradingBadges/FilterBadge';
 
 type Props = {
   filters: ColumnFiltersState;
