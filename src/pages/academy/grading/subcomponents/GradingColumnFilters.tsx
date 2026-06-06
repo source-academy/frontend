@@ -1,4 +1,4 @@
-import { ColumnFilterBadge } from './GradingBadges';
+import ColumnFilterBadge from './gradingBadges/ColumnFilterBadge';
 
 type Props = {
   filters: string[];

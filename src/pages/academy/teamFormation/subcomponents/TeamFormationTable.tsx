@@ -15,7 +15,7 @@ import GradingText from 'src/commons/grading/GradingText';
 import { objectKeys } from 'src/commons/utils/TypeHelper';
 import type { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 
-import { AssessmentTypeBadge } from '../../grading/subcomponents/GradingBadges';
+import AssessmentTypeBadge from '../../grading/subcomponents/gradingBadges/AssessmentTypeBadge';
 import TeamFormationFilters from '../../teamFormation/subcomponents/TeamFormationFilters';
 import TeamFormationActions from './TeamFormationActions';
 
