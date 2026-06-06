@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { DraggableData, DraggableEvent } from 'react-draggable';
 import Draggable from 'react-draggable';
+import logo from 'src/assets/SA.jpg';
 import { useSession } from 'src/commons/utils/Hooks';
 import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 
@@ -131,6 +132,8 @@ function Chatbot({ getSection, getText }: Props) {
                 </div>
               )}
               <ChatbotButton
+                src={logo}
+                alt="SA Logo"
                 onMouseEnter={() => !isDragging && setIsDivVisible(true)}
                 onMouseLeave={() => setIsDivVisible(false)}
                 onClick={togglePop}
@@ -147,6 +150,8 @@ function Chatbot({ getSection, getText }: Props) {
               />
             )}
             <ChatbotButton
+              src={logo}
+              alt="SA Logo"
               onMouseEnter={() => !isDragging && setIsDivVisible(true)}
               onMouseLeave={() => setIsDivVisible(false)}
               onClick={togglePop}

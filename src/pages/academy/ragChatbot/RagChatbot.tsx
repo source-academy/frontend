@@ -1,9 +1,10 @@
-import { AnchorButton, Icon } from '@blueprintjs/core';
 import { useRef, useState } from 'react';
 import type { DraggableData, DraggableEvent } from 'react-draggable';
 import Draggable from 'react-draggable';
 import pixelLogo from 'src/assets/pixel.jpg';
 import { useSession } from 'src/commons/utils/Hooks';
+import ChatbotButton from 'src/pages/sicp/subcomponents/chatbot/ChatbotButton';
+import { CHATBOT_BUTTON_DRAG_HANDLE_CLASS_NAME } from 'src/pages/sicp/subcomponents/chatbot/constants';
 
 import classes from './RagChatbot.module.css';
 import RagChatBox from './RagChatBox';
@@ -99,7 +100,7 @@ function RagChatbot() {
     <div>
       <Draggable
         nodeRef={nodeRef}
-        handle={`.${classes['bot-button']}`}
+        handle={`.${CHATBOT_BUTTON_DRAG_HANDLE_CLASS_NAME}`}
         position={position}
         onStart={handleDragStart}
         onDrag={handleDrag}
@@ -120,23 +121,12 @@ function RagChatbot() {
                 </p>
               </div>
             )}
-            <AnchorButton
-              className={classes['bot-button']}
+            <ChatbotButton
+              src={pixelLogo}
+              alt="Pixel Logo"
               onMouseEnter={() => !isDragging && setIsDivVisible(true)}
               onMouseLeave={() => setIsDivVisible(false)}
               onClick={togglePop}
-              icon={
-                <Icon
-                  icon={
-                    <img
-                      src={pixelLogo}
-                      className={classes['pixel-avatar']}
-                      alt="Pixel Logo"
-                      draggable={false}
-                    />
-                  }
-                />
-              }
             />
           </div>
           {isPop && (

@@ -1,16 +1,17 @@
 import { AnchorButton, Icon } from '@blueprintjs/core';
 import classNames from 'classnames';
-import logo from 'src/assets/SA.jpg';
 
 import { CHATBOT_BUTTON_DRAG_HANDLE_CLASS_NAME } from './constants';
 
 type Props = {
+  src: string;
+  alt?: string;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   onClick: () => void;
 };
 
-function ChatbotButton({ onMouseEnter, onMouseLeave, onClick }: Props) {
+function ChatbotButton({ src, alt = 'Logo', onMouseEnter, onMouseLeave, onClick }: Props) {
   return (
     <AnchorButton
       className={classNames(
@@ -24,9 +25,9 @@ function ChatbotButton({ onMouseEnter, onMouseLeave, onClick }: Props) {
         <Icon
           icon={
             <img
-              src={logo}
+              src={src}
               className="pointer-events-none size-full select-none rounded-full object-cover [-webkit-user-drag:none]"
-              alt="SA Logo"
+              alt={alt}
               draggable={false}
             />
           }
