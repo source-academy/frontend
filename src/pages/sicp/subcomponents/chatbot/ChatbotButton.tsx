@@ -1,0 +1,39 @@
+import { AnchorButton, Icon } from '@blueprintjs/core';
+import classNames from 'classnames';
+import logo from 'src/assets/SA.jpg';
+
+import { CHATBOT_BUTTON_DRAG_HANDLE_CLASS_NAME } from './constants';
+
+type Props = {
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+  onClick: () => void;
+};
+
+function ChatbotButton({ onMouseEnter, onMouseLeave, onClick }: Props) {
+  return (
+    <AnchorButton
+      className={classNames(
+        CHATBOT_BUTTON_DRAG_HANDLE_CLASS_NAME,
+        'absolute right-2.5 bottom-2.5 flex size-12.5 cursor-grab select-none items-center justify-center rounded-full border-0 bg-transparent p-0 active:cursor-grabbing [-webkit-user-select:none]',
+      )}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      onClick={onClick}
+      icon={
+        <Icon
+          icon={
+            <img
+              src={logo}
+              className="pointer-events-none size-full select-none rounded-full object-cover [-webkit-user-drag:none]"
+              alt="SA Logo"
+              draggable={false}
+            />
+          }
+        />
+      }
+    />
+  );
+}
+
+export default ChatbotButton;

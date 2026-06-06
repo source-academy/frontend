@@ -1,13 +1,13 @@
-import { AnchorButton, Icon } from '@blueprintjs/core';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { DraggableData, DraggableEvent } from 'react-draggable';
 import Draggable from 'react-draggable';
-import logo from 'src/assets/SA.jpg';
 import { useSession } from 'src/commons/utils/Hooks';
 import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 
+import ChatbotButton from './ChatbotButton';
 import classes from './Chatbot.module.css';
 import ChatBox from './ChatBox';
+import { CHATBOT_BUTTON_DRAG_HANDLE_CLASS_NAME } from './constants';
 
 type Props = {
   getSection: () => SicpSection;
@@ -109,7 +109,7 @@ function Chatbot({ getSection, getText }: Props) {
       {isLoggedIn && (
         <Draggable
           nodeRef={nodeRef}
-          handle={`.${classes['bot-button']}`}
+          handle={`.${CHATBOT_BUTTON_DRAG_HANDLE_CLASS_NAME}`}
           position={position}
           onStart={handleDragStart}
           onDrag={handleDrag}
@@ -130,18 +130,10 @@ function Chatbot({ getSection, getText }: Props) {
                   </p>
                 </div>
               )}
-              <AnchorButton
-                className={classes['bot-button']}
+              <ChatbotButton
                 onMouseEnter={() => !isDragging && setIsDivVisible(true)}
                 onMouseLeave={() => setIsDivVisible(false)}
                 onClick={togglePop}
-                icon={
-                  <Icon
-                    icon={
-                      <img src={logo} className={classes['iSA']} alt="SA Logo" draggable={false} />
-                    }
-                  />
-                }
               />
             </div>
             {isPop && (
@@ -154,18 +146,10 @@ function Chatbot({ getSection, getText }: Props) {
                 toggleExpanded={toggleExpanded}
               />
             )}
-            <AnchorButton
-              className={classes['bot-button']}
+            <ChatbotButton
               onMouseEnter={() => !isDragging && setIsDivVisible(true)}
               onMouseLeave={() => setIsDivVisible(false)}
               onClick={togglePop}
-              icon={
-                <Icon
-                  icon={
-                    <img src={logo} className={classes['iSA']} alt="SA Logo" draggable={false} />
-                  }
-                />
-              }
             />
           </div>
         </Draggable>

@@ -71,37 +71,6 @@
   word-break: normal;
 }
 
-.bot-button {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  cursor: grab;
-  justify-content: center;
-  align-items: center;
-  user-select: none;
-  -webkit-user-select: none;
-
-  &:active {
-    cursor: grabbing;
-  }
-}
-
-.iSA {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  pointer-events: none;
-  -webkit-user-drag: none;
-  user-select: none;
-}
-
 .chat-message {
   flex: 1;
   border: 1px solid #ddd;
