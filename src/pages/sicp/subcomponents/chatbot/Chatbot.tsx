@@ -1,171 +1,33 @@
-import classNames from 'classnames';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import type { DraggableData, DraggableEvent } from 'react-draggable';
-import Draggable from 'react-draggable';
 import logo from 'src/assets/SA.jpg';
-import { useSession } from 'src/commons/utils/Hooks';
+import FloatingChatbot from 'src/components/ui/chatbot/FloatingChatbot';
 import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 
-import ChatbotButton from './ChatbotButton';
 import ChatBox from './ChatBox';
-import { CHATBOT_BUTTON_DRAG_HANDLE_CLASS_NAME } from './constants';
 
 type Props = {
   getSection: () => SicpSection;
   getText: () => string;
 };
 
-const ICON_SIZE = 50;
-const CHAT_WIDTH = 400;
-const CHAT_HEIGHT = 450;
-const CHAT_EXPANDED_WIDTH = 700;
-const CHAT_EXPANDED_HEIGHT_VH = 0.8;
-const CHAT_EXPANDED_MAX_HEIGHT = 800;
-
-export const clampPosition = (
-  x: number,
-  y: number,
-  chatOpen: boolean,
-  expanded: boolean,
-): { x: number; y: number } => {
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-
-  const containerW = chatOpen ? (expanded ? CHAT_EXPANDED_WIDTH : CHAT_WIDTH) : ICON_SIZE;
-  const expandedH = Math.min(vh * CHAT_EXPANDED_HEIGHT_VH, CHAT_EXPANDED_MAX_HEIGHT);
-  const containerH = chatOpen ? (expanded ? expandedH : CHAT_HEIGHT) + ICON_SIZE : ICON_SIZE;
-
-  const minX = containerW - vw;
-  const maxX = 0;
-  const minY = containerH - vh;
-  const maxY = 0;
-
-  return {
-    x: Math.min(maxX, Math.max(minX, x)),
-    y: Math.min(maxY, Math.max(minY, y)),
-  };
-};
-
 function Chatbot({ getSection, getText }: Props) {
-  const [isPop, setPop] = useState(false);
-  const [isDivVisible, setIsDivVisible] = useState(false);
-  const [tipsMessage, setTipsMessage] = useState('You can click me for a chat');
-  const [activeSnippetId, setActiveSnippetId] = useState('');
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const { isLoggedIn } = useSession();
-  const nodeRef = useRef<HTMLDivElement>(null);
-
-  const isSnippetOpen = activeSnippetId !== '';
-
-  const toggleExpanded = useCallback(() => {
-    setIsExpanded(prev => {
-      const next = !prev;
-      setPosition(pos => clampPosition(pos.x, pos.y, true, next));
-      return next;
-    });
-  }, []);
-
-  const togglePop = () => {
-    if (isDragging) {
-      return;
-    }
-    const willOpen = !isPop;
-    setPop(willOpen);
-    if (willOpen) {
-      setTipsMessage('');
-      setPosition(pos => clampPosition(pos.x, pos.y, true, isExpanded));
-    } else {
-      setTipsMessage('You can click me for a chat');
-    }
-  };
-
-  useEffect(() => {
-    const handleResize = () => {
-      setPosition(pos => clampPosition(pos.x, pos.y, isPop, isExpanded));
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [isPop, isExpanded]);
-
-  const handleDragStart = () => {
-    setIsDragging(false);
-  };
-
-  const handleDrag = (_e: DraggableEvent, data: DraggableData) => {
-    setIsDragging(true);
-    setIsDivVisible(false);
-    setPosition({ x: data.x, y: data.y });
-  };
-
-  const handleDragStop = (_e: DraggableEvent, data: DraggableData) => {
-    const clamped = clampPosition(data.x, data.y, isPop, isExpanded);
-    setPosition(clamped);
-    setTimeout(() => setIsDragging(false), 0);
-  };
-
   return (
-    <div>
-      {isLoggedIn && (
-        <Draggable
-          nodeRef={nodeRef}
-          handle={`.${CHATBOT_BUTTON_DRAG_HANDLE_CLASS_NAME}`}
-          position={position}
-          onStart={handleDragStart}
-          onDrag={handleDrag}
-          onStop={handleDragStop}
-        >
-          <div
-            ref={nodeRef}
-            className={classNames(
-              'fixed right-0 bottom-0 z-1000 max-h-screen max-w-[100vw]',
-              isSnippetOpen ? 'hidden' : 'block',
-            )}
-          >
-            <div className="relative">
-              {isDivVisible && (
-                <div
-                  className={
-                    'absolute right-16.25 bottom-2.5 h-auto w-65 rounded-[5px] border border-black bg-[#f1f1f1] pr-2.5'
-                  }
-                >
-                  <p className="m-0 whitespace-normal break-normal px-2 py-1 text-right text-[13px]">
-                    I am Louis, your SICP bot
-                    <br />
-                    {tipsMessage}
-                  </p>
-                </div>
-              )}
-              <ChatbotButton
-                src={logo}
-                alt="SA Logo"
-                onMouseEnter={() => !isDragging && setIsDivVisible(true)}
-                onMouseLeave={() => setIsDivVisible(false)}
-                onClick={togglePop}
-              />
-            </div>
-            {isPop && (
-              <ChatBox
-                getSection={getSection}
-                getText={getText}
-                activeSnippetId={activeSnippetId}
-                setActiveSnippetId={setActiveSnippetId}
-                isExpanded={isExpanded}
-                toggleExpanded={toggleExpanded}
-              />
-            )}
-            <ChatbotButton
-              src={logo}
-              alt="SA Logo"
-              onMouseEnter={() => !isDragging && setIsDivVisible(true)}
-              onMouseLeave={() => setIsDivVisible(false)}
-              onClick={togglePop}
-            />
-          </div>
-        </Draggable>
+    <FloatingChatbot
+      avatarSrc={logo}
+      avatarAlt="SA Logo"
+      introMessage="I am Louis, your SICP bot"
+      defaultTipsMessage="You can click me for a chat"
+    >
+      {({ activeSnippetId, setActiveSnippetId, isExpanded, toggleExpanded }) => (
+        <ChatBox
+          getSection={getSection}
+          getText={getText}
+          activeSnippetId={activeSnippetId}
+          setActiveSnippetId={setActiveSnippetId}
+          isExpanded={isExpanded}
+          toggleExpanded={toggleExpanded}
+        />
       )}
-    </div>
+    </FloatingChatbot>
   );
 }
 

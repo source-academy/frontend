@@ -11,7 +11,13 @@ type Props = {
   onClick: () => void;
 };
 
-function ChatbotButton({ src, alt = 'Logo', onMouseEnter, onMouseLeave, onClick }: Props) {
+function FloatingChatbotButton({
+  src,
+  alt = 'Chatbot logo',
+  onMouseEnter,
+  onMouseLeave,
+  onClick,
+}: Props) {
   return (
     <AnchorButton
       className={classNames(
@@ -37,4 +43,4 @@ function ChatbotButton({ src, alt = 'Logo', onMouseEnter, onMouseLeave, onClick 
   );
 }
 
-export default ChatbotButton;
+export default FloatingChatbotButton;
