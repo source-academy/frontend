@@ -25,10 +25,6 @@ export type ObjectProperty = TrackInteraction &
     leadTo: string;
   };
 
-export type ObjectLayerProps = {
-  cursor?: string;
-};
-
 /**
  * Data that represents the object on screen.
  * @prop {GlowingImage| Phaser.GameObjects.Rectangle} sprite - The clickable object sprite which can be made to glow and blink
