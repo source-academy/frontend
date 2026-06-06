@@ -56,7 +56,7 @@ export const Config = Object.freeze({
   MaxExportHeight: 12000,
 
   MinTerminalSegmentLength: 30,
-  ArrowPostFrameStraightLength: 20,
+  ArrowPostFrameStraightLength: 10,
   // Canvas background color
   BgColor: '#2c3e50',
   PrintBgColor: '#fff',
