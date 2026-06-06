@@ -103,14 +103,6 @@ export type GradingQuery = {
   enable_llm_grading: boolean | null;
 };
 
-export type GradingSubmissionTableProps = {
-  showAllSubmissions: boolean;
-  totalRows: number;
-  pageSize: number;
-  submissions: GradingOverview[];
-  updateEntries: (page: number, filterParams: object) => void;
-};
-
 export enum ColumnName {
   assessmentName = 'Name',
   assessmentType = 'Type',
