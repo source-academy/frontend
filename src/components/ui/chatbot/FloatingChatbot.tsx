@@ -132,20 +132,24 @@ function FloatingChatbot({
       <div
         ref={nodeRef}
         className={classNames(
-          'fixed right-0 bottom-0 z-[1000] max-h-screen max-w-[100vw]',
+          'fixed right-0 bottom-0 z-1000 max-h-screen max-w-[100vw]',
           isSnippetOpen ? 'hidden' : 'block',
         )}
       >
         {isTipsVisible && (
           <div
             className={
-              'absolute right-[65px] bottom-2.5 h-auto w-[260px] rounded-[5px] border border-black bg-[#f1f1f1] pr-2.5'
+              'absolute right-16.25 bottom-2.5 h-auto w-65 rounded-[5px] border border-black bg-[#f1f1f1] pr-2.5'
             }
           >
             <p className="m-0 whitespace-normal break-normal px-2 py-1 text-right text-[13px]">
               {introMessage}
-              <br />
-              {isOpen ? '' : defaultTipsMessage}
+              {isOpen && (
+                <>
+                  <br />
+                  {defaultTipsMessage}
+                </>
+              )}
             </p>
           </div>
         )}
