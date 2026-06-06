@@ -41,8 +41,9 @@ export class ArrowFromStashItemComponent extends GenericArrow<
 
       const getLanding = (approachY: number): [number, number] => {
         if (approachY > targetCY + r) return [targetCX, targetCY + r]; // from below
-        if (approachY < targetCY - r) return [targetCX, targetCY - r]; // from above
-        return [targetCX - r, targetCY]; // same level: left face
+        if (approachY < targetCY - r)
+          return [targetCX, targetCY - (to instanceof ContValue ? 1.5 * r : r)]; // from above
+        return [to instanceof ContValue ? targetCX - 1.5 * r : targetCX - r, targetCY]; // same level: left face
       };
 
       const approachY =

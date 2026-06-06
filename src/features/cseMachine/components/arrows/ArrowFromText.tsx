@@ -70,21 +70,21 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
       steps.push((x, y) => [frameExitX, y]);
     }
 
-    const isFnTarget =
-      to instanceof FnValue || to instanceof GlobalFnValue || to instanceof ContValue;
+    const fnTarget =
+      to instanceof FnValue || to instanceof GlobalFnValue || to instanceof ContValue ? to : null;
 
     // Closure geometry: targetCX = left eyeball center (Fn) or circle center (Cont).
     // leftFaceX = leftmost point; rightFaceX = rightmost point of the closure shape.
-    const r = isFnTarget ? to.radius : 0;
-    const targetCX = isFnTarget
-      ? to instanceof ContValue
-        ? to.centerX
-        : to.centerX - to.radius
+    const r = fnTarget ? fnTarget.radius : 0;
+    const targetCX = fnTarget
+      ? fnTarget instanceof ContValue
+        ? fnTarget.centerX
+        : fnTarget.centerX - fnTarget.radius
       : 0;
-    const targetCY = isFnTarget ? to.y() : 0; // circle center Y
+    const targetCY = fnTarget ? fnTarget.y() : 0; // circle center Y
     // FnValue right face = centerX + 2r; ContValue right face = centerX + r.
-    const leftFaceX = targetCX - r;
-    const rightFaceX = to instanceof ContValue ? targetCX + r : targetCX + 3 * r;
+    const leftFaceX = fnTarget instanceof ContValue ? targetCX - 1.5 * r : targetCX - r;
+    const rightFaceX = fnTarget instanceof ContValue ? targetCX + r : targetCX + 3 * r;
 
     if (to.x() < from.x()) {
       // Target is to the left - bend left and down/up to reach target
@@ -92,7 +92,7 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
         steps.push((x, y) => [x, to.y() - verticalTerminalOffset]);
         steps.push((x, y) => [to.x() + Config.DataUnitWidth / 2, y]);
         steps.push((x, y) => [x, to.y()]);
-      } else if (isFnTarget) {
+      } else if (fnTarget) {
         // Approach from the right: bend up first, then left, landing on the right face.
         steps.push((x, y) => [x, y - from.height() / 2 - Config.TextMargin]);
         steps.push((x, y) => [rightFaceX + terminalSegmentLength, y]);
@@ -111,12 +111,13 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
           ? Math.max(frameExitX, rightFaceX + terminalSegmentLength)
           : Math.max(frameExitX, leftFaceX - terminalSegmentLength);
 
-      if (isFnTarget) {
+      if (fnTarget) {
         // Use the approach Y (horizontal segment Y) to decide which face of the circle to land on.
         // Same level → left face; source above → top face; source below → bottom face.
         const approachY = from.y() + from.height() / 2;
         const [landX, landY] = ((): [number, number] => {
-          if (approachY < targetCY - r) return [targetCX, targetCY - r]; // from above: top face
+          if (approachY < targetCY - r)
+            return [targetCX, targetCY - (fnTarget instanceof ContValue ? 1.5 * r : r)]; // from above: top face
           if (approachY > targetCY + r) return [targetCX, targetCY + r]; // from below: bottom face
           return [leftFaceX, targetCY]; // same level: left face
         })();
