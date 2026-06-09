@@ -2814,8 +2814,8 @@ __metadata:
   linkType: hard
 
 "@rsbuild/plugin-node-polyfill@npm:^1.4.4":
-  version: 1.4.5
-  resolution: "@rsbuild/plugin-node-polyfill@npm:1.4.5"
+  version: 1.4.6
+  resolution: "@rsbuild/plugin-node-polyfill@npm:1.4.6"
   dependencies:
     assert: "npm:^2.1.0"
     browserify-zlib: "npm:^0.2.0"
@@ -2841,11 +2841,11 @@ __metadata:
     util: "npm:^0.12.5"
     vm-browserify: "npm:^1.1.2"
   peerDependencies:
-    "@rsbuild/core": ^1.0.0 || ^2.0.0-0
+    "@rsbuild/core": ^1.0.0 || ^2.0.0
   peerDependenciesMeta:
     "@rsbuild/core":
       optional: true
-  checksum: 10c0/d82b517f04656ef97cda5c3a380371f4f0a7ff193ee96a6a48fc2b49928b9d7e6ca4d162c07c8d1bc0546b5e5804ccbfda67c19799b4f2f3666eab69506a867c
+  checksum: 10c0/7157ca2279b572f445e666a4da88a93fc454da756c1b3f70e697f7f2ac2b11fbf4bd68bf1c904d30dc1623fe83c9da5efcb9e1e4ad9f8e814afd67388ed5df18
   languageName: node
   linkType: hard
 
