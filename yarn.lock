@@ -3535,14 +3535,14 @@ __metadata:
   linkType: hard
 
 "@szhsin/react-menu@npm:^4.0.0":
-  version: 4.5.1
-  resolution: "@szhsin/react-menu@npm:4.5.1"
+  version: 4.5.2
+  resolution: "@szhsin/react-menu@npm:4.5.2"
   dependencies:
-    react-transition-state: "npm:^2.3.1"
+    react-transition-state: "npm:^2.4.0"
   peerDependencies:
     react: ">=16.14.0"
     react-dom: ">=16.14.0"
-  checksum: 10c0/69a86cc52bf9915c74d70acd031e8f86080e95dcbcc84766af879b33345f2e38d8db8f8f01d5035d916e60af462e9c6838ca016a7a85e2d86ae6f32c92bf3044
+  checksum: 10c0/9338769cf5e8bfe6a7700f42db29c3f29316e654ce63e6b82f5f1ebbb5c33462774b5f311d5ad3993a210626d3d1c421d81f011d2b68c1c3b37f4785e36bd112
   languageName: node
   linkType: hard
 
@@ -11458,13 +11458,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-transition-state@npm:^2.3.1":
-  version: 2.3.1
-  resolution: "react-transition-state@npm:2.3.1"
+"react-transition-state@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "react-transition-state@npm:2.4.0"
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 10c0/145f20e45c53d570f9db5fe749e0fd794b62bdf464c67c594c454df44f31fa58c16ccec705f9fdccf4c5250a309e4f7da5bd2e85cd686ba52d6b79e1c22b811f
+  checksum: 10c0/f0858a6d572d0dd20cbf02de9bd7983fc09d826ec01ea4295ea49e0910e1045763da3caa28cbe29fe88118b712900b964b618f06ac22377c5bd99d7ede074050
   languageName: node
   linkType: hard
 
