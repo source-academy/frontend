@@ -4,6 +4,20 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="theme-color" content="#000000" />
+        <!--
+          Import map so dynamically-imported Conductor web plugin bundles resolve these bare
+          specifiers to the host frontend's singleton instances (see src/bootstrap/conductorSharedDeps.ts
+          and public/shims/*). Keeps a single React tree and identical Blueprint styling.
+        -->
+        <script type="importmap">
+        {
+            "imports": {
+                "react": "<%= assetPrefix %>/shims/react.mjs",
+                "react/jsx-runtime": "<%= assetPrefix %>/shims/react-jsx-runtime.mjs",
+                "@blueprintjs/core": "<%= assetPrefix %>/shims/blueprintjs-core.mjs"
+            }
+        }
+        </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.0/TweenMax.min.js"
 		integrity="sha256-yYE5i030zFWS1QObMdcpEqiGU10EwGSEAQaYGnQBUs0="
 		crossorigin="anonymous"></script>

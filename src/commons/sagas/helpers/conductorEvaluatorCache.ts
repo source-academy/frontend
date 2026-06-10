@@ -1,10 +1,16 @@
 import type { IConduit } from '@sourceacademy/conductor/conduit';
+import { PluginType } from '@sourceacademy/plugin-directory/src';
 import type { SagaIterator } from 'redux-saga';
 import { call } from 'redux-saga/effects';
 
 import type { BrowserHostPlugin } from '../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../features/conductor/createConductor';
 import type { CseMachineHostPlugin } from '../../../features/conductor/CseMachineHostPlugin';
+import {
+  clearPluginTabs,
+  registerPluginTabIfPresent,
+} from '../../../features/conductor/pluginTabRegistry';
+import { store } from '../../../pages/createStore';
 
 type PreparedConductor = {
   path: string;
@@ -53,20 +59,63 @@ function resetPreparedConductor() {
 function* cleanupPreparedConductorSaga(): SagaIterator {
   const conductorToTerminate = preparedConductor;
   resetPreparedConductor();
+  clearPluginTabs();
   yield call(terminatePreparedConductor, conductorToTerminate);
+}
+
+/**
+ * Loads a web plugin requested by the runner. The plugin's web-half URL is resolved generically
+ * from the plugin directory (`resolutions[WEB]`); after registering it, any side-content tab it
+ * exposes is surfaced to the UI. This is plugin-agnostic — no per-plugin code lives here.
+ */
+/**
+ * Resolves a plugin's web-half URL from the plugin directory. The runner may request a plugin
+ * before the directory has finished loading, so we poll briefly for it.
+ */
+async function resolveWebPluginUrl(pluginId: string): Promise<string | undefined> {
+  for (let attempt = 0; attempt < 50; attempt++) {
+    const url = store.getState().pluginDirectory.pluginMap[pluginId]?.resolutions?.[PluginType.WEB];
+    if (url) return url;
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  return undefined;
+}
+
+async function loadWebPlugin(
+  hostPlugin: BrowserHostPlugin | undefined,
+  pluginId: string,
+): Promise<void> {
+  if (!hostPlugin) return;
+  const url = await resolveWebPluginUrl(pluginId);
+  if (!url) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      `Conductor: no web resolution for plugin "${pluginId}" (is directory.plugin.url set?)`,
+    );
+    return;
+  }
+  try {
+    const plugin = await hostPlugin.importAndRegisterExternalPlugin(url);
+    registerPluginTabIfPresent(plugin);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.warn(`Conductor: failed to load web plugin "${pluginId}"`, error);
+  }
 }
 
 async function createPreparedConductor(path: string): Promise<PreparedConductor> {
   const evaluatorUrl = await fetchEvaluatorObjectUrl(path);
 
   let currentFiles: Record<string, string> = {};
+  let hostPluginRef: BrowserHostPlugin | undefined = undefined;
   const { hostPlugin, csePlugin, conduit } = createConductor(
     evaluatorUrl,
     async (fileName: string) => currentFiles[fileName],
-    (_pluginName: string) => {
-      // TODO: implement dynamic plugin loading
+    (pluginName: string) => {
+      void loadWebPlugin(hostPluginRef, pluginName);
     },
   );
+  hostPluginRef = hostPlugin;
 
   return {
     path,

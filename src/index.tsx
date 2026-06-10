@@ -1,6 +1,8 @@
 import 'src/i18n/i18n';
 import 'src/styles/global.css';
 import 'src/styles/index.scss';
+// Expose shared libs for dynamically-loaded Conductor web plugins (must run before any plugin loads).
+import 'src/bootstrap/conductorSharedDeps';
 
 import { Button, OverlaysProvider } from '@blueprintjs/core';
 import { setModulesStaticURL } from 'js-slang/dist/modules/loader';

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "source-1",
+    "name": "Source 1 (Stepper)",
+    "evaluators": [
+      {
+        "id": "default",
+        "name": "Default",
+        "path": "/evaluators/js-slang/SourceStepperEvaluator1.js",
+        "capabilities": []
+      }
+    ]
+  },
+  {
+    "id": "source-2",
+    "name": "Source 2 (Stepper)",
+    "evaluators": [
+      {
+        "id": "default",
+        "name": "Default",
+        "path": "/evaluators/js-slang/SourceStepperEvaluator2.js",
+        "capabilities": []
+      }
+    ]
+  },
+  {
+    "id": "python-1",
+    "name": "Python 1 (Stepper)",
+    "evaluators": [
+      {
+        "id": "default",
+        "name": "Default",
+        "path": "/evaluators/py-slang/PythonStepperEvaluator1.js",
+        "capabilities": []
+      }
+    ]
+  }
+]

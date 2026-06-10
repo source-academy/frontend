@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { isEqual } from 'lodash-es';
 import { decompressFromEncodedURIComponent } from 'lz-string';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { useDispatch, useStore } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
@@ -34,6 +34,12 @@ import {
 } from 'src/commons/utils/WarningDialogHelper';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
+import { makePluginTabFrom } from 'src/features/conductor/makePluginTabFrom';
+import {
+  getPluginTabs,
+  subscribePluginTabs,
+} from 'src/features/conductor/pluginTabRegistry';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import GithubActions from 'src/features/github/GitHubActions';
 import PersistenceActions from 'src/features/persistence/PersistenceActions';
@@ -745,6 +751,10 @@ function Playground(props: PlaygroundProps) {
     ? conductorEvaluatorSupportsCse || hasCseSnapshots
     : languageConfig.supports.cseMachine || hasCseSnapshots;
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
+  // When the Conductor framework is enabled, the stepper (and other tools) are provided by web
+  // plugins loaded dynamically, so the legacy in-frontend tabs are hidden in favour of plugin tabs.
+  const conductorEnabled = useTypedSelector(selectConductorEnable);
+  const pluginTabs = useSyncExternalStore(subscribePluginTabs, getPluginTabs);
 
   const conductorWelcomeText = useTypedSelector(state => {
     if (!selectConductorEnable(state)) return null;
@@ -797,8 +807,15 @@ function Playground(props: PlaygroundProps) {
       if (shouldShowCseMachine) {
         tabs.push(makeCseMachineTabFrom(workspaceLocation));
       }
-      if (shouldShowSubstVisualizer) {
+      // The legacy stepper tab is only shown with the old (non-conductor) pipeline.
+      if (shouldShowSubstVisualizer && !conductorEnabled) {
         tabs.push(makeSubstVisualizerTabFrom(workspaceLocation, output));
+      }
+      // Under the conductor, tools are contributed by dynamically-loaded web plugins.
+      if (conductorEnabled) {
+        for (const pluginTab of pluginTabs) {
+          tabs.push(makePluginTabFrom(pluginTab));
+        }
       }
     }
 
@@ -821,6 +838,8 @@ function Playground(props: PlaygroundProps) {
     shouldShowDataVisualizer,
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
+    conductorEnabled,
+    pluginTabs,
     remoteExecutionTab,
     editorSessionId,
     sessionManagementTab,
@@ -989,7 +1008,10 @@ function Playground(props: PlaygroundProps) {
     sourceVariant: languageConfig.variant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
     hidden:
-      selectedTab === SideContentType.substVisualizer || selectedTab === SideContentType.cseMachine,
+      selectedTab === SideContentType.substVisualizer ||
+      selectedTab === SideContentType.cseMachine ||
+      // When the conductor stepper plugin tab is active, also hide the REPL (matches legacy behaviour)
+      (conductorEnabled && (selectedTab as string) === 'stepper'),
     inputHidden: replDisabled,
     replButtons: [replDisabled ? null : evalButton, clearButton],
     disableScrolling: isSicpEditor,
@@ -1056,7 +1078,10 @@ function Playground(props: PlaygroundProps) {
       workspaceLocation,
     },
     sideContentIsResizeable:
-      selectedTab !== SideContentType.substVisualizer && selectedTab !== SideContentType.cseMachine,
+      selectedTab !== SideContentType.substVisualizer &&
+      selectedTab !== SideContentType.cseMachine &&
+      // When the conductor stepper plugin tab is active, also disable resizing (matches legacy behaviour)
+      !(conductorEnabled && (selectedTab as string) === 'stepper'),
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {

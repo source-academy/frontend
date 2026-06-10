@@ -3155,12 +3155,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/conductor@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "@sourceacademy/conductor@npm:0.5.0"
-  checksum: 10c0/e87c54febc0c68498ba4ebb29de79028798fa2d3183e2f4b09ba8d7992f44f8a04600409fa08a7b2e07d38261e23ee300140e6c982181d0a549636c0a944813d
+"@sourceacademy/conductor@portal:../conductor::locator=frontend%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@sourceacademy/conductor@portal:../conductor::locator=frontend%40workspace%3A."
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.9":
   version: 0.0.9
@@ -3169,12 +3168,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/plugin-directory@https://github.com/source-academy/plugin-directory.git#0.0.2":
-  version: 0.0.2
-  resolution: "@sourceacademy/plugin-directory@https://github.com/source-academy/plugin-directory.git#commit=8b31c1a2abea6b42d52267c8ea343ee49ec5d857"
-  checksum: 10c0/29dbaddeda6efbacaacbeaf8d82816cba4f0ff080a1cdc451f6ae5c71de4c4519890d8a17a10161af0903f894f8b67ee2ae9044e6d1ca003522a05a15af42882
+"@sourceacademy/plugin-directory@portal:../plugin-directory::locator=frontend%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@sourceacademy/plugin-directory@portal:../plugin-directory::locator=frontend%40workspace%3A."
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "@sourceacademy/sharedb-ace@npm:2.1.1":
   version: 2.1.1
@@ -7243,9 +7241,9 @@ __metadata:
     "@sentry/react": "npm:^10.5.0"
     "@sourceacademy/autocomplete": "github:source-academy/autocomplete#e669d9ed98753350a3c8433a92985227eb789663"
     "@sourceacademy/c-slang": "npm:^1.0.21"
-    "@sourceacademy/conductor": "npm:^0.5.0"
+    "@sourceacademy/conductor": "portal:../conductor"
     "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.9"
-    "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.2"
+    "@sourceacademy/plugin-directory": "portal:../plugin-directory"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
     "@sourceacademy/web-cse-machine": "npm:^1.0.0"

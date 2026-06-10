@@ -136,8 +136,10 @@ const WorkspaceSaga = combineSagaHandlers({
       }
     });
   },
-  [WorkspaceActions.evalEditor.type]: ({ payload: { workspaceLocation } }) =>
-    evalEditorSaga(workspaceLocation),
+  [WorkspaceActions.evalEditor.type]: {
+    takeLatest: ({ payload: { workspaceLocation } }) => evalEditorSaga(workspaceLocation),
+  },
+
   [WorkspaceActions.promptAutocomplete.type]: function* (action) {
     const workspaceLocation = action.payload.workspaceLocation;
     const {
