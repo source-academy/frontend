@@ -1,10 +1,14 @@
 import type { IConduit } from '@sourceacademy/conductor/conduit';
+import { PluginType } from '@sourceacademy/plugin-directory';
 import type { SagaIterator } from 'redux-saga';
-import { call } from 'redux-saga/effects';
+import { call, select } from 'redux-saga/effects';
+import { requireProvider } from 'src/commons/sideContent/SideContentHelper';
 import { registry } from 'src/features/conductor/Registry';
+import { selectDirectoryPluginUrl } from 'src/features/directory/flagDirectoryPluginUrl';
 
 import type { BrowserHostPlugin } from '../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../features/conductor/createConductor';
+import type { OverallState } from '../../application/ApplicationTypes';
 import sideContentManager from '../../sideContent/SideContentManager';
 import type { SideContentLocation } from '../../sideContent/SideContentTypes';
 
@@ -27,6 +31,17 @@ let preparedConductor: PreparedConductor | null = null;
 let loadingConductorPath: string | null = null;
 let loadingConductorPromise: Promise<PreparedConductor> | null = null;
 let currentEvaluatorPath: string | null = null;
+let currentPluginDirectoryUrl: string | null = null;
+let currentPluginMap: OverallState['pluginDirectory']['pluginMap'] = {};
+
+function getWebPluginLocation(pluginName: string): string | undefined {
+  return currentPluginMap[pluginName]?.resolutions[PluginType.WEB];
+}
+
+function* updatePluginDirectorySnapshotSaga(): SagaIterator {
+  currentPluginMap = yield select((state: OverallState) => state.pluginDirectory.pluginMap);
+  currentPluginDirectoryUrl = yield select(selectDirectoryPluginUrl);
+}
 
 async function fetchEvaluatorObjectUrl(path: string): Promise<string> {
   const evaluatorResponse = await fetch(path);
@@ -66,19 +81,29 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
   const { hostPlugin, conduit } = createConductor(
     evaluatorUrl,
     async (fileName: string) => currentFiles[fileName],
-    (pluginName: string) => {
+    async (pluginName: string) => {
       if (registry.has(pluginName)) {
         const pluginClass = registry.get(pluginName)!;
         conduit.registerPlugin(pluginClass, sideContentManager);
         return;
       }
-      // const pluginDefinition = useTypedSelector(s => s.pluginDirectory.pluginMap[pluginName]);
-      // if (!pluginDefinition) {
-      //   throw new Error(`Plugin ${pluginName} not found in plugin directory`);
-      // }
-      // const pluginClass = pluginDefinition.resolutions.web;
-      // selectConductorEnable
-    }
+
+      let pluginClassLocation = getWebPluginLocation(pluginName);
+      if (!pluginClassLocation) {
+        console.warn(`No web plugin resolution found for "${pluginName}" in the plugin directory.`);
+        return;
+      }
+      if (!pluginClassLocation.startsWith('http')) {
+        pluginClassLocation = new URL(
+          pluginClassLocation,
+          currentPluginDirectoryUrl || document.baseURI,
+        ).toString();
+      }
+      await import(/* webpackIgnore: true */ pluginClassLocation)
+        .then(tab => tab.default(requireProvider))
+        .then(plugin => conduit.registerPlugin(plugin, sideContentManager))
+        .catch(error => console.error(`Unable to load external plugin "${pluginName}".`, error));
+    },
   );
 
   return {
@@ -124,6 +149,7 @@ export function* preloadConductorEvaluatorSaga(path?: string): SagaIterator {
     return;
   }
 
+  yield call(updatePluginDirectorySnapshotSaga);
   currentEvaluatorPath = path;
   yield call(ensurePreparedConductorSaga, path);
 }
@@ -140,6 +166,7 @@ export function* getPreparedConductorSaga(
   }
 
   const path = currentEvaluatorPath;
+  yield call(updatePluginDirectorySnapshotSaga);
   if (options?.workspaceLocation) {
     sideContentManager.setWorkspaceLocation(options.workspaceLocation);
   }

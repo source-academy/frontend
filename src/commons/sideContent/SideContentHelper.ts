@@ -25,7 +25,7 @@ import type {
 } from './SideContentTypes';
 import { SideContentType } from './SideContentTypes';
 
-const requireProvider = (x: string) => {
+export const requireProvider = (x: string) => {
   const exports = {
     react: React,
     'react/jsx-runtime': JSXRuntime,
@@ -42,7 +42,9 @@ const requireProvider = (x: string) => {
   return exports[x as keyof typeof exports] as any;
 };
 
-type RawTab = (provider: ReturnType<typeof requireProvider>) => { default: ModuleSideContent };
+export type RawTab = (provider: ReturnType<typeof requireProvider>) => {
+  default: ModuleSideContent;
+};
 
 /**
  * Returns an array of SideContentTabs to be spawned
