@@ -7,6 +7,7 @@ import { getLocation } from '../sideContent/SideContentHelper';
 import {
   type SideContentLocation,
   type SideContentManagerState,
+  type SideContentTabId,
   SideContentType,
 } from '../sideContent/SideContentTypes';
 import WorkspaceActions from '../workspace/WorkspaceActions';
@@ -25,7 +26,7 @@ const isVisitSideContent = (
 const selectSelectedTab = (
   state: any,
   workspaceLocation: SideContentLocation,
-): SideContentType | undefined => {
+): SideContentTabId | undefined => {
   const sideContentState = (state.sideContent ?? state) as SideContentManagerState;
   const [location] = getLocation(workspaceLocation);
   return sideContentState[location]?.selectedTab;
@@ -38,7 +39,7 @@ const SideContentSaga = combineSagaHandlers({
     // When a program finishes evaluation, we clear all alerts,
     // So we must wait until after and all module tabs have been spawned
     // to process any kind of alerts that were raised by non-module side content
-    const selectedTab: SideContentType | undefined = yield select((state: any) =>
+    const selectedTab: SideContentTabId | undefined = yield select((state: any) =>
       selectSelectedTab(state, workspaceLocation),
     );
 
@@ -72,7 +73,7 @@ const SideContentSaga = combineSagaHandlers({
       return;
     }
 
-    const selectedTabAfterWait: SideContentType | undefined = yield select((state: any) =>
+    const selectedTabAfterWait: SideContentTabId | undefined = yield select((state: any) =>
       selectSelectedTab(state, workspaceLocation),
     );
 

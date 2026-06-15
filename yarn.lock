@@ -1400,6 +1400,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@blueprintjs/icons@npm:>=6.0.0":
+  version: 6.11.0
+  resolution: "@blueprintjs/icons@npm:6.11.0"
+  dependencies:
+    change-case: "npm:^4.1.2"
+    classnames: "npm:^2.3.1"
+    tslib: "npm:~2.6.2"
+  peerDependencies:
+    "@types/react": 18 || 19
+    react: 18 || 19
+    react-dom: 18 || 19
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/192f1f3b6465f3c76eed1ea8192255e98fd32a0da6645419934478c5966441f31a1760e14c707f0124cdd70f8076b04d9efb9ad46c9ab1682702e17ed42ee11b
+  languageName: node
+  linkType: hard
+
 "@blueprintjs/icons@npm:^6.0.0, @blueprintjs/icons@npm:^6.10.0":
   version: 6.10.0
   resolution: "@blueprintjs/icons@npm:6.10.0"
@@ -3155,6 +3173,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sourceacademy/common-tabs@file:../plugins/src/common/tabs::locator=frontend%40workspace%3A.":
+  version: 0.0.1
+  resolution: "@sourceacademy/common-tabs@file:../plugins/src/common/tabs#../plugins/src/common/tabs::hash=a8f273&locator=frontend%40workspace%3A."
+  dependencies:
+    "@blueprintjs/icons": "npm:>=6.0.0"
+    "@types/react": "npm:^19.2.17"
+  checksum: 10c0/b6e0c62a2643511e24cb58372f253477b2b221fd8496f42e434554a81258c643b44a5b9bcb0deb57e0c87127f1605537a324af5e7edb0bcac020a4777ebf3705
+  languageName: node
+  linkType: hard
+
 "@sourceacademy/conductor@https://github.com/source-academy/conductor.git#0.4.0":
   version: 0.4.0
   resolution: "@sourceacademy/conductor@https://github.com/source-academy/conductor.git#commit=00a0d5fdce269d62a0feb33230300db27121be05"
@@ -3195,6 +3223,17 @@ __metadata:
     mqtt: "npm:^4.2.1"
     tiny-typed-emitter: "npm:^2.0.3"
   checksum: 10c0/d7cb2ce7136811c5eb185d013fe2d62c22bc4bcb50952621f734d816b0a428e1a09d22c284bcc564025e2adb4aad5f85a0ad9a12f633d0c8a264deb22b577d4c
+  languageName: node
+  linkType: hard
+
+"@sourceacademy/web-test@file:..\\plugins\\src\\web\\test::locator=frontend%40workspace%3A.":
+  version: 0.0.1
+  resolution: "@sourceacademy/web-test@file:../plugins/src/web/test#../plugins/src/web/test::hash=191a7d&locator=frontend%40workspace%3A."
+  dependencies:
+    "@types/react": "npm:^19.2.17"
+    react: "npm:^19.2.7"
+    react-dom: "npm:^19.2.7"
+  checksum: 10c0/ece5b81f4b1e0b344373daf3f290341a096390753d8375579c4ed6fd8c5a319e6e409d7a2d06c3e2cfdfe43457595effa765037c28fec81417b8f8366a2adf84
   languageName: node
   linkType: hard
 
@@ -4111,7 +4150,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^19.1.8":
+"@types/react@npm:*, @types/react@npm:^19.1.8, @types/react@npm:^19.2.17":
   version: 19.2.17
   resolution: "@types/react@npm:19.2.17"
   dependencies:
@@ -7218,11 +7257,13 @@ __metadata:
     "@sentry/react": "npm:^10.5.0"
     "@sourceacademy/autocomplete": "github:source-academy/autocomplete#e669d9ed98753350a3c8433a92985227eb789663"
     "@sourceacademy/c-slang": "npm:^1.0.21"
+    "@sourceacademy/common-tabs": "file:../plugins/src/common/tabs"
     "@sourceacademy/conductor": "https://github.com/source-academy/conductor.git#0.4.0"
     "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.6"
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.2"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
+    "@sourceacademy/web-test": "file:..\\plugins\\src\\web\\test"
     "@svgr/webpack": "npm:^8.0.0"
     "@swc/core": "npm:^1.11.22"
     "@szhsin/react-menu": "npm:^4.0.0"
@@ -11113,7 +11154,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^19.2.4":
+"react-dom@npm:^19.2.4, react-dom@npm:^19.2.7":
   version: 19.2.7
   resolution: "react-dom@npm:19.2.7"
   dependencies:
@@ -11468,7 +11509,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^19.2.4":
+"react@npm:^19.2.4, react@npm:^19.2.7":
   version: 19.2.7
   resolution: "react@npm:19.2.7"
   checksum: 10c0/0bd0e2f1bbd4ba97561c6597bf8a5fec05e6476fe61e165c1065598d16668efc6715205599c94d3ddd49d36cb0f21cbf1b9bcc18ee840b805ce222c3e8d558ac

@@ -72,7 +72,11 @@ import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix'
 import type { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight } from '../sideContent/SideContentActions';
 import { useSideContent } from '../sideContent/SideContentHelper';
-import { type SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import {
+  type SideContentTab,
+  type SideContentTabId,
+  SideContentType,
+} from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { useResponsive, useTypedSelector } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
@@ -666,8 +670,8 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
     }
 
     const onChangeTabs = (
-      newTabId: SideContentType,
-      prevTabId: SideContentType,
+      newTabId: SideContentTabId,
+      prevTabId: SideContentTabId,
       event: React.MouseEvent<HTMLElement>,
     ) => {
       if (newTabId === prevTabId) {
@@ -879,8 +883,8 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
 
   const mobileSideContentProps: (q: number) => MobileSideContentProps = (questionId: number) => {
     const onChangeTabs = (
-      newTabId: SideContentType,
-      prevTabId: SideContentType,
+      newTabId: SideContentTabId,
+      prevTabId: SideContentTabId,
       event: React.MouseEvent<HTMLElement>,
     ) => {
       if (newTabId === prevTabId) {

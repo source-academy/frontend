@@ -1,9 +1,12 @@
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import type { SagaIterator } from 'redux-saga';
 import { call } from 'redux-saga/effects';
+import { registry } from 'src/features/conductor/Registry';
 
 import type { BrowserHostPlugin } from '../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../features/conductor/createConductor';
+import sideContentManager from '../../sideContent/SideContentManager';
+import type { SideContentLocation } from '../../sideContent/SideContentTypes';
 
 type PreparedConductor = {
   path: string;
@@ -16,6 +19,7 @@ type PreparedConductor = {
 type GetPreparedConductorOptions = {
   files?: Record<string, string>;
   consume?: boolean;
+  workspaceLocation?: SideContentLocation;
 };
 
 let preparedConductorPath: string | null = null;
@@ -40,6 +44,7 @@ async function terminatePreparedConductor(conductor: PreparedConductor | null) {
   }
 
   await conductor.conduit.terminate();
+  sideContentManager.clearTabs();
   URL.revokeObjectURL(conductor.evaluatorUrl);
 }
 
@@ -61,9 +66,19 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
   const { hostPlugin, conduit } = createConductor(
     evaluatorUrl,
     async (fileName: string) => currentFiles[fileName],
-    (_pluginName: string) => {
-      // TODO: implement dynamic plugin loading
-    },
+    (pluginName: string) => {
+      if (registry.has(pluginName)) {
+        const pluginClass = registry.get(pluginName)!;
+        conduit.registerPlugin(pluginClass, sideContentManager);
+        return;
+      }
+      // const pluginDefinition = useTypedSelector(s => s.pluginDirectory.pluginMap[pluginName]);
+      // if (!pluginDefinition) {
+      //   throw new Error(`Plugin ${pluginName} not found in plugin directory`);
+      // }
+      // const pluginClass = pluginDefinition.resolutions.web;
+      // selectConductorEnable
+    }
   );
 
   return {
@@ -125,6 +140,9 @@ export function* getPreparedConductorSaga(
   }
 
   const path = currentEvaluatorPath;
+  if (options?.workspaceLocation) {
+    sideContentManager.setWorkspaceLocation(options.workspaceLocation);
+  }
   const prepared: PreparedConductor = yield call(ensurePreparedConductorSaga, path);
   const files = options?.files;
   const consume = options?.consume ?? false;

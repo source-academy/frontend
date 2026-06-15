@@ -21,6 +21,7 @@ import type {
   SideContentLocation,
   SideContentState,
   SideContentTab,
+  SideContentTabId,
 } from './SideContentTypes';
 import { SideContentType } from './SideContentTypes';
 
@@ -72,14 +73,14 @@ export const getTabId = (tab: SideContentTab) =>
 export const generateTabAlert = (shouldAlert: boolean) =>
   `side-content-tooltip${shouldAlert ? ' side-content-tab-alert' : ''}`;
 
-export const useSideContent = (location: SideContentLocation, defaultTab?: SideContentType) => {
+export const useSideContent = (location: SideContentLocation, defaultTab?: SideContentTabId) => {
   const [workspaceLocation] = getLocation(location);
   const { alerts, dynamicTabs, selectedTab, height }: SideContentState = useTypedSelector(
     state => state.sideContent[workspaceLocation],
   );
   const dispatch = useDispatch();
   const setSelectedTab = useCallback(
-    (newId: SideContentType) => {
+    (newId: SideContentTabId) => {
       if (
         (selectedTab === SideContentType.substVisualizer ||
           selectedTab === SideContentType.cseMachine) &&

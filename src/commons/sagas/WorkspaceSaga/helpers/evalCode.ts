@@ -22,6 +22,7 @@ import { selectConductorEnable } from '../../../../features/conductor/flagConduc
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { type OverallState } from '../../../application/ApplicationTypes';
 import { visitSideContent } from '../../../sideContent/SideContentActions';
+import sideContentManager from '../../../sideContent/SideContentManager';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import DisplayBufferService from '../../../utils/DisplayBufferService';
@@ -548,7 +549,7 @@ export function* evalCodeConductorSaga(
   // Reuse a preloaded conductor instance when available.
   const { hostPlugin, conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } = yield call(
     getPreparedConductorSaga,
-    { files, consume: true },
+    { files, consume: true, workspaceLocation },
   );
 
   // Begin evaluation
@@ -574,6 +575,7 @@ export function* evalCodeConductorSaga(
   }
   yield cancel(statusTask);
   yield call([conduit, 'terminate']);
+  yield call([sideContentManager, sideContentManager.clearTabs]);
   yield cancel(stdoutTask);
   yield cancel(resultTask);
   yield cancel(errorTask);
