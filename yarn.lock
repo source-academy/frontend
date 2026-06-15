@@ -1373,7 +1373,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@blueprintjs/core@npm:^6.0.0, @blueprintjs/core@npm:^6.15.0":
+"@blueprintjs/core@npm:^6.0.0":
+  version: 6.16.0
+  resolution: "@blueprintjs/core@npm:6.16.0"
+  dependencies:
+    "@blueprintjs/colors": "npm:^5.1.16"
+    "@blueprintjs/icons": "npm:^6.11.0"
+    "@floating-ui/react": "npm:^0.27.13"
+    "@popperjs/core": "npm:^2.11.8"
+    classnames: "npm:^2.3.1"
+    normalize.css: "npm:^8.0.1"
+    react-popper: "npm:^2.3.0"
+    react-transition-group: "npm:^4.4.5"
+    tslib: "npm:~2.6.2"
+  peerDependencies:
+    "@types/react": 18 || 19
+    react: 18 || 19
+    react-dom: 18 || 19
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  bin:
+    upgrade-blueprint-2.0.0-rename: scripts/upgrade-blueprint-2.0.0-rename.sh
+    upgrade-blueprint-3.0.0-rename: scripts/upgrade-blueprint-3.0.0-rename.sh
+  checksum: 10c0/5a55fa5637d8def84bc7db04d00291898e6ef776b3941f7518a2a2fbc8dd7da46486addbd54ad108462d83ccc9a79983a0ba87730af7ca3e3fcd9763674b83da
+  languageName: node
+  linkType: hard
+
+"@blueprintjs/core@npm:^6.15.0":
   version: 6.15.0
   resolution: "@blueprintjs/core@npm:6.15.0"
   dependencies:
@@ -1400,7 +1427,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@blueprintjs/icons@npm:>=6.0.0":
+"@blueprintjs/icons@npm:>=6.0.0, @blueprintjs/icons@npm:^6.0.0, @blueprintjs/icons@npm:^6.11.0":
   version: 6.11.0
   resolution: "@blueprintjs/icons@npm:6.11.0"
   dependencies:
@@ -1418,7 +1445,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@blueprintjs/icons@npm:^6.0.0, @blueprintjs/icons@npm:^6.10.0":
+"@blueprintjs/icons@npm:^6.10.0":
   version: 6.10.0
   resolution: "@blueprintjs/icons@npm:6.10.0"
   dependencies:
@@ -3175,11 +3202,11 @@ __metadata:
 
 "@sourceacademy/common-tabs@file:../plugins/src/common/tabs::locator=frontend%40workspace%3A.":
   version: 0.0.1
-  resolution: "@sourceacademy/common-tabs@file:../plugins/src/common/tabs#../plugins/src/common/tabs::hash=a8f273&locator=frontend%40workspace%3A."
+  resolution: "@sourceacademy/common-tabs@file:../plugins/src/common/tabs#../plugins/src/common/tabs::hash=c05497&locator=frontend%40workspace%3A."
   dependencies:
     "@blueprintjs/icons": "npm:>=6.0.0"
     "@types/react": "npm:^19.2.17"
-  checksum: 10c0/b6e0c62a2643511e24cb58372f253477b2b221fd8496f42e434554a81258c643b44a5b9bcb0deb57e0c87127f1605537a324af5e7edb0bcac020a4777ebf3705
+  checksum: 10c0/0c57f8e616756f5f9ee818c10e2f127b89b5302f8ac15e3ed14c6612f3fe65910397482e5206929a3be5382b753cb96af58739c821d702516b02c361ca188e7c
   languageName: node
   linkType: hard
 
@@ -3228,12 +3255,12 @@ __metadata:
 
 "@sourceacademy/web-test@file:..\\plugins\\src\\web\\test::locator=frontend%40workspace%3A.":
   version: 0.0.1
-  resolution: "@sourceacademy/web-test@file:../plugins/src/web/test#../plugins/src/web/test::hash=191a7d&locator=frontend%40workspace%3A."
+  resolution: "@sourceacademy/web-test@file:../plugins/src/web/test#../plugins/src/web/test::hash=107271&locator=frontend%40workspace%3A."
   dependencies:
     "@types/react": "npm:^19.2.17"
     react: "npm:^19.2.7"
     react-dom: "npm:^19.2.7"
-  checksum: 10c0/ece5b81f4b1e0b344373daf3f290341a096390753d8375579c4ed6fd8c5a319e6e409d7a2d06c3e2cfdfe43457595effa765037c28fec81417b8f8366a2adf84
+  checksum: 10c0/838a8d3e4f527f668ce3779e8d95d681e593301455abe6287cd6cd56ef245b67d0576ef191ef2c79af28b2f2c9ffff45f90349fd53680422b65c21a0032a3968
   languageName: node
   linkType: hard
 
