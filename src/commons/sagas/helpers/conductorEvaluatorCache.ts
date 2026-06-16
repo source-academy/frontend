@@ -74,7 +74,7 @@ function* cleanupPreparedConductorSaga(): SagaIterator {
  */
 async function resolveWebPluginUrl(pluginId: string): Promise<string | undefined> {
   for (let attempt = 0; attempt < 50; attempt++) {
-    const url = store.getState().pluginDirectory.pluginMap[pluginId]?.resolutions?.[PluginType.WEB];
+    const url = store.getState().pluginDirectory.pluginMap?.[pluginId]?.resolutions?.[PluginType.WEB];
     if (url) return url;
     await new Promise(resolve => setTimeout(resolve, 100));
   }
