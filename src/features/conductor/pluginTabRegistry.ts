@@ -15,6 +15,17 @@ export type ConductorPluginTab = {
   /** Blueprint icon name for the tab. */
   iconName: string;
   /** The React component rendered as the tab body. Self-contained; takes no props. */
+/**
+ * A generic registry of side-content tabs contributed by Conductor **web plugins**.
+ *
+ * Conductor itself has no UI mechanism, so when the host loads a web plugin that exposes a `tab`
+ * (see {`@link` ConductorPluginTab}), we record it here. The Playground renders these tabs via
+ * `useSyncExternalStore`. This module is deliberately plugin-agnostic — it knows nothing about the
+ * stepper or any specific plugin, so adding another web plugin needs no changes here.
+ */
+import type React from 'react';
+
+export type ConductorPluginTab = {
   Component: React.ComponentType;
 };
 
