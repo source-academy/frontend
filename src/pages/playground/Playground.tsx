@@ -755,6 +755,7 @@ function Playground(props: PlaygroundProps) {
   // plugins loaded dynamically, so the legacy in-frontend tabs are hidden in favour of plugin tabs.
   const conductorEnabled = useTypedSelector(selectConductorEnable);
   const pluginTabs = useSyncExternalStore(subscribePluginTabs, getPluginTabs);
+  const CONDUCTOR_STEPPER_TAB_ID = 'stepper';
 
   const conductorWelcomeText = useTypedSelector(state => {
     if (!selectConductorEnable(state)) return null;
@@ -1011,7 +1012,7 @@ function Playground(props: PlaygroundProps) {
       selectedTab === SideContentType.substVisualizer ||
       selectedTab === SideContentType.cseMachine ||
       // When the conductor stepper plugin tab is active, also hide the REPL (matches legacy behaviour)
-      (conductorEnabled && (selectedTab as string) === 'stepper'),
+      (conductorEnabled && (selectedTab as string) === CONDUCTOR_STEPPER_TAB_ID),
     inputHidden: replDisabled,
     replButtons: [replDisabled ? null : evalButton, clearButton],
     disableScrolling: isSicpEditor,
@@ -1081,7 +1082,7 @@ function Playground(props: PlaygroundProps) {
       selectedTab !== SideContentType.substVisualizer &&
       selectedTab !== SideContentType.cseMachine &&
       // When the conductor stepper plugin tab is active, also disable resizing (matches legacy behaviour)
-      !(conductorEnabled && (selectedTab as string) === 'stepper'),
+      !(conductorEnabled && (selectedTab as string) === CONDUCTOR_STEPPER_TAB_ID),
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {

@@ -650,9 +650,16 @@ export function* evalCodeConductorSaga(
       if (stdoutTask) yield cancel(stdoutTask);
       if (resultTask) yield cancel(resultTask);
       if (errorTask) yield cancel(errorTask);
-      if (conduit) yield call([conduit, 'terminate']);
+      if (conduit) {
+        try {
+          yield call([conduit, 'terminate']);
+        } catch (e) {
+          console.warn('[conductor] failed to terminate conduit', e);
+        }
+      }
     } finally {
       yield put(actions.endInterruptExecution(workspaceLocation));
+      yield put(actions.setIsRunning(false, workspaceLocation));
     }
   }
 }

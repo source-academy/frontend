@@ -96,7 +96,9 @@ async function loadWebPlugin(
   }
   try {
     const plugin = await hostPlugin.importAndRegisterExternalPlugin(url);
-    registerPluginTabIfPresent(plugin);
+    if (preparedConductor?.hostPlugin === hostPlugin) {
+      registerPluginTabIfPresent(plugin);
+    }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn(`Conductor: failed to load web plugin "${pluginId}"`, error);
