@@ -144,13 +144,17 @@ function NavigationBar() {
     const id = s.languageDirectory.selectedLanguageId;
     return id ? s.languageDirectory.languageMap[id] : null;
   });
-  const textbookEntry: NavbarEntryInfo = selectedLanguage?.textbookUrl
-    ? {
-        to: selectedLanguage.textbookUrl.endsWith('json_py/') ? '/sicppy' : '/sicpjs',
-        icon: IconNames.BOOK,
-        text: `${selectedLanguage.name} Textbook`,
-      }
-    : { to: '/sicpjs', icon: IconNames.BOOK, text: 'SICP JS' };
+  const textbookEntry: NavbarEntryInfo = useMemo(
+    () =>
+      selectedLanguage?.textbookUrl
+        ? {
+            to: selectedLanguage.textbookUrl.endsWith('json_py/') ? '/sicppy' : '/sicpjs',
+            icon: IconNames.BOOK,
+            text: `${selectedLanguage.name} Textbook`,
+          }
+        : { to: '/sicpjs', icon: IconNames.BOOK, text: 'SICP JS' },
+    [selectedLanguage],
+  );
 
   const fullAcademyNavbarLeftCommonInfo: NavbarEntryInfo[] = useMemo(() => {
     return [

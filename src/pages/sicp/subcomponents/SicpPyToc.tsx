@@ -13,13 +13,13 @@ function SicpPyToc({ handleCloseToc }: TocProps) {
   const [sidebarContent, setSidebarContent] = useState(toc as TreeNodeInfo[]);
   const navigate = useNavigate();
 
-  const handleNodeExpand = (_node: TreeNodeInfo, path: integer[]) => {
+  const handleNodeExpand = (_node: TreeNodeInfo, path: number[]) => {
     const newState = cloneDeep(sidebarContent);
     Tree.nodeFromPath(path, newState).isExpanded = true;
     setSidebarContent(newState);
   };
 
-  const handleNodeCollapse = (_node: TreeNodeInfo, path: integer[]) => {
+  const handleNodeCollapse = (_node: TreeNodeInfo, path: number[]) => {
     const newState = cloneDeep(sidebarContent);
     Tree.nodeFromPath(path, newState).isExpanded = false;
     setSidebarContent(newState);

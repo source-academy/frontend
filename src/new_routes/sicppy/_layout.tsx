@@ -54,8 +54,9 @@ function SicpPyLayout() {
     }
 
     setLoading(true);
+    const controller = new AbortController();
 
-    fetch(baseUrl + section + extension)
+    fetch(baseUrl + section + extension, { signal: controller.signal })
       .then(response => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
@@ -70,6 +71,7 @@ function SicpPyLayout() {
         }
       })
       .catch(error => {
+        if (error.name === 'AbortError') return;
         console.error(error);
         if (error.message === 'Not Found') {
           setData(getSicpError(SicpErrorType.PAGE_NOT_FOUND_ERROR));
@@ -81,6 +83,8 @@ function SicpPyLayout() {
         setLocalStorage(SICPPY_CACHE_KEY, SICPPY_DEFAULT_SECTION);
       })
       .finally(() => setLoading(false));
+
+    return () => controller.abort();
   }, [section, navigate]);
 
   useEffect(() => {
