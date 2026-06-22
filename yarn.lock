@@ -3155,17 +3155,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/conductor@https://github.com/source-academy/conductor.git#0.5.0":
-  version: 0.5.0
-  resolution: "@sourceacademy/conductor@https://github.com/source-academy/conductor.git#commit=2349aa912b32ff4f8b5bad2666243c6adad5677e"
-  checksum: 10c0/6f17b0f9bbd4630d73a3c4df043e05140f9c77b735fba4956442d3574c54f5918dd6113b3d52b1ed4238febc9ff2c03676c0200f7f1c5b5a3bc5eea92ecebea9
+"@sourceacademy/conductor@https://github.com/source-academy/conductor.git#0.4.0":
+  version: 0.4.0
+  resolution: "@sourceacademy/conductor@https://github.com/source-academy/conductor.git#commit=00a0d5fdce269d62a0feb33230300db27121be05"
+  checksum: 10c0/1e92b0eb3d9c67f3ab5fd7768e24a33941a006df85770aaf1938c9484a4d466c6136202ad06a202a257bc7117b87907dda6e3c695340c24f5ab8ada8d12b5c77
   languageName: node
   linkType: hard
 
-"@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.6":
-  version: 0.0.6
-  resolution: "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#commit=9fcd0cb67957f10cbf8b0e18458bb197f3bb6a8b"
-  checksum: 10c0/348fdde83991ebe6bc0a117298d14257086eefa962d8cec32e7fa772176ea45762ab02045e0745155381c735a1fef2f136a899bd4e66100973d062623c5398aa
+"@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.7":
+  version: 0.0.7
+  resolution: "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#commit=95a25cf8446ceee97e4a28f32b61f7b1728c5625"
+  checksum: 10c0/c580d7e90fb71baa6cf47a2078f2b6d0c6132f0214419f3a0583dd38a6fb5b1d71642b494dd37581ba7ca3c1d1f284a39326a563a18438e34c7a4cd2b1ac49db
   languageName: node
   linkType: hard
 
@@ -7233,8 +7233,8 @@ __metadata:
     "@sentry/react": "npm:^10.5.0"
     "@sourceacademy/autocomplete": "github:source-academy/autocomplete#e669d9ed98753350a3c8433a92985227eb789663"
     "@sourceacademy/c-slang": "npm:^1.0.21"
-    "@sourceacademy/conductor": "https://github.com/source-academy/conductor.git#0.5.0"
-    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.6"
+    "@sourceacademy/conductor": "https://github.com/source-academy/conductor.git#0.4.0"
+    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.7"
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.2"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
