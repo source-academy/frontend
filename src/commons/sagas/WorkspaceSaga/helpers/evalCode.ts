@@ -578,12 +578,15 @@ export function* evalCodeConductorSaga(
       timeout: call(() => new Promise(resolve => setTimeout(resolve, execTime + 10000))),
     });
   } finally {
-    if (statusTask) yield cancel(statusTask);
-    if (conduit) yield call([conduit, 'terminate']);
-    if (stdoutTask) yield cancel(stdoutTask);
-    if (resultTask) yield cancel(resultTask);
-    if (errorTask) yield cancel(errorTask);
-    yield put(actions.endInterruptExecution(workspaceLocation));
+    try {
+      if (statusTask) yield cancel(statusTask);
+      if (stdoutTask) yield cancel(stdoutTask);
+      if (resultTask) yield cancel(resultTask);
+      if (errorTask) yield cancel(errorTask);
+      if (conduit) yield call([conduit, 'terminate']);
+    } finally {
+      yield put(actions.endInterruptExecution(workspaceLocation));
+    }
   }
 }
 
