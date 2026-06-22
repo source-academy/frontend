@@ -29,12 +29,8 @@ function SicpPyPage() {
 
   const navigationButtons = (
     <div className="sicp-navigation-buttons">
-      {prev && (
-        <Button onClick={() => handleNavigation(prev)}>Previous</Button>
-      )}
-      {next && (
-        <Button onClick={() => handleNavigation(next)}>Next</Button>
-      )}
+      {prev && <Button onClick={() => handleNavigation(prev)}>Previous</Button>}
+      {next && <Button onClick={() => handleNavigation(next)}>Next</Button>}
     </div>
   );
 

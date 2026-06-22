@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router';
 
 import toc from '../../../features/sicp/data/toc-py.json';
 
-type TocProps = {
+type Props = {
   handleCloseToc?: () => void;
 };
 
-function SicpPyToc({ handleCloseToc }: TocProps) {
+function SicpPyToc({ handleCloseToc }: Props) {
   const [sidebarContent, setSidebarContent] = useState(toc as TreeNodeInfo[]);
   const navigate = useNavigate();
 

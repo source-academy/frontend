@@ -244,6 +244,7 @@ function NavigationBar() {
     const topNavbarNavlinks = [
       '/playground',
       '/sicpjs',
+      '/sicppy',
       '/contributors',
       `/courses/${courseId}/achievements`,
       `/courses/${courseId}/leaderboard`,
@@ -346,7 +347,6 @@ function NavigationBar() {
     </>
   );
 }
-
 
 export function DesktopNavLink(props: NavbarEntryInfo) {
   const responsive = useResponsive();

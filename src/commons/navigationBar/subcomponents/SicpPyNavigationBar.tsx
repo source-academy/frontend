@@ -1,10 +1,4 @@
-import {
-  Alignment,
-  Drawer,
-  Navbar,
-  NavbarGroup,
-  Position,
-} from '@blueprintjs/core';
+import { Alignment, Drawer, Navbar, NavbarGroup, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';

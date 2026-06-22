@@ -90,8 +90,7 @@ function SicpPyLayout() {
   useEffect(() => {
     if (loading) return;
     const hash = location.hash;
-    const elem =
-      (hash ? (document.querySelector(hash) as HTMLElement | null) : null) ?? refs.current[hash];
+    const elem = (hash ? document.getElementById(hash.slice(1)) : null) ?? refs.current[hash];
     scrollRefIntoView(elem, parentRef);
   }, [loading, location.hash]);
 
