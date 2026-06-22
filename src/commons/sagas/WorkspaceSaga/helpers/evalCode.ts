@@ -448,14 +448,15 @@ function* handleResults(
   workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
   const resultChan = eventChannel(emitter => {
-    hostPlugin.receiveResult = emitter;
+    const onReceiveResult = (result: any) => emitter({ value: result });
+    hostPlugin.receiveResult = onReceiveResult;
     return () => {
-      if (hostPlugin.receiveResult === emitter) delete hostPlugin.receiveResult;
+      if (hostPlugin.receiveResult === onReceiveResult) delete hostPlugin.receiveResult;
     };
   });
   try {
     while (true) {
-      const result = yield take(resultChan);
+      const { value: result } = yield take(resultChan);
       yield put(actions.appendInterpreterResult(result, workspaceLocation));
     }
   } finally {
@@ -558,20 +559,9 @@ export function* evalCodeConductorSaga(
   const statusTask = yield fork(handleStatuses, hostPlugin, workspaceLocation);
   yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
 
-  // This exit logic of this while loop might be causing an unintended infinite loop in the REPL
-  while (true) {
-    const { stop } = yield race({
-      repl: take(actions.evalRepl.type),
-      stop: take(actions.beginInterruptExecution.type),
-    });
-    if (stop) break;
-    const code: string = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].replValue,
-    );
-    yield put(actions.sendReplInputToOutput(code, workspaceLocation));
-    yield put(actions.clearReplInput(workspaceLocation));
-    yield call([hostPlugin, 'sendChunk'], code);
-  }
+  // OneShot: wait for the runner to send STOPPED/ERROR (dispatched by handleStatuses),
+  // or for the user to manually interrupt execution.
+  yield take(actions.beginInterruptExecution.type);
   yield cancel(statusTask);
   yield call([conduit, 'terminate']);
   yield cancel(stdoutTask);
