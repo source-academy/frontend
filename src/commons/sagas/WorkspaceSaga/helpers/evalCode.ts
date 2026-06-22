@@ -458,6 +458,10 @@ function* handleResults(
     while (true) {
       const { value: result } = yield take(resultChan);
       yield put(actions.appendInterpreterResult(result, workspaceLocation));
+      // The OneShot evaluator sends exactly one result then stops. Trigger cleanup
+      // via beginInterruptExecution so the parent saga exits even if the STATUS
+      // channel is broken (e.g. const-enum erasure in older evaluator bundles).
+      yield put(actions.beginInterruptExecution(workspaceLocation));
     }
   } finally {
     if (yield cancelled()) {
@@ -493,8 +497,10 @@ function* handleStatuses(
   workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
   const statusChan = eventChannel<{ status: RunnerStatus; isActive: boolean }>(emitter => {
-    const onStatusUpdate = (status: RunnerStatus, isActive: boolean) =>
+    const onStatusUpdate = (status: RunnerStatus, isActive: boolean) => {
+      console.log('[conductor] status update received:', status, 'isActive:', isActive, 'STOPPED=', RunnerStatus.STOPPED);
       emitter({ status, isActive });
+    };
     hostPlugin.receiveStatusUpdate = onStatusUpdate;
     return () => {
       if (hostPlugin.receiveStatusUpdate === onStatusUpdate) delete hostPlugin.receiveStatusUpdate;
@@ -503,13 +509,12 @@ function* handleStatuses(
   try {
     while (true) {
       const { status, isActive } = yield take(statusChan);
+      const isTerminalStatus =
+        isActive && (status === RunnerStatus.STOPPED || status === RunnerStatus.ERROR);
+      console.log('[conductor] handleStatuses loop: status=', status, 'isActive=', isActive, 'isTerminal=', isTerminalStatus);
       if (status === RunnerStatus.RUNNING) {
         yield put(actions.setIsRunning(isActive, workspaceLocation));
       }
-
-      const isTerminalStatus =
-        isActive && (status === RunnerStatus.STOPPED || status === RunnerStatus.ERROR);
-
       if (isTerminalStatus) {
         yield put(actions.beginInterruptExecution(workspaceLocation));
       }
@@ -546,30 +551,43 @@ export function* evalCodeConductorSaga(
     if (!evaluator?.path) throw Error('no evaluator');
   }
 
-  // Reuse a preloaded conductor instance when available.
-  const { hostPlugin, conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } = yield call(
-    getPreparedConductorSaga,
-    { files, consume: true },
-  );
+  let conduit: IConduit | undefined;
+  let stdoutTask: any;
+  let resultTask: any;
+  let errorTask: any;
+  let statusTask: any;
 
-  // Begin evaluation
-  const stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
-  const resultTask = yield fork(handleResults, hostPlugin, workspaceLocation);
-  const errorTask = yield fork(handleErrors, hostPlugin, workspaceLocation);
-  const statusTask = yield fork(handleStatuses, hostPlugin, workspaceLocation);
-  yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
+  try {
+    // Reuse a preloaded conductor instance when available.
+    const prepared: { hostPlugin: BrowserHostPlugin; conduit: IConduit } = yield call(
+      getPreparedConductorSaga,
+      { files, consume: true },
+    );
+    const hostPlugin = prepared.hostPlugin;
+    conduit = prepared.conduit;
 
-  // OneShot: wait for the runner to send STOPPED/ERROR (dispatched by handleStatuses),
-  // or for the user to manually interrupt execution.
-  yield take(actions.beginInterruptExecution.type);
-  yield cancel(statusTask);
-  yield call([conduit, 'terminate']);
-  yield cancel(stdoutTask);
-  yield cancel(resultTask);
-  yield cancel(errorTask);
-  //yield put(actions.debuggerReset(workspaceLocation));
-  yield put(actions.endInterruptExecution(workspaceLocation));
-  console.log('killed');
+    // Begin evaluation
+    stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
+    resultTask = yield fork(handleResults, hostPlugin, workspaceLocation);
+    errorTask = yield fork(handleErrors, hostPlugin, workspaceLocation);
+    statusTask = yield fork(handleStatuses, hostPlugin, workspaceLocation);
+
+    yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
+
+    // OneShot: wait for the runner to send STOPPED/ERROR (dispatched by handleStatuses),
+    // or for the user to manually interrupt execution.
+    yield race({
+      done: take(actions.beginInterruptExecution.type),
+      timeout: call(() => new Promise(resolve => setTimeout(resolve, execTime + 10000))),
+    });
+  } finally {
+    if (statusTask) yield cancel(statusTask);
+    if (conduit) yield call([conduit, 'terminate']);
+    if (stdoutTask) yield cancel(stdoutTask);
+    if (resultTask) yield cancel(resultTask);
+    if (errorTask) yield cancel(errorTask);
+    yield put(actions.endInterruptExecution(workspaceLocation));
+  }
 }
 
 // Special module errors
