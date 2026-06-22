@@ -497,10 +497,8 @@ function* handleStatuses(
   workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
   const statusChan = eventChannel<{ status: RunnerStatus; isActive: boolean }>(emitter => {
-    const onStatusUpdate = (status: RunnerStatus, isActive: boolean) => {
-      console.log('[conductor] status update received:', status, 'isActive:', isActive, 'STOPPED=', RunnerStatus.STOPPED);
+    const onStatusUpdate = (status: RunnerStatus, isActive: boolean) =>
       emitter({ status, isActive });
-    };
     hostPlugin.receiveStatusUpdate = onStatusUpdate;
     return () => {
       if (hostPlugin.receiveStatusUpdate === onStatusUpdate) delete hostPlugin.receiveStatusUpdate;
@@ -511,7 +509,6 @@ function* handleStatuses(
       const { status, isActive } = yield take(statusChan);
       const isTerminalStatus =
         isActive && (status === RunnerStatus.STOPPED || status === RunnerStatus.ERROR);
-      console.log('[conductor] handleStatuses loop: status=', status, 'isActive=', isActive, 'isTerminal=', isTerminalStatus);
       if (status === RunnerStatus.RUNNING) {
         yield put(actions.setIsRunning(isActive, workspaceLocation));
       }
