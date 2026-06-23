@@ -26,6 +26,7 @@ import {
   type PlaygroundWorkspaceState,
   type WorkspaceLocation,
 } from 'src/commons/workspace/WorkspaceTypes';
+import type { CseSerializedEnvFrame, CseSnapshot } from 'src/features/conductor/CseMachineHostPlugin';
 import { ClearDeadFramesAnimation } from 'src/features/cseMachine/animationComponents/ClearDeadFramesAnimation';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
@@ -33,8 +34,6 @@ import { Layout } from 'src/features/cseMachine/CseMachineLayout';
 import type { ArrowOriginFilterKey } from 'src/features/cseMachine/CseMachineTypes';
 import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
-
-import type { CseSerializedEnvFrame, CseSnapshot } from 'src/features/conductor/CseMachineHostPlugin';
 
 import type { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
 import type { HighlightedLines } from '../../editor/EditorTypes';

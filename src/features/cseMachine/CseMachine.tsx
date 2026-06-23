@@ -5,7 +5,6 @@ import { parse } from 'js-slang/dist/parser/parser';
 import type { CseSerializedEnvFrame, CseSnapshot } from '../conductor/CseMachineHostPlugin';
 import { arrowSelection } from './components/arrows/ArrowSelection';
 import { CseAnimation } from './CseMachineAnimation';
-import { buildFakeEnvTreeFromSnapshot } from './CseSnapshotAdapter';
 import { Layout, type LayoutCache } from './CseMachineLayout';
 import type {
   ArrowOriginFilterKey,
@@ -14,6 +13,7 @@ import type {
   EnvTreeNode,
 } from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
+import { buildFakeEnvTreeFromSnapshot } from './CseSnapshotAdapter';
 
 type SetVis = (vis: React.ReactNode) => void;
 type SetEditorHighlightedLines = (segments: [number, number][]) => void;
