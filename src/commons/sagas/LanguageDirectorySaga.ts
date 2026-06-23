@@ -52,12 +52,20 @@ const languageDirectoryHandlers = combineSagaHandlers({
     yield put(LanguageDirectoryActions.setLanguages(result));
   },
   [LanguageDirectoryActions.setSelectedLanguage.type]: function* () {
+    // Selecting a language defaults its evaluator to the first one. The actual conductor preload
+    // happens in the setSelectedEvaluator handler below (this dispatch triggers it), so switching
+    // evaluators afterwards re-preloads the correct one.
     const language = yield call(getLanguageDefinitionSaga);
     if (!language) return;
     if (language.evaluators.length > 0) {
       yield put(LanguageDirectoryActions.setSelectedEvaluator(language.evaluators[0].id));
     }
-
+  },
+  [LanguageDirectoryActions.setSelectedEvaluator.type]: function* () {
+    // Preload the conductor for the *newly selected* evaluator, so a subsequent Run uses this
+    // evaluator (not the language default). Without this, picking e.g. the Stepper evaluator would
+    // never update the prepared conductor — the run would keep using the default evaluator, so
+    // `hostLoadPlugin("stepper")` would never fire and the Stepper tab would never appear.
     const conductorEnabled: boolean = yield select(selectConductorEnable);
     if (!conductorEnabled) return;
 

@@ -1,11 +1,12 @@
-import { useCallback } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 
 import { useSideContent } from './SideContentHelper';
+import sideContentManager from './SideContentManager';
 import type {
   ChangeTabsCallback,
   SideContentLocation,
   SideContentTab,
-  SideContentType,
+  SideContentTabId,
 } from './SideContentTypes';
 
 type SideContentProviderProps = {
@@ -18,7 +19,7 @@ type SideContentProviderProps = {
     alerts: string[];
     changeTabsCallback: ChangeTabsCallback;
     height?: number;
-    selectedTab?: SideContentType;
+    selectedTab?: SideContentTabId;
   }) => React.ReactElement;
 
   /**
@@ -26,12 +27,12 @@ type SideContentProviderProps = {
    * then responsible for managing tab changing
    */
   onChange?: ChangeTabsCallback;
-  selectedTab?: SideContentType;
+  selectedTab?: SideContentTabId;
 
   /**
    * Value to use if the currently selected tab is undefined
    */
-  defaultTab?: SideContentType;
+  defaultTab?: SideContentTabId;
   workspaceLocation: SideContentLocation;
 };
 
@@ -56,10 +57,14 @@ export default function SideContentProvider({
     workspaceLocation,
     defaultTab,
   );
+  const serviceTabs = useSyncExternalStore(
+    sideContentManager.subscribe.bind(sideContentManager),
+    () => sideContentManager.getTabs(workspaceLocation),
+  );
 
   const allTabs = tabs
-    ? [...tabs.beforeDynamicTabs, ...dynamicTabs, ...tabs.afterDynamicTabs]
-    : dynamicTabs;
+    ? [...tabs.beforeDynamicTabs, ...dynamicTabs, ...serviceTabs, ...tabs.afterDynamicTabs]
+    : [...dynamicTabs, ...serviceTabs];
 
   const changeTabsCallback: ChangeTabsCallback = useCallback(
     (newId, oldId, event) => {

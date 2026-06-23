@@ -1,22 +1,22 @@
 import { createActions } from '../redux/utils';
 import type { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import type { SideContentLocation, SideContentType } from './SideContentTypes';
+import type { SideContentLocation, SideContentTabId } from './SideContentTypes';
 
 const SideContentActions = createActions('sideContent', {
-  beginAlertSideContent: (id: SideContentType, workspaceLocation: SideContentLocation) => ({
+  beginAlertSideContent: (id: SideContentTabId, workspaceLocation: SideContentLocation) => ({
     id,
     workspaceLocation,
   }),
-  endAlertSideContent: (id: SideContentType, workspaceLocation: SideContentLocation) => ({
+  endAlertSideContent: (id: SideContentTabId, workspaceLocation: SideContentLocation) => ({
     id,
     workspaceLocation,
   }),
   visitSideContent: (
-    newId: SideContentType,
-    prevId: SideContentType | undefined,
+    newId: SideContentTabId,
+    prevId: SideContentTabId | undefined,
     workspaceLocation: SideContentLocation,
   ) => ({ newId, prevId, workspaceLocation }),
-  removeSideContentAlert: (id: SideContentType, workspaceLocation: SideContentLocation) => ({
+  removeSideContentAlert: (id: SideContentTabId, workspaceLocation: SideContentLocation) => ({
     id,
     workspaceLocation,
   }),

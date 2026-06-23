@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { isEqual } from 'lodash-es';
 import { decompressFromEncodedURIComponent } from 'lz-string';
-import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useStore } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
@@ -35,11 +35,6 @@ import {
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
-import { makePluginTabFrom } from 'src/features/conductor/makePluginTabFrom';
-import {
-  getPluginTabs,
-  subscribePluginTabs,
-} from 'src/features/conductor/pluginTabRegistry';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import GithubActions from 'src/features/github/GitHubActions';
 import PersistenceActions from 'src/features/persistence/PersistenceActions';
@@ -754,7 +749,6 @@ function Playground(props: PlaygroundProps) {
   // When the Conductor framework is enabled, the stepper (and other tools) are provided by web
   // plugins loaded dynamically, so the legacy in-frontend tabs are hidden in favour of plugin tabs.
   const conductorEnabled = useTypedSelector(selectConductorEnable);
-  const pluginTabs = useSyncExternalStore(subscribePluginTabs, getPluginTabs);
   const CONDUCTOR_STEPPER_TAB_ID = 'stepper';
 
   const conductorWelcomeText = useTypedSelector(state => {
@@ -812,12 +806,8 @@ function Playground(props: PlaygroundProps) {
       if (shouldShowSubstVisualizer && !conductorEnabled) {
         tabs.push(makeSubstVisualizerTabFrom(workspaceLocation, output));
       }
-      // Under the conductor, tools are contributed by dynamically-loaded web plugins.
-      if (conductorEnabled) {
-        for (const pluginTab of pluginTabs) {
-          tabs.push(makePluginTabFrom(pluginTab));
-        }
-      }
+      // Under the conductor, tools are contributed by dynamically-loaded web plugins; their tabs are
+      // injected automatically by SideContentProvider (via the shared tab service), not here.
     }
 
     if (!isSicpEditor && !Constants.playgroundOnly) {
@@ -840,7 +830,6 @@ function Playground(props: PlaygroundProps) {
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
     conductorEnabled,
-    pluginTabs,
     remoteExecutionTab,
     editorSessionId,
     sessionManagementTab,
