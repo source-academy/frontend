@@ -51,7 +51,7 @@
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.2",
     "@sourceacademy/sharedb-ace": "2.1.1",
     "@sourceacademy/sling-client": "^0.1.0",
-    "@sourceacademy/web-cse-machine": "portal:/home/vakshay/plugins/src/web/cse-machine",
+    "@sourceacademy/web-cse-machine": "^1.0.0",
     "@szhsin/react-menu": "^4.0.0",
     "@tanstack/react-query": "^5.100.14",
     "@tanstack/react-table": "^8.9.3",
