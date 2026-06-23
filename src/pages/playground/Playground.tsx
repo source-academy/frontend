@@ -88,6 +88,7 @@ import type {
   Input,
   SelectionRange,
 } from '../../features/eventLogging/EventLoggingTypes';
+import { selectConductorEnable } from '../../features/conductor/flagConductorEnable';
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   desktopOnlyTabIds,
@@ -724,7 +725,17 @@ function Playground(props: PlaygroundProps) {
   }, [dispatch, playgroundSourceChapter, playgroundSourceVariant]);
 
   const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer;
-  const shouldShowCseMachine = languageConfig.supports.cseMachine;
+  const hasCseSnapshots = useTypedSelector(
+    state => state.workspaces[workspaceLocation].cseSnapshots !== null,
+  );
+  const conductorLanguageActive = useTypedSelector(
+    state => selectConductorEnable(state) && !!state.languageDirectory.selectedLanguageId,
+  );
+  // When a conductor language is active, the Source-based languageConfig doesn't reflect the
+  // selected language — rely solely on whether snapshots actually arrived.
+  const shouldShowCseMachine = conductorLanguageActive
+    ? hasCseSnapshots
+    : languageConfig.supports.cseMachine || hasCseSnapshots;
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
 
   const playgroundIntroductionTab: SideContentTab = useMemo(
