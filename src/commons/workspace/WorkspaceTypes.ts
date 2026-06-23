@@ -117,6 +117,7 @@ export type WorkspaceState = {
   readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
   readonly lastDebuggerResult: any;
+  readonly cseSnapshots: any[] | null;
   readonly files: UploadResult;
   readonly updateUserRoleCallback: (id: string, newRole: CollabEditingAccess) => void;
   readonly versionHistory: VersionHistoryState;

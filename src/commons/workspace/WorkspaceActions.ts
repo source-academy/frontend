@@ -273,6 +273,10 @@ const newActions = createActions('workspace', {
     changepointSteps,
     workspaceLocation,
   }),
+  updateCseSnapshots: (snapshots: any[] | null, workspaceLocation: WorkspaceLocation) => ({
+    snapshots,
+    workspaceLocation,
+  }),
   updateLastDebuggerResult: (lastDebuggerResult: any, workspaceLocation: WorkspaceLocation) => ({
     lastDebuggerResult,
     workspaceLocation,

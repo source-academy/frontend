@@ -3198,6 +3198,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sourceacademy/web-cse-machine@portal:/home/vakshay/plugins/src/web/cse-machine::locator=frontend%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@sourceacademy/web-cse-machine@portal:/home/vakshay/plugins/src/web/cse-machine::locator=frontend%40workspace%3A."
+  peerDependencies:
+    "@sourceacademy/common-cse-machine": ">=0.1.0"
+    "@sourceacademy/conductor": ">=0.3.0"
+  languageName: node
+  linkType: soft
+
 "@standard-schema/spec@npm:^1.1.0":
   version: 1.1.0
   resolution: "@standard-schema/spec@npm:1.1.0"
@@ -7238,6 +7247,7 @@ __metadata:
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.2"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
+    "@sourceacademy/web-cse-machine": "portal:/home/vakshay/plugins/src/web/cse-machine"
     "@svgr/webpack": "npm:^8.0.0"
     "@swc/core": "npm:^1.11.22"
     "@szhsin/react-menu": "npm:^4.0.0"

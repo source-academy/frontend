@@ -9,8 +9,8 @@ import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { pick } from 'lodash-es';
-import { eventChannel, type SagaIterator } from 'redux-saga';
-import { call, cancel, cancelled, fork, put, race, select, take } from 'redux-saga/effects';
+import { END, eventChannel, type SagaIterator } from 'redux-saga';
+import { call, cancel, cancelled, fork, put, race, select, spawn, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
 import InterpreterActions from '../../../../commons/application/actions/InterpreterActions';
@@ -18,6 +18,7 @@ import { makeCCompilerConfig, specialCReturnObject } from '../../../../commons/u
 import { javaRun } from '../../../../commons/utils/JavaHelper';
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHostPlugin';
+import type { CseMachineHostPlugin, CseSnapshot } from '../../../../features/conductor/CseMachineHostPlugin';
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { type OverallState } from '../../../application/ApplicationTypes';
@@ -29,7 +30,7 @@ import { showWarningMessage } from '../../../utils/notifications/NotificationsHe
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
-import { getPreparedConductorSaga } from '../../helpers/conductorEvaluatorCache';
+import { getPreparedConductorSaga, preloadConductorEvaluatorSaga } from '../../helpers/conductorEvaluatorCache';
 import { getEvaluatorDefinitionSaga } from '../../LanguageDirectorySaga';
 import { selectWorkspace } from '../../SafeEffects';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
@@ -492,6 +493,31 @@ function* handleErrors(
   }
 }
 
+function* handleCseSnapshots(
+  csePlugin: CseMachineHostPlugin,
+  workspaceLocation: WorkspaceLocation,
+): SagaIterator {
+  const snapshotChan = eventChannel<CseSnapshot[]>(emitter => {
+    csePlugin.receiveSnapshots = emitter;
+    return () => {
+      if (csePlugin.receiveSnapshots === emitter) csePlugin.receiveSnapshots = () => {};
+    };
+  });
+  try {
+    while (true) {
+      const snapshots: CseSnapshot[] | typeof END = yield take(snapshotChan);
+      if (snapshots === END || !Array.isArray(snapshots)) break;
+      yield put(WorkspaceActions.updateCseSnapshots(snapshots, workspaceLocation));
+      yield put(WorkspaceActions.updateStepsTotal(snapshots.length - 1, workspaceLocation));
+      yield put(WorkspaceActions.toggleUpdateCse(false, workspaceLocation as any));
+    }
+  } catch (_e) {
+    // Swallow errors from this non-critical background task
+  } finally {
+    snapshotChan.close();
+  }
+}
+
 function* handleStatuses(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
@@ -548,26 +574,42 @@ export function* evalCodeConductorSaga(
     if (!evaluator?.path) throw Error('no evaluator');
   }
 
+  // Clear stale CSE snapshots from the previous run
+  yield put(WorkspaceActions.updateCseSnapshots(null, workspaceLocation));
+
+  // Inject step limit so the evaluator knows how many snapshots to collect
+  const { stepLimit }: { stepLimit: number } = yield* selectWorkspace(workspaceLocation);
+  const filesWithConfig = {
+    ...files,
+    '/__cse_config__': JSON.stringify({ stepLimit }),
+  };
+
   let conduit: IConduit | undefined;
   let stdoutTask: any;
   let resultTask: any;
   let errorTask: any;
   let statusTask: any;
+  let cseTask: any;
 
   try {
     // Reuse a preloaded conductor instance when available.
-    const prepared: { hostPlugin: BrowserHostPlugin; conduit: IConduit } = yield call(
+    const prepared: { hostPlugin: BrowserHostPlugin; csePlugin: CseMachineHostPlugin; conduit: IConduit } = yield call(
       getPreparedConductorSaga,
-      { files, consume: true },
+      { files: filesWithConfig, consume: true },
     );
     const hostPlugin = prepared.hostPlugin;
+    const csePlugin = prepared.csePlugin;
     conduit = prepared.conduit;
+
+    // Immediately start warming the next conductor in the background
+    yield spawn(preloadConductorEvaluatorSaga, evaluator.path);
 
     // Begin evaluation
     stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
     resultTask = yield fork(handleResults, hostPlugin, workspaceLocation);
     errorTask = yield fork(handleErrors, hostPlugin, workspaceLocation);
     statusTask = yield fork(handleStatuses, hostPlugin, workspaceLocation);
+    cseTask = yield fork(handleCseSnapshots, csePlugin, workspaceLocation);
 
     yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
 
@@ -579,6 +621,7 @@ export function* evalCodeConductorSaga(
     });
   } finally {
     try {
+      if (cseTask) yield cancel(cseTask);
       if (statusTask) yield cancel(statusTask);
       if (stdoutTask) yield cancel(stdoutTask);
       if (resultTask) yield cancel(resultTask);
