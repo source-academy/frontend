@@ -253,12 +253,33 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     if (prevProps.cseSnapshots !== this.props.cseSnapshots) {
       this.accumulatedFrames.clear();
     }
-    // Flush visualization when user switches away from the CSE tab.
-    if (prevProps.isActive && !this.props.isActive && this.props.cseSnapshots) {
-      this.props.updateCseSnapshots(null);
+
+    // isActive is only provided for conductor/snapshot mode (Python 3/4).
+    // For Java/Source CSE, isActive is undefined and these guards are skipped.
+    const isActiveProvided = this.props.isActive !== undefined;
+
+    // User switched AWAY from the CSE tab: flush visualization and snapshots.
+    if (isActiveProvided && prevProps.isActive && !this.props.isActive) {
+      this.setState({ visualization: null, value: -1 });
+      if (this.props.cseSnapshots) this.props.updateCseSnapshots(null);
       return;
     }
-    if (prevProps.needCseUpdate && !this.props.needCseUpdate) {
+
+    // User switched TO the CSE tab while snapshots from a home-tab run are ready.
+    if (isActiveProvided && !prevProps.isActive && this.props.isActive && this.props.cseSnapshots) {
+      this.stepFirst();
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          this.setState(prev => ({ sliderKey: prev.sliderKey + 1 }));
+        });
+      });
+      return;
+    }
+
+    // New run completed. In snapshot mode, only process when CSE tab is active
+    // (prevents editor highlight and tab badge firing while user is on another tab).
+    const shouldProcess = !isActiveProvided || this.props.isActive;
+    if (prevProps.needCseUpdate && !this.props.needCseUpdate && shouldProcess) {
       this.setState({ arrowFilterOpen: false });
 
       if (this.props.cseSnapshots) {
