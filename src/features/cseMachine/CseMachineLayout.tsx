@@ -206,6 +206,7 @@ export class Layout {
     Layout.currentStackTruncDark = undefined;
     Layout.currentStackLight = undefined;
     Layout.currentStackTruncLight = undefined;
+
     // clear/initialize data and value arrays
     Layout.values.clear();
     arrowSelection.clearSelection();
@@ -789,6 +790,7 @@ export class Layout {
           </div>
         </div>
       );
+
       Layout.prevLayout = layout;
       if (CseMachine.getPrintableMode()) {
         if (CseMachine.getControlStash()) {

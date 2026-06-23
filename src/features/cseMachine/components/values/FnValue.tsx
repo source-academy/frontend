@@ -25,6 +25,7 @@ import {
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { ArrowFromFnTooltip } from '../arrows/ArrowFromFnTooltip';
+import { ArrowFromStreamNullaryFn } from '../arrows/ArrowFromStreamNullaryFn';
 import { Binding } from '../Binding';
 import { Frame } from '../Frame';
 import { FunctionTooltipLabels, Value } from './Value';
@@ -58,6 +59,8 @@ export class FnValue extends Value implements IHoverable {
   enclosingFrame?: Frame;
   private isExpandedDescription: boolean = false;
   private _arrow: ArrowFromFn | undefined;
+  private _streamArrows: ArrowFromStreamNullaryFn[] = [];
+
   private tooltipArrow: ArrowFromFnTooltip | undefined;
   private showTooltipArrow: boolean = false;
 
@@ -137,6 +140,16 @@ export class FnValue extends Value implements IHoverable {
 
   arrow(): ArrowFromFn | undefined {
     return this._arrow;
+  }
+
+  addArrow(target: any): void {
+    // Check how many arrows already point to this specific target
+    const currentCount = this._streamArrows.filter(arrow => arrow.target === target).length;
+
+    // Pass the count as the offsetIndex
+    this._streamArrows?.push(
+      new ArrowFromStreamNullaryFn(this, currentCount).to(target) as ArrowFromStreamNullaryFn,
+    );
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -230,11 +243,20 @@ export class FnValue extends Value implements IHoverable {
   }
 
   draw(): React.ReactNode {
-    if (this.fnName === undefined) {
-      throw new Error('Closure has no main reference and is not initialised!');
-    }
-    //update center x accourding to the same id from cache
+    // Update centerX before arrow geometry is computed so arrow start positions are correct.
     this.centerX = this.x() + this.radius * 2;
+    this._streamArrows = [];
+    if (CseMachine.getPairCreationMode()) {
+      const pairs = CseMachine.getStreamLineage((this.data as any).id);
+      if (pairs != undefined) {
+        for (const pair of pairs) {
+          const target = Layout.values.get(pair);
+          if (target) {
+            this.addArrow(target);
+          }
+        }
+      }
+    }
     this.enclosingFrame = Frame.getFrom(this.data.environment);
     if (this.enclosingFrame) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
@@ -308,6 +330,7 @@ export class FnValue extends Value implements IHoverable {
           />
         </Group>
         {this._arrow?.draw()}
+        {this._streamArrows.map((arrow, index) => arrow.draw())}
         {this.tooltipArrow?.draw()}
       </Fragment>
     );
