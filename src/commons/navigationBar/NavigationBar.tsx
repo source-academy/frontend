@@ -146,11 +146,11 @@ function NavigationBar() {
   });
   const textbookEntry: NavbarEntryInfo = useMemo(
     () =>
-      selectedLanguage?.textbookUrl
+      selectedLanguage?.textbook
         ? {
-            to: selectedLanguage.textbookUrl.endsWith('json_py/') ? '/sicppy' : '/sicpjs',
+            to: selectedLanguage.textbook.url.endsWith('json_py/') ? '/sicppy' : '/sicpjs',
             icon: IconNames.BOOK,
-            text: `${selectedLanguage.name} Textbook`,
+            text: selectedLanguage.textbook.name,
           }
         : { to: '/sicpjs', icon: IconNames.BOOK, text: 'SICP JS' },
     [selectedLanguage],
