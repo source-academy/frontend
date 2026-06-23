@@ -263,8 +263,13 @@ export class Layout {
           ? Layout.controlComponent.width() + Config.CanvasPaddingX * 2
           : 0),
     );
-    // initialise animations
-    CseAnimation.updateAnimation();
+    // initialise animations — wrapped so animation failures never prevent the visualization
+    // from rendering (e.g. getLayer() null before first mount, or undefined stash items).
+    try {
+      CseAnimation.updateAnimation();
+    } catch (_e) {
+      CseAnimation.disableAnimations();
+    }
   }
 
   static initializeControlStash(chapter: Chapter) {
