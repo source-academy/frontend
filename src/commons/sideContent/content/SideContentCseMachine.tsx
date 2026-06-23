@@ -78,12 +78,12 @@ type StateProps = {
   machineOutput: InterpreterOutput[];
   chapter: Chapter;
   cseSnapshots: any[] | null;
+  /** Derived directly from Redux selectedTab — more reliable than prop threading. */
+  isOnCseTab: boolean;
 };
 
 type OwnProps = {
   workspaceLocation: WorkspaceLocation;
-  /** Whether the CSE Machine tab is currently selected. Used to guard snapshot processing. */
-  isActive?: boolean;
 };
 
 type DispatchProps = {
@@ -242,7 +242,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     stepsTotal: number;
     needCseUpdate: boolean;
     cseSnapshots?: any[] | null;
-    isActive?: boolean;
+    isOnCseTab: boolean;
   }) {
     if (
       prevProps.sideContentHeight !== this.props.sideContentHeight ||
@@ -254,15 +254,15 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       this.accumulatedFrames.clear();
     }
 
-    // isActive is only provided for conductor/snapshot mode (Python 3/4).
-    // For Java/Source CSE, isActive is undefined and these guards are skipped.
-    const isActiveProvided = this.props.isActive !== undefined;
+    // Snapshot mode (conductor, Python 3/4): cseSnapshots is a non-undefined prop.
+    // Java/Source CSE never sets cseSnapshots so it's undefined → guards are skipped.
+    const inSnapshotMode = this.props.cseSnapshots !== undefined;
 
     // Snapshots arrived while user was on another tab: discard immediately so that
     // switching to the CSE tab shows the standard template, not a stale visualization.
     if (
-      isActiveProvided &&
-      !this.props.isActive &&
+      inSnapshotMode &&
+      !this.props.isOnCseTab &&
       this.props.cseSnapshots !== null &&
       prevProps.cseSnapshots !== this.props.cseSnapshots
     ) {
@@ -272,7 +272,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
 
     // User switched AWAY from the CSE tab: clear local visualization state so the
     // standard template text appears when they return.
-    if (isActiveProvided && prevProps.isActive && !this.props.isActive) {
+    if (inSnapshotMode && prevProps.isOnCseTab && !this.props.isOnCseTab) {
       this.setState({ visualization: null, value: -1 });
       if (this.props.cseSnapshots) this.props.updateCseSnapshots(null);
       return;
@@ -280,7 +280,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
 
     // New run completed. In snapshot mode, only process when CSE tab is active
     // (prevents editor highlight and tab badge firing while user is on another tab).
-    const shouldProcess = !isActiveProvided || this.props.isActive;
+    const shouldProcess = !inSnapshotMode || this.props.isOnCseTab;
     if (prevProps.needCseUpdate && !this.props.needCseUpdate && shouldProcess) {
       this.setState({ arrowFilterOpen: false });
 
@@ -840,6 +840,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     machineOutput: workspace.output,
     chapter: workspace.context.chapter,
     cseSnapshots: workspace.cseSnapshots,
+    isOnCseTab: state.sideContent[loc]?.selectedTab === SideContentType.cseMachine,
   };
 };
 
@@ -880,10 +881,10 @@ export const SideContentCseMachine = connect(
   mapDispatchToProps,
 )(SideContentCseMachineBase);
 
-const makeCseMachineTabFrom = (location: WorkspaceLocation, isActive?: boolean): SideContentTab => ({
+const makeCseMachineTabFrom = (location: WorkspaceLocation): SideContentTab => ({
   label: t($ => $.cseMachine.label, { ns: 'sideContent' }),
   iconName: IconNames.GLOBE,
-  body: <SideContentCseMachine workspaceLocation={location} isActive={isActive} />,
+  body: <SideContentCseMachine workspaceLocation={location} />,
   id: SideContentType.cseMachine,
 });
 
