@@ -1,0 +1,154 @@
+[
+  {
+    "id": "source1",
+    "name": "Source 1",
+    "textbookUrl": "https://sicp.sourceacademy.org/json/",
+    "evaluators": [
+      {
+        "id": "source1Default",
+        "name": "Default",
+        "path": "https://source-academy.github.io/js-slang-lean/evaluator1.js",
+        "capabilities": []
+      }
+    ]
+  },
+  {
+    "id": "source2",
+    "name": "Source 2",
+    "textbookUrl": "https://sicp.sourceacademy.org/json/",
+    "evaluators": [
+      {
+        "id": "source2Default",
+        "name": "Default",
+        "path": "https://source-academy.github.io/js-slang-lean/evaluator2.js",
+        "capabilities": []
+      }
+    ]
+  },
+  {
+    "id": "source3",
+    "name": "Source 3",
+    "textbookUrl": "https://sicp.sourceacademy.org/json/",
+    "evaluators": [
+      {
+        "id": "source3Default",
+        "name": "Default",
+        "path": "https://source-academy.github.io/js-slang-lean/evaluator3.js",
+        "capabilities": []
+      }
+    ]
+  },
+  {
+    "id": "source4",
+    "name": "Source 4",
+    "textbookUrl": "https://sicp.sourceacademy.org/json/",
+    "evaluators": [
+      {
+        "id": "source4Default",
+        "name": "Default",
+        "path": "https://source-academy.github.io/js-slang-lean/evaluator4.js",
+        "capabilities": []
+      }
+    ]
+  },
+  {
+    "id": "pythonFull",
+    "name": "Python Full",
+    "evaluators": [
+      {
+        "id": "pythonFullDefault",
+        "name": "Default",
+        "path": "https://source-academy.github.io/py-slang/pyodide-evaluator-full.js",
+        "capabilities": []
+      }
+    ]
+  },
+  {
+    "id": "python1",
+    "name": "Python 1",
+    "textbookUrl": "https://sicp.sourceacademy.org/json_py/",
+    "evaluators": [
+      {
+        "id": "python1Default",
+        "name": "Default",
+        "path": "http://localhost:8000/PyCseEvaluator1.js",
+        "capabilities": []
+      },
+      {
+        "id": "python1Pyodide",
+        "name": "Pyodide",
+        "path": "https://source-academy.github.io/py-slang/pyodide-evaluator-1.js",
+        "capabilities": []
+      }
+    ]
+  },
+  {
+    "id": "python2",
+    "name": "Python 2",
+    "textbookUrl": "https://sicp.sourceacademy.org/json_py/",
+    "evaluators": [
+      {
+        "id": "python2Default",
+        "name": "Default",
+        "path": "http://localhost:8000/PyCseEvaluator2.js",
+        "capabilities": []
+      },
+      {
+        "id": "python2Pyodide",
+        "name": "Pyodide",
+        "path": "https://source-academy.github.io/py-slang/pyodide-evaluator-2.js",
+        "capabilities": []
+      }
+    ]
+  },
+  {
+    "id": "python3",
+    "name": "Python 3",
+    "textbookUrl": "https://sicp.sourceacademy.org/json_py/",
+    "evaluators": [
+      {
+        "id": "python3Default",
+        "name": "Default",
+        "path": "http://localhost:8000/PyCseEvaluator3.js",
+        "capabilities": ["cse"]
+      },
+      {
+        "id": "python3Pyodide",
+        "name": "Pyodide",
+        "path": "https://source-academy.github.io/py-slang/pyodide-evaluator-3.js",
+        "capabilities": []
+      }
+    ]
+  },
+  {
+    "id": "python4",
+    "name": "Python 4",
+    "textbookUrl": "https://sicp.sourceacademy.org/json_py/",
+    "evaluators": [
+      {
+        "id": "python4Default",
+        "name": "Default",
+        "path": "http://localhost:8000/PyCseEvaluator4.js",
+        "capabilities": ["cse"]
+      },
+      {
+        "id": "python4Pyodide",
+        "name": "Pyodide",
+        "path": "https://source-academy.github.io/py-slang/pyodide-evaluator-4.js",
+        "capabilities": []
+      }
+    ]
+  },
+  {
+    "id": "scheme",
+    "name": "Scheme",
+    "evaluators": [
+      {
+        "id": "schemeDefault",
+        "name": "Default",
+        "path": "https://source-academy.github.io/scm-slang/scm-slang-evaluator.js",
+        "capabilities": []
+      }
+    ]
+  }
+]
