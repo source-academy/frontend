@@ -782,7 +782,7 @@ function Playground(props: PlaygroundProps) {
         tabs.push(makeDataVisualizerTabFrom(workspaceLocation));
       }
       if (shouldShowCseMachine) {
-        tabs.push(makeCseMachineTabFrom(workspaceLocation));
+        tabs.push(makeCseMachineTabFrom(workspaceLocation, selectedTab === SideContentType.cseMachine));
       }
       if (shouldShowSubstVisualizer) {
         tabs.push(makeSubstVisualizerTabFrom(workspaceLocation, output));
@@ -811,6 +811,7 @@ function Playground(props: PlaygroundProps) {
     remoteExecutionTab,
     editorSessionId,
     sessionManagementTab,
+    selectedTab,
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile

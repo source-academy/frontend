@@ -82,6 +82,8 @@ type StateProps = {
 
 type OwnProps = {
   workspaceLocation: WorkspaceLocation;
+  /** Whether the CSE Machine tab is currently selected. Used to guard snapshot processing. */
+  isActive?: boolean;
 };
 
 type DispatchProps = {
@@ -96,6 +98,7 @@ type DispatchProps = {
     newHighlightedLines: HighlightedLines[],
   ) => void;
   handleAlertSideContent: () => void;
+  updateCseSnapshots: (snapshots: any[] | null) => void;
 };
 
 class SideContentCseMachineBase extends Component<CseMachineProps, State> {
@@ -119,6 +122,8 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       sliderKey: 0,
     };
     if (this.isJava()) {
+      // Java uses JavaCseMachine (initialized separately in the constructor); calling
+      // CseMachine methods here when isJava() is true would crash if setVis is null.
       JavaCseMachine.init(
         visualization => this.setState({ visualization }),
         (segments: [number, number][]) => {
@@ -126,11 +131,12 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
         },
       );
     } else {
+      const sharedSetVis = (visualization: React.ReactNode) => {
+        this.setState({ visualization }, () => CseAnimation.playAnimation());
+        if (visualization) this.props.handleAlertSideContent();
+      };
       CseMachine.init(
-        visualization => {
-          this.setState({ visualization }, () => CseAnimation.playAnimation());
-          if (visualization) this.props.handleAlertSideContent();
-        },
+        sharedSetVis,
         this.state.width,
         this.state.height,
         (segments: [number, number][]) => {
@@ -212,6 +218,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     document.addEventListener('fullscreenchange', this.handleFullscreenChange);
     if (!this.isJava()) {
       if (this.props.cseSnapshots) {
+        // Snapshot mode: component may mount after snapshots already arrived, so render step 0 now.
         this.renderSnapshotAt(0);
       } else {
         CseMachine.redraw();
@@ -235,6 +242,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     stepsTotal: number;
     needCseUpdate: boolean;
     cseSnapshots?: any[] | null;
+    isActive?: boolean;
   }) {
     if (
       prevProps.sideContentHeight !== this.props.sideContentHeight ||
@@ -245,10 +253,16 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     if (prevProps.cseSnapshots !== this.props.cseSnapshots) {
       this.accumulatedFrames.clear();
     }
+    // Flush visualization when user switches away from the CSE tab.
+    if (prevProps.isActive && !this.props.isActive && this.props.cseSnapshots) {
+      this.props.updateCseSnapshots(null);
+      return;
+    }
     if (prevProps.needCseUpdate && !this.props.needCseUpdate) {
       this.setState({ arrowFilterOpen: false });
 
       if (this.props.cseSnapshots) {
+        // Snapshot mode: step to 0 — sliderRelease will call renderSnapshotAt(0)
         this.stepFirst();
       } else if (this.isJava()) {
         this.stepFirst();
@@ -417,6 +431,12 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                           checked={arrowFilters.stash}
                           label="From stash"
                           onChange={() => this.toggleArrowFilter('stash')}
+                        />
+                        <Checkbox
+                          checked={CseMachine.getPairCreationMode()}
+                          disabled={!this.state.visualization}
+                          label="Pairs returned by nullary functions"
+                          onChange={() => this.togglePairCreationModeArrows()}
                         />
                       </div>
                     }
@@ -620,21 +640,23 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
 
   private sliderRelease = (newValue: number) => {
     if (this.props.cseSnapshots) {
+      // Snapshot mode: index into pre-computed snapshots, no re-evaluation
       this.renderSnapshotAt(newValue);
+      return;
     }
     if (newValue === this.props.stepsTotal) {
       this.setState({ lastStep: true });
     } else {
       this.setState({ lastStep: false });
     }
-    if (!this.props.cseSnapshots) this.props.handleEditorEval();
+    this.props.handleEditorEval();
   };
 
   private sliderShift = (newValue: number) => {
-    if (this.state.clearDeadFrames && !this.props.cseSnapshots) {
+    if (this.state.clearDeadFrames) {
       CseMachine.setClearDeadFrames(false);
       CseMachine.clearLiveLayouts();
-      CseMachine.redraw();
+      if (!this.props.cseSnapshots) CseMachine.redraw();
     }
     this.props.handleStepUpdate(newValue);
     this.setState((state: State) => {
@@ -652,9 +674,9 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
   private stepNext = () => {
     const lastStepValue = this.props.stepsTotal;
     if (this.state.value !== lastStepValue) {
+      CseAnimation.enableAnimations();
       this.sliderShift(this.state.value + 1);
       this.sliderRelease(this.state.value + 1);
-      CseAnimation.enableAnimations();
     }
   };
 
@@ -760,6 +782,11 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     }
     this.forceUpdate();
   };
+
+  private togglePairCreationModeArrows = () => {
+    CseMachine.togglePairCreationMode();
+    this.refreshArrowFilters();
+  };
 }
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
@@ -819,6 +846,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
           editorTabIndex,
           newHighlightedLines,
         ),
+      updateCseSnapshots: (snapshots: any[] | null) =>
+        WorkspaceActions.updateCseSnapshots(snapshots, props.workspaceLocation),
     },
     dispatch,
   );
@@ -828,10 +857,10 @@ export const SideContentCseMachine = connect(
   mapDispatchToProps,
 )(SideContentCseMachineBase);
 
-const makeCseMachineTabFrom = (location: WorkspaceLocation): SideContentTab => ({
+const makeCseMachineTabFrom = (location: WorkspaceLocation, isActive?: boolean): SideContentTab => ({
   label: t($ => $.cseMachine.label, { ns: 'sideContent' }),
   iconName: IconNames.GLOBE,
-  body: <SideContentCseMachine workspaceLocation={location} />,
+  body: <SideContentCseMachine workspaceLocation={location} isActive={isActive} />,
   id: SideContentType.cseMachine,
 });
 
