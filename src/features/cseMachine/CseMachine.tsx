@@ -407,7 +407,11 @@ export default class CseMachine {
 
     Layout.snapshotMode = true;
     try {
-      Layout.setContext(envTree as unknown as EnvTree, fakeControl as unknown as Control, fakeStash as unknown as Stash);
+      Layout.setContext(
+        envTree as unknown as EnvTree,
+        fakeControl as unknown as Control,
+        fakeStash as unknown as Stash,
+      );
     } finally {
       Layout.snapshotMode = false;
     }

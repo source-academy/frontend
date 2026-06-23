@@ -17,7 +17,11 @@ import type { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { InstrType } from 'js-slang/dist/cse-machine/types';
 import type { Environment } from 'js-slang/dist/types';
 
-import type { CseSerializedEnvFrame, CseSerializedValue, CseSnapshot } from '../conductor/CseMachineHostPlugin';
+import type {
+  CseSerializedEnvFrame,
+  CseSerializedValue,
+  CseSnapshot,
+} from '../conductor/CseMachineHostPlugin';
 import { Config } from './CseMachineConfig';
 
 // Global counter so every fake closure gets a unique id regardless of which env it was defined in.
@@ -81,7 +85,7 @@ function toJsValue(
       toJsValue(el, envMap, closureCache, listCache),
     );
     Object.defineProperties(arr, {
-      id:          { value: arrayId ?? `arr_${Math.random()}`, writable: true },
+      id: { value: arrayId ?? `arr_${Math.random()}`, writable: true },
       environment: { value: envId ? (envMap.get(envId) ?? null) : null, writable: true },
     });
 
@@ -147,14 +151,19 @@ function toJsValue(
 function makeFakeStack<T>(items: T[]) {
   const storage = [...items];
   const stack = {
-    push: (...newItems: T[]) => { storage.push(...newItems); },
+    push: (...newItems: T[]) => {
+      storage.push(...newItems);
+    },
     pop: () => storage.pop(),
     peek: () => (storage.length > 0 ? storage[storage.length - 1] : undefined),
     size: () => storage.length,
     isEmpty: () => storage.length === 0,
     getStack: () => [...storage],
     some: (pred: (v: T) => boolean) => storage.some(pred),
-    setTo: (other: any) => { storage.length = 0; storage.push(...other.getStack()); },
+    setTo: (other: any) => {
+      storage.length = 0;
+      storage.push(...other.getStack());
+    },
     // Control-specific extras
     canAvoidEnvInstr: () => true,
     copy: () => makeFakeStack([...storage]),
@@ -174,8 +183,12 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
   // built-in functions) and Source CSE Machine also hides it (via removePreludeEnv).
   // Instead we reparent any child of prelude directly to global, matching Source's behaviour.
   const rawFrames = snapshot.environments;
-  const globalFrame = rawFrames.find((f: CseSerializedEnvFrame) => f.name === 'global' && f.parentId === null);
-  const preludeFrame = rawFrames.find((f: CseSerializedEnvFrame) => f.name === 'prelude' && f.parentId === null);
+  const globalFrame = rawFrames.find(
+    (f: CseSerializedEnvFrame) => f.name === 'global' && f.parentId === null,
+  );
+  const preludeFrame = rawFrames.find(
+    (f: CseSerializedEnvFrame) => f.name === 'prelude' && f.parentId === null,
+  );
   const frames = (() => {
     if (!globalFrame) return rawFrames;
     if (!preludeFrame) {
@@ -247,7 +260,10 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
   for (const f of frames) {
     const env = envMap.get(f.id)!;
     for (const b of f.bindings) {
-      if (/closure|function|lambda|method/i.test(b.value.label) && (b.value.metadata as any)?.closureFrameId) {
+      if (
+        /closure|function|lambda|method/i.test(b.value.label) &&
+        (b.value.metadata as any)?.closureFrameId
+      ) {
         const val = toJsValue(b.value, envMap, closureCache, listCache);
         Object.defineProperty(env.head, b.name, {
           value: val,
@@ -292,7 +308,9 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
   }
 
   const inserted = new Set(rootFrames.map((f: CseSerializedEnvFrame) => f.id));
-  const queue = frames.filter((f: CseSerializedEnvFrame) => f.parentId).map((f: CseSerializedEnvFrame) => f.id);
+  const queue = frames
+    .filter((f: CseSerializedEnvFrame) => f.parentId)
+    .map((f: CseSerializedEnvFrame) => f.id);
   let qi = 0;
   let guard = frames.length * 2;
   while (qi < queue.length && guard-- > 0) {
@@ -320,9 +338,13 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
       }
     }
 
-    const loc = meta?.startLine !== undefined
-      ? { start: { line: meta.startLine as number }, end: { line: (meta.endLine ?? meta.startLine) as number } }
-      : undefined;
+    const loc =
+      meta?.startLine !== undefined
+        ? {
+            start: { line: meta.startLine as number },
+            end: { line: (meta.endLine ?? meta.startLine) as number },
+          }
+        : undefined;
 
     // ── Animation-aware reconstruction (js-slang conductor mode) ─────────────
     // When js-slang serializes control items it embeds instrType / nodeType in
@@ -350,7 +372,8 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
       // correctly for animations without breaking the control-stack display.
       const nodeType = meta.nodeType as string;
       const bodyLength: number = (meta.bodyLength as number | undefined) ?? 0;
-      const bodyNodeTypes: (string | undefined)[] = (meta.bodyNodeTypes as (string | undefined)[] | undefined) ?? [];
+      const bodyNodeTypes: (string | undefined)[] =
+        (meta.bodyNodeTypes as (string | undefined)[] | undefined) ?? [];
 
       // Build a body array for block-like nodes so handleNode can check body.length.
       // Stub elements' types drive the recursive handleNode call when body.length === 1.
@@ -358,7 +381,8 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
       // stub that lands in the ControlExpansionAnimation case.
       const body = Array.from({ length: bodyLength }, (_, i) => {
         const t = bodyNodeTypes[i] ?? 'VariableDeclaration';
-        if (t === 'ExpressionStatement') return { type: t, expression: { type: 'BinaryExpression' } };
+        if (t === 'ExpressionStatement')
+          return { type: t, expression: { type: 'BinaryExpression' } };
         return { type: t };
       });
 

@@ -26,7 +26,10 @@ import {
   type PlaygroundWorkspaceState,
   type WorkspaceLocation,
 } from 'src/commons/workspace/WorkspaceTypes';
-import type { CseSerializedEnvFrame, CseSnapshot } from 'src/features/conductor/CseMachineHostPlugin';
+import type {
+  CseSerializedEnvFrame,
+  CseSnapshot,
+} from 'src/features/conductor/CseMachineHostPlugin';
 import { ClearDeadFramesAnimation } from 'src/features/cseMachine/animationComponents/ClearDeadFramesAnimation';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
@@ -359,7 +362,11 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                     onMouseUp={() => {
                       if (this.state.visualization) {
                         CseMachine.toggleControlStash();
-                        if (this.props.cseSnapshots) { this.renderSnapshotAt(this.state.value); } else { CseMachine.redraw(); }
+                        if (this.props.cseSnapshots) {
+                          this.renderSnapshotAt(this.state.value);
+                        } else {
+                          CseMachine.redraw();
+                        }
                       }
                     }}
                     icon="layers"
@@ -377,7 +384,11 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                     onMouseUp={() => {
                       if (this.state.visualization) {
                         CseMachine.toggleStackTruncated();
-                        if (this.props.cseSnapshots) { this.renderSnapshotAt(this.state.value); } else { CseMachine.redraw(); }
+                        if (this.props.cseSnapshots) {
+                          this.renderSnapshotAt(this.state.value);
+                        } else {
+                          CseMachine.redraw();
+                        }
                       }
                     }}
                     icon="minimize"
@@ -396,7 +407,11 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                     onMouseUp={() => {
                       if (this.state.visualization) {
                         CseMachine.toggleCenterAlignment();
-                        if (this.props.cseSnapshots) { this.renderSnapshotAt(this.state.value); } else { CseMachine.redraw(); }
+                        if (this.props.cseSnapshots) {
+                          this.renderSnapshotAt(this.state.value);
+                        } else {
+                          CseMachine.redraw();
+                        }
                       }
                     }}
                     icon="eye-open"
@@ -539,7 +554,11 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                                 Layout.draw = originalDraw;
                               }
                             };
-                            if (this.props.cseSnapshots) { this.renderSnapshotAt(this.state.value); } else { CseMachine.redraw(); }
+                            if (this.props.cseSnapshots) {
+                              this.renderSnapshotAt(this.state.value);
+                            } else {
+                              CseMachine.redraw();
+                            }
                           },
                         );
                       }
@@ -553,7 +572,11 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                     onMouseUp={() => {
                       if (this.state.visualization) {
                         CseMachine.togglePrintableMode();
-                        if (this.props.cseSnapshots) { this.renderSnapshotAt(this.state.value); } else { CseMachine.redraw(); }
+                        if (this.props.cseSnapshots) {
+                          this.renderSnapshotAt(this.state.value);
+                        } else {
+                          CseMachine.redraw();
+                        }
                       }
                     }}
                     icon="print"
@@ -652,7 +675,10 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       .map(f => ({ ...f, isActive: false, isOnCallStack: false }));
 
     CseMachine.clearLiveLayouts();
-    CseMachine.renderSnapshot({ ...snapshot, environments: [...snapshot.environments, ...deadFrames] });
+    CseMachine.renderSnapshot({
+      ...snapshot,
+      environments: [...snapshot.environments, ...deadFrames],
+    });
 
     this.props.setEditorHighlightedLinesStep(0, []);
     if (snapshot.currentLine !== undefined && snapshot.currentLine > 0) {
@@ -740,8 +766,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     this.sliderRelease(0);
   };
 
-  private envFingerprint = (snap: CseSnapshot): string =>
-    JSON.stringify(snap?.environments ?? []);
+  private envFingerprint = (snap: CseSnapshot): string => JSON.stringify(snap?.environments ?? []);
 
   private getChangepointSteps = (): number[] => {
     const snaps = this.props.cseSnapshots as CseSnapshot[] | null;

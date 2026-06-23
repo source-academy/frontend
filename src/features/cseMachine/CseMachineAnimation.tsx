@@ -146,10 +146,18 @@ export class CseAnimation {
           // resolves to the global frame, use ControlToStashAnimation instead.
           const currentEnvId = CseAnimation.currentFrame?.environment?.id;
           if (currentEnvId && currentEnvId !== '-1') {
-            const [foundFrame, foundBinding] = lookupBinding(CseAnimation.currentFrame, identNode.name);
+            const [foundFrame, foundBinding] = lookupBinding(
+              CseAnimation.currentFrame,
+              identNode.name,
+            );
             if (foundFrame?.environment?.id !== '-1') {
               CseAnimation.animations.push(
-                new LookupAnimation(lastControlComponent, currStashComponent!, foundFrame, foundBinding),
+                new LookupAnimation(
+                  lastControlComponent,
+                  currStashComponent!,
+                  foundFrame,
+                  foundBinding,
+                ),
               );
             } else {
               CseAnimation.animations.push(
@@ -224,7 +232,12 @@ export class CseAnimation {
           //  - js-slang builtins / streams
           //  - Python builtins (serialized as strings — no reference arrow)
           //  - any call that didn't push new control items (e.g. tail-call-like builtins)
-          if (isBuiltInFn(fn) || isStreamFn(fn) || !fnStashItem.arrow || newControlItems.length === 0) {
+          if (
+            isBuiltInFn(fn) ||
+            isStreamFn(fn) ||
+            !fnStashItem.arrow ||
+            newControlItems.length === 0
+          ) {
             CseAnimation.animations.push(
               new InstructionApplicationAnimation(
                 lastControlComponent,

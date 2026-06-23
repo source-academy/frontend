@@ -18,7 +18,10 @@ import { makeCCompilerConfig, specialCReturnObject } from '../../../../commons/u
 import { javaRun } from '../../../../commons/utils/JavaHelper';
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHostPlugin';
-import type { CseMachineHostPlugin, CseSnapshot } from '../../../../features/conductor/CseMachineHostPlugin';
+import type {
+  CseMachineHostPlugin,
+  CseSnapshot,
+} from '../../../../features/conductor/CseMachineHostPlugin';
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { type OverallState } from '../../../application/ApplicationTypes';
@@ -30,7 +33,10 @@ import { showWarningMessage } from '../../../utils/notifications/NotificationsHe
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
-import { getPreparedConductorSaga, preloadConductorEvaluatorSaga } from '../../helpers/conductorEvaluatorCache';
+import {
+  getPreparedConductorSaga,
+  preloadConductorEvaluatorSaga,
+} from '../../helpers/conductorEvaluatorCache';
 import { getEvaluatorDefinitionSaga } from '../../LanguageDirectorySaga';
 import { selectWorkspace } from '../../SafeEffects';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
@@ -593,10 +599,11 @@ export function* evalCodeConductorSaga(
 
   try {
     // Reuse a preloaded conductor instance when available.
-    const prepared: { hostPlugin: BrowserHostPlugin; csePlugin: CseMachineHostPlugin; conduit: IConduit } = yield call(
-      getPreparedConductorSaga,
-      { files: filesWithConfig, consume: true },
-    );
+    const prepared: {
+      hostPlugin: BrowserHostPlugin;
+      csePlugin: CseMachineHostPlugin;
+      conduit: IConduit;
+    } = yield call(getPreparedConductorSaga, { files: filesWithConfig, consume: true });
     const hostPlugin = prepared.hostPlugin;
     const csePlugin = prepared.csePlugin;
     conduit = prepared.conduit;

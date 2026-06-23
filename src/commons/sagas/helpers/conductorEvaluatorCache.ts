@@ -122,7 +122,11 @@ export function* preloadConductorEvaluatorSaga(path?: string): SagaIterator {
  */
 export function* getPreparedConductorSaga(
   options?: GetPreparedConductorOptions,
-): SagaIterator<{ hostPlugin: BrowserHostPlugin; csePlugin: CseMachineHostPlugin; conduit: IConduit }> {
+): SagaIterator<{
+  hostPlugin: BrowserHostPlugin;
+  csePlugin: CseMachineHostPlugin;
+  conduit: IConduit;
+}> {
   if (!currentEvaluatorPath) {
     throw Error('no evaluator path selected');
   }
@@ -141,5 +145,9 @@ export function* getPreparedConductorSaga(
     resetPreparedConductor();
   }
 
-  return { hostPlugin: prepared.hostPlugin, csePlugin: prepared.csePlugin, conduit: prepared.conduit };
+  return {
+    hostPlugin: prepared.hostPlugin,
+    csePlugin: prepared.csePlugin,
+    conduit: prepared.conduit,
+  };
 }
