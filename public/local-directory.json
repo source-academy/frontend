@@ -71,7 +71,7 @@
       {
         "id": "python1Default",
         "name": "Default",
-        "path": "http://localhost:8000/PyCseEvaluator1.js",
+        "path": "https://source-academy.github.io/py-slang/PyCseEvaluator1.js",
         "capabilities": []
       },
       {
@@ -90,7 +90,7 @@
       {
         "id": "python2Default",
         "name": "Default",
-        "path": "http://localhost:8000/PyCseEvaluator2.js",
+        "path": "https://source-academy.github.io/py-slang/PyCseEvaluator2.js",
         "capabilities": []
       },
       {
@@ -109,7 +109,7 @@
       {
         "id": "python3Default",
         "name": "Default",
-        "path": "http://localhost:8000/PyCseEvaluator3.js",
+        "path": "https://source-academy.github.io/py-slang/PyCseEvaluator3.js",
         "capabilities": ["cse"]
       },
       {
@@ -128,7 +128,7 @@
       {
         "id": "python4Default",
         "name": "Default",
-        "path": "http://localhost:8000/PyCseEvaluator4.js",
+        "path": "https://source-academy.github.io/py-slang/PyCseEvaluator4.js",
         "capabilities": ["cse"]
       },
       {
