@@ -258,21 +258,23 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     // For Java/Source CSE, isActive is undefined and these guards are skipped.
     const isActiveProvided = this.props.isActive !== undefined;
 
-    // User switched AWAY from the CSE tab: flush visualization and snapshots.
-    if (isActiveProvided && prevProps.isActive && !this.props.isActive) {
-      this.setState({ visualization: null, value: -1 });
-      if (this.props.cseSnapshots) this.props.updateCseSnapshots(null);
+    // Snapshots arrived while user was on another tab: discard immediately so that
+    // switching to the CSE tab shows the standard template, not a stale visualization.
+    if (
+      isActiveProvided &&
+      !this.props.isActive &&
+      this.props.cseSnapshots !== null &&
+      prevProps.cseSnapshots !== this.props.cseSnapshots
+    ) {
+      this.props.updateCseSnapshots(null);
       return;
     }
 
-    // User switched TO the CSE tab while snapshots from a home-tab run are ready.
-    if (isActiveProvided && !prevProps.isActive && this.props.isActive && this.props.cseSnapshots) {
-      this.stepFirst();
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          this.setState(prev => ({ sliderKey: prev.sliderKey + 1 }));
-        });
-      });
+    // User switched AWAY from the CSE tab: clear local visualization state so the
+    // standard template text appears when they return.
+    if (isActiveProvided && prevProps.isActive && !this.props.isActive) {
+      this.setState({ visualization: null, value: -1 });
+      if (this.props.cseSnapshots) this.props.updateCseSnapshots(null);
       return;
     }
 
