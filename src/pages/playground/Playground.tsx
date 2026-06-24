@@ -34,8 +34,8 @@ import {
 } from 'src/commons/utils/WarningDialogHelper';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-import CseMachine from 'src/features/cseMachine/CseMachine';
 import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
+import CseMachine from 'src/features/cseMachine/CseMachine';
 import GithubActions from 'src/features/github/GitHubActions';
 import PersistenceActions from 'src/features/persistence/PersistenceActions';
 import {
@@ -742,9 +742,7 @@ function Playground(props: PlaygroundProps) {
 
   const playgroundIntroductionTab: SideContentTab = useMemo(
     () =>
-      makeIntroductionTabFrom(
-        conductorWelcomeText ?? generateLanguageIntroduction(languageConfig),
-      ),
+      makeIntroductionTabFrom(conductorWelcomeText ?? generateLanguageIntroduction(languageConfig)),
     [conductorWelcomeText, languageConfig],
   );
   const tabs = useMemo(() => {
