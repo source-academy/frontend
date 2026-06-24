@@ -41,7 +41,7 @@ const languageDirectoryHandlers = combineSagaHandlers({
     const defaultUrl = 'https://source-academy.github.io/language-directory/directory.json';
     let result: ILanguageDefinition[];
     if (url === defaultUrl) {
-      result = languages;
+      result = yield call(() => Promise.resolve(languages));
     } else {
       const response = yield call(fetch, url);
       if (!response.ok) {
