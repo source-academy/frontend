@@ -50,9 +50,14 @@ function toJsValue(
 ): unknown {
   const label = v.label.toLowerCase();
 
-  if (label === 'int' || label === 'float' || label === 'number') {
+  if (label === 'int' || label === 'number') {
     const n = parseFloat(v.displayValue);
     return isNaN(n) ? 0 : n;
+  }
+  if (label === 'float') {
+    // Return a source object so PrimitiveValue uses toReplString() (which preserves the
+    // ".0" suffix) instead of String(value) (which drops it for integer-valued floats).
+    return { toReplString: () => v.displayValue };
   }
   if (label === 'bool' || label === 'boolean') {
     return v.displayValue === 'True' || v.displayValue === 'true';
