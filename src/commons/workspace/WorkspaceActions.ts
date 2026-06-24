@@ -1,7 +1,7 @@
 import type { Context } from 'js-slang';
-import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 
+import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
 import type {
   AllColsSortStates,
   GradingColumnVisibility,

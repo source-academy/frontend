@@ -122,7 +122,9 @@ export function SideContentCseMachine({ workspaceLocation }: OwnProps) {
   );
   const doSetEditorHighlightedLinesStep = useCallback(
     (editorTabIndex: number, lines: HighlightedLines[]) =>
-      dispatch(WorkspaceActions.setEditorHighlightedLines(workspaceLocation, editorTabIndex, lines)),
+      dispatch(
+        WorkspaceActions.setEditorHighlightedLines(workspaceLocation, editorTabIndex, lines),
+      ),
     [dispatch, workspaceLocation],
   );
   const doUpdateCseSnapshots = useCallback(
@@ -151,12 +153,24 @@ export function SideContentCseMachine({ workspaceLocation }: OwnProps) {
   const clearDeadFramesRef = useRef(clearDeadFrames);
   const breakpointStepsRef = useRef(breakpointSteps);
   const changepointStepsRef = useRef(changepointSteps);
-  useEffect(() => { valueRef.current = value; }, [value]);
-  useEffect(() => { stepsRef.current = stepsTotal; }, [stepsTotal]);
-  useEffect(() => { cseSnapshotsRef.current = cseSnapshots; }, [cseSnapshots]);
-  useEffect(() => { clearDeadFramesRef.current = clearDeadFrames; }, [clearDeadFrames]);
-  useEffect(() => { breakpointStepsRef.current = breakpointSteps; }, [breakpointSteps]);
-  useEffect(() => { changepointStepsRef.current = changepointSteps; }, [changepointSteps]);
+  useEffect(() => {
+    valueRef.current = value;
+  }, [value]);
+  useEffect(() => {
+    stepsRef.current = stepsTotal;
+  }, [stepsTotal]);
+  useEffect(() => {
+    cseSnapshotsRef.current = cseSnapshots;
+  }, [cseSnapshots]);
+  useEffect(() => {
+    clearDeadFramesRef.current = clearDeadFrames;
+  }, [clearDeadFrames]);
+  useEffect(() => {
+    breakpointStepsRef.current = breakpointSteps;
+  }, [breakpointSteps]);
+  useEffect(() => {
+    changepointStepsRef.current = changepointSteps;
+  }, [changepointSteps]);
 
   // ─── Snapshot rendering ────────────────────────────────────────────────────
   const renderSnapshotAt = useCallback(
@@ -456,7 +470,12 @@ export function SideContentCseMachine({ workspaceLocation }: OwnProps) {
 
     const inSnapshotMode = isConductorMode;
 
-    if (inSnapshotMode && !isOnCseTab && cseSnapshots !== null && prevCseSnapshots !== cseSnapshots) {
+    if (
+      inSnapshotMode &&
+      !isOnCseTab &&
+      cseSnapshots !== null &&
+      prevCseSnapshots !== cseSnapshots
+    ) {
       doUpdateCseSnapshots(null);
       return;
     }
@@ -484,7 +503,15 @@ export function SideContentCseMachine({ workspaceLocation }: OwnProps) {
         requestAnimationFrame(() => setSliderKey(prev => prev + 1));
       });
     }
-  }, [isConductorMode, isOnCseTab, cseSnapshots, needCseUpdate, doUpdateCseSnapshots, stepFirst, isJava]);
+  }, [
+    isConductorMode,
+    isOnCseTab,
+    cseSnapshots,
+    needCseUpdate,
+    doUpdateCseSnapshots,
+    stepFirst,
+    isJava,
+  ]);
 
   // ─── Render ───────────────────────────────────────────────────────────────
   const arrowFilters = CseMachine.getArrowOriginFilters();
@@ -697,7 +724,10 @@ export function SideContentCseMachine({ workspaceLocation }: OwnProps) {
                       Layout.draw = () => {
                         try {
                           const currLevels = Layout.levels;
-                          const changedFramePairs = computeFramesCoordChange(prevLevels, currLevels);
+                          const changedFramePairs = computeFramesCoordChange(
+                            prevLevels,
+                            currLevels,
+                          );
                           if (changedFramePairs.length > 0) {
                             CseAnimation.animations.push(
                               new ClearDeadFramesAnimation(changedFramePairs),
@@ -753,9 +783,7 @@ export function SideContentCseMachine({ workspaceLocation }: OwnProps) {
           )}
         </div>
       </div>{' '}
-      {visualization &&
-      machineOutput.length &&
-      machineOutput[0].type === 'errors' ? (
+      {visualization && machineOutput.length && machineOutput[0].type === 'errors' ? (
         machineOutput.map((slice, index) => (
           <Output output={slice} key={index} usingSubst={false} isHtml={false} />
         ))
