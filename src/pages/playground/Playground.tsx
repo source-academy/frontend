@@ -35,6 +35,7 @@ import {
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import CseMachine from 'src/features/cseMachine/CseMachine';
+import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import GithubActions from 'src/features/github/GitHubActions';
 import PersistenceActions from 'src/features/persistence/PersistenceActions';
 import {
@@ -727,9 +728,24 @@ function Playground(props: PlaygroundProps) {
   const shouldShowCseMachine = languageConfig.supports.cseMachine;
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
 
+  const conductorWelcomeText = useTypedSelector(state => {
+    if (!selectConductorEnable(state)) return null;
+    const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
+    if (!selectedLanguageId) return null;
+    const lang = languageMap[selectedLanguageId];
+    if (!lang?.welcome) return null;
+    const evaluator = selectedEvaluatorId
+      ? lang.evaluators.find(e => e.id === selectedEvaluatorId)
+      : undefined;
+    return evaluator?.welcome ? `${lang.welcome}\n\n${evaluator.welcome}` : lang.welcome;
+  });
+
   const playgroundIntroductionTab: SideContentTab = useMemo(
-    () => makeIntroductionTabFrom(generateLanguageIntroduction(languageConfig)),
-    [languageConfig],
+    () =>
+      makeIntroductionTabFrom(
+        conductorWelcomeText ?? generateLanguageIntroduction(languageConfig),
+      ),
+    [conductorWelcomeText, languageConfig],
   );
   const tabs = useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
