@@ -1,6 +1,6 @@
+import { languages } from '@sourceacademy/language-directory';
 import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
 import { getEvaluatorDefinition } from '@sourceacademy/language-directory/dist/util';
-import bundledDirectory from '@sourceacademy/language-directory/dist/directory.json';
 import { call, fork, put, select } from 'redux-saga/effects';
 import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import { selectDirectoryLanguageUrl } from 'src/features/directory/flagDirectoryLanguageUrl';
@@ -41,7 +41,7 @@ const languageDirectoryHandlers = combineSagaHandlers({
     const defaultUrl = 'https://source-academy.github.io/language-directory/directory.json';
     let result: ILanguageDefinition[];
     if (url === defaultUrl) {
-      result = bundledDirectory as ILanguageDefinition[];
+      result = languages;
     } else {
       const response = yield call(fetch, url);
       if (!response.ok) {
