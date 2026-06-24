@@ -307,21 +307,24 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
     envTree.insert(envMap.get(f.id)!);
   }
 
+  // Insert child frames in parent-before-child order using a progress-based loop
+  // so arbitrarily deep chains (child serialized before parent) are handled correctly.
   const inserted = new Set(rootFrames.map((f: CseSerializedEnvFrame) => f.id));
-  const queue = frames
-    .filter((f: CseSerializedEnvFrame) => f.parentId)
-    .map((f: CseSerializedEnvFrame) => f.id);
-  let qi = 0;
-  let guard = frames.length * 2;
-  while (qi < queue.length && guard-- > 0) {
-    const id = queue[qi++];
-    const frame = frames.find((f: CseSerializedEnvFrame) => f.id === id)!;
-    if (frame.parentId && inserted.has(frame.parentId)) {
-      envTree.insert(envMap.get(id)!);
-      inserted.add(id);
-    } else {
-      queue.push(id);
+  let pending = frames.filter((f: CseSerializedEnvFrame) => !!f.parentId);
+  let progress = true;
+  while (pending.length > 0 && progress) {
+    progress = false;
+    const next: CseSerializedEnvFrame[] = [];
+    for (const frame of pending) {
+      if (frame.parentId && inserted.has(frame.parentId)) {
+        envTree.insert(envMap.get(frame.id)!);
+        inserted.add(frame.id);
+        progress = true;
+      } else {
+        next.push(frame);
+      }
     }
+    pending = next;
   }
 
   // ── Build fake Control (top-first in snapshot → reverse for stack order) ─
@@ -331,7 +334,12 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
     // ENVIRONMENT instructions: build a fake EnvInstr so the renderer draws an
     // arrow from the control item to the frame it will restore.
     // py-slang uses metadata.envId; js-slang sends displayText='ENVIRONMENT' + envId.
-    if (instr.displayText.toLowerCase() === 'environment' && meta?.envId) {
+    if (
+      (instr.displayText.toLowerCase() === 'environment' ||
+        meta?.instrType === 'env' ||
+        meta?.instrType === 'ENVIRONMENT') &&
+      meta?.envId
+    ) {
       const targetEnv = envMap.get(meta.envId as string);
       if (targetEnv) {
         return { instrType: InstrType.ENVIRONMENT, env: targetEnv, srcNode: { loc: undefined } };

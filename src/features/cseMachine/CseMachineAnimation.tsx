@@ -142,15 +142,18 @@ export class CseAnimation {
           );
         } else {
           // Only show LookupAnimation when the binding is found in a non-global frame.
-          // When the current frame is already the global frame (id '-1'), or the lookup
+          // When the current frame is already the global frame, or the lookup
           // resolves to the global frame, use ControlToStashAnimation instead.
-          const currentEnvId = CseAnimation.currentFrame?.environment?.id;
-          if (currentEnvId && currentEnvId !== '-1') {
+          // Use name === 'global' rather than id === '-1' so conductor evaluators
+          // with different global env ids are handled correctly.
+          const isGlobalEnv = (env: any) => !env || env.id === '-1' || env.name === 'global';
+          const currentEnv = CseAnimation.currentFrame?.environment;
+          if (currentEnv && !isGlobalEnv(currentEnv)) {
             const [foundFrame, foundBinding] = lookupBinding(
               CseAnimation.currentFrame,
               identNode.name,
             );
-            if (foundFrame?.environment?.id !== '-1') {
+            if (!isGlobalEnv(foundFrame?.environment)) {
               CseAnimation.animations.push(
                 new LookupAnimation(
                   lastControlComponent,

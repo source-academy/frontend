@@ -399,6 +399,10 @@ export default class CseMachine {
     if (!this.setVis) throw new Error('CSE machine not initialized');
 
     CseMachine.lastSnapshot = snapshot;
+    // Clear any live Source context so resize-triggered redraws use lastSnapshot, not stale live data.
+    CseMachine.environmentTree = undefined;
+    CseMachine.control = undefined;
+    CseMachine.stash = undefined;
 
     const activeEnv = snapshot.environments.find((env: CseSerializedEnvFrame) => env.isActive);
     if (activeEnv) CseMachine.currentEnvId = activeEnv.id;

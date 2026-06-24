@@ -1,4 +1,5 @@
 import type { Context } from 'js-slang';
+import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 
 import type {
@@ -273,7 +274,7 @@ const newActions = createActions('workspace', {
     changepointSteps,
     workspaceLocation,
   }),
-  updateCseSnapshots: (snapshots: any[] | null, workspaceLocation: WorkspaceLocation) => ({
+  updateCseSnapshots: (snapshots: CseSnapshot[] | null, workspaceLocation: WorkspaceLocation) => ({
     snapshots,
     workspaceLocation,
   }),

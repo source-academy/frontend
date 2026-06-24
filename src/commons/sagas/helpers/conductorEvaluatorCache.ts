@@ -120,9 +120,7 @@ export function* preloadConductorEvaluatorSaga(path?: string): SagaIterator {
  * Returns a conductor for the current evaluator path, preferring a preloaded instance.
  * The returned conductor is consumed from the cache and should be terminated by the caller.
  */
-export function* getPreparedConductorSaga(
-  options?: GetPreparedConductorOptions,
-): SagaIterator<{
+export function* getPreparedConductorSaga(options?: GetPreparedConductorOptions): SagaIterator<{
   hostPlugin: BrowserHostPlugin;
   csePlugin: CseMachineHostPlugin;
   conduit: IConduit;

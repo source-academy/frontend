@@ -32,7 +32,11 @@ import DisplayBufferService from '../../../utils/DisplayBufferService';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
-import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import {
+  EVAL_SILENT,
+  type WorkspaceLocation,
+  type WorkspaceLocationsWithTools,
+} from '../../../workspace/WorkspaceTypes';
 import {
   getPreparedConductorSaga,
   preloadConductorEvaluatorSaga,
@@ -514,8 +518,12 @@ function* handleCseSnapshots(
       const snapshots: CseSnapshot[] | typeof END = yield take(snapshotChan);
       if (snapshots === END || !Array.isArray(snapshots)) break;
       yield put(WorkspaceActions.updateCseSnapshots(snapshots, workspaceLocation));
-      yield put(WorkspaceActions.updateStepsTotal(snapshots.length - 1, workspaceLocation));
-      yield put(WorkspaceActions.toggleUpdateCse(false, workspaceLocation as any));
+      yield put(
+        WorkspaceActions.updateStepsTotal(Math.max(0, snapshots.length - 1), workspaceLocation),
+      );
+      yield put(
+        WorkspaceActions.toggleUpdateCse(false, workspaceLocation as WorkspaceLocationsWithTools),
+      );
     }
   } catch (_e) {
     // Swallow errors from this non-critical background task

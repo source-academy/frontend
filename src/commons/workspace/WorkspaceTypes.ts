@@ -9,6 +9,7 @@ import type { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import type { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import type { HighlightedLines, Position } from '../editor/EditorTypes';
+import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
 import type { UploadResult } from '../sideContent/content/SideContentUpload';
 
 export const EVAL_SILENT = 'EVAL_SILENT';
@@ -117,7 +118,7 @@ export type WorkspaceState = {
   readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
   readonly lastDebuggerResult: any;
-  readonly cseSnapshots: any[] | null;
+  readonly cseSnapshots: CseSnapshot[] | null;
   readonly files: UploadResult;
   readonly updateUserRoleCallback: (id: string, newRole: CollabEditingAccess) => void;
   readonly versionHistory: VersionHistoryState;

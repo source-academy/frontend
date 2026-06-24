@@ -40,6 +40,7 @@ import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMa
 
 import type { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
 import type { HighlightedLines } from '../../editor/EditorTypes';
+import { selectConductorEnable } from '../../../features/conductor/flagConductorEnable';
 import Constants, { Links } from '../../utils/Constants';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
 import { beginAlertSideContent } from '../SideContentActions';
@@ -80,9 +81,11 @@ type StateProps = {
   needCseUpdate: boolean;
   machineOutput: InterpreterOutput[];
   chapter: Chapter;
-  cseSnapshots: any[] | null;
+  cseSnapshots: CseSnapshot[] | null;
   /** Derived directly from Redux selectedTab — more reliable than prop threading. */
   isOnCseTab: boolean;
+  /** True when a conductor evaluator is selected; gates snapshot-mode behaviour. */
+  isConductorMode: boolean;
 };
 
 type OwnProps = {
@@ -101,7 +104,7 @@ type DispatchProps = {
     newHighlightedLines: HighlightedLines[],
   ) => void;
   handleAlertSideContent: () => void;
-  updateCseSnapshots: (snapshots: any[] | null) => void;
+  updateCseSnapshots: (snapshots: CseSnapshot[] | null) => void;
 };
 
 class SideContentCseMachineBase extends Component<CseMachineProps, State> {
@@ -244,8 +247,9 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     sideContentHeight?: number;
     stepsTotal: number;
     needCseUpdate: boolean;
-    cseSnapshots?: any[] | null;
+    cseSnapshots?: CseSnapshot[] | null;
     isOnCseTab: boolean;
+    isConductorMode: boolean;
   }) {
     if (
       prevProps.sideContentHeight !== this.props.sideContentHeight ||
@@ -257,9 +261,9 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       this.accumulatedFrames.clear();
     }
 
-    // Snapshot mode (conductor, Python 3/4): cseSnapshots is a non-undefined prop.
-    // Java/Source CSE never sets cseSnapshots so it's undefined → guards are skipped.
-    const inSnapshotMode = this.props.cseSnapshots !== undefined;
+    // Guards below only apply when a conductor evaluator is active.
+    // For Java/Source CSE isConductorMode is false so all guards are skipped.
+    const inSnapshotMode = this.props.isConductorMode;
 
     // Snapshots arrived while user was on another tab: discard immediately so that
     // switching to the CSE tab shows the standard template, not a stale visualization.
@@ -866,6 +870,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     chapter: workspace.context.chapter,
     cseSnapshots: workspace.cseSnapshots,
     isOnCseTab: state.sideContent[loc]?.selectedTab === SideContentType.cseMachine,
+    isConductorMode: selectConductorEnable(state),
   };
 };
 
@@ -895,7 +900,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
           editorTabIndex,
           newHighlightedLines,
         ),
-      updateCseSnapshots: (snapshots: any[] | null) =>
+      updateCseSnapshots: (snapshots: CseSnapshot[] | null) =>
         WorkspaceActions.updateCseSnapshots(snapshots, props.workspaceLocation),
     },
     dispatch,
