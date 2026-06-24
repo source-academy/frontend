@@ -47,7 +47,7 @@
     "@sourceacademy/autocomplete": "github:source-academy/autocomplete#e669d9ed98753350a3c8433a92985227eb789663",
     "@sourceacademy/c-slang": "^1.0.21",
     "@sourceacademy/conductor": "https://github.com/source-academy/conductor.git#0.5.0",
-    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#feat/textbook-object",
+    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.8",
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.2",
     "@sourceacademy/sharedb-ace": "2.1.1",
     "@sourceacademy/sling-client": "^0.1.0",
