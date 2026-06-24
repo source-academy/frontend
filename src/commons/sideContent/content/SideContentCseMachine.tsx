@@ -12,20 +12,17 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import type { HotkeyItem } from '@mantine/hooks';
-import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
 import { t } from 'i18next';
 import { Chapter } from 'js-slang/dist/langs';
 import { debounce } from 'lodash-es';
-import { Component } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { connect, type MapDispatchToProps, type MapStateToProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
-import {
-  type PlaygroundWorkspaceState,
-  type WorkspaceLocation,
-} from 'src/commons/workspace/WorkspaceTypes';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { type WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import type {
   CseSerializedEnvFrame,
   CseSnapshot,
@@ -38,9 +35,9 @@ import type { ArrowOriginFilterKey } from 'src/features/cseMachine/CseMachineTyp
 import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
-import type { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
-import type { HighlightedLines } from '../../editor/EditorTypes';
 import { selectConductorEnable } from '../../../features/conductor/flagConductorEnable';
+import type { OverallState } from '../../application/ApplicationTypes';
+import type { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
 import { beginAlertSideContent } from '../SideContentActions';
@@ -56,860 +53,749 @@ const ALL_ARROW_FILTER_KEYS: ArrowOriginFilterKey[] = [
   'stash',
 ];
 
-type State = {
-  visualization: React.ReactNode;
-  value: number;
-  height: number;
-  width: number;
-  lastStep: boolean;
-  stepLimitExceeded: boolean;
-  chapter: Chapter;
-  clearDeadFrames: boolean;
-  arrowFilterOpen: boolean;
-  sliderKey: number;
-};
-
-type CseMachineProps = OwnProps & StateProps & DispatchProps;
-
-type StateProps = {
-  editorWidth?: string;
-  sideContentHeight?: number;
-  stepsTotal: number;
-  currentStep: number;
-  breakpointSteps: number[];
-  changepointSteps: number[];
-  needCseUpdate: boolean;
-  machineOutput: InterpreterOutput[];
-  chapter: Chapter;
-  cseSnapshots: CseSnapshot[] | null;
-  /** Derived directly from Redux selectedTab — more reliable than prop threading. */
-  isOnCseTab: boolean;
-  /** True when a conductor evaluator is selected; gates snapshot-mode behaviour. */
-  isConductorMode: boolean;
-};
-
 type OwnProps = {
   workspaceLocation: WorkspaceLocation;
 };
 
-type DispatchProps = {
-  handleStepUpdate: (steps: number) => void;
-  handleEditorEval: () => void;
-  setEditorHighlightedLines: (
-    editorTabIndex: number,
-    newHighlightedLines: HighlightedLines[],
-  ) => void;
-  setEditorHighlightedLinesStep: (
-    editorTabIndex: number,
-    newHighlightedLines: HighlightedLines[],
-  ) => void;
-  handleAlertSideContent: () => void;
-  updateCseSnapshots: (snapshots: CseSnapshot[] | null) => void;
-};
-
-class SideContentCseMachineBase extends Component<CseMachineProps, State> {
-  // Accumulates every frame ever seen in the current run. Frames absent from the
-  // current snapshot (dead) are re-injected with isActive=false so computeLiveState
-  // can fade them correctly. Reset on each new run (new cseSnapshots prop value).
-  private accumulatedFrames = new Map<string, CseSerializedEnvFrame>();
-
-  constructor(props: CseMachineProps) {
-    super(props);
-    this.state = {
-      visualization: null,
-      value: -1,
-      width: this.calculateWidth(props.editorWidth),
-      height: this.calculateHeight(props.sideContentHeight),
-      lastStep: false,
-      stepLimitExceeded: false,
-      chapter: props.chapter,
-      clearDeadFrames: false,
-      arrowFilterOpen: false,
-      sliderKey: 0,
-    };
-    if (this.isJava()) {
-      // Java uses JavaCseMachine (initialized separately in the constructor); calling
-      // CseMachine methods here when isJava() is true would crash if setVis is null.
-      JavaCseMachine.init(
-        visualization => this.setState({ visualization }),
-        (segments: [number, number][]) => {
-          props.setEditorHighlightedLines(0, segments);
-        },
-      );
-    } else {
-      const sharedSetVis = (visualization: React.ReactNode) => {
-        this.setState({ visualization }, () => CseAnimation.playAnimation());
-        if (visualization) this.props.handleAlertSideContent();
-      };
-      CseMachine.init(
-        sharedSetVis,
-        this.state.width,
-        this.state.height,
-        (segments: [number, number][]) => {
-          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-          // This comment is copied over from workspace saga
-          props.setEditorHighlightedLines(0, segments);
-        },
-        // We shouldn't be able to move slider to a step number beyond the step limit
-        isControlEmpty => {
-          const isAtLastStep = this.state.value === this.props.stepsTotal;
-
-          this.setState({
-            stepLimitExceeded: !isControlEmpty && isAtLastStep,
-          });
-        },
-      );
-    }
+function calculateWidth(editorWidth?: string) {
+  const horizontalPadding = 50;
+  const maxWidth = 5000;
+  if (editorWidth === undefined) {
+    return Math.min(window.innerWidth - horizontalPadding, maxWidth);
   }
+  return Math.min(
+    (window.innerWidth * (100 - parseFloat(editorWidth))) / 100 - horizontalPadding,
+    maxWidth,
+  );
+}
 
-  private isJava(): boolean {
-    return this.props.chapter === Chapter.FULL_JAVA;
+function calculateHeight(sideContentHeight?: number) {
+  const verticalPadding = 150;
+  const maxHeight = 5000;
+  if (window.innerWidth < Constants.mobileBreakpoint || sideContentHeight === undefined) {
+    return Math.min(window.innerHeight - verticalPadding, maxHeight);
   }
+  return Math.min(sideContentHeight - verticalPadding, maxHeight);
+}
 
-  private calculateWidth(editorWidth?: string) {
-    const horizontalPadding = 50;
-    const maxWidth = 5000; // limit for visible diagram width for huge screens
-    let width;
-    if (editorWidth === undefined) {
-      width = window.innerWidth - horizontalPadding;
-    } else {
-      width = Math.min(
-        maxWidth,
-        (window.innerWidth * (100 - parseFloat(editorWidth))) / 100 - horizontalPadding,
-      );
-    }
-    return Math.min(width, maxWidth);
-  }
+export function SideContentCseMachine({ workspaceLocation }: OwnProps) {
+  const [loc] = getLocation(workspaceLocation);
 
-  private calculateHeight(sideContentHeight?: number) {
-    const verticalPadding = 150;
-    const maxHeight = 5000; // limit for visible diagram height for huge screens
-    let height;
-    if (window.innerWidth < Constants.mobileBreakpoint) {
-      // mobile mode
-      height = window.innerHeight - verticalPadding;
-    } else if (sideContentHeight === undefined) {
-      height = window.innerHeight - verticalPadding;
-    } else {
-      height = sideContentHeight - verticalPadding;
-    }
-    return Math.min(height, maxHeight);
-  }
+  const workspace = useTypedSelector((state: OverallState) =>
+    loc === 'sicp' ? state.workspaces.sicp : state.workspaces.playground,
+  );
+  const isOnCseTab = useTypedSelector(
+    (state: OverallState) => state.sideContent[loc]?.selectedTab === SideContentType.cseMachine,
+  );
+  const isConductorMode = useTypedSelector(selectConductorEnable);
 
-  handleResize = debounce(() => {
-    const newWidth = this.calculateWidth(this.props.editorWidth);
-    const newHeight = this.calculateHeight(this.props.sideContentHeight);
-    if (newWidth !== this.state.width || newHeight !== this.state.height) {
-      this.setState({
-        height: newHeight,
-        width: newWidth,
-      });
-      CseMachine.updateDimensions(newWidth, newHeight);
-    }
-  }, 300);
+  const {
+    stepsTotal,
+    breakpointSteps,
+    changepointSteps,
+    updateCse: needCseUpdate,
+    output: machineOutput,
+    context: { chapter },
+    cseSnapshots,
+  } = workspace;
 
-  private handleFullscreenChange = () => {
-    // Double rAF ensures the browser has completed layout after the fullscreen
-    // transition before Blueprint Slider remounts and measures its track width.
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        this.setState(prev => ({ sliderKey: prev.sliderKey + 1 }));
-      });
-    });
-  };
+  const dispatch = useDispatch();
 
-  componentDidMount() {
-    this.handleResize();
-    window.addEventListener('resize', this.handleResize);
-    document.addEventListener('fullscreenchange', this.handleFullscreenChange);
-    if (!this.isJava()) {
-      if (this.props.cseSnapshots) {
-        // Snapshot mode: component may mount after snapshots already arrived, so render step 0 now.
-        this.renderSnapshotAt(0);
-      } else {
-        CseMachine.redraw();
-      }
-    }
-  }
+  const handleStepUpdate = useCallback(
+    (steps: number) => dispatch(WorkspaceActions.updateCurrentStep(steps, workspaceLocation)),
+    [dispatch, workspaceLocation],
+  );
+  const handleEditorEval = useCallback(
+    () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
+    [dispatch, workspaceLocation],
+  );
+  const handleAlertSideContent = useCallback(
+    () => dispatch(beginAlertSideContent(SideContentType.cseMachine, workspaceLocation)),
+    [dispatch, workspaceLocation],
+  );
+  const doSetEditorHighlightedLines = useCallback(
+    (editorTabIndex: number, lines: HighlightedLines[]) =>
+      dispatch(
+        WorkspaceActions.setEditorHighlightedLinesControl(workspaceLocation, editorTabIndex, lines),
+      ),
+    [dispatch, workspaceLocation],
+  );
+  const doSetEditorHighlightedLinesStep = useCallback(
+    (editorTabIndex: number, lines: HighlightedLines[]) =>
+      dispatch(WorkspaceActions.setEditorHighlightedLines(workspaceLocation, editorTabIndex, lines)),
+    [dispatch, workspaceLocation],
+  );
+  const doUpdateCseSnapshots = useCallback(
+    (snapshots: CseSnapshot[] | null) =>
+      dispatch(WorkspaceActions.updateCseSnapshots(snapshots, workspaceLocation)),
+    [dispatch, workspaceLocation],
+  );
 
-  componentWillUnmount() {
-    this.handleResize.cancel();
-    window.removeEventListener('resize', this.handleResize);
-    document.removeEventListener('fullscreenchange', this.handleFullscreenChange);
-    if (!this.isJava()) {
-      CseMachine.resetArrowOriginFilters();
-      this.props.setEditorHighlightedLinesStep(0, []);
-    }
-  }
+  const isJava = chapter === Chapter.FULL_JAVA;
 
-  componentDidUpdate(prevProps: {
-    editorWidth?: string;
-    sideContentHeight?: number;
-    stepsTotal: number;
-    needCseUpdate: boolean;
-    cseSnapshots?: CseSnapshot[] | null;
-    isOnCseTab: boolean;
-    isConductorMode: boolean;
-  }) {
-    if (
-      prevProps.sideContentHeight !== this.props.sideContentHeight ||
-      prevProps.editorWidth !== this.props.editorWidth
-    ) {
-      this.handleResize();
-    }
-    if (prevProps.cseSnapshots !== this.props.cseSnapshots) {
-      this.accumulatedFrames.clear();
-    }
+  const [visualization, setVisualization] = useState<React.ReactNode>(null);
+  const [value, setValue] = useState(-1);
+  const [width, setWidth] = useState(() => calculateWidth());
+  const [height, setHeight] = useState(() => calculateHeight());
+  const [stepLimitExceeded, setStepLimitExceeded] = useState(false);
+  const [clearDeadFrames, setClearDeadFrames] = useState(false);
+  const [arrowFilterOpen, setArrowFilterOpen] = useState(false);
+  const [sliderKey, setSliderKey] = useState(0);
 
-    // Guards below only apply when a conductor evaluator is active.
-    // For Java/Source CSE isConductorMode is false so all guards are skipped.
-    const inSnapshotMode = this.props.isConductorMode;
+  const accumulatedFrames = useRef(new Map<string, CseSerializedEnvFrame>());
 
-    // Snapshots arrived while user was on another tab: discard immediately so that
-    // switching to the CSE tab shows the standard template, not a stale visualization.
-    if (
-      inSnapshotMode &&
-      !this.props.isOnCseTab &&
-      this.props.cseSnapshots !== null &&
-      prevProps.cseSnapshots !== this.props.cseSnapshots
-    ) {
-      this.props.updateCseSnapshots(null);
-      return;
-    }
+  // Refs for values read inside stable callbacks to avoid stale closures.
+  const valueRef = useRef(value);
+  const stepsRef = useRef(stepsTotal);
+  const cseSnapshotsRef = useRef(cseSnapshots);
+  const clearDeadFramesRef = useRef(clearDeadFrames);
+  const breakpointStepsRef = useRef(breakpointSteps);
+  const changepointStepsRef = useRef(changepointSteps);
+  useEffect(() => { valueRef.current = value; }, [value]);
+  useEffect(() => { stepsRef.current = stepsTotal; }, [stepsTotal]);
+  useEffect(() => { cseSnapshotsRef.current = cseSnapshots; }, [cseSnapshots]);
+  useEffect(() => { clearDeadFramesRef.current = clearDeadFrames; }, [clearDeadFrames]);
+  useEffect(() => { breakpointStepsRef.current = breakpointSteps; }, [breakpointSteps]);
+  useEffect(() => { changepointStepsRef.current = changepointSteps; }, [changepointSteps]);
 
-    // User switched AWAY from the CSE tab: clear local visualization state so the
-    // standard template text appears when they return.
-    if (inSnapshotMode && prevProps.isOnCseTab && !this.props.isOnCseTab) {
-      this.setState({ visualization: null, value: -1 });
-      if (this.props.cseSnapshots) this.props.updateCseSnapshots(null);
-      return;
-    }
+  // ─── Snapshot rendering ────────────────────────────────────────────────────
+  const renderSnapshotAt = useCallback(
+    (step: number) => {
+      const snaps = cseSnapshotsRef.current;
+      if (!snaps) return;
+      const snapshot = snaps[step] as CseSnapshot;
+      if (!snapshot) return;
 
-    // New run completed. In snapshot mode, only process when CSE tab is active
-    // (prevents editor highlight and tab badge firing while user is on another tab).
-    const shouldProcess = !inSnapshotMode || this.props.isOnCseTab;
-    if (prevProps.needCseUpdate && !this.props.needCseUpdate && shouldProcess) {
-      this.setState({ arrowFilterOpen: false });
+      doSetEditorHighlightedLines(0, []);
 
-      if (this.props.cseSnapshots) {
-        // Snapshot mode: step to 0 — sliderRelease will call renderSnapshotAt(0)
-        this.stepFirst();
-      } else if (this.isJava()) {
-        this.stepFirst();
-        JavaCseMachine.clearCse();
-      } else {
-        this.stepFirst();
-        CseMachine.clearCse();
+      accumulatedFrames.current.clear();
+      for (let i = 0; i <= step; i++) {
+        const s = snaps[i] as CseSnapshot;
+        if (!s) continue;
+        for (const frame of s.environments) {
+          accumulatedFrames.current.set(frame.id, frame);
+        }
       }
 
-      // Blueprint Slider caches its track width at mount. After a code run the
-      // tab is guaranteed visible, so force it to remount and re-measure.
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          this.setState(prev => ({ sliderKey: prev.sliderKey + 1 }));
-        });
-      });
-    }
-  }
+      const liveIds = new Set(snapshot.environments.map((f: CseSerializedEnvFrame) => f.id));
+      const deadFrames = [...accumulatedFrames.current.values()]
+        .filter(f => !liveIds.has(f.id))
+        .map(f => ({ ...f, isActive: false, isOnCallStack: false }));
 
-  public render() {
-    const arrowFilters = CseMachine.getArrowOriginFilters();
-    const areAllArrowFiltersSelected = ALL_ARROW_FILTER_KEYS.every(key => arrowFilters[key]);
-    const hotkeyBindings: HotkeyItem[] = this.state.visualization
-      ? [
-          ['a', this.stepFirst],
-          ['f', this.stepNext],
-          ['b', this.stepPrevious],
-          ['e', this.stepLast(this.props.stepsTotal)],
-        ]
-      : [
-          ['a', () => {}],
-          ['f', () => {}],
-          ['b', () => {}],
-          ['e', () => {}],
-        ];
-
-    const currentStep = Math.max(0, this.state.value);
-    const isAtFirstStep = currentStep < 1;
-    const isAtLastStep = currentStep >= this.props.stepsTotal;
-    const isNavDisabled = !this.state.visualization;
-
-    return (
-      <HotKeys
-        bindings={hotkeyBindings}
-        style={{
-          maxHeight: '100%',
-          overflow: this.state.visualization ? 'hidden' : 'auto',
-        }}
-      >
-        <div className={classNames('sa-substituter', Classes.DARK)}>
-          <Slider
-            key={this.state.sliderKey}
-            disabled={!this.state.visualization}
-            min={0}
-            max={this.props.stepsTotal}
-            onChange={this.sliderShift}
-            onRelease={this.sliderRelease}
-            value={this.state.value < 0 ? 0 : this.state.value}
-          />
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: this.isJava() ? 'center' : 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            {!this.isJava() && (
-              <ButtonGroup>
-                <Tooltip content="Control and Stash" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        CseMachine.toggleControlStash();
-                        if (this.props.cseSnapshots) {
-                          this.renderSnapshotAt(this.state.value);
-                        } else {
-                          CseMachine.redraw();
-                        }
-                      }
-                    }}
-                    icon="layers"
-                    disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      checked={CseMachine.getControlStash()}
-                      disabled={!this.state.visualization}
-                      style={{ margin: 0 }}
-                    />
-                  </AnchorButton>
-                </Tooltip>
-                <Tooltip content="Truncate Control" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        CseMachine.toggleStackTruncated();
-                        if (this.props.cseSnapshots) {
-                          this.renderSnapshotAt(this.state.value);
-                        } else {
-                          CseMachine.redraw();
-                        }
-                      }
-                    }}
-                    icon="minimize"
-                    disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      checked={CseMachine.getStackTruncated()}
-                      disabled={!this.state.visualization}
-                      style={{ margin: 0 }}
-                    />
-                  </AnchorButton>
-                </Tooltip>
-
-                <Tooltip content="Alignment" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        CseMachine.toggleCenterAlignment();
-                        if (this.props.cseSnapshots) {
-                          this.renderSnapshotAt(this.state.value);
-                        } else {
-                          CseMachine.redraw();
-                        }
-                      }
-                    }}
-                    icon="eye-open"
-                    disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      checked={CseMachine.getCenterAlignment()}
-                      disabled={!this.state.visualization}
-                      style={{ margin: 0 }}
-                    />
-                  </AnchorButton>
-                </Tooltip>
-                <Tooltip content="Filter Arrows" compact>
-                  <Popover
-                    isOpen={this.state.arrowFilterOpen}
-                    onInteraction={nextOpen => this.setState({ arrowFilterOpen: nextOpen })}
-                    position={Position.BOTTOM_LEFT}
-                    content={
-                      <div style={{ padding: '8px 10px', minWidth: '210px' }}>
-                        <div style={{ marginBottom: '8px', fontWeight: 600 }}>Filter Arrows</div>
-                        <Button
-                          size="small"
-                          variant="minimal"
-                          onClick={() => this.setAllArrowFilters(!areAllArrowFiltersSelected)}
-                          style={{ marginBottom: '8px' }}
-                        >
-                          {areAllArrowFiltersSelected ? 'Deselect all' : 'Select all'}
-                        </Button>
-                        <Checkbox
-                          checked={arrowFilters.text}
-                          label="From text"
-                          onChange={() => this.toggleArrowFilter('text')}
-                        />
-                        <Checkbox
-                          checked={arrowFilters.frame}
-                          label="From frames"
-                          onChange={() => this.toggleArrowFilter('frame')}
-                        />
-                        <Checkbox
-                          checked={arrowFilters.function}
-                          label="From function objects"
-                          onChange={() => this.toggleArrowFilter('function')}
-                        />
-                        <Checkbox
-                          checked={arrowFilters.array}
-                          label="From arrays"
-                          onChange={() => this.toggleArrowFilter('array')}
-                        />
-                        <Checkbox
-                          checked={arrowFilters.control}
-                          label="From control"
-                          onChange={() => this.toggleArrowFilter('control')}
-                        />
-                        <Checkbox
-                          checked={arrowFilters.stash}
-                          label="From stash"
-                          onChange={() => this.toggleArrowFilter('stash')}
-                        />
-                        <Checkbox
-                          checked={CseMachine.getPairCreationMode()}
-                          disabled={!this.state.visualization}
-                          label="Pairs returned by nullary functions"
-                          onChange={() => this.togglePairCreationModeArrows()}
-                        />
-                      </div>
-                    }
-                  >
-                    <AnchorButton icon="flow-branch" disabled={!this.state.visualization} />
-                  </Popover>
-                </Tooltip>
-              </ButtonGroup>
-            )}
-            <ButtonGroup>
-              <Button
-                disabled={isNavDisabled || isAtFirstStep}
-                icon="double-chevron-left"
-                onClick={this.stepPrevBreakpoint}
-              />
-              <Button
-                disabled={isNavDisabled || isAtFirstStep}
-                icon="chevron-left"
-                onClick={
-                  this.isJava() || CseMachine.getControlStash()
-                    ? this.stepPrevious
-                    : this.stepPrevChangepoint
-                }
-              />
-              <Button
-                disabled={isNavDisabled || isAtLastStep}
-                icon="chevron-right"
-                onClick={
-                  this.isJava() || CseMachine.getControlStash()
-                    ? this.stepNext
-                    : this.stepNextChangepoint
-                }
-              />
-              <Button
-                disabled={isNavDisabled || isAtLastStep}
-                icon="double-chevron-right"
-                onClick={this.stepNextBreakpoint}
-              />
-            </ButtonGroup>
-
-            {!this.isJava() && (
-              <ButtonGroup>
-                <Tooltip content="Clear Dead Frames" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        const prevLevels = Layout.levels;
-                        this.setState(
-                          prevState => ({
-                            clearDeadFrames: true,
-                          }),
-                          () => {
-                            CseMachine.setClearDeadFrames(this.state.clearDeadFrames);
-                            CseMachine.clearLiveLayouts();
-
-                            // Temporarily store the original draw function
-                            const originalDraw = Layout.draw;
-
-                            // Overriding because the animations are causing
-                            // Konva objects to not be drawn
-                            Layout.draw = () => {
-                              try {
-                                const currLevels = Layout.levels;
-                                const changedFramePairs = computeFramesCoordChange(
-                                  prevLevels,
-                                  currLevels,
-                                );
-                                if (changedFramePairs.length > 0) {
-                                  CseAnimation.animations.push(
-                                    new ClearDeadFramesAnimation(changedFramePairs),
-                                  );
-                                  CseAnimation.enableAnimations();
-                                }
-
-                                return originalDraw.apply(Layout);
-                              } finally {
-                                Layout.draw = originalDraw;
-                              }
-                            };
-                            if (this.props.cseSnapshots) {
-                              this.renderSnapshotAt(this.state.value);
-                            } else {
-                              CseMachine.redraw();
-                            }
-                          },
-                        );
-                      }
-                    }}
-                    icon="eraser"
-                    disabled={this.state.clearDeadFrames || !this.state.visualization}
-                  />
-                </Tooltip>
-                <Tooltip content="Print" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        CseMachine.togglePrintableMode();
-                        if (this.props.cseSnapshots) {
-                          this.renderSnapshotAt(this.state.value);
-                        } else {
-                          CseMachine.redraw();
-                        }
-                      }
-                    }}
-                    icon="print"
-                    disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      disabled={!this.state.visualization}
-                      checked={CseMachine.getPrintableMode()}
-                      style={{ margin: 0 }}
-                    />
-                  </AnchorButton>
-                </Tooltip>
-                <Tooltip content="Save" compact>
-                  <AnchorButton
-                    icon="floppy-disk"
-                    disabled={!this.state.visualization}
-                    onClick={Layout.exportImage}
-                  />
-                </Tooltip>
-              </ButtonGroup>
-            )}
-          </div>
-        </div>{' '}
-        {this.state.visualization &&
-        this.props.machineOutput.length &&
-        this.props.machineOutput[0].type === 'errors' ? (
-          this.props.machineOutput.map((slice, index) => (
-            <Output output={slice} key={index} usingSubst={false} isHtml={false} />
-          ))
-        ) : (
-          <div />
-        )}
-        {this.state.visualization ? (
-          this.state.stepLimitExceeded ? (
-            <div
-              id="cse-machine-default-text"
-              className={Classes.RUNNING_TEXT}
-              data-testid="cse-machine-default-text"
-            >
-              Maximum number of steps exceeded.
-              <Divider />
-              Please increase the step limit if you would like to see futher evaluation.
-            </div>
-          ) : (
-            this.state.visualization
-          )
-        ) : (
-          <CseMachineDefaultText isJava={this.isJava()} />
-        )}
-        <ButtonGroup vertical style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
-          <Button
-            icon="plus"
-            disabled={!this.state.visualization}
-            onClick={() => this.zoomStage(true, 5)}
-            style={{ marginBottom: '5px', borderRadius: '3px' }}
-          />
-          <Button
-            icon="minus"
-            disabled={!this.state.visualization}
-            onClick={() => this.zoomStage(false, 5)}
-            style={{ borderRadius: '3px' }}
-          />
-        </ButtonGroup>
-      </HotKeys>
-    );
-  }
-
-  private zoomStage = (isZoomIn: boolean, multiplier: number) => {
-    if (this.isJava()) {
-      JavaCseMachine.zoomStage(isZoomIn, multiplier);
-    } else {
-      Layout.zoomStage(isZoomIn, multiplier);
-    }
-  };
-
-  private renderSnapshotAt = (step: number) => {
-    const { cseSnapshots } = this.props;
-    if (!cseSnapshots) return;
-    const snapshot = cseSnapshots[step] as CseSnapshot;
-    if (!snapshot) return;
-
-    this.props.setEditorHighlightedLines(0, []);
-
-    this.accumulatedFrames.clear();
-    for (let i = 0; i <= step; i++) {
-      const s = cseSnapshots[i] as CseSnapshot;
-      if (!s) continue;
-      for (const frame of s.environments) {
-        this.accumulatedFrames.set(frame.id, frame);
-      }
-    }
-
-    const liveIds = new Set(snapshot.environments.map((f: CseSerializedEnvFrame) => f.id));
-    const deadFrames = [...this.accumulatedFrames.values()]
-      .filter(f => !liveIds.has(f.id))
-      .map(f => ({ ...f, isActive: false, isOnCallStack: false }));
-
-    CseMachine.clearLiveLayouts();
-    CseMachine.renderSnapshot({
-      ...snapshot,
-      environments: [...snapshot.environments, ...deadFrames],
-    });
-
-    this.props.setEditorHighlightedLinesStep(0, []);
-    if (snapshot.currentLine !== undefined && snapshot.currentLine > 0) {
-      const row = snapshot.currentLine - 1;
-      this.props.setEditorHighlightedLinesStep(0, [[row, row]]);
-    }
-  };
-
-  private sliderRelease = (newValue: number) => {
-    if (this.props.cseSnapshots) {
-      // Snapshot mode: index into pre-computed snapshots, no re-evaluation
-      this.renderSnapshotAt(newValue);
-      return;
-    }
-    if (newValue === this.props.stepsTotal) {
-      this.setState({ lastStep: true });
-    } else {
-      this.setState({ lastStep: false });
-    }
-    this.props.handleEditorEval();
-  };
-
-  private sliderShift = (newValue: number) => {
-    if (this.state.clearDeadFrames) {
-      CseMachine.setClearDeadFrames(false);
       CseMachine.clearLiveLayouts();
-      if (!this.props.cseSnapshots) CseMachine.redraw();
-    }
-    this.props.handleStepUpdate(newValue);
-    this.setState((state: State) => {
-      return { value: newValue, clearDeadFrames: false };
-    });
-  };
+      CseMachine.renderSnapshot({
+        ...snapshot,
+        environments: [...snapshot.environments, ...deadFrames],
+      });
 
-  private stepPrevious = () => {
-    if (this.state.value !== 0) {
-      this.sliderShift(this.state.value - 1);
-      this.sliderRelease(this.state.value - 1);
-    }
-  };
+      doSetEditorHighlightedLinesStep(0, []);
+      if (snapshot.currentLine !== undefined && snapshot.currentLine > 0) {
+        const row = snapshot.currentLine - 1;
+        doSetEditorHighlightedLinesStep(0, [[row, row]]);
+      }
+    },
+    [doSetEditorHighlightedLines, doSetEditorHighlightedLinesStep],
+  );
 
-  private stepNext = () => {
-    const lastStepValue = this.props.stepsTotal;
-    if (this.state.value !== lastStepValue) {
+  // ─── Slider / navigation (stable callbacks via refs) ───────────────────────
+  const sliderRelease = useCallback(
+    (newValue: number) => {
+      if (cseSnapshotsRef.current) {
+        renderSnapshotAt(newValue);
+        return;
+      }
+      handleEditorEval();
+    },
+    [renderSnapshotAt, handleEditorEval],
+  );
+
+  const sliderShift = useCallback(
+    (newValue: number) => {
+      if (clearDeadFramesRef.current) {
+        CseMachine.setClearDeadFrames(false);
+        CseMachine.clearLiveLayouts();
+        if (!cseSnapshotsRef.current) CseMachine.redraw();
+      }
+      handleStepUpdate(newValue);
+      setValue(newValue);
+      setClearDeadFrames(false);
+    },
+    [handleStepUpdate],
+  );
+
+  const stepFirst = useCallback(() => {
+    sliderShift(0);
+    sliderRelease(0);
+  }, [sliderShift, sliderRelease]);
+
+  const stepLast = useCallback(
+    (lastStepValue: number) => () => {
+      sliderShift(lastStepValue);
+      sliderRelease(lastStepValue);
+    },
+    [sliderShift, sliderRelease],
+  );
+
+  const stepNext = useCallback(() => {
+    if (valueRef.current !== stepsRef.current) {
       CseAnimation.enableAnimations();
-      this.sliderShift(this.state.value + 1);
-      this.sliderRelease(this.state.value + 1);
+      sliderShift(valueRef.current + 1);
+      sliderRelease(valueRef.current + 1);
     }
-  };
+  }, [sliderShift, sliderRelease]);
 
-  private stepFirst = () => {
-    // Move to the first step
-    this.sliderShift(0);
-    this.sliderRelease(0);
-  };
+  const stepPrevious = useCallback(() => {
+    if (valueRef.current !== 0) {
+      sliderShift(valueRef.current - 1);
+      sliderRelease(valueRef.current - 1);
+    }
+  }, [sliderShift, sliderRelease]);
 
-  private stepLast = (lastStepValue: number) => () => {
-    // Move to the last step
-    this.sliderShift(lastStepValue);
-    this.sliderRelease(lastStepValue);
-  };
-
-  private stepNextBreakpoint = () => {
-    for (const step of this.props.breakpointSteps) {
-      if (step > this.state.value) {
-        this.sliderShift(step);
-        this.sliderRelease(step);
+  const stepNextBreakpoint = useCallback(() => {
+    const bps = breakpointStepsRef.current;
+    const v = valueRef.current;
+    for (const step of bps) {
+      if (step > v) {
+        sliderShift(step);
+        sliderRelease(step);
         return;
       }
     }
-    this.sliderShift(this.props.stepsTotal);
-    this.sliderRelease(this.props.stepsTotal);
-  };
+    sliderShift(stepsRef.current);
+    sliderRelease(stepsRef.current);
+  }, [sliderShift, sliderRelease]);
 
-  private stepPrevBreakpoint = () => {
-    for (let i = this.props.breakpointSteps.length - 1; i >= 0; i--) {
-      const step = this.props.breakpointSteps[i];
-      if (step < this.state.value) {
-        this.sliderShift(step);
-        this.sliderRelease(step);
+  const stepPrevBreakpoint = useCallback(() => {
+    const bps = breakpointStepsRef.current;
+    const v = valueRef.current;
+    for (let i = bps.length - 1; i >= 0; i--) {
+      if (bps[i] < v) {
+        sliderShift(bps[i]);
+        sliderRelease(bps[i]);
         return;
       }
     }
-    this.sliderShift(0);
-    this.sliderRelease(0);
-  };
+    sliderShift(0);
+    sliderRelease(0);
+  }, [sliderShift, sliderRelease]);
 
-  private envFingerprint = (snap: CseSnapshot): string => JSON.stringify(snap?.environments ?? []);
-
-  private getChangepointSteps = (): number[] => {
-    const snaps = this.props.cseSnapshots as CseSnapshot[] | null;
+  const getChangepointSteps = useCallback((): number[] => {
+    const snaps = cseSnapshotsRef.current;
     if (snaps) {
       const steps: number[] = [];
       let prevFp: string | null = null;
       for (let i = 0; i < snaps.length; i++) {
-        const fp = this.envFingerprint(snaps[i]);
+        const fp = JSON.stringify(snaps[i]?.environments ?? []);
         if (prevFp === null || fp !== prevFp) steps.push(i);
         prevFp = fp;
       }
       return steps;
     }
-    return this.props.changepointSteps;
-  };
+    return changepointStepsRef.current;
+  }, []);
 
-  private stepNextChangepoint = () => {
-    const changeSteps = this.getChangepointSteps();
-    for (const step of changeSteps) {
-      if (step > this.state.value) {
-        this.sliderShift(step);
-        this.sliderRelease(step);
+  const stepNextChangepoint = useCallback(() => {
+    const v = valueRef.current;
+    for (const step of getChangepointSteps()) {
+      if (step > v) {
+        sliderShift(step);
+        sliderRelease(step);
         return;
       }
     }
-    this.sliderShift(this.props.stepsTotal);
-    this.sliderRelease(this.props.stepsTotal);
-  };
+    sliderShift(stepsRef.current);
+    sliderRelease(stepsRef.current);
+  }, [getChangepointSteps, sliderShift, sliderRelease]);
 
-  private stepPrevChangepoint = () => {
-    const changeSteps = this.getChangepointSteps();
+  const stepPrevChangepoint = useCallback(() => {
+    const v = valueRef.current;
+    const changeSteps = getChangepointSteps();
     for (let i = changeSteps.length - 1; i >= 0; i--) {
-      const step = changeSteps[i];
-      if (step < this.state.value) {
-        this.sliderShift(step);
-        this.sliderRelease(step);
+      if (changeSteps[i] < v) {
+        sliderShift(changeSteps[i]);
+        sliderRelease(changeSteps[i]);
         return;
       }
     }
-    this.sliderShift(0);
-    this.sliderRelease(0);
-  };
+    sliderShift(0);
+    sliderRelease(0);
+  }, [getChangepointSteps, sliderShift, sliderRelease]);
 
-  private toggleArrowFilter = (origin: ArrowOriginFilterKey) => {
-    const filters = CseMachine.getArrowOriginFilters();
-    CseMachine.setArrowOriginVisible(origin, !filters[origin]);
-    this.refreshArrowFilters();
-  };
-
-  private setAllArrowFilters = (visible: boolean) => {
-    CseMachine.setAllArrowOriginsVisible(visible);
-    this.refreshArrowFilters();
-  };
-
-  private refreshArrowFilters = () => {
+  // ─── Arrow filters ────────────────────────────────────────────────────────
+  const refreshArrowFilters = useCallback(() => {
     CseMachine.clearRenderedLayouts();
-    if (this.props.cseSnapshots) {
-      this.renderSnapshotAt(this.state.value);
+    if (cseSnapshotsRef.current) {
+      renderSnapshotAt(valueRef.current);
     } else {
       CseMachine.redraw();
     }
-    this.forceUpdate();
-  };
+  }, [renderSnapshotAt]);
 
-  private togglePairCreationModeArrows = () => {
-    CseMachine.togglePairCreationMode();
-    this.refreshArrowFilters();
-  };
-}
-
-const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
-  state: OverallState,
-  ownProps: OwnProps,
-) => {
-  let workspace: PlaygroundWorkspaceState;
-  const [loc] = getLocation(ownProps.workspaceLocation);
-
-  switch (loc) {
-    case 'sicp': {
-      workspace = state.workspaces.sicp;
-      break;
-    }
-    default: {
-      workspace = state.workspaces.playground;
-      break;
-    }
-  }
-
-  return {
-    ...ownProps,
-    stepsTotal: workspace.stepsTotal,
-    currentStep: workspace.currentStep,
-    breakpointSteps: workspace.breakpointSteps,
-    changepointSteps: workspace.changepointSteps,
-    needCseUpdate: workspace.updateCse,
-    machineOutput: workspace.output,
-    chapter: workspace.context.chapter,
-    cseSnapshots: workspace.cseSnapshots,
-    isOnCseTab: state.sideContent[loc]?.selectedTab === SideContentType.cseMachine,
-    isConductorMode: selectConductorEnable(state),
-  };
-};
-
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) =>
-  bindActionCreators(
-    {
-      handleEditorEval: () => WorkspaceActions.evalEditor(props.workspaceLocation),
-      handleStepUpdate: (steps: number) =>
-        WorkspaceActions.updateCurrentStep(steps, props.workspaceLocation),
-      handleAlertSideContent: () =>
-        beginAlertSideContent(SideContentType.cseMachine, props.workspaceLocation),
-      setEditorHighlightedLines: (
-        editorTabIndex: number,
-        newHighlightedLines: HighlightedLines[],
-      ) =>
-        WorkspaceActions.setEditorHighlightedLinesControl(
-          props.workspaceLocation,
-          editorTabIndex,
-          newHighlightedLines,
-        ),
-      setEditorHighlightedLinesStep: (
-        editorTabIndex: number,
-        newHighlightedLines: HighlightedLines[],
-      ) =>
-        WorkspaceActions.setEditorHighlightedLines(
-          props.workspaceLocation,
-          editorTabIndex,
-          newHighlightedLines,
-        ),
-      updateCseSnapshots: (snapshots: CseSnapshot[] | null) =>
-        WorkspaceActions.updateCseSnapshots(snapshots, props.workspaceLocation),
+  const toggleArrowFilter = useCallback(
+    (origin: ArrowOriginFilterKey) => {
+      CseMachine.setArrowOriginVisible(origin, !CseMachine.getArrowOriginFilters()[origin]);
+      refreshArrowFilters();
     },
-    dispatch,
+    [refreshArrowFilters],
   );
 
-export const SideContentCseMachine = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SideContentCseMachineBase);
+  const setAllArrowFilters = useCallback(
+    (visible: boolean) => {
+      CseMachine.setAllArrowOriginsVisible(visible);
+      refreshArrowFilters();
+    },
+    [refreshArrowFilters],
+  );
+
+  const togglePairCreationModeArrows = useCallback(() => {
+    CseMachine.togglePairCreationMode();
+    refreshArrowFilters();
+  }, [refreshArrowFilters]);
+
+  const zoomStage = useCallback(
+    (isZoomIn: boolean, multiplier: number) => {
+      if (isJava) {
+        JavaCseMachine.zoomStage(isZoomIn, multiplier);
+      } else {
+        Layout.zoomStage(isZoomIn, multiplier);
+      }
+    },
+    [isJava],
+  );
+
+  // ─── Init CseMachine once on mount ────────────────────────────────────────
+  useEffect(() => {
+    if (isJava) {
+      JavaCseMachine.init(
+        vis => setVisualization(vis),
+        (segments: [number, number][]) => doSetEditorHighlightedLines(0, segments),
+      );
+    } else {
+      CseMachine.init(
+        vis => {
+          setVisualization(vis);
+          CseAnimation.playAnimation();
+          if (vis) handleAlertSideContent();
+        },
+        width,
+        height,
+        (segments: [number, number][]) => doSetEditorHighlightedLines(0, segments),
+        isControlEmpty => {
+          const isAtLastStep = valueRef.current === stepsRef.current;
+          setStepLimitExceeded(!isControlEmpty && isAtLastStep);
+        },
+      );
+      if (cseSnapshotsRef.current) {
+        renderSnapshotAt(0);
+      } else {
+        CseMachine.redraw();
+      }
+    }
+    return () => {
+      if (!isJava) {
+        CseMachine.resetArrowOriginFilters();
+        doSetEditorHighlightedLinesStep(0, []);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ─── Window resize ────────────────────────────────────────────────────────
+  const handleResizeRef = useRef(
+    debounce(() => {
+      const newWidth = calculateWidth();
+      const newHeight = calculateHeight();
+      setWidth(newWidth);
+      setHeight(newHeight);
+      CseMachine.updateDimensions(newWidth, newHeight);
+    }, 300),
+  );
+
+  useEffect(() => {
+    const handler = handleResizeRef.current;
+    handler();
+    window.addEventListener('resize', handler);
+    return () => {
+      handler.cancel();
+      window.removeEventListener('resize', handler);
+    };
+  }, []);
+
+  // ─── Fullscreen ───────────────────────────────────────────────────────────
+  useEffect(() => {
+    const handler = () => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setSliderKey(prev => prev + 1));
+      });
+    };
+    document.addEventListener('fullscreenchange', handler);
+    return () => document.removeEventListener('fullscreenchange', handler);
+  }, []);
+
+  // ─── cseSnapshots reference change → clear accumulated frames ─────────────
+  const prevCseSnapshotsRef = useRef(cseSnapshots);
+  useEffect(() => {
+    if (prevCseSnapshotsRef.current !== cseSnapshots) {
+      accumulatedFrames.current.clear();
+    }
+    prevCseSnapshotsRef.current = cseSnapshots;
+  }, [cseSnapshots]);
+
+  // ─── Snapshot-mode guards + new-run handling (mirrors componentDidUpdate) ──
+  const prevIsOnCseTabRef = useRef(isOnCseTab);
+  const prevNeedCseUpdateRef = useRef(needCseUpdate);
+  const prevCseSnapshotsGuardRef = useRef(cseSnapshots);
+
+  useEffect(() => {
+    const prevIsOnCseTab = prevIsOnCseTabRef.current;
+    const prevNeedCseUpdate = prevNeedCseUpdateRef.current;
+    const prevCseSnapshots = prevCseSnapshotsGuardRef.current;
+    prevIsOnCseTabRef.current = isOnCseTab;
+    prevNeedCseUpdateRef.current = needCseUpdate;
+    prevCseSnapshotsGuardRef.current = cseSnapshots;
+
+    const inSnapshotMode = isConductorMode;
+
+    if (inSnapshotMode && !isOnCseTab && cseSnapshots !== null && prevCseSnapshots !== cseSnapshots) {
+      doUpdateCseSnapshots(null);
+      return;
+    }
+
+    if (inSnapshotMode && prevIsOnCseTab && !isOnCseTab) {
+      setVisualization(null);
+      setValue(-1);
+      if (cseSnapshots) doUpdateCseSnapshots(null);
+      return;
+    }
+
+    const shouldProcess = !inSnapshotMode || isOnCseTab;
+    if (prevNeedCseUpdate && !needCseUpdate && shouldProcess) {
+      setArrowFilterOpen(false);
+      if (cseSnapshots) {
+        stepFirst();
+      } else if (isJava) {
+        stepFirst();
+        JavaCseMachine.clearCse();
+      } else {
+        stepFirst();
+        CseMachine.clearCse();
+      }
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setSliderKey(prev => prev + 1));
+      });
+    }
+  }, [isConductorMode, isOnCseTab, cseSnapshots, needCseUpdate, doUpdateCseSnapshots, stepFirst, isJava]);
+
+  // ─── Render ───────────────────────────────────────────────────────────────
+  const arrowFilters = CseMachine.getArrowOriginFilters();
+  const areAllArrowFiltersSelected = ALL_ARROW_FILTER_KEYS.every(key => arrowFilters[key]);
+  const currentStep = Math.max(0, value);
+  const isAtFirstStep = currentStep < 1;
+  const isAtLastStep = currentStep >= stepsTotal;
+  const isNavDisabled = !visualization;
+
+  const hotkeyBindings: HotkeyItem[] = visualization
+    ? [
+        ['a', stepFirst],
+        ['f', stepNext],
+        ['b', stepPrevious],
+        ['e', stepLast(stepsTotal)],
+      ]
+    : [
+        ['a', () => {}],
+        ['f', () => {}],
+        ['b', () => {}],
+        ['e', () => {}],
+      ];
+
+  return (
+    <HotKeys
+      bindings={hotkeyBindings}
+      style={{
+        maxHeight: '100%',
+        overflow: visualization ? 'hidden' : 'auto',
+      }}
+    >
+      <div className={classNames('sa-substituter', Classes.DARK)}>
+        <Slider
+          key={sliderKey}
+          disabled={!visualization}
+          min={0}
+          max={stepsTotal}
+          onChange={sliderShift}
+          onRelease={sliderRelease}
+          value={value < 0 ? 0 : value}
+        />
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: isJava ? 'center' : 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          {!isJava && (
+            <ButtonGroup>
+              <Tooltip content="Control and Stash" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (visualization) {
+                      CseMachine.toggleControlStash();
+                      if (cseSnapshotsRef.current) {
+                        renderSnapshotAt(value);
+                      } else {
+                        CseMachine.redraw();
+                      }
+                    }
+                  }}
+                  icon="layers"
+                  disabled={!visualization}
+                >
+                  <Checkbox
+                    checked={CseMachine.getControlStash()}
+                    disabled={!visualization}
+                    style={{ margin: 0 }}
+                  />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip content="Truncate Control" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (visualization) {
+                      CseMachine.toggleStackTruncated();
+                      if (cseSnapshotsRef.current) {
+                        renderSnapshotAt(value);
+                      } else {
+                        CseMachine.redraw();
+                      }
+                    }
+                  }}
+                  icon="minimize"
+                  disabled={!visualization}
+                >
+                  <Checkbox
+                    checked={CseMachine.getStackTruncated()}
+                    disabled={!visualization}
+                    style={{ margin: 0 }}
+                  />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip content="Alignment" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (visualization) {
+                      CseMachine.toggleCenterAlignment();
+                      if (cseSnapshotsRef.current) {
+                        renderSnapshotAt(value);
+                      } else {
+                        CseMachine.redraw();
+                      }
+                    }
+                  }}
+                  icon="eye-open"
+                  disabled={!visualization}
+                >
+                  <Checkbox
+                    checked={CseMachine.getCenterAlignment()}
+                    disabled={!visualization}
+                    style={{ margin: 0 }}
+                  />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip content="Filter Arrows" compact>
+                <Popover
+                  isOpen={arrowFilterOpen}
+                  onInteraction={nextOpen => setArrowFilterOpen(nextOpen)}
+                  position={Position.BOTTOM_LEFT}
+                  content={
+                    <div style={{ padding: '8px 10px', minWidth: '210px' }}>
+                      <div style={{ marginBottom: '8px', fontWeight: 600 }}>Filter Arrows</div>
+                      <Button
+                        size="small"
+                        variant="minimal"
+                        onClick={() => setAllArrowFilters(!areAllArrowFiltersSelected)}
+                        style={{ marginBottom: '8px' }}
+                      >
+                        {areAllArrowFiltersSelected ? 'Deselect all' : 'Select all'}
+                      </Button>
+                      <Checkbox
+                        checked={arrowFilters.text}
+                        label="From text"
+                        onChange={() => toggleArrowFilter('text')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.frame}
+                        label="From frames"
+                        onChange={() => toggleArrowFilter('frame')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.function}
+                        label="From function objects"
+                        onChange={() => toggleArrowFilter('function')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.array}
+                        label="From arrays"
+                        onChange={() => toggleArrowFilter('array')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.control}
+                        label="From control"
+                        onChange={() => toggleArrowFilter('control')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.stash}
+                        label="From stash"
+                        onChange={() => toggleArrowFilter('stash')}
+                      />
+                      <Checkbox
+                        checked={CseMachine.getPairCreationMode()}
+                        disabled={!visualization}
+                        label="Pairs returned by nullary functions"
+                        onChange={togglePairCreationModeArrows}
+                      />
+                    </div>
+                  }
+                >
+                  <AnchorButton icon="flow-branch" disabled={!visualization} />
+                </Popover>
+              </Tooltip>
+            </ButtonGroup>
+          )}
+          <ButtonGroup>
+            <Button
+              disabled={isNavDisabled || isAtFirstStep}
+              icon="double-chevron-left"
+              onClick={stepPrevBreakpoint}
+            />
+            <Button
+              disabled={isNavDisabled || isAtFirstStep}
+              icon="chevron-left"
+              onClick={isJava || CseMachine.getControlStash() ? stepPrevious : stepPrevChangepoint}
+            />
+            <Button
+              disabled={isNavDisabled || isAtLastStep}
+              icon="chevron-right"
+              onClick={isJava || CseMachine.getControlStash() ? stepNext : stepNextChangepoint}
+            />
+            <Button
+              disabled={isNavDisabled || isAtLastStep}
+              icon="double-chevron-right"
+              onClick={stepNextBreakpoint}
+            />
+          </ButtonGroup>
+          {!isJava && (
+            <ButtonGroup>
+              <Tooltip content="Clear Dead Frames" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (visualization) {
+                      const prevLevels = Layout.levels;
+                      setClearDeadFrames(true);
+                      CseMachine.setClearDeadFrames(true);
+                      CseMachine.clearLiveLayouts();
+                      const originalDraw = Layout.draw;
+                      Layout.draw = () => {
+                        try {
+                          const currLevels = Layout.levels;
+                          const changedFramePairs = computeFramesCoordChange(prevLevels, currLevels);
+                          if (changedFramePairs.length > 0) {
+                            CseAnimation.animations.push(
+                              new ClearDeadFramesAnimation(changedFramePairs),
+                            );
+                            CseAnimation.enableAnimations();
+                          }
+                          return originalDraw.apply(Layout);
+                        } finally {
+                          Layout.draw = originalDraw;
+                        }
+                      };
+                      if (cseSnapshotsRef.current) {
+                        renderSnapshotAt(value);
+                      } else {
+                        CseMachine.redraw();
+                      }
+                    }
+                  }}
+                  icon="eraser"
+                  disabled={clearDeadFrames || !visualization}
+                />
+              </Tooltip>
+              <Tooltip content="Print" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (visualization) {
+                      CseMachine.togglePrintableMode();
+                      if (cseSnapshotsRef.current) {
+                        renderSnapshotAt(value);
+                      } else {
+                        CseMachine.redraw();
+                      }
+                    }
+                  }}
+                  icon="print"
+                  disabled={!visualization}
+                >
+                  <Checkbox
+                    disabled={!visualization}
+                    checked={CseMachine.getPrintableMode()}
+                    style={{ margin: 0 }}
+                  />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip content="Save" compact>
+                <AnchorButton
+                  icon="floppy-disk"
+                  disabled={!visualization}
+                  onClick={Layout.exportImage}
+                />
+              </Tooltip>
+            </ButtonGroup>
+          )}
+        </div>
+      </div>{' '}
+      {visualization &&
+      machineOutput.length &&
+      machineOutput[0].type === 'errors' ? (
+        machineOutput.map((slice, index) => (
+          <Output output={slice} key={index} usingSubst={false} isHtml={false} />
+        ))
+      ) : (
+        <div />
+      )}
+      {visualization ? (
+        stepLimitExceeded ? (
+          <div
+            id="cse-machine-default-text"
+            className={Classes.RUNNING_TEXT}
+            data-testid="cse-machine-default-text"
+          >
+            Maximum number of steps exceeded.
+            <Divider />
+            Please increase the step limit if you would like to see futher evaluation.
+          </div>
+        ) : (
+          visualization
+        )
+      ) : (
+        <CseMachineDefaultText isJava={isJava} />
+      )}
+      <ButtonGroup vertical style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
+        <Button
+          icon="plus"
+          disabled={!visualization}
+          onClick={() => zoomStage(true, 5)}
+          style={{ marginBottom: '5px', borderRadius: '3px' }}
+        />
+        <Button
+          icon="minus"
+          disabled={!visualization}
+          onClick={() => zoomStage(false, 5)}
+          style={{ borderRadius: '3px' }}
+        />
+      </ButtonGroup>
+    </HotKeys>
+  );
+}
 
 const makeCseMachineTabFrom = (location: WorkspaceLocation): SideContentTab => ({
   label: t($ => $.cseMachine.label, { ns: 'sideContent' }),

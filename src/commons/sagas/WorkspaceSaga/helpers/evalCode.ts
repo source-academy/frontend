@@ -363,7 +363,7 @@ export function* evalCodeSaga(
       // enable the CSE machine visualizer during errors
       if (context.executionMethod === 'cse-machine' && needUpdateCse) {
         yield put(actions.updateStepsTotal(context.runtime.envStepsTotal + 1, workspaceLocation));
-        yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
+        yield put(actions.toggleUpdateCse(false, workspaceLocation as WorkspaceLocationsWithTools));
         yield put(
           actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation),
         );
@@ -422,7 +422,7 @@ export function* evalCodeSaga(
     yield put(actions.updateStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
     // `needUpdateCse` implies `correctWorkspace`, which satisfies the type constraint.
     // But TS can't infer that yet, so we need a typecast here.
-    yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
+    yield put(actions.toggleUpdateCse(false, workspaceLocation as WorkspaceLocationsWithTools));
     yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
     yield put(actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation));
   }

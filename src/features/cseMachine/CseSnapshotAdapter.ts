@@ -130,12 +130,12 @@ function toJsValue(
     const params: string[] = meta?.params ?? [];
     const funcName: string = meta?.funcName ?? v.displayValue.split('(')[0] ?? 'fn';
 
-    // Same logical Python closure (same name + defining env + params) must map to the exact same
-    // JS object so Layout.values memoization (keyed by object identity) returns one FnValue circle.
-    // Without this, each binding that holds the same closure creates a separate JS object → two
-    // FnValue instances, the one in the outer frame staying at (0,0) forever.
-    const cacheKey = `${funcName}@${closureEnvId}@${params.join(',')}`;
-    if (closureCache.has(cacheKey)) return closureCache.get(cacheKey);
+    // Cache named functions only: same name + defining env + params uniquely identifies a named
+    // closure. Anonymous lambdas cannot be distinguished by metadata alone — two lambdas with the
+    // same params in the same scope would alias, producing incorrect shared JS objects.
+    const isNamed = funcName !== 'lambda' && funcName !== 'anonymous';
+    const cacheKey = isNamed ? `${funcName}@${closureEnvId}@${params.join(',')}` : null;
+    if (cacheKey && closureCache.has(cacheKey)) return closureCache.get(cacheKey);
 
     const fakeFn: any = function SnapshotClosure() {};
     fakeFn.id = `snap_${++_closureSeq}_${closureEnvId}`;
@@ -145,7 +145,7 @@ function toJsValue(
     fakeFn.node = makeStubNode(params);
     fakeFn.originalNode = fakeFn.node;
     fakeFn.toString = () => `function ${funcName}(${params.join(', ')}) { [Python] }`;
-    closureCache.set(cacheKey, fakeFn);
+    if (cacheKey) closureCache.set(cacheKey, fakeFn);
     return fakeFn;
   }
 
