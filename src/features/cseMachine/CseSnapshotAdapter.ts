@@ -54,9 +54,10 @@ function toJsValue(
     const n = parseFloat(v.displayValue);
     return isNaN(n) ? 0 : n;
   }
-  if (label === 'float') {
-    // Return a source object so PrimitiveValue uses toReplString() (which preserves the
-    // ".0" suffix) instead of String(value) (which drops it for integer-valued floats).
+  if (label === 'float' || label === 'complex') {
+    // Return a source object so PrimitiveValue uses toReplString() instead of String(value).
+    // For float: preserves the ".0" suffix (String(3) drops it).
+    // For complex: avoids wrapping the value in quotes (it's not a string).
     return { toReplString: () => v.displayValue };
   }
   if (label === 'bool' || label === 'boolean') {

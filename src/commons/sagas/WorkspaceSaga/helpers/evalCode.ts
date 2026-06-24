@@ -468,7 +468,7 @@ function* handleResults(
   try {
     while (true) {
       const { value: result } = yield take(resultChan);
-      yield put(actions.appendInterpreterResult(result, workspaceLocation));
+      if (result !== undefined) yield put(actions.appendInterpreterResult(result, workspaceLocation));
       // The OneShot evaluator sends exactly one result then stops. Trigger cleanup
       // via beginInterruptExecution so the parent saga exits even if the STATUS
       // channel is broken (e.g. const-enum erasure in older evaluator bundles).
