@@ -1,7 +1,6 @@
 import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
 import type { Context } from 'js-slang';
 
-import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
 import type {
   AllColsSortStates,
   GradingColumnVisibility,
@@ -10,6 +9,7 @@ import type { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import type { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import type { HighlightedLines, Position } from '../editor/EditorTypes';
+import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
 import type { UploadResult } from '../sideContent/content/SideContentUpload';
 
 export const EVAL_SILENT = 'EVAL_SILENT';

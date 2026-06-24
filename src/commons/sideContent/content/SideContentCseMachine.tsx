@@ -38,9 +38,9 @@ import type { ArrowOriginFilterKey } from 'src/features/cseMachine/CseMachineTyp
 import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
-import { selectConductorEnable } from '../../../features/conductor/flagConductorEnable';
 import type { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
 import type { HighlightedLines } from '../../editor/EditorTypes';
+import { selectConductorEnable } from '../../../features/conductor/flagConductorEnable';
 import Constants, { Links } from '../../utils/Constants';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
 import { beginAlertSideContent } from '../SideContentActions';
