@@ -55,12 +55,14 @@ const languageDirectoryHandlers = combineSagaHandlers({
   },
   [LanguageDirectoryActions.setSelectedEvaluator.type]: function* () {
     const evaluator = yield call(getEvaluatorDefinitionSaga);
-    if (!evaluator?.defaultProgram) return;
-    const editorValue: string = yield select(
-      (state: OverallState) => state.workspaces.playground.editorTabs[0]?.value ?? '',
-    );
+    if (evaluator?.defaultProgram == null) return;
+    const playground = yield select((state: OverallState) => state.workspaces.playground);
+    const activeTabIndex: number = playground.activeEditorTabIndex ?? 0;
+    const editorValue: string = playground.editorTabs[activeTabIndex]?.value ?? '';
     if (editorValue === defaultEditorValue) {
-      yield put(WorkspaceActions.updateEditorValue('playground', 0, evaluator.defaultProgram));
+      yield put(
+        WorkspaceActions.updateEditorValue('playground', activeTabIndex, evaluator.defaultProgram),
+      );
     }
   },
   [LanguageDirectoryActions.setSelectedLanguage.type]: function* () {
