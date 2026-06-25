@@ -211,7 +211,6 @@ export class CseAnimation {
     const lastControlComponent = Layout.previousControlComponent.stackItemComponents.at(-1);
     const currStashComponent = Layout.stashComponent.stashItemComponents.at(-1);
     if (
-      !CseAnimation.animationEnabled ||
       !lastControlItem ||
       !lastControlComponent ||
       !CseMachine.getControlStash() // TODO: handle cases where there are only environment animations
