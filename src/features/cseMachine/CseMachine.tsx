@@ -61,6 +61,7 @@ export default class CseMachine {
   private static currentEnvId: string;
   private static control: Control | undefined;
   private static stash: Stash | undefined;
+  /** Toggled each time a pair is created; Layout uses it to alternate arrow directions and avoid visual overlap. */
   private static pairCreationMode: boolean = false;
   /** Last snapshot passed to renderSnapshot(); used by redraw() in snapshot mode. */
   private static lastSnapshot: CseSnapshot | null = null;

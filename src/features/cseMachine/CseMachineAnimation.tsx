@@ -1,3 +1,4 @@
+import type { Identifier } from 'estree';
 import type { AppInstr, ArrLitInstr, AssmtInstr } from 'js-slang/dist/cse-machine/types';
 import { InstrType } from 'js-slang/dist/cse-machine/types';
 import type { Node } from 'js-slang/dist/types';
@@ -134,7 +135,7 @@ export class CseAnimation {
         );
         break;
       case 'Identifier': {
-        const identNode = node as any;
+        const identNode = node as unknown as Identifier;
         // Special case for 'undefined' identifier
         if (identNode.name === 'undefined') {
           CseAnimation.animations.push(
