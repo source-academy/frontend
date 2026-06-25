@@ -2850,17 +2850,17 @@ __metadata:
   linkType: hard
 
 "@rsbuild/plugin-react@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "@rsbuild/plugin-react@npm:2.0.1"
+  version: 2.1.0
+  resolution: "@rsbuild/plugin-react@npm:2.1.0"
   dependencies:
-    "@rspack/plugin-react-refresh": "npm:2.0.0"
+    "@rspack/plugin-react-refresh": "npm:^2.0.2"
     react-refresh: "npm:^0.18.0"
   peerDependencies:
-    "@rsbuild/core": ^2.0.0-0
+    "@rsbuild/core": ^2.0.0
   peerDependenciesMeta:
     "@rsbuild/core":
       optional: true
-  checksum: 10c0/b9bb8941ca8081a7231e5b61fe071f8eda79f09ef3177b1ba4d2472ad6df749931446e0a3c71f2de930b8cdf05eac90d37d7f50f498752577516a694c2ee43e9
+  checksum: 10c0/8f50c1d1554a09835f8bf9bb30c72f5373314a5158cdc4c5e7314791877a71fad2ff1b75f3327c10e7c4a4ec3ec4c80a45afd7c16460653192f8e185aac2d166
   languageName: node
   linkType: hard
 
@@ -3045,16 +3045,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rspack/plugin-react-refresh@npm:2.0.0":
-  version: 2.0.0
-  resolution: "@rspack/plugin-react-refresh@npm:2.0.0"
+"@rspack/plugin-react-refresh@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@rspack/plugin-react-refresh@npm:2.0.2"
   peerDependencies:
-    "@rspack/core": ^2.0.0-0
+    "@rspack/core": ^2.0.0
     react-refresh: ">=0.10.0 <1.0.0"
   peerDependenciesMeta:
     "@rspack/core":
       optional: true
-  checksum: 10c0/ee8e6492c0772536abb98ab5ec92d0e4ad092613a3a6085542f0b354131eef48f4d7cbe9a8cf9a9389d5e51d623d08a2c07594c8add5ad5fb54fd5543150ead1
+  checksum: 10c0/1291689c3fcdfc4bc62e9fd032786d0f72a24b8e3c844974367a54b9b640534836f1ac945b1f1342f877332a584440a71631761a3569dad3e76c30655f20b9bb
   languageName: node
   linkType: hard
 
@@ -5754,10 +5754,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookie@npm:^1.0.1":
-  version: 1.0.2
-  resolution: "cookie@npm:1.0.2"
-  checksum: 10c0/fd25fe79e8fbcfcaf6aa61cd081c55d144eeeba755206c058682257cb38c4bd6795c6620de3f064c740695bb65b7949ebb1db7a95e4636efb8357a335ad3f54b
+"cookie-es@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "cookie-es@npm:3.1.1"
+  checksum: 10c0/62cf0c325cc547b52477b351e9b5d068b3ffc74f7d143cdf7af854648dd1015fca3aed1498b355365e24b0746333f0b15688ed3a535abecc5ed0a046ae956a84
   languageName: node
   linkType: hard
 
@@ -7338,7 +7338,7 @@ __metadata:
     react-papaparse: "npm:^4.0.2"
     react-qr-reader: "npm:^3.0.0-beta-1"
     react-redux: "npm:^8.1.1"
-    react-router: "npm:^7.6.2"
+    react-router: "npm:^8.0.0"
     react-select: "npm:^5.7.3"
     react-simple-keyboard: "npm:^3.6.27"
     react-syntax-highlighter: "npm:^16.0.0"
@@ -11164,15 +11164,15 @@ __metadata:
   linkType: hard
 
 "react-draggable@npm:^4.4.5":
-  version: 4.6.0
-  resolution: "react-draggable@npm:4.6.0"
+  version: 4.7.0
+  resolution: "react-draggable@npm:4.7.0"
   dependencies:
     clsx: "npm:^2.1.1"
     prop-types: "npm:^15.8.1"
   peerDependencies:
     react: ">= 16.3.0"
     react-dom: ">= 16.3.0"
-  checksum: 10c0/4fc196136a86054f18a005d77a33d0bf214751b2534e38b76f8d588df865b8230b6084c1645040c243d83b191723fc133653ec372db45ab4bea0b1842c42a38a
+  checksum: 10c0/4bfd46025b6009585a644d17721cafcd7976c058c250086c06c1a952724230c83caa548c54f9b5849c3a148144e3ed6610a1745b2afc6db685c85c56a0b4f775
   languageName: node
   linkType: hard
 
@@ -11394,19 +11394,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:^7.6.2":
-  version: 7.18.0
-  resolution: "react-router@npm:7.18.0"
+"react-router@npm:^8.0.0":
+  version: 8.0.1
+  resolution: "react-router@npm:8.0.1"
   dependencies:
-    cookie: "npm:^1.0.1"
-    set-cookie-parser: "npm:^2.6.0"
+    cookie-es: "npm:^3.1.1"
   peerDependencies:
-    react: ">=18"
-    react-dom: ">=18"
+    react: ">=19.2.7"
+    react-dom: ">=19.2.7"
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/7ab6c6dc7efdc14092486d63f55b04f9e3ef269fdec8c695a513f69e55d02a9beab8f637a13396952815d85accf16e7db2d65d9cbb68def13c349be82ceb5aee
+  checksum: 10c0/7ffcac5caf209b6988a0e045fd044f5f8e91e7f677475f707becd514f316f6c2d556f90e371c5a41f6033da891a2d97370b1c5d443ba96991ab0f4f71252c8ba
   languageName: node
   linkType: hard
 
@@ -12382,13 +12381,6 @@ __metadata:
   dependencies:
     randombytes: "npm:^2.1.0"
   checksum: 10c0/2dd09ef4b65a1289ba24a788b1423a035581bef60817bea1f01eda8e3bda623f86357665fe7ac1b50f6d4f583f97db9615b3f07b2a2e8cbcb75033965f771dd2
-  languageName: node
-  linkType: hard
-
-"set-cookie-parser@npm:^2.6.0":
-  version: 2.7.1
-  resolution: "set-cookie-parser@npm:2.7.1"
-  checksum: 10c0/060c198c4c92547ac15988256f445eae523f57f2ceefeccf52d30d75dedf6bff22b9c26f756bd44e8e560d44ff4ab2130b178bd2e52ef5571bf7be3bd7632d9a
   languageName: node
   linkType: hard
 
