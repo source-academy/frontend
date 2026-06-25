@@ -2,6 +2,7 @@ import type { Context } from 'js-slang';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { parse } from 'js-slang/dist/parser/parser';
 
+import type { CseSerializedEnvFrame, CseSnapshot } from '../conductor/CseMachineHostPlugin';
 import { arrowSelection } from './components/arrows/ArrowSelection';
 import { CseAnimation } from './CseMachineAnimation';
 import { Layout, type LayoutCache } from './CseMachineLayout';
@@ -12,6 +13,7 @@ import type {
   EnvTreeNode,
 } from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
+import { buildFakeEnvTreeFromSnapshot } from './CseSnapshotAdapter';
 
 type SetVis = (vis: React.ReactNode) => void;
 type SetEditorHighlightedLines = (segments: [number, number][]) => void;
@@ -59,6 +61,18 @@ export default class CseMachine {
   private static currentEnvId: string;
   private static control: Control | undefined;
   private static stash: Stash | undefined;
+  /** Toggled each time a pair is created; Layout uses it to alternate arrow directions and avoid visual overlap. */
+  private static pairCreationMode: boolean = false;
+  /** Last snapshot passed to renderSnapshot(); used by redraw() in snapshot mode. */
+  private static lastSnapshot: CseSnapshot | null = null;
+
+  public static togglePairCreationMode(): void {
+    CseMachine.pairCreationMode = !CseMachine.pairCreationMode;
+  }
+  public static getPairCreationMode(): boolean {
+    return CseMachine.pairCreationMode;
+  }
+
   public static togglePrintableMode(): void {
     CseMachine.printableMode = !CseMachine.printableMode;
   }
@@ -195,6 +209,7 @@ export default class CseMachine {
   static clear() {
     Layout.values.clear();
     arrowSelection.clearSelection();
+    CseMachine.lastSnapshot = null;
   }
 
   /** updates the visualization state in the SideContentCseMachine component based on
@@ -380,7 +395,43 @@ export default class CseMachine {
     Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
   }
 
+  /** Renders a language-agnostic CseSnapshot (from the Conductor __cse channel) using the Source renderer. */
+  static renderSnapshot(snapshot: CseSnapshot): void {
+    if (!this.setVis) throw new Error('CSE machine not initialized');
+
+    CseMachine.lastSnapshot = snapshot;
+    // Clear any live Source context so resize-triggered redraws use lastSnapshot, not stale live data.
+    CseMachine.environmentTree = undefined;
+    CseMachine.control = undefined;
+    CseMachine.stash = undefined;
+
+    const activeEnv = snapshot.environments.find((env: CseSerializedEnvFrame) => env.isActive);
+    if (activeEnv) CseMachine.currentEnvId = activeEnv.id;
+
+    const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
+
+    Layout.snapshotMode = true;
+    try {
+      Layout.setContext(
+        envTree as unknown as EnvTree,
+        fakeControl as unknown as Control,
+        fakeStash as unknown as Stash,
+      );
+    } finally {
+      Layout.snapshotMode = false;
+    }
+
+    this.setVis(Layout.draw());
+    Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
+  }
+
   static redraw() {
+    // In snapshot mode, re-render from the last snapshot instead of the js-slang context.
+    if (!CseMachine.environmentTree && CseMachine.lastSnapshot) {
+      CseMachine.renderSnapshot(CseMachine.lastSnapshot);
+      return;
+    }
+
     if (CseMachine.environmentTree && CseMachine.control && CseMachine.stash) {
       // checks if the required diagram exists, and updates the dom node using setVis
 

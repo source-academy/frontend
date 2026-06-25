@@ -1,6 +1,7 @@
 import type { Context } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 
+import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
 import type {
   AllColsSortStates,
   GradingColumnVisibility,
@@ -271,6 +272,10 @@ const newActions = createActions('workspace', {
   }),
   updateChangePointSteps: (changepointSteps: number[], workspaceLocation: WorkspaceLocation) => ({
     changepointSteps,
+    workspaceLocation,
+  }),
+  updateCseSnapshots: (snapshots: CseSnapshot[] | null, workspaceLocation: WorkspaceLocation) => ({
+    snapshots,
     workspaceLocation,
   }),
   updateLastDebuggerResult: (lastDebuggerResult: any, workspaceLocation: WorkspaceLocation) => ({

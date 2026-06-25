@@ -78,5 +78,15 @@ export const handleCseAndStepperActions = (
           changepointSteps: action.payload.changepointSteps,
         },
       };
+    })
+    .addCase(WorkspaceActions.updateCseSnapshots, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          cseSnapshots: action.payload.snapshots,
+        },
+      };
     });
 };

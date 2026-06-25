@@ -672,7 +672,9 @@ export function getNonEmptyEnv(environment: Env): Env {
 /** Returns whether the given environments `env1` and `env2` refer to the same environment. */
 export function isEnvEqual(env1: Env, env2: Env): boolean {
   // Cannot check env references because of partial cloning of environment tree,
-  // so we can only check id
+  // so we can only check id. Guard against null — snapshot adapters may produce
+  // closures whose defining environment wasn't serialized.
+  if (!env1 || !env2) return false;
   return env1.id === env2.id;
 }
 
