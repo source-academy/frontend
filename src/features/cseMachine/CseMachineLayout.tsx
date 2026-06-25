@@ -268,7 +268,7 @@ export class Layout {
     try {
       CseAnimation.updateAnimation();
     } catch (_e) {
-      CseAnimation.disableAnimations();
+      CseAnimation.animations.length = 0;
     }
   }
 
