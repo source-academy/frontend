@@ -1,0 +1,11 @@
+.ConfirmDialog {
+  .large-button:not(:first-of-type) {
+    margin-top: 0.5em;
+  }
+
+  @media only screen and (max-width: 500px) {
+    // Set width to 98% when screen width is less than 500px
+    // 500px is the default width of the component
+    width: 98%;
+  }
+}

@@ -1,0 +1,160 @@
+@import '_global';
+
+.grading-overview-unfilterable-btns,
+.grading-overview-filterable-btns {
+  padding: 0 2px;
+  text-align: inherit;
+  outline: none;
+  line-height: 1.5;
+
+  a {
+    text-decoration: none;
+    color: black;
+  }
+
+  &,
+  p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
+.grading-overview-filterable-btns {
+  &:hover:not(:has(> .grading-badge)) {
+    text-decoration: underline;
+  }
+
+  &:hover:has(> .grading-badge) {
+    filter: brightness(0.75);
+  }
+}
+
+.grading-overview-unfilterable-btns,
+.grading-overview-filterable-btns {
+  border-radius: 9999px;
+}
+
+.grading-table-col-icons {
+  pointer-events: none;
+  opacity: 0;
+  padding: 6px;
+  height: fit-content;
+  line-height: initial !important;
+  border-radius: 5px;
+  margin-right: 2.5px;
+  position: absolute;
+  right: 0;
+
+  &:hover {
+    background-color: #00000022;
+  }
+}
+
+:global(.ag-header-cell).grading-left-align {
+  :global(span.ag-header-cell-text) {
+    margin: auto auto auto 0px;
+  }
+}
+
+.grading-default-headers {
+  justify-content: space-between;
+  width: 100%;
+  transition: 0.1s ease;
+  cursor: pointer;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+
+  &:not(.grading-left-align) {
+    padding: 0 !important;
+  }
+
+  :global(span.ag-header-cell-text) {
+    margin: 0 auto;
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-weight: 600;
+    margin: auto;
+    padding: 0 5px;
+  }
+
+  &:hover {
+    --ag-header-cell-hover-background-color: #e5e7eb;
+  }
+
+  &:hover .grading-table-col-icons {
+    pointer-events: all;
+    opacity: 1;
+    position: relative;
+    transition: 0.1s ease;
+  }
+}
+
+.grading-table-header-individual {
+  width: 100%;
+}
+
+.grading-table-rows {
+  &:global(.ag-row-hover) {
+    --ag-row-hover-color: #f5f5f5;
+  }
+
+  &:global(.ag-row.ag-row-last) {
+    border-bottom: 0px !important;
+  }
+}
+
+.grading-filter-btn {
+  padding: 7.5px 15px;
+  border-radius: 25px;
+  margin: 0 15px 0 auto;
+  background-color: #dbeafef5 !important;
+  color: #3b82f6 !important;
+  min-width: fit-content;
+
+  &.grading-filter-btn-on {
+    background-color: #f5f5f5 !important;
+    color: black !important;
+  }
+
+  &:hover {
+    filter: contrast(0.9);
+  }
+}
+
+.grading-def-cell {
+  text-align: center;
+  display: flex !important;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 0.875rem;
+  user-select: text;
+  border: 0px !important;
+
+  &:hover:has(.grading-overview-filterable-btns) {
+    .grading-overview-filterable-btns {
+      text-decoration: underline;
+    }
+  }
+
+  &:active {
+    border-style: outset;
+  }
+
+  &.grading-def-cell-pointer {
+    cursor: pointer;
+  }
+
+  &.grading-def-cell-selectable {
+    cursor: text;
+    border-style: outset;
+  }
+
+  &.grading-cell-align-left {
+    text-align: left !important;
+  }
+
+  &.grading-xp-cell {
+    text-wrap: wrap;
+    line-height: 15px;
+  }
+}

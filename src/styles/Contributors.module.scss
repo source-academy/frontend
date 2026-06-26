@@ -1,0 +1,130 @@
+@import '_global';
+
+// Styling components of the ContributorsDetails
+
+.outsideDetails {
+  text-align: center;
+
+  .contributorsDetails {
+    background-color: $cadet-color-4;
+    display: inline-block;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    padding: 1% 1% 1% 1%;
+
+    h3 {
+      font-weight: bold;
+      font-style: oblique;
+    }
+
+    p {
+      margin-right: 0.5%;
+      margin-left: 0.5%;
+    }
+
+    p.description {
+      text-align: justify;
+      text-align-last: center;
+    }
+
+    span.dot {
+      padding: 0 0.2rem 0 0.2rem;
+    }
+
+    div.leadership {
+      margin-top: 10px;
+      text-align: center;
+
+      p {
+        vertical-align: top;
+        display: inline-block;
+        width: 120px;
+        &.wider {
+          width: 140px;
+        }
+        &.evenWider {
+          width: 200px;
+        }
+      }
+    }
+
+    div.hallOfFame {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    div.contributors {
+      margin-top: 10px;
+      text-align: center;
+
+      h5 {
+        text-align: center;
+      }
+    }
+  }
+}
+
+// Styling components of the ContributorsList
+
+.containerPermalink {
+  background-color: $cadet-color-4;
+  margin-bottom: 2%;
+}
+
+div.inPermalink {
+  background-color: $cadet-color-4;
+  text-align: justify;
+
+  div {
+    text-align: center;
+    vertical-align: top;
+    display: inline-block;
+    width: 20%;
+    height: 20%;
+    margin-top: 1%;
+    margin-bottom: 0.5%;
+
+    @media screen and (max-width: 1000px) {
+      width: 33.3%;
+      height: 33.3%;
+    }
+  }
+
+  img {
+    width: 90%;
+    height: 90%;
+  }
+
+  p {
+    margin-bottom: 0.2rem;
+    color: $cadet-color-2;
+  }
+
+  a {
+    text-decoration: none;
+    font-weight: bold;
+    color: $cadet-color-1;
+    &:hover {
+      color: $cadet-color-3;
+    }
+  }
+}
+
+div.repoDetailsPermalink {
+  text-align: center;
+
+  h3 {
+    margin: 0% 2% 0.5% 2%;
+    color: $cadet-color-2;
+  }
+
+  h3::first-letter {
+    text-transform: uppercase;
+  }
+
+  h5 {
+    margin: 0% 2% 1% 2%;
+    font-style: italic;
+    color: $cadet-color-1;
+  }
+}

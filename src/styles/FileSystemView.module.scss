@@ -1,0 +1,67 @@
+@import '_global';
+
+.file-system-view-container {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 1px;
+  display: flex;
+  flex-direction: column;
+
+  // Remove the white space at the intersection of the x-axis & y-axis
+  // scrollbars on Chromium browsers.
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+.file-system-view-error {
+  text-align: center;
+}
+
+.file-system-view-empty-space {
+  flex-grow: 1;
+}
+
+.file-system-view-list-container {
+  min-width: 100%;
+  width: min-content;
+  display: flex;
+  flex-direction: column;
+}
+
+.file-system-view-spinner {
+  padding: 5px;
+}
+
+.file-system-view-directory-node-container {
+  min-width: 100%;
+  width: min-content;
+}
+
+.file-system-view-node-container {
+  min-width: 100%;
+  width: min-content;
+  display: flex;
+  flex-direction: row;
+  column-gap: 3px;
+  user-select: none;
+  padding: 2px 5px;
+
+  &:hover {
+    background: $cadet-color-3;
+  }
+}
+
+.file-system-view-input {
+  width: 100%;
+  background: transparent;
+  border: thin solid $cadet-color-4;
+  padding: 0;
+}
+
+.file-system-view-file-name {
+  // Should be the line-width & line-style as the border of .file-system-view-input
+  // to prevent shifting of file entries in the file system view when renaming.
+  border: thin solid transparent;
+}
