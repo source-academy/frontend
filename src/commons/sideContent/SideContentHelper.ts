@@ -42,7 +42,9 @@ export const requireProvider = (x: string) => {
   return exports[x as keyof typeof exports] as any;
 };
 
-export type RawTab = (provider: ReturnType<typeof requireProvider>) => { default: ModuleSideContent };
+export type RawTab = (provider: ReturnType<typeof requireProvider>) => {
+  default: ModuleSideContent;
+};
 
 /**
  * Returns an array of SideContentTabs to be spawned

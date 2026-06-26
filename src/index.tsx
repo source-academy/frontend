@@ -14,7 +14,7 @@ import Constants, { Links } from 'src/commons/utils/Constants';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import {
   register as registerServiceWorker,
-  unregister as unregisterServiceWorker
+  unregister as unregisterServiceWorker,
 } from 'src/commons/utils/RegisterServiceWorker';
 import { triggerSyncLogs } from 'src/features/eventLogging/client';
 import { store } from 'src/pages/createStore';
