@@ -746,9 +746,22 @@ function Playground(props: PlaygroundProps) {
     : languageConfig.supports.cseMachine || hasCseSnapshots;
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
 
+  const conductorWelcomeText = useTypedSelector(state => {
+    if (!selectConductorEnable(state)) return null;
+    const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
+    if (!selectedLanguageId) return null;
+    const lang = languageMap[selectedLanguageId];
+    if (!lang?.welcome) return null;
+    const evaluator = selectedEvaluatorId
+      ? lang.evaluators.find(e => e.id === selectedEvaluatorId)
+      : undefined;
+    return evaluator?.welcome ? `${lang.welcome}\n\n${evaluator.welcome}` : lang.welcome;
+  });
+
   const playgroundIntroductionTab: SideContentTab = useMemo(
-    () => makeIntroductionTabFrom(generateLanguageIntroduction(languageConfig)),
-    [languageConfig],
+    () =>
+      makeIntroductionTabFrom(conductorWelcomeText ?? generateLanguageIntroduction(languageConfig)),
+    [conductorWelcomeText, languageConfig],
   );
   const tabs = useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
