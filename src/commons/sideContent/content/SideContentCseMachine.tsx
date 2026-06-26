@@ -34,6 +34,11 @@ import type { ArrowOriginFilterKey } from 'src/features/cseMachine/CseMachineTyp
 import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
+import type {
+  CseSerializedEnvFrame,
+  CseSnapshot,
+} from '../../../features/conductor/CseMachineHostPlugin';
+import { selectConductorEnable } from '../../../features/conductor/flagConductorEnable';
 import type { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
 import type { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
@@ -76,6 +81,9 @@ type StateProps = {
   needCseUpdate: boolean;
   machineOutput: InterpreterOutput[];
   chapter: Chapter;
+  isConductorMode: boolean;
+  cseSnapshots: CseSnapshot[] | null;
+  isOnCseTab: boolean;
 };
 
 type OwnProps = {
@@ -89,10 +97,17 @@ type DispatchProps = {
     editorTabIndex: number,
     newHighlightedLines: HighlightedLines[],
   ) => void;
+  setEditorHighlightedLinesStep: (
+    editorTabIndex: number,
+    newHighlightedLines: HighlightedLines[],
+  ) => void;
   handleAlertSideContent: () => void;
+  doUpdateCseSnapshots: (snapshots: CseSnapshot[] | null) => void;
 };
 
 class SideContentCseMachineBase extends Component<CseMachineProps, State> {
+  private accumulatedFrames = new Map<string, CseSerializedEnvFrame>();
+
   constructor(props: CseMachineProps) {
     super(props);
     this.state = {
@@ -199,7 +214,11 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
     document.addEventListener('fullscreenchange', this.handleFullscreenChange);
-    CseMachine.redraw();
+    if (this.props.cseSnapshots) {
+      this.renderSnapshotAt(0);
+    } else {
+      CseMachine.redraw();
+    }
   }
 
   componentWillUnmount() {
@@ -208,6 +227,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     document.removeEventListener('fullscreenchange', this.handleFullscreenChange);
     if (!this.isJava()) {
       CseMachine.resetArrowOriginFilters();
+      this.props.setEditorHighlightedLinesStep(0, []);
     }
   }
 
@@ -216,6 +236,8 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     sideContentHeight?: number;
     stepsTotal: number;
     needCseUpdate: boolean;
+    isOnCseTab: boolean;
+    cseSnapshots: CseSnapshot[] | null;
   }) {
     if (
       prevProps.sideContentHeight !== this.props.sideContentHeight ||
@@ -223,11 +245,34 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     ) {
       this.handleResize();
     }
+
+    const { isConductorMode, isOnCseTab, cseSnapshots } = this.props;
+
+    // Snapshot mode: new snapshots arrived while not on the CSE tab — discard them
+    if (
+      isConductorMode &&
+      !isOnCseTab &&
+      cseSnapshots !== null &&
+      prevProps.cseSnapshots !== cseSnapshots
+    ) {
+      this.props.doUpdateCseSnapshots(null);
+      return;
+    }
+
+    // Snapshot mode: user navigated away from CSE tab — clear visualization
+    if (isConductorMode && prevProps.isOnCseTab && !isOnCseTab) {
+      this.setState({ visualization: null, value: -1 });
+      if (cseSnapshots) this.props.doUpdateCseSnapshots(null);
+      return;
+    }
+
     if (prevProps.needCseUpdate && !this.props.needCseUpdate) {
       this.setState({ arrowFilterOpen: false });
       this.stepFirst();
 
-      if (this.isJava()) {
+      if (cseSnapshots) {
+        // Conductor snapshot mode: stepFirst already calls renderSnapshotAt(0)
+      } else if (this.isJava()) {
         JavaCseMachine.clearCse();
       } else {
         CseMachine.clearCse();
@@ -241,6 +286,59 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
         });
       });
     }
+  }
+
+  /** Renders the conductor CSE snapshot at the given step index. */
+  private renderSnapshotAt(step: number) {
+    const { cseSnapshots } = this.props;
+    if (!cseSnapshots) return;
+    const snapshot = cseSnapshots[step];
+    if (!snapshot) return;
+
+    this.props.setEditorHighlightedLines(0, []);
+
+    // Accumulate all frames seen up to this step so dead frames can be shown.
+    this.accumulatedFrames.clear();
+    for (let i = 0; i <= step; i++) {
+      const s = cseSnapshots[i];
+      if (!s) continue;
+      for (const frame of s.environments) {
+        this.accumulatedFrames.set(frame.id, frame);
+      }
+    }
+
+    const liveIds = new Set(snapshot.environments.map((f: CseSerializedEnvFrame) => f.id));
+    const deadFrames = [...this.accumulatedFrames.values()]
+      .filter(f => !liveIds.has(f.id))
+      .map(f => ({ ...f, isActive: false, isOnCallStack: false }));
+
+    CseMachine.clearLiveLayouts();
+    CseMachine.renderSnapshot({
+      ...snapshot,
+      environments: [...snapshot.environments, ...deadFrames],
+    });
+
+    this.props.setEditorHighlightedLinesStep(0, []);
+    if (snapshot.currentLine !== undefined && snapshot.currentLine > 0) {
+      const row = snapshot.currentLine - 1;
+      this.props.setEditorHighlightedLinesStep(0, [[row, row]]);
+    }
+  }
+
+  /** Returns changepoint steps. In snapshot mode, computed from environment diffs. */
+  private getChangepointSteps(): number[] {
+    const { cseSnapshots, changepointSteps } = this.props;
+    if (cseSnapshots) {
+      const steps: number[] = [];
+      let prevFp: string | null = null;
+      for (let i = 0; i < cseSnapshots.length; i++) {
+        const fp = JSON.stringify(cseSnapshots[i]?.environments ?? []);
+        if (prevFp === null || fp !== prevFp) steps.push(i);
+        prevFp = fp;
+      }
+      return steps;
+    }
+    return changepointSteps;
   }
 
   public render() {
@@ -562,6 +660,10 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
   };
 
   private sliderRelease = (newValue: number) => {
+    if (this.props.cseSnapshots) {
+      this.renderSnapshotAt(newValue);
+      return;
+    }
     if (newValue === this.props.stepsTotal) {
       this.setState({ lastStep: true });
     } else {
@@ -574,7 +676,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     if (this.state.clearDeadFrames) {
       CseMachine.setClearDeadFrames(false);
       CseMachine.clearLiveLayouts();
-      CseMachine.redraw();
+      if (!this.props.cseSnapshots) CseMachine.redraw();
     }
     this.props.handleStepUpdate(newValue);
     this.setState((state: State) => {
@@ -636,7 +738,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
   };
 
   private stepNextChangepoint = () => {
-    for (const step of this.props.changepointSteps) {
+    for (const step of this.getChangepointSteps()) {
       if (step > this.state.value) {
         this.sliderShift(step);
         this.sliderRelease(step);
@@ -648,8 +750,9 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
   };
 
   private stepPrevChangepoint = () => {
-    for (let i = this.props.changepointSteps.length - 1; i >= 0; i--) {
-      const step = this.props.changepointSteps[i];
+    const changeSteps = this.getChangepointSteps();
+    for (let i = changeSteps.length - 1; i >= 0; i--) {
+      const step = changeSteps[i];
       if (step < this.state.value) {
         this.sliderShift(step);
         this.sliderRelease(step);
@@ -673,7 +776,11 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
 
   private refreshArrowFilters = () => {
     CseMachine.clearRenderedLayouts();
-    CseMachine.redraw();
+    if (this.props.cseSnapshots) {
+      this.renderSnapshotAt(this.state.value);
+    } else {
+      CseMachine.redraw();
+    }
     this.forceUpdate();
   };
 }
@@ -705,6 +812,9 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     needCseUpdate: workspace.updateCse,
     machineOutput: workspace.output,
     chapter: workspace.context.chapter,
+    isConductorMode: selectConductorEnable(state),
+    cseSnapshots: workspace.cseSnapshots,
+    isOnCseTab: state.sideContent[loc]?.selectedTab === SideContentType.cseMachine,
   };
 };
 
@@ -725,6 +835,17 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
           editorTabIndex,
           newHighlightedLines,
         ),
+      setEditorHighlightedLinesStep: (
+        editorTabIndex: number,
+        newHighlightedLines: HighlightedLines[],
+      ) =>
+        WorkspaceActions.setEditorHighlightedLines(
+          props.workspaceLocation,
+          editorTabIndex,
+          newHighlightedLines,
+        ),
+      doUpdateCseSnapshots: (snapshots: CseSnapshot[] | null) =>
+        WorkspaceActions.updateCseSnapshots(snapshots, props.workspaceLocation),
     },
     dispatch,
   );
