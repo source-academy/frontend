@@ -248,10 +248,11 @@ const WorkspaceSaga = combineSagaHandlers({
     yield put(actions.clearReplInput(workspaceLocation));
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
 
+    const context: Context = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].context,
+    );
+
     if (yield select(selectConductorEnable)) {
-      const context: Context = yield select(
-        (state: OverallState) => state.workspaces[workspaceLocation].context,
-      );
       const codeFilePath = '/code.js';
       yield call(
         evalCodeConductorSaga,
@@ -265,9 +266,6 @@ const WorkspaceSaga = combineSagaHandlers({
       return;
     }
 
-    const context: Context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context,
-    );
     // Reset old context.errors
     context.errors = [];
     const codeFilePath = '/code.js';
