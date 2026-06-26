@@ -48,10 +48,10 @@ export class ArrowFromStashItemComponent extends GenericArrow<
 
       // For FnValue, turn at its enclosing frame's top so the horizontal segment is visible
       // above the frame rather than hidden inside it.
-      const approachTargetY =
-        to instanceof FnValue && to.enclosingFrame
-          ? to.enclosingFrame.y() - terminalSegmentLength
-          : targetCY - terminalSegmentLength;
+      const enclosingFrame = to instanceof FnValue ? Frame.getFrom(to.data.environment) : undefined;
+      const approachTargetY = enclosingFrame
+        ? enclosingFrame.y() - terminalSegmentLength
+        : targetCY - terminalSegmentLength;
 
       const approachY =
         targetCY >= sourceBottomY
