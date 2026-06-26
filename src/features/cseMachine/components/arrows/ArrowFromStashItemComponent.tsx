@@ -46,9 +46,16 @@ export class ArrowFromStashItemComponent extends GenericArrow<
         return [to instanceof ContValue ? targetCX - 1.5 * r : targetCX - r, targetCY]; // same level: left face
       };
 
+      // For FnValue, turn at its enclosing frame's top so the horizontal segment is visible
+      // above the frame rather than hidden inside it.
+      const approachTargetY =
+        to instanceof FnValue && to.enclosingFrame
+          ? to.enclosingFrame.y() - terminalSegmentLength
+          : targetCY - terminalSegmentLength;
+
       const approachY =
         targetCY >= sourceBottomY
-          ? Math.max(sourceBottomY + postSourceStraightLength, targetCY - terminalSegmentLength)
+          ? Math.max(sourceBottomY + postSourceStraightLength, approachTargetY)
           : Math.max(sourceBottomY + postSourceStraightLength, targetCY + terminalSegmentLength);
 
       const [landX, landY] = getLanding(approachY);
