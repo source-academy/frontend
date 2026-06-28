@@ -8,6 +8,7 @@ import { selectDirectoryPluginUrl } from 'src/features/directory/flagDirectoryPl
 
 import type { BrowserHostPlugin } from '../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../features/conductor/createConductor';
+import type { CseMachineHostPlugin } from '../../../features/conductor/CseMachineHostPlugin';
 import type { OverallState } from '../../application/ApplicationTypes';
 import sideContentManager from '../../sideContent/SideContentManager';
 import type { SideContentLocation } from '../../sideContent/SideContentTypes';
@@ -16,6 +17,7 @@ type PreparedConductor = {
   path: string;
   evaluatorUrl: string;
   hostPlugin: BrowserHostPlugin;
+  csePlugin: CseMachineHostPlugin;
   conduit: IConduit;
   setFiles: (files: Record<string, string>) => void;
 };
@@ -78,7 +80,7 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
   const evaluatorUrl = await fetchEvaluatorObjectUrl(path);
 
   let currentFiles: Record<string, string> = {};
-  const { hostPlugin, conduit } = createConductor(
+  const { hostPlugin, csePlugin, conduit } = createConductor(
     evaluatorUrl,
     async (fileName: string) => currentFiles[fileName],
     async (pluginName: string) => {
@@ -110,6 +112,7 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
     path,
     evaluatorUrl,
     hostPlugin,
+    csePlugin,
     conduit,
     setFiles: (files: Record<string, string>) => {
       currentFiles = files;
@@ -158,9 +161,11 @@ export function* preloadConductorEvaluatorSaga(path?: string): SagaIterator {
  * Returns a conductor for the current evaluator path, preferring a preloaded instance.
  * The returned conductor is consumed from the cache and should be terminated by the caller.
  */
-export function* getPreparedConductorSaga(
-  options?: GetPreparedConductorOptions,
-): SagaIterator<{ hostPlugin: BrowserHostPlugin; conduit: IConduit }> {
+export function* getPreparedConductorSaga(options?: GetPreparedConductorOptions): SagaIterator<{
+  hostPlugin: BrowserHostPlugin;
+  csePlugin: CseMachineHostPlugin;
+  conduit: IConduit;
+}> {
   if (!currentEvaluatorPath) {
     throw Error('no evaluator path selected');
   }
@@ -183,5 +188,9 @@ export function* getPreparedConductorSaga(
     resetPreparedConductor();
   }
 
-  return { hostPlugin: prepared.hostPlugin, conduit: prepared.conduit };
+  return {
+    hostPlugin: prepared.hostPlugin,
+    csePlugin: prepared.csePlugin,
+    conduit: prepared.conduit,
+  };
 }

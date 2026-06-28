@@ -251,6 +251,7 @@ export const processingFunctions: Record<
   ),
 
   JAVASCRIPTINLINE: (obj, _refs) => <Code>{obj.body}</Code>,
+  PYTHONINLINE: (obj, _refs) => <Code>{obj.body}</Code>,
 
   LATEX: (obj, _refs) => handleLatex(obj.body!),
 
