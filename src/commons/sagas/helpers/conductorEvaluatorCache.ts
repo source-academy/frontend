@@ -6,10 +6,8 @@ import { call } from 'redux-saga/effects';
 import type { BrowserHostPlugin } from '../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../features/conductor/createConductor';
 import type { CseMachineHostPlugin } from '../../../features/conductor/CseMachineHostPlugin';
-import {
-  clearPluginTabs,
-  registerPluginTabIfPresent,
-} from '../../../features/conductor/pluginTabRegistry';
+import { DeferredConductorTabService } from '../../../features/conductor/deferredConductorTabService';
+import { importAndRegisterWebPlugin } from '../../../features/conductor/importExternalWebPlugin';
 import { store } from '../../../pages/createStore';
 
 type PreparedConductor = {
@@ -18,6 +16,7 @@ type PreparedConductor = {
   hostPlugin: BrowserHostPlugin;
   csePlugin: CseMachineHostPlugin;
   conduit: IConduit;
+  tabService: DeferredConductorTabService;
   setFiles: (files: Record<string, string>) => void;
 };
 
@@ -31,6 +30,19 @@ let preparedConductor: PreparedConductor | null = null;
 let loadingConductorPath: string | null = null;
 let loadingConductorPromise: Promise<PreparedConductor> | null = null;
 let currentEvaluatorPath: string | null = null;
+let activeTabService: DeferredConductorTabService | null = null;
+
+/**
+ * Makes `tabService` the sole conductor surfacing tabs in the UI, deactivating the previous one.
+ * Only the selected/running conductor shows its tabs; preloaded spares buffer silently until run.
+ */
+function activateConductorTabs(tabService: DeferredConductorTabService): void {
+  if (activeTabService !== tabService) {
+    activeTabService?.deactivate();
+    activeTabService = tabService;
+  }
+  tabService.activate();
+}
 
 async function fetchEvaluatorObjectUrl(path: string): Promise<string> {
   const evaluatorResponse = await fetch(path);
@@ -59,7 +71,6 @@ function resetPreparedConductor() {
 function* cleanupPreparedConductorSaga(): SagaIterator {
   const conductorToTerminate = preparedConductor;
   resetPreparedConductor();
-  clearPluginTabs();
   yield call(terminatePreparedConductor, conductorToTerminate);
 }
 
@@ -85,6 +96,7 @@ async function resolveWebPluginUrl(pluginId: string): Promise<string | undefined
 async function loadWebPlugin(
   hostPlugin: BrowserHostPlugin | undefined,
   pluginId: string,
+  tabService: DeferredConductorTabService,
 ): Promise<void> {
   if (!hostPlugin) return;
   const url = await resolveWebPluginUrl(pluginId);
@@ -96,10 +108,10 @@ async function loadWebPlugin(
     return;
   }
   try {
-    const plugin = await hostPlugin.importAndRegisterExternalPlugin(url);
-    if (preparedConductor?.hostPlugin === hostPlugin) {
-      registerPluginTabIfPresent(plugin);
-    }
+    // The plugin is constructed with this conductor's ITabService (third constructor arg), so any
+    // side-content tab it exposes registers into that service. The tab is buffered there and only
+    // surfaced to the UI while this conductor is the active one (see DeferredConductorTabService).
+    await importAndRegisterWebPlugin(hostPlugin, url, tabService);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.warn(`Conductor: failed to load web plugin "${pluginId}"`, error);
@@ -111,11 +123,12 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
 
   let currentFiles: Record<string, string> = {};
   let hostPluginRef: BrowserHostPlugin | undefined = undefined;
+  const tabService = new DeferredConductorTabService();
   const { hostPlugin, csePlugin, conduit } = createConductor(
     evaluatorUrl,
     async (fileName: string) => currentFiles[fileName],
     (pluginName: string) => {
-      void loadWebPlugin(hostPluginRef, pluginName);
+      void loadWebPlugin(hostPluginRef, pluginName, tabService);
     },
   );
   hostPluginRef = hostPlugin;
@@ -126,6 +139,7 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
     hostPlugin,
     csePlugin,
     conduit,
+    tabService,
     setFiles: (files: Record<string, string>) => {
       currentFiles = files;
     },
@@ -164,8 +178,16 @@ export function* preloadConductorEvaluatorSaga(path?: string): SagaIterator {
     return;
   }
 
+  const evaluatorChanged = currentEvaluatorPath !== path;
   currentEvaluatorPath = path;
-  yield call(ensurePreparedConductorSaga, path);
+  const prepared: PreparedConductor = yield call(ensurePreparedConductorSaga, path);
+
+  // On an evaluator switch, surface the newly-prepared conductor's tabs (e.g. show the Stepper's
+  // empty welcome tab on selection). A same-evaluator warm-up spawned after a Run leaves the active
+  // conductor untouched, so its populated tab is not replaced by the idle spare.
+  if (evaluatorChanged) {
+    activateConductorTabs(prepared.tabService);
+  }
 }
 
 /**
@@ -190,9 +212,14 @@ export function* getPreparedConductorSaga(options?: GetPreparedConductorOptions)
     prepared.setFiles(files);
   }
 
-  // Consume only when requested (e.g. for program evaluation, not autocomplete requests).
-  if (consume && preparedConductor === prepared) {
-    resetPreparedConductor();
+  // Consume only when requested (e.g. for program evaluation, not autocomplete requests). Promote
+  // this conductor's tabs to the UI so a Run shows the conductor that actually executed, and keep
+  // them shown while the next (idle) conductor is warmed in the background.
+  if (consume) {
+    activateConductorTabs(prepared.tabService);
+    if (preparedConductor === prepared) {
+      resetPreparedConductor();
+    }
   }
 
   return {
