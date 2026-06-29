@@ -194,6 +194,10 @@ export async function handleHash(
   }
 }
 
+// Tab id exposed by the conductor stepper web plugin. The frontend mirrors this contract to hide
+// the legacy REPL/resizing when that plugin's tab is active (see usages below).
+const CONDUCTOR_STEPPER_TAB_ID = 'stepper';
+
 function Playground(props: PlaygroundProps) {
   const { isSicpEditor } = props;
   const workspaceLocation: WorkspaceLocation = isSicpEditor ? 'sicp' : 'playground';
@@ -748,7 +752,6 @@ function Playground(props: PlaygroundProps) {
   // When the Conductor framework is enabled, the stepper (and other tools) are provided by web
   // plugins loaded dynamically, so the legacy in-frontend tabs are hidden in favour of plugin tabs.
   const conductorEnabled = useTypedSelector(selectConductorEnable);
-  const CONDUCTOR_STEPPER_TAB_ID = 'stepper';
 
   const conductorWelcomeText = useTypedSelector(state => {
     if (!selectConductorEnable(state)) return null;
