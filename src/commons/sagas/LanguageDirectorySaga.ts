@@ -8,7 +8,9 @@ import { selectDirectoryLanguageUrl } from 'src/features/directory/flagDirectory
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
 import type { LanguageDirectoryState } from '../../features/directory/LanguageDirectoryTypes';
 import type { OverallState } from '../application/ApplicationTypes';
+import { defaultEditorValue } from '../application/ApplicationTypes';
 import { combineSagaHandlers } from '../redux/utils';
+import WorkspaceActions from '../workspace/WorkspaceActions';
 import { preloadConductorEvaluatorSaga } from './helpers/conductorEvaluatorCache';
 
 export function* getLanguageDefinitionSaga() {
@@ -50,6 +52,18 @@ const languageDirectoryHandlers = combineSagaHandlers({
       result = yield call([response, 'json']);
     }
     yield put(LanguageDirectoryActions.setLanguages(result));
+  },
+  [LanguageDirectoryActions.setSelectedEvaluator.type]: function* () {
+    const evaluator = yield call(getEvaluatorDefinitionSaga);
+    if (evaluator?.defaultProgram == null) return;
+    const playground = yield select((state: OverallState) => state.workspaces.playground);
+    const activeTabIndex: number = playground.activeEditorTabIndex ?? 0;
+    const editorValue: string = playground.editorTabs[activeTabIndex]?.value ?? '';
+    if (editorValue === defaultEditorValue) {
+      yield put(
+        WorkspaceActions.updateEditorValue('playground', activeTabIndex, evaluator.defaultProgram),
+      );
+    }
   },
   [LanguageDirectoryActions.setSelectedLanguage.type]: function* () {
     const language = yield call(getLanguageDefinitionSaga);
