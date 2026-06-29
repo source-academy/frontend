@@ -485,7 +485,6 @@ function* handleResults(
 function* handleErrors(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
-  onTerminate: () => void,
 ): SagaIterator {
   const errorChan = eventChannel(emitter => {
     hostPlugin.receiveError = emitter;
@@ -498,10 +497,10 @@ function* handleErrors(
       const error = yield take(errorChan);
       yield put(actions.appendInterpreterError([toConductorSourceError(error)], workspaceLocation));
       // Signal the REPL loop that evaluation has ended due to an error.
-      // We call onTerminate() here as a safety net: the runner should also
-      // send a terminal status (STOPPED/ERROR) which handleStatuses will catch,
+      // We dispatch beginInterruptExecution here as a safety net: the runner should
+      // also send a terminal status (STOPPED/ERROR) which handleStatuses will catch,
       // but if it doesn't (e.g. older evaluator build), this ensures we unblock.
-      onTerminate();
+      yield put(actions.beginInterruptExecution(workspaceLocation));
     }
   } finally {
     if (yield cancelled()) {
@@ -542,7 +541,6 @@ function* handleCseSnapshots(
 function* handleStatuses(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
-  onTerminate: () => void,
 ): SagaIterator {
   const statusChan = eventChannel<{ status: RunnerStatus; isActive: boolean }>(emitter => {
     const onStatusUpdate = (status: RunnerStatus, isActive: boolean) =>
@@ -562,7 +560,7 @@ function* handleStatuses(
       }
       if (isTerminalStatus) {
         // Unblock the REPL loop via the shared termination signal.
-        onTerminate();
+        yield put(actions.beginInterruptExecution(workspaceLocation));
       }
     }
   } finally {

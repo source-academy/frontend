@@ -1,5 +1,5 @@
 import type { IConduit } from '@sourceacademy/conductor/conduit';
-import { PluginType } from '@sourceacademy/plugin-directory/src';
+import { PluginType } from '@sourceacademy/plugin-directory';
 import type { SagaIterator } from 'redux-saga';
 import { call } from 'redux-saga/effects';
 

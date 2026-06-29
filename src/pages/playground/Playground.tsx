@@ -83,7 +83,6 @@ import { generateLanguageIntroduction } from '../../commons/utils/IntroductionHe
 import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
 import { type IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { type WorkspaceProps } from '../../commons/workspace/Workspace';
-import { selectConductorEnable } from '../../features/conductor/flagConductorEnable';
 import { initSession, log } from '../../features/eventLogging';
 import type {
   CodeDelta,
