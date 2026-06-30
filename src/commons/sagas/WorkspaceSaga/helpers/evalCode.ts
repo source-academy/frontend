@@ -9,8 +9,8 @@ import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { pick } from 'lodash-es';
-import { eventChannel, type SagaIterator } from 'redux-saga';
-import { call, cancel, cancelled, fork, put, race, select, take } from 'redux-saga/effects';
+import { END, eventChannel, type SagaIterator } from 'redux-saga';
+import { call, cancel, cancelled, fork, put, race, select, spawn, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
 import InterpreterActions from '../../../../commons/application/actions/InterpreterActions';
@@ -18,6 +18,10 @@ import { makeCCompilerConfig, specialCReturnObject } from '../../../../commons/u
 import { javaRun } from '../../../../commons/utils/JavaHelper';
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHostPlugin';
+import type {
+  CseMachineHostPlugin,
+  CseSnapshot,
+} from '../../../../features/conductor/CseMachineHostPlugin';
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { type OverallState } from '../../../application/ApplicationTypes';
@@ -29,8 +33,15 @@ import DisplayBufferService from '../../../utils/DisplayBufferService';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
-import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
-import { getPreparedConductorSaga } from '../../helpers/conductorEvaluatorCache';
+import {
+  EVAL_SILENT,
+  type WorkspaceLocation,
+  type WorkspaceLocationsWithTools,
+} from '../../../workspace/WorkspaceTypes';
+import {
+  getPreparedConductorSaga,
+  preloadConductorEvaluatorSaga,
+} from '../../helpers/conductorEvaluatorCache';
 import { getEvaluatorDefinitionSaga } from '../../LanguageDirectorySaga';
 import { selectWorkspace } from '../../SafeEffects';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
@@ -353,7 +364,7 @@ export function* evalCodeSaga(
       // enable the CSE machine visualizer during errors
       if (context.executionMethod === 'cse-machine' && needUpdateCse) {
         yield put(actions.updateStepsTotal(context.runtime.envStepsTotal + 1, workspaceLocation));
-        yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
+        yield put(actions.toggleUpdateCse(false, workspaceLocation as WorkspaceLocationsWithTools));
         yield put(
           actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation),
         );
@@ -412,7 +423,7 @@ export function* evalCodeSaga(
     yield put(actions.updateStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
     // `needUpdateCse` implies `correctWorkspace`, which satisfies the type constraint.
     // But TS can't infer that yet, so we need a typecast here.
-    yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
+    yield put(actions.toggleUpdateCse(false, workspaceLocation as WorkspaceLocationsWithTools));
     yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
     yield put(actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation));
   }
@@ -449,15 +460,21 @@ function* handleResults(
   workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
   const resultChan = eventChannel(emitter => {
-    hostPlugin.receiveResult = emitter;
+    const onReceiveResult = (result: any) => emitter({ value: result });
+    hostPlugin.receiveResult = onReceiveResult;
     return () => {
-      if (hostPlugin.receiveResult === emitter) delete hostPlugin.receiveResult;
+      if (hostPlugin.receiveResult === onReceiveResult) delete hostPlugin.receiveResult;
     };
   });
   try {
     while (true) {
-      const result = yield take(resultChan);
-      yield put(actions.appendInterpreterResult(result, workspaceLocation));
+      const { value: result } = yield take(resultChan);
+      if (result !== undefined)
+        yield put(actions.appendInterpreterResult(result, workspaceLocation));
+      // The OneShot evaluator sends exactly one result then stops. Trigger cleanup
+      // via beginInterruptExecution so the parent saga exits even if the STATUS
+      // channel is broken (e.g. const-enum erasure in older evaluator bundles).
+      yield put(actions.beginInterruptExecution(workspaceLocation));
     }
   } finally {
     if (yield cancelled()) {
@@ -488,6 +505,35 @@ function* handleErrors(
   }
 }
 
+function* handleCseSnapshots(
+  csePlugin: CseMachineHostPlugin,
+  workspaceLocation: WorkspaceLocation,
+): SagaIterator {
+  const snapshotChan = eventChannel<CseSnapshot[]>(emitter => {
+    csePlugin.receiveSnapshots = emitter;
+    return () => {
+      if (csePlugin.receiveSnapshots === emitter) csePlugin.receiveSnapshots = () => {};
+    };
+  });
+  try {
+    while (true) {
+      const snapshots: CseSnapshot[] | typeof END = yield take(snapshotChan);
+      if (snapshots === END || !Array.isArray(snapshots)) break;
+      yield put(WorkspaceActions.updateCseSnapshots(snapshots, workspaceLocation));
+      yield put(
+        WorkspaceActions.updateStepsTotal(Math.max(0, snapshots.length - 1), workspaceLocation),
+      );
+      yield put(
+        WorkspaceActions.toggleUpdateCse(false, workspaceLocation as WorkspaceLocationsWithTools),
+      );
+    }
+  } catch (_e) {
+    // Swallow errors from this non-critical background task
+  } finally {
+    snapshotChan.close();
+  }
+}
+
 function* handleStatuses(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
@@ -503,13 +549,11 @@ function* handleStatuses(
   try {
     while (true) {
       const { status, isActive } = yield take(statusChan);
+      const isTerminalStatus =
+        isActive && (status === RunnerStatus.STOPPED || status === RunnerStatus.ERROR);
       if (status === RunnerStatus.RUNNING) {
         yield put(actions.setIsRunning(isActive, workspaceLocation));
       }
-
-      const isTerminalStatus =
-        isActive && (status === RunnerStatus.STOPPED || status === RunnerStatus.ERROR);
-
       if (isTerminalStatus) {
         yield put(actions.beginInterruptExecution(workspaceLocation));
       }
@@ -546,42 +590,65 @@ export function* evalCodeConductorSaga(
     if (!evaluator?.path) throw Error('no evaluator');
   }
 
-  // Reuse a preloaded conductor instance when available.
-  const { hostPlugin, conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } = yield call(
-    getPreparedConductorSaga,
-    { files, consume: true, workspaceLocation },
-  );
+  // Clear stale CSE snapshots from the previous run
+  yield put(WorkspaceActions.updateCseSnapshots(null, workspaceLocation));
 
-  // Begin evaluation
-  const stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
-  const resultTask = yield fork(handleResults, hostPlugin, workspaceLocation);
-  const errorTask = yield fork(handleErrors, hostPlugin, workspaceLocation);
-  const statusTask = yield fork(handleStatuses, hostPlugin, workspaceLocation);
-  yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
+  // Inject step limit so the evaluator knows how many snapshots to collect
+  const { stepLimit }: { stepLimit: number } = yield* selectWorkspace(workspaceLocation);
+  const filesWithConfig = {
+    ...files,
+    '/__cse_config__': JSON.stringify({ stepLimit }),
+  };
 
-  // This exit logic of this while loop might be causing an unintended infinite loop in the REPL
-  while (true) {
-    const { stop } = yield race({
-      repl: take(actions.evalRepl.type),
-      stop: take(actions.beginInterruptExecution.type),
+  let conduit: IConduit | undefined;
+  let stdoutTask: any;
+  let resultTask: any;
+  let errorTask: any;
+  let statusTask: any;
+  let cseTask: any;
+
+  try {
+    // Reuse a preloaded conductor instance when available.
+    const prepared: {
+      hostPlugin: BrowserHostPlugin;
+      csePlugin: CseMachineHostPlugin;
+      conduit: IConduit;
+    } = yield call(getPreparedConductorSaga, { files: filesWithConfig, consume: true });
+    const hostPlugin = prepared.hostPlugin;
+    const csePlugin = prepared.csePlugin;
+    conduit = prepared.conduit;
+
+    // Immediately start warming the next conductor in the background
+    yield spawn(preloadConductorEvaluatorSaga, evaluator.path);
+
+    // Begin evaluation
+    stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
+    resultTask = yield fork(handleResults, hostPlugin, workspaceLocation);
+    errorTask = yield fork(handleErrors, hostPlugin, workspaceLocation);
+    statusTask = yield fork(handleStatuses, hostPlugin, workspaceLocation);
+    cseTask = yield fork(handleCseSnapshots, csePlugin, workspaceLocation);
+
+    yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
+
+    // OneShot: wait for the runner to send STOPPED/ERROR (dispatched by handleStatuses),
+    // or for the user to manually interrupt execution.
+    yield race({
+      done: take(actions.beginInterruptExecution.type),
+      timeout: call(() => new Promise(resolve => setTimeout(resolve, execTime + 10000))),
     });
-    if (stop) break;
-    const code: string = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].replValue,
-    );
-    yield put(actions.sendReplInputToOutput(code, workspaceLocation));
-    yield put(actions.clearReplInput(workspaceLocation));
-    yield call([hostPlugin, 'sendChunk'], code);
+  } finally {
+    try {
+      if (cseTask) yield cancel(cseTask);
+      if (statusTask) yield cancel(statusTask);
+      if (stdoutTask) yield cancel(stdoutTask);
+      if (resultTask) yield cancel(resultTask);
+      if (errorTask) yield cancel(errorTask);
+      if (conduit) yield call([conduit, 'terminate']);
+      yield call([sideContentManager, sideContentManager.clearTabs]);
+    } finally {
+      yield put(actions.endInterruptExecution(workspaceLocation));
+    }
   }
-  yield cancel(statusTask);
-  yield call([conduit, 'terminate']);
-  yield call([sideContentManager, sideContentManager.clearTabs]);
-  yield cancel(stdoutTask);
-  yield cancel(resultTask);
-  yield cancel(errorTask);
-  //yield put(actions.debuggerReset(workspaceLocation));
-  yield put(actions.endInterruptExecution(workspaceLocation));
-  console.log('killed');
 }
 
 // Special module errors

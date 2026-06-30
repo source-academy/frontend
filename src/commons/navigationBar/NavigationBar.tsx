@@ -23,7 +23,7 @@ import Dropdown from '../dropdown/Dropdown';
 import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByType } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
-import { useResponsive, useSession } from '../utils/Hooks';
+import { useResponsive, useSession, useTypedSelector } from '../utils/Hooks';
 import classes from './NavigationBar.module.css';
 import AcademyNavigationBar, {
   assessmentTypesToNavlinkInfo,
@@ -31,6 +31,7 @@ import AcademyNavigationBar, {
 } from './subcomponents/AcademyNavigationBar';
 import NavigationBarLangSelectButton from './subcomponents/NavigationBarLangSelectButton';
 import SicpNavigationBar from './subcomponents/SicpNavigationBar';
+import SicpPyNavigationBar from './subcomponents/SicpPyNavigationBar';
 
 export type NavbarEntryInfo = {
   to: string;
@@ -93,10 +94,13 @@ function useSecondaryNavbarType() {
   const isAchievements = useMatch('/courses/:courseId/achievements/*');
   const isLeaderboard = useMatch('/courses/:courseId/leaderboard/*');
   const isSicp = useMatch('/sicpjs/:section?');
+  const isSicpPy = useMatch('/sicppy/:section?');
 
   const isHidden = isPlayground || isContributors || isAchievements || isLeaderboard;
 
-  if (isSicp) {
+  if (isSicpPy) {
+    return 'sicppy';
+  } else if (isSicp) {
     return 'sicp';
   } else if (isHidden) {
     return 'hidden';
@@ -136,6 +140,22 @@ function NavigationBar() {
     [assessmentTypes, courseId, isEnrolledInACourse],
   );
 
+  const selectedLanguage = useTypedSelector(s => {
+    const id = s.languageDirectory.selectedLanguageId;
+    return id ? s.languageDirectory.languageMap[id] : null;
+  });
+  const textbookEntry: NavbarEntryInfo = useMemo(
+    () =>
+      selectedLanguage?.textbook
+        ? {
+            to: selectedLanguage.textbook.url.endsWith('json_py/') ? '/sicppy' : '/sicpjs',
+            icon: IconNames.BOOK,
+            text: selectedLanguage.textbook.name,
+          }
+        : { to: '/sicpjs', icon: IconNames.BOOK, text: 'SICP JS' },
+    [selectedLanguage],
+  );
+
   const fullAcademyNavbarLeftCommonInfo: NavbarEntryInfo[] = useMemo(() => {
     return [
       {
@@ -145,9 +165,7 @@ function NavigationBar() {
         disabled: !isEnrolledInACourse,
       },
       {
-        to: '/sicpjs',
-        icon: IconNames.BOOK,
-        text: 'SICP JS',
+        ...textbookEntry,
         disabled: !isLoggedIn,
       },
       {
@@ -170,6 +188,7 @@ function NavigationBar() {
     enableAchievements,
     enableContestLeaderboard,
     enableOverallLeaderboard,
+    textbookEntry,
   ]);
 
   const fullAcademyMobileNavbarLeftAdditionalInfo = useMemo(
@@ -188,6 +207,11 @@ function NavigationBar() {
     fullAcademyNavbarLeftCommonInfo,
     fullAcademyMobileNavbarLeftAdditionalInfo,
   ]);
+
+  const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
+    { to: '/playground', icon: IconNames.CODE, text: 'Playground' },
+    textbookEntry,
+  ];
 
   const renderPlaygroundOnlyNavbarLeftDesktop = () => (
     <NavbarGroup align={Alignment.START}>
@@ -220,6 +244,7 @@ function NavigationBar() {
     const topNavbarNavlinks = [
       '/playground',
       '/sicpjs',
+      '/sicppy',
       '/contributors',
       `/courses/${courseId}/achievements`,
       `/courses/${courseId}/leaderboard`,
@@ -312,7 +337,9 @@ function NavigationBar() {
         {commonNavbarRight}
       </Navbar>
 
-      {navbarType === 'hidden' ? null : navbarType === 'sicp' ? (
+      {navbarType === 'hidden' ? null : navbarType === 'sicppy' ? (
+        <SicpPyNavigationBar />
+      ) : navbarType === 'sicp' ? (
         <SicpNavigationBar />
       ) : !Constants.playgroundOnly && isEnrolledInACourse && !isMobileBreakpoint ? (
         <AcademyNavigationBar assessmentTypes={assessmentTypes} />
@@ -320,19 +347,6 @@ function NavigationBar() {
     </>
   );
 }
-
-const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
-  {
-    to: '/playground',
-    icon: IconNames.CODE,
-    text: 'Playground',
-  },
-  {
-    to: '/sicpjs',
-    icon: IconNames.BOOK,
-    text: 'SICP JS',
-  },
-];
 
 export function DesktopNavLink(props: NavbarEntryInfo) {
   const responsive = useResponsive();

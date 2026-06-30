@@ -1,6 +1,5 @@
 import type { IChannel, IConduit } from '@sourceacademy/conductor/conduit';
 import { BasicHostPlugin } from '@sourceacademy/conductor/host';
-import type { IResultMessage } from '@sourceacademy/conductor/types';
 
 export class BrowserHostPlugin extends BasicHostPlugin {
   requestFile(fileName: string): Promise<string | undefined> {
@@ -18,7 +17,6 @@ export class BrowserHostPlugin extends BasicHostPlugin {
   private __onRequestFile: (fileName: string) => Promise<string | undefined>;
   private __onRequestLoadPlugin: (pluginName: string) => void;
 
-  static readonly channelAttach = [...super.channelAttach, '__result'] as any;
   constructor(
     conduit: IConduit,
     channels: IChannel<any>[],
@@ -28,9 +26,5 @@ export class BrowserHostPlugin extends BasicHostPlugin {
     super(conduit, channels);
     this.__onRequestFile = onRequestFile;
     this.__onRequestLoadPlugin = onRequestLoadPlugin;
-    const resultChannel = channels.find(
-      (channel): channel is IChannel<IResultMessage> => channel.name === '__result',
-    );
-    resultChannel?.subscribe(resultMessage => this.receiveResult?.(resultMessage.result));
   }
 }

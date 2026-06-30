@@ -82,6 +82,7 @@ import { generateLanguageIntroduction } from '../../commons/utils/IntroductionHe
 import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
 import { type IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { type WorkspaceProps } from '../../commons/workspace/Workspace';
+import { selectConductorEnable } from '../../features/conductor/flagConductorEnable';
 import { initSession, log } from '../../features/eventLogging';
 import type {
   CodeDelta,
@@ -724,12 +725,43 @@ function Playground(props: PlaygroundProps) {
   }, [dispatch, playgroundSourceChapter, playgroundSourceVariant]);
 
   const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer;
-  const shouldShowCseMachine = languageConfig.supports.cseMachine;
+  const hasCseSnapshots = useTypedSelector(
+    state => state.workspaces[workspaceLocation].cseSnapshots !== null,
+  );
+  const conductorEvaluatorSupportsCse = useTypedSelector(state => {
+    if (!selectConductorEnable(state)) return false;
+    const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
+    if (!selectedLanguageId || !selectedEvaluatorId) return false;
+    const lang = languageMap[selectedLanguageId];
+    const evaluator = lang?.evaluators.find(e => e.id === selectedEvaluatorId);
+    return (evaluator?.capabilities as string[] | undefined)?.includes('cse') ?? false;
+  });
+  const conductorLanguageActive = useTypedSelector(
+    state => selectConductorEnable(state) && !!state.languageDirectory.selectedLanguageId,
+  );
+  // For conductor languages: show CSE tab proactively when the evaluator declares "cse"
+  // capability, or reactively once snapshots arrive. For Source languages use the usual flag.
+  const shouldShowCseMachine = conductorLanguageActive
+    ? conductorEvaluatorSupportsCse || hasCseSnapshots
+    : languageConfig.supports.cseMachine || hasCseSnapshots;
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
 
+  const conductorWelcomeText = useTypedSelector(state => {
+    if (!selectConductorEnable(state)) return null;
+    const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
+    if (!selectedLanguageId) return null;
+    const lang = languageMap[selectedLanguageId];
+    if (!lang?.welcome) return null;
+    const evaluator = selectedEvaluatorId
+      ? lang.evaluators.find(e => e.id === selectedEvaluatorId)
+      : undefined;
+    return evaluator?.welcome ? `${lang.welcome}\n\n${evaluator.welcome}` : lang.welcome;
+  });
+
   const playgroundIntroductionTab: SideContentTab = useMemo(
-    () => makeIntroductionTabFrom(generateLanguageIntroduction(languageConfig)),
-    [languageConfig],
+    () =>
+      makeIntroductionTabFrom(conductorWelcomeText ?? generateLanguageIntroduction(languageConfig)),
+    [conductorWelcomeText, languageConfig],
   );
   const tabs = useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];

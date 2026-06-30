@@ -380,6 +380,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   enableDebugging: true,
   debuggerContext: {} as DebuggerContext,
   lastDebuggerResult: undefined,
+  cseSnapshots: null,
   files: {},
   updateUserRoleCallback: () => {},
   versionHistory: {

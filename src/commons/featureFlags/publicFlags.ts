@@ -1,3 +1,5 @@
+import { flagDirectoryModulesUrl } from 'src/features/directory/flagDirectoryModulesUrl';
+
 import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
 import { flagDirectoryLanguageUrl } from '../../features/directory/flagDirectoryLanguageUrl';
 import { flagDirectoryPluginUrl } from '../../features/directory/flagDirectoryPluginUrl';
@@ -7,4 +9,5 @@ export const publicFlags: FeatureFlag<any>[] = [
   flagConductorEnable,
   flagDirectoryLanguageUrl,
   flagDirectoryPluginUrl,
+  flagDirectoryModulesUrl
 ];

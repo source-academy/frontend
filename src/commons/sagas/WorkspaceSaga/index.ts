@@ -40,7 +40,7 @@ import {
 import { showFullJSDisclaimer, showFullTSDisclaimer } from '../../utils/WarningDialogHelper';
 import { getPreparedConductorSaga } from '../helpers/conductorEvaluatorCache';
 import { selectWorkspace } from '../SafeEffects';
-import { evalCodeSaga } from './helpers/evalCode';
+import { evalCodeConductorSaga, evalCodeSaga } from './helpers/evalCode';
 import { evalEditorSaga } from './helpers/evalEditor';
 import { runTestCase } from './helpers/runTestCase';
 import {
@@ -241,18 +241,31 @@ const WorkspaceSaga = combineSagaHandlers({
     );
   },
   [WorkspaceActions.evalRepl.type]: function* (action) {
-    if (yield select(selectConductorEnable)) {
-      return; // no-op: evalCodeConductorSaga will pick up this action and handle it from there
-    }
     const workspaceLocation = action.payload.workspaceLocation;
     const { replValue: code, execTime } = yield* selectWorkspace(workspaceLocation);
 
     yield put(actions.beginInterruptExecution(workspaceLocation));
     yield put(actions.clearReplInput(workspaceLocation));
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
+
     const context: Context = yield select(
       (state: OverallState) => state.workspaces[workspaceLocation].context,
     );
+
+    if (yield select(selectConductorEnable)) {
+      const codeFilePath = '/code.js';
+      yield call(
+        evalCodeConductorSaga,
+        { [codeFilePath]: code },
+        codeFilePath,
+        context,
+        execTime,
+        workspaceLocation,
+        WorkspaceActions.evalRepl.type,
+      );
+      return;
+    }
+
     // Reset old context.errors
     context.errors = [];
     const codeFilePath = '/code.js';

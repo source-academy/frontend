@@ -37,6 +37,8 @@ export const requireProvider = (x: string) => {
     konva: Konva,
     '@blueprintjs/core': bpcore,
     '@blueprintjs/icons': bpicons,
+    konva: Konva,
+    'react-konva': ReactKonva,
     'js-slang': jsslang,
     'js-slang/dist': jsslangDist,
     lodash,

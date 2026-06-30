@@ -1,3 +1,4 @@
+import { languages } from '@sourceacademy/language-directory';
 import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
 import { getEvaluatorDefinition } from '@sourceacademy/language-directory/dist/util';
 import { call, fork, put, select } from 'redux-saga/effects';
@@ -36,12 +37,18 @@ const languageDirectoryHandlers = combineSagaHandlers({
     }
   },
   [LanguageDirectoryActions.fetchLanguages.type]: function* () {
-    const url = yield select(selectDirectoryLanguageUrl);
-    const response = yield call(fetch, url);
-    if (!response.ok) {
-      throw new Error(`Can't retrieve language directory: ${response.status}`);
+    const url: string = yield select(selectDirectoryLanguageUrl);
+    const defaultUrl = 'https://source-academy.github.io/language-directory/directory.json';
+    let result: ILanguageDefinition[];
+    if (url === defaultUrl) {
+      result = yield call(() => Promise.resolve(languages));
+    } else {
+      const response = yield call(fetch, url);
+      if (!response.ok) {
+        throw new Error(`Can't retrieve language directory: ${response.status}`);
+      }
+      result = yield call([response, 'json']);
     }
-    const result: ILanguageDefinition[] = yield call([response, 'json']);
     yield put(LanguageDirectoryActions.setLanguages(result));
   },
   [LanguageDirectoryActions.setSelectedLanguage.type]: function* () {

@@ -1,6 +1,7 @@
 import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
 import type { Context } from 'js-slang';
 
+import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
 import type {
   AllColsSortStates,
   GradingColumnVisibility,
@@ -117,6 +118,7 @@ export type WorkspaceState = {
   readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
   readonly lastDebuggerResult: any;
+  readonly cseSnapshots: CseSnapshot[] | null;
   readonly files: UploadResult;
   readonly updateUserRoleCallback: (id: string, newRole: CollabEditingAccess) => void;
   readonly versionHistory: VersionHistoryState;
