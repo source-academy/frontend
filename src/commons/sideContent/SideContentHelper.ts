@@ -3,6 +3,7 @@ import * as bpcore from '@blueprintjs/core';
 import * as bpicons from '@blueprintjs/icons';
 import * as jsslang from 'js-slang';
 import * as jsslangDist from 'js-slang/dist';
+import * as Konva from 'konva';
 import * as lodash from 'lodash-es';
 // We need it to inject modules into the context
 // eslint-disable-next-line no-restricted-imports
@@ -11,6 +12,7 @@ import { useCallback } from 'react';
 import JSXRuntime from 'react/jsx-runtime';
 import ace from 'react-ace';
 import ReactDOM from 'react-dom';
+import * as ReactKonva from 'react-konva';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector } from '../utils/Hooks';
@@ -33,6 +35,8 @@ export const requireProvider = (x: string) => {
     'react-dom': ReactDOM,
     '@blueprintjs/core': bpcore,
     '@blueprintjs/icons': bpicons,
+    konva: Konva,
+    'react-konva': ReactKonva,
     'js-slang': jsslang,
     'js-slang/dist': jsslangDist,
     lodash,
