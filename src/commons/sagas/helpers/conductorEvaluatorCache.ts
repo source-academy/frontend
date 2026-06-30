@@ -1,5 +1,6 @@
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { PluginType } from '@sourceacademy/plugin-directory';
+import { ModuleLoaderWebPlugin } from '@sourceacademy/web-module-loader';
 import type { SagaIterator } from 'redux-saga';
 import { call, select } from 'redux-saga/effects';
 import { requireProvider } from 'src/commons/sideContent/SideContentHelper';
@@ -92,8 +93,17 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
 
       let pluginClassLocation = getWebPluginLocation(pluginName);
       if (!pluginClassLocation) {
-        console.warn(`No web plugin resolution found for "${pluginName}" in the plugin directory.`);
-        return;
+        try {
+          const moduleTabLocation = ModuleLoaderWebPlugin.instance?.getModuleTabLocation(pluginName);
+          if (!moduleTabLocation) {
+            console.warn(`No web plugin resolution found for "${pluginName}" in the plugin directory.`);            
+            return;
+          }
+          pluginClassLocation = moduleTabLocation;
+        } catch (error) {
+          console.error(`Error occurred while fetching web plugin location for "${pluginName}":`, error);
+          return
+        }
       }
       if (!pluginClassLocation.startsWith('http')) {
         pluginClassLocation = new URL(

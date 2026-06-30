@@ -53,6 +53,7 @@
     "@sourceacademy/sharedb-ace": "2.1.1",
     "@sourceacademy/sling-client": "^0.1.0",
     "@sourceacademy/web-cse-machine": "^1.0.0",
+    "@sourceacademy/web-module-loader": "../plugins/src/web/module-loader",
     "@sourceacademy/web-test": "^0.0.2",
     "@szhsin/react-menu": "^4.0.0",
     "@tanstack/react-query": "^5.100.14",
