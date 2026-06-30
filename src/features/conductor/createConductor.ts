@@ -16,7 +16,6 @@ export function createConductor(
   const hostPlugin = conduit.registerPlugin(BrowserHostPlugin, onRequestFile, onRequestLoadPlugin);
   hostPlugin.registerPlugin(AutoCompletePlugin);
   const csePlugin = conduit.registerPlugin(CseMachineHostPlugin);
-  const moduleLoaderPlugin = hostPlugin.registerPlugin(ModuleLoaderWebPlugin);
-  // TODO: Load the module directory URL from the plugin directory instead of hardcoding it here.
+  hostPlugin.registerPlugin(ModuleLoaderWebPlugin);
   return { hostPlugin, csePlugin, conduit };
 }

@@ -5,6 +5,7 @@ import type { SagaIterator } from 'redux-saga';
 import { call, select } from 'redux-saga/effects';
 import { requireProvider } from 'src/commons/sideContent/SideContentHelper';
 import { registry } from 'src/features/conductor/Registry';
+import { selectDirectoryModulesUrl } from 'src/features/directory/flagDirectoryModulesUrl';
 import { selectDirectoryPluginUrl } from 'src/features/directory/flagDirectoryPluginUrl';
 
 import type { BrowserHostPlugin } from '../../../features/conductor/BrowserHostPlugin';
@@ -102,7 +103,7 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
           pluginClassLocation = moduleTabLocation;
         } catch (error) {
           console.error(`Error occurred while fetching web plugin location for "${pluginName}":`, error);
-          return
+          return;
         }
       }
       if (!pluginClassLocation.startsWith('http')) {
@@ -153,7 +154,8 @@ function* ensurePreparedConductorSaga(path: string): SagaIterator<PreparedConduc
       loadingConductorPath = null;
       loadingConductorPromise = null;
     });
-
+  const moduleDirectory = yield select(selectDirectoryModulesUrl);
+  ModuleLoaderWebPlugin.instance?.onModuleDirectoryURLChange(moduleDirectory);
   return yield call(() => loadingConductorPromise as Promise<PreparedConductor>);
 }
 
