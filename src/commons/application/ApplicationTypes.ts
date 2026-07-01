@@ -107,11 +107,7 @@ export type NotificationOutput = {
 };
 
 export type InterpreterOutput =
-  | RunningOutput
-  | CodeOutput
-  | ResultOutput
-  | ErrorOutput
-  | NotificationOutput;
+  RunningOutput | CodeOutput | ResultOutput | ErrorOutput | NotificationOutput;
 
 export enum Role {
   Student = 'student',
