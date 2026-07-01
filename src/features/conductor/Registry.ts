@@ -1,6 +1,8 @@
+import type { ITabService } from '@sourceacademy/common-tabs';
 import type { PluginClass } from '@sourceacademy/conductor/conduit';
 
-import type { ITabService } from './commonTabs';
+import AutoCompletePlugin from './AutocompletePlugin';
+import { TestPlugin } from './TestPlugin';
 
 /**
  * Registry of *built-in* web plugins implemented inside the frontend (e.g. autocomplete). These are
@@ -14,3 +16,5 @@ import type { ITabService } from './commonTabs';
 export type PluginRegistry = Map<string, PluginClass<[ITabService]>>;
 
 export const registry: PluginRegistry = new Map();
+registry.set('__autocomplete_plugin_web', AutoCompletePlugin);
+registry.set('test', TestPlugin);

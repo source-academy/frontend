@@ -1,5 +1,6 @@
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { Conduit } from '@sourceacademy/conductor/conduit';
+import { ModuleLoaderWebPlugin } from '@sourceacademy/web-module-loader';
 
 import AutoCompletePlugin from './AutocompletePlugin';
 import { BrowserHostPlugin } from './BrowserHostPlugin';
@@ -15,5 +16,6 @@ export function createConductor(
   const hostPlugin = conduit.registerPlugin(BrowserHostPlugin, onRequestFile, onRequestLoadPlugin);
   hostPlugin.registerPlugin(AutoCompletePlugin);
   const csePlugin = conduit.registerPlugin(CseMachineHostPlugin);
+  hostPlugin.registerPlugin(ModuleLoaderWebPlugin);
   return { hostPlugin, csePlugin, conduit };
 }

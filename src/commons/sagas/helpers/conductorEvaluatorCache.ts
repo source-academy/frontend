@@ -1,7 +1,9 @@
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { PluginType } from '@sourceacademy/plugin-directory';
+import { ModuleLoaderWebPlugin } from '@sourceacademy/web-module-loader';
 import type { SagaIterator } from 'redux-saga';
-import { call } from 'redux-saga/effects';
+import { call, select } from 'redux-saga/effects';
+import { selectDirectoryModulesUrl } from 'src/features/directory/flagDirectoryModulesUrl';
 
 import type { BrowserHostPlugin } from '../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../features/conductor/createConductor';
@@ -9,6 +11,8 @@ import type { CseMachineHostPlugin } from '../../../features/conductor/CseMachin
 import { DeferredConductorTabService } from '../../../features/conductor/deferredConductorTabService';
 import { importAndRegisterWebPlugin } from '../../../features/conductor/importExternalWebPlugin';
 import { store } from '../../../pages/createStore';
+import sideContentManager from '../../sideContent/SideContentManager';
+import type { SideContentLocation } from '../../sideContent/SideContentTypes';
 
 type PreparedConductor = {
   path: string;
@@ -23,6 +27,7 @@ type PreparedConductor = {
 type GetPreparedConductorOptions = {
   files?: Record<string, string>;
   consume?: boolean;
+  workspaceLocation?: SideContentLocation;
 };
 
 let preparedConductorPath: string | null = null;
@@ -60,6 +65,7 @@ async function terminatePreparedConductor(conductor: PreparedConductor | null) {
   }
 
   await conductor.conduit.terminate();
+  sideContentManager.clearTabs();
   URL.revokeObjectURL(conductor.evaluatorUrl);
 }
 
@@ -88,6 +94,8 @@ async function resolveWebPluginUrl(pluginId: string): Promise<string | undefined
     const url =
       store.getState().pluginDirectory.pluginMap?.[pluginId]?.resolutions?.[PluginType.WEB];
     if (url) return url;
+    const moduleUrl = ModuleLoaderWebPlugin.instance?.getModuleTabLocation(pluginId);
+    if (moduleUrl) return moduleUrl;
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   return undefined;
@@ -155,19 +163,20 @@ function* ensurePreparedConductorSaga(path: string): SagaIterator<PreparedConduc
 
   // A new evaluator path is requested, so release the old preloaded conductor first.
   yield call(cleanupPreparedConductorSaga);
+  const moduleDirectory = yield select(selectDirectoryModulesUrl);
 
   loadingConductorPath = path;
   loadingConductorPromise = createPreparedConductor(path)
     .then(prepared => {
       preparedConductorPath = path;
       preparedConductor = prepared;
+      ModuleLoaderWebPlugin.instance?.onModuleDirectoryURLChange(moduleDirectory);
       return prepared;
     })
     .finally(() => {
       loadingConductorPath = null;
       loadingConductorPromise = null;
     });
-
   return yield call(() => loadingConductorPromise as Promise<PreparedConductor>);
 }
 
@@ -202,6 +211,9 @@ export function* getPreparedConductorSaga(options?: GetPreparedConductorOptions)
   }
 
   const path = currentEvaluatorPath;
+  if (options?.workspaceLocation) {
+    sideContentManager.setWorkspaceLocation(options.workspaceLocation);
+  }
   const prepared: PreparedConductor = yield call(ensurePreparedConductorSaga, path);
   const files = options?.files;
   const consume = options?.consume ?? false;

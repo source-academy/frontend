@@ -1,4 +1,4 @@
-import type { ITabService, Tab } from 'src/features/conductor/commonTabs';
+import type { ITabService, Tab } from '@sourceacademy/common-tabs';
 
 import type { SideContentLocation, SideContentTab } from './SideContentTypes';
 

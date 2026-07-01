@@ -892,9 +892,9 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
       }
 
       // Do nothing when clicking the mobile 'Run' tab while on the autograder tab.
-      if (!(
-        prevTabId === SideContentType.autograder && newTabId === SideContentType.mobileEditorRun
-      )) {
+      if (
+        !(prevTabId === SideContentType.autograder && newTabId === SideContentType.mobileEditorRun)
+      ) {
         setSelectedTab(newTabId);
       }
     };
