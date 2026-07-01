@@ -2904,21 +2904,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rsbuild/plugin-sass@npm:^1.5.2":
-  version: 1.5.3
-  resolution: "@rsbuild/plugin-sass@npm:1.5.3"
+"@rsbuild/plugin-sass@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@rsbuild/plugin-sass@npm:2.0.0"
   dependencies:
     deepmerge: "npm:^4.3.1"
     loader-utils: "npm:^2.0.4"
     postcss: "npm:^8.5.15"
-    reduce-configs: "npm:^1.1.2"
+    reduce-configs: "npm:^2.0.1"
     sass-embedded: "npm:^1.100.0"
   peerDependencies:
-    "@rsbuild/core": ^1.3.0 || ^2.0.0-0
+    "@rsbuild/core": ^2.0.0
   peerDependenciesMeta:
     "@rsbuild/core":
       optional: true
-  checksum: 10c0/31b4662d2fbc3ddb4aae601e7603ac3210a954ce404a55584c7a6c35ed0dae07a13c0aa2dfae3ad42b449dd69d493af8352cacdace4369b6cf8684f8652d68a7
+  checksum: 10c0/5591229d77a1f1bbe33940f69e927655aaa185d26988b6c724885a86ccaf9e7596b593ea8f3d50d310992e9245d0581fc4a1601282ae9b3b10dd79c946193114
   languageName: node
   linkType: hard
 
@@ -3222,10 +3222,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.10":
+"@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.11":
   version: 0.0.9
-  resolution: "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#commit=7a9b32d7fff0434172d8f065c3035a222c2dc391"
-  checksum: 10c0/08ce7e500ec20baeeb44c86843c26286d376a6d9d4fd7f9807b4543b61ec81d1ef85761356a62ec31aba31835a114292d7b4c5d572d20d67605b83bb0eb9fd3c
+  resolution: "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#commit=54fd0c7e006c142eca44d03a2b3562203420b20a"
+  checksum: 10c0/1329a5b8d68fba14cfa48c7812de68ecdc7cdaf0d6e241b9972207017b83bade79cd766a0fee3f1c40784968bbe954917887c122a014bbc3896e13992580f939
   languageName: node
   linkType: hard
 
@@ -7297,14 +7297,14 @@ __metadata:
     "@rsbuild/plugin-eslint": "npm:^2.0.0"
     "@rsbuild/plugin-node-polyfill": "npm:^1.4.4"
     "@rsbuild/plugin-react": "npm:^2.0.0"
-    "@rsbuild/plugin-sass": "npm:^1.5.2"
+    "@rsbuild/plugin-sass": "npm:^2.0.0"
     "@rsbuild/plugin-svgr": "npm:^2.0.2"
     "@rsbuild/plugin-tailwindcss": "npm:^2.0.0"
     "@sentry/react": "npm:^10.5.0"
     "@sourceacademy/autocomplete": "github:source-academy/autocomplete#5b8871b8852815184af291f2622788fbc1263911"
     "@sourceacademy/c-slang": "npm:^1.0.21"
     "@sourceacademy/conductor": "npm:^0.5.0"
-    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.10"
+    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.11"
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.3"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
@@ -11626,10 +11626,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"reduce-configs@npm:^1.1.2":
-  version: 1.1.2
-  resolution: "reduce-configs@npm:1.1.2"
-  checksum: 10c0/dfd1c11e8e01b7ffef4469747a49f9f4f03442fddb2dab8a85fff094fd90eb8dd130fabba4e7fdd30272cae1e06d43d690b8cf01684ef17e821b3d0aad47dc3f
+"reduce-configs@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "reduce-configs@npm:2.0.1"
+  checksum: 10c0/671c25b3c1700be1c075bbf138c6e6f926589bf118ecd783a0d8d4369d49d03253c3fcdc1014a6ae8c94bd4004cdc3314dc9a88701736fa0b71074adb182deb1
   languageName: node
   linkType: hard
 
