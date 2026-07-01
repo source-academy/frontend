@@ -106,7 +106,7 @@ function SicpPyNavigationBar() {
       if (!node?.children?.[ch]) return [];
       node = node.children[ch];
     }
-    return node.value;
+    return node.value || [];
   }
 
   function autocomplete(prefix: string, trie: TrieNode, n: number = 25): string[] {
@@ -126,6 +126,7 @@ function SicpPyNavigationBar() {
   }
 
   function indexAutoComplete(prefix: string, n: number = 25): string[] {
+    if (!prefix) return [];
     const lower = prefix[0].toLowerCase() + prefix.slice(1);
     const upper = prefix[0].toUpperCase() + prefix.slice(1);
     const result = autocomplete(lower, rewritedSearchData.indexTrie, n);
@@ -138,8 +139,9 @@ function SicpPyNavigationBar() {
     const words = keyStr.split(' ');
     const longestWord = words.reduce((a, b) => (a.length > b.length ? a : b), '');
     return trieLookup(longestWord, rewritedSearchData.textTrie).filter(id => {
-      const text = rewritedSearchData.idToContentMap[id].toLowerCase().replaceAll('\n', ' ');
-      return text.includes(keyStr);
+      const content = rewritedSearchData.idToContentMap[id];
+      if (!content) return false;
+      return content.toLowerCase().replaceAll('\n', ' ').includes(keyStr);
     });
   }
 
@@ -149,9 +151,9 @@ function SicpPyNavigationBar() {
     if (words.length === 1) return autocomplete(words[0], rewritedSearchData.textTrie, n);
 
     const pre = words.slice(0, -1).join(' ');
-    const results = sentenceSearch(pre).map(id =>
-      rewritedSearchData.idToContentMap[id].toLowerCase(),
-    );
+    const results = sentenceSearch(pre)
+      .map(id => rewritedSearchData.idToContentMap[id]?.toLowerCase())
+      .filter((text): text is string => !!text);
     const answers: string[] = [];
     while (answers.length < n && results.length > 0) {
       let sentence = results.shift();
@@ -169,9 +171,17 @@ function SicpPyNavigationBar() {
     return answers;
   }
 
-  const focusResult = (result: string, q: string): React.ReactNode => {
+  const focusResult = (result: string | undefined, q: string): React.ReactNode => {
+    if (!result) return null;
     result = result.replaceAll('\n', ' ').toLowerCase();
     const startIndex = result.indexOf(q);
+    if (startIndex === -1)
+      return (
+        <>
+          {result.slice(0, 100)}
+          {result.length > 100 ? '...' : ''}
+        </>
+      );
     let start = startIndex;
     while (start > 0 && !result[start - 1].match(/[^a-zA-Z, _]/)) start--;
     const endIndex = startIndex + q.length;
@@ -318,15 +328,17 @@ function SicpPyNavigationBar() {
                   variant="minimal"
                   style={{ padding: 0, minHeight: 0, verticalAlign: 'baseline' }}
                   onClick={() => {
-                    setOmnibarMode(previousMode!);
-                    setPreviousMode(null);
-                    switch (previousMode) {
-                      case 'text':
-                        setSearchResults(sentenceAutoComplete(query));
-                        break;
-                      case 'index':
-                        setSearchResults(indexAutoComplete(query));
-                        break;
+                    if (previousMode) {
+                      setOmnibarMode(previousMode);
+                      setPreviousMode(null);
+                      switch (previousMode) {
+                        case 'text':
+                          setSearchResults(sentenceAutoComplete(query));
+                          break;
+                        case 'index':
+                          setSearchResults(indexAutoComplete(query));
+                          break;
+                      }
                     }
                   }}
                 >
