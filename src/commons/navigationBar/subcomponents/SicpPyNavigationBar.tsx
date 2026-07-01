@@ -243,9 +243,7 @@ function SicpPyNavigationBar() {
         break;
       case 'index':
         setSearchResults(
-          processIndexSearchResults(
-            trieLookup(result, rewritedSearchData.indexTrie),
-          ) as any[],
+          processIndexSearchResults(trieLookup(result, rewritedSearchData.indexTrie)) as any[],
         );
         break;
     }
