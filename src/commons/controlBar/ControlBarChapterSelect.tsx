@@ -52,7 +52,7 @@ function ControlBarChapterSelect({
   // selects it automatically (see Playground). The button label still resolves against the full list
   // so it shows the true current evaluator (e.g. "Stepper") even while that entry is unselectable.
   const selectableEvaluators = evaluators.filter(
-    e => !(e.capabilities as string[]).includes(STEPPER_EVALUATOR_CAPABILITY),
+    e => !(e.capabilities as string[] | undefined)?.includes(STEPPER_EVALUATOR_CAPABILITY),
   );
   const selectedEvaluator = evaluators.find(e => e.id === selectedEvaluatorId);
 
