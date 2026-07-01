@@ -101,7 +101,6 @@ async function loadWebPlugin(
   if (!hostPlugin) return;
   const url = await resolveWebPluginUrl(pluginId);
   if (!url) {
-    // eslint-disable-next-line no-console
     console.warn(
       `Conductor: no web resolution for plugin "${pluginId}" (is directory.plugin.url set?)`,
     );
@@ -113,7 +112,6 @@ async function loadWebPlugin(
     // surfaced to the UI while this conductor is the active one (see DeferredConductorTabService).
     await importAndRegisterWebPlugin(hostPlugin, url, tabService);
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.warn(`Conductor: failed to load web plugin "${pluginId}"`, error);
   }
 }
