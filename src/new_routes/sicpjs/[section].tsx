@@ -2,6 +2,7 @@ import 'katex/dist/katex.min.css';
 
 import { Button } from '@blueprintjs/core';
 import { Link, useNavigate, useOutletContext, useParams } from 'react-router';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 
 import SicpIndexPage from '../../pages/sicp/subcomponents/sicpIndexPage/SicpIndexPage';
@@ -9,6 +10,9 @@ import SicpIndexPage from '../../pages/sicp/subcomponents/sicpIndexPage/SicpInde
 function SicpPage() {
   const { section } = useParams<{ section: string }>();
   const navigate = useNavigate();
+  const titleImageUrl = useTypedSelector(
+    s => s.languageDirectory.languageMap['source1']?.textbook?.titleImageUrl,
+  );
 
   const handleNavigation = (sect: string) => {
     navigate('/sicpjs/' + sect);
@@ -29,7 +33,7 @@ function SicpPage() {
   const { data } = useOutletContext<{ data: React.ReactNode }>();
 
   return section === 'index' ? (
-    <SicpIndexPage />
+    <SicpIndexPage titleImageUrl={titleImageUrl ?? undefined} />
   ) : (
     <div className="sicp-content">
       <Link id="begin" to="#begin" />

@@ -3,15 +3,14 @@ import { PluginType } from '@sourceacademy/plugin-directory';
 import { ModuleLoaderWebPlugin } from '@sourceacademy/web-module-loader';
 import type { SagaIterator } from 'redux-saga';
 import { call, select } from 'redux-saga/effects';
-import { requireProvider } from 'src/commons/sideContent/SideContentHelper';
-import { registry } from 'src/features/conductor/Registry';
 import { selectDirectoryModulesUrl } from 'src/features/directory/flagDirectoryModulesUrl';
-import { selectDirectoryPluginUrl } from 'src/features/directory/flagDirectoryPluginUrl';
 
 import type { BrowserHostPlugin } from '../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../features/conductor/createConductor';
 import type { CseMachineHostPlugin } from '../../../features/conductor/CseMachineHostPlugin';
-import type { OverallState } from '../../application/ApplicationTypes';
+import { DeferredConductorTabService } from '../../../features/conductor/deferredConductorTabService';
+import { importAndRegisterWebPlugin } from '../../../features/conductor/importExternalWebPlugin';
+import { store } from '../../../pages/createStore';
 import sideContentManager from '../../sideContent/SideContentManager';
 import type { SideContentLocation } from '../../sideContent/SideContentTypes';
 
@@ -21,6 +20,7 @@ type PreparedConductor = {
   hostPlugin: BrowserHostPlugin;
   csePlugin: CseMachineHostPlugin;
   conduit: IConduit;
+  tabService: DeferredConductorTabService;
   setFiles: (files: Record<string, string>) => void;
 };
 
@@ -35,16 +35,18 @@ let preparedConductor: PreparedConductor | null = null;
 let loadingConductorPath: string | null = null;
 let loadingConductorPromise: Promise<PreparedConductor> | null = null;
 let currentEvaluatorPath: string | null = null;
-let currentPluginDirectoryUrl: string | null = null;
-let currentPluginMap: OverallState['pluginDirectory']['pluginMap'] = {};
+let activeTabService: DeferredConductorTabService | null = null;
 
-function getWebPluginLocation(pluginName: string): string | undefined {
-  return currentPluginMap[pluginName]?.resolutions[PluginType.WEB];
-}
-
-function* updatePluginDirectorySnapshotSaga(): SagaIterator {
-  currentPluginMap = yield select((state: OverallState) => state.pluginDirectory.pluginMap);
-  currentPluginDirectoryUrl = yield select(selectDirectoryPluginUrl);
+/**
+ * Makes `tabService` the sole conductor surfacing tabs in the UI, deactivating the previous one.
+ * Only the selected/running conductor shows its tabs; preloaded spares buffer silently until run.
+ */
+function activateConductorTabs(tabService: DeferredConductorTabService): void {
+  if (activeTabService !== tabService) {
+    activeTabService?.deactivate();
+    activeTabService = tabService;
+  }
+  tabService.activate();
 }
 
 async function fetchEvaluatorObjectUrl(path: string): Promise<string> {
@@ -78,55 +80,64 @@ function* cleanupPreparedConductorSaga(): SagaIterator {
   yield call(terminatePreparedConductor, conductorToTerminate);
 }
 
+/**
+ * Loads a web plugin requested by the runner. The plugin's web-half URL is resolved generically
+ * from the plugin directory (`resolutions[WEB]`); after registering it, any side-content tab it
+ * exposes is surfaced to the UI. This is plugin-agnostic — no per-plugin code lives here.
+ */
+/**
+ * Resolves a plugin's web-half URL from the plugin directory. The runner may request a plugin
+ * before the directory has finished loading, so we poll briefly for it.
+ */
+async function resolveWebPluginUrl(pluginId: string): Promise<string | undefined> {
+  for (let attempt = 0; attempt < 50; attempt++) {
+    const url =
+      store.getState().pluginDirectory.pluginMap?.[pluginId]?.resolutions?.[PluginType.WEB];
+    if (url) return url;
+    const moduleUrl = ModuleLoaderWebPlugin.instance?.getModuleTabLocation(pluginId);
+    if (moduleUrl) return moduleUrl;
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  return undefined;
+}
+
+async function loadWebPlugin(
+  hostPlugin: BrowserHostPlugin | undefined,
+  pluginId: string,
+  tabService: DeferredConductorTabService,
+): Promise<void> {
+  if (!hostPlugin) return;
+  const url = await resolveWebPluginUrl(pluginId);
+  if (!url) {
+    console.warn(
+      `Conductor: no web resolution for plugin "${pluginId}" (is directory.plugin.url set?)`,
+    );
+    return;
+  }
+  try {
+    // The plugin is constructed with this conductor's ITabService (third constructor arg), so any
+    // side-content tab it exposes registers into that service. The tab is buffered there and only
+    // surfaced to the UI while this conductor is the active one (see DeferredConductorTabService).
+    await importAndRegisterWebPlugin(hostPlugin, url, tabService);
+  } catch (error) {
+    console.warn(`Conductor: failed to load web plugin "${pluginId}"`, error);
+  }
+}
+
 async function createPreparedConductor(path: string): Promise<PreparedConductor> {
   const evaluatorUrl = await fetchEvaluatorObjectUrl(path);
 
   let currentFiles: Record<string, string> = {};
+  let hostPluginRef: BrowserHostPlugin | undefined = undefined;
+  const tabService = new DeferredConductorTabService();
   const { hostPlugin, csePlugin, conduit } = createConductor(
     evaluatorUrl,
     async (fileName: string) => currentFiles[fileName],
-    async (pluginName: string) => {
-      if (registry.has(pluginName)) {
-        const pluginClass = registry.get(pluginName)!;
-        conduit.registerPlugin(pluginClass, sideContentManager);
-        return;
-      }
-
-      let pluginClassLocation = getWebPluginLocation(pluginName);
-      if (!pluginClassLocation) {
-        try {
-          console.log(ModuleLoaderWebPlugin.instance);
-          const moduleTabLocation =
-            ModuleLoaderWebPlugin.instance?.getModuleTabLocation(pluginName);
-          console.log(moduleTabLocation);
-          if (!moduleTabLocation) {
-            console.warn(
-              `No web plugin resolution found for "${pluginName}" in the plugin directory.`,
-            );
-            return;
-          }
-          pluginClassLocation = moduleTabLocation;
-        } catch (error) {
-          console.error(
-            `Error occurred while fetching web plugin location for "${pluginName}":`,
-            error,
-          );
-          return;
-        }
-      }
-      if (!pluginClassLocation.startsWith('http')) {
-        pluginClassLocation = new URL(
-          pluginClassLocation,
-          currentPluginDirectoryUrl || document.baseURI,
-        ).toString();
-      }
-      await import(/* webpackIgnore: true */ pluginClassLocation)
-        .then(tab => tab.default(requireProvider))
-        .then(tab => ('default' in tab ? tab.default : tab))
-        .then(plugin => conduit.registerPlugin(plugin, sideContentManager))
-        .catch(error => console.error(`Unable to load external plugin "${pluginName}".`, error));
+    (pluginName: string) => {
+      void loadWebPlugin(hostPluginRef, pluginName, tabService);
     },
   );
+  hostPluginRef = hostPlugin;
 
   return {
     path,
@@ -134,6 +145,7 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
     hostPlugin,
     csePlugin,
     conduit,
+    tabService,
     setFiles: (files: Record<string, string>) => {
       currentFiles = files;
     },
@@ -173,9 +185,16 @@ export function* preloadConductorEvaluatorSaga(path?: string): SagaIterator {
     return;
   }
 
-  yield call(updatePluginDirectorySnapshotSaga);
+  const evaluatorChanged = currentEvaluatorPath !== path;
   currentEvaluatorPath = path;
-  yield call(ensurePreparedConductorSaga, path);
+  const prepared: PreparedConductor = yield call(ensurePreparedConductorSaga, path);
+
+  // On an evaluator switch, surface the newly-prepared conductor's tabs (e.g. show the Stepper's
+  // empty welcome tab on selection). A same-evaluator warm-up spawned after a Run leaves the active
+  // conductor untouched, so its populated tab is not replaced by the idle spare.
+  if (evaluatorChanged) {
+    activateConductorTabs(prepared.tabService);
+  }
 }
 
 /**
@@ -192,7 +211,6 @@ export function* getPreparedConductorSaga(options?: GetPreparedConductorOptions)
   }
 
   const path = currentEvaluatorPath;
-  yield call(updatePluginDirectorySnapshotSaga);
   if (options?.workspaceLocation) {
     sideContentManager.setWorkspaceLocation(options.workspaceLocation);
   }
@@ -204,9 +222,14 @@ export function* getPreparedConductorSaga(options?: GetPreparedConductorOptions)
     prepared.setFiles(files);
   }
 
-  // Consume only when requested (e.g. for program evaluation, not autocomplete requests).
-  if (consume && preparedConductor === prepared) {
-    resetPreparedConductor();
+  // Consume only when requested (e.g. for program evaluation, not autocomplete requests). Promote
+  // this conductor's tabs to the UI so a Run shows the conductor that actually executed, and keep
+  // them shown while the next (idle) conductor is warmed in the background.
+  if (consume) {
+    activateConductorTabs(prepared.tabService);
+    if (preparedConductor === prepared) {
+      resetPreparedConductor();
+    }
   }
 
   return {

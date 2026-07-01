@@ -26,7 +26,6 @@ import { selectConductorEnable } from '../../../../features/conductor/flagConduc
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { type OverallState } from '../../../application/ApplicationTypes';
 import { visitSideContent } from '../../../sideContent/SideContentActions';
-import sideContentManager from '../../../sideContent/SideContentManager';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import DisplayBufferService from '../../../utils/DisplayBufferService';
@@ -497,6 +496,11 @@ function* handleErrors(
     while (true) {
       const error = yield take(errorChan);
       yield put(actions.appendInterpreterError([toConductorSourceError(error)], workspaceLocation));
+      // Signal the REPL loop that evaluation has ended due to an error.
+      // We dispatch beginInterruptExecution here as a safety net: the runner should
+      // also send a terminal status (STOPPED/ERROR) which handleStatuses will catch,
+      // but if it doesn't (e.g. older evaluator build), this ensures we unblock.
+      yield put(actions.beginInterruptExecution(workspaceLocation));
     }
   } finally {
     if (yield cancelled()) {
@@ -555,6 +559,7 @@ function* handleStatuses(
         yield put(actions.setIsRunning(isActive, workspaceLocation));
       }
       if (isTerminalStatus) {
+        // Unblock the REPL loop via the shared termination signal.
         yield put(actions.beginInterruptExecution(workspaceLocation));
       }
     }
@@ -643,9 +648,9 @@ export function* evalCodeConductorSaga(
       if (stdoutTask) yield cancel(stdoutTask);
       if (resultTask) yield cancel(resultTask);
       if (errorTask) yield cancel(errorTask);
-      yield call([sideContentManager, sideContentManager.clearTabs]);
     } finally {
       yield put(actions.endInterruptExecution(workspaceLocation));
+      yield put(actions.setIsRunning(false, workspaceLocation));
     }
   }
 }

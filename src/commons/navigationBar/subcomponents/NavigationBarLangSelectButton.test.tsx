@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { SupportedLanguage } from '../../../commons/application/ApplicationTypes';
@@ -16,7 +17,9 @@ const createAppWithStore = () => {
   const store = createStore();
   const app = (
     <Provider store={store}>
-      <NavigationBarLangSelectButton />
+      <MemoryRouter>
+        <NavigationBarLangSelectButton />
+      </MemoryRouter>
     </Provider>
   );
   return { app, store };

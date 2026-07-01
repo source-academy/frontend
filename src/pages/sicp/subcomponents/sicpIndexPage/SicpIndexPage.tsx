@@ -5,11 +5,17 @@ import SicpAuthors from './subcomponents/SicpAuthors';
 import SicpLicenses from './subcomponents/SicpLicenses';
 import SicpTitle from './subcomponents/SicpTitle';
 
-function SicpIndexPage() {
+type Props = {
+  titleImageUrl?: string;
+};
+
+function SicpIndexPage({
+  titleImageUrl = 'https://source-academy.github.io/sicp/sicpjs.png',
+}: Props) {
   return (
     <div className="sicp-index-page">
       <div className="sicp-cover">
-        <img src="https://source-academy.github.io/sicp/sicpjs.png" alt="SICP" />
+        <img src={titleImageUrl} alt="SICP" />
         <div className="sicp-cover-text">
           <SicpTitle />
           <SicpAuthors />

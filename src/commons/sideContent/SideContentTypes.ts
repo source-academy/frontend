@@ -40,6 +40,12 @@ export enum SideContentType {
 export type SideContentTabId = SideContentType | string;
 
 /**
+ * The id of a side-content tab. Built-in tabs use the {@link SideContentType} enum; dynamically
+ * loaded plugin tabs (via the tab service) use a free-form string id.
+ */
+export type SideContentTabId = SideContentType | string;
+
+/**
  * @property label A string that will appear as the tooltip.
  *
  * @property iconName BlueprintJS IconName element, used to render the
