@@ -136,17 +136,19 @@ function SicpPyNavigationBar() {
   }
 
   function sentenceSearch(keyStr: string): string[] {
-    const words = keyStr.split(' ');
+    const normalizedKey = keyStr.toLowerCase();
+    const words = normalizedKey.split(' ');
     const longestWord = words.reduce((a, b) => (a.length > b.length ? a : b), '');
     return trieLookup(longestWord, rewritedSearchData.textTrie).filter(id => {
       const content = rewritedSearchData.idToContentMap[id];
       if (!content) return false;
-      return content.toLowerCase().replaceAll('\n', ' ').includes(keyStr);
+      return content.toLowerCase().replaceAll('\n', ' ').includes(normalizedKey);
     });
   }
 
   function sentenceAutoComplete(prefix: string, n: number = 25): string[] {
-    const words = prefix.split(' ');
+    const normalizedPrefix = prefix.toLowerCase();
+    const words = normalizedPrefix.split(' ');
     if (words.length === 0) return [];
     if (words.length === 1) return autocomplete(words[0], rewritedSearchData.textTrie, n);
 
@@ -159,12 +161,12 @@ function SicpPyNavigationBar() {
       let sentence = results.shift();
       if (!sentence) continue;
       sentence = sentence.replaceAll('\n', ' ');
-      const start = sentence.indexOf(prefix) + prefix.length;
-      if (start >= prefix.length) {
+      const start = sentence.indexOf(normalizedPrefix) + normalizedPrefix.length;
+      if (start >= normalizedPrefix.length) {
         const rest = sentence.slice(start);
         let end = rest.search(/[^a-zA-Z _]/);
         if (end === -1) end = rest.length;
-        const toPush = (prefix + rest.slice(0, end)).trim();
+        const toPush = (normalizedPrefix + rest.slice(0, end)).trim();
         if (!answers.includes(toPush)) answers.push(toPush);
       }
     }
@@ -173,8 +175,9 @@ function SicpPyNavigationBar() {
 
   const focusResult = (result: string | undefined, q: string): React.ReactNode => {
     if (!result) return null;
+    const normalizedQ = q.toLowerCase();
     result = result.replaceAll('\n', ' ').toLowerCase();
-    const startIndex = result.indexOf(q);
+    const startIndex = result.indexOf(normalizedQ);
     if (startIndex === -1)
       return (
         <>
@@ -184,7 +187,7 @@ function SicpPyNavigationBar() {
       );
     let start = startIndex;
     while (start > 0 && !result[start - 1].match(/[^a-zA-Z, _]/)) start--;
-    const endIndex = startIndex + q.length;
+    const endIndex = startIndex + normalizedQ.length;
     let end = endIndex;
     while (end < result.length && !result[end].match(/[^a-zA-Z _,]/)) end++;
     let subStr = result.slice(start, end);
@@ -193,11 +196,16 @@ function SicpPyNavigationBar() {
     subStr = subStr.trim();
     return (
       <>
-        {subStr.slice(0, subStr.indexOf(q))}
+        {subStr.slice(0, subStr.indexOf(normalizedQ))}
         <mark>
-          <strong>{subStr.slice(subStr.indexOf(q), subStr.indexOf(q) + q.length)}</strong>
+          <strong>
+            {subStr.slice(
+              subStr.indexOf(normalizedQ),
+              subStr.indexOf(normalizedQ) + normalizedQ.length,
+            )}
+          </strong>
         </mark>
-        {subStr.slice(subStr.indexOf(q) + q.length)}
+        {subStr.slice(subStr.indexOf(normalizedQ) + normalizedQ.length)}
       </>
     );
   };
