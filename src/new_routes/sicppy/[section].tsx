@@ -15,7 +15,9 @@ function SicpPyIndexPage() {
   return (
     <div className="sicp-index-page">
       <div className="sicp-cover">
-        {titleImageUrl && <img src={titleImageUrl} alt="SICPy" style={{ maxHeight: '400px', width: 'auto' }} />}
+        {titleImageUrl && (
+          <img src={titleImageUrl} alt="SICPy" style={{ maxHeight: '400px', width: 'auto' }} />
+        )}
         <div className="sicp-cover-text">
           <H2>Structure and Interpretation of Computer Programs</H2>
           <p style={{ color: 'grey', marginTop: 0 }}>Python Edition</p>
