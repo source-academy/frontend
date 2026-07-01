@@ -314,7 +314,22 @@ function SicpPyNavigationBar() {
         overlayProps={{ className: Classes.OVERLAY_SCROLL_CONTAINER }}
         onClose={() => setIsOmnibarOpen(false)}
         items={searchResults}
-        onItemSelect={() => {}}
+        onItemSelect={result => {
+          switch (omnibarMode) {
+            case 'text':
+            case 'index':
+              handleResultClick(result);
+              break;
+            case 'submenu':
+              if (previousMode === 'text') {
+                handleNavigation(result as string);
+              } else if (previousMode === 'index') {
+                handleNavigation((result as unknown as IndexSearchResult).id);
+              }
+              setIsOmnibarOpen(false);
+              break;
+          }
+        }}
         query={query}
         onQueryChange={handleQueryChange}
         itemListRenderer={({ itemsParentRef, renderItem, items }) => (
@@ -349,14 +364,15 @@ function SicpPyNavigationBar() {
             {items.map(renderItem)}
           </Menu>
         )}
-        itemRenderer={result => {
+        itemRenderer={(result, { handleClick, modifiers }) => {
           switch (omnibarMode) {
             case 'text':
             case 'index':
               return (
                 <MenuItem
+                  active={modifiers.active}
                   text={result}
-                  onClick={() => handleResultClick(result)}
+                  onClick={handleClick}
                   labelElement={<Icon icon={IconNames.CARET_RIGHT} />}
                 />
               );
