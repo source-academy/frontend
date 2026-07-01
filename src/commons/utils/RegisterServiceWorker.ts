@@ -136,13 +136,25 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
 }
 
 export function unregister() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready
-      .then(registration => {
-        registration.unregister();
-      })
-      .catch(error => {
-        console.error(error.message);
-      });
+  if (!('serviceWorker' in navigator)) {
+    return;
+  }
+  // Robustly remove ANY previously-registered service worker (e.g. from a production build or an
+  // earlier visit) and purge its caches. A stale SW serves the cached app shell for every request
+  // — including worker/evaluator scripts — so a fetched `.js` comes back as `index.html`, which
+  // breaks local development (notably Conductor evaluation: the evaluator Worker fails to parse
+  // HTML and the run hangs forever). We use getRegistrations() rather than `.ready` (which never
+  // resolves when there is no active SW) so every registration is caught.
+  navigator.serviceWorker
+    .getRegistrations()
+    .then(registrations =>
+      Promise.all(registrations.map(registration => registration.unregister())),
+    )
+    .catch(error => console.error('Failed to unregister service workers:', error));
+  if ('caches' in window) {
+    caches
+      .keys()
+      .then(keys => Promise.all(keys.map(key => caches.delete(key))))
+      .catch(error => console.error('Failed to clear service worker caches:', error));
   }
 }

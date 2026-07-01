@@ -8,14 +8,15 @@ import SideContentSubstVisualizer from 'src/commons/sideContent/content/SideCont
 import {
   type SideContentLocation,
   type SideContentTab,
+  type SideContentTabId,
   SideContentType,
 } from 'src/commons/sideContent/SideContentTypes';
 
-export const mobileOnlyTabIds: readonly SideContentType[] = [
+export const mobileOnlyTabIds: readonly SideContentTabId[] = [
   SideContentType.mobileEditor,
   SideContentType.mobileEditorRun,
 ];
-export const desktopOnlyTabIds: readonly SideContentType[] = [SideContentType.introduction];
+export const desktopOnlyTabIds: readonly SideContentTabId[] = [SideContentType.introduction];
 
 export const makeIntroductionTabFrom = (content: string): SideContentTab => ({
   label: 'Introduction',

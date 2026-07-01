@@ -8,7 +8,7 @@ import type {
   ChangeTabsCallback,
   SideContentLocation,
   SideContentTab,
-  SideContentType,
+  SideContentTabId,
 } from './SideContentTypes';
 
 export type SideContentProps = {
@@ -19,8 +19,8 @@ export type SideContentProps = {
     afterDynamicTabs: SideContentTab[];
   };
   onChange?: ChangeTabsCallback;
-  selectedTabId?: SideContentType;
-  defaultTab?: SideContentType;
+  selectedTabId?: SideContentTabId;
+  defaultTab?: SideContentTabId;
   workspaceLocation: SideContentLocation;
 };
 

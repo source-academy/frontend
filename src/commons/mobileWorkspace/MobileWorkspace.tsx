@@ -11,7 +11,11 @@ import McqChooser, { type McqChooserProps } from '../mcqChooser/McqChooser';
 import { Prompt } from '../ReactRouterPrompt';
 import type { ReplProps } from '../repl/Repl';
 import type { SideBarTab } from '../sideBar/SideBar';
-import { type SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import {
+  type SideContentTab,
+  type SideContentTabId,
+  SideContentType,
+} from '../sideContent/SideContentTypes';
 import DraggableRepl from './DraggableRepl';
 import MobileKeyboard from './MobileKeyboard';
 import MobileSideContent, {
@@ -169,7 +173,7 @@ function MobileWorkspace(props: MobileWorkspaceProps) {
 
   const handleEditorEval = props.editorContainerProps?.handleEditorEval;
   const handleTabChangeForRepl = useCallback(
-    (newTabId: SideContentType, prevTabId: SideContentType) => {
+    (newTabId: SideContentTabId, prevTabId: SideContentTabId) => {
       // Evaluate program upon pressing the run tab.
       if (newTabId === SideContentType.mobileEditorRun) {
         handleEditorEval?.();
@@ -210,8 +214,8 @@ function MobileWorkspace(props: MobileWorkspaceProps) {
   const onChange = props.mobileSideContentProps.onChange;
   const onSideContentTabChange = useCallback(
     (
-      newTabId: SideContentType,
-      prevTabId: SideContentType,
+      newTabId: SideContentTabId,
+      prevTabId: SideContentTabId,
       event: React.MouseEvent<HTMLElement>,
     ) => {
       onChange(newTabId, prevTabId, event);

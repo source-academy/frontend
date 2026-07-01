@@ -21,10 +21,11 @@ import type {
   SideContentLocation,
   SideContentState,
   SideContentTab,
+  SideContentTabId,
 } from './SideContentTypes';
 import { SideContentType } from './SideContentTypes';
 
-const requireProvider = (x: string) => {
+export const requireProvider = (x: string) => {
   const exports = {
     react: React,
     'react/jsx-runtime': JSXRuntime,
@@ -41,7 +42,9 @@ const requireProvider = (x: string) => {
   return exports[x as keyof typeof exports] as any;
 };
 
-type RawTab = (provider: ReturnType<typeof requireProvider>) => { default: ModuleSideContent };
+export type RawTab = (provider: ReturnType<typeof requireProvider>) => {
+  default: ModuleSideContent;
+};
 
 /**
  * Returns an array of SideContentTabs to be spawned
@@ -72,14 +75,14 @@ export const getTabId = (tab: SideContentTab) =>
 export const generateTabAlert = (shouldAlert: boolean) =>
   `side-content-tooltip${shouldAlert ? ' side-content-tab-alert' : ''}`;
 
-export const useSideContent = (location: SideContentLocation, defaultTab?: SideContentType) => {
+export const useSideContent = (location: SideContentLocation, defaultTab?: SideContentTabId) => {
   const [workspaceLocation] = getLocation(location);
   const { alerts, dynamicTabs, selectedTab, height }: SideContentState = useTypedSelector(
     state => state.sideContent[workspaceLocation],
   );
   const dispatch = useDispatch();
   const setSelectedTab = useCallback(
-    (newId: SideContentType) => {
+    (newId: SideContentTabId) => {
       if (
         (selectedTab === SideContentType.substVisualizer ||
           selectedTab === SideContentType.cseMachine) &&

@@ -7,6 +7,7 @@ import { getLocation } from '../sideContent/SideContentHelper';
 import {
   type SideContentLocation,
   type SideContentManagerState,
+  type SideContentTabId,
   SideContentType,
 } from '../sideContent/SideContentTypes';
 import WorkspaceActions from '../workspace/WorkspaceActions';
@@ -25,7 +26,7 @@ const isVisitSideContent = (
 const selectSelectedTab = (
   state: any,
   workspaceLocation: SideContentLocation,
-): SideContentType | undefined => {
+): SideContentTabId | undefined => {
   const sideContentState = (state.sideContent ?? state) as SideContentManagerState;
   const [location] = getLocation(workspaceLocation);
   return sideContentState[location]?.selectedTab;

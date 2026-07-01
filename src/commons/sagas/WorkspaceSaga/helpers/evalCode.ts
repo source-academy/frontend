@@ -496,6 +496,11 @@ function* handleErrors(
     while (true) {
       const error = yield take(errorChan);
       yield put(actions.appendInterpreterError([toConductorSourceError(error)], workspaceLocation));
+      // Signal the REPL loop that evaluation has ended due to an error.
+      // We dispatch beginInterruptExecution here as a safety net: the runner should
+      // also send a terminal status (STOPPED/ERROR) which handleStatuses will catch,
+      // but if it doesn't (e.g. older evaluator build), this ensures we unblock.
+      yield put(actions.beginInterruptExecution(workspaceLocation));
     }
   } finally {
     if (yield cancelled()) {
@@ -554,6 +559,7 @@ function* handleStatuses(
         yield put(actions.setIsRunning(isActive, workspaceLocation));
       }
       if (isTerminalStatus) {
+        // Unblock the REPL loop via the shared termination signal.
         yield put(actions.beginInterruptExecution(workspaceLocation));
       }
     }
@@ -642,9 +648,16 @@ export function* evalCodeConductorSaga(
       if (stdoutTask) yield cancel(stdoutTask);
       if (resultTask) yield cancel(resultTask);
       if (errorTask) yield cancel(errorTask);
-      if (conduit) yield call([conduit, 'terminate']);
+      if (conduit) {
+        try {
+          yield call([conduit, 'terminate']);
+        } catch (e) {
+          console.warn('[conductor] failed to terminate conduit', e);
+        }
+      }
     } finally {
       yield put(actions.endInterruptExecution(workspaceLocation));
+      yield put(actions.setIsRunning(false, workspaceLocation));
     }
   }
 }

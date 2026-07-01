@@ -10,7 +10,7 @@ import {
   type ChangeTabsCallback,
   type SideContentLocation,
   type SideContentTab,
-  SideContentType,
+  type SideContentTabId,
 } from '../../sideContent/SideContentTypes';
 import { propsAreEqual } from '../../utils/MemoizeHelper';
 import MobileControlBar from './MobileControlBar';
@@ -66,7 +66,7 @@ function MobileSideContent({
    * renderedPanels is not memoized since a change in selectedTabId (when changing tabs)
    * would force React.useMemo to recompute the nullary function anyway
    */
-  const renderedPanels = (dynamicTabs: SideContentTab[], selectedTabId?: SideContentType) => {
+  const renderedPanels = (dynamicTabs: SideContentTab[], selectedTabId?: SideContentTabId) => {
     // TODO: Fix the CSS of all the panels (e.g. subst_visualizer)
     const renderPanel = (tab: SideContentTab, workspaceLocation?: SideContentLocation) => {
       if (!tab.body) return;

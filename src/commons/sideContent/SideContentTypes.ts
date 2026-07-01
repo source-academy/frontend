@@ -38,6 +38,12 @@ export enum SideContentType {
 }
 
 /**
+ * The id of a side-content tab. Built-in tabs use the {@link SideContentType} enum; dynamically
+ * loaded plugin tabs (via the tab service) use a free-form string id.
+ */
+export type SideContentTabId = SideContentType | string;
+
+/**
  * @property label A string that will appear as the tooltip.
  *
  * @property iconName BlueprintJS IconName element, used to render the
@@ -57,7 +63,7 @@ export type SideContentTab = {
   label: string;
   iconName: IconName;
   body: React.ReactElement | null;
-  id?: SideContentType;
+  id?: SideContentTabId;
   disabled?: boolean;
 };
 
@@ -93,12 +99,12 @@ export type SideContentState = {
   height?: number;
   dynamicTabs: SideContentTab[];
   alerts: string[];
-  selectedTab?: SideContentType;
+  selectedTab?: SideContentTabId;
 };
 
 export type ChangeTabsCallback = (
-  newId: SideContentType,
-  oldId: SideContentType,
+  newId: SideContentTabId,
+  oldId: SideContentTabId,
   event: React.MouseEvent<HTMLElement>,
 ) => void;
 
@@ -106,5 +112,5 @@ export type SideContentDispatchProps = {
   /**
    * Call this function to cause the icon of the tab with the provided ID to flash
    */
-  alertSideContent: (newId: SideContentType) => void;
+  alertSideContent: (newId: SideContentTabId) => void;
 };
