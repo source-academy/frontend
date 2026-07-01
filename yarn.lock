@@ -3265,10 +3265,10 @@ __metadata:
 
 "@sourceacademy/web-module-loader@file:../plugins/src/web/module-loader::locator=frontend%40workspace%3A.":
   version: 0.0.2
-  resolution: "@sourceacademy/web-module-loader@file:../plugins/src/web/module-loader#../plugins/src/web/module-loader::hash=755d88&locator=frontend%40workspace%3A."
+  resolution: "@sourceacademy/web-module-loader@file:../plugins/src/web/module-loader#../plugins/src/web/module-loader::hash=ffe7eb&locator=frontend%40workspace%3A."
   peerDependencies:
     "@sourceacademy/conductor": ">=0.3.0"
-  checksum: 10c0/5aa324a8622667d57ccf4288b91f1da7c107759bfaf3569845843b6cfd9b6184259e75687f4cd7a653758aa4440d729c0f7611729c04b02acd63fd4834f8c0dc
+  checksum: 10c0/93ec1c16c876b8eeca224ca229e4889c0e23355121216462eab20bd8f99c102490c81ac89a88f3dbf06469ecb76326122f1ef8359a74ed33d43c34373e9bc637
   languageName: node
   linkType: hard
 

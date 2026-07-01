@@ -643,7 +643,6 @@ export function* evalCodeConductorSaga(
       if (stdoutTask) yield cancel(stdoutTask);
       if (resultTask) yield cancel(resultTask);
       if (errorTask) yield cancel(errorTask);
-      if (conduit) yield call([conduit, 'terminate']);
       yield call([sideContentManager, sideContentManager.clearTabs]);
     } finally {
       yield put(actions.endInterruptExecution(workspaceLocation));

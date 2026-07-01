@@ -95,14 +95,22 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
       let pluginClassLocation = getWebPluginLocation(pluginName);
       if (!pluginClassLocation) {
         try {
-          const moduleTabLocation = ModuleLoaderWebPlugin.instance?.getModuleTabLocation(pluginName);
+          console.log(ModuleLoaderWebPlugin.instance);
+          const moduleTabLocation =
+            ModuleLoaderWebPlugin.instance?.getModuleTabLocation(pluginName);
+          console.log(moduleTabLocation);
           if (!moduleTabLocation) {
-            console.warn(`No web plugin resolution found for "${pluginName}" in the plugin directory.`);            
+            console.warn(
+              `No web plugin resolution found for "${pluginName}" in the plugin directory.`,
+            );
             return;
           }
           pluginClassLocation = moduleTabLocation;
         } catch (error) {
-          console.error(`Error occurred while fetching web plugin location for "${pluginName}":`, error);
+          console.error(
+            `Error occurred while fetching web plugin location for "${pluginName}":`,
+            error,
+          );
           return;
         }
       }
@@ -114,6 +122,7 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
       }
       await import(/* webpackIgnore: true */ pluginClassLocation)
         .then(tab => tab.default(requireProvider))
+        .then(tab => ('default' in tab ? tab.default : tab))
         .then(plugin => conduit.registerPlugin(plugin, sideContentManager))
         .catch(error => console.error(`Unable to load external plugin "${pluginName}".`, error));
     },
@@ -142,20 +151,20 @@ function* ensurePreparedConductorSaga(path: string): SagaIterator<PreparedConduc
 
   // A new evaluator path is requested, so release the old preloaded conductor first.
   yield call(cleanupPreparedConductorSaga);
+  const moduleDirectory = yield select(selectDirectoryModulesUrl);
 
   loadingConductorPath = path;
   loadingConductorPromise = createPreparedConductor(path)
     .then(prepared => {
       preparedConductorPath = path;
       preparedConductor = prepared;
+      ModuleLoaderWebPlugin.instance?.onModuleDirectoryURLChange(moduleDirectory);
       return prepared;
     })
     .finally(() => {
       loadingConductorPath = null;
       loadingConductorPromise = null;
     });
-  const moduleDirectory = yield select(selectDirectoryModulesUrl);
-  ModuleLoaderWebPlugin.instance?.onModuleDirectoryURLChange(moduleDirectory);
   return yield call(() => loadingConductorPromise as Promise<PreparedConductor>);
 }
 
