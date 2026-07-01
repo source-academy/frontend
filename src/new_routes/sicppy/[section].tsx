@@ -2,23 +2,13 @@ import 'katex/dist/katex.min.css';
 
 import { Button, H2 } from '@blueprintjs/core';
 import { Link, useNavigate, useOutletContext, useParams } from 'react-router';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { getNextPy, getPrevPy } from 'src/features/sicp/TableOfContentsHelperPy';
 
 import SicpPyToc from '../../pages/sicp/subcomponents/SicpPyToc';
 
 function SicpPyIndexPage() {
-  const titleImageUrl = useTypedSelector(
-    s => s.languageDirectory.languageMap['python1']?.textbook?.titleImageUrl,
-  );
-
   return (
     <div className="sicp-index-page">
-      {titleImageUrl && (
-        <div className="sicp-cover">
-          <img src={titleImageUrl} alt="SICPy" />
-        </div>
-      )}
       <div style={{ padding: '2rem 2rem 0' }}>
         <H2>Structure and Interpretation of Computer Programs</H2>
         <p style={{ color: 'grey', marginTop: 0 }}>Python Edition</p>
