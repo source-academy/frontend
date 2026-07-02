@@ -3,14 +3,19 @@ import * as bpcore from '@blueprintjs/core';
 import * as bpicons from '@blueprintjs/icons';
 import * as jsslang from 'js-slang';
 import * as jsslangDist from 'js-slang/dist';
+import * as jsslangErrors from 'js-slang/dist/errors/base';
+import * as rttcErrors from 'js-slang/dist/errors/rttcErrors';
+import * as jsslangOperators from 'js-slang/dist/utils/operators';
+import * as jsslangRttc from 'js-slang/dist/utils/rttc';
 import * as lodash from 'lodash-es';
 // We need it to inject modules into the context
 // eslint-disable-next-line no-restricted-imports
 import * as React from 'react';
 import { useCallback } from 'react';
-import JSXRuntime from 'react/jsx-runtime';
-import ace from 'react-ace';
-import ReactDOM from 'react-dom';
+import * as JSXRuntime from 'react/jsx-runtime';
+import * as ace from 'react-ace';
+import * as ReactDOM from 'react-dom';
+import * as ReactDOMClient from 'react-dom/client';
 import { useDispatch } from 'react-redux';
 
 import { useTypedSelector } from '../utils/Hooks';
@@ -31,10 +36,15 @@ export const requireProvider = (x: string) => {
     'react/jsx-runtime': JSXRuntime,
     'react-ace': ace,
     'react-dom': ReactDOM,
+    'react-dom/client': ReactDOMClient,
     '@blueprintjs/core': bpcore,
     '@blueprintjs/icons': bpicons,
     'js-slang': jsslang,
     'js-slang/dist': jsslangDist,
+    'js-slang/dist/utils/operators': jsslangOperators,
+    'js-slang/dist/utils/rttc': jsslangRttc,
+    'js-slang/dist/errors/base': jsslangErrors,
+    'js-slang/dist/errors/rttcErrors': rttcErrors,
     lodash,
   };
 
