@@ -12,9 +12,9 @@ import * as lodash from 'lodash-es';
 // eslint-disable-next-line no-restricted-imports
 import * as React from 'react';
 import { useCallback } from 'react';
-import * as JSXRuntime from 'react/jsx-runtime';
-import * as ace from 'react-ace';
-import * as ReactDOM from 'react-dom';
+import JSXRuntime from 'react/jsx-runtime';
+import ace from 'react-ace';
+import ReactDOM from 'react-dom';
 import * as ReactDOMClient from 'react-dom/client';
 import { useDispatch } from 'react-redux';
 
