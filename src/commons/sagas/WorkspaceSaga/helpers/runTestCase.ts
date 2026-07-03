@@ -2,7 +2,10 @@ import type { Context } from 'js-slang';
 import { random } from 'lodash-es';
 import { call, put, select, type StrictEffect } from 'redux-saga/effects';
 
+import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 import type { OverallState } from '../../../application/ApplicationTypes';
+import type { TestcaseType } from '../../../assessment/AssessmentTypes';
+import { TestcaseTypes } from '../../../assessment/AssessmentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import { makeElevatedContext } from '../../../utils/JsSlangHelper';
 import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
@@ -12,6 +15,77 @@ import { clearContext } from './clearContext';
 import { evalCodeSaga } from './evalCode';
 import { evalTestCode } from './evalTestCode';
 import { restoreExtraMethods } from './restoreExtraMethods';
+
+/**
+ * Runs a testcase under Conductor.
+ *
+ * Conductor gives every evalCodeSaga call its own fresh, isolated worker that is
+ * terminated afterwards - there is no persistent privileged context to run prepend,
+ * student code, postpend, and the testcase separately into, unlike the legacy
+ * js-slang path below. Instead, concatenate all four into a single file and run it
+ * in one Conductor call: prepend and postpend definitions stay visible to the
+ * student's code and to each other in the same order they'd run in normally, and
+ * any prepend-defined mutable state (e.g. a counter incremented by a prepend
+ * function that postpend later checks) is preserved since it's all one execution.
+ *
+ * The result of the run is read back from the workspace's last output entry -
+ * evalCodeConductorSaga only dispatches generic appendInterpreterResult/Error
+ * actions, it does not know this call is for a testcase - and re-dispatched as
+ * evalTestcaseSuccess/Failure so the existing testcase UI (which reads
+ * editorTestcases[index].result) keeps working unchanged.
+ */
+function* runTestCaseConductor(
+  workspaceLocation: WorkspaceLocation,
+  index: number,
+  value: string,
+  testcase: string,
+  type: TestcaseType,
+  prepend: string,
+  postpend: string,
+  execTime: number,
+): Generator<StrictEffect, boolean, any> {
+  const context: Context<any> = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].context,
+  );
+
+  const combinedFilePath = '/testcase.py';
+  const combinedCode = [prepend, value, postpend, testcase]
+    .filter(part => part && part.trim().length > 0)
+    .join('\n');
+
+  yield put(actions.resetTestcase(workspaceLocation, index));
+
+  yield call(
+    evalCodeSaga,
+    { [combinedFilePath]: combinedCode },
+    combinedFilePath,
+    context,
+    execTime,
+    EVAL_SILENT,
+    workspaceLocation,
+  );
+
+  const lastOutput: { type: string; value?: any; errors?: any } | undefined = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].output.slice(-1)[0],
+  );
+
+  let passed: boolean;
+  if (lastOutput?.type === 'errors') {
+    yield put(actions.evalTestcaseFailure(lastOutput.errors, workspaceLocation, index));
+    passed = false;
+  } else if (lastOutput?.type === 'result') {
+    yield put(actions.evalTestcaseSuccess(lastOutput.value, workspaceLocation, index));
+    passed = true;
+  } else {
+    passed = false;
+  }
+
+  if (type === TestcaseTypes.opaque) {
+    yield put(actions.clearReplOutputLast(workspaceLocation));
+  }
+
+  return passed;
+}
 
 export function* runTestCase(
   workspaceLocation: WorkspaceLocation,
@@ -32,6 +106,20 @@ export function* runTestCase(
   yield* clearContext(workspaceLocation, value);
 
   // Do NOT clear the REPL output!
+
+  const isConductorEnabled: boolean = yield select(selectConductorEnable);
+  if (isConductorEnabled) {
+    return yield* runTestCaseConductor(
+      workspaceLocation,
+      index,
+      value,
+      testcase,
+      type,
+      prepend,
+      postpend,
+      execTime,
+    );
+  }
 
   /**
    *  Shard a new privileged context elevated to use Source chapter 4 for testcases - enables
