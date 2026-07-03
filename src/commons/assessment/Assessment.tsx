@@ -28,7 +28,7 @@ import ContentDisplay from '../ContentDisplay';
 import ControlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 import { beforeNow } from '../utils/DateHelper';
-import { useSession, useTypedSelector } from '../utils/Hooks';
+import { useAppSelector, useSession } from '../utils/Hooks';
 import { convertParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
 import AssessmentOverviewCard from './AssessmentOverviewCard';
@@ -107,7 +107,7 @@ function Assessment() {
     [assessmentConfigToLoad.type, assessmentOverviewsUnfiltered],
   );
 
-  const fromLeaderboard: boolean = useTypedSelector(store => store.leaderboard.code) ? true : false;
+  const fromLeaderboard: boolean = useAppSelector(store => store.leaderboard.code) ? true : false;
 
   // If assessmentId or questionId is defined but not numeric, redirect back to the Assessment overviews page
   if (

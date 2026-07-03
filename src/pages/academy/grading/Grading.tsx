@@ -9,7 +9,7 @@ import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
 import { getAllGradingOverviews } from 'src/commons/sagas/RequestsSaga';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
-import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppSelector, useSession } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import type { GradingOverview } from 'src/features/grading/GradingTypes';
@@ -56,11 +56,11 @@ function Grading() {
   const [submissions, setSubmissions] = useState<GradingOverview[]>([]);
 
   const dispatch = useDispatch();
-  const allColsSortStates = useTypedSelector(state => state.workspaces.grading.allColsSortStates);
-  const hasLoadedBefore = useTypedSelector(state => state.workspaces.grading.hasLoadedBefore);
-  const requestCounter = useTypedSelector(state => state.workspaces.grading.requestCounter);
-  const accessToken = useTypedSelector(state => state.session.accessToken);
-  const refreshToken = useTypedSelector(state => state.session.refreshToken);
+  const allColsSortStates = useAppSelector(state => state.workspaces.grading.allColsSortStates);
+  const hasLoadedBefore = useAppSelector(state => state.workspaces.grading.hasLoadedBefore);
+  const requestCounter = useAppSelector(state => state.workspaces.grading.requestCounter);
+  const accessToken = useAppSelector(state => state.session.accessToken);
+  const refreshToken = useAppSelector(state => state.session.refreshToken);
 
   const isLoading = useMemo(() => requestCounter > 0, [requestCounter]);
 

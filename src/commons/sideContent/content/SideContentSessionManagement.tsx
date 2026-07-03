@@ -10,7 +10,7 @@ import {
   getPlaygroundSessionUrl,
 } from 'src/commons/collabEditing/CollabEditingHelper';
 import CopyToClipboard from 'src/commons/utils/CopyToClipboard';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppSelector } from 'src/commons/utils/Hooks';
 import { showSuccessMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import classes from 'src/styles/SideContentSessionManagement.module.scss';
 
@@ -30,7 +30,7 @@ function AdminView({ users, playgroundCode }: AdminViewProps) {
   const [toggling, setToggling] = useState<{ [key: string]: boolean }>(
     Object.fromEntries(Object.entries(users).map(([id]) => [id, true])),
   );
-  const updateUserRoleCallback = useTypedSelector(
+  const updateUserRoleCallback = useAppSelector(
     store => store.workspaces.playground.updateUserRoleCallback,
   );
 

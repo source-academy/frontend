@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppSelector } from 'src/commons/utils/Hooks';
 import type { AccountInfo } from 'src/features/game/SourceAcademyGame';
 import SourceAcademyGame, { GameType } from 'src/features/game/SourceAcademyGame';
 import { gameSimulatorConfig } from 'src/features/gameSimulator/GameSimulatorConstants';
@@ -26,7 +26,7 @@ const createGameSimulatorGame = () => {
  * are able to control what is shown on the Game Simulator panel.
  */
 function GameSimulator() {
-  const session = useTypedSelector(state => state.session);
+  const session = useAppSelector(state => state.session);
   const [gameSimulatorState, setGameSimulatorState] = useState<string>(GameSimulatorState.DEFAULT);
 
   useEffect(() => {

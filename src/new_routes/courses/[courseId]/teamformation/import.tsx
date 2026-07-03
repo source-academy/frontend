@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 import Select from 'react-select';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import type { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppSelector } from 'src/commons/utils/Hooks';
 import { FormContainer, FormField, FormFieldRow } from 'src/components/ui/form';
 
 function TeamFormationImport() {
@@ -14,8 +14,8 @@ function TeamFormationImport() {
   const dispatch = useDispatch();
   const fileTypes = ['XLSX', 'XLS'];
   const [file, setFile] = useState<File | null>(null);
-  const { courseId, students } = useTypedSelector(state => state.session);
-  const assessmentOverviews = useTypedSelector(state => state.session.assessmentOverviews);
+  const { courseId, students } = useAppSelector(state => state.session);
+  const assessmentOverviews = useAppSelector(state => state.session.assessmentOverviews);
   const [selectedAssessment, setSelectedAssessment] = useState<AssessmentOverview | undefined>(
     undefined,
   );

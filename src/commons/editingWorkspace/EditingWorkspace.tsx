@@ -52,7 +52,7 @@ import type { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight } from '../sideContent/SideContentActions';
 import type { SideContentTab } from '../sideContent/SideContentTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
-import { useTypedSelector } from '../utils/Hooks';
+import { useAppSelector } from '../utils/Hooks';
 import Workspace, { type WorkspaceProps } from '../workspace/Workspace';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 import type { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
@@ -90,7 +90,7 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
     replValue,
     currentAssessment: storedAssessmentId,
     currentQuestion: storedQuestionId,
-  } = useTypedSelector(store => store.workspaces[workspaceLocation]);
+  } = useAppSelector(store => store.workspaces[workspaceLocation]);
 
   /**
    * After mounting (either an older copy of the assessment

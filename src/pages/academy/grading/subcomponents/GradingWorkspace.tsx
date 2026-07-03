@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
@@ -89,9 +89,9 @@ function GradingWorkspace(props: Props) {
     SideContentType.grading,
   );
 
-  const grading = useTypedSelector(state => state.session.gradings[props.submissionId]);
-  const courseId = useTypedSelector(state => state.session.courseId);
-  const llm_grading = useTypedSelector(state => state.session.enableLlmGrading);
+  const grading = useAppSelector(state => state.session.gradings[props.submissionId]);
+  const courseId = useAppSelector(state => state.session.courseId);
+  const llm_grading = useAppSelector(state => state.session.enableLlmGrading);
   const {
     autogradingResults,
     isFolderModeEnabled,
@@ -104,7 +104,7 @@ function GradingWorkspace(props: Props) {
     currentSubmission: storedSubmissionId,
     currentQuestion: storedQuestionId,
     versionHistory,
-  } = useTypedSelector(state => state.workspaces[workspaceLocation]);
+  } = useAppSelector(state => state.workspaces[workspaceLocation]);
 
   const dispatch = useDispatch();
   const {

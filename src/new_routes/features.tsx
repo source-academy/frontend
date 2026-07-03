@@ -16,7 +16,7 @@ import { useDispatch } from 'react-redux';
 import { FeatureFlagsActions } from 'src/commons/featureFlags';
 import { FeatureFlag } from 'src/commons/featureFlags/FeatureFlag';
 import { publicFlags } from 'src/commons/featureFlags/publicFlags';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppSelector } from 'src/commons/utils/Hooks';
 import { PageCard, PageWrapper } from 'src/components/ui/page';
 
 type FlagCardProps<T> = React.PropsWithChildren<{
@@ -150,7 +150,7 @@ function FeatureFlagSection({
 }
 
 function FeatureFlagsPage() {
-  const flags = useTypedSelector(store => store.featureFlags.modifiedFlags);
+  const flags = useAppSelector(store => store.featureFlags.modifiedFlags);
 
   const cards = publicFlags.map(flag => {
     const [icon, FlagCard] = whichCard(flag);

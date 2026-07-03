@@ -6,7 +6,7 @@ import { NavLink } from 'react-router';
 import SessionActions from '../application/actions/SessionActions';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
-import { useTypedSelector } from '../utils/Hooks';
+import { useAppSelector } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import { type AssessmentOverview, AssessmentStatuses } from './AssessmentTypes';
 
@@ -15,7 +15,7 @@ type Props = {
 };
 
 function AssessmentInteractButton({ overview }: Props) {
-  const courseId = useTypedSelector(state => state.session.courseId);
+  const courseId = useAppSelector(state => state.session.courseId);
   const dispatch = useDispatch();
   const { icon, label, optionalLabel } = createButtonConfiguration(overview.status);
 

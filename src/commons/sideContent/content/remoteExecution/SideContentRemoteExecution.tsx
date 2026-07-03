@@ -25,7 +25,7 @@ import {
 import type { Device, DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
 
 import { actions } from '../../../utils/ActionsHelper';
-import { useTypedSelector } from '../../../utils/Hooks';
+import { useAppSelector } from '../../../utils/Hooks';
 import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import DeviceMenuItemButtons from './DeviceMenuItemButtons';
 
@@ -73,9 +73,9 @@ function SideContentRemoteExecution(props: SideContentRemoteExecutionProps) {
   );
   const [secretParams, setSecretParams] = useState(props.secretParams);
 
-  const isLoggedIn = useTypedSelector(state => !!state.session.accessToken && !!state.session.role);
-  const devices = useTypedSelector(state => state.session.remoteExecutionDevices);
-  const currentSession = useTypedSelector(state => state.session.remoteExecutionSession);
+  const isLoggedIn = useAppSelector(state => !!state.session.accessToken && !!state.session.role);
+  const devices = useAppSelector(state => state.session.remoteExecutionDevices);
+  const currentSession = useAppSelector(state => state.session.remoteExecutionSession);
   const dispatch = useDispatch();
 
   const isConnected = currentSession?.connection.status === 'CONNECTED';

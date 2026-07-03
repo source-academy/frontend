@@ -10,7 +10,7 @@ import { STEPPER_EVALUATOR_CAPABILITY } from '../../features/conductor/stepperTa
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
 import type { SALanguage } from '../application/ApplicationTypes';
 import { useFeature } from '../featureFlags/useFeature';
-import { useTypedSelector } from '../utils/Hooks';
+import { useAppSelector } from '../utils/Hooks';
 import LegacyControlBarChapterSelect from './LegacyControlBarChapterSelect';
 
 type Props = {
@@ -30,9 +30,9 @@ function ControlBarChapterSelect({
 }: Props) {
   const dispatch = useDispatch();
   const directoryEnabled = useFeature(flagConductorEnable);
-  const selectedLanguageId = useTypedSelector(s => s.languageDirectory.selectedLanguageId);
-  const selectedEvaluatorId = useTypedSelector(s => s.languageDirectory.selectedEvaluatorId);
-  const dirLanguages = useTypedSelector(s => s.languageDirectory.languages);
+  const selectedLanguageId = useAppSelector(s => s.languageDirectory.selectedLanguageId);
+  const selectedEvaluatorId = useAppSelector(s => s.languageDirectory.selectedEvaluatorId);
+  const dirLanguages = useAppSelector(s => s.languageDirectory.languages);
 
   if (!directoryEnabled) {
     return (

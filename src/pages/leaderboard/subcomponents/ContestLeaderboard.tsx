@@ -5,7 +5,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppSelector } from 'src/commons/utils/Hooks';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import type {
   ContestLeaderboardRow,
@@ -28,14 +28,12 @@ function ContestLeaderboard({
   type,
   contest: { contest_id: contestId, title: contestName },
 }: Props) {
-  const courseID = useTypedSelector(store => store.session.courseId);
-  const visibleEntries = useTypedSelector(
-    store => store.session?.topContestLeaderboardDisplay ?? 10,
-  );
+  const courseID = useAppSelector(store => store.session.courseId);
+  const visibleEntries = useAppSelector(store => store.session?.topContestLeaderboardDisplay ?? 10);
   const dispatch = useDispatch();
 
   // Retrieve Contest Score Data from store
-  const rankedLeaderboard: ContestLeaderboardRow[] = useTypedSelector(store =>
+  const rankedLeaderboard: ContestLeaderboardRow[] = useAppSelector(store =>
     type === 'score' ? store.leaderboard.contestScore : store.leaderboard.contestPopularVote,
   );
 

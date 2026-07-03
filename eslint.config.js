@@ -41,7 +41,7 @@ const restrictedImports = [
       // "useDispatch",
       'useSelector',
     ],
-    message: 'Use the typed hook "useTypedSelector" instead.',
+    message: 'Use the typed hook "useAppSelector" instead.',
   },
 ];
 
