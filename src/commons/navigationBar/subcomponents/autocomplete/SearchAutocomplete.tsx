@@ -39,16 +39,12 @@ type Props = {
 
 function SearchAutocomplete({ queryKey, fetchSearchData, onNavigate }: Props) {
   const [shouldLoad, setShouldLoad] = useState(false);
-  const {
-    data: rewritedSearchData,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data, isFetching, error } = useQuery({
     queryKey: [queryKey],
     queryFn: fetchSearchData,
     enabled: shouldLoad,
-    initialData: emptySearchData,
   });
+  const rewritedSearchData = data ?? emptySearchData;
 
   const [isOmnibarOpen, setIsOmnibarOpen] = useState(false);
   const [omnibarMode, setOmnibarMode] = useState<Mode>('text');
@@ -195,8 +191,8 @@ function SearchAutocomplete({ queryKey, fetchSearchData, onNavigate }: Props) {
         className="sicp-search-bar"
         isOpen={isOmnibarOpen}
         inputProps={{
-          disabled: omnibarMode === 'submenu' || isLoading,
-          placeholder: isLoading
+          disabled: omnibarMode === 'submenu' || isFetching,
+          placeholder: isFetching
             ? 'Loading search data...'
             : `${omnibarMode.charAt(0).toUpperCase()}${omnibarMode.slice(1)} Search...`,
         }}
@@ -226,9 +222,9 @@ function SearchAutocomplete({ queryKey, fetchSearchData, onNavigate }: Props) {
         itemListRenderer={({ itemsParentRef, renderItem, items }) => (
           <Menu ulRef={itemsParentRef}>
             {(omnibarMode === 'text' || omnibarMode === 'index') &&
-              (isLoading || error !== null) && (
+              (isFetching || error !== null) && (
                 <Text className={Classes.TEXT_MUTED} style={{ padding: 6 }}>
-                  {isLoading
+                  {isFetching
                     ? 'Loading search data...'
                     : error !== null
                       ? 'Unable to load search data. Please try again.'
