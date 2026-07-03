@@ -26,6 +26,8 @@ import SicpPyToc from '../../../pages/sicp/subcomponents/SicpPyToc';
 
 type IndexSearchResult = { text: string; order: string; id: string; hasSubindex: boolean };
 
+type SearchResultItem = string | IndexSearchResult;
+
 type TrieNode = {
   children: Record<string, TrieNode>;
   value: string[] & IndexSearchResult[];
@@ -257,7 +259,7 @@ function SicpPyNavigationBar() {
   const [omnibarMode, setOmnibarMode] = useState<'text' | 'index' | 'submenu'>('text');
   const [previousMode, setPreviousMode] = useState<'text' | 'index' | null>(null);
   const [query, setQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<string[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchResultItem[]>([]);
 
   const initTextSearch = () => {
     setOmnibarMode('text');
@@ -301,7 +303,7 @@ function SicpPyNavigationBar() {
         break;
       case 'index':
         setSearchResults(
-          processIndexSearchResults(trieLookup(result, rewritedSearchData.indexTrie)) as any[],
+          processIndexSearchResults(trieLookup(result, rewritedSearchData.indexTrie)),
         );
         break;
     }
@@ -369,13 +371,13 @@ function SicpPyNavigationBar() {
           switch (omnibarMode) {
             case 'text':
             case 'index':
-              handleResultClick(result);
+              if (typeof result === 'string') handleResultClick(result);
               break;
             case 'submenu':
-              if (previousMode === 'text') {
-                handleNavigation(result as string);
-              } else if (previousMode === 'index') {
-                handleNavigation((result as unknown as IndexSearchResult).id);
+              if (previousMode === 'text' && typeof result === 'string') {
+                handleNavigation(result);
+              } else if (previousMode === 'index' && typeof result !== 'string') {
+                handleNavigation(result.id);
               }
               setIsOmnibarOpen(false);
               break;
@@ -424,6 +426,7 @@ function SicpPyNavigationBar() {
           switch (omnibarMode) {
             case 'text':
             case 'index':
+              if (typeof result !== 'string') return null;
               return (
                 <MenuItem
                   active={modifiers.active}
@@ -435,9 +438,9 @@ function SicpPyNavigationBar() {
             case 'submenu':
               switch (previousMode!) {
                 case 'text':
-                  return makeTextSearchSubmenuItem(result);
+                  return typeof result === 'string' ? makeTextSearchSubmenuItem(result) : null;
                 case 'index':
-                  return makeIndexSearchSubmenuItem(result as unknown as IndexSearchResult);
+                  return typeof result !== 'string' ? makeIndexSearchSubmenuItem(result) : null;
               }
           }
         }}
