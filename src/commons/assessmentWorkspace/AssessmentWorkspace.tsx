@@ -440,7 +440,13 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
     const resetWorkspaceOptions = assertType<WorkspaceState>()({
       autogradingResults: options.autogradingResults ?? [],
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorTabs: [{ value: options.editorValue ?? '', highlightedLines: [], breakpoints: [] }],
+      editorTabs: [
+        {
+          value: options.editorValue ?? '',
+          highlightedLines: [],
+          breakpoints: [],
+        },
+      ],
       programPrependValue: options.programPrependValue ?? '',
       programPostpendValue: options.programPostpendValue ?? '',
       editorTestcases: options.editorTestcases ?? [],
@@ -898,9 +904,9 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
       }
 
       // Do nothing when clicking the mobile 'Run' tab while on the autograder tab.
-      if (!(
-        prevTabId === SideContentType.autograder && newTabId === SideContentType.mobileEditorRun
-      )) {
+      if (
+        !(prevTabId === SideContentType.autograder && newTabId === SideContentType.mobileEditorRun)
+      ) {
         setSelectedTab(newTabId);
       }
     };
