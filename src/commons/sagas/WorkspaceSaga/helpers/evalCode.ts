@@ -492,9 +492,13 @@ function* handleErrors(
   workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
   const errorChan = eventChannel(emitter => {
-    hostPlugin.receiveError = emitter;
+    // Same undefined-forbidden-by-eventChannel issue as the result channel: the
+    // conductor package's BasicHostPlugin calls receiveError with errorMessage.error
+    // directly, which isn't guaranteed to be defined.
+    const onReceiveError = (error: unknown) => emitter(error === undefined ? null : error);
+    hostPlugin.receiveError = onReceiveError;
     return () => {
-      if (hostPlugin.receiveError === emitter) {
+      if (hostPlugin.receiveError === onReceiveError) {
         delete hostPlugin.receiveError;
       }
     };
