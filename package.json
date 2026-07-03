@@ -170,6 +170,17 @@
     "vitest": "4.1.9",
     "webpack-bundle-analyzer": "^5.0.0"
   },
+  "dependenciesMeta": {
+    "@parcel/watcher": {
+      "built": true
+    },
+    "@swc/core": {
+      "built": true
+    },
+    "canvas": {
+      "built": true
+    }
+  },
   "browserslist": {
     "production": [
       "Firefox ESR",
