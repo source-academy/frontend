@@ -23,22 +23,9 @@ import { getNextPy, getPrevPy } from 'src/features/sicp/TableOfContentsHelperPy'
 
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
 import SicpPyToc from '../../../pages/sicp/subcomponents/SicpPyToc';
-
-type IndexSearchResult = { text: string; order: string; id: string; hasSubindex: boolean };
+import type { IndexSearchResult, SearchData, TrieNode } from './autocomplete/types';
 
 type SearchResultItem = string | IndexSearchResult;
-
-type TrieNode = {
-  children: Record<string, TrieNode>;
-  value: string[] & IndexSearchResult[];
-  key: string;
-};
-
-type SearchData = {
-  indexTrie: TrieNode;
-  textTrie: TrieNode;
-  idToContentMap: Record<string, string>;
-};
 
 const emptyTrieNode: TrieNode = { children: {}, value: [] as any, key: '' };
 const emptySearchData: SearchData = {
