@@ -70,6 +70,8 @@ export function* evalEditorSaga(
       CseMachine.clearRenderedLayouts();
     }
 
+    const isConductorEnabled: boolean = yield select(selectConductorEnable);
+
     // Insert debugger statements at the lines of the program with a breakpoint.
     for (const editorTab of editorTabs) {
       const filePath = editorTab.filePath ?? defaultFilePath;
@@ -80,10 +82,9 @@ export function* evalEditorSaga(
         code,
         breakpoints,
         context,
+        isConductorEnabled,
       );
     }
-
-    const isConductorEnabled: boolean = yield select(selectConductorEnable);
 
     // Evaluate the prepend silently with a privileged context, if it exists.
     // Skipped under Conductor: each evalCodeSaga call runs in its own fresh,
