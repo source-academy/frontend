@@ -29,7 +29,7 @@ function LocaleSelector() {
       />
       <Tooltip
         position={PopoverPosition.TOP}
-        className="form-field-help-text"
+        className="form-field-help-text ml-2.5"
         content="Choose your language."
       >
         <Icon icon={IconNames.Help} />

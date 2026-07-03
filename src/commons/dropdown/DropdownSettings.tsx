@@ -58,7 +58,7 @@ function DropdownSettings({ isOpen, onClose }: Props) {
           />
           <Tooltip
             position={PopoverPosition.TOP}
-            className="form-field-help-text"
+            className="form-field-help-text ml-2.5"
             content="Optional editor bindings for advanced users. Set to 'None' for default text editor behaviour."
           >
             <Icon icon={IconNames.Help} />
