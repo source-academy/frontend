@@ -221,18 +221,10 @@ function SicpNavigationBar() {
     }
   };
 
-  const userSearch = (
-    <ControlButton label="Text Search" icon={IconNames.SEARCH} onClick={initTextSearch} />
-  );
-
-  const indexSearch = (
-    <ControlButton label="Index Search" icon={IconNames.SEARCH} onClick={initIndexSearch} />
-  );
-
   const searchWrapper = (
     <div style={{ width: '100%', display: 'flex', gap: 2, justifyContent: 'center' }}>
-      {userSearch}
-      {indexSearch}
+      <ControlButton label="Text Search" icon={IconNames.SEARCH} onClick={initTextSearch} />
+      <ControlButton label="Index Search" icon={IconNames.SEARCH} onClick={initIndexSearch} />
     </div>
   );
 
