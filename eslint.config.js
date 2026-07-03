@@ -36,12 +36,13 @@ const restrictedImports = [
   })),
   {
     name: 'react-redux',
-    importNames: [
-      // TODO: Create typed hook for useDispatch
-      // "useDispatch",
-      'useSelector',
-    ],
+    importNames: ['useSelector'],
     message: 'Use the typed hook "useAppSelector" instead.',
+  },
+  {
+    name: 'react-redux',
+    importNames: ['useDispatch'],
+    message: 'Use the typed hook "useAppDispatch" instead.',
   },
 ];
 
