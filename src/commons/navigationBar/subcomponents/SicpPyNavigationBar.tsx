@@ -94,14 +94,18 @@ function SicpPyNavigationBar() {
 
   useEffect(() => {
     return () => {
-      if (loadingMessageTimeoutRef.current) clearTimeout(loadingMessageTimeoutRef.current);
+      if (loadingMessageTimeoutRef.current) {
+        clearTimeout(loadingMessageTimeoutRef.current);
+      }
     };
   }, []);
 
   // Search data (currently ~5MB) is fetched lazily, only once the user actually opens
   // search, rather than eagerly whenever the textbook is opened.
   const loadSearchData = () => {
-    if (searchDataStatus === 'loading' || searchDataStatus === 'ready') return;
+    if (searchDataStatus === 'loading' || searchDataStatus === 'ready') {
+      return;
+    }
 
     if (process.env.NODE_ENV === 'test') {
       setRewritedSearchData(emptySearchData);
@@ -134,25 +138,36 @@ function SicpPyNavigationBar() {
   };
 
   const focusResult = (result: string | undefined, q: string): React.ReactNode => {
-    if (!result) return null;
+    if (!result) {
+      return null;
+    }
     const normalizedQ = q.toLowerCase();
     result = result.replaceAll('\n', ' ').toLowerCase();
     const startIndex = result.indexOf(normalizedQ);
-    if (startIndex === -1)
+    if (startIndex === -1) {
       return (
         <>
           {result.slice(0, 100)}
           {result.length > 100 ? '...' : ''}
         </>
       );
+    }
     let start = startIndex;
-    while (start > 0 && !result[start - 1].match(/[^a-zA-Z, _]/)) start--;
+    while (start > 0 && !result[start - 1].match(/[^a-zA-Z, _]/)) {
+      start--;
+    }
     const endIndex = startIndex + normalizedQ.length;
     let end = endIndex;
-    while (end < result.length && !result[end].match(/[^a-zA-Z _,]/)) end++;
+    while (end < result.length && !result[end].match(/[^a-zA-Z _,]/)) {
+      end++;
+    }
     let subStr = result.slice(start, end);
-    if (start > 0) subStr = '...' + subStr;
-    if (end < result.length) subStr = subStr + '...';
+    if (start > 0) {
+      subStr = '...' + subStr;
+    }
+    if (end < result.length) {
+      subStr = subStr + '...';
+    }
     subStr = subStr.trim();
     return (
       <>
@@ -231,8 +246,12 @@ function SicpPyNavigationBar() {
     results
       .filter(r => r.id)
       .sort((a, b) => {
-        if (a.hasSubindex && !b.hasSubindex) return 1;
-        if (!a.hasSubindex && b.hasSubindex) return -1;
+        if (a.hasSubindex && !b.hasSubindex) {
+          return 1;
+        }
+        if (!a.hasSubindex && b.hasSubindex) {
+          return -1;
+        }
         return a.order.localeCompare(b.order);
       });
 
@@ -289,7 +308,9 @@ function SicpPyNavigationBar() {
           switch (omnibarMode) {
             case 'text':
             case 'index':
-              if (typeof result === 'string') handleResultClick(result);
+              if (typeof result === 'string') {
+                handleResultClick(result);
+              }
               break;
             case 'submenu':
               if (previousMode === 'text' && typeof result === 'string') {
@@ -344,7 +365,9 @@ function SicpPyNavigationBar() {
           switch (omnibarMode) {
             case 'text':
             case 'index':
-              if (typeof result !== 'string') return null;
+              if (typeof result !== 'string') {
+                return null;
+              }
               return (
                 <MenuItem
                   active={modifiers.active}
