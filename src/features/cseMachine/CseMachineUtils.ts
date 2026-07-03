@@ -344,7 +344,10 @@ function markReachableEnvs(
 
   rootIds.forEach(id => {
     const env = findEnvById(envTree.root, id);
-    if (env) pushEnv(env); //to add the root envs to the worklist for DFS later on
+    if (env) {
+      // to add the root envs to the worklist for DFS later on
+      pushEnv(env);
+    }
   });
 
   while (worklist.length > 0) {
