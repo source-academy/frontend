@@ -1,0 +1,41 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "src/index.tsx",
+    "src/service-worker.ts",
+    "src/sw/precache.ts"
+  ],
+  "project": ["**/*.{ts,tsx,js,jsx}"],
+  "ignore": [
+    "**/*.test.{ts,tsx}",
+    "**/*.snap",
+    "build/**",
+    "scripts/**",
+    "src/fileMock.ts",
+    "src/commons/mocks/**",
+    "src/setupTests.ts",
+    "src/global.d.ts",
+    "public/**"
+  ],
+  "ignoreDependencies": [
+    "@babel/core",
+    "@babel/plugin-proposal-private-property-in-object",
+    "@babel/preset-typescript",
+    "@babel/runtime",
+    "@swc/core",
+    "@svgr/webpack",
+    "acorn",
+    "coveralls",
+    "flexboxgrid",
+    "flexboxgrid-helpers",
+    "identity-obj-proxy",
+    "phaser",
+    "sass",
+    "tailwindcss",
+    "@types/estree",
+    "@types/gapi.client",
+    "@types/gapi",
+    "@types/identity-obj-proxy",
+    "@types/react-redux"
+  ]
+}
