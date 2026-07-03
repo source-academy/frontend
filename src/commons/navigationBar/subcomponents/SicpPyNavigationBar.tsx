@@ -133,9 +133,8 @@ function SicpPyNavigationBar() {
       })
       .catch(err => {
         console.error(err);
-        alert(err instanceof Error ? err.message : 'Unable to get search data.');
         setSearchDataStatus('error');
-        setLoadingMessage(null);
+        setLoadingMessage('Unable to load search data. Please try again.');
       });
   };
 
