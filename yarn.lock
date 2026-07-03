@@ -7346,6 +7346,7 @@ __metadata:
     lodash-es: "npm:^4.18.1"
     lz-string: "npm:^1.4.4"
     phaser: "npm:~3.90.0"
+    phaser3spectorjs: "npm:^0.0.8"
     prettier: "npm:^3.3.3"
     query-string: "npm:^9.0.0"
     re-resizable: "npm:^6.9.9"
@@ -10734,6 +10735,13 @@ __metadata:
   version: 2.1.0
   resolution: "performance-now@npm:2.1.0"
   checksum: 10c0/22c54de06f269e29f640e0e075207af57de5052a3d15e360c09b9a8663f393f6f45902006c1e71aa8a5a1cdfb1a47fe268826f8496d6425c362f00f5bc3e85d9
+  languageName: node
+  linkType: hard
+
+"phaser3spectorjs@npm:^0.0.8":
+  version: 0.0.8
+  resolution: "phaser3spectorjs@npm:0.0.8"
+  checksum: 10c0/84933cc3e314279d2bd2c4b3356f2c93e0fe6918dcf6d7ab88d0df4d3457df05703e895012a27ba50d8dd3d9bc61183b58a7b8dde9ec81fc3d887e0fd77184dd
   languageName: node
   linkType: hard
 
