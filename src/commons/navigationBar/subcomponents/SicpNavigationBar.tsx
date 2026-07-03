@@ -34,14 +34,15 @@ import {
 } from './autocomplete/utils';
 
 function SicpNavigationBar() {
-  // this section responsible for the travel and table of content
   const [isTocOpen, setIsTocOpen] = useState(false);
   const { section } = useParams<{ section: string }>();
   const navigate = useNavigate();
-  const prev = getPrev(section!);
-  const next = getNext(section!);
-  const handleCloseToc = () => setIsTocOpen(false);
+  const prev = getPrev(section ?? '');
+  const next = getNext(section ?? '');
+
   const handleOpenToc = () => setIsTocOpen(true);
+  const handleCloseToc = () => setIsTocOpen(false);
+
   const handleNavigation = (sect: string) => {
     navigate('/sicpjs/' + sect);
   };
