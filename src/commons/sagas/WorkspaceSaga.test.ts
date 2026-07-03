@@ -671,6 +671,50 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       });
   });
 
+  test('finds printed output even when the trailing output entry has no consoleLogs of its own', () => {
+    const context = createContext();
+    let capturedValue: { toReplString(): string } | undefined;
+
+    return expectSaga(
+      runTestCaseConductor,
+      workspaceLocation,
+      testcaseId,
+      editorValue,
+      testcaseProgram,
+      TestcaseTypes.public,
+      programPrependValue,
+      programPostpendValue,
+      execTime,
+    )
+      .withState(
+        generateDefaultState(workspaceLocation, {
+          context,
+          // stdout and result messages travel on separate Conductor channels with no
+          // guaranteed relative ordering, and output is never cleared between runs -
+          // so the printed text can end up on an earlier entry than the trailing one.
+          output: [
+            { type: 'result', consoleLogs: ['True'] },
+            { type: 'result' },
+          ] as any,
+        }),
+      )
+      .provide([
+        [matchers.call.fn(evalCodeSaga), undefined],
+        {
+          put(effect, next) {
+            if (effect.action.type === InterpreterActions.evalTestcaseSuccess.type) {
+              capturedValue = effect.action.payload.value;
+            }
+            return next();
+          },
+        },
+      ])
+      .run()
+      .then(() => {
+        expect(capturedValue?.toReplString()).toBe('True');
+      });
+  });
+
   test('reports failure without crashing when the Conductor run errors', () => {
     const context = createContext();
     const errors: SourceError[] = [
