@@ -1,24 +1,18 @@
 import type { SearchData, TrieNode } from './types';
 
-function autocomplete(incompleteKeys: string, trie: TrieNode, n: number = 25) {
+function autocomplete(prefix: string, trie: TrieNode, n: number = 25): string[] {
   let node = trie;
-  for (let i = 0; i < incompleteKeys.length; i++) {
-    if (!node.children[incompleteKeys[i]]) {
-      return [];
-    }
-    node = node.children[incompleteKeys[i]];
+  for (const ch of prefix) {
+    if (!node.children[ch]) return [];
+    node = node.children[ch];
   }
-  const result = [];
-  const queue = [node];
+  const result: string[] = [];
+  const queue: TrieNode[] = [node];
   while (queue.length > 0 && result.length < n) {
-    const currNode = queue.shift();
-    if (currNode && currNode.value.length > 0) {
-      result.push(currNode.key);
-    }
-    if (currNode && currNode.children) {
-      for (const child of Object.values(currNode.children)) {
-        queue.push(child);
-      }
+    const currNode = queue.shift()!;
+    if (currNode.value.length > 0) result.push(currNode.key);
+    for (const child of Object.values(currNode.children)) {
+      queue.push(child);
     }
   }
   return result;
