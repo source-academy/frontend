@@ -43,7 +43,9 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
-    if (!to) return [];
+    if (!to) {
+      return [];
+    }
 
     const steps: StepsArray = [
       (x, y) => [x + Config.DataUnitWidth / 2, y + Config.DataUnitHeight / 2],
@@ -61,8 +63,14 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
         // Which face of the left circle to land on, based on where the horizontal
         // segment sits relative to the circle center (using r as the threshold).
         const getLanding = (approachY: number): [number, number] => {
-          if (approachY > targetCY + r) return [targetCX, targetCY + r]; // from below
-          if (approachY < targetCY - r) return [targetCX, targetCY - r]; // from above
+          if (approachY > targetCY + r) {
+            // from below
+            return [targetCX, targetCY + r];
+          }
+          if (approachY < targetCY - r) {
+            // from above
+            return [targetCX, targetCY - r];
+          }
           return [targetCX - r, targetCY]; // same level: left face
         };
 

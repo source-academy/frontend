@@ -15,10 +15,18 @@ export class AnimatedTextbox extends AnimatableTo<TextRectSharedConfig> {
 
   // Update the current component's dimensions based on the inner rect component's dimensions
   private onPropsChange = (props: RectConfig) => {
-    if (props.x) this._x = props.x;
-    if (props.y) this._y = props.y;
-    if (props.width) this._width = props.width;
-    if (props.height) this._height = props.height;
+    if (props.x) {
+      this._x = props.x;
+    }
+    if (props.y) {
+      this._y = props.y;
+    }
+    if (props.width) {
+      this._width = props.width;
+    }
+    if (props.height) {
+      this._height = props.height;
+    }
   };
 
   constructor(

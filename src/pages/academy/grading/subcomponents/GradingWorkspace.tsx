@@ -72,8 +72,12 @@ const getDisplayName = (
     id: number;
   }[],
 ): string[] => {
-  if (studentName) return [studentName];
-  if (team != null) return team.map(member => member.name);
+  if (studentName) {
+    return [studentName];
+  }
+  if (team != null) {
+    return team.map(member => member.name);
+  }
 
   return [''];
 };

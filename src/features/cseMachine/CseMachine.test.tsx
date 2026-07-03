@@ -165,15 +165,21 @@ codeSamples.forEach((code, idx) => {
                     expect(Number(path[1])).toBeLessThan(Number(path[4])); // arrow moves right
                     expect(path[2]).toEqual(path[5]); // horizontal arrow
                     // Box-and-pointer notation, y-coordinate should be the same
-                    if (isArray(unit.data)) expect(unit.value.y()).toEqual(v.y());
+                    if (isArray(unit.data)) {
+                      expect(unit.value.y()).toEqual(v.y());
+                    }
                     // y-coordinates of functions should be at the mid-point of the array
-                    else expect(unit.value.y()).toEqual(v.y() + Config.DataUnitHeight / 2);
+                    else {
+                      expect(unit.value.y()).toEqual(v.y() + Config.DataUnitHeight / 2);
+                    }
                   } else {
                     expect(unit.value.y()).toBeGreaterThan(v.y());
                     expect(path[1]).toEqual(path[4]); // vertical arrow
                     expect(Number(path[2])).toBeLessThan(Number(path[5])); // arrow moves down
                     // Arrays have matching x-coordinates
-                    if (isArray(unit.data)) expect(unit.value.x()).toEqual(unit.x());
+                    if (isArray(unit.data)) {
+                      expect(unit.value.x()).toEqual(unit.x());
+                    }
                     // Functions have the centers aligned instead
                     else {
                       expect(unit.value.x() + unit.value.width() / 2).toEqual(
@@ -259,12 +265,18 @@ codeSamplesControlStash.forEach(codeSample => {
     const stashItemsToTest: StashItemComponent[] = Layout.stashComponent.stashItemComponents;
     controlItemsToTest.forEach(item => {
       expect(item.draw()).toMatchSnapshot();
-      if (item.value === 'ENVIRONMENT') expect(item.arrow).toBeDefined();
+      if (item.value === 'ENVIRONMENT') {
+        expect(item.arrow).toBeDefined();
+      }
     });
-    if (truncate) expect(controlItemsToTest.length).toBeLessThanOrEqual(10);
+    if (truncate) {
+      expect(controlItemsToTest.length).toBeLessThanOrEqual(10);
+    }
     stashItemsToTest.forEach(item => {
       expect(item.draw()).toMatchSnapshot();
-      if (isFunction(item.value) || isArray(item.value)) expect(item.arrow).toBeDefined();
+      if (isFunction(item.value) || isArray(item.value)) {
+        expect(item.arrow).toBeDefined();
+      }
     });
   });
 });

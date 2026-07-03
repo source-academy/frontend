@@ -48,7 +48,9 @@ export const requireProvider = (x: string) => {
     lodash,
   };
 
-  if (!(x in exports)) throw new Error(`Dynamic require of ${x} is not supported`);
+  if (!(x in exports)) {
+    throw new Error(`Dynamic require of ${x} is not supported`);
+  }
   return exports[x as keyof typeof exports] as any;
 };
 
@@ -63,7 +65,9 @@ export type RawTab = (provider: ReturnType<typeof requireProvider>) => {
 export function getDynamicTabs(debuggerContext: DebuggerContext): SideContentTab[] {
   const moduleContexts = debuggerContext?.context?.moduleContexts;
 
-  if (!moduleContexts) return [];
+  if (!moduleContexts) {
+    return [];
+  }
 
   return Object.values(moduleContexts)
     .flatMap(({ tabs }) => tabs ?? [])

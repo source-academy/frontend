@@ -150,7 +150,9 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
     this.activeChoiceIdx = id;
 
     // Render checked option
-    if (this.activeChoice) this.activeChoice.destroy();
+    if (this.activeChoice) {
+      this.activeChoice.destroy();
+    }
 
     this.activeChoice = new Phaser.GameObjects.Container(
       this.scene,

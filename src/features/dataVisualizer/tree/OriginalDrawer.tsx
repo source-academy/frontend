@@ -138,7 +138,9 @@ export class OriginalDrawer {
       this.drawables.push(arrow);
     }
 
-    if (!(node instanceof DrawableTreeNode)) return;
+    if (!(node instanceof DrawableTreeNode)) {
+      return;
+    }
 
     // draws the content
     if (node instanceof FunctionTreeNode) {

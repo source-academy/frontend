@@ -36,13 +36,17 @@ export const timeFromExpired = (deadline?: Date) =>
   deadline === undefined ? 0 : deadline.getTime() - now.getTime();
 
 export const prettifyDate = (deadline?: Date) => {
-  if (deadline === undefined) return '';
+  if (deadline === undefined) {
+    return '';
+  }
 
   return dayjs(deadline).format('D MMMM YYYY HH:mm');
 };
 
 export const prettifyTime = (time?: Date) => {
-  if (time === undefined) return '';
+  if (time === undefined) {
+    return '';
+  }
   return dayjs(time).format('HH:mm');
 };
 

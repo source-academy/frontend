@@ -102,7 +102,9 @@ function* githubOpenFileSaga(): any {
 
 function* githubSaveFileSaga(): any {
   const octokit = getGitHubOctokitInstance();
-  if (octokit === undefined) return;
+  if (octokit === undefined) {
+    return;
+  }
 
   type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
     typeof octokit.users.getAuthenticated

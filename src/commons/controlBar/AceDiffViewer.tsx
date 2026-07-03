@@ -21,10 +21,14 @@ function AceDiffViewer({ currentCode, versionCode }: Props) {
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container) {
+      return;
+    }
 
     const initDiff = () => {
-      if (diffRef.current) return;
+      if (diffRef.current) {
+        return;
+      }
       diffRef.current = new AceDiff({
         ace,
         element: container,
@@ -45,7 +49,9 @@ function AceDiffViewer({ currentCode, versionCode }: Props) {
 
     const observer = new ResizeObserver(() => {
       const { width, height } = container.getBoundingClientRect();
-      if (width === 0 || height === 0) return;
+      if (width === 0 || height === 0) {
+        return;
+      }
       // Defer initialization until the container has real dimensions (after Drawer animation)
       if (!diffRef.current) {
         initDiff();
@@ -74,7 +80,9 @@ function AceDiffViewer({ currentCode, versionCode }: Props) {
 
   // Update content without re-mounting when it changes
   useEffect(() => {
-    if (!diffRef.current) return;
+    if (!diffRef.current) {
+      return;
+    }
     const editors = diffRef.current.getEditors();
     if (editors.left.getValue() !== currentCode) {
       editors.left.setValue(currentCode, -1);

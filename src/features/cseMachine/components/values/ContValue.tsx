@@ -91,7 +91,9 @@ export class ContValue extends Value implements IHoverable {
   }
 
   handleNewReference(newReference: ReferenceType): void {
-    if (!isMainReference(this, newReference)) return;
+    if (!isMainReference(this, newReference)) {
+      return;
+    }
 
     // derive the coordinates from the main reference (binding / array unit)
     if (newReference instanceof Binding) {
@@ -117,14 +119,18 @@ export class ContValue extends Value implements IHoverable {
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) {
+      return;
+    }
     setHoveredCursor(currentTarget);
     this.labelRef.current?.moveToTop();
     this.labelRef.current?.show();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) {
+      return;
+    }
     setUnhoveredCursor(currentTarget);
     this.labelRef.current?.hide();
   };
@@ -132,17 +138,24 @@ export class ContValue extends Value implements IHoverable {
   setArrowSourceHighlightedStyle(): void {
     const color = this.isLive() ? Config.HoverColor : Config.HoverDeadColor;
     (this.ref.current?.getChildren() ?? []).forEach((shape: any) => {
-      if (shape.attrs?.stroke) shape.stroke(color);
-      if (shape.attrs?.fill && !shape.attrs?.stroke) shape.fill(color);
+      if (shape.attrs?.stroke) {
+        shape.stroke(color);
+      }
+      if (shape.attrs?.fill && !shape.attrs?.stroke) {
+        shape.fill(color);
+      }
     });
   }
 
   setArrowSourceNormalStyle(): void {
     const strokeColor = this.isLive() ? defaultStrokeColor() : fadedStrokeColor();
     (this.ref.current?.getChildren() ?? []).forEach((shape: any) => {
-      if (shape.attrs?.stroke) shape.stroke(strokeColor);
-      if (shape.attrs?.fill)
+      if (shape.attrs?.stroke) {
+        shape.stroke(strokeColor);
+      }
+      if (shape.attrs?.fill) {
         shape.fill(shape.attrs?.stroke ? defaultBackgroundColor() : strokeColor);
+      }
     });
   }
 

@@ -41,7 +41,9 @@ function EditablePrerequisiteUuids({ changePrerequisiteUuids, uuid, prerequisite
   };
 
   const removePrereq = (removeUuid?: string) => {
-    if (removeUuid === undefined) return;
+    if (removeUuid === undefined) {
+      return;
+    }
 
     selectedPrereqs.delete(removeUuid);
     availablePrereqs.add(removeUuid);

@@ -17,7 +17,9 @@ export function* getLanguageDefinitionSaga() {
   const directory: LanguageDirectoryState = yield select(
     (state: OverallState) => state.languageDirectory,
   );
-  if (!directory.selectedLanguageId) return undefined;
+  if (!directory.selectedLanguageId) {
+    return undefined;
+  }
   return directory.languageMap[directory.selectedLanguageId];
 }
 
@@ -25,9 +27,13 @@ export function* getEvaluatorDefinitionSaga() {
   const directory: LanguageDirectoryState = yield select(
     (state: OverallState) => state.languageDirectory,
   );
-  if (!directory.selectedEvaluatorId) return undefined;
+  if (!directory.selectedEvaluatorId) {
+    return undefined;
+  }
   const language: ILanguageDefinition = yield call(getLanguageDefinitionSaga);
-  if (!language) return undefined;
+  if (!language) {
+    return undefined;
+  }
   return getEvaluatorDefinition(language, directory.selectedEvaluatorId);
 }
 
@@ -78,8 +84,12 @@ const languageDirectoryHandlers = combineSagaHandlers({
     // never update the prepared conductor — the run would keep using the default evaluator, so
     // `hostLoadPlugin("stepper")` would never fire and the Stepper tab would never appear.
     const conductorEnabled: boolean = yield select(selectConductorEnable);
-    if (!conductorEnabled) return;
-    if (!evaluator?.path) return;
+    if (!conductorEnabled) {
+      return;
+    }
+    if (!evaluator?.path) {
+      return;
+    }
 
     try {
       yield call(preloadConductorEvaluatorSaga, evaluator.path);
@@ -92,7 +102,9 @@ const languageDirectoryHandlers = combineSagaHandlers({
     // happens in the setSelectedEvaluator handler above (this dispatch triggers it), so switching
     // evaluators afterwards re-preloads the correct one.
     const language = yield call(getLanguageDefinitionSaga);
-    if (!language) return;
+    if (!language) {
+      return;
+    }
     if (language.evaluators.length > 0) {
       yield put(LanguageDirectoryActions.setSelectedEvaluator(language.evaluators[0].id));
     }

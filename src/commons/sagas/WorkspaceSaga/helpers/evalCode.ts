@@ -439,7 +439,9 @@ function* handleStdout(
   const outputChan = eventChannel(emitter => {
     hostPlugin.receiveOutput = emitter;
     return () => {
-      if (hostPlugin.receiveOutput === emitter) delete hostPlugin.receiveOutput;
+      if (hostPlugin.receiveOutput === emitter) {
+        delete hostPlugin.receiveOutput;
+      }
     };
   });
   try {
@@ -462,14 +464,17 @@ function* handleResults(
     const onReceiveResult = (result: any) => emitter({ value: result });
     hostPlugin.receiveResult = onReceiveResult;
     return () => {
-      if (hostPlugin.receiveResult === onReceiveResult) delete hostPlugin.receiveResult;
+      if (hostPlugin.receiveResult === onReceiveResult) {
+        delete hostPlugin.receiveResult;
+      }
     };
   });
   try {
     while (true) {
       const { value: result } = yield take(resultChan);
-      if (result !== undefined)
+      if (result !== undefined) {
         yield put(actions.appendInterpreterResult(result, workspaceLocation));
+      }
       // The OneShot evaluator sends exactly one result then stops. Trigger cleanup
       // via beginInterruptExecution so the parent saga exits even if the STATUS
       // channel is broken (e.g. const-enum erasure in older evaluator bundles).
@@ -489,7 +494,9 @@ function* handleErrors(
   const errorChan = eventChannel(emitter => {
     hostPlugin.receiveError = emitter;
     return () => {
-      if (hostPlugin.receiveError === emitter) delete hostPlugin.receiveError;
+      if (hostPlugin.receiveError === emitter) {
+        delete hostPlugin.receiveError;
+      }
     };
   });
   try {
@@ -516,13 +523,17 @@ function* handleCseSnapshots(
   const snapshotChan = eventChannel<CseSnapshot[]>(emitter => {
     csePlugin.receiveSnapshots = emitter;
     return () => {
-      if (csePlugin.receiveSnapshots === emitter) csePlugin.receiveSnapshots = () => {};
+      if (csePlugin.receiveSnapshots === emitter) {
+        csePlugin.receiveSnapshots = () => {};
+      }
     };
   });
   try {
     while (true) {
       const snapshots: CseSnapshot[] | typeof END = yield take(snapshotChan);
-      if (snapshots === END || !Array.isArray(snapshots)) break;
+      if (snapshots === END || !Array.isArray(snapshots)) {
+        break;
+      }
       yield put(WorkspaceActions.updateCseSnapshots(snapshots, workspaceLocation));
       yield put(
         WorkspaceActions.updateStepsTotal(Math.max(0, snapshots.length - 1), workspaceLocation),
@@ -547,7 +558,9 @@ function* handleStatuses(
       emitter({ status, isActive });
     hostPlugin.receiveStatusUpdate = onStatusUpdate;
     return () => {
-      if (hostPlugin.receiveStatusUpdate === onStatusUpdate) delete hostPlugin.receiveStatusUpdate;
+      if (hostPlugin.receiveStatusUpdate === onStatusUpdate) {
+        delete hostPlugin.receiveStatusUpdate;
+      }
     };
   });
   try {
@@ -592,7 +605,9 @@ export function* evalCodeConductorSaga(
       throw Error('language directory could not be loaded in time');
     }
     evaluator = yield call(getEvaluatorDefinitionSaga);
-    if (!evaluator?.path) throw Error('no evaluator');
+    if (!evaluator?.path) {
+      throw Error('no evaluator');
+    }
   }
 
   // Clear stale CSE snapshots from the previous run
@@ -643,11 +658,21 @@ export function* evalCodeConductorSaga(
     });
   } finally {
     try {
-      if (cseTask) yield cancel(cseTask);
-      if (statusTask) yield cancel(statusTask);
-      if (stdoutTask) yield cancel(stdoutTask);
-      if (resultTask) yield cancel(resultTask);
-      if (errorTask) yield cancel(errorTask);
+      if (cseTask) {
+        yield cancel(cseTask);
+      }
+      if (statusTask) {
+        yield cancel(statusTask);
+      }
+      if (stdoutTask) {
+        yield cancel(stdoutTask);
+      }
+      if (resultTask) {
+        yield cancel(resultTask);
+      }
+      if (errorTask) {
+        yield cancel(errorTask);
+      }
       if (conduit) {
         try {
           yield call([conduit, 'terminate']);

@@ -38,7 +38,9 @@ export class ArrayValue extends Value implements IHoverable {
   }
 
   handleNewReference(newReference: ReferenceType): void {
-    if (!isMainReference(this, newReference)) return;
+    if (!isMainReference(this, newReference)) {
+      return;
+    }
 
     // derive the coordinates from the main reference (binding / array unit)
     if (newReference instanceof Binding) {
@@ -130,7 +132,9 @@ export class ArrayValue extends Value implements IHoverable {
   }
 
   markAsReferenced() {
-    if (this.isReferenced()) return;
+    if (this.isReferenced()) {
+      return;
+    }
     super.markAsReferenced();
     for (const unit of this.units) {
       unit.value.markAsReferenced();
@@ -155,7 +159,9 @@ export class ArrayValue extends Value implements IHoverable {
     if (Layout.clearDeadFrames && !this.isLive()) {
       return null;
     }
-    if (this.isDrawn()) return null;
+    if (this.isDrawn()) {
+      return null;
+    }
     this._isDrawn = true;
     return (
       <Group

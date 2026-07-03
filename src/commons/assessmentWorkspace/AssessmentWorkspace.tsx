@@ -293,7 +293,9 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   useEffect(() => {
-    if (!selectedTab) return;
+    if (!selectedTab) {
+      return;
+    }
 
     if ((!isMobileBreakpoint || isVscode) && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.questionOverview);
@@ -419,7 +421,9 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
       case QuestionTypes.voting: {
         const votingQuestionData: IContestVotingQuestion = question;
         options.programPrependValue = votingQuestionData.prepend;
-        if (props.fromContestLeaderboard) options.editorValue = code;
+        if (props.fromContestLeaderboard) {
+          options.editorValue = code;
+        }
         options.programPostpendValue = votingQuestionData.postpend;
         // maybe the following dispatch can be placed in a better location
         dispatch(LeaderboardActions.setWorkspaceInitialRun(votingId));
@@ -718,7 +722,9 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
     };
 
     const onClickSave = () => {
-      if (isSaving) return;
+      if (isSaving) {
+        return;
+      }
       setIsSaving(true);
       if (isTeamAssessment) {
         checkLastModified();

@@ -489,15 +489,21 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
       } catch {
         return false;
       }
-      if (!modeModule?.Mode) return false;
-      if ((session.getMode() as any).$id === modeId) return true;
+      if (!modeModule?.Mode) {
+        return false;
+      }
+      if ((session.getMode() as any).$id === modeId) {
+        return true;
+      }
       session.setMode(new modeModule.Mode());
       return true;
     };
 
     const attachToSession = (session: any) => {
       modeChangeUnsub?.();
-      if (pollHandle) clearInterval(pollHandle);
+      if (pollHandle) {
+        clearInterval(pollHandle);
+      }
 
       const onChangeMode = () => {
         if ((session.getMode() as any).$id !== modeId) {
@@ -526,7 +532,9 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
 
     return () => {
       modeChangeUnsub?.();
-      if (pollHandle) clearInterval(pollHandle);
+      if (pollHandle) {
+        clearInterval(pollHandle);
+      }
       editor.off('changeSession', onChangeSession);
     };
   }, [conductorEnabled, selectedEvaluatorId]);
@@ -643,7 +651,9 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     }
 
     function close() {
-      if (!closer) return;
+      if (!closer) {
+        return;
+      }
       document.removeEventListener('keydown', documentEscListener);
       closer?.parentNode?.removeChild(closer);
       if (editor) {

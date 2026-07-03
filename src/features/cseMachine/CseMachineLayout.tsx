@@ -284,8 +284,12 @@ export class Layout {
    * objects into the global environment head and heap
    */
   private static removePreludeEnv() {
-    if (Layout.snapshotMode) return;
-    if (!Layout.globalEnvNode.children || Layout.globalEnvNode.children.length === 0) return;
+    if (Layout.snapshotMode) {
+      return;
+    }
+    if (!Layout.globalEnvNode.children || Layout.globalEnvNode.children.length === 0) {
+      return;
+    }
 
     const preludeEnvNode = Layout.globalEnvNode.children[0];
     const preludeEnv = preludeEnvNode.environment;
@@ -324,7 +328,9 @@ export class Layout {
 
   /** remove any global functions not referenced elsewhere in the program */
   private static removeUnreferencedGlobalFns(): void {
-    if (Layout.snapshotMode) return;
+    if (Layout.snapshotMode) {
+      return;
+    }
     const referencedFns = new Set<GlobalFn | NonGlobalFn>();
     const visitedData = new Set<DataArray>();
 
@@ -348,7 +354,9 @@ export class Layout {
     };
 
     const findGlobalFnReferencesInData = (data: DataArray): void => {
-      if (visitedData.has(data)) return;
+      if (visitedData.has(data)) {
+        return;
+      }
       visitedData.add(data);
       data.forEach(d => {
         if (isGlobalFn(d)) {
@@ -362,7 +370,9 @@ export class Layout {
     // only include predeclared or built-in functions used in user code
     for (const name of CseMachine.usedBuiltInNames) {
       const fn = Layout.globalEnvNode.environment.head[name];
-      if (fn && isGlobalFn(fn)) referencedFns.add(fn);
+      if (fn && isGlobalFn(fn)) {
+        referencedFns.add(fn);
+      }
     }
 
     // Then, find any references within any arrays inside the global environment heap,
@@ -386,8 +396,12 @@ export class Layout {
     const newHead: Frame = {};
     const newHeap = new Heap();
     for (const fn of referencedFns) {
-      if (isClosure(fn)) newHeap.add(fn);
-      if (isGlobalFn(fn)) newHead[functionNames.get(fn) ?? `${i++}`] = fn;
+      if (isClosure(fn)) {
+        newHeap.add(fn);
+      }
+      if (isGlobalFn(fn)) {
+        newHead[functionNames.get(fn) ?? `${i++}`] = fn;
+      }
     }
 
     // add any arrays from the original heap to the new heap
@@ -516,8 +530,11 @@ export class Layout {
     data: GlobalFn | NonGlobalFn | StreamFn | Continuation | DataArray,
     value: Value,
   ) {
-    if (isBuiltInFn(data) || isStreamFn(data)) Layout.values.set(data, value);
-    else Layout.values.set((data as any).id, value);
+    if (isBuiltInFn(data) || isStreamFn(data)) {
+      Layout.values.set(data, value);
+    } else {
+      Layout.values.set((data as any).id, value);
+    }
   }
 
   private static getExportScale(width: number, height: number, padding: number): number {
@@ -661,7 +678,9 @@ export class Layout {
    * @param y y position of the scroll container
    */
   private static handleScrollPosition(x: number, y: number) {
-    if (!this.stageRef.current) return;
+    if (!this.stageRef.current) {
+      return;
+    }
     const dx = x - Layout.invisiblePaddingHorizontal;
     const dy = y - Layout.invisiblePaddingVertical;
     this.stageRef.current.container().style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';

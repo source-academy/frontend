@@ -13,20 +13,26 @@ function AssetViewerUpload() {
   const [showfolderOverwrite, setShowFolderOverwrite] = useState(false);
 
   function handleLoadFile(e: any) {
-    if (!e.target.files) return;
+    if (!e.target.files) {
+      return;
+    }
     const loadedFiles = e.target.files;
     setFileList(loadedFiles);
   }
 
   async function handleUploadButtonClick() {
     const finalFolder = folderOverwrite || uploadFolder;
-    if (!fileList || !finalFolder) return;
+    if (!fileList || !finalFolder) {
+      return;
+    }
     const response = await uploadAssetsToS3(fileList, finalFolder);
     alert(response);
   }
 
   function handleChangeUploadFolder(e: any) {
-    if (!e.target.innerText) return;
+    if (!e.target.innerText) {
+      return;
+    }
     setUploadFolder(e.target.innerText);
     setShowFolderOverwrite(false);
   }
@@ -36,7 +42,9 @@ function AssetViewerUpload() {
   }
 
   function showSpecifyFolder(e: any) {
-    if (!e.target.innerText) return;
+    if (!e.target.innerText) {
+      return;
+    }
     setUploadFolder(e.target.innerText);
     setShowFolderOverwrite(true);
   }

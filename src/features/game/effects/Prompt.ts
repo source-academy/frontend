@@ -103,7 +103,9 @@ export async function promptWithChoices(
           bitMapTextStyle: promptOptStyle,
           onUp: () => {
             // Prevents the confirm prompt from showing up multiple times if someone tries to spam clicks it
-            if (isResolved) return;
+            if (isResolved) {
+              return;
+            }
 
             const phaseManager = GameGlobalAPI.getInstance().getGameManager().getPhaseManager();
 

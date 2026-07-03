@@ -35,7 +35,9 @@ function AdminView({ users, playgroundCode }: AdminViewProps) {
   );
 
   const handleToggleAccess = (checked: boolean, id: string) => {
-    if (toggling[id]) return;
+    if (toggling[id]) {
+      return;
+    }
     setToggling(prev => ({ ...prev, [id]: true }));
 
     try {
@@ -144,7 +146,9 @@ function SideContentSessionManagement({
     dispatch(beginAlertSideContent(SideContentType.sessionManagement, workspaceLocation));
   }, [dispatch, workspaceLocation, users]);
 
-  if (Object.values(users).length === 0) return;
+  if (Object.values(users).length === 0) {
+    return;
+  }
   const myself = Object.values(users)[0];
 
   return (
