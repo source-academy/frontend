@@ -17,7 +17,6 @@ export async function fetchSicpSearchData() {
 
   const resp = await fetch(Constants.sicpBackendUrl + 'json/rewritedSearchData.json');
   if (!resp.ok) {
-    alert('Unable to get rewrited search data. Error code = ' + resp.status);
     throw new Error('Unable to get rewrited search data. Error code = ' + resp.status);
   }
   const searchData: SearchData = await resp.json();

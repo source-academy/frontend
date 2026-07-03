@@ -98,7 +98,6 @@ export function indexAutoComplete(
   while (result1.length < n && result2.length > 0) {
     const toPush = result2.shift();
     if (toPush === undefined) {
-      console.log('when searching, got undefined toPush');
       continue;
     }
     result1.push(toPush);
