@@ -146,7 +146,7 @@ function DropdownCreateCourse(props: Props) {
           <Tabs
             selectedTabId={courseHelpTextSelectedTab}
             onChange={onChangeTabs}
-            className="module-help-text-tabs inline-block ml-[15px]"
+            className="module-help-text-tabs inline-block ml-3.75"
           >
             <Tab id={CourseHelpTextEditorTab.WRITE} title="Write" />
             <Tab id={CourseHelpTextEditorTab.PREVIEW} title="Preview" />
@@ -154,7 +154,7 @@ function DropdownCreateCourse(props: Props) {
           {courseHelpTextSelectedTab === CourseHelpTextEditorTab.WRITE && (
             <TextArea
               id="moduleHelpText"
-              className="input-textarea h-[100px]"
+              className="input-textarea h-25"
               fill
               value={courseConfig.moduleHelpText}
               onChange={e =>
@@ -166,7 +166,7 @@ function DropdownCreateCourse(props: Props) {
             />
           )}
           {courseHelpTextSelectedTab === CourseHelpTextEditorTab.PREVIEW && (
-            <div className="input-markdown p-2.5 h-[100px] bg-[#f5f5f5] rounded overflow-auto [box-shadow:inset_0_0_0_1px_rgba(16,22,26,0.15),inset_0_1px_1px_rgba(16,22,26,0.2)] [&>div>*]:m-0">
+            <div className="input-markdown p-2.5 h-25 bg-[#f5f5f5] rounded overflow-auto [box-shadow:inset_0_0_0_1px_rgba(16,22,26,0.15),inset_0_1px_1px_rgba(16,22,26,0.2)] [&>div>*]:m-0">
               <Markdown content={courseConfig.moduleHelpText || ''} openLinksInNewWindow />
             </div>
           )}
