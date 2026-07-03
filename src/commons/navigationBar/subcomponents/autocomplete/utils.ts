@@ -3,14 +3,18 @@ import type { SearchData, TrieNode } from './types';
 function autocomplete(prefix: string, trie: TrieNode, n: number = 25): string[] {
   let node = trie;
   for (const ch of prefix) {
-    if (!node.children[ch]) return [];
+    if (!node.children[ch]) {
+      return [];
+    }
     node = node.children[ch];
   }
   const result: string[] = [];
   const queue: TrieNode[] = [node];
   while (queue.length > 0 && result.length < n) {
     const currNode = queue.shift()!;
-    if (currNode.value.length > 0) result.push(currNode.key);
+    if (currNode.value.length > 0) {
+      result.push(currNode.key);
+    }
     for (const child of Object.values(currNode.children)) {
       queue.push(child);
     }
@@ -84,7 +88,9 @@ export function indexAutoComplete(
   prefix: string,
   n: number = 25,
 ): string[] {
-  if (!prefix) return [];
+  if (!prefix) {
+    return [];
+  }
   const lower = prefix[0].toLowerCase() + prefix.slice(1);
   const upper = prefix[0].toUpperCase() + prefix.slice(1);
   const result1 = autocomplete(lower, rewritedSearchData.indexTrie, n);
