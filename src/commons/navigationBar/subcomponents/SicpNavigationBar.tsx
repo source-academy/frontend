@@ -23,8 +23,7 @@ import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
 import SicpToc from '../../../pages/sicp/subcomponents/SicpToc';
-
-type IndexSearchResult = { text: string; order: string; id: string; hasSubindex: boolean };
+import type { IndexSearchResult, SearchData, TrieNode } from './autocomplete/types';
 
 function SicpNavigationBar() {
   // this section responsible for the travel and table of content
@@ -77,19 +76,6 @@ function SicpNavigationBar() {
     usePortal: false,
   };
 
-  // this section responsible for the search
-  type TrieNode = {
-    children: Record<string, TrieNode>;
-    value: string[] & IndexSearchResult[];
-    key: string;
-  };
-
-  type SearchData = {
-    indexTrie: TrieNode;
-    textTrie: TrieNode;
-    idToContentMap: Record<string, string>;
-  };
-
   const fetchSearchData = () => {
     if (process.env.NODE_ENV === 'test') {
       const emptyTrie: TrieNode = { children: {}, value: [] as any, key: '' };
@@ -97,7 +83,7 @@ function SicpNavigationBar() {
         indexTrie: emptyTrie,
         textTrie: emptyTrie,
         idToContentMap: {},
-      } as SearchData;
+      } satisfies SearchData;
     }
 
     const xhr = new XMLHttpRequest();
