@@ -1,10 +1,9 @@
 import { Position } from '@blueprintjs/core';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import { useFeature } from 'src/commons/featureFlags/useFeature';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
-import { useAppSelector } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
 
@@ -21,7 +20,7 @@ const NavigationBarLangSelectButton = () => {
   const selectedDirLanguageId = useAppSelector(s => s.languageDirectory.selectedLanguageId);
   const languageMap = useAppSelector(s => s.languageDirectory.languageMap);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const dirOptions = useDirectoryOptions();
   const location = useLocation();
   const navigate = useNavigate();

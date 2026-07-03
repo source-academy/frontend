@@ -15,9 +15,9 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { isEqual } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import Messages, { sendToWebview } from 'src/features/vscode/messages';
@@ -144,7 +144,7 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
     saveStatus,
   } = useAppSelector(store => store.workspaces[workspaceLocation]);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     handleTeamOverviewFetch,
     handleTestcaseEval,

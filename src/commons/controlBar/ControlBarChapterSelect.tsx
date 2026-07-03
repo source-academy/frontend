@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { type ItemListRenderer, type ItemRenderer, Select } from '@blueprintjs/select';
 import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
 import { STEPPER_EVALUATOR_CAPABILITY } from '../../features/conductor/stepperTab';
@@ -28,7 +28,7 @@ function ControlBarChapterSelect({
   handleChapterSelect = () => {},
   disabled = false,
 }: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const directoryEnabled = useFeature(flagConductorEnable);
   const selectedLanguageId = useAppSelector(s => s.languageDirectory.selectedLanguageId);
   const selectedEvaluatorId = useAppSelector(s => s.languageDirectory.selectedEvaluatorId);

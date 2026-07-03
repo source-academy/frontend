@@ -14,8 +14,8 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { sortBy } from 'lodash-es';
 import { useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Navigate, useLoaderData, useParams } from 'react-router';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import Messages, { sendToWebview } from 'src/features/vscode/messages';
 
@@ -47,7 +47,7 @@ function Assessment() {
   const [showUpcomingAssessments, setShowUpcomingAssessments] = useState(true);
 
   const { courseId, role, assessmentOverviews: assessmentOverviewsUnfiltered } = useSession();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (assessmentOverviewsUnfiltered && courseId) {

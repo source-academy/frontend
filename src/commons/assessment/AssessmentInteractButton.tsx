@@ -1,7 +1,7 @@
 import { Button } from '@blueprintjs/core';
 import { type IconName, IconNames } from '@blueprintjs/icons';
-import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../application/actions/SessionActions';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
@@ -16,7 +16,7 @@ type Props = {
 
 function AssessmentInteractButton({ overview }: Props) {
   const courseId = useAppSelector(state => state.session.courseId);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { icon, label, optionalLabel } = createButtonConfiguration(overview.status);
 
   return (

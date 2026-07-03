@@ -10,7 +10,7 @@ import sharedbAce from '@sourceacademy/sharedb-ace';
 import type SharedbAceBinding from '@sourceacademy/sharedb-ace/binding';
 import { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
 import { useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { getLanguageConfig } from '../application/ApplicationTypes';
 import CollabEditingActions from '../collabEditing/CollabEditingActions';
@@ -37,7 +37,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
   const { editorSessionId, sessionDetails } = inProps;
   const { name, userId } = useSession();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (!editorSessionId || !sessionDetails) {

@@ -12,8 +12,8 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../application/actions/SessionActions';
 import type {
@@ -111,7 +111,7 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
    */
   useEffect(() => checkWorkspaceReset());
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     handleBrowseHistoryDown,
     handleBrowseHistoryUp,
