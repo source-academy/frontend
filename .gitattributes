@@ -1,3 +1,8 @@
-# Ensure all TS/TSX files are treated as text and normalized with LF line endings
+# Ensure all code are treated as text and normalized with LF line endings
 *.ts text eol=lf
 *.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
