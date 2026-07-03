@@ -155,7 +155,9 @@ class GameSoundManager {
     }
 
     // Stop previous BgMusic
-    if (this.currBgMusic) this.fadeOutAndDestroyMusic(this.currBgMusic);
+    if (this.currBgMusic) {
+      this.fadeOutAndDestroyMusic(this.currBgMusic);
+    }
 
     // Update BGM and key
     const soundAsset = mandatory(this.getSoundAsset(soundKey));

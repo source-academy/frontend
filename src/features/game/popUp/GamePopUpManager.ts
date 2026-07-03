@@ -54,7 +54,9 @@ class GamePopUpManager {
 
     // Get assetKey
     const assetKey = this.getAssetKey(itemId);
-    if (!assetKey) return;
+    if (!assetKey) {
+      return;
+    }
 
     // Set up images
     const popUpImage = new Phaser.GameObjects.Image(
@@ -98,7 +100,9 @@ class GamePopUpManager {
    */
   public async destroyPopUp(position: GamePosition) {
     const atPosContainer = this.currPopUp.get(position);
-    if (!atPosContainer) return;
+    if (!atPosContainer) {
+      return;
+    }
 
     GameGlobalAPI.getInstance()
       .getGameManager()

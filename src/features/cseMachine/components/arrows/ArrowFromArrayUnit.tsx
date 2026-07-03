@@ -43,7 +43,9 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
-    if (!to) return [];
+    if (!to) {
+      return [];
+    }
 
     const steps: StepsArray = [
       (x, y) => [x + Config.DataUnitWidth / 2, y + Config.DataUnitHeight / 2],

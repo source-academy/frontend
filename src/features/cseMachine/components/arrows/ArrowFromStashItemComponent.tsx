@@ -25,7 +25,9 @@ export class ArrowFromStashItemComponent extends GenericArrow<
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
-    if (!to) return [];
+    if (!to) {
+      return [];
+    }
 
     const terminalSegmentLength = Math.max(Config.ArrowHeadSize, Config.MinTerminalSegmentLength);
     const postSourceStraightLength = Config.ArrowPostFrameStraightLength;

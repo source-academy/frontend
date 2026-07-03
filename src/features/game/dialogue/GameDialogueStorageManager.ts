@@ -20,7 +20,9 @@ export default class GameDialogueStorageManager {
    * @param newSpeakerDetail the SpeakerDetail object that contains the speaker id.
    */
   public storeLine(newLine: string, newSpeakerDetail?: SpeakerDetail | null) {
-    if (!newSpeakerDetail) return;
+    if (!newSpeakerDetail) {
+      return;
+    }
 
     if (!this.dialogueStorage) {
       this.dialogueStorage = new Array<DialogueStorageLine>();

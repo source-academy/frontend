@@ -113,7 +113,9 @@ export class GlobalFnValue extends Value implements IHoverable {
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) {
+      return;
+    }
     setHoveredCursor(currentTarget);
     this.ref.current?.getParent()?.moveToTop();
     if (this.isExpandedDescription && this.isTooltipTruncated) {
@@ -133,7 +135,9 @@ export class GlobalFnValue extends Value implements IHoverable {
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) {
+      return;
+    }
     setUnhoveredCursor(currentTarget);
     this.isExpandedDescription = false;
     this.labelRef.current?.hide();
@@ -143,7 +147,9 @@ export class GlobalFnValue extends Value implements IHoverable {
   };
 
   onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode() || !this.isTooltipTruncated) return;
+    if (CseMachine.getPrintableMode() || !this.isTooltipTruncated) {
+      return;
+    }
     this.ref.current?.getParent()?.moveToTop();
     this.isExpandedDescription = true;
     this.labelRef.current?.hide();
@@ -183,17 +189,24 @@ export class GlobalFnValue extends Value implements IHoverable {
   setArrowSourceHighlightedStyle(): void {
     const color = this.isReferenced() ? Config.HoverColor : Config.HoverDeadColor;
     (this.ref.current?.getChildren() ?? []).forEach((shape: any) => {
-      if (shape.attrs?.stroke) shape.stroke(color);
-      if (shape.attrs?.fill && !shape.attrs?.stroke) shape.fill(color);
+      if (shape.attrs?.stroke) {
+        shape.stroke(color);
+      }
+      if (shape.attrs?.fill && !shape.attrs?.stroke) {
+        shape.fill(color);
+      }
     });
   }
 
   setArrowSourceNormalStyle(): void {
     const strokeColor = this.isReferenced() ? defaultStrokeColor() : fadedStrokeColor();
     (this.ref.current?.getChildren() ?? []).forEach((shape: any) => {
-      if (shape.attrs?.stroke) shape.stroke(strokeColor);
-      if (shape.attrs?.fill)
+      if (shape.attrs?.stroke) {
+        shape.stroke(strokeColor);
+      }
+      if (shape.attrs?.fill) {
         shape.fill(shape.attrs?.stroke ? defaultBackgroundColor() : strokeColor);
+      }
     });
   }
 

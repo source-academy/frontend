@@ -31,7 +31,9 @@ export class ArrowFromFn extends GenericArrow<FnValue | GlobalFnValue | ContValu
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
-    if (!to) return [];
+    if (!to) {
+      return [];
+    }
 
     const steps: StepsArray = [
       (x, y) =>

@@ -33,7 +33,9 @@ export class UnassignedValue extends Value {
   }
 
   setFaded(faded: boolean) {
-    if (this.text instanceof Text) this.text.options.faded = faded;
+    if (this.text instanceof Text) {
+      this.text.options.faded = faded;
+    }
   }
 
   isLive(): boolean {

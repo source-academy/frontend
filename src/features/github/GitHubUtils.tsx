@@ -182,7 +182,9 @@ export async function openFileInEditor(
   repoName: string,
   filePath: string,
 ) {
-  if (octokit === undefined) return;
+  if (octokit === undefined) {
+    return;
+  }
 
   type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
   const results: GetContentResponse = await octokit.repos.getContent({
@@ -215,7 +217,9 @@ export async function performOverwritingSave(
   commitMessage: string,
   content: string,
 ) {
-  if (octokit === undefined) return;
+  if (octokit === undefined) {
+    return;
+  }
 
   githubEmail = githubEmail || 'No public email provided';
   githubName = githubName || 'Source Academy User';
@@ -270,7 +274,9 @@ export async function performCreatingSave(
   commitMessage: string,
   content: string,
 ) {
-  if (octokit === undefined) return;
+  if (octokit === undefined) {
+    return;
+  }
 
   githubEmail = githubEmail || 'No public email provided';
   githubName = githubName || 'Source Academy User';
@@ -306,7 +312,9 @@ export async function performFolderDeletion(
   githubEmail: string | null,
   commitMessage: string,
 ) {
-  if (octokit === undefined) return;
+  if (octokit === undefined) {
+    return;
+  }
 
   githubEmail = githubEmail || 'No public email provided';
   githubName = githubName || 'Source Academy User';

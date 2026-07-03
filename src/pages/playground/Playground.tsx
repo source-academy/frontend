@@ -379,7 +379,9 @@ function Playground(props: PlaygroundProps) {
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   useEffect(() => {
-    if (!selectedTab) return;
+    if (!selectedTab) {
+      return;
+    }
 
     if (!isVscode && isMobileBreakpoint && desktopOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.mobileEditor);
@@ -733,9 +735,13 @@ function Playground(props: PlaygroundProps) {
     state => state.workspaces[workspaceLocation].cseSnapshots !== null,
   );
   const conductorEvaluatorSupportsCse = useTypedSelector(state => {
-    if (!selectConductorEnable(state)) return false;
+    if (!selectConductorEnable(state)) {
+      return false;
+    }
     const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
-    if (!selectedLanguageId || !selectedEvaluatorId) return false;
+    if (!selectedLanguageId || !selectedEvaluatorId) {
+      return false;
+    }
     const lang = languageMap[selectedLanguageId];
     const evaluator = lang?.evaluators.find(e => e.id === selectedEvaluatorId);
     return (evaluator?.capabilities as string[] | undefined)?.includes('cse') ?? false;
@@ -754,11 +760,17 @@ function Playground(props: PlaygroundProps) {
   const conductorEnabled = useTypedSelector(selectConductorEnable);
 
   const conductorWelcomeText = useTypedSelector(state => {
-    if (!selectConductorEnable(state)) return null;
+    if (!selectConductorEnable(state)) {
+      return null;
+    }
     const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
-    if (!selectedLanguageId) return null;
+    if (!selectedLanguageId) {
+      return null;
+    }
     const lang = languageMap[selectedLanguageId];
-    if (!lang?.welcome) return null;
+    if (!lang?.welcome) {
+      return null;
+    }
     const evaluator = selectedEvaluatorId
       ? lang.evaluators.find(e => e.id === selectedEvaluatorId)
       : undefined;

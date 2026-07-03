@@ -84,7 +84,9 @@ function toJsValue(
     const envId: string | null = meta?.envId ?? null;
     const elements: CseSerializedValue[] = meta?.elements ?? [];
 
-    if (arrayId && listCache.has(arrayId)) return listCache.get(arrayId);
+    if (arrayId && listCache.has(arrayId)) {
+      return listCache.get(arrayId);
+    }
 
     // Build a real JS array with own `id` and `environment` so isDataArray() passes.
     const arr: any = elements.map((el: CseSerializedValue) =>
@@ -95,7 +97,9 @@ function toJsValue(
       environment: { value: envId ? (envMap.get(envId) ?? null) : null, writable: true },
     });
 
-    if (arrayId) listCache.set(arrayId, arr);
+    if (arrayId) {
+      listCache.set(arrayId, arr);
+    }
 
     // Register with the defining env's heap so the CSE visualizer draws the array box.
     if ((arr as any).environment) {
@@ -113,7 +117,9 @@ function toJsValue(
 
     // Same Python list object (same stable id) must map to the same JS array so
     // Layout.values memoization produces one DataArray box, not one per binding.
-    if (listCache.has(listId)) return listCache.get(listId);
+    if (listCache.has(listId)) {
+      return listCache.get(listId);
+    }
 
     // Build a real JS array — isDataArray() checks Array.isArray + own 'id' + own 'environment'.
     const arr: any = elements.map(el => toJsValue(el, envMap, closureCache, listCache));
@@ -135,7 +141,9 @@ function toJsValue(
     // same params in the same scope would alias, producing incorrect shared JS objects.
     const isNamed = funcName !== 'lambda' && funcName !== 'anonymous';
     const cacheKey = isNamed ? `${funcName}@${closureEnvId}@${params.join(',')}` : null;
-    if (cacheKey && closureCache.has(cacheKey)) return closureCache.get(cacheKey);
+    if (cacheKey && closureCache.has(cacheKey)) {
+      return closureCache.get(cacheKey);
+    }
 
     const fakeFn: any = function SnapshotClosure() {};
     fakeFn.id = `snap_${++_closureSeq}_${closureEnvId}`;
@@ -145,7 +153,9 @@ function toJsValue(
     fakeFn.node = makeStubNode(params);
     fakeFn.originalNode = fakeFn.node;
     fakeFn.toString = () => `function ${funcName}(${params.join(', ')}) { [Python] }`;
-    if (cacheKey) closureCache.set(cacheKey, fakeFn);
+    if (cacheKey) {
+      closureCache.set(cacheKey, fakeFn);
+    }
     return fakeFn;
   }
 
@@ -196,7 +206,9 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
     (f: CseSerializedEnvFrame) => f.name === 'prelude' && f.parentId === null,
   );
   const frames = (() => {
-    if (!globalFrame) return rawFrames;
+    if (!globalFrame) {
+      return rawFrames;
+    }
     if (!preludeFrame) {
       // No prelude env serialized (ch1: misc+math preludes are empty strings, so no prelude env
       // is ever pushed onto the call stack). Any orphaned top-level frame — i.e. a frame other
@@ -240,7 +252,9 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
   for (const f of frames) {
     if (f.parentId) {
       const parent = envMap.get(f.parentId);
-      if (parent) (envMap.get(f.id) as any).tail = parent;
+      if (parent) {
+        (envMap.get(f.id) as any).tail = parent;
+      }
     }
   }
 
@@ -300,7 +314,9 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
     const env = envMap.get(f.id)!;
     for (const sv of f.heapObjects ?? []) {
       const val = toJsValue(sv, envMap, closureCache, listCache);
-      if (val != null) env.heap.add(val as any);
+      if (val != null) {
+        env.heap.add(val as any);
+      }
     }
   }
 
@@ -395,8 +411,9 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
       // stub that lands in the ControlExpansionAnimation case.
       const body = Array.from({ length: bodyLength }, (_, i) => {
         const t = bodyNodeTypes[i] ?? 'VariableDeclaration';
-        if (t === 'ExpressionStatement')
+        if (t === 'ExpressionStatement') {
           return { type: t, expression: { type: 'BinaryExpression' } };
+        }
         return { type: t };
       });
 

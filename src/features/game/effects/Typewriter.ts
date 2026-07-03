@@ -38,7 +38,9 @@ export function Typewriter(
 
   /* Reset line and type out */
   const changeLine = (message: string) => {
-    if (!message) return;
+    if (!message) {
+      return;
+    }
     line = message;
 
     textSprite.text = '';

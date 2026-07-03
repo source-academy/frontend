@@ -63,7 +63,9 @@ class GameDashboardManager implements IGameUI {
    */
   private setPage(pageIndex: number) {
     if (this.uiContainer) {
-      if (this.pageChosenContainer) this.pageChosenContainer.destroy();
+      if (this.pageChosenContainer) {
+        this.pageChosenContainer.destroy();
+      }
 
       // Hide current page
       const currPageUIContainer = this.pageUIContainers[this.currPageIndex];

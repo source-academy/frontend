@@ -51,7 +51,9 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
-    if (!to) return [];
+    if (!to) {
+      return [];
+    }
 
     const terminalSegmentLength = Math.max(Config.ArrowHeadSize, Config.MinTerminalSegmentLength);
     const verticalTerminalOffset = Math.max(Config.DataUnitHeight / 3, terminalSegmentLength);

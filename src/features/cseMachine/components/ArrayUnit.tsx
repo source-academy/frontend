@@ -58,7 +58,9 @@ export class ArrayUnit extends Visible {
   }
 
   hideIndex() {
-    if (!CseMachine.getPrintableMode()) this.indexRef.current?.hide();
+    if (!CseMachine.getPrintableMode()) {
+      this.indexRef.current?.hide();
+    }
   }
 
   setArrowSourceHighlightedStyle(): void {
@@ -78,7 +80,9 @@ export class ArrayUnit extends Visible {
   }
 
   draw(): React.ReactNode {
-    if (this.isDrawn()) return null;
+    if (this.isDrawn()) {
+      return null;
+    }
     this._isDrawn = true;
 
     const isLive = this.parent.isEnclosingFrameLive();
@@ -97,9 +101,12 @@ export class ArrayUnit extends Visible {
       lowerRight: 0,
     };
 
-    if (this.isFirstUnit) cornerRadius.upperLeft = cornerRadius.lowerLeft = Config.DataCornerRadius;
-    if (this.isLastUnit)
+    if (this.isFirstUnit) {
+      cornerRadius.upperLeft = cornerRadius.lowerLeft = Config.DataCornerRadius;
+    }
+    if (this.isLastUnit) {
       cornerRadius.upperRight = cornerRadius.lowerRight = Config.DataCornerRadius;
+    }
 
     const indexProps: TextConfig = {
       fontFamily: defaultOptions.fontFamily,

@@ -18,7 +18,9 @@ function ChapterSimulatorTextLoader({ storageName, s3TxtFiles }: StorageProps) {
   const [chosenFilename, setChosenFilename] = useState(s3TxtFiles[0]);
 
   function onLoadTxt(e: any) {
-    if (!e.target.files) return;
+    if (!e.target.files) {
+      return;
+    }
     const [file] = e.target.files;
     loadFileLocally(storageName, file);
   }

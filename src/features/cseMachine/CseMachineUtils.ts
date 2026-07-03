@@ -62,7 +62,9 @@ class AssertionError extends Error {
 }
 
 export function assert(condition: boolean, msg?: string): asserts condition {
-  if (!condition) throw new AssertionError(msg);
+  if (!condition) {
+    throw new AssertionError(msg);
+  }
 }
 
 /** Returns `true` if `object` is empty */
@@ -215,14 +217,18 @@ function findEnvById(node: EnvTreeNode, id: string): Env | null {
   }
   for (const child of node.children as EnvTreeNode[]) {
     const res = findEnvById(child, id);
-    if (res) return res;
+    if (res) {
+      return res;
+    }
   }
   return null;
 }
 
 /** Returns id of specific values */
 function getObjectId(value: any): string | null {
-  if (!value) return null;
+  if (!value) {
+    return null;
+  }
   if (isClosure(value) || isDataArray(value) || isContinuation(value) || isStreamFn(value)) {
     return (value as any).id ?? null;
   }
@@ -284,11 +290,15 @@ function pushEnvFromData(
   markLiveObject?: (id: string) => void,
   visitedObjects = new Set<any>(),
 ) {
-  if (!value || visitedObjects.has(value)) return;
+  if (!value || visitedObjects.has(value)) {
+    return;
+  }
   visitedObjects.add(value);
 
   const id = getObjectId(value); // directly add as a live object first since anything is an OBJECT
-  if (id && markLiveObject) markLiveObject(id);
+  if (id && markLiveObject) {
+    markLiveObject(id);
+  }
 
   if (isClosure(value) || isStreamFn(value)) {
     if (value.environment) {
@@ -319,8 +329,12 @@ function markReachableEnvs(
   const worklist: Env[] = [];
 
   const pushEnv = (env: Env | null | undefined) => {
-    if (!env) return;
-    if (visited.has(env.id)) return;
+    if (!env) {
+      return;
+    }
+    if (visited.has(env.id)) {
+      return;
+    }
     visited.add(env.id);
     worklist.push(env);
   };
@@ -356,7 +370,9 @@ export function computeLiveState(envTree: EnvTree): {
   const extraRootIds = new Set<string>();
   const pushEnv = (env: Env | null | undefined) => {
     //specially made ONLY for stack/control dummy bindings
-    if (env && env.id) extraRootIds.add(env.id);
+    if (env && env.id) {
+      extraRootIds.add(env.id);
+    }
   };
 
   // const visitedObjects = new Set<any>();
@@ -451,7 +467,9 @@ export function setDifference<T>(set1: Set<T>, set2: Set<T>) {
   } else {
     const result = new Set<T>();
     for (const item of set1) {
-      if (!set2.has(item)) result.add(item);
+      if (!set2.has(item)) {
+        result.add(item);
+      }
     }
     return result;
   }
@@ -574,7 +592,9 @@ export function getTextHeight(
 export function getParamsText(data: Closure | GlobalFn | StreamFn): string {
   if (isClosure(data)) {
     let params = data.functionName.slice(0, data.functionName.indexOf('=>')).trim();
-    if (!params.startsWith('(')) params = '(' + params + ')';
+    if (!params.startsWith('(')) {
+      params = '(' + params + ')';
+    }
     return params;
   } else {
     const fnString = data.toString();
@@ -591,7 +611,9 @@ export function getBodyText(data: Closure | GlobalFn | StreamFn): string {
         ? fnString.substring(fnString.indexOf('{'))
         : fnString.substring(fnString.indexOf('=') + 3);
 
-    if (body[0] !== '{') body = '{\n  return ' + body + ';\n}';
+    if (body[0] !== '{') {
+      body = '{\n  return ' + body + ';\n}';
+    }
     return body;
   } else if (isStreamFn(data)) {
     // TODO: remove if `stream` becomes pre-defined
@@ -674,7 +696,9 @@ export function isEnvEqual(env1: Env, env2: Env): boolean {
   // Cannot check env references because of partial cloning of environment tree,
   // so we can only check id. Guard against null — snapshot adapters may produce
   // closures whose defining environment wasn't serialized.
-  if (!env1 || !env2) return false;
+  if (!env1 || !env2) {
+    return false;
+  }
   return env1.id === env2.id;
 }
 
@@ -688,13 +712,17 @@ function findObjects(
   array: any[],
   visited = new Set<any[]>(), // needed to track circular references
 ): void {
-  if (visited.has(array)) return;
+  if (visited.has(array)) {
+    return;
+  }
   visited.add(array);
   for (const item of array) {
     if (isDataArray(item) || isClosure(item)) {
       if (isEnvEqual(item.environment, environment)) {
         set.add(item);
-        if (isDataArray(item)) findObjects(environment, set, item, visited);
+        if (isDataArray(item)) {
+          findObjects(environment, set, item, visited);
+        }
       }
     }
   }
