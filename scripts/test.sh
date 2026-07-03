@@ -17,14 +17,12 @@ main() {
 
     tsc="yarn run tsc"
     eslint="yarn run eslint"
-    prettier_ts="yarn run format:tsx"
-    prettier_scss="yarn run format:scss"
+    oxfmt="yarn run format:ci"
     jest_ts="yarn test"
 
     run_cmd "${tsc}"; tsc_exit=$?
     run_cmd "${eslint}"; eslint_exit=$?
-    run_cmd "${prettier_ts}"; prettier_ts_exit=$?
-    run_cmd "${prettier_scss}"; prettier_scss_exit=$?
+    run_cmd "${oxfmt}"; oxfmt_exit=$?
     run_cmd_jest "${jest_ts}"; jest_ts_exit=$?
 
     # Only pop the stash if we actually created one
@@ -36,13 +34,12 @@ main() {
         echo -ne "\033[0;31m"
         [ "${tsc_exit}" -eq "0" ] || echo "TSC failed"
         [ "${eslint_exit}" -eq "0" ] || echo "ESLint failed"
-        [ "${prettier_ts_exit}" -eq "0" ] || echo "Prettier failed for *.{ts,tsx}"
-        [ "${prettier_scss_exit}" -eq "0" ] || echo "Prettier failed for *.scss"
+        [ "${oxfmt_exit}" -eq "0" ] || echo "Oxfmt failed"
         [ "${jest_ts_exit}" -eq "0" ] || echo "Jest failed"
         echo -ne "\033[0m"
     )
 
-    [[ $(( tsc_exit + eslint_exit + prettier_ts_exit + prettier_scss_exit + jest_ts_exit )) -eq "0" ]]
+    [[ $(( tsc_exit + eslint_exit + oxfmt_exit + jest_ts_exit )) -eq "0" ]]
 }
 
 run_cmd() {
