@@ -24,6 +24,8 @@ vi.mock('../../pages/createStore', () => ({
   createStore: vi.fn(),
 }));
 
+import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
+import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import InterpreterActions from '../application/actions/InterpreterActions';
 import SessionActions from '../application/actions/SessionActions';
 import {
@@ -49,7 +51,8 @@ import workspaceSaga from './WorkspaceSaga';
 import { evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
 import { evalEditorSaga } from './WorkspaceSaga/helpers/evalEditor';
 import { evalTestCode } from './WorkspaceSaga/helpers/evalTestCode';
-import { runTestCase } from './WorkspaceSaga/helpers/runTestCase';
+import { insertDebuggerStatements } from './WorkspaceSaga/helpers/insertDebuggerStatements';
+import { runTestCase, runTestCaseConductor } from './WorkspaceSaga/helpers/runTestCase';
 import { watchSavingStatus } from './WorkspaceSaga/helpers/versionHistory';
 
 vi.mock('src/features/cseMachine/CseMachine', async importOriginal => {
@@ -477,6 +480,234 @@ describe('EVAL_TESTCASE', () => {
         })
         .silentRun()
     );
+  });
+});
+
+describe('insertDebuggerStatements under Conductor', () => {
+  test('skips js-slang parsing entirely and returns the code unchanged when Conductor is enabled', () => {
+    const context = createContext();
+    // Valid Python, invalid JS - if the js-slang pre-parse still ran, this would
+    // populate context.errors instead of being returned untouched.
+    const pythonCode = 'def foo():\n    pass\n';
+
+    const gen = insertDebuggerStatements('playground', pythonCode, [], context, true);
+    const result = gen.next();
+
+    expect(result.done).toBe(true);
+    expect(result.value).toBe(pythonCode);
+    expect(context.errors).toHaveLength(0);
+  });
+
+  test('still parses and inserts debugger statements when Conductor is disabled', () => {
+    const context = createContext();
+    const code = 'const x = 1;\nconst y = 2;';
+
+    const gen = insertDebuggerStatements('playground', code, ['', 'x'], context, false);
+    const result = gen.next();
+
+    expect(result.done).toBe(true);
+    expect(result.value).toBe('const x = 1;\ndebugger;const y = 2;');
+  });
+});
+
+describe('EVAL_EDITOR under Conductor', () => {
+  test('concatenates prepend into the entrypoint for a single Conductor call instead of evaluating it separately', () => {
+    const workspaceLocation = 'playground';
+    const programPrependValue = 'COUNTER = 0';
+    const editorValue = 'print(COUNTER)';
+    const execTime = 1000;
+    const context = createContext();
+
+    const newDefaultState = {
+      ...generateDefaultState(workspaceLocation, {
+        editorTabs: [{ value: editorValue, highlightedLines: [], breakpoints: [] }],
+        programPrependValue,
+        execTime,
+        context,
+      }),
+      featureFlags: { modifiedFlags: { [flagConductorEnable.flagName]: true } },
+    };
+
+    const entrypointFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
+
+    return expectSaga(workspaceSaga)
+      .withState(newDefaultState)
+      .provide([[matchers.call.fn(evalCodeSaga), undefined]])
+      .call.like({
+        fn: evalCodeSaga,
+        args: [{ [entrypointFilePath]: `${programPrependValue}\n${editorValue}` }],
+      })
+      .not.call.like({ fn: evalCodeSaga, args: [{ '/prepend.js': programPrependValue }] })
+      .dispatch({
+        type: WorkspaceActions.evalEditor.type,
+        payload: { workspaceLocation },
+      })
+      .silentRun();
+  });
+
+  test('does not alter the entrypoint when there is no prepend', () => {
+    const workspaceLocation = 'playground';
+    const editorValue = 'print(1)';
+    const execTime = 1000;
+    const context = createContext();
+
+    const newDefaultState = {
+      ...generateDefaultState(workspaceLocation, {
+        editorTabs: [{ value: editorValue, highlightedLines: [], breakpoints: [] }],
+        programPrependValue: '',
+        execTime,
+        context,
+      }),
+      featureFlags: { modifiedFlags: { [flagConductorEnable.flagName]: true } },
+    };
+
+    const entrypointFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
+
+    return expectSaga(workspaceSaga)
+      .withState(newDefaultState)
+      .provide([[matchers.call.fn(evalCodeSaga), undefined]])
+      .call.like({
+        fn: evalCodeSaga,
+        args: [{ [entrypointFilePath]: editorValue }],
+      })
+      .dispatch({
+        type: WorkspaceActions.evalEditor.type,
+        payload: { workspaceLocation },
+      })
+      .silentRun();
+  });
+});
+
+describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
+  const workspaceLocation: WorkspaceLocation = 'grading';
+  const programPrependValue = 'COUNTER = 0';
+  const editorValue = 'def f():\n    return True';
+  const programPostpendValue = 'RESULT = f()';
+  const testcaseProgram = 'print(RESULT)';
+  const execTime = 1000;
+  const testcaseId = 0;
+
+  test('runs prepend+code+postpend+testcase as a single concatenated Conductor call', () => {
+    const context = createContext();
+
+    return expectSaga(
+      runTestCaseConductor,
+      workspaceLocation,
+      testcaseId,
+      editorValue,
+      testcaseProgram,
+      TestcaseTypes.public,
+      programPrependValue,
+      programPostpendValue,
+      execTime,
+    )
+      .withState(
+        generateDefaultState(workspaceLocation, {
+          context,
+          output: [],
+        }),
+      )
+      .provide([[matchers.call.fn(evalCodeSaga), undefined]])
+      .call.like({
+        fn: evalCodeSaga,
+        args: [
+          {
+            '/testcase.py': [
+              programPrependValue,
+              editorValue,
+              programPostpendValue,
+              testcaseProgram,
+            ].join('\n'),
+          },
+        ],
+      })
+      .silentRun();
+  });
+
+  test('grades by the last printed line, not a returned value', () => {
+    const context = createContext();
+    let capturedValue: { toReplString(): string } | undefined;
+
+    return expectSaga(
+      runTestCaseConductor,
+      workspaceLocation,
+      testcaseId,
+      editorValue,
+      testcaseProgram,
+      TestcaseTypes.public,
+      programPrependValue,
+      programPostpendValue,
+      execTime,
+    )
+      .withState(
+        generateDefaultState(workspaceLocation, {
+          context,
+          // Simulate a completed Conductor run whose last printed line was "True" -
+          // note there is no distinct 'result' value, matching Python's script-level
+          // semantics of not producing a REPL-style last-expression value.
+          output: [{ type: 'result', consoleLogs: ['True'] } as any],
+        }),
+      )
+      .provide([
+        [matchers.call.fn(evalCodeSaga), undefined],
+        {
+          put(effect, next) {
+            if (effect.action.type === InterpreterActions.evalTestcaseSuccess.type) {
+              capturedValue = effect.action.payload.value;
+            }
+            return next();
+          },
+        },
+      ])
+      .put.like({
+        action: {
+          type: InterpreterActions.evalTestcaseSuccess.type,
+          payload: { workspaceLocation, index: testcaseId },
+        },
+      })
+      .run()
+      .then(() => {
+        expect(capturedValue?.toReplString()).toBe('True');
+      });
+  });
+
+  test('reports failure without crashing when the Conductor run errors', () => {
+    const context = createContext();
+    const errors: SourceError[] = [
+      {
+        type: ErrorType.RUNTIME,
+        severity: 'Error' as any,
+        location: { start: { line: 0, column: 0 }, end: { line: 0, column: 0 } },
+        explain: () => 'boom',
+        elaborate: () => '',
+      },
+    ];
+
+    return expectSaga(
+      runTestCaseConductor,
+      workspaceLocation,
+      testcaseId,
+      editorValue,
+      testcaseProgram,
+      TestcaseTypes.public,
+      programPrependValue,
+      programPostpendValue,
+      execTime,
+    )
+      .withState(
+        generateDefaultState(workspaceLocation, {
+          context,
+          output: [{ type: 'errors', errors } as any],
+        }),
+      )
+      .provide([[matchers.call.fn(evalCodeSaga), undefined]])
+      .put.like({
+        action: {
+          type: InterpreterActions.evalTestcaseFailure.type,
+          payload: { workspaceLocation, index: testcaseId },
+        },
+      })
+      .silentRun();
   });
 });
 
