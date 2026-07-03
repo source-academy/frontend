@@ -10,7 +10,8 @@
     "start": "Start the Webpack development server",
     "build": "Build production bundle",
     "test": "Run unit tests",
-    "update-ui-snapshots": "Update UI test snapshots"
+    "update-ui-snapshots": "Update UI test snapshots",
+    "knip": "Find unused dependencies, files, and exports"
   },
   "scripts": {
     "analyze": "yarn build --stats; webpack-bundle-analyzer build/bundle-stats.json",
@@ -27,6 +28,7 @@
     "test-coveralls": "./scripts/test-coveralls.sh",
     "update-ui-snapshots": "vitest run --update",
     "eslint": "eslint src",
+    "knip": "knip",
     "prepare": "husky",
     "preview": "rsbuild preview"
   },
@@ -159,6 +161,7 @@
     "husky": "^9.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jsdom": "^29.0.0",
+    "knip": "^6.23.0",
     "phaser3spectorjs": "^0.0.8",
     "prettier": "^3.3.3",
     "react-error-overlay": "^6.0.11",
