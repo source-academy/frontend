@@ -41,7 +41,7 @@ import { restoreExtraMethods } from './restoreExtraMethods';
  * wrapped in a toReplString() so stringify() renders it verbatim instead of adding
  * the JSON-style quoting it'd otherwise apply to a plain string.
  */
-function* runTestCaseConductor(
+export function* runTestCaseConductor(
   workspaceLocation: WorkspaceLocation,
   index: number,
   value: string,
