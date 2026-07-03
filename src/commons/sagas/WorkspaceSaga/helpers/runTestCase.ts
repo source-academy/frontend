@@ -28,11 +28,18 @@ import { restoreExtraMethods } from './restoreExtraMethods';
  * any prepend-defined mutable state (e.g. a counter incremented by a prepend
  * function that postpend later checks) is preserved since it's all one execution.
  *
- * The result of the run is read back from the workspace's last output entry -
- * evalCodeConductorSaga only dispatches generic appendInterpreterResult/Error
- * actions, it does not know this call is for a testcase - and re-dispatched as
- * evalTestcaseSuccess/Failure so the existing testcase UI (which reads
- * editorTestcases[index].result) keeps working unchanged.
+ * Unlike js-slang, ordinary Python statements don't produce a REPL-style "value of
+ * the last expression" - running a .py script bare-expression-statement-last, e.g.
+ * `lte(x, y)`, discards the result exactly like it would in a real Python
+ * interpreter. So testcases are expected to `print(...)` what they want graded, and
+ * grading compares the last printed line against the testcase's `answer`, not a
+ * returned value.
+ *
+ * That comparison is re-dispatched via evalTestcaseSuccess/Failure so the existing
+ * testcase UI (which reads editorTestcases[index].result and compares
+ * stringify(result) against .answer) keeps working - the captured output line is
+ * wrapped in a toReplString() so stringify() renders it verbatim instead of adding
+ * the JSON-style quoting it'd otherwise apply to a plain string.
  */
 function* runTestCaseConductor(
   workspaceLocation: WorkspaceLocation,
@@ -65,19 +72,27 @@ function* runTestCaseConductor(
     workspaceLocation,
   );
 
-  const lastOutput: { type: string; value?: any; errors?: any } | undefined = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].output.slice(-1)[0],
-  );
+  const lastOutput: { type: string; consoleLogs?: string[]; errors?: any } | undefined =
+    yield select((state: OverallState) => state.workspaces[workspaceLocation].output.slice(-1)[0]);
 
   let passed: boolean;
   if (lastOutput?.type === 'errors') {
     yield put(actions.evalTestcaseFailure(lastOutput.errors, workspaceLocation, index));
     passed = false;
-  } else if (lastOutput?.type === 'result') {
-    yield put(actions.evalTestcaseSuccess(lastOutput.value, workspaceLocation, index));
-    passed = true;
   } else {
-    passed = false;
+    // The testcase's own print(...) is the last line printed, since nothing runs
+    // after it in the combined file; earlier prints (if any) belong to
+    // prepend/value/postpend and aren't part of what's being graded.
+    const printedLines = lastOutput?.consoleLogs ?? [];
+    const printedResult = printedLines.length > 0 ? printedLines[printedLines.length - 1].trim() : '';
+    yield put(
+      actions.evalTestcaseSuccess(
+        { toReplString: () => printedResult },
+        workspaceLocation,
+        index,
+      ),
+    );
+    passed = true;
   }
 
   if (type === TestcaseTypes.opaque) {
