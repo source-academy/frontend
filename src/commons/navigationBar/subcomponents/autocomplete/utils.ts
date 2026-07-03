@@ -19,37 +19,33 @@ function autocomplete(prefix: string, trie: TrieNode, n: number = 25): string[] 
 }
 
 export function search(keyStr: string, trie: TrieNode) {
-  const keys = [...keyStr];
   let node = trie;
-  for (let i = 0; i < keys.length; i++) {
-    if (node === undefined || node.children === undefined) {
+  for (const ch of keyStr) {
+    if (!node?.children?.[ch]) {
       return [];
     }
-
-    if (!node.children[keys[i]]) {
-      return [];
-    }
-    node = node.children[keys[i]];
+    node = node.children[ch];
   }
-  return node.value;
+  return node.value || [];
 }
 
-export function sentenceSearch(rewritedSearchData: SearchData, keyStr: string) {
-  const words = keyStr.split(' ');
+export function sentenceSearch(rewritedSearchData: SearchData, keyStr: string): string[] {
+  const normalizedKey = keyStr.toLowerCase();
+  const words = normalizedKey.split(' ');
   const longestWord = words.reduce((a, b) => (a.length > b.length ? a : b), '');
-  const results = search(longestWord, rewritedSearchData.textTrie).filter(id => {
-    const text = rewritedSearchData.idToContentMap[id].toLowerCase().replaceAll('\n', ' ');
-    return text.includes(keyStr);
+  return search(longestWord, rewritedSearchData.textTrie).filter(id => {
+    const content = rewritedSearchData.idToContentMap[id].toLowerCase().replaceAll('\n', ' ');
+    return content.includes(normalizedKey);
   });
-  return results;
 }
 
 export function sentenceAutoComplete(
   rewritedSearchData: SearchData,
-  incompleteKeys: string,
+  prefix: string,
   n: number = 25,
-) {
-  const words = incompleteKeys.split(' ');
+): string[] {
+  const normalizedPrefix = prefix.toLowerCase();
+  const words = normalizedPrefix.split(' ');
   if (words.length === 0) {
     return [];
   }
@@ -57,26 +53,26 @@ export function sentenceAutoComplete(
     return autocomplete(words[0], rewritedSearchData.textTrie, n);
   }
   const pre = words.slice(0, -1).join(' ');
-  const results = sentenceSearch(rewritedSearchData, pre).map(id =>
-    rewritedSearchData.idToContentMap[id].toLowerCase(),
-  );
+  const results: string[] = sentenceSearch(rewritedSearchData, pre)
+    .map(id => rewritedSearchData.idToContentMap[id]?.toLowerCase())
+    .filter(text => !!text);
   const answers: string[] = [];
   while (answers.length < n && results.length > 0) {
     let sentence = results.shift();
-    if (sentence === undefined) {
+    if (!sentence) {
       continue;
     }
     sentence = sentence.replaceAll('\n', ' ');
-    const start = sentence.indexOf(incompleteKeys) + incompleteKeys.length;
-    if (start >= incompleteKeys.length) {
+    const start = sentence.indexOf(normalizedPrefix) + normalizedPrefix.length;
+    if (start >= normalizedPrefix.length) {
       const rest = sentence.slice(start);
       let end = rest.search(/[^a-zA-Z _]/);
       if (end === -1) {
         end = rest.length;
       }
-      const toPush = incompleteKeys + rest.slice(0, end);
-      if (!answers.includes(toPush.trim())) {
-        answers.push(toPush.trim());
+      const toPush = (normalizedPrefix + rest.slice(0, end)).trim();
+      if (!answers.includes(toPush)) {
+        answers.push(toPush);
       }
     }
   }
@@ -85,13 +81,14 @@ export function sentenceAutoComplete(
 
 export function indexAutoComplete(
   rewritedSearchData: SearchData,
-  incompleteKeys: string,
+  prefix: string,
   n: number = 25,
-) {
-  const firstIsLowerCase = incompleteKeys[0].toLowerCase() + incompleteKeys.slice(1);
-  const firstIsUpperCase = incompleteKeys[0].toUpperCase() + incompleteKeys.slice(1);
-  const result1 = autocomplete(firstIsLowerCase, rewritedSearchData.indexTrie, n);
-  const result2 = autocomplete(firstIsUpperCase, rewritedSearchData.indexTrie, n);
+): string[] {
+  if (!prefix) return [];
+  const lower = prefix[0].toLowerCase() + prefix.slice(1);
+  const upper = prefix[0].toUpperCase() + prefix.slice(1);
+  const result1 = autocomplete(lower, rewritedSearchData.indexTrie, n);
+  const result2 = autocomplete(upper, rewritedSearchData.indexTrie, n);
   while (result1.length < n && result2.length > 0) {
     const toPush = result2.shift();
     if (toPush === undefined) {

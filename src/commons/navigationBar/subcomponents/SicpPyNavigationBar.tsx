@@ -24,6 +24,12 @@ import { getNextPy, getPrevPy } from 'src/features/sicp/TableOfContentsHelperPy'
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
 import SicpPyToc from '../../../pages/sicp/subcomponents/SicpPyToc';
 import type { IndexSearchResult, SearchData, TrieNode } from './autocomplete/types';
+import {
+  indexAutoComplete,
+  search,
+  sentenceAutoComplete,
+  sentenceSearch,
+} from './autocomplete/utils';
 
 type SearchResultItem = string | IndexSearchResult;
 
@@ -127,79 +133,6 @@ function SicpPyNavigationBar() {
       });
   };
 
-  function trieLookup(keyStr: string, trie: TrieNode): any[] {
-    let node = trie;
-    for (const ch of keyStr) {
-      if (!node?.children?.[ch]) return [];
-      node = node.children[ch];
-    }
-    return node.value || [];
-  }
-
-  function autocomplete(prefix: string, trie: TrieNode, n: number = 25): string[] {
-    let node = trie;
-    for (const ch of prefix) {
-      if (!node.children[ch]) return [];
-      node = node.children[ch];
-    }
-    const result: string[] = [];
-    const queue: TrieNode[] = [node];
-    while (queue.length > 0 && result.length < n) {
-      const curr = queue.shift()!;
-      if (curr.value.length > 0) result.push(curr.key);
-      for (const child of Object.values(curr.children)) queue.push(child);
-    }
-    return result;
-  }
-
-  function indexAutoComplete(prefix: string, n: number = 25): string[] {
-    if (!prefix) return [];
-    const lower = prefix[0].toLowerCase() + prefix.slice(1);
-    const upper = prefix[0].toUpperCase() + prefix.slice(1);
-    const result = autocomplete(lower, rewritedSearchData.indexTrie, n);
-    const extra = autocomplete(upper, rewritedSearchData.indexTrie, n);
-    while (result.length < n && extra.length > 0) result.push(extra.shift()!);
-    return result;
-  }
-
-  function sentenceSearch(keyStr: string): string[] {
-    const normalizedKey = keyStr.toLowerCase();
-    const words = normalizedKey.split(' ');
-    const longestWord = words.reduce((a, b) => (a.length > b.length ? a : b), '');
-    return trieLookup(longestWord, rewritedSearchData.textTrie).filter(id => {
-      const content = rewritedSearchData.idToContentMap[id];
-      if (!content) return false;
-      return content.toLowerCase().replaceAll('\n', ' ').includes(normalizedKey);
-    });
-  }
-
-  function sentenceAutoComplete(prefix: string, n: number = 25): string[] {
-    const normalizedPrefix = prefix.toLowerCase();
-    const words = normalizedPrefix.split(' ');
-    if (words.length === 0) return [];
-    if (words.length === 1) return autocomplete(words[0], rewritedSearchData.textTrie, n);
-
-    const pre = words.slice(0, -1).join(' ');
-    const results = sentenceSearch(pre)
-      .map(id => rewritedSearchData.idToContentMap[id]?.toLowerCase())
-      .filter((text): text is string => !!text);
-    const answers: string[] = [];
-    while (answers.length < n && results.length > 0) {
-      let sentence = results.shift();
-      if (!sentence) continue;
-      sentence = sentence.replaceAll('\n', ' ');
-      const start = sentence.indexOf(normalizedPrefix) + normalizedPrefix.length;
-      if (start >= normalizedPrefix.length) {
-        const rest = sentence.slice(start);
-        let end = rest.search(/[^a-zA-Z _]/);
-        if (end === -1) end = rest.length;
-        const toPush = (normalizedPrefix + rest.slice(0, end)).trim();
-        if (!answers.includes(toPush)) answers.push(toPush);
-      }
-    }
-    return answers;
-  }
-
   const focusResult = (result: string | undefined, q: string): React.ReactNode => {
     if (!result) return null;
     const normalizedQ = q.toLowerCase();
@@ -272,10 +205,10 @@ function SicpPyNavigationBar() {
     }
     switch (omnibarMode) {
       case 'text':
-        setSearchResults(sentenceAutoComplete(q));
+        setSearchResults(sentenceAutoComplete(rewritedSearchData, q));
         break;
       case 'index':
-        setSearchResults(indexAutoComplete(q));
+        setSearchResults(indexAutoComplete(rewritedSearchData, q));
         break;
     }
   };
@@ -286,12 +219,10 @@ function SicpPyNavigationBar() {
     setOmnibarMode('submenu');
     switch (omnibarMode) {
       case 'text':
-        setSearchResults(sentenceSearch(result));
+        setSearchResults(sentenceSearch(rewritedSearchData, result));
         break;
       case 'index':
-        setSearchResults(
-          processIndexSearchResults(trieLookup(result, rewritedSearchData.indexTrie)),
-        );
+        setSearchResults(processIndexSearchResults(search(result, rewritedSearchData.indexTrie)));
         break;
     }
   };
@@ -393,10 +324,10 @@ function SicpPyNavigationBar() {
                       setPreviousMode(null);
                       switch (previousMode) {
                         case 'text':
-                          setSearchResults(sentenceAutoComplete(query));
+                          setSearchResults(sentenceAutoComplete(rewritedSearchData, query));
                           break;
                         case 'index':
-                          setSearchResults(indexAutoComplete(query));
+                          setSearchResults(indexAutoComplete(rewritedSearchData, query));
                           break;
                       }
                     }
