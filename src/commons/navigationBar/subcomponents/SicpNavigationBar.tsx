@@ -14,17 +14,18 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Omnibar } from '@blueprintjs/select';
-import { useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import Latex from 'react-latex-next';
 import { useNavigate, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
-import Constants from 'src/commons/utils/Constants';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
 import SicpToc from '../../../pages/sicp/subcomponents/SicpToc';
+import { emptySearchData, fetchSicpSearchData } from './autocomplete/query';
 import { processIndexSearchResults } from './autocomplete/renderUtils';
-import type { IndexSearchResult, SearchData, TrieNode } from './autocomplete/types';
+import type { IndexSearchResult } from './autocomplete/types';
 import {
   indexAutoComplete,
   search,
@@ -83,31 +84,11 @@ function SicpNavigationBar() {
     usePortal: false,
   };
 
-  const fetchSearchData = () => {
-    if (process.env.NODE_ENV === 'test') {
-      const emptyTrie: TrieNode = { children: {}, value: [] as any, key: '' };
-      return {
-        indexTrie: emptyTrie,
-        textTrie: emptyTrie,
-        idToContentMap: {},
-      } satisfies SearchData;
-    }
-
-    const xhr = new XMLHttpRequest();
-    const url = Constants.sicpBackendUrl + 'json/rewritedSearchData.json';
-    xhr.open('GET', url, false); //sync download
-    xhr.send();
-    if (xhr.status !== 200) {
-      alert('Unable to get rewrited search data. Error code = ' + xhr.status + ' url is ' + url);
-      throw new Error('Unable to get search data. Error code = ' + xhr.status + ' url is ' + url);
-    } else {
-      const searchData: SearchData = JSON.parse(xhr.responseText);
-      return searchData;
-    }
-  };
-
-  // fetch search catalog only once
-  const rewritedSearchData: SearchData = useMemo(fetchSearchData, []);
+  const { data: rewritedSearchData } = useQuery({
+    queryKey: ['sicpSearchData'],
+    queryFn: fetchSicpSearchData,
+    initialData: emptySearchData,
+  });
 
   const focusResult = (result: string, query: string): React.ReactNode => {
     result = result.replaceAll('\n', ' ').toLowerCase();

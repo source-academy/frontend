@@ -14,17 +14,18 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Omnibar } from '@blueprintjs/select';
-import { useEffect, useRef, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import Latex from 'react-latex-next';
 import { useNavigate, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
-import Constants from 'src/commons/utils/Constants';
 import { getNextPy, getPrevPy } from 'src/features/sicp/TableOfContentsHelperPy';
 
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
 import SicpPyToc from '../../../pages/sicp/subcomponents/SicpPyToc';
+import { emptySearchData, fetchSicpySearchData } from './autocomplete/query';
 import { processIndexSearchResults } from './autocomplete/renderUtils';
-import type { IndexSearchResult, SearchData, TrieNode } from './autocomplete/types';
+import type { IndexSearchResult } from './autocomplete/types';
 import {
   indexAutoComplete,
   search,
@@ -33,15 +34,6 @@ import {
 } from './autocomplete/utils';
 
 type SearchResultItem = string | IndexSearchResult;
-
-const emptyTrieNode: TrieNode = { children: {}, value: [] as any, key: '' };
-const emptySearchData: SearchData = {
-  indexTrie: emptyTrieNode,
-  textTrie: emptyTrieNode,
-  idToContentMap: {},
-};
-
-type SearchDataStatus = 'idle' | 'loading' | 'ready' | 'error';
 
 function SicpPyNavigationBar() {
   const [isTocOpen, setIsTocOpen] = useState(false);
@@ -88,55 +80,17 @@ function SicpPyNavigationBar() {
     usePortal: false,
   };
 
-  const [rewritedSearchData, setRewritedSearchData] = useState<SearchData>(emptySearchData);
-  const [searchDataStatus, setSearchDataStatus] = useState<SearchDataStatus>('idle');
-  const [loadingMessage, setLoadingMessage] = useState<string | null>(null);
-  const loadingMessageTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-
-  useEffect(() => {
-    return () => {
-      if (loadingMessageTimeoutRef.current) {
-        clearTimeout(loadingMessageTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  // Search data (currently ~5MB) is fetched lazily, only once the user actually opens
-  // search, rather than eagerly whenever the textbook is opened.
-  const loadSearchData = () => {
-    if (searchDataStatus === 'loading' || searchDataStatus === 'ready') {
-      return;
-    }
-
-    if (process.env.NODE_ENV === 'test') {
-      setRewritedSearchData(emptySearchData);
-      setSearchDataStatus('ready');
-      return;
-    }
-
-    setSearchDataStatus('loading');
-    setLoadingMessage('...loading search data.');
-
-    const url = Constants.sicpBackendUrl + 'json_py/rewritedSearchData.json';
-    fetch(url)
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`Unable to get search data. Error code = ${res.status} url is ${url}`);
-        }
-        return res.json() as Promise<SearchData>;
-      })
-      .then(data => {
-        setRewritedSearchData(data);
-        setSearchDataStatus('ready');
-        setLoadingMessage('done');
-        loadingMessageTimeoutRef.current = setTimeout(() => setLoadingMessage(null), 800);
-      })
-      .catch(err => {
-        console.error(err);
-        setSearchDataStatus('error');
-        setLoadingMessage('Unable to load search data. Please try again.');
-      });
-  };
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const {
+    data: rewritedSearchData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['sicpPySearchData'],
+    queryFn: fetchSicpySearchData,
+    enabled: shouldLoad,
+    initialData: emptySearchData,
+  });
 
   const focusResult = (result: string | undefined, q: string): React.ReactNode => {
     if (!result) {
@@ -202,7 +156,7 @@ function SicpPyNavigationBar() {
     setIsOmnibarOpen(true);
     setQuery('');
     setSearchResults([]);
-    loadSearchData();
+    setShouldLoad(true);
   };
 
   const initIndexSearch = () => {
@@ -210,7 +164,7 @@ function SicpPyNavigationBar() {
     setIsOmnibarOpen(true);
     setQuery('');
     setSearchResults([]);
-    loadSearchData();
+    setShouldLoad(true);
   };
 
   const handleQueryChange = (q: string) => {
@@ -283,11 +237,10 @@ function SicpPyNavigationBar() {
         className="sicp-search-bar"
         isOpen={isOmnibarOpen}
         inputProps={{
-          disabled: omnibarMode === 'submenu' || searchDataStatus === 'loading',
-          placeholder:
-            searchDataStatus === 'loading'
-              ? 'Loading search data...'
-              : `${omnibarMode.charAt(0).toUpperCase()}${omnibarMode.slice(1)} Search...`,
+          disabled: omnibarMode === 'submenu' || isLoading,
+          placeholder: isLoading
+            ? 'Loading search data...'
+            : `${omnibarMode.charAt(0).toUpperCase()}${omnibarMode.slice(1)} Search...`,
         }}
         overlayProps={{ className: Classes.OVERLAY_SCROLL_CONTAINER }}
         onClose={() => setIsOmnibarOpen(false)}
@@ -314,11 +267,16 @@ function SicpPyNavigationBar() {
         onQueryChange={handleQueryChange}
         itemListRenderer={({ itemsParentRef, renderItem, items }) => (
           <Menu ulRef={itemsParentRef}>
-            {(omnibarMode === 'text' || omnibarMode === 'index') && loadingMessage && (
-              <Text className={Classes.TEXT_MUTED} style={{ padding: 6 }}>
-                {loadingMessage}
-              </Text>
-            )}
+            {(omnibarMode === 'text' || omnibarMode === 'index') &&
+              (isLoading || error !== null) && (
+                <Text className={Classes.TEXT_MUTED} style={{ padding: 6 }}>
+                  {isLoading
+                    ? 'Loading search data...'
+                    : error !== null
+                      ? 'Unable to load search data. Please try again.'
+                      : ''}
+                </Text>
+              )}
             {omnibarMode === 'submenu' && (
               <Text className={Classes.TEXT_MUTED} style={{ padding: 6 }}>
                 Showing results for <strong>{query}</strong>&hellip;{' '}
