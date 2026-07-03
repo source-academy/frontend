@@ -94,9 +94,13 @@ export default defineConfig({
           // Ignore the warnings that occur because js-slang uses dynamic imports
           // to load Source modules
           const moduleName = warning.moduleDescriptor?.name;
-          if (!moduleName) return false;
+          if (!moduleName) {
+            return false;
+          }
 
-          if (!/js-slang\/dist\/modules\/loader\/loaders.js/.test(moduleName)) return false;
+          if (!/js-slang\/dist\/modules\/loader\/loaders.js/.test(moduleName)) {
+            return false;
+          }
           return /Critical dependency: the request of a dependency is an expression/.test(
             warning.message,
           );
