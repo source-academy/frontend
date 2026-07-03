@@ -7,9 +7,22 @@ import Latex from 'react-latex-next';
 import ControlButton from 'src/commons/ControlButton';
 
 import { emptySearchData } from './query';
-import { processIndexSearchResults } from './renderUtils';
 import type { IndexSearchResult, SearchData } from './types';
 import { indexAutoComplete, search, sentenceAutoComplete, sentenceSearch } from './utils';
+
+function processIndexSearchResults(searchResults: IndexSearchResult[]): IndexSearchResult[] {
+  return searchResults
+    .filter(r => r.id)
+    .sort((a, b) => {
+      if (a.hasSubindex && !b.hasSubindex) {
+        return 1;
+      }
+      if (!a.hasSubindex && b.hasSubindex) {
+        return -1;
+      }
+      return a.order.localeCompare(b.order);
+    });
+}
 
 type Mode = 'text' | 'index' | 'submenu';
 type PreviousMode = 'text' | 'index' | null;
