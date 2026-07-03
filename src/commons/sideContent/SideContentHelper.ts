@@ -15,8 +15,8 @@ import { useCallback } from 'react';
 import ace from 'react-ace';
 import ReactDOM from 'react-dom';
 import * as ReactDOMClient from 'react-dom/client';
-import { useDispatch } from 'react-redux';
 import JSXRuntime from 'react/jsx-runtime';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { useAppSelector } from '../utils/Hooks';
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
@@ -94,7 +94,7 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
   const { alerts, dynamicTabs, selectedTab, height }: SideContentState = useAppSelector(
     state => state.sideContent[workspaceLocation],
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const setSelectedTab = useCallback(
     (newId: SideContentTabId) => {
       if (

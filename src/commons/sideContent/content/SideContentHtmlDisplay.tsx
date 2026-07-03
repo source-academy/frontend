@@ -2,8 +2,8 @@ import { IconNames } from '@blueprintjs/icons';
 import { t } from 'i18next';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import type { ResultOutput } from 'src/commons/application/ApplicationTypes';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { beginAlertSideContent } from '../SideContentActions';
 import {
@@ -23,7 +23,7 @@ const ERROR_MESSAGE_REGEX = /^Line \d+: /i;
 export function SideContentHtmlDisplay(props: Props) {
   const { t } = useTranslation('sideContent', { keyPrefix: 'htmlDisplay' });
   const { content, handleAddHtmlConsoleError, workspaceLocation } = props;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const handleEvent = (event: MessageEvent) => {

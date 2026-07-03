@@ -4,9 +4,8 @@ import type { ColDef, IDatasource } from 'ag-grid-community';
 import { themeAlpine } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import default_avatar from 'src/assets/default-avatar.jpg';
-import { useAppSelector } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import type { LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 import { convertToRandomNumber } from 'src/pages/leaderboard/subcomponents/LeaderboardUtils';
@@ -48,7 +47,7 @@ const columnDefs: ColDef<LeaderboardRow>[] = [
 ];
 
 function OverallLeaderboard() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(LeaderboardActions.getContests());

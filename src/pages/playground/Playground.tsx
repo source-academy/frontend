@@ -10,7 +10,7 @@ import { Chapter, Variant } from 'js-slang/dist/langs';
 import { isEqual } from 'lodash-es';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch, useStore } from 'react-redux';
+import { useStore } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import SessionActions from 'src/commons/application/actions/SessionActions';
@@ -26,7 +26,7 @@ import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentH
 import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
-import { useAppSelector, useResponsive } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector, useResponsive } from 'src/commons/utils/Hooks';
 import {
   showFullJSWarningOnUrlLoad,
   showFulTSWarningOnUrlLoad,
@@ -242,7 +242,7 @@ function Playground(props: PlaygroundProps) {
     githubOctokitObject,
   } = useAppSelector(state => state.session);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     handleChangeExecTime,
     handleChapterSelect,

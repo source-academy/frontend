@@ -1,7 +1,6 @@
 import { Button, Icon, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
@@ -9,7 +8,7 @@ import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
 import { getAllGradingOverviews } from 'src/commons/sagas/RequestsSaga';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
-import { useAppSelector, useSession } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector, useSession } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import type { GradingOverview } from 'src/features/grading/GradingTypes';
@@ -55,7 +54,7 @@ function Grading() {
   const [animateRefresh, setAnimateRefresh] = useState(false); // for animation (becomes false on animation end)
   const [submissions, setSubmissions] = useState<GradingOverview[]>([]);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const allColsSortStates = useAppSelector(state => state.workspaces.grading.allColsSortStates);
   const hasLoadedBefore = useAppSelector(state => state.workspaces.grading.hasLoadedBefore);
   const requestCounter = useAppSelector(state => state.workspaces.grading.requestCounter);

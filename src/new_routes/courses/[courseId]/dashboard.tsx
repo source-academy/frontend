@@ -1,8 +1,7 @@
 import { type ColDef, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { startCase } from 'lodash-es';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { fetchGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
@@ -15,7 +14,7 @@ const defaultColumnDefs: ColDef = {
 };
 
 function Dashboard() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const gradingSummary = useAppSelector(state => state.dashboard.gradingSummary);
 
   const columnDefs = gradingSummary.cols.map(e => {

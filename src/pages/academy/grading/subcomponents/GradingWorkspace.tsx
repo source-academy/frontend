@@ -3,12 +3,11 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useEffect, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
-import { useAppSelector } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
@@ -106,7 +105,7 @@ function GradingWorkspace(props: Props) {
     versionHistory,
   } = useAppSelector(state => state.workspaces[workspaceLocation]);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     handleBrowseHistoryDown,
     handleBrowseHistoryUp,

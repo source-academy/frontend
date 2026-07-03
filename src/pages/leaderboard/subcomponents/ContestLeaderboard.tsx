@@ -3,9 +3,8 @@ import 'src/styles/Leaderboard.scss';
 import { type ColDef, themeAlpine } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { useEffect, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { useAppSelector } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import type {
   ContestLeaderboardRow,
@@ -30,7 +29,7 @@ function ContestLeaderboard({
 }: Props) {
   const courseID = useAppSelector(store => store.session.courseId);
   const visibleEntries = useAppSelector(store => store.session?.topContestLeaderboardDisplay ?? 10);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   // Retrieve Contest Score Data from store
   const rankedLeaderboard: ContestLeaderboardRow[] = useAppSelector(store =>

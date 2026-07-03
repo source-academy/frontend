@@ -4,13 +4,12 @@ import { CollabEditingAccess, type SharedbAceUser } from '@sourceacademy/sharedb
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import {
   changeDefaultEditable,
   getPlaygroundSessionUrl,
 } from 'src/commons/collabEditing/CollabEditingHelper';
 import CopyToClipboard from 'src/commons/utils/CopyToClipboard';
-import { useAppSelector } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 import { showSuccessMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import classes from 'src/styles/SideContentSessionManagement.module.scss';
 
@@ -140,7 +139,7 @@ function SideContentSessionManagement({
   workspaceLocation,
 }: Props) {
   const { t } = useTranslation('sideContent', { keyPrefix: 'sessionManagement' });
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(beginAlertSideContent(SideContentType.sessionManagement, workspaceLocation));

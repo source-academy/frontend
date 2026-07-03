@@ -12,11 +12,10 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import type { BlueprintIcons_16Id } from '@blueprintjs/icons/lib/esm/generated/16px/blueprint-icons-16';
 import { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { FeatureFlagsActions } from 'src/commons/featureFlags';
 import { FeatureFlag } from 'src/commons/featureFlags/FeatureFlag';
 import { publicFlags } from 'src/commons/featureFlags/publicFlags';
-import { useAppSelector } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 import { PageCard, PageWrapper } from 'src/components/ui/page';
 
 type FlagCardProps<T> = React.PropsWithChildren<{
@@ -28,7 +27,7 @@ function BooleanFlagCard({ flag, modifiedFlag }: FlagCardProps<boolean>) {
   const currentFlag = modifiedFlag ?? flag.defaultValue;
   const isModified = modifiedFlag !== undefined;
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = e => {
     dispatch(FeatureFlagsActions.setFlag({ featureFlag: flag, value: !currentFlag }));
@@ -47,7 +46,7 @@ function NumberFlagCard({ flag, modifiedFlag }: FlagCardProps<number>) {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const onValueChange = (value: number) => {
     dispatch(FeatureFlagsActions.setFlag({ featureFlag: flag, value: value }));
@@ -73,7 +72,7 @@ function StringFlagCard({ flag, modifiedFlag }: FlagCardProps<string>) {
 
   const inputRef = useRef<HTMLDivElement>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const onConfirm = (value: string) => {
     dispatch(FeatureFlagsActions.setFlag({ featureFlag: flag, value: value }));
@@ -116,7 +115,7 @@ function FeatureFlagSection({
   children,
   icon,
 }: FlagCardProps<any> & { icon: BlueprintIcons_16Id }) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => setIsOpen(v => !v);
