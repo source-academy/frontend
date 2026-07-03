@@ -72,8 +72,10 @@ export function* runTestCaseConductor(
     workspaceLocation,
   );
 
-  const lastOutput: { type: string; consoleLogs?: string[]; errors?: any } | undefined =
-    yield select((state: OverallState) => state.workspaces[workspaceLocation].output.slice(-1)[0]);
+  const output: Array<{ type: string; consoleLogs?: string[]; errors?: any }> = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].output,
+  );
+  const lastOutput = output[output.length - 1];
 
   let passed: boolean;
   if (lastOutput?.type === 'errors') {
@@ -82,8 +84,13 @@ export function* runTestCaseConductor(
   } else {
     // The testcase's own print(...) is the last line printed, since nothing runs
     // after it in the combined file; earlier prints (if any) belong to
-    // prepend/value/postpend and aren't part of what's being graded.
-    const printedLines = lastOutput?.consoleLogs ?? [];
+    // prepend/value/postpend and aren't part of what's being graded. consoleLogs
+    // isn't guaranteed to be on the absolute last output entry - stdout and result
+    // messages travel on separate Conductor channels with no guaranteed relative
+    // ordering, and output is never cleared between testcase runs - so search
+    // backward for the last entry that actually carries console logs.
+    const lastLogOutput = [...output].reverse().find(entry => entry?.consoleLogs?.length);
+    const printedLines = lastLogOutput?.consoleLogs ?? [];
     const printedResult = printedLines.length > 0 ? printedLines[printedLines.length - 1].trim() : '';
     yield put(
       actions.evalTestcaseSuccess(
