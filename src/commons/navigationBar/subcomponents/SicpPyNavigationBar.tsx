@@ -3,23 +3,34 @@ import { IconNames } from '@blueprintjs/icons';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
-import { getNextPy, getPrevPy } from 'src/features/sicp/TableOfContentsHelperPy';
+import {
+  getNextPy as getNext,
+  getPrevPy as getPrev,
+} from 'src/features/sicp/TableOfContentsHelperPy';
 
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
 import SicpPyToc from '../../../pages/sicp/subcomponents/SicpPyToc';
+import { fetchSicpySearchData } from './autocomplete/query';
+import SearchAutocomplete from './autocomplete/SearchAutocomplete';
 
 function SicpPyNavigationBar() {
   const [isTocOpen, setIsTocOpen] = useState(false);
   const { section } = useParams<{ section: string }>();
   const navigate = useNavigate();
+  const prev = getPrev(section ?? '');
+  const next = getNext(section ?? '');
 
-  const prev = getPrevPy(section ?? '');
-  const next = getNextPy(section ?? '');
+  const handleOpenToc = () => setIsTocOpen(true);
+  const handleCloseToc = () => setIsTocOpen(false);
 
-  const handleNavigation = (sect: string) => navigate('/sicppy/' + sect);
+  const handleNavigation = (sect: string) => {
+    navigate('/sicppy/' + sect);
+  };
 
-  const tocButton = <TableOfContentsButton key="toc" handleOpenToc={() => setIsTocOpen(true)} />;
+  // Button to open table of contents
+  const tocButton = <TableOfContentsButton key="toc" handleOpenToc={handleOpenToc} />;
 
+  // Previous button only displayed when next page is valid.
   const prevButton = prev && (
     <div key="prev">
       <ControlButton
@@ -30,6 +41,7 @@ function SicpPyNavigationBar() {
     </div>
   );
 
+  // Next button only displayed when next page is valid.
   const nextButton = next && (
     <div key="next">
       <ControlButton
@@ -42,7 +54,7 @@ function SicpPyNavigationBar() {
   );
 
   const drawerProps = {
-    onClose: () => setIsTocOpen(false),
+    onClose: handleCloseToc,
     autoFocus: true,
     canEscapeKeyClose: true,
     canOutsideClickClose: true,
@@ -58,6 +70,13 @@ function SicpPyNavigationBar() {
       <Navbar className="SicpNavigationBar secondary-navbar">
         <NavbarGroup align={Alignment.START}>{tocButton}</NavbarGroup>
         <NavbarGroup align={Alignment.END}>{[prevButton, nextButton]}</NavbarGroup>
+        <NavbarGroup align={Alignment.CENTER}>
+          <SearchAutocomplete
+            queryKey="sicpPySearchData"
+            fetchSearchData={fetchSicpySearchData}
+            onNavigate={handleNavigation}
+          />
+        </NavbarGroup>
       </Navbar>
       <Drawer {...drawerProps} className="sicp-toc-drawer">
         <SicpPyToc handleCloseToc={() => setIsTocOpen(false)} />
