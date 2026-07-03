@@ -23,6 +23,7 @@ import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
 import SicpToc from '../../../pages/sicp/subcomponents/SicpToc';
+import { processIndexSearchResults } from './autocomplete/renderUtils';
 import type { IndexSearchResult, SearchData, TrieNode } from './autocomplete/types';
 import {
   indexAutoComplete,
@@ -169,20 +170,6 @@ function SicpNavigationBar() {
         }}
       />
     );
-  };
-
-  const processIndexSearchResults = (searchResults: IndexSearchResult[]) => {
-    return searchResults
-      .filter(result => result.id)
-      .sort((a, b) => {
-        if (a.hasSubindex && !b.hasSubindex) {
-          return 1;
-        }
-        if (!a.hasSubindex && b.hasSubindex) {
-          return -1;
-        }
-        return a.order.localeCompare(b.order);
-      });
   };
 
   const makeIndexSearchSubmenuItem = (result: IndexSearchResult) => {

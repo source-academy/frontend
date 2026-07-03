@@ -23,6 +23,7 @@ import { getNextPy, getPrevPy } from 'src/features/sicp/TableOfContentsHelperPy'
 
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
 import SicpPyToc from '../../../pages/sicp/subcomponents/SicpPyToc';
+import { processIndexSearchResults } from './autocomplete/renderUtils';
 import type { IndexSearchResult, SearchData, TrieNode } from './autocomplete/types';
 import {
   indexAutoComplete,
@@ -241,19 +242,6 @@ function SicpPyNavigationBar() {
         break;
     }
   };
-
-  const processIndexSearchResults = (results: IndexSearchResult[]): IndexSearchResult[] =>
-    results
-      .filter(r => r.id)
-      .sort((a, b) => {
-        if (a.hasSubindex && !b.hasSubindex) {
-          return 1;
-        }
-        if (!a.hasSubindex && b.hasSubindex) {
-          return -1;
-        }
-        return a.order.localeCompare(b.order);
-      });
 
   const makeTextSearchSubmenuItem = (result: string) => (
     <MenuItem
