@@ -381,7 +381,9 @@ function Playground(props: PlaygroundProps) {
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   useEffect(() => {
-    if (!selectedTab) return;
+    if (!selectedTab) {
+      return;
+    }
 
     if (!isVscode && isMobileBreakpoint && desktopOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.mobileEditor);
@@ -739,9 +741,13 @@ function Playground(props: PlaygroundProps) {
     state => state.workspaces[workspaceLocation].cseSnapshots !== null,
   );
   const conductorEvaluatorSupportsCse = useTypedSelector(state => {
-    if (!selectConductorEnable(state)) return false;
+    if (!selectConductorEnable(state)) {
+      return false;
+    }
     const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
-    if (!selectedLanguageId || !selectedEvaluatorId) return false;
+    if (!selectedLanguageId || !selectedEvaluatorId) {
+      return false;
+    }
     const lang = languageMap[selectedLanguageId];
     const evaluator = lang?.evaluators.find(e => e.id === selectedEvaluatorId);
     return (evaluator?.capabilities as string[] | undefined)?.includes('cse') ?? false;
@@ -766,7 +772,9 @@ function Playground(props: PlaygroundProps) {
     state => state.languageDirectory.selectedEvaluatorId,
   );
   const stepperEvaluatorId = useTypedSelector(state => {
-    if (!selectConductorEnable(state)) return null;
+    if (!selectConductorEnable(state)) {
+      return null;
+    }
     const { selectedLanguageId, languageMap } = state.languageDirectory;
     const lang = selectedLanguageId ? languageMap[selectedLanguageId] : undefined;
     const evaluator = lang?.evaluators.find(e =>
@@ -775,7 +783,9 @@ function Playground(props: PlaygroundProps) {
     return evaluator?.id ?? null;
   });
   const defaultEvaluatorId = useTypedSelector(state => {
-    if (!selectConductorEnable(state)) return null;
+    if (!selectConductorEnable(state)) {
+      return null;
+    }
     const { selectedLanguageId, languageMap } = state.languageDirectory;
     const lang = selectedLanguageId ? languageMap[selectedLanguageId] : undefined;
     const evaluator = lang?.evaluators.find(
@@ -788,7 +798,9 @@ function Playground(props: PlaygroundProps) {
   // evaluator (so a Run produces steps); leaving it restores the default. Each branch dispatches only
   // on a real mismatch, so this converges rather than looping.
   useEffect(() => {
-    if (!conductorEnabled) return;
+    if (!conductorEnabled) {
+      return;
+    }
     const onStepperTab = selectedTab === CONDUCTOR_STEPPER_TAB_ID;
     if (!stepperEvaluatorId) {
       // This language offers no stepper; if we're stranded on the Stepper tab (e.g. after switching
@@ -816,11 +828,17 @@ function Playground(props: PlaygroundProps) {
   ]);
 
   const conductorWelcomeText = useTypedSelector(state => {
-    if (!selectConductorEnable(state)) return null;
+    if (!selectConductorEnable(state)) {
+      return null;
+    }
     const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
-    if (!selectedLanguageId) return null;
+    if (!selectedLanguageId) {
+      return null;
+    }
     const lang = languageMap[selectedLanguageId];
-    if (!lang?.welcome) return null;
+    if (!lang?.welcome) {
+      return null;
+    }
     const evaluator = selectedEvaluatorId
       ? lang.evaluators.find(e => e.id === selectedEvaluatorId)
       : undefined;
