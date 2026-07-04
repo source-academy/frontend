@@ -24,7 +24,7 @@ function SicpPyNavigationBar() {
   const handleCloseToc = () => setIsTocOpen(false);
 
   const handleNavigation = (sect: string) => {
-    navigate('/sicppy/' + sect);
+    navigate('/sicpy/' + sect);
   };
 
   // Button to open table of contents

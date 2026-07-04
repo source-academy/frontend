@@ -35,7 +35,7 @@ function SicpPyPage() {
 
   const prev = getPrevPy(section ?? '');
   const next = getNextPy(section ?? '');
-  const handleNavigation = (sect: string) => navigate('/sicppy/' + sect);
+  const handleNavigation = (sect: string) => navigate('/sicpy/' + sect);
 
   const navigationButtons = (
     <div className="sicp-navigation-buttons">
