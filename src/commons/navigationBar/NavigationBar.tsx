@@ -94,7 +94,7 @@ function useSecondaryNavbarType() {
   const isAchievements = useMatch('/courses/:courseId/achievements/*');
   const isLeaderboard = useMatch('/courses/:courseId/leaderboard/*');
   const isSicp = useMatch('/sicpjs/:section?');
-  const isSicpPy = useMatch('/sicppy/:section?');
+  const isSicpPy = useMatch('/sicpy/:section?');
 
   const isHidden = isPlayground || isContributors || isAchievements || isLeaderboard;
 
@@ -148,7 +148,7 @@ function NavigationBar() {
     () =>
       selectedLanguage?.textbook
         ? {
-            to: selectedLanguage.textbook.url.endsWith('json_py/') ? '/sicppy' : '/sicpjs',
+            to: selectedLanguage.textbook.url.endsWith('json_py/') ? '/sicpy' : '/sicpjs',
             icon: IconNames.BOOK,
             text: selectedLanguage.textbook.name,
           }
@@ -244,7 +244,7 @@ function NavigationBar() {
     const topNavbarNavlinks = [
       '/playground',
       '/sicpjs',
-      '/sicppy',
+      '/sicpy',
       '/contributors',
       `/courses/${courseId}/achievements`,
       `/courses/${courseId}/leaderboard`,

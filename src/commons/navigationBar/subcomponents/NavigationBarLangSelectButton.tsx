@@ -36,12 +36,12 @@ const NavigationBarLangSelectButton = () => {
     setIsOpen(false);
 
     const isInTextbook =
-      location.pathname.startsWith('/sicpjs') || location.pathname.startsWith('/sicppy');
+      location.pathname.startsWith('/sicpjs') || location.pathname.startsWith('/sicpy');
     if (isInTextbook) {
       const newLang = languageMap[languageId];
       if (newLang?.textbook) {
         const newPath = newLang.textbook.url.endsWith('json_py/')
-          ? '/sicppy/index'
+          ? '/sicpy/index'
           : '/sicpjs/index';
         navigate(newPath);
       } else {
