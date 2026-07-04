@@ -776,9 +776,8 @@ function Playground(props: PlaygroundProps) {
     if (!selectConductorEnable(state)) {
       return null;
     }
-    const lang = selectedLanguageId
-      ? state.languageDirectory.languageMap[selectedLanguageId]
-      : undefined;
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    const lang = langId ? languageMap[langId] : undefined;
     const evaluator = lang?.evaluators.find(e =>
       (e.capabilities as string[] | undefined)?.includes(STEPPER_EVALUATOR_CAPABILITY),
     );
@@ -788,9 +787,8 @@ function Playground(props: PlaygroundProps) {
     if (!selectConductorEnable(state)) {
       return null;
     }
-    const lang = selectedLanguageId
-      ? state.languageDirectory.languageMap[selectedLanguageId]
-      : undefined;
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    const lang = langId ? languageMap[langId] : undefined;
     const evaluator = lang?.evaluators.find(
       e => !(e.capabilities as string[] | undefined)?.includes(STEPPER_EVALUATOR_CAPABILITY),
     );
