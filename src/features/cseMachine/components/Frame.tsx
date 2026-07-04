@@ -34,8 +34,8 @@ import { GlobalFnValue } from './values/GlobalFnValue';
 import { Visible } from './Visible';
 
 const frameNames = new Map([
-  ['global', 'Global'],
-  ['programEnvironment', 'Program'],
+  ['global', 'Built-in functions'],
+  ['programEnvironment', 'Globals'],
   ['forLoopEnvironment', 'Body of for-loop'],
   ['forBlockEnvironment', 'Control variable of for-loop'],
   ['blockEnvironment', 'Block'],
@@ -63,6 +63,11 @@ export class Frame extends Visible implements IHoverable {
   readonly bindings: Binding[] = [];
   /** name of this frame to display */
   private _name!: Text; // removed readonly to allow reassignment for fixed layout
+  /**
+   * annotation naming the names in this frame that resolve via the global frame instead of the
+   * usual enclosing-scope chain (e.g. Python's `global` statement), or undefined if none
+   */
+  private _globalNamesText: Text | undefined;
   private readonly rectRef = createRef<KonvaRect | null>();
   /** the level in which this frame resides */
   readonly level: Level | undefined;
@@ -74,6 +79,8 @@ export class Frame extends Visible implements IHoverable {
   readonly arrow: GenericArrow<Frame, Frame> | undefined;
   /** check if this frame is live */
   readonly isLive: boolean;
+  /** vertical space taken up by {@link _globalNamesText}; bindings start below it */
+  bindingsYOffset: number = 0;
 
   constructor(
     /** environment tree node that contains this frame */
@@ -108,6 +115,13 @@ export class Frame extends Visible implements IHoverable {
       const index = entries.findIndex(([key]) => key === Config.GlobalFrameDefaultText);
       entries.unshift(entries.splice(index, 1)[0]);
     }
+
+    // `globalNames` predates its type declaration: it's a minor bump to
+    // @sourceacademy/common-cse-machine (see the companion source-academy/plugins PR) that isn't
+    // published yet, so Env (js-slang's Environment type) doesn't declare it.
+    const globalNames = (this.environment as unknown as { globalNames?: string[] }).globalNames;
+    const globalNamesLabel =
+      globalNames && globalNames.length > 0 ? `globals: ${globalNames.join(', ')}` : undefined;
 
     // get values that are unreferenced, which will used to created dummy bindings
     const unreferencedValues = [...getUnreferencedObjects(this.environment)];
@@ -180,13 +194,32 @@ export class Frame extends Visible implements IHoverable {
       this._width = Math.max(this._width, bindingTextWidth + Config.FramePaddingX * 2);
       this._width = Math.min(this._width, Config.FrameDefaultWidth); // cap the frame width to default width
     }
+    if (globalNamesLabel) {
+      this._width = Math.max(
+        this._width,
+        getTextWidth(globalNamesLabel) + Config.FramePaddingX * 2,
+      );
+      this._width = Math.min(this._width, Config.FrameDefaultWidth);
+    }
+
+    this.isLive = this.environment ? Layout.liveEnvIDs.has(this.environment.id) : false;
+
+    // Reserve space for the globals annotation above the bindings, so the first binding's
+    // position (derived in the Binding constructor) starts below it.
+    if (globalNamesLabel) {
+      this._globalNamesText = new Text(
+        globalNamesLabel,
+        this.x() + Config.FramePaddingX,
+        this.y() + Config.FramePaddingY,
+        { maxWidth: this.width() - Config.FramePaddingX * 2, faded: !this.isLive },
+      );
+      this.bindingsYOffset = this._globalNamesText.height() + Config.TextPaddingY;
+    }
 
     // Create all the bindings and values
     let prevBinding: Binding | null = null;
     let prevVisibleBinding: Binding | null = null;
     let lastVisibleBinding: Binding | null = null;
-
-    this.isLive = this.environment ? Layout.liveEnvIDs.has(this.environment.id) : false;
 
     for (const [key, data] of entries) {
       const constant =
@@ -239,7 +272,7 @@ export class Frame extends Visible implements IHoverable {
     // derive the height of the frame from the the position of the last visible binding
     this._height = lastVisibleBinding
       ? lastVisibleBinding.y() - this.y() + lastVisibleBinding.height() + Config.FramePaddingY
-      : Config.FramePaddingY * 2;
+      : Config.FramePaddingY * 2 + this.bindingsYOffset;
 
     this._name = new Text(
       frameNames.get(this.environment.name) ?? this.environment.name,
@@ -279,6 +312,7 @@ export class Frame extends Visible implements IHoverable {
       this.level!.y(), // this method is only called after the frame is drawn
       { maxWidth: this.width(), faded: !this.isLive },
     );
+    this._globalNamesText?.setX(this.x() + Config.FramePaddingX);
   }
 
   /**
@@ -289,6 +323,7 @@ export class Frame extends Visible implements IHoverable {
     this._y = newY;
     const relativeTextY = newY - (Config.FontSize + Config.TextPaddingY / 2);
     this.name.setY(relativeTextY);
+    this._globalNamesText?.setY(newY + Config.FramePaddingY);
   }
 
   reassignWidth(newWidth: number): void {
@@ -349,6 +384,7 @@ export class Frame extends Visible implements IHoverable {
           key={Layout.key++}
           fill={defaultBackgroundColor()}
         />
+        {this._globalNamesText?.draw()}
         {this.bindings.map(binding => binding.draw())}
         {this.arrow?.draw()}
       </Group>

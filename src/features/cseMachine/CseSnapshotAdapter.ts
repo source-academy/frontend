@@ -238,12 +238,18 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
     // pre-populate the same sentinel Source uses to keep Frame's constructor from crashing.
     const head: Record<string, unknown> =
       f.name === 'global' ? { [Config.GlobalFrameDefaultText]: Symbol() } : {};
+    // `globalNames` predates its type declaration: it's a minor bump to
+    // @sourceacademy/common-cse-machine (see the companion source-academy/plugins PR) that
+    // isn't published yet, so the installed CseSerializedEnvFrame doesn't declare it. Cast at
+    // the read site until frontend's dependency is bumped to the version that declares it.
+    const globalNames = (f as { globalNames?: string[] }).globalNames;
     const env = {
       id: f.id,
       name: f.name,
       head,
       tail: null as Environment | null,
       heap: new Heap(),
+      globalNames,
     } as unknown as Environment;
     envMap.set(f.id, env);
   }
