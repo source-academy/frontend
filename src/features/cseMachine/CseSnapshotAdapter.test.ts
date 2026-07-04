@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { CseSnapshot } from '../conductor/CseMachineHostPlugin';
 import { Frame } from './components/Frame';
+import { Config } from './CseMachineConfig';
 import { Layout } from './CseMachineLayout';
 import type { EnvTree } from './CseMachineTypes';
 import { buildFakeEnvTreeFromSnapshot } from './CseSnapshotAdapter';
@@ -62,7 +63,7 @@ describe('buildFakeEnvTreeFromSnapshot', () => {
 });
 
 describe('Frame rendering of globalNames (via Layout.setContext)', () => {
-  it('reserves vertical space for the annotation and pushes the first binding below it', () => {
+  it('floats the globalNames annotation above the frame, next to the name, without shifting bindings', () => {
     const snapshot: CseSnapshot = {
       stepIndex: 0,
       control: [],
@@ -96,12 +97,113 @@ describe('Frame rendering of globalNames (via Layout.setContext)', () => {
     const callFrameEnv = findNode(envTree, 'f1')!.environment;
     const frame = Frame.getFrom(callFrameEnv as any)!;
 
-    expect(frame.bindingsYOffset).toBeGreaterThan(0);
+    expect(frame.globalNamesText).toBeDefined();
+    expect(frame.globalNamesText!.partialStr).toContain('globals: x');
+    // Sits in its own row above the box, stacked below the frame name (not beside it, since
+    // frame names are arbitrary function names of unpredictable length) and not inside the box.
+    expect(frame.globalNamesText!.y()).toBeGreaterThan(frame.name.y());
+    expect(frame.globalNamesText!.y()).toBeLessThan(frame.y());
+    // Left-aligned like the name (never pushed left of the frame's own border), and never at a
+    // negative offset regardless of label length.
+    expect(frame.globalNamesText!.x()).toBe(frame.name.x());
+
+    // Bindings are unaffected — the first one still starts right at the top padding.
     expect(frame.bindings).toHaveLength(1);
-    expect(frame.bindings[0].y()).toBeGreaterThanOrEqual(frame.y() + frame.bindingsYOffset);
+    expect(frame.bindings[0].y()).toBe(frame.y() + 30); // Config.FramePaddingY
   });
 
-  it('does not reserve space when the frame declares no globals', () => {
+  it('widens the frame to fit a label longer than its bindings need, instead of truncating it', () => {
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        { id: 'g', name: 'global', parentId: null, bindings: [], isActive: false },
+        {
+          id: 'f1',
+          name: 'f',
+          parentId: 'g',
+          // A single short binding would otherwise keep the frame's own box narrow, while the
+          // annotation is far wider — this is the scenario that used to get ellipsis-truncated
+          // and rendered left of the frame's own border, before the frame width sizing pass
+          // was taught to account for the annotation too (same treatment as binding text).
+          bindings: [{ name: 'y', value: { displayValue: '3', label: 'number' } }],
+          isActive: true,
+          globalNames: ['counter_with_a_very_long_descriptive_name'],
+        } as any,
+      ],
+    };
+
+    const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
+
+    Layout.snapshotMode = true;
+    try {
+      Layout.setContext(
+        envTree as unknown as EnvTree,
+        fakeControl as unknown as Control,
+        fakeStash as unknown as Stash,
+      );
+    } finally {
+      Layout.snapshotMode = false;
+    }
+
+    const callFrameEnv = findNode(envTree, 'f1')!.environment;
+    const frame = Frame.getFrom(callFrameEnv as any)!;
+
+    expect(frame.globalNamesText!.partialStr).toBe(
+      'globals: counter_with_a_very_long_descriptive_name',
+    );
+    // The frame widened to fit the label (under the FrameDefaultWidth cap), so it's not clipped
+    // and stays flush with the frame's own left edge, never overflowing past its right edge.
+    expect(frame.globalNamesText!.width()).toBeLessThanOrEqual(frame.width());
+    expect(frame.globalNamesText!.x()).toBe(frame.x());
+  });
+
+  it('caps the frame width like bindings do, truncating a label wider than FrameDefaultWidth', () => {
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        { id: 'g', name: 'global', parentId: null, bindings: [], isActive: false },
+        {
+          id: 'f1',
+          name: 'f',
+          parentId: 'g',
+          // A frame with a genuinely empty head gets collapsed by Layout's "skip empty
+          // environments" behavior (CseMachineUtils.isEmptyEnvironment), so give it one
+          // trivial binding to keep it visible — unrelated to what's under test here.
+          bindings: [{ name: 'y', value: { displayValue: '3', label: 'number' } }],
+          isActive: true,
+          globalNames: [
+            'an_extremely_long_variable_name_that_by_itself_should_exceed_the_default_frame_width_cap_used_for_bindings_too',
+          ],
+        } as any,
+      ],
+    };
+
+    const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
+
+    Layout.snapshotMode = true;
+    try {
+      Layout.setContext(
+        envTree as unknown as EnvTree,
+        fakeControl as unknown as Control,
+        fakeStash as unknown as Stash,
+      );
+    } finally {
+      Layout.snapshotMode = false;
+    }
+
+    const callFrameEnv = findNode(envTree, 'f1')!.environment;
+    const frame = Frame.getFrom(callFrameEnv as any)!;
+
+    expect(frame.width()).toBe(472); // Config.FrameDefaultWidth
+    expect(frame.globalNamesText!.partialStr).toContain(Config.Ellipsis);
+    expect(frame.globalNamesText!.x()).toBe(frame.x());
+  });
+
+  it('has no annotation when the frame declares no globals', () => {
     const snapshot: CseSnapshot = {
       stepIndex: 0,
       control: [],
@@ -124,6 +226,6 @@ describe('Frame rendering of globalNames (via Layout.setContext)', () => {
 
     const globalEnv = findNode(envTree, 'g')!.environment;
     const frame = Frame.getFrom(globalEnv as any)!;
-    expect(frame.bindingsYOffset).toBe(0);
+    expect(frame.globalNamesText).toBeUndefined();
   });
 });

@@ -55,7 +55,7 @@ export class Binding extends Visible {
       this._y = this.prevBinding.y() + this.prevBinding.height() + Config.TextPaddingY;
     } else {
       this._x = this.frame.x() + Config.FramePaddingX;
-      this._y = this.frame.y() + Config.FramePaddingY + this.frame.bindingsYOffset;
+      this._y = this.frame.y() + Config.FramePaddingY;
     }
 
     const GlobalDefaultText = this.keyString === Config.GlobalFrameDefaultText;
