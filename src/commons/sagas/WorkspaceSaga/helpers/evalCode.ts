@@ -23,10 +23,11 @@ import type {
   CseSnapshot,
 } from '../../../../features/conductor/CseMachineHostPlugin';
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
+import { CONDUCTOR_STEPPER_TAB_ID } from '../../../../features/conductor/stepperTab';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { type OverallState } from '../../../application/ApplicationTypes';
 import { visitSideContent } from '../../../sideContent/SideContentActions';
-import { SideContentType } from '../../../sideContent/SideContentTypes';
+import { type SideContentTabId, SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import DisplayBufferService from '../../../utils/DisplayBufferService';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
@@ -487,6 +488,26 @@ function* handleResults(
   }
 }
 
+/**
+ * Surfaces a conductor evaluation error: appends it to the REPL and, when the (REPL-hiding) conductor
+ * Stepper tab is active, switches to the Introduction tab so the error is visible rather than failing
+ * silently — the conductor analogue of the legacy `usingSubst` path. Also unblocks the run loop.
+ */
+function* surfaceConductorError(
+  error: unknown,
+  workspaceLocation: WorkspaceLocation,
+): SagaIterator {
+  yield put(actions.appendInterpreterError([toConductorSourceError(error)], workspaceLocation));
+  const selectedTab: SideContentTabId | undefined = yield select(
+    (state: OverallState) => state.sideContent[workspaceLocation]?.selectedTab,
+  );
+  if (selectedTab === CONDUCTOR_STEPPER_TAB_ID) {
+    yield put(visitSideContent(SideContentType.introduction, selectedTab, workspaceLocation));
+  }
+  // Unblock the run loop (the runner should also send a terminal status, but this is a safety net).
+  yield put(actions.beginInterruptExecution(workspaceLocation));
+}
+
 function* handleErrors(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
@@ -502,12 +523,18 @@ function* handleErrors(
   try {
     while (true) {
       const error = yield take(errorChan);
-      yield put(actions.appendInterpreterError([toConductorSourceError(error)], workspaceLocation));
-      // Signal the REPL loop that evaluation has ended due to an error.
-      // We dispatch beginInterruptExecution here as a safety net: the runner should
-      // also send a terminal status (STOPPED/ERROR) which handleStatuses will catch,
-      // but if it doesn't (e.g. older evaluator build), this ensures we unblock.
-      yield put(actions.beginInterruptExecution(workspaceLocation));
+      yield* surfaceConductorError(error, workspaceLocation);
+    }
+  } catch (e) {
+    // A conductor evaluator may report a preprocessing/syntax error by rejecting its run rather than
+    // via the error channel (the Python stepper does this: the rejection is thrown into this forked
+    // task by redux-saga). Handle it the same way and do NOT re-throw — otherwise it aborts the run
+    // saga and escapes as an uncaught error (invisible to the user). redux-saga task cancellations are
+    // not Error instances, so re-raise those to preserve normal teardown.
+    if (e instanceof Error) {
+      yield* surfaceConductorError(e, workspaceLocation);
+    } else {
+      throw e;
     }
   } finally {
     if (yield cancelled()) {
@@ -652,10 +679,27 @@ export function* evalCodeConductorSaga(
 
     // OneShot: wait for the runner to send STOPPED/ERROR (dispatched by handleStatuses),
     // or for the user to manually interrupt execution.
-    yield race({
+    const { done } = yield race({
       done: take(actions.beginInterruptExecution.type),
       timeout: call(() => new Promise(resolve => setTimeout(resolve, execTime + 10000))),
     });
+
+    // Drain pending result/error/output before teardown. Each conductor channel is its own
+    // MessagePort with no cross-channel ordering, so the terminal STOPPED status (which resolves the
+    // race above) can be handled before the result/error/output posted just before it on their own
+    // ports. Cancelling the forks immediately would drop those still-in-flight messages (e.g. an
+    // evaluator that reports an error via `sendError` rather than by rejecting — see the catch below).
+    // Give the forks a brief window to process what the runner already sent. `done` is set on runner
+    // completion and on manual interrupt (both may have a trailing message to flush); only a hard
+    // timeout skips the drain.
+    if (done) {
+      yield call(() => new Promise(resolve => setTimeout(resolve, 50)));
+    }
+  } catch (runError) {
+    // Defensive: surface any setup error (e.g. failing to obtain the conductor) or synchronous
+    // startEvaluator rejection here rather than letting it escape as an uncaught saga error. The
+    // Python stepper's async rejection is delivered to and handled in `handleErrors`, not here.
+    yield* surfaceConductorError(runError, workspaceLocation);
   } finally {
     try {
       if (cseTask) {

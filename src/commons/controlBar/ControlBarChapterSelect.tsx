@@ -6,6 +6,7 @@ import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useDispatch } from 'react-redux';
 
 import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
+import { STEPPER_EVALUATOR_CAPABILITY } from '../../features/conductor/stepperTab';
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
 import type { SALanguage } from '../application/ApplicationTypes';
 import { useFeature } from '../featureFlags/useFeature';
@@ -47,6 +48,12 @@ function ControlBarChapterSelect({
 
   const currentLanguage = dirLanguages.find(l => l.id === selectedLanguageId);
   const evaluators = currentLanguage?.evaluators ?? [];
+  // The stepper evaluator is hidden from the dropdown: it is reached only via the Stepper tab, which
+  // selects it automatically (see Playground). The button label still resolves against the full list
+  // so it shows the true current evaluator (e.g. "Stepper") even while that entry is unselectable.
+  const selectableEvaluators = evaluators.filter(
+    e => !(e.capabilities as string[] | undefined)?.includes(STEPPER_EVALUATOR_CAPABILITY),
+  );
   const selectedEvaluator = evaluators.find(e => e.id === selectedEvaluatorId);
 
   const evaluatorListRenderer: ItemListRenderer<IEvaluatorDefinition> = ({
@@ -69,7 +76,7 @@ function ControlBarChapterSelect({
 
   return (
     <Select<IEvaluatorDefinition>
-      items={evaluators}
+      items={selectableEvaluators}
       onItemSelect={onSelectEvaluator}
       itemRenderer={evaluatorRenderer}
       itemListRenderer={evaluatorListRenderer}

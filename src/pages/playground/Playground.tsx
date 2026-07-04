@@ -35,7 +35,12 @@ import {
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
+import {
+  CONDUCTOR_STEPPER_TAB_ID,
+  STEPPER_EVALUATOR_CAPABILITY,
+} from 'src/features/conductor/stepperTab';
 import CseMachine from 'src/features/cseMachine/CseMachine';
+import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
 import GithubActions from 'src/features/github/GitHubActions';
 import PersistenceActions from 'src/features/persistence/PersistenceActions';
 import {
@@ -92,6 +97,7 @@ import type {
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   desktopOnlyTabIds,
+  makeConductorStepperPlaceholderTab,
   makeIntroductionTabFrom,
   makeRemoteExecutionTabFrom,
   makeSessionManagementTabFrom,
@@ -193,10 +199,6 @@ export async function handleHash(
     }
   }
 }
-
-// Tab id exposed by the conductor stepper web plugin. The frontend mirrors this contract to hide
-// the legacy REPL/resizing when that plugin's tab is active (see usages below).
-const CONDUCTOR_STEPPER_TAB_ID = 'stepper';
 
 function Playground(props: PlaygroundProps) {
   const { isSicpEditor } = props;
@@ -529,7 +531,10 @@ function Playground(props: PlaygroundProps) {
         sourceChapter={languageConfig.chapter}
         sourceVariant={languageConfig.variant}
         key="chapter"
-        disabled={usingRemoteExecution}
+        // While the Stepper tab is active the evaluator is pinned to the (hidden) stepper evaluator,
+        // so disable the dropdown: changing evaluator here would fight the tab-to-evaluator sync.
+        // The 'stepper' tab id only exists under the conductor, so this never disables Source's select.
+        disabled={usingRemoteExecution || selectedTab === CONDUCTOR_STEPPER_TAB_ID}
       />
     ),
     [
@@ -538,6 +543,7 @@ function Playground(props: PlaygroundProps) {
       languageConfig.chapter,
       languageConfig.variant,
       usingRemoteExecution,
+      selectedTab,
     ],
   );
 
@@ -759,6 +765,68 @@ function Playground(props: PlaygroundProps) {
   // plugins loaded dynamically, so the legacy in-frontend tabs are hidden in favour of plugin tabs.
   const conductorEnabled = useTypedSelector(selectConductorEnable);
 
+  // Stepper tab wiring (conductor only). The Stepper tab is offered for any language that has a
+  // stepper-capability evaluator; opening the tab selects that (dropdown-hidden) evaluator so a Run
+  // produces steps, and leaving it restores the language's default evaluator. See the effect below.
+  const selectedEvaluatorId = useTypedSelector(
+    state => state.languageDirectory.selectedEvaluatorId,
+  );
+  const stepperEvaluatorId = useTypedSelector(state => {
+    if (!selectConductorEnable(state)) {
+      return null;
+    }
+    const { selectedLanguageId, languageMap } = state.languageDirectory;
+    const lang = selectedLanguageId ? languageMap[selectedLanguageId] : undefined;
+    const evaluator = lang?.evaluators.find(e =>
+      (e.capabilities as string[] | undefined)?.includes(STEPPER_EVALUATOR_CAPABILITY),
+    );
+    return evaluator?.id ?? null;
+  });
+  const defaultEvaluatorId = useTypedSelector(state => {
+    if (!selectConductorEnable(state)) {
+      return null;
+    }
+    const { selectedLanguageId, languageMap } = state.languageDirectory;
+    const lang = selectedLanguageId ? languageMap[selectedLanguageId] : undefined;
+    const evaluator = lang?.evaluators.find(
+      e => !(e.capabilities as string[] | undefined)?.includes(STEPPER_EVALUATOR_CAPABILITY),
+    );
+    return evaluator?.id ?? null;
+  });
+
+  // Keep the selected evaluator in sync with the Stepper tab. Opening the tab selects the stepper
+  // evaluator (so a Run produces steps); leaving it restores the default. Each branch dispatches only
+  // on a real mismatch, so this converges rather than looping.
+  useEffect(() => {
+    if (!conductorEnabled) {
+      return;
+    }
+    const onStepperTab = selectedTab === CONDUCTOR_STEPPER_TAB_ID;
+    if (!stepperEvaluatorId) {
+      // This language offers no stepper; if we're stranded on the Stepper tab (e.g. after switching
+      // away from Python §1/§2), fall back to the Introduction tab.
+      if (onStepperTab) {
+        setSelectedTab(SideContentType.introduction);
+      }
+      return;
+    }
+    if (onStepperTab) {
+      if (selectedEvaluatorId !== stepperEvaluatorId) {
+        dispatch(LanguageDirectoryActions.setSelectedEvaluator(stepperEvaluatorId));
+      }
+    } else if (selectedEvaluatorId === stepperEvaluatorId && defaultEvaluatorId) {
+      dispatch(LanguageDirectoryActions.setSelectedEvaluator(defaultEvaluatorId));
+    }
+  }, [
+    conductorEnabled,
+    stepperEvaluatorId,
+    defaultEvaluatorId,
+    selectedEvaluatorId,
+    selectedTab,
+    setSelectedTab,
+    dispatch,
+  ]);
+
   const conductorWelcomeText = useTypedSelector(state => {
     if (!selectConductorEnable(state)) {
       return null;
@@ -851,6 +919,15 @@ function Playground(props: PlaygroundProps) {
 
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs].filter(({ id }) => !(id && desktopOnlyTabIds.includes(id)));
+
+  // For a conductor language that offers stepping, keep a placeholder Stepper tab visible so it can be
+  // opened before its evaluator loads. It sits after the dynamic tabs so the stepper plugin's live tab
+  // (registered once the evaluator is selected) lands in the same slot and de-duplicates the
+  // placeholder away (see SideContentProvider), avoiding both a disappearing tab and a duplicate.
+  const afterDynamicTabs: SideContentTab[] = useMemo(
+    () => (conductorEnabled && stepperEvaluatorId ? [makeConductorStepperPlaceholderTab()] : []),
+    [conductorEnabled, stepperEvaluatorId],
+  );
 
   const onLoadMethod = useCallback(
     (editor: Ace.Editor) => {
@@ -1077,7 +1154,7 @@ function Playground(props: PlaygroundProps) {
       selectedTabId: selectedTab,
       tabs: {
         beforeDynamicTabs: tabs,
-        afterDynamicTabs: [],
+        afterDynamicTabs,
       },
       workspaceLocation,
     },
@@ -1108,7 +1185,7 @@ function Playground(props: PlaygroundProps) {
       onChange: setSelectedTab,
       tabs: {
         beforeDynamicTabs: mobileTabs,
-        afterDynamicTabs: [],
+        afterDynamicTabs,
       },
       workspaceLocation: workspaceLocation,
     },
