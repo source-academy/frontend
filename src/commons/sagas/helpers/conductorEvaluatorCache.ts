@@ -87,7 +87,9 @@ async function resolveWebPluginUrl(pluginId: string): Promise<string | undefined
   for (let attempt = 0; attempt < 50; attempt++) {
     const url =
       store.getState().pluginDirectory.pluginMap?.[pluginId]?.resolutions?.[PluginType.WEB];
-    if (url) return url;
+    if (url) {
+      return url;
+    }
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   return undefined;
@@ -98,7 +100,9 @@ async function loadWebPlugin(
   pluginId: string,
   tabService: DeferredConductorTabService,
 ): Promise<void> {
-  if (!hostPlugin) return;
+  if (!hostPlugin) {
+    return;
+  }
   const url = await resolveWebPluginUrl(pluginId);
   if (!url) {
     console.warn(

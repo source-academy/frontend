@@ -54,8 +54,9 @@ const PlaygroundSaga = combineSagaHandlers({
   [SideContentActions.visitSideContent.type]: function* ({
     payload: { newId, prevId, workspaceLocation },
   }) {
-    if ((workspaceLocation !== 'playground' && workspaceLocation !== 'sicp') || newId === prevId)
+    if ((workspaceLocation !== 'playground' && workspaceLocation !== 'sicp') || newId === prevId) {
       return;
+    }
 
     // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
     if (prevId === SideContentType.substVisualizer && newId === SideContentType.mobileEditorRun) {

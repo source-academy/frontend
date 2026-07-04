@@ -18,9 +18,13 @@ import { getVersionCode, getVersionHistory, updateVersionName } from '../../Requ
 function* isAutosaveEnabledForCurrentAssessment(): SagaIterator<boolean> {
   return yield select((state: OverallState) => {
     const assessmentId = state.workspaces.assessment.currentAssessment;
-    if (assessmentId === undefined) return false;
+    if (assessmentId === undefined) {
+      return false;
+    }
     const overview = state.session.assessmentOverviews?.find(o => o.id === assessmentId);
-    if (!overview) return false;
+    if (!overview) {
+      return false;
+    }
     return overview.isAutosaveEnabled ?? true;
   });
 }
@@ -113,7 +117,9 @@ export function* selectVersionSaga(
 ): SagaIterator {
   const { workspaceLocation, version } = action.payload;
 
-  if (version === null) return;
+  if (version === null) {
+    return;
+  }
 
   const questionId: number | undefined = yield call(getCurrentQuestionId, workspaceLocation);
 
@@ -189,7 +195,9 @@ export function* restoreVersionSaga(
   // Check if this is a team assessment
   const isTeamAssessment: boolean = yield select((state: OverallState) => {
     const assessmentId = state.workspaces.assessment.currentAssessment;
-    if (assessmentId === undefined) return false;
+    if (assessmentId === undefined) {
+      return false;
+    }
     const overview = state.session.assessmentOverviews?.find(o => o.id === assessmentId);
     return overview ? overview.maxTeamSize !== 1 : false;
   });
@@ -264,9 +272,13 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
   // Skip auto-save for MCQ questions
   const currentQuestionType: string | undefined = yield select((state: OverallState) => {
     const assessmentId = state.workspaces.assessment.currentAssessment;
-    if (assessmentId === undefined) return undefined;
+    if (assessmentId === undefined) {
+      return undefined;
+    }
     const questionIndex = state.workspaces.assessment.currentQuestion;
-    if (questionIndex === undefined) return undefined;
+    if (questionIndex === undefined) {
+      return undefined;
+    }
     return state.session.assessments[assessmentId]?.questions[questionIndex]?.type;
   });
 
@@ -277,7 +289,9 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
   // Skip auto-save for team assessments
   const isTeamAssessment: boolean = yield select((state: OverallState) => {
     const assessmentId = state.workspaces.assessment.currentAssessment;
-    if (assessmentId === undefined) return false;
+    if (assessmentId === undefined) {
+      return false;
+    }
     const overview = state.session.assessmentOverviews?.find(o => o.id === assessmentId);
     return overview ? overview.maxTeamSize !== 1 : false;
   });
@@ -326,7 +340,9 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
     const lastSubmittedAnswer: string | undefined = yield select((state: OverallState) => {
       const assessmentId = state.workspaces.assessment.currentAssessment;
       const questionIndex = state.workspaces.assessment.currentQuestion;
-      if (assessmentId === undefined || questionIndex === undefined) return undefined;
+      if (assessmentId === undefined || questionIndex === undefined) {
+        return undefined;
+      }
       return state.session.assessments[assessmentId]?.questions[questionIndex]?.answer as
         string | undefined;
     });
@@ -370,9 +386,13 @@ export function* watchAutoSave() {
     WorkspaceActions.updateEditorValue.type,
     function* (action: ReturnType<typeof WorkspaceActions.updateEditorValue>) {
       const { workspaceLocation } = action.payload;
-      if (workspaceLocation !== 'assessment') return;
+      if (workspaceLocation !== 'assessment') {
+        return;
+      }
       const autosaveEnabled: boolean = yield call(isAutosaveEnabledForCurrentAssessment);
-      if (!autosaveEnabled) return;
+      if (!autosaveEnabled) {
+        return;
+      }
       yield call(performAutoSave, workspaceLocation);
     },
   );
@@ -387,9 +407,13 @@ export function* watchSavingStatus() {
     WorkspaceActions.updateEditorValue.type,
     function* (action: ReturnType<typeof WorkspaceActions.updateEditorValue>) {
       const { workspaceLocation } = action.payload;
-      if (workspaceLocation !== 'assessment') return;
+      if (workspaceLocation !== 'assessment') {
+        return;
+      }
       const autosaveEnabled: boolean = yield call(isAutosaveEnabledForCurrentAssessment);
-      if (!autosaveEnabled) return;
+      if (!autosaveEnabled) {
+        return;
+      }
       yield put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saving'));
     },
   );

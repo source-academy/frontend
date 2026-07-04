@@ -58,7 +58,9 @@ function SicpPyLayout() {
 
     fetch(baseUrl + section + extension, { signal: controller.signal })
       .then(response => {
-        if (!response.ok) throw Error(response.statusText);
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
         return response.json();
       })
       .then(myJson => {
@@ -71,7 +73,9 @@ function SicpPyLayout() {
         }
       })
       .catch(error => {
-        if (error.name === 'AbortError') return;
+        if (error.name === 'AbortError') {
+          return;
+        }
         console.error(error);
         if (error.message === 'Not Found') {
           setData(getSicpError(SicpErrorType.PAGE_NOT_FOUND_ERROR));
@@ -88,7 +92,9 @@ function SicpPyLayout() {
   }, [section, navigate]);
 
   useEffect(() => {
-    if (loading) return;
+    if (loading) {
+      return;
+    }
     const hash = location.hash;
     const elem = (hash ? document.getElementById(hash.slice(1)) : null) ?? refs.current[hash];
     scrollRefIntoView(elem, parentRef);

@@ -11,9 +11,12 @@ export class ArrowFromFn extends GenericArrow<FnValue | GlobalFnValue | ContValu
   //Removed the constructor as it is identical to the parent class as now 'faded' property is removed
   constructor(from: FnValue | GlobalFnValue | ContValue) {
     super(from);
-    if (from instanceof GlobalFnValue)
-      this.isLive = true; // Global functions are always live
-    else this.isLive = from.isLive();
+    if (from instanceof GlobalFnValue) {
+      // Global functions are always live
+      this.isLive = true;
+    } else {
+      this.isLive = from.isLive();
+    }
   }
 
   protected updateIsLive(): void {
@@ -31,7 +34,9 @@ export class ArrowFromFn extends GenericArrow<FnValue | GlobalFnValue | ContValu
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
-    if (!to) return [];
+    if (!to) {
+      return [];
+    }
 
     const steps: StepsArray = [
       (x, y) =>

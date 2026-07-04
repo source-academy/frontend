@@ -69,6 +69,7 @@ export default tseslint.config(
       'react/jsx-boolean-value': ['warn', 'never', { always: ['value'] }],
       'react/self-closing-comp': 'error',
       'no-restricted-imports': ['error', ...restrictedImports],
+      curly: ['error', 'all'],
     },
   },
   {

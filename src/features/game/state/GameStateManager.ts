@@ -303,7 +303,9 @@ class GameStateManager {
 
     // Update every location that has the object
     this.gameMap.getLocations().forEach((location, locId) => {
-      if (!location.objects.has(id)) return;
+      if (!location.objects.has(id)) {
+        return;
+      }
 
       if (this.isCurrentLocation(locId)) {
         this.getSubscriberForItemType(GameItemType.objects)?.handleMutate(id);
@@ -325,7 +327,9 @@ class GameStateManager {
 
     // Update every location that has the bbox
     this.gameMap.getLocations().forEach((location, locId) => {
-      if (!location.boundingBoxes.has(id)) return;
+      if (!location.boundingBoxes.has(id)) {
+        return;
+      }
 
       if (this.isCurrentLocation(locId)) {
         this.getSubscriberForItemType(GameItemType.boundingBoxes)?.handleMutate(id);
@@ -348,7 +352,9 @@ class GameStateManager {
 
     // Find location with character and remove him
     this.gameMap.getLocations().forEach((location, locId) => {
-      if (!location.characters.has(id)) return;
+      if (!location.characters.has(id)) {
+        return;
+      }
       this.removeItem(GameItemType.characters, locId, id);
     });
 
@@ -367,7 +373,9 @@ class GameStateManager {
 
     // Update every location that has the character
     this.gameMap.getLocations().forEach((location, locId) => {
-      if (!location.characters.has(id)) return;
+      if (!location.characters.has(id)) {
+        return;
+      }
 
       if (this.isCurrentLocation(locId)) {
         this.getSubscriberForItemType(GameItemType.characters)?.handleMutate(id);

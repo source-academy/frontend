@@ -17,7 +17,9 @@ export async function fetchGameChapters(): Promise<GameChapter[]> {
     accessToken: SourceAcademyGame.getInstance().getAccountInfo().accessToken,
     refreshToken: SourceAcademyGame.getInstance().getAccountInfo().refreshToken,
   });
-  if (!response) return [];
+  if (!response) {
+    return [];
+  }
   const chapterDetails = response.status === 200 ? await response.json() : [];
   const sortedChapters = sortBy(chapterDetails, chapterDetail => new Date(chapterDetail.openAt));
   sortedChapters.forEach(chapter => (chapter.filenames = chapter.filenames.map(toTxtPath)));

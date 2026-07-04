@@ -54,7 +54,9 @@ function parseHexColor(color: string): [number, number, number] {
   if (!isHexColor(color)) {
     throw new Error(`Cannot parse given color string: ${color}`);
   }
-  if (color.length === 4) color = color + color.slice(1);
+  if (color.length === 4) {
+    color = color + color.slice(1);
+  }
   return [
     parseInt(color.slice(1, 3), 16),
     parseInt(color.slice(3, 5), 16),
@@ -81,7 +83,9 @@ function lerpColor(
   endColor: string,
   easingFn: NonNullable<AnimationConfig['easing']>,
 ): `#${string}` {
-  if (!startColor) return endColor as `#${string}`;
+  if (!startColor) {
+    return endColor as `#${string}`;
+  }
   const startRgb = parseHexColor(startColor);
   const endRgb = parseHexColor(endColor);
   const rgb = Array.from({ length: 3 }, (_, i) =>
@@ -102,9 +106,13 @@ export function lerp(
   endValue: any,
   easingFn: NonNullable<AnimationConfig['easing']>,
 ): any {
-  if (startValue === endValue) return endValue;
+  if (startValue === endValue) {
+    return endValue;
+  }
   if (typeof endValue === 'number') {
-    if (typeof startValue !== 'number') return endValue;
+    if (typeof startValue !== 'number') {
+      return endValue;
+    }
     return easingFn(delta, startValue, endValue - startValue, 1);
   } else if (property === 'fill' || property === 'stroke') {
     return lerpColor(delta, startValue, endValue, easingFn);

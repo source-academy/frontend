@@ -47,7 +47,9 @@ class ChapterSelect extends Phaser.Scene {
   }
 
   public update() {
-    if (!this.chaptersContainer) return;
+    if (!this.chaptersContainer) {
+      return;
+    }
 
     const targetX = -this.targetPage * screenSize.x;
     if (this.chaptersContainer.x > targetX) {

@@ -421,7 +421,9 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(WorkspaceActions.receiveVersionCode, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const versionHistory = state[workspaceLocation].versionHistory;
-      if (versionHistory.selectedVersion?.id !== action.payload.versionId) return;
+      if (versionHistory.selectedVersion?.id !== action.payload.versionId) {
+        return;
+      }
       versionHistory.selectedVersionCode = action.payload.code;
       versionHistory.isLoadingCode = false;
     })

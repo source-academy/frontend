@@ -39,13 +39,28 @@ export abstract class Arrow {
     source: Visible,
     sourceFrame?: Pick<Frame, 'x' | 'y' | 'width' | 'height'>,
   ): GenericArrow<Visible, Visible> {
-    if (source instanceof Frame) return new ArrowFromFrame(source);
-    if (source instanceof FnValue || source instanceof GlobalFnValue || source instanceof ContValue)
+    if (source instanceof Frame) {
+      return new ArrowFromFrame(source);
+    }
+    if (
+      source instanceof FnValue ||
+      source instanceof GlobalFnValue ||
+      source instanceof ContValue
+    ) {
       return new ArrowFromFn(source);
-    if (source instanceof Text) return new ArrowFromText(source, sourceFrame!);
-    if (source instanceof ArrayUnit) return new ArrowFromArrayUnit(source);
-    if (source instanceof ControlItemComponent) return new ArrowFromControlItemComponent(source);
-    if (source instanceof StashItemComponent) return new ArrowFromStashItemComponent(source);
+    }
+    if (source instanceof Text) {
+      return new ArrowFromText(source, sourceFrame!);
+    }
+    if (source instanceof ArrayUnit) {
+      return new ArrowFromArrayUnit(source);
+    }
+    if (source instanceof ControlItemComponent) {
+      return new ArrowFromControlItemComponent(source);
+    }
+    if (source instanceof StashItemComponent) {
+      return new ArrowFromStashItemComponent(source);
+    }
 
     // else return a generic arrow
     return new GenericArrow(source);

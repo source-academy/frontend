@@ -87,7 +87,9 @@ export class CseAnimation {
     const currentControlSize = Layout.controlComponent.control.size();
     const previousControlSize = Layout.previousControlComponent.control.size();
     const numOfItems = currentControlSize - previousControlSize + 1;
-    if (numOfItems <= 0) return [];
+    if (numOfItems <= 0) {
+      return [];
+    }
     return Layout.controlComponent.stackItemComponents.slice(-numOfItems);
   }
 
@@ -207,7 +209,9 @@ export class CseAnimation {
   static updateAnimation() {
     CseAnimation.clearAnimationComponents();
 
-    if (!Layout.previousControlComponent) return;
+    if (!Layout.previousControlComponent) {
+      return;
+    }
     const lastControlItem = Layout.previousControlComponent.control.peek();
     const lastControlComponent = Layout.previousControlComponent.stackItemComponents.at(-1);
     const currStashComponent = Layout.stashComponent.stashItemComponents.at(-1);
@@ -228,7 +232,9 @@ export class CseAnimation {
           // (e.g. 0-arg calls where the plugin uses a truthy guard). Fall back to 0.
           const numOfArgs = appInstr.numOfArgs ?? 0;
           const fnStashItem = Layout.previousStashComponent.stashItemComponents.at(-numOfArgs - 1);
-          if (!fnStashItem) break;
+          if (!fnStashItem) {
+            break;
+          }
           const fn = fnStashItem.value;
           const newControlItems = CseAnimation.getNewControlItems();
           // Use InstructionApplicationAnimation for:
@@ -420,7 +426,9 @@ export class CseAnimation {
     // Setting the listening property to false on the Konva Layer does not seem to work, so
     // this a workaround.
     const canvasElement = CseAnimation.getLayer()?.getNativeCanvasElement();
-    if (canvasElement) canvasElement.style.pointerEvents = 'none';
+    if (canvasElement) {
+      canvasElement.style.pointerEvents = 'none';
+    }
     // Play all the animations
     await Promise.all(this.animations.map(a => a.animate()));
   }

@@ -51,7 +51,9 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
-    if (!to) return [];
+    if (!to) {
+      return [];
+    }
 
     const terminalSegmentLength = Math.max(Config.ArrowHeadSize, Config.MinTerminalSegmentLength);
     const verticalTerminalOffset = Math.max(Config.DataUnitHeight / 3, terminalSegmentLength);
@@ -116,9 +118,14 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
         // Same level → left face; source above → top face; source below → bottom face.
         const approachY = from.y() + from.height() / 2;
         const [landX, landY] = ((): [number, number] => {
-          if (approachY < targetCY - r)
-            return [targetCX, targetCY - (fnTarget instanceof ContValue ? 1.5 * r : r)]; // from above: top face
-          if (approachY > targetCY + r) return [targetCX, targetCY + r]; // from below: bottom face
+          if (approachY < targetCY - r) {
+            // from above: top face
+            return [targetCX, targetCY - (fnTarget instanceof ContValue ? 1.5 * r : r)];
+          }
+          if (approachY > targetCY + r) {
+            // from below: bottom face
+            return [targetCX, targetCY + r];
+          }
           return [leftFaceX, targetCY]; // same level: left face
         })();
         steps.push((x, y) => [landX, y]);

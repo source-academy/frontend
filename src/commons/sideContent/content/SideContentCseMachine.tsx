@@ -133,7 +133,9 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       CseMachine.init(
         visualization => {
           this.setState({ visualization }, () => CseAnimation.playAnimation());
-          if (visualization) this.props.handleAlertSideContent();
+          if (visualization) {
+            this.props.handleAlertSideContent();
+          }
         },
         this.state.width,
         this.state.height,
@@ -262,7 +264,9 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     // Snapshot mode: user navigated away from CSE tab — clear visualization
     if (isConductorMode && prevProps.isOnCseTab && !isOnCseTab) {
       this.setState({ visualization: null, value: -1 });
-      if (cseSnapshots) this.props.doUpdateCseSnapshots(null);
+      if (cseSnapshots) {
+        this.props.doUpdateCseSnapshots(null);
+      }
       return;
     }
 
@@ -291,9 +295,13 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
   /** Renders the conductor CSE snapshot at the given step index. */
   private renderSnapshotAt(step: number) {
     const { cseSnapshots } = this.props;
-    if (!cseSnapshots) return;
+    if (!cseSnapshots) {
+      return;
+    }
     const snapshot = cseSnapshots[step];
-    if (!snapshot) return;
+    if (!snapshot) {
+      return;
+    }
 
     this.props.setEditorHighlightedLines(0, []);
 
@@ -301,7 +309,9 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     this.accumulatedFrames.clear();
     for (let i = 0; i <= step; i++) {
       const s = cseSnapshots[i];
-      if (!s) continue;
+      if (!s) {
+        continue;
+      }
       for (const frame of s.environments) {
         this.accumulatedFrames.set(frame.id, frame);
       }
@@ -333,7 +343,9 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       let prevFp: string | null = null;
       for (let i = 0; i < cseSnapshots.length; i++) {
         const fp = JSON.stringify(cseSnapshots[i]?.environments ?? []);
-        if (prevFp === null || fp !== prevFp) steps.push(i);
+        if (prevFp === null || fp !== prevFp) {
+          steps.push(i);
+        }
         prevFp = fp;
       }
       return steps;
@@ -676,7 +688,9 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     if (this.state.clearDeadFrames) {
       CseMachine.setClearDeadFrames(false);
       CseMachine.clearLiveLayouts();
-      if (!this.props.cseSnapshots) CseMachine.redraw();
+      if (!this.props.cseSnapshots) {
+        CseMachine.redraw();
+      }
     }
     this.props.handleStepUpdate(newValue);
     this.setState((state: State) => {

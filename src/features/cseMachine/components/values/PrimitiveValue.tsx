@@ -70,23 +70,32 @@ export class PrimitiveValue extends Value {
   }
 
   handleNewReference(): void {
-    if (this.references.length > 1)
+    if (this.references.length > 1) {
       throw new Error('Primitive values cannot have more than one reference!');
+    }
   }
 
   markAsReferenced() {
-    if (this.isReferenced()) return;
+    if (this.isReferenced()) {
+      return;
+    }
     super.markAsReferenced();
-    if (this.text instanceof Text) this.text.options.faded = false;
+    if (this.text instanceof Text) {
+      this.text.options.faded = false;
+    }
   }
 
   setFaded(faded: boolean) {
-    if (this.text instanceof Text) this.text.options.faded = faded;
+    if (this.text instanceof Text) {
+      this.text.options.faded = faded;
+    }
   }
 
   isLive(): boolean {
     const reference = this.references[0];
-    if (!reference) return false;
+    if (!reference) {
+      return false;
+    }
 
     if (reference instanceof Binding) {
       return this.isReferenced() && reference.frame.isLive;

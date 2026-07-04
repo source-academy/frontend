@@ -40,14 +40,20 @@ type VersionGroup = {
 };
 
 const formatTimestamp = (timestamp: number | null | undefined): string => {
-  if (timestamp == null) return 'Unknown date';
+  if (timestamp == null) {
+    return 'Unknown date';
+  }
   const date = new Date(timestamp);
-  if (isNaN(date.getTime())) return 'Unknown date';
+  if (isNaN(date.getTime())) {
+    return 'Unknown date';
+  }
   return date.toLocaleString();
 };
 
 const groupVersions = (sortedNewestFirst: CodeVersionMetadata[]): VersionGroup[] => {
-  if (sortedNewestFirst.length === 0) return [];
+  if (sortedNewestFirst.length === 0) {
+    return [];
+  }
   const groups: VersionGroup[] = [];
   let current: CodeVersionMetadata[] = [sortedNewestFirst[0]];
 
@@ -84,7 +90,9 @@ function VersionHistoryPanel({
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    if (!isOpen || versions.length === 0) return;
+    if (!isOpen || versions.length === 0) {
+      return;
+    }
     onSelectVersion(versions[0]);
   }, [isOpen, versions, onSelectVersion]);
 
@@ -101,7 +109,9 @@ function VersionHistoryPanel({
   }, []);
 
   const handleRestore = useCallback(() => {
-    if (!selectedVersion || !selectedVersionCode) return;
+    if (!selectedVersion || !selectedVersionCode) {
+      return;
+    }
     const version: CodeVersion = { ...selectedVersion, code: selectedVersionCode };
     onRestore(version);
     onClose();

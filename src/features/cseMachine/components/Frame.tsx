@@ -128,7 +128,9 @@ export class Frame extends Visible implements IHoverable {
             const prev = unreferencedValues.findIndex(value => value.id === data.id);
             if (prev > -1) {
               unreferencedValues.splice(prev, 1);
-              if (prev <= i) i--;
+              if (prev <= i) {
+                i--;
+              }
             }
           }
         }
@@ -152,7 +154,9 @@ export class Frame extends Visible implements IHoverable {
     // This pass sizes only the frame body (text and primitive values inside the frame).
     this._width = Config.FrameMinWidth;
     for (const [key, data] of entries) {
-      if (isDummyKey(key)) continue;
+      if (isDummyKey(key)) {
+        continue;
+      }
       const constant =
         this.environment.head[key]?.description === 'const declaration' || !data.writable;
       let bindingTextWidth = getTextWidth(
@@ -208,7 +212,9 @@ export class Frame extends Visible implements IHoverable {
     // `totalDataWidth` is measured strictly as overflow beyond the frame's right edge.
     const frameRightX = this.x() + this.width();
     for (const binding of this.bindings) {
-      if (!binding.rendersReferencedValue()) continue;
+      if (!binding.rendersReferencedValue()) {
+        continue;
+      }
 
       const value = binding.value;
       let valueRightX: number | undefined;
@@ -243,7 +249,9 @@ export class Frame extends Visible implements IHoverable {
     );
     this.totalHeight = this.height() + this.name.height() + Config.TextPaddingY / 2;
 
-    if (this.parentFrame) this.arrow = new ArrowFromFrame(this).to(this.parentFrame);
+    if (this.parentFrame) {
+      this.arrow = new ArrowFromFrame(this).to(this.parentFrame);
+    }
 
     if (CseMachine.getCurrentEnvId() === this.environment.id) {
       CseAnimation.setCurrentFrame(this);
