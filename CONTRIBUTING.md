@@ -31,7 +31,7 @@ Before pushing to Github, ensure that your code is formatted and your tests are 
 
 ## Running your own js-slang
 
-See [js-slang README](https://github.com/source-academy/js-slang#using-your-js-slang-in-local-source-academy) for instructions how to run your own js-slang in the frontend.
+See [js-slang README](https://github.com/source-academy/js-slang#using-your-js-slang-in-local-source-academy) for instructions on how to run your own js-slang in the frontend.
 
 ## Running your own py-slang
 
