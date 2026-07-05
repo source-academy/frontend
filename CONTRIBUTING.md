@@ -31,7 +31,11 @@ Before pushing to Github, ensure that your code is formatted and your tests are 
 
 ## Running your own js-slang
 
-See [js-slang README](https://github.com/source-academy/js-slang#using-your-js-slang-in-local-source-academy) for instructions how to run your own js-slang in the frontend.
+See [js-slang README](https://github.com/source-academy/js-slang#using-your-js-slang-in-local-source-academy) for instructions on how to run your own js-slang in the frontend.
+
+## Running your own py-slang
+
+See [py-slang README](https://github.com/source-academy/py-slang#using-your-py-slang-in-your-local-source-academy) for instructions on how to run your own py-slang in the frontend. Unlike js-slang, py-slang is loaded at runtime via a URL from the [Language Directory](https://github.com/source-academy/language-directory), rather than as a build-time npm dependency.
 
 ## TypeScript Coding Conventions
 
