@@ -1,12 +1,26 @@
 import type { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
+import Konva from 'konva';
 import { describe, expect, it } from 'vitest';
 
 import type { CseSnapshot } from '../conductor/CseMachineHostPlugin';
 import { Frame } from './components/Frame';
+import CseMachine from './CseMachine';
+import { CseAnimation } from './CseMachineAnimation';
 import { Config } from './CseMachineConfig';
 import { Layout } from './CseMachineLayout';
 import type { EnvTree } from './CseMachineTypes';
 import { buildFakeEnvTreeFromSnapshot } from './CseSnapshotAdapter';
+
+// Real (headless) Konva stage/layer so animation components — which need a live layer
+// ref to attach to — can actually construct, matching CseMachineAnimation.test.tsx's setup.
+const mockStage = new Konva.Stage({
+  container: document.createElement('div'),
+  width: 500,
+  height: 500,
+} as Konva.StageConfig);
+const mockLayer = new Konva.Layer();
+mockStage.add(mockLayer);
+Object.defineProperty(CseAnimation.layerRef, 'current', { value: mockLayer });
 
 function findNode(envTree: ReturnType<typeof buildFakeEnvTreeFromSnapshot>['envTree'], id: string) {
   const root = envTree.root;
@@ -227,5 +241,52 @@ describe('Frame rendering of globalNames (via Layout.setContext)', () => {
     const globalEnv = findNode(envTree, 'g')!.environment;
     const frame = Frame.getFrom(globalEnv as any)!;
     expect(frame.globalNamesText).toBeUndefined();
+  });
+});
+
+describe('assignment animation across a snapshot step (regression)', () => {
+  it('animates a statement-only assignment (stash empties afterwards, e.g. Python) without throwing', () => {
+    CseMachine.init(
+      () => {},
+      1000,
+      1000,
+      () => {},
+      () => {},
+    );
+    if (!CseMachine.getControlStash()) {
+      CseMachine.toggleControlStash();
+    }
+
+    // Step 1: "x = 5" is about to execute — the value sits on the stash, ASSIGNMENT is next.
+    const before: CseSnapshot = {
+      stepIndex: 0,
+      control: [{ displayText: 'asgn x', metadata: { instrType: 'Assignment', symbol: 'x' } }],
+      stash: [{ displayValue: '5', label: 'int' }],
+      environments: [{ id: 'g', name: 'global', parentId: null, bindings: [], isActive: true }],
+    };
+
+    // Step 2: assignment has happened. Unlike a JS assignment *expression* (which re-pushes its
+    // value), a Python assignment *statement* leaves nothing on the stash.
+    const after: CseSnapshot = {
+      stepIndex: 1,
+      control: [],
+      stash: [],
+      environments: [
+        {
+          id: 'g',
+          name: 'global',
+          parentId: null,
+          bindings: [{ name: 'x', value: { displayValue: '5', label: 'int' } }],
+          isActive: true,
+        },
+      ],
+    };
+
+    expect(() => {
+      CseMachine.renderSnapshot(before);
+      CseMachine.renderSnapshot(after);
+    }).not.toThrow();
+
+    expect(CseAnimation.animations.map(a => a.constructor.name)).toContain('AssignmentAnimation');
   });
 });
