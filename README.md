@@ -92,7 +92,7 @@ If `REACT_APP_USE_BACKEND` is `TRUE` and no backend is reachable at `REACT_APP_B
    mix deps.get
    ```
 
-1. Initialise and seed the development database:
+1. Initialize and seed the development database:
 
    ```bash
    mix ecto.setup
