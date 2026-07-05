@@ -1,11 +1,11 @@
 import { Spinner, SpinnerSize } from '@blueprintjs/core';
-import { FSModule } from 'browserfs/dist/node/core/FS';
+import type { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
-import React from 'react';
-import classes from 'src/styles/FileSystemView.module.scss';
+import { useEffect, useState } from 'react';
 
 import Delay from '../delay/Delay';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import classes from './FileSystemView.module.css';
 import FileSystemViewDirectoryNode from './FileSystemViewDirectoryNode';
 import FileSystemViewFileNode from './FileSystemViewFileNode';
 
@@ -16,14 +16,9 @@ type Props = {
   indentationLevel: number;
 };
 
-const FileSystemViewList: React.FC<Props> = ({
-  workspaceLocation,
-  fileSystem,
-  basePath,
-  indentationLevel
-}) => {
-  const [dirNames, setDirNames] = React.useState<string[] | undefined>(undefined);
-  const [fileNames, setFileNames] = React.useState<string[] | undefined>(undefined);
+function FileSystemViewList({ workspaceLocation, fileSystem, basePath, indentationLevel }: Props) {
+  const [dirNames, setDirNames] = useState<string[] | undefined>(undefined);
+  const [fileNames, setFileNames] = useState<string[] | undefined>(undefined);
 
   const readDirectory = () => {
     fileSystem.readdir(basePath, async (err, fileNames) => {
@@ -65,7 +60,7 @@ const FileSystemViewList: React.FC<Props> = ({
     });
   };
 
-  React.useEffect(readDirectory, [fileSystem, basePath]);
+  useEffect(readDirectory, [fileSystem, basePath]);
 
   if (!fileNames || !dirNames) {
     return (
@@ -105,6 +100,6 @@ const FileSystemViewList: React.FC<Props> = ({
       })}
     </div>
   );
-};
+}
 
 export default FileSystemViewList;

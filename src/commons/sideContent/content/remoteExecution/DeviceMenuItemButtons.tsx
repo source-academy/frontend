@@ -1,5 +1,4 @@
 import { Button } from '@blueprintjs/core';
-import React from 'react';
 
 type Props = {
   text?: React.ReactNode;
@@ -7,14 +6,14 @@ type Props = {
   handleEdit: React.MouseEventHandler;
 };
 
-const DeviceMenuItemButtons: React.FC<Props> = ({ text, handleDelete, handleEdit }) => {
+function DeviceMenuItemButtons({ text, handleDelete, handleEdit }: Props) {
   return (
     <>
       {text}
       <div className="edit-buttons">
         <Button
-          small
-          minimal
+          size="small"
+          variant="minimal"
           icon="edit"
           onClick={e => {
             e.stopPropagation();
@@ -22,8 +21,8 @@ const DeviceMenuItemButtons: React.FC<Props> = ({ text, handleDelete, handleEdit
           }}
         />
         <Button
-          small
-          minimal
+          size="small"
+          variant="minimal"
           intent="danger"
           icon="trash"
           onClick={e => {
@@ -34,6 +33,6 @@ const DeviceMenuItemButtons: React.FC<Props> = ({ text, handleDelete, handleEdit
       </div>
     </>
   );
-};
+}
 
 export default DeviceMenuItemButtons;

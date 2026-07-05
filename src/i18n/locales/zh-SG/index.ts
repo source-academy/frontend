@@ -12,9 +12,6 @@ import resultCard from './sideContent/resultCard';
 import sessionManagement from './sideContent/sessionManagement';
 import substVisualizer from './sideContent/substVisualizer';
 import upload from './sideContent/upload';
-import sourcecast from './sourcecast';
-import sourceRecorder from './sourceRecorder';
-import stories from './stories';
 import welcome from './welcome';
 
 export default {
@@ -22,10 +19,7 @@ export default {
   login,
   translation: {
     ...grading,
-    ...sourcecast,
-    ...sourceRecorder,
-    ...stories,
-    ...welcome
+    ...welcome,
   },
   sideContent: {
     autograder,
@@ -38,6 +32,6 @@ export default {
     resultCard,
     sessionManagement,
     substVisualizer,
-    upload
-  }
+    upload,
+  },
 };

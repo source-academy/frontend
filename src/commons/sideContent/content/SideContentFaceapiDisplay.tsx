@@ -1,9 +1,8 @@
 import { Button, Divider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-const SideContentFaceapiDisplay: React.FC = () => {
+function SideContentFaceapiDisplay() {
   const { t } = useTranslation('sideContent', { keyPrefix: 'faceapiDisplay' });
   const browserWindow = window as any;
 
@@ -18,7 +17,7 @@ const SideContentFaceapiDisplay: React.FC = () => {
     takePhoto: () => any,
     resetPhoto: () => any,
     canvasId: string,
-    canvasHeight: number
+    canvasHeight: number,
   ) => (
     <div className="sa-video-header">
       <div className="sa-video-header-element">
@@ -51,13 +50,7 @@ const SideContentFaceapiDisplay: React.FC = () => {
   return (
     <div className="sa-video">
       <div className="sa-video-element">
-        <video
-          id="video"
-          style={{ position: 'absolute' }}
-          autoPlay={true}
-          width={333}
-          height={250}
-        />
+        <video id="video" style={{ position: 'absolute' }} autoPlay width={333} height={250} />
 
         <canvas
           id="canvas"
@@ -72,6 +65,6 @@ const SideContentFaceapiDisplay: React.FC = () => {
       {makeVideoContainer(takePhotoC, resetPhotoC, 'canvas-capture-c', 20)}
     </div>
   );
-};
+}
 
 export default SideContentFaceapiDisplay;

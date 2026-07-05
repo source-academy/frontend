@@ -1,4 +1,3 @@
-import React from 'react';
 import { Group } from 'react-konva';
 
 import { ArrayNullUnit } from '../components/ArrayNullUnit';
@@ -19,7 +18,7 @@ import { AnimatedFnObject } from './base/AnimatedFnObject';
 import {
   AnimatedLineComponent,
   AnimatedRectComponent,
-  AnimatedTextComponent
+  AnimatedTextComponent,
 } from './base/AnimationComponents';
 import { getNodePosition } from './base/AnimationUtils';
 
@@ -50,28 +49,28 @@ export class ClearDeadFramesAnimation extends Animatable {
   private newLineCovers: AnimatedLineComponent[] = [];
 
   private static getBindingKeyTarget(
-    binding: Binding
+    binding: Binding,
   ): Pick<AnimatedTextPair, 'targetX' | 'targetY'> {
     return {
       targetX: binding.x(),
-      targetY: binding.y() + binding.keyYOffset
+      targetY: binding.y() + binding.keyYOffset,
     };
   }
 
   private static getBindingValueTarget(
     binding: Binding,
-    value: PrimitiveValue
+    value: PrimitiveValue,
   ): Pick<AnimatedTextPair, 'targetX' | 'targetY'> {
     if (!(value.text instanceof Text)) {
       return {
         targetX: value.x(),
-        targetY: value.y()
+        targetY: value.y(),
       };
     }
 
     return {
       targetX: binding.x() + binding.key.width() + Config.TextPaddingX,
-      targetY: binding.y()
+      targetY: binding.y(),
     };
   }
 
@@ -92,7 +91,7 @@ export class ClearDeadFramesAnimation extends Animatable {
     super();
     CseAnimation.setHideReferenceArrows(true);
     CseAnimation.setHiddenFrameIds(
-      changedFramePairs.map(([, newFrame]) => newFrame.environment.id)
+      changedFramePairs.map(([, newFrame]) => newFrame.environment.id),
     );
 
     const changedTextPairs: AnimatedTextPair[] = [];
@@ -115,8 +114,8 @@ export class ClearDeadFramesAnimation extends Animatable {
             CseMachine.getCurrentEnvId() != null &&
             framePair[0].environment?.id === CseMachine.getCurrentEnvId()
               ? defaultActiveColor()
-              : defaultStrokeColor()
-        })
+              : defaultStrokeColor(),
+        }),
       );
       const newFramePosition = getNodePosition(framePair[1]);
       this.newFrameCovers.push(
@@ -125,15 +124,15 @@ export class ClearDeadFramesAnimation extends Animatable {
           cornerRadius: Config.FrameCornerRadius,
           fill: defaultBackgroundColor(),
           stroke: defaultBackgroundColor(),
-          strokeWidth: 4
-        })
+          strokeWidth: 4,
+        }),
       );
 
       changedTextPairs.push({
         oldText: framePair[0].name,
         newText: framePair[1].name,
         targetX: framePair[1].name.x(),
-        targetY: framePair[1].name.y()
+        targetY: framePair[1].name.y(),
       });
 
       // For each binding in this frame
@@ -141,12 +140,12 @@ export class ClearDeadFramesAnimation extends Animatable {
       const newBindingsByIdentity = new Map(
         framePair[1].bindings.map(binding => [
           ClearDeadFramesAnimation.getBindingIdentity(binding),
-          binding
-        ])
+          binding,
+        ]),
       );
       for (const oldBinding of oldBindings) {
         const newBinding = newBindingsByIdentity.get(
-          ClearDeadFramesAnimation.getBindingIdentity(oldBinding)
+          ClearDeadFramesAnimation.getBindingIdentity(oldBinding),
         );
         if (!newBinding) {
           continue;
@@ -157,7 +156,7 @@ export class ClearDeadFramesAnimation extends Animatable {
           changedTextPairs.push({
             oldText: oldBinding.key,
             newText: newBinding.key,
-            ...keyTarget
+            ...keyTarget,
           });
 
           // Create animations for primitive text values
@@ -170,12 +169,12 @@ export class ClearDeadFramesAnimation extends Animatable {
             if (oldValue.text instanceof Text) {
               const valueTarget = ClearDeadFramesAnimation.getBindingValueTarget(
                 newBinding,
-                newValue
+                newValue,
               );
               changedTextPairs.push({
                 oldText: oldValue.text as Text,
                 newText: newValue.text as Text,
-                ...valueTarget
+                ...valueTarget,
               });
             }
           }
@@ -207,8 +206,8 @@ export class ClearDeadFramesAnimation extends Animatable {
               this.frameAnimations.push(
                 new AnimatedRectComponent({
                   ...getNodePosition(oldArr),
-                  cornerRadius: 0
-                })
+                  cornerRadius: 0,
+                }),
               );
               this.newFrameCovers.push(
                 new AnimatedRectComponent({
@@ -216,8 +215,8 @@ export class ClearDeadFramesAnimation extends Animatable {
                   cornerRadius: 0,
                   fill: defaultBackgroundColor(),
                   stroke: defaultBackgroundColor(),
-                  strokeWidth: 4
-                })
+                  strokeWidth: 4,
+                }),
               );
             } else {
               // Has at least one ArrayUnit
@@ -228,7 +227,7 @@ export class ClearDeadFramesAnimation extends Animatable {
                 changedTextPairs,
                 changedFnPairs,
                 visitedFnValues,
-                visitedArrayValues
+                visitedArrayValues,
               );
             }
           }
@@ -244,8 +243,8 @@ export class ClearDeadFramesAnimation extends Animatable {
       this.textAnimations.push(
         new AnimatedTextComponent({
           ...oldTextPosition,
-          text: textPair.oldText.partialStr
-        })
+          text: textPair.oldText.partialStr,
+        }),
       );
       this.newTextCovers.push(
         new AnimatedTextComponent({
@@ -254,8 +253,8 @@ export class ClearDeadFramesAnimation extends Animatable {
           text: textPair.newText.partialStr,
           fill: defaultBackgroundColor(),
           stroke: defaultBackgroundColor(),
-          strokeWidth: 4 // stroke is required for strokeWidth
-        })
+          strokeWidth: 4, // stroke is required for strokeWidth
+        }),
       );
     }
 
@@ -266,18 +265,18 @@ export class ClearDeadFramesAnimation extends Animatable {
       const oldFnPosition = getNodePosition(fnPair[0]);
       this.fnAnimations.push(
         new AnimatedFnObject(fnPair[0], {
-          ...oldFnPosition
-        })
+          ...oldFnPosition,
+        }),
       );
       const newFnPosition = getNodePosition(fnPair[1]);
       this.newFnCovers.push(
         new AnimatedFnObject(
           fnPair[1],
           {
-            ...newFnPosition
+            ...newFnPosition,
           },
-          true
-        )
+          true,
+        ),
       );
     }
   }
@@ -290,7 +289,7 @@ export class ClearDeadFramesAnimation extends Animatable {
     changedTextPairs: AnimatedTextPair[],
     changedFnPairs: Array<[FnValue | GlobalFnValue, FnValue | GlobalFnValue]>,
     visitedFnValues: Set<FnValue | GlobalFnValue>,
-    visitedArrayValues: Set<ArrayValue>
+    visitedArrayValues: Set<ArrayValue>,
   ): void {
     // Check each ArrayUnit, add them accordingly
     for (let unitIdx = 0; unitIdx < oldArr.units.length; unitIdx++) {
@@ -305,15 +304,15 @@ export class ClearDeadFramesAnimation extends Animatable {
         oldUnit.isFirstUnit ? Config.DataCornerRadius : 0,
         oldUnit.isLastUnit ? Config.DataCornerRadius : 0,
         oldUnit.isLastUnit ? Config.DataCornerRadius : 0,
-        oldUnit.isFirstUnit ? Config.DataCornerRadius : 0
+        oldUnit.isFirstUnit ? Config.DataCornerRadius : 0,
       ];
 
       // Add the border first
       this.frameAnimations.push(
         new AnimatedRectComponent({
           ...getNodePosition(oldUnit),
-          cornerRadius: cornerRadius
-        })
+          cornerRadius: cornerRadius,
+        }),
       );
       this.newFrameCovers.push(
         new AnimatedRectComponent({
@@ -321,8 +320,8 @@ export class ClearDeadFramesAnimation extends Animatable {
           cornerRadius: cornerRadius,
           fill: defaultBackgroundColor(),
           stroke: defaultBackgroundColor(),
-          strokeWidth: 4
-        })
+          strokeWidth: 4,
+        }),
       );
 
       // Add the value next
@@ -334,7 +333,7 @@ export class ClearDeadFramesAnimation extends Animatable {
             oldText: oldValue.text as Text,
             newText: newValue.text as Text,
             targetX: newValue.x(),
-            targetY: newValue.y()
+            targetY: newValue.y(),
           });
         } else if (oldValue.text instanceof ArrayNullUnit) {
           let { x, y, height, width } = getNodePosition(oldValue.text as ArrayNullUnit);
@@ -342,8 +341,8 @@ export class ClearDeadFramesAnimation extends Animatable {
             new AnimatedLineComponent({
               x: x,
               y: y,
-              points: [0, height, width, 0]
-            })
+              points: [0, height, width, 0],
+            }),
           );
           ({ x, y, height, width } = getNodePosition(newValue.text as ArrayNullUnit));
           this.newLineCovers.push(
@@ -352,8 +351,8 @@ export class ClearDeadFramesAnimation extends Animatable {
               y: y,
               points: [0, height, width, 0],
               stroke: defaultBackgroundColor(),
-              strokeWidth: 4
-            })
+              strokeWidth: 4,
+            }),
           );
         }
       } else if (oldUnit.value instanceof FnValue) {
@@ -373,7 +372,7 @@ export class ClearDeadFramesAnimation extends Animatable {
             changedTextPairs,
             changedFnPairs,
             visitedFnValues,
-            visitedArrayValues
+            visitedArrayValues,
           );
         }
       }
@@ -407,10 +406,10 @@ export class ClearDeadFramesAnimation extends Animatable {
         this.frameAnimations[frameIdx].animateTo(
           {
             x: newFramePosition.x,
-            y: newFramePosition.y
+            y: newFramePosition.y,
           },
-          { duration: 2 }
-        )
+          { duration: 2 },
+        ),
       );
     }
     // TEXTS
@@ -420,10 +419,10 @@ export class ClearDeadFramesAnimation extends Animatable {
         this.textAnimations[textIdx].animateTo(
           {
             x: newTextPosition.x,
-            y: newTextPosition.y
+            y: newTextPosition.y,
           },
-          { duration: 2 }
-        )
+          { duration: 2 },
+        ),
       );
     }
     // ArrayNullUnit's line
@@ -433,10 +432,10 @@ export class ClearDeadFramesAnimation extends Animatable {
         this.lineAnimations[lineIdx].animateTo(
           {
             x: newLinePosition.x,
-            y: newLinePosition.y
+            y: newLinePosition.y,
           },
-          { duration: 2 }
-        )
+          { duration: 2 },
+        ),
       );
     }
     // FN OBJECTS
@@ -446,10 +445,10 @@ export class ClearDeadFramesAnimation extends Animatable {
         this.fnAnimations[fnIdx].animateTo(
           {
             x: newFnPosition.x,
-            y: newFnPosition.y
+            y: newFnPosition.y,
           },
-          { duration: 2 }
-        )
+          { duration: 2 },
+        ),
       );
     }
     await Promise.all(animations);

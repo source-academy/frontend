@@ -2,12 +2,12 @@ import { Classes, HTMLTable, Icon, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { CollabEditingAccess, type SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import {
   changeDefaultEditable,
-  getPlaygroundSessionUrl
+  getPlaygroundSessionUrl,
 } from 'src/commons/collabEditing/CollabEditingHelper';
 import CopyToClipboard from 'src/commons/utils/CopyToClipboard';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -15,7 +15,7 @@ import { showSuccessMessage } from 'src/commons/utils/notifications/Notification
 import classes from 'src/styles/SideContentSessionManagement.module.scss';
 
 import { beginAlertSideContent } from '../SideContentActions';
-import { SideContentLocation, SideContentType } from '../SideContentTypes';
+import { type SideContentLocation, SideContentType } from '../SideContentTypes';
 
 interface AdminViewProps {
   users: Record<string, SharedbAceUser>;
@@ -28,14 +28,16 @@ function AdminView({ users, playgroundCode }: AdminViewProps) {
   const [toggleAll, setToggleAll] = useState<boolean>(true);
   const [defaultRole, setDefaultRole] = useState<boolean>(true);
   const [toggling, setToggling] = useState<{ [key: string]: boolean }>(
-    Object.fromEntries(Object.entries(users).map(([id]) => [id, true]))
+    Object.fromEntries(Object.entries(users).map(([id]) => [id, true])),
   );
   const updateUserRoleCallback = useTypedSelector(
-    store => store.workspaces.playground.updateUserRoleCallback
+    store => store.workspaces.playground.updateUserRoleCallback,
   );
 
   const handleToggleAccess = (checked: boolean, id: string) => {
-    if (toggling[id]) return;
+    if (toggling[id]) {
+      return;
+    }
     setToggling(prev => ({ ...prev, [id]: true }));
 
     try {
@@ -51,7 +53,7 @@ function AdminView({ users, playgroundCode }: AdminViewProps) {
         if (userId !== 'all') {
           updateUserRoleCallback(
             userId,
-            checked ? CollabEditingAccess.EDITOR : CollabEditingAccess.VIEWER
+            checked ? CollabEditingAccess.EDITOR : CollabEditingAccess.VIEWER,
           );
         }
       });
@@ -131,12 +133,12 @@ type Props = {
   workspaceLocation: SideContentLocation;
 };
 
-const SideContentSessionManagement: React.FC<Props> = ({
+function SideContentSessionManagement({
   users,
   playgroundCode,
   readOnly,
-  workspaceLocation
-}) => {
+  workspaceLocation,
+}: Props) {
   const { t } = useTranslation('sideContent', { keyPrefix: 'sessionManagement' });
   const dispatch = useDispatch();
 
@@ -144,14 +146,16 @@ const SideContentSessionManagement: React.FC<Props> = ({
     dispatch(beginAlertSideContent(SideContentType.sessionManagement, workspaceLocation));
   }, [dispatch, workspaceLocation, users]);
 
-  if (Object.values(users).length === 0) return;
+  if (Object.values(users).length === 0) {
+    return;
+  }
   const myself = Object.values(users)[0];
 
   return (
     <div className={classes['table-container']}>
       <span className={classes['span']}>
         This is the session management tab. Add users by sharing the session code. If you are the
-        owner of this session, you can manage users' access levels from the table below.
+        owner of this session, you can manage users&apos; access levels from the table below.
       </span>
       <br />
       <span className={classes['span']}>
@@ -208,6 +212,6 @@ const SideContentSessionManagement: React.FC<Props> = ({
       </div>
     </div>
   );
-};
+}
 
 export default SideContentSessionManagement;

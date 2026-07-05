@@ -1,14 +1,13 @@
 import { Card, Elevation, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
 import type { TFunction } from 'i18next';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AutogradingError, AutogradingResult } from '../../assessment/AssessmentTypes';
+import type { AutogradingError, AutogradingResult } from '../../assessment/AssessmentTypes';
 
 const buildErrorString = (
   t: TFunction<'sideContent', 'resultCard'>,
-  errors: AutogradingError[]
+  errors: AutogradingError[],
 ) => {
   return errors
     .map(error => {
@@ -33,7 +32,7 @@ type Props = {
   result: AutogradingResult;
 };
 
-const SideContentResultCard: React.FC<Props> = ({ index, result }) => {
+function SideContentResultCard({ index, result }: Props) {
   const { t } = useTranslation('sideContent', { keyPrefix: 'resultCard' });
   return (
     <div
@@ -58,6 +57,6 @@ const SideContentResultCard: React.FC<Props> = ({ index, result }) => {
       </Card>
     </div>
   );
-};
+}
 
 export default SideContentResultCard;

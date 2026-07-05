@@ -1,12 +1,11 @@
 import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
 import type { Context } from 'js-slang';
 
+import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
 import type {
   AllColsSortStates,
-  GradingColumnVisibility
+  GradingColumnVisibility,
 } from '../../features/grading/GradingTypes';
-import type { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
-import type { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import type { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import type { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
@@ -17,6 +16,28 @@ export const EVAL_SILENT = 'EVAL_SILENT';
 
 export type WorkspaceLocation = keyof WorkspaceManagerState;
 export type WorkspaceLocationsWithTools = Extract<WorkspaceLocation, 'playground' | 'sicp'>;
+
+export type CodeVersionMetadata = {
+  readonly id: string;
+  readonly timestamp: number;
+  readonly name?: string;
+};
+
+export type CodeVersion = CodeVersionMetadata & {
+  readonly code: string;
+};
+
+export type VersionHistoryState = {
+  readonly versions: CodeVersionMetadata[];
+  readonly selectedVersion: CodeVersionMetadata | null;
+  readonly selectedVersionCode: string | null;
+  readonly isLoadingCode: boolean;
+  readonly isLoading: boolean;
+  readonly isHistoryPanelOpen: boolean;
+  readonly isAutoSaving: boolean;
+};
+
+export type SaveStatus = 'idle' | 'saving' | 'saved' | 'saveFailed';
 
 type AssessmentWorkspaceAttr = {
   readonly currentAssessment?: number;
@@ -58,16 +79,8 @@ export type WorkspaceManagerState = {
   readonly assessment: AssessmentWorkspaceState;
   readonly grading: GradingWorkspaceState;
   readonly playground: PlaygroundWorkspaceState;
-  readonly sourcecast: SourcecastWorkspaceState;
-  readonly sourcereel: SourcereelWorkspaceState;
   readonly sicp: SicpWorkspaceState;
-  readonly stories: StoriesWorkspaceState;
 };
-
-type StoriesWorkspaceAttr = {
-  // TODO: Add stories workspace attributes
-};
-type StoriesWorkspaceState = StoriesWorkspaceAttr & WorkspaceState;
 
 export type EditorTabState = {
   readonly filePath?: string;
@@ -92,7 +105,6 @@ export type WorkspaceState = {
   readonly isRunning: boolean;
   readonly isDebugging: boolean;
   readonly enableDebugging: boolean;
-  readonly isEditorAutorun: boolean;
   readonly isEditorReadonly: boolean;
   readonly output: InterpreterOutput[];
   readonly externalLibrary: ExternalLibraryName;
@@ -106,8 +118,11 @@ export type WorkspaceState = {
   readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
   readonly lastDebuggerResult: any;
+  readonly cseSnapshots: CseSnapshot[] | null;
   readonly files: UploadResult;
   readonly updateUserRoleCallback: (id: string, newRole: CollabEditingAccess) => void;
+  readonly versionHistory: VersionHistoryState;
+  readonly saveStatus: SaveStatus;
 };
 
 type ReplHistory = {

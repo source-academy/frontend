@@ -1,7 +1,7 @@
-import React from 'react';
-import Draggable, { DraggableEventHandler } from 'react-draggable';
+import { useRef } from 'react';
+import Draggable, { type DraggableEventHandler } from 'react-draggable';
 
-import Repl, { ReplProps } from '../repl/Repl';
+import Repl, { type ReplProps } from '../repl/Repl';
 
 type Props = {
   position: { x: number; y: number };
@@ -10,8 +10,8 @@ type Props = {
   replProps: ReplProps;
 };
 
-const DraggableRepl: React.FC<Props> = props => {
-  const nodeRef = React.useRef<HTMLDivElement>(null);
+function DraggableRepl(props: Props) {
+  const nodeRef = useRef<HTMLDivElement>(null);
 
   return (
     <Draggable
@@ -43,6 +43,6 @@ const DraggableRepl: React.FC<Props> = props => {
       </div>
     </Draggable>
   );
-};
+}
 
 export default DraggableRepl;

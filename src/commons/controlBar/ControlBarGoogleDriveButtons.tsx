@@ -1,15 +1,17 @@
 import { ButtonGroup, Classes, Intent, Popover, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
-import { PersistenceFile, PersistenceState } from '../../features/persistence/PersistenceTypes';
+import type {
+  PersistenceFile,
+  PersistenceState,
+} from '../../features/persistence/PersistenceTypes';
 import ControlButton from '../ControlButton';
 import { useResponsive } from '../utils/Hooks';
 
 const stateToIntent: { [state in PersistenceState]: Intent } = {
   INACTIVE: Intent.NONE,
   SAVED: Intent.PRIMARY,
-  DIRTY: Intent.WARNING
+  DIRTY: Intent.WARNING,
 };
 
 type Props = {
@@ -24,7 +26,7 @@ type Props = {
   onPopoverOpening?: () => any;
 };
 
-export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
+function ControlBarGoogleDriveButtons(props: Props) {
   const { isMobileBreakpoint } = useResponsive();
   const state: PersistenceState = props.currentFile
     ? props.isDirty
@@ -85,4 +87,6 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
       </Popover>
     </Tooltip>
   );
-};
+}
+
+export default ControlBarGoogleDriveButtons;

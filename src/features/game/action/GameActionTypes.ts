@@ -1,4 +1,4 @@
-import { ItemId, TrackInteraction } from '../commons/CommonTypes';
+import type { ItemId, TrackInteraction } from '../commons/CommonTypes';
 import { GameStateStorage } from '../state/GameStateTypes';
 
 export enum GameActionType {
@@ -28,7 +28,7 @@ export enum GameActionType {
   Delay = 'Delay',
   ShowQuiz = 'ShowQuiz',
   ChangeLocationTo = 'ChangeLocationTo',
-  ShowTopics = 'ShowTopics'
+  ShowTopics = 'ShowTopics',
 }
 
 /**

@@ -1,14 +1,16 @@
 import 'src/styles/Leaderboard.scss';
 
-import React from 'react';
-import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
+import type {
+  ContestLeaderboardRow,
+  LeaderboardRow,
+} from 'src/features/leaderboard/LeaderboardTypes';
 
 type Props =
   | { type: 'overall'; data: LeaderboardRow[]; outputType: undefined }
   | { type: 'contest'; data: ContestLeaderboardRow[]; outputType: 'image' }
   | { type: 'contest'; data: ContestLeaderboardRow[]; outputType: 'audio' };
 
-const LeaderboardPodium: React.FC<Props> = ({ type, data, outputType }) => {
+function LeaderboardPodium({ type, data, outputType }: Props) {
   // TODO: Retrieval of rune image/audio files from backend to be displayed on the podium
 
   return (
@@ -35,6 +37,6 @@ const LeaderboardPodium: React.FC<Props> = ({ type, data, outputType }) => {
         ))}
     </div>
   );
-};
+}
 
 export default LeaderboardPodium;

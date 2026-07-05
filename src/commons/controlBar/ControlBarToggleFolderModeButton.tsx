@@ -1,6 +1,5 @@
 import { Colors, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 import ControlButton from '../ControlButton';
 
@@ -11,12 +10,12 @@ type Props = {
   toggleFolderMode: () => void;
 };
 
-export const ControlBarToggleFolderModeButton: React.FC<Props> = ({
+function ControlBarToggleFolderModeButton({
   isFolderModeEnabled,
   isSessionActive,
   isPersistenceActive,
-  toggleFolderMode
-}) => {
+  toggleFolderMode,
+}: Props) {
   const tooltipContent = isSessionActive
     ? 'Currently unsupported while a collaborative session is active'
     : isPersistenceActive
@@ -28,11 +27,13 @@ export const ControlBarToggleFolderModeButton: React.FC<Props> = ({
         label="Folder"
         icon={IconNames.FOLDER_CLOSE}
         options={{
-          iconColor: isFolderModeEnabled ? Colors.BLUE4 : undefined
+          iconColor: isFolderModeEnabled ? Colors.BLUE4 : undefined,
         }}
         onClick={toggleFolderMode}
         isDisabled={isSessionActive || isPersistenceActive}
       />
     </Tooltip>
   );
-};
+}
+
+export default ControlBarToggleFolderModeButton;

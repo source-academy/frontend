@@ -1,13 +1,13 @@
 import Konva from 'konva';
-import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import type { KonvaEventObject } from 'konva/lib/Node';
+import { createRef } from 'react';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
 import { CseAnimation } from '../../CseMachineAnimation';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { ArrowOriginFilterKey, IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
+import type { ArrowOriginFilterKey, IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
 import { defaultStrokeColor, fadedStrokeColor } from '../../CseMachineUtils';
 import { Visible } from '../Visible';
 import { arrowSelection } from './ArrowSelection';
@@ -23,10 +23,10 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   target: Target | undefined;
   faded: boolean = false;
   protected _visible: boolean = true;
-  private pathRef: RefObject<Konva.Path | null> = React.createRef();
-  private sourceSegmentPathRef: RefObject<Konva.Path | null> = React.createRef();
-  private sourceSegmentGroupRef: RefObject<Konva.Group | null> = React.createRef();
-  private arrowHeadRef: RefObject<Konva.Arrow | null> = React.createRef();
+  private pathRef: React.RefObject<Konva.Path | null> = createRef();
+  private sourceSegmentPathRef: React.RefObject<Konva.Path | null> = createRef();
+  private sourceSegmentGroupRef: React.RefObject<Konva.Group | null> = createRef();
+  private arrowHeadRef: React.RefObject<Konva.Arrow | null> = createRef();
 
   // Check if this arrow is selected
   protected isSelected(): boolean {
@@ -56,7 +56,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   }
 
   private attachArrowRef = (node: Konva.Group | null) => {
-    (this.ref as React.MutableRefObject<Konva.Group | null>).current = node;
+    (this.ref as React.RefObject<Konva.Group | null>).current = node;
   };
 
   path(): string {
@@ -84,7 +84,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
 
     const points = this.calculateSteps().reduce<Array<number>>(
       (acc, step) => [...acc, ...step(acc[acc.length - 2], acc[acc.length - 1])],
-      [this.source.x(), this.source.y()]
+      [this.source.x(), this.source.y()],
     );
     points.splice(0, 2);
 
@@ -120,7 +120,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
         const isLastCorner = n + 6 >= points.length;
         const minTerminalStraightLength = Math.max(
           Config.ArrowHeadSize,
-          Config.ArrowMinCornerRadius
+          Config.ArrowMinCornerRadius,
         );
         const terminalAllowance = isLastCorner
           ? Math.max(0, segment2Length - minTerminalStraightLength)
@@ -128,7 +128,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
         const maxSpaceRadius = Math.min(segment1Length / 2, segment2Length / 2, terminalAllowance);
         const desiredRadius = Math.min(
           Config.ArrowCornerRadius,
-          maxSpaceRadius * Config.ArrowSmallBendRadiusScale
+          maxSpaceRadius * Config.ArrowSmallBendRadiusScale,
         );
         const br =
           maxSpaceRadius >= Config.ArrowMinCornerRadius
@@ -167,7 +167,9 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
    */
   protected calculateSteps(): StepsArray {
     const to = this.target;
-    if (!to) return [];
+    if (!to) {
+      return [];
+    }
     return [() => [to.x(), to.y()]];
   }
 
@@ -322,7 +324,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
       x1: number,
       y1: number,
       x2: number,
-      y2: number
+      y2: number,
     ): [number, number] | null => {
       const dx = x2 - x1;
       const dy = y2 - y1;
@@ -404,7 +406,9 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   private drawSourceFrameSegment(stroke: string, interactive: boolean): React.ReactNode {
     const rect = this.getSourceFrameBounds();
     const segmentPath = this.getSourceFrameSegmentPath();
-    if (!rect || !segmentPath) return null;
+    if (!rect || !segmentPath) {
+      return null;
+    }
 
     return (
       <KonvaGroup
@@ -498,7 +502,8 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
           pointerWidth={this.isSelected() ? Config.ArrowHoveredHeadSize : Config.ArrowHeadSize}
           key={Layout.key++}
         />
-      </KonvaGroup>
+      </KonvaGroup>,
+      this.isLive,
     );
 
     return this.drawSourceFrameSegment(stroke, interactive);

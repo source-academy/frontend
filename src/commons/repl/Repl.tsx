@@ -4,16 +4,14 @@ import classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { stringify } from 'js-slang/dist/utils/stringify';
-import React, { type JSX } from 'react';
+import { useMemo } from 'react';
 
 import type { InterpreterOutput, ResultOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { ReplInput } from './ReplInput';
 import type { OutputProps } from './ReplTypes';
 
-export type ReplProps = DispatchProps & StateProps & OwnProps;
-
-type StateProps = {
+export type ReplProps = {
   output: InterpreterOutput[];
   replValue: string;
   hidden?: boolean;
@@ -24,22 +22,16 @@ type StateProps = {
   externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
   showStepperPrompt?: boolean;
-};
-
-type DispatchProps = {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleReplEval: () => void;
   handleReplValueChange: (newCode: string) => void;
   onFocus?: (editor: Ace.Editor) => void;
   onBlur?: () => void;
+  replButtons: Array<React.ReactElement | null>;
 };
 
-type OwnProps = {
-  replButtons: Array<JSX.Element | null>;
-};
-
-const Repl: React.FC<ReplProps> = props => {
+function Repl(props: ReplProps) {
   const cards = props.output.map((slice, index) => (
     <Output
       output={slice}
@@ -61,12 +53,10 @@ const Repl: React.FC<ReplProps> = props => {
       </div>
     </div>
   );
-};
+}
 
-const ResultOutputDisplay: React.FC<{ output: ResultOutput }> = ({
-  output: { value, consoleLogs }
-}) => {
-  const stringified = React.useMemo(() => stringify(value), [value]);
+function ResultOutputDisplay({ output: { value, consoleLogs } }: { output: ResultOutput }) {
+  const stringified = useMemo(() => stringify(value), [value]);
   if (consoleLogs.length === 0) {
     return (
       <Card>
@@ -81,9 +71,9 @@ const ResultOutputDisplay: React.FC<{ output: ResultOutput }> = ({
       </Card>
     );
   }
-};
+}
 
-export const Output: React.FC<OutputProps> = props => {
+export function Output(props: OutputProps) {
   switch (props.output.type) {
     case 'code':
       return (
@@ -139,8 +129,8 @@ export const Output: React.FC<OutputProps> = props => {
         </Card>
       );
     default:
-      return <Card>''</Card>;
+      return <Card>&apos;&apos;</Card>;
   }
-};
+}
 
 export default Repl;

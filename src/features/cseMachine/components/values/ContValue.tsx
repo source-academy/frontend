@@ -1,22 +1,23 @@
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
-import { Environment } from 'js-slang/dist/types';
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { Environment } from 'js-slang/dist/types';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
-import React, { RefObject } from 'react';
+import { createRef, Fragment } from 'react';
 import {
   Circle,
   Group,
   Label as KonvaLabel,
   Rect,
   Tag as KonvaTag,
-  Text as KonvaText
+  Text as KonvaText,
 } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { IHoverable, ReferenceType } from '../../CseMachineTypes';
+import type { IHoverable, ReferenceType } from '../../CseMachineTypes';
 import {
+  defaultBackgroundColor,
   defaultStrokeColor,
   defaultTextColor,
   fadedStrokeColor,
@@ -24,7 +25,7 @@ import {
   getTextWidth,
   isMainReference,
   setHoveredCursor,
-  setUnhoveredCursor
+  setUnhoveredCursor,
 } from '../../CseMachineUtils';
 import { Continuation } from '../../utils/continuation';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
@@ -37,7 +38,7 @@ import { Value } from './Value';
 export class ContValue extends Value implements IHoverable {
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
-  readonly labelRef: RefObject<Label | null> = React.createRef();
+  readonly labelRef: React.RefObject<Label | null> = createRef();
 
   readonly tooltip: string = 'continuation';
   readonly tooltipWidth: number = getTextWidth(this.tooltip);
@@ -55,7 +56,7 @@ export class ContValue extends Value implements IHoverable {
     /** underlying continuation */
     readonly data: Continuation,
     /** what this value is being referenced by */
-    firstReference: ReferenceType
+    firstReference: ReferenceType,
   ) {
     super();
     Layout.memoizeValue(data, this);
@@ -90,7 +91,9 @@ export class ContValue extends Value implements IHoverable {
   }
 
   handleNewReference(newReference: ReferenceType): void {
-    if (!isMainReference(this, newReference)) return;
+    if (!isMainReference(this, newReference)) {
+      return;
+    }
 
     // derive the coordinates from the main reference (binding / array unit)
     if (newReference instanceof Binding) {
@@ -116,29 +119,44 @@ export class ContValue extends Value implements IHoverable {
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) {
+      return;
+    }
     setHoveredCursor(currentTarget);
     this.labelRef.current?.moveToTop();
     this.labelRef.current?.show();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) {
+      return;
+    }
     setUnhoveredCursor(currentTarget);
     this.labelRef.current?.hide();
   };
 
   setArrowSourceHighlightedStyle(): void {
-    if (this.isLive()) {
-      this.setShapesStyle(Config.HoverColor);
-    } else {
-      this.setShapesStyle(Config.HoverDeadColor);
-    }
+    const color = this.isLive() ? Config.HoverColor : Config.HoverDeadColor;
+    (this.ref.current?.getChildren() ?? []).forEach((shape: any) => {
+      if (shape.attrs?.stroke) {
+        shape.stroke(color);
+      }
+      if (shape.attrs?.fill && !shape.attrs?.stroke) {
+        shape.fill(color);
+      }
+    });
   }
 
   setArrowSourceNormalStyle(): void {
     const strokeColor = this.isLive() ? defaultStrokeColor() : fadedStrokeColor();
-    this.setShapesStyle(strokeColor);
+    (this.ref.current?.getChildren() ?? []).forEach((shape: any) => {
+      if (shape.attrs?.stroke) {
+        shape.stroke(strokeColor);
+      }
+      if (shape.attrs?.fill) {
+        shape.fill(shape.attrs?.stroke ? defaultBackgroundColor() : strokeColor);
+      }
+    });
   }
 
   draw(): React.ReactNode {
@@ -150,7 +168,7 @@ export class ContValue extends Value implements IHoverable {
     //dont need to check isReferenced here since live is ALL we need to know
 
     return (
-      <React.Fragment key={Layout.key++}>
+      <Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>
           <Rect
             {...ShapeDefaultProps}
@@ -160,6 +178,7 @@ export class ContValue extends Value implements IHoverable {
             width={this.radius / 2}
             height={this.radius * 2}
             stroke={strokeColor}
+            fill={defaultBackgroundColor()}
           />
           <Rect
             {...ShapeDefaultProps}
@@ -169,6 +188,7 @@ export class ContValue extends Value implements IHoverable {
             width={this.radius * 2}
             height={this.radius / 2}
             stroke={strokeColor}
+            fill={defaultBackgroundColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -177,6 +197,7 @@ export class ContValue extends Value implements IHoverable {
             y={this.y()}
             radius={this.radius}
             stroke={strokeColor}
+            fill={defaultBackgroundColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -212,7 +233,7 @@ export class ContValue extends Value implements IHoverable {
           />
         </KonvaLabel>
         {this._arrow?.draw()}
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

@@ -1,5 +1,4 @@
 import Konva from 'konva';
-import type { JSX } from 'react';
 import { Layer, Stage, Text } from 'react-konva';
 
 import { Config } from '../Config';
@@ -13,14 +12,14 @@ import {
   DataTreeNode,
   DrawableTreeNode,
   FunctionTreeNode,
-  TreeNode
+  TreeNode,
 } from './TreeNode';
 
 /**
  * Tree drawer for general tree view
  */
 export class GeneralTreeDrawer extends OriginalDrawer {
-  draw(x: number, y: number, key: number): JSX.Element {
+  draw(x: number, y: number, key: number): React.ReactElement {
     // NON-GENERAL TREE WARNING
     if (!DataVisualizer.isGenTree) {
       return (
@@ -45,7 +44,7 @@ export class GeneralTreeDrawer extends OriginalDrawer {
         align: 'center',
         fontStyle: 'normal',
         fontSize: 20,
-        fill: Config.Stroke
+        fill: Config.Stroke,
       };
       const konvaText = new Konva.Text(textConfig);
       this.width = konvaText.width();
@@ -90,7 +89,7 @@ export class GeneralTreeDrawer extends OriginalDrawer {
     colorIndex: number,
     parentIndex: number,
     originIndex: number,
-    originX: number
+    originX: number,
   ) {
     if (node instanceof AlreadyParsedTreeNode) {
       // if its child is part of a cycle and it's been drawn, link back to that node instead
@@ -98,27 +97,27 @@ export class GeneralTreeDrawer extends OriginalDrawer {
       const arrowProps = {
         from: {
           x: parentX + Config.BoxWidth / 2,
-          y: parentY + Config.BoxHeight / 2
+          y: parentY + Config.BoxHeight / 2,
         },
         to: {
           x: drawnNode.drawableX!,
-          y: drawnNode.drawableY!
-        }
+          y: drawnNode.drawableY!,
+        },
       };
 
       const isBackwardArrow = arrowProps.from.y >= arrowProps.to.y;
 
-      let arrow: JSX.Element;
+      let arrow: React.ReactElement;
 
       if (isBackwardArrow) {
         // Update the minX and minY, in case overflow to the top or left happens
         this.minX = Math.min(
           this.minX,
-          drawnNode.drawableX! - Config.ArrowMarginHorizontal - Config.StrokeWidth / 2
+          drawnNode.drawableX! - Config.ArrowMarginHorizontal - Config.StrokeWidth / 2,
         );
         this.minY = Math.min(
           this.minY,
-          drawnNode.drawableY! - Config.ArrowMarginTop - Config.StrokeWidth / 2
+          drawnNode.drawableY! - Config.ArrowMarginTop - Config.StrokeWidth / 2,
         );
         arrow = (
           <BackwardArrowDrawable key={'Arrow (back)' + parentX + x + parentY + y} {...arrowProps} />
@@ -129,7 +128,9 @@ export class GeneralTreeDrawer extends OriginalDrawer {
       this.drawables.push(arrow);
     }
 
-    if (!(node instanceof DrawableTreeNode)) return;
+    if (!(node instanceof DrawableTreeNode)) {
+      return;
+    }
 
     // draws the content
     if (node instanceof FunctionTreeNode) {
@@ -192,7 +193,7 @@ export class GeneralTreeDrawer extends OriginalDrawer {
           colorIndex,
           colorIndex,
           originIndex,
-          originX
+          originX,
         );
       });
     }

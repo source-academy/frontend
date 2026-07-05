@@ -2,7 +2,7 @@ import { FnValue } from '../../components/values/FnValue';
 import { GlobalFnValue } from '../../components/values/GlobalFnValue';
 import { Config } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
-import { StepsArray } from '../../CseMachineTypes';
+import type { StepsArray } from '../../CseMachineTypes';
 import { ControlItemComponent } from '../ControlItemComponent';
 import { Frame } from '../Frame';
 import { ContValue } from '../values/ContValue';
@@ -25,7 +25,9 @@ export class ArrowFromControlItemComponent extends GenericArrow<
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
-    if (!to) return [];
+    if (!to) {
+      return [];
+    }
 
     const terminalSegmentLength = Math.max(Config.ArrowHeadSize, Config.MinTerminalSegmentLength);
     const postSourceStraightLength = Config.ArrowPostFrameStraightLength;
@@ -39,18 +41,18 @@ export class ArrowFromControlItemComponent extends GenericArrow<
       to.x() >= from.x() + from.width()
         ? Math.max(
             from.x() + from.width() + postSourceStraightLength,
-            to.x() - terminalSegmentLength
+            to.x() - terminalSegmentLength,
           )
         : Math.min(
             from.x() + from.width() + postSourceStraightLength,
-            to.x() + terminalSegmentLength
+            to.x() + terminalSegmentLength,
           );
 
     const steps: StepsArray = [
       (x, y) => [x + from.width(), y + from.height() / 2],
       (x, y) => [turnX, y],
       (x, y) => [x, targetY],
-      () => [to.x(), targetY]
+      () => [to.x(), targetY],
     ];
 
     return steps;

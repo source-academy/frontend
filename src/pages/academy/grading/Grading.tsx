@@ -1,6 +1,6 @@
 import { Button, Icon, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
@@ -12,11 +12,11 @@ import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
-import { GradingOverview } from 'src/features/grading/GradingTypes';
+import type { GradingOverview } from 'src/features/grading/GradingTypes';
 import {
   exportGradingCSV,
   paginationToBackendParams,
-  unpublishedToBackendParams
+  unpublishedToBackendParams,
 } from 'src/features/grading/GradingUtils';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
@@ -26,22 +26,22 @@ import GradingWorkspace from './subcomponents/GradingWorkspace';
 
 const groupOptions = [
   { value: true, label: 'my groups' },
-  { value: false, label: 'all groups' }
+  { value: false, label: 'all groups' },
 ];
 
 const showOptions = [
   { value: false, label: 'unpublished' },
-  { value: true, label: 'all' }
+  { value: true, label: 'all' },
 ];
 
 const pageSizeOptions = [
   { value: 10, label: '10' },
   { value: 15, label: '15' },
   { value: 25, label: '25' },
-  { value: 50, label: '50' }
+  { value: 50, label: '50' },
 ];
 
-const Grading: React.FC = () => {
+function Grading() {
   const { courseId, gradingOverviews, role, group } = useSession();
   const params = useParams<{ submissionId: string; questionId: string }>();
 
@@ -75,11 +75,11 @@ const Grading: React.FC = () => {
           unpublishedToBackendParams(showAllSubmissions),
           paginationToBackendParams(page, pageSize),
           filterParams,
-          allColsSortStates
-        )
+          allColsSortStates,
+        ),
       );
     },
-    [dispatch, showUserGroups, showAllSubmissions, pageSize, allColsSortStates]
+    [dispatch, showUserGroups, showAllSubmissions, pageSize, allColsSortStates],
   );
 
   useEffect(() => {
@@ -91,8 +91,8 @@ const Grading: React.FC = () => {
           unpublishedToBackendParams(showAllSubmissions),
           paginationToBackendParams(refreshQueryData.page, pageSize),
           refreshQueryData.filterParams,
-          allColsSortStates
-        )
+          allColsSortStates,
+        ),
       );
       setRefreshQueried(false);
     }
@@ -103,7 +103,7 @@ const Grading: React.FC = () => {
     pageSize,
     allColsSortStates,
     refreshQueried,
-    refreshQueryData
+    refreshQueryData,
   ]);
 
   useEffect(() => {
@@ -114,10 +114,10 @@ const Grading: React.FC = () => {
               ...e,
               studentName: Array.isArray(e.studentNames)
                 ? e.studentNames.join(', ')
-                : e.studentNames
+                : e.studentNames,
             }
-          : e
-      ) ?? []
+          : e,
+      ) ?? [],
     );
     dispatch(WorkspaceActions.decreaseRequestCounter());
   }, [gradingOverviews, dispatch]);
@@ -166,12 +166,12 @@ const Grading: React.FC = () => {
                   Submissions
                 </GradingText>
                 <Button
-                  minimal
+                  variant="minimal"
                   icon={IconNames.EXPORT}
                   onClick={() => {
                     const tokens = {
                       accessToken: accessToken!,
-                      refreshToken: refreshToken!
+                      refreshToken: refreshToken!,
                     };
                     getAllGradingOverviews(tokens).then(resp => exportGradingCSV(resp?.data));
                   }}
@@ -191,7 +191,7 @@ const Grading: React.FC = () => {
                 selectedValue={showAllSubmissions}
                 onClick={setShowAllSubmissions}
                 popoverProps={{ position: Position.BOTTOM }}
-                buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+                buttonProps={{ variant: 'minimal', endIcon: 'caret-down' }}
               />
               <GradingText>submissions from</GradingText>
               <SimpleDropdown
@@ -199,7 +199,7 @@ const Grading: React.FC = () => {
                 selectedValue={showUserGroups}
                 onClick={setShowUserGroups}
                 popoverProps={{ position: Position.BOTTOM }}
-                buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+                buttonProps={{ variant: 'minimal', endIcon: 'caret-down' }}
               />
               <GradingText>showing</GradingText>
               <SimpleDropdown
@@ -207,12 +207,12 @@ const Grading: React.FC = () => {
                 selectedValue={pageSize}
                 onClick={setPageSize}
                 popoverProps={{ position: Position.BOTTOM }}
-                buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
+                buttonProps={{ variant: 'minimal', endIcon: 'caret-down' }}
               />
               <GradingText>entries per page.</GradingText>
               <Button
                 className={animateRefresh ? 'grading-refresh-loop' : ''}
-                minimal
+                variant="minimal"
                 style={{ padding: 0 }}
                 onClick={e => {
                   setRefreshQueried(true);
@@ -237,11 +237,8 @@ const Grading: React.FC = () => {
       fullWidth
     />
   );
-};
+}
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = Grading;
-Component.displayName = 'Grading';
 
 export default Grading;

@@ -1,11 +1,11 @@
-import { CircleConfig } from 'konva/lib/shapes/Circle';
+import type { CircleConfig } from 'konva/lib/shapes/Circle';
 import { Group } from 'react-konva';
 
 import { FnValue } from '../../components/values/FnValue';
 import { GlobalFnValue } from '../../components/values/GlobalFnValue';
 import { Config } from '../../CseMachineConfig';
 import { defaultBackgroundColor, defaultStrokeColor } from '../../CseMachineUtils';
-import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
+import { Animatable, AnimatableTo, type AnimationConfig } from './Animatable';
 import { AnimatedCircleComponent } from './AnimationComponents';
 
 export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
@@ -17,10 +17,18 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
 
   // Update the current component's dimensions based on the inner rect component's dimensions
   private onPropsChange = (props: CircleConfig) => {
-    if (props.x !== undefined) this._x = props.x;
-    if (props.y !== undefined) this._y = props.y;
-    if (props.width !== undefined) this._width = props.width;
-    if (props.height !== undefined) this._height = props.height;
+    if (props.x !== undefined) {
+      this._x = props.x;
+    }
+    if (props.y !== undefined) {
+      this._y = props.y;
+    }
+    if (props.width !== undefined) {
+      this._width = props.width;
+    }
+    if (props.height !== undefined) {
+      this._height = props.height;
+    }
   };
 
   constructor(fn: FnValue | GlobalFnValue, props?: CircleConfig, isCover?: boolean) {
@@ -41,13 +49,13 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
           fill: defaultBackgroundColor(),
           stroke: defaultBackgroundColor(),
           strokeWidth: 3.5,
-          ...safeProps
+          ...safeProps,
         })
       : new AnimatedCircleComponent({
           x: this.centerX - Config.FnRadius,
           y: this._y,
           radius: Config.FnRadius,
-          ...safeProps
+          ...safeProps,
         });
     this.leftInner = isCover
       ? new AnimatedCircleComponent({
@@ -57,7 +65,7 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
           strokeWidth: 2,
           fill: defaultBackgroundColor(),
           stroke: defaultBackgroundColor(),
-          ...safeProps
+          ...safeProps,
         })
       : new AnimatedCircleComponent({
           x: this.centerX - Config.FnRadius,
@@ -65,7 +73,7 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
           radius: Config.FnInnerRadius,
           strokeWidth: 0,
           fill: defaultStrokeColor(),
-          ...safeProps
+          ...safeProps,
         });
     this.rightCircle = isCover
       ? new AnimatedCircleComponent({
@@ -75,13 +83,13 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
           fill: defaultBackgroundColor(),
           stroke: defaultBackgroundColor(),
           strokeWidth: 3.5,
-          ...safeProps
+          ...safeProps,
         })
       : new AnimatedCircleComponent({
           x: this.centerX + Config.FnRadius,
           y: this._y,
           radius: Config.FnRadius,
-          ...safeProps
+          ...safeProps,
         });
     this.rightInner = isCover
       ? new AnimatedCircleComponent({
@@ -91,7 +99,7 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
           strokeWidth: 2,
           fill: defaultBackgroundColor(),
           stroke: defaultBackgroundColor(),
-          ...safeProps
+          ...safeProps,
         })
       : new AnimatedCircleComponent({
           x: this.centerX + Config.FnRadius,
@@ -99,7 +107,7 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
           radius: Config.FnInnerRadius,
           strokeWidth: 0,
           fill: defaultStrokeColor(),
-          ...safeProps
+          ...safeProps,
         });
     this.leftCircle.addListener(this.onPropsChange);
     this.leftInner.addListener(this.onPropsChange);
@@ -125,34 +133,34 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
         {
           ...others,
           ...(x !== undefined && { x: x + Config.FnRadius }),
-          ...(y !== undefined && { y: y })
+          ...(y !== undefined && { y: y }),
         },
-        animationConfig
+        animationConfig,
       ),
       this.leftInner.animateTo(
         {
           ...others,
           ...(x !== undefined && { x: x + Config.FnRadius }),
-          ...(y !== undefined && { y: y })
+          ...(y !== undefined && { y: y }),
         },
-        animationConfig
+        animationConfig,
       ),
       this.rightCircle.animateTo(
         {
           ...others,
           ...(x !== undefined && { x: x + 3 * Config.FnRadius }),
-          ...(y !== undefined && { y: y })
+          ...(y !== undefined && { y: y }),
         },
-        animationConfig
+        animationConfig,
       ),
       this.rightInner.animateTo(
         {
           ...others,
           ...(x !== undefined && { x: x + 3 * Config.FnRadius }),
-          ...(y !== undefined && { y: y })
+          ...(y !== undefined && { y: y }),
         },
-        animationConfig
-      )
+        animationConfig,
+      ),
     ]);
   }
 

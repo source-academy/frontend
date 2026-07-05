@@ -1,5 +1,5 @@
 import { AssetType } from '../assets/AssetsTypes';
-import { SpeakerDetail } from '../character/GameCharacterTypes';
+import type { SpeakerDetail } from '../character/GameCharacterTypes';
 import StringUtils from '../utils/StringUtils';
 import CharacterParser from './CharacterParser';
 import Parser from './Parser';
@@ -24,7 +24,7 @@ export default class SpeakerParser {
   public static parse(rawStr: string): SpeakerDetail {
     const [speakerId, expression, speakerPositionStr] = StringUtils.splitByChar(
       rawStr.slice(1), // remove the @
-      ','
+      ',',
     );
     const speakerPosition = ParserConverter.stringToPosition(speakerPositionStr);
 
@@ -33,7 +33,7 @@ export default class SpeakerParser {
     return {
       speakerId,
       expression,
-      speakerPosition
+      speakerPosition,
     };
   }
 
@@ -60,13 +60,13 @@ export default class SpeakerParser {
 
     character.expressions.set(
       expression,
-      CharacterParser.characterAssetKey(charId, expression || charExpression)
+      CharacterParser.characterAssetKey(charId, expression || charExpression),
     );
 
     Parser.checkpoint.map.addMapAsset(CharacterParser.characterAssetKey(charId, charExpression), {
       path: CharacterParser.characterAssetPath(charId, charExpression),
       type: AssetType.Image,
-      key: charId
+      key: charId,
     });
   }
 }

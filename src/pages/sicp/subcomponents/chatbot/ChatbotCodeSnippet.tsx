@@ -1,16 +1,17 @@
 import { Card, Elevation, Overlay2 } from '@blueprintjs/core';
 import { compressToEncodedURIComponent } from 'lz-string';
-import React from 'react';
+import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
-import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
+import ControlBarCloseButton from 'src/commons/controlBar/ControlBarCloseButton';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import Playground from 'src/pages/playground/Playground';
-import classes from 'src/styles/ChatbotCodeSnippet.module.scss';
 
-export type ChatbotCodeSnippetProps = {
+import classes from './ChatbotCodeSnippet.module.css';
+
+type Props = {
   /** The code to display and run */
   code: string;
   /** Unique ID for this snippet (used to track which is active) */
@@ -28,13 +29,13 @@ export type ChatbotCodeSnippetProps = {
  * When closed, it shows syntax-highlighted code that's clickable.
  * When open, it shows a full Playground editor where the user can run the code.
  */
-const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
+function ChatbotCodeSnippet({
   code,
   id,
   activeSnippetId,
   setActiveSnippet,
-  language = 'javascript'
-}) => {
+  language = 'javascript',
+}: Props) {
   const dispatch = useDispatch();
 
   const isActive = activeSnippetId === id;
@@ -48,7 +49,7 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
     setActiveSnippet(id);
   };
 
-  const handleClose = React.useCallback(() => {
+  const handleClose = useCallback(() => {
     setActiveSnippet('');
   }, [setActiveSnippet]);
 
@@ -56,7 +57,7 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
     initialEditorValueHash,
     prependLength: undefined,
     isSicpEditor: true,
-    handleCloseEditor: handleClose
+    handleCloseEditor: handleClose,
   };
 
   const closeButton = <ControlBarCloseButton key="close" handleClose={handleClose} />;
@@ -64,17 +65,17 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
   const controlBarProps = {
     editorButtons: [],
     flowButtons: [],
-    editingWorkspaceButtons: [closeButton]
+    editingWorkspaceButtons: [closeButton],
   };
 
   return (
     <>
       <Overlay2
-        hasBackdrop={true}
+        hasBackdrop
         isOpen={isActive}
         transitionDuration={0}
         backdropProps={{
-          style: { position: 'fixed' }
+          style: { position: 'fixed' },
         }}
       >
         <div className={classes['snippet-open']}>
@@ -88,7 +89,7 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
       </Overlay2>
       <Card
         className={classes['snippet-closed']}
-        interactive={true}
+        interactive
         elevation={Elevation.TWO}
         onClick={handleOpen}
       >
@@ -98,6 +99,6 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
       </Card>
     </>
   );
-};
+}
 
 export default ChatbotCodeSnippet;

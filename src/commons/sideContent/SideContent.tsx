@@ -1,5 +1,5 @@
-import { Card, Icon, Tab, TabProps, Tabs, Tooltip } from '@blueprintjs/core';
-import type { JSX } from 'react';
+import { Card, Icon, Tab, type TabProps, Tabs, Tooltip } from '@blueprintjs/core';
+import { cloneElement } from 'react';
 
 import { assertType } from '../utils/TypeHelper';
 import { generateTabAlert, getTabId } from './SideContentHelper';
@@ -8,7 +8,7 @@ import type {
   ChangeTabsCallback,
   SideContentLocation,
   SideContentTab,
-  SideContentType
+  SideContentTabId,
 } from './SideContentTypes';
 
 export type SideContentProps = {
@@ -19,8 +19,8 @@ export type SideContentProps = {
     afterDynamicTabs: SideContentTab[];
   };
   onChange?: ChangeTabsCallback;
-  selectedTabId?: SideContentType;
-  defaultTab?: SideContentType;
+  selectedTabId?: SideContentTabId;
+  defaultTab?: SideContentTabId;
   workspaceLocation: SideContentLocation;
 };
 
@@ -29,7 +29,7 @@ const renderTab = (
   shouldAlert: boolean,
   workspaceLocation?: SideContentLocation,
   editorWidth?: string,
-  sideContentHeight?: number
+  sideContentHeight?: number,
 ) => {
   const iconSize = 20;
   const tabId = getTabId(tab);
@@ -44,57 +44,51 @@ const renderTab = (
     id: tabId,
     title: tabTitle,
     disabled: tab.disabled,
-    className: 'side-content-tab'
+    className: 'side-content-tab',
   });
 
   if (!tab.body) {
     return <Tab key={tabId} {...tabProps} />;
   }
 
-  const tabBody: JSX.Element = workspaceLocation
-    ? {
-        ...tab.body,
-        props: {
-          ...tab.body.props,
-          workspaceLocation,
-          editorWidth,
-          sideContentHeight
-        }
-      }
+  const tabBody: React.ReactElement = workspaceLocation
+    ? cloneElement(tab.body, { workspaceLocation, editorWidth, sideContentHeight } as any)
     : tab.body;
-  const tabPanel: JSX.Element = <div className="side-content-text">{tabBody}</div>;
+  const tabPanel: React.ReactElement = <div className="side-content-text">{tabBody}</div>;
 
   return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
 };
 
-const SideContent = ({ renderActiveTabPanelOnly, editorWidth, ...props }: SideContentProps) => (
-  <SideContentProvider {...props}>
-    {({ tabs: allTabs, alerts: tabAlerts, changeTabsCallback, selectedTab, height }) => (
-      <div className="side-content">
-        <Card>
-          <div className="side-content-tabs">
-            <Tabs
-              id="side-content-tabs"
-              onChange={changeTabsCallback}
-              renderActiveTabPanelOnly={renderActiveTabPanelOnly}
-              selectedTabId={selectedTab}
-            >
-              {allTabs.map(tab => {
-                const tabId = getTabId(tab);
-                return renderTab(
-                  tab,
-                  tabAlerts.includes(tabId),
-                  props.workspaceLocation,
-                  editorWidth,
-                  height
-                );
-              })}
-            </Tabs>
-          </div>
-        </Card>
-      </div>
-    )}
-  </SideContentProvider>
-);
+function SideContent({ renderActiveTabPanelOnly, editorWidth, ...props }: SideContentProps) {
+  return (
+    <SideContentProvider {...props}>
+      {({ tabs: allTabs, alerts: tabAlerts, changeTabsCallback, selectedTab, height }) => (
+        <div className="side-content">
+          <Card>
+            <div className="side-content-tabs">
+              <Tabs
+                id="side-content-tabs"
+                onChange={changeTabsCallback}
+                renderActiveTabPanelOnly={renderActiveTabPanelOnly}
+                selectedTabId={selectedTab}
+              >
+                {allTabs.map(tab => {
+                  const tabId = getTabId(tab);
+                  return renderTab(
+                    tab,
+                    tabAlerts.includes(tabId),
+                    props.workspaceLocation,
+                    editorWidth,
+                    height,
+                  );
+                })}
+              </Tabs>
+            </div>
+          </Card>
+        </div>
+      )}
+    </SideContentProvider>
+  );
+}
 
 export default SideContent;

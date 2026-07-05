@@ -2,14 +2,14 @@ import FontAssets from '../assets/FontAssets';
 import ImageAssets from '../assets/ImageAssets';
 import { createButton } from '../utils/ButtonUtils';
 import { screenCenter } from './CommonConstants';
-import { BitmapFontStyle } from './CommonTypes';
+import type { BitmapFontStyle } from './CommonTypes';
 
 const backMessage = 'back';
 const backTextYPos = -screenCenter.y * 0.975;
 const backButtonStyle: BitmapFontStyle = {
   key: FontAssets.zektonDarkFont.key,
   size: 25,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
 };
 
 /**
@@ -35,7 +35,7 @@ class CommonBackButton extends Phaser.GameObjects.Container {
       message: message,
       textConfig: { x: 0, y: backTextYPos, oriX: 0.5, oriY: 0.25 },
       bitMapTextStyle: backButtonStyle,
-      onUp: callback
+      onUp: callback,
     }).setPosition(screenCenter.x, screenCenter.y);
     this.add(backButton);
   }

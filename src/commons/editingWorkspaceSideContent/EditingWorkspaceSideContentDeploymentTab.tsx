@@ -1,28 +1,27 @@
 import { Button, Classes, Divider, MenuItem, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemRenderer, Select } from '@blueprintjs/select';
+import type { ItemRenderer } from '@blueprintjs/select';
+import { Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import React from 'react';
 
-import { SALanguage, sourceLanguages, styliseSublanguage } from '../application/ApplicationTypes';
 import {
-  External,
+  type SALanguage,
+  sourceLanguages,
+  styliseSublanguage,
+} from '../application/ApplicationTypes';
+import {
+  type External,
   externalLibraries,
-  ExternalLibraryName
+  ExternalLibraryName,
 } from '../application/types/ExternalTypes';
-import { Assessment, emptyLibrary, Library } from '../assessment/AssessmentTypes';
+import { type Assessment, emptyLibrary, type Library } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 
-type DeploymentTabProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   updateAssessment: (assessment: Assessment) => void;
   handleRefreshLibrary: (library: Library) => void;
-};
-
-type StateProps = {
   assessment: Assessment;
   label: string;
   pathToLibrary: Array<string | number>;
@@ -30,7 +29,7 @@ type StateProps = {
   isOptionalDeployment: boolean;
 };
 
-const DeploymentTab: React.FC<DeploymentTabProps> = props => {
+function DeploymentTab(props: Props) {
   const deploymentTab = () => {
     const deploymentPath = props.pathToLibrary;
     const deployment = getValueFromPath(deploymentPath, props.assessment) as Library;
@@ -65,7 +64,7 @@ const DeploymentTab: React.FC<DeploymentTabProps> = props => {
     );
 
     const symbolsFragment = (
-      <React.Fragment>
+      <>
         External Library:
         <br />
         {externalSelect(deployment.external.name, handleExternalSelect)}
@@ -76,18 +75,18 @@ const DeploymentTab: React.FC<DeploymentTabProps> = props => {
           <tbody>{symbols}</tbody>
         </table>
         <ControlButton label="New Symbol" icon={IconNames.PLUS} onClick={handleNewSymbol} />
-      </React.Fragment>
+      </>
     );
 
     const globalsFragment = (
-      <React.Fragment>
+      <>
         <div>Globals:</div>
         <br />
         <table style={{ width: '100%', borderSpacing: '5px' }}>
           <tbody>{globals}</tbody>
         </table>
         <ControlButton label="New Global" icon={IconNames.PLUS} onClick={handleNewGlobal} />
-      </React.Fragment>
+      </>
     );
 
     return (
@@ -115,7 +114,7 @@ const DeploymentTab: React.FC<DeploymentTabProps> = props => {
         path={path}
         processResults={removeSpaces}
         updateAssessment={props.updateAssessment}
-        useRawValue={true}
+        useRawValue
       />
     );
   };
@@ -127,7 +126,7 @@ const DeploymentTab: React.FC<DeploymentTabProps> = props => {
         assessment={props.assessment}
         path={pathVal}
         updateAssessment={handleGlobalValueUpdate(i)}
-        useRawValue={true}
+        useRawValue
       />
     );
   };
@@ -193,7 +192,7 @@ const DeploymentTab: React.FC<DeploymentTabProps> = props => {
     if (isEmptyLibrary()) {
       let library = getValueFromPath(
         props.pathToCopy || ['globalDeployment'],
-        assessment
+        assessment,
       ) as Library;
       if (library.chapter === -1) {
         library = assessment.globalDeployment!;
@@ -230,7 +229,7 @@ const DeploymentTab: React.FC<DeploymentTabProps> = props => {
       </div>
     );
   }
-};
+}
 
 const removeSpaces = (str: string | number) => {
   return typeof str === 'string' ? str.replace(/\s+/g, '') : str;
@@ -243,9 +242,9 @@ const altEval = (str: string): any => {
 const chapterSelect = (
   currentChap: Chapter,
   variant: Variant = Variant.DEFAULT,
-  handleSelect = (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => {}
+  handleSelect = (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => {},
 ) => (
-  <ChapterSelectComponent
+  <Select<SALanguage>
     className={Classes.MINIMAL}
     items={sourceLanguages}
     onItemSelect={handleSelect}
@@ -253,14 +252,12 @@ const chapterSelect = (
     filterable={false}
   >
     <Button
-      minimal
+      variant="minimal"
       text={styliseSublanguage(currentChap, variant)}
-      rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
+      endIcon={IconNames.DOUBLE_CARET_VERTICAL}
     />
-  </ChapterSelectComponent>
+  </Select>
 );
-
-const ChapterSelectComponent = Select.ofType<SALanguage>();
 
 const chapterRenderer: ItemRenderer<SALanguage> = (chap, { handleClick, modifiers, query }) => (
   <MenuItem active={false} key={chap.displayName} onClick={handleClick} text={chap.displayName} />
@@ -269,25 +266,23 @@ const chapterRenderer: ItemRenderer<SALanguage> = (chap, { handleClick, modifier
 const iExternals = Array.from(externalLibraries.entries()).map((entry, index) => ({
   name: entry[0] as ExternalLibraryName,
   key: index,
-  symbols: entry[1]
+  symbols: entry[1],
 }));
 
 const externalSelect = (
   currentExternal: string,
-  handleSelect: (i: External, e?: React.SyntheticEvent<HTMLElement>) => void
+  handleSelect: (i: External, e?: React.SyntheticEvent<HTMLElement>) => void,
 ) => (
-  <ExternalSelectComponent
+  <Select<External>
     className={Classes.MINIMAL}
     items={iExternals}
     onItemSelect={handleSelect}
     itemRenderer={externalRenderer}
     filterable={false}
   >
-    <Button minimal text={currentExternal} rightIcon={IconNames.DOUBLE_CARET_VERTICAL} />
-  </ExternalSelectComponent>
+    <Button variant="minimal" text={currentExternal} endIcon={IconNames.DOUBLE_CARET_VERTICAL} />
+  </Select>
 );
-
-const ExternalSelectComponent = Select.ofType<External>();
 
 const externalRenderer: ItemRenderer<External> = (external, { handleClick, modifiers, query }) => (
   <MenuItem active={false} key={external.key} onClick={handleClick} text={external.name} />

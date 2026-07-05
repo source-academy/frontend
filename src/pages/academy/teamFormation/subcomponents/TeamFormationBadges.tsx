@@ -1,9 +1,8 @@
 import { Button, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ColumnFilter } from '@tanstack/react-table';
-import React from 'react';
+import type { ColumnFilter } from '@tanstack/react-table';
 
-import { getBadgeColorFromLabelLegacy } from '../../grading/subcomponents/GradingBadges';
+import { getBadgeColorFromLabelLegacy } from '../../grading/subcomponents/gradingBadges/gradingBadgeColors';
 
 // TODO: Remove after migration is completed
 const TREMOR_TO_BLUEPRINT_INTENT: Record<string, Intent> = {
@@ -15,7 +14,7 @@ const TREMOR_TO_BLUEPRINT_INTENT: Record<string, Intent> = {
   red: Intent.DANGER,
   yellow: Intent.WARNING,
   green: Intent.SUCCESS,
-  blue: Intent.PRIMARY
+  blue: Intent.PRIMARY,
 };
 
 type Props = {
@@ -23,7 +22,7 @@ type Props = {
   onRemove: (filter: ColumnFilter) => void;
 };
 
-const FilterBadge: React.FC<Props> = ({ filter, onRemove }) => {
+function FilterBadge({ filter, onRemove }: Props) {
   let filterValue = filter.value as string;
   filterValue = filterValue.charAt(0).toUpperCase() + filterValue.slice(1);
   const legacyColor = getBadgeColorFromLabelLegacy(filterValue);
@@ -34,6 +33,6 @@ const FilterBadge: React.FC<Props> = ({ filter, onRemove }) => {
       {filterValue}
     </Button>
   );
-};
+}
 
 export { FilterBadge };

@@ -1,5 +1,5 @@
 import { Button, Card, Collapse, Elevation } from '@blueprintjs/core';
-import React, { type JSX } from 'react';
+import { useState } from 'react';
 
 export const noSolutionPlaceholder = (
   <span>
@@ -15,12 +15,12 @@ export const noSolutionPlaceholder = (
 
 type Props = {
   title: string;
-  body: JSX.Element;
-  solution: JSX.Element | undefined;
+  body: React.ReactElement;
+  solution: React.ReactElement | undefined;
 };
 
-const SicpExercise: React.FC<Props> = props => {
-  const [isOpen, setIsOpen] = React.useState(false);
+function SicpExercise(props: Props) {
+  const [isOpen, setIsOpen] = useState(false);
 
   const onClick = () => {
     setIsOpen(!isOpen);
@@ -31,7 +31,7 @@ const SicpExercise: React.FC<Props> = props => {
       <b>{props.title}</b>
       <div>{props.body}</div>
       <div className="sicp-button-container">
-        <Button onClick={onClick} large={true} className="sicp-show-solution-button">
+        <Button onClick={onClick} size="large" className="sicp-show-solution-button">
           {isOpen ? 'Hide Solution' : 'Show Solution'}
         </Button>
       </div>
@@ -40,6 +40,6 @@ const SicpExercise: React.FC<Props> = props => {
       </Collapse>
     </Card>
   );
-};
+}
 
 export default SicpExercise;

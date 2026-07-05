@@ -1,8 +1,8 @@
 import { Dialog, DialogBody, DialogFooter, Intent, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
-import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
   data: AssessmentOverview;
 };
 
-const DeleteCell: React.FC<Props> = ({ handleDeleteAssessment, data }) => {
+function DeleteCell({ handleDeleteAssessment, data }: Props) {
   const [isDialogOpen, setDialogState] = useState(false);
 
   const handleOpenDialog = useCallback(() => setDialogState(true), []);
@@ -32,7 +32,7 @@ const DeleteCell: React.FC<Props> = ({ handleDeleteAssessment, data }) => {
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         title="Deleting assessment"
-        canOutsideClickClose={true}
+        canOutsideClickClose
       >
         <DialogBody>
           <p>
@@ -49,13 +49,13 @@ const DeleteCell: React.FC<Props> = ({ handleDeleteAssessment, data }) => {
                 label="Cancel"
                 icon={IconNames.CROSS}
                 onClick={handleCloseDialog}
-                options={{ minimal: false }}
+                options={{ variant: 'default' }}
               />
               <ControlButton
                 label="Confirm"
                 icon={IconNames.TRASH}
                 onClick={handleDelete}
-                options={{ minimal: false, intent: Intent.DANGER }}
+                options={{ variant: 'default', intent: Intent.DANGER }}
               />
             </>
           }
@@ -63,6 +63,6 @@ const DeleteCell: React.FC<Props> = ({ handleDeleteAssessment, data }) => {
       </Dialog>
     </>
   );
-};
+}
 
 export default DeleteCell;

@@ -7,9 +7,9 @@ import { Ace, Range } from 'ace-builds';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 import { decompressFromEncodedURIComponent } from 'lz-string';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useStore } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
@@ -17,9 +17,9 @@ import SessionActions from 'src/commons/application/actions/SessionActions';
 import {
   setEditorSessionId,
   setSessionDetails,
-  setSharedbConnected
+  setSharedbConnected,
 } from 'src/commons/collabEditing/CollabEditingActions';
-import { ControlBarExecutionTime } from 'src/commons/controlBar/ControlBarExecutionTime';
+import ControlBarExecutionTime from 'src/commons/controlBar/ControlBarExecutionTime';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
@@ -30,18 +30,24 @@ import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   showFullJSWarningOnUrlLoad,
   showFulTSWarningOnUrlLoad,
-  showHTMLDisclaimer
+  showHTMLDisclaimer,
 } from 'src/commons/utils/WarningDialogHelper';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
+import {
+  CONDUCTOR_STEPPER_TAB_ID,
+  STEPPER_EVALUATOR_CAPABILITY,
+} from 'src/features/conductor/stepperTab';
 import CseMachine from 'src/features/cseMachine/CseMachine';
+import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
 import GithubActions from 'src/features/github/GitHubActions';
 import PersistenceActions from 'src/features/persistence/PersistenceActions';
 import {
   generateLzString,
   playgroundConfigLanguage,
   shortenURL,
-  updateShortURL
+  updateShortURL,
 } from 'src/features/playground/PlaygroundActions';
 import Messages, { sendToWebview } from 'src/features/vscode/messages';
 
@@ -52,50 +58,51 @@ import {
   isSourceLanguage,
   type OverallState,
   type ResultOutput,
-  type SALanguage
+  type SALanguage,
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
-import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
-import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
-import { ControlBarGoogleDriveButtons } from '../../commons/controlBar/ControlBarGoogleDriveButtons';
-import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
-import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
-import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
-import { ControlBarToggleFolderModeButton } from '../../commons/controlBar/ControlBarToggleFolderModeButton';
-import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
+import ControlBarAutorunButtons from '../../commons/controlBar/ControlBarAutorunButtons';
+import ControlBarChapterSelect from '../../commons/controlBar/ControlBarChapterSelect';
+import ControlBarClearButton from '../../commons/controlBar/ControlBarClearButton';
+import ControlBarEvalButton from '../../commons/controlBar/ControlBarEvalButton';
+import ControlBarGoogleDriveButtons from '../../commons/controlBar/ControlBarGoogleDriveButtons';
+import ControlBarSessionButtons from '../../commons/controlBar/ControlBarSessionButton';
+import ControlBarShareButton from '../../commons/controlBar/ControlBarShareButton';
+import ControlBarStepLimit from '../../commons/controlBar/ControlBarStepLimit';
+import ControlBarToggleFolderModeButton from '../../commons/controlBar/ControlBarToggleFolderModeButton';
+import ControlBarGitHubButtons from '../../commons/controlBar/github/ControlBarGitHubButtons';
 import {
   convertEditorTabStateToProps,
-  type NormalEditorContainerProps
+  type NormalEditorContainerProps,
 } from '../../commons/editor/EditorContainer';
 import type { Position } from '../../commons/editor/EditorTypes';
 import { overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';
 import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import MobileWorkspace, {
-  type MobileWorkspaceProps
+  type MobileWorkspaceProps,
 } from '../../commons/mobileWorkspace/MobileWorkspace';
-import { SideBarTab } from '../../commons/sideBar/SideBar';
+import type { SideBarTab } from '../../commons/sideBar/SideBar';
 import { type SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants, { Links } from '../../commons/utils/Constants';
 import { generateLanguageIntroduction } from '../../commons/utils/IntroductionHelper';
 import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
 import { type IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
-import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import Workspace, { type WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
 import type {
   CodeDelta,
   Input,
-  SelectionRange
-} from '../../features/sourceRecorder/SourceRecorderTypes';
+  SelectionRange,
+} from '../../features/eventLogging/EventLoggingTypes';
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   desktopOnlyTabIds,
+  makeConductorStepperPlaceholderTab,
   makeIntroductionTabFrom,
   makeRemoteExecutionTabFrom,
   makeSessionManagementTabFrom,
   makeSubstVisualizerTabFrom,
-  mobileOnlyTabIds
+  mobileOnlyTabIds,
 } from './PlaygroundTabs';
 
 export type PlaygroundProps = {
@@ -113,7 +120,7 @@ export async function handleHash(
   },
   workspaceLocation: WorkspaceLocation,
   dispatch: Dispatch<AnyAction>,
-  fileSystem: FSModule | null
+  fileSystem: FSModule | null,
 ) {
   // Make the parsed query string object a Partial because we might access keys which are not set.
   const qs: Partial<IParsedQuery> = parseQuery(hash);
@@ -139,7 +146,7 @@ export async function handleHash(
     const files: Record<string, string> =
       qs.files === undefined
         ? {
-            [defaultFilePath]: program
+            [defaultFilePath]: program,
           }
         : parseQuery(decompressFromEncodedURIComponent(qs.files));
     if (fileSystem !== null) {
@@ -158,19 +165,19 @@ export async function handleHash(
 
     // By default, open a single editor tab containing the default playground file.
     const editorTabFilePaths = qs.tabs?.split(',').map(decompressFromEncodedURIComponent) ?? [
-      defaultFilePath
+      defaultFilePath,
     ];
     // Remove all editor tabs before populating with the ones from the query string.
     dispatch(
       WorkspaceActions.removeEditorTabsForDirectory(
         workspaceLocation,
-        WORKSPACE_BASE_PATHS[workspaceLocation]
-      )
+        WORKSPACE_BASE_PATHS[workspaceLocation],
+      ),
     );
     // Add editor tabs from the query string.
     editorTabFilePaths.forEach(filePath =>
       // Fall back on the empty string if the file contents do not exist.
-      dispatch(WorkspaceActions.addEditorTab(workspaceLocation, filePath, files[filePath] ?? ''))
+      dispatch(WorkspaceActions.addEditorTab(workspaceLocation, filePath, files[filePath] ?? '')),
     );
 
     // By default, use the first editor tab.
@@ -193,7 +200,7 @@ export async function handleHash(
   }
 }
 
-const Playground: React.FC<PlaygroundProps> = props => {
+function Playground(props: PlaygroundProps) {
   const { isSicpEditor } = props;
   const workspaceLocation: WorkspaceLocation = isSicpEditor ? 'sicp' : 'playground';
   const { isMobileBreakpoint } = useResponsive();
@@ -213,7 +220,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sessionDetails,
     stepLimit,
     execTime,
-    isEditorAutorun,
     isRunning,
     isDebugging,
     output,
@@ -221,20 +227,19 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sharedbConnected,
     usingSubst,
     usingCse,
-    updateCse,
     isFolderModeEnabled,
     activeEditorTabIndex,
-    context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
+    context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant },
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
   const { queryString, shortURL, persistenceFile, githubSaveInfo } = useTypedSelector(
-    state => state.playground
+    state => state.playground,
   );
   const {
     sourceChapter: courseSourceChapter,
     sourceVariant: courseSourceVariant,
     googleUser: persistenceUser,
-    githubOctokitObject
+    githubOctokitObject,
   } = useTypedSelector(state => state.session);
 
   const dispatch = useDispatch();
@@ -245,7 +250,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handleSetEditorBreakpoints,
     handleReplEval,
     handleReplOutputClear,
-    handleUsingSubst
+    handleUsingSubst,
   } = useMemo(() => {
     return {
       handleChangeExecTime: (execTime: number) =>
@@ -254,16 +259,16 @@ const Playground: React.FC<PlaygroundProps> = props => {
         dispatch(WorkspaceActions.chapterSelect(chapter, variant, workspaceLocation)),
       handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
         dispatch(
-          WorkspaceActions.updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)
+          WorkspaceActions.updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue),
         ),
       handleSetEditorBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
         dispatch(
-          WorkspaceActions.setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)
+          WorkspaceActions.setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints),
         ),
       handleReplEval: () => dispatch(WorkspaceActions.evalRepl(workspaceLocation)),
       handleReplOutputClear: () => dispatch(WorkspaceActions.clearReplOutput(workspaceLocation)),
       handleUsingSubst: (usingSubst: boolean) =>
-        dispatch(WorkspaceActions.toggleUsingSubst(usingSubst, workspaceLocation))
+        dispatch(WorkspaceActions.toggleUsingSubst(usingSubst, workspaceLocation)),
     };
   }, [dispatch, workspaceLocation]);
 
@@ -277,19 +282,19 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [lastEdit, setLastEdit] = useState(new Date());
   const { alerts, selectedTab, setSelectedTab } = useSideContent(
     workspaceLocation,
-    shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction
+    shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction,
   );
   const showStepperPrompt = alerts.includes(SideContentType.substVisualizer);
   const hasAnyBreakpoints = useMemo(
     () => editorTabs.some(tab => tab.breakpoints.some(Boolean)),
-    [editorTabs]
+    [editorTabs],
   );
   const [sessionId, setSessionId] = useState(() =>
     initSession('playground', {
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorValue: editorTabs[0]?.value ?? '',
-      chapter: playgroundSourceChapter
-    })
+      chapter: playgroundSourceChapter,
+    }),
   );
   const [users, setUsers] = useState<Record<string, SharedbAceUser>>({});
 
@@ -297,7 +302,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [isGreen, setIsGreen] = useState(false);
   const playgroundHotkeyBindings: HotkeyItem[] = useMemo(
     () => [['ctrl+alt+h', () => setIsGreen(v => !v)]],
-    [setIsGreen]
+    [setIsGreen],
   );
   useHotkeys(playgroundHotkeyBindings);
 
@@ -308,7 +313,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const remoteExecutionTab: SideContentTab = useMemo(
     () => makeRemoteExecutionTabFrom(deviceSecret, setDeviceSecret),
-    [deviceSecret]
+    [deviceSecret],
   );
 
   const sessionManagementTab: SideContentTab = useMemo(() => {
@@ -320,7 +325,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   // this is still used by remote execution (EV3)
   // specifically, for the editor Ctrl+B to work
   const externalLibraryName = useTypedSelector(
-    state => state.workspaces.playground.externalLibrary
+    state => state.workspaces.playground.externalLibrary,
   );
 
   useEffect(() => {
@@ -329,8 +334,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       initSession('playground', {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         editorValue: editorTabs[0]?.value ?? '',
-        chapter: playgroundSourceChapter
-      })
+        chapter: playgroundSourceChapter,
+      }),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorSessionId]);
@@ -359,7 +364,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       { handleChangeExecTime, handleChapterSelect },
       workspaceLocation,
       dispatch,
-      fileSystem
+      fileSystem,
     );
   }, [
     dispatch,
@@ -369,14 +374,16 @@ const Playground: React.FC<PlaygroundProps> = props => {
     courseSourceVariant,
     workspaceLocation,
     handleChapterSelect,
-    handleChangeExecTime
+    handleChangeExecTime,
   ]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   useEffect(() => {
-    if (!selectedTab) return;
+    if (!selectedTab) {
+      return;
+    }
 
     if (!isVscode && isMobileBreakpoint && desktopOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.mobileEditor);
@@ -385,12 +392,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   }, [isMobileBreakpoint, isVscode, selectedTab, setSelectedTab]);
 
-  const onEditorValueChange = React.useCallback(
+  const onEditorValueChange = useCallback(
     (editorTabIndex: number, newEditorValue: string) => {
       setLastEdit(new Date());
       handleEditorValueChange(editorTabIndex, newEditorValue);
     },
-    [handleEditorValueChange]
+    [handleEditorValueChange],
   );
 
   useEffect(() => {
@@ -408,8 +415,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         playgroundSourceChapter,
         '',
         initialCode,
-        breakpoints
-      )
+        breakpoints,
+      ),
     );
     // We don't want to re-send this message even when the variables change
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -419,15 +426,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
     (newInput: Input) => {
       log(sessionId, newInput);
     },
-    [sessionId]
+    [sessionId],
   );
 
   const autorunButtonHandlers = useMemo(() => {
     return {
       handleEditorEval: () => {
-        if (updateCse) {
-          CseMachine.clearCachedLayouts();
-        }
+        CseMachine.clearCachedLayouts();
+
         // reset stepper before evaluation
         dispatch(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
         dispatch(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
@@ -441,26 +447,20 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
         dispatch(WorkspaceActions.evalEditor(workspaceLocation));
         CseMachine.setClearDeadFrames(false);
-        if (CseMachine.getCenterAlignment()) {
-          CseMachine.toggleCenterAlignment();
-        }
       },
       handleInterruptEval: () =>
         dispatch(InterpreterActions.beginInterruptExecution(workspaceLocation)),
-      handleToggleEditorAutorun: () =>
-        dispatch(WorkspaceActions.toggleEditorAutorun(workspaceLocation)),
       handleDebuggerPause: () => dispatch(InterpreterActions.beginDebuggerPause(workspaceLocation)),
       handleDebuggerReset: () => dispatch(InterpreterActions.debuggerReset(workspaceLocation)),
-      handleDebuggerResume: () => dispatch(InterpreterActions.debuggerResume(workspaceLocation))
+      handleDebuggerResume: () => dispatch(InterpreterActions.debuggerResume(workspaceLocation)),
     };
   }, [
     dispatch,
     workspaceLocation,
-    updateCse,
     playgroundSourceChapter,
     selectedTab,
     hasAnyBreakpoints,
-    handleUsingSubst
+    handleUsingSubst,
   ]);
 
   const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
@@ -470,10 +470,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       <ControlBarAutorunButtons
         isEntrypointFileDefined={activeEditorTabIndex !== null}
         isDebugging={isDebugging}
-        isEditorAutorun={isEditorAutorun}
         isRunning={isRunning}
         key="autorun"
-        autorunDisabled={usingRemoteExecution}
         sourceChapter={languageConfig.chapter}
         // Disable pause for non-Source languages since they cannot be paused
         pauseDisabled={usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)}
@@ -483,11 +481,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }, [
     activeEditorTabIndex,
     isDebugging,
-    isEditorAutorun,
     isRunning,
     languageConfig.chapter,
     autorunButtonHandlers,
-    usingRemoteExecution
+    usingRemoteExecution,
   ]);
 
   const chapterSelectHandler = useCallback(
@@ -504,7 +501,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       const input: Input = {
         time: Date.now(),
         type: 'chapterSelect',
-        data: chapter
+        data: chapter,
       };
 
       pushLog(input);
@@ -522,8 +519,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       pushLog,
       handleReplOutputClear,
       handleUsingSubst,
-      handleChapterSelect
-    ]
+      handleChapterSelect,
+    ],
   );
 
   const chapterSelectButton = useMemo(
@@ -534,7 +531,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
         sourceChapter={languageConfig.chapter}
         sourceVariant={languageConfig.variant}
         key="chapter"
-        disabled={usingRemoteExecution}
+        // While the Stepper tab is active the evaluator is pinned to the (hidden) stepper evaluator,
+        // so disable the dropdown: changing evaluator here would fight the tab-to-evaluator sync.
+        // The 'stepper' tab id only exists under the conductor, so this never disables Source's select.
+        disabled={usingRemoteExecution || selectedTab === CONDUCTOR_STEPPER_TAB_ID}
       />
     ),
     [
@@ -542,8 +542,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
       isFolderModeEnabled,
       languageConfig.chapter,
       languageConfig.variant,
-      usingRemoteExecution
-    ]
+      usingRemoteExecution,
+      selectedTab,
+    ],
   );
 
   const clearButton = useMemo(
@@ -551,7 +552,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       selectedTab === SideContentType.substVisualizer ? null : (
         <ControlBarClearButton handleReplOutputClear={handleReplOutputClear} key="clear_repl" />
       ),
-    [handleReplOutputClear, selectedTab]
+    [handleReplOutputClear, selectedTab],
   );
 
   const evalButton = useMemo(
@@ -563,7 +564,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           key="eval_repl"
         />
       ),
-    [handleReplEval, isRunning, selectedTab]
+    [handleReplEval, isRunning, selectedTab],
   );
 
   // Compute this here to avoid re-rendering the button every keystroke
@@ -612,7 +613,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     githubOctokitObject.octokit,
     githubPersistenceIsDirty,
     githubSaveInfo,
-    isFolderModeEnabled
+    isFolderModeEnabled,
   ]);
 
   const executionTime = useMemo(
@@ -623,7 +624,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         key="execution_time"
       />
     ),
-    [execTime, handleChangeExecTime]
+    [execTime, handleChangeExecTime],
   );
 
   const stepperStepLimit = useMemo(
@@ -650,24 +651,24 @@ const Playground: React.FC<PlaygroundProps> = props => {
         key="step_limit"
       />
     ),
-    [dispatch, stepLimit, usingSubst, usingCse, workspaceLocation]
+    [dispatch, stepLimit, usingSubst, usingCse, workspaceLocation],
   );
 
   const getEditorValue = useCallback(
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     () => store.getState().workspaces[workspaceLocation].editorTabs[0].value,
-    [store, workspaceLocation]
+    [store, workspaceLocation],
   );
 
   const handleSetEditorSessionId = useCallback(
     (id: string) => dispatch(setEditorSessionId(workspaceLocation, id)),
-    [dispatch, workspaceLocation]
+    [dispatch, workspaceLocation],
   );
 
   const handleSetSessionDetails = useCallback(
     (details: { docId: string; readOnly: boolean; owner: boolean } | null) =>
       dispatch(setSessionDetails(workspaceLocation, details)),
-    [dispatch, workspaceLocation]
+    [dispatch, workspaceLocation],
   );
 
   const sessionButtons = useMemo(
@@ -688,8 +689,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       getEditorValue,
       handleSetEditorSessionId,
       handleSetSessionDetails,
-      sharedbConnected
-    ]
+      sharedbConnected,
+    ],
   );
 
   const shareButton = useMemo(() => {
@@ -723,7 +724,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     isFolderModeEnabled,
     persistenceFile,
     editorSessionId,
-    workspaceLocation
+    workspaceLocation,
   ]);
 
   useEffect(() => {
@@ -736,12 +737,127 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }, [dispatch, playgroundSourceChapter, playgroundSourceVariant]);
 
   const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer;
-  const shouldShowCseMachine = languageConfig.supports.cseMachine;
+  const hasCseSnapshots = useTypedSelector(
+    state => state.workspaces[workspaceLocation].cseSnapshots !== null,
+  );
+  const conductorEvaluatorSupportsCse = useTypedSelector(state => {
+    if (!selectConductorEnable(state)) {
+      return false;
+    }
+    const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
+    if (!selectedLanguageId || !selectedEvaluatorId) {
+      return false;
+    }
+    const lang = languageMap[selectedLanguageId];
+    const evaluator = lang?.evaluators.find(e => e.id === selectedEvaluatorId);
+    return (evaluator?.capabilities as string[] | undefined)?.includes('cse') ?? false;
+  });
+  const conductorLanguageActive = useTypedSelector(
+    state => selectConductorEnable(state) && !!state.languageDirectory.selectedLanguageId,
+  );
+  // For conductor languages: show CSE tab proactively when the evaluator declares "cse"
+  // capability, or reactively once snapshots arrive. For Source languages use the usual flag.
+  const shouldShowCseMachine = conductorLanguageActive
+    ? conductorEvaluatorSupportsCse || hasCseSnapshots
+    : languageConfig.supports.cseMachine || hasCseSnapshots;
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
+  // When the Conductor framework is enabled, the stepper (and other tools) are provided by web
+  // plugins loaded dynamically, so the legacy in-frontend tabs are hidden in favour of plugin tabs.
+  const conductorEnabled = useTypedSelector(selectConductorEnable);
+
+  // Stepper tab wiring (conductor only). The Stepper tab is offered for any language that has a
+  // stepper-capability evaluator; opening the tab selects that (dropdown-hidden) evaluator so a Run
+  // produces steps, and leaving it restores the language's default evaluator. See the effect below.
+  const selectedLanguageId = useTypedSelector(state => state.languageDirectory.selectedLanguageId);
+  const selectedEvaluatorId = useTypedSelector(
+    state => state.languageDirectory.selectedEvaluatorId,
+  );
+  const stepperEvaluatorId = useTypedSelector(state => {
+    if (!selectConductorEnable(state)) {
+      return null;
+    }
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    const lang = langId ? languageMap[langId] : undefined;
+    const evaluator = lang?.evaluators.find(e =>
+      (e.capabilities as string[] | undefined)?.includes(STEPPER_EVALUATOR_CAPABILITY),
+    );
+    return evaluator?.id ?? null;
+  });
+  const defaultEvaluatorId = useTypedSelector(state => {
+    if (!selectConductorEnable(state)) {
+      return null;
+    }
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    const lang = langId ? languageMap[langId] : undefined;
+    const evaluator = lang?.evaluators.find(
+      e => !(e.capabilities as string[] | undefined)?.includes(STEPPER_EVALUATOR_CAPABILITY),
+    );
+    return evaluator?.id ?? null;
+  });
+
+  // Keep the selected evaluator in sync with the Stepper tab. Opening the tab selects the stepper
+  // evaluator (so a Run produces steps); leaving it restores the default. Each branch dispatches only
+  // on a real mismatch, so this converges rather than looping.
+  useEffect(() => {
+    if (!conductorEnabled) {
+      return;
+    }
+    const onStepperTab = selectedTab === CONDUCTOR_STEPPER_TAB_ID;
+    if (onStepperTab) {
+      if (stepperEvaluatorId && selectedEvaluatorId !== stepperEvaluatorId) {
+        dispatch(LanguageDirectoryActions.setSelectedEvaluator(stepperEvaluatorId));
+      }
+    } else if (selectedEvaluatorId === stepperEvaluatorId && defaultEvaluatorId) {
+      dispatch(LanguageDirectoryActions.setSelectedEvaluator(defaultEvaluatorId));
+    }
+  }, [
+    conductorEnabled,
+    stepperEvaluatorId,
+    defaultEvaluatorId,
+    selectedEvaluatorId,
+    selectedTab,
+    dispatch,
+  ]);
+
+  // Reset to the Introduction tab whenever the Conductor directory's selected language changes (e.g.
+  // Python §1 ⇌ §2). Not stepper-specific: any tab tied to the previous language — a plugin-provided
+  // one, or one only some languages offer, like the Stepper — may not exist or apply to the new one,
+  // so unconditionally falling back avoids stranding the user on a tab that no longer makes sense.
+  // (The legacy Source/full-JS/Java/C chapter-and-variant picker already does this: its `chapterSelect`
+  // saga dispatches `resetSideContent` whenever the chapter or variant actually changes.)
+  const previousSelectedLanguageIdRef = useRef(selectedLanguageId);
+  useEffect(() => {
+    // The directory auto-selects the first language on startup (see `LanguageDirectorySaga`); that
+    // transition away from "no language yet" is startup settling, not a user-initiated switch.
+    const previousSelectedLanguageId = previousSelectedLanguageIdRef.current;
+    previousSelectedLanguageIdRef.current = selectedLanguageId;
+    if (previousSelectedLanguageId !== null && previousSelectedLanguageId !== selectedLanguageId) {
+      setSelectedTab(SideContentType.introduction);
+    }
+  }, [selectedLanguageId, setSelectedTab]);
+
+  const conductorWelcomeText = useTypedSelector(state => {
+    if (!selectConductorEnable(state)) {
+      return null;
+    }
+    const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
+    if (!selectedLanguageId) {
+      return null;
+    }
+    const lang = languageMap[selectedLanguageId];
+    if (!lang?.welcome) {
+      return null;
+    }
+    const evaluator = selectedEvaluatorId
+      ? lang.evaluators.find(e => e.id === selectedEvaluatorId)
+      : undefined;
+    return evaluator?.welcome ? `${lang.welcome}\n\n${evaluator.welcome}` : lang.welcome;
+  });
 
   const playgroundIntroductionTab: SideContentTab = useMemo(
-    () => makeIntroductionTabFrom(generateLanguageIntroduction(languageConfig)),
-    [languageConfig]
+    () =>
+      makeIntroductionTabFrom(conductorWelcomeText ?? generateLanguageIntroduction(languageConfig)),
+    [conductorWelcomeText, languageConfig],
   );
   const tabs = useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
@@ -754,8 +870,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
           makeHtmlDisplayTabFrom(
             output[0] as ResultOutput,
             errorMsg => dispatch(WorkspaceActions.addHtmlConsoleError(errorMsg, workspaceLocation)),
-            workspaceLocation
-          )
+            workspaceLocation,
+          ),
         );
       }
       return tabs;
@@ -763,7 +879,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
     if (currentLang === Chapter.FULL_JAVA && process.env.NODE_ENV === 'development') {
       tabs.push(
-        makeUploadTabFrom(files => dispatch(WorkspaceActions.uploadFiles(files, workspaceLocation)))
+        makeUploadTabFrom(files =>
+          dispatch(WorkspaceActions.uploadFiles(files, workspaceLocation)),
+        ),
       );
     }
 
@@ -775,9 +893,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
       if (shouldShowCseMachine) {
         tabs.push(makeCseMachineTabFrom(workspaceLocation));
       }
-      if (shouldShowSubstVisualizer) {
+      // The legacy stepper tab is only shown with the old (non-conductor) pipeline.
+      if (shouldShowSubstVisualizer && !conductorEnabled) {
         tabs.push(makeSubstVisualizerTabFrom(workspaceLocation, output));
       }
+      // Under the conductor, tools are contributed by dynamically-loaded web plugins; their tabs are
+      // injected automatically by SideContentProvider (via the shared tab service), not here.
     }
 
     if (!isSicpEditor && !Constants.playgroundOnly) {
@@ -799,13 +920,23 @@ const Playground: React.FC<PlaygroundProps> = props => {
     shouldShowDataVisualizer,
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
+    conductorEnabled,
     remoteExecutionTab,
     editorSessionId,
-    sessionManagementTab
+    sessionManagementTab,
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs].filter(({ id }) => !(id && desktopOnlyTabIds.includes(id)));
+
+  // For a conductor language that offers stepping, keep a placeholder Stepper tab visible so it can be
+  // opened before its evaluator loads. It sits after the dynamic tabs so the stepper plugin's live tab
+  // (registered once the evaluator is selected) lands in the same slot and de-duplicates the
+  // placeholder away (see SideContentProvider), avoiding both a disappearing tab and a duplicate.
+  const afterDynamicTabs: SideContentTab[] = useMemo(
+    () => (conductorEnabled && stepperEvaluatorId ? [makeConductorStepperPlaceholderTab()] : []),
+    [conductorEnabled, stepperEvaluatorId],
+  );
 
   const onLoadMethod = useCallback(
     (editor: Ace.Editor) => {
@@ -816,7 +947,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
       editor.renderer.on('afterRender', addFold);
     },
-    [props.prependLength]
+    [props.prependLength],
   );
 
   const onChangeMethod = useCallback(
@@ -824,14 +955,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
       const input: Input = {
         time: Date.now(),
         type: 'codeDelta',
-        data: delta
+        data: delta,
       };
 
       pushLog(input);
       dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
       dispatch(WorkspaceActions.setEditorHighlightedLines(workspaceLocation, 0, []));
     },
-    [pushLog, dispatch, workspaceLocation]
+    [pushLog, dispatch, workspaceLocation],
   );
 
   const onCursorChangeMethod = useCallback(
@@ -839,12 +970,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
       const input: Input = {
         time: Date.now(),
         type: 'cursorPositionChange',
-        data: selection.getCursor()
+        data: selection.getCursor(),
       };
 
       pushLog(input);
     },
-    [pushLog]
+    [pushLog],
   );
 
   const onSelectionChangeMethod = useCallback(
@@ -855,13 +986,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
         const input: Input = {
           time: Date.now(),
           type: 'selectionRangeData',
-          data: { range, isBackwards }
+          data: { range, isBackwards },
         };
 
         pushLog(input);
       }
     },
-    [pushLog]
+    [pushLog],
   );
 
   const handleEditorUpdateBreakpoints = useCallback(
@@ -869,7 +1000,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       const hasBreakpointsInTab = breakpoints.some(Boolean);
 
       const hasAnyBreakpointsAfterUpdate = editorTabs.some((tab, index) =>
-        index === editorTabIndex ? hasBreakpointsInTab : tab.breakpoints.some(Boolean)
+        index === editorTabIndex ? hasBreakpointsInTab : tab.breakpoints.some(Boolean),
       );
 
       if (hasAnyBreakpointsAfterUpdate && playgroundSourceChapter <= Chapter.SOURCE_2) {
@@ -892,8 +1023,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleSetEditorBreakpoints,
       handleReplOutputClear,
       handleUsingSubst,
-      playgroundSourceChapter
-    ]
+      playgroundSourceChapter,
+    ],
   );
 
   const replDisabled = !languageConfig.supports.repl || usingRemoteExecution;
@@ -910,16 +1041,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
         dispatch(setSharedbConnected(workspaceLocation, connected)),
       setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
         dispatch(
-          WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)
+          WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex),
         ),
       removeEditorTabByIndex: (editorTabIndex: number) =>
-        dispatch(WorkspaceActions.removeEditorTab(workspaceLocation, editorTabIndex))
+        dispatch(WorkspaceActions.removeEditorTab(workspaceLocation, editorTabIndex)),
     };
   }, [dispatch, workspaceLocation]);
   const editorContainerProps: NormalEditorContainerProps = {
     editorSessionId,
     sessionDetails,
-    isEditorAutorun,
     editorVariant: 'normal',
     baseFilePath: WORKSPACE_BASE_PATHS[workspaceLocation],
     isFolderModeEnabled,
@@ -942,7 +1072,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handleEditorValueChange: onEditorValueChange,
     handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
     setUsers,
-    updateLanguageCallback: chapterSelectHandler
+    updateLanguageCallback: chapterSelectHandler,
   };
 
   const replHandlers = useMemo(() => {
@@ -952,7 +1082,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleBrowseHistoryUp: () =>
         dispatch(WorkspaceActions.browseReplHistoryUp(workspaceLocation)),
       handleReplValueChange: (newValue: string) =>
-        dispatch(WorkspaceActions.updateReplValue(newValue, workspaceLocation))
+        dispatch(WorkspaceActions.updateReplValue(newValue, workspaceLocation)),
     };
   }, [dispatch, workspaceLocation]);
   const replProps = {
@@ -968,10 +1098,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sourceVariant: languageConfig.variant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
     hidden:
-      selectedTab === SideContentType.substVisualizer || selectedTab === SideContentType.cseMachine,
+      selectedTab === SideContentType.substVisualizer ||
+      selectedTab === SideContentType.cseMachine ||
+      // When the conductor stepper plugin tab is active, also hide the REPL (matches legacy behaviour)
+      (conductorEnabled && (selectedTab as string) === CONDUCTOR_STEPPER_TAB_ID),
     inputHidden: replDisabled,
     replButtons: [replDisabled ? null : evalButton, clearButton],
-    disableScrolling: isSicpEditor
+    disableScrolling: isSicpEditor,
   };
 
   const sideBarProps: { tabs: SideBarTab[] } = useMemo(() => {
@@ -994,11 +1127,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
                   />
                 ),
                 iconName: IconNames.FOLDER_CLOSE,
-                id: SideContentType.folder
-              }
+                id: SideContentType.folder,
+              },
             ]
-          : [])
-      ]
+          : []),
+      ],
     };
   }, [isFolderModeEnabled, workspaceLocation]);
 
@@ -1016,13 +1149,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
           ? stepperStepLimit
           : isSourceLanguage(languageConfig.chapter)
             ? executionTime
-            : null
-      ]
+            : null,
+      ],
     },
     editorContainerProps: editorContainerProps,
     handleSideContentHeightChange: useCallback(
       change => dispatch(changeSideContentHeight(change, workspaceLocation)),
-      [dispatch, workspaceLocation]
+      [dispatch, workspaceLocation],
     ),
     replProps: replProps,
     sideBarProps: sideBarProps,
@@ -1030,12 +1163,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
       selectedTabId: selectedTab,
       tabs: {
         beforeDynamicTabs: tabs,
-        afterDynamicTabs: []
+        afterDynamicTabs,
       },
-      workspaceLocation
+      workspaceLocation,
     },
     sideContentIsResizeable:
-      selectedTab !== SideContentType.substVisualizer && selectedTab !== SideContentType.cseMachine
+      selectedTab !== SideContentType.substVisualizer &&
+      selectedTab !== SideContentType.cseMachine &&
+      // When the conductor stepper plugin tab is active, also disable resizing (matches legacy behaviour)
+      !(conductorEnabled && (selectedTab as string) === CONDUCTOR_STEPPER_TAB_ID),
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {
@@ -1051,17 +1187,17 @@ const Playground: React.FC<PlaygroundProps> = props => {
           isSicpEditor ? null : sessionButtons,
           languageConfig.supports.multiFile ? toggleFolderModeButton : null,
           persistenceButtons,
-          githubButtons
-        ]
+          githubButtons,
+        ],
       },
       selectedTabId: selectedTab,
       onChange: setSelectedTab,
       tabs: {
         beforeDynamicTabs: mobileTabs,
-        afterDynamicTabs: []
+        afterDynamicTabs,
       },
-      workspaceLocation: workspaceLocation
-    }
+      workspaceLocation: workspaceLocation,
+    },
   };
 
   return !isVscode && isMobileBreakpoint ? (
@@ -1073,11 +1209,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       <Workspace {...workspaceProps} />
     </div>
   );
-};
+}
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = Playground;
-Component.displayName = 'Playground';
 
 export default Playground;

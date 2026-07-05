@@ -1,15 +1,15 @@
 import 'src/styles/Leaderboard.scss';
 
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
-const LeaderboardDropdown: React.FC = () => {
+function LeaderboardDropdown() {
   const enableOverallLeaderboard = useTypedSelector(
-    store => store.session.enableOverallLeaderboard
+    store => store.session.enableOverallLeaderboard,
   );
   const enableContestLeaderboard = useTypedSelector(
-    store => store.session.enableContestLeaderboard
+    store => store.session.enableContestLeaderboard,
   );
   const crid = useTypedSelector(store => store.session.courseId);
   const baseLink = `/courses/${crid}/leaderboard`;
@@ -40,6 +40,6 @@ const LeaderboardDropdown: React.FC = () => {
         ))}
     </select>
   );
-};
+}
 
 export default LeaderboardDropdown;

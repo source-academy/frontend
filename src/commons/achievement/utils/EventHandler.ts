@@ -1,10 +1,10 @@
 import {
-  AchievementGoal,
-  AchievementItem,
-  EventMeta,
+  type AchievementGoal,
+  type AchievementItem,
+  type EventMeta,
   EventType,
-  GoalProgress,
-  GoalType
+  type GoalProgress,
+  GoalType,
 } from '../../../features/achievement/AchievementTypes';
 import { showSuccessMessage } from '../../utils/notifications/NotificationsHelper';
 import AchievementInferencer from './AchievementInferencer';

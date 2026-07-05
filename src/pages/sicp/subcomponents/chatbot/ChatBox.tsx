@@ -1,11 +1,11 @@
 import { Button } from '@blueprintjs/core';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useTokens } from 'src/commons/utils/Hooks';
 import { continueChat, initChat } from 'src/features/sicp/chatCompletion/api';
-import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
-import classes from 'src/styles/Chatbot.module.scss';
+import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { v4 as uuid } from 'uuid';
 
+import classes from './Chatbot.module.css';
 import ChatbotCodeSnippet from './ChatbotCodeSnippet';
 
 type Props = {
@@ -20,27 +20,27 @@ type Props = {
 const createInitialMessage = (): ChatMessage => ({
   id: uuid(),
   content: 'Ask me something about this paragraph!',
-  role: 'assistant'
+  role: 'assistant',
 });
 
 const createErrorMessage = (): ChatMessage => ({
   id: uuid(),
   content: 'Sorry, I am down with a cold, please try again later.',
-  role: 'assistant'
+  role: 'assistant',
 });
 
 const scrollToBottom = (ref: React.RefObject<HTMLDivElement | null>) => {
   ref.current?.scrollTo({ top: ref.current?.scrollHeight });
 };
 
-const ChatBox: React.FC<Props> = ({
+function ChatBox({
   getSection,
   getText,
   activeSnippetId,
   setActiveSnippetId,
   isExpanded,
-  toggleExpanded
-}) => {
+  toggleExpanded,
+}: Props) {
   const chatRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(() => [createInitialMessage()]);
@@ -65,7 +65,6 @@ const ChatBox: React.FC<Props> = ({
     const currentSection = getSection();
     const currentText = getText();
 
-    // No chatId needed - backend identifies conversation by user
     continueChat(tokens, userInput, currentSection, currentText)
       .then(resp => {
         setMessages(prev => [...prev, { id: uuid(), role: 'assistant', content: resp.response }]);
@@ -82,30 +81,31 @@ const ChatBox: React.FC<Props> = ({
         sendMessage();
       }
     },
-    [isLoading, sendMessage]
+    [isLoading, sendMessage],
   );
 
   const resetChat = useCallback(() => {
-    initChat(tokens).then(resp => {
-      const conversationMessages = resp.messages;
-      const maxMessageSize = resp.maxContentSize;
-      // Load all previous messages from the conversation, or use initial if empty
-      if (conversationMessages && conversationMessages.length > 0) {
-        // Ensure all messages have IDs (backend may not provide them)
-        const messagesWithIds = conversationMessages.map(msg => ({
-          ...msg,
-          id: msg.id || uuid()
-        }));
-        setMessages(messagesWithIds);
-      } else {
+    initChat(tokens)
+      .then(resp => {
+        const conversationMessages = resp.messages;
+        const maxMessageSize = resp.maxContentSize;
+        if (conversationMessages && conversationMessages.length > 0) {
+          const messagesWithIds = conversationMessages.map(msg => ({
+            ...msg,
+            id: msg.id || uuid(),
+          }));
+          setMessages(messagesWithIds);
+        } else {
+          setMessages([createInitialMessage()]);
+        }
+        setMaxContentSize(maxMessageSize);
+        setUserInput('');
+      })
+      .catch(() => {
         setMessages([createInitialMessage()]);
-      }
-      setMaxContentSize(maxMessageSize);
-      setUserInput('');
-    });
+      });
   }, [tokens]);
 
-  // Run once when component is mounted
   useEffect(() => {
     resetChat();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -169,7 +169,7 @@ const ChatBox: React.FC<Props> = ({
       </div>
     </div>
   );
-};
+}
 
 // Message renderer component that can render code blocks with interactive snippets
 type MessageRendererProps = {
@@ -178,11 +178,7 @@ type MessageRendererProps = {
   setActiveSnippetId: (id: string) => void;
 };
 
-const MessageRenderer: React.FC<MessageRendererProps> = ({
-  message,
-  activeSnippetId,
-  setActiveSnippetId
-}) => {
+function MessageRenderer({ message, activeSnippetId, setActiveSnippetId }: MessageRendererProps) {
   const content = message.content;
   const messageId = message.id;
 
@@ -200,12 +196,12 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
       parts.push(
         <div key={`${messageId}-text-${lastIndex}`} style={{ marginBottom: '0.5em' }}>
           {text.split('\n').map((line, i) => (
-            <React.Fragment key={i}>
+            <Fragment key={i}>
               {line}
               <br />
-            </React.Fragment>
+            </Fragment>
           ))}
-        </div>
+        </div>,
       );
     }
 
@@ -225,7 +221,7 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
           activeSnippetId={activeSnippetId}
           setActiveSnippet={setActiveSnippetId}
           language={lang}
-        />
+        />,
       );
     } else {
       // For other languages, just show syntax highlighting without run capability
@@ -236,7 +232,7 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
           style={{
             margin: '0.5em 0',
             borderRadius: '4px',
-            overflow: 'hidden'
+            overflow: 'hidden',
           }}
         >
           <ChatbotCodeSnippet
@@ -247,7 +243,7 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
             setActiveSnippet={setActiveSnippetId}
             language={lang}
           />
-        </div>
+        </div>,
       );
     }
 
@@ -259,16 +255,16 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
     parts.push(
       <div key={`${messageId}-text-end`} style={{ marginBottom: '0.5em' }}>
         {text.split('\n').map((line, i) => (
-          <React.Fragment key={i}>
+          <Fragment key={i}>
             {line}
             <br />
-          </React.Fragment>
+          </Fragment>
         ))}
-      </div>
+      </div>,
     );
   }
 
   return parts;
-};
+}
 
 export default ChatBox;

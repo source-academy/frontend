@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback } from 'react';
 
 import SideContentMarkdownEditor from './SideContentMarkdownEditor';
 
@@ -9,7 +9,7 @@ type Props = {
   setTaskDescriptions: (newList: any[]) => void;
 };
 
-const SideContentTaskEditor: React.FC<Props> = props => {
+function SideContentTaskEditor(props: Props) {
   const taskIndex = props.currentTaskNumber - 1;
   const taskDescriptions = props.taskDescriptions;
   const setTaskDescriptions = props.setTaskDescriptions;
@@ -21,7 +21,7 @@ const SideContentTaskEditor: React.FC<Props> = props => {
     ? 'Welcome to Mission Mode! This is where the Task Briefing for each question will appear!'
     : taskDescriptions[taskIndex];
 
-  const taskBriefingSetter = React.useCallback(
+  const taskBriefingSetter = useCallback(
     (newDescription: string) => {
       if (indexOutOfRange) {
         return;
@@ -31,7 +31,7 @@ const SideContentTaskEditor: React.FC<Props> = props => {
       newTaskDescriptions[taskIndex] = newDescription;
       setTaskDescriptions(newTaskDescriptions);
     },
-    [setTaskDescriptions, taskDescriptions, taskIndex, indexOutOfRange]
+    [setTaskDescriptions, taskDescriptions, taskIndex, indexOutOfRange],
   );
 
   return (
@@ -43,6 +43,6 @@ const SideContentTaskEditor: React.FC<Props> = props => {
       />
     </div>
   );
-};
+}
 
 export default SideContentTaskEditor;

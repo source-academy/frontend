@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 type Props = {
   canvas: HTMLCanvasElement;
@@ -8,7 +8,7 @@ type Props = {
  * Takes the output of the rendered graphics (in a hidden canvas tag under <body>)
  * and makes it into a new <canvas> output for viewing.
  */
-const SideContentCanvasOutput: React.FC<Props> = ({ canvas }) => {
+function SideContentCanvasOutput({ canvas }: Props) {
   const parentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -18,6 +18,6 @@ const SideContentCanvasOutput: React.FC<Props> = ({ canvas }) => {
   }, []);
 
   return <div ref={parentRef} className="canvas-container" />;
-};
+}
 
 export default SideContentCanvasOutput;

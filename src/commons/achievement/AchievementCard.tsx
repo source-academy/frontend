@@ -1,6 +1,6 @@
 import { Icon, Intent, ProgressBar } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { AchievementContext, handleGlow } from 'src/features/achievement/AchievementConstants';
 
 import { AchievementStatus } from '../../features/achievement/AchievementTypes';
@@ -15,13 +15,13 @@ type Props = {
   toggleDropdown?: () => void;
 };
 
-const AchievementCard: React.FC<Props> = ({
+function AchievementCard({
   uuid,
   focusState,
   isDropdownOpen,
   shouldRender,
-  toggleDropdown
-}) => {
+  toggleDropdown,
+}: Props) {
   const inferencer = useContext(AchievementContext);
 
   const [focusUuid, setFocusUuid] = focusState;
@@ -44,7 +44,7 @@ const AchievementCard: React.FC<Props> = ({
       style={{
         ...handleGlow(uuid, focusUuid),
         opacity: shouldRender ? '100%' : '20%',
-        background: `url(${cardBackground}) center/cover`
+        background: `url(${cardBackground}) center/cover`,
       }}
     >
       <div className="dropdown-button">
@@ -76,6 +76,6 @@ const AchievementCard: React.FC<Props> = ({
       </div>
     </div>
   );
-};
+}
 
 export default AchievementCard;

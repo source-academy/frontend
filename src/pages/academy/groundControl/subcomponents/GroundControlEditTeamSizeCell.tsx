@@ -1,21 +1,16 @@
 import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 
-import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 
-type Props = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   onTeamSizeChange: (id: number, newTeamSize: number) => void;
-};
-
-type StateProps = {
   data: AssessmentOverview;
 };
 
-const EditTeamSizeCell: React.FC<Props> = ({ data, onTeamSizeChange }) => {
+function EditTeamSizeCell({ data, onTeamSizeChange }: Props) {
   const minTeamSize = 1; // Corresponds to an individual assessment
   const teamSize = data.maxTeamSize;
 
@@ -26,7 +21,7 @@ const EditTeamSizeCell: React.FC<Props> = ({ data, onTeamSizeChange }) => {
       }
       onTeamSizeChange(data.id, size);
     },
-    [data.id, teamSize, onTeamSizeChange]
+    [data.id, teamSize, onTeamSizeChange],
   );
 
   const handleIncrement = () => {
@@ -53,6 +48,6 @@ const EditTeamSizeCell: React.FC<Props> = ({ data, onTeamSizeChange }) => {
       <Button variant="minimal" icon={IconNames.PLUS} onClick={handleIncrement} />
     </GradingFlex>
   );
-};
+}
 
 export default EditTeamSizeCell;

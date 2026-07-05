@@ -1,13 +1,13 @@
 import { Card, Elevation } from '@blueprintjs/core';
-import React, { type JSX, useEffect } from 'react';
+import { useEffect } from 'react';
 
 export type ContentDisplayProps = {
   fullWidth?: boolean;
-  display: JSX.Element;
+  display: React.ReactElement;
   loadContentDispatch?: () => void;
 };
 
-const ContentDisplay: React.FC<ContentDisplayProps> = props => {
+function ContentDisplay(props: ContentDisplayProps) {
   useEffect(() => {
     props.loadContentDispatch?.();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -26,6 +26,6 @@ const ContentDisplay: React.FC<ContentDisplayProps> = props => {
       </div>
     </div>
   );
-};
+}
 
 export default ContentDisplay;

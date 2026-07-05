@@ -2,7 +2,7 @@ export enum DashboardPage {
   Log = 'Log',
   Tasks = 'Tasks',
   Collectibles = 'Collectibles',
-  Achievements = 'Achievements'
+  Achievements = 'Achievements',
 }
 
 export interface DashboardPageManager {

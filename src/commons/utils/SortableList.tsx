@@ -2,32 +2,32 @@ import { Button } from '@blueprintjs/core';
 import {
   closestCenter,
   DndContext,
-  DragEndEvent,
+  type DragEndEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,
-  useSensors
+  useSensors,
 } from '@dnd-kit/core';
 import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
-  verticalListSortingStrategy
+  verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import React from 'react';
+import { memo, useCallback, useState } from 'react';
 
 type SortableItemProps = {
   id: string;
 };
 
-const SortableItem = React.memo(({ id }: SortableItemProps) => {
+const SortableItem = memo(({ id }: SortableItemProps) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition
+    transition,
   };
 
   return (
@@ -36,18 +36,19 @@ const SortableItem = React.memo(({ id }: SortableItemProps) => {
     </div>
   );
 });
+SortableItem.displayName = 'SortableItem';
 
 type SortableListProps = {
   items: string[];
   onSortEnd: (event: DragEndEvent) => void;
 };
 
-export const SortableList = React.memo(({ items, onSortEnd }: SortableListProps) => {
+export const SortableList = memo(({ items, onSortEnd }: SortableListProps) => {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates
-    })
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
   );
 
   return (
@@ -60,11 +61,12 @@ export const SortableList = React.memo(({ items, onSortEnd }: SortableListProps)
     </DndContext>
   );
 });
+SortableList.displayName = 'SortableList';
 
 export const useSortableList = () => {
-  const [items, setItems] = React.useState<string[]>([]);
+  const [items, setItems] = useState<string[]>([]);
 
-  const onSortEnd = React.useCallback((event: DragEndEvent) => {
+  const onSortEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
 
     if (over && active.id !== over.id) {
@@ -80,6 +82,6 @@ export const useSortableList = () => {
   return {
     items,
     setItems,
-    onSortEnd
+    onSortEnd,
   };
 };

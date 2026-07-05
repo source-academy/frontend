@@ -1,11 +1,10 @@
-import { KonvaEventObject } from 'konva/lib/Node';
-import React from 'react';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Group } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { DataArray, IHoverable, ReferenceType } from '../../CseMachineTypes';
+import type { DataArray, IHoverable, ReferenceType } from '../../CseMachineTypes';
 import { isMainReference } from '../../CseMachineUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayUnit } from '../ArrayUnit';
@@ -31,7 +30,7 @@ export class ArrayValue extends Value implements IHoverable {
     /** underlying values this array contains */
     readonly data: DataArray,
     /** what this value is being referenced by */
-    firstReference: ReferenceType
+    firstReference: ReferenceType,
   ) {
     super();
     Layout.memoizeValue(data, this);
@@ -39,7 +38,9 @@ export class ArrayValue extends Value implements IHoverable {
   }
 
   handleNewReference(newReference: ReferenceType): void {
-    if (!isMainReference(this, newReference)) return;
+    if (!isMainReference(this, newReference)) {
+      return;
+    }
 
     // derive the coordinates from the main reference (binding / array unit)
     if (newReference instanceof Binding) {
@@ -102,7 +103,9 @@ export class ArrayValue extends Value implements IHoverable {
         this.totalWidth = Math.max(
           this.totalWidth,
           childWidth +
-            (i === this.data.length - 1 ? (i + 2) * Config.DataUnitWidth : i * Config.DataUnitWidth)
+            (i === this.data.length - 1
+              ? (i + 2) * Config.DataUnitWidth
+              : i * Config.DataUnitWidth),
         );
         this.totalHeight = Math.max(this.totalHeight, bottomY - unit.y());
       }
@@ -129,7 +132,9 @@ export class ArrayValue extends Value implements IHoverable {
   }
 
   markAsReferenced() {
-    if (this.isReferenced()) return;
+    if (this.isReferenced()) {
+      return;
+    }
     super.markAsReferenced();
     for (const unit of this.units) {
       unit.value.markAsReferenced();
@@ -154,13 +159,15 @@ export class ArrayValue extends Value implements IHoverable {
     if (Layout.clearDeadFrames && !this.isLive()) {
       return null;
     }
-    if (this.isDrawn()) return null;
+    if (this.isDrawn()) {
+      return null;
+    }
     this._isDrawn = true;
     return (
       <Group
         key={Layout.key++}
         ref={this.ref}
-        listening={true}
+        listening
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
       >

@@ -10,7 +10,7 @@ export const flagDirectoryPluginUrl = createFeatureFlag(
   'The URL where the plugin directory may be found.',
   function* () {
     yield put(PluginDirectoryActions.fetchPlugins());
-  }
+  },
 );
 
 export const selectDirectoryPluginUrl = featureSelector(flagDirectoryPluginUrl);

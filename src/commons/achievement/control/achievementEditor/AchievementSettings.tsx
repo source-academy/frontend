@@ -1,7 +1,7 @@
 import { Button, Checkbox, Dialog, EditableText, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useState } from 'react';
-import { AchievementItem } from 'src/features/achievement/AchievementTypes';
+import { useState } from 'react';
+import type { AchievementItem } from 'src/features/achievement/AchievementTypes';
 
 import EditableGoalUuids from './achievementSettings/EditableGoalUuids';
 import EditablePosition from './achievementSettings/EditablePosition';
@@ -16,14 +16,14 @@ type Props = {
   editableAchievement: AchievementItem;
 };
 
-const AchievementSettings: React.FC<Props> = ({
+function AchievementSettings({
   changeCardBackground,
   changeGoalUuids,
   changePosition,
   changePrerequisiteUuids,
   changeIsVariableXp,
-  editableAchievement
-}) => {
+  editableAchievement,
+}: Props) {
   const { uuid, cardBackground, goalUuids, position, prerequisiteUuids, isVariableXp } =
     editableAchievement;
 
@@ -40,7 +40,7 @@ const AchievementSettings: React.FC<Props> = ({
         <div style={{ padding: '0 0.5em' }}>
           <h3>Card Background</h3>
           <EditableText
-            multiline={true}
+            multiline
             onChange={changeCardBackground}
             placeholder="Enter card background URL here"
             value={cardBackground}
@@ -67,6 +67,6 @@ const AchievementSettings: React.FC<Props> = ({
       </Dialog>
     </>
   );
-};
+}
 
 export default AchievementSettings;

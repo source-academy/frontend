@@ -1,6 +1,6 @@
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { StepsArray } from '../../CseMachineTypes';
+import type { StepsArray } from '../../CseMachineTypes';
 import { Frame } from '../Frame';
 import { GenericArrow } from './GenericArrow';
 
@@ -21,7 +21,9 @@ export class ArrowFromFrame extends GenericArrow<Frame, Frame> {
 
   protected calculateSteps() {
     const to = this.target;
-    if (!to) return [];
+    if (!to) {
+      return [];
+    }
 
     const steps: StepsArray = [(x, y) => [x + Config.FramePaddingX, y]];
 

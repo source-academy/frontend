@@ -1,7 +1,6 @@
 import { ProgressBar } from '@blueprintjs/core';
-import React from 'react';
 
-import { AchievementGoal } from '../../../features/achievement/AchievementTypes';
+import type { AchievementGoal } from '../../../features/achievement/AchievementTypes';
 
 /**
  * Maps an array of goalUuid to Goal component
@@ -37,13 +36,13 @@ type Props = {
   goals: AchievementGoal[];
 };
 
-const AchievementViewGoal: React.FC<Props> = ({ goals }) => {
+function AchievementViewGoal({ goals }: Props) {
   return (
     <>
       <h1 className="progress-header">Progress</h1>
       {goals.map(goal => mapGoalToJSX(goal))}
     </>
   );
-};
+}
 
 export default AchievementViewGoal;

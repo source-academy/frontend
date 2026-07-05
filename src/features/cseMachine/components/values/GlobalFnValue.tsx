@@ -1,13 +1,14 @@
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
-import React, { RefObject } from 'react';
+import { createRef, Fragment } from 'react';
 import { Circle, Group } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { GlobalFn, IHoverable } from '../../CseMachineTypes';
+import type { GlobalFn, IHoverable } from '../../CseMachineTypes';
 import {
+  defaultBackgroundColor,
   defaultStrokeColor,
   defaultTextColor,
   fadedStrokeColor,
@@ -18,7 +19,7 @@ import {
   getTextWidth,
   setHoveredCursor,
   setUnhoveredCursor,
-  truncateFunctionTooltip
+  truncateFunctionTooltip,
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { ArrowFromFnTooltip } from '../arrows/ArrowFromFnTooltip';
@@ -42,8 +43,8 @@ export class GlobalFnValue extends Value implements IHoverable {
   readonly printDescriptionOffsetY: number;
   readonly printDescriptionBottomGap: number;
   readonly totalWidth: number;
-  readonly labelRef: RefObject<Label | null> = React.createRef();
-  readonly revealLabelRef: RefObject<Label | null> = React.createRef();
+  readonly labelRef: React.RefObject<Label | null> = createRef();
+  readonly revealLabelRef: React.RefObject<Label | null> = createRef();
 
   centerX: number;
   private isExpandedDescription: boolean = false;
@@ -55,17 +56,20 @@ export class GlobalFnValue extends Value implements IHoverable {
     /** underlying function */
     readonly data: GlobalFn,
     /** what this value is being referenced by */
-    mainReference: Binding
+    mainReference: Binding,
   ) {
     super();
     Layout.memoizeValue(data, this);
     // check for frame x cooridnate in cache
     const ghostX = Layout.getGhostFrameX(mainReference.frame.environment.id);
+    const ghostY = Layout.getGhostFrameY(mainReference.frame.environment.id);
     const frameX = ghostX !== undefined ? ghostX : mainReference.frame.x();
+    const frameY = ghostY !== undefined ? ghostY : mainReference.frame.y();
     // derive the coordinates from the main reference (binding)
     // if frame x coordinate exitst use it, if not use live value
     this._x = frameX + mainReference.frame.width() + Config.FrameMarginX;
-    this._y = mainReference.y();
+    const relativeOffset = mainReference.y() - mainReference.frame.y();
+    this._y = frameY + relativeOffset;
     this.centerX = this._x + this.radius * 2;
     this._y += this.radius;
 
@@ -83,13 +87,13 @@ export class GlobalFnValue extends Value implements IHoverable {
     this.exportTooltip = truncateFunctionTooltip(
       this.tooltip,
       Config.FnDescriptionMaxWidth,
-      Config.FnDescriptionMaxHeight
+      Config.FnDescriptionMaxHeight,
     );
     this.isTooltipTruncated = this.exportTooltip !== this.tooltip;
     this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));
     this.exportTooltipWidth = Math.min(
       Config.FnDescriptionMaxWidth,
-      getTextWidth(this.exportTooltip)
+      getTextWidth(this.exportTooltip),
     );
     this.printDescriptionHeight =
       getTextHeight(this.exportTooltip, Config.FnDescriptionMaxWidth) +
@@ -109,7 +113,9 @@ export class GlobalFnValue extends Value implements IHoverable {
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) {
+      return;
+    }
     setHoveredCursor(currentTarget);
     this.ref.current?.getParent()?.moveToTop();
     if (this.isExpandedDescription && this.isTooltipTruncated) {
@@ -129,7 +135,9 @@ export class GlobalFnValue extends Value implements IHoverable {
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
+    if (CseMachine.getPrintableMode()) {
+      return;
+    }
     setUnhoveredCursor(currentTarget);
     this.isExpandedDescription = false;
     this.labelRef.current?.hide();
@@ -139,7 +147,9 @@ export class GlobalFnValue extends Value implements IHoverable {
   };
 
   onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode() || !this.isTooltipTruncated) return;
+    if (CseMachine.getPrintableMode() || !this.isTooltipTruncated) {
+      return;
+    }
     this.ref.current?.getParent()?.moveToTop();
     this.isExpandedDescription = true;
     this.labelRef.current?.hide();
@@ -177,16 +187,27 @@ export class GlobalFnValue extends Value implements IHoverable {
   };
 
   setArrowSourceHighlightedStyle(): void {
-    if (this.isReferenced()) {
-      this.setShapesStyle(Config.HoverColor);
-    } else {
-      this.setShapesStyle(Config.HoverDeadColor);
-    }
+    const color = this.isReferenced() ? Config.HoverColor : Config.HoverDeadColor;
+    (this.ref.current?.getChildren() ?? []).forEach((shape: any) => {
+      if (shape.attrs?.stroke) {
+        shape.stroke(color);
+      }
+      if (shape.attrs?.fill && !shape.attrs?.stroke) {
+        shape.fill(color);
+      }
+    });
   }
 
   setArrowSourceNormalStyle(): void {
     const strokeColor = this.isReferenced() ? defaultStrokeColor() : fadedStrokeColor();
-    this.setShapesStyle(strokeColor);
+    (this.ref.current?.getChildren() ?? []).forEach((shape: any) => {
+      if (shape.attrs?.stroke) {
+        shape.stroke(strokeColor);
+      }
+      if (shape.attrs?.fill) {
+        shape.fill(shape.attrs?.stroke ? defaultBackgroundColor() : strokeColor);
+      }
+    });
   }
 
   isLive(): boolean {
@@ -218,10 +239,10 @@ export class GlobalFnValue extends Value implements IHoverable {
         textColor={textColor}
         labelRef={this.labelRef}
         revealLabelRef={this.revealLabelRef}
-      />
+      />,
     );
     return (
-      <React.Fragment key={Layout.key++}>
+      <Fragment key={Layout.key++}>
         <Group
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
@@ -235,6 +256,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             y={this.y()}
             radius={this.radius}
             stroke={strokeColor}
+            fill={defaultBackgroundColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -251,6 +273,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             y={this.y()}
             radius={this.radius}
             stroke={strokeColor}
+            fill={defaultBackgroundColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -263,7 +286,7 @@ export class GlobalFnValue extends Value implements IHoverable {
         </Group>
         {this._arrow?.draw()}
         {this.tooltipArrow?.draw()}
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

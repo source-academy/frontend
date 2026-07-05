@@ -2,7 +2,7 @@ import { Classes } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import React, { type JSX } from 'react';
+import { useEffect, useRef } from 'react';
 import AceEditor from 'react-ace';
 import ReactAce from 'react-ace/lib/ace';
 
@@ -11,34 +11,26 @@ import { getModeString, selectMode } from '../utils/AceHelper';
 import { useResponsive } from '../utils/Hooks';
 // source mode and chapter imported in Editor.tsx
 
-export type ReplInputProps = DispatchProps & StateProps & OwnProps;
-
-type DispatchProps = {
+export type ReplInputProps = {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleReplValueChange: (newCode: string) => void;
   handleReplEval: () => void;
   onFocus?: (editor: Ace.Editor) => void;
   onBlur?: () => void;
-};
-
-type StateProps = {
   replValue: string;
   sourceChapter: Chapter;
   sourceVariant: Variant;
   externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
+  replButtons: Array<React.ReactElement | null>;
 };
 
-type OwnProps = {
-  replButtons: Array<JSX.Element | null>;
-};
-
-export const ReplInput: React.FC<ReplInputProps> = props => {
+export function ReplInput(props: ReplInputProps) {
   const { onFocus, onBlur } = props;
 
-  const replInput = React.useRef<ReactAce>(null);
-  const replInputBottom = React.useRef<HTMLDivElement>(null);
+  const replInput = useRef<ReactAce>(null);
+  const replInputBottom = useRef<HTMLDivElement>(null);
 
   const { isDesktopBreakpoint } = useResponsive();
 
@@ -55,7 +47,7 @@ export const ReplInput: React.FC<ReplInputProps> = props => {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!replInput.current) {
       return;
     }
@@ -68,7 +60,7 @@ export const ReplInput: React.FC<ReplInputProps> = props => {
     }
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!replInputBottom.current || props.disableScrolling) {
       return;
     }
@@ -107,26 +99,26 @@ export const ReplInput: React.FC<ReplInputProps> = props => {
             name: 'browseHistoryDown',
             bindKey: {
               win: 'Down',
-              mac: 'Down'
+              mac: 'Down',
             },
-            exec: execBrowseHistoryDown
+            exec: execBrowseHistoryDown,
           },
           {
             name: 'browseHistoryUp',
             bindKey: {
               win: 'Up',
-              mac: 'Up'
+              mac: 'Up',
             },
-            exec: execBrowseHistoryUp
+            exec: execBrowseHistoryUp,
           },
           {
             name: 'evaluate',
             bindKey: {
               win: 'Shift-Enter',
-              mac: 'Shift-Enter'
+              mac: 'Shift-Enter',
             },
-            exec: execEvaluate
-          }
+            exec: execEvaluate,
+          },
         ]}
         minLines={1}
         maxLines={20}
@@ -135,7 +127,7 @@ export const ReplInput: React.FC<ReplInputProps> = props => {
         showGutter={false}
         showPrintMargin={false}
         setOptions={{
-          fontFamily: "'Inconsolata', 'Consolas', monospace"
+          fontFamily: "'Inconsolata', 'Consolas', monospace",
         }}
         ref={replInput}
       />
@@ -143,4 +135,4 @@ export const ReplInput: React.FC<ReplInputProps> = props => {
       {isDesktopBreakpoint && <div ref={replInputBottom} />}
     </>
   );
-};
+}

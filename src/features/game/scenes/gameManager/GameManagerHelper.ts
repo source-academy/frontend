@@ -11,6 +11,6 @@ export const createGamePhases = () => {
     [GamePhaseType.Explore, new GameModeExplore()],
     [GamePhaseType.Talk, new GameModeTalk()],
     [GamePhaseType.Sequence, new GameModeSequence()],
-    [GamePhaseType.None, new GameModeSequence()]
+    [GamePhaseType.None, new GameModeSequence()],
   ]);
 };

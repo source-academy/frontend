@@ -1,6 +1,6 @@
 import { Button, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
@@ -12,7 +12,7 @@ type Props = {
   teamId: number;
 };
 
-const TeamFormationActions: React.FC<Props> = ({ teamId }) => {
+function TeamFormationActions({ teamId }: Props) {
   const dispatch = useDispatch();
   const { courseId } = useSession();
 
@@ -25,7 +25,7 @@ const TeamFormationActions: React.FC<Props> = ({ teamId }) => {
         </>
       ),
       positiveIntent: 'danger',
-      positiveLabel: 'Delete Team'
+      positiveLabel: 'Delete Team',
     });
     if (confirm) {
       dispatch(SessionActions.deleteTeam(teamId));
@@ -50,6 +50,6 @@ const TeamFormationActions: React.FC<Props> = ({ teamId }) => {
       </Tooltip>
     </GradingFlex>
   );
-};
+}
 
 export default TeamFormationActions;

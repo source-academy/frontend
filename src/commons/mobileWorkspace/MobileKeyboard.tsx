@@ -1,24 +1,24 @@
 import { Ace } from 'ace-builds';
-import React from 'react';
-import Draggable, { DraggableEvent, DraggableEventHandler } from 'react-draggable';
+import { useRef, useState } from 'react';
+import Draggable, { type DraggableEvent, type DraggableEventHandler } from 'react-draggable';
 import Keyboard from 'react-simple-keyboard';
 
 type Props = {
   targetKeyboardInput: Ace.Editor | null;
 };
 
-const MobileKeyboard: React.FC<Props> = props => {
-  const nodeRef = React.useRef<HTMLDivElement>(null);
-  const [isKeyboardShown, setIsKeyboardShown] = React.useState(false);
-  const [buttonContent, setButtonContent] = React.useState('ᐸ');
-  const [keyboardPosition, setKeyboardPosition] = React.useState({ x: 0, y: 0 });
-  const [targetKeyboardInput, setTargetKeyboardInput] = React.useState<Ace.Editor | null>(null);
-  const [lastKeyPressed, setLastKeyPressed] = React.useState<string>('');
-  const [touchStartInfo, setTouchStartInfo] = React.useState({ x: 0, y: 0, time: 0 });
+function MobileKeyboard(props: Props) {
+  const nodeRef = useRef<HTMLDivElement>(null);
+  const [isKeyboardShown, setIsKeyboardShown] = useState(false);
+  const [buttonContent, setButtonContent] = useState('ᐸ');
+  const [keyboardPosition, setKeyboardPosition] = useState({ x: 0, y: 0 });
+  const [targetKeyboardInput, setTargetKeyboardInput] = useState<Ace.Editor | null>(null);
+  const [lastKeyPressed, setLastKeyPressed] = useState<string>('');
+  const [touchStartInfo, setTouchStartInfo] = useState({ x: 0, y: 0, time: 0 });
 
   const onDrag: DraggableEventHandler = (
     e: DraggableEvent,
-    position: { x: number; y: number }
+    position: { x: number; y: number },
   ): void => {
     setKeyboardPosition(position);
   };
@@ -60,7 +60,7 @@ const MobileKeyboard: React.FC<Props> = props => {
     setTouchStartInfo({
       x: touch.clientX,
       y: touch.clientY,
-      time: Date.now()
+      time: Date.now(),
     });
   };
 
@@ -111,21 +111,23 @@ const MobileKeyboard: React.FC<Props> = props => {
     disableButtonHold: true,
     baseClass: 'simple-keyboard-shortcut',
     layout: {
-      default: ['{ } ( ) " \' _ => ; {tab} && || ! < > = === + - * / % // {arrowleft} {arrowright}']
+      default: [
+        '{ } ( ) " \' _ => ; {tab} && || ! < > = === + - * / % // {arrowleft} {arrowright}',
+      ],
     },
     buttonTheme: [
       {
         class: 'mobile-navigation',
-        buttons: '{arrowleft} {arrowright}'
+        buttons: '{arrowleft} {arrowright}',
       },
       {
         class: 'big-buttons',
-        buttons: '=== &&'
-      }
+        buttons: '=== &&',
+      },
     ],
     theme: 'hg-theme-default',
     preventMouseDownDefault: true,
-    disableCaretPositioning: false
+    disableCaretPositioning: false,
   };
 
   return (
@@ -160,6 +162,6 @@ const MobileKeyboard: React.FC<Props> = props => {
       </div>
     </Draggable>
   );
-};
+}
 
 export default MobileKeyboard;

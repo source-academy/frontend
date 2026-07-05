@@ -1,4 +1,4 @@
-import { NodeConfig } from 'konva/lib/Node';
+import type { NodeConfig } from 'konva/lib/Node';
 
 import { Visible } from '../../components/Visible';
 
@@ -53,7 +53,9 @@ export abstract class AnimatableTo<KonvaConfig extends NodeConfig> extends Visib
   /** Removes the specified listener so it is no longer called when the animation is running */
   removeListener(listener: (props: Partial<KonvaConfig>) => void) {
     const i = this.listeners.indexOf(listener);
-    if (i > -1) this.listeners.splice(i, 1);
+    if (i > -1) {
+      this.listeners.splice(i, 1);
+    }
   }
 
   /** Animates the node to the specified values, and update any listeners attached to the animation

@@ -1,12 +1,12 @@
 import { Rect as KonvaRect } from 'konva/lib/shapes/Rect';
-import React from 'react';
+import { createRef } from 'react';
 import { Group, Rect } from 'react-konva';
 
 import CseMachine from '../CseMachine';
 import { CseAnimation } from '../CseMachineAnimation';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
+import type { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   defaultActiveColor,
   defaultBackgroundColor,
@@ -19,7 +19,7 @@ import {
   isDummyKey,
   isPrimitiveData,
   isSourceObject,
-  isUnassigned
+  isUnassigned,
 } from '../CseMachineUtils';
 import { isContinuation } from '../utils/continuation';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
@@ -39,7 +39,7 @@ const frameNames = new Map([
   ['forLoopEnvironment', 'Body of for-loop'],
   ['forBlockEnvironment', 'Control variable of for-loop'],
   ['blockEnvironment', 'Block'],
-  ['functionBodyEnvironment', 'Function Body']
+  ['functionBodyEnvironment', 'Function Body'],
 ]);
 
 /** this class encapsulates a frame of key-value bindings to be drawn on canvas */
@@ -47,6 +47,9 @@ export class Frame extends Visible implements IHoverable {
   private static envFrameMap: Map<string, Frame> = new Map();
   public static getFrom(environment: Env): Frame | undefined {
     return Frame.envFrameMap.get(environment.id);
+  }
+  public static clearMap(): void {
+    Frame.envFrameMap.clear();
   }
 
   /** total height = frame height + frame title height */
@@ -60,7 +63,7 @@ export class Frame extends Visible implements IHoverable {
   readonly bindings: Binding[] = [];
   /** name of this frame to display */
   private _name!: Text; // removed readonly to allow reassignment for fixed layout
-  private readonly rectRef = React.createRef<KonvaRect | null>();
+  private readonly rectRef = createRef<KonvaRect | null>();
   /** the level in which this frame resides */
   readonly level: Level | undefined;
   /** environment associated with this frame */
@@ -76,7 +79,7 @@ export class Frame extends Visible implements IHoverable {
     /** environment tree node that contains this frame */
     readonly envTreeNode: EnvTreeNode,
     /** the frame to the left of this frame, on the same level. used for calculating this frame's position */
-    readonly leftSiblingFrame: Frame | null
+    readonly leftSiblingFrame: Frame | null,
   ) {
     super();
 
@@ -125,7 +128,9 @@ export class Frame extends Visible implements IHoverable {
             const prev = unreferencedValues.findIndex(value => value.id === data.id);
             if (prev > -1) {
               unreferencedValues.splice(prev, 1);
-              if (prev <= i) i--;
+              if (prev <= i) {
+                i--;
+              }
             }
           }
         }
@@ -139,7 +144,7 @@ export class Frame extends Visible implements IHoverable {
         value,
         configurable: false,
         enumerable: true,
-        writable: false
+        writable: false,
       };
       // The key is a number string to "disguise" as a dummy binding
       entries.push([`${i++}`, descriptor]);
@@ -149,11 +154,13 @@ export class Frame extends Visible implements IHoverable {
     // This pass sizes only the frame body (text and primitive values inside the frame).
     this._width = Config.FrameMinWidth;
     for (const [key, data] of entries) {
-      if (isDummyKey(key)) continue;
+      if (isDummyKey(key)) {
+        continue;
+      }
       const constant =
         this.environment.head[key]?.description === 'const declaration' || !data.writable;
       let bindingTextWidth = getTextWidth(
-        key + (constant ? Config.ConstantColon : Config.VariableColon)
+        key + (constant ? Config.ConstantColon : Config.VariableColon),
       );
       // TODO: Check if key + colon size exceed default frame width
       if (isUnassigned(data.value)) {
@@ -165,7 +172,7 @@ export class Frame extends Visible implements IHoverable {
           getTextWidth(
             isSourceObject(data.value)
               ? data.value.toReplString()
-              : JSON.stringify(data.value) || String(data.value)
+              : JSON.stringify(data.value) || String(data.value),
           );
         // TODO: Check if primitive value size exceed default frame width
       }
@@ -191,7 +198,7 @@ export class Frame extends Visible implements IHoverable {
         this,
         previousBindingForLayout,
         constant,
-        this.isLive
+        this.isLive,
       );
       prevBinding = currBinding;
       if (currBinding.occupiesVerticalSpace()) {
@@ -205,7 +212,9 @@ export class Frame extends Visible implements IHoverable {
     // `totalDataWidth` is measured strictly as overflow beyond the frame's right edge.
     const frameRightX = this.x() + this.width();
     for (const binding of this.bindings) {
-      if (!binding.rendersReferencedValue()) continue;
+      if (!binding.rendersReferencedValue()) {
+        continue;
+      }
 
       const value = binding.value;
       let valueRightX: number | undefined;
@@ -236,11 +245,13 @@ export class Frame extends Visible implements IHoverable {
       frameNames.get(this.environment.name) ?? this.environment.name,
       this.x(),
       this.level.y(),
-      { maxWidth: this.width(), faded: !this.isLive }
+      { maxWidth: this.width(), faded: !this.isLive },
     );
     this.totalHeight = this.height() + this.name.height() + Config.TextPaddingY / 2;
 
-    if (this.parentFrame) this.arrow = new ArrowFromFrame(this).to(this.parentFrame);
+    if (this.parentFrame) {
+      this.arrow = new ArrowFromFrame(this).to(this.parentFrame);
+    }
 
     if (CseMachine.getCurrentEnvId() === this.environment.id) {
       CseAnimation.setCurrentFrame(this);
@@ -266,7 +277,7 @@ export class Frame extends Visible implements IHoverable {
       frameNames.get(this.environment.name) ?? this.environment.name,
       this.x() + textOffset,
       this.level!.y(), // this method is only called after the frame is drawn
-      { maxWidth: this.width(), faded: !this.isLive }
+      { maxWidth: this.width(), faded: !this.isLive },
     );
   }
 
@@ -303,7 +314,7 @@ export class Frame extends Visible implements IHoverable {
         ? defaultActiveColor()
         : this.isLive
           ? defaultStrokeColor()
-          : fadedStrokeColor()
+          : fadedStrokeColor(),
     );
     this.name.setArrowSourceNormalStyle();
   }

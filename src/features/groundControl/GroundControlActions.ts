@@ -6,21 +6,27 @@ const GroundControlActions = createActions('groundControl', {
   deleteAssessment: (id: number) => id,
   publishAssessment: (togglePublishAssessmentTo: boolean, id: number) => ({
     id,
-    togglePublishAssessmentTo
+    togglePublishAssessmentTo,
   }),
   publishGradingAll: (id: number) => id,
   unpublishGradingAll: (id: number) => id,
   uploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) => ({
     file,
     forceUpdate,
-    assessmentConfigId
+    assessmentConfigId,
   }),
-  configureAssessment: (id: number, hasVotingFeatures: boolean, hasTokenCounter: boolean) => ({
+  configureAssessment: (
+    id: number,
+    hasVotingFeatures: boolean,
+    hasTokenCounter: boolean,
+    isAutosaveEnabled: boolean,
+  ) => ({
     id,
     hasVotingFeatures,
-    hasTokenCounter
+    hasTokenCounter,
+    isAutosaveEnabled,
   }),
-  assignEntriesForVoting: (id: number) => ({ id })
+  assignEntriesForVoting: (id: number) => ({ id }),
 });
 
 // For compatibility with existing code (actions helper)

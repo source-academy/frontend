@@ -1,13 +1,19 @@
-import { Context } from 'js-slang';
+import type { Context } from 'js-slang';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { parse } from 'js-slang/dist/parser/parser';
-import React from 'react';
 
+import type { CseSerializedEnvFrame, CseSnapshot } from '../conductor/CseMachineHostPlugin';
 import { arrowSelection } from './components/arrows/ArrowSelection';
 import { CseAnimation } from './CseMachineAnimation';
-import { Layout, LayoutCache } from './CseMachineLayout';
-import { ArrowOriginFilterKey, ArrowOriginFilters, EnvTree, EnvTreeNode } from './CseMachineTypes';
+import { Layout, type LayoutCache } from './CseMachineLayout';
+import type {
+  ArrowOriginFilterKey,
+  ArrowOriginFilters,
+  EnvTree,
+  EnvTreeNode,
+} from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
+import { buildFakeEnvTreeFromSnapshot } from './CseSnapshotAdapter';
 
 type SetVis = (vis: React.ReactNode) => void;
 type SetEditorHighlightedLines = (segments: [number, number][]) => void;
@@ -21,7 +27,7 @@ export default class CseMachine {
     'function',
     'array',
     'control',
-    'stash'
+    'stash',
   ];
   private static readonly defaultArrowOriginFilters: ArrowOriginFilters = {
     text: true,
@@ -29,7 +35,7 @@ export default class CseMachine {
     function: true,
     array: true,
     control: true,
-    stash: true
+    stash: true,
   };
   /** callback function to update the visualization state in the SideContentCseMachine component */
   private static setVis: SetVis;
@@ -49,12 +55,24 @@ export default class CseMachine {
   private static centerAlignment: boolean = false;
   private static centerAlignmentToggled: boolean = false;
   private static arrowOriginFilters: ArrowOriginFilters = {
-    ...CseMachine.defaultArrowOriginFilters
+    ...CseMachine.defaultArrowOriginFilters,
   };
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
   private static control: Control | undefined;
   private static stash: Stash | undefined;
+  /** Toggled each time a pair is created; Layout uses it to alternate arrow directions and avoid visual overlap. */
+  private static pairCreationMode: boolean = false;
+  /** Last snapshot passed to renderSnapshot(); used by redraw() in snapshot mode. */
+  private static lastSnapshot: CseSnapshot | null = null;
+
+  public static togglePairCreationMode(): void {
+    CseMachine.pairCreationMode = !CseMachine.pairCreationMode;
+  }
+  public static getPairCreationMode(): boolean {
+    return CseMachine.pairCreationMode;
+  }
+
   public static togglePrintableMode(): void {
     CseMachine.printableMode = !CseMachine.printableMode;
   }
@@ -127,7 +145,9 @@ export default class CseMachine {
   }
 
   public static isArrowOriginVisible(origin: ArrowOriginFilterKey | null): boolean {
-    if (origin === null) return true;
+    if (origin === null) {
+      return true;
+    }
     return CseMachine.arrowOriginFilters[origin];
   }
 
@@ -179,7 +199,7 @@ export default class CseMachine {
     width: number,
     height: number,
     setEditorHighlightedLines: (segments: [number, number][]) => void,
-    setIsStepLimitExceeded: SetisStepLimitExceeded
+    setIsStepLimitExceeded: SetisStepLimitExceeded,
   ) {
     Layout.visibleHeight = height;
     Layout.visibleWidth = width;
@@ -191,6 +211,7 @@ export default class CseMachine {
   static clear() {
     Layout.values.clear();
     arrowSelection.clearSelection();
+    CseMachine.lastSnapshot = null;
   }
 
   /** updates the visualization state in the SideContentCseMachine component based on
@@ -199,8 +220,9 @@ export default class CseMachine {
     // store environmentTree at last breakpoint.
     CseMachine.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
     CseMachine.currentEnvId = getEnvId(context.runtime.environments[0]);
-    if (!this.setVis || !context.runtime.control || !context.runtime.stash)
+    if (!this.setVis || !context.runtime.control || !context.runtime.stash) {
       throw new Error('CSE machine not initialized');
+    }
     CseMachine.control = context.runtime.control;
     CseMachine.stash = context.runtime.stash;
     CseMachine.setClearDeadFrames(false);
@@ -209,7 +231,7 @@ export default class CseMachine {
       context.runtime.environmentTree as EnvTree,
       context.runtime.control,
       context.runtime.stash,
-      context.chapter
+      context.chapter,
     );
 
     // Build ghost layout cache and built-in/predeclared functions cache lazily per mode, using mode-specific layout.
@@ -238,7 +260,9 @@ export default class CseMachine {
             // Checks if a variable exists in the current scope or any parent scope
             const isDeclaredInScope = (name: string) => {
               for (let i = scopeStack.length - 1; i >= 0; i--) {
-                if (scopeStack[i].has(name)) return true;
+                if (scopeStack[i].has(name)) {
+                  return true;
+                }
               }
               return false;
             };
@@ -251,14 +275,18 @@ export default class CseMachine {
 
             // The Recursive Walker
             const walk = (node: any, parentType?: string, keyName?: string) => {
-              if (!node || typeof node !== 'object') return;
+              if (!node || typeof node !== 'object') {
+                return;
+              }
 
               let isNewScope = false;
 
               // Enter Scope Boundary (Blocks and Functions)
               if (node.type === 'BlockStatement' || node.type === 'Program') {
                 isNewScope = true;
-                if (node.type !== 'Program') scopeStack.push(new Set());
+                if (node.type !== 'Program') {
+                  scopeStack.push(new Set());
+                }
 
                 // add declarations into this scope before traversing deeper
                 const body = node.body || [];
@@ -346,7 +374,7 @@ export default class CseMachine {
           context.runtime.environmentTree as EnvTree,
           context.runtime.control!,
           context.runtime.stash!,
-          context.chapter
+          context.chapter,
         );
         return Layout.getLayoutPositions(this.controlStash);
       };
@@ -362,7 +390,7 @@ export default class CseMachine {
         context.runtime.environmentTree as EnvTree,
         context.runtime.control,
         context.runtime.stash,
-        context.chapter
+        context.chapter,
       );
     }
 
@@ -376,7 +404,47 @@ export default class CseMachine {
     Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
   }
 
+  /** Renders a language-agnostic CseSnapshot (from the Conductor __cse channel) using the Source renderer. */
+  static renderSnapshot(snapshot: CseSnapshot): void {
+    if (!this.setVis) {
+      throw new Error('CSE machine not initialized');
+    }
+
+    CseMachine.lastSnapshot = snapshot;
+    // Clear any live Source context so resize-triggered redraws use lastSnapshot, not stale live data.
+    CseMachine.environmentTree = undefined;
+    CseMachine.control = undefined;
+    CseMachine.stash = undefined;
+
+    const activeEnv = snapshot.environments.find((env: CseSerializedEnvFrame) => env.isActive);
+    if (activeEnv) {
+      CseMachine.currentEnvId = activeEnv.id;
+    }
+
+    const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
+
+    Layout.snapshotMode = true;
+    try {
+      Layout.setContext(
+        envTree as unknown as EnvTree,
+        fakeControl as unknown as Control,
+        fakeStash as unknown as Stash,
+      );
+    } finally {
+      Layout.snapshotMode = false;
+    }
+
+    this.setVis(Layout.draw());
+    Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
+  }
+
   static redraw() {
+    // In snapshot mode, re-render from the last snapshot instead of the js-slang context.
+    if (!CseMachine.environmentTree && CseMachine.lastSnapshot) {
+      CseMachine.renderSnapshot(CseMachine.lastSnapshot);
+      return;
+    }
+
     if (CseMachine.environmentTree && CseMachine.control && CseMachine.stash) {
       // checks if the required diagram exists, and updates the dom node using setVis
 
@@ -461,7 +529,6 @@ export default class CseMachine {
   }
 
   static clearCse() {
-    CseMachine.resetArrowOriginFilters();
     if (this.setVis) {
       this.setVis(undefined);
       CseMachine.environmentTree = undefined;

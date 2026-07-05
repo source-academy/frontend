@@ -6,7 +6,7 @@ const translations = {
     '数据可视化工具使用框图和指针图，这些图基于<0>《计算机程序的构造和解释，JavaScript 版》第 2 章第 2 节</0>中介绍的符号。',
   label: '数据可视化工具',
   previous: '上一个',
-  next: '下一个'
+  next: '下一个',
 };
 
 export default translations;

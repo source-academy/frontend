@@ -1,6 +1,6 @@
 import { Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
@@ -14,7 +14,7 @@ import DropdownCreateCourse from './DropdownCreateCourse';
 import DropdownHelp from './DropdownHelp';
 import DropdownSettings from './DropdownSettings';
 
-const Dropdown: React.FC = () => {
+function Dropdown() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
@@ -99,9 +99,9 @@ const Dropdown: React.FC = () => {
       ) : null}
     </>
   );
-};
+}
 
 const titleCase = (str: string) =>
-  str.replace(/\w\S*/g, wrd => wrd.charAt(0).toUpperCase() + wrd.substr(1).toLowerCase());
+  str.replace(/\w\S*/g, wrd => wrd.charAt(0).toUpperCase() + wrd.slice(1).toLowerCase());
 
 export default Dropdown;

@@ -6,10 +6,11 @@ export const keyboardShortcuts = {
   Explore: Phaser.Input.Keyboard.KeyCodes.E,
   Move: Phaser.Input.Keyboard.KeyCodes.V,
   Talk: Phaser.Input.Keyboard.KeyCodes.T,
+  SkipDialogue: Phaser.Input.Keyboard.KeyCodes.S,
   Options: [
     Phaser.Input.Keyboard.KeyCodes.ONE,
     Phaser.Input.Keyboard.KeyCodes.TWO,
     Phaser.Input.Keyboard.KeyCodes.THREE,
-    Phaser.Input.Keyboard.KeyCodes.FOUR
-  ]
+    Phaser.Input.Keyboard.KeyCodes.FOUR,
+  ],
 };

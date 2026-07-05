@@ -1,7 +1,8 @@
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants } from '../commons/CommonConstants';
-import { GamePosition, GameSize, ItemId } from '../commons/CommonTypes';
+import type { ItemId } from '../commons/CommonTypes';
+import { GamePosition, GameSize } from '../commons/CommonTypes';
 import { scrollEntry, scrollExit } from '../effects/ScrollEffect';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
@@ -35,7 +36,7 @@ class GamePopUpManager {
     itemId: ItemId,
     position: GamePosition,
     duration = Constants.popUpDuration,
-    size: GameSize = GameSize.Medium
+    size: GameSize = GameSize.Medium,
   ) {
     // Destroy previous pop up if any
     this.destroyPopUp(position);
@@ -48,19 +49,21 @@ class GamePopUpManager {
       gameManager,
       PopUpConstants.rect.x[position],
       PopUpConstants.rect.y[size],
-      ImageAssets.popUpFrame.key
+      ImageAssets.popUpFrame.key,
     ).setScale(PopUpConstants.rect.scale[size]);
 
     // Get assetKey
     const assetKey = this.getAssetKey(itemId);
-    if (!assetKey) return;
+    if (!assetKey) {
+      return;
+    }
 
     // Set up images
     const popUpImage = new Phaser.GameObjects.Image(
       gameManager,
       PopUpConstants.rect.x[position] + PopUpConstants.image.xOffset,
       PopUpConstants.rect.y[size] + PopUpConstants.image.yOffset,
-      assetKey
+      assetKey,
     );
     const newWidth = PopUpConstants.rect.width * PopUpConstants.rect.scale[size];
     const newHeight = PopUpConstants.rect.height * PopUpConstants.rect.scale[size];
@@ -97,7 +100,9 @@ class GamePopUpManager {
    */
   public async destroyPopUp(position: GamePosition) {
     const atPosContainer = this.currPopUp.get(position);
-    if (!atPosContainer) return;
+    if (!atPosContainer) {
+      return;
+    }
 
     GameGlobalAPI.getInstance()
       .getGameManager()

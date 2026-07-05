@@ -3,7 +3,7 @@ import SourceAcademyGame from '../SourceAcademyGame';
 import { calcTableFormatPos, HexColor } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import { Constants, screenSize } from './CommonConstants';
-import { AssetKey, BitmapFontStyle, TextConfig } from './CommonTypes';
+import type { AssetKey, BitmapFontStyle, TextConfig } from './CommonTypes';
 
 type RadioButtonChoiceConfig = {
   circleDim: number;
@@ -71,14 +71,14 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
       radioChoiceConfig = {
         circleDim: 20,
         checkedDim: 10,
-        outlineThickness: 5
+        outlineThickness: 5,
       },
       choiceTextConfig = { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
-      bitmapTextStyle = Constants.defaultFontStyle
+      bitmapTextStyle = Constants.defaultFontStyle,
     }: RadioButtonConfig,
     x?: number,
     y?: number,
-    buttonClickSoundKey: AssetKey = SoundAssets.radioButtonClick.key
+    buttonClickSoundKey: AssetKey = SoundAssets.radioButtonClick.key,
   ) {
     super(scene, x, y);
     this.activeChoiceIdx = defaultChoiceIdx;
@@ -91,7 +91,7 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
     const buttons = this.getRadioButtons(choices);
     this.buttonPositions = calcTableFormatPos({
       numOfItems: buttons.length,
-      maxXSpace: maxXSpace
+      maxXSpace: maxXSpace,
     });
 
     this.renderRadioButtons(buttons, this.buttonPositions, this.radioChoiceConfig);
@@ -102,7 +102,7 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
     return choices.map((choice, index) => {
       return {
         text: choice,
-        callback: () => this.activate(index)
+        callback: () => this.activate(index),
       };
     });
   }
@@ -110,7 +110,7 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
   private renderRadioButtons(
     buttons: { text: string; callback: any }[],
     buttonPos: Array<[number, number]>,
-    radioChoiceConfig: RadioButtonChoiceConfig
+    radioChoiceConfig: RadioButtonChoiceConfig,
   ) {
     this.add(
       buttons.map((button, index) =>
@@ -118,9 +118,9 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
           buttonPos[index][0],
           buttonPos[index][1],
           button.callback,
-          radioChoiceConfig
-        )
-      )
+          radioChoiceConfig,
+        ),
+      ),
     );
   }
 
@@ -128,7 +128,7 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
     xPos: number,
     yPos: number,
     callback: any,
-    radioChoiceConfig: RadioButtonChoiceConfig
+    radioChoiceConfig: RadioButtonChoiceConfig,
   ) {
     return new Phaser.GameObjects.Ellipse(
       this.scene,
@@ -136,7 +136,7 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
       yPos,
       radioChoiceConfig.circleDim,
       radioChoiceConfig.circleDim,
-      HexColor.lightBlue
+      HexColor.lightBlue,
     )
       .setStrokeStyle(radioChoiceConfig.outlineThickness, HexColor.darkBlue)
       .setInteractive({ useHandCursor: true })
@@ -150,18 +150,20 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
     this.activeChoiceIdx = id;
 
     // Render checked option
-    if (this.activeChoice) this.activeChoice.destroy();
+    if (this.activeChoice) {
+      this.activeChoice.destroy();
+    }
 
     this.activeChoice = new Phaser.GameObjects.Container(
       this.scene,
       this.buttonPositions[id][0],
-      this.buttonPositions[id][1]
+      this.buttonPositions[id][1],
     );
     const choiceText = createBitmapText(
       this.scene,
       this.choices[id],
       this.choiceTextConfig,
-      this.bitmapTextStyle
+      this.bitmapTextStyle,
     );
     const optionChecked = new Phaser.GameObjects.Ellipse(
       this.scene,
@@ -169,7 +171,7 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
       0,
       this.radioChoiceConfig.checkedDim,
       this.radioChoiceConfig.checkedDim,
-      HexColor.darkBlue
+      HexColor.darkBlue,
     );
     this.activeChoice.add([choiceText, optionChecked]);
 

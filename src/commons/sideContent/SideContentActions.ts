@@ -1,34 +1,34 @@
 import { createActions } from '../redux/utils';
-import { DebuggerContext, type WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { SideContentLocation, SideContentType } from './SideContentTypes';
+import type { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { SideContentLocation, SideContentTabId } from './SideContentTypes';
 
 const SideContentActions = createActions('sideContent', {
-  beginAlertSideContent: (id: SideContentType, workspaceLocation: SideContentLocation) => ({
+  beginAlertSideContent: (id: SideContentTabId, workspaceLocation: SideContentLocation) => ({
     id,
-    workspaceLocation
+    workspaceLocation,
   }),
-  endAlertSideContent: (id: SideContentType, workspaceLocation: SideContentLocation) => ({
+  endAlertSideContent: (id: SideContentTabId, workspaceLocation: SideContentLocation) => ({
     id,
-    workspaceLocation
+    workspaceLocation,
   }),
   visitSideContent: (
-    newId: SideContentType,
-    prevId: SideContentType | undefined,
-    workspaceLocation: SideContentLocation
+    newId: SideContentTabId,
+    prevId: SideContentTabId | undefined,
+    workspaceLocation: SideContentLocation,
   ) => ({ newId, prevId, workspaceLocation }),
-  removeSideContentAlert: (id: SideContentType, workspaceLocation: SideContentLocation) => ({
+  removeSideContentAlert: (id: SideContentTabId, workspaceLocation: SideContentLocation) => ({
     id,
-    workspaceLocation
+    workspaceLocation,
   }),
   spawnSideContent: (workspaceLocation: SideContentLocation, debuggerContext: DebuggerContext) => ({
     workspaceLocation,
-    debuggerContext
+    debuggerContext,
   }),
   resetSideContent: (workspaceLocation: SideContentLocation) => ({ workspaceLocation }),
   changeSideContentHeight: (height: number, workspaceLocation: WorkspaceLocation) => ({
     height,
-    workspaceLocation
-  })
+    workspaceLocation,
+  }),
 });
 
 // For compatibility with existing code (reducer)
@@ -39,7 +39,7 @@ export const {
   removeSideContentAlert,
   spawnSideContent,
   resetSideContent,
-  changeSideContentHeight
+  changeSideContentHeight,
 } = SideContentActions;
 
 // For compatibility with existing code (actions helper)

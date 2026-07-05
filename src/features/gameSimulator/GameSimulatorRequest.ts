@@ -8,7 +8,7 @@ const sendRequest =
     requestPath: string,
     method: string,
     headerConfig: object = {},
-    requestDetails: object = {}
+    requestDetails: object = {},
   ) => {
     try {
       const accessToken = SourceAcademyGame.getInstance().getAccountInfo().accessToken || '';
@@ -21,12 +21,12 @@ const sendRequest =
       const config = {
         method,
         headers,
-        ...requestDetails
+        ...requestDetails,
       };
 
       return fetch(
         Constants.backendUrl + `/v2/courses/${courseId()}/${route}/` + requestPath,
-        config
+        config,
       );
     } finally {
     }

@@ -1,49 +1,62 @@
+import type { TabId } from '@blueprintjs/core';
 import * as bpcore from '@blueprintjs/core';
-import { TabId } from '@blueprintjs/core';
 import * as bpicons from '@blueprintjs/icons';
 import * as jsslang from 'js-slang';
 import * as jsslangDist from 'js-slang/dist';
-import lodash from 'lodash';
-import phaser from 'phaser';
-import React, { useCallback } from 'react';
+import * as jsslangErrors from 'js-slang/dist/errors/base';
+import * as rttcErrors from 'js-slang/dist/errors/rttcErrors';
+import * as jsslangOperators from 'js-slang/dist/utils/operators';
+import * as jsslangRttc from 'js-slang/dist/utils/rttc';
+import * as lodash from 'lodash-es';
+// We need it to inject modules into the context
+// eslint-disable-next-line no-restricted-imports
+import * as React from 'react';
+import { useCallback } from 'react';
 import JSXRuntime from 'react/jsx-runtime';
 import ace from 'react-ace';
 import ReactDOM from 'react-dom';
+import * as ReactDOMClient from 'react-dom/client';
 import { useDispatch } from 'react-redux';
 
-import { defaultSideContent } from '../application/ApplicationTypes';
 import { useTypedSelector } from '../utils/Hooks';
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
 import { visitSideContent } from './SideContentActions';
-import {
+import type {
   ModuleSideContent,
-  NonStoryWorkspaceLocation,
   SideContentLocation,
   SideContentState,
   SideContentTab,
-  SideContentType,
-  StoryWorkspaceLocation
+  SideContentTabId,
 } from './SideContentTypes';
+import { SideContentType } from './SideContentTypes';
 
-const requireProvider = (x: string) => {
+export const requireProvider = (x: string) => {
   const exports = {
     react: React,
     'react/jsx-runtime': JSXRuntime,
     'react-ace': ace,
     'react-dom': ReactDOM,
+    'react-dom/client': ReactDOMClient,
     '@blueprintjs/core': bpcore,
     '@blueprintjs/icons': bpicons,
     'js-slang': jsslang,
     'js-slang/dist': jsslangDist,
+    'js-slang/dist/utils/operators': jsslangOperators,
+    'js-slang/dist/utils/rttc': jsslangRttc,
+    'js-slang/dist/errors/base': jsslangErrors,
+    'js-slang/dist/errors/rttcErrors': rttcErrors,
     lodash,
-    phaser
   };
 
-  if (!(x in exports)) throw new Error(`Dynamic require of ${x} is not supported`);
+  if (!(x in exports)) {
+    throw new Error(`Dynamic require of ${x} is not supported`);
+  }
   return exports[x as keyof typeof exports] as any;
 };
 
-type RawTab = (provider: ReturnType<typeof requireProvider>) => { default: ModuleSideContent };
+export type RawTab = (provider: ReturnType<typeof requireProvider>) => {
+  default: ModuleSideContent;
+};
 
 /**
  * Returns an array of SideContentTabs to be spawned
@@ -52,7 +65,9 @@ type RawTab = (provider: ReturnType<typeof requireProvider>) => { default: Modul
 export function getDynamicTabs(debuggerContext: DebuggerContext): SideContentTab[] {
   const moduleContexts = debuggerContext?.context?.moduleContexts;
 
-  if (!moduleContexts) return [];
+  if (!moduleContexts) {
+    return [];
+  }
 
   return Object.values(moduleContexts)
     .flatMap(({ tabs }) => tabs ?? [])
@@ -64,7 +79,7 @@ export function getDynamicTabs(debuggerContext: DebuggerContext): SideContentTab
     .map(tab => ({
       ...tab,
       body: tab.body(debuggerContext),
-      id: SideContentType.module
+      id: SideContentType.module,
     }));
 }
 
@@ -74,16 +89,14 @@ export const getTabId = (tab: SideContentTab) =>
 export const generateTabAlert = (shouldAlert: boolean) =>
   `side-content-tooltip${shouldAlert ? ' side-content-tab-alert' : ''}`;
 
-export const useSideContent = (location: SideContentLocation, defaultTab?: SideContentType) => {
-  const [workspaceLocation, storyEnv] = getLocation(location);
-  const { alerts, dynamicTabs, selectedTab, height }: SideContentState = useTypedSelector(state =>
-    workspaceLocation === 'stories'
-      ? (state.sideContent.stories[storyEnv] ?? { ...defaultSideContent })
-      : state.sideContent[workspaceLocation]
+export const useSideContent = (location: SideContentLocation, defaultTab?: SideContentTabId) => {
+  const [workspaceLocation] = getLocation(location);
+  const { alerts, dynamicTabs, selectedTab, height }: SideContentState = useTypedSelector(
+    state => state.sideContent[workspaceLocation],
   );
   const dispatch = useDispatch();
   const setSelectedTab = useCallback(
-    (newId: SideContentType) => {
+    (newId: SideContentTabId) => {
       if (
         (selectedTab === SideContentType.substVisualizer ||
           selectedTab === SideContentType.cseMachine) &&
@@ -93,7 +106,7 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
       }
       dispatch(visitSideContent(newId, selectedTab, location));
     },
-    [dispatch, location, selectedTab]
+    [dispatch, location, selectedTab],
   );
 
   return {
@@ -101,25 +114,13 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
     dynamicTabs,
     selectedTab: selectedTab ?? defaultTab,
     setSelectedTab,
-    height
+    height,
   };
 };
 
 /**
- * Determine if the given SideContentLocation is a Story location specification
- * or a regular WorkspaceSpecification
- */
-export const isStoryLocation = (
-  location: SideContentLocation
-): location is StoryWorkspaceLocation => location.startsWith('stories');
-
-/**
  * Give a SideContentLocation specification, return the WorkspaceLocation
- * and StoryEnv value, if present
  */
-export const getLocation = (
-  location: SideContentLocation
-): [NonStoryWorkspaceLocation] | ['stories', string] => {
-  if (isStoryLocation(location)) return location.split('.', 2) as ['stories', string];
-  return [location];
-};
+export const getLocation = (location: SideContentLocation): [location: SideContentLocation] => [
+  location,
+];

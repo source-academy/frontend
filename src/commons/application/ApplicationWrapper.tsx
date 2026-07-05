@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router';
-import { getAcademyRoutes } from 'src/pages/academy/academyRoutes';
+import { academyRoutes } from 'src/pages/academy/academyRoutes';
 
 import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from '../../routes/routerConfig';
 import { getHealth } from '../sagas/RequestsSaga';
@@ -20,7 +20,7 @@ import { updateReactRouter } from './actions/CommonsActions';
  * 1. Playground-only (stripped-down backendless version of SA - e.g. https://sourceacademy.org)
  * 2. Full Academy (full SA to be deployed and configured with the backend - e.g. https://sourceacademy.nus.edu.sg)
  */
-const ApplicationWrapper: React.FC = () => {
+function ApplicationWrapper() {
   const dispatch = useDispatch();
   const { isLoggedIn, name, courseId } = useSession();
   const [isApiHealthy, setIsApiHealthy] = useState(true);
@@ -31,8 +31,6 @@ const ApplicationWrapper: React.FC = () => {
     }
   }, []);
 
-  const academyRoutes = useMemo(() => getAcademyRoutes(), []);
-
   const router = useMemo(() => {
     const routerConfig = Constants.playgroundOnly
       ? playgroundOnlyRouterConfig
@@ -42,7 +40,7 @@ const ApplicationWrapper: React.FC = () => {
     dispatch(updateReactRouter(r));
 
     return r;
-  }, [name, isLoggedIn, courseId, academyRoutes, dispatch]);
+  }, [name, isLoggedIn, courseId, dispatch]);
 
   if (!isApiHealthy) {
     return (
@@ -57,6 +55,6 @@ const ApplicationWrapper: React.FC = () => {
   }
 
   return <RouterProvider router={router} />;
-};
+}
 
 export default ApplicationWrapper;

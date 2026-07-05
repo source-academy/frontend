@@ -1,8 +1,9 @@
-import { getHotkeyHandler, HotkeyItem } from '@mantine/hooks';
-import React, { PropsWithChildren } from 'react';
+import { getHotkeyHandler, type HotkeyItem } from '@mantine/hooks';
 
 type HotKeysProps = {
   bindings: HotkeyItem[];
+  style?: React.CSSProperties;
+  children?: React.ReactNode;
 };
 
 /**
@@ -16,13 +17,7 @@ type HotKeysProps = {
  * TODO:
  * - Eventually migrate out of class-based React in the aforementioned components and use useHotkeys directly.
  */
-const HotKeys: React.FC<
-  PropsWithChildren<
-    HotKeysProps & {
-      style?: React.CSSProperties;
-    }
-  >
-> = ({ bindings, children, style }) => {
+function HotKeys({ bindings, children, style }: HotKeysProps) {
   const handler = getHotkeyHandler(bindings);
 
   return (
@@ -34,6 +29,6 @@ const HotKeys: React.FC<
       {children}
     </div>
   );
-};
+}
 
 export default HotKeys;

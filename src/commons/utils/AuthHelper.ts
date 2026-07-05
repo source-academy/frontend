@@ -3,7 +3,7 @@ import Constants from './Constants';
 export enum AuthProviderType {
   OAUTH2 = 'OAUTH2',
   CAS = 'CAS',
-  SAML_SSO = 'SAML'
+  SAML_SSO = 'SAML',
 }
 
 export function computeEndpointUrl(providerId: string, forVscode?: boolean): string | undefined {
@@ -33,7 +33,7 @@ export function computeEndpointUrl(providerId: string, forVscode?: boolean): str
 
 export function computeFrontendRedirectUri(
   providerId: string,
-  forVscode?: boolean
+  forVscode?: boolean,
 ): string | undefined {
   const ep = Constants.authProviders.get(providerId);
   if (!ep) {
@@ -53,7 +53,7 @@ function computeSamlRedirectUri(providerId: string): string | undefined {
     return undefined;
   }
   const callback = `${Constants.backendUrl}/v2/auth/saml_redirect?provider=${encodeURIComponent(
-    providerId
+    providerId,
   )}`;
   return callback;
 }
@@ -73,7 +73,6 @@ export function getClientId(providerId: string): string | undefined {
 }
 
 export function getDefaultProvider():
-  | [string, NonNullable<ReturnType<typeof Constants.authProviders.get>>]
-  | undefined {
+  [string, NonNullable<ReturnType<typeof Constants.authProviders.get>>] | undefined {
   return [...Constants.authProviders.entries()].find(([_, { isDefault }]) => isDefault);
 }

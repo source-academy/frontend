@@ -32,7 +32,9 @@ class GameInputManager {
    * @param active if true, mouse input is enabled. Else, mouse input is disabled.
    */
   public enableMouseInput(active: boolean) {
-    if (this.scene.input.mouse) this.scene.input.mouse.enabled = active;
+    if (this.scene.input.mouse) {
+      this.scene.input.mouse.enabled = active;
+    }
   }
 
   /**
@@ -41,7 +43,9 @@ class GameInputManager {
    * @param active if true, keyboard input is enabled. Else, keyboard input is disabled.
    */
   public enableKeyboardInput(active: boolean) {
-    if (this.scene.input.keyboard) this.scene.input.keyboard.enabled = active;
+    if (this.scene.input.keyboard) {
+      this.scene.input.keyboard.enabled = active;
+    }
   }
 
   /**
@@ -55,9 +59,11 @@ class GameInputManager {
   public registerKeyboardListener(
     key: string | number | Phaser.Input.Keyboard.Key,
     event: string | symbol,
-    callback: Function
+    callback: Function,
   ) {
-    if (!this.scene.input.keyboard) return;
+    if (!this.scene.input.keyboard) {
+      return;
+    }
 
     const keyObj = this.scene.input.keyboard.addKey(key);
     const keyboardListener = keyObj.addListener(event, callback);

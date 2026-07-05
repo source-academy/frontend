@@ -1,4 +1,3 @@
-import React from 'react';
 import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
@@ -10,9 +9,9 @@ import {
   defaultDangerColor,
   defaultStrokeColor,
   getTextWidth,
-  isStashItemInDanger
+  isStashItemInDanger,
 } from '../CseMachineUtils';
-import { Animatable, AnimationConfig } from './base/Animatable';
+import { Animatable, type AnimationConfig } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
@@ -34,7 +33,7 @@ export class InstructionApplicationAnimation extends Animatable {
   constructor(
     private controlInstrItem: ControlItemComponent,
     private stashItems: StashItemComponent[],
-    private resultItem: StashItemComponent
+    private resultItem: StashItemComponent,
   ) {
     super();
     this.resultItemIsFirst = (resultItem?.index ?? stashItems[0].index) === 0;
@@ -42,18 +41,18 @@ export class InstructionApplicationAnimation extends Animatable {
     this.controlInstrAnimation = new AnimatedTextbox(
       controlInstrItem.text,
       getNodePosition(controlInstrItem),
-      { rectProps: { stroke: defaultActiveColor() } }
+      { rectProps: { stroke: defaultActiveColor() } },
     );
     this.stashItemAnimations = stashItems.map(item => {
       return new AnimatedTextbox(item.text, getNodePosition(item), {
         rectProps: {
-          stroke: isStashItemInDanger(item.index) ? defaultDangerColor() : defaultStrokeColor()
-        }
+          stroke: isStashItemInDanger(item.index) ? defaultDangerColor() : defaultStrokeColor(),
+        },
       });
     });
     this.resultAnimation = new AnimatedTextbox(resultItem.text, {
       ...getNodePosition(resultItem),
-      opacity: 0
+      opacity: 0,
     });
     if (resultItem.arrow) {
       this.arrowAnimation = new AnimatedGenericArrow(resultItem.arrow, { opacity: 0 });
@@ -85,7 +84,7 @@ export class InstructionApplicationAnimation extends Animatable {
     await Promise.all([
       this.resultAnimation.animateTo(
         { x: startX + (this.endX - startX) / 2 - this.resultItem!.width() / 2 },
-        { duration: 0 }
+        { duration: 0 },
       ),
       this.controlInstrAnimation.animateRectTo({ stroke: defaultStrokeColor() }, animationConfig),
       this.controlInstrAnimation.animateTo(
@@ -96,13 +95,13 @@ export class InstructionApplicationAnimation extends Animatable {
             (this.resultItemIsFirst
               ? 0
               : (this.resultItem?.height() ?? this.stashItems[0].height())),
-          width: minInstrWidth
+          width: minInstrWidth,
         },
-        animationConfig
+        animationConfig,
       ),
       ...this.stashItemAnimations.map(a =>
-        a.animateRectTo({ stroke: defaultStrokeColor() }, animationConfig)
-      )
+        a.animateRectTo({ stroke: defaultStrokeColor() }, animationConfig),
+      ),
     ]);
     animationConfig = { ...animationConfig, delay: 0 };
     // Merge all elements together to form the result
@@ -110,23 +109,23 @@ export class InstructionApplicationAnimation extends Animatable {
       this.controlInstrAnimation.animateTo({ x: resultX, y: resultY }, animationConfig),
       this.controlInstrAnimation.animateTo(
         { opacity: 0 },
-        { ...animationConfig, duration: fadeDuration }
+        { ...animationConfig, duration: fadeDuration },
       ),
       ...this.stashItemAnimations.flatMap(a => [
         a.animateTo({ x: resultX }, animationConfig),
-        a.animateTo({ opacity: 0 }, { ...animationConfig, duration: fadeDuration })
+        a.animateTo({ opacity: 0 }, { ...animationConfig, duration: fadeDuration }),
       ]),
       this.resultAnimation?.animateTo({ x: resultX }, animationConfig),
       isStashItemInDanger(this.resultItem.index) &&
         this.resultAnimation?.animateRectTo({ stroke: defaultDangerColor() }, animationConfig),
       this.resultAnimation?.animateTo(
         { opacity: 1 },
-        { ...animationConfig, duration: fadeDuration, delay: fadeInDelay }
+        { ...animationConfig, duration: fadeDuration, delay: fadeInDelay },
       ),
       this.arrowAnimation?.animateTo(
         { opacity: 1 },
-        { ...animationConfig, delay: animationConfig?.duration ?? 1 }
-      )
+        { ...animationConfig, delay: animationConfig?.duration ?? 1 },
+      ),
     ]);
     this.destroy();
   }

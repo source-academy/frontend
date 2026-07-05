@@ -20,7 +20,7 @@ type DateInputProps = {
   disableTimezoneSelect?: boolean;
 };
 
-const DateInput: React.FC<DateInputProps> = ({
+function DateInput({
   value,
   onChange,
   onError,
@@ -32,8 +32,8 @@ const DateInput: React.FC<DateInputProps> = ({
   fill,
   closeOnSelection,
   timePrecision,
-  disableTimezoneSelect
-}) => {
+  disableTimezoneSelect,
+}: DateInputProps) {
   void timePrecision;
   void disableTimezoneSelect;
   const [inputValue, setInputValue] = useState(value ? formatDate(new Date(value)) : '');
@@ -113,6 +113,6 @@ const DateInput: React.FC<DateInputProps> = ({
       </Popover>
     </GradingFlex>
   );
-};
+}
 
 export default DateInput;

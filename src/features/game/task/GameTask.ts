@@ -1,4 +1,4 @@
-import { TaskDetail } from './GameTaskTypes';
+import type { TaskDetail } from './GameTaskTypes';
 
 /**
  * The class encapsulates data on all the task ids
@@ -39,7 +39,7 @@ class GameTask {
     if (prevDetail !== undefined) {
       const newDetail: TaskDetail = {
         ...prevDetail,
-        visible: true
+        visible: true,
       };
       this.taskDetails.set(key, newDetail);
     }

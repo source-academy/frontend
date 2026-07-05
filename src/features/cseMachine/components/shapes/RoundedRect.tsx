@@ -1,5 +1,4 @@
-import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Shape } from 'react-konva';
 
 import { ShapeDefaultProps } from '../../CseMachineConfig';
@@ -15,7 +14,7 @@ interface Props {
   listening?: boolean;
   fillEnabled: boolean;
   hitStrokeWidth: number;
-  forwardRef: RefObject<any>;
+  forwardRef: React.RefObject<any>;
   onMouseEnter?: ({ currentTarget }: KonvaEventObject<MouseEvent>) => void;
   onMouseLeave?: ({ currentTarget }: KonvaEventObject<MouseEvent>) => void;
   onClick?: ({ currentTarget }: KonvaEventObject<MouseEvent>) => void;
@@ -24,15 +23,7 @@ interface Props {
 /**
  * Represents Rectangle with rounded corners, for boundary of arrays.
  */
-export const RoundedRect: React.FC<Props> = ({
-  x,
-  y,
-  width,
-  height,
-  cornerRadius,
-  forwardRef,
-  ...props
-}) => {
+export function RoundedRect({ x, y, width, height, cornerRadius, forwardRef, ...props }: Props) {
   return (
     <Shape
       sceneFunc={(context, shape) => {
@@ -56,4 +47,4 @@ export const RoundedRect: React.FC<Props> = ({
       {...props}
     />
   );
-};
+}

@@ -9,13 +9,13 @@ type Props<T extends OptionType> = {
   popoverProps?: Partial<React.ComponentProps<typeof Popover>>;
 };
 
-const SimpleDropdown = <T extends OptionType>({
+function SimpleDropdown<T extends OptionType>({
   options,
   selectedValue,
   onClick,
   buttonProps,
-  popoverProps
-}: Props<T>) => {
+  popoverProps,
+}: Props<T>) {
   const handleClick = (value: T['value']) => {
     onClick?.(value);
   };
@@ -40,6 +40,6 @@ const SimpleDropdown = <T extends OptionType>({
       <Button {...buttonProps}>{buttonLabel()}</Button>
     </Popover>
   );
-};
+}
 
 export default SimpleDropdown;

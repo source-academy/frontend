@@ -1,10 +1,10 @@
 import { FileInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { t } from 'i18next';
-import React, { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SideContentTab, SideContentType } from '../SideContentTypes';
+import { type SideContentTab, SideContentType } from '../SideContentTypes';
 
 export type UploadResult = {
   [key: string]: any;
@@ -29,9 +29,9 @@ type Props = {
 /**
  * This component is responsible for uploading Java class files to bypass the compiler.
  */
-const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
+function SideContentUpload({ onUpload }: Props) {
   const { t } = useTranslation('sideContent', { keyPrefix: 'upload' });
-  const [count, setCount] = React.useState(0);
+  const [count, setCount] = useState(0);
 
   const handleFileUpload: React.ChangeEventHandler<HTMLInputElement> = useCallback(
     e => {
@@ -42,7 +42,7 @@ const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
           promises.push(
             getBase64(file, (b64: string) => {
               ret[file.name] = b64;
-            })
+            }),
           );
         }
       }
@@ -51,7 +51,7 @@ const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
         setCount(promises.length);
       });
     },
-    [onUpload]
+    [onUpload],
   );
 
   return (
@@ -73,13 +73,13 @@ const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
       />
     </div>
   );
-};
+}
 
 const makeUploadTabFrom = (onUpload: (files: UploadResult) => void): SideContentTab => ({
   label: t($ => $.upload.label, { ns: 'sideContent' }),
   iconName: IconNames.Upload,
   body: <SideContentUpload onUpload={onUpload} />,
-  id: SideContentType.upload
+  id: SideContentType.upload,
 });
 
 export default makeUploadTabFrom;

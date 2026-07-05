@@ -1,14 +1,14 @@
 import CommonTextHover from '../commons/CommonTextHover';
-import { ItemId } from '../commons/CommonTypes';
+import type { ItemId } from '../commons/CommonTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { HexColor } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import AwardsConstants, {
   awardExplanation,
   awardKeyStyle,
-  defaultAwardProp
+  defaultAwardProp,
 } from './GameAwardsConstants';
-import { AwardProperty } from './GameAwardsTypes';
+import type { AwardProperty } from './GameAwardsTypes';
 
 /**
  * Get corresponding award properties of the given award keys.
@@ -47,7 +47,7 @@ export function createAssetKeyPreviewCont(scene: Phaser.Scene) {
   const assetKeyCont = new Phaser.GameObjects.Container(
     scene,
     AwardsConstants.preview.rect.xOffset,
-    AwardsConstants.preview.rect.yOffset
+    AwardsConstants.preview.rect.yOffset,
   );
   const rectDim = AwardsConstants.preview.key;
 
@@ -59,7 +59,7 @@ export function createAssetKeyPreviewCont(scene: Phaser.Scene) {
     rectDim.width,
     rectDim.height,
     HexColor.lightBlue,
-    0.1
+    0.1,
   );
   const assetKeyTagBg = new Phaser.GameObjects.Rectangle(
     scene,
@@ -68,13 +68,13 @@ export function createAssetKeyPreviewCont(scene: Phaser.Scene) {
     rectDim.width / 4,
     rectDim.height,
     HexColor.lightBlue,
-    0.2
+    0.2,
   );
   const assetKeyTag = createBitmapText(
     scene,
     'asset key',
     AwardsConstants.preview.keyTagTextConfig,
-    awardKeyStyle
+    awardKeyStyle,
   );
 
   // Create explanation pop-up
@@ -82,16 +82,16 @@ export function createAssetKeyPreviewCont(scene: Phaser.Scene) {
     scene,
     AwardsConstants.preview.explanation.x,
     AwardsConstants.preview.explanation.y,
-    awardExplanation
+    awardExplanation,
   );
 
   // Attach
   assetKeyTagBg.setInteractive();
   assetKeyTagBg.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
-    hoverCont.setVisible(true)
+    hoverCont.setVisible(true),
   );
   assetKeyTagBg.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () =>
-    hoverCont.setVisible(false)
+    hoverCont.setVisible(false),
   );
 
   assetKeyCont.add([assetKeyBg, assetKeyTagBg, assetKeyTag, hoverCont]);

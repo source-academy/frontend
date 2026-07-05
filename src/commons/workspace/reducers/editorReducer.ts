@@ -1,8 +1,8 @@
-import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
+import type { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
 import WorkspaceActions from '../WorkspaceActions';
 import { getWorkspaceLocation } from '../WorkspaceReducer';
-import { EditorTabState, WorkspaceManagerState } from '../WorkspaceTypes';
+import type { EditorTabState, WorkspaceManagerState } from '../WorkspaceTypes';
 
 export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceManagerState>) => {
   builder
@@ -36,7 +36,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
       const updatedEditorTabs = [...state[workspaceLocation].editorTabs];
       updatedEditorTabs[activeEditorTabIndex] = {
         ...updatedEditorTabs[activeEditorTabIndex],
-        ...activeEditorTabOptions
+        ...activeEditorTabOptions,
       };
 
       state[workspaceLocation].editorTabs = updatedEditorTabs;
@@ -109,7 +109,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
 
       const editorTabs = state[workspaceLocation].editorTabs;
       const openedEditorTabIndex = editorTabs.findIndex(
-        (editorTab: EditorTabState) => editorTab.filePath === filePath
+        (editorTab: EditorTabState) => editorTab.filePath === filePath,
       );
       const fileIsAlreadyOpen = openedEditorTabIndex !== -1;
       if (fileIsAlreadyOpen) {
@@ -121,7 +121,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
         filePath,
         value: editorValue,
         highlightedLines: [],
-        breakpoints: []
+        breakpoints: [],
       };
       editorTabs.push(newEditorTab);
       // Set the newly added editor tab as the active tab.
@@ -151,12 +151,12 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
       const editorTabs = state[workspaceLocation].editorTabs;
       const shiftedEditorTab = editorTabs[previousEditorTabIndex];
       const filteredEditorTabs = editorTabs.filter(
-        (editorTab: EditorTabState, index: number) => index !== previousEditorTabIndex
+        (editorTab: EditorTabState, index: number) => index !== previousEditorTabIndex,
       );
       const newEditorTabs = [
         ...filteredEditorTabs.slice(0, newEditorTabIndex),
         shiftedEditorTab,
-        ...filteredEditorTabs.slice(newEditorTabIndex)
+        ...filteredEditorTabs.slice(newEditorTabIndex),
       ];
 
       state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
@@ -172,14 +172,14 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
         throw new Error('Editor tab index must have a corresponding editor tab!');
       }
       const newEditorTabs = state[workspaceLocation].editorTabs.filter(
-        (editorTab: EditorTabState, index: number) => index !== editorTabIndex
+        (editorTab: EditorTabState, index: number) => index !== editorTabIndex,
       );
 
       const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
       const newActiveEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
         activeEditorTabIndex,
         editorTabIndex,
-        newEditorTabs.length
+        newEditorTabs.length,
       );
 
       state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
@@ -191,20 +191,20 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
 
       const editorTabs = state[workspaceLocation].editorTabs;
       const editorTabIndexToRemove = editorTabs.findIndex(
-        (editorTab: EditorTabState) => editorTab.filePath === removedFilePath
+        (editorTab: EditorTabState) => editorTab.filePath === removedFilePath,
       );
       if (editorTabIndexToRemove === -1) {
         return;
       }
       const newEditorTabs = editorTabs.filter(
-        (editorTab: EditorTabState, index: number) => index !== editorTabIndexToRemove
+        (editorTab: EditorTabState, index: number) => index !== editorTabIndexToRemove,
       );
 
       const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
       const newActiveEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
         activeEditorTabIndex,
         editorTabIndexToRemove,
-        newEditorTabs.length
+        newEditorTabs.length,
       );
 
       state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
@@ -235,7 +235,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
         newActiveEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
           newActiveEditorTabIndex,
           editorTabIndexToRemove,
-          newEditorTabs.length
+          newEditorTabs.length,
         );
       }
 
@@ -261,9 +261,9 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
         editorTab.filePath?.startsWith(oldDirectoryPath)
           ? {
               ...editorTab,
-              filePath: editorTab.filePath?.replace(oldDirectoryPath, newDirectoryPath)
+              filePath: editorTab.filePath?.replace(oldDirectoryPath, newDirectoryPath),
             }
-          : editorTab
+          : editorTab,
       );
 
       state[workspaceLocation].editorTabs = newEditorTabs;
@@ -273,7 +273,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
 const getNextActiveEditorTabIndexAfterTabRemoval = (
   activeEditorTabIndex: number | null,
   removedEditorTabIndex: number,
-  newEditorTabsLength: number
+  newEditorTabsLength: number,
 ) => {
   return activeEditorTabIndex !== removedEditorTabIndex
     ? // If the active editor tab is not the one that is removed,

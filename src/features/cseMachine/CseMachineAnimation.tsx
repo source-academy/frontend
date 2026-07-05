@@ -1,8 +1,10 @@
-import { AppInstr, ArrLitInstr, AssmtInstr, InstrType } from 'js-slang/dist/cse-machine/types';
-import { Node } from 'js-slang/dist/types';
+import type { Identifier } from 'estree';
+import type { AppInstr, ArrLitInstr, AssmtInstr } from 'js-slang/dist/cse-machine/types';
+import { InstrType } from 'js-slang/dist/cse-machine/types';
+import type { Node } from 'js-slang/dist/types';
 import { Layer } from 'konva/lib/Layer';
 import { Easings } from 'konva/lib/Tween';
-import React from 'react';
+import { createRef } from 'react';
 
 import { ArrayAccessAnimation } from './animationComponents/ArrayAccessAnimation';
 import { ArrayAssignmentAnimation } from './animationComponents/ArrayAssignmentAnimation';
@@ -38,7 +40,7 @@ export class CseAnimation {
   private static currentFrame: Frame;
   private static previousFrame: Frame;
 
-  static layerRef = React.createRef<Layer>();
+  static layerRef = createRef<Layer>();
   static getLayer(): Layer | null {
     return this.layerRef.current;
   }
@@ -85,64 +87,100 @@ export class CseAnimation {
     const currentControlSize = Layout.controlComponent.control.size();
     const previousControlSize = Layout.previousControlComponent.control.size();
     const numOfItems = currentControlSize - previousControlSize + 1;
-    if (numOfItems <= 0) return [];
+    if (numOfItems <= 0) {
+      return [];
+    }
     return Layout.controlComponent.stackItemComponents.slice(-numOfItems);
   }
 
   private static handleNode(node: Node) {
     const lastControlComponent = Layout.previousControlComponent.stackItemComponents.at(-1)!;
     const currStashComponent = Layout.stashComponent.stashItemComponents.at(-1)!;
-    switch (node.type) {
+    // In conductor/snapshot mode the adapter stores the real AST type in __snapAnimType
+    // while keeping type:'Identifier' for correct control-stack display.  Real AST nodes
+    // never have __snapAnimType so this falls through to node.type transparently.
+    const effectiveType = (node as any).__snapAnimType ?? node.type;
+    switch (effectiveType) {
       case 'Program':
       case 'BlockStatement':
-      case 'StatementSequence':
-        if (node.body.length === 1) {
-          CseAnimation.handleNode(node.body[0]);
+      case 'StatementSequence': {
+        // In snapshot mode, body is stored in __snapBody (stub elements).
+        // For real AST nodes, (node as any).__snapBody is undefined so we fall back to node.body.
+        const body: Node[] = (node as any).__snapBody ?? (node as any).body ?? [];
+        if (body.length === 1) {
+          CseAnimation.handleNode(body[0]);
         } else {
           CseAnimation.animations.push(
-            new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+            new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems()),
           );
           if (
             !isEnvEqual(
               CseAnimation.currentFrame.environment,
-              CseAnimation.previousFrame.environment
+              CseAnimation.previousFrame.environment,
             )
           ) {
             CseAnimation.animations.push(
-              new FrameCreationAnimation(lastControlComponent, CseAnimation.currentFrame)
+              new FrameCreationAnimation(lastControlComponent, CseAnimation.currentFrame),
             );
           }
         }
         break;
+      }
       case 'Literal':
         CseAnimation.animations.push(
-          new ControlToStashAnimation(lastControlComponent, currStashComponent!)
+          new ControlToStashAnimation(lastControlComponent, currStashComponent!),
         );
         break;
       case 'ArrowFunctionExpression':
         CseAnimation.animations.push(
-          new ControlToStashAnimation(lastControlComponent, currStashComponent!)
+          new ControlToStashAnimation(lastControlComponent, currStashComponent!),
         );
         break;
-      case 'Identifier':
+      case 'Identifier': {
+        const identNode = node as unknown as Identifier;
         // Special case for 'undefined' identifier
-        if (node.name === 'undefined') {
+        if (identNode.name === 'undefined') {
           CseAnimation.animations.push(
-            new ControlToStashAnimation(lastControlComponent, currStashComponent!)
+            new ControlToStashAnimation(lastControlComponent, currStashComponent!),
           );
         } else {
-          CseAnimation.animations.push(
-            new LookupAnimation(
-              lastControlComponent,
-              currStashComponent!,
-              ...lookupBinding(CseAnimation.currentFrame, node.name)
-            )
-          );
+          // Only show LookupAnimation when the binding is found in a non-global frame.
+          // When the current frame is already the global frame, or the lookup
+          // resolves to the global frame, use ControlToStashAnimation instead.
+          // Use name === 'global' rather than id === '-1' so conductor evaluators
+          // with different global env ids are handled correctly.
+          const isGlobalEnv = (env: any) => !env || env.id === '-1' || env.name === 'global';
+          const currentEnv = CseAnimation.currentFrame?.environment;
+          if (currentEnv && !isGlobalEnv(currentEnv)) {
+            const [foundFrame, foundBinding] = lookupBinding(
+              CseAnimation.currentFrame,
+              identNode.name,
+            );
+            if (!isGlobalEnv(foundFrame?.environment)) {
+              CseAnimation.animations.push(
+                new LookupAnimation(
+                  lastControlComponent,
+                  currStashComponent!,
+                  foundFrame,
+                  foundBinding,
+                ),
+              );
+            } else {
+              CseAnimation.animations.push(
+                new ControlToStashAnimation(lastControlComponent, currStashComponent!),
+              );
+            }
+          } else {
+            CseAnimation.animations.push(
+              new ControlToStashAnimation(lastControlComponent, currStashComponent!),
+            );
+          }
         }
         break;
+      }
       case 'SpreadElement':
         CseAnimation.animations.push(
-          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems()),
         );
         break;
       case 'AssignmentExpression':
@@ -159,11 +197,11 @@ export class CseAnimation {
       case 'FunctionDeclaration':
       case 'WhileStatement':
         CseAnimation.animations.push(
-          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems()),
         );
         break;
       case 'ExpressionStatement':
-        CseAnimation.handleNode(node.expression);
+        CseAnimation.handleNode((node as any).expression);
         break;
     }
   }
@@ -171,12 +209,13 @@ export class CseAnimation {
   static updateAnimation() {
     CseAnimation.clearAnimationComponents();
 
-    if (!Layout.previousControlComponent) return;
+    if (!Layout.previousControlComponent) {
+      return;
+    }
     const lastControlItem = Layout.previousControlComponent.control.peek();
     const lastControlComponent = Layout.previousControlComponent.stackItemComponents.at(-1);
     const currStashComponent = Layout.stashComponent.stashItemComponents.at(-1);
     if (
-      !CseAnimation.animationEnabled ||
       !lastControlItem ||
       !lastControlComponent ||
       !CseMachine.getControlStash() // TODO: handle cases where there are only environment animations
@@ -189,30 +228,53 @@ export class CseAnimation {
       switch (lastControlItem.instrType) {
         case InstrType.APPLICATION: {
           const appInstr = lastControlItem as AppInstr;
-          const fnStashItem = Layout.previousStashComponent.stashItemComponents.at(
-            -appInstr.numOfArgs - 1
-          )!;
+          // numOfArgs may be undefined when serialized from Python snapshot metadata
+          // (e.g. 0-arg calls where the plugin uses a truthy guard). Fall back to 0.
+          const numOfArgs = appInstr.numOfArgs ?? 0;
+          const fnStashItem = Layout.previousStashComponent.stashItemComponents.at(-numOfArgs - 1);
+          if (!fnStashItem) {
+            break;
+          }
           const fn = fnStashItem.value;
-          if (isBuiltInFn(fn) || isStreamFn(fn)) {
+          const newControlItems = CseAnimation.getNewControlItems();
+          // Use InstructionApplicationAnimation for:
+          //  - js-slang builtins / streams
+          //  - Python builtins (serialized as strings — no reference arrow)
+          //  - any call that didn't push new control items (e.g. tail-call-like builtins)
+          if (
+            isBuiltInFn(fn) ||
+            isStreamFn(fn) ||
+            !fnStashItem.arrow ||
+            newControlItems.length === 0
+          ) {
             CseAnimation.animations.push(
               new InstructionApplicationAnimation(
                 lastControlComponent,
-                Layout.previousStashComponent.stashItemComponents.slice(-appInstr.numOfArgs - 1),
-                currStashComponent!
-              )
+                Layout.previousStashComponent.stashItemComponents.slice(-numOfArgs - 1),
+                currStashComponent!,
+              ),
             );
             break;
           }
-          const frameCreated = appInstr.numOfArgs > 0;
-
+          // A new frame is created whenever a user-defined function is applied.
+          // Use environment identity to detect this (handles 0-arg functions too).
+          const frameCreated = !isEnvEqual(
+            CseAnimation.currentFrame?.environment,
+            CseAnimation.previousFrame?.environment,
+          );
+          // slice(-0) === slice(0) returns the whole array, so guard 0-arg case.
+          const argStashItems =
+            numOfArgs > 0
+              ? Layout.previousStashComponent.stashItemComponents.slice(-numOfArgs)
+              : [];
           CseAnimation.animations.push(
             new FunctionApplicationAnimation(
               lastControlComponent,
-              CseAnimation.getNewControlItems(),
+              newControlItems,
               fnStashItem,
-              Layout.previousStashComponent.stashItemComponents.slice(-appInstr.numOfArgs),
-              frameCreated ? CseAnimation.currentFrame : undefined
-            )
+              argStashItems,
+              frameCreated ? CseAnimation.currentFrame : undefined,
+            ),
           );
           break;
         }
@@ -222,8 +284,8 @@ export class CseAnimation {
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.at(-2)!,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
-              Layout.stashComponent.stashItemComponents.at(-1)!
-            )
+              Layout.stashComponent.stashItemComponents.at(-1)!,
+            ),
           );
           break;
         case InstrType.ARRAY_ASSIGNMENT: {
@@ -235,8 +297,8 @@ export class CseAnimation {
               Layout.values.get(arrayItem.value.id) as ArrayValue,
               Layout.previousStashComponent.stashItemComponents.at(-2)!,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
-              Layout.stashComponent.stashItemComponents.at(-1)!
-            )
+              Layout.stashComponent.stashItemComponents.at(-1)!,
+            ),
           );
           break;
         }
@@ -246,8 +308,8 @@ export class CseAnimation {
             new InstructionApplicationAnimation(
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.slice(-arrSize),
-              currStashComponent!
-            )
+              currStashComponent!,
+            ),
           );
           break;
         }
@@ -256,8 +318,8 @@ export class CseAnimation {
             new AssignmentAnimation(
               lastControlComponent,
               currStashComponent!,
-              ...lookupBinding(CseAnimation.currentFrame, (lastControlItem as AssmtInstr).symbol)
-            )
+              ...lookupBinding(CseAnimation.currentFrame, (lastControlItem as AssmtInstr).symbol),
+            ),
           );
           break;
         case InstrType.BINARY_OP:
@@ -266,8 +328,8 @@ export class CseAnimation {
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.at(-2)!,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
-              currStashComponent!
-            )
+              currStashComponent!,
+            ),
           );
           break;
         case InstrType.BRANCH:
@@ -277,13 +339,13 @@ export class CseAnimation {
             new BranchAnimation(
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
-              CseAnimation.getNewControlItems()
-            )
+              CseAnimation.getNewControlItems(),
+            ),
           );
           break;
         case InstrType.ENVIRONMENT:
           CseAnimation.animations.push(
-            new EnvironmentAnimation(CseAnimation.previousFrame, CseAnimation.currentFrame)
+            new EnvironmentAnimation(CseAnimation.previousFrame, CseAnimation.currentFrame),
           );
           break;
         case InstrType.POP:
@@ -298,8 +360,8 @@ export class CseAnimation {
               new PopAnimation(
                 lastControlComponent,
                 Layout.previousStashComponent.stashItemComponents.at(-1)!,
-                lastStashIsUndefined ? currStashComponent : undefined
-              )
+                lastStashIsUndefined ? currStashComponent : undefined,
+              ),
             );
           }
           break;
@@ -308,8 +370,8 @@ export class CseAnimation {
             new UnaryOperationAnimation(
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
-              currStashComponent!
-            )
+              currStashComponent!,
+            ),
           );
           break;
         case InstrType.SPREAD: {
@@ -337,8 +399,8 @@ export class CseAnimation {
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
               resultItems!,
-              currCallInstr!
-            )
+              currCallInstr!,
+            ),
           );
           break;
         }
@@ -364,7 +426,9 @@ export class CseAnimation {
     // Setting the listening property to false on the Konva Layer does not seem to work, so
     // this a workaround.
     const canvasElement = CseAnimation.getLayer()?.getNativeCanvasElement();
-    if (canvasElement) canvasElement.style.pointerEvents = 'none';
+    if (canvasElement) {
+      canvasElement.style.pointerEvents = 'none';
+    }
     // Play all the animations
     await Promise.all(this.animations.map(a => a.animate()));
   }

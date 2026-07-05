@@ -1,5 +1,4 @@
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 import ControlButton from '../ControlButton';
 
@@ -7,6 +6,8 @@ type Props = {
   onClick?(): any;
 };
 
-export const ControlBarResetButton: React.FC<Props> = ({ onClick }) => {
+function ControlBarResetButton({ onClick }: Props) {
   return <ControlButton label="Reset" icon={IconNames.REPEAT} onClick={onClick} />;
-};
+}
+
+export default ControlBarResetButton;

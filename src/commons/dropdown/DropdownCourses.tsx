@@ -1,10 +1,9 @@
 import { Dialog, DialogBody, HTMLSelect } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 import { useNavigate } from 'react-router';
 
 import { Role } from '../application/ApplicationTypes';
-import { UserCourse } from '../application/types/SessionTypes';
+import type { UserCourse } from '../application/types/SessionTypes';
 
 type Props = {
   isOpen: boolean;
@@ -13,13 +12,13 @@ type Props = {
   courseId?: number;
 };
 
-const DropdownCourses = (({ isOpen, onClose, courses, courseId }) => {
+function DropdownCourses({ isOpen, onClose, courses, courseId }: Props) {
   const navigate = useNavigate();
 
   const options = courses.map(course => ({
     value: course.courseId,
     label: course.courseName.concat(!course.viewable ? ' - disabled' : ''),
-    disabled: !course.viewable && course.role !== Role.Admin
+    disabled: !course.viewable && course.role !== Role.Admin,
   }));
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -30,7 +29,7 @@ const DropdownCourses = (({ isOpen, onClose, courses, courseId }) => {
   return (
     <Dialog
       icon={IconNames.PROPERTIES}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={isOpen}
       onClose={onClose}
       title="My Courses"
@@ -47,6 +46,6 @@ const DropdownCourses = (({ isOpen, onClose, courses, courseId }) => {
       </DialogBody>
     </Dialog>
   );
-}) satisfies React.FC<Props>;
+}
 
 export default DropdownCourses;

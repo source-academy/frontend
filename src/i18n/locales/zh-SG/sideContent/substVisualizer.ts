@@ -9,9 +9,9 @@ const translations = {
     a: 'a: 跳到第一步',
     e: 'e: 跳到最后一步',
     f: 'f: 跳到下一步',
-    b: 'b: 跳到上一步'
+    b: 'b: 跳到上一步',
   },
-  shortcutsNote: '请注意，这些快捷键仅在浏览器焦点位于此标签页时有效（点击说明文字或其上方区域）。'
+  shortcutsNote: '请注意，这些快捷键仅在浏览器焦点位于此标签页时有效（点击说明文字或其上方区域）。',
 };
 
 export default translations;

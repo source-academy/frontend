@@ -1,9 +1,9 @@
 import { Collapse } from '@blueprintjs/core';
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 
 import {
   AchievementContext,
-  getAbilityColor
+  getAbilityColor,
 } from '../../features/achievement/AchievementConstants';
 import { AchievementStatus, FilterStatus } from '../../features/achievement/AchievementTypes';
 import AchievementCard from './AchievementCard';
@@ -14,7 +14,7 @@ type Props = {
   focusState: [string, any];
 };
 
-const AchievementTask: React.FC<Props> = ({ uuid, filterStatus, focusState }) => {
+function AchievementTask({ uuid, filterStatus, focusState }: Props) {
   const inferencer = useContext(AchievementContext);
   const prerequisiteUuids = [...inferencer.getImmediateChildren(uuid)];
   const taskColor = getAbilityColor();
@@ -82,7 +82,7 @@ const AchievementTask: React.FC<Props> = ({ uuid, filterStatus, focusState }) =>
             shouldRender={isInFilter(uuid)}
             toggleDropdown={toggleDropdown}
           />
-          <Collapse isOpen={isDropdownOpen} keepChildrenMounted={true}>
+          <Collapse isOpen={isDropdownOpen} keepChildrenMounted>
             <div className="prerequisite-container">
               {prerequisiteUuids.map(prerequisiteUuid => (
                 <div className="prerequisite" key={prerequisiteUuid}>
@@ -90,9 +90,9 @@ const AchievementTask: React.FC<Props> = ({ uuid, filterStatus, focusState }) =>
                     className="dropdown-lines"
                     style={{
                       borderBottom: `1px solid ${taskColor}`,
-                      borderLeft: `1px solid ${taskColor}`
+                      borderLeft: `1px solid ${taskColor}`,
                     }}
-                  ></div>
+                  />
                   <AchievementCard
                     uuid={prerequisiteUuid}
                     focusState={focusState}
@@ -106,6 +106,6 @@ const AchievementTask: React.FC<Props> = ({ uuid, filterStatus, focusState }) =>
       )}
     </>
   );
-};
+}
 
 export default AchievementTask;

@@ -1,5 +1,4 @@
 import { NumericInput } from '@blueprintjs/core';
-import React from 'react';
 
 type TimePickerProps = {
   value?: Date;
@@ -7,7 +6,7 @@ type TimePickerProps = {
   showArrowButtons?: boolean;
 };
 
-const TimePicker: React.FC<TimePickerProps> = ({ value, onChange, showArrowButtons = false }) => {
+function TimePicker({ value, onChange, showArrowButtons = false }: TimePickerProps) {
   const hours = value ? value.getHours() : 0;
   const minutes = value ? value.getMinutes() : 0;
   const seconds = value ? value.getSeconds() : 0;
@@ -37,7 +36,7 @@ const TimePicker: React.FC<TimePickerProps> = ({ value, onChange, showArrowButto
 
   const handleWheel = (
     e: React.WheelEvent<HTMLInputElement>,
-    field: 'hours' | 'minutes' | 'seconds'
+    field: 'hours' | 'minutes' | 'seconds',
   ) => {
     e.preventDefault();
     const delta = e.deltaY > 0 ? -1 : 1;
@@ -89,6 +88,6 @@ const TimePicker: React.FC<TimePickerProps> = ({ value, onChange, showArrowButto
       />
     </div>
   );
-};
+}
 
 export default TimePicker;

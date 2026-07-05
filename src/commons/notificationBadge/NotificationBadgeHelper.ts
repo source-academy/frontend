@@ -1,5 +1,5 @@
-import { AssessmentType } from '../assessment/AssessmentTypes';
-import { Notification, NotificationFilterFunction } from './NotificationBadgeTypes';
+import type { AssessmentType } from '../assessment/AssessmentTypes';
+import type { Notification, NotificationFilterFunction } from './NotificationBadgeTypes';
 
 /**
  * @return A function that takes in an array of notification and filters it by assessment id.
@@ -26,7 +26,7 @@ export function filterNotificationsBySubmission(submissionId: number): Notificat
  * @return A function that takes in an array of notification and filters it by the type of notification.
  */
 export function filterNotificationsByType(
-  assessmentType: AssessmentType
+  assessmentType: AssessmentType,
 ): NotificationFilterFunction {
   return (notifications: Notification[]) =>
     notifications.filter(n => {

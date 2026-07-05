@@ -1,11 +1,12 @@
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
-import { ItemId } from '../commons/CommonTypes';
-import { GameItemType, LocationId } from '../location/GameMapTypes';
-import { ActivatableSprite } from '../objects/GameObjectTypes';
-import { StateObserver } from '../state/GameStateTypes';
-import { BBoxProperty } from './GameBoundingBoxTypes';
+import type { ItemId } from '../commons/CommonTypes';
+import type { LocationId } from '../location/GameMapTypes';
+import { GameItemType } from '../location/GameMapTypes';
+import type { ActivatableSprite } from '../objects/GameObjectTypes';
+import type { StateObserver } from '../state/GameStateTypes';
+import type { BBoxProperty } from './GameBoundingBoxTypes';
 
 /**
  * Manager for rendering interactive bounding boxes in the location.
@@ -28,7 +29,7 @@ class GameBoundingBoxManager implements StateObserver {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.BBox]);
     const bboxIdsToRender = GameGlobalAPI.getInstance().getGameItemsInLocation(
       GameItemType.boundingBoxes,
-      locationId
+      locationId,
     );
 
     // Refresh mapping
@@ -58,7 +59,7 @@ class GameBoundingBoxManager implements StateObserver {
       sprite: bboxSprite,
       clickArea: bboxSprite,
       actionIds,
-      interactionId
+      interactionId,
     };
   }
 

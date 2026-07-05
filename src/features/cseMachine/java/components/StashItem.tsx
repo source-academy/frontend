@@ -1,9 +1,8 @@
-import React from 'react';
 import {
   Group as KonvaGroup,
   Label as KonvaLabel,
   Tag as KonvaTag,
-  Text as KonvaText
+  Text as KonvaText,
 } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
@@ -23,7 +22,7 @@ export class StashItem extends Visible {
     x: number,
     private readonly _text: string,
     private readonly _stroke: string,
-    reference?: Method | Frame | Variable
+    reference?: Method | Frame | Variable,
   ) {
     super();
 
@@ -47,7 +46,7 @@ export class StashItem extends Visible {
         this._x + this._width / 2,
         this._y + this._height,
         reference.x(),
-        toY
+        toY,
       );
     }
   }
@@ -59,12 +58,12 @@ export class StashItem extends Visible {
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: ControlStashConfig.FontSize,
       fontStyle: ControlStashConfig.FontStyle,
-      fontVariant: ControlStashConfig.FontVariant
+      fontVariant: ControlStashConfig.FontVariant,
     };
 
     const tagProps = {
       stroke: this._stroke,
-      cornerRadius: ControlStashConfig.StashItemCornerRadius
+      cornerRadius: ControlStashConfig.StashItemCornerRadius,
     };
 
     return (

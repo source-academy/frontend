@@ -1,17 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
-import { ContestEntry } from '../../assessment/AssessmentTypes';
+import type { ContestEntry } from '../../assessment/AssessmentTypes';
 import SideContentContestVoting from './SideContentContestVoting';
 
-export type SideContentContestVotingContainerProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+export type SideContentContestVotingContainerProps = {
   handleContestEntryClick: (submissionId: number, answer: string) => void;
   handleSave: (votingSubmission: ContestEntry[]) => void;
-};
-
-type StateProps = {
   canSave: boolean;
   contestEntries: ContestEntry[];
 };
@@ -20,12 +15,12 @@ type StateProps = {
  * Container to separate behaviour concerns from rendering concerns
  * Stores component-level voting ranking state
  */
-const SideContentContestVotingContainer: React.FC<SideContentContestVotingContainerProps> = ({
+function SideContentContestVotingContainer({
   canSave,
   contestEntries,
   handleSave,
-  handleContestEntryClick
-}) => {
+  handleContestEntryClick,
+}: SideContentContestVotingContainerProps) {
   const [isValid, setIsValid] = useState(true);
   const [votingSubmission, setVotingSubmission] = useState<ContestEntry[]>([]);
 
@@ -42,7 +37,7 @@ const SideContentContestVotingContainer: React.FC<SideContentContestVotingContai
   const handleVotingSubmissionChange = (submissionId: number, score: number): void => {
     // update the votes
     const updatedSubmission = votingSubmission.map(vote =>
-      vote.submission_id === submissionId ? { ...vote, score: score } : vote
+      vote.submission_id === submissionId ? { ...vote, score: score } : vote,
     );
     setVotingSubmission(updatedSubmission);
     const noNull = submissionHasNoNull(updatedSubmission);
@@ -64,6 +59,6 @@ const SideContentContestVotingContainer: React.FC<SideContentContestVotingContai
       contestEntries={votingSubmission}
     />
   );
-};
+}
 
 export default SideContentContestVotingContainer;

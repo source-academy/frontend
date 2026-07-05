@@ -5,38 +5,38 @@ import {
   DialogFooter,
   Intent,
   Menu,
-  MenuItem
+  MenuItem,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
+import { type ItemListRenderer, type ItemRenderer, Select } from '@blueprintjs/select';
 import { Variant } from 'js-slang/dist/langs';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 
 import {
-  SALanguage,
+  type SALanguage,
   sourceLanguages,
-  styliseSublanguage
+  styliseSublanguage,
 } from '../../../../commons/application/ApplicationTypes';
 import ControlButton from '../../../../commons/ControlButton';
 import WorkspaceActions from '../../../../commons/workspace/WorkspaceActions';
 
-const DefaultChapterSelect: React.FC = () => {
+function DefaultChapterSelect() {
   const [chosenSublang, setSublanguage] = useState<SALanguage>(sourceLanguages[0]);
   const [isDialogOpen, setDialogState] = useState(false);
 
   const {
     // Temporarily load the defaults when the course configuration fetch has yet to return
     sourceChapter = Constants.defaultSourceChapter,
-    sourceVariant = Constants.defaultSourceVariant
+    sourceVariant = Constants.defaultSourceVariant,
   } = useSession();
 
   const dispatch = useDispatch();
   const handleUpdateSublanguage = useCallback(
     (sublang: SALanguage) => dispatch(WorkspaceActions.changeSublanguage(sublang)),
-    [dispatch]
+    [dispatch],
   );
 
   const handleOpenDialog = useCallback(
@@ -44,7 +44,7 @@ const DefaultChapterSelect: React.FC = () => {
       setDialogState(true);
       setSublanguage(choice);
     },
-    [setDialogState, setSublanguage]
+    [setDialogState, setSublanguage],
   );
   const handleCloseDialog = useCallback(() => {
     setDialogState(false);
@@ -58,7 +58,7 @@ const DefaultChapterSelect: React.FC = () => {
     (lang, { handleClick }) => (
       <MenuItem key={lang.displayName} onClick={handleClick} text={lang.displayName} />
     ),
-    []
+    [],
   );
 
   const chapterListRenderer: ItemListRenderer<SALanguage> = useCallback(
@@ -77,18 +77,16 @@ const DefaultChapterSelect: React.FC = () => {
         </Menu>
       );
     },
-    []
+    [],
   );
-
-  const DefaultChapterSelectComponent = Select.ofType<SALanguage>();
 
   const dialog = (
     <Dialog
-      canEscapeKeyClose={true}
-      canOutsideClickClose={true}
+      canEscapeKeyClose
+      canOutsideClickClose
       className="change-default-lang-dialog"
       icon={IconNames.ERROR}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={isDialogOpen}
       onClose={handleCloseDialog}
       title="Updating default Source sublanguage"
@@ -103,12 +101,12 @@ const DefaultChapterSelect: React.FC = () => {
             <ControlButton
               label="Cancel"
               onClick={handleCloseDialog}
-              options={{ minimal: false }}
+              options={{ variant: 'default' }}
             />
             <ControlButton
               label="Confirm"
               onClick={handleConfirmDialog}
-              options={{ minimal: false, intent: Intent.DANGER }}
+              options={{ variant: 'default', intent: Intent.DANGER }}
             />
           </>
         }
@@ -118,21 +116,21 @@ const DefaultChapterSelect: React.FC = () => {
 
   return (
     <>
-      <DefaultChapterSelectComponent
+      <Select<SALanguage>
         items={sourceLanguages}
         onItemSelect={handleOpenDialog}
         itemRenderer={chapterRenderer}
         itemListRenderer={chapterListRenderer}
         filterable={false}
       >
-        <Button rightIcon={IconNames.DOUBLE_CARET_VERTICAL}>
+        <Button endIcon={IconNames.DOUBLE_CARET_VERTICAL}>
           <span className="hidden-xs hidden-sm">Default sublanguage: </span>
           <span>{styliseSublanguage(sourceChapter, sourceVariant)}</span>
         </Button>
-      </DefaultChapterSelectComponent>
+      </Select>
       {dialog}
     </>
   );
-};
+}
 
 export default DefaultChapterSelect;

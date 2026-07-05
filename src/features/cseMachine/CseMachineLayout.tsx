@@ -1,23 +1,24 @@
 import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Chapter } from 'js-slang/dist/langs';
-import { Frame } from 'js-slang/dist/types';
+import type { Frame } from 'js-slang/dist/types';
 import { Group as KonvaGroupNode } from 'konva/lib/Group';
 import { Layer as KonvaLayerNode } from 'konva/lib/Layer';
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Stage } from 'konva/lib/Stage';
-import React, { RefObject } from 'react';
+import { createRef } from 'react';
 import {
   Group as KonvaGroup,
   Layer as KonvaLayer,
   Rect as KonvaRect,
-  Stage as KonvaStage
+  Stage as KonvaStage,
 } from 'react-konva';
 import classes from 'src/styles/Draggable.module.scss';
 
 import { arrowSelection } from './components/arrows/ArrowSelection';
 import { Binding } from './components/Binding';
 import { ControlStack } from './components/ControlStack';
+import { Frame as FrameComponent } from './components/Frame';
 import { Level } from './components/Level';
 import { StashStack } from './components/StashStack';
 import { ArrayValue } from './components/values/ArrayValue';
@@ -31,7 +32,7 @@ import CseMachine from './CseMachine';
 import { CseAnimation } from './CseMachineAnimation';
 import { Config, ShapeDefaultProps } from './CseMachineConfig';
 import { ControlStashConfig } from './CseMachineControlStashConfig'; // Added for offset
-import {
+import type {
   Data,
   DataArray,
   EnvTree,
@@ -39,7 +40,7 @@ import {
   GlobalFn,
   NonGlobalFn,
   ReferenceType,
-  StreamFn
+  StreamFn,
 } from './CseMachineTypes';
 import {
   assert,
@@ -57,7 +58,7 @@ import {
   isPrimitiveData,
   isStreamFn,
   isUnassigned,
-  setDifference
+  setDifference,
 } from './CseMachineUtils';
 import { Continuation, isContinuation } from './utils/continuation';
 export type LayoutCache = {
@@ -109,6 +110,8 @@ export class Layout {
   static liveObjectIDs: Set<string> = new Set();
   /** hide non-live frames temporarily for the current step */
   static clearDeadFrames: boolean = false;
+  /** set to true during renderSnapshot() to skip EnvTree deep-copy and changepointSteps tracking */
+  static snapshotMode: boolean = false;
 
   /**
    * memoized values, where keys are either ids for arrays and closures,
@@ -124,24 +127,31 @@ export class Layout {
   static currentStackTruncDark: React.ReactNode;
   static currentStackLight: React.ReactNode;
   static currentStackTruncLight: React.ReactNode;
-  static stageRef: RefObject<Stage | null> = React.createRef();
-  static contentGroupRef: RefObject<KonvaGroupNode | null> = React.createRef();
-  static animationGroupRef: RefObject<KonvaGroupNode | null> = React.createRef();
-  static arrowUnderlayLayerRef: RefObject<KonvaLayerNode | null> = React.createRef();
-  static underlayArrows: React.ReactNode[] = [];
+  static stageRef: React.RefObject<Stage | null> = createRef();
+  static contentGroupRef: React.RefObject<KonvaGroupNode | null> = createRef();
+  static animationGroupRef: React.RefObject<KonvaGroupNode | null> = createRef();
+  static arrowUnderlayLayerRef: React.RefObject<KonvaLayerNode | null> = createRef();
+  static liveArrowLayerRef: React.RefObject<KonvaLayerNode | null> = createRef();
+  static deadUnderlayArrows: React.ReactNode[] = [];
+  static liveUnderlayArrows: React.ReactNode[] = [];
   static overlayNodes: React.ReactNode[] = [];
 
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
   static invisiblePaddingHorizontal: number = 300;
-  static scrollContainerRef: RefObject<HTMLDivElement | null> = React.createRef();
+  static scrollContainerRef: React.RefObject<HTMLDivElement | null> = createRef();
 
   static resetUnderlayArrows() {
-    Layout.underlayArrows = [];
+    Layout.deadUnderlayArrows = [];
+    Layout.liveUnderlayArrows = [];
   }
 
-  static registerUnderlayArrow(arrow: React.ReactNode) {
-    Layout.underlayArrows.push(arrow);
+  static registerUnderlayArrow(arrow: React.ReactNode, isLive: boolean = false) {
+    if (isLive) {
+      Layout.liveUnderlayArrows.push(arrow);
+    } else {
+      Layout.deadUnderlayArrows.push(arrow);
+    }
   }
 
   static resetOverlayNodes() {
@@ -190,7 +200,7 @@ export class Layout {
     envTree: EnvTree,
     control: Control,
     stash: Stash,
-    chapter: Chapter = Chapter.SOURCE_4
+    chapter: Chapter = Chapter.SOURCE_4,
   ): void {
     Layout.currentLight = undefined;
     Layout.currentDark = undefined;
@@ -205,8 +215,8 @@ export class Layout {
     Layout.resetUnderlayArrows();
     Layout.resetOverlayNodes();
 
-    // deep copy so we don't mutate the context
-    Layout.globalEnvNode = deepCopyTree(envTree).root;
+    // deep copy so we don't mutate the context (skip in snapshot mode — tree is already isolated)
+    Layout.globalEnvNode = Layout.snapshotMode ? (envTree as any).root : deepCopyTree(envTree).root;
     Layout.control = control;
     Layout.stash = stash;
 
@@ -228,12 +238,12 @@ export class Layout {
     if (CseMachine.getControlStash()) {
       Layout.controlStashHeight = Math.max(
         Config.CanvasMinHeight,
-        Layout.controlComponent.y() + Layout.controlComponent.height() + Config.CanvasPaddingY
+        Layout.controlComponent.y() + Layout.controlComponent.height() + Config.CanvasPaddingY,
       );
       Layout.controlStashWidth = Math.max(
         Config.CanvasMinWidth,
         Layout.controlComponent.x() + Layout.controlComponent.width() + Config.CanvasPaddingX,
-        Layout.stashComponent.x() + Layout.stashComponent.width() + Config.CanvasPaddingX
+        Layout.stashComponent.x() + Layout.stashComponent.width() + Config.CanvasPaddingX,
       );
     }
     // calculate height and width by considering lowest and widest level
@@ -242,7 +252,7 @@ export class Layout {
       Layout.visibleHeight,
       Config.CanvasMinHeight,
       lastLevel.y() + lastLevel.height() + Config.CanvasPaddingY,
-      Layout.controlStashHeight ?? 0
+      Layout.controlStashHeight ?? 0,
     );
     Layout._width = Math.max(
       Layout.visibleWidth,
@@ -251,10 +261,15 @@ export class Layout {
         Config.CanvasPaddingX * 2 +
         (CseMachine.getControlStash()
           ? Layout.controlComponent.width() + Config.CanvasPaddingX * 2
-          : 0)
+          : 0),
     );
-    // initialise animations
-    CseAnimation.updateAnimation();
+    // initialise animations — wrapped so animation failures never prevent the visualization
+    // from rendering (e.g. getLayer() null before first mount, or undefined stash items).
+    try {
+      CseAnimation.updateAnimation();
+    } catch (_e) {
+      CseAnimation.animations.length = 0;
+    }
   }
 
   static initializeControlStash(chapter: Chapter) {
@@ -269,7 +284,12 @@ export class Layout {
    * objects into the global environment head and heap
    */
   private static removePreludeEnv() {
-    if (!Layout.globalEnvNode.children || Layout.globalEnvNode.children.length === 0) return;
+    if (Layout.snapshotMode) {
+      return;
+    }
+    if (!Layout.globalEnvNode.children || Layout.globalEnvNode.children.length === 0) {
+      return;
+    }
 
     const preludeEnvNode = Layout.globalEnvNode.children[0];
     const preludeEnv = preludeEnvNode.environment;
@@ -308,6 +328,9 @@ export class Layout {
 
   /** remove any global functions not referenced elsewhere in the program */
   private static removeUnreferencedGlobalFns(): void {
+    if (Layout.snapshotMode) {
+      return;
+    }
     const referencedFns = new Set<GlobalFn | NonGlobalFn>();
     const visitedData = new Set<DataArray>();
 
@@ -331,7 +354,9 @@ export class Layout {
     };
 
     const findGlobalFnReferencesInData = (data: DataArray): void => {
-      if (visitedData.has(data)) return;
+      if (visitedData.has(data)) {
+        return;
+      }
       visitedData.add(data);
       data.forEach(d => {
         if (isGlobalFn(d)) {
@@ -345,7 +370,9 @@ export class Layout {
     // only include predeclared or built-in functions used in user code
     for (const name of CseMachine.usedBuiltInNames) {
       const fn = Layout.globalEnvNode.environment.head[name];
-      if (fn && isGlobalFn(fn)) referencedFns.add(fn);
+      if (fn && isGlobalFn(fn)) {
+        referencedFns.add(fn);
+      }
     }
 
     // Then, find any references within any arrays inside the global environment heap,
@@ -362,15 +389,19 @@ export class Layout {
     Layout.globalEnvNode.children.forEach(findGlobalFnReferences);
 
     const functionNames = new Map(
-      Object.entries(Layout.globalEnvNode.environment.head).map(([key, value]) => [value, key])
+      Object.entries(Layout.globalEnvNode.environment.head).map(([key, value]) => [value, key]),
     );
 
     let i = 0;
     const newHead: Frame = {};
     const newHeap = new Heap();
     for (const fn of referencedFns) {
-      if (isClosure(fn)) newHeap.add(fn);
-      if (isGlobalFn(fn)) newHead[functionNames.get(fn) ?? `${i++}`] = fn;
+      if (isClosure(fn)) {
+        newHeap.add(fn);
+      }
+      if (isGlobalFn(fn)) {
+        newHead[functionNames.get(fn) ?? `${i++}`] = fn;
+      }
     }
 
     // add any arrays from the original heap to the new heap
@@ -382,7 +413,7 @@ export class Layout {
 
     Layout.globalEnvNode.environment.head = {
       [Config.GlobalFrameDefaultText]: Symbol(),
-      ...newHead
+      ...newHead,
     };
     Layout.globalEnvNode.environment.heap = newHeap;
   }
@@ -401,13 +432,14 @@ export class Layout {
    */
   private static sortNodesByCreation(nodes: EnvTreeNode[]): EnvTreeNode[] {
     return [...nodes].sort((left, right) =>
-      left.environment.id.localeCompare(right.environment.id, undefined, { numeric: true })
+      left.environment.id.localeCompare(right.environment.id, undefined, { numeric: true }),
     );
   }
 
   /** initializes grid */
   private static initializeGrid(): void {
     this.levels = [];
+    FrameComponent.clearMap();
     let frontier: EnvTreeNode[] = Layout.clearDeadFrames
       ? Layout.getVisibleChildren([Layout.globalEnvNode])
       : [Layout.globalEnvNode];
@@ -472,7 +504,7 @@ export class Layout {
       return new PrimitiveValue(data, reference);
     } else {
       const existingValue = Layout.values.get(
-        isBuiltInFn(data) || isStreamFn(data) ? data : data.id
+        isBuiltInFn(data) || isStreamFn(data) ? data : data.id,
       );
       if (existingValue) {
         existingValue.addReference(reference);
@@ -496,10 +528,13 @@ export class Layout {
 
   static memoizeValue(
     data: GlobalFn | NonGlobalFn | StreamFn | Continuation | DataArray,
-    value: Value
+    value: Value,
   ) {
-    if (isBuiltInFn(data) || isStreamFn(data)) Layout.values.set(data, value);
-    else Layout.values.set((data as any).id, value);
+    if (isBuiltInFn(data) || isStreamFn(data)) {
+      Layout.values.set(data, value);
+    } else {
+      Layout.values.set((data as any).id, value);
+    }
   }
 
   private static getExportScale(width: number, height: number, padding: number): number {
@@ -511,10 +546,10 @@ export class Layout {
   private static getExportBounds() {
     const bounds = [
       this.contentGroupRef.current?.getClientRect(),
-      this.animationGroupRef.current?.getClientRect()
+      this.animationGroupRef.current?.getClientRect(),
     ].filter(
       (rect): rect is { x: number; y: number; width: number; height: number } =>
-        !!rect && rect.width > 0 && rect.height > 0
+        !!rect && rect.width > 0 && rect.height > 0,
     );
 
     if (bounds.length === 0) {
@@ -522,7 +557,7 @@ export class Layout {
         x: Layout.invisiblePaddingHorizontal,
         y: Layout.invisiblePaddingVertical,
         width: Layout.width(),
-        height: Layout.height()
+        height: Layout.height(),
       };
     }
 
@@ -536,7 +571,7 @@ export class Layout {
       x: Math.max(0, minX - padding),
       y: Math.max(0, minY - padding),
       width: maxX - minX + padding * 2,
-      height: maxY - minY + padding * 2
+      height: maxY - minY + padding * 2,
     };
   }
 
@@ -557,7 +592,7 @@ export class Layout {
     stage.scale({ x: nextScale, y: nextScale });
     stage.position({
       x: (viewportWidth - bounds.width * nextScale) / 2 - bounds.x * nextScale,
-      y: (viewportHeight - bounds.height * nextScale) / 2 - bounds.y * nextScale
+      y: (viewportHeight - bounds.height * nextScale) / 2 - bounds.y * nextScale,
     });
     container?.scrollTo({ left: 0, top: 0 });
     Layout.handleScrollPosition(0, 0);
@@ -603,7 +638,7 @@ export class Layout {
       width: bounds.width,
       height: bounds.height,
       pixelRatio: exportScale,
-      mimeType: 'image/png'
+      mimeType: 'image/png',
     });
 
     const image = new window.Image();
@@ -643,7 +678,9 @@ export class Layout {
    * @param y y position of the scroll container
    */
   private static handleScrollPosition(x: number, y: number) {
-    if (!this.stageRef.current) return;
+    if (!this.stageRef.current) {
+      return;
+    }
     const dx = x - Layout.invisiblePaddingHorizontal;
     const dy = y - Layout.invisiblePaddingVertical;
     this.stageRef.current.container().style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
@@ -664,11 +701,11 @@ export class Layout {
       const oldScale = stage.scaleX();
       const { x: pointerX, y: pointerY } = stage.getPointerPosition() ?? {
         x: Layout.visibleWidth / 2 - stage.x(),
-        y: Layout.visibleHeight / 2 - stage.y()
+        y: Layout.visibleHeight / 2 - stage.y(),
       };
       const mousePointTo = {
         x: (pointerX - stage.x()) / oldScale,
-        y: (pointerY - stage.y()) / oldScale
+        y: (pointerY - stage.y()) / oldScale,
       };
 
       // zoom in or zoom out
@@ -685,7 +722,7 @@ export class Layout {
         if (typeof event !== 'boolean') {
           const newPos = {
             x: pointerX - mousePointTo.x * newScale,
-            y: pointerY - mousePointTo.y * newScale
+            y: pointerY - mousePointTo.y * newScale,
           };
           stage.position(newPos);
           stage.batchDraw();
@@ -703,7 +740,8 @@ export class Layout {
       const levelNodes = Layout.levels.map(level => level.draw());
       const controlNode = CseMachine.getControlStash() ? Layout.controlComponent.draw() : null;
       const stashNode = CseMachine.getControlStash() ? Layout.stashComponent.draw() : null;
-      const underlayArrows = [...Layout.underlayArrows];
+      const deadUnderlayArrows = [...Layout.deadUnderlayArrows];
+      const liveUnderlayArrows = [...Layout.liveUnderlayArrows];
       const overlayNodes = [...Layout.overlayNodes];
       const layout = (
         <div className="sa-cse-machine" data-testid="sa-cse-machine">
@@ -716,7 +754,7 @@ export class Layout {
             style={{
               width: Layout.visibleWidth,
               height: Layout.visibleHeight,
-              overflow: 'hidden'
+              overflow: 'hidden',
             }}
           >
             <div
@@ -725,7 +763,7 @@ export class Layout {
                 width: Layout.width(),
                 height: Layout.height(),
                 overflow: 'hidden',
-                backgroundColor: defaultBackgroundColor()
+                backgroundColor: defaultBackgroundColor(),
               }}
             >
               <KonvaStage
@@ -743,13 +781,14 @@ export class Layout {
                     y={0}
                     width={Layout.width()}
                     height={Layout.height()}
-                    fillEnabled={true}
+                    fillEnabled
                     strokeEnabled={false}
                     key={Layout.key++}
                     listening={false}
                   />
-                  {underlayArrows}
+                  {deadUnderlayArrows}
                 </KonvaLayer>
+                <KonvaLayer ref={Layout.liveArrowLayerRef}>{liveUnderlayArrows}</KonvaLayer>
                 <KonvaLayer>
                   <KonvaRect
                     {...ShapeDefaultProps}
@@ -815,21 +854,24 @@ export class Layout {
       framesY: new Map(),
       framesWidth: new Map(),
       levelWidth: new Map(),
-      largestWidth: 0
+      largestWidth: 0,
     };
 
     Layout.levels.forEach(level => {
       const frames = level.frames;
-      const controlStashOffset =
+      const controlStashOffsetX =
         ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth;
-      const offset = controlStash ? controlStashOffset : 0;
+      const controlStashOffsetY =
+        ControlStashConfig.ControlPosY + ControlStashConfig.StashItemHeight;
+      const offsetX = controlStash ? controlStashOffsetX : 0;
+      const offsetY = controlStash ? controlStashOffsetY : 0;
       // `level.width()` already includes the last frame's right-side overflow.
       const currWidth = level.width();
       cache.largestWidth = Math.max(cache.largestWidth, currWidth);
       frames.forEach(frame => {
-        cache.framesX.set(frame.environment.id, frame.x() - offset);
+        cache.framesX.set(frame.environment.id, frame.x() - offsetX);
         cache.framesWidth.set(frame.environment.id, frame.width());
-        cache.framesY.set(frame.environment.id, frame.y());
+        cache.framesY.set(frame.environment.id, frame.y() - offsetY);
         cache.levelWidth.set(frame.environment.id, currWidth);
       });
     });
@@ -845,13 +887,15 @@ export class Layout {
     const cache = CseMachine.getMasterLayout();
     if (cache && cache.framesX.has(envId)) {
       const fixedX = cache.framesX.get(envId)!;
-      let offset: number = 0;
-      offset += CseMachine.getControlStash()
-        ? ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth
-        : 0;
-      offset += CseMachine.getCenterAlignment()
-        ? Math.floor((cache.largestWidth - cache.levelWidth.get(envId)!) / 2)
-        : 0;
+
+      const offset =
+        (CseMachine.getControlStash()
+          ? ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth
+          : 0) +
+        (CseMachine.getCenterAlignment()
+          ? Math.floor((cache.largestWidth - cache.levelWidth.get(envId)!) / 2)
+          : 0);
+
       return fixedX + offset;
     }
     return undefined;
@@ -866,7 +910,11 @@ export class Layout {
     const cache = CseMachine.getMasterLayout();
     if (cache && cache.framesY.has(envId)) {
       const fixedY = cache.framesY.get(envId)!;
-      return fixedY;
+      const offset = CseMachine.getControlStash()
+        ? ControlStashConfig.ControlPosY + ControlStashConfig.StashItemHeight
+        : 0;
+
+      return fixedY + offset;
     }
     return undefined;
   }
@@ -913,6 +961,10 @@ export class Layout {
           const currentWidth = frame.width();
           frame.reassignWidth(Math.max(currentWidth, fixedWidth));
         }
+
+        // get predetermined y coordinate
+        const fixedY = Layout.getGhostFrameY(id)!;
+        frame.reassignCoordinatesY(fixedY);
       });
     });
   }

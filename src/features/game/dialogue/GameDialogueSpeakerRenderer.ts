@@ -1,7 +1,8 @@
 import ImageAssets from '../assets/ImageAssets';
-import { SpeakerDetail } from '../character/GameCharacterTypes';
+import type { SpeakerDetail } from '../character/GameCharacterTypes';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
-import { GamePosition, ItemId } from '../commons/CommonTypes';
+import type { ItemId } from '../commons/CommonTypes';
+import { GamePosition } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
@@ -29,7 +30,9 @@ export default class DialogueSpeakerRenderer {
    * Null - if there is no speaker for the line
    */
   public changeSpeakerTo(newSpeakerDetail?: SpeakerDetail | null) {
-    if (newSpeakerDetail === undefined) return;
+    if (newSpeakerDetail === undefined) {
+      return;
+    }
 
     if (this.currentSpeakerId) {
       GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Speaker, Layer.SpeakerBox]);
@@ -45,13 +48,15 @@ export default class DialogueSpeakerRenderer {
   }
 
   private drawSpeakerBox(speakerId: ItemId) {
-    if (speakerId === 'narrator') return;
+    if (speakerId === 'narrator') {
+      return;
+    }
     const speakerContainer =
       speakerId === 'you'
         ? this.createSpeakerBox(this.getUsername(), GamePosition.Right)
         : this.createSpeakerBox(
             GameGlobalAPI.getInstance().getCharacterById(speakerId).name,
-            GamePosition.Left
+            GamePosition.Left,
           );
     GameGlobalAPI.getInstance().addToLayer(Layer.SpeakerBox, speakerContainer);
   }
@@ -64,7 +69,7 @@ export default class DialogueSpeakerRenderer {
     const speakerSprite = GameGlobalAPI.getInstance().createCharacterSprite(
       speakerId,
       expression,
-      speakerPosition
+      speakerPosition,
     );
     this.speakerSprite = speakerSprite;
     GameGlobalAPI.getInstance().addToLayer(Layer.Speaker, speakerSprite);
@@ -77,14 +82,14 @@ export default class DialogueSpeakerRenderer {
       gameManager,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.speakerBox.key
+      ImageAssets.speakerBox.key,
     ).setAlpha(0.8);
 
     const speakerText = createBitmapText(
       gameManager,
       '',
       DialogueConstants.speakerTextConfig,
-      speakerTextStyle
+      speakerTextStyle,
     );
 
     if (position === GamePosition.Right) {

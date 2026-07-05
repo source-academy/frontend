@@ -1,16 +1,16 @@
 import { Classes, Icon, Tab, Tabs, Tooltip } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React, { type JSX } from 'react';
-import { SideContentProps } from 'src/commons/sideContent/SideContent';
+import { cloneElement, memo } from 'react';
+import type { SideContentProps } from 'src/commons/sideContent/SideContent';
 import { generateIconId } from 'src/commons/sideContent/SideContentHelper';
 import SideContentProvider from 'src/commons/sideContent/SideContentProvider';
 
-import { ControlBarProps } from '../../controlBar/ControlBar';
+import type { ControlBarProps } from '../../controlBar/ControlBar';
 import {
-  ChangeTabsCallback,
-  SideContentLocation,
-  SideContentTab,
-  SideContentType
+  type ChangeTabsCallback,
+  type SideContentLocation,
+  type SideContentTab,
+  type SideContentTabId,
 } from '../../sideContent/SideContentTypes';
 import { propsAreEqual } from '../../utils/MemoizeHelper';
 import MobileControlBar from './MobileControlBar';
@@ -26,7 +26,7 @@ type MobileControlBarProps = {
 const renderTab = (tab: SideContentTab, isIOS: boolean) => {
   const iconSize = 20;
   const tabId = tab.id === undefined ? tab.label : tab.id;
-  const tabTitle: JSX.Element = (
+  const tabTitle: React.ReactElement = (
     <Tooltip
       content={tab.label}
       onOpening={() => {
@@ -53,32 +53,28 @@ const renderTab = (tab: SideContentTab, isIOS: boolean) => {
   );
 };
 
-const MobileSideContent: React.FC<MobileSideContentProps> = ({
+function MobileSideContent({
   renderActiveTabPanelOnly,
   mobileControlBarProps,
   onChange,
   selectedTabId,
   ...props
-}) => {
+}: MobileSideContentProps) {
   const isIOS = /iPhone|iPod/.test(navigator.platform);
 
   /**
    * renderedPanels is not memoized since a change in selectedTabId (when changing tabs)
    * would force React.useMemo to recompute the nullary function anyway
    */
-  const renderedPanels = (dynamicTabs: SideContentTab[], selectedTabId?: SideContentType) => {
+  const renderedPanels = (dynamicTabs: SideContentTab[], selectedTabId?: SideContentTabId) => {
     // TODO: Fix the CSS of all the panels (e.g. subst_visualizer)
     const renderPanel = (tab: SideContentTab, workspaceLocation?: SideContentLocation) => {
-      if (!tab.body) return;
+      if (!tab.body) {
+        return;
+      }
 
-      const tabBody: JSX.Element = workspaceLocation
-        ? {
-            ...tab.body,
-            props: {
-              ...tab.body.props,
-              workspaceLocation
-            }
-          }
+      const tabBody: React.ReactElement = workspaceLocation
+        ? cloneElement(tab.body, { workspaceLocation } as any)
         : tab.body;
 
       // Render the other panels only when their corresponding tab is selected
@@ -120,6 +116,6 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
       )}
     </SideContentProvider>
   );
-};
+}
 
-export default React.memo(MobileSideContent, propsAreEqual);
+export default memo(MobileSideContent, propsAreEqual);

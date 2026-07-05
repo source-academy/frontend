@@ -1,19 +1,19 @@
-import { KonvaEventObject } from 'konva/lib/Node';
+import type { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
-import React from 'react';
+import { createRef, Fragment } from 'react';
 import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
 
 import CseMachine from '../CseMachine';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { Data, IHoverable } from '../CseMachineTypes';
+import type { Data, IHoverable } from '../CseMachineTypes';
 import {
   defaultTextColor,
   fadedTextColor,
   getTextWidth,
   isSourceObject,
   setHoveredCursor,
-  setUnhoveredCursor
+  setUnhoveredCursor,
 } from '../CseMachineUtils';
 import { Frame } from './Frame';
 import { Visible } from './Visible';
@@ -40,7 +40,7 @@ export const defaultOptions: TextOptions = {
   isStringIdentifiable: false, // if true, contain strings within double quotation marks "". Default is false
   faded: false, // if true, draws text with a lighter shade
   hidden: false, // if true, hides the text when only when first drawn
-  bindingType: 'none' // if > 0, add colon or equal sign to the end of the text (given from binding)
+  bindingType: 'none', // if > 0, add colon or equal sign to the end of the text (given from binding)
 };
 
 /** this class encapsulates a string to be drawn onto the canvas */
@@ -52,14 +52,14 @@ export class Text extends Visible implements IHoverable {
   readonly fullStr: string; // full string representation of data
 
   readonly options: TextOptions = defaultOptions;
-  readonly labelRef: React.RefObject<Label | null> = React.createRef();
+  readonly labelRef: React.RefObject<Label | null> = createRef();
 
   constructor(
     readonly data: Data,
     x: number,
     y: number,
     /** additional options (for customization of text) */
-    options: Partial<TextOptions> = {}
+    options: Partial<TextOptions> = {},
   ) {
     super();
     this._x = x;
@@ -149,10 +149,10 @@ export class Text extends Visible implements IHoverable {
       fontSize: this.options.fontSize,
       fontStyle: this.options.fontStyle,
       fill: this.options.faded ? fadedTextColor() : defaultTextColor(),
-      visible: !this.options.hidden
+      visible: !this.options.hidden,
     };
     return (
-      <React.Fragment key={Layout.key++}>
+      <Fragment key={Layout.key++}>
         <KonvaLabel
           x={this.x()}
           y={this.y()}
@@ -182,7 +182,7 @@ export class Text extends Visible implements IHoverable {
           />
           <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.fullStr} {...props} />
         </KonvaLabel>
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

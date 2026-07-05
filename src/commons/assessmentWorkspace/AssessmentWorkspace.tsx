@@ -8,13 +8,13 @@ import {
   Intent,
   NonIdealState,
   Spinner,
-  SpinnerSize
+  SpinnerSize,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import { isEqual } from 'lodash';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { isEqual } from 'lodash-es';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
@@ -24,15 +24,15 @@ import Messages, { sendToWebview } from 'src/features/vscode/messages';
 import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
 
 import { initSession, log } from '../../features/eventLogging';
-import {
+import type {
   CodeDelta,
   Input,
-  KeyboardCommand,
-  SelectionRange
-} from '../../features/sourceRecorder/SourceRecorderTypes';
+  SelectionRange,
+} from '../../features/eventLogging/EventLoggingTypes';
+import { KeyboardCommand } from '../../features/eventLogging/EventLoggingTypes';
 import SessionActions from '../application/actions/SessionActions';
 import { defaultWorkspaceManager } from '../application/ApplicationTypes';
-import {
+import type {
   AssessmentConfiguration,
   AutogradingResult,
   ContestEntry,
@@ -40,43 +40,55 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
-  QuestionTypes,
-  Testcase
+  Testcase,
 } from '../assessment/AssessmentTypes';
-import { ControlBarProps } from '../controlBar/ControlBar';
-import { ControlBarChapterSelect } from '../controlBar/ControlBarChapterSelect';
-import { ControlBarClearButton } from '../controlBar/ControlBarClearButton';
-import { ControlBarEvalButton } from '../controlBar/ControlBarEvalButton';
-import { ControlBarNextButton } from '../controlBar/ControlBarNextButton';
-import { ControlBarPreviousButton } from '../controlBar/ControlBarPreviousButton';
-import { ControlBarQuestionViewButton } from '../controlBar/ControlBarQuestionViewButton';
-import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
-import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
-import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
+import { QuestionTypes } from '../assessment/AssessmentTypes';
+import type { ControlBarProps } from '../controlBar/ControlBar';
+import ControlBarChapterSelect from '../controlBar/ControlBarChapterSelect';
+import ControlBarClearButton from '../controlBar/ControlBarClearButton';
+import ControlBarEvalButton from '../controlBar/ControlBarEvalButton';
+import ControlBarNextButton from '../controlBar/ControlBarNextButton';
+import ControlBarPreviousButton from '../controlBar/ControlBarPreviousButton';
+import ControlBarQuestionViewButton from '../controlBar/ControlBarQuestionViewButton';
+import ControlBarResetButton from '../controlBar/ControlBarResetButton';
+import ControlBarRunButton from '../controlBar/ControlBarRunButton';
+import ControlButtonSaveButton from '../controlBar/ControlBarSaveButton';
+import ControlBarSaveStatusIndicator from '../controlBar/ControlBarSaveStatusIndicator';
+import ControlBarVersionHistoryButton from '../controlBar/ControlBarVersionHistoryButton';
+import VersionHistoryPanel from '../controlBar/VersionHistoryPanel';
 import ControlButton from '../ControlButton';
 import {
   convertEditorTabStateToProps,
-  NormalEditorContainerProps
+  type NormalEditorContainerProps,
 } from '../editor/EditorContainer';
-import { Position } from '../editor/EditorTypes';
+import type { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
-import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/MobileSideContent';
-import MobileWorkspace, { MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
+import type { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/MobileSideContent';
+import MobileWorkspace, { type MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
 import SideContentAutograder from '../sideContent/content/SideContentAutograder';
 import SideContentContestLeaderboard from '../sideContent/content/SideContentContestLeaderboard';
 import SideContentContestVotingContainer from '../sideContent/content/SideContentContestVotingContainer';
 import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
-import { SideContentProps } from '../sideContent/SideContent';
+import type { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight } from '../sideContent/SideContentActions';
 import { useSideContent } from '../sideContent/SideContentHelper';
-import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import {
+  type SideContentTab,
+  type SideContentTabId,
+  SideContentType,
+} from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { useResponsive, useTypedSelector } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import { assertType } from '../utils/TypeHelper';
-import Workspace, { WorkspaceProps } from '../workspace/Workspace';
+import Workspace, { type WorkspaceProps } from '../workspace/Workspace';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+import {
+  type CodeVersion,
+  type CodeVersionMetadata,
+  type WorkspaceLocation,
+  type WorkspaceState,
+} from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 
 export type AssessmentWorkspaceProps = {
@@ -89,9 +101,9 @@ export type AssessmentWorkspaceProps = {
   fromContestLeaderboard: boolean;
 };
 
-const workspaceLocation: WorkspaceLocation = 'assessment';
+const workspaceLocation = 'assessment' satisfies WorkspaceLocation;
 
-const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
+function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
   const [showOverlay, setShowOverlay] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
@@ -110,7 +122,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     workspaceLocation,
     assessment?.questions[props.questionId].grader !== undefined
       ? SideContentType.grading
-      : SideContentType.questionOverview
+      : SideContentType.questionOverview,
   );
 
   const navigate = useNavigate();
@@ -127,7 +139,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     output,
     replValue,
     currentAssessment: storedAssessmentId,
-    currentQuestion: storedQuestionId
+    currentQuestion: storedQuestionId,
+    versionHistory,
+    saveStatus,
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
 
   const dispatch = useDispatch();
@@ -148,7 +162,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleCheckLastModifiedAt,
     handleUpdateHasUnsavedChanges,
     handleEnableTokenCounter,
-    handleDisableTokenCounter
+    handleDisableTokenCounter,
+    handleFetchVersionHistory,
+    handleToggleHistoryPanel,
+    handleSelectVersion,
+    handleRestoreVersion,
+    handleNameVersion,
   } = useMemo(() => {
     return {
       handleTeamOverviewFetch: (assessmentId: number) =>
@@ -169,11 +188,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         dispatch(SessionActions.fetchAssessment(assessmentId, assessmentPassword)),
       handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
         dispatch(
-          WorkspaceActions.updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)
+          WorkspaceActions.updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue),
         ),
       handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
         dispatch(
-          WorkspaceActions.setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)
+          WorkspaceActions.setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints),
         ),
       handleReplEval: () => dispatch(WorkspaceActions.evalRepl(workspaceLocation)),
       handleCheckLastModifiedAt: (id: number, lastModifiedAt: string, saveAnswer: Function) =>
@@ -185,7 +204,25 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       handleEnableTokenCounter: () =>
         dispatch(WorkspaceActions.enableTokenCounter(workspaceLocation)),
       handleDisableTokenCounter: () =>
-        dispatch(WorkspaceActions.disableTokenCounter(workspaceLocation))
+        dispatch(WorkspaceActions.disableTokenCounter(workspaceLocation)),
+      handleFetchVersionHistory: () =>
+        dispatch(WorkspaceActions.fetchVersionHistory(workspaceLocation)),
+      handleToggleHistoryPanel: () =>
+        dispatch(WorkspaceActions.toggleHistoryPanel(workspaceLocation)),
+      handleSelectVersion: (version: CodeVersionMetadata) =>
+        dispatch(WorkspaceActions.selectVersion(workspaceLocation, version)),
+      handleRestoreVersion: (version: CodeVersion) =>
+        dispatch(
+          WorkspaceActions.restoreVersion(
+            workspaceLocation,
+            version.id,
+            version.name,
+            version.timestamp,
+            version.code,
+          ),
+        ),
+      handleNameVersion: (versionId: string, name: string) =>
+        dispatch(WorkspaceActions.nameVersion(workspaceLocation, versionId, name)),
     };
   }, [dispatch]);
 
@@ -256,7 +293,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   useEffect(() => {
-    if (!selectedTab) return;
+    if (!selectedTab) {
+      return;
+    }
 
     if ((!isMobileBreakpoint || isVscode) && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.questionOverview);
@@ -276,7 +315,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const input: Input = {
       time: Date.now(),
       type: 'codeDelta',
-      data: delta
+      data: delta,
     };
     pushLog(input);
   };
@@ -285,7 +324,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const input: Input = {
       time: Date.now(),
       type: 'cursorPositionChange',
-      data: selection.getCursor()
+      data: selection.getCursor(),
     };
     pushLog(input);
   };
@@ -297,7 +336,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       const input: Input = {
         time: Date.now(),
         type: 'selectionRangeData',
-        data: { range, isBackwards }
+        data: { range, isBackwards },
       };
       pushLog(input);
     }
@@ -322,7 +361,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const input: Input = {
       time: Date.now(),
       type: 'keyboardCommand',
-      data: KeyboardCommand.run
+      data: KeyboardCommand.run,
     };
     pushLog(input);
   }, [handleEditorEval, handleRunAllTestcases, pushLog]);
@@ -373,8 +412,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             initSession(`${(assessment as any).number}/${props.questionId}`, {
               chapter: question.library.chapter,
               externalLibrary: question?.library?.external?.name || 'NONE',
-              editorValue: options.editorValue
-            })
+              editorValue: options.editorValue,
+            }),
           );
         }
         break;
@@ -382,7 +421,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       case QuestionTypes.voting: {
         const votingQuestionData: IContestVotingQuestion = question;
         options.programPrependValue = votingQuestionData.prepend;
-        if (props.fromContestLeaderboard) options.editorValue = code;
+        if (props.fromContestLeaderboard) {
+          options.editorValue = code;
+        }
         options.programPostpendValue = votingQuestionData.postpend;
         // maybe the following dispatch can be placed in a better location
         dispatch(LeaderboardActions.setWorkspaceInitialRun(votingId));
@@ -402,14 +443,15 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       editorTabs: [{ value: options.editorValue ?? '', highlightedLines: [], breakpoints: [] }],
       programPrependValue: options.programPrependValue ?? '',
       programPostpendValue: options.programPostpendValue ?? '',
-      editorTestcases: options.editorTestcases ?? []
+      editorTestcases: options.editorTestcases ?? [],
     });
     handleResetWorkspace(resetWorkspaceOptions);
     handleChangeExecTime(
-      question.library.execTimeMs ?? defaultWorkspaceManager.assessment.execTime
+      question.library.execTimeMs ?? defaultWorkspaceManager.assessment.execTime,
     );
     handleClearContext(question.library, true);
     handleUpdateHasUnsavedChanges(false);
+    handleFetchVersionHistory();
 
     const chapter = question.library.chapter;
     const questionType = question.type;
@@ -423,8 +465,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             `assessment${assessment.id}`,
             mcqQuestionData.id,
             chapter,
-            mcqQuestionData.choices.map(choice => choice.content)
-          )
+            mcqQuestionData.choices.map(choice => choice.content),
+          ),
         );
         break;
       }
@@ -440,8 +482,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             chapter,
             prepend,
             code,
-            breakpoints
-          )
+            breakpoints,
+          ),
         );
         break;
       }
@@ -460,7 +502,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    */
   const sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
     props: AssessmentWorkspaceProps,
-    questionId: number
+    questionId: number,
   ) => {
     const question = assessment!.questions[questionId];
     const isGraded = question.grader !== undefined;
@@ -481,8 +523,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           question.library.chapter,
           '',
           answer,
-          breakpoints
-        )
+          breakpoints,
+        ),
       );
       //
     };
@@ -492,8 +534,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         label: `Question ${questionId + 1}`,
         iconName: IconNames.NINJA,
         body: <Markdown content={question.content} />,
-        id: SideContentType.questionOverview
-      }
+        id: SideContentType.questionOverview,
+      },
     ];
 
     if (isTeamAssessment) {
@@ -516,7 +558,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               </div>
             )}
           </div>
-        )
+        ),
       });
     }
 
@@ -526,7 +568,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           label: `Contest Voting Briefing`,
           iconName: IconNames.BRIEFCASE,
           body: <Markdown content={assessment!.longSummary} />,
-          id: SideContentType.briefing
+          id: SideContentType.briefing,
         },
         {
           label: 'Contest Voting',
@@ -541,8 +583,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               contestEntries={(question as IContestVotingQuestion)?.contestEntries ?? []}
             />
           ),
-          id: SideContentType.contestVoting
-        }
+          id: SideContentType.contestVoting,
+        },
       );
       if (isPublished) {
         tabs.push(
@@ -556,7 +598,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
                 leaderboardType={SideContentType.scoreLeaderboard}
               />
             ),
-            id: SideContentType.scoreLeaderboard
+            id: SideContentType.scoreLeaderboard,
           },
           {
             label: 'Popular Vote Leaderboard',
@@ -570,8 +612,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
                 leaderboardType={SideContentType.popularVoteLeaderboard}
               />
             ),
-            id: SideContentType.popularVoteLeaderboard
-          }
+            id: SideContentType.popularVoteLeaderboard,
+          },
         );
       }
     } else {
@@ -580,7 +622,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           label: `Briefing`,
           iconName: IconNames.BRIEFCASE,
           body: <Markdown className="sidecontent-overview" content={assessment!.longSummary} />,
-          id: SideContentType.briefing
+          id: SideContentType.briefing,
         },
         {
           label: `Autograder`,
@@ -598,8 +640,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               workspaceLocation="assessment"
             />
           ),
-          id: SideContentType.autograder
-        }
+          id: SideContentType.autograder,
+        },
       );
     }
 
@@ -616,7 +658,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             comments={question.comments}
           />
         ),
-        id: SideContentType.grading
+        id: SideContentType.grading,
       });
     }
 
@@ -627,14 +669,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         label: `Tone Matrix`,
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
-        id: SideContentType.toneMatrix
+        id: SideContentType.toneMatrix,
       });
     }
 
     const onChangeTabs = (
-      newTabId: SideContentType,
-      prevTabId: SideContentType,
-      event: React.MouseEvent<HTMLElement>
+      newTabId: SideContentTabId,
+      prevTabId: SideContentTabId,
+      event: React.MouseEvent<HTMLElement>,
     ) => {
       if (newTabId === prevTabId) {
         return;
@@ -646,10 +688,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       selectedTabId: selectedTab,
       tabs: {
         beforeDynamicTabs: tabs,
-        afterDynamicTabs: []
+        afterDynamicTabs: [],
       },
       onChange: onChangeTabs,
-      workspaceLocation
+      workspaceLocation,
     };
   };
 
@@ -680,23 +722,29 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
 
     const onClickSave = () => {
-      if (isSaving) return;
+      if (isSaving) {
+        return;
+      }
       setIsSaving(true);
-      checkLastModified();
+      if (isTeamAssessment) {
+        checkLastModified();
+      } else {
+        saveClick(false);
+      }
       setTimeout(() => {
         setIsSaving(false);
       }, 3000);
     };
 
     const checkLastModified = () => {
-      const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 0;
+      const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 1;
       if (isTeamAssessment && question.type === QuestionTypes.programming) {
         handleCheckLastModifiedAt(question.id, question.lastModifiedAt, saveClick);
       }
     };
 
     const saveClick = async (modified: boolean) => {
-      const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 0;
+      const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 1;
       if (isTeamAssessment && question.type === QuestionTypes.programming) {
         if (modified) {
           const confirm = await showSimpleConfirmDialog({
@@ -707,7 +755,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               </>
             ),
             positiveIntent: 'danger',
-            positiveLabel: 'Save'
+            positiveLabel: 'Save',
           });
 
           if (!confirm) {
@@ -778,23 +826,38 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       />
     );
 
-    // Define the function to check if the Save button should be disabled
-    const shouldDisableSaveButton = (): boolean | undefined => {
-      const isIndividualAssessment: boolean = assessmentOverview?.maxTeamSize === 1;
-      if (isIndividualAssessment) {
-        return false;
-      }
-      return !teamFormationOverview;
-    };
+    const isTeamAssessment: boolean = assessmentOverview
+      ? assessmentOverview.maxTeamSize !== 1
+      : false;
 
-    const saveButton =
-      props.canSave && question.type === QuestionTypes.programming ? (
-        <ControlButtonSaveButton
-          hasUnsavedChanges={hasUnsavedChanges}
-          isDisabled={shouldDisableSaveButton()}
-          onClickSave={onClickSave}
-          key="save"
+    const isAutosaveEnabled = assessmentOverview ? assessmentOverview.isAutosaveEnabled : false;
+
+    const showSaveButton =
+      question.type === QuestionTypes.programming && (isTeamAssessment || !isAutosaveEnabled);
+
+    const saveButton = showSaveButton ? (
+      <ControlButtonSaveButton
+        key="save"
+        hasUnsavedChanges={hasUnsavedChanges}
+        onClickSave={onClickSave}
+        isDisabled={!props.canSave || (isTeamAssessment && !teamFormationOverview)}
+      />
+    ) : null;
+
+    const versionHistoryButton =
+      question.type !== QuestionTypes.mcq ? (
+        <ControlBarVersionHistoryButton
+          onClick={() => {
+            handleFetchVersionHistory();
+            handleToggleHistoryPanel();
+          }}
+          key="version_history"
         />
+      ) : null;
+
+    const saveStatusIndicator =
+      question.type !== QuestionTypes.mcq && !isTeamAssessment && isAutosaveEnabled ? (
+        <ControlBarSaveStatusIndicator saveStatus={saveStatus} key="save_status" />
       ) : null;
 
     const chapterSelect = (
@@ -811,38 +874,45 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     return {
       editorButtons:
         !isMobileBreakpoint || isVscode
-          ? [runButton, saveButton, resetButton, chapterSelect]
-          : [saveButton, resetButton],
-      flowButtons: [previousButton, questionView, nextButton]
+          ? [
+              runButton,
+              saveButton,
+              resetButton,
+              versionHistoryButton,
+              saveStatusIndicator,
+              chapterSelect,
+            ]
+          : [saveButton, resetButton, versionHistoryButton, saveStatusIndicator],
+      flowButtons: [previousButton, questionView, nextButton],
     };
   };
 
   const mobileSideContentProps: (q: number) => MobileSideContentProps = (questionId: number) => {
     const onChangeTabs = (
-      newTabId: SideContentType,
-      prevTabId: SideContentType,
-      event: React.MouseEvent<HTMLElement>
+      newTabId: SideContentTabId,
+      prevTabId: SideContentTabId,
+      event: React.MouseEvent<HTMLElement>,
     ) => {
       if (newTabId === prevTabId) {
         return;
       }
 
       // Do nothing when clicking the mobile 'Run' tab while on the autograder tab.
-      if (
-        !(prevTabId === SideContentType.autograder && newTabId === SideContentType.mobileEditorRun)
-      ) {
+      if (!(
+        prevTabId === SideContentType.autograder && newTabId === SideContentType.mobileEditorRun
+      )) {
         setSelectedTab(newTabId);
       }
     };
 
     return {
       mobileControlBarProps: {
-        ...controlBarProps(questionId)
+        ...controlBarProps(questionId),
       },
       ...sideContentProps(props, questionId),
       onChange: onChangeTabs,
       selectedTabId: selectedTab,
-      handleEditorEval: handleEval
+      handleEditorEval: handleEval,
     };
   };
 
@@ -864,14 +934,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     return {
       setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
         dispatch(
-          WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)
+          WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex),
         ),
       removeEditorTabByIndex: (editorTabIndex: number) =>
         dispatch(WorkspaceActions.removeEditorTab(workspaceLocation, editorTabIndex)),
       handleDeclarationNavigate: (cursorPosition: Position) =>
         dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        dispatch(WorkspaceActions.promptAutocomplete(workspaceLocation, row, col, callback))
+        dispatch(WorkspaceActions.promptAutocomplete(workspaceLocation, row, col, callback)),
     };
   }, [dispatch]);
 
@@ -882,14 +952,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       handleBrowseHistoryUp: () =>
         dispatch(WorkspaceActions.browseReplHistoryUp(workspaceLocation)),
       handleReplValueChange: (newValue: string) =>
-        dispatch(WorkspaceActions.updateReplValue(newValue, workspaceLocation))
+        dispatch(WorkspaceActions.updateReplValue(newValue, workspaceLocation)),
     };
   }, [dispatch]);
 
   const workspaceHandlers = useMemo(() => {
     return {
       handleSideContentHeightChange: (heightChange: number) =>
-        dispatch(changeSideContentHeight(heightChange, workspaceLocation))
+        dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
     };
   }, [dispatch]);
 
@@ -936,19 +1006,19 @@ It is safe to close this window.`}
     <Dialog
       className="assessment-reset"
       icon={IconNames.ERROR}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={showResetTemplateOverlay}
       onClose={closeOverlay}
       title="Confirmation: Reset editor?"
     >
       <DialogBody>
         <Markdown content="Are you sure you want to reset the template?" />
-        <Markdown content="*Note this will not affect the saved copy of your program, unless you save over it.*" />
+        <Markdown content="*Note: This will not affect your version history.*" />
       </DialogBody>
       <DialogFooter
         actions={
           <>
-            <ControlButton label="Cancel" onClick={closeOverlay} options={{ minimal: false }} />
+            <ControlButton label="Cancel" onClick={closeOverlay} options={{ variant: 'default' }} />
             <ControlButton
               label="Confirm"
               onClick={() => {
@@ -956,19 +1026,19 @@ It is safe to close this window.`}
                 // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
                 handleEditorValueChange(
                   0,
-                  (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
+                  (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate,
                 );
                 handleUpdateHasUnsavedChanges(true);
                 if (isVscode) {
                   sendToWebview(
                     Messages.ResetEditor(
                       workspaceLocation,
-                      (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
-                    )
+                      (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate,
+                    ),
                   );
                 }
               }}
-              options={{ minimal: false, intent: Intent.DANGER }}
+              options={{ variant: 'default', intent: Intent.DANGER }}
             />
           </>
         }
@@ -1002,15 +1072,14 @@ It is safe to close this window.`}
           handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,
           handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
           handlePromptAutocomplete: editorContainerHandlers.handlePromptAutocomplete,
-          isEditorAutorun: false,
           onChange: onChangeMethod,
           onCursorChange: onCursorChangeMethod,
-          onSelectionChange: onSelectionChangeMethod
+          onSelectionChange: onSelectionChangeMethod,
         }
       : undefined;
   const mcqProps = {
     mcq: question as IMCQQuestion,
-    handleMCQSubmit: (option: number) => handleSave(assessment!.questions[questionId].id, option)
+    handleMCQSubmit: (option: number) => handleSave(assessment!.questions[questionId].id, option),
   };
   const replProps = {
     handleBrowseHistoryDown: replHandlers.handleBrowseHistoryDown,
@@ -1022,10 +1091,10 @@ It is safe to close this window.`}
     sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
     sourceVariant: question.library.variant ?? Variant.DEFAULT,
     externalLibrary: question?.library?.external?.name || 'NONE',
-    replButtons: replButtons
+    replButtons: replButtons,
   };
   const sideBarProps = {
-    tabs: []
+    tabs: [],
   };
   const workspaceProps: WorkspaceProps = {
     controlBarProps: controlBarProps(questionId),
@@ -1035,7 +1104,7 @@ It is safe to close this window.`}
     mcqProps: mcqProps,
     sideBarProps: sideBarProps,
     sideContentProps: sideContentProps(props, questionId),
-    replProps: replProps
+    replProps: replProps,
   };
   const mobileWorkspaceProps: MobileWorkspaceProps = {
     editorContainerProps: editorContainerProps,
@@ -1043,13 +1112,26 @@ It is safe to close this window.`}
     mcqProps: mcqProps,
     replProps: replProps,
     sideBarProps: sideBarProps,
-    mobileSideContentProps: mobileSideContentProps(questionId)
+    mobileSideContentProps: mobileSideContentProps(questionId),
   };
   return (
     <div className={classNames('WorkspaceParent', Classes.DARK)}>
       {submissionOverlay}
       {overlay}
       {resetTemplateOverlay}
+      <VersionHistoryPanel
+        versions={versionHistory.versions}
+        currentCode={editorTabs[activeEditorTabIndex ?? 0]?.value ?? ''}
+        isOpen={versionHistory.isHistoryPanelOpen}
+        isLoading={versionHistory.isLoading}
+        selectedVersion={versionHistory.selectedVersion}
+        selectedVersionCode={versionHistory.selectedVersionCode}
+        isLoadingCode={versionHistory.isLoadingCode}
+        onClose={handleToggleHistoryPanel}
+        onSelectVersion={handleSelectVersion}
+        onRestore={handleRestoreVersion}
+        onRename={handleNameVersion}
+      />
       {isVscode || !isMobileBreakpoint ? (
         <Workspace {...workspaceProps} />
       ) : (
@@ -1057,6 +1139,6 @@ It is safe to close this window.`}
       )}
     </div>
   );
-};
+}
 
 export default AssessmentWorkspace;

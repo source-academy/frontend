@@ -1,17 +1,17 @@
-import { Text, TextConfig } from 'konva/lib/shapes/Text';
-import React from 'react';
+import { Text, type TextConfig } from 'konva/lib/shapes/Text';
+import { createRef, Fragment } from 'react';
 import { Text as KonvaText } from 'react-konva';
 
 import CseMachine from '../CseMachine';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { Data } from '../CseMachineTypes';
+import type { Data } from '../CseMachineTypes';
 import {
   defaultBackgroundColor,
   defaultStrokeColor,
   defaultTextColor,
   fadedStrokeColor,
-  fadedTextColor
+  fadedTextColor,
 } from '../CseMachineUtils';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { GenericArrow } from './arrows/GenericArrow';
@@ -33,7 +33,7 @@ export class ArrayUnit extends Visible {
   readonly isLastUnit: boolean;
   /** arrow that is drawn from the array unit to the value */
   arrow?: GenericArrow<ArrayUnit, Value>;
-  readonly indexRef = React.createRef<Text>();
+  readonly indexRef = createRef<Text>();
 
   constructor(
     /** index of this unit in its parent */
@@ -41,7 +41,7 @@ export class ArrayUnit extends Visible {
     /** the value this unit contains*/
     readonly data: Data,
     /** parent of this unit */
-    readonly parent: ArrayValue
+    readonly parent: ArrayValue,
   ) {
     super();
     this._x = this.parent.x() + this.index * Config.DataUnitWidth;
@@ -58,7 +58,9 @@ export class ArrayUnit extends Visible {
   }
 
   hideIndex() {
-    if (!CseMachine.getPrintableMode()) this.indexRef.current?.hide();
+    if (!CseMachine.getPrintableMode()) {
+      this.indexRef.current?.hide();
+    }
   }
 
   setArrowSourceHighlightedStyle(): void {
@@ -73,12 +75,14 @@ export class ArrayUnit extends Visible {
     this.ref.current?.stroke(
       this.parent.isReferenced() && this.parent.isEnclosingFrameLive()
         ? defaultStrokeColor()
-        : fadedStrokeColor()
+        : fadedStrokeColor(),
     );
   }
 
   draw(): React.ReactNode {
-    if (this.isDrawn()) return null;
+    if (this.isDrawn()) {
+      return null;
+    }
     this._isDrawn = true;
 
     const isLive = this.parent.isEnclosingFrameLive();
@@ -94,12 +98,15 @@ export class ArrayUnit extends Visible {
       upperLeft: 0,
       lowerLeft: 0,
       upperRight: 0,
-      lowerRight: 0
+      lowerRight: 0,
     };
 
-    if (this.isFirstUnit) cornerRadius.upperLeft = cornerRadius.lowerLeft = Config.DataCornerRadius;
-    if (this.isLastUnit)
+    if (this.isFirstUnit) {
+      cornerRadius.upperLeft = cornerRadius.lowerLeft = Config.DataCornerRadius;
+    }
+    if (this.isLastUnit) {
       cornerRadius.upperRight = cornerRadius.lowerRight = Config.DataCornerRadius;
+    }
 
     const indexProps: TextConfig = {
       fontFamily: defaultOptions.fontFamily,
@@ -110,7 +117,7 @@ export class ArrayUnit extends Visible {
       y: this.y() - defaultOptions.fontSize - 4,
       width: this.width(),
       padding: 2,
-      visible: CseMachine.getPrintableMode()
+      visible: CseMachine.getPrintableMode(),
     };
 
     const strokeColor =
@@ -119,7 +126,7 @@ export class ArrayUnit extends Visible {
         : fadedStrokeColor();
 
     return (
-      <React.Fragment key={Layout.key++}>
+      <Fragment key={Layout.key++}>
         <RoundedRect
           key={Layout.key++}
           x={this.x()}
@@ -130,7 +137,7 @@ export class ArrayUnit extends Visible {
           fill={defaultBackgroundColor()}
           listening={false}
           hitStrokeWidth={Config.DataHitStrokeWidth}
-          fillEnabled={true}
+          fillEnabled
           cornerRadius={cornerRadius}
           forwardRef={this.ref}
         />
@@ -145,7 +152,7 @@ export class ArrayUnit extends Visible {
         />
         {this.value.draw()}
         {this.arrow?.draw()}
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

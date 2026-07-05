@@ -1,5 +1,5 @@
-import { IGameActionable } from '../action/GameActionTypes';
-import { TrackInteraction } from '../commons/CommonTypes';
+import type { IGameActionable } from '../action/GameActionTypes';
+import type { TrackInteraction } from '../commons/CommonTypes';
 
 /**
  * Information on a bounding box, a clickable rectangle area

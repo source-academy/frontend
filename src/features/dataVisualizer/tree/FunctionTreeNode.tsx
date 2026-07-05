@@ -1,4 +1,3 @@
-import type { JSX } from 'react';
 import { Group } from 'react-konva';
 
 import { Config } from '../Config';
@@ -14,24 +13,24 @@ export class FunctionTreeNode extends DrawableTreeNode {
     y: number,
     parentX: number,
     parentY: number,
-    colorIndex: number
-  ): JSX.Element {
+    colorIndex: number,
+  ): React.ReactElement {
     this._drawable = (
       <Group key={x + ', ' + y}>
-        <FunctionDrawable {...{ x, y }}></FunctionDrawable>
+        <FunctionDrawable {...{ x, y }} />
         {(parentX !== x || parentY !== y) && (
           <ArrowDrawable
             {...{
               from: {
                 x: parentX + Config.BoxWidth / 2,
-                y: parentY + Config.BoxHeight / 2
+                y: parentY + Config.BoxHeight / 2,
               },
               to: {
                 x,
-                y
-              }
+                y,
+              },
             }}
-          ></ArrowDrawable>
+          />
         )}
       </Group>
     );

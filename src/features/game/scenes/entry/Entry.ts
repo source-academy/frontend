@@ -57,8 +57,8 @@ class Entry extends Phaser.Scene {
     SourceAcademyGame.getInstance().setAwardsMapping(awardsMapping);
     await Promise.all(
       Array.from(awardsMapping.values()).map(
-        async awardInfo => await loadImage(this, awardInfo.assetKey, awardInfo.assetPath)
-      )
+        async awardInfo => await loadImage(this, awardInfo.assetKey, awardInfo.assetPath),
+      ),
     );
   }
 
@@ -72,8 +72,8 @@ class Entry extends Phaser.Scene {
     SourceAcademyGame.getInstance().setRoomPreviewMapping(roomPreviewMapping);
     await Promise.all(
       Array.from(roomPreviewMapping.entries()).map(
-        async ([key, value]) => await loadImage(this, key, value)
-      )
+        async ([key, value]) => await loadImage(this, key, value),
+      ),
     );
   }
 
@@ -83,10 +83,10 @@ class Entry extends Phaser.Scene {
   private preloadAssets() {
     SourceAcademyGame.getInstance().getSoundManager().loadSoundAssetMap(SoundAssets);
     Object.values(ImageAssets).forEach(asset =>
-      this.load.image(asset.key, toS3Path(asset.path, false))
+      this.load.image(asset.key, toS3Path(asset.path, false)),
     );
     Object.values(FontAssets).forEach(asset =>
-      this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath)
+      this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath),
     );
     Object.values(TextAssets).forEach(asset => this.load.text(asset.key, asset.path));
   }

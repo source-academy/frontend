@@ -26,7 +26,7 @@ export const selectMode = (chapter: Chapter, variant: Variant, library: string) 
       chapter,
       variant,
       library,
-      Documentation.externalLibraries[library]
+      Documentation.externalLibraries[library],
     );
   }
   ModeSelector(chapter, variant, library);
@@ -56,7 +56,7 @@ export const getModeString = (chapter: Chapter, variant: Variant, library: strin
 };
 
 export const parseModeString = (
-  modeString: string
+  modeString: string,
 ): { chapter: Chapter; variant: Variant; library: ExternalLibraryName } => {
   switch (modeString) {
     case 'html':
@@ -65,19 +65,19 @@ export const parseModeString = (
       return {
         chapter: Chapter.FULL_TS,
         variant: Variant.DEFAULT,
-        library: ExternalLibraryName.NONE
+        library: ExternalLibraryName.NONE,
       };
     case 'java':
       return {
         chapter: Chapter.FULL_JAVA,
         variant: Variant.DEFAULT,
-        library: ExternalLibraryName.NONE
+        library: ExternalLibraryName.NONE,
       };
     case 'c_cpp':
       return {
         chapter: Chapter.FULL_C,
         variant: Variant.DEFAULT,
-        library: ExternalLibraryName.NONE
+        library: ExternalLibraryName.NONE,
       };
     default: {
       const matches = modeString.match(/source(-?\d+)([a-z-]+)([A-Z]+)/);
@@ -97,7 +97,7 @@ export const parseModeString = (
         variant: Variant[variant as keyof typeof Variant] || Variant.DEFAULT,
         library:
           ExternalLibraryName[externalLibraryName as keyof typeof ExternalLibraryName] ||
-          ExternalLibraryName.NONE
+          ExternalLibraryName.NONE,
       };
     }
   }

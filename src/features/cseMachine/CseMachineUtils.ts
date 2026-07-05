@@ -1,5 +1,5 @@
 import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
-import {
+import type {
   AppInstr,
   ArrLitInstr,
   AssmtInstr,
@@ -7,17 +7,17 @@ import {
   ControlItem,
   EnvInstr,
   Instr,
-  InstrType,
-  UnOpInstr
+  UnOpInstr,
 } from 'js-slang/dist/cse-machine/types';
+import { InstrType } from 'js-slang/dist/cse-machine/types';
 import { Chapter } from 'js-slang/dist/langs';
-import { Environment, Value as StashValue } from 'js-slang/dist/types';
+import type { Environment, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { Text } from 'konva/lib/shapes/Text';
-import { cloneDeep, isObject } from 'lodash';
+import { cloneDeep, isObject } from 'lodash-es';
 import classes from 'src/styles/Draggable.module.scss';
 
 import { ArrayUnit } from './components/ArrayUnit';
@@ -35,7 +35,7 @@ import { Value } from './components/values/Value';
 import CseMachine from './CseMachine';
 import { Config } from './CseMachineConfig';
 import { Layout } from './CseMachineLayout';
-import {
+import type {
   BuiltInFn,
   Closure,
   Data,
@@ -51,7 +51,7 @@ import {
   ReferenceType,
   SourceObject,
   StreamFn,
-  Unassigned
+  Unassigned,
 } from './CseMachineTypes';
 import { isContinuation } from './utils/continuation';
 class AssertionError extends Error {
@@ -62,7 +62,9 @@ class AssertionError extends Error {
 }
 
 export function assert(condition: boolean, msg?: string): asserts condition {
-  if (!condition) throw new AssertionError(msg);
+  if (!condition) {
+    throw new AssertionError(msg);
+  }
 }
 
 /** Returns `true` if `object` is empty */
@@ -72,7 +74,7 @@ export function isEmptyObject(object: object): object is EmptyObject {
 
 /** Returns `true` if `x` is a source object, e.g. runes */
 export function isSourceObject(x: any): x is SourceObject {
-  return isObject(x) && 'toReplString' in x && isFunction(x.toReplString);
+  return isObject(x) && !isFunction(x) && 'toReplString' in x && isFunction(x.toReplString);
 }
 
 /** Returns `true` if `object` is `Environment` */
@@ -215,14 +217,18 @@ function findEnvById(node: EnvTreeNode, id: string): Env | null {
   }
   for (const child of node.children as EnvTreeNode[]) {
     const res = findEnvById(child, id);
-    if (res) return res;
+    if (res) {
+      return res;
+    }
   }
   return null;
 }
 
 /** Returns id of specific values */
 function getObjectId(value: any): string | null {
-  if (!value) return null;
+  if (!value) {
+    return null;
+  }
   if (isClosure(value) || isDataArray(value) || isContinuation(value) || isStreamFn(value)) {
     return (value as any).id ?? null;
   }
@@ -282,13 +288,17 @@ function pushEnvFromData(
   value: any,
   pushEnv: (e: Env | null | undefined) => void,
   markLiveObject?: (id: string) => void,
-  visitedObjects = new Set<any>()
+  visitedObjects = new Set<any>(),
 ) {
-  if (!value || visitedObjects.has(value)) return;
+  if (!value || visitedObjects.has(value)) {
+    return;
+  }
   visitedObjects.add(value);
 
   const id = getObjectId(value); // directly add as a live object first since anything is an OBJECT
-  if (id && markLiveObject) markLiveObject(id);
+  if (id && markLiveObject) {
+    markLiveObject(id);
+  }
 
   if (isClosure(value) || isStreamFn(value)) {
     if (value.environment) {
@@ -312,15 +322,19 @@ function pushEnvFromData(
 /** Returns environment id and object id that are reachable from root environments */
 function markReachableEnvs(
   envTree: EnvTree,
-  rootIds: Set<string>
+  rootIds: Set<string>,
 ): { liveEnvIds: Set<string>; liveObjectIds: Set<string> } {
   const visited = new Set<string>();
   const liveObjectIds = new Set<string>();
   const worklist: Env[] = [];
 
   const pushEnv = (env: Env | null | undefined) => {
-    if (!env) return;
-    if (visited.has(env.id)) return;
+    if (!env) {
+      return;
+    }
+    if (visited.has(env.id)) {
+      return;
+    }
     visited.add(env.id);
     worklist.push(env);
   };
@@ -330,7 +344,10 @@ function markReachableEnvs(
 
   rootIds.forEach(id => {
     const env = findEnvById(envTree.root, id);
-    if (env) pushEnv(env); //to add the root envs to the worklist for DFS later on
+    if (env) {
+      // to add the root envs to the worklist for DFS later on
+      pushEnv(env);
+    }
   });
 
   while (worklist.length > 0) {
@@ -356,7 +373,9 @@ export function computeLiveState(envTree: EnvTree): {
   const extraRootIds = new Set<string>();
   const pushEnv = (env: Env | null | undefined) => {
     //specially made ONLY for stack/control dummy bindings
-    if (env && env.id) extraRootIds.add(env.id);
+    if (env && env.id) {
+      extraRootIds.add(env.id);
+    }
   };
 
   // const visitedObjects = new Set<any>();
@@ -451,7 +470,9 @@ export function setDifference<T>(set1: Set<T>, set2: Set<T>) {
   } else {
     const result = new Set<T>();
     for (const item of set1) {
-      if (!set2.has(item)) result.add(item);
+      if (!set2.has(item)) {
+        result.add(item);
+      }
     }
     return result;
   }
@@ -482,7 +503,7 @@ export function isMainReference(value: Value, reference: ReferenceType) {
   }
   const valueEnv = value.data.environment;
   const mainReference = value.references.find(r =>
-    isEnvEqual(r instanceof ArrayUnit ? r.parent.data.environment : r.frame.environment, valueEnv)
+    isEnvEqual(r instanceof ArrayUnit ? r.parent.data.environment : r.frame.environment, valueEnv),
   );
   return reference === mainReference;
 }
@@ -523,7 +544,7 @@ const context = canvas.getContext('2d');
  */
 export function getTextWidth(
   text: string,
-  font: string = `${Config.FontStyle} ${Config.FontSize}px ${Config.FontFamily}`
+  font: string = `${Config.FontStyle} ${Config.FontSize}px ${Config.FontFamily}`,
 ): number {
   if (!context || !text) {
     return 0;
@@ -537,7 +558,7 @@ export function getTextWidth(
         context.measureText(accText).width > context.measureText(currValue).width
           ? accText
           : currValue,
-      ''
+      '',
     );
   const metrics = context.measureText(longestLine);
   return Math.round(metrics.width);
@@ -556,7 +577,7 @@ export function getTextHeight(
   text: string,
   width: number,
   font: string = `${Config.FontStyle} ${Config.FontSize}px ${Config.FontFamily}`,
-  fontSize: number = Config.FontSize
+  fontSize: number = Config.FontSize,
 ): number {
   if (!context || !text) {
     return 0;
@@ -574,7 +595,9 @@ export function getTextHeight(
 export function getParamsText(data: Closure | GlobalFn | StreamFn): string {
   if (isClosure(data)) {
     let params = data.functionName.slice(0, data.functionName.indexOf('=>')).trim();
-    if (!params.startsWith('(')) params = '(' + params + ')';
+    if (!params.startsWith('(')) {
+      params = '(' + params + ')';
+    }
     return params;
   } else {
     const fnString = data.toString();
@@ -591,7 +614,9 @@ export function getBodyText(data: Closure | GlobalFn | StreamFn): string {
         ? fnString.substring(fnString.indexOf('{'))
         : fnString.substring(fnString.indexOf('=') + 3);
 
-    if (body[0] !== '{') body = '{\n  return ' + body + ';\n}';
+    if (body[0] !== '{') {
+      body = '{\n  return ' + body + ';\n}';
+    }
     return body;
   } else if (isStreamFn(data)) {
     // TODO: remove if `stream` becomes pre-defined
@@ -626,7 +651,7 @@ export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): v
     node.setAttrs({
       stroke: node.attrs.stroke ? Config.HoverColor : node.attrs.stroke,
       fill: node.attrs.fill ? Config.HoverColor : node.attrs.fill,
-      ...hoveredAttrs
+      ...hoveredAttrs,
     });
   });
 }
@@ -649,7 +674,7 @@ export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}
           ? defaultTextColor()
           : defaultStrokeColor()
         : node.attrs.fill,
-      ...unhoveredAttrs
+      ...unhoveredAttrs,
     });
   });
 }
@@ -672,7 +697,11 @@ export function getNonEmptyEnv(environment: Env): Env {
 /** Returns whether the given environments `env1` and `env2` refer to the same environment. */
 export function isEnvEqual(env1: Env, env2: Env): boolean {
   // Cannot check env references because of partial cloning of environment tree,
-  // so we can only check id
+  // so we can only check id. Guard against null — snapshot adapters may produce
+  // closures whose defining environment wasn't serialized.
+  if (!env1 || !env2) {
+    return false;
+  }
   return env1.id === env2.id;
 }
 
@@ -684,15 +713,19 @@ function findObjects(
   environment: Env,
   set: Set<DataArray | Closure>,
   array: any[],
-  visited = new Set<any[]>() // needed to track circular references
+  visited = new Set<any[]>(), // needed to track circular references
 ): void {
-  if (visited.has(array)) return;
+  if (visited.has(array)) {
+    return;
+  }
   visited.add(array);
   for (const item of array) {
     if (isDataArray(item) || isClosure(item)) {
       if (isEnvEqual(item.environment, environment)) {
         set.add(item);
-        if (isDataArray(item)) findObjects(environment, set, item, visited);
+        if (isDataArray(item)) {
+          findObjects(environment, set, item, visited);
+        }
       }
     }
   }
@@ -819,7 +852,7 @@ const appendSuffixWithinWidth = (line: string, suffix: string, maxWidth: number)
 export const truncateFunctionTooltip = (
   tooltip: string,
   maxWidth: number,
-  maxHeight: number
+  maxHeight: number,
 ): string => {
   const truncatedTooltip = truncateText(tooltip, maxWidth, maxHeight);
 
@@ -862,7 +895,7 @@ export function getControlItemComponent(
   index: number,
   highlightOnHover: () => void,
   unhighlightOnHover: () => void,
-  chapter: Chapter
+  chapter: Chapter,
 ): ControlItemComponent {
   const topItem = CseMachine.getStackTruncated()
     ? index === Math.min(Layout.control.size() - 1, 9)
@@ -890,7 +923,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       }
       case 'Literal': {
@@ -904,7 +937,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       }
       default: {
@@ -915,7 +948,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       }
     }
@@ -928,7 +961,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.WHILE:
         return new ControlItemComponent(
@@ -937,7 +970,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.FOR:
         return new ControlItemComponent(
@@ -946,7 +979,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.ASSIGNMENT: {
         const assmtInstr = controlItem as AssmtInstr;
@@ -956,7 +989,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       }
       case InstrType.UNARY_OP: {
@@ -967,7 +1000,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       }
       case InstrType.BINARY_OP: {
@@ -978,7 +1011,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       }
       case InstrType.POP:
@@ -988,7 +1021,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.APPLICATION: {
         const appInstr = controlItem as AppInstr;
@@ -998,7 +1031,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       }
       case InstrType.BRANCH:
@@ -1008,7 +1041,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.ENVIRONMENT: {
         const envInstr = controlItem as EnvInstr;
@@ -1024,8 +1057,8 @@ export function getControlItemComponent(
               accum
                 ? accum
                 : level.frames.find(frame => frame.environment?.id === getEnvId(envInstr.env)),
-            undefined
-          )
+            undefined,
+          ),
         );
       }
       case InstrType.ARRAY_LITERAL: {
@@ -1037,7 +1070,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       }
       case InstrType.ARRAY_ACCESS:
@@ -1047,7 +1080,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.ARRAY_ASSIGNMENT:
         return new ControlItemComponent(
@@ -1056,7 +1089,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.ARRAY_LENGTH:
         return new ControlItemComponent(
@@ -1065,7 +1098,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.CONTINUE:
         return new ControlItemComponent(
@@ -1074,7 +1107,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.CONTINUE_MARKER:
         return new ControlItemComponent(
@@ -1083,7 +1116,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.BREAK:
         return new ControlItemComponent(
@@ -1092,7 +1125,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.BREAK_MARKER:
         return new ControlItemComponent(
@@ -1101,7 +1134,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.MARKER:
         return new ControlItemComponent(
@@ -1110,7 +1143,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       case InstrType.SPREAD:
         return new ControlItemComponent(
@@ -1119,7 +1152,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
       default:
         return new ControlItemComponent(
@@ -1128,7 +1161,7 @@ export function getControlItemComponent(
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
-          topItem
+          topItem,
         );
     }
   }
@@ -1138,7 +1171,7 @@ export function getStashItemComponent(
   stashItem: StashValue,
   stackHeight: number,
   index: number,
-  _chapter: Chapter
+  _chapter: Chapter,
 ): StashItemComponent {
   let arrowTo: ArrayValue | FnValue | GlobalFnValue | ContValue | undefined;
   if (isFunction(stashItem) || isDataArray(stashItem || isContinuation(stashItem))) {

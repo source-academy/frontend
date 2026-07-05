@@ -1,6 +1,5 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 const stringifyXp = (xp: number, isBonus: boolean) => {
   return (isBonus ? 'Total ' : '') + xp + ' XP';
@@ -11,7 +10,7 @@ type Props = {
   xp: number;
 };
 
-const AchievementXp: React.FC<Props> = ({ isBonus, xp }) => {
+function AchievementXp({ isBonus, xp }: Props) {
   return (
     <div className="xp">
       {xp !== 0 && (
@@ -22,6 +21,6 @@ const AchievementXp: React.FC<Props> = ({ isBonus, xp }) => {
       )}
     </div>
   );
-};
+}
 
 export default AchievementXp;

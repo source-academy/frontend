@@ -2,7 +2,7 @@ import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
 import CommonRadioButton from '../commons/CommonRadioButton';
-import { IBaseScene, IGameUI } from '../commons/CommonTypes';
+import type { IBaseScene, IGameUI } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import SettingsConstants from '../scenes/settings/SettingsConstants';
@@ -13,7 +13,7 @@ import { createBitmapText } from '../utils/TextUtils';
 import EscapeConstants, {
   escapeOptButtonStyle,
   optTextStyle,
-  volumeRadioOptTextStyle
+  volumeRadioOptTextStyle,
 } from './GameEscapeConstants';
 
 /**
@@ -22,6 +22,7 @@ import EscapeConstants, {
 class GameEscapeManager implements IGameUI {
   private bgmVolumeRadioButtons: CommonRadioButton | undefined;
   private sfxVolumeRadioButtons: CommonRadioButton | undefined;
+  private skipConfirmRadioButtons: CommonRadioButton | undefined;
   private scene: IBaseScene;
 
   /**
@@ -45,7 +46,7 @@ class GameEscapeManager implements IGameUI {
       this.scene,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.escapeMenuBackground.key
+      ImageAssets.escapeMenuBackground.key,
     )
       .setDisplaySize(screenSize.x, screenSize.y)
       .setInteractive({ pixelPerfect: true });
@@ -56,7 +57,7 @@ class GameEscapeManager implements IGameUI {
     const settingsPos = calcTableFormatPos({
       direction: Direction.Column,
       numOfItems: settings.length,
-      maxYSpace: EscapeConstants.settings.ySpace
+      maxYSpace: EscapeConstants.settings.ySpace,
     });
     escapeMenuContainer.add(
       settings.map((setting, index) =>
@@ -65,32 +66,50 @@ class GameEscapeManager implements IGameUI {
           setting,
           {
             ...EscapeConstants.settingsTextConfig,
-            y: settingsPos[index][1] + EscapeConstants.settingsTextConfig.y
+            y: settingsPos[index][1] + EscapeConstants.settingsTextConfig.y,
           },
-          optTextStyle
-        )
-      )
+          optTextStyle,
+        ),
+      ),
     );
 
     // Get user settings, to use as default choice in the radio buttons
-    const { bgmVolume, sfxVolume } = this.getSettingsSaveManager().getSettings();
+    const { bgmVolume, sfxVolume, skipConfirm } = this.getSettingsSaveManager().getSettings();
     const sfxVolIdx = SettingsConstants.volContainerOpts.findIndex(
-      value => parseFloat(value) === sfxVolume
+      value => parseFloat(value) === sfxVolume,
     );
     const bgmVolIdx = SettingsConstants.volContainerOpts.findIndex(
-      value => parseFloat(value) === bgmVolume
+      value => parseFloat(value) === bgmVolume,
     );
+    const skipConfirmIdx = skipConfirm !== false ? 0 : 1;
 
     // SFX Radio buttons
-    this.sfxVolumeRadioButtons = this.createSettingsRadioOptions(sfxVolIdx, settingsPos[0][1]);
+    this.sfxVolumeRadioButtons = this.createSettingsRadioOptions(
+      SettingsConstants.volContainerOpts,
+      sfxVolIdx,
+      settingsPos[0][1],
+    );
     // BGM Radio buttons
-    this.bgmVolumeRadioButtons = this.createSettingsRadioOptions(bgmVolIdx, settingsPos[1][1]);
-    escapeMenuContainer.add([this.sfxVolumeRadioButtons, this.bgmVolumeRadioButtons]);
+    this.bgmVolumeRadioButtons = this.createSettingsRadioOptions(
+      SettingsConstants.volContainerOpts,
+      bgmVolIdx,
+      settingsPos[1][1],
+    );
+    this.skipConfirmRadioButtons = this.createSettingsRadioOptions(
+      EscapeConstants.skipConfirmOpts,
+      skipConfirmIdx,
+      settingsPos[2][1],
+    );
+    escapeMenuContainer.add([
+      this.sfxVolumeRadioButtons,
+      this.bgmVolumeRadioButtons,
+      this.skipConfirmRadioButtons,
+    ]);
 
     // Get all the buttons
     const buttons = this.getOptButtons();
     const buttonPositions = calcTableFormatPos({
-      numOfItems: buttons.length
+      numOfItems: buttons.length,
     });
 
     escapeMenuContainer.add(
@@ -99,9 +118,9 @@ class GameEscapeManager implements IGameUI {
           button.text,
           buttonPositions[index][0],
           buttonPositions[index][1] + EscapeConstants.button.y,
-          button.callback
-        )
-      )
+          button.callback,
+        ),
+      ),
     );
 
     return escapeMenuContainer;
@@ -114,7 +133,7 @@ class GameEscapeManager implements IGameUI {
    * are handled separately (radio buttons)
    */
   private getSettings() {
-    return ['SFX', 'BGM'];
+    return ['SFX', 'BGM', 'Skip Confirm'];
   }
 
   /**
@@ -123,23 +142,23 @@ class GameEscapeManager implements IGameUI {
    * @param defaultChoiceIdx default option for the radio button
    * @param yPos y position of the radio buttons
    */
-  private createSettingsRadioOptions(defaultChoiceIdx: number, yPos: number) {
+  private createSettingsRadioOptions(choices: string[], defaultChoiceIdx: number, yPos: number) {
     return new CommonRadioButton(
       this.scene,
       {
-        choices: SettingsConstants.volContainerOpts,
+        choices: choices,
         defaultChoiceIdx: defaultChoiceIdx,
         maxXSpace: EscapeConstants.radioButtons.xSpace,
         radioChoiceConfig: {
           circleDim: 15,
           checkedDim: 10,
-          outlineThickness: 3
+          outlineThickness: 3,
         },
         choiceTextConfig: EscapeConstants.radioChoiceTextConfig,
-        bitmapTextStyle: volumeRadioOptTextStyle
+        bitmapTextStyle: volumeRadioOptTextStyle,
       },
       EscapeConstants.volOpt.x,
-      -screenCenter.y + yPos + EscapeConstants.settings.yOffset
+      -screenCenter.y + yPos + EscapeConstants.settings.yOffset,
     );
   }
 
@@ -159,7 +178,7 @@ class GameEscapeManager implements IGameUI {
           } else {
             this.scene.scene.start('MainMenu');
           }
-        }
+        },
       },
       {
         text: 'Continue',
@@ -167,12 +186,12 @@ class GameEscapeManager implements IGameUI {
           if (this.scene.getPhaseManager().isCurrentPhase(GamePhaseType.EscapeMenu)) {
             await this.scene.getPhaseManager().popPhase();
           }
-        }
+        },
       },
       {
         text: 'Apply Settings',
-        callback: () => this.applySettings()
-      }
+        callback: () => this.applySettings(),
+      },
     ];
   }
 
@@ -191,7 +210,7 @@ class GameEscapeManager implements IGameUI {
       message: text,
       textConfig: EscapeConstants.escapeOptTextConfig,
       bitMapTextStyle: escapeOptButtonStyle,
-      onUp: callback
+      onUp: callback,
     }).setPosition(xPos, yPos);
   }
 
@@ -206,9 +225,12 @@ class GameEscapeManager implements IGameUI {
     const bgmVol = this.bgmVolumeRadioButtons
       ? parseFloat(this.bgmVolumeRadioButtons.getChosenChoice())
       : 1;
+    const skipConfirmVal = this.skipConfirmRadioButtons
+      ? this.skipConfirmRadioButtons.getChosenChoice() === 'ON'
+      : true;
 
     // Save settings
-    const newSettings = { bgmVolume: bgmVol, sfxVolume: sfxVol };
+    const newSettings = { bgmVolume: bgmVol, sfxVolume: sfxVol, skipConfirm: skipConfirmVal };
     await this.getSettingsSaveManager().saveSettings(newSettings);
 
     // Apply settings

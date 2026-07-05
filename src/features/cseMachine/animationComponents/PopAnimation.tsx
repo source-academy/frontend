@@ -1,5 +1,4 @@
 import { Easings } from 'konva/lib/Tween';
-import React from 'react';
 import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
@@ -18,12 +17,12 @@ export class PopAnimation extends Animatable {
   constructor(
     popItem: ControlItemComponent,
     private stashItem: StashItemComponent,
-    private undefinedStashItem?: StashItemComponent
+    private undefinedStashItem?: StashItemComponent,
   ) {
     super();
     const stashItemPosition = getNodePosition(stashItem);
     this.popItemAnimation = new AnimatedTextbox(popItem.text, getNodePosition(popItem), {
-      rectProps: { stroke: defaultActiveColor() }
+      rectProps: { stroke: defaultActiveColor() },
     });
     this.stashItemAnimation = new AnimatedTextbox(
       stashItem.text,
@@ -32,14 +31,14 @@ export class PopAnimation extends Animatable {
         x: stashItemPosition.x + stashItemPosition.width / 2,
         offsetX: stashItemPosition.width / 2,
         y: stashItemPosition.y + stashItemPosition.height / 2,
-        offsetY: stashItemPosition.height / 2
+        offsetY: stashItemPosition.height / 2,
       },
-      { rectProps: { stroke: defaultDangerColor() } }
+      { rectProps: { stroke: defaultDangerColor() } },
     );
     if (undefinedStashItem) {
       this.undefinedStashItemAnimation = new AnimatedTextbox(undefinedStashItem.text, {
         ...getNodePosition(undefinedStashItem),
-        opacity: 0
+        opacity: 0,
       });
     }
   }
@@ -60,14 +59,14 @@ export class PopAnimation extends Animatable {
       this.popItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }, { duration: 0.8 }),
       this.popItemAnimation.animateTo({ ...getNodePosition(this.stashItem), opacity: 0 }),
       this.stashItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }, { delay: 0.3 }),
-      this.stashItemAnimation.animateTo({ scaleX: 0.6, scaleY: 0.6 }, { delay: 0.3 })
+      this.stashItemAnimation.animateTo({ scaleX: 0.6, scaleY: 0.6 }, { delay: 0.3 }),
     ]);
     await Promise.all([
       this.stashItemAnimation.animateTo(
         { scaleX: 1.1, scaleY: 1.1, opacity: 0 },
-        { duration: 0.5, easing: Easings.StrongEaseOut }
+        { duration: 0.5, easing: Easings.StrongEaseOut },
       ),
-      this.undefinedStashItemAnimation?.animateTo({ opacity: 1 }, { delay: 0.3 })
+      this.undefinedStashItemAnimation?.animateTo({ opacity: 1 }, { delay: 0.3 }),
     ]);
     this.destroy();
   }

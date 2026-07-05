@@ -1,7 +1,6 @@
 import { Card, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import React from 'react';
 
 type Props = {
   filePath: string;
@@ -10,7 +9,7 @@ type Props = {
   remove: () => void;
 };
 
-const EditorTab: React.FC<Props> = ({ filePath, isActive, setActive, remove }) => {
+function EditorTab({ filePath, isActive, setActive, remove }: Props) {
   const onClick = (e: React.MouseEvent<HTMLElement>) => {
     // Stop the click event from propagating to the parent component.
     e.stopPropagation();
@@ -20,7 +19,7 @@ const EditorTab: React.FC<Props> = ({ filePath, isActive, setActive, remove }) =
   return (
     <Card
       className={classNames('editor-tab', {
-        selected: isActive
+        selected: isActive,
       })}
       onClick={setActive}
     >
@@ -28,6 +27,6 @@ const EditorTab: React.FC<Props> = ({ filePath, isActive, setActive, remove }) =
       <Icon className="remove-button" icon={IconNames.SMALL_CROSS} onClick={onClick} />
     </Card>
   );
-};
+}
 
 export default EditorTab;

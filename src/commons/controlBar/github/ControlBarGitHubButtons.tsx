@@ -1,10 +1,9 @@
 import { ButtonGroup, Classes, Intent, Popover, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
-import React from 'react';
 import { useResponsive } from 'src/commons/utils/Hooks';
 
-import { GitHubSaveInfo } from '../../../features/github/GitHubTypes';
+import type { GitHubSaveInfo } from '../../../features/github/GitHubTypes';
 import ControlButton from '../../ControlButton';
 
 type Props = {
@@ -25,7 +24,7 @@ type Props = {
  *
  * @param props Component properties
  */
-export const ControlBarGitHubButtons: React.FC<Props> = props => {
+function ControlBarGitHubButtons(props: Props) {
   const { isMobileBreakpoint } = useResponsive();
 
   const filePath = props.githubSaveInfo.filePath || '';
@@ -109,4 +108,6 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
       </Popover>
     </Tooltip>
   );
-};
+}
+
+export default ControlBarGitHubButtons;

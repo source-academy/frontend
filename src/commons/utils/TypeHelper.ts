@@ -50,13 +50,15 @@ export type DeepPartial<T> = {
 
 /** Omits the index signature `[key: string]: any;` from type `T` */
 export type RemoveIndex<T> = {
-  [K in keyof T as string extends K
-    ? never
-    : number extends K
+  [
+    K in keyof T as string extends K
       ? never
-      : symbol extends K
+      : number extends K
         ? never
-        : K]: T[K];
+        : symbol extends K
+          ? never
+          : K
+  ]: T[K];
 };
 
 /**
@@ -85,13 +87,13 @@ export type RemoveFirst<T extends any[]> = T extends [any, ...infer U] ? U : T;
 export type RemoveFirstN<
   T extends any[],
   N extends number,
-  Carry extends any[] = []
+  Carry extends any[] = [],
 > = Carry['length'] extends N ? T : RemoveFirstN<RemoveFirst<T>, N, [any, ...Carry]>;
 /** Creates a new tuple type with the first N elements of T. */
 export type FirstN<
   T extends any[],
   N extends number,
-  Counter extends any[] = []
+  Counter extends any[] = [],
 > = Counter['length'] extends N ? Counter : FirstN<RemoveFirst<T>, N, [...Counter, T[0]]>;
 
 /** Creates a new tuple type with the last element of T removed. */
@@ -100,7 +102,7 @@ export type RemoveLast<T extends any[]> = T extends [...infer U, any] ? U : T;
 export type LastN<
   T extends any[],
   N extends number,
-  Counter extends any[] = []
+  Counter extends any[] = [],
 > = Counter['length'] extends N
   ? Counter
   : LastN<RemoveLast<T>, N, [[never, ...T][T['length']], ...Counter]>;
@@ -109,7 +111,7 @@ export type LastN<
 export type ReplaceTypeAtIndex<T extends any[], I extends number, S> = [
   ...FirstN<T, I>,
   S,
-  ...RemoveFirst<RemoveFirstN<T, I>>
+  ...RemoveFirst<RemoveFirstN<T, I>>,
 ];
 
 /**
@@ -138,9 +140,9 @@ export const assertType =
       // `--exactOptionalPropertyTypes` flag in tsconfig.json,
       // but this allows us to only enforce it when we want to.
       [key in keyof T]: key extends keyof S ? S[key] : never;
-    } = any
+    } = any,
   >(
-    obj: T
+    obj: T,
     // Keep the original type as inferred by TS
   ): T =>
     obj;

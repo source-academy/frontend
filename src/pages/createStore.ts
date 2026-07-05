@@ -1,14 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setAutoFreeze } from 'immer';
-import { throttle } from 'lodash';
+import { throttle } from 'lodash-es';
 import createSagaMiddleware from 'redux-saga';
-import { SourceActionType } from 'src/commons/utils/ActionsHelper';
+import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
-import { ALL_LANGUAGES, defaultState, OverallState } from '../commons/application/ApplicationTypes';
+import {
+  ALL_LANGUAGES,
+  defaultState,
+  type OverallState,
+} from '../commons/application/ApplicationTypes';
 import rootReducer from '../commons/application/reducers/RootReducer';
 import MainSaga from '../commons/sagas/MainSaga';
 import { generateOctokitInstance } from '../commons/utils/GitHubPersistenceHelper';
-import { loadStoredState, SavedState, saveState } from './localStorage';
+import { loadStoredState, type SavedState, saveState } from './localStorage';
 
 // FIXME: Hotfix: Disable auto freezing of states for RTK as this breaks the code evaluation sagas
 setAutoFreeze(false);
@@ -28,7 +32,7 @@ export function createStore() {
     devTools: { serialize: true, maxAge: 300 },
     // We already provide the generic type argument, so we put
     // `as any` to prevent excessively long type inference
-    preloadedState: initialStore as any
+    preloadedState: initialStore as any,
     // TODO: Sentry Redux integration once we update to RTK2
   });
   sagaMiddleware.run(MainSaga);
@@ -36,7 +40,7 @@ export function createStore() {
   createdStore.subscribe(
     throttle(() => {
       saveState(createdStore.getState());
-    }, 1000)
+    }, 1000),
   );
 
   return createdStore;
@@ -54,14 +58,14 @@ function loadStore(loadedStore: SavedState | undefined) {
       githubOctokitObject: {
         octokit: loadedStore.session.githubAccessToken
           ? generateOctokitInstance(loadedStore.session.githubAccessToken)
-          : undefined
-      }
+          : undefined,
+      },
     },
     featureFlags: {
       modifiedFlags: {
         ...defaultState.featureFlags.modifiedFlags,
-        ...loadedStore.featureFlags
-      }
+        ...loadedStore.featureFlags,
+      },
     },
     workspaces: {
       ...defaultState.workspaces,
@@ -76,9 +80,6 @@ function loadStore(loadedStore: SavedState | undefined) {
         editorTabs: loadedStore.playgroundEditorTabs
           ? loadedStore.playgroundEditorTabs
           : defaultState.workspaces.playground.editorTabs,
-        isEditorAutorun: loadedStore.playgroundIsEditorAutorun
-          ? loadedStore.playgroundIsEditorAutorun
-          : defaultState.workspaces.playground.isEditorAutorun,
         externalLibrary: loadedStore.playgroundExternalLibrary
           ? loadedStore.playgroundExternalLibrary
           : defaultState.workspaces.playground.externalLibrary,
@@ -90,21 +91,19 @@ function loadStore(loadedStore: SavedState | undefined) {
             ? loadedStore.playgroundSourceVariant
             : defaultState.workspaces.playground.context.variant;
           const validCombination = ALL_LANGUAGES.some(
-            lang => lang.chapter === chapter && lang.variant === variant
+            lang => lang.chapter === chapter && lang.variant === variant,
           );
           return {
             ...defaultState.workspaces.playground.context,
             chapter: validCombination
               ? chapter
               : defaultState.workspaces.playground.context.chapter,
-            variant: validCombination ? variant : defaultState.workspaces.playground.context.variant
+            variant: validCombination
+              ? variant
+              : defaultState.workspaces.playground.context.variant,
           };
-        })()
-      }
+        })(),
+      },
     },
-    stories: {
-      ...defaultState.stories,
-      ...loadedStore.stories
-    }
   };
 }

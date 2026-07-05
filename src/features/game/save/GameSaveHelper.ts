@@ -1,7 +1,7 @@
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
-import { FullSaveState, GameSaveState } from './GameSaveTypes';
+import type { FullSaveState, GameSaveState } from './GameSaveTypes';
 
 /**
  * Function that saves game data as a 'snapshot' in FullSaveState
@@ -16,7 +16,7 @@ import { FullSaveState, GameSaveState } from './GameSaveTypes';
 export function gameStateToJson(
   prevGameState: FullSaveState,
   chapterNum: number,
-  checkpointNum: number
+  checkpointNum: number,
 ): FullSaveState {
   const gameManager = GameGlobalAPI.getInstance().getGameManager();
   const gameStateManager = gameManager.getStateManager();
@@ -35,15 +35,15 @@ export function gameStateToJson(
         completedObjectives: gameStateManager.getCompletedObjectives(),
         triggeredInteractions: gameStateManager.getTriggeredInteractions(),
         triggeredStateChangeActions: gameStateManager.getTriggeredStateChangeActions(),
-        quizScores: gameStateManager.getQuizScores()
-      }
+        quizScores: gameStateManager.getQuizScores(),
+      },
     },
     userSaveState: {
       settings: prevGameState.userSaveState.settings,
       recentlyPlayedCheckpoint: [chapterNum, checkpointNum],
       collectibles: SourceAcademyGame.getInstance().getUserStateManager().getCollectibles(),
-      largestCompletedChapter: prevGameState.userSaveState.largestCompletedChapter
-    }
+      largestCompletedChapter: prevGameState.userSaveState.largestCompletedChapter,
+    },
   };
 }
 
@@ -58,10 +58,10 @@ export const createEmptySaveState = (): FullSaveState => {
     gameSaveStates: {},
     userSaveState: {
       collectibles: [],
-      settings: { bgmVolume: 1, sfxVolume: 1 },
+      settings: { bgmVolume: 1, sfxVolume: 1, skipConfirm: true },
       recentlyPlayedCheckpoint: [-1, -1],
-      largestCompletedChapter: -1
-    }
+      largestCompletedChapter: -1,
+    },
   };
 };
 
@@ -82,7 +82,7 @@ export const createEmptyGameSaveState = (): GameSaveState => {
     completedObjectives: [],
     triggeredInteractions: [],
     triggeredStateChangeActions: [],
-    quizScores: []
+    quizScores: [],
   };
 };
 

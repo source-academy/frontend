@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { Arrow } from 'react-konva';
 
 import { Config } from '../Config';
@@ -14,7 +14,7 @@ type Props = {
  *
  * Used with ArrayDrawable and FunctionDrawable.
  */
-const ArrowDrawable: React.FC<Props> = props => {
+function ArrowDrawable(props: Props) {
   if (DataVisualizer.getBinTreeMode() || DataVisualizer.getTreeMode()) {
     // Binary Tree View and General Tree View
     return (
@@ -24,7 +24,7 @@ const ArrowDrawable: React.FC<Props> = props => {
           props.from.x,
           props.from.y,
           props.to.x + Config.BoxWidth / 2,
-          props.to.y + Config.ArrowPointerOffsetVertical
+          props.to.y + Config.ArrowPointerOffsetVertical,
         ]}
         pointerWidth={Config.ArrowPointerSize}
         pointerLength={Config.ArrowPointerSize}
@@ -32,7 +32,7 @@ const ArrowDrawable: React.FC<Props> = props => {
         stroke={Config.Stroke}
         strokeWidth={Config.StrokeWidth}
         preventDefault={false}
-      ></Arrow>
+      />
     );
   } else {
     // OriginalView
@@ -43,7 +43,7 @@ const ArrowDrawable: React.FC<Props> = props => {
           props.from.x,
           props.from.y,
           props.to.x + Config.BoxWidth / 2,
-          props.to.y + Config.ArrowPointerOffsetVertical
+          props.to.y + Config.ArrowPointerOffsetVertical,
         ]}
         pointerWidth={Config.ArrowPointerSize}
         pointerLength={Config.ArrowPointerSize}
@@ -51,9 +51,9 @@ const ArrowDrawable: React.FC<Props> = props => {
         stroke={Config.Stroke}
         strokeWidth={Config.StrokeWidth}
         preventDefault={false}
-      ></Arrow>
+      />
     );
   }
-};
+}
 
-export default React.memo(ArrowDrawable);
+export default memo(ArrowDrawable);

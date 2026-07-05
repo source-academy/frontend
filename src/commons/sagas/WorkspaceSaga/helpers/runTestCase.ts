@@ -1,6 +1,6 @@
 import type { Context } from 'js-slang';
-import { random } from 'lodash';
-import { call, put, select, StrictEffect } from 'redux-saga/effects';
+import { random } from 'lodash-es';
+import { call, put, select, type StrictEffect } from 'redux-saga/effects';
 
 import type { OverallState } from '../../../application/ApplicationTypes';
 import { actions } from '../../../utils/ActionsHelper';
@@ -15,18 +15,18 @@ import { restoreExtraMethods } from './restoreExtraMethods';
 
 export function* runTestCase(
   workspaceLocation: WorkspaceLocation,
-  index: number
+  index: number,
 ): Generator<StrictEffect, boolean, any> {
   const {
     editorTabs: {
-      [0]: { value }
+      [0]: { value },
     },
     editorTestcases: {
-      [index]: { program: testcase, type: type }
+      [index]: { program: testcase, type: type },
     },
     execTime,
     programPrependValue: prepend,
-    programPostpendValue: postpend
+    programPostpendValue: postpend,
   } = yield* selectWorkspace(workspaceLocation);
 
   yield* clearContext(workspaceLocation, value);
@@ -40,14 +40,14 @@ export function* runTestCase(
    *  this elevated context to run dis-allowed code beyond the current chapter from the REPL
    */
   const context: Context<any> = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].context
+    (state: OverallState) => state.workspaces[workspaceLocation].context,
   );
 
   // Execute prepend silently in privileged context
   const elevatedContext = makeElevatedContext(context);
   const prependFilePath = '/prepend.js';
   const prependFiles = {
-    [prependFilePath]: prepend
+    [prependFilePath]: prepend,
   };
   yield call(
     evalCodeSaga,
@@ -56,7 +56,7 @@ export function* runTestCase(
     elevatedContext,
     execTime,
     EVAL_SILENT,
-    workspaceLocation
+    workspaceLocation,
   );
 
   // Block use of methods from privileged context using a randomly generated blocking key
@@ -65,7 +65,7 @@ export function* runTestCase(
   yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
   const valueFilePath = '/value.js';
   const valueFiles = {
-    [valueFilePath]: value
+    [valueFilePath]: value,
   };
   yield call(
     evalCodeSaga,
@@ -74,7 +74,7 @@ export function* runTestCase(
     context,
     execTime,
     EVAL_SILENT,
-    workspaceLocation
+    workspaceLocation,
   );
 
   // Halt execution if the student's code in the editor results in an error
@@ -90,7 +90,7 @@ export function* runTestCase(
     yield* restoreExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
     const postpendFilePath = '/postpend.js';
     const postpendFiles = {
-      [postpendFilePath]: postpend
+      [postpendFilePath]: postpend,
     };
     yield call(
       evalCodeSaga,
@@ -99,7 +99,7 @@ export function* runTestCase(
       elevatedContext,
       execTime,
       EVAL_SILENT,
-      workspaceLocation
+      workspaceLocation,
     );
     yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
   }

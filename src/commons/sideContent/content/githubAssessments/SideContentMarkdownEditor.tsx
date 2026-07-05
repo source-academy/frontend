@@ -1,5 +1,5 @@
 import { TextArea } from '@blueprintjs/core';
-import React, { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Markdown from '../../../Markdown';
 
@@ -9,10 +9,10 @@ type Props = {
   setContent: (content: string) => void;
 };
 
-const SideContentMarkdownEditor: React.FC<Props> = ({ allowEdits, content, setContent }) => {
-  const [editorModeOn, setEditorModeOn] = React.useState(false);
+function SideContentMarkdownEditor({ allowEdits, content, setContent }: Props) {
+  const [editorModeOn, setEditorModeOn] = useState(false);
 
-  const node = React.useRef<HTMLDivElement>(null);
+  const node = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClick(event: any) {
@@ -38,9 +38,9 @@ const SideContentMarkdownEditor: React.FC<Props> = ({ allowEdits, content, setCo
   return (
     <div ref={node}>
       {editorModeOn ? (
-        <TextArea onChange={onEditorChange} fill={true} autoResize={true} defaultValue={content} />
+        <TextArea onChange={onEditorChange} fill autoResize defaultValue={content} />
       ) : (
-        <Markdown content={content} openLinksInNewWindow={true} />
+        <Markdown content={content} openLinksInNewWindow />
       )}
     </div>
   );
@@ -48,6 +48,6 @@ const SideContentMarkdownEditor: React.FC<Props> = ({ allowEdits, content, setCo
   function onEditorChange(event: any) {
     setContent(event.target.value);
   }
-};
+}
 
 export default SideContentMarkdownEditor;

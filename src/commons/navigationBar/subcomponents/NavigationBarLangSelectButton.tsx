@@ -1,6 +1,7 @@
 import { Position } from '@blueprintjs/core';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router';
 import { useFeature } from 'src/commons/featureFlags/useFeature';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -18,9 +19,12 @@ function useDirectoryOptions() {
 const NavigationBarLangSelectButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const selectedDirLanguageId = useTypedSelector(s => s.languageDirectory.selectedLanguageId);
+  const languageMap = useTypedSelector(s => s.languageDirectory.languageMap);
 
   const dispatch = useDispatch();
   const dirOptions = useDirectoryOptions();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const directoryEnabled = useFeature(flagConductorEnable);
   if (!directoryEnabled) {
@@ -30,6 +34,20 @@ const NavigationBarLangSelectButton = () => {
   const selectDirLanguage = (languageId: string) => {
     dispatch(LanguageDirectoryActions.setSelectedLanguage(languageId));
     setIsOpen(false);
+
+    const isInTextbook =
+      location.pathname.startsWith('/sicpjs') || location.pathname.startsWith('/sicpy');
+    if (isInTextbook) {
+      const newLang = languageMap[languageId];
+      if (newLang?.textbook) {
+        const newPath = newLang.textbook.url.endsWith('json_py/')
+          ? '/sicpy/index'
+          : '/sicpjs/index';
+        navigate(newPath);
+      } else {
+        navigate('/playground');
+      }
+    }
   };
 
   return (
@@ -39,9 +57,9 @@ const NavigationBarLangSelectButton = () => {
       selectedValue={selectedDirLanguageId ?? undefined}
       popoverProps={{ position: Position.BOTTOM_RIGHT, onClose: () => setIsOpen(false), isOpen }}
       buttonProps={{
-        rightIcon: 'caret-down',
+        endIcon: 'caret-down',
         onClick: () => setIsOpen(true),
-        'data-testid': 'NavigationBarLangSelectButton'
+        'data-testid': 'NavigationBarLangSelectButton',
       }}
     />
   );
