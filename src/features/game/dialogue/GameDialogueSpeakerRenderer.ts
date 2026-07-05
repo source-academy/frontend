@@ -30,7 +30,9 @@ export default class DialogueSpeakerRenderer {
    * Null - if there is no speaker for the line
    */
   public changeSpeakerTo(newSpeakerDetail?: SpeakerDetail | null) {
-    if (newSpeakerDetail === undefined) return;
+    if (newSpeakerDetail === undefined) {
+      return;
+    }
 
     if (this.currentSpeakerId) {
       GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Speaker, Layer.SpeakerBox]);
@@ -46,7 +48,9 @@ export default class DialogueSpeakerRenderer {
   }
 
   private drawSpeakerBox(speakerId: ItemId) {
-    if (speakerId === 'narrator') return;
+    if (speakerId === 'narrator') {
+      return;
+    }
     const speakerContainer =
       speakerId === 'you'
         ? this.createSpeakerBox(this.getUsername(), GamePosition.Right)

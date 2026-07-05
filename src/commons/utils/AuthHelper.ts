@@ -73,7 +73,6 @@ export function getClientId(providerId: string): string | undefined {
 }
 
 export function getDefaultProvider():
-  | [string, NonNullable<ReturnType<typeof Constants.authProviders.get>>]
-  | undefined {
+  [string, NonNullable<ReturnType<typeof Constants.authProviders.get>>] | undefined {
   return [...Constants.authProviders.entries()].find(([_, { isDefault }]) => isDefault);
 }

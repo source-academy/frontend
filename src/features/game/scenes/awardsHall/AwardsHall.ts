@@ -74,7 +74,9 @@ class AwardsHall extends Phaser.Scene {
   }
 
   public update() {
-    if (!this.backgroundTile || !this.awardsContainer) return;
+    if (!this.backgroundTile || !this.awardsContainer) {
+      return;
+    }
 
     // Scroll the awards hall if button is currently clicked/held down
     let newXPos = this.awardsContainer.x;
@@ -95,7 +97,9 @@ class AwardsHall extends Phaser.Scene {
    * UI elements (arrows, backbutton, as well as the 'Collectible' and 'Achievement' banner).
    */
   private renderBackground() {
-    if (this.backgroundTile) this.backgroundTile.destroy();
+    if (this.backgroundTile) {
+      this.backgroundTile.destroy();
+    }
 
     this.backgroundTile = new Phaser.GameObjects.TileSprite(
       this,
@@ -148,7 +152,9 @@ class AwardsHall extends Phaser.Scene {
    * Render all the awards that student has.
    */
   private renderAwards() {
-    if (this.awardsContainer) this.awardsContainer.destroy();
+    if (this.awardsContainer) {
+      this.awardsContainer.destroy();
+    }
 
     this.awardsContainer = new Phaser.GameObjects.Container(this, 0, 0);
 

@@ -72,7 +72,11 @@ import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix'
 import type { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight } from '../sideContent/SideContentActions';
 import { useSideContent } from '../sideContent/SideContentHelper';
-import { type SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import {
+  type SideContentTab,
+  type SideContentTabId,
+  SideContentType,
+} from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { useResponsive, useTypedSelector } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
@@ -289,7 +293,9 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   useEffect(() => {
-    if (!selectedTab) return;
+    if (!selectedTab) {
+      return;
+    }
 
     if ((!isMobileBreakpoint || isVscode) && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.questionOverview);
@@ -415,7 +421,9 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
       case QuestionTypes.voting: {
         const votingQuestionData: IContestVotingQuestion = question;
         options.programPrependValue = votingQuestionData.prepend;
-        if (props.fromContestLeaderboard) options.editorValue = code;
+        if (props.fromContestLeaderboard) {
+          options.editorValue = code;
+        }
         options.programPostpendValue = votingQuestionData.postpend;
         // maybe the following dispatch can be placed in a better location
         dispatch(LeaderboardActions.setWorkspaceInitialRun(votingId));
@@ -666,8 +674,8 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
     }
 
     const onChangeTabs = (
-      newTabId: SideContentType,
-      prevTabId: SideContentType,
+      newTabId: SideContentTabId,
+      prevTabId: SideContentTabId,
       event: React.MouseEvent<HTMLElement>,
     ) => {
       if (newTabId === prevTabId) {
@@ -714,7 +722,9 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
     };
 
     const onClickSave = () => {
-      if (isSaving) return;
+      if (isSaving) {
+        return;
+      }
       setIsSaving(true);
       if (isTeamAssessment) {
         checkLastModified();
@@ -879,8 +889,8 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
 
   const mobileSideContentProps: (q: number) => MobileSideContentProps = (questionId: number) => {
     const onChangeTabs = (
-      newTabId: SideContentType,
-      prevTabId: SideContentType,
+      newTabId: SideContentTabId,
+      prevTabId: SideContentTabId,
       event: React.MouseEvent<HTMLElement>,
     ) => {
       if (newTabId === prevTabId) {
@@ -888,9 +898,9 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
       }
 
       // Do nothing when clicking the mobile 'Run' tab while on the autograder tab.
-      if (
-        !(prevTabId === SideContentType.autograder && newTabId === SideContentType.mobileEditorRun)
-      ) {
+      if (!(
+        prevTabId === SideContentType.autograder && newTabId === SideContentType.mobileEditorRun
+      )) {
         setSelectedTab(newTabId);
       }
     };

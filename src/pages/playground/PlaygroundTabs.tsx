@@ -8,14 +8,16 @@ import SideContentSubstVisualizer from 'src/commons/sideContent/content/SideCont
 import {
   type SideContentLocation,
   type SideContentTab,
+  type SideContentTabId,
   SideContentType,
 } from 'src/commons/sideContent/SideContentTypes';
+import { CONDUCTOR_STEPPER_TAB_ID } from 'src/features/conductor/stepperTab';
 
-export const mobileOnlyTabIds: readonly SideContentType[] = [
+export const mobileOnlyTabIds: readonly SideContentTabId[] = [
   SideContentType.mobileEditor,
   SideContentType.mobileEditorRun,
 ];
-export const desktopOnlyTabIds: readonly SideContentType[] = [SideContentType.introduction];
+export const desktopOnlyTabIds: readonly SideContentTabId[] = [SideContentType.introduction];
 
 export const makeIntroductionTabFrom = (content: string): SideContentTab => ({
   label: 'Introduction',
@@ -56,6 +58,20 @@ export const makeRemoteExecutionTabFrom = (
     />
   ),
   id: SideContentType.remoteExecution,
+});
+
+/**
+ * A placeholder Stepper tab for conductor languages that offer stepping. It keeps the tab visible in
+ * the tab bar so the user can open it (which selects the stepper evaluator — see Playground) even
+ * before that evaluator's conductor has loaded. Once it has, the stepper web plugin registers the
+ * live tab under the same id and it takes over (de-duplicated in SideContentProvider), so this body
+ * only shows during that brief load.
+ */
+export const makeConductorStepperPlaceholderTab = (): SideContentTab => ({
+  label: 'Stepper',
+  iconName: IconNames.FLOW_REVIEW,
+  body: <Markdown content="Loading the stepper…" />,
+  id: CONDUCTOR_STEPPER_TAB_ID,
 });
 
 export const makeSubstVisualizerTabFrom = (

@@ -36,7 +36,9 @@ function EditableGoalUuids({ changeGoalUuids, goalUuids }: Props) {
   };
 
   const removeGoal = (removeUuid?: string) => {
-    if (removeGoal === undefined) return;
+    if (removeGoal === undefined) {
+      return;
+    }
 
     selectedGoals.delete(removeUuid!);
     availableGoals.add(removeUuid!);

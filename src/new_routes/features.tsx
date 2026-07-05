@@ -82,7 +82,9 @@ function StringFlagCard({ flag, modifiedFlag }: FlagCardProps<string>) {
   let inputField = (
     <EditableText onConfirm={onConfirm} defaultValue={currentFlag} elementRef={inputRef} />
   );
-  if (isModified) inputField = <b>{inputField}</b>;
+  if (isModified) {
+    inputField = <b>{inputField}</b>;
+  }
 
   return (
     <Card interactive onClick={() => inputRef.current?.focus()} style={{ overflowY: 'hidden' }}>

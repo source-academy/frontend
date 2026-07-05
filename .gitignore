@@ -18,6 +18,16 @@ terraform*
 # sourceror bundle
 /public/externalLibs/sourceror
 
+# Conductor dev fixtures: evaluator/web-plugin bundles + local directories.
+# These are built from the language repos (js-slang, py-slang) and the plugins
+# monorepo, deployed to GitHub Pages, and referenced via the hosted language-
+# and plugin-directories. dev.sh copies them here for local turnkey testing only;
+# they must never be committed to the frontend.
+/public/evaluators/js-slang/
+/public/evaluators/py-slang/
+/public/languages/
+/public/plugins/
+
 # misc
 .DS_Store
 .env.local

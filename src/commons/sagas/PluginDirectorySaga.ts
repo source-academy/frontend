@@ -16,7 +16,9 @@ export function* getPluginDefinitionSaga(pluginId: string) {
 
 export function* getWebPluginSaga(pluginId: string) {
   const pluginDefinition: IPluginDefinition = yield getPluginDefinitionSaga(pluginId);
-  if (!pluginDefinition) return;
+  if (!pluginDefinition) {
+    return;
+  }
   return pluginDefinition.resolutions[PluginType.WEB];
 }
 

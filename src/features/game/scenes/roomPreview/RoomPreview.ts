@@ -256,10 +256,14 @@ export default class RoomPreview extends Phaser.Scene {
     const collectibles = this.getUserStateManager().getCollectibles();
     const defaultAward = new Phaser.GameObjects.Sprite(this, x, y, ImageAssets.cookies.key);
 
-    if (!achievements.includes(awardKey) && !collectibles.includes(awardKey)) return defaultAward;
+    if (!achievements.includes(awardKey) && !collectibles.includes(awardKey)) {
+      return defaultAward;
+    }
 
     const awardProp = getAwardProp(awardKey);
-    if (!awardProp.completed) return defaultAward;
+    if (!awardProp.completed) {
+      return defaultAward;
+    }
 
     const award = new Phaser.GameObjects.Sprite(this, x, y, awardProp.assetKey);
     return this.attachVerificationTag(award);

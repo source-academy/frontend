@@ -145,7 +145,9 @@ export default class CseMachine {
   }
 
   public static isArrowOriginVisible(origin: ArrowOriginFilterKey | null): boolean {
-    if (origin === null) return true;
+    if (origin === null) {
+      return true;
+    }
     return CseMachine.arrowOriginFilters[origin];
   }
 
@@ -218,8 +220,9 @@ export default class CseMachine {
     // store environmentTree at last breakpoint.
     CseMachine.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
     CseMachine.currentEnvId = getEnvId(context.runtime.environments[0]);
-    if (!this.setVis || !context.runtime.control || !context.runtime.stash)
+    if (!this.setVis || !context.runtime.control || !context.runtime.stash) {
       throw new Error('CSE machine not initialized');
+    }
     CseMachine.control = context.runtime.control;
     CseMachine.stash = context.runtime.stash;
     CseMachine.setClearDeadFrames(false);
@@ -257,7 +260,9 @@ export default class CseMachine {
             // Checks if a variable exists in the current scope or any parent scope
             const isDeclaredInScope = (name: string) => {
               for (let i = scopeStack.length - 1; i >= 0; i--) {
-                if (scopeStack[i].has(name)) return true;
+                if (scopeStack[i].has(name)) {
+                  return true;
+                }
               }
               return false;
             };
@@ -270,14 +275,18 @@ export default class CseMachine {
 
             // The Recursive Walker
             const walk = (node: any, parentType?: string, keyName?: string) => {
-              if (!node || typeof node !== 'object') return;
+              if (!node || typeof node !== 'object') {
+                return;
+              }
 
               let isNewScope = false;
 
               // Enter Scope Boundary (Blocks and Functions)
               if (node.type === 'BlockStatement' || node.type === 'Program') {
                 isNewScope = true;
-                if (node.type !== 'Program') scopeStack.push(new Set());
+                if (node.type !== 'Program') {
+                  scopeStack.push(new Set());
+                }
 
                 // add declarations into this scope before traversing deeper
                 const body = node.body || [];
@@ -397,7 +406,9 @@ export default class CseMachine {
 
   /** Renders a language-agnostic CseSnapshot (from the Conductor __cse channel) using the Source renderer. */
   static renderSnapshot(snapshot: CseSnapshot): void {
-    if (!this.setVis) throw new Error('CSE machine not initialized');
+    if (!this.setVis) {
+      throw new Error('CSE machine not initialized');
+    }
 
     CseMachine.lastSnapshot = snapshot;
     // Clear any live Source context so resize-triggered redraws use lastSnapshot, not stale live data.
@@ -406,7 +417,9 @@ export default class CseMachine {
     CseMachine.stash = undefined;
 
     const activeEnv = snapshot.environments.find((env: CseSerializedEnvFrame) => env.isActive);
-    if (activeEnv) CseMachine.currentEnvId = activeEnv.id;
+    if (activeEnv) {
+      CseMachine.currentEnvId = activeEnv.id;
+    }
 
     const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
 

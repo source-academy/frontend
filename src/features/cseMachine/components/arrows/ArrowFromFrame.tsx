@@ -21,7 +21,9 @@ export class ArrowFromFrame extends GenericArrow<Frame, Frame> {
 
   protected calculateSteps() {
     const to = this.target;
-    if (!to) return [];
+    if (!to) {
+      return [];
+    }
 
     const steps: StepsArray = [(x, y) => [x + Config.FramePaddingX, y]];
 

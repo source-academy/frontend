@@ -1,11 +1,12 @@
-import { useCallback } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 
-import { useSideContent } from './SideContentHelper';
+import { getTabId, useSideContent } from './SideContentHelper';
+import sideContentManager from './SideContentManager';
 import type {
   ChangeTabsCallback,
   SideContentLocation,
   SideContentTab,
-  SideContentType,
+  SideContentTabId,
 } from './SideContentTypes';
 
 type SideContentProviderProps = {
@@ -18,7 +19,7 @@ type SideContentProviderProps = {
     alerts: string[];
     changeTabsCallback: ChangeTabsCallback;
     height?: number;
-    selectedTab?: SideContentType;
+    selectedTab?: SideContentTabId;
   }) => React.ReactElement;
 
   /**
@@ -26,12 +27,12 @@ type SideContentProviderProps = {
    * then responsible for managing tab changing
    */
   onChange?: ChangeTabsCallback;
-  selectedTab?: SideContentType;
+  selectedTab?: SideContentTabId;
 
   /**
    * Value to use if the currently selected tab is undefined
    */
-  defaultTab?: SideContentType;
+  defaultTab?: SideContentTabId;
   workspaceLocation: SideContentLocation;
 };
 
@@ -56,10 +57,30 @@ export default function SideContentProvider({
     workspaceLocation,
     defaultTab,
   );
+  const serviceTabs = useSyncExternalStore(
+    sideContentManager.subscribe.bind(sideContentManager),
+    () => sideContentManager.getTabs(workspaceLocation),
+  );
 
-  const allTabs = tabs
-    ? [...tabs.beforeDynamicTabs, ...dynamicTabs, ...tabs.afterDynamicTabs]
-    : dynamicTabs;
+  const combinedTabs = tabs
+    ? [...tabs.beforeDynamicTabs, ...dynamicTabs, ...serviceTabs, ...tabs.afterDynamicTabs]
+    : [...dynamicTabs, ...serviceTabs];
+
+  // De-duplicate by rendered tab id (the same key React/Blueprint use), keeping the first occurrence.
+  // A statically-provided tab may share an id with a dynamically-registered service tab — e.g. the
+  // Stepper tab, which the Playground provides as a placeholder so it is always visible for a stepping
+  // language, while the conductor's web plugin registers the live one once its evaluator is selected.
+  // Ordering the service tabs before the placeholder lets the live tab win in the same slot, so the
+  // tab neither disappears nor duplicates as the evaluator loads.
+  const seenTabIds = new Set<string>();
+  const allTabs = combinedTabs.filter(tab => {
+    const id = getTabId(tab);
+    if (seenTabIds.has(id)) {
+      return false;
+    }
+    seenTabIds.add(id);
+    return true;
+  });
 
   const changeTabsCallback: ChangeTabsCallback = useCallback(
     (newId, oldId, event) => {

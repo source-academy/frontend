@@ -7,7 +7,9 @@ import type { GradingOverview } from './GradingTypes';
 import { ColumnFields } from './GradingTypes';
 
 export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined) => {
-  if (!gradingOverviews) return;
+  if (!gradingOverviews) {
+    return;
+  }
 
   const win = document.defaultView || window;
   if (!win) {

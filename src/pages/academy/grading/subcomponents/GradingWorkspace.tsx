@@ -38,6 +38,7 @@ import type { SideContentProps } from '../../../../commons/sideContent/SideConte
 import { useSideContent } from '../../../../commons/sideContent/SideContentHelper';
 import {
   type SideContentTab,
+  type SideContentTabId,
   SideContentType,
 } from '../../../../commons/sideContent/SideContentTypes';
 import Workspace, { type WorkspaceProps } from '../../../../commons/workspace/Workspace';
@@ -71,8 +72,12 @@ const getDisplayName = (
     id: number;
   }[],
 ): string[] => {
-  if (studentName) return [studentName];
-  if (team != null) return team.map(member => member.name);
+  if (studentName) {
+    return [studentName];
+  }
+  if (team != null) {
+    return team.map(member => member.name);
+  }
 
   return [''];
 };
@@ -425,8 +430,8 @@ function GradingWorkspace(props: Props) {
 
     const sideContentProps: SideContentProps = {
       onChange: (
-        newTabId: SideContentType,
-        prevTabId: SideContentType,
+        newTabId: SideContentTabId,
+        prevTabId: SideContentTabId,
         event: React.MouseEvent<HTMLElement>,
       ) => {
         if (newTabId === prevTabId) {

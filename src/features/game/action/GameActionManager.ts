@@ -16,7 +16,9 @@ export default class GameActionManager {
    * @param actionIds ids of the actions
    */
   public async fastForwardGameActions(actionIds?: ItemId[]): Promise<void> {
-    if (!actionIds) return;
+    if (!actionIds) {
+      return;
+    }
     for (const actionId of actionIds) {
       const { actionType, actionParams } = GameGlobalAPI.getInstance().getActionById(actionId);
       await GameActionExecuter.executeGameAction(actionType, actionParams);
@@ -31,7 +33,9 @@ export default class GameActionManager {
    * @param actionIds ids of the actions
    */
   public async processGameActions(actionIds?: ItemId[]): Promise<void> {
-    if (!actionIds) return;
+    if (!actionIds) {
+      return;
+    }
     for (const actionId of actionIds) {
       await this.processGameAction(actionId);
     }

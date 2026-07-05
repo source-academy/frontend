@@ -268,7 +268,7 @@ $code-color-notification: #f9f0d7;
     word-break: break-word;
     color: $code-color-result;
     text-align: justify;
-    overflow-x: auto;
+    overflow-x: hidden;
     /* Respect padding of containing bp3 Card when scrollable */
     margin-bottom: 0.4rem;
 
@@ -406,7 +406,8 @@ $code-color-notification: #f9f0d7;
 
     // Specific CSS for the Stepper and CSE Machine tab, since REPL is hidden
     ##{$ns}-tab-panel_side-content-tabs_subst_visualiser,
-    ##{$ns}-tab-panel_side-content-tabs_cse_machine {
+    ##{$ns}-tab-panel_side-content-tabs_cse_machine,
+    ##{$ns}-tab-panel_side-content-tabs_stepper {
       height: calc(100% - 60px);
       margin-top: -45px;
 
