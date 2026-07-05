@@ -386,14 +386,21 @@ export class Frame extends Visible implements IHoverable {
           gap that the parent/tail arrow passes through. Arrows are already drawn on a Konva
           layer behind this one, but plain text has no opaque fill, so the arrow line still
           shows through the empty space between glyphs. An opaque backing rect the size of each
-          text's bounding box blocks it, the same way the frame's own Rect fill already hides
-          any arrow passing behind the box.
+          text's own rendered width blocks it, the same way the frame's own Rect fill already
+          hides any arrow passing behind the box.
+
+          Deliberately uses getTextWidth(text) here, not this.name.width()/this._globalNamesText
+          .width(): those apply Config.TextMinWidth (30px) as a floor, which exists for binding
+          key/value alignment elsewhere and has nothing to do with this text's actual rendered
+          width. For a single short glyph (e.g. a one-letter function name) that floor is wider
+          than Config.FramePaddingX (20px, the arrow's x-offset), so the padded-out rect would
+          cover the arrow well past where the glyph's own ink ends — an oversized, unnecessary gap.
         */}
         <Rect
           {...ShapeDefaultProps}
           x={this.name.x()}
           y={this.name.y()}
-          width={this.name.width()}
+          width={getTextWidth(this.name.partialStr)}
           height={this.name.height()}
           listening={false}
           strokeEnabled={false}
@@ -406,7 +413,7 @@ export class Frame extends Visible implements IHoverable {
             {...ShapeDefaultProps}
             x={this._globalNamesText.x()}
             y={this._globalNamesText.y()}
-            width={this._globalNamesText.width()}
+            width={getTextWidth(this._globalNamesText.partialStr)}
             height={this._globalNamesText.height()}
             listening={false}
             strokeEnabled={false}
