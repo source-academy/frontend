@@ -6,6 +6,7 @@ import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
 import {
   ALL_LANGUAGES,
+  defaultLanguageConfig,
   defaultState,
   type OverallState,
 } from '../commons/application/ApplicationTypes';
@@ -93,14 +94,13 @@ function loadStore(loadedStore: SavedState | undefined) {
           const validCombination = ALL_LANGUAGES.some(
             lang => lang.chapter === chapter && lang.variant === variant,
           );
+          // Invalid stored combinations (e.g. chapter 1 + explicit-control, which can be
+          // persisted when toggling feature flags) would crash on load, so fall back to
+          // the default language config as a coherent, always-valid pair.
           return {
             ...defaultState.workspaces.playground.context,
-            chapter: validCombination
-              ? chapter
-              : defaultState.workspaces.playground.context.chapter,
-            variant: validCombination
-              ? variant
-              : defaultState.workspaces.playground.context.variant,
+            chapter: validCombination ? chapter : defaultLanguageConfig.chapter,
+            variant: validCombination ? variant : defaultLanguageConfig.variant,
           };
         })(),
       },
