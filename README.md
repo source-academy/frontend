@@ -36,9 +36,7 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 
 1. Point your browser to `http://localhost:8000` to see your local Source Academy.
 
-In this edition, you will only see the Playground with all its tools, but no login options or homework submission features. To work with 
-the Python edition of Source Academy, you need to turn on the Conductor feature flag: Click on the top right down-arrow button, then
-Settings, then Feature Flags. Toggle `conductor.enable` to `true`.
+In this edition, you will only see the Playground with all its tools, but no login options or homework submission features. 
 
 If you wish to set up the GitHub or Google Drive integrations, copy the `.env.example` file as `.env` and refer to [_Setting up your environment_](#setting-up-your-environment) below for the relevant configuration options.
 
