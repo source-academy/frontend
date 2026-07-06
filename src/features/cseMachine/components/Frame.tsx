@@ -103,9 +103,8 @@ export class Frame extends Visible implements IHoverable {
         Config.FrameMarginX
       : this.level.x();
 
-    // `globalNames` predates its type declaration: it's a minor bump to
-    // @sourceacademy/common-cse-machine (see the companion source-academy/plugins PR) that isn't
-    // published yet, so Env (js-slang's Environment type) doesn't declare it.
+    // `globalNames` is stashed onto the fake Environment by CseSnapshotAdapter.ts (see there);
+    // Env (js-slang's real Environment type) has no such field, so a cast is unavoidable here.
     const globalNames = (this.environment as unknown as { globalNames?: string[] }).globalNames;
     const globalNamesLabel =
       globalNames && globalNames.length > 0 ? `globals: ${globalNames.join(', ')}` : undefined;

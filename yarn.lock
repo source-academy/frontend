@@ -3215,10 +3215,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/common-cse-machine@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@sourceacademy/common-cse-machine@npm:0.1.0"
-  checksum: 10c0/7c31a0629e15b6d1c9d8a67228d290555003c4862e7298ef591fe4a33cb2ccc3372675d7165029af3ad47dd68b6cc116f4ca8843e5a8306c0f62531c5c01fd4a
+"@sourceacademy/common-cse-machine@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@sourceacademy/common-cse-machine@npm:0.2.0"
+  checksum: 10c0/da882e9f6f6bc3aae32c06e6f2d5de9050c21ad64b6c8bcab51427fd5817fd8ee83a53ad3c791edd3349adc4f68f1d4f438573d75f9b1741400b1247fe4089cd
   languageName: node
   linkType: hard
 
@@ -3265,13 +3265,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/web-cse-machine@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@sourceacademy/web-cse-machine@npm:1.0.0"
+"@sourceacademy/web-cse-machine@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@sourceacademy/web-cse-machine@npm:2.0.0"
   peerDependencies:
-    "@sourceacademy/common-cse-machine": ">=0.1.0"
+    "@sourceacademy/common-cse-machine": ">=0.2.0"
     "@sourceacademy/conductor": ">=0.3.0"
-  checksum: 10c0/1645f77dc8599b3b782475583bc975976138746e630f811b2b604f57fceb2952052ae48d5ba9673604368a76df38df896f5b0bf67b005af1646ead6e6bc8b0b1
+  checksum: 10c0/5d3f0948122fa6ce9be86cabdd780335452a14fafac8b8f43cfe0403afd0009272a40eeeaac56da546bac78573a811506684e20752ad0227a0e38e1a138b688b
   languageName: node
   linkType: hard
 
@@ -7287,13 +7287,13 @@ __metadata:
     "@sentry/react": "npm:^10.5.0"
     "@sourceacademy/autocomplete": "github:source-academy/autocomplete#5b8871b8852815184af291f2622788fbc1263911"
     "@sourceacademy/c-slang": "npm:^1.0.21"
-    "@sourceacademy/common-cse-machine": "npm:^0.1.0"
+    "@sourceacademy/common-cse-machine": "npm:^0.2.0"
     "@sourceacademy/conductor": "npm:^0.5.0"
     "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.12"
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.3"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
-    "@sourceacademy/web-cse-machine": "npm:^1.0.0"
+    "@sourceacademy/web-cse-machine": "npm:^2.0.0"
     "@svgr/webpack": "npm:^8.0.0"
     "@swc/core": "npm:^1.11.22"
     "@szhsin/react-menu": "npm:^4.0.0"
