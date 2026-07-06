@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { isEqual } from 'lodash-es';
 import { decompressFromEncodedURIComponent } from 'lz-string';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useStore } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
@@ -768,6 +768,7 @@ function Playground(props: PlaygroundProps) {
   // Stepper tab wiring (conductor only). The Stepper tab is offered for any language that has a
   // stepper-capability evaluator; opening the tab selects that (dropdown-hidden) evaluator so a Run
   // produces steps, and leaving it restores the language's default evaluator. See the effect below.
+  const selectedLanguageId = useTypedSelector(state => state.languageDirectory.selectedLanguageId);
   const selectedEvaluatorId = useTypedSelector(
     state => state.languageDirectory.selectedEvaluatorId,
   );
@@ -775,8 +776,8 @@ function Playground(props: PlaygroundProps) {
     if (!selectConductorEnable(state)) {
       return null;
     }
-    const { selectedLanguageId, languageMap } = state.languageDirectory;
-    const lang = selectedLanguageId ? languageMap[selectedLanguageId] : undefined;
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    const lang = langId ? languageMap[langId] : undefined;
     const evaluator = lang?.evaluators.find(e =>
       (e.capabilities as string[] | undefined)?.includes(STEPPER_EVALUATOR_CAPABILITY),
     );
@@ -786,8 +787,8 @@ function Playground(props: PlaygroundProps) {
     if (!selectConductorEnable(state)) {
       return null;
     }
-    const { selectedLanguageId, languageMap } = state.languageDirectory;
-    const lang = selectedLanguageId ? languageMap[selectedLanguageId] : undefined;
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    const lang = langId ? languageMap[langId] : undefined;
     const evaluator = lang?.evaluators.find(
       e => !(e.capabilities as string[] | undefined)?.includes(STEPPER_EVALUATOR_CAPABILITY),
     );
@@ -802,16 +803,8 @@ function Playground(props: PlaygroundProps) {
       return;
     }
     const onStepperTab = selectedTab === CONDUCTOR_STEPPER_TAB_ID;
-    if (!stepperEvaluatorId) {
-      // This language offers no stepper; if we're stranded on the Stepper tab (e.g. after switching
-      // away from Python §1/§2), fall back to the Introduction tab.
-      if (onStepperTab) {
-        setSelectedTab(SideContentType.introduction);
-      }
-      return;
-    }
     if (onStepperTab) {
-      if (selectedEvaluatorId !== stepperEvaluatorId) {
+      if (stepperEvaluatorId && selectedEvaluatorId !== stepperEvaluatorId) {
         dispatch(LanguageDirectoryActions.setSelectedEvaluator(stepperEvaluatorId));
       }
     } else if (selectedEvaluatorId === stepperEvaluatorId && defaultEvaluatorId) {
@@ -823,9 +816,25 @@ function Playground(props: PlaygroundProps) {
     defaultEvaluatorId,
     selectedEvaluatorId,
     selectedTab,
-    setSelectedTab,
     dispatch,
   ]);
+
+  // Reset to the Introduction tab whenever the Conductor directory's selected language changes (e.g.
+  // Python §1 ⇌ §2). Not stepper-specific: any tab tied to the previous language — a plugin-provided
+  // one, or one only some languages offer, like the Stepper — may not exist or apply to the new one,
+  // so unconditionally falling back avoids stranding the user on a tab that no longer makes sense.
+  // (The legacy Source/full-JS/Java/C chapter-and-variant picker already does this: its `chapterSelect`
+  // saga dispatches `resetSideContent` whenever the chapter or variant actually changes.)
+  const previousSelectedLanguageIdRef = useRef(selectedLanguageId);
+  useEffect(() => {
+    // The directory auto-selects the first language on startup (see `LanguageDirectorySaga`); that
+    // transition away from "no language yet" is startup settling, not a user-initiated switch.
+    const previousSelectedLanguageId = previousSelectedLanguageIdRef.current;
+    previousSelectedLanguageIdRef.current = selectedLanguageId;
+    if (previousSelectedLanguageId !== null && previousSelectedLanguageId !== selectedLanguageId) {
+      setSelectedTab(SideContentType.introduction);
+    }
+  }, [selectedLanguageId, setSelectedTab]);
 
   const conductorWelcomeText = useTypedSelector(state => {
     if (!selectConductorEnable(state)) {
