@@ -60,7 +60,9 @@ export function fadeAndDestroy(
   object: Phaser.GameObjects.GameObject | null,
   { fadeDuration }: FadeProps = {},
 ) {
-  if (!object) return;
+  if (!object) {
+    return;
+  }
   scene.add.tween(fadeOut([object], fadeDuration || Constants.fadeDuration));
   setTimeout(() => object.destroy(), fadeDuration || Constants.fadeDuration);
 }

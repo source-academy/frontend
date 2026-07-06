@@ -27,7 +27,9 @@ abstract class BaseAnimationComponent<
   private animation: Konva.Animation;
 
   private animationFn: AnimationFn = frame => {
-    if (!frame || this.animationData.length === 0) return false;
+    if (!frame || this.animationData.length === 0) {
+      return false;
+    }
     if (!this.ref.current) {
       this.animationData.forEach(data => data.resolve());
       this.animation.stop();
@@ -64,10 +66,18 @@ abstract class BaseAnimationComponent<
       for (const attr in data.to) {
         const value = lerp(delta, attr, data.from[attr], data.to[attr], data.easing);
         data.current[attr] = value;
-        if (attr === 'x') this._x = value;
-        if (attr === 'y') this._y = value;
-        if (attr === 'width') this._width = value;
-        if (attr === 'height') this._height = value;
+        if (attr === 'x') {
+          this._x = value;
+        }
+        if (attr === 'y') {
+          this._y = value;
+        }
+        if (attr === 'width') {
+          this._width = value;
+        }
+        if (attr === 'height') {
+          this._height = value;
+        }
       }
       // Add the new attributes and values into the main attrs object
       Object.assign(attrs, data.current);
@@ -86,7 +96,9 @@ abstract class BaseAnimationComponent<
       this.ref.current.setAttrs(attrs);
       this.listeners.forEach(f => f({ ...attrs }));
     }
-    if (animationComplete) this.animation.stop();
+    if (animationComplete) {
+      this.animation.stop();
+    }
     // Promises are only resolved after attributes have been fully set on the Konva node
     resolveList.forEach(r => r());
     return;
@@ -100,10 +112,18 @@ abstract class BaseAnimationComponent<
       throw new Error('Missing animation layer! Unable to create animation component!');
     }
     this.animation = new Konva.Animation(this.animationFn, CseAnimation.getLayer());
-    if (props.x !== undefined) this._x = props.x;
-    if (props.y !== undefined) this._y = props.y;
-    if (props.width !== undefined) this._width = props.width;
-    if (props.height !== undefined) this._height = props.height;
+    if (props.x !== undefined) {
+      this._x = props.x;
+    }
+    if (props.y !== undefined) {
+      this._y = props.y;
+    }
+    if (props.width !== undefined) {
+      this._width = props.width;
+    }
+    if (props.height !== undefined) {
+      this._height = props.height;
+    }
   }
 
   animateTo(to: Partial<KonvaConfig>, animationConfig?: AnimationConfig): Promise<void> {
@@ -124,7 +144,9 @@ abstract class BaseAnimationComponent<
       const data = { startTime, endTime, to, easing, resolve };
       this.animationData.push(data);
       // Play animation
-      if (!this.animation.isRunning()) this.animation.start();
+      if (!this.animation.isRunning()) {
+        this.animation.start();
+      }
     });
   }
 

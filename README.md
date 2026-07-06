@@ -36,9 +36,22 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 
 1. Point your browser to `http://localhost:8000` to see your local Source Academy.
 
-In this edition, you will only see the Playground with all its tools, but no login options or homework submission features.
+In this edition, you will only see the Playground with all its tools, but no login options or homework submission features. 
 
 If you wish to set up the GitHub or Google Drive integrations, copy the `.env.example` file as `.env` and refer to [_Setting up your environment_](#setting-up-your-environment) below for the relevant configuration options.
+
+### Python
+
+To work with 
+the Python edition of Source Academy, you need to turn on the Conductor feature flag: Click on the top right down-arrow button, then
+Settings, then Feature Flags. Toggle `conductor.enable` to `true`.
+```
+directory.language.url
+https://source-academy.github.io/language-directory/directory.json
+
+directory.plugin.url
+https://source-academy.github.io/plugin-directory/directory.json
+```
 
 ### Installation of [Source Academy @ NUS](https://sourceacademy.nus.edu.sg)
 
@@ -59,6 +72,52 @@ The project requires some environment variables to be set to work properly. In t
 1. `REACT_APP_MODULE_BACKEND_URL`: The base URL from which Source modules are loaded. (This is a js-slang feature, but of course it has to be configured here.) You can just use the default value in development.
 1. `REACT_APP_SHAREDB_BACKEND_URL`: The base URL of the [ShareDB collaborative editor backend](https://github.com/source-academy/sharedb-ace-backend). The protocol must be HTTP or HTTPS (it will automatically be set to WS/WSS as appropriate). **Must end in a trailing `/`.**
 1. `REACT_APP_SICPJS_BACKEND_URL`: The base URL from which [SICP JS](https://github.com/source-academy/sicp) content is loaded.
+
+#### Running a local backend
+
+If `REACT_APP_USE_BACKEND` is `TRUE` and no backend is reachable at `REACT_APP_BACKEND_URL` (`http://localhost:4000` by default), the frontend shows a "Source Academy is under maintenance" page instead of logging in. To run a local [backend](https://github.com/source-academy/backend):
+
+1. Install [asdf](https://asdf-vm.com/) and add the Erlang and Elixir plugins:
+
+   ```bash
+   asdf plugin add erlang
+   asdf plugin add elixir
+   ```
+
+1. Clone the backend and install the toolchain versions pinned in its `.tool-versions`:
+
+   ```bash
+   git clone https://github.com/source-academy/backend.git
+   cd backend
+   asdf install
+   ```
+
+1. Start a local PostgreSQL instance (only needs to be done once; on subsequent runs use `docker start sa-backend-db` instead):
+
+   ```bash
+   docker run --name sa-backend-db -e POSTGRES_HOST_AUTH_METHOD=trust -p 5432:5432 -d postgres
+   ```
+
+1. Set up the development secrets and install dependencies:
+
+   ```bash
+   cp config/dev.secrets.exs.example config/dev.secrets.exs
+   mix deps.get
+   ```
+
+1. Initialize and seed the development database:
+
+   ```bash
+   mix ecto.setup
+   ```
+
+1. Run the server:
+
+   ```bash
+   mix phx.server
+   ```
+
+The backend is now reachable at `http://localhost:4000` (Swagger docs at `http://localhost:4000/swagger`), and the frontend's `.env.example` test OAuth providers (`test_admin`, `test_staff`, `test_student`) will log you in against the accounts seeded above. See the [backend's own README](https://github.com/source-academy/backend#developer-setup) for feature-specific setup (e.g. MQTT for Sling) beyond this base configuration.
 
 #### URL shortener configuration
 

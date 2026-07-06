@@ -28,7 +28,7 @@ function SicpPyToc({ handleCloseToc }: Props) {
   const handleNodeClicked = useCallback(
     (node: TreeNodeInfo) => {
       handleCloseToc?.();
-      navigate('/sicppy/' + String(node.nodeData));
+      navigate('/sicpy/' + String(node.nodeData));
     },
     [navigate, handleCloseToc],
   );

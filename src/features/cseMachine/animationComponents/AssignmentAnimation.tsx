@@ -66,7 +66,9 @@ export class AssignmentAnimation extends Animatable {
     const minAsgnItemWidth =
       getTextWidth(this.asgnItem.text) + ControlStashConfig.ControlItemTextPadding * 2;
     // hide value of binding
-    if (this.bindingAnimation) this.binding.value.ref.current?.hide();
+    if (this.bindingAnimation) {
+      this.binding.value.ref.current?.hide();
+    }
     // hide arrow
     this.binding.arrow?.ref.current?.hide();
     // move asgn instruction next to stash item, while also decreasing its width

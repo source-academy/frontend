@@ -3,6 +3,10 @@ import * as bpcore from '@blueprintjs/core';
 import * as bpicons from '@blueprintjs/icons';
 import * as jsslang from 'js-slang';
 import * as jsslangDist from 'js-slang/dist';
+import * as jsslangErrors from 'js-slang/dist/errors/base';
+import * as rttcErrors from 'js-slang/dist/errors/rttcErrors';
+import * as jsslangOperators from 'js-slang/dist/utils/operators';
+import * as jsslangRttc from 'js-slang/dist/utils/rttc';
 import Konva from 'konva';
 import * as lodash from 'lodash-es';
 // We need it to inject modules into the context
@@ -12,6 +16,7 @@ import { useCallback } from 'react';
 import JSXRuntime from 'react/jsx-runtime';
 import ace from 'react-ace';
 import ReactDOM from 'react-dom';
+import * as ReactDOMClient from 'react-dom/client';
 import * as ReactKonva from 'react-konva';
 import { useDispatch } from 'react-redux';
 
@@ -35,14 +40,21 @@ export const requireProvider = (x: string) => {
     'react-dom': ReactDOM,
     'react-konva': ReactKonva,
     konva: Konva,
+    'react-dom/client': ReactDOMClient,
     '@blueprintjs/core': bpcore,
     '@blueprintjs/icons': bpicons,
     'js-slang': jsslang,
     'js-slang/dist': jsslangDist,
+    'js-slang/dist/utils/operators': jsslangOperators,
+    'js-slang/dist/utils/rttc': jsslangRttc,
+    'js-slang/dist/errors/base': jsslangErrors,
+    'js-slang/dist/errors/rttcErrors': rttcErrors,
     lodash,
   };
 
-  if (!(x in exports)) throw new Error(`Dynamic require of ${x} is not supported`);
+  if (!(x in exports)) {
+    throw new Error(`Dynamic require of ${x} is not supported`);
+  }
   return exports[x as keyof typeof exports] as any;
 };
 
@@ -57,7 +69,9 @@ export type RawTab = (provider: ReturnType<typeof requireProvider>) => {
 export function getDynamicTabs(debuggerContext: DebuggerContext): SideContentTab[] {
   const moduleContexts = debuggerContext?.context?.moduleContexts;
 
-  if (!moduleContexts) return [];
+  if (!moduleContexts) {
+    return [];
+  }
 
   return Object.values(moduleContexts)
     .flatMap(({ tabs }) => tabs ?? [])

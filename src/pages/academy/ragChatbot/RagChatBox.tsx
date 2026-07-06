@@ -127,7 +127,9 @@ function RagChatBox({ isExpanded, toggleExpanded, activeSnippetId, setActiveSnip
   );
 
   const resetChat = useCallback(() => {
-    if (!tokens.accessToken || !tokens.refreshToken) return;
+    if (!tokens.accessToken || !tokens.refreshToken) {
+      return;
+    }
     const authedTokens: Tokens = {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,

@@ -11,7 +11,10 @@ import {
   type OverallState,
 } from 'src/commons/application/ApplicationTypes';
 import type { Router } from 'src/commons/application/types/CommonsTypes';
+import { visitSideContent } from 'src/commons/sideContent/SideContentActions';
+import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
+import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
 import { createStore } from 'src/pages/createStore';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
@@ -87,6 +90,40 @@ describe('Playground tests', () => {
 
     expect(getSourceChapterFromStore(mockStore)).toBe(Chapter.SOURCE_2);
     expect(getEditorValueFromStore(mockStore)).toBe("display('hello!');");
+  });
+
+  test('switching the Conductor-selected language resets the side content tab to Introduction (#4061)', async () => {
+    const router = createMemoryRouter(routes, {
+      initialEntries: ['/playground'],
+      initialIndex: 0,
+    });
+    await renderTree(router);
+
+    await act(() => {
+      mockStore.dispatch(
+        LanguageDirectoryActions.setLanguages([
+          { id: 'python1', name: 'Python §1', evaluators: [] },
+          { id: 'python2', name: 'Python §2', evaluators: [] },
+        ]),
+      );
+      mockStore.dispatch(LanguageDirectoryActions.setSelectedLanguage('python1'));
+    });
+
+    // Land on some other tab (e.g. the Stepper tab, as in the reported bug).
+    await act(() => {
+      mockStore.dispatch(visitSideContent('stepper', SideContentType.introduction, 'playground'));
+    });
+    expect(mockStore.getState().sideContent.playground.selectedTab).toBe('stepper');
+
+    // Switch to Python §2. Previously this left the (now-defunct) Stepper tab active, which hung
+    // forever since it belonged to the Python §1 evaluator instance.
+    await act(() => {
+      mockStore.dispatch(LanguageDirectoryActions.setSelectedLanguage('python2'));
+    });
+
+    expect(mockStore.getState().sideContent.playground.selectedTab).toBe(
+      SideContentType.introduction,
+    );
   });
 
   describe('handleHash', () => {

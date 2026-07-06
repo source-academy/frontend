@@ -126,6 +126,8 @@ export function* selectWorkspace<T extends WorkspaceLocation, U>(
     (state: OverallState) => state.workspaces[workspaceLocation],
   );
 
-  if (f) return f(workspace);
+  if (f) {
+    return f(workspace);
+  }
   return workspace;
 }

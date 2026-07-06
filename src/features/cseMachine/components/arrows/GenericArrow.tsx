@@ -167,7 +167,9 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
    */
   protected calculateSteps(): StepsArray {
     const to = this.target;
-    if (!to) return [];
+    if (!to) {
+      return [];
+    }
     return [() => [to.x(), to.y()]];
   }
 
@@ -404,7 +406,9 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   private drawSourceFrameSegment(stroke: string, interactive: boolean): React.ReactNode {
     const rect = this.getSourceFrameBounds();
     const segmentPath = this.getSourceFrameSegmentPath();
-    if (!rect || !segmentPath) return null;
+    if (!rect || !segmentPath) {
+      return null;
+    }
 
     return (
       <KonvaGroup

@@ -23,10 +23,11 @@ import type {
   CseSnapshot,
 } from '../../../../features/conductor/CseMachineHostPlugin';
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
+import { CONDUCTOR_STEPPER_TAB_ID } from '../../../../features/conductor/stepperTab';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { type OverallState } from '../../../application/ApplicationTypes';
 import { visitSideContent } from '../../../sideContent/SideContentActions';
-import { SideContentType } from '../../../sideContent/SideContentTypes';
+import { type SideContentTabId, SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import DisplayBufferService from '../../../utils/DisplayBufferService';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
@@ -439,7 +440,9 @@ function* handleStdout(
   const outputChan = eventChannel(emitter => {
     hostPlugin.receiveOutput = emitter;
     return () => {
-      if (hostPlugin.receiveOutput === emitter) delete hostPlugin.receiveOutput;
+      if (hostPlugin.receiveOutput === emitter) {
+        delete hostPlugin.receiveOutput;
+      }
     };
   });
   try {
@@ -462,14 +465,17 @@ function* handleResults(
     const onReceiveResult = (result: any) => emitter({ value: result });
     hostPlugin.receiveResult = onReceiveResult;
     return () => {
-      if (hostPlugin.receiveResult === onReceiveResult) delete hostPlugin.receiveResult;
+      if (hostPlugin.receiveResult === onReceiveResult) {
+        delete hostPlugin.receiveResult;
+      }
     };
   });
   try {
     while (true) {
       const { value: result } = yield take(resultChan);
-      if (result !== undefined)
+      if (result !== undefined) {
         yield put(actions.appendInterpreterResult(result, workspaceLocation));
+      }
       // The OneShot evaluator sends exactly one result then stops. Trigger cleanup
       // via beginInterruptExecution so the parent saga exits even if the STATUS
       // channel is broken (e.g. const-enum erasure in older evaluator bundles).
@@ -482,6 +488,27 @@ function* handleResults(
   }
 }
 
+/**
+ * Surfaces a conductor evaluation error: appends it to the REPL and, when the (REPL-hiding) conductor
+ * Stepper or CSE Machine tab is active, switches to the Introduction tab so the error is visible
+ * rather than failing silently — the conductor analogue of the legacy `usingSubst`/`usingCse` path.
+ * Also unblocks the run loop.
+ */
+function* surfaceConductorError(
+  error: unknown,
+  workspaceLocation: WorkspaceLocation,
+): SagaIterator {
+  yield put(actions.appendInterpreterError([toConductorSourceError(error)], workspaceLocation));
+  const selectedTab: SideContentTabId | undefined = yield select(
+    (state: OverallState) => state.sideContent[workspaceLocation]?.selectedTab,
+  );
+  if (selectedTab === CONDUCTOR_STEPPER_TAB_ID || selectedTab === SideContentType.cseMachine) {
+    yield put(visitSideContent(SideContentType.introduction, selectedTab, workspaceLocation));
+  }
+  // Unblock the run loop (the runner should also send a terminal status, but this is a safety net).
+  yield put(actions.beginInterruptExecution(workspaceLocation));
+}
+
 function* handleErrors(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
@@ -489,18 +516,26 @@ function* handleErrors(
   const errorChan = eventChannel(emitter => {
     hostPlugin.receiveError = emitter;
     return () => {
-      if (hostPlugin.receiveError === emitter) delete hostPlugin.receiveError;
+      if (hostPlugin.receiveError === emitter) {
+        delete hostPlugin.receiveError;
+      }
     };
   });
   try {
     while (true) {
       const error = yield take(errorChan);
-      yield put(actions.appendInterpreterError([toConductorSourceError(error)], workspaceLocation));
-      // Signal the REPL loop that evaluation has ended due to an error.
-      // We dispatch beginInterruptExecution here as a safety net: the runner should
-      // also send a terminal status (STOPPED/ERROR) which handleStatuses will catch,
-      // but if it doesn't (e.g. older evaluator build), this ensures we unblock.
-      yield put(actions.beginInterruptExecution(workspaceLocation));
+      yield* surfaceConductorError(error, workspaceLocation);
+    }
+  } catch (e) {
+    // A conductor evaluator may report a preprocessing/syntax error by rejecting its run rather than
+    // via the error channel (the Python stepper does this: the rejection is thrown into this forked
+    // task by redux-saga). Handle it the same way and do NOT re-throw — otherwise it aborts the run
+    // saga and escapes as an uncaught error (invisible to the user). redux-saga task cancellations are
+    // not Error instances, so re-raise those to preserve normal teardown.
+    if (e instanceof Error) {
+      yield* surfaceConductorError(e, workspaceLocation);
+    } else {
+      throw e;
     }
   } finally {
     if (yield cancelled()) {
@@ -516,13 +551,17 @@ function* handleCseSnapshots(
   const snapshotChan = eventChannel<CseSnapshot[]>(emitter => {
     csePlugin.receiveSnapshots = emitter;
     return () => {
-      if (csePlugin.receiveSnapshots === emitter) csePlugin.receiveSnapshots = () => {};
+      if (csePlugin.receiveSnapshots === emitter) {
+        csePlugin.receiveSnapshots = () => {};
+      }
     };
   });
   try {
     while (true) {
       const snapshots: CseSnapshot[] | typeof END = yield take(snapshotChan);
-      if (snapshots === END || !Array.isArray(snapshots)) break;
+      if (snapshots === END || !Array.isArray(snapshots)) {
+        break;
+      }
       yield put(WorkspaceActions.updateCseSnapshots(snapshots, workspaceLocation));
       yield put(
         WorkspaceActions.updateStepsTotal(Math.max(0, snapshots.length - 1), workspaceLocation),
@@ -547,7 +586,9 @@ function* handleStatuses(
       emitter({ status, isActive });
     hostPlugin.receiveStatusUpdate = onStatusUpdate;
     return () => {
-      if (hostPlugin.receiveStatusUpdate === onStatusUpdate) delete hostPlugin.receiveStatusUpdate;
+      if (hostPlugin.receiveStatusUpdate === onStatusUpdate) {
+        delete hostPlugin.receiveStatusUpdate;
+      }
     };
   });
   try {
@@ -592,7 +633,9 @@ export function* evalCodeConductorSaga(
       throw Error('language directory could not be loaded in time');
     }
     evaluator = yield call(getEvaluatorDefinitionSaga);
-    if (!evaluator?.path) throw Error('no evaluator');
+    if (!evaluator?.path) {
+      throw Error('no evaluator');
+    }
   }
 
   // Clear stale CSE snapshots from the previous run
@@ -637,17 +680,44 @@ export function* evalCodeConductorSaga(
 
     // OneShot: wait for the runner to send STOPPED/ERROR (dispatched by handleStatuses),
     // or for the user to manually interrupt execution.
-    yield race({
+    const { done } = yield race({
       done: take(actions.beginInterruptExecution.type),
       timeout: call(() => new Promise(resolve => setTimeout(resolve, execTime + 10000))),
     });
+
+    // Drain pending result/error/output before teardown. Each conductor channel is its own
+    // MessagePort with no cross-channel ordering, so the terminal STOPPED status (which resolves the
+    // race above) can be handled before the result/error/output posted just before it on their own
+    // ports. Cancelling the forks immediately would drop those still-in-flight messages (e.g. an
+    // evaluator that reports an error via `sendError` rather than by rejecting — see the catch below).
+    // Give the forks a brief window to process what the runner already sent. `done` is set on runner
+    // completion and on manual interrupt (both may have a trailing message to flush); only a hard
+    // timeout skips the drain.
+    if (done) {
+      yield call(() => new Promise(resolve => setTimeout(resolve, 50)));
+    }
+  } catch (runError) {
+    // Defensive: surface any setup error (e.g. failing to obtain the conductor) or synchronous
+    // startEvaluator rejection here rather than letting it escape as an uncaught saga error. The
+    // Python stepper's async rejection is delivered to and handled in `handleErrors`, not here.
+    yield* surfaceConductorError(runError, workspaceLocation);
   } finally {
     try {
-      if (cseTask) yield cancel(cseTask);
-      if (statusTask) yield cancel(statusTask);
-      if (stdoutTask) yield cancel(stdoutTask);
-      if (resultTask) yield cancel(resultTask);
-      if (errorTask) yield cancel(errorTask);
+      if (cseTask) {
+        yield cancel(cseTask);
+      }
+      if (statusTask) {
+        yield cancel(statusTask);
+      }
+      if (stdoutTask) {
+        yield cancel(stdoutTask);
+      }
+      if (resultTask) {
+        yield cancel(resultTask);
+      }
+      if (errorTask) {
+        yield cancel(errorTask);
+      }
     } finally {
       yield put(actions.endInterruptExecution(workspaceLocation));
       yield put(actions.setIsRunning(false, workspaceLocation));

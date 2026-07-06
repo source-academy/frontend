@@ -69,7 +69,9 @@ function MobileSideContent({
   const renderedPanels = (dynamicTabs: SideContentTab[], selectedTabId?: SideContentTabId) => {
     // TODO: Fix the CSS of all the panels (e.g. subst_visualizer)
     const renderPanel = (tab: SideContentTab, workspaceLocation?: SideContentLocation) => {
-      if (!tab.body) return;
+      if (!tab.body) {
+        return;
+      }
 
       const tabBody: React.ReactElement = workspaceLocation
         ? cloneElement(tab.body, { workspaceLocation } as any)

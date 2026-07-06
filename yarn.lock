@@ -2,7 +2,7 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 8
+  version: 10
   cacheKey: 10c0
 
 "@aaroon/workbox-rspack-plugin@npm:^1.0.0":
@@ -3180,9 +3180,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/autocomplete@github:source-academy/autocomplete#5b8871b8852815184af291f2622788fbc1263911":
+"@sourceacademy/autocomplete@github:source-academy/autocomplete#d476416170412c4726c7becc2a5c0018fb7cc4f7":
   version: 0.0.1
-  resolution: "@sourceacademy/autocomplete@https://github.com/source-academy/autocomplete.git#commit=5b8871b8852815184af291f2622788fbc1263911"
+  resolution: "@sourceacademy/autocomplete@https://github.com/source-academy/autocomplete.git#commit=d476416170412c4726c7becc2a5c0018fb7cc4f7"
   peerDependencies:
     "@sourceacademy/conductor": ">=0.3.0"
   checksum: 10c0/0c75481ab156e019665179447d3d9e427910277871a157916a081047da5b5e66429ceb6fb04667d14f5e73ddcc0f09307cb00eda0e444490575b5fa87f1e0c30
@@ -3217,10 +3217,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.11":
+"@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.12":
   version: 0.0.9
-  resolution: "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#commit=54fd0c7e006c142eca44d03a2b3562203420b20a"
-  checksum: 10c0/1329a5b8d68fba14cfa48c7812de68ecdc7cdaf0d6e241b9972207017b83bade79cd766a0fee3f1c40784968bbe954917887c122a014bbc3896e13992580f939
+  resolution: "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#commit=e80b87a827f6b2ed098fd9ffc4d171aee9c70e61"
+  checksum: 10c0/70f79e59d3eb3f4e3bbecbb5858daa7ec8ff14f2e77e8340d86a0ef80ab2790adb1141b4e16c89aa9c10e4bcd6d58b605865148330e51f9b2bbb88d7679af0d1
   languageName: node
   linkType: hard
 
@@ -3265,10 +3265,10 @@ __metadata:
 
 "@sourceacademy/web-module-loader@file:../plugins/src/web/module-loader::locator=frontend%40workspace%3A.":
   version: 0.0.2
-  resolution: "@sourceacademy/web-module-loader@file:../plugins/src/web/module-loader#../plugins/src/web/module-loader::hash=ffe7eb&locator=frontend%40workspace%3A."
+  resolution: "@sourceacademy/web-module-loader@file:../plugins/src/web/module-loader#../plugins/src/web/module-loader::hash=155726&locator=frontend%40workspace%3A."
   peerDependencies:
     "@sourceacademy/conductor": ">=0.3.0"
-  checksum: 10c0/93ec1c16c876b8eeca224ca229e4889c0e23355121216462eab20bd8f99c102490c81ac89a88f3dbf06469ecb76326122f1ef8359a74ed33d43c34373e9bc637
+  checksum: 10c0/b82d5e4c426bdd34fb270d4307094e69b1bb81e1f04842ad7f22217c61e348d1aead941326fff999f7a3c47bac1774d0c8919f9bd6debccfe66a269666df96c8
   languageName: node
   linkType: hard
 
@@ -4053,13 +4053,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/js-yaml@npm:^4.0.5":
-  version: 4.0.9
-  resolution: "@types/js-yaml@npm:4.0.9"
-  checksum: 10c0/24de857aa8d61526bbfbbaa383aa538283ad17363fcd5bb5148e2c7f604547db36646440e739d78241ed008702a8920665d1add5618687b6743858fae00da211
-  languageName: node
-  linkType: hard
-
 "@types/json-schema@npm:^7.0.15":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
@@ -4128,15 +4121,6 @@ __metadata:
   version: 1.26.5
   resolution: "@types/prismjs@npm:1.26.5"
   checksum: 10c0/5619cb449e0d8df098c8759d6f47bf8fdd510abf5dbdfa999e55c6a2545efbd1e209cc85a33d8d9f4ff2898089a1a6d9a70737c9baffaae635c46852c40d384a
-  languageName: node
-  linkType: hard
-
-"@types/react-copy-to-clipboard@npm:^5.0.4":
-  version: 5.0.7
-  resolution: "@types/react-copy-to-clipboard@npm:5.0.7"
-  dependencies:
-    "@types/react": "npm:*"
-  checksum: 10c0/33bea4549fa263b597d0dedb3807f99286d8ccf59adb370e3d82d1c9075195925a343982abd73c63cc47854a7240ddae79873a5cb3590c9b33c1b65bf9d07689
   languageName: node
   linkType: hard
 
@@ -4777,7 +4761,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-styles@npm:^6.1.0, ansi-styles@npm:^6.2.1":
+"ansi-styles@npm:^6.1.0":
   version: 6.2.1
   resolution: "ansi-styles@npm:6.2.1"
   checksum: 10c0/5d1ec38c123984bcedd996eac680d548f31828bd679a66db2bdf11844634dde55fec3efa9c6bb1d89056a5e79c1ac540c4c784d592ea1d25028a92227d2f2d5c
@@ -4839,13 +4823,6 @@ __metadata:
     is-string: "npm:^1.1.1"
     math-intrinsics: "npm:^1.1.0"
   checksum: 10c0/0235fa69078abeac05ac4250699c44996bc6f774a9cbe45db48674ce6bd142f09b327d31482ff75cf03344db4ea03eae23edb862d59378b484b47ed842574856
-  languageName: node
-  linkType: hard
-
-"array-move@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "array-move@npm:4.0.0"
-  checksum: 10c0/056eaf4ceeabe6b275d2d96e8628d839a3bf53844f13070de74f73a035ace8f9160800e4288e5fb36226593d39b239f9b63c654a6bb95e05f18aeb345c886acf
   languageName: node
   linkType: hard
 
@@ -7302,11 +7279,11 @@ __metadata:
     "@rsbuild/plugin-svgr": "npm:^2.0.2"
     "@rsbuild/plugin-tailwindcss": "npm:^2.0.0"
     "@sentry/react": "npm:^10.5.0"
-    "@sourceacademy/autocomplete": "github:source-academy/autocomplete#5b8871b8852815184af291f2622788fbc1263911"
+    "@sourceacademy/autocomplete": "github:source-academy/autocomplete#d476416170412c4726c7becc2a5c0018fb7cc4f7"
     "@sourceacademy/c-slang": "npm:^1.0.21"
     "@sourceacademy/common-tabs": "npm:^0.0.1"
     "@sourceacademy/conductor": "npm:^0.5.0"
-    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.11"
+    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.12"
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.3"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
@@ -7330,10 +7307,8 @@ __metadata:
     "@types/google.picker": "npm:^0.0.52"
     "@types/identity-obj-proxy": "npm:^3"
     "@types/js-cookie": "npm:^3.0.6"
-    "@types/js-yaml": "npm:^4.0.5"
     "@types/lodash-es": "npm:^4.17.12"
     "@types/react": "npm:^19.1.8"
-    "@types/react-copy-to-clipboard": "npm:^5.0.4"
     "@types/react-dom": "npm:^19.1.6"
     "@types/react-redux": "npm:^7.1.24"
     "@types/react-syntax-highlighter": "npm:^15.5.7"
@@ -7348,7 +7323,6 @@ __metadata:
     acorn: "npm:^8.9.0"
     ag-grid-community: "npm:^35.0.0"
     ag-grid-react: "npm:^35.0.0"
-    array-move: "npm:^4.0.0"
     browserfs: "npm:^1.4.3"
     canvas: "npm:^3.1.0"
     classnames: "npm:^2.3.2"
@@ -7363,7 +7337,6 @@ __metadata:
     eslint-plugin-simple-import-sort: "npm:^13.0.0"
     flexboxgrid: "npm:^6.3.1"
     flexboxgrid-helpers: "npm:^1.1.3"
-    hastscript: "npm:^9.0.0"
     husky: "npm:^9.0.0"
     i18next: "npm:^26.0.3"
     i18next-browser-languagedetector: "npm:^8.0.0"
@@ -7371,16 +7344,11 @@ __metadata:
     immer: "npm:^9.0.21"
     java-slang: "npm:^1.0.13"
     js-cookie: "npm:^3.0.5"
-    js-slang: "npm:^1.0.93"
-    js-yaml: "npm:^4.1.0"
+    js-slang: "npm:^1.0.94"
     jsdom: "npm:^29.0.0"
     konva: "npm:^10.0.0"
     lodash-es: "npm:^4.18.1"
     lz-string: "npm:^1.4.4"
-    mdast-util-from-markdown: "npm:^2.0.0"
-    mdast-util-to-hast: "npm:^13.0.0"
-    normalize.css: "npm:^8.0.1"
-    npm-run-all2: "npm:^9.0.0"
     phaser: "npm:~3.90.0"
     phaser3spectorjs: "npm:^0.0.8"
     prettier: "npm:^3.3.3"
@@ -7388,7 +7356,6 @@ __metadata:
     re-resizable: "npm:^6.9.9"
     react: "npm:^19.2.4"
     react-ace: "npm:^14.0.0"
-    react-debounce-render: "npm:^8.0.2"
     react-dom: "npm:^19.2.4"
     react-drag-drop-files: "npm:^3.0.0"
     react-draggable: "npm:^4.4.5"
@@ -7410,7 +7377,6 @@ __metadata:
     redux-mock-store: "npm:^1.5.4"
     redux-saga: "npm:^1.2.3"
     redux-saga-test-plan: "npm:^4.0.6"
-    rehype-react: "npm:^8.0.0"
     remark-gfm: "npm:^4.0.1"
     resize-observer-polyfill: "npm:^1.5.1"
     sass: "npm:^1.63.6"
@@ -7419,7 +7385,6 @@ __metadata:
     tailwindcss: "npm:^4.3.0"
     typescript: "npm:^6.0.2"
     typescript-eslint: "npm:^8.1.0"
-    unified: "npm:^11.0.0"
     uuid: "npm:^14.0.0"
     vitest: "npm:4.1.9"
     webpack-bundle-analyzer: "npm:^5.0.0"
@@ -7428,7 +7393,13 @@ __metadata:
     workbox-routing: "npm:^7.3.0"
     xlsx: "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
     xml2js: "npm:^0.6.0"
-    yareco: "npm:^0.1.5"
+  dependenciesMeta:
+    "@parcel/watcher":
+      built: true
+    "@swc/core":
+      built: true
+    canvas:
+      built: true
   languageName: unknown
   linkType: soft
 
@@ -8555,13 +8526,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isexe@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "isexe@npm:4.0.0"
-  checksum: 10c0/5884815115bceac452877659a9c7726382531592f43dc29e5d48b7c4100661aed54018cb90bd36cb2eaeba521092570769167acbb95c18d39afdccbcca06c5ce
-  languageName: node
-  linkType: hard
-
 "isstream@npm:~0.1.2":
   version: 0.1.2
   resolution: "isstream@npm:0.1.2"
@@ -8711,9 +8675,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-slang@npm:^1.0.93":
-  version: 1.0.93
-  resolution: "js-slang@npm:1.0.93"
+"js-slang@npm:^1.0.94":
+  version: 1.0.94
+  resolution: "js-slang@npm:1.0.94"
   dependencies:
     "@babel/parser": "npm:^7.19.4"
     "@commander-js/extra-typings": "npm:^14.0.0"
@@ -8729,7 +8693,7 @@ __metadata:
     source-map: "npm:0.7.6"
   bin:
     js-slang: dist/repl/index.js
-  checksum: 10c0/fafdc08b512b69f57a172325566cae34095977e81c77de9c2a4ffe9a41be563b8db8682dcf3055e0d554f8af21c76ff64a847921e2d26cd5593948703fb020e0
+  checksum: 10c0/6997dca0fced0e37cc688f3c3398b0136804d55e9fb716f8fa8eaf7c5f841bc7bf9358e69c8f3d648f0d2d7248efb3adce5a223449f9df997e6d6297e9fa82ce
   languageName: node
   linkType: hard
 
@@ -8847,13 +8811,6 @@ __metadata:
   version: 2.3.1
   resolution: "json-parse-even-better-errors@npm:2.3.1"
   checksum: 10c0/140932564c8f0b88455432e0f33c4cb4086b8868e37524e07e723f4eaedb9425bdc2bafd71bd1d9765bd15fd1e2d126972bc83990f55c467168c228c24d665f3
-  languageName: node
-  linkType: hard
-
-"json-parse-even-better-errors@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "json-parse-even-better-errors@npm:6.0.0"
-  checksum: 10c0/d90b1fee6aa37eddbebe9a79564ec5d2b8cf2629f9eecc6d383e43121097a29213211f62765e5c963c589efacb7be1ed22fbd4917f737c4d073481b76ba0d6c0
   languageName: node
   linkType: hard
 
@@ -9648,13 +9605,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"memorystream@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "memorystream@npm:0.3.1"
-  checksum: 10c0/4bd164657711d9747ff5edb0508b2944414da3464b7fe21ac5c67cf35bba975c4b446a0124bd0f9a8be54cfc18faf92e92bd77563a20328b1ccf2ff04e9f39b9
-  languageName: node
-  linkType: hard
-
 "merge2@npm:^1.3.0":
   version: 1.4.1
   resolution: "merge2@npm:1.4.1"
@@ -10363,34 +10313,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npm-normalize-package-bin@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "npm-normalize-package-bin@npm:6.0.0"
-  checksum: 10c0/0edede94ea6b6a71d665e04f256bd3db893317c60536f75f954fa2fe1b3b64bad61308ffa88be8567a5594186d11ab85475e5d2d9dadf2def982fe1c0aec57b5
-  languageName: node
-  linkType: hard
-
-"npm-run-all2@npm:^9.0.0":
-  version: 9.0.1
-  resolution: "npm-run-all2@npm:9.0.1"
-  dependencies:
-    ansi-styles: "npm:^6.2.1"
-    cross-spawn: "npm:^7.0.6"
-    memorystream: "npm:^0.3.1"
-    picomatch: "npm:^4.0.2"
-    pidtree: "npm:^0.6.0"
-    read-package-json-fast: "npm:^6.0.0"
-    shell-quote: "npm:^1.7.3"
-    which: "npm:^7.0.0"
-  bin:
-    npm-run-all: bin/npm-run-all/index.js
-    npm-run-all2: bin/npm-run-all/index.js
-    run-p: bin/run-p/index.js
-    run-s: bin/run-s/index.js
-  checksum: 10c0/5a512231d34311b99e0c0b522cdda92db4a091486e5a743e15006e7384ce59f629192d7071816c4db66fb991a1e37394d7a3f19cbc8af8eb7cde77cd3c704197
-  languageName: node
-  linkType: hard
-
 "nth-check@npm:^2.0.1":
   version: 2.1.1
   resolution: "nth-check@npm:2.1.1"
@@ -10864,15 +10786,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pidtree@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "pidtree@npm:0.6.0"
-  bin:
-    pidtree: bin/pidtree.js
-  checksum: 10c0/0829ec4e9209e230f74ebf4265f5ccc9ebfb488334b525cb13f86ff801dca44b362c41252cd43ae4d7653a10a5c6ab3be39d2c79064d6895e0d78dc50a5ed6e9
-  languageName: node
-  linkType: hard
-
 "possible-typed-array-names@npm:^1.0.0":
   version: 1.0.0
   resolution: "possible-typed-array-names@npm:1.0.0"
@@ -11188,18 +11101,6 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10c0/2ca2690f5e8c22b0fd24079b68959110ec199ec7d5ac74f26cfe6dad3cadf7d781458a9a654673dd47009e4fbb8548711ec0ae048e41dd3cf1d4ede16dadad55
-  languageName: node
-  linkType: hard
-
-"react-debounce-render@npm:^8.0.2":
-  version: 8.0.2
-  resolution: "react-debounce-render@npm:8.0.2"
-  dependencies:
-    hoist-non-react-statics: "npm:^3.3.2"
-    lodash.debounce: "npm:^4.0.8"
-  peerDependencies:
-    react: ^17.0.2
-  checksum: 10c0/54a8a636b749581d1aa0715ff52184ec59dc31b74169a47ca2b606b9c542107b8d1d166d0773d0c53493dd716d76cca3fb6c788b22c4b82efec5b2a42e7a5878
   languageName: node
   linkType: hard
 
@@ -11564,16 +11465,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"read-package-json-fast@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "read-package-json-fast@npm:6.0.0"
-  dependencies:
-    json-parse-even-better-errors: "npm:^6.0.0"
-    npm-normalize-package-bin: "npm:^6.0.0"
-  checksum: 10c0/a34947f099982de1db56ecde8bf4cbc440ca06839d92c14936da4c6bfc712bc3df84f8ddda8b457772e30ea5e567831c73679cb319a304c5bf126b0ce1a8a49d
-  languageName: node
-  linkType: hard
-
 "readable-stream@npm:^2.3.8":
   version: 2.3.8
   resolution: "readable-stream@npm:2.3.8"
@@ -11778,17 +11669,6 @@ __metadata:
   bin:
     regjsparser: bin/parser
   checksum: 10c0/99d3e4e10c8c7732eb7aa843b8da2fd8b647fe144d3711b480e4647dc3bff4b1e96691ccf17f3ace24aa866a50b064236177cb25e6e4fbbb18285d99edaed83b
-  languageName: node
-  linkType: hard
-
-"rehype-react@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "rehype-react@npm:8.0.0"
-  dependencies:
-    "@types/hast": "npm:^3.0.0"
-    hast-util-to-jsx-runtime: "npm:^2.0.0"
-    unified: "npm:^11.0.0"
-  checksum: 10c0/87578322bb25bc2599154210739fa581b7d15edb69b3bb2687ed164b7429fb07b5e38acb12155046d0d04b206b76bab3886ef45ab7120f4ec4fc82e9ea1eb90b
   languageName: node
   linkType: hard
 
@@ -12537,13 +12417,6 @@ __metadata:
   version: 3.0.0
   resolution: "shebang-regex@npm:3.0.0"
   checksum: 10c0/1dbed0726dd0e1152a92696c76c7f06084eb32a90f0528d11acd764043aacf76994b2fb30aa1291a21bd019d6699164d048286309a278855ee7bec06cf6fb690
-  languageName: node
-  linkType: hard
-
-"shell-quote@npm:^1.7.3":
-  version: 1.8.0
-  resolution: "shell-quote@npm:1.8.0"
-  checksum: 10c0/651a201a1af981d49326fac8c005bbe2af97bc56fcabded0b22944c08eea0ba3bccfa497168d4bcb70508ca5802fe1cb83ca89a7e121eb0701d4c8b1d6c71a5d
   languageName: node
   linkType: hard
 
@@ -14265,17 +14138,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"which@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "which@npm:7.0.0"
-  dependencies:
-    isexe: "npm:^4.0.0"
-  bin:
-    node-which: bin/which.js
-  checksum: 10c0/ca0b54f198f78bbc4b7c02e34bda8d335cb352e0adb4cbca1c37b1a957af3a879a82c4c27ca6525bc942f548d8b64f816ef6528360af9f3de55ffb9b979b620d
-  languageName: node
-  linkType: hard
-
 "why-is-node-running@npm:^2.3.0":
   version: 2.3.0
   resolution: "why-is-node-running@npm:2.3.0"
@@ -14645,13 +14507,6 @@ __metadata:
   version: 1.10.2
   resolution: "yaml@npm:1.10.2"
   checksum: 10c0/5c28b9eb7adc46544f28d9a8d20c5b3cb1215a886609a2fd41f51628d8aaa5878ccd628b755dbcd29f6bb4921bd04ffbc6dcc370689bb96e594e2f9813d2605f
-  languageName: node
-  linkType: hard
-
-"yareco@npm:^0.1.5":
-  version: 0.1.5
-  resolution: "yareco@npm:0.1.5"
-  checksum: 10c0/d171b1187db2fafa8e5db49dd8c3bcdff2d246eebffaa87024e0dc0b2cd609198bbf3cf40cfa039941dc1e306ce9ba15920a9a49acb6a888d324842ac30e2112
   languageName: node
   linkType: hard
 

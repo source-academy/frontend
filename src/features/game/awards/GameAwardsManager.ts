@@ -91,7 +91,9 @@ class GameAwardsManager implements DashboardPageManager {
    */
   private setPage() {
     if (this.uiContainer) {
-      if (this.itemsContainer) this.itemsContainer.destroy();
+      if (this.itemsContainer) {
+        this.itemsContainer.destroy();
+      }
 
       // Update
       this.itemsContainer = this.createItemsContainer();
@@ -112,8 +114,12 @@ class GameAwardsManager implements DashboardPageManager {
    */
   private setPreview(award?: AwardProperty) {
     if (this.uiContainer) {
-      if (this.previewContainer) this.previewContainer.destroy();
-      if (!award) return;
+      if (this.previewContainer) {
+        this.previewContainer.destroy();
+      }
+      if (!award) {
+        return;
+      }
 
       this.previewContainer = new Phaser.GameObjects.Container(
         this.scene,
@@ -264,7 +270,9 @@ class GameAwardsManager implements DashboardPageManager {
     }).setPosition(xPos, yPos);
 
     // For non completed award, they do not hover effect and is less visible
-    if (!completed) button.setAlpha(0.5);
+    if (!completed) {
+      button.setAlpha(0.5);
+    }
     return button;
   }
 

@@ -72,7 +72,9 @@ function PixelbotConfigPanel(props: Props) {
   const refreshToken = useTypedSelector(state => state.session.refreshToken);
 
   useEffect(() => {
-    if (!accessToken || !refreshToken) return;
+    if (!accessToken || !refreshToken) {
+      return;
+    }
     const fetchDocumentMap = async () => {
       try {
         const data = await getPixelbotDocumentMap({ accessToken, refreshToken } as Tokens);

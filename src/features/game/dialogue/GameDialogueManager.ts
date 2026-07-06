@@ -108,12 +108,16 @@ export default class DialogueManager {
   }
 
   private async triggerSkip() {
-    if (this.isPrompting || this.isSkipping || this.isDialoguePromptActive) return;
+    if (this.isPrompting || this.isSkipping || this.isDialoguePromptActive) {
+      return;
+    }
 
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const phaseManager = gameManager.getPhaseManager();
 
-    if (phaseManager.isCurrentPhaseTerminal()) return;
+    if (phaseManager.isCurrentPhaseTerminal()) {
+      return;
+    }
 
     const settings = SourceAcademyGame.getInstance().getSaveManager().getSettings();
     const requiresConfirm = settings.skipConfirm !== false;
@@ -159,7 +163,9 @@ export default class DialogueManager {
    * Does not skip prompts that require user input.
    */
   private async skipRemainingDialogue() {
-    if (this.isSkipping) return;
+    if (this.isSkipping) {
+      return;
+    }
     this.isSkipping = true;
 
     // Hide and disable button while skipping
@@ -171,7 +177,9 @@ export default class DialogueManager {
 
     try {
       while (this.isSkipping) {
-        if (!this.dialogueRenderer) break;
+        if (!this.dialogueRenderer) {
+          break;
+        }
 
         const nextLine = this.getDialogueGenerator().peekNextLine();
 
@@ -257,7 +265,9 @@ export default class DialogueManager {
       this.getInputManager().enableKeyboardInput(true);
       this.getDialogueGenerator().updateCurrPart(prompt.choices[response][1]);
 
-      if (this.skipButton) this.skipButton.setVisible(true);
+      if (this.skipButton) {
+        this.skipButton.setVisible(true);
+      }
       this.isDialoguePromptActive = false;
     }
 

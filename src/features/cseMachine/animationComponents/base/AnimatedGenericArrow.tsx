@@ -19,8 +19,12 @@ export class AnimatedGenericArrow<
   private arrowComponent: AnimatedArrowComponent;
 
   private onPropsChange = (props: PathConfig) => {
-    if (props.x) this._x = this.arrow.x() + props.x;
-    if (props.y) this._y = this.arrow.y() + props.y;
+    if (props.x) {
+      this._x = this.arrow.x() + props.x;
+    }
+    if (props.y) {
+      this._y = this.arrow.y() + props.y;
+    }
   };
 
   constructor(

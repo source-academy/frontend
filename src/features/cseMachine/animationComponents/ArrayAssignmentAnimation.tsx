@@ -65,7 +65,9 @@ export class ArrayAssignmentAnimation extends Animatable {
     this.resultAnimation = new AnimatedTextbox(resultItem.text, getNodePosition(valueItem), {
       rectProps: { stroke: defaultDangerColor() },
     });
-    if (valueItem.arrow) this.valueArrowAnimation = new AnimatedGenericArrow(valueItem.arrow);
+    if (valueItem.arrow) {
+      this.valueArrowAnimation = new AnimatedGenericArrow(valueItem.arrow);
+    }
     if (resultItem.arrow) {
       this.resultArrowAnimation = new AnimatedGenericArrow(resultItem.arrow, { opacity: 0 });
     }

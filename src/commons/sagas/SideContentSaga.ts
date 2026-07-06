@@ -84,7 +84,9 @@ const SideContentSaga = combineSagaHandlers({
     yield put(SideContentActions.endAlertSideContent(id, workspaceLocation));
   },
   [WorkspaceActions.notifyProgramEvaluated.type]: function* (action) {
-    if (!action.payload.workspaceLocation) return;
+    if (!action.payload.workspaceLocation) {
+      return;
+    }
 
     const debuggerContext = {
       result: action.payload.result,

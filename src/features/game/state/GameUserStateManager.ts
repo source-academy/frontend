@@ -24,7 +24,9 @@ export default class GameUserStateManager {
   }
 
   public async loadUserState() {
-    if (SourceAcademyGame.getInstance().isGameType(GameType.Simulator)) return;
+    if (SourceAcademyGame.getInstance().isGameType(GameType.Simulator)) {
+      return;
+    }
     await this.loadAchievements();
     await this.loadAssessments();
     this.collectibles = new Set(

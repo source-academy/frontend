@@ -84,11 +84,15 @@ export function createButton(
   });
   button.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
     SourceAcademyGame.getInstance().getSoundManager().playSound(onHoverSound);
-    if (onHoverEffect) container.setAlpha(onHoverAlpha);
+    if (onHoverEffect) {
+      container.setAlpha(onHoverAlpha);
+    }
     onHover();
   });
   button.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
-    if (onHoverEffect) container.setAlpha(offHoverAlpha);
+    if (onHoverEffect) {
+      container.setAlpha(offHoverAlpha);
+    }
     onOut();
   });
   button.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
@@ -105,7 +109,9 @@ export function createButton(
   const text = createBitmapText(scene, message, textConfig, bitMapTextStyle);
 
   container.add([button, text]);
-  if (onHoverEffect) container.setAlpha(offHoverAlpha);
+  if (onHoverEffect) {
+    container.setAlpha(offHoverAlpha);
+  }
 
   return container;
 }

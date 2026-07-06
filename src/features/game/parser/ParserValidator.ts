@@ -218,7 +218,9 @@ export default class ParserValidator {
                 const isDefaultAsset = Object.values(SoundAssets).some(
                   sound => sound.soundType === GameSoundType.BGM && sound.key === itemId,
                 );
-                if (!isDefaultAsset) throw new Error(`Cannot find bgm key "${itemId}"`);
+                if (!isDefaultAsset) {
+                  throw new Error(`Cannot find bgm key "${itemId}"`);
+                }
               } else if (numberOfBgm > 1) {
                 throw new Error(`More than 1 bgm key "${itemId}"`);
               }
@@ -239,7 +241,9 @@ export default class ParserValidator {
                 const isDefaultAsset = Object.values(SoundAssets).some(
                   sound => sound.soundType === GameSoundType.SFX && sound.key === itemId,
                 );
-                if (!isDefaultAsset) throw new Error(`Cannot find sfx key "${itemId}"`);
+                if (!isDefaultAsset) {
+                  throw new Error(`Cannot find sfx key "${itemId}"`);
+                }
               } else if (numberOfSfx > 1) {
                 throw new Error(`More than 1 sfx key "${itemId}"`);
               }
