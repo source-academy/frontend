@@ -76,6 +76,48 @@ describe('buildFakeEnvTreeFromSnapshot', () => {
   });
 });
 
+describe('Python LEGB frame labels (#4042) only apply in snapshot mode', () => {
+  it('renames "global"/"programEnvironment" for a Python snapshot', () => {
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        { id: 'g', name: 'global', parentId: null, bindings: [], isActive: false },
+        {
+          id: 'p',
+          name: 'programEnvironment',
+          parentId: 'g',
+          // A frame with a genuinely empty head gets collapsed by Layout's "skip empty
+          // environments" behavior; give it one trivial binding to keep it visible.
+          bindings: [{ name: 'x', value: { displayValue: '1', label: 'number' } }],
+          isActive: true,
+        },
+      ],
+    };
+
+    const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
+
+    Layout.snapshotMode = true;
+    try {
+      Layout.setContext(
+        envTree as unknown as EnvTree,
+        fakeControl as unknown as Control,
+        fakeStash as unknown as Stash,
+      );
+    } finally {
+      Layout.snapshotMode = false;
+    }
+
+    expect(Frame.getFrom(findNode(envTree, 'g')!.environment as any)!.name.partialStr).toBe(
+      'Built-in functions',
+    );
+    expect(Frame.getFrom(findNode(envTree, 'p')!.environment as any)!.name.partialStr).toBe(
+      'Globals',
+    );
+  });
+});
+
 describe('Frame rendering of globalNames (via Layout.setContext)', () => {
   it('floats the globalNames annotation above the frame, next to the name, without shifting bindings', () => {
     const snapshot: CseSnapshot = {

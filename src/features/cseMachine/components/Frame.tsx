@@ -34,13 +34,29 @@ import { GlobalFnValue } from './values/GlobalFnValue';
 import { Visible } from './Visible';
 
 const frameNames = new Map([
-  ['global', 'Built-in functions'],
-  ['programEnvironment', 'Globals'],
+  ['global', 'Global'],
+  ['programEnvironment', 'Program'],
   ['forLoopEnvironment', 'Body of for-loop'],
   ['forBlockEnvironment', 'Control variable of for-loop'],
   ['blockEnvironment', 'Block'],
   ['functionBodyEnvironment', 'Function Body'],
 ]);
+
+// Python's LEGB terminology (#4042). Layout.snapshotMode is true only while rendering a
+// Conductor snapshot (currently Python-only) — the legacy non-conductor path (conductor.enable
+// off) always runs js-slang's own real-time interpreter and must keep js-slang's own
+// "Global"/"Program" names unchanged.
+const pythonFrameNames = new Map([
+  ['global', 'Built-in functions'],
+  ['programEnvironment', 'Globals'],
+]);
+
+function getFrameLabel(envName: string): string {
+  const label = Layout.snapshotMode
+    ? (pythonFrameNames.get(envName) ?? frameNames.get(envName))
+    : frameNames.get(envName);
+  return label ?? envName;
+}
 
 /** this class encapsulates a frame of key-value bindings to be drawn on canvas */
 export class Frame extends Visible implements IHoverable {
@@ -268,12 +284,10 @@ export class Frame extends Visible implements IHoverable {
       ? lastVisibleBinding.y() - this.y() + lastVisibleBinding.height() + Config.FramePaddingY
       : Config.FramePaddingY * 2;
 
-    this._name = new Text(
-      frameNames.get(this.environment.name) ?? this.environment.name,
-      this.x(),
-      this.level.y(),
-      { maxWidth: this.width(), faded: !this.isLive },
-    );
+    this._name = new Text(getFrameLabel(this.environment.name), this.x(), this.level.y(), {
+      maxWidth: this.width(),
+      faded: !this.isLive,
+    });
 
     // Floats above the frame's box, on its own row below the name — not a binding inside the
     // box. Marks that a lookup for these names skips the usual enclosing-scope walk and jumps
@@ -325,7 +339,7 @@ export class Frame extends Visible implements IHoverable {
       textOffset += Math.floor(this.width() / 2) - Math.floor(this.name.width() / 2);
     }
     this._name = new Text(
-      frameNames.get(this.environment.name) ?? this.environment.name,
+      getFrameLabel(this.environment.name),
       this.x() + textOffset,
       this.level!.y(), // this method is only called after the frame is drawn
       { maxWidth: this.width(), faded: !this.isLive },
