@@ -58,6 +58,9 @@ function getFrameLabel(envName: string): string {
   return label ?? envName;
 }
 
+// Height of one header row (frame name, or the globals annotation stacked below it).
+const headerRowHeight = Config.FontSize + Config.TextPaddingY / 2;
+
 /** this class encapsulates a frame of key-value bindings to be drawn on canvas */
 export class Frame extends Visible implements IHoverable {
   private static envFrameMap: Map<string, Frame> = new Map();
@@ -128,7 +131,6 @@ export class Frame extends Visible implements IHoverable {
     // One header row for the frame name; a second, stacked below it, for the globals
     // annotation when present. Stacked (rather than side-by-side) because frame names come
     // from arbitrary function names and can be any length, so they can't safely share a row.
-    const headerRowHeight = Config.FontSize + Config.TextPaddingY / 2;
     // Frames are strictly left-aligned within their level to prevent large gaps from forming.
     // Previously, a frame's position was also influenced by its parent's position, which could
     // cause an entire level of frames to be shifted undesirably.
@@ -344,7 +346,7 @@ export class Frame extends Visible implements IHoverable {
       this.level!.y(), // this method is only called after the frame is drawn
       { maxWidth: this.width(), faded: !this.isLive },
     );
-    this._globalNamesText?.setX(this.x());
+    this._globalNamesText?.setX(this.x() + textOffset);
   }
 
   /**
@@ -353,7 +355,6 @@ export class Frame extends Visible implements IHoverable {
    */
   reassignCoordinatesY(newY: number): void {
     this._y = newY;
-    const headerRowHeight = Config.FontSize + Config.TextPaddingY / 2;
     const levelY = newY - headerRowHeight * (this._globalNamesText ? 2 : 1);
     this.name.setY(levelY);
     this._globalNamesText?.setY(levelY + headerRowHeight);

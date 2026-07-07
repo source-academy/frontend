@@ -284,6 +284,57 @@ describe('Frame rendering of globalNames (via Layout.setContext)', () => {
     const frame = Frame.getFrom(globalEnv as any)!;
     expect(frame.globalNamesText).toBeUndefined();
   });
+
+  it('keeps the globals annotation aligned with the frame name under center-alignment', () => {
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        { id: 'g', name: 'global', parentId: null, bindings: [], isActive: false },
+        {
+          id: 'f1',
+          name: 'f',
+          parentId: 'g',
+          bindings: [{ name: 'y', value: { displayValue: '1', label: 'number' } }],
+          isActive: true,
+          globalNames: ['x'],
+        } as any,
+      ],
+    };
+
+    const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
+
+    Layout.snapshotMode = true;
+    try {
+      Layout.setContext(
+        envTree as unknown as EnvTree,
+        fakeControl as unknown as Control,
+        fakeStash as unknown as Stash,
+      );
+    } finally {
+      Layout.snapshotMode = false;
+    }
+
+    const frame = Frame.getFrom(findNode(envTree, 'f1')!.environment as any)!;
+
+    const wasCentered = CseMachine.getCenterAlignment();
+    if (!wasCentered) {
+      CseMachine.toggleCenterAlignment();
+    }
+    try {
+      // reassignCoordinatesX is only called from the fixed-position (redraw) path in real use,
+      // but it's the unit under test here — see #4068 review: it applied the center-alignment
+      // offset to the frame name but not to the globals annotation, leaving the annotation
+      // flush-left under a centered name.
+      frame.reassignCoordinatesX(frame.x());
+      expect(frame.globalNamesText!.x()).toBe(frame.name.x());
+    } finally {
+      if (!wasCentered) {
+        CseMachine.toggleCenterAlignment();
+      }
+    }
+  });
 });
 
 describe('assignment animation across a snapshot step (regression)', () => {
