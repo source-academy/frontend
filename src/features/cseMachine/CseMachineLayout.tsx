@@ -267,7 +267,8 @@ export class Layout {
     // from rendering (e.g. getLayer() null before first mount, or undefined stash items).
     try {
       CseAnimation.updateAnimation();
-    } catch (_e) {
+    } catch (e) {
+      console.error('CSE machine animation failed for this step:', e);
       CseAnimation.animations.length = 0;
     }
   }
