@@ -544,28 +544,34 @@ function* handleErrors(
   }
 }
 
+type CseSnapshotBatch = { snapshots: CseSnapshot[]; breakpointSteps: number[] };
+
 function* handleCseSnapshots(
   csePlugin: CseMachineHostPlugin,
   workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
-  const snapshotChan = eventChannel<CseSnapshot[]>(emitter => {
-    csePlugin.receiveSnapshots = emitter;
+  const snapshotChan = eventChannel<CseSnapshotBatch>(emitter => {
+    const receive = (snapshots: CseSnapshot[], breakpointSteps: number[]) =>
+      emitter({ snapshots, breakpointSteps });
+    csePlugin.receiveSnapshots = receive;
     return () => {
-      if (csePlugin.receiveSnapshots === emitter) {
+      if (csePlugin.receiveSnapshots === receive) {
         csePlugin.receiveSnapshots = () => {};
       }
     };
   });
   try {
     while (true) {
-      const snapshots: CseSnapshot[] | typeof END = yield take(snapshotChan);
-      if (snapshots === END || !Array.isArray(snapshots)) {
+      const batch: CseSnapshotBatch | typeof END = yield take(snapshotChan);
+      if (!("snapshots" in batch) || !Array.isArray(batch.snapshots)) {
         break;
       }
+      const { snapshots, breakpointSteps } = batch;
       yield put(WorkspaceActions.updateCseSnapshots(snapshots, workspaceLocation));
       yield put(
         WorkspaceActions.updateStepsTotal(Math.max(0, snapshots.length - 1), workspaceLocation),
       );
+      yield put(WorkspaceActions.updateBreakpointSteps(breakpointSteps ?? [], workspaceLocation));
       yield put(
         WorkspaceActions.toggleUpdateCse(false, workspaceLocation as WorkspaceLocationsWithTools),
       );
