@@ -196,8 +196,6 @@
   },
   "resolutions": {
     "@types/estree": "1.0.9",
-    "vite": "^8.0.0",
-    "@sourceacademy/common-cse-machine": "portal:/home/vakshay/plugins/src/common/cse-machine",
-    "@sourceacademy/web-cse-machine": "portal:/home/vakshay/plugins/src/web/cse-machine"
+    "vite": "^8.0.0"
   }
 }
