@@ -24,9 +24,9 @@ const commonRoutes: RouteObject = {
       children: [{ path: ':section', lazy: () => import('../new_routes/sicpjs/[section]') }],
     },
     {
-      path: 'sicppy',
-      lazy: () => import('../new_routes/sicppy/_layout'),
-      children: [{ path: ':section', lazy: () => import('../new_routes/sicppy/[section]') }],
+      path: 'sicpy',
+      lazy: () => import('../new_routes/sicpy/_layout'),
+      children: [{ path: ':section', lazy: () => import('../new_routes/sicpy/[section]') }],
     },
   ],
 };

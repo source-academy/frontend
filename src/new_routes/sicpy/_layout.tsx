@@ -44,7 +44,7 @@ function SicpPyLayout() {
   useEffect(() => {
     if (!section) {
       const cached = readLocalStorage(SICPPY_CACHE_KEY, SICPPY_DEFAULT_SECTION);
-      navigate(`/sicppy/${cached}`, { replace: true });
+      navigate(`/sicpy/${cached}`, { replace: true });
       return;
     }
 

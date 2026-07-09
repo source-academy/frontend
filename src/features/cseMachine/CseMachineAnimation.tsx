@@ -314,10 +314,15 @@ export class CseAnimation {
           break;
         }
         case InstrType.ASSIGNMENT:
+          // Assignment consumes the value on top of the stash and pushes nothing back (unlike
+          // a JS assignment *expression*, which re-pushes its value — that's why this used to
+          // read currStashComponent and only broke for statement-only-assignment languages like
+          // Python, where the stash is genuinely empty afterwards). The animated value is the one
+          // that was on top of the stash *before* this step, same as InstrType.POP below.
           CseAnimation.animations.push(
             new AssignmentAnimation(
               lastControlComponent,
-              currStashComponent!,
+              Layout.previousStashComponent.stashItemComponents.at(-1)!,
               ...lookupBinding(CseAnimation.currentFrame, (lastControlItem as AssmtInstr).symbol),
             ),
           );

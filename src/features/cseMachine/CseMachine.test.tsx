@@ -295,3 +295,25 @@ test('clearRenderedLayouts preserves used built-in names', () => {
   // Cleanup static state to avoid cross-test pollution.
   CseMachine.clearCachedLayouts();
 });
+
+test('the legacy non-conductor (real js-slang) path keeps js-slang\'s own "Global"/"Program" frame names', async () => {
+  const context = createContext(4);
+  await runInContext('function f() { return 1; } f(); debugger;', context);
+
+  // Layout.snapshotMode is left false here (unlike the Python/Conductor path in
+  // CseSnapshotAdapter.test.ts), matching evalCodeSaga's real branch when conductor.enable is
+  // off: it calls Layout.setContext directly from a real js-slang EnvTree, never through
+  // CseMachine.renderSnapshot(). Python's LEGB relabeling (#4042) must not leak in here.
+  expect(Layout.snapshotMode).toBe(false);
+  Layout.setContext(
+    context.runtime.environmentTree as EnvTree,
+    context.runtime.control!,
+    context.runtime.stash!,
+  );
+
+  const globalFrame = Array.from(Layout.levels[0].frames)[0];
+  expect(globalFrame.name.partialStr).toBe('Global');
+
+  const programFrame = Layout.levels[1]?.frames[0];
+  expect(programFrame?.name.partialStr).toBe('Program');
+});
