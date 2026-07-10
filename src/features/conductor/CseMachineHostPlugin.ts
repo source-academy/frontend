@@ -11,7 +11,7 @@ import {
 } from '@sourceacademy/web-cse-machine';
 
 export class CseMachineHostPlugin extends _CseMachineHostPluginBase {
-  receiveSnapshots: (snapshots: CseSnapshot[]) => void = () => {};
+  receiveSnapshots: (snapshots: CseSnapshot[], breakpointSteps: number[]) => void = () => {};
 }
 
 export type {
