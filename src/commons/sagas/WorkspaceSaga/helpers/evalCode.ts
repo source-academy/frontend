@@ -563,7 +563,7 @@ function* handleCseSnapshots(
   try {
     while (true) {
       const batch: CseSnapshotBatch | typeof END = yield take(snapshotChan);
-      if (!("snapshots" in batch) || !Array.isArray(batch.snapshots)) {
+      if (!('snapshots' in batch) || !Array.isArray(batch.snapshots)) {
         break;
       }
       const { snapshots, breakpointSteps } = batch;
