@@ -5,18 +5,20 @@
  * receiveSnapshots). This subclass makes receiveSnapshots reassignable so evalCode.ts
  * can wire it to a Redux eventChannel after construction.
  */
-import { CseMachineHostPlugin as _CseMachineHostPluginBase } from '@sourceacademy/web-cse-machine';
+import {
+  CseMachineHostPlugin as _CseMachineHostPluginBase,
+  type CseSnapshot,
+} from '@sourceacademy/web-cse-machine';
 
 export class CseMachineHostPlugin extends _CseMachineHostPluginBase {
-  // Widen the signature to accept whatever the base expects (varies by package version).
-  receiveSnapshots: (...args: any[]) => void = () => {};
+  receiveSnapshots: (snapshots: CseSnapshot[], breakpointSteps: number[]) => void = () => {};
 }
 
 export type {
+  CseSnapshot,
+  CseSerializedValue,
+  CseSerializedInstruction,
   CseSerializedBinding,
   CseSerializedEnvFrame,
-  CseSerializedInstruction,
-  CseSerializedValue,
-  CseSnapshot,
   CseSnapshotMessage,
 } from '@sourceacademy/web-cse-machine';
