@@ -489,6 +489,12 @@ function* handleInputRequest(
           },
         );
         hostPlugin.sendInput(response.buttonResponse ? response.value : '');
+      } catch {
+        // showSimplePromptDialog's underlying promise rejects if the dialog is dismissed via its
+        // onClose path (e.g. clicking outside) rather than a button response. Without this catch,
+        // that rejection would escape the while(true) loop and kill this saga permanently, leaving
+        // the runner blocked forever with no way to answer any future input() call either.
+        hostPlugin.sendInput('');
       } finally {
         yield put(actions.setIsWaitingForInput(false, workspaceLocation));
       }
