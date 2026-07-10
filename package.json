@@ -47,7 +47,7 @@
     "@sourceacademy/autocomplete": "github:source-academy/autocomplete#d476416170412c4726c7becc2a5c0018fb7cc4f7",
     "@sourceacademy/c-slang": "^1.0.21",
     "@sourceacademy/common-cse-machine": "^0.2.0",
-    "@sourceacademy/conductor": "^0.5.0",
+    "@sourceacademy/conductor": "https://github.com/source-academy/conductor.git#0.6.0",
     "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.12",
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.3",
     "@sourceacademy/sharedb-ace": "2.1.1",
@@ -196,7 +196,6 @@
   },
   "resolutions": {
     "@types/estree": "1.0.9",
-    "vite": "^8.0.0",
-    "@sourceacademy/conductor": "portal:/home/vakshay/conductor"
+    "vite": "^8.0.0"
   }
 }
