@@ -103,6 +103,7 @@ export type WorkspaceState = {
   readonly editorTestcases: Testcase[];
   readonly execTime: number;
   readonly isRunning: boolean;
+  readonly isWaitingForInput: boolean;
   readonly isDebugging: boolean;
   readonly enableDebugging: boolean;
   readonly isEditorReadonly: boolean;
