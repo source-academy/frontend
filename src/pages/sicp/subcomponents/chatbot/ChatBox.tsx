@@ -74,7 +74,7 @@ function ChatBox({
         setMessages(prev => [...prev, createErrorMessage()]);
       })
       .finally(() => setIsLoading(false));
-  }, [tokens, userInput, getSection, getText]);
+  }, [tokens, userInput, getSection, getText, languageConfig]);
 
   const keyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
     e => {
