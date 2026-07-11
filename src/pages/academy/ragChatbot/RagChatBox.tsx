@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { Tokens } from 'src/commons/application/types/SessionTypes';
-import { useSession, useTokens } from 'src/commons/utils/Hooks';
+import { useSession, useTokens, useTypedSelector } from 'src/commons/utils/Hooks';
 import { initRagChat, sendRagMessage } from 'src/features/ragChat/api';
 import ChatbotCodeSnippet from 'src/pages/sicp/subcomponents/chatbot/ChatbotCodeSnippet';
 import { v4 as uuid } from 'uuid';
@@ -90,6 +90,7 @@ function RagChatBox({ isExpanded, toggleExpanded, activeSnippetId, setActiveSnip
   const [maxContentSize, setMaxContentSize] = useState(1000);
   const { feedbackUrl } = useSession();
   const tokens = useTokens({ throwWhenEmpty: false });
+  const languageConfig = useTypedSelector(state => state.playground.languageConfig);
 
   const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value);
@@ -107,7 +108,7 @@ function RagChatBox({ isExpanded, toggleExpanded, activeSnippetId, setActiveSnip
     setMessages(prev => [...prev, { id: uuid(), role: 'user', content: userInput }]);
     setIsLoading(true);
 
-    sendRagMessage(authedTokens, userInput)
+    sendRagMessage(authedTokens, userInput, languageConfig)
       .then(resp => {
         setMessages(prev => [...prev, { id: uuid(), role: 'assistant', content: resp.response }]);
       })

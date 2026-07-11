@@ -1,3 +1,4 @@
+import type { SALanguage } from 'src/commons/application/ApplicationTypes';
 import type { Tokens } from 'src/commons/application/types/SessionTypes';
 import { request } from 'src/commons/utils/RequestHelper';
 
@@ -36,12 +37,21 @@ export async function initRagChat(tokens: Tokens): Promise<InitChatResponse> {
 export async function sendRagMessage(
   tokens: Tokens,
   userMessage: string,
+  language?: SALanguage,
 ): Promise<ContinueChatResponse> {
+  const body: any = { message: userMessage };
+  if (language) {
+    body.language = {
+      chapter: language.chapter,
+      variant: language.variant,
+      displayName: language.displayName,
+      mainLanguage: language.mainLanguage,
+    };
+  }
+
   const response = await request('rag_chat/message', 'POST', {
     ...tokens,
-    body: {
-      message: userMessage,
-    },
+    body,
   });
   if (!response) {
     throw new Error('Unknown error occurred.');
