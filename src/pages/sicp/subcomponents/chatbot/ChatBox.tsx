@@ -47,9 +47,7 @@ function ChatBox({
   const [userInput, setUserInput] = useState('');
   const [maxContentSize, setMaxContentSize] = useState(1000);
   const tokens = useTokens();
-  const selectedLanguageId = useTypedSelector(
-    s => s.languageDirectory.selectedLanguageId ?? undefined,
-  );
+  const languageConfig = useTypedSelector(state => state.playground.languageConfig);
 
   const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value);
@@ -68,7 +66,7 @@ function ChatBox({
     const currentSection = getSection();
     const currentText = getText();
 
-    continueChat(tokens, userInput, currentSection, currentText, selectedLanguageId)
+    continueChat(tokens, userInput, currentSection, currentText, languageConfig)
       .then(resp => {
         setMessages(prev => [...prev, { id: uuid(), role: 'assistant', content: resp.response }]);
       })
@@ -76,7 +74,7 @@ function ChatBox({
         setMessages(prev => [...prev, createErrorMessage()]);
       })
       .finally(() => setIsLoading(false));
-  }, [tokens, userInput, getSection, getText, selectedLanguageId]);
+  }, [tokens, userInput, getSection, getText, languageConfig]);
 
   const keyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
     e => {
@@ -88,7 +86,7 @@ function ChatBox({
   );
 
   const resetChat = useCallback(() => {
-    initChat(tokens, selectedLanguageId)
+    initChat(tokens)
       .then(resp => {
         const conversationMessages = resp.messages;
         const maxMessageSize = resp.maxContentSize;
@@ -107,7 +105,7 @@ function ChatBox({
       .catch(() => {
         setMessages([createInitialMessage()]);
       });
-  }, [tokens, selectedLanguageId]);
+  }, [tokens]);
 
   useEffect(() => {
     resetChat();
