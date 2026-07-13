@@ -15,6 +15,10 @@
     {
       "matchPackageNames": ["/^@blueprintjs.*/"],
       "groupName": "blueprintjs"
+    },
+    {
+      "matchPackageNames": ["/^@rsbuild.*/"],
+      "groupName": "rsbuild"
     }
   ],
   "enabledManagers": ["npm"]
