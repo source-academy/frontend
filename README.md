@@ -208,7 +208,7 @@ When Knip reports something:
 The repo's `knip.json` has three pieces:
 
 - `entry` — the static entry points Knip starts analysis from. We list `src/index.tsx` (the React root), `src/service-worker.ts` (the PWA worker, referenced as `swSrc` in `rsbuild.config.ts`), and `src/sw/precache.ts` (imported by the service worker). Saga roots are reached transitively through `src/pages/createStore.ts`, which `index.tsx` imports.
-- `ignore` — files that Knip should not try to analyse: test files, snapshots, the `scripts/` and `build/` directories, the test mocks under `src/commons/mocks/`, and the asset mocks at `src/fileMock.ts` / `src/global.d.ts` / `src/setupTests.ts`.
+- `ignore` — files that Knip should not try to analyse, e.g. test files,  test mocks under `src/commons/mocks/`, etc.
 - `ignoreDependencies` — packages that are reported by Knip as unused but that we have manually verified are genuinely used (transitive-only consumers, build-pipeline injections, CSS-only `@import` paths, alias references in `vitest.config.ts`, etc.). Add a new entry whenever Knip produces a false positive; remove an entry whenever the referenced package is finally deleted.
 
 If you add a new entry point (e.g. a new top-level script or worker), update `entry`. If you add a new kind of ignored artefact, update `ignore`.
