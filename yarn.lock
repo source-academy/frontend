@@ -2905,8 +2905,8 @@ __metadata:
   linkType: hard
 
 "@rsbuild/plugin-sass@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@rsbuild/plugin-sass@npm:2.0.0"
+  version: 2.0.1
+  resolution: "@rsbuild/plugin-sass@npm:2.0.1"
   dependencies:
     deepmerge: "npm:^4.3.1"
     loader-utils: "npm:^2.0.4"
@@ -2918,7 +2918,7 @@ __metadata:
   peerDependenciesMeta:
     "@rsbuild/core":
       optional: true
-  checksum: 10c0/5591229d77a1f1bbe33940f69e927655aaa185d26988b6c724885a86ccaf9e7596b593ea8f3d50d310992e9245d0581fc4a1601282ae9b3b10dd79c946193114
+  checksum: 10c0/eb3e7fcb2ad1e6a9a28b722f73266325d016c7adb60dee1271c891c20a23a113f65e727abadee58f670b7e2681b6b98ce54e2683846c738ef926659380bc6c46
   languageName: node
   linkType: hard
 
