@@ -11,9 +11,8 @@ import { IconNames } from '@blueprintjs/icons';
 import { type ItemListRenderer, type ItemRenderer, Select } from '@blueprintjs/select';
 import { Variant } from 'js-slang/dist/langs';
 import { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import Constants from 'src/commons/utils/Constants';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
 
 import {
   type SALanguage,
@@ -33,7 +32,7 @@ function DefaultChapterSelect() {
     sourceVariant = Constants.defaultSourceVariant,
   } = useSession();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const handleUpdateSublanguage = useCallback(
     (sublang: SALanguage) => dispatch(WorkspaceActions.changeSublanguage(sublang)),
     [dispatch],

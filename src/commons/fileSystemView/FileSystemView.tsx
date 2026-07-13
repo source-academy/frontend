@@ -4,7 +4,7 @@ import path from 'path';
 import { useState } from 'react';
 
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
-import { useTypedSelector } from '../utils/Hooks';
+import { useAppSelector } from '../utils/Hooks';
 import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import classes from './FileSystemView.module.css';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
@@ -18,7 +18,7 @@ type Props = {
 };
 
 function FileSystemView({ workspaceLocation, basePath }: Props) {
-  const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
+  const fileSystem = useAppSelector(state => state.fileSystem.inBrowserFileSystem);
 
   const [isAddingNewFile, setIsAddingNewFile] = useState(false);
   const [isAddingNewDirectory, setIsAddingNewDirectory] = useState(false);

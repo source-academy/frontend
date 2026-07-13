@@ -40,7 +40,7 @@ import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { useFeature } from '../featureFlags/useFeature';
-import { useTypedSelector } from '../utils/Hooks';
+import { useAppSelector } from '../utils/Hooks';
 import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
@@ -471,7 +471,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
   };
 
   const conductorEnabled = useFeature(flagConductorEnable);
-  const selectedEvaluatorId = useTypedSelector(s => s.languageDirectory.selectedEvaluatorId)!;
+  const selectedEvaluatorId = useAppSelector(s => s.languageDirectory.selectedEvaluatorId)!;
   useEffect(() => {
     if (!conductorEnabled || !reactAceRef.current || !selectedEvaluatorId) {
       return;

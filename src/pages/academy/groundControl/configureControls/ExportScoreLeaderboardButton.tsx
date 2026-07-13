@@ -2,7 +2,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { createGrid, type GridOptions } from 'ag-grid-community';
 import ControlButton from 'src/commons/ControlButton';
 import { getScoreLeaderboard } from 'src/commons/sagas/RequestsSaga';
-import { useTokens, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppSelector, useTokens } from 'src/commons/utils/Hooks';
 
 type Props = {
   assessmentId: number;
@@ -10,7 +10,7 @@ type Props = {
 
 function ExportScoreLeaderboardButton({ assessmentId }: Props) {
   const tokens = useTokens();
-  const visibleEntries = useTypedSelector(store => store.session.topContestLeaderboardDisplay);
+  const visibleEntries = useAppSelector(store => store.session.topContestLeaderboardDisplay);
 
   // onClick handler for fetching score leaderboard, putting it into a grid and exporting data
   const exportScoreLeaderboardToCsv = async () => {

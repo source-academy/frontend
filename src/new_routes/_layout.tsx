@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import Messages, {
   type MessageType,
   MessageTypeNames,
@@ -19,7 +19,7 @@ import {
 } from '../commons/WorkspaceSettingsContext';
 
 function RootLayout() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { isLoggedIn } = useSession();
 
   // Used in the mobile/PWA experience (e.g. separate handling of orientation changes on Andriod & iOS due to unique browser behaviours)

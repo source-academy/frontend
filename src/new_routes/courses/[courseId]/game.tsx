@@ -2,8 +2,7 @@ import { Button, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useFullscreenElement } from '@mantine/hooks';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 import AchievementActions from 'src/features/achievement/AchievementActions';
 import { saveData } from 'src/features/game/save/GameSaveRequests';
 import type { FullSaveState } from 'src/features/game/save/GameSaveTypes';
@@ -11,15 +10,15 @@ import type { AccountInfo } from 'src/features/game/SourceAcademyGame';
 import SourceAcademyGame, { createSourceAcademyGame } from 'src/features/game/SourceAcademyGame';
 
 function Game() {
-  const session = useTypedSelector(state => state.session);
-  const dispatch = useDispatch();
+  const session = useAppSelector(state => state.session);
+  const dispatch = useAppDispatch();
 
-  const achievements = useTypedSelector(state => state.achievement.achievements);
-  const goals = useTypedSelector(state => state.achievement.goals);
+  const achievements = useAppSelector(state => state.achievement.achievements);
+  const goals = useAppSelector(state => state.achievement.goals);
 
   const [isTestStudent, setIsTestStudent] = useState(false);
   const [isUsingMock, setIsUsingMock] = useState(false);
-  const isVscode = useTypedSelector(state => state.vscode.isVscode);
+  const isVscode = useAppSelector(state => state.vscode.isVscode);
 
   useEffect(() => {
     dispatch(AchievementActions.getAchievements());

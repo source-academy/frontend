@@ -15,7 +15,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import AcademyActions from 'src/features/academy/AcademyActions';
 
 import { CourseHelpTextEditorTab } from '../../features/adminPanel/subcomponents/CourseConfigPanel';
@@ -30,7 +30,7 @@ type Props = {
 };
 
 function DropdownCreateCourse(props: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [courseConfig, setCourseConfig] = useState<UpdateCourseConfiguration>({
     courseName: '',

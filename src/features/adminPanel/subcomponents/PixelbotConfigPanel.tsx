@@ -11,7 +11,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useCallback, useEffect, useState } from 'react';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppSelector } from 'src/commons/utils/Hooks';
 
 import type {
   Tokens,
@@ -68,8 +68,8 @@ function PixelbotConfigPanel(props: Props) {
   const [routingDraft, setRoutingDraft] = useState('');
   const [answerDraft, setAnswerDraft] = useState('');
 
-  const accessToken = useTypedSelector(state => state.session.accessToken);
-  const refreshToken = useTypedSelector(state => state.session.refreshToken);
+  const accessToken = useAppSelector(state => state.session.accessToken);
+  const refreshToken = useAppSelector(state => state.session.refreshToken);
 
   useEffect(() => {
     if (!accessToken || !refreshToken) {

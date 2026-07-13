@@ -1,7 +1,6 @@
 import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
 import AcademyActions from 'src/features/academy/AcademyActions';
 
 import SessionActions from '../../../commons/application/actions/SessionActions';
@@ -40,7 +39,7 @@ function AdminPanel() {
   const [hasChangesAssessmentConfig, setHasChangesAssessmentConfig] = useState(false);
   const [courseConfiguration, setCourseConfiguration] = useState(defaultCourseConfig);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const session = useSession();
 
   useEffect(() => {

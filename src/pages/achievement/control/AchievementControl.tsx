@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useReducer, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 
 import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';
 import AchievementPreview from '../../../commons/achievement/control/AchievementPreview';
@@ -15,7 +14,7 @@ import type {
 } from '../../../features/achievement/AchievementTypes';
 
 function AchievementControl() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     handleBulkUpdateAchievements,
     handleBulkUpdateGoals,
@@ -38,7 +37,7 @@ function AchievementControl() {
     [dispatch],
   );
 
-  const [initialAchievements, initialGoals] = useTypedSelector(state => [
+  const [initialAchievements, initialGoals] = useAppSelector(state => [
     state.achievement.achievements,
     state.achievement.goals,
   ]);

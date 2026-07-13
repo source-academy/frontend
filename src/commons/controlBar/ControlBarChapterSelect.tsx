@@ -3,14 +3,14 @@ import { IconNames } from '@blueprintjs/icons';
 import { type ItemListRenderer, type ItemRenderer, Select } from '@blueprintjs/select';
 import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
 import { STEPPER_EVALUATOR_CAPABILITY } from '../../features/conductor/stepperTab';
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
 import type { SALanguage } from '../application/ApplicationTypes';
 import { useFeature } from '../featureFlags/useFeature';
-import { useTypedSelector } from '../utils/Hooks';
+import { useAppSelector } from '../utils/Hooks';
 import LegacyControlBarChapterSelect from './LegacyControlBarChapterSelect';
 
 type Props = {
@@ -28,11 +28,11 @@ function ControlBarChapterSelect({
   handleChapterSelect = () => {},
   disabled = false,
 }: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const directoryEnabled = useFeature(flagConductorEnable);
-  const selectedLanguageId = useTypedSelector(s => s.languageDirectory.selectedLanguageId);
-  const selectedEvaluatorId = useTypedSelector(s => s.languageDirectory.selectedEvaluatorId);
-  const dirLanguages = useTypedSelector(s => s.languageDirectory.languages);
+  const selectedLanguageId = useAppSelector(s => s.languageDirectory.selectedLanguageId);
+  const selectedEvaluatorId = useAppSelector(s => s.languageDirectory.selectedEvaluatorId);
+  const dirLanguages = useAppSelector(s => s.languageDirectory.languages);
 
   if (!directoryEnabled) {
     return (

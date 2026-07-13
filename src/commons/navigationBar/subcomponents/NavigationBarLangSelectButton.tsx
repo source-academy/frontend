@@ -1,10 +1,9 @@
 import { Position } from '@blueprintjs/core';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import { useFeature } from 'src/commons/featureFlags/useFeature';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
 
@@ -12,16 +11,16 @@ import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryAc
 import LegacyNavigationBarLangSelectButton from './LegacyNavigationBarLangSelectButton';
 
 function useDirectoryOptions() {
-  const langs = useTypedSelector(s => s.languageDirectory.languages);
+  const langs = useAppSelector(s => s.languageDirectory.languages);
   return langs.map(l => ({ value: l.id, label: l.name }));
 }
 
 const NavigationBarLangSelectButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const selectedDirLanguageId = useTypedSelector(s => s.languageDirectory.selectedLanguageId);
-  const languageMap = useTypedSelector(s => s.languageDirectory.languageMap);
+  const selectedDirLanguageId = useAppSelector(s => s.languageDirectory.selectedLanguageId);
+  const languageMap = useAppSelector(s => s.languageDirectory.languageMap);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const dirOptions = useDirectoryOptions();
   const location = useLocation();
   const navigate = useNavigate();
