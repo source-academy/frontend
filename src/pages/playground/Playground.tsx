@@ -766,11 +766,9 @@ function Playground(props: PlaygroundProps) {
   // Stepper tab wiring (conductor only). The Stepper tab is offered for any language that has a
   // stepper-capability evaluator; opening the tab selects that (dropdown-hidden) evaluator so a Run
   // produces steps, and leaving it restores the language's default evaluator. See the effect below.
-  const selectedLanguageId = useTypedSelector(state => state.languageDirectory.selectedLanguageId);
-  const selectedEvaluatorId = useTypedSelector(
-    state => state.languageDirectory.selectedEvaluatorId,
-  );
-  const stepperEvaluatorId = useTypedSelector(state => {
+  const selectedLanguageId = useAppSelector(state => state.languageDirectory.selectedLanguageId);
+  const selectedEvaluatorId = useAppSelector(state => state.languageDirectory.selectedEvaluatorId);
+  const stepperEvaluatorId = useAppSelector(state => {
     if (!selectConductorEnable(state)) {
       return null;
     }
@@ -781,7 +779,7 @@ function Playground(props: PlaygroundProps) {
     );
     return evaluator?.id ?? null;
   });
-  const defaultEvaluatorId = useTypedSelector(state => {
+  const defaultEvaluatorId = useAppSelector(state => {
     if (!selectConductorEnable(state)) {
       return null;
     }
