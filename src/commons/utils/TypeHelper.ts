@@ -50,15 +50,13 @@ export type DeepPartial<T> = {
 
 /** Omits the index signature `[key: string]: any;` from type `T` */
 export type RemoveIndex<T> = {
-  [
-    K in keyof T as string extends K
+  [K in keyof T as string extends K
+    ? never
+    : number extends K
       ? never
-      : number extends K
+      : symbol extends K
         ? never
-        : symbol extends K
-          ? never
-          : K
-  ]: T[K];
+        : K]: T[K];
 };
 
 /**

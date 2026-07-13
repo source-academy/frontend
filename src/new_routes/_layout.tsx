@@ -53,10 +53,12 @@ function RootLayout() {
    */
   useEffect(() => {
     const orientationChangeHandler = () => {
-      if (!(
-        window.innerHeight < browserDimensions.current.height &&
-        window.innerWidth === browserDimensions.current.width
-      )) {
+      if (
+        !(
+          window.innerHeight < browserDimensions.current.height &&
+          window.innerWidth === browserDimensions.current.width
+        )
+      ) {
         // If it is not an Android soft keyboard triggering the resize event, update the application height.
         document.documentElement.style.setProperty(
           '--application-height',
