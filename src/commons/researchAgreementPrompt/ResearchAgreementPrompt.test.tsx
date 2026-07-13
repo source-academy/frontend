@@ -9,8 +9,8 @@ import { beforeEach, describe, expect, type Mock, test, vi } from 'vitest';
 import { useAppDispatch } from '../utils/Hooks';
 import ResearchAgreementPrompt from './ResearchAgreementPrompt';
 
-vi.mock('src/commons/utils/Hooks', async () => ({
-  ...(await vi.importActual('src/commons/utils/Hooks')),
+vi.mock('src/commons/utils/Hooks', async importActual => ({
+  ...(await importActual()),
   useAppDispatch: vi.fn(),
 }));
 const useDispatchMock = useAppDispatch as Mock;

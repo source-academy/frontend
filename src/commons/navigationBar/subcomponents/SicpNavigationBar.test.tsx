@@ -5,8 +5,8 @@ import { expect, test, vi } from 'vitest';
 
 import SicpNavigationBar from './SicpNavigationBar';
 
-vi.mock('react-router', async () => ({
-  ...(await vi.importActual('react-router')),
+vi.mock('react-router', async importActual => ({
+  ...(await importActual()),
   useParams: vi.fn().mockReturnValue({ section: 'index' }),
   useNavigate: vi.fn().mockReturnValue(vi.fn()),
 }));
