@@ -1,9 +1,10 @@
 import type { Store } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
-import { Provider, useDispatch } from 'react-redux';
+import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import type { OverallState } from 'src/commons/application/ApplicationTypes';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import { beforeEach, describe, expect, type Mock, test, vi } from 'vitest';
 
 import { mockInitialStore } from '../../commons/mocks/StoreMocks';
@@ -11,11 +12,11 @@ import { Component as LoginCallback } from '../../new_routes/login/callback';
 import { Component as LoginPage } from '../../new_routes/login/index';
 import Login from './Login';
 
-vi.mock('react-redux', async () => ({
-  ...(await vi.importActual('react-redux')),
-  useDispatch: vi.fn(),
+vi.mock('src/commons/utils/Hooks', async importActual => ({
+  ...(await importActual()),
+  useAppDispatch: vi.fn(),
 }));
-const useDispatchMock = useDispatch as Mock;
+const useDispatchMock = useAppDispatch as Mock;
 const dispatchMock = vi.fn();
 
 vi.mock('../../commons/utils/Constants', () => {
@@ -31,8 +32,8 @@ vi.mock('../../commons/utils/Constants', () => {
 
 // https://stackoverflow.com/a/74525026
 const navigateSpy = vi.fn();
-vi.mock('react-router', async () => ({
-  ...(await vi.importActual('react-router')),
+vi.mock('react-router', async importActual => ({
+  ...(await importActual()),
   useNavigate: () => navigateSpy,
 }));
 

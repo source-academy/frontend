@@ -2,13 +2,13 @@ import 'katex/dist/katex.min.css';
 
 import { Button, H2 } from '@blueprintjs/core';
 import { Link, useNavigate, useOutletContext, useParams } from 'react-router';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppSelector } from 'src/commons/utils/Hooks';
 import { getNextPy, getPrevPy } from 'src/features/sicp/TableOfContentsHelperPy';
 
 import SicpPyToc from '../../pages/sicp/subcomponents/SicpPyToc';
 
 function SicpPyIndexPage() {
-  const titleImageUrl = useTypedSelector(
+  const titleImageUrl = useAppSelector(
     s => s.languageDirectory.languageMap['python1']?.textbook?.titleImageUrl,
   );
 

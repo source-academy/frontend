@@ -14,8 +14,8 @@ import classNames from 'classnames';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
 import type { Step } from '../../../features/dataVisualizer/dataVisualizerTypes';
@@ -33,7 +33,7 @@ type Props = {
 };
 
 function SideContentDataVisualizer({ workspaceLocation }: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [steps, setSteps] = useState<Step[]>([]);
   const [currentStep, setCurrentStep] = useState(0);
 

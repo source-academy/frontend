@@ -1,7 +1,7 @@
 import { FileInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import { parseString } from 'xml2js';
 
 import SessionActions from '../application/actions/SessionActions';
@@ -27,7 +27,7 @@ function MissionCreator(props: Props) {
   const [fileInputText, setFileInputText] = useState('Import XML');
   let fileReader: FileReader | undefined = undefined;
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const newAssessment = useCallback(
     (assessment: Assessment) => dispatch(SessionActions.updateAssessment(assessment)),
     [dispatch],

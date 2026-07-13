@@ -12,8 +12,8 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../application/actions/SessionActions';
 import type {
@@ -52,7 +52,7 @@ import type { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight } from '../sideContent/SideContentActions';
 import type { SideContentTab } from '../sideContent/SideContentTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
-import { useTypedSelector } from '../utils/Hooks';
+import { useAppSelector } from '../utils/Hooks';
 import Workspace, { type WorkspaceProps } from '../workspace/Workspace';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 import type { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
@@ -90,7 +90,7 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
     replValue,
     currentAssessment: storedAssessmentId,
     currentQuestion: storedQuestionId,
-  } = useTypedSelector(store => store.workspaces[workspaceLocation]);
+  } = useAppSelector(store => store.workspaces[workspaceLocation]);
 
   /**
    * After mounting (either an older copy of the assessment
@@ -111,7 +111,7 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
    */
   useEffect(() => checkWorkspaceReset());
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     handleBrowseHistoryDown,
     handleBrowseHistoryUp,

@@ -14,9 +14,8 @@ import { IconNames } from '@blueprintjs/icons';
 import { useEffect, useMemo, useState } from 'react';
 import type { ReactMdeProps } from 'react-mde';
 import ReactMde from 'react-mde';
-import { useDispatch } from 'react-redux';
 import type { AutogradingResult, LLMPrompt } from 'src/commons/assessment/AssessmentTypes';
-import { useTokens } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useTokens } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../../../../commons/application/actions/SessionActions';
 import ControlButton from '../../../../commons/ControlButton';
@@ -63,7 +62,7 @@ type Props = {
 const gradingEditorButtonClass = 'grading-editor-button';
 
 function GradingEditor(props: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const tokens = useTokens();
   const { handleGradingSave, handleGradingSaveAndContinue, handleReautogradeAnswer } = useMemo(
     () =>

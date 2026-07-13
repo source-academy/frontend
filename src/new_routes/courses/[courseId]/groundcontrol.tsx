@@ -11,8 +11,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { type ColDef, type GridApi, type GridReadyEvent, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { useMemo, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../../../commons/application/actions/SessionActions';
 import type { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
@@ -38,7 +37,7 @@ const defaultColumnDefs: ColDef = {
 function GroundControl() {
   const [showDropzone, setShowDropzone] = useState(false);
   const { assessmentOverviews, assessmentConfigurations } = useSession();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const gridApi = useRef<GridApi | null>(null);
 

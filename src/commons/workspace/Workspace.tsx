@@ -13,7 +13,7 @@ import { Prompt } from '../ReactRouterPrompt';
 import Repl, { type ReplProps } from '../repl/Repl';
 import SideBar, { type SideBarTab } from '../sideBar/SideBar';
 import SideContent, { type SideContentProps } from '../sideContent/SideContent';
-import { useDimensions, useTypedSelector } from '../utils/Hooks';
+import { useAppSelector, useDimensions } from '../utils/Hooks';
 
 export type WorkspaceProps = {
   handleSideContentHeightChange: (height: number) => void;
@@ -40,7 +40,7 @@ function Workspace(props: WorkspaceProps) {
   const [contentContainerWidth] = useDimensions(contentContainerDiv);
   const [expandedSideBarWidth, setExpandedSideBarWidth] = useState(200);
   const [isSideBarExpanded, setIsSideBarExpanded] = useState(true);
-  const isVscode = useTypedSelector(state => state.vscode.isVscode);
+  const isVscode = useAppSelector(state => state.vscode.isVscode);
 
   const sideBarCollapsedWidth = 40;
 

@@ -23,7 +23,7 @@ import Dropdown from '../dropdown/Dropdown';
 import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByType } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
-import { useResponsive, useSession, useTypedSelector } from '../utils/Hooks';
+import { useAppSelector, useResponsive, useSession } from '../utils/Hooks';
 import classes from './NavigationBar.module.css';
 import AcademyNavigationBar, {
   assessmentTypesToNavlinkInfo,
@@ -140,7 +140,7 @@ function NavigationBar() {
     [assessmentTypes, courseId, isEnrolledInACourse],
   );
 
-  const selectedLanguage = useTypedSelector(s => {
+  const selectedLanguage = useAppSelector(s => {
     const id = s.languageDirectory.selectedLanguageId;
     return id ? s.languageDirectory.languageMap[id] : null;
   });

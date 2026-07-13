@@ -1,12 +1,11 @@
 import { Drawer, DrawerSize, NonIdealState, Spinner } from '@blueprintjs/core';
 import { type IconName, IconNames } from '@blueprintjs/icons';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import SessionActions from '../application/actions/SessionActions';
 import { AssessmentStatuses, type AssessmentType } from '../assessment/AssessmentTypes';
 import Constants from '../utils/Constants';
-import { useSession } from '../utils/Hooks';
+import { useAppDispatch, useSession } from '../utils/Hooks';
 import ProfileCard from './ProfileCard';
 
 export type ProfileProps = OwnProps;
@@ -30,7 +29,7 @@ function Profile(props: ProfileProps) {
     courseId,
   } = useSession();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     if (isLoggedIn && isEnrolledInACourse && !assessmentOverviews) {
       // If assessment overviews are not loaded, fetch them

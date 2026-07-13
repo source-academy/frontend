@@ -1,13 +1,12 @@
 import { Button, Icon, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import type { ProgressStatus } from 'src/commons/assessment/AssessmentTypes';
 import { ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
 
 type Props = {
   submissionId: number;
@@ -17,7 +16,7 @@ type Props = {
 };
 
 function GradingActions({ submissionId, style, progress, filterMode }: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { courseId } = useSession();
 
   const handleReautogradeClick = async () => {

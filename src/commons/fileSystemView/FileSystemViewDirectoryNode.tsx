@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { rmdirRecursively } from '../fileSystem/utils';
 import { showSimpleConfirmDialog, showSimpleErrorDialog } from '../utils/DialogHelper';
@@ -40,7 +40,7 @@ function FileSystemViewDirectoryNode({
   const [isAddingNewFile, setIsAddingNewFile] = useState(false);
   const [isAddingNewDirectory, setIsAddingNewDirectory] = useState(false);
   const [fileSystemViewListKey, setFileSystemViewListKey] = useState(0);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const toggleIsExpanded = () => {
     if (isEditing) {
