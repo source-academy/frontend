@@ -1,10 +1,10 @@
 import { Card, Elevation, Overlay2 } from '@blueprintjs/core';
 import { compressToEncodedURIComponent } from 'lz-string';
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
 import ControlBarCloseButton from 'src/commons/controlBar/ControlBarCloseButton';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import Playground from 'src/pages/playground/Playground';
@@ -36,7 +36,7 @@ function ChatbotCodeSnippet({
   setActiveSnippet,
   language = 'javascript',
 }: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const isActive = activeSnippetId === id;
 
