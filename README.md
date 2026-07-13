@@ -201,7 +201,7 @@ When Knip reports something:
 1. **For `Unused (dev)dependencies`**: remove the entry from `package.json` and re-run `yarn install`. Don't forget to grep first — some packages are referenced by name in build configs and never imported as ES modules.
 1. **For `Unused files`**: delete the file. The commit message should call out the deletion explicitly so it is easy to revert.
 1. **For `Unused exports`**: usually the source file is still in use; just delete the `export` keyword. Reserve whole-symbol deletions for clearly internal helpers.
-1. **When Knip is wrong**: if a flagged symbol is genuinely used (for example, referenced by reflection, by a feature-flag name, by an externally-loaded Conductor plugin, or by `/// <reference types="..." />` directives in saga files), add the package to `ignoreDependencies` in `knip.json` with a short comment explaining why. Keep the `ignoreDependencies` list minimal — each entry is a promise that the next reader doesn't have to re-verify.
+1. **When Knip is wrong**: if a flagged symbol is genuinely used (for example, referenced by reflection, by a feature-flag name, or by an externally-loaded Conductor plugin), use `ignoreIssues` in knip.json or JSDoc tags (like @public). If a dependency is flagged as unused but is actually needed (for example, referenced by `/// <reference types="..." />` directives in saga files), add the package to `ignoreDependencies` in knip.json with a short comment explaining why. Keep these lists minimal — each entry is a promise that the next reader doesn't have to re-verify.
 
 ### Configuration
 
