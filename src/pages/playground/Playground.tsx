@@ -1,7 +1,6 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { type HotkeyItem, useHotkeys } from '@mantine/hooks';
-import type { AnyAction, Dispatch } from '@reduxjs/toolkit';
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { Ace, Range } from 'ace-builds';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
@@ -26,6 +25,7 @@ import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentH
 import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
+import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 import { useAppDispatch, useAppSelector, useResponsive } from 'src/commons/utils/Hooks';
 import {
   showFullJSWarningOnUrlLoad,
@@ -119,7 +119,7 @@ export async function handleHash(
     handleChangeExecTime: (execTime: number) => void;
   },
   workspaceLocation: WorkspaceLocation,
-  dispatch: Dispatch<AnyAction>,
+  dispatch: React.Dispatch<SourceActionType>,
   fileSystem: FSModule | null,
 ) {
   // Make the parsed query string object a Partial because we might access keys which are not set.
