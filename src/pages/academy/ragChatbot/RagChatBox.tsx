@@ -115,7 +115,7 @@ function RagChatBox({ isExpanded, toggleExpanded, activeSnippetId, setActiveSnip
         setMessages(prev => [...prev, createErrorMessage()]);
       })
       .finally(() => setIsLoading(false));
-  }, [tokens, userInput, languageConfig]);
+  }, [tokens, userInput]);
 
   const keyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
     e => {
