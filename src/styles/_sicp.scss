@@ -189,9 +189,9 @@ $sicp-content-lr-padding: 6em;
       margin: 25px 0;
       transform: translateX(
         min(
-          -$sicp-content-lr-padding,
-          calc(#{$sicp-max-width} / 2 - 50vw - #{$sicp-content-lr-padding})
-        )
+            -$sicp-content-lr-padding,
+            calc(#{$sicp-max-width} / 2 - 50vw - #{$sicp-content-lr-padding})
+          )
       );
       display: flex;
       flex-flow: column nowrap;
