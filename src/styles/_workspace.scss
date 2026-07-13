@@ -586,47 +586,6 @@ $code-color-notification: #f9f0d7;
       }
     }
 
-    .sa-video {
-      min-width: min-content;
-
-      .sa-video-header {
-        justify-content: space-around;
-        display: flex;
-        background: rgba(26, 37, 48, 0.5);
-        border-radius: 3px 3px 0 0;
-
-        .sa-video-header-element {
-          display: inherit;
-          padding: 5px 0px;
-
-          .#{$ns}-button-group {
-            width: max-content;
-
-            .#{$ns}-button.sa-live-video-button.#{$ns}-active {
-              pointer-events: none;
-            }
-          }
-
-          .sa-video-header-numeric-input {
-            margin-left: 5px;
-            margin-right: 5px;
-          }
-        }
-
-        .#{$ns}-divider {
-          margin: 0;
-        }
-      }
-
-      .sa-video-element {
-        width: 100%;
-        text-align: center;
-        padding: 10px;
-        background: $cadet-color-1;
-        border-radius: 0 0 3px 3px;
-      }
-    }
-
     .sa-remote-execution {
       margin: 6px;
 
@@ -1340,10 +1299,6 @@ $code-color-notification: #f9f0d7;
 
       .testcase-actual {
         width: 26%;
-      }
-
-      .testcase-button {
-        width: 0.1%;
       }
 
       /* Following two are styles for rendered WebGL elements (runes, curves) */
