@@ -19,7 +19,6 @@ import {
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
-import Chatbot from '../../pages/sicp/subcomponents/chatbot/Chatbot';
 
 const baseUrl = Constants.sicpBackendUrl + 'json/';
 const extension = '.json';
@@ -160,9 +159,7 @@ function SicpLayout() {
           )}
         </CodeSnippetProvider>
       </SicpErrorBoundary>
-      {isLoggedIn && Constants.featureFlags.enableSicpChatbot && (
-        <Chatbot getSection={getSection} getText={getText} />
-      )}
+      {/* Chatbot intentionally disabled for JavaScript layout. */}
     </div>
   );
 }
