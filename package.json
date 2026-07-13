@@ -10,7 +10,8 @@
     "start": "Start the Webpack development server",
     "build": "Build production bundle",
     "test": "Run unit tests",
-    "update-ui-snapshots": "Update UI test snapshots"
+    "update-ui-snapshots": "Update UI test snapshots",
+    "knip": "Find unused dependencies, files, and exports"
   },
   "scripts": {
     "analyze": "yarn build --stats; webpack-bundle-analyzer build/bundle-stats.json",
@@ -27,6 +28,8 @@
     "test-coveralls": "./scripts/test-coveralls.sh",
     "update-ui-snapshots": "vitest run --update",
     "eslint": "eslint src",
+    "knip": "knip",
+    "knip:fix": "knip --fix",
     "prepare": "husky",
     "preview": "rsbuild preview"
   },
@@ -73,6 +76,7 @@
     "java-slang": "^1.0.13",
     "js-cookie": "^3.0.5",
     "js-slang": "^1.0.94",
+    "katex": "^0.16.10",
     "konva": "^10.0.0",
     "lodash-es": "^4.18.1",
     "lz-string": "^1.4.4",
@@ -116,6 +120,9 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-typescript": "^7.24.1",
     "@babel/runtime": "^7.24.5",
+    "@eslint/js": "^9.9.0",
+    "@octokit/types": "^16.0.0",
+    "@redux-saga/types": "^1.4.0",
     "@rsbuild/core": "^2.0.3",
     "@rsbuild/plugin-eslint": "^2.0.0",
     "@rsbuild/plugin-node-polyfill": "^1.4.4",
@@ -151,6 +158,7 @@
     "canvas": "^3.1.0",
     "coveralls": "^3.1.1",
     "cross-env": "^10.0.0",
+    "csstype": "^3.2.3",
     "eslint": "^9.9.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^7.0.0",
@@ -159,6 +167,7 @@
     "husky": "^9.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jsdom": "^29.0.0",
+    "knip": "^6.23.0",
     "phaser3spectorjs": "^0.0.8",
     "prettier": "^3.3.3",
     "react-error-overlay": "^6.0.11",
