@@ -67,7 +67,8 @@ function SicpLayout() {
   }, [section, navigate]);
 
   const { data, error, isPending, isFetching, refs } = useSicpJsSectionQuery(section);
-  const isLoading = isPending || isFetching;
+  // Index page is served from local content, not the network, so it is never loading
+  const isLoading = section !== SICP_INDEX && (isPending || isFetching);
 
   // Scroll to correct position
   useEffect(() => {

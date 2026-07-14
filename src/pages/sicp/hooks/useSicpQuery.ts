@@ -35,7 +35,7 @@ export function useSicpJsSectionQuery(section: string | undefined) {
   const refs = useRef<Record<string, HTMLElement | null>>({});
   const { data, error, isPending, isFetching } = useQuery({
     ...queries.sicp.sectionJs(section ?? ''),
-    enabled: !!section,
+    enabled: !!section && section !== SICP_INDEX,
     select: json => {
       try {
         return parseArr(json, refs);
@@ -60,7 +60,7 @@ export function useSicPySectionQuery(section: string | undefined) {
   const refs = useRef<Record<string, HTMLElement | null>>({});
   const { data, error, isPending, isFetching } = useQuery({
     ...queries.sicp.sectionPy(section ?? ''),
-    enabled: !!section,
+    enabled: !!section && section !== SICPY_INDEX,
     select: json => {
       try {
         return parseArr(json, refs);

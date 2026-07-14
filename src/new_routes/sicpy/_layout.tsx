@@ -36,7 +36,8 @@ function SicPyLayout() {
   }, [section, navigate]);
 
   const { data, error, isPending, isFetching, refs } = useSicPySectionQuery(section);
-  const isLoading = isPending || isFetching;
+  // Index page is served from local content, not the network, so it is never loading
+  const isLoading = section !== SICPY_INDEX && (isPending || isFetching);
 
   // Scroll to correct position
   useEffect(() => {
