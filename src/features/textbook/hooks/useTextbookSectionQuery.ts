@@ -23,10 +23,10 @@ function useTextbookSectionPersistence(
       setLocalStorage(opts.key, opts.defaultSection);
       return;
     }
-    if (data) {
-      setLocalStorage(opts.key, section);
-    } else {
+    if (error) {
       setLocalStorage(opts.key, opts.defaultSection);
+    } else if (data) {
+      setLocalStorage(opts.key, section);
     }
   }, [data, error, section, opts.key, opts.defaultSection]);
 }
