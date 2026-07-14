@@ -4,7 +4,7 @@ import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router';
-import { readLocalStorage, setLocalStorage } from 'src/commons/hooks/useLocalStorageState';
+import { useLocalStorageState } from 'src/commons/hooks/useLocalStorageState';
 import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
@@ -21,15 +21,6 @@ const extension = '.json';
 
 const SICP_INDEX = 'index';
 const SICP_CACHE_KEY = 'sicp-section';
-
-const setSicpSectionLocalStorage = (value: string) => {
-  setLocalStorage(SICP_CACHE_KEY, value);
-};
-
-const readSicpSectionLocalStorage = () => {
-  const data = readLocalStorage(SICP_CACHE_KEY, SICP_INDEX);
-  return data;
-};
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
@@ -57,6 +48,7 @@ const getText = () => {
 function SicpLayout() {
   const [data, setData] = useState(<></>);
   const [loading, setLoading] = useState(false);
+  const [cachedSection, setCachedSection] = useLocalStorageState(SICP_CACHE_KEY, SICP_INDEX);
   const { section } = useParams<{ section: string }>();
   const parentRef = useRef<HTMLDivElement>(null);
   const refs = useRef<Record<string, HTMLElement | null>>({});
@@ -69,20 +61,23 @@ function SicpLayout() {
     return location.pathname.replace('/sicpjs/', '') as SicpSection;
   }
 
+  // Handle rerouting to the latest viewed section when clicking from the main
+  // application navbar. Navigate replace logic is used to allow the user to
+  // still use the browser back button to navigate the app.
+  useEffect(() => {
+    if (!section) {
+      navigate(`/sicpjs/${cachedSection}`, { replace: true });
+    }
+  }, [section, cachedSection, navigate]);
+
   // Handle loading of latest viewed section and fetch json data
   useEffect(() => {
     if (!section) {
-      /**
-       * Handles rerouting to the latest viewed section when clicking from
-       * the main application navbar. Navigate replace logic is used to allow the
-       * user to still use the browser back button to navigate the app.
-       */
-      navigate(`/sicpjs/${readSicpSectionLocalStorage()}`, { replace: true });
       return;
     }
 
     if (section === SICP_INDEX) {
-      setSicpSectionLocalStorage(SICP_INDEX);
+      setCachedSection(SICP_INDEX);
       return;
     }
 
@@ -99,7 +94,7 @@ function SicpLayout() {
         try {
           const newData = parseArr(myJson, refs); // Might throw error
           setData(newData);
-          setSicpSectionLocalStorage(section); // Sets local storage if valid page
+          setCachedSection(section); // Sets local storage if valid page
         } catch (error) {
           throw new ParseJsonError(error.message);
         }
@@ -115,7 +110,7 @@ function SicpLayout() {
         } else {
           setData(getSicpError(SicpErrorType.UNEXPECTED_ERROR));
         }
-        setLocalStorage(SICP_CACHE_KEY, SICP_INDEX); // Prevents caching invalid page
+        setCachedSection(SICP_INDEX); // Prevents caching invalid page
       })
       .finally(() => {
         setLoading(false);

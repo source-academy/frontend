@@ -4,7 +4,7 @@ import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router';
-import { readLocalStorage, setLocalStorage } from 'src/commons/hooks/useLocalStorageState';
+import { useLocalStorageState } from 'src/commons/hooks/useLocalStorageState';
 import Constants from 'src/commons/utils/Constants';
 import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
@@ -24,26 +24,33 @@ const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner /
 function SicPyLayout() {
   const [data, setData] = useState(<></>);
   const [loading, setLoading] = useState(false);
+  const [cachedSection, setCachedSection] = useLocalStorageState(
+    SICPY_CACHE_KEY,
+    SICPY_DEFAULT_SECTION,
+  );
   const { section } = useParams<{ section: string }>();
   const parentRef = useRef<HTMLDivElement>(null);
   const refs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Handle rerouting to the latest viewed section when clicking from the main
+  // application navbar. Navigate replace logic is used to allow the user to
+  // still use the browser back button to navigate the app.
   useEffect(() => {
     if (!section) {
-      const cached = readLocalStorage(SICPY_CACHE_KEY, SICPY_DEFAULT_SECTION);
-      /**
-       * Handles rerouting to the latest viewed section when clicking from
-       * the main application navbar. Navigate replace logic is used to allow the
-       * user to still use the browser back button to navigate the app.
-       */
-      navigate(`/sicpy/${cached}`, { replace: true });
+      navigate(`/sicpy/${cachedSection}`, { replace: true });
+    }
+  }, [section, cachedSection, navigate]);
+
+  // Handle loading of the latest viewed section and fetch json data
+  useEffect(() => {
+    if (!section) {
       return;
     }
 
-    if (section === 'index') {
-      setLocalStorage(SICPY_CACHE_KEY, 'index');
+    if (section === SICPY_DEFAULT_SECTION) {
+      setCachedSection(SICPY_DEFAULT_SECTION);
       return;
     }
 
@@ -61,7 +68,7 @@ function SicPyLayout() {
         try {
           const newData = parseArr(myJson, refs);
           setData(newData);
-          setLocalStorage(SICPY_CACHE_KEY, section);
+          setCachedSection(section); // Sets local storage if valid page
         } catch (error) {
           throw new ParseJsonError(error.message);
         }
@@ -80,7 +87,7 @@ function SicPyLayout() {
         } else {
           setData(getSicpError(SicpErrorType.UNEXPECTED_ERROR));
         }
-        setLocalStorage(SICPY_CACHE_KEY, SICPY_DEFAULT_SECTION);
+        setCachedSection(SICPY_DEFAULT_SECTION); // Prevents caching invalid page
       })
       .finally(() => setLoading(false));
 
