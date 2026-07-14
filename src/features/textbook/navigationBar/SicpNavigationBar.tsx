@@ -3,17 +3,14 @@ import { IconNames } from '@blueprintjs/icons';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
-import {
-  getNextPy as getNext,
-  getPrevPy as getPrev,
-} from 'src/features/sicp/TableOfContentsHelperPy';
+import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 
-import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
-import { fetchSicpySearchData } from '../../../features/textbook/navigationBar/autocomplete/query';
-import SearchAutocomplete from '../../../features/textbook/navigationBar/autocomplete/SearchAutocomplete';
-import SicpPyToc from '../../../pages/sicp/subcomponents/SicpPyToc';
+import SicpToc from '../../../pages/sicp/subcomponents/SicpToc';
+import { TableOfContentsButton } from '../../sicp/TableOfContentsButton';
+import { fetchSicpSearchData } from './autocomplete/query';
+import SearchAutocomplete from './autocomplete/SearchAutocomplete';
 
-function SicPyNavigationBar() {
+function SicpNavigationBar() {
   const [isTocOpen, setIsTocOpen] = useState(false);
   const { section } = useParams<{ section: string }>();
   const navigate = useNavigate();
@@ -24,7 +21,7 @@ function SicPyNavigationBar() {
   const handleCloseToc = () => setIsTocOpen(false);
 
   const handleNavigation = (sect: string) => {
-    navigate('/sicpy/' + sect);
+    navigate('/sicpjs/' + sect);
   };
 
   // Button to open table of contents
@@ -72,17 +69,17 @@ function SicPyNavigationBar() {
         <NavbarGroup align={Alignment.END}>{[prevButton, nextButton]}</NavbarGroup>
         <NavbarGroup align={Alignment.CENTER}>
           <SearchAutocomplete
-            queryKey="sicpPySearchData"
-            fetchSearchData={fetchSicpySearchData}
+            queryKey="sicpSearchData"
+            fetchSearchData={fetchSicpSearchData}
             onNavigate={handleNavigation}
           />
         </NavbarGroup>
       </Navbar>
       <Drawer {...drawerProps} className="sicp-toc-drawer">
-        <SicpPyToc handleCloseToc={() => setIsTocOpen(false)} />
+        <SicpToc handleCloseToc={handleCloseToc} />
       </Drawer>
     </>
   );
 }
 
-export default SicPyNavigationBar;
+export default SicpNavigationBar;
