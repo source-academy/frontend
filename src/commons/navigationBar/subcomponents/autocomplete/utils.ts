@@ -33,18 +33,18 @@ export function search(keyStr: string, trie: TrieNode) {
   return node.value || [];
 }
 
-export function sentenceSearch(rewritedSearchData: SearchData, keyStr: string): string[] {
+export function sentenceSearch(searchData: SearchData, keyStr: string): string[] {
   const normalizedKey = keyStr.toLowerCase();
   const words = normalizedKey.split(' ');
   const longestWord = words.reduce((a, b) => (a.length > b.length ? a : b), '');
-  return search(longestWord, rewritedSearchData.textTrie).filter(id => {
-    const content = rewritedSearchData.idToContentMap[id].toLowerCase().replaceAll('\n', ' ');
-    return content.includes(normalizedKey);
+  return search(longestWord, searchData.textTrie).filter(id => {
+    const content = searchData.idToContentMap[id]?.toLowerCase().replaceAll('\n', ' ');
+    return content?.includes(normalizedKey) ?? false;
   });
 }
 
 export function sentenceAutoComplete(
-  rewritedSearchData: SearchData,
+  searchData: SearchData,
   prefix: string,
   n: number = 25,
 ): string[] {
@@ -54,11 +54,11 @@ export function sentenceAutoComplete(
     return [];
   }
   if (words.length === 1) {
-    return autocomplete(words[0], rewritedSearchData.textTrie, n);
+    return autocomplete(words[0], searchData.textTrie, n);
   }
   const pre = words.slice(0, -1).join(' ');
-  const results: string[] = sentenceSearch(rewritedSearchData, pre)
-    .map(id => rewritedSearchData.idToContentMap[id]?.toLowerCase())
+  const results: string[] = sentenceSearch(searchData, pre)
+    .map(id => searchData.idToContentMap[id]?.toLowerCase())
     .filter(text => !!text);
   const answers: string[] = [];
   while (answers.length < n && results.length > 0) {
@@ -84,7 +84,7 @@ export function sentenceAutoComplete(
 }
 
 export function indexAutoComplete(
-  rewritedSearchData: SearchData,
+  searchData: SearchData,
   prefix: string,
   n: number = 25,
 ): string[] {
@@ -93,8 +93,8 @@ export function indexAutoComplete(
   }
   const lower = prefix[0].toLowerCase() + prefix.slice(1);
   const upper = prefix[0].toUpperCase() + prefix.slice(1);
-  const result1 = autocomplete(lower, rewritedSearchData.indexTrie, n);
-  const result2 = autocomplete(upper, rewritedSearchData.indexTrie, n);
+  const result1 = autocomplete(lower, searchData.indexTrie, n);
+  const result2 = autocomplete(upper, searchData.indexTrie, n);
   while (result1.length < n && result2.length > 0) {
     const toPush = result2.shift();
     if (toPush === undefined) {

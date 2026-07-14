@@ -15,9 +15,9 @@ export async function fetchSicpSearchData() {
     return emptySearchData;
   }
 
-  const resp = await fetch(Constants.sicpBackendUrl + 'json/rewritedSearchData.json');
+  const resp = await fetch(Constants.sicpBackendUrl + 'json/searchData.json');
   if (!resp.ok) {
-    throw new Error('Unable to get rewrited search data. Error code = ' + resp.status);
+    throw new Error('Unable to get search data. Error code = ' + resp.status);
   }
   const searchData: SearchData = await resp.json();
   return searchData;
@@ -28,7 +28,7 @@ export async function fetchSicpySearchData() {
     return emptySearchData;
   }
 
-  const url = Constants.sicpBackendUrl + 'json_py/rewritedSearchData.json';
+  const url = Constants.sicpBackendUrl + 'json_py/searchData.json';
   const resp = await fetch(url);
   if (!resp.ok) {
     throw new Error(`Unable to get search data. Error code = ${resp.status} url is ${url}`);
