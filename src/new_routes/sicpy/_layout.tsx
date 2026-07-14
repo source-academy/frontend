@@ -16,12 +16,12 @@ import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErro
 const baseUrl = Constants.sicpBackendUrl + 'json_py/';
 const extension = '.json';
 
-const SICPPY_CACHE_KEY = 'sicppy-section';
-const SICPPY_DEFAULT_SECTION = 'index';
+const SICPY_CACHE_KEY = 'sicPy-section';
+const SICPY_DEFAULT_SECTION = 'index';
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
-function SicpPyLayout() {
+function SicPyLayout() {
   const [data, setData] = useState(<></>);
   const [loading, setLoading] = useState(false);
   const { section } = useParams<{ section: string }>();
@@ -32,7 +32,7 @@ function SicpPyLayout() {
 
   useEffect(() => {
     if (!section) {
-      const cached = readLocalStorage(SICPPY_CACHE_KEY, SICPPY_DEFAULT_SECTION);
+      const cached = readLocalStorage(SICPY_CACHE_KEY, SICPY_DEFAULT_SECTION);
       /**
        * Handles rerouting to the latest viewed section when clicking from
        * the main application navbar. Navigate replace logic is used to allow the
@@ -43,7 +43,7 @@ function SicpPyLayout() {
     }
 
     if (section === 'index') {
-      setLocalStorage(SICPPY_CACHE_KEY, 'index');
+      setLocalStorage(SICPY_CACHE_KEY, 'index');
       return;
     }
 
@@ -61,7 +61,7 @@ function SicpPyLayout() {
         try {
           const newData = parseArr(myJson, refs);
           setData(newData);
-          setLocalStorage(SICPPY_CACHE_KEY, section);
+          setLocalStorage(SICPY_CACHE_KEY, section);
         } catch (error) {
           throw new ParseJsonError(error.message);
         }
@@ -80,7 +80,7 @@ function SicpPyLayout() {
         } else {
           setData(getSicpError(SicpErrorType.UNEXPECTED_ERROR));
         }
-        setLocalStorage(SICPPY_CACHE_KEY, SICPPY_DEFAULT_SECTION);
+        setLocalStorage(SICPY_CACHE_KEY, SICPY_DEFAULT_SECTION);
       })
       .finally(() => setLoading(false));
 
@@ -117,4 +117,4 @@ function SicpPyLayout() {
   );
 }
 
-export const Component = SicpPyLayout;
+export const Component = SicPyLayout;
