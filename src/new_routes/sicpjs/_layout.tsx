@@ -15,7 +15,7 @@ import {
   SICP_CACHE_KEY,
   SICP_INDEX,
   useSicpJsSectionQuery,
-} from 'src/pages/sicp/hooks/useSicpQuery';
+} from 'src/features/textbook/hooks/useTextbookSectionQuery';
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';

@@ -7,7 +7,7 @@ import { queries } from 'src/queryKeys';
 export const SICP_INDEX = 'index';
 export const SICP_CACHE_KEY = 'sicp-section';
 
-function useSicpSectionPersistence(
+function useTextbookSectionPersistence(
   section: string | undefined,
   data: unknown,
   error: unknown,
@@ -45,7 +45,7 @@ export function useSicpJsSectionQuery(section: string | undefined) {
     },
   });
 
-  useSicpSectionPersistence(section, data, error, {
+  useTextbookSectionPersistence(section, data, error, {
     key: SICP_CACHE_KEY,
     defaultSection: SICP_INDEX,
   });
@@ -70,7 +70,7 @@ export function useSicPySectionQuery(section: string | undefined) {
     },
   });
 
-  useSicpSectionPersistence(section, data, error, {
+  useTextbookSectionPersistence(section, data, error, {
     key: SICPY_CACHE_KEY,
     defaultSection: SICPY_INDEX,
   });
