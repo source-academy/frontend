@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
 import { TableOfContentsButton } from 'src/features/sicp/TableOfContentsButton';
-import SicpToc from 'src/pages/sicp/subcomponents/SicpToc';
+import SicpToc from 'src/features/textbook/toc/SicpToc';
 
 import SearchAutocomplete from './autocomplete/SearchAutocomplete';
 import type { SearchData } from './autocomplete/types';

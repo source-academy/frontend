@@ -2,7 +2,7 @@ import { MemoryRouter } from 'react-router';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { expect, test } from 'vitest';
 
-import toc from '../../../features/sicp/data/toc.json';
+import toc from './data/sicpjs-toc.json';
 import SicpToc from './SicpToc';
 
 test('Sicp toc renders correctly', async () => {

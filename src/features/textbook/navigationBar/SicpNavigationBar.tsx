@@ -1,7 +1,7 @@
-import toc from 'src/features/sicp/data/toc.json';
-import tocNavigation from 'src/features/sicp/data/toc-navigation.json';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 
+import tocNavigation from '../toc/data/sicpjs-navigation.json';
+import toc from '../toc/data/sicpjs-toc.json';
 import { fetchSicpSearchData } from './autocomplete/query';
 import SicpTextbookNavigationBar from './SicpTextbookNavigationBar';
 

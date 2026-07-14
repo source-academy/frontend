@@ -1,4 +1,4 @@
-import toc from '../../../../features/sicp/data/toc.json';
+import toc from '../../../../features/textbook/toc/data/sicpjs-toc.json';
 import SicpIndexPageWrapper from './SicpIndexPageWrapper';
 import SicpAuthors from './subcomponents/SicpAuthors';
 import SicpLicenses from './subcomponents/SicpLicenses';

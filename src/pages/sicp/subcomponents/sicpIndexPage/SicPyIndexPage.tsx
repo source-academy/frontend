@@ -1,6 +1,6 @@
 import { H2 } from '@blueprintjs/core';
 
-import toc from '../../../../features/sicp/data/toc-py.json';
+import toc from '../../../../features/textbook/toc/data/sicpy-toc.json';
 import SicpIndexPageWrapper from './SicpIndexPageWrapper';
 
 type Props = {

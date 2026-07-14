@@ -1,7 +1,7 @@
 import { H2, type TreeNodeInfo } from '@blueprintjs/core';
 import { useNavigate } from 'react-router';
 
-import SicpToc from '../SicpToc';
+import SicpToc from '../../../../features/textbook/toc/SicpToc';
 
 type Props = {
   toc: TreeNodeInfo[];

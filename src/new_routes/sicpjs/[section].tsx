@@ -3,8 +3,8 @@ import 'katex/dist/katex.min.css';
 import { Button } from '@blueprintjs/core';
 import { Link, useNavigate, useOutletContext, useParams } from 'react-router';
 import { useAppSelector } from 'src/commons/utils/Hooks';
-import tocNavigation from 'src/features/sicp/data/toc-navigation.json';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
+import tocNavigation from 'src/features/textbook/toc/data/sicpjs-navigation.json';
 
 import SicpIndexPage from '../../pages/sicp/subcomponents/sicpIndexPage/SicpIndexPage';
 
