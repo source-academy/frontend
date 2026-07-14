@@ -180,7 +180,10 @@ function Profile(props: ProfileProps) {
           <div className="profile-xp-footer italic text-center pb-3">
             *{fullXp}XP needed to reach full CA level of {caFulfillmentLevel}
           </div>
-          <div className="profile-callouts flex-1 overflow-y-auto space-y-2" data-testid="profile-callouts">
+          <div
+            className="profile-callouts flex-1 overflow-y-auto space-y-2"
+            data-testid="profile-callouts"
+          >
             {summaryCallouts}
           </div>
         </div>
