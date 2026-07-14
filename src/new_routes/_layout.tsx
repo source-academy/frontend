@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Outlet } from 'react-router';
+import { useLocalStorageState } from 'src/commons/hooks/useLocalStorageState';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
 import Messages, {
   type MessageType,
@@ -11,7 +12,7 @@ import SessionActions from '../commons/application/actions/SessionActions';
 import VscodeActions from '../commons/application/actions/VscodeActions';
 import NavigationBar from '../commons/navigationBar/NavigationBar';
 import Constants from '../commons/utils/Constants';
-import { useLocalStorageState, useSession } from '../commons/utils/Hooks';
+import { useSession } from '../commons/utils/Hooks';
 import WorkspaceActions from '../commons/workspace/WorkspaceActions';
 import {
   defaultWorkspaceSettings,
