@@ -1,11 +1,20 @@
 import { useEffect, useState } from 'react';
 
-export const readLocalStorage = (key: string, defaultValue?: any) => {
-  const localStorageValue = window.localStorage.getItem(key);
-  return localStorageValue ? JSON.parse(localStorageValue) : defaultValue;
+const tryParse = <T>(value: string): T | null => {
+  try {
+    return JSON.parse(value) as T;
+  } catch (error) {
+    console.warn(`Failed to parse localStorage value:`, error);
+    return null;
+  }
 };
 
-export const setLocalStorage = (key: string, value: any) => {
+export const readLocalStorage = <T>(key: string, defaultValue: T) => {
+  const localStorageValue = window.localStorage.getItem(key);
+  return localStorageValue ? (tryParse<T>(localStorageValue) ?? defaultValue) : defaultValue;
+};
+
+export const setLocalStorage = <T>(key: string, value: T) => {
   window.localStorage.setItem(key, JSON.stringify(value));
 };
 
