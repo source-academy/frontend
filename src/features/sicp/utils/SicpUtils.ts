@@ -1,4 +1,4 @@
-import { readLocalStorage, setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
+import { readLocalStorage, setLocalStorage } from 'src/commons/hooks/useLocalStorageState';
 
 export const SICP_INDEX = 'index';
 export const SICP_CACHE_KEY = 'sicp-section';

@@ -4,8 +4,8 @@ import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router';
+import { readLocalStorage, setLocalStorage } from 'src/commons/hooks/useLocalStorageState';
 import Constants from 'src/commons/utils/Constants';
-import { readLocalStorage, setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
 import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 
