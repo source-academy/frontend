@@ -173,7 +173,7 @@
     "react-error-overlay": "^6.0.11",
     "redux-saga-test-plan": "^4.0.6",
     "resize-observer-polyfill": "^1.5.1",
-    "sass": "^1.63.6",
+    "sass-embedded": "^1.100.0",
     "tailwindcss": "^4.3.0",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.1.0",
