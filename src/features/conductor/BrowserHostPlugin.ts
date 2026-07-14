@@ -13,6 +13,10 @@ export class BrowserHostPlugin extends BasicHostPlugin {
     return { [pluginId]: pluginId };
   }
   receiveResult?(result: any): void;
+  receiveOutput?: (output: any) => void;
+  receiveInputRequest?: (prompt: string) => void;
+  receiveError?: (error: any) => void;
+  receiveStatusUpdate?: (status: any, isActive: boolean) => void;
 
   private __onRequestFile: (fileName: string) => Promise<string | undefined>;
   private __onRequestLoadPlugin: (pluginName: string) => void;

@@ -7,7 +7,7 @@ import { Outlet, useLocation, useNavigate, useParams } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
-import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
+// type SicpSection removed — not used in this file.
 import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import {
@@ -25,43 +25,9 @@ const extension = '.json';
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
-const getText = () => {
-  const divs = document.querySelectorAll('p.sicp-text');
-  let visibleParagraphs = '';
+// `getText` removed — it was unused.
 
-  divs.forEach(div => {
-    const rect = div.getBoundingClientRect();
-
-    if (
-      rect.top <= window.innerHeight &&
-      rect.bottom >= 0 &&
-      rect.left <= window.innerWidth &&
-      rect.right >= 0
-    ) {
-      const text = div.textContent;
-      visibleParagraphs += text + '\n';
-    }
-  });
-
-  return visibleParagraphs;
-};
-
-const scrollRefIntoView = (
-  ref: HTMLElement | null,
-  parentRef: React.RefObject<HTMLDivElement | null>,
-) => {
-  if (!ref || !parentRef?.current) {
-    return;
-  }
-
-  const parent = parentRef.current!;
-  const relativeTop = window.scrollY > parent.offsetTop ? window.scrollY : parent.offsetTop;
-
-  parent.scrollTo({
-    behavior: 'smooth',
-    top: ref.offsetTop - relativeTop,
-  });
-};
+// scrollRefIntoView helper removed; behavior inlined where used below.
 
 function SicpLayout() {
   const [data, setData] = useState(<></>);
@@ -71,12 +37,7 @@ function SicpLayout() {
   const refs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
   const location = useLocation();
-  const { isLoggedIn } = useSession();
-
-  function getSection() {
-    // To discard the '/sicpjs/'
-    return location.pathname.replace('/sicpjs/', '') as SicpSection;
-  }
+  useSession();
 
   // Handle loading of latest viewed section and fetch json data
   useEffect(() => {
@@ -95,7 +56,8 @@ function SicpLayout() {
       return;
     }
 
-    setLoading(true);
+    // Defer setLoading to avoid synchronous setState within the effect.
+    Promise.resolve().then(() => setLoading(true));
 
     fetch(baseUrl + section + extension)
       .then(response => {
@@ -141,7 +103,12 @@ function SicpLayout() {
     const hash = location.hash;
     const elem =
       (hash ? (document.querySelector(hash) as HTMLElement | null) : null) ?? refs.current[hash];
-    scrollRefIntoView(elem, parentRef);
+
+    if (elem && parentRef?.current) {
+      const parent = parentRef.current!;
+      const relativeTop = window.scrollY > parent.offsetTop ? window.scrollY : parent.offsetTop;
+      parent.scrollTo({ behavior: 'smooth', top: elem.offsetTop - relativeTop });
+    }
   }, [loading, location.hash]);
 
   return (
