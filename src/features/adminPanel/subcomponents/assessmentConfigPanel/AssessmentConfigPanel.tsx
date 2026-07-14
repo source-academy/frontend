@@ -21,7 +21,7 @@ const MAX_ROWS = 8;
 const MIN_ROWS = 1;
 
 // Negative ids mark rows that have not yet been persisted; the backend treats
-// `assessmentConfigId: -1` as "create" (see the course-creation flow in
+// `assessmentConfigId: <negative>` as "create" (see the course-creation flow in
 // BackendSaga) and assigns real ids on the next fetchAssessmentConfigs round
 // trip. We use a per-mount monotonic counter so that multiple newly-added rows
 // in the same session get unique `getRowId`s.
