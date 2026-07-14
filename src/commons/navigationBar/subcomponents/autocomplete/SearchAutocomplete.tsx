@@ -44,7 +44,7 @@ function SearchAutocomplete({ queryKey, fetchSearchData, onNavigate }: Props) {
     queryFn: fetchSearchData,
     enabled: shouldLoad,
   });
-  const rewritedSearchData = data ?? emptySearchData;
+  const searchData = data ?? emptySearchData;
 
   const [isOmnibarOpen, setIsOmnibarOpen] = useState(false);
   const [omnibarMode, setOmnibarMode] = useState<Mode>('text');
@@ -76,10 +76,10 @@ function SearchAutocomplete({ queryKey, fetchSearchData, onNavigate }: Props) {
     }
     switch (omnibarMode) {
       case 'text':
-        setSearchResults(sentenceAutoComplete(rewritedSearchData, q));
+        setSearchResults(sentenceAutoComplete(searchData, q));
         break;
       case 'index':
-        setSearchResults(indexAutoComplete(rewritedSearchData, q));
+        setSearchResults(indexAutoComplete(searchData, q));
         break;
     }
   };
@@ -90,10 +90,10 @@ function SearchAutocomplete({ queryKey, fetchSearchData, onNavigate }: Props) {
     setOmnibarMode('submenu');
     switch (omnibarMode) {
       case 'text':
-        setSearchResults(sentenceSearch(rewritedSearchData, result));
+        setSearchResults(sentenceSearch(searchData, result));
         break;
       case 'index':
-        setSearchResults(processIndexSearchResults(search(result, rewritedSearchData.indexTrie)));
+        setSearchResults(processIndexSearchResults(search(result, searchData.indexTrie)));
         break;
     }
   };
@@ -158,7 +158,7 @@ function SearchAutocomplete({ queryKey, fetchSearchData, onNavigate }: Props) {
         <>
           <Tag minimal>Section {getIndex(result)}</Tag>
           <br />
-          {focusResult(rewritedSearchData.idToContentMap[result], query)}
+          {focusResult(searchData.idToContentMap[result], query)}
         </>
       }
       onClick={() => {
@@ -245,10 +245,10 @@ function SearchAutocomplete({ queryKey, fetchSearchData, onNavigate }: Props) {
                       setPreviousMode(null);
                       switch (previousMode) {
                         case 'text':
-                          setSearchResults(sentenceAutoComplete(rewritedSearchData, query));
+                          setSearchResults(sentenceAutoComplete(searchData, query));
                           break;
                         case 'index':
-                          setSearchResults(indexAutoComplete(rewritedSearchData, query));
+                          setSearchResults(indexAutoComplete(searchData, query));
                           break;
                       }
                     }
