@@ -1,5 +1,5 @@
 import { useMediaQuery } from '@mantine/hooks';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 // eslint-disable-next-line no-restricted-imports
 import { type TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
@@ -53,46 +53,6 @@ export function useInput<T>(defaultValue: T) {
 /** Typed version of useSelector. Use this instead of the useSelector hook. */
 export const useAppSelector: TypedUseSelectorHook<OverallState> = useSelector;
 export const useAppDispatch: () => React.Dispatch<SourceActionType> = useDispatch;
-
-/**
- * Dynamically returns the dimensions (width & height) of an HTML element, updating whenever the
- * element is loaded or resized.
- *
- * @param ref A reference to the underlying HTML element.
- */
-
-export const useDimensions = (
-  ref: React.RefObject<HTMLElement | null>,
-): [width: number, height: number] => {
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
-
-  const resizeObserver = useMemo(
-    () =>
-      new ResizeObserver((entries: ResizeObserverEntry[], observer: ResizeObserver) => {
-        if (entries.length !== 1) {
-          throw new Error(
-            'Expected only a single HTML element to be observed by the ResizeObserver.',
-          );
-        }
-        const contentRect = entries[0].contentRect;
-        setWidth(contentRect.width);
-        setHeight(contentRect.height);
-      }),
-    [],
-  );
-
-  useEffect(() => {
-    const htmlElement = ref.current;
-    if (htmlElement === null) {
-      return;
-    }
-    resizeObserver.observe(htmlElement);
-    return () => resizeObserver.disconnect();
-  }, [ref, resizeObserver]);
-
-  return [width, height];
-};
 
 /**
  * Returns whether the current view falls under mobile
