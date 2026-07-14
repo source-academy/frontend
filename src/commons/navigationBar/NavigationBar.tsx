@@ -31,7 +31,7 @@ import AcademyNavigationBar, {
 } from './subcomponents/AcademyNavigationBar';
 import NavigationBarLangSelectButton from './subcomponents/NavigationBarLangSelectButton';
 import SicpNavigationBar from './subcomponents/SicpNavigationBar';
-import SicpPyNavigationBar from './subcomponents/SicpPyNavigationBar';
+import SicPyNavigationBar from './subcomponents/SicPyNavigationBar';
 
 export type NavbarEntryInfo = {
   to: string;
@@ -338,7 +338,7 @@ function NavigationBar() {
       </Navbar>
 
       {navbarType === 'hidden' ? null : navbarType === 'sicppy' ? (
-        <SicpPyNavigationBar />
+        <SicPyNavigationBar />
       ) : navbarType === 'sicp' ? (
         <SicpNavigationBar />
       ) : !Constants.playgroundOnly && isEnrolledInACourse && !isMobileBreakpoint ? (

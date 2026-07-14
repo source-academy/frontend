@@ -13,7 +13,7 @@ import { fetchSicpySearchData } from '../../../features/textbook/navigationBar/a
 import SearchAutocomplete from '../../../features/textbook/navigationBar/autocomplete/SearchAutocomplete';
 import SicpPyToc from '../../../pages/sicp/subcomponents/SicpPyToc';
 
-function SicpPyNavigationBar() {
+function SicPyNavigationBar() {
   const [isTocOpen, setIsTocOpen] = useState(false);
   const { section } = useParams<{ section: string }>();
   const navigate = useNavigate();
@@ -85,4 +85,4 @@ function SicpPyNavigationBar() {
   );
 }
 
-export default SicpPyNavigationBar;
+export default SicPyNavigationBar;
