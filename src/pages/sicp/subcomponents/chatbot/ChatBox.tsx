@@ -1,6 +1,6 @@
 import { Button } from '@blueprintjs/core';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
-import { useTokens } from 'src/commons/utils/Hooks';
+import { useTokens, useTypedSelector } from 'src/commons/utils/Hooks';
 import { continueChat, initChat } from 'src/features/sicp/chatCompletion/api';
 import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { v4 as uuid } from 'uuid';
@@ -47,6 +47,9 @@ function ChatBox({
   const [userInput, setUserInput] = useState('');
   const [maxContentSize, setMaxContentSize] = useState(1000);
   const tokens = useTokens();
+  const selectedLanguageId = useTypedSelector(
+    s => s.languageDirectory.selectedLanguageId ?? undefined,
+  );
 
   const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value);
@@ -65,7 +68,7 @@ function ChatBox({
     const currentSection = getSection();
     const currentText = getText();
 
-    continueChat(tokens, userInput, currentSection, currentText)
+    continueChat(tokens, userInput, currentSection, currentText, selectedLanguageId)
       .then(resp => {
         setMessages(prev => [...prev, { id: uuid(), role: 'assistant', content: resp.response }]);
       })
@@ -73,7 +76,7 @@ function ChatBox({
         setMessages(prev => [...prev, createErrorMessage()]);
       })
       .finally(() => setIsLoading(false));
-  }, [tokens, userInput, getSection, getText]);
+  }, [tokens, userInput, getSection, getText, selectedLanguageId]);
 
   const keyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
     e => {
@@ -85,7 +88,7 @@ function ChatBox({
   );
 
   const resetChat = useCallback(() => {
-    initChat(tokens)
+    initChat(tokens, selectedLanguageId)
       .then(resp => {
         const conversationMessages = resp.messages;
         const maxMessageSize = resp.maxContentSize;
@@ -104,7 +107,7 @@ function ChatBox({
       .catch(() => {
         setMessages([createInitialMessage()]);
       });
-  }, [tokens]);
+  }, [tokens, selectedLanguageId]);
 
   useEffect(() => {
     resetChat();

@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import { readLocalStorage, setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
 import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
@@ -130,6 +130,16 @@ function SicpPyLayout() {
     scrollRefIntoView(elem, parentRef);
   }, [loading, location.hash]);
 
+  const selectedLanguage = useTypedSelector(s =>
+    s.languageDirectory.selectedLanguageId
+      ? s.languageDirectory.languageMap[s.languageDirectory.selectedLanguageId]
+      : undefined,
+  );
+
+  const showChatbotForLanguage = Boolean(
+    selectedLanguage && selectedLanguage.textbook?.url?.endsWith('json_py/'),
+  );
+
   return (
     <div
       className={classNames('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}
@@ -144,7 +154,7 @@ function SicpPyLayout() {
           )}
         </CodeSnippetProvider>
       </SicpErrorBoundary>
-      {isLoggedIn && Constants.featureFlags.enableSicpChatbot && (
+      {isLoggedIn && Constants.featureFlags.enableSicpChatbot && showChatbotForLanguage && (
         <Chatbot getSection={getSection} getText={getText} />
       )}
     </div>
