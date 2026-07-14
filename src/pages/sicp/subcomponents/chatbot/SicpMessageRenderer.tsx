@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import type { RenderMessageContext } from 'src/components/ui/chatbot/ChatBox';
 
 import ChatbotCodeSnippet from './ChatbotCodeSnippet';
 
@@ -8,14 +9,11 @@ type ChatMessage = {
   content: string;
 };
 
-// Message renderer component that can render code blocks with interactive snippets
-type Props = {
-  message: ChatMessage;
-  activeSnippetId: string;
-  setActiveSnippetId: (id: string) => void;
-};
-
-function SicpMessageRenderer({ message, activeSnippetId, setActiveSnippetId }: Props) {
+/**
+ * Message renderer component that can render code blocks with interactive snippets.
+ */
+function SicpMessageRenderer(message: ChatMessage, ctx: RenderMessageContext) {
+  const { activeSnippetId, setActiveSnippetId } = ctx;
   const content = message.content;
   const messageId = message.id;
 

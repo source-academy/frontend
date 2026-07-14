@@ -1,5 +1,6 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import type { RenderMessageContext } from 'src/components/ui/chatbot/ChatBox';
 import ChatbotCodeSnippet from 'src/pages/sicp/subcomponents/chatbot/ChatbotCodeSnippet';
 
 type ChatMessage = {
@@ -8,13 +9,8 @@ type ChatMessage = {
   content: string;
 };
 
-type Props = {
-  message: ChatMessage;
-  activeSnippetId: string;
-  setActiveSnippetId: (id: string) => void;
-};
-
-function RagMessageRenderer({ message, activeSnippetId, setActiveSnippetId }: Props) {
+function RagMessageRenderer(message: ChatMessage, ctx: RenderMessageContext) {
+  const { activeSnippetId, setActiveSnippetId } = ctx;
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
