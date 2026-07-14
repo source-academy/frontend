@@ -4,19 +4,13 @@ import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router';
-import { setLocalStorage } from 'src/commons/hooks/useLocalStorageState';
+import { readLocalStorage, setLocalStorage } from 'src/commons/hooks/useLocalStorageState';
 import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
-import {
-  readSicpSectionLocalStorage,
-  scrollRefIntoView,
-  setSicpSectionLocalStorage,
-  SICP_CACHE_KEY,
-  SICP_INDEX,
-} from 'src/features/sicp/utils/SicpUtils';
+import { scrollRefIntoView } from 'src/features/sicp/utils/SicpUtils';
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
@@ -24,6 +18,18 @@ import Chatbot from '../../pages/sicp/subcomponents/chatbot/Chatbot';
 
 const baseUrl = Constants.sicpBackendUrl + 'json/';
 const extension = '.json';
+
+const SICP_INDEX = 'index';
+const SICP_CACHE_KEY = 'sicp-section';
+
+const setSicpSectionLocalStorage = (value: string) => {
+  setLocalStorage(SICP_CACHE_KEY, value);
+};
+
+const readSicpSectionLocalStorage = () => {
+  const data = readLocalStorage(SICP_CACHE_KEY, SICP_INDEX);
+  return data;
+};
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
