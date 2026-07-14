@@ -1,16 +1,16 @@
-type ChatMessage = {
+export type ChatMessage = {
   id: string;
   role: 'user' | 'assistant';
   content: string;
 };
 
-type InitChatResponse = {
+export type InitChatResponse = {
   messages: ChatMessage[];
   conversationId: number;
   maxContentSize: number;
 };
 
-type ContinueChatResponse = {
+export type SendMessageResponse = {
   response: string;
   conversationId: number;
 };
