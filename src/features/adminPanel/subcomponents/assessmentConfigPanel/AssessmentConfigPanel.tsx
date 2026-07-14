@@ -4,11 +4,11 @@ import {
   type ColDef,
   type GetRowIdParams,
   type RowDragEvent,
-  themeBalham,
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { isEqual } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { themeSource } from 'src/commons/agGrid/theme';
 import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import type { KeysOfType } from 'src/commons/utils/TypeHelper';
@@ -310,7 +310,7 @@ function AssessmentConfigPanel({ configs, onChange, onHasChangesChange, initialC
       </div>
       <div className="Grid">
         <AgGridReact
-          theme={themeBalham}
+          theme={themeSource}
           domLayout="autoHeight"
           columnDefs={columnDefs}
           defaultColDef={defaultColumnDefs}
