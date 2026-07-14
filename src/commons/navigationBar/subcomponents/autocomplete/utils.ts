@@ -38,8 +38,8 @@ export function sentenceSearch(searchData: SearchData, keyStr: string): string[]
   const words = normalizedKey.split(' ');
   const longestWord = words.reduce((a, b) => (a.length > b.length ? a : b), '');
   return search(longestWord, searchData.textTrie).filter(id => {
-    const content = searchData.idToContentMap[id].toLowerCase().replaceAll('\n', ' ');
-    return content.includes(normalizedKey);
+    const content = searchData.idToContentMap[id]?.toLowerCase().replaceAll('\n', ' ');
+    return content?.includes(normalizedKey) ?? false;
   });
 }
 
