@@ -8,6 +8,7 @@ import { readLocalStorage, setLocalStorage } from 'src/commons/hooks/useLocalSto
 import Constants from 'src/commons/utils/Constants';
 import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
+import { scrollRefIntoView } from 'src/features/sicp/utils/SicpUtils';
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
@@ -19,18 +20,6 @@ const SICPPY_CACHE_KEY = 'sicppy-section';
 const SICPPY_DEFAULT_SECTION = 'index';
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
-
-const scrollRefIntoView = (
-  ref: HTMLElement | null,
-  parentRef: React.RefObject<HTMLDivElement | null>,
-) => {
-  if (!ref || !parentRef?.current) {
-    return;
-  }
-  const parent = parentRef.current!;
-  const relativeTop = window.scrollY > parent.offsetTop ? window.scrollY : parent.offsetTop;
-  parent.scrollTo({ behavior: 'smooth', top: ref.offsetTop - relativeTop });
-};
 
 function SicpPyLayout() {
   const [data, setData] = useState(<></>);
@@ -44,6 +33,11 @@ function SicpPyLayout() {
   useEffect(() => {
     if (!section) {
       const cached = readLocalStorage(SICPPY_CACHE_KEY, SICPPY_DEFAULT_SECTION);
+      /**
+       * Handles rerouting to the latest viewed section when clicking from
+       * the main application navbar. Navigate replace logic is used to allow the
+       * user to still use the browser back button to navigate the app.
+       */
       navigate(`/sicpy/${cached}`, { replace: true });
       return;
     }
@@ -78,8 +72,10 @@ function SicpPyLayout() {
         }
         console.error(error);
         if (error.message === 'Not Found') {
+          // page not found
           setData(getSicpError(SicpErrorType.PAGE_NOT_FOUND_ERROR));
         } else if (error instanceof ParseJsonError) {
+          // error occurred while parsing JSON
           setData(getSicpError(SicpErrorType.PARSING_ERROR));
         } else {
           setData(getSicpError(SicpErrorType.UNEXPECTED_ERROR));
@@ -91,10 +87,12 @@ function SicpPyLayout() {
     return () => controller.abort();
   }, [section, navigate]);
 
+  // Scroll to correct position
   useEffect(() => {
     if (loading) {
       return;
     }
+
     const hash = location.hash;
     const elem = (hash ? document.getElementById(hash.slice(1)) : null) ?? refs.current[hash];
     scrollRefIntoView(elem, parentRef);
@@ -106,6 +104,7 @@ function SicpPyLayout() {
       ref={parentRef}
     >
       <SicpErrorBoundary>
+        {/* Close all active code snippet when new page is loaded */}
         <CodeSnippetProvider key={section}>
           {loading ? (
             <div className="sicp-content">{loadingComponent}</div>

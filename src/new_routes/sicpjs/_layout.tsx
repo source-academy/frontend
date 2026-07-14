@@ -12,6 +12,7 @@ import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import {
   readSicpSectionLocalStorage,
+  scrollRefIntoView,
   setSicpSectionLocalStorage,
   SICP_CACHE_KEY,
   SICP_INDEX,
@@ -45,23 +46,6 @@ const getText = () => {
   });
 
   return visibleParagraphs;
-};
-
-const scrollRefIntoView = (
-  ref: HTMLElement | null,
-  parentRef: React.RefObject<HTMLDivElement | null>,
-) => {
-  if (!ref || !parentRef?.current) {
-    return;
-  }
-
-  const parent = parentRef.current!;
-  const relativeTop = window.scrollY > parent.offsetTop ? window.scrollY : parent.offsetTop;
-
-  parent.scrollTo({
-    behavior: 'smooth',
-    top: ref.offsetTop - relativeTop,
-  });
 };
 
 function SicpLayout() {
@@ -116,7 +100,6 @@ function SicpLayout() {
       })
       .catch(error => {
         console.error(error);
-
         if (error.message === 'Not Found') {
           // page not found
           setData(getSicpError(SicpErrorType.PAGE_NOT_FOUND_ERROR));
