@@ -1,51 +1,36 @@
 import { Tree, type TreeNodeInfo } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash-es';
-import { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useState } from 'react';
 
-import toc from '../../../features/sicp/data/toc.json';
-
-type TocProps = OwnProps;
-
-type OwnProps = {
-  handleCloseToc?: () => void;
+type Props = {
+  handleClick?: (node: TreeNodeInfo) => void;
+  toc: TreeNodeInfo[];
 };
 
 /**
  * Table of contents of SICP.
  */
-function SicpToc(props: TocProps) {
-  const [sidebarContent, setSidebarContent] = useState(toc as TreeNodeInfo[]);
-  const navigate = useNavigate();
+function SicpToc({ handleClick, toc }: Props) {
+  const [sidebarContent, setSidebarContent] = useState(toc);
 
-  const handleNodeExpand = (_node: TreeNodeInfo, path: integer[]) => {
+  const handleNodeExpand = (_node: TreeNodeInfo, path: number[]) => {
     const newState = cloneDeep(sidebarContent);
     Tree.nodeFromPath(path, newState).isExpanded = true;
     setSidebarContent(newState);
   };
 
-  const handleNodeCollapse = (_node: TreeNodeInfo, path: integer[]) => {
+  const handleNodeCollapse = (_node: TreeNodeInfo, path: number[]) => {
     const newState = cloneDeep(sidebarContent);
     Tree.nodeFromPath(path, newState).isExpanded = false;
     setSidebarContent(newState);
   };
-
-  const handleNodeClicked = useCallback(
-    (node: TreeNodeInfo) => {
-      if (props.handleCloseToc) {
-        props.handleCloseToc();
-      }
-      navigate('/sicpjs/' + String(node.nodeData));
-    },
-    [navigate, props],
-  );
 
   return (
     <div className="sicp-toc">
       <Tree
         className="sicp-toc-tree"
         contents={sidebarContent}
-        onNodeClick={handleNodeClicked}
+        onNodeClick={handleClick}
         onNodeCollapse={handleNodeCollapse}
         onNodeExpand={handleNodeExpand}
       />

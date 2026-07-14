@@ -1,5 +1,6 @@
 import { H2 } from '@blueprintjs/core';
 
+import toc from '../../../../features/sicp/data/toc.json';
 import SicpToc from '../SicpToc';
 import SicpAuthors from './subcomponents/SicpAuthors';
 import SicpLicenses from './subcomponents/SicpLicenses';
@@ -23,7 +24,7 @@ function SicpIndexPage({
       </div>
       <br />
       <H2>Content</H2>
-      <SicpToc />
+      <SicpToc toc={toc} />
       <br />
       <H2>Licenses</H2>
       <SicpLicenses />
