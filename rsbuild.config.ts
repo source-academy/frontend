@@ -13,6 +13,18 @@ import { pluginTailwindcss } from '@rsbuild/plugin-tailwindcss';
 const { publicVars, rawPublicVars } = loadEnv({ prefixes: ['REACT_APP_'] });
 
 export default defineConfig({
+  // Split icons from `@blueprintjs/icons` into a separate chunk to avoid bloating the main bundle with icons that are not used in the initial render.
+  splitChunks: {
+    cacheGroups: {
+      'blueprintjs-icons': {
+        test: /[\\/]node_modules[\\/]@blueprintjs[\\/]icons[\\/]/,
+        name: 'blueprintjs-icons',
+        chunks: 'all',
+        enforce: true,
+      },
+    },
+  },
+  performance: {},
   plugins: [
     pluginReact(),
     pluginSvgr({ mixedImport: true }),
