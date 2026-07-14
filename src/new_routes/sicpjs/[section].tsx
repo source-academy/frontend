@@ -30,7 +30,9 @@ function SicpPage() {
   const { data } = useOutletContext<{ data: React.ReactNode }>();
 
   return section === 'index' ? (
-    <SicpIndexPage titleImageUrl={titleImageUrl ?? undefined} />
+    <SicpIndexPage
+      titleImageUrl={titleImageUrl ?? 'https://source-academy.github.io/sicp/sicpjs.png'}
+    />
   ) : (
     <div className="sicp-content">
       <Link id="begin" to="#begin" />
