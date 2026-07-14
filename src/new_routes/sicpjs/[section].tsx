@@ -3,6 +3,7 @@ import 'katex/dist/katex.min.css';
 import { Button } from '@blueprintjs/core';
 import { Link, useNavigate, useOutletContext, useParams } from 'react-router';
 import { useAppSelector } from 'src/commons/utils/Hooks';
+import tocNavigation from 'src/features/sicp/data/toc-navigation.json';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 
 import SicpIndexPage from '../../pages/sicp/subcomponents/sicpIndexPage/SicpIndexPage';
@@ -14,19 +15,15 @@ function SicpPage() {
     s => s.languageDirectory.languageMap['source1']?.textbook?.titleImageUrl,
   );
 
-  const handleNavigation = (sect: string) => {
-    navigate('/sicpjs/' + sect);
-  };
+  // `section` is always defined due to the route configuration
+  const prev = getPrev(tocNavigation, section ?? '');
+  const next = getNext(tocNavigation, section ?? '');
+  const handleNavigation = (sect: string) => navigate('/sicpjs/' + sect);
 
-  // `section` is defined due to the route configuration
   const navigationButtons = (
     <div className="sicp-navigation-buttons">
-      {getPrev(section!) && (
-        <Button onClick={() => handleNavigation(getPrev(section!)!)}>Previous</Button>
-      )}
-      {getNext(section!) && (
-        <Button onClick={() => handleNavigation(getNext(section!)!)}>Next</Button>
-      )}
+      {prev && <Button onClick={() => handleNavigation(prev)}>Previous</Button>}
+      {next && <Button onClick={() => handleNavigation(next)}>Next</Button>}
     </div>
   );
 

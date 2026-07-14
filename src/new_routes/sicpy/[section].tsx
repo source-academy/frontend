@@ -3,7 +3,8 @@ import 'katex/dist/katex.min.css';
 import { Button, H2 } from '@blueprintjs/core';
 import { Link, useNavigate, useOutletContext, useParams } from 'react-router';
 import { useAppSelector } from 'src/commons/utils/Hooks';
-import { getNextPy, getPrevPy } from 'src/features/sicp/TableOfContentsHelperPy';
+import tocNavigation from 'src/features/sicp/data/toc-navigation-py.json';
+import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 import SicpToc from 'src/pages/sicp/subcomponents/SicpToc';
 
 import toc from '../../features/sicp/data/toc-py.json';
@@ -34,8 +35,9 @@ function SicpPyPage() {
   const { section } = useParams<{ section: string }>();
   const navigate = useNavigate();
 
-  const prev = getPrevPy(section ?? '');
-  const next = getNextPy(section ?? '');
+  // `section` is always defined due to the route configuration
+  const prev = getPrev(tocNavigation, section ?? '');
+  const next = getNext(tocNavigation, section ?? '');
   const handleNavigation = (sect: string) => navigate('/sicpy/' + sect);
 
   const navigationButtons = (
