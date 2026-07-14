@@ -267,8 +267,7 @@ function AssessmentConfigPanel({ configs, onChange, onHasChangesChange, initialC
     ],
   );
 
-  // Live-reorder rows while the user drags them. ag-grid's `rowDragManaged`
-  // will pick up the new array ordering on the next render.
+  // Live-reorder rows while the user drags them
   const onRowDragMove = useCallback(
     (event: RowDragEvent<AssessmentConfiguration>) => {
       const movingNode = event.node;
