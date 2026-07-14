@@ -29,7 +29,7 @@ export function useLocalStorageState<T>(
   key: string,
   defaultValue: T,
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
-  const [value, setValue] = useState<T>(readLocalStorage(key, defaultValue));
+  const [value, setValue] = useState<T>(() => readLocalStorage(key, defaultValue));
 
   useEffect(() => {
     setLocalStorage(key, value);
