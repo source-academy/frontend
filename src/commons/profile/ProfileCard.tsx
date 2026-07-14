@@ -45,7 +45,7 @@ function ProfileCard(props: Props) {
       data-testid="profile-summary-navlink"
     >
       <Callout
-        className="profile-summary-callout leading-none py-1 px-3 pl-7.5 rounded-md hover:bg-[rgba(138,155,168,0.25)] [&>div:not(:first-of-type)]:mt-[0.2em]"
+        className="profile-summary-callout relative leading-none py-1 px-3 pl-7.5 rounded-md hover:bg-[rgba(138,155,168,0.25)] [&>div:not(:first-of-type)]:mt-[0.2em] [&_[class*='-icon']]:absolute [&_[class*='-icon']]:top-1.5 [&_[class*='-icon']]:left-1.5 [&_svg]:h-4.5 [&_svg]:w-4.5"
         key={`${item.title}-${item.id}`}
         icon={props.renderIcon(item.type)}
         title={item.title}
