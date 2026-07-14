@@ -1,3 +1,4 @@
+import type { TreeNodeInfo } from '@blueprintjs/core';
 import { Alignment, Drawer, Navbar, NavbarGroup, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useState } from 'react';
@@ -7,8 +8,9 @@ import {
   getNextPy as getNext,
   getPrevPy as getPrev,
 } from 'src/features/sicp/TableOfContentsHelperPy';
+import SicpToc from 'src/pages/sicp/subcomponents/SicpToc';
 
-import SicpPyToc from '../../../pages/sicp/subcomponents/SicpPyToc';
+import toc from '../../../features/sicp/data/toc-py.json';
 import { TableOfContentsButton } from '../../sicp/TableOfContentsButton';
 import { fetchSicpySearchData } from './autocomplete/query';
 import SearchAutocomplete from './autocomplete/SearchAutocomplete';
@@ -22,6 +24,10 @@ function SicPyNavigationBar() {
 
   const handleOpenToc = () => setIsTocOpen(true);
   const handleCloseToc = () => setIsTocOpen(false);
+  const handleClickToc = (node: TreeNodeInfo) => {
+    setIsTocOpen(false);
+    handleNavigation(String(node.nodeData));
+  };
 
   const handleNavigation = (sect: string) => {
     navigate('/sicpy/' + sect);
@@ -79,7 +85,7 @@ function SicPyNavigationBar() {
         </NavbarGroup>
       </Navbar>
       <Drawer {...drawerProps} className="sicp-toc-drawer">
-        <SicpPyToc handleCloseToc={() => setIsTocOpen(false)} />
+        <SicpToc handleClick={handleClickToc} toc={toc} />
       </Drawer>
     </>
   );

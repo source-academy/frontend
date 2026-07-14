@@ -4,10 +4,11 @@ import { Button, H2 } from '@blueprintjs/core';
 import { Link, useNavigate, useOutletContext, useParams } from 'react-router';
 import { useAppSelector } from 'src/commons/utils/Hooks';
 import { getNextPy, getPrevPy } from 'src/features/sicp/TableOfContentsHelperPy';
+import SicpToc from 'src/pages/sicp/subcomponents/SicpToc';
 
-import SicpPyToc from '../../pages/sicp/subcomponents/SicpPyToc';
+import toc from '../../features/sicp/data/toc-py.json';
 
-function SicpPyIndexPage() {
+function SicPyIndexPage() {
   const titleImageUrl = useAppSelector(
     s => s.languageDirectory.languageMap['python1']?.textbook?.titleImageUrl,
   );
@@ -24,7 +25,7 @@ function SicpPyIndexPage() {
         </div>
       </div>
       <H2 style={{ paddingLeft: '2rem' }}>Contents</H2>
-      <SicpPyToc />
+      <SicpToc toc={toc} />
     </div>
   );
 }
@@ -47,7 +48,7 @@ function SicpPyPage() {
   const { data } = useOutletContext<{ data: React.ReactNode }>();
 
   return section === 'index' ? (
-    <SicpPyIndexPage />
+    <SicPyIndexPage />
   ) : (
     <div className="sicp-content">
       <Link id="begin" to="#begin" />
