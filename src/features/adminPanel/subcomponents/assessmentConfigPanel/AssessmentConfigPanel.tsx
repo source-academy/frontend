@@ -308,26 +308,24 @@ function AssessmentConfigPanel({ configs, onChange, onHasChangesChange, initialC
         <H2>Assessment Configuration</H2>
         <Button text="Add Row" onClick={handleAddRow} className="add-row-button" />
       </div>
-      <div className="Grid">
-        <AgGridReact
-          theme={themeSource}
-          domLayout="autoHeight"
-          columnDefs={columnDefs}
-          defaultColDef={defaultColumnDefs}
-          getRowId={getRowId}
-          rowData={configs}
-          rowHeight={36}
-          suppressCellFocus
-          suppressMovableColumns
-          suppressPaginationPanel
-          onRowDragMove={onRowDragMove}
-          onCellValueChanged={onCellValueChanged}
-        />
-        <div className="footer-text">
-          *If you create an assessment with these toggles enabled, they will be activated within the
-          assessment <b>by default</b>. However, you can also visit ground control to manually
-          override these settings if needed.
-        </div>
+      <AgGridReact
+        theme={themeSource}
+        domLayout="autoHeight"
+        columnDefs={columnDefs}
+        defaultColDef={defaultColumnDefs}
+        getRowId={getRowId}
+        rowData={configs}
+        rowHeight={36}
+        suppressCellFocus
+        suppressMovableColumns
+        suppressPaginationPanel
+        onRowDragMove={onRowDragMove}
+        onCellValueChanged={onCellValueChanged}
+      />
+      <div className="footer-text">
+        *If you create an assessment with these toggles enabled, they will be activated within the
+        assessment <b>by default</b>. However, you can also visit ground control to manually
+        override these settings if needed.
       </div>
     </div>
   );
