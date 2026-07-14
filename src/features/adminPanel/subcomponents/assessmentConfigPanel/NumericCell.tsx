@@ -8,27 +8,23 @@ type Props = {
   data: AssessmentConfiguration;
   field: KeysOfType<AssessmentConfiguration, number>;
   node: IRowNode<AssessmentConfiguration>;
-  setStateHandler: (index: number, value: number) => void;
+  onChange: (
+    row: AssessmentConfiguration,
+    field: KeysOfType<AssessmentConfiguration, number>,
+    value: number,
+  ) => void;
 };
 
-function NumericCell(props: Props) {
-  const { data } = props;
-  const { rowIndex } = props.node;
-
+function NumericCell({ data, field, node, onChange }: Props) {
   const changeHandler = useCallback(
     (value: number) => {
-      props.setStateHandler(rowIndex!, value);
+      onChange(data, field, value);
     },
-    [props, rowIndex],
+    [onChange, data, field],
   );
 
   return (
-    <NumericInput
-      value={data[props.field]}
-      min={0}
-      clampValueOnBlur
-      onValueChange={changeHandler}
-    />
+    <NumericInput value={data[field]} min={0} clampValueOnBlur onValueChange={changeHandler} />
   );
 }
 

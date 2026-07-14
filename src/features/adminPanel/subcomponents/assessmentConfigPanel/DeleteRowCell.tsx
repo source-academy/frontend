@@ -8,20 +8,19 @@ import ControlButton from 'src/commons/ControlButton';
 type Props = {
   data: AssessmentConfiguration;
   node: IRowNode<AssessmentConfiguration>;
-  deleteRowHandler: (index: number) => void;
+  onRemove: (row: AssessmentConfiguration) => void;
 };
 
-function DeleteRowCell({ data, node, deleteRowHandler }: Props) {
-  const { rowIndex } = node;
+function DeleteRowCell({ data, onRemove }: Props) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const clickHandler = () => {
     setIsDialogOpen(true);
   };
   const handleDelete = useCallback(() => {
-    deleteRowHandler(rowIndex!);
+    onRemove(data);
     setIsDialogOpen(false);
-  }, [deleteRowHandler, rowIndex]);
+  }, [onRemove, data]);
 
   return (
     <>
