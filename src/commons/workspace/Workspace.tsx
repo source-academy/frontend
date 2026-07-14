@@ -8,12 +8,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import ControlBar, { type ControlBarProps } from '../controlBar/ControlBar';
 import EditorContainer, { type EditorContainerProps } from '../editor/EditorContainer';
+import { useDimensions } from '../hooks/useDimensions';
 import McqChooser, { type McqChooserProps } from '../mcqChooser/McqChooser';
 import { Prompt } from '../ReactRouterPrompt';
 import Repl, { type ReplProps } from '../repl/Repl';
 import SideBar, { type SideBarTab } from '../sideBar/SideBar';
 import SideContent, { type SideContentProps } from '../sideContent/SideContent';
-import { useAppSelector, useDimensions } from '../utils/Hooks';
+import { useAppSelector } from '../utils/Hooks';
 
 export type WorkspaceProps = {
   handleSideContentHeightChange: (height: number) => void;

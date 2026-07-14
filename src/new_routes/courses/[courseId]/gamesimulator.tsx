@@ -49,9 +49,9 @@ function GameSimulator() {
   }, [session]);
 
   return (
-    <div className="GameSimulatorWrapper">
+    <div className="flex flex-row m-7.5 rounded-[10px] overflow-hidden">
       <div id="game-display" />
-      <div className="LeftAlign GameSimulatorPanel">
+      <div className="flex flex-col items-start bg-white w-200 h-full overflow-scroll p-5">
         {gameSimulatorState === GameSimulatorState.DEFAULT && <h3>Welcome to Game simulator!</h3>}
         {gameSimulatorState === GameSimulatorState.CHAPTERSIMULATOR && <ChapterSimulator />}
         {gameSimulatorState === GameSimulatorState.CHAPTERPUBLISHER && <ChapterPublisher />}

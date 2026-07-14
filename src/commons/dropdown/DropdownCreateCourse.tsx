@@ -91,7 +91,6 @@ function DropdownCreateCourse(props: Props) {
 
   return (
     <Dialog
-      className="create-course"
       icon={IconNames.ADD}
       isCloseButtonShown
       canOutsideClickClose={false}
@@ -141,13 +140,13 @@ function DropdownCreateCourse(props: Props) {
           labelFor="moduleHelpText"
         >
           <Text tagName="span">Module Help Text&nbsp;</Text>
-          <Text tagName="span" className="optional-text">
+          <Text tagName="span" className="optional-text text-[#5c7080]">
             (optional)
           </Text>
           <Tabs
             selectedTabId={courseHelpTextSelectedTab}
             onChange={onChangeTabs}
-            className="module-help-text-tabs"
+            className="module-help-text-tabs inline-block ml-3.75"
           >
             <Tab id={CourseHelpTextEditorTab.WRITE} title="Write" />
             <Tab id={CourseHelpTextEditorTab.PREVIEW} title="Preview" />
@@ -155,7 +154,7 @@ function DropdownCreateCourse(props: Props) {
           {courseHelpTextSelectedTab === CourseHelpTextEditorTab.WRITE && (
             <TextArea
               id="moduleHelpText"
-              className="input-textarea"
+              className="input-textarea h-25"
               fill
               value={courseConfig.moduleHelpText}
               onChange={e =>
@@ -167,13 +166,13 @@ function DropdownCreateCourse(props: Props) {
             />
           )}
           {courseHelpTextSelectedTab === CourseHelpTextEditorTab.PREVIEW && (
-            <div className="input-markdown">
+            <div className="input-markdown p-2.5 h-25 bg-[#f5f5f5] rounded overflow-auto [box-shadow:inset_0_0_0_1px_rgba(16,22,26,0.15),inset_0_1px_1px_rgba(16,22,26,0.2)] [&>div>*]:m-0">
               <Markdown content={courseConfig.moduleHelpText || ''} openLinksInNewWindow />
             </div>
           )}
         </FormGroup>
 
-        <div className="boolean-container">
+        <div className="boolean-container flex">
           <div>
             <Switch
               checked={courseConfig.viewable}
@@ -280,7 +279,7 @@ function DropdownCreateCourse(props: Props) {
             />
           </FormGroup>
         </div>
-        <div className="create-course-button-container">
+        <div className="create-course-button-container mt-5 flex justify-center items-center">
           <Button text="Create Course" onClick={submitHandler} />
         </div>
       </DialogBody>

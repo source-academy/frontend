@@ -51,7 +51,7 @@ function ChapterSimulatorTextLoader({ storageName, s3TxtFiles }: StorageProps) {
   );
 
   return (
-    <div className="LeftAlign">
+    <div className="flex flex-col items-start">
       <hr />
       <Tabs id="Tabs" key="vertical" renderActiveTabPanelOnly>
         <Tab id="own" title="Local" panel={uploadButton} />
