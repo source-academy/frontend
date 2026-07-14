@@ -8,9 +8,10 @@ import {
   SpinnerSize,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { type ColDef, type GridApi, type GridReadyEvent, themeBalham } from 'ag-grid-community';
+import { type ColDef, type GridApi, type GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { useMemo, useRef, useState } from 'react';
+import { themeSource } from 'src/commons/agGrid/theme';
 import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../../../commons/application/actions/SessionActions';
@@ -206,24 +207,6 @@ function GroundControl() {
     </Collapse>
   );
 
-  const grid = (
-    <div className="Grid">
-      <AgGridReact
-        theme={themeBalham}
-        alwaysShowHorizontalScroll
-        domLayout="autoHeight"
-        columnDefs={columnDefs}
-        defaultColDef={defaultColumnDefs}
-        onGridReady={onGridReady}
-        rowData={assessmentOverviews}
-        rowHeight={35}
-        suppressCellFocus
-        suppressMovableColumns
-        suppressPaginationPanel
-      />
-    </div>
-  );
-
   if (!assessmentOverviews) {
     return (
       <NonIdealState
@@ -238,7 +221,19 @@ function GroundControl() {
       {controls}
       {dropzone}
       <Divider />
-      {grid}
+      <AgGridReact
+        theme={themeSource}
+        alwaysShowHorizontalScroll
+        domLayout="autoHeight"
+        columnDefs={columnDefs}
+        defaultColDef={defaultColumnDefs}
+        onGridReady={onGridReady}
+        rowData={assessmentOverviews}
+        rowHeight={35}
+        suppressCellFocus
+        suppressMovableColumns
+        suppressPaginationPanel
+      />
     </div>
   );
 

@@ -3,6 +3,12 @@ import { useCallback } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import type { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
 
+const roleOptions = [
+  { label: 'Student', value: Role.Student },
+  { label: 'Staff', value: Role.Staff },
+  { label: 'Admin', value: Role.Admin },
+];
+
 type Props = {
   data: AdminPanelCourseRegistration;
   rowIndex: number;
@@ -19,16 +25,10 @@ function RolesCell(props: Props) {
     },
     [data, props],
   );
-
-  const roleOptions = [
-    { label: 'Student', value: Role.Student },
-    { label: 'Staff', value: Role.Staff },
-    { label: 'Admin', value: Role.Admin },
-  ];
   return (
     <Popover
       content="You cannot downgrade yourself from an admin role!"
-      interactionKind="click"
+      interactionKind="hover-target"
       position={Position.TOP}
       disabled={props.courseRegId !== data.courseRegId}
     >
@@ -37,7 +37,7 @@ function RolesCell(props: Props) {
         onChange={changeHandler}
         fill
         minimal
-        style={{ textAlign: 'center' }}
+        style={{ verticalAlign: 'top' }}
         value={data.role}
         disabled={props.courseRegId === data.courseRegId}
       />
