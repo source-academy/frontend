@@ -1,13 +1,11 @@
 import { Button, Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import type { IRowNode } from 'ag-grid-community';
 import { useCallback, useState } from 'react';
 import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import ControlButton from 'src/commons/ControlButton';
 
 type Props = {
   data: AssessmentConfiguration;
-  node: IRowNode<AssessmentConfiguration>;
   onRemove: (row: AssessmentConfiguration) => void;
 };
 
