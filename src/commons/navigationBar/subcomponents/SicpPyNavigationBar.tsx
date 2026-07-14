@@ -9,9 +9,9 @@ import {
 } from 'src/features/sicp/TableOfContentsHelperPy';
 
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
+import { fetchSicpySearchData } from '../../../features/textbook/navigationBar/autocomplete/query';
+import SearchAutocomplete from '../../../features/textbook/navigationBar/autocomplete/SearchAutocomplete';
 import SicpPyToc from '../../../pages/sicp/subcomponents/SicpPyToc';
-import { fetchSicpySearchData } from './autocomplete/query';
-import SearchAutocomplete from './autocomplete/SearchAutocomplete';
 
 function SicpPyNavigationBar() {
   const [isTocOpen, setIsTocOpen] = useState(false);

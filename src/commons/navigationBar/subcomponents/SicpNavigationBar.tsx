@@ -6,9 +6,9 @@ import ControlButton from 'src/commons/ControlButton';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 
 import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
+import { fetchSicpSearchData } from '../../../features/textbook/navigationBar/autocomplete/query';
+import SearchAutocomplete from '../../../features/textbook/navigationBar/autocomplete/SearchAutocomplete';
 import SicpToc from '../../../pages/sicp/subcomponents/SicpToc';
-import { fetchSicpSearchData } from './autocomplete/query';
-import SearchAutocomplete from './autocomplete/SearchAutocomplete';
 
 function SicpNavigationBar() {
   const [isTocOpen, setIsTocOpen] = useState(false);
