@@ -1,40 +1,22 @@
 import 'katex/dist/katex.min.css';
 
-import { Button, H2 } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import { Link, useNavigate, useOutletContext, useParams } from 'react-router';
 import { useAppSelector } from 'src/commons/utils/Hooks';
-import { getNextPy, getPrevPy } from 'src/features/sicp/TableOfContentsHelperPy';
-
-import SicpPyToc from '../../pages/sicp/subcomponents/SicpPyToc';
-
-function SicpPyIndexPage() {
-  const titleImageUrl = useAppSelector(
-    s => s.languageDirectory.languageMap['python1']?.textbook?.titleImageUrl,
-  );
-
-  return (
-    <div className="sicp-index-page">
-      <div className="sicp-cover">
-        {titleImageUrl && (
-          <img src={titleImageUrl} alt="SICPy" style={{ maxHeight: '400px', width: 'auto' }} />
-        )}
-        <div className="sicp-cover-text">
-          <H2>Structure and Interpretation of Computer Programs</H2>
-          <p style={{ color: 'grey', marginTop: 0 }}>Python Edition</p>
-        </div>
-      </div>
-      <H2 style={{ paddingLeft: '2rem' }}>Contents</H2>
-      <SicpPyToc />
-    </div>
-  );
-}
+import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
+import tocNavigation from 'src/features/textbook/toc/data/sicpy-navigation.json';
+import SicPyIndexPage from 'src/pages/sicp/subcomponents/sicpIndexPage/SicPyIndexPage';
 
 function SicpPyPage() {
   const { section } = useParams<{ section: string }>();
   const navigate = useNavigate();
+  const titleImageUrl = useAppSelector(
+    s => s.languageDirectory.languageMap['python1']?.textbook?.titleImageUrl,
+  );
 
-  const prev = getPrevPy(section ?? '');
-  const next = getNextPy(section ?? '');
+  // `section` is always defined due to the route configuration
+  const prev = getPrev(tocNavigation, section ?? '');
+  const next = getNext(tocNavigation, section ?? '');
   const handleNavigation = (sect: string) => navigate('/sicpy/' + sect);
 
   const navigationButtons = (
@@ -46,9 +28,11 @@ function SicpPyPage() {
 
   const { data } = useOutletContext<{ data: React.ReactNode }>();
 
-  return section === 'index' ? (
-    <SicpPyIndexPage />
-  ) : (
+  if (section === 'index') {
+    return <SicPyIndexPage titleImageUrl={titleImageUrl} />;
+  }
+
+  return (
     <div className="sicp-content">
       <Link id="begin" to="#begin" />
       {data}

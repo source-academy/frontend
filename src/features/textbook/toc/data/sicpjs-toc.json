@@ -13,7 +13,12 @@
     "label": "Prefaces to Structure and Interpretation of Computer Programs, 1996 & 1984",
     "nodeData": "prefaces96"
   },
-  { "id": 4, "hasCaret": false, "label": "Acknowledgments", "nodeData": "acknowledgements" },
+  {
+    "id": 4,
+    "hasCaret": false,
+    "label": "Acknowledgments",
+    "nodeData": "acknowledgements"
+  },
   {
     "id": 6,
     "hasCaret": true,
@@ -26,7 +31,12 @@
         "label": "1.1 The Elements of Programming",
         "nodeData": "1.1",
         "childNodes": [
-          { "id": 8, "hasCaret": false, "label": "1.1.1 Expressions", "nodeData": "1.1.1" },
+          {
+            "id": 8,
+            "hasCaret": false,
+            "label": "1.1.1 Expressions",
+            "nodeData": "1.1.1"
+          },
           {
             "id": 9,
             "hasCaret": false,
@@ -39,7 +49,12 @@
             "label": "1.1.3 Evaluating Operator Combinations",
             "nodeData": "1.1.3"
           },
-          { "id": 11, "hasCaret": false, "label": "1.1.4 Compound Functions", "nodeData": "1.1.4" },
+          {
+            "id": 11,
+            "hasCaret": false,
+            "label": "1.1.4 Compound Functions",
+            "nodeData": "1.1.4"
+          },
           {
             "id": 12,
             "hasCaret": false,
@@ -78,9 +93,24 @@
             "label": "1.2.1 Linear Recursion and Iteration",
             "nodeData": "1.2.1"
           },
-          { "id": 18, "hasCaret": false, "label": "1.2.2 Tree Recursion", "nodeData": "1.2.2" },
-          { "id": 19, "hasCaret": false, "label": "1.2.3 Orders of Growth", "nodeData": "1.2.3" },
-          { "id": 20, "hasCaret": false, "label": "1.2.4 Exponentiation", "nodeData": "1.2.4" },
+          {
+            "id": 18,
+            "hasCaret": false,
+            "label": "1.2.2 Tree Recursion",
+            "nodeData": "1.2.2"
+          },
+          {
+            "id": 19,
+            "hasCaret": false,
+            "label": "1.2.3 Orders of Growth",
+            "nodeData": "1.2.3"
+          },
+          {
+            "id": 20,
+            "hasCaret": false,
+            "label": "1.2.4 Exponentiation",
+            "nodeData": "1.2.4"
+          },
           {
             "id": 21,
             "hasCaret": false,
@@ -205,7 +235,12 @@
         "label": "2.3 Symbolic Data",
         "nodeData": "2.3",
         "childNodes": [
-          { "id": 40, "hasCaret": false, "label": "2.3.1 Strings", "nodeData": "2.3.1" },
+          {
+            "id": 40,
+            "hasCaret": false,
+            "label": "2.3.1 Strings",
+            "nodeData": "2.3.1"
+          },
           {
             "id": 41,
             "hasCaret": false,
@@ -238,7 +273,12 @@
             "label": "2.4.1 Representations for Complex Numbers",
             "nodeData": "2.4.1"
           },
-          { "id": 46, "hasCaret": false, "label": "2.4.2 Tagged data", "nodeData": "2.4.2" },
+          {
+            "id": 46,
+            "hasCaret": false,
+            "label": "2.4.2 Tagged data",
+            "nodeData": "2.4.2"
+          },
           {
             "id": 47,
             "hasCaret": false,
@@ -409,7 +449,12 @@
             "label": "3.5.1 Streams Are Delayed Lists",
             "nodeData": "3.5.1"
           },
-          { "id": 73, "hasCaret": false, "label": "3.5.2 Infinite Streams", "nodeData": "3.5.2" },
+          {
+            "id": 73,
+            "hasCaret": false,
+            "label": "3.5.2 Infinite Streams",
+            "nodeData": "3.5.2"
+          },
           {
             "id": 74,
             "hasCaret": false,
@@ -468,7 +513,12 @@
             "label": "4.1.4 Running the Evaluator as a Program",
             "nodeData": "4.1.4"
           },
-          { "id": 83, "hasCaret": false, "label": "4.1.5 Data as Programs", "nodeData": "4.1.5" },
+          {
+            "id": 83,
+            "hasCaret": false,
+            "label": "4.1.5 Data as Programs",
+            "nodeData": "4.1.5"
+          },
           {
             "id": 84,
             "hasCaret": false,
@@ -515,7 +565,12 @@
         "label": "4.3 Nondeterministic Computing",
         "nodeData": "4.3",
         "childNodes": [
-          { "id": 91, "hasCaret": false, "label": "4.3.1 Search and amb", "nodeData": "4.3.1" },
+          {
+            "id": 91,
+            "hasCaret": false,
+            "label": "4.3.1 Search and amb",
+            "nodeData": "4.3.1"
+          },
           {
             "id": 92,
             "hasCaret": false,
@@ -588,7 +643,12 @@
             "label": "5.1.2 Abstraction in Machine Design",
             "nodeData": "5.1.2"
           },
-          { "id": 103, "hasCaret": false, "label": "5.1.3 Subroutines", "nodeData": "5.1.3" },
+          {
+            "id": 103,
+            "hasCaret": false,
+            "label": "5.1.3 Subroutines",
+            "nodeData": "5.1.3"
+          },
           {
             "id": 104,
             "hasCaret": false,
@@ -609,8 +669,18 @@
         "label": "5.2 A Register-Machine Simulator",
         "nodeData": "5.2",
         "childNodes": [
-          { "id": 107, "hasCaret": false, "label": "5.2.1 The Machine Model", "nodeData": "5.2.1" },
-          { "id": 108, "hasCaret": false, "label": "5.2.2 The Assembler", "nodeData": "5.2.2" },
+          {
+            "id": 107,
+            "hasCaret": false,
+            "label": "5.2.1 The Machine Model",
+            "nodeData": "5.2.1"
+          },
+          {
+            "id": 108,
+            "hasCaret": false,
+            "label": "5.2.2 The Assembler",
+            "nodeData": "5.2.2"
+          },
           {
             "id": 109,
             "hasCaret": false,
@@ -631,7 +701,12 @@
         "label": "5.3 Storage Allocation and Garbage Collection",
         "nodeData": "5.3",
         "childNodes": [
-          { "id": 112, "hasCaret": false, "label": "5.3.1 Memory as Vectors", "nodeData": "5.3.1" },
+          {
+            "id": 112,
+            "hasCaret": false,
+            "label": "5.3.1 Memory as Vectors",
+            "nodeData": "5.3.1"
+          },
           {
             "id": 113,
             "hasCaret": false,
@@ -724,6 +799,16 @@
       }
     ]
   },
-  { "id": 127, "hasCaret": false, "label": "References", "nodeData": "references" },
-  { "id": 128, "hasCaret": false, "label": "About the SICP JS Project", "nodeData": "making-of" }
+  {
+    "id": 127,
+    "hasCaret": false,
+    "label": "References",
+    "nodeData": "references"
+  },
+  {
+    "id": 128,
+    "hasCaret": false,
+    "label": "About the SICP JS Project",
+    "nodeData": "making-of"
+  }
 ]
