@@ -31,8 +31,14 @@ function useTextbookSectionPersistence(
   }, [data, error, section, opts.key, opts.defaultSection]);
 }
 
+// Prevent stale references by reusing a global default object
+const defaultRefs: Record<'js' | 'py', Record<string, HTMLElement | null>> = {
+  js: {},
+  py: {},
+};
+
 export function useSicpJsSectionQuery(section: string | undefined) {
-  const refs = useRef<Record<string, HTMLElement | null>>({});
+  const refs = useRef<Record<string, HTMLElement | null>>(defaultRefs.js);
   const { data, error, isPending, isFetching } = useQuery({
     ...queries.sicp.sectionJs(section ?? ''),
     enabled: !!section && section !== SICP_INDEX,
@@ -57,7 +63,7 @@ export const SICPY_INDEX = 'index';
 export const SICPY_CACHE_KEY = 'sicPy-section';
 
 export function useSicPySectionQuery(section: string | undefined) {
-  const refs = useRef<Record<string, HTMLElement | null>>({});
+  const refs = useRef<Record<string, HTMLElement | null>>(defaultRefs.py);
   const { data, error, isPending, isFetching } = useQuery({
     ...queries.sicp.sectionPy(section ?? ''),
     enabled: !!section && section !== SICPY_INDEX,
