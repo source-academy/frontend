@@ -13,6 +13,7 @@ function SicPyIndexPage() {
   const titleImageUrl = useAppSelector(
     s => s.languageDirectory.languageMap['python1']?.textbook?.titleImageUrl,
   );
+  const navigate = useNavigate();
 
   return (
     <div className="sicp-index-page">
@@ -26,7 +27,7 @@ function SicPyIndexPage() {
         </div>
       </div>
       <H2 style={{ paddingLeft: '2rem' }}>Contents</H2>
-      <SicpToc toc={toc} />
+      <SicpToc toc={toc} handleClick={node => navigate(`/sicpy/${node.nodeData}`)} />
     </div>
   );
 }
