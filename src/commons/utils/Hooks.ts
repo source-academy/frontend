@@ -7,7 +7,6 @@ import type { OverallState } from '../application/ApplicationTypes';
 import type { Tokens } from '../application/types/SessionTypes';
 import type { SourceActionType } from './ActionsHelper';
 import Constants from './Constants';
-import { readLocalStorage, setLocalStorage } from './LocalStorageHelper';
 
 /**
  * This hook sends a request to the backend to fetch the initial state of the field
@@ -49,26 +48,6 @@ export function useInput<T>(defaultValue: T) {
       },
     },
   };
-}
-
-/**
- * This hook usage is similar to useState, the only difference
- * being that the state is also written to local storage at the specified key on state updates.
- *
- * When calling this hook, the value will take on the stored value in local storage (if any).
- * If this key-value does not exist in local storage yet, the default value will be used.
- */
-export function useLocalStorageState<T>(
-  key: string,
-  defaultValue: T,
-): [T, React.Dispatch<React.SetStateAction<T>>] {
-  const [value, setValue] = useState<T>(readLocalStorage(key, defaultValue));
-
-  useEffect(() => {
-    setLocalStorage(key, value);
-  }, [key, value]);
-
-  return [value, setValue];
 }
 
 /** Typed version of useSelector. Use this instead of the useSelector hook. */

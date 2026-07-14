@@ -2,114 +2,85 @@ import 'katex/dist/katex.min.css';
 
 import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import classNames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router';
+import { readLocalStorage } from 'src/commons/hooks/useLocalStorageState';
 import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
-import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
-// type SicpSection removed — not used in this file.
+import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
-import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
+import { ParseJsonError } from 'src/features/sicp/parser/ParseJson';
+import { scrollRefIntoView } from 'src/features/sicp/utils/SicpUtils';
 import {
-  readSicpSectionLocalStorage,
-  setSicpSectionLocalStorage,
   SICP_CACHE_KEY,
   SICP_INDEX,
-} from 'src/features/sicp/utils/SicpUtils';
+  useSicpJsSectionQuery,
+} from 'src/features/textbook/hooks/useTextbookSectionQuery';
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
-
-const baseUrl = Constants.sicpBackendUrl + 'json/';
-const extension = '.json';
+import Chatbot from '../../pages/sicp/subcomponents/chatbot/Chatbot';
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
-// `getText` removed — it was unused.
+const getText = () => {
+  const divs = document.querySelectorAll('p.sicp-text');
+  let visibleParagraphs = '';
 
-// scrollRefIntoView helper removed; behavior inlined where used below.
+  divs.forEach(div => {
+    const rect = div.getBoundingClientRect();
+
+    if (
+      rect.top <= window.innerHeight &&
+      rect.bottom >= 0 &&
+      rect.left <= window.innerWidth &&
+      rect.right >= 0
+    ) {
+      const text = div.textContent;
+      visibleParagraphs += text + '\n';
+    }
+  });
+
+  return visibleParagraphs;
+};
 
 function SicpLayout() {
-  const [data, setData] = useState(<></>);
-  const [loading, setLoading] = useState(false);
   const { section } = useParams<{ section: string }>();
   const parentRef = useRef<HTMLDivElement>(null);
-  const refs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
   const location = useLocation();
-  useSession();
+  const { isLoggedIn } = useSession();
 
-  // Handle loading of latest viewed section and fetch json data
+  function getSection() {
+    // To discard the '/sicpjs/'
+    return location.pathname.replace('/sicpjs/', '') as SicpSection;
+  }
+
+  // Handle rerouting to the latest viewed section when clicking from the main
+  // application navbar. Navigate replace logic is used to allow the user to
+  // still use the browser back button to navigate the app.
   useEffect(() => {
     if (!section) {
-      /**
-       * Handles rerouting to the latest viewed section when clicking from
-       * the main application navbar. Navigate replace logic is used to allow the
-       * user to still use the browser back button to navigate the app.
-       */
-      navigate(`/sicpjs/${readSicpSectionLocalStorage()}`, { replace: true });
-      return;
+      const cached = readLocalStorage<string>(SICP_CACHE_KEY, SICP_INDEX);
+      navigate(`/sicpjs/${cached}`, { replace: true });
     }
-
-    if (section === SICP_INDEX) {
-      setSicpSectionLocalStorage(SICP_INDEX);
-      return;
-    }
-
-    // Defer setLoading to avoid synchronous setState within the effect.
-    Promise.resolve().then(() => setLoading(true));
-
-    fetch(baseUrl + section + extension)
-      .then(response => {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then(myJson => {
-        try {
-          const newData = parseArr(myJson, refs); // Might throw error
-          setData(newData);
-          setSicpSectionLocalStorage(section); // Sets local storage if valid page
-        } catch (error) {
-          throw new ParseJsonError(error.message);
-        }
-      })
-      .catch(error => {
-        console.error(error);
-
-        if (error.message === 'Not Found') {
-          // page not found
-          setData(getSicpError(SicpErrorType.PAGE_NOT_FOUND_ERROR));
-        } else if (error instanceof ParseJsonError) {
-          // error occurred while parsing JSON
-          setData(getSicpError(SicpErrorType.PARSING_ERROR));
-        } else {
-          setData(getSicpError(SicpErrorType.UNEXPECTED_ERROR));
-        }
-        setLocalStorage(SICP_CACHE_KEY, SICP_INDEX); // Prevents caching invalid page
-      })
-      .finally(() => {
-        setLoading(false);
-      });
   }, [section, navigate]);
+
+  const { data, error, isPending, isFetching, refs } = useSicpJsSectionQuery(section);
+  // Index page is served from local content, not the network, so it is never loading
+  const isLoading = section !== SICP_INDEX && (isPending || isFetching);
 
   // Scroll to correct position
   useEffect(() => {
-    if (loading) {
+    if (isLoading) {
       return;
     }
 
     const hash = location.hash;
     const elem =
       (hash ? (document.querySelector(hash) as HTMLElement | null) : null) ?? refs.current[hash];
-
-    if (elem && parentRef?.current) {
-      const parent = parentRef.current!;
-      const relativeTop = window.scrollY > parent.offsetTop ? window.scrollY : parent.offsetTop;
-      parent.scrollTo({ behavior: 'smooth', top: elem.offsetTop - relativeTop });
-    }
-  }, [loading, location.hash]);
+    scrollRefIntoView(elem, parentRef);
+  }, [isLoading, location.hash, refs]);
 
   return (
     <div
@@ -119,14 +90,24 @@ function SicpLayout() {
       <SicpErrorBoundary>
         {/* Close all active code snippet when new page is loaded */}
         <CodeSnippetProvider key={section}>
-          {loading ? (
+          {isLoading ? (
             <div className="sicp-content">{loadingComponent}</div>
+          ) : error ? (
+            error.message === 'Not Found' ? (
+              getSicpError(SicpErrorType.PAGE_NOT_FOUND_ERROR)
+            ) : error instanceof ParseJsonError ? (
+              getSicpError(SicpErrorType.PARSING_ERROR)
+            ) : (
+              getSicpError(SicpErrorType.UNEXPECTED_ERROR)
+            )
           ) : (
             <Outlet context={{ data }} />
           )}
         </CodeSnippetProvider>
       </SicpErrorBoundary>
-      {/* Chatbot intentionally disabled for JavaScript layout. */}
+      {isLoggedIn && Constants.featureFlags.enableSicpChatbot && (
+        <Chatbot getSection={getSection} getText={getText} />
+      )}
     </div>
   );
 }

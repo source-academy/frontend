@@ -2,143 +2,53 @@ import 'katex/dist/katex.min.css';
 
 import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import classNames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router';
-import Constants from 'src/commons/utils/Constants';
-import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
-import { readLocalStorage, setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
-import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
+import { readLocalStorage } from 'src/commons/hooks/useLocalStorageState';
 import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
-import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
+import { ParseJsonError } from 'src/features/sicp/parser/ParseJson';
+import { scrollRefIntoView } from 'src/features/sicp/utils/SicpUtils';
+import {
+  SICPY_CACHE_KEY,
+  SICPY_INDEX,
+  useSicPySectionQuery,
+} from 'src/features/textbook/hooks/useTextbookSectionQuery';
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
-import Chatbot from '../../pages/sicp/subcomponents/chatbot/Chatbot';
-
-const baseUrl = Constants.sicpBackendUrl + 'json_py/';
-const extension = '.json';
-
-const SICPPY_CACHE_KEY = 'sicppy-section';
-const SICPPY_DEFAULT_SECTION = 'index';
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
-const scrollRefIntoView = (
-  ref: HTMLElement | null,
-  parentRef: React.RefObject<HTMLDivElement | null>,
-) => {
-  if (!ref || !parentRef?.current) {
-    return;
-  }
-  const parent = parentRef.current!;
-  const relativeTop = window.scrollY > parent.offsetTop ? window.scrollY : parent.offsetTop;
-  parent.scrollTo({ behavior: 'smooth', top: ref.offsetTop - relativeTop });
-};
-
-const getText = () => {
-  const divs = document.querySelectorAll('p.sicp-text');
-  let visibleParagraphs = '';
-
-  divs.forEach(div => {
-    const rect = div.getBoundingClientRect();
-
-    if (
-      rect.top <= window.innerHeight &&
-      rect.bottom >= 0 &&
-      rect.left <= window.innerWidth &&
-      rect.right >= 0
-    ) {
-      const text = div.textContent;
-      visibleParagraphs += text + '\n';
-    }
-  });
-
-  return visibleParagraphs;
-};
-
-function SicpPyLayout() {
-  const [data, setData] = useState(<></>);
-  const [loading, setLoading] = useState(false);
+function SicPyLayout() {
   const { section } = useParams<{ section: string }>();
   const parentRef = useRef<HTMLDivElement>(null);
-  const refs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
   const location = useLocation();
-  const { isLoggedIn } = useSession();
 
-  function getSection() {
-    // To discard the '/sicpy/'
-    return location.pathname.replace('/sicpy/', '') as SicpSection;
-  }
-
+  // Handle rerouting to the latest viewed section when clicking from the main
+  // application navbar. Navigate replace logic is used to allow the user to
+  // still use the browser back button to navigate the app.
   useEffect(() => {
     if (!section) {
-      const cached = readLocalStorage(SICPPY_CACHE_KEY, SICPPY_DEFAULT_SECTION);
+      const cached = readLocalStorage<string>(SICPY_CACHE_KEY, SICPY_INDEX);
       navigate(`/sicpy/${cached}`, { replace: true });
-      return;
     }
-
-    if (section === 'index') {
-      setLocalStorage(SICPPY_CACHE_KEY, 'index');
-      return;
-    }
-
-    setLoading(true);
-    const controller = new AbortController();
-
-    fetch(baseUrl + section + extension, { signal: controller.signal })
-      .then(response => {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then(myJson => {
-        try {
-          const newData = parseArr(myJson, refs);
-          setData(newData);
-          setLocalStorage(SICPPY_CACHE_KEY, section);
-        } catch (error) {
-          throw new ParseJsonError(error.message);
-        }
-      })
-      .catch(error => {
-        if (error.name === 'AbortError') {
-          return;
-        }
-        console.error(error);
-        if (error.message === 'Not Found') {
-          setData(getSicpError(SicpErrorType.PAGE_NOT_FOUND_ERROR));
-        } else if (error instanceof ParseJsonError) {
-          setData(getSicpError(SicpErrorType.PARSING_ERROR));
-        } else {
-          setData(getSicpError(SicpErrorType.UNEXPECTED_ERROR));
-        }
-        setLocalStorage(SICPPY_CACHE_KEY, SICPPY_DEFAULT_SECTION);
-      })
-      .finally(() => setLoading(false));
-
-    return () => controller.abort();
   }, [section, navigate]);
 
+  const { data, error, isPending, isFetching, refs } = useSicPySectionQuery(section);
+  // Index page is served from local content, not the network, so it is never loading
+  const isLoading = section !== SICPY_INDEX && (isPending || isFetching);
+
+  // Scroll to correct position
   useEffect(() => {
-    if (loading) {
+    if (isLoading) {
       return;
     }
+
     const hash = location.hash;
     const elem = (hash ? document.getElementById(hash.slice(1)) : null) ?? refs.current[hash];
     scrollRefIntoView(elem, parentRef);
-  }, [loading, location.hash]);
-
-  const selectedLanguage = useTypedSelector(s =>
-    s.languageDirectory.selectedLanguageId
-      ? s.languageDirectory.languageMap[s.languageDirectory.selectedLanguageId]
-      : undefined,
-  );
-
-  const showChatbotForLanguage = Boolean(
-    selectedLanguage && selectedLanguage.textbook?.url?.endsWith('json_py/'),
-  );
+  }, [isLoading, location.hash, refs]);
 
   return (
     <div
@@ -146,19 +56,25 @@ function SicpPyLayout() {
       ref={parentRef}
     >
       <SicpErrorBoundary>
+        {/* Close all active code snippet when new page is loaded */}
         <CodeSnippetProvider key={section}>
-          {loading ? (
+          {isLoading ? (
             <div className="sicp-content">{loadingComponent}</div>
+          ) : error ? (
+            error.message === 'Not Found' ? (
+              getSicpError(SicpErrorType.PAGE_NOT_FOUND_ERROR)
+            ) : error instanceof ParseJsonError ? (
+              getSicpError(SicpErrorType.PARSING_ERROR)
+            ) : (
+              getSicpError(SicpErrorType.UNEXPECTED_ERROR)
+            )
           ) : (
             <Outlet context={{ data }} />
           )}
         </CodeSnippetProvider>
       </SicpErrorBoundary>
-      {isLoggedIn && Constants.featureFlags.enableSicpChatbot && showChatbotForLanguage && (
-        <Chatbot getSection={getSection} getText={getText} />
-      )}
     </div>
   );
 }
 
-export const Component = SicpPyLayout;
+export const Component = SicPyLayout;
