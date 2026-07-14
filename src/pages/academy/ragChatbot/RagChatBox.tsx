@@ -1,63 +1,18 @@
 import { Button } from '@blueprintjs/core';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import type { Tokens } from 'src/commons/application/types/SessionTypes';
 import { useSession, useTokens } from 'src/commons/utils/Hooks';
 import { initRagChat, sendRagMessage } from 'src/features/ragChat/api';
-import ChatbotCodeSnippet from 'src/pages/sicp/subcomponents/chatbot/ChatbotCodeSnippet';
 import { v4 as uuid } from 'uuid';
 
 import classes from './RagChatbot.module.css';
+import RagMessageRenderer from './RagMessageRenderer';
 
 type ChatMessage = {
   id: string;
   role: 'user' | 'assistant';
   content: string;
 };
-
-type RagMessageRendererProps = {
-  message: ChatMessage;
-  activeSnippetId: string;
-  setActiveSnippetId: (id: string) => void;
-};
-
-function RagMessageRenderer({
-  message,
-  activeSnippetId,
-  setActiveSnippetId,
-}: RagMessageRendererProps) {
-  return (
-    <ReactMarkdown
-      remarkPlugins={[remarkGfm]}
-      components={{
-        code({ node, inline, className, children, ...props }: any) {
-          const match = /language-(\w+)/.exec(className || '');
-          const lang = match ? match[1] : 'javascript';
-          const code = String(children).replace(/\n$/, '');
-          const snippetId = `${message.id}-code-${node?.position?.start.offset ?? 0}`;
-
-          return !inline ? (
-            <ChatbotCodeSnippet
-              key={snippetId}
-              id={snippetId}
-              code={code}
-              activeSnippetId={activeSnippetId}
-              setActiveSnippet={setActiveSnippetId}
-              language={lang}
-            />
-          ) : (
-            <code className={className} {...props}>
-              {children}
-            </code>
-          );
-        },
-      }}
-    >
-      {message.content}
-    </ReactMarkdown>
-  );
-}
 
 type Props = {
   isExpanded: boolean;
