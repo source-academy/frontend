@@ -98,10 +98,10 @@ function Profile(props: ProfileProps) {
         return frac < 0
           ? ''
           : frac >= 0.8
-            ? ' [&_svg_path:last-of-type]:stroke-[#137cbd] [&>div]:bg-[#137cbd]'
+            ? ' [&_svg_path:last-of-type]:stroke-[#137cbd] [&>div:empty]:bg-[#137cbd]'
             : frac >= 0.45
-              ? ' [&_svg_path:last-of-type]:stroke-[#579ecb] [&>div]:bg-[#579ecb]'
-              : ' [&_svg_path:last-of-type]:stroke-[#9ac0d8] [&>div]:bg-[#9ac0d8]';
+              ? ' [&_svg_path:last-of-type]:stroke-[#579ecb] [&>div:empty]:bg-[#579ecb]'
+              : ' [&_svg_path:last-of-type]:stroke-[#9ac0d8] [&>div:empty]:bg-[#9ac0d8]';
       };
 
       // Given an assessment category, return its icon
