@@ -9,12 +9,12 @@ import {
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router';
 import BrickSvg from 'src/assets/BrickSvg';
 import PortSvg from 'src/assets/PortSvg';
 import { deleteDevice } from 'src/commons/sagas/RequestsSaga';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import PeripheralContainer from 'src/features/remoteExecution/PeripheralContainer';
 import RemoteExecutionAddDeviceDialog from 'src/features/remoteExecution/RemoteExecutionDeviceDialog';
@@ -25,7 +25,7 @@ import {
 import type { Device, DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
 
 import { actions } from '../../../utils/ActionsHelper';
-import { useTypedSelector } from '../../../utils/Hooks';
+import { useAppSelector } from '../../../utils/Hooks';
 import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import DeviceMenuItemButtons from './DeviceMenuItemButtons';
 
@@ -73,10 +73,10 @@ function SideContentRemoteExecution(props: SideContentRemoteExecutionProps) {
   );
   const [secretParams, setSecretParams] = useState(props.secretParams);
 
-  const isLoggedIn = useTypedSelector(state => !!state.session.accessToken && !!state.session.role);
-  const devices = useTypedSelector(state => state.session.remoteExecutionDevices);
-  const currentSession = useTypedSelector(state => state.session.remoteExecutionSession);
-  const dispatch = useDispatch();
+  const isLoggedIn = useAppSelector(state => !!state.session.accessToken && !!state.session.role);
+  const devices = useAppSelector(state => state.session.remoteExecutionDevices);
+  const currentSession = useAppSelector(state => state.session.remoteExecutionSession);
+  const dispatch = useAppDispatch();
 
   const isConnected = currentSession?.connection.status === 'CONNECTED';
 

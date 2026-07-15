@@ -1,21 +1,20 @@
 import { Button } from '@blueprintjs/core';
 import { useState } from 'react';
 import { FileUploader } from 'react-drag-drop-files';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import Select from 'react-select';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import type { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 import { FormContainer, FormField, FormFieldRow } from 'src/components/ui/form';
 
 function TeamFormationImport() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const fileTypes = ['XLSX', 'XLS'];
   const [file, setFile] = useState<File | null>(null);
-  const { courseId, students } = useTypedSelector(state => state.session);
-  const assessmentOverviews = useTypedSelector(state => state.session.assessmentOverviews);
+  const { courseId, students } = useAppSelector(state => state.session);
+  const assessmentOverviews = useAppSelector(state => state.session.assessmentOverviews);
   const [selectedAssessment, setSelectedAssessment] = useState<AssessmentOverview | undefined>(
     undefined,
   );

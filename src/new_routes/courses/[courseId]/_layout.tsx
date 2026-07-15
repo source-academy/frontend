@@ -1,11 +1,10 @@
 import { Card, Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { Navigate, Outlet, useNavigate, useParams } from 'react-router';
 import ResearchAgreementPrompt from 'src/commons/researchAgreementPrompt/ResearchAgreementPrompt';
 import Constants from 'src/commons/utils/Constants';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
 import classes from 'src/pages/academy/Academy.module.scss';
 
 import SessionActions from '../../../commons/application/actions/SessionActions';
@@ -13,7 +12,7 @@ import { numberRegExp } from '../../../features/academy/AcademyTypes';
 import RagChatbot from '../../../pages/academy/ragChatbot/RagChatbot';
 
 function Academy() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(SessionActions.fetchStudents());
     dispatch(SessionActions.fetchNotifications());
@@ -34,7 +33,7 @@ function Academy() {
 }
 
 function CourseSelectingAcademy() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { courseId } = useSession();
   const { courseId: routeCourseIdStr } = useParams<{ courseId?: string }>();

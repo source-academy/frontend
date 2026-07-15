@@ -1,7 +1,8 @@
 import { Button, H2 } from '@blueprintjs/core';
-import { type ColDef, type GridApi, type GridReadyEvent, themeBalham } from 'ag-grid-community';
+import { type ColDef, type GridApi, type GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { useRef } from 'react';
+import { themeSource } from 'src/commons/agGrid/theme';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import type { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
 
@@ -65,23 +66,6 @@ function UserConfigPanel(props: Props) {
     gridApi.current = params.api;
   };
 
-  const grid = (
-    <div className="Grid">
-      <AgGridReact
-        theme={themeBalham}
-        domLayout="autoHeight"
-        columnDefs={columnDefs}
-        defaultColDef={defaultColumnDefs}
-        onGridReady={onGridReady}
-        rowData={userCourseRegistrations}
-        rowHeight={36}
-        suppressCellFocus
-        suppressMovableColumns
-        pagination
-      />
-    </div>
-  );
-
   return (
     <div className="users-configuration">
       <div className="users-header-container">
@@ -97,7 +81,18 @@ function UserConfigPanel(props: Props) {
           }}
         />
       </div>
-      {grid}
+      <AgGridReact
+        theme={themeSource}
+        domLayout="autoHeight"
+        columnDefs={columnDefs}
+        defaultColDef={defaultColumnDefs}
+        onGridReady={onGridReady}
+        rowData={userCourseRegistrations}
+        rowHeight={36}
+        suppressCellFocus
+        suppressMovableColumns
+        pagination
+      />
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 
 import Markdown from '../Markdown';
 import { Links } from '../utils/Constants';
-import { useTypedSelector } from '../utils/Hooks';
+import { useAppSelector } from '../utils/Hooks';
 
 type Props = {
   isOpen: boolean;
@@ -11,7 +11,7 @@ type Props = {
 };
 
 function DropdownHelp(props: Props) {
-  const moduleHelpText = useTypedSelector(store => store.session.moduleHelpText);
+  const moduleHelpText = useAppSelector(store => store.session.moduleHelpText);
 
   return (
     <Dialog

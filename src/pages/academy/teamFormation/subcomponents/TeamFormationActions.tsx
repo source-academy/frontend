@@ -1,19 +1,18 @@
 import { Button, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
 
 type Props = {
   teamId: number;
 };
 
 function TeamFormationActions({ teamId }: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { courseId } = useSession();
 
   const handleDeleteTeamClick = useCallback(async () => {

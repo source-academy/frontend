@@ -1,8 +1,7 @@
 import { IconNames } from '@blueprintjs/icons';
 import { useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import { useResponsive, useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector, useResponsive, useSession } from 'src/commons/utils/Hooks';
 
 import AchievementFilter from '../../../commons/achievement/AchievementFilter';
 import AchievementManualEditor from '../../../commons/achievement/AchievementManualEditor';
@@ -52,14 +51,14 @@ function AchievementDashboard() {
     assessmentConfigurations: assessmentConfigs,
   } = useSession();
 
-  const { assessmentOverviews: achievementAssessmentOverviews, users } = useTypedSelector(
+  const { assessmentOverviews: achievementAssessmentOverviews, users } = useAppSelector(
     state => state.achievement,
   );
-  const inferencer = useTypedSelector(
+  const inferencer = useAppSelector(
     state => new AchievementInferencer(state.achievement.achievements, state.achievement.goals),
   );
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     handleFetchAssessmentOverviews,
     handleGetAchievements,

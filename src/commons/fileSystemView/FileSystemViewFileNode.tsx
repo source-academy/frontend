@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
@@ -31,7 +31,7 @@ function FileSystemViewFileNode({
   refreshDirectory,
 }: Props) {
   const [isEditing, setIsEditing] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const fullPath = path.join(basePath, fileName);
 

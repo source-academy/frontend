@@ -14,17 +14,16 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { Links } from 'src/commons/utils/Constants';
-import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector, useSession } from 'src/commons/utils/Hooks';
 import { parseQuery } from 'src/commons/utils/QueryHelper';
 import classes from 'src/styles/Login.module.scss';
 
 function LoginVscodeCallback() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const { t } = useTranslation('login');
   const { isLoggedIn, courseId } = useSession();
@@ -33,7 +32,7 @@ function LoginVscodeCallback() {
     provider: providerId,
     'client-request-id': clientRequestId,
   } = parseQuery(location.search);
-  const isVscode = useTypedSelector(state => state.vscode.isVscode);
+  const isVscode = useAppSelector(state => state.vscode.isVscode);
   const { access_token: accessToken, refresh_token: refreshToken } = parseQuery(location.search);
 
   const launchVscode = () => {

@@ -3,16 +3,15 @@ import classNames from 'classnames';
 import Cookies from 'js-cookie';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/Login.module.scss';
 
 import { parseQuery } from '../../commons/utils/QueryHelper';
 
 function LoginCallback() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const { isLoggedIn } = useSession();

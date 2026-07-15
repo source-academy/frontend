@@ -39,7 +39,7 @@ import {
 } from 'js-slang/dist/tracer/nodes/Statement/VariableDeclaration';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { beginAlertSideContent } from '../SideContentActions';
 import { type SideContentLocation, SideContentType } from '../SideContentTypes';
@@ -94,7 +94,7 @@ function SideContentSubstVisualizer(props: SubstVisualizerPropsAST) {
   const [stepValue, setStepValue] = useState(1);
   const lastStepValue = props.content.length;
   const hasRunCode = lastStepValue !== 0;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const alertSideContent = useCallback(
     () => dispatch(beginAlertSideContent(SideContentType.substVisualizer, props.workspaceLocation)),
     [props.workspaceLocation, dispatch],

@@ -1,11 +1,11 @@
 import { Button, Classes, Dialog, DialogBody, DialogFooter, H4, Intent } from '@blueprintjs/core';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../application/actions/SessionActions';
 import Constants from '../utils/Constants';
 
 function ResearchAgreementPrompt() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   return (
     <div className="research-prompt">

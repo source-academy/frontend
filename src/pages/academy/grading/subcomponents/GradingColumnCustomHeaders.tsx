@@ -3,7 +3,7 @@ import type { CustomHeaderProps } from 'ag-grid-react';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppSelector } from 'src/commons/utils/Hooks';
 import { SortStates } from 'src/features/grading/GradingTypes';
 
 import classes from '../Grading.module.css';
@@ -18,7 +18,7 @@ type Props = CustomHeaderProps & {
 function GradingColumnCustomHeaders(props: Props) {
   // The values correspond to the available icons in the BlueprintJS library. "sort" means unsorted.
   const [sortState, setSortState] = useState(SortStates.NONE);
-  const colsSortState = useTypedSelector(state => state.workspaces.grading.allColsSortStates);
+  const colsSortState = useAppSelector(state => state.workspaces.grading.allColsSortStates);
 
   const nextSortState = () => {
     setSortState(prev => getNextSortState(prev));

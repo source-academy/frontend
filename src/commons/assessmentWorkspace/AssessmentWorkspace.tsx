@@ -15,9 +15,9 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { isEqual } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import Messages, { sendToWebview } from 'src/features/vscode/messages';
@@ -78,7 +78,7 @@ import {
   SideContentType,
 } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
-import { useResponsive, useTypedSelector } from '../utils/Hooks';
+import { useAppSelector, useResponsive } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import { assertType } from '../utils/TypeHelper';
 import Workspace, { type WorkspaceProps } from '../workspace/Workspace';
@@ -110,11 +110,11 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
   const [sessionId, setSessionId] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { isMobileBreakpoint } = useResponsive();
-  const isVscode = useTypedSelector(state => state.vscode.isVscode);
+  const isVscode = useAppSelector(state => state.vscode.isVscode);
 
-  const assessment = useTypedSelector(state => state.session.assessments[props.assessmentId]);
-  const assessmentOverviews = useTypedSelector(state => state.session.assessmentOverviews);
-  const teamFormationOverview = useTypedSelector(state => state.session.teamFormationOverview);
+  const assessment = useAppSelector(state => state.session.assessments[props.assessmentId]);
+  const assessmentOverviews = useAppSelector(state => state.session.assessmentOverviews);
+  const teamFormationOverview = useAppSelector(state => state.session.teamFormationOverview);
   const assessmentOverview = assessmentOverviews?.find(assessmentOverview => {
     return assessmentOverview.id === assessment?.id;
   });
@@ -127,7 +127,7 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
 
   const navigate = useNavigate();
 
-  const { courseId } = useTypedSelector(state => state.session);
+  const { courseId } = useAppSelector(state => state.session);
   const {
     isFolderModeEnabled,
     activeEditorTabIndex,
@@ -142,9 +142,9 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
     currentQuestion: storedQuestionId,
     versionHistory,
     saveStatus,
-  } = useTypedSelector(store => store.workspaces[workspaceLocation]);
+  } = useAppSelector(store => store.workspaces[workspaceLocation]);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     handleTeamOverviewFetch,
     handleTestcaseEval,
@@ -226,8 +226,8 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
     };
   }, [dispatch]);
 
-  const code = useTypedSelector(store => store.leaderboard.code);
-  const initialRunCompleted = useTypedSelector(store => store.leaderboard.initialRun);
+  const code = useAppSelector(store => store.leaderboard.code);
+  const initialRunCompleted = useAppSelector(store => store.leaderboard.initialRun);
   const votingId = props.assessmentId;
 
   useEffect(() => {
@@ -440,7 +440,13 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
     const resetWorkspaceOptions = assertType<WorkspaceState>()({
       autogradingResults: options.autogradingResults ?? [],
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorTabs: [{ value: options.editorValue ?? '', highlightedLines: [], breakpoints: [] }],
+      editorTabs: [
+        {
+          value: options.editorValue ?? '',
+          highlightedLines: [],
+          breakpoints: [],
+        },
+      ],
       programPrependValue: options.programPrependValue ?? '',
       programPostpendValue: options.programPostpendValue ?? '',
       editorTestcases: options.editorTestcases ?? [],

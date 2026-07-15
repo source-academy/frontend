@@ -1,12 +1,11 @@
 import { Drawer, DrawerSize, NonIdealState, Spinner } from '@blueprintjs/core';
 import { type IconName, IconNames } from '@blueprintjs/icons';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import SessionActions from '../application/actions/SessionActions';
 import { AssessmentStatuses, type AssessmentType } from '../assessment/AssessmentTypes';
 import Constants from '../utils/Constants';
-import { useSession } from '../utils/Hooks';
+import { useAppDispatch, useSession } from '../utils/Hooks';
 import ProfileCard from './ProfileCard';
 
 export type ProfileProps = OwnProps;
@@ -30,7 +29,7 @@ function Profile(props: ProfileProps) {
     courseId,
   } = useSession();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     if (isLoggedIn && isEnrolledInACourse && !assessmentOverviews) {
       // If assessment overviews are not loaded, fetch them
@@ -68,19 +67,22 @@ function Profile(props: ProfileProps) {
     const fullXp = caFulfillmentLevel * 1000;
 
     const userDetails = (
-      <div className="profile-header">
+      <div className="profile-header shrink-0 text-center pb-[1.75em]">
         <div className="profile-username">
-          <div className="name">{name}</div>
-          <div className="role">{role}</div>
+          <div className="name text-2xl font-extrabold mb-[0.3em]">{name}</div>
+          <div className="role text-base italic">{role}</div>
         </div>
       </div>
     );
 
     if (numClosed === 0) {
       content = (
-        <div className="profile-content">
+        <div className="profile-content h-[calc(100vh-40px)] flex-1 p-5 leading-[18px] flex flex-col">
           {userDetails}
-          <div className="profile-placeholder" data-testid="profile-placeholder">
+          <div
+            className="profile-placeholder shrink-0 text-center"
+            data-testid="profile-placeholder"
+          >
             There are no closed assessments to render grade and XP of.
           </div>
         </div>
@@ -96,10 +98,10 @@ function Profile(props: ProfileProps) {
         return frac < 0
           ? ''
           : frac >= 0.8
-            ? ' progress-steelblue'
+            ? ' [&_svg_path:last-of-type]:stroke-[#137cbd] [&>div:empty]:bg-[#137cbd]'
             : frac >= 0.45
-              ? ' progress-deepskyblue'
-              : ' progress-skyblue';
+              ? ' [&_svg_path:last-of-type]:stroke-[#579ecb] [&>div:empty]:bg-[#579ecb]'
+              : ' [&_svg_path:last-of-type]:stroke-[#9ac0d8] [&>div:empty]:bg-[#9ac0d8]';
       };
 
       // Given an assessment category, return its icon
@@ -141,32 +143,47 @@ function Profile(props: ProfileProps) {
         });
 
       content = (
-        <div className="profile-content">
+        <div className="h-[calc(100vh-40px)] flex-1 p-5 leading-[18px] flex flex-col">
           {userDetails}
 
-          <div className="profile-progress" data-testid="profile-progress">
-            <div className="profile-xp">
+          <div
+            className="profile-progress shrink-0 flex flex-row pb-3 justify-around items-stretch"
+            data-testid="profile-progress"
+          >
+            <div className="profile-xp relative w-[42%] shrink-0 mb-[0.3em]">
               <Spinner
                 className={'profile-spinner' + parseColour(getFrac(userXp, fullXp))}
                 size={144}
                 value={getFrac(userXp, fullXp)}
                 data-testid="profile-spinner"
               />
-              <div className="type" data-testid="profile-type">
+              <div
+                className="type absolute text-center w-full font-bold text-[1.35em] top-[35%]"
+                data-testid="profile-type"
+              >
                 XP Progress
               </div>
-              <div className="total-value" data-testid="profile-total-value">
+              <div
+                className="total-value absolute text-center w-full text-[1.15em] top-[52%]"
+                data-testid="profile-total-value"
+              >
                 {userXp} / {fullXp}*
               </div>
-              <div className="percentage" data-testid="profile-percentage">
+              <div
+                className="percentage absolute text-center w-full text-[0.95em] top-[78%]"
+                data-testid="profile-percentage"
+              >
                 {(getFrac(userXp, fullXp) * 100).toFixed(2)}%
               </div>
             </div>
           </div>
-          <div className="profile-xp-footer">
+          <div className="profile-xp-footer italic text-center pb-3">
             *{fullXp}XP needed to reach full CA level of {caFulfillmentLevel}
           </div>
-          <div className="profile-callouts" data-testid="profile-callouts">
+          <div
+            className="profile-callouts flex-1 overflow-y-auto space-y-2"
+            data-testid="profile-callouts"
+          >
             {summaryCallouts}
           </div>
         </div>
@@ -176,7 +193,7 @@ function Profile(props: ProfileProps) {
 
   return (
     <Drawer
-      className="profile"
+      className="profile min-w-[410px]"
       icon={IconNames.USER}
       isCloseButtonShown
       isOpen={props.isOpen}

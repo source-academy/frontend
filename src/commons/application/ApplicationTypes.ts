@@ -376,6 +376,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   stepLimit: 1000,
   globals: [],
   isRunning: false,
+  isWaitingForInput: false,
   isDebugging: false,
   enableDebugging: true,
   debuggerContext: {} as DebuggerContext,

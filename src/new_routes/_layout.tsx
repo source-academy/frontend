@@ -1,6 +1,8 @@
-import { useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import { Outlet } from 'react-router';
+import { useLocalStorageState } from 'src/commons/hooks/useLocalStorageState';
+import { useOrientationChangeHandler } from 'src/commons/hooks/useOrientationChangeHandler';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import Messages, {
   type MessageType,
   MessageTypeNames,
@@ -11,7 +13,7 @@ import SessionActions from '../commons/application/actions/SessionActions';
 import VscodeActions from '../commons/application/actions/VscodeActions';
 import NavigationBar from '../commons/navigationBar/NavigationBar';
 import Constants from '../commons/utils/Constants';
-import { useLocalStorageState, useSession } from '../commons/utils/Hooks';
+import { useSession } from '../commons/utils/Hooks';
 import WorkspaceActions from '../commons/workspace/WorkspaceActions';
 import {
   defaultWorkspaceSettings,
@@ -19,13 +21,8 @@ import {
 } from '../commons/WorkspaceSettingsContext';
 
 function RootLayout() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { isLoggedIn } = useSession();
-
-  // Used in the mobile/PWA experience (e.g. separate handling of orientation changes on Andriod & iOS due to unique browser behaviours)
-  const isMobile = /iPhone|iPad|Android/.test(navigator.userAgent);
-  const isPWA = window.matchMedia('(display-mode: standalone)').matches; // Checks if user is accessing from the PWA
-  const browserDimensions = useRef({ height: 0, width: 0 });
 
   const [workspaceSettings, setWorkspaceSettings] = useLocalStorageState(
     Constants.workspaceSettingsLocalStorageKey,
@@ -41,44 +38,7 @@ function RootLayout() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /**
-   * The following effect prevents the mobile browser interface from hiding on scroll by setting the
-   * application height to the window's innerHeight, even after orientation changes. This ensures that
-   * the app UI does not break due to the hiding of the browser interface when the user is not on the PWA.
-   *
-   * Note: When the soft keyboard is up on Android devices, the viewport height decreases and triggers
-   * the 'resize' event. The conditional in orientationChangeHandler checks specifically for this, and
-   * does not update the application height when the Android keyboard triggers the resize event. IOS
-   * devices are not affected.
-   */
-  useEffect(() => {
-    const orientationChangeHandler = () => {
-      if (
-        !(
-          window.innerHeight < browserDimensions.current.height &&
-          window.innerWidth === browserDimensions.current.width
-        )
-      ) {
-        // If it is not an Android soft keyboard triggering the resize event, update the application height.
-        document.documentElement.style.setProperty(
-          '--application-height',
-          window.innerHeight + 'px',
-        );
-      }
-      browserDimensions.current = { height: window.innerHeight, width: window.innerWidth };
-    };
-
-    if (!isPWA && isMobile) {
-      orientationChangeHandler();
-      window.addEventListener('resize', orientationChangeHandler);
-    }
-
-    return () => {
-      if (!isPWA && isMobile) {
-        window.removeEventListener('resize', orientationChangeHandler);
-      }
-    };
-  }, [isPWA, isMobile]);
+  useOrientationChangeHandler();
 
   // Effect to handle messages from VS Code
   useEffect(() => {

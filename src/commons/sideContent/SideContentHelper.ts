@@ -18,9 +18,9 @@ import ace from 'react-ace';
 import ReactDOM from 'react-dom';
 import * as ReactDOMClient from 'react-dom/client';
 import * as ReactKonva from 'react-konva';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
-import { useTypedSelector } from '../utils/Hooks';
+import { useAppSelector } from '../utils/Hooks';
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
 import { visitSideContent } from './SideContentActions';
 import type {
@@ -95,10 +95,10 @@ export const generateTabAlert = (shouldAlert: boolean) =>
 
 export const useSideContent = (location: SideContentLocation, defaultTab?: SideContentTabId) => {
   const [workspaceLocation] = getLocation(location);
-  const { alerts, dynamicTabs, selectedTab, height }: SideContentState = useTypedSelector(
+  const { alerts, dynamicTabs, selectedTab, height }: SideContentState = useAppSelector(
     state => state.sideContent[workspaceLocation],
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const setSelectedTab = useCallback(
     (newId: SideContentTabId) => {
       if (

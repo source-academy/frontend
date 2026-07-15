@@ -1,7 +1,7 @@
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
@@ -30,7 +30,7 @@ function FileSystemViewFileName({
   refreshDirectory,
 }: Props) {
   const [editedFileName, setEditedFileName] = useState(fileName);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setEditedFileName(e.target.value);
