@@ -1,94 +1,60 @@
 import { Button } from '@blueprintjs/core';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import type { Tokens } from 'src/commons/application/types/SessionTypes';
-import { useSession, useTokens } from 'src/commons/utils/Hooks';
-import { initRagChat, sendRagMessage } from 'src/features/ragChat/api';
-import ChatbotCodeSnippet from 'src/pages/sicp/subcomponents/chatbot/ChatbotCodeSnippet';
+import { useTokens } from 'src/commons/utils/Hooks';
 import { v4 as uuid } from 'uuid';
 
-import classes from './RagChatbot.module.css';
+import classes from './ChatBox.module.css';
+import type { ChatMessage, InitChatResponse, SendMessageResponse } from './types';
 
-type ChatMessage = {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-};
-
-type RagMessageRendererProps = {
-  message: ChatMessage;
+export type RenderMessageContext = {
   activeSnippetId: string;
   setActiveSnippetId: (id: string) => void;
 };
 
-function RagMessageRenderer({
-  message,
-  activeSnippetId,
-  setActiveSnippetId,
-}: RagMessageRendererProps) {
-  return (
-    <ReactMarkdown
-      remarkPlugins={[remarkGfm]}
-      components={{
-        code({ node, inline, className, children, ...props }: any) {
-          const match = /language-(\w+)/.exec(className || '');
-          const lang = match ? match[1] : 'javascript';
-          const code = String(children).replace(/\n$/, '');
-          const snippetId = `${message.id}-code-${node?.position?.start.offset ?? 0}`;
-
-          return !inline ? (
-            <ChatbotCodeSnippet
-              key={snippetId}
-              id={snippetId}
-              code={code}
-              activeSnippetId={activeSnippetId}
-              setActiveSnippet={setActiveSnippetId}
-              language={lang}
-            />
-          ) : (
-            <code className={className} {...props}>
-              {children}
-            </code>
-          );
-        },
-      }}
-    >
-      {message.content}
-    </ReactMarkdown>
-  );
-}
-
-type Props = {
-  isExpanded: boolean;
-  toggleExpanded: () => void;
-  activeSnippetId: string;
-  setActiveSnippetId: (id: string) => void;
-};
-
-const createInitialMessage = (): ChatMessage => ({
-  id: uuid(),
-  content: 'Hi! Ask me about lectures, tutorials, recitations, or past exams!',
-  role: 'assistant',
-});
-
-const createErrorMessage = (): ChatMessage => ({
-  id: uuid(),
-  content: 'Sorry, something went wrong. Please try again later.',
-  role: 'assistant',
-});
-
-const scrollToBottom = (ref: React.RefObject<HTMLDivElement | null>) => {
+const scrollToBottom = (ref: React.RefObject<HTMLDivElement | null>): void => {
   ref.current?.scrollTo({ top: ref.current?.scrollHeight });
 };
 
-function RagChatBox({ isExpanded, toggleExpanded, activeSnippetId, setActiveSnippetId }: Props) {
+type Props = {
+  // From FloatingChatbot render prop
+  activeSnippetId: string;
+  setActiveSnippetId: (id: string) => void;
+  isExpanded: boolean;
+  toggleExpanded: () => void;
+  // Backend wiring
+  initChat: (tokens: Tokens) => Promise<InitChatResponse>;
+  sendMessage: (tokens: Tokens, userInput: string) => Promise<SendMessageResponse>;
+  // Strings
+  initialMessage: string;
+  errorMessage: string;
+  inputPlaceholder: string;
+  // Render
+  renderMessage: (message: ChatMessage, ctx: RenderMessageContext) => React.ReactNode;
+  // Optional header bits
+  feedbackUrl?: string;
+};
+
+function ChatBox({
+  activeSnippetId,
+  setActiveSnippetId,
+  isExpanded,
+  toggleExpanded,
+  initChat,
+  sendMessage: handleSendMessage,
+  initialMessage,
+  errorMessage,
+  inputPlaceholder,
+  renderMessage,
+  feedbackUrl,
+}: Props) {
   const chatRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>(() => [createInitialMessage()]);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [
+    { id: uuid(), role: 'assistant', content: initialMessage },
+  ]);
   const [userInput, setUserInput] = useState('');
   const [maxContentSize, setMaxContentSize] = useState(1000);
-  const { feedbackUrl } = useSession();
   const tokens = useTokens({ throwWhenEmpty: false });
 
   const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,15 +73,15 @@ function RagChatBox({ isExpanded, toggleExpanded, activeSnippetId, setActiveSnip
     setMessages(prev => [...prev, { id: uuid(), role: 'user', content: userInput }]);
     setIsLoading(true);
 
-    sendRagMessage(authedTokens, userInput)
+    handleSendMessage(authedTokens, userInput)
       .then(resp => {
         setMessages(prev => [...prev, { id: uuid(), role: 'assistant', content: resp.response }]);
       })
       .catch(() => {
-        setMessages(prev => [...prev, createErrorMessage()]);
+        setMessages(prev => [...prev, { id: uuid(), role: 'assistant', content: errorMessage }]);
       })
       .finally(() => setIsLoading(false));
-  }, [tokens, userInput]);
+  }, [tokens.accessToken, tokens.refreshToken, userInput, handleSendMessage, errorMessage]);
 
   const keyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
     e => {
@@ -135,7 +101,7 @@ function RagChatBox({ isExpanded, toggleExpanded, activeSnippetId, setActiveSnip
       refreshToken: tokens.refreshToken,
     };
 
-    initRagChat(authedTokens)
+    initChat(authedTokens)
       .then(resp => {
         const conversationMessages = resp.messages;
         const maxMessageSize = resp.maxContentSize;
@@ -146,15 +112,15 @@ function RagChatBox({ isExpanded, toggleExpanded, activeSnippetId, setActiveSnip
           }));
           setMessages(messagesWithIds);
         } else {
-          setMessages([createInitialMessage()]);
+          setMessages([{ id: uuid(), role: 'assistant', content: initialMessage }]);
         }
         setMaxContentSize(maxMessageSize);
         setUserInput('');
       })
       .catch(() => {
-        setMessages([createInitialMessage()]);
+        setMessages([{ id: uuid(), role: 'assistant', content: initialMessage }]);
       });
-  }, [tokens]);
+  }, [tokens.accessToken, tokens.refreshToken, initChat, initialMessage]);
 
   useEffect(() => {
     resetChat();
@@ -191,16 +157,10 @@ function RagChatBox({ isExpanded, toggleExpanded, activeSnippetId, setActiveSnip
       </div>
       <div className={classes['chat-message']} ref={chatRef}>
         {messages.map(message => (
-          <div key={message.id} className={classes[`${message.role}`]}>
-            {message.role === 'assistant' ? (
-              <RagMessageRenderer
-                message={message}
-                activeSnippetId={activeSnippetId}
-                setActiveSnippetId={setActiveSnippetId}
-              />
-            ) : (
-              message.content
-            )}
+          <div key={message.id} className={classes[message.role]}>
+            {message.role === 'assistant'
+              ? renderMessage(message, { activeSnippetId, setActiveSnippetId })
+              : message.content}
           </div>
         ))}
         {isLoading && <p>loading...</p>}
@@ -210,7 +170,7 @@ function RagChatBox({ isExpanded, toggleExpanded, activeSnippetId, setActiveSnip
           type="text"
           disabled={isLoading}
           className={classes['user-input']}
-          placeholder={isLoading ? 'Waiting for response...' : 'Ask Pixel anything...'}
+          placeholder={isLoading ? 'Waiting for response...' : inputPlaceholder}
           value={userInput}
           onChange={handleUserInput}
           onKeyDown={keyDown}
@@ -233,4 +193,4 @@ function RagChatBox({ isExpanded, toggleExpanded, activeSnippetId, setActiveSnip
   );
 }
 
-export default RagChatBox;
+export default ChatBox;
