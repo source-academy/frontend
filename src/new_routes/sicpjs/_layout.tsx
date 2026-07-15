@@ -44,17 +44,17 @@ const getText = () => {
   return visibleParagraphs;
 };
 
+function getSection() {
+  // To discard the '/sicpjs/'
+  return location.pathname.replace('/sicpjs/', '') as SicpSection;
+}
+
 function SicpLayout() {
   const { section } = useParams<{ section: string }>();
   const parentRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { isLoggedIn } = useSession();
-
-  function getSection() {
-    // To discard the '/sicpjs/'
-    return location.pathname.replace('/sicpjs/', '') as SicpSection;
-  }
 
   // Handle rerouting to the latest viewed section when clicking from the main
   // application navbar. Navigate replace logic is used to allow the user to

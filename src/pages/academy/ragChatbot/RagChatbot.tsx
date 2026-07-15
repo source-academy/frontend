@@ -7,10 +7,11 @@ import { initRagChat, sendRagMessage } from 'src/features/ragChat/api';
 
 import RagMessageRenderer from './RagMessageRenderer';
 
+const init = (tokens: Tokens) => initRagChat(tokens);
+const send = (tokens: Tokens, userInput: string) => sendRagMessage(tokens, userInput);
+
 function RagChatbot() {
   const { feedbackUrl } = useSession();
-  const init = (tokens: Tokens) => initRagChat(tokens);
-  const send = (tokens: Tokens, userInput: string) => sendRagMessage(tokens, userInput);
 
   return (
     <FloatingChatbot

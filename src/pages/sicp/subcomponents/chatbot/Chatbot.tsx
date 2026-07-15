@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import logo from 'src/assets/SA.jpg';
 import type { Tokens } from 'src/commons/application/types/SessionTypes';
 import ChatBox from 'src/components/ui/chatbot/ChatBox';
@@ -7,15 +8,18 @@ import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletio
 
 import SicpMessageRenderer from './SicpMessageRenderer';
 
+const init = (tokens: Tokens) => initChat(tokens);
+
 type Props = {
   getSection: () => SicpSection;
   getText: () => string;
 };
 
 function Chatbot({ getSection, getText }: Props) {
-  const init = (tokens: Tokens) => initChat(tokens);
-  const send = (tokens: Tokens, userInput: string) =>
-    continueChat(tokens, userInput, getSection(), getText());
+  const send = useCallback(
+    (tokens: Tokens, userInput: string) => continueChat(tokens, userInput, getSection(), getText()),
+    [getSection, getText],
+  );
 
   return (
     <FloatingChatbot
