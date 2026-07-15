@@ -175,7 +175,7 @@
     "resize-observer-polyfill": "^1.5.1",
     "sass-embedded": "^1.100.0",
     "tailwindcss": "^4.3.0",
-    "typescript": "^6.0.2",
+    "typescript": "^7.0.0",
     "typescript-eslint": "^8.1.0",
     "vitest": "4.1.10",
     "webpack-bundle-analyzer": "^5.0.0"
