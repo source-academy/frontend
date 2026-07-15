@@ -81,7 +81,7 @@ function ChatBox({
         setMessages(prev => [...prev, { id: uuid(), role: 'assistant', content: errorMessage }]);
       })
       .finally(() => setIsLoading(false));
-  }, [tokens, userInput, handleSendMessage, errorMessage]);
+  }, [tokens.accessToken, tokens.refreshToken, userInput, handleSendMessage, errorMessage]);
 
   const keyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
     e => {
@@ -120,7 +120,7 @@ function ChatBox({
       .catch(() => {
         setMessages([{ id: uuid(), role: 'assistant', content: initialMessage }]);
       });
-  }, [tokens, initChat, initialMessage]);
+  }, [tokens.accessToken, tokens.refreshToken, initChat, initialMessage]);
 
   useEffect(() => {
     resetChat();
