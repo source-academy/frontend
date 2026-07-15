@@ -1,13 +1,8 @@
 import { Fragment } from 'react';
 import type { RenderMessageContext } from 'src/components/ui/chatbot/ChatBox';
+import type { ChatMessage } from 'src/components/ui/chatbot/types';
 
 import ChatbotCodeSnippet from './ChatbotCodeSnippet';
-
-type ChatMessage = {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-};
 
 /**
  * Message renderer component that can render code blocks with interactive snippets.
