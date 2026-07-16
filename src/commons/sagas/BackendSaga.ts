@@ -763,7 +763,7 @@ const newBackendSagaTwo = combineSagaHandlers({
 
     if (courseConfiguration?.enableExamMode) {
       const {
-        user
+        user,
       }: {
         user: User | null;
         courseRegistration: CourseRegistration | null;

@@ -1615,8 +1615,8 @@ export const validateResumeCode = async (tokens: Tokens, resumeCode: string): Pr
   const resp = await request(`${courseId()}/resume_code`, 'POST', {
     ...tokens,
     body: {
-      resume_code: resumeCode
-    }
+      resume_code: resumeCode,
+    },
   });
 
   return resp != null && resp.ok;
@@ -1624,7 +1624,7 @@ export const validateResumeCode = async (tokens: Tokens, resumeCode: string): Pr
 
 export const pauseUser = async (tokens: Tokens): Promise<boolean> => {
   const resp = await request(`${courseId()}/user/pause`, 'PUT', {
-    ...tokens
+    ...tokens,
   });
 
   return resp != null && resp.ok;
@@ -1632,7 +1632,7 @@ export const pauseUser = async (tokens: Tokens): Promise<boolean> => {
 
 export const reportFocusLost = async (tokens: Tokens): Promise<boolean> => {
   const resp = await request(`${courseId()}/user/focus/0`, 'POST', {
-    ...tokens
+    ...tokens,
   });
 
   return resp != null && resp.ok;
@@ -1640,7 +1640,7 @@ export const reportFocusLost = async (tokens: Tokens): Promise<boolean> => {
 
 export const reportFocusRegain = async (tokens: Tokens): Promise<boolean> => {
   const resp = await request(`${courseId()}/user/focus/1`, 'POST', {
-    ...tokens
+    ...tokens,
   });
 
   return resp != null && resp.ok;

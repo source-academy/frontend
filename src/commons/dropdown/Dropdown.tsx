@@ -26,7 +26,7 @@ function Dropdown() {
   const [isCreateCourseOpen, setIsCreateCourseOpen] = useState(false);
   const [isPreviewExamMode] = useLocalStorageState(
     Constants.isPreviewExamModeLocalStorageKey,
-    false
+    false,
   );
 
   const { t } = useTranslation('commons', { keyPrefix: 'dropdown' });
@@ -63,10 +63,10 @@ function Dropdown() {
   const createCourse =
     isLoggedIn && !isPreviewExamMode && (!enableExamMode || role !== Role.Student) ? (
       <MenuItem
-      icon={IconNames.ADD}
-      onClick={toggleCreateCourseOpen}
-      text={t($ => $['Create Course'])}
-    />
+        icon={IconNames.ADD}
+        onClick={toggleCreateCourseOpen}
+        text={t($ => $['Create Course'])}
+      />
     ) : null;
 
   const logout = isLoggedIn ? (

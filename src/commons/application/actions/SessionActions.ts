@@ -150,11 +150,11 @@ const SessionActions = createActions('session', {
   updateCourseResearchAgreement: (agreedToResearch: boolean) => ({ agreedToResearch }),
   validateResumeCode: (resumeCode: string, callback: (isResumeCodeValid: boolean) => any) => ({
     resumeCode,
-    callback
+    callback,
   }),
   pauseUser: () => ({}),
   reportFocusLost: () => ({}),
-  reportFocusRegain: () => ({})
+  reportFocusRegain: () => ({}),
 });
 
 // For compatibility with existing code (actions helper)

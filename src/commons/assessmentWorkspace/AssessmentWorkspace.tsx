@@ -686,7 +686,7 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
         label: `Documentation`,
         iconName: IconNames.BOOK,
         body: <SideContentDocumentation />,
-        id: SideContentType.documentation
+        id: SideContentType.documentation,
       });
     }
 

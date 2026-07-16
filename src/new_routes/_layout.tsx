@@ -36,7 +36,7 @@ function RootLayout() {
   // Used for dev tools detection
   const [isPreviewExamMode] = useLocalStorageState(
     Constants.isPreviewExamModeLocalStorageKey,
-    false
+    false,
   );
   const [pauseAcademy, setPauseAcademy] = useState(false);
   const [pauseAcademyReason, setPauseAcademyReason] = useState('');
@@ -158,7 +158,7 @@ function RootLayout() {
       disableDevtool({
         ondevtoolopen: () => {
           showPauseAcademyOverlay('Developer tools detected');
-        }
+        },
       });
 
       document.addEventListener('contextmenu', event => event.preventDefault());
@@ -197,7 +197,7 @@ function RootLayout() {
           } else {
             showWarningMessage('Resume code is invalid.');
           }
-        })
+        }),
       );
     }
   };

@@ -863,7 +863,7 @@ function Playground(props: PlaygroundProps) {
   // Exam mode variables
   const [isPreviewExamMode] = useLocalStorageState(
     Constants.isPreviewExamModeLocalStorageKey,
-    false
+    false,
   );
   const applyEnableExamMode = isPreviewExamMode || (enableExamMode && role === Role.Student);
 

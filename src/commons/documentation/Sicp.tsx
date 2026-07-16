@@ -13,7 +13,7 @@ import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 import {
   setSicpSectionLocalStorage,
   SICP_CACHE_KEY,
-  SICP_INDEX
+  SICP_INDEX,
 } from 'src/features/sicp/utils/SicpUtils';
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
@@ -27,7 +27,7 @@ const extension = '.json';
 // Context to determine which code snippet is active
 export const CodeSnippetContext = React.createContext({
   active: '0',
-  setActive: (x: string) => {}
+  setActive: (x: string) => {},
 });
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
@@ -52,7 +52,7 @@ const Sicp: React.FC<SicpProps> = props => {
     }
 
     ref.scrollIntoView({
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   };
 
@@ -161,7 +161,7 @@ const Sicp: React.FC<SicpProps> = props => {
       setSection(String(node.nodeData));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [section]
+    [section],
   );
 
   const handleNodeClickedString = React.useCallback(
@@ -175,7 +175,7 @@ const Sicp: React.FC<SicpProps> = props => {
       setSection(urlPart[0]);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [section]
+    [section],
   );
 
   return (

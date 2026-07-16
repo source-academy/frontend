@@ -20,7 +20,7 @@ function DropdownCourses({ isOpen, onClose, courses, courseId }: Props) {
   const { enableExamMode, role } = useSession();
   const [isPreviewExamMode] = useLocalStorageState(
     Constants.isPreviewExamModeLocalStorageKey,
-    false
+    false,
   );
 
   const options = courses.map(course => ({

@@ -11,13 +11,13 @@ const SideContentDocumentation: React.FC = () => {
     {
       name: 'Modules',
       src: 'https://source-academy.github.io/modules/documentation/index.html',
-      component: null
+      component: null,
     },
     {
       name: 'Docs',
       src: 'https://docs.sourceacademy.org/',
-      component: null
-    }
+      component: null,
+    },
   ];
 
   const [activePage, setActivePage] = useState(pages[0]);
@@ -29,7 +29,7 @@ const SideContentDocumentation: React.FC = () => {
     const ref = documentationDivRef.current as HTMLDivElement;
     const visibilityCallback = (
       entries: IntersectionObserverEntry[],
-      observer: IntersectionObserver
+      observer: IntersectionObserver,
     ) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -47,7 +47,7 @@ const SideContentDocumentation: React.FC = () => {
 
     const observer = new IntersectionObserver(visibilityCallback, {
       root: null,
-      threshold: 0.1
+      threshold: 0.1,
     });
 
     observer.observe(ref);
@@ -79,7 +79,7 @@ const SideContentDocumentation: React.FC = () => {
   pages.push({
     name: 'SICP JS',
     src: 'https://sicp.sourceacademy.org',
-    component: <Sicp setSicpHomeCallBackFn={sicpHomeCallbackSetter} />
+    component: <Sicp setSicpHomeCallBackFn={sicpHomeCallbackSetter} />,
   });
 
   return (
@@ -88,7 +88,7 @@ const SideContentDocumentation: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        flexGrow: 1
+        flexGrow: 1,
       }}
       ref={documentationDivRef}
     >
@@ -97,7 +97,7 @@ const SideContentDocumentation: React.FC = () => {
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          marginBottom: '5px'
+          marginBottom: '5px',
         }}
       >
         <Button
@@ -125,7 +125,7 @@ const SideContentDocumentation: React.FC = () => {
           flexDirection: 'column',
           height: '100%',
           flexGrow: 1,
-          marginBottom: '0.25em'
+          marginBottom: '0.25em',
         }}
       >
         {pages.map(page =>
@@ -142,13 +142,13 @@ const SideContentDocumentation: React.FC = () => {
                 width: '100%',
                 height: '100%',
                 display: page.src === activePage.src ? 'flex' : 'none',
-                flexGrow: 1
+                flexGrow: 1,
               }}
               src={page.src}
               ref={page.src === activePage.src ? activeIframeRef : null}
               sandbox="allow-scripts allow-same-origin"
             />
-          )
+          ),
         )}
       </div>
     </div>
