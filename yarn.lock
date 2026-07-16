@@ -4021,12 +4021,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/web-module-loader@file:../plugins/src/web/module-loader::locator=frontend%40workspace%3A.":
+"@sourceacademy/web-module-loader@npm:^0.0.2":
   version: 0.0.2
-  resolution: "@sourceacademy/web-module-loader@file:../plugins/src/web/module-loader#../plugins/src/web/module-loader::hash=155726&locator=frontend%40workspace%3A."
+  resolution: "@sourceacademy/web-module-loader@npm:0.0.2"
   peerDependencies:
     "@sourceacademy/conductor": ">=0.3.0"
-  checksum: 10c0/b82d5e4c426bdd34fb270d4307094e69b1bb81e1f04842ad7f22217c61e348d1aead941326fff999f7a3c47bac1774d0c8919f9bd6debccfe66a269666df96c8
+  checksum: 10c0/435c70c122285ed3d611a3067a6da638b2c3cbe056995caa846bba998f0d070c912a535f5553374b616e014b625e8715327b687ee04bcf32f3052e281e960a3a
   languageName: node
   linkType: hard
 
@@ -8288,7 +8288,7 @@ __metadata:
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
     "@sourceacademy/web-cse-machine": "npm:^3.0.0"
-    "@sourceacademy/web-module-loader": ../plugins/src/web/module-loader
+    "@sourceacademy/web-module-loader": "npm:^0.0.2"
     "@sourceacademy/web-test": "npm:^0.0.2"
     "@svgr/webpack": "npm:^8.0.0"
     "@swc/core": "npm:^1.11.22"

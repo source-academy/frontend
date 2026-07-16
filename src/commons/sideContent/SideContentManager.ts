@@ -70,10 +70,13 @@ export class TabService implements ITabService {
     this.emit();
   }
 
-  subscribe(listener: Listener): () => void {
+  // An arrow-function property (not a method) so it has a stable `this`-bound identity that can be
+  // passed directly to useSyncExternalStore - a plain method would need `.bind()` on every render
+  // (a new function reference each time), causing needless unsubscribe/resubscribe churn.
+  subscribe = (listener: Listener): (() => void) => {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);
-  }
+  };
 
   private emit(): void {
     this.visibleTabs = Array.from(this.tabs.values())

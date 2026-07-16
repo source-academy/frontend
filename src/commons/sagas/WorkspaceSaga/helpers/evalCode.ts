@@ -795,6 +795,12 @@ export function* evalCodeConductorSaga(
     yield* surfaceConductorError(runError, workspaceLocation);
   } finally {
     try {
+      // getPreparedConductorSaga's contract: a consumed conductor "should be terminated by the
+      // caller" - this is that caller. Without this, every Run leaks its Worker instead of
+      // shutting it down.
+      if (conduit) {
+        yield call([conduit, 'terminate']);
+      }
       if (cseTask) {
         yield cancel(cseTask);
       }

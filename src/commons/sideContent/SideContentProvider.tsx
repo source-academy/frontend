@@ -58,7 +58,7 @@ export default function SideContentProvider({
     defaultTab,
   );
   const serviceTabs = useSyncExternalStore(
-    sideContentManager.subscribe.bind(sideContentManager),
+    sideContentManager.subscribe,
     () => sideContentManager.getTabs(workspaceLocation),
   );
 
