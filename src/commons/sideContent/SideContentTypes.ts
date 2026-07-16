@@ -37,8 +37,6 @@ export enum SideContentType {
   upload = 'upload',
 }
 
-export type SideContentTabId = SideContentType | string;
-
 /**
  * The id of a side-content tab. Built-in tabs use the {@link SideContentType} enum; dynamically
  * loaded plugin tabs (via the tab service) use a free-form string id.

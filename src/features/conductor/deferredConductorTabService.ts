@@ -1,5 +1,5 @@
 import sideContentManager from '../../commons/sideContent/SideContentManager';
-import type { ITabService, Tab } from './commonTabs';
+import type { ITabService, Tab } from '@sourceacademy/common-tabs';
 
 /**
  * Per-conductor {@link ITabService} that buffers a conductor's side-content tab registrations and
