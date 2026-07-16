@@ -14,6 +14,7 @@ type Props = {
   contentHeadingStyle?: React.CSSProperties;
   showTopBreak?: boolean;
   licenses?: React.ReactNode;
+  onNavigate?: (section: string) => void;
 };
 
 /**
@@ -32,6 +33,7 @@ function SicpIndexPageWrapper({
   contentHeadingStyle,
   showTopBreak = true,
   licenses,
+  onNavigate,
 }: Props) {
   const navigate = useNavigate();
   return (
@@ -42,7 +44,17 @@ function SicpIndexPageWrapper({
       </div>
       {showTopBreak && <br />}
       <H2 style={contentHeadingStyle}>{contentHeading}</H2>
-      <SicpToc toc={toc} handleClick={node => navigate(`${routePrefix}/${node.nodeData}`)} />
+      <SicpToc
+        toc={toc}
+        handleClick={node => {
+          const section = String(node.nodeData);
+          if (onNavigate) {
+            onNavigate(section);
+          } else {
+            navigate(`${routePrefix}/${section}`);
+          }
+        }}
+      />
       {licenses && (
         <>
           <br />

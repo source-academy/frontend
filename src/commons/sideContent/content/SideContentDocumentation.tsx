@@ -1,151 +1,125 @@
 import { Button } from '@blueprintjs/core';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Sicp from 'src/commons/documentation/Sicp';
+import { Links } from 'src/commons/utils/Constants';
+import { SICP_INDEX } from 'src/features/textbook/hooks/useTextbookSectionQuery';
+
+const MODULES_DOCUMENTATION_URL =
+  'https://source-academy.github.io/modules/documentation/index.html';
+
+const documentationPages = [
+  { id: 'modules', src: MODULES_DOCUMENTATION_URL },
+  { id: 'sourceDocs', src: Links.sourceDocs },
+  { id: 'sicpJs' },
+] as const;
+
+type DocumentationPage = (typeof documentationPages)[number];
+type DocumentationPageId = DocumentationPage['id'];
 
 function SideContentDocumentation() {
-  const pages: {
-    name: string;
-    src: string;
-    component: React.ReactElement | null;
-  }[] = [
-    {
-      name: 'Modules',
-      src: 'https://source-academy.github.io/modules/documentation/index.html',
-      component: null,
-    },
-    {
-      name: 'Docs',
-      src: 'https://docs.sourceacademy.org/',
-      component: null,
-    },
-  ];
+  const { t } = useTranslation('sideContent', { keyPrefix: 'documentation' });
+  const [activePageId, setActivePageId] = useState<DocumentationPageId>('modules');
+  const [sicpSection, setSicpSection] = useState(SICP_INDEX);
+  const iframeRefs = useRef<Partial<Record<DocumentationPageId, HTMLIFrameElement>>>({});
+  const documentationRef = useRef<HTMLDivElement>(null);
 
-  const [activePage, setActivePage] = useState(pages[0]);
-  const activeIframeRef = useRef<HTMLIFrameElement>(null);
-  const documentationDivRef = useRef<HTMLDivElement>(null);
-
-  // Used to resize the docs tab to an initial height only once
+  // Give the documentation enough room to be useful the first time its tab becomes visible.
   useEffect(() => {
-    const ref = documentationDivRef.current as HTMLDivElement;
-    const visibilityCallback = (
-      entries: IntersectionObserverEntry[],
-      observer: IntersectionObserver,
-    ) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const resizableSideContentElement = document
-            .getElementsByClassName('resize-side-content')
-            .item(0) as HTMLDivElement;
-          if (resizableSideContentElement !== null) {
-            resizableSideContentElement.style.height = '500px';
-          }
+    const documentationElement = documentationRef.current;
+    if (!documentationElement) {
+      return;
+    }
+    if (typeof IntersectionObserver === 'undefined') {
+      return;
+    }
 
-          observer.unobserve(ref);
+    const observer = new IntersectionObserver(
+      entries => {
+        if (!entries.some(entry => entry.isIntersecting)) {
+          return;
         }
-      });
-    };
 
-    const observer = new IntersectionObserver(visibilityCallback, {
-      root: null,
-      threshold: 0.1,
-    });
+        const sideContentElement = document.querySelector<HTMLDivElement>('.resize-side-content');
+        if (sideContentElement) {
+          sideContentElement.style.height = '500px';
+        }
+        observer.unobserve(documentationElement);
+      },
+      { threshold: 0.1 },
+    );
 
-    observer.observe(ref);
-    return () => {
-      observer.unobserve(ref);
-    };
+    observer.observe(documentationElement);
+    return () => observer.disconnect();
   }, []);
 
-  let sicpHomeCallbackFn: () => void = () => {};
-
-  const changeActivePage = (index: number) => {
-    setActivePage(pages[index]);
-  };
-
-  const handleDocsHome = useCallback(() => {
-    if (sicpHomeCallbackFn !== null && activePage.src === 'https://sicp.sourceacademy.org') {
-      sicpHomeCallbackFn();
+  const handleHome = () => {
+    if (activePageId === 'sicpJs') {
+      setSicpSection(SICP_INDEX);
+      return;
     }
 
-    if (activeIframeRef.current !== null) {
-      activeIframeRef.current.src = activePage.src;
+    const activeIframe = iframeRefs.current[activePageId];
+    const activePage = documentationPages.find(page => page.id === activePageId);
+    if (activeIframe && activePage && 'src' in activePage) {
+      activeIframe.src = activePage.src;
     }
-  }, [activePage.src]);
-
-  const sicpHomeCallbackSetter = (fn: () => void) => {
-    sicpHomeCallbackFn = fn;
   };
 
-  pages.push({
-    name: 'SICP JS',
-    src: 'https://sicp.sourceacademy.org',
-    component: <Sicp setSicpHomeCallBackFn={sicpHomeCallbackSetter} />,
-  });
+  const getPageLabel = (pageId: DocumentationPageId) => {
+    switch (pageId) {
+      case 'modules':
+        return t($ => $.modules);
+      case 'sourceDocs':
+        return t($ => $.sourceDocs);
+      case 'sicpJs':
+        return t($ => $.sicpJs);
+    }
+  };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        flexGrow: 1,
-      }}
-      ref={documentationDivRef}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginBottom: '5px',
-        }}
-      >
+    <div className="documentation-side-content" ref={documentationRef}>
+      <div className="documentation-side-content-controls">
         <Button
-          style={{ padding: '0 2ch 0 2ch', margin: '0px 5px 0px 5px', textWrap: 'nowrap' }}
+          className="documentation-side-content-button"
           size="small"
-          text={'Home'}
+          text={t($ => $.home)}
           variant="minimal"
-          onClick={() => handleDocsHome()}
+          onClick={handleHome}
         />
-        <div style={{ width: '100%' }} />
-        {pages.map((page, index) => (
+        <div className="documentation-side-content-spacer" />
+        {documentationPages.map(page => (
           <Button
-            active={page.name === activePage.name}
-            style={{ padding: '0 2ch 0 2ch', margin: '0px 5px 0px 5px', textWrap: 'nowrap' }}
-            text={page.name}
+            active={page.id === activePageId}
+            className="documentation-side-content-button"
+            key={page.id}
+            text={getPageLabel(page.id)}
             variant="minimal"
             size="small"
-            onClick={() => changeActivePage(index)}
+            onClick={() => setActivePageId(page.id)}
           />
         ))}
       </div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-          flexGrow: 1,
-          marginBottom: '0.25em',
-        }}
-      >
-        {pages.map(page =>
-          page.component ? (
+      <div className="documentation-side-content-pages">
+        {documentationPages.map(page =>
+          page.id === 'sicpJs' ? (
             <div
-              style={{ display: page.src === activePage.src ? 'block' : 'none', height: '100%' }}
+              className="documentation-side-content-page"
+              hidden={page.id !== activePageId}
+              key={page.id}
             >
-              {page.component}
+              <Sicp section={sicpSection} onNavigate={setSicpSection} />
             </div>
           ) : (
             <iframe
-              style={{
-                border: 'none',
-                width: '100%',
-                height: '100%',
-                display: page.src === activePage.src ? 'flex' : 'none',
-                flexGrow: 1,
-              }}
+              className="documentation-side-content-iframe"
+              hidden={page.id !== activePageId}
+              key={page.id}
               src={page.src}
-              ref={page.src === activePage.src ? activeIframeRef : null}
+              title={getPageLabel(page.id)}
+              ref={ref => {
+                iframeRefs.current[page.id] = ref ?? undefined;
+              }}
               sandbox="allow-scripts allow-same-origin"
             />
           ),
