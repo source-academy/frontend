@@ -108,8 +108,7 @@ function SicpTextbookNavigationBar({
   return (
     <>
       <Navbar
-        className="SicpNavigationBar secondary-navbar"
-        style={sticky ? { position: 'sticky', top: 0 } : undefined}
+        className={classNames('SicpNavigationBar secondary-navbar', sticky && 'sticky top-0')}
       >
         <NavbarGroup align={Alignment.START}>{tocButton}</NavbarGroup>
         <NavbarGroup align={Alignment.END}>{[prevButton, nextButton]}</NavbarGroup>

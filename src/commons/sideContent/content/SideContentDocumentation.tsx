@@ -78,20 +78,20 @@ function SideContentDocumentation() {
   };
 
   return (
-    <div className="documentation-side-content" ref={documentationRef}>
-      <div className="documentation-side-content-controls">
+    <div className="flex h-full flex-1 flex-col" ref={documentationRef}>
+      <div className="mb-1 flex items-center">
         <Button
-          className="documentation-side-content-button"
+          className="mx-1 whitespace-nowrap px-3"
           size="small"
           text={t($ => $.home)}
           variant="minimal"
           onClick={handleHome}
         />
-        <div className="documentation-side-content-spacer" />
+        <div className="flex-1" />
         {documentationPages.map(page => (
           <Button
             active={page.id === activePageId}
-            className="documentation-side-content-button"
+            className="mx-1 whitespace-nowrap px-3"
             key={page.id}
             text={getPageLabel(page.id)}
             variant="minimal"
@@ -100,11 +100,11 @@ function SideContentDocumentation() {
           />
         ))}
       </div>
-      <div className="documentation-side-content-pages">
+      <div className="mb-1 flex h-full min-h-0 flex-1 flex-col">
         {documentationPages.map(page =>
           page.id === 'sicpJs' ? (
             <div
-              className="documentation-side-content-page"
+              className="h-full w-full flex-1 border-0"
               hidden={page.id !== activePageId}
               key={page.id}
             >
@@ -112,7 +112,7 @@ function SideContentDocumentation() {
             </div>
           ) : (
             <iframe
-              className="documentation-side-content-iframe"
+              className="h-full w-full flex-1 border-0"
               hidden={page.id !== activePageId}
               key={page.id}
               src={page.src}
