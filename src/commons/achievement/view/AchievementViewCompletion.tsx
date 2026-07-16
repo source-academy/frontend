@@ -1,11 +1,9 @@
-import React from 'react';
-
 type Props = {
   awardedXp: number;
   completionText: string;
 };
 
-const AchievementViewCompletion: React.FC<Props> = ({ awardedXp, completionText }) => {
+function AchievementViewCompletion({ awardedXp, completionText }: Props) {
   const paragraphs = completionText ? completionText.split('\n') : [''];
 
   return (
@@ -19,6 +17,6 @@ const AchievementViewCompletion: React.FC<Props> = ({ awardedXp, completionText 
       ))}
     </div>
   );
-};
+}
 
 export default AchievementViewCompletion;

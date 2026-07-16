@@ -1,7 +1,7 @@
-import { SALanguage } from 'src/commons/application/ApplicationTypes';
+import type { SALanguage } from 'src/commons/application/ApplicationTypes';
 
-import { GitHubSaveInfo } from '../github/GitHubTypes';
-import { PersistenceFile } from '../persistence/PersistenceTypes';
+import type { GitHubSaveInfo } from '../github/GitHubTypes';
+import type { PersistenceFile } from '../persistence/PersistenceTypes';
 
 export type PlaygroundState = {
   readonly queryString?: string;

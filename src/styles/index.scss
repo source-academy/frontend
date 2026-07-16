@@ -1,9 +1,5 @@
 @use 'sass:math';
 
-@import '~normalize.css/normalize.css';
-@import '~@blueprintjs/core/lib/css/blueprint.css';
-@import '~@blueprintjs/datetime/lib/css/blueprint-datetime.css';
-@import '~@blueprintjs/select/lib/css/blueprint-select.css';
 @import '~flexboxgrid/dist/flexboxgrid.css';
 @import '~flexboxgrid-helpers/dist/flexboxgrid-helpers.min.css';
 
@@ -25,20 +21,15 @@
 @import 'application';
 @import 'commons';
 @import 'contributors';
-@import 'dropdown';
 @import 'editorTabs';
 @import 'game';
 @import 'github';
-@import 'gamesimulator';
 @import 'groundcontrol';
 @import 'mobileworkspace';
 @import 'navigationBar';
 @import 'playground';
 @import 'sicp';
 @import 'sideBar';
-@import 'sourcereel';
-@import 'sourcecast';
-@import 'stories';
 @import 'variableHighlighting';
 @import 'workspaceGreen';
 @import 'workspace';

@@ -1,12 +1,12 @@
 import { Icon } from '@blueprintjs/core';
-import { CustomHeaderProps } from 'ag-grid-react';
+import type { CustomHeaderProps } from 'ag-grid-react';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppSelector } from 'src/commons/utils/Hooks';
 import { SortStates } from 'src/features/grading/GradingTypes';
-import classes from 'src/styles/Grading.module.scss';
 
+import classes from '../Grading.module.css';
 import { getNextSortState } from './GradingSubmissionsTable';
 
 type Props = CustomHeaderProps & {
@@ -15,10 +15,10 @@ type Props = CustomHeaderProps & {
   disabledSortCols: string[];
 };
 
-const GradingColumnCustomHeaders: React.FC<Props> = props => {
+function GradingColumnCustomHeaders(props: Props) {
   // The values correspond to the available icons in the BlueprintJS library. "sort" means unsorted.
   const [sortState, setSortState] = useState(SortStates.NONE);
-  const colsSortState = useTypedSelector(state => state.workspaces.grading.allColsSortStates);
+  const colsSortState = useAppSelector(state => state.workspaces.grading.allColsSortStates);
 
   const nextSortState = () => {
     setSortState(prev => getNextSortState(prev));
@@ -35,7 +35,7 @@ const GradingColumnCustomHeaders: React.FC<Props> = props => {
     <GradingFlex
       className={classNames(
         props.eGridHeader.classList,
-        classes['grading-table-header-individual']
+        classes['grading-table-header-individual'],
       )}
     >
       <span className="ag-header-cell-text">{props.displayName}</span>
@@ -57,6 +57,6 @@ const GradingColumnCustomHeaders: React.FC<Props> = props => {
       </div>
     </GradingFlex>
   );
-};
+}
 
 export default GradingColumnCustomHeaders;

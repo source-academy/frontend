@@ -1,29 +1,29 @@
 import { IconNames } from '@blueprintjs/icons';
-import { bindActionCreators } from '@reduxjs/toolkit';
 import { t } from 'i18next';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { connect, MapDispatchToProps } from 'react-redux';
-import { ResultOutput } from 'src/commons/application/ApplicationTypes';
+import type { ResultOutput } from 'src/commons/application/ApplicationTypes';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { beginAlertSideContent } from '../SideContentActions';
-import { SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
+import {
+  type SideContentLocation,
+  type SideContentTab,
+  SideContentType,
+} from '../SideContentTypes';
 
-type OwnProps = {
+type Props = {
   content: string;
   handleAddHtmlConsoleError: (errorMsg: string) => void;
   workspaceLocation: SideContentLocation;
 };
 
-type DispatchProps = {
-  alertSideContent: () => void;
-};
-
 const ERROR_MESSAGE_REGEX = /^Line \d+: /i;
 
-const SideContentHtmlDisplayBase: React.FC<OwnProps & DispatchProps> = props => {
+export function SideContentHtmlDisplay(props: Props) {
   const { t } = useTranslation('sideContent', { keyPrefix: 'htmlDisplay' });
-  const { content, handleAddHtmlConsoleError, alertSideContent } = props;
+  const { content, handleAddHtmlConsoleError, workspaceLocation } = props;
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const handleEvent = (event: MessageEvent) => {
@@ -41,38 +41,27 @@ const SideContentHtmlDisplayBase: React.FC<OwnProps & DispatchProps> = props => 
   });
 
   useEffect(() => {
-    alertSideContent();
+    dispatch(beginAlertSideContent(SideContentType.htmlDisplay, workspaceLocation));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <iframe
       className="sa-html-display"
-      title={t('title')}
+      title={t($ => $.title)}
       sandbox="allow-scripts"
       srcDoc={content}
       src="about:blank"
     />
   );
-};
-
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) =>
-  bindActionCreators(
-    {
-      alertSideContent: () =>
-        beginAlertSideContent(SideContentType.htmlDisplay, props.workspaceLocation)
-    },
-    dispatch
-  );
-
-export const SideContentHtmlDisplay = connect(null, mapDispatchToProps)(SideContentHtmlDisplayBase);
+}
 
 const makeHtmlDisplayTabFrom = (
   output: ResultOutput,
   handleError: (errorMsg: string) => void,
-  workspaceLocation: SideContentLocation
+  workspaceLocation: SideContentLocation,
 ): SideContentTab => ({
-  label: t('sideContent:htmlDisplay.label'),
+  label: t($ => $.htmlDisplay.label, { ns: 'sideContent' }),
   iconName: IconNames.MODAL,
   body: (
     <SideContentHtmlDisplay
@@ -81,6 +70,7 @@ const makeHtmlDisplayTabFrom = (
       handleAddHtmlConsoleError={handleError}
     />
   ),
-  id: SideContentType.htmlDisplay
+  id: SideContentType.htmlDisplay,
 });
-export { makeHtmlDisplayTabFrom as default, type OwnProps as SideContentHtmlDisplayProps };
+
+export default makeHtmlDisplayTabFrom;

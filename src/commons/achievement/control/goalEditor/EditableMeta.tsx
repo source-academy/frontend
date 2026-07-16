@@ -1,14 +1,13 @@
 import { Button, MenuItem, Tooltip } from '@blueprintjs/core';
-import { ItemRenderer, Select } from '@blueprintjs/select';
-import React from 'react';
-import {
+import { type ItemRenderer, Select } from '@blueprintjs/select';
+import type {
   AssessmentMeta,
   BinaryMeta,
   EventMeta,
   GoalMeta,
-  GoalType,
-  ManualMeta
+  ManualMeta,
 } from 'src/features/achievement/AchievementTypes';
+import { GoalType } from 'src/features/achievement/AchievementTypes';
 
 import { metaTemplate } from './GoalTemplate';
 import EditableAssessmentMeta from './metaDetails/EditableAssessmentMeta';
@@ -21,10 +20,9 @@ type Props = {
   meta: GoalMeta;
 };
 
-const EditableMeta: React.FC<Props> = ({ changeMeta, meta }) => {
+function EditableMeta({ changeMeta, meta }: Props) {
   const { type } = meta;
 
-  const TypeSelect = Select.ofType<GoalType>();
   const typeRenderer: ItemRenderer<GoalType> = (type, { handleClick }) => (
     <MenuItem key={type} onClick={handleClick} text={type} />
   );
@@ -51,18 +49,18 @@ const EditableMeta: React.FC<Props> = ({ changeMeta, meta }) => {
   return (
     <>
       <Tooltip content="Change Goal Type">
-        <TypeSelect
+        <Select<GoalType>
           filterable={false}
           itemRenderer={typeRenderer}
           items={Object.values(GoalType)}
           onItemSelect={changeType}
         >
-          <Button minimal={true} outlined={true} text={type} />
-        </TypeSelect>
+          <Button variant="outlined" text={type} />
+        </Select>
       </Tooltip>
       {editableMetaDetails(type)}
     </>
   );
-};
+}
 
 export default EditableMeta;

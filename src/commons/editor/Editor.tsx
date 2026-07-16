@@ -21,33 +21,37 @@ import 'ace-builds/src-noconflict/keybinding-vim';
 import { Card } from '@blueprintjs/core';
 import * as AceBuilds from 'ace-builds';
 import { Ace, require as acequire, createEditSession } from 'ace-builds';
-import { Chapter, Variant } from 'js-slang/dist/types';
-import React from 'react';
-import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
-import { IAceEditor } from 'react-ace/lib/types';
-import { SALanguage } from '../application/ApplicationTypes';
-import { EditorBinding } from '../WorkspaceSettingsContext';
+import { Chapter, Variant } from 'js-slang/dist/langs';
+import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import type { IAceEditorProps, IEditorProps } from 'react-ace';
+import AceEditor from 'react-ace';
+import type { IAceEditor } from 'react-ace/lib/types';
+import type { SALanguage } from '../application/ApplicationTypes';
 import { getModeString, selectMode } from '../utils/AceHelper';
 import { objectEntries } from '../utils/TypeHelper';
-import { KeyFunction, keyBindings } from './EditorHotkeys';
-import { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
+import { EditorBinding } from '../WorkspaceSettingsContext';
+import { type KeyFunction, keyBindings } from './EditorHotkeys';
+import type { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 
 // =============== Hooks ===============
 // TODO: Should further refactor into EditorBase + different variants.
 // Ideally, hooks should be specified by the parent component instead.
+import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
+import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { useFeature } from '../featureFlags/useFeature';
+import { useAppSelector } from '../utils/Hooks';
 import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
-import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (
   inProps: Readonly<EditorProps>,
   outProps: IAceEditorProps,
   keyBindings: EditorKeyBindingHandlers,
-  reactAceRef: React.MutableRefObject<AceEditor | null>
+  reactAceRef: React.RefObject<AceEditor | null>,
 ) => void;
 
 export type EditorProps = DispatchProps & EditorStateProps & EditorTabStateProps & OnEvent;
@@ -66,12 +70,12 @@ type DispatchProps = {
 type EditorStateProps = {
   editorSessionId: string;
   sessionDetails: { docId: string; readOnly: boolean; owner: boolean } | null;
-  isEditorAutorun: boolean;
   sourceChapter?: Chapter;
   externalLibraryName?: string;
   sourceVariant?: Variant;
   hooks?: EditorHook[];
   editorBinding?: EditorBinding;
+  mode?: string;
   setUsers?: React.Dispatch<React.SetStateAction<Record<string, SharedbAceUser>>>;
   // TODO: Handle changing of external library
   updateLanguageCallback?: (sublanguage: SALanguage, e: any) => void;
@@ -119,11 +123,11 @@ const EventT: Array<keyof OnEvent> = [
   'onPaste',
   'onFocus',
   'onBlur',
-  'onScroll'
+  'onScroll',
 ];
 
 const getMarkers = (
-  highlightedLines: EditorTabStateProps['highlightedLines']
+  highlightedLines: EditorTabStateProps['highlightedLines'],
 ): IAceEditorProps['markers'] => {
   return highlightedLines.map(lineNums => ({
     startRow: lineNums[0],
@@ -131,14 +135,14 @@ const getMarkers = (
     endRow: lineNums[1],
     endCol: 1,
     className: 'myMarker',
-    type: 'fullLine'
+    type: 'fullLine',
   }));
 };
 
 const makeHandleGutterClick =
   (
     handleEditorUpdateBreakpoints: DispatchProps['handleEditorUpdateBreakpoints'],
-    editorTabIndex: number
+    editorTabIndex: number,
   ) =>
   (e: AceMouseEvent) => {
     const target = e.domEvent.target! as HTMLDivElement;
@@ -325,7 +329,7 @@ const makeCompleter = (handlePromptAutocomplete: DispatchProps['handlePromptAuto
     session: Ace.EditSession,
     pos: Ace.Point,
     prefix: string,
-    callback: () => void
+    callback: () => void,
   ) => {
     // Don't prompt if prefix starts with number
     if (prefix && /\d/.test(prefix.charAt(0))) {
@@ -335,7 +339,7 @@ const makeCompleter = (handlePromptAutocomplete: DispatchProps['handlePromptAuto
 
     // Cursor col is insertion location i.e. last char col + 1
     handlePromptAutocomplete(pos.row + 1, pos.column, callback);
-  }
+  },
 });
 
 const moveCursor = (editor: AceEditor['editor'], position: Position) => {
@@ -345,13 +349,13 @@ const moveCursor = (editor: AceEditor['editor'], position: Position) => {
   editor.renderer.scrollCursorIntoView(position, 0.5);
 };
 
-const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
-  const reactAceRef: React.MutableRefObject<AceEditor | null> = React.useRef(null);
-  const [filePath, setFilePath] = React.useState<string | undefined>(undefined);
+const EditorBase = memo((props: EditorProps & LocalStateProps) => {
+  const reactAceRef: React.RefObject<AceEditor | null> = useRef(null);
+  const [filePath, setFilePath] = useState<string | undefined>(undefined);
 
   // Refs for things that technically shouldn't change... but just in case.
-  const handleEditorUpdateBreakpointsRef = React.useRef(props.handleEditorUpdateBreakpoints);
-  const handlePromptAutocompleteRef = React.useRef(props.handlePromptAutocomplete);
+  const handleEditorUpdateBreakpointsRef = useRef(props.handleEditorUpdateBreakpoints);
+  const handlePromptAutocompleteRef = useRef(props.handlePromptAutocomplete);
 
   const editor = reactAceRef.current?.editor;
   // Set edit session history when switching to another editor tab.
@@ -374,12 +378,12 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     handleEditorUpdateBreakpointsRef.current = props.handleEditorUpdateBreakpoints;
     handlePromptAutocompleteRef.current = props.handlePromptAutocomplete;
   }, [props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (editor === undefined) {
       return;
     }
@@ -387,7 +391,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   }, [editor, props.breakpoints]);
 
   // Handles input into AceEditor causing app to scroll to the top on iOS Safari
-  React.useEffect(() => {
+  useEffect(() => {
     const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
     if (isIOS) {
       document.body.style.position = 'fixed';
@@ -403,7 +407,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   const [sourceChapter, sourceVariant, externalLibraryName] = [
     props.sourceChapter || Chapter.SOURCE_1,
     props.sourceVariant || Variant.DEFAULT,
-    props.externalLibraryName || ExternalLibraryName.NONE
+    props.externalLibraryName || ExternalLibraryName.NONE,
   ];
 
   // this function defines the Ace language and highlighting mode for the
@@ -416,7 +420,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   // unconditionally.
   selectMode(sourceChapter, sourceVariant, externalLibraryName);
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (editor === undefined) {
       return;
     }
@@ -428,7 +432,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     // hopelessly incomplete
     editor.on(
       'gutterclick' as any,
-      makeHandleGutterClick(handleEditorUpdateBreakpointsRef.current, props.editorTabIndex)
+      makeHandleGutterClick(handleEditorUpdateBreakpointsRef.current, props.editorTabIndex),
     );
 
     // Change all info annotations to error annotations
@@ -441,12 +445,12 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       setCompleters([textCompleter, keyWordCompleter]);
     } else {
       acequire('ace/ext/language_tools').setCompleters([
-        makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
+        makeCompleter((...args) => handlePromptAutocompleteRef.current(...args)),
       ]);
     }
   }, [editor, props.sourceChapter, props.editorTabIndex]);
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (editor === undefined) {
       return;
     }
@@ -456,40 +460,111 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     }
   }, [editor, props.newCursorPosition]);
 
-  const {
-    handleUpdateHasUnsavedChanges,
-    handleEditorValueChange,
-    isEditorAutorun,
-    handleEditorEval
-  } = props;
+  const { handleUpdateHasUnsavedChanges, handleEditorValueChange, handleEditorEval } = props;
+  const handleEditorEvalRef = useRef(handleEditorEval);
+  handleEditorEvalRef.current = handleEditorEval;
+
   const keyHandlers: EditorKeyBindingHandlers = {
-    evaluate: handleEditorEval
+    evaluate: () => {
+      handleEditorEvalRef.current();
+    },
   };
+
+  const conductorEnabled = useFeature(flagConductorEnable);
+  const selectedEvaluatorId = useAppSelector(s => s.languageDirectory.selectedEvaluatorId)!;
+  useEffect(() => {
+    if (!conductorEnabled || !reactAceRef.current || !selectedEvaluatorId) {
+      return;
+    }
+
+    const editor = reactAceRef.current.editor;
+    const modeId = `ace/mode/${selectedEvaluatorId}`;
+    let modeChangeUnsub: (() => void) | undefined;
+    let pollHandle: ReturnType<typeof setInterval> | undefined;
+
+    const apply = (session: any) => {
+      let modeModule: any;
+      try {
+        modeModule = acequire(modeId);
+      } catch {
+        return false;
+      }
+      if (!modeModule?.Mode) {
+        return false;
+      }
+      if ((session.getMode() as any).$id === modeId) {
+        return true;
+      }
+      session.setMode(new modeModule.Mode());
+      return true;
+    };
+
+    const attachToSession = (session: any) => {
+      modeChangeUnsub?.();
+      if (pollHandle) {
+        clearInterval(pollHandle);
+      }
+
+      const onChangeMode = () => {
+        if ((session.getMode() as any).$id !== modeId) {
+          apply(session);
+        }
+      };
+      session.on('changeMode', onChangeMode);
+      modeChangeUnsub = () => session.off('changeMode', onChangeMode);
+
+      if (!apply(session)) {
+        pollHandle = setInterval(() => {
+          if (apply(session)) {
+            clearInterval(pollHandle);
+            pollHandle = undefined;
+          }
+        }, 200);
+      }
+    };
+
+    attachToSession(editor.getSession());
+
+    const onChangeSession = (e: any) => {
+      attachToSession(e.session);
+    };
+    editor.on('changeSession', onChangeSession);
+
+    return () => {
+      modeChangeUnsub?.();
+      if (pollHandle) {
+        clearInterval(pollHandle);
+      }
+      editor.off('changeSession', onChangeSession);
+    };
+  }, [conductorEnabled, selectedEvaluatorId]);
 
   const aceEditorProps: IAceEditorProps = {
     className: 'react-ace',
     editorProps: {
-      $blockScrolling: Infinity
+      $blockScrolling: Infinity,
     },
-    markers: React.useMemo(() => getMarkers(props.highlightedLines), [props.highlightedLines]),
+    markers: useMemo(() => getMarkers(props.highlightedLines), [props.highlightedLines]),
     fontSize: 17,
     height: '100%',
     highlightActiveLine: false,
-    mode: getModeString(sourceChapter, sourceVariant, externalLibraryName),
+    mode: conductorEnabled
+      ? 'text'
+      : getModeString(sourceChapter, sourceVariant, externalLibraryName),
     theme: 'source',
     value: props.editorValue,
     width: '100%',
     setOptions: {
       enableBasicAutocompletion: true,
       enableLiveAutocompletion: true,
-      fontFamily: "'Inconsolata', 'Consolas', monospace"
+      fontFamily: "'Inconsolata', 'Consolas', monospace",
     },
-    keyboardHandler: props.editorBinding
+    keyboardHandler: props.editorBinding,
   };
 
   // Hooks must not change after an editor is instantiated, so to prevent that
   // we store the original value and always use that only
-  const [hooks] = React.useState(props.hooks);
+  const [hooks] = useState(props.hooks);
   if (hooks) {
     // Note: the following is extremely non-standard use of hooks
     // DO NOT refactor this into any form where the hook is called from a lambda
@@ -500,7 +575,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
 
   const { onChange } = aceEditorProps;
 
-  aceEditorProps.onChange = React.useCallback(
+  aceEditorProps.onChange = useCallback(
     (newCode: string, delta: Ace.Delta) => {
       if (!reactAceRef.current) {
         return;
@@ -512,28 +587,17 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       handleEditorValueChange(props.editorTabIndex, newCode);
       handleEditorUpdateBreakpointsRef.current(
         props.editorTabIndex,
-        reactAceRef.current.editor.session.getBreakpoints()
+        reactAceRef.current.editor.session.getBreakpoints(),
       );
 
       if (handleUpdateHasUnsavedChanges) {
         handleUpdateHasUnsavedChanges(true);
       }
-      const annotations = reactAceRef.current.editor.getSession().getAnnotations();
-      if (isEditorAutorun && annotations.length === 0) {
-        handleEditorEval();
-      }
       if (onChange !== undefined) {
         onChange(newCode, delta);
       }
     },
-    [
-      handleEditorValueChange,
-      props.editorTabIndex,
-      handleUpdateHasUnsavedChanges,
-      isEditorAutorun,
-      onChange,
-      handleEditorEval
-    ]
+    [handleEditorValueChange, props.editorTabIndex, handleUpdateHasUnsavedChanges, onChange],
   );
 
   aceEditorProps.commands = objectEntries(keyHandlers)
@@ -573,7 +637,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   acequire('ace/ext/menu_tools/overlay_page').overlayPage = function (
     editor: any,
     contentElement: HTMLElement,
-    callback: any
+    callback: any,
   ) {
     let closer: HTMLElement | null = document.createElement('div');
     // Add id to the overlay div
@@ -587,7 +651,9 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     }
 
     function close() {
-      if (!closer) return;
+      if (!closer) {
+        return;
+      }
       document.removeEventListener('keydown', documentEscListener);
       closer?.parentNode?.removeChild(closer);
       if (editor) {
@@ -635,12 +701,12 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     }
     return {
       close: close,
-      setIgnoreFocusOut: setIgnoreFocusOut
+      setIgnoreFocusOut: setIgnoreFocusOut,
     };
   };
 
   // Remove the overlay div when the editor is unmounted
-  React.useEffect(() => {
+  useEffect(() => {
     return () => {
       const div = document.getElementById('overlay');
       if (div) {
@@ -658,12 +724,13 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     </Card>
   );
 });
+EditorBase.displayName = 'EditorBase';
 
 // don't create a new list every render.
 const hooks = [useHighlighting, useNavigation, useShareAce, useRefactor];
 
-const Editor: React.FC<EditorProps> = (props: EditorProps) => {
-  const [sessions, setSessions] = React.useState<Record<string, Ace.EditSession>>({});
+function Editor(props: EditorProps) {
+  const [sessions, setSessions] = useState<Record<string, Ace.EditSession>>({});
 
   // Create new edit session.
   const defaultMode = acequire('ace/mode/javascript').Mode();
@@ -673,7 +740,7 @@ const Editor: React.FC<EditorProps> = (props: EditorProps) => {
   if (props.filePath !== undefined && sessions[props.filePath] === undefined) {
     setSessions({
       ...sessions,
-      [props.filePath]: defaultEditSession
+      [props.filePath]: defaultEditSession,
     });
   }
 
@@ -684,6 +751,6 @@ const Editor: React.FC<EditorProps> = (props: EditorProps) => {
       hooks={hooks}
     />
   );
-};
+}
 
 export default Editor;

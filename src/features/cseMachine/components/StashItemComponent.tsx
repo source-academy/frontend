@@ -1,5 +1,5 @@
-import { KonvaEventObject } from 'konva/lib/Node';
-import React, { RefObject } from 'react';
+import type { KonvaEventObject } from 'konva/lib/Node';
+import { createRef, Fragment } from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
 import { FnValue } from '../components/values/FnValue';
@@ -8,7 +8,7 @@ import CseMachine from '../CseMachine';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { Layout } from '../CseMachineLayout';
-import { IHoverable } from '../CseMachineTypes';
+import type { IHoverable } from '../CseMachineTypes';
 import {
   defaultDangerColor,
   defaultStrokeColor,
@@ -22,9 +22,9 @@ import {
   setHoveredStyle,
   setUnhoveredCursor,
   setUnhoveredStyle,
-  truncateText
+  truncateText,
 } from '../CseMachineUtils';
-import { isContinuation } from '../utils/scheme';
+import { isContinuation } from '../utils/continuation';
 import { ArrowFromStashItemComponent } from './arrows/ArrowFromStashItemComponent';
 import { ArrayValue } from './values/ArrayValue';
 import { ContValue } from './values/ContValue';
@@ -35,7 +35,7 @@ export class StashItemComponent extends Visible implements IHoverable {
   readonly text: string;
   /** text to display on hover */
   readonly tooltip: string;
-  readonly tooltipRef: RefObject<any>;
+  readonly tooltipRef: React.RefObject<any>;
   readonly arrow?: ArrowFromStashItemComponent;
 
   constructor(
@@ -44,7 +44,7 @@ export class StashItemComponent extends Visible implements IHoverable {
     stackWidth: number,
     /** The index number of this stack item */
     readonly index: number,
-    arrowTo?: FnValue | GlobalFnValue | ContValue | ArrayValue
+    arrowTo?: FnValue | GlobalFnValue | ContValue | ArrayValue,
   ) {
     super();
     const valToStashRep = (val: any): string => {
@@ -65,15 +65,15 @@ export class StashItemComponent extends Visible implements IHoverable {
     this.text = truncateText(
       valToStashRep(value),
       ControlStashConfig.StashMaxTextWidth,
-      ControlStashConfig.StashMaxTextHeight
+      ControlStashConfig.StashMaxTextHeight,
     ).replace(/[\r\n]/gm, ' ');
     this.tooltip = valToStashRep(value);
-    this.tooltipRef = React.createRef();
+    this.tooltipRef = createRef();
     this._width =
       ControlStashConfig.StashItemTextPadding * 2 +
       getTextWidth(
         this.text,
-        `${ControlStashConfig.FontStyle} ${ControlStashConfig.FontSize}px ${ControlStashConfig.FontFamily}`
+        `${ControlStashConfig.FontStyle} ${ControlStashConfig.FontSize}px ${ControlStashConfig.FontFamily}`,
       );
     this._height = ControlStashConfig.StashItemHeight + ControlStashConfig.StashItemTextPadding * 2;
     this._x = ControlStashConfig.StashPosX + stackWidth;
@@ -106,6 +106,16 @@ export class StashItemComponent extends Visible implements IHoverable {
     this.ref.current.zIndex(this.zIndex);
   };
 
+  setArrowSourceHighlightedStyle(): void {
+    this.tag?.stroke(Config.HoverColor);
+    this.secItem?.fill(Config.HoverColor);
+  }
+
+  setArrowSourceNormalStyle(): void {
+    this.tag?.stroke(isStashItemInDanger(this.index) ? defaultDangerColor() : defaultStrokeColor());
+    this.secItem?.fill(defaultTextColor());
+  }
+
   destroy() {
     this.ref.current.destroyChildren();
   }
@@ -117,14 +127,14 @@ export class StashItemComponent extends Visible implements IHoverable {
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: ControlStashConfig.FontSize,
       fontStyle: ControlStashConfig.FontStyle,
-      fontVariant: ControlStashConfig.FontVariant
+      fontVariant: ControlStashConfig.FontVariant,
     };
     const tagProps = {
       stroke: isStashItemInDanger(this.index) ? defaultDangerColor() : defaultStrokeColor(),
-      cornerRadius: ControlStashConfig.StashItemCornerRadius
+      cornerRadius: ControlStashConfig.StashItemCornerRadius,
     };
     return (
-      <React.Fragment key={Layout.key++}>
+      <Fragment key={Layout.key++}>
         <Label
           ref={this.ref}
           x={this.x()}
@@ -156,7 +166,7 @@ export class StashItemComponent extends Visible implements IHoverable {
           />
         </Label>
         {this.arrow?.draw()}
-      </React.Fragment>
+      </Fragment>
     );
   }
 }

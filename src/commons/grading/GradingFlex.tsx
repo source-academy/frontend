@@ -1,8 +1,7 @@
-import { Property } from 'csstype';
-import React from 'react';
+import type { Property } from 'csstype';
 
 const defaultStyles: React.CSSProperties = {
-  display: 'flex'
+  display: 'flex',
 };
 
 type Props = {
@@ -14,20 +13,20 @@ type Props = {
   className?: string;
 };
 
-const GradingFlex: React.FC<Props> = ({
+function GradingFlex({
   justifyContent,
   alignItems,
   flexDirection,
   children,
   style,
-  className
-}) => {
+  className,
+}: Props) {
   const styles: React.CSSProperties = { ...style, justifyContent, alignItems, flexDirection };
   return (
     <div className={className} style={{ ...defaultStyles, ...styles }}>
       {children}
     </div>
   );
-};
+}
 
 export default GradingFlex;

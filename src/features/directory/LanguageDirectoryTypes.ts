@@ -1,4 +1,4 @@
-import { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
+import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
 
 export type LanguageDirectoryState = {
   readonly selectedLanguageId: string | null;

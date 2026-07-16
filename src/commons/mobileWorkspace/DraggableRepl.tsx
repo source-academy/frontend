@@ -1,7 +1,7 @@
-import React from 'react';
-import Draggable, { DraggableEventHandler } from 'react-draggable';
+import { useRef } from 'react';
+import Draggable, { type DraggableEventHandler } from 'react-draggable';
 
-import Repl, { ReplProps } from '../repl/Repl';
+import Repl, { type ReplProps } from '../repl/Repl';
 
 type Props = {
   position: { x: number; y: number };
@@ -10,9 +10,12 @@ type Props = {
   replProps: ReplProps;
 };
 
-const DraggableRepl: React.FC<Props> = props => {
+function DraggableRepl(props: Props) {
+  const nodeRef = useRef<HTMLDivElement>(null);
+
   return (
     <Draggable
+      nodeRef={nodeRef}
       axis="y"
       handle="#dragHandle"
       position={props.position}
@@ -20,7 +23,7 @@ const DraggableRepl: React.FC<Props> = props => {
       onDrag={props.onDrag}
       disabled={props.disabled}
     >
-      <div className="mobile-draggable">
+      <div ref={nodeRef} className="mobile-draggable">
         {!props.disabled ? (
           <div className="handle enabled" id="dragHandle">
             {['1', '2', '3'].map(i => (
@@ -40,6 +43,6 @@ const DraggableRepl: React.FC<Props> = props => {
       </div>
     </Draggable>
   );
-};
+}
 
 export default DraggableRepl;

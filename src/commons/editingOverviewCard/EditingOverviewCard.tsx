@@ -11,35 +11,31 @@ import {
   Icon,
   Intent,
   MenuItem,
-  Text
+  Text,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemRenderer, Select } from '@blueprintjs/select';
-import React, { useState } from 'react';
+import type { ItemRenderer } from '@blueprintjs/select';
+import { Select } from '@blueprintjs/select';
+import { useState } from 'react';
 import { NavLink } from 'react-router';
 import Textarea from 'react-textarea-autosize';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
-import { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
+import type { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
 import Constants from '../utils/Constants';
 import { getPrettyDate } from '../utils/DateHelper';
 import { exportXml, storeLocalAssessmentOverview } from '../XMLParser/XMLParserHelper';
 
-type EditingOverviewCardProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   updateEditingOverview: (overview: AssessmentOverview) => void;
-};
-
-type StateProps = {
   listingPath: string;
   overview: AssessmentOverview;
   assessmentTypes: AssessmentType[];
 };
 
-export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => {
+export function EditingOverviewCard(props: Props) {
   const [editingOverviewField, setEditingOverviewField] = useState('');
   const [fieldValue, setFieldValue] = useState<any>('');
   const [showOptionsOverlay, setShowOptionsOverlay] = useState(false);
@@ -47,7 +43,7 @@ export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => 
   const saveEditOverview = (field: keyof AssessmentOverview) => (e: any) => {
     const overview = {
       ...props.overview,
-      [field]: fieldValue
+      [field]: fieldValue,
     };
     setEditingOverviewField('');
     setFieldValue('');
@@ -76,7 +72,7 @@ export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => 
 
   const makeEditingOverviewTextarea = (field: keyof AssessmentOverview) => (
     <Textarea
-      autoFocus={true}
+      autoFocus
       className={'editing-textarea'}
       onChange={handleEditOverview}
       onBlur={saveEditOverview(field)}
@@ -128,7 +124,7 @@ export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => 
                   : `${getPrettyDate(overview.closeAt)}`}
               </div>
             </Text>
-            <Button icon={IconNames.WRENCH} minimal={true} onClick={toggleOptionsOverlay}>
+            <Button icon={IconNames.WRENCH} variant="minimal" onClick={toggleOptionsOverlay}>
               Other Options
             </Button>
             <NavLink
@@ -144,7 +140,7 @@ export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => 
 
   const makeEditingOverviewCardTitle = (overview: AssessmentOverview, title: string) => (
     <div className="row listing-title">
-      <Text ellipsize={true} className={'col-xs-10'}>
+      <Text ellipsize className={'col-xs-10'}>
         <H4 onClick={toggleEditField('title')}>
           {editingOverviewField === 'title'
             ? makeEditingOverviewTextarea('title')
@@ -156,7 +152,12 @@ export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => 
   );
 
   const makeExportButton = (overview: AssessmentOverview) => (
-    <Button icon={IconNames.EXPORT} intent={Intent.DANGER} minimal={true} onClick={handleExportXml}>
+    <Button
+      icon={IconNames.EXPORT}
+      intent={Intent.DANGER}
+      variant="minimal"
+      onClick={handleExportXml}
+    >
       Save as XML
     </Button>
   );
@@ -164,7 +165,7 @@ export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => 
   const saveCategory = (i: AssessmentType, e: any) => {
     const overview = {
       ...props.overview,
-      category: i
+      category: i,
     };
     storeLocalAssessmentOverview(overview);
     props.updateEditingOverview(overview);
@@ -175,7 +176,7 @@ export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => 
       canOutsideClickClose={false}
       className="assessment-reset"
       icon={IconNames.WRENCH}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={showOptionsOverlay}
       onClose={toggleOptionsOverlay}
       title="Other options"
@@ -208,17 +209,17 @@ export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => 
 
   const assessmentTypeSelect = (
     assessmentType: AssessmentType,
-    handleSelect = (i: AssessmentType, e?: React.SyntheticEvent<HTMLElement>) => {}
+    handleSelect = (i: AssessmentType, e?: React.SyntheticEvent<HTMLElement>) => {},
   ) => (
-    <AssessmentTypeSelectComponent
+    <Select<AssessmentType>
       className={Classes.MINIMAL}
       items={props.assessmentTypes}
       onItemSelect={handleSelect}
       itemRenderer={assessmentTypeRenderer}
       filterable={false}
     >
-      <Button minimal text={assessmentType} rightIcon={IconNames.DOUBLE_CARET_VERTICAL} />
-    </AssessmentTypeSelectComponent>
+      <Button variant="minimal" text={assessmentType} endIcon={IconNames.DOUBLE_CARET_VERTICAL} />
+    </Select>
   );
 
   return (
@@ -227,7 +228,7 @@ export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => 
       {makeEditingOverviewCard(props.overview)}
     </div>
   );
-};
+}
 
 const createPlaceholder = (str: string): string => {
   if (str.match('^(\n| )*$')) {
@@ -237,9 +238,7 @@ const createPlaceholder = (str: string): string => {
   }
 };
 
-const AssessmentTypeSelectComponent = Select.ofType<AssessmentType>();
-
 const assessmentTypeRenderer: ItemRenderer<AssessmentType> = (
   assessmentType,
-  { handleClick, modifiers, query }
+  { handleClick, modifiers, query },
 ) => <MenuItem active={false} key={assessmentType} onClick={handleClick} text={assessmentType} />;

@@ -1,62 +1,49 @@
-import { AnchorButton, Icon } from '@blueprintjs/core';
-import * as React from 'react';
+import { useCallback } from 'react';
 import logo from 'src/assets/SA.jpg';
-import { useSession } from 'src/commons/utils/Hooks';
-import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
-import classes from 'src/styles/Chatbot.module.scss';
+import type { Tokens } from 'src/commons/application/types/SessionTypes';
+import ChatBox from 'src/components/ui/chatbot/ChatBox';
+import FloatingChatbot from 'src/components/ui/chatbot/FloatingChatbot';
+import { continueChat, initChat } from 'src/features/sicp/chatCompletion/api';
+import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 
-import ChatBox from './ChatBox';
+import SicpMessageRenderer from './SicpMessageRenderer';
+
+const init = (tokens: Tokens) => initChat(tokens);
 
 type Props = {
   getSection: () => SicpSection;
   getText: () => string;
 };
 
-const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
-  const [isPop, setPop] = React.useState(false);
-  const [isDivVisible, setIsDivVisible] = React.useState(false);
-  const [tipsMessage, setTipsMessage] = React.useState('You can click me for a chat');
-  const { isLoggedIn } = useSession();
-  // const tipsBoxRef = React.useRef<HTMLDivElement | null>(null);
-
-  // To Show reminder words
-  const togglePop = () => {
-    setPop(!isPop);
-    if (!isPop) {
-      setTipsMessage('');
-    } else {
-      setTipsMessage('You can click me for a chat');
-    }
-  };
+function Chatbot({ getSection, getText }: Props) {
+  const send = useCallback(
+    (tokens: Tokens, userInput: string) => continueChat(tokens, userInput, getSection(), getText()),
+    [getSection, getText],
+  );
 
   return (
-    <div>
-      {isLoggedIn && (
-        <div className={classes['bot-container']}>
-          <div className={classes['bot-area']}>
-            {isDivVisible && (
-              // <div className="tips-box">
-              <div className={classes['tips-box']}>
-                <p className={classes['tips-message']}>
-                  I am Louis, your SICP bot
-                  <br />
-                  {tipsMessage}
-                </p>
-              </div>
-            )}
-            <AnchorButton
-              className={classes['bot-button']}
-              onMouseEnter={() => setIsDivVisible(true)}
-              onMouseLeave={() => setIsDivVisible(false)}
-              onClick={togglePop}
-              icon={<Icon icon={<img src={logo} className={classes['iSA']} alt="SA Logo" />} />}
-            ></AnchorButton>
-          </div>
-          {isPop && <ChatBox getSection={getSection} getText={getText} />}
-        </div>
+    <FloatingChatbot
+      avatarSrc={logo}
+      avatarAlt="SA Logo"
+      introMessage="I am Louis, your SICP bot"
+      defaultTipsMessage="You can click me for a chat"
+    >
+      {({ activeSnippetId, setActiveSnippetId, isExpanded, toggleExpanded }) => (
+        <ChatBox
+          activeSnippetId={activeSnippetId}
+          setActiveSnippetId={setActiveSnippetId}
+          isExpanded={isExpanded}
+          toggleExpanded={toggleExpanded}
+          initChat={init}
+          sendMessage={send}
+          initialMessage="Ask me something about this paragraph!"
+          errorMessage="Sorry, I am down with a cold, please try again later."
+          inputPlaceholder="Type your message here..."
+          renderMessage={SicpMessageRenderer}
+        />
       )}
-    </div>
+    </FloatingChatbot>
   );
-};
+}
 
 export default Chatbot;

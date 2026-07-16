@@ -1,0 +1,21 @@
+.buttons-wrapper {
+  width: 70%;
+
+  button:not(.outlined) {
+    box-shadow: 0 0 0 0 transparent !important;
+    background-color: #013399 !important;
+
+    &:hover {
+      background-color: #70a3cf !important;
+    }
+  }
+
+  > * {
+    border-radius: 24px !important;
+    width: 100%;
+  }
+
+  > * + * {
+    margin-top: 1rem;
+  }
+}

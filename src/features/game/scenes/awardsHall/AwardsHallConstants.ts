@@ -1,6 +1,6 @@
 import FontAssets from '../../assets/FontAssets';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
-import { BitmapFontStyle } from '../../commons/CommonTypes';
+import type { BitmapFontStyle } from '../../commons/CommonTypes';
 import { Color } from '../../utils/StyleUtils';
 
 export const AwardsHallConstants = {
@@ -11,13 +11,13 @@ export const AwardsHallConstants = {
   award: { xSpace: 300, yStart: 300, ySpace: screenCenter.y - 50, dim: 200 },
   awardInfo: { width: 300 },
   banner: { xOffset: -screenSize.x * 0.28 },
-  bannerTextConfig: { x: 30, y: 0, oriX: 0.0, oriY: 0.5 }
+  bannerTextConfig: { x: 30, y: 0, oriX: 0.0, oriY: 0.5 },
 };
 
 export const awardBannerTextStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
   size: 35,
-  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
+  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT,
 };
 
 export const awardNoAssetTitleStyle = {
@@ -25,7 +25,7 @@ export const awardNoAssetTitleStyle = {
   fontSize: '30px',
   fill: Color.lightBlue,
   align: 'center',
-  wordWrap: { width: AwardsHallConstants.award.dim - 20 }
+  wordWrap: { width: AwardsHallConstants.award.dim - 20 },
 };
 
 export const awardHoverTitleStyle = {
@@ -33,7 +33,7 @@ export const awardHoverTitleStyle = {
   fontSize: '20px',
   fill: Color.lightBlue,
   align: 'left',
-  wordWrap: { width: AwardsHallConstants.awardInfo.width - 20 }
+  wordWrap: { width: AwardsHallConstants.awardInfo.width - 20 },
 };
 
 export const awardHoverKeyStyle = {
@@ -41,7 +41,7 @@ export const awardHoverKeyStyle = {
   fontSize: '15px',
   fill: Color.offWhite,
   align: 'left',
-  wordWrap: { width: AwardsHallConstants.awardInfo.width - 20 }
+  wordWrap: { width: AwardsHallConstants.awardInfo.width - 20 },
 };
 
 export const awardHoverDescStyle = {
@@ -49,5 +49,5 @@ export const awardHoverDescStyle = {
   fontSize: '15px',
   fill: Color.lightBlue,
   align: 'left',
-  wordWrap: { width: AwardsHallConstants.awardInfo.width - 20 }
+  wordWrap: { width: AwardsHallConstants.awardInfo.width - 20 },
 };

@@ -1,22 +1,19 @@
 import { EditableText } from '@blueprintjs/core';
-import { cloneDeep } from 'lodash';
-import React, { useContext, useMemo, useReducer, useState } from 'react';
+import { cloneDeep } from 'lodash-es';
+import { useContext, useMemo, useReducer, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
-import { GoalDefinition, GoalMeta } from 'src/features/achievement/AchievementTypes';
+import type { GoalDefinition, GoalMeta } from 'src/features/achievement/AchievementTypes';
 
 import ItemDeleter from '../common/ItemDeleter';
 import ItemSaver from '../common/ItemSaver';
-import {
-  EditableGoalAction as Action,
-  EditableGoalActionType as ActionType,
-  EditableGoalState as State
-} from './EditableGoalTypes';
+import type { EditableGoalAction as Action, EditableGoalState as State } from './EditableGoalTypes';
+import { EditableGoalActionType as ActionType } from './EditableGoalTypes';
 import EditableMeta from './EditableMeta';
 
 const init = (goal: GoalDefinition): State => {
   return {
     editableGoal: goal,
-    isDirty: false
+    isDirty: false,
   };
 };
 
@@ -25,30 +22,30 @@ const reducer = (state: State, action: Action) => {
     case ActionType.SAVE_CHANGES:
       return {
         ...state,
-        isDirty: false
+        isDirty: false,
       };
     case ActionType.DISCARD_CHANGES:
       return init(action.payload);
     case ActionType.DELETE_GOAL:
       return {
         ...state,
-        isDirty: false
+        isDirty: false,
       };
     case ActionType.CHANGE_META:
       return {
         editableGoal: {
           ...state.editableGoal,
-          meta: action.payload
+          meta: action.payload,
         },
-        isDirty: true
+        isDirty: true,
       };
     case ActionType.CHANGE_TEXT:
       return {
         editableGoal: {
           ...state.editableGoal,
-          text: action.payload
+          text: action.payload,
         },
-        isDirty: true
+        isDirty: true,
       };
     default:
       return state;
@@ -63,13 +60,7 @@ type Props = {
   requestPublish: () => void;
 };
 
-const EditableGoal: React.FC<Props> = ({
-  uuid,
-  isNewGoal,
-  releaseUuid,
-  removeCard,
-  requestPublish
-}) => {
+function EditableGoal({ uuid, isNewGoal, releaseUuid, removeCard, requestPublish }: Props) {
   const inferencer = useContext(AchievementContext);
   const goal = inferencer.getGoalDefinition(uuid);
   const goalClone = useMemo(() => cloneDeep(goal), [goal]);
@@ -123,6 +114,6 @@ const EditableGoal: React.FC<Props> = ({
       </div>
     </li>
   );
-};
+}
 
 export default EditableGoal;

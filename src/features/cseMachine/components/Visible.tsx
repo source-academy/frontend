@@ -1,7 +1,7 @@
-import React from 'react';
-import { RefObject } from 'react';
+import Konva from 'konva';
+import { createRef } from 'react';
 
-import { IVisible } from '../CseMachineTypes';
+import type { IVisible } from '../CseMachineTypes';
 
 /**
  * class to implement the IVisible interface, used by all components.
@@ -30,6 +30,27 @@ export abstract class Visible implements IVisible {
   reset(): void {
     this._isDrawn = false;
   }
-  public ref: RefObject<any> = React.createRef();
+  setShapesStyle(color: string): void {
+    const shapes = this.ref.current?.getChildren?.() ?? [];
+    shapes.forEach((shape: Konva.Node) => {
+      if (shape instanceof Konva.Shape) {
+        if (shape.attrs.stroke) {
+          shape.stroke(color);
+        }
+        if (shape.attrs.fill) {
+          shape.fill(color);
+        }
+      }
+    });
+  }
+  public ref: React.RefObject<any> = createRef();
+  protected get tag() {
+    return this.ref.current?.getChildren?.()[0];
+  }
+  protected get secItem() {
+    return this.ref.current?.getChildren?.()[1];
+  }
+  setArrowSourceHighlightedStyle(): void {}
+  setArrowSourceNormalStyle(): void {}
   abstract draw(key?: number): React.ReactNode;
 }

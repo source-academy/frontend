@@ -1,0 +1,150 @@
+import 'src/styles/Leaderboard.scss';
+
+import type { ColDef, IDatasource } from 'ag-grid-community';
+import { themeAlpine } from 'ag-grid-community';
+import { AgGridReact } from 'ag-grid-react';
+import { useEffect, useRef, useState } from 'react';
+import default_avatar from 'src/assets/default-avatar.jpg';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
+import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
+import type { LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
+import { convertToRandomNumber } from 'src/pages/leaderboard/subcomponents/LeaderboardUtils';
+
+import leaderboardBackground from '../../../../assets/leaderboard_background.jpg';
+import LeaderboardDropdown from '../../../../pages/leaderboard/subcomponents/LeaderboardDropdown';
+import LeaderboardExportButton from '../../../../pages/leaderboard/subcomponents/LeaderboardExportButton';
+import LeaderboardPodium from '../../../../pages/leaderboard/subcomponents/LeaderboardPodium';
+
+const columnDefs: ColDef<LeaderboardRow>[] = [
+  {
+    field: 'rank',
+    headerName: 'Rank',
+    flex: 84,
+    sortable: true,
+    cellRenderer: (params: any) => {
+      const rank = params.value;
+      const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+      return `${rank} ${medal}`;
+    },
+  },
+  {
+    field: 'avatar',
+    headerName: 'Avatar',
+    flex: 180,
+    sortable: false,
+    cellRenderer: (params: any) => (
+      <img
+        src={params.value}
+        alt="avatar"
+        className="avatar"
+        onError={e => (e.currentTarget.src = default_avatar)}
+        style={{ flex: '40px', height: '40px', borderRadius: '50%' }}
+      />
+    ),
+  },
+  { field: 'name', headerName: 'Name', flex: 520, sortable: true },
+  { field: 'xp', headerName: 'XP', flex: 414, sortable: true },
+];
+
+function OverallLeaderboard() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(LeaderboardActions.getContests());
+  }, [dispatch]);
+
+  // Temporary loading of leaderboard background
+  useEffect(() => {
+    const originalBackground = document.body.style.background;
+    document.body.style.background = `url(${leaderboardBackground}) center/cover no-repeat fixed`;
+    return () => {
+      // Cleanup
+      document.body.style.background = originalBackground;
+    };
+  }, []);
+
+  const paginatedLeaderboard: { rows: LeaderboardRow[]; userCount: number } = useAppSelector(
+    store => store.leaderboard.paginatedUserXp,
+  );
+  const pageSize = 25;
+  const visibleEntries = useAppSelector(
+    store => store.session?.topLeaderboardDisplay ?? Number.MAX_SAFE_INTEGER,
+  );
+  const [top3Leaderboard, setTop3Leaderboard] = useState<LeaderboardRow[]>([]);
+
+  useEffect(() => {
+    dispatch(LeaderboardActions.getOverallLeaderboardXP(1, pageSize));
+  }, [dispatch]);
+
+  const latestParamsRef = useRef<any>(null);
+  const dataSourceRef = useRef<IDatasource>({
+    getRows: async (params: any) => {
+      const startRow = params.startRow;
+      const endRow = params.endRow;
+
+      const pageSize = endRow - startRow;
+      const page = startRow / pageSize + 1;
+
+      dispatch(LeaderboardActions.getOverallLeaderboardXP(page, pageSize));
+
+      // Params stored to prevent re-rendering
+      latestParamsRef.current = params;
+    },
+  });
+
+  useEffect(() => {
+    if (latestParamsRef.current && paginatedLeaderboard.rows.length > 0) {
+      const { successCallback } = latestParamsRef.current;
+
+      if (latestParamsRef.current.startRow === 0) {
+        setTop3Leaderboard(paginatedLeaderboard.rows.slice(0, 3));
+      }
+
+      successCallback(
+        paginatedLeaderboard.rows,
+        Math.min(paginatedLeaderboard.userCount, visibleEntries),
+      );
+      latestParamsRef.current = null;
+    }
+  }, [paginatedLeaderboard]);
+
+  paginatedLeaderboard.rows.map((row: LeaderboardRow) => {
+    row.avatar = `/assets/Sample_Profile_${convertToRandomNumber(row.username)}.jpg`;
+  });
+
+  return (
+    <div className="leaderboard-container">
+      {/* Top 3 Ranking */}
+      <LeaderboardPodium type="overall" data={top3Leaderboard} outputType={undefined} />
+
+      <div className="buttons-container">
+        {/* Leaderboard Options Dropdown */}
+        <LeaderboardDropdown />
+
+        {/* Export Button */}
+        <LeaderboardExportButton type="overall" />
+      </div>
+
+      {/* Leaderboard Table (Replaced with ag-Grid) */}
+      <div className="leaderboard-table-container">
+        <AgGridReact
+          theme={themeAlpine}
+          pagination
+          suppressCellFocus
+          suppressMovableColumns
+          paginationPageSizeSelector={false}
+          columnDefs={columnDefs}
+          rowModelType="infinite"
+          paginationPageSize={pageSize}
+          domLayout="autoHeight"
+          rowHeight={60}
+          cacheBlockSize={pageSize}
+          maxBlocksInCache={5}
+          datasource={dataSourceRef.current}
+        />
+      </div>
+    </div>
+  );
+}
+
+export const Component = OverallLeaderboard;

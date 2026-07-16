@@ -1,6 +1,6 @@
-import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
+import type { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
-import { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
+import type { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
 import { Role } from '../application/ApplicationTypes';
 import { mockFetchRole, mockFetchStudents } from './UserMocks';
 
@@ -14,7 +14,7 @@ export const mockTeamFormationOverviews: TeamFormationOverview[] = [
     assessmentName: 'An Odessey to Runes',
     assessmentType: 'Missions',
     studentIds: [106, 107, 108, 109],
-    studentNames: ['Lolita Sim', 'Lim Jun Ming', 'Tobias Gray', 'Lenard Toh See Ming']
+    studentNames: ['Lolita Sim', 'Lim Jun Ming', 'Tobias Gray', 'Lenard Toh See Ming'],
   },
   {
     teamId: 2,
@@ -22,7 +22,7 @@ export const mockTeamFormationOverviews: TeamFormationOverview[] = [
     assessmentName: 'An Odessey to Runes',
     assessmentType: 'Missions',
     studentIds: [110, 111, 112, 113],
-    studentNames: ['Richard Gray', 'Benedict Lim', 'Harshvathini Tharman', 'James Cook']
+    studentNames: ['Richard Gray', 'Benedict Lim', 'Harshvathini Tharman', 'James Cook'],
   },
   {
     teamId: 3,
@@ -30,8 +30,8 @@ export const mockTeamFormationOverviews: TeamFormationOverview[] = [
     assessmentName: 'An Odessey to Runes',
     assessmentType: 'Missions',
     studentIds: [114, 115, 116, 117],
-    studentNames: ['Mike Chang', 'Giyu Tomioka', 'Oliver Sandy', 'Muthu Valakrishnan']
-  }
+    studentNames: ['Mike Chang', 'Giyu Tomioka', 'Oliver Sandy', 'Muthu Valakrishnan'],
+  },
 ];
 
 /**
@@ -43,7 +43,7 @@ export const mockTeamFormationOverviews: TeamFormationOverview[] = [
  */
 export const mockFetchTeamFormationOverview = (
   accessToken: string,
-  group: boolean
+  group: boolean,
 ): TeamFormationOverview[] | null => {
   // mocks backend role fetching
   const permittedRoles: Role[] = [Role.Admin, Role.Staff];
@@ -55,7 +55,7 @@ export const mockFetchTeamFormationOverview = (
       ? [mockTeamFormationOverviews[0]]
       : mockTeamFormationOverviews.sort(
           (subX: TeamFormationOverview, subY: TeamFormationOverview) =>
-            subY.assessmentId - subX.assessmentId
+            subY.assessmentId - subX.assessmentId,
         );
   }
 };
@@ -73,7 +73,7 @@ export const mockCreateTeam = (
   assessmentId: number,
   assessmentName: string,
   assessmentType: string,
-  teams: OptionType[][]
+  teams: OptionType[][],
 ): TeamFormationOverview[] | null => {
   const permittedRoles: Role[] = [Role.Admin, Role.Staff];
   const role: Role | null = mockFetchRole(accessToken);
@@ -99,7 +99,7 @@ export const mockCreateTeam = (
         assessmentName: assessmentName,
         assessmentType: assessmentType,
         studentIds: studentIds,
-        studentNames: studentNames
+        studentNames: studentNames,
       };
     });
 
@@ -107,7 +107,7 @@ export const mockCreateTeam = (
 
     return mockTeamFormationOverviews.sort(
       (subX: TeamFormationOverview, subY: TeamFormationOverview) =>
-        subY.assessmentId - subX.assessmentId
+        subY.assessmentId - subX.assessmentId,
     );
   }
 };
@@ -126,7 +126,7 @@ export const mockBulkUploadTeam = async (
   assessmentId: number,
   assessmentName: string,
   assessmentType: string,
-  teamsFile: File
+  teamsFile: File,
 ): Promise<TeamFormationOverview[] | null> => {
   const permittedRoles: Role[] = [Role.Admin, Role.Staff];
   const role: Role | null = mockFetchRole(accessToken);
@@ -154,7 +154,7 @@ export const mockBulkUploadTeam = async (
         if (student) {
           team.push({
             label: student.name,
-            value: student
+            value: student,
           });
         }
       });
@@ -175,7 +175,7 @@ export const mockBulkUploadTeam = async (
         assessmentName: assessmentName,
         assessmentType: assessmentType,
         studentIds: studentIds,
-        studentNames: studentNames
+        studentNames: studentNames,
       });
     }
 
@@ -183,7 +183,7 @@ export const mockBulkUploadTeam = async (
 
     return mockTeamFormationOverviews.sort(
       (subX: TeamFormationOverview, subY: TeamFormationOverview) =>
-        subY.assessmentId - subX.assessmentId
+        subY.assessmentId - subX.assessmentId,
     );
   }
 };
@@ -221,7 +221,7 @@ export const mockUpdateTeam = (
   assessmentId: number,
   assessmentName: string,
   assessmentType: string,
-  teams: OptionType[][]
+  teams: OptionType[][],
 ): TeamFormationOverview[] | null => {
   const permittedRoles: Role[] = [Role.Admin, Role.Staff];
   const role: Role | null = mockFetchRole(accessToken);
@@ -253,7 +253,7 @@ export const mockUpdateTeam = (
 
     return mockTeamFormationOverviews.sort(
       (subX: TeamFormationOverview, subY: TeamFormationOverview) =>
-        subY.assessmentId - subX.assessmentId
+        subY.assessmentId - subX.assessmentId,
     );
   }
 };
@@ -267,7 +267,7 @@ export const mockUpdateTeam = (
  */
 export const mockDeleteTeam = (
   accessToken: string,
-  teamId: number
+  teamId: number,
 ): TeamFormationOverview[] | null => {
   const permittedRoles: Role[] = [Role.Admin, Role.Staff];
   const role: Role | null = mockFetchRole(accessToken);

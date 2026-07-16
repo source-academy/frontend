@@ -27,14 +27,6 @@ $sicp-content-lr-padding: 6em;
     overflow-x: scroll;
   }
 
-  .#{$ns}-blockquote {
-    margin: 10px 0;
-  }
-
-  .#{$ns}-heading {
-    margin-top: 10px;
-  }
-
   .#{$ns}-code {
     color: $sicp-text-color;
     background-color: inherit;
@@ -43,8 +35,7 @@ $sicp-content-lr-padding: 6em;
 
   .#{$ns}-code-block {
     font-size: 14pt;
-    padding: 0;
-    margin: 10px 0;
+    padding-inline: 0;
     box-shadow: none;
     color: $sicp-text-color;
     background-color: inherit;
@@ -98,10 +89,10 @@ $sicp-content-lr-padding: 6em;
         background-color: $cadet-color-3;
         width: 80px;
         padding: 10px 15px;
-      }
 
-      .#{$ns}-button:hover {
-        background-color: $cadet-color-1;
+        &:hover {
+          background-color: $cadet-color-1;
+        }
       }
     }
 
@@ -198,9 +189,9 @@ $sicp-content-lr-padding: 6em;
       margin: 25px 0;
       transform: translateX(
         min(
-          -$sicp-content-lr-padding,
-          calc(#{$sicp-max-width} / 2 - 50vw - #{$sicp-content-lr-padding})
-        )
+            -$sicp-content-lr-padding,
+            calc(#{$sicp-max-width} / 2 - 50vw - #{$sicp-content-lr-padding})
+          )
       );
       display: flex;
       flex-flow: column nowrap;
@@ -312,12 +303,7 @@ $sicp-content-lr-padding: 6em;
     height: fit-content;
   }
 
-  .#{$ns}-tree-node-list {
-    padding: 0;
-  }
-
   .#{$ns}-tree-node-label {
-    padding-left: 7px;
     white-space: normal;
     text-overflow: clip;
   }
@@ -325,10 +311,10 @@ $sicp-content-lr-padding: 6em;
   .#{$ns}-tree-node-caret {
     color: #777777 !important;
     scale: 1.25;
-  }
 
-  .#{$ns}-tree-node-caret:hover {
-    color: $sicp-text-color !important;
+    &:hover {
+      color: $sicp-text-color !important;
+    }
   }
 }
 
@@ -340,8 +326,7 @@ $sicp-content-lr-padding: 6em;
     font-size: larger;
 
     .#{$ns}-tree-node-content {
-      padding-top: 10px;
-      padding-bottom: 10px;
+      padding-block: 8px;
     }
 
     @media only screen and (max-width: 768px) {

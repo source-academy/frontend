@@ -7,7 +7,7 @@ import { screenSize } from '../commons/CommonConstants';
 export const entryTweenProps = {
   y: 0,
   duration: 300,
-  ease: 'Power2'
+  ease: 'Power2',
 };
 
 /**
@@ -17,7 +17,7 @@ export const entryTweenProps = {
 export const exitTweenProps = {
   y: -screenSize.y,
   duration: 250,
-  ease: 'Power2'
+  ease: 'Power2',
 };
 
 /**
@@ -27,7 +27,7 @@ export const exitTweenProps = {
 export const leftSideEntryTweenProps = {
   x: 0,
   duration: 350,
-  ease: 'Power2'
+  ease: 'Power2',
 };
 
 /**
@@ -37,7 +37,7 @@ export const leftSideEntryTweenProps = {
 export const leftSideExitTweenProps = {
   x: -screenSize.x,
   duration: 350,
-  ease: 'Power2'
+  ease: 'Power2',
 };
 
 /**
@@ -47,7 +47,7 @@ export const leftSideExitTweenProps = {
 export const rightSideEntryTweenProps = {
   x: 0,
   duration: 500,
-  ease: 'Power2'
+  ease: 'Power2',
 };
 
 /**
@@ -57,5 +57,5 @@ export const rightSideEntryTweenProps = {
 export const rightSideExitTweenProps = {
   x: screenSize.x,
   duration: 500,
-  ease: 'Power2'
+  ease: 'Power2',
 };

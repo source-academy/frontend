@@ -1,6 +1,5 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 import { DeadlineColors } from '../../../features/achievement/AchievementConstants';
 import { isExpired, prettifyDeadline, timeFromExpired } from '../utils/DateHelper';
@@ -11,7 +10,7 @@ type Props = {
   deadline?: Date;
 };
 
-const AchievementDeadline: React.FC<Props> = ({ deadline }) => {
+function AchievementDeadline({ deadline }: Props) {
   // red deadline color for core achievements that are expiring in less than 2 days
   const deadlineColor =
     deadline !== undefined && !isExpired(deadline) && timeFromExpired(deadline) <= twoDays
@@ -24,6 +23,6 @@ const AchievementDeadline: React.FC<Props> = ({ deadline }) => {
       <p style={{ color: deadlineColor }}>{prettifyDeadline(deadline)}</p>
     </div>
   );
-};
+}
 
 export default AchievementDeadline;

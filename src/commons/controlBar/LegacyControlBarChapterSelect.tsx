@@ -1,30 +1,22 @@
 import { Button, Menu, MenuItem, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
-import { Chapter, Variant } from 'js-slang/dist/types';
-import React from 'react';
+import { type ItemListRenderer, type ItemRenderer, Select } from '@blueprintjs/select';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 
 import {
   fullJSLanguage,
   fullTSLanguage,
   htmlLanguage,
   javaLanguages,
-  pyLanguages,
-  SALanguage,
-  schemeLanguages,
+  type SALanguage,
   sourceLanguages,
-  styliseSublanguage
+  styliseSublanguage,
 } from '../application/ApplicationTypes';
 import Constants from '../utils/Constants';
-import { useTypedSelector } from '../utils/Hooks';
+import { useAppSelector } from '../utils/Hooks';
 
-type ControlBarChapterSelectProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   handleChapterSelect?: (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => void;
-};
-
-type StateProps = {
   isFolderModeEnabled: boolean;
   sourceChapter: Chapter;
   sourceVariant: Variant;
@@ -34,7 +26,7 @@ type StateProps = {
 const chapterListRenderer: ItemListRenderer<SALanguage> = ({
   itemsParentRef,
   renderItem,
-  items
+  items,
 }) => {
   const defaultChoices = items.filter(({ variant }) => variant === Variant.DEFAULT);
   const variantChoices = items.filter(({ variant }) => variant !== Variant.DEFAULT);
@@ -53,6 +45,7 @@ const chapterListRenderer: ItemListRenderer<SALanguage> = ({
 
 const chapterRenderer: (isFolderModeEnabled: boolean) => ItemRenderer<SALanguage> =
   (isFolderModeEnabled: boolean) =>
+  // eslint-disable-next-line react/display-name
   (lang, { handleClick }) => {
     const isDisabled = isFolderModeEnabled && lang.chapter === Chapter.SOURCE_1;
     const tooltipContent = isDisabled
@@ -69,16 +62,14 @@ const chapterRenderer: (isFolderModeEnabled: boolean) => ItemRenderer<SALanguage
     );
   };
 
-const ChapterSelectComponent = Select.ofType<SALanguage>();
-
-export const LegacyControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = ({
+function LegacyControlBarChapterSelect({
   isFolderModeEnabled,
   sourceChapter,
   sourceVariant,
   handleChapterSelect = () => {},
-  disabled = false
-}) => {
-  const selectedLang = useTypedSelector(store => store.playground.languageConfig.mainLanguage);
+  disabled = false,
+}: Props) {
+  const selectedLang = useAppSelector(store => store.playground.languageConfig.mainLanguage);
 
   const choices = [
     ...sourceLanguages,
@@ -86,13 +77,11 @@ export const LegacyControlBarChapterSelect: React.FC<ControlBarChapterSelectProp
     // for public deployments. HTML, while sandboxed, is treated the same way to be safe.
     // See https://github.com/source-academy/frontend/pull/2460#issuecomment-1528759912
     ...(Constants.playgroundOnly ? [fullJSLanguage, fullTSLanguage, htmlLanguage] : []),
-    ...schemeLanguages,
-    ...pyLanguages,
-    ...javaLanguages
+    ...javaLanguages,
   ];
 
   return (
-    <ChapterSelectComponent
+    <Select<SALanguage>
       items={choices.filter(({ mainLanguage }) => mainLanguage === selectedLang)}
       onItemSelect={handleChapterSelect}
       itemRenderer={chapterRenderer(isFolderModeEnabled)}
@@ -101,11 +90,13 @@ export const LegacyControlBarChapterSelect: React.FC<ControlBarChapterSelectProp
       disabled={disabled}
     >
       <Button
-        minimal
+        variant="minimal"
         text={styliseSublanguage(sourceChapter, sourceVariant)}
-        rightIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
+        endIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
         disabled={disabled}
       />
-    </ChapterSelectComponent>
+    </Select>
   );
-};
+}
+
+export default LegacyControlBarChapterSelect;

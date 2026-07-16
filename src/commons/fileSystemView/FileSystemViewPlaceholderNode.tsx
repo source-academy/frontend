@@ -1,13 +1,14 @@
-import React from 'react';
-import classes from 'src/styles/FileSystemView.module.scss';
+import { useState } from 'react';
+
+import classes from './FileSystemView.module.css';
 
 type Props = {
   processFileName: (fileName: string) => void;
   removePlaceholder: () => void;
 };
 
-const FileSystemViewPlaceholderNode: React.FC<Props> = ({ processFileName, removePlaceholder }) => {
-  const [fileName, setFileName] = React.useState('');
+function FileSystemViewPlaceholderNode({ processFileName, removePlaceholder }: Props) {
+  const [fileName, setFileName] = useState('');
 
   const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setFileName(e.target.value);
@@ -33,6 +34,6 @@ const FileSystemViewPlaceholderNode: React.FC<Props> = ({ processFileName, remov
       onBlur={handleInputOnBlur}
     />
   );
-};
+}
 
 export default FileSystemViewPlaceholderNode;

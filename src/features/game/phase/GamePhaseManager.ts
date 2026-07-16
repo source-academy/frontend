@@ -1,6 +1,7 @@
 import { Constants } from '../commons/CommonConstants';
-import { IGameUI } from '../commons/CommonTypes';
+import type { IGameUI } from '../commons/CommonTypes';
 import GameInputManager from '../input/GameInputManager';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { GamePhaseType, GameTerminalPhaseType } from './GamePhaseTypes';
 
 /**
@@ -20,7 +21,7 @@ export default class GamePhaseManager {
   private interruptCheckCallback: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => boolean;
   private interruptTransitionCallback: (
     prevPhase: GamePhaseType,
-    newPhase: GamePhaseType
+    newPhase: GamePhaseType,
   ) => Promise<void>;
   private transitionCallback: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => void;
 
@@ -53,7 +54,7 @@ export default class GamePhaseManager {
    * @param fn callback
    */
   public setInterruptCheckCallback(
-    fn: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => boolean
+    fn: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => boolean,
   ) {
     this.interruptCheckCallback = fn;
   }
@@ -69,7 +70,7 @@ export default class GamePhaseManager {
    * @param fn callback
    */
   public setInterruptCallback(
-    fn: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => Promise<void>
+    fn: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => Promise<void>,
   ) {
     this.interruptTransitionCallback = fn;
   }
@@ -102,7 +103,9 @@ export default class GamePhaseManager {
    */
   public async pushPhase(newPhase: GamePhaseType): Promise<void> {
     const prevPhase = this.getCurrentPhase();
-    if (newPhase === prevPhase) return;
+    if (newPhase === prevPhase) {
+      return;
+    }
     this.phaseStack.push(newPhase);
     await this.executePhaseTransition(prevPhase, newPhase);
   }
@@ -114,8 +117,11 @@ export default class GamePhaseManager {
    * @param newPhase phase to swap to
    */
   public async swapPhase(newPhase: GamePhaseType): Promise<void> {
+    GameGlobalAPI.getInstance().hideTooltip();
     const prevPhase = this.getCurrentPhase();
-    if (newPhase === prevPhase) return;
+    if (newPhase === prevPhase) {
+      return;
+    }
     this.phaseStack.pop();
     this.phaseStack.push(newPhase);
     await this.executePhaseTransition(prevPhase, newPhase);
@@ -139,7 +145,6 @@ export default class GamePhaseManager {
     this.inputManager.enableKeyboardInput(false);
     this.inputManager.enableMouseInput(false);
     await this.phaseMap.get(prevPhase)!.deactivateUI();
-
     if (this.interruptCheckCallback(prevPhase, newPhase)) {
       // Enable input in case interrupt transition callback needs it
       this.inputManager.enableMouseInput(true);
@@ -173,7 +178,7 @@ export default class GamePhaseManager {
    */
   public isCurrentPhaseTerminal(): boolean {
     return Object.values(GameTerminalPhaseType).includes(
-      this.getCurrentPhase() as unknown as GameTerminalPhaseType
+      this.getCurrentPhase() as unknown as GameTerminalPhaseType,
     );
   }
 

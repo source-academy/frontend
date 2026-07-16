@@ -1,4 +1,3 @@
-import React from 'react';
 import { Group } from 'react-konva';
 
 import { ArrayUnit } from '../components/ArrayUnit';
@@ -13,7 +12,7 @@ import {
   defaultActiveColor,
   defaultDangerColor,
   defaultStrokeColor,
-  getTextWidth
+  getTextWidth,
 } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
@@ -48,25 +47,27 @@ export class ArrayAssignmentAnimation extends Animatable {
     arrayValue: ArrayValue,
     indexItem: StashItemComponent,
     valueItem: StashItemComponent,
-    private resultItem: StashItemComponent
+    private resultItem: StashItemComponent,
   ) {
     super();
     this.resultItemIsFirst = resultItem.index === 0;
     this.asgnItemAnimation = new AnimatedTextbox(asgnItem.text, getNodePosition(asgnItem), {
-      rectProps: { stroke: defaultActiveColor() }
+      rectProps: { stroke: defaultActiveColor() },
     });
     this.arrayItemAnimation = new AnimatedTextbox(arrayItem.text, getNodePosition(arrayItem), {
-      rectProps: { stroke: defaultDangerColor() }
+      rectProps: { stroke: defaultDangerColor() },
     });
     this.arrayArrowAnimation = new AnimatedGenericArrow(arrayItem.arrow!);
     this.indexItemAnimation = new AnimatedTextbox(indexItem.text, getNodePosition(indexItem), {
-      rectProps: { stroke: defaultDangerColor() }
+      rectProps: { stroke: defaultDangerColor() },
     });
     // valueItem and resultItem should be the same
     this.resultAnimation = new AnimatedTextbox(resultItem.text, getNodePosition(valueItem), {
-      rectProps: { stroke: defaultDangerColor() }
+      rectProps: { stroke: defaultDangerColor() },
     });
-    if (valueItem.arrow) this.valueArrowAnimation = new AnimatedGenericArrow(valueItem.arrow);
+    if (valueItem.arrow) {
+      this.valueArrowAnimation = new AnimatedGenericArrow(valueItem.arrow);
+    }
     if (resultItem.arrow) {
       this.resultArrowAnimation = new AnimatedGenericArrow(resultItem.arrow, { opacity: 0 });
     }
@@ -77,10 +78,10 @@ export class ArrayAssignmentAnimation extends Animatable {
     ) {
       this.arrayUnitText = this.arrayUnit.value.text;
       this.arrayUnitTextAnimation = new AnimatedTextComponent({
-        text: this.arrayUnitText.partialStr,
+        text: this.arrayUnitText['partialStr'],
         x: this.arrayUnitText.x(),
         y: this.arrayUnitText.y() - 16,
-        opacity: 0
+        opacity: 0,
       });
     }
   }
@@ -90,7 +91,7 @@ export class ArrayAssignmentAnimation extends Animatable {
     if (this.arrayUnit.arrow) {
       this.arrayUnitArrowAnimation = new AnimatedGenericArrow(this.arrayUnit.arrow, {
         opacity: 0,
-        y: -16
+        y: -16,
       });
     }
     return (
@@ -124,7 +125,7 @@ export class ArrayAssignmentAnimation extends Animatable {
       this.asgnItemAnimation.animateTo({
         x: this.resultItem.x() - (this.resultItemIsFirst ? minAsgnItemWidth : 0),
         y: this.resultItem.y() + (this.resultItemIsFirst ? 0 : this.resultItem.height()),
-        width: minAsgnItemWidth
+        width: minAsgnItemWidth,
       }),
       this.arrayItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
       this.arrayItemAnimation.animateTo({ opacity: 0 }, fadeConfig),
@@ -133,28 +134,28 @@ export class ArrayAssignmentAnimation extends Animatable {
       this.indexItemAnimation.animateTo({ opacity: 0 }, fadeConfig),
       this.resultAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
       this.resultAnimation.animateTo({ x: this.resultItem.x() }),
-      this.resultArrowAnimation?.animateTo({ opacity: 1 }, { duration: 0.5, delay: 0.75 })
+      this.resultArrowAnimation?.animateTo({ opacity: 1 }, { duration: 0.5, delay: 0.75 }),
     ]);
     this.resultItem.ref.current?.show();
     this.resultItem.arrow?.ref.current?.show();
     this.resultArrowAnimation?.destroy();
     const aboveArrayLocation = {
       x: this.arrayUnit.x() + this.arrayUnit.width() / 2 - this.resultItem.width() / 2,
-      y: this.arrayUnit.y() - this.resultItem.height() - 8
+      y: this.arrayUnit.y() - this.resultItem.height() - 8,
     };
     const inArrayLocation = {
-      y: this.arrayUnit.y() + this.arrayUnit.height() / 2 - this.resultItem.height() / 2
+      y: this.arrayUnit.y() + this.arrayUnit.height() / 2 - this.resultItem.height() / 2,
     };
     // move instruction and a copy of the value to above the array
     await Promise.all([
       this.asgnItemAnimation.animateTo(
         {
           x: aboveArrayLocation.x - minAsgnItemWidth,
-          y: aboveArrayLocation.y
+          y: aboveArrayLocation.y,
         },
-        { duration: 1.2 }
+        { duration: 1.2 },
       ),
-      this.resultAnimation.animateTo(aboveArrayLocation, { duration: 1.2 })
+      this.resultAnimation.animateTo(aboveArrayLocation, { duration: 1.2 }),
     ]);
     // insert value into array
     await Promise.all([
@@ -165,7 +166,7 @@ export class ArrayAssignmentAnimation extends Animatable {
       this.arrayUnitTextAnimation?.animateTo({ y: this.arrayUnitText!.y() }),
       this.arrayUnitTextAnimation?.animateTo({ opacity: 1 }, { ...fadeConfig, delay: 1 / 4 }),
       this.arrayUnitArrowAnimation?.animateTo({ y: 0 }),
-      this.arrayUnitArrowAnimation?.animateTo({ opacity: 1 }, { ...fadeConfig, delay: 1 / 4 })
+      this.arrayUnitArrowAnimation?.animateTo({ opacity: 1 }, { ...fadeConfig, delay: 1 / 4 }),
     ]);
     this.destroy();
   }

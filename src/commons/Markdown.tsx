@@ -1,7 +1,7 @@
 import { Classes } from '@blueprintjs/core';
 import classNames from 'classnames';
 import DOMPurify from 'dompurify';
-import React from 'react';
+import { memo } from 'react';
 import { Converter } from 'showdown';
 
 type Props = {
@@ -13,13 +13,13 @@ type Props = {
   tasklists?: boolean;
 };
 
-const Markdown: React.FC<Props> = props => {
+function Markdown(props: Props) {
   const converter = new Converter({
     tables: true,
     simplifiedAutoLink: props.simplifiedAutoLink,
     strikethrough: props.strikethrough,
     tasklists: props.tasklists,
-    openLinksInNewWindow: props.openLinksInNewWindow
+    openLinksInNewWindow: props.openLinksInNewWindow,
   });
 
   return (
@@ -28,11 +28,11 @@ const Markdown: React.FC<Props> = props => {
       dangerouslySetInnerHTML={{
         __html: DOMPurify.sanitize(converter.makeHtml(props.content), {
           USE_PROFILES: { html: true },
-          ADD_ATTR: ['target']
-        })
+          ADD_ATTR: ['target'],
+        }),
       }}
     />
   );
-};
+}
 
-export default React.memo(Markdown);
+export default memo(Markdown);

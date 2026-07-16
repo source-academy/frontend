@@ -10,17 +10,17 @@ import {
   Tab,
   Tabs,
   Text,
-  TextArea
+  TextArea,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Chapter, Variant } from 'js-slang/dist/types';
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import { Chapter, Variant } from 'js-slang/dist/langs';
+import { useCallback, useState } from 'react';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import AcademyActions from 'src/features/academy/AcademyActions';
 
-import { CourseHelpTextEditorTab } from '../../pages/academy/adminPanel/subcomponents/CourseConfigPanel';
+import { CourseHelpTextEditorTab } from '../../features/adminPanel/subcomponents/CourseConfigPanel';
 import { sourceLanguages } from '../application/ApplicationTypes';
-import { UpdateCourseConfiguration } from '../application/types/SessionTypes';
+import type { UpdateCourseConfiguration } from '../application/types/SessionTypes';
 import Markdown from '../Markdown';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
@@ -29,31 +29,31 @@ type Props = {
   onClose: () => void;
 };
 
-const DropdownCreateCourse: React.FC<Props> = props => {
-  const dispatch = useDispatch();
+function DropdownCreateCourse(props: Props) {
+  const dispatch = useAppDispatch();
 
-  const [courseConfig, setCourseConfig] = React.useState<UpdateCourseConfiguration>({
+  const [courseConfig, setCourseConfig] = useState<UpdateCourseConfiguration>({
     courseName: '',
     courseShortName: '',
     viewable: true,
     enableGame: true,
     enableAchievements: true,
-    enableSourcecast: true,
-    enableStories: false,
+    enableLlmGrading: false,
     enableExamMode: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
-    moduleHelpText: ''
+    moduleHelpText: '',
+    llmApiKey: '',
   });
 
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
-    React.useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
+    useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
 
   const sourceChapterOptions = [
     { value: Chapter.SOURCE_1 },
     { value: Chapter.SOURCE_2 },
     { value: Chapter.SOURCE_3 },
-    { value: Chapter.SOURCE_4 }
+    { value: Chapter.SOURCE_4 },
   ];
 
   const sourceVariantOptions = (chapter: Chapter) =>
@@ -62,7 +62,7 @@ const DropdownCreateCourse: React.FC<Props> = props => {
       .map(e => {
         return {
           label: e.variant.replace(/^\w/, c => c.toUpperCase()),
-          value: e.variant
+          value: e.variant,
         };
       });
 
@@ -76,25 +76,24 @@ const DropdownCreateCourse: React.FC<Props> = props => {
     props.onClose();
   };
 
-  const onChangeTabs = React.useCallback(
+  const onChangeTabs = useCallback(
     (
       newTabId: CourseHelpTextEditorTab,
       prevTabId: CourseHelpTextEditorTab,
-      event: React.MouseEvent<HTMLElement>
+      event: React.MouseEvent<HTMLElement>,
     ) => {
       if (newTabId === prevTabId) {
         return;
       }
       setCourseHelpTextSelectedTab(newTabId);
     },
-    [setCourseHelpTextSelectedTab]
+    [setCourseHelpTextSelectedTab],
   );
 
   return (
     <Dialog
-      className="create-course"
       icon={IconNames.ADD}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       canOutsideClickClose={false}
       isOpen={props.isOpen}
       onClose={props.onClose}
@@ -115,7 +114,7 @@ const DropdownCreateCourse: React.FC<Props> = props => {
             onChange={e =>
               setCourseConfig({
                 ...courseConfig,
-                courseName: e.target.value
+                courseName: e.target.value,
               })
             }
           />
@@ -132,7 +131,7 @@ const DropdownCreateCourse: React.FC<Props> = props => {
             onChange={e =>
               setCourseConfig({
                 ...courseConfig,
-                courseShortName: e.target.value
+                courseShortName: e.target.value,
               })
             }
           />
@@ -142,13 +141,13 @@ const DropdownCreateCourse: React.FC<Props> = props => {
           labelFor="moduleHelpText"
         >
           <Text tagName="span">Module Help Text&nbsp;</Text>
-          <Text tagName="span" className="optional-text">
+          <Text tagName="span" className="optional-text text-[#5c7080]">
             (optional)
           </Text>
           <Tabs
             selectedTabId={courseHelpTextSelectedTab}
             onChange={onChangeTabs}
-            className="module-help-text-tabs"
+            className="module-help-text-tabs inline-block ml-3.75"
           >
             <Tab id={CourseHelpTextEditorTab.WRITE} title="Write" />
             <Tab id={CourseHelpTextEditorTab.PREVIEW} title="Preview" />
@@ -156,25 +155,25 @@ const DropdownCreateCourse: React.FC<Props> = props => {
           {courseHelpTextSelectedTab === CourseHelpTextEditorTab.WRITE && (
             <TextArea
               id="moduleHelpText"
-              className="input-textarea"
-              fill={true}
+              className="input-textarea h-25"
+              fill
               value={courseConfig.moduleHelpText}
               onChange={e =>
                 setCourseConfig({
                   ...courseConfig,
-                  moduleHelpText: e.target.value
+                  moduleHelpText: e.target.value,
                 })
               }
             />
           )}
           {courseHelpTextSelectedTab === CourseHelpTextEditorTab.PREVIEW && (
-            <div className="input-markdown">
+            <div className="input-markdown p-2.5 h-25 bg-[#f5f5f5] rounded overflow-auto [box-shadow:inset_0_0_0_1px_rgba(16,22,26,0.15),inset_0_1px_1px_rgba(16,22,26,0.2)] [&>div>*]:m-0">
               <Markdown content={courseConfig.moduleHelpText || ''} openLinksInNewWindow />
             </div>
           )}
         </FormGroup>
 
-        <div className="boolean-container">
+        <div className="boolean-container flex">
           <div>
             <Switch
               checked={courseConfig.viewable}
@@ -183,7 +182,7 @@ const DropdownCreateCourse: React.FC<Props> = props => {
               onChange={e =>
                 setCourseConfig({
                   ...courseConfig,
-                  viewable: (e.target as HTMLInputElement).checked
+                  viewable: (e.target as HTMLInputElement).checked,
                 })
               }
             />
@@ -194,7 +193,7 @@ const DropdownCreateCourse: React.FC<Props> = props => {
               onChange={e =>
                 setCourseConfig({
                   ...courseConfig,
-                  enableAchievements: (e.target as HTMLInputElement).checked
+                  enableAchievements: (e.target as HTMLInputElement).checked,
                 })
               }
             />
@@ -207,31 +206,19 @@ const DropdownCreateCourse: React.FC<Props> = props => {
               onChange={e =>
                 setCourseConfig({
                   ...courseConfig,
-                  enableGame: (e.target as HTMLInputElement).checked
+                  enableGame: (e.target as HTMLInputElement).checked,
                 })
               }
             />
 
             <Switch
-              checked={courseConfig.enableSourcecast}
+              checked={courseConfig.enableLlmGrading}
               inline
-              label="Enable Sourcecast"
+              label="Enable LLM Grading"
               onChange={e =>
                 setCourseConfig({
                   ...courseConfig,
-                  enableSourcecast: (e.target as HTMLInputElement).checked
-                })
-              }
-            />
-
-            <Switch
-              checked={courseConfig.enableStories}
-              inline
-              label="Enable Stories"
-              onChange={e =>
-                setCourseConfig({
-                  ...courseConfig,
-                  enableStories: (e.target as HTMLInputElement).checked
+                  enableLlmGrading: (e.target as HTMLInputElement).checked,
                 })
               }
             />
@@ -250,7 +237,7 @@ const DropdownCreateCourse: React.FC<Props> = props => {
               onChange={e => {
                 setCourseConfig({
                   ...courseConfig,
-                  sourceChapter: parseInt(e.target.value)
+                  sourceChapter: parseInt(e.target.value),
                 });
               }}
               fill
@@ -268,19 +255,37 @@ const DropdownCreateCourse: React.FC<Props> = props => {
               onChange={e => {
                 setCourseConfig({
                   ...courseConfig,
-                  sourceVariant: e.target.value as Variant
+                  sourceVariant: e.target.value as Variant,
                 });
               }}
               fill
             />
           </FormGroup>
+          <FormGroup
+            helperText="API Key for LLM endpoint. This key will be encrypted and will not be retrievable on the frontend after."
+            label={'LLM API Key'}
+            labelInfo="(optional)"
+            labelFor="llmApiKey"
+          >
+            <InputGroup
+              id="llmApiKey"
+              type="password"
+              value={courseConfig.llmApiKey}
+              onChange={e =>
+                setCourseConfig({
+                  ...courseConfig,
+                  llmApiKey: e.target.value,
+                })
+              }
+            />
+          </FormGroup>
         </div>
-        <div className="create-course-button-container">
+        <div className="create-course-button-container mt-5 flex justify-center items-center">
           <Button text="Create Course" onClick={submitHandler} />
         </div>
       </DialogBody>
     </Dialog>
   );
-};
+}
 
 export default DropdownCreateCourse;

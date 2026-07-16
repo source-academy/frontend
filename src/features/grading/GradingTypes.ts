@@ -1,15 +1,16 @@
-import { ColDef } from 'ag-grid-community';
+import type { ColDef } from 'ag-grid-community';
 
-import {
+import type {
   AssessmentStatus,
   AssessmentType,
   AutogradingResult,
+  LLMPrompt,
   MCQChoice,
   ProgressStatus,
   Question,
-  Testcase
+  Testcase,
 } from '../../commons/assessment/AssessmentTypes';
-import { Notification } from '../../commons/notificationBadge/NotificationBadgeTypes';
+import type { Notification } from '../../commons/notificationBadge/NotificationBadgeTypes';
 
 export enum ColumnFields {
   assessmentName = 'assessmentName',
@@ -19,7 +20,7 @@ export enum ColumnFields {
   groupName = 'groupName',
   progressStatus = 'progressStatus',
   xp = 'xp',
-  actionsIndex = 'actionsIndex'
+  actionsIndex = 'actionsIndex',
 }
 
 export type ColumnFieldsKeys = keyof typeof ColumnFields;
@@ -27,7 +28,7 @@ export type ColumnFieldsKeys = keyof typeof ColumnFields;
 export enum SortStates {
   ASC = 'sort-asc',
   DESC = 'sort-desc',
-  NONE = 'sort'
+  NONE = 'sort',
 }
 
 /**
@@ -99,14 +100,7 @@ export type GradingAssessment = {
 export type GradingQuery = {
   answers: GradingAnswer;
   assessment: GradingAssessment;
-};
-
-export type GradingSubmissionTableProps = {
-  showAllSubmissions: boolean;
-  totalRows: number;
-  pageSize: number;
-  submissions: GradingOverview[];
-  updateEntries: (page: number, filterParams: object) => void;
+  enable_llm_grading: boolean | null;
 };
 
 export enum ColumnName {
@@ -117,7 +111,7 @@ export enum ColumnName {
   groupName = 'Group',
   progressStatus = 'Progress',
   xp = 'Raw XP (+Bonus)',
-  actionsIndex = 'Actions'
+  actionsIndex = 'Actions',
 }
 
 export type ColumnNameKeys = keyof typeof ColumnName;
@@ -168,6 +162,7 @@ export type IGradingTableProperties = {
  * particular question in a submission.
  */
 export type GradingQuestion = {
+  id: number;
   question: AnsweredQuestion;
   team?: Array<{
     username: any;
@@ -189,6 +184,10 @@ export type GradingQuestion = {
     };
     gradedAt?: string;
   };
+  autogradingResults: AutogradingResult[];
+  autoGradingStatus: string;
+  ai_comments?: string[];
+  prompts: LLMPrompt[];
 };
 
 /**

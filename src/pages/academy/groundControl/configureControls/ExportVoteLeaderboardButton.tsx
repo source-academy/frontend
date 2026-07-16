@@ -1,28 +1,28 @@
 import { IconNames } from '@blueprintjs/icons';
-import { createGrid, GridOptions } from 'ag-grid-community';
+import { createGrid, type GridOptions } from 'ag-grid-community';
 import ControlButton from 'src/commons/ControlButton';
 import { getPopularVoteLeaderboard } from 'src/commons/sagas/RequestsSaga';
-import { useTokens, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppSelector, useTokens } from 'src/commons/utils/Hooks';
 
 type Props = {
   assessmentId: number;
 };
 
-const ExportVoteLeaderboardButton: React.FC<Props> = ({ assessmentId }) => {
+function ExportVoteLeaderboardButton({ assessmentId }: Props) {
   const tokens = useTokens({ throwWhenEmpty: true });
-  const visibleEntries = useTypedSelector(store => store.session.topContestLeaderboardDisplay);
+  const visibleEntries = useAppSelector(store => store.session.topContestLeaderboardDisplay);
 
   // onClick handler for fetching popular vote leaderboard, putting it into a grid and exporting data
   const exportPopularVoteLeaderboardToCsv = async () => {
     const popularVoteLeaderboard = await getPopularVoteLeaderboard(
       assessmentId,
       visibleEntries,
-      tokens
+      tokens,
     );
     const gridContainer = document.createElement('div');
     const gridOptions: GridOptions = {
       rowData: popularVoteLeaderboard,
-      columnDefs: [{ field: 'student_name' }, { field: 'answer' }, { field: 'final_score' }]
+      columnDefs: [{ field: 'student_name' }, { field: 'answer' }, { field: 'final_score' }],
     };
     const api = createGrid(gridContainer, gridOptions);
     api.exportDataAsCsv();
@@ -38,6 +38,6 @@ const ExportVoteLeaderboardButton: React.FC<Props> = ({ assessmentId }) => {
       />
     </div>
   );
-};
+}
 
 export default ExportVoteLeaderboardButton;

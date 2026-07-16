@@ -1,14 +1,14 @@
 import { Button, Dialog, EditableText, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useState } from 'react';
-import { AchievementView } from 'src/features/achievement/AchievementTypes';
+import { useState } from 'react';
+import type { AchievementView } from 'src/features/achievement/AchievementTypes';
 
 type Props = {
   changeView: (view: AchievementView) => void;
   view: AchievementView;
 };
 
-const EditableView: React.FC<Props> = ({ changeView, view }) => {
+function EditableView({ changeView, view }: Props) {
   const { coverImage, description, completionText } = view;
 
   const [isOpen, setOpen] = useState(false);
@@ -32,21 +32,21 @@ const EditableView: React.FC<Props> = ({ changeView, view }) => {
         <div style={{ padding: '0 0.5em' }}>
           <h3>Cover Image</h3>
           <EditableText
-            multiline={true}
+            multiline
             onChange={changeCoverImage}
             placeholder="Enter cover image URL here"
             value={coverImage}
           />
           <h3>Description</h3>
           <EditableText
-            multiline={true}
+            multiline
             onChange={changeDescription}
             placeholder="Enter description here"
             value={description}
           />
           <h3>Completion Text</h3>
           <EditableText
-            multiline={true}
+            multiline
             onChange={changeCompletionText}
             placeholder="Enter completion text here"
             value={completionText}
@@ -55,6 +55,6 @@ const EditableView: React.FC<Props> = ({ changeView, view }) => {
       </Dialog>
     </>
   );
-};
+}
 
 export default EditableView;

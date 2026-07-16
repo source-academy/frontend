@@ -1,7 +1,8 @@
-import { InterpreterOutput } from '../application/ApplicationTypes';
+import type { InterpreterOutput } from '../application/ApplicationTypes';
 
 export type OutputProps = {
   output: InterpreterOutput;
   usingSubst?: boolean;
   isHtml?: boolean;
+  showStepperPrompt?: boolean;
 };

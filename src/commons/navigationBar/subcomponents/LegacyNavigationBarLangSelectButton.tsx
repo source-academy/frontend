@@ -1,34 +1,29 @@
 import { Position } from '@blueprintjs/core';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import {
   cLanguages,
   getLanguageConfig,
   javaLanguages,
-  pyLanguages,
-  SALanguage,
-  schemeLanguages,
+  type SALanguage,
   sourceLanguages,
   SUPPORTED_LANGUAGES,
-  SupportedLanguage
+  SupportedLanguage,
 } from 'src/commons/application/ApplicationTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { playgroundConfigLanguage } from 'src/features/playground/PlaygroundActions';
 
 const LegacyNavigationBarLangSelectButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const lang = useTypedSelector(store => store.playground.languageConfig.mainLanguage);
-  const dispatch = useDispatch();
+  const lang = useAppSelector(store => store.playground.languageConfig.mainLanguage);
+  const dispatch = useAppDispatch();
 
   // Legacy default sublanguage mapping
   const defaultSublanguages: { [lang in SupportedLanguage]: SALanguage } = {
     [SupportedLanguage.JAVASCRIPT]: sourceLanguages[0],
-    [SupportedLanguage.PYTHON]: pyLanguages[0],
-    [SupportedLanguage.SCHEME]: schemeLanguages[0],
     [SupportedLanguage.JAVA]: javaLanguages[0],
-    [SupportedLanguage.C]: cLanguages[0]
+    [SupportedLanguage.C]: cLanguages[0],
   };
 
   const selectLang = (language: SupportedLanguage) => {
@@ -45,9 +40,9 @@ const LegacyNavigationBarLangSelectButton = () => {
       selectedValue={lang}
       popoverProps={{ position: Position.BOTTOM_RIGHT, onClose: () => setIsOpen(false), isOpen }}
       buttonProps={{
-        rightIcon: 'caret-down',
+        endIcon: 'caret-down',
         onClick: () => setIsOpen(true),
-        'data-testid': 'NavigationBarLangSelectButton'
+        'data-testid': 'NavigationBarLangSelectButton',
       }}
     />
   );

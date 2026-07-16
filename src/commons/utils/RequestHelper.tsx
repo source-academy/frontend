@@ -1,14 +1,14 @@
 import { Button } from '@blueprintjs/core';
-import _ from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { assessmentFullPathRegex } from 'src/features/academy/AcademyTypes';
 import { store } from 'src/pages/createStore';
 
-import { Tokens } from '../application/types/SessionTypes';
+import type { Tokens } from '../application/types/SessionTypes';
 import { postRefresh } from '../sagas/RequestsSaga';
-import { MockResponse } from './__tests__/RequestHelper.test';
 import { actions } from './ActionsHelper';
 import Constants from './Constants';
 import { dismiss, showWarningMessage } from './notifications/NotificationsHelper';
+import type { MockResponse } from './RequestHelper.test';
 
 /**
  * @property accessToken - backend access token
@@ -49,8 +49,12 @@ export const request = async (
   path: string,
   method: RequestMethod,
   opts: RequestOptions,
-  rawUrl?: string
+  rawUrl?: string,
 ): Promise<Response | null> => {
+  if (Constants.forwardLoadBalancerCookies) {
+    // Always attach cookies to every API call
+    opts.withCredentials = true;
+  }
   const fetchOptions = generateApiCallHeadersAndFetchOptions(method, opts);
 
   try {
@@ -87,7 +91,7 @@ export const request = async (
       }
 
       store.dispatch(actions.setTokens(newTokens));
-      const updatedFetchOptions = _.cloneDeep(fetchOptions);
+      const updatedFetchOptions = cloneDeep(fetchOptions);
       updatedFetchOptions.headers.set('Authorization', `Bearer ${newTokens.accessToken}`);
 
       const retriedResp = await fetch(`${Constants.backendUrl}/v2/${path}`, updatedFetchOptions);
@@ -101,7 +105,7 @@ export const request = async (
       }
 
       showWarningMessage(
-        opts.errorMessage ? opts.errorMessage : getResponseErrorMessage(retriedResp)
+        opts.errorMessage ? opts.errorMessage : getResponseErrorMessage(retriedResp),
       );
       return null;
     } catch (err) {
@@ -112,7 +116,7 @@ export const request = async (
         showWarningMessage(
           promptReloginMessage,
           -1, // force toast to not timeout
-          userSessionExpiredNotificationKey
+          userSessionExpiredNotificationKey,
         );
       } else {
         store.dispatch(actions.logOut());
@@ -132,7 +136,7 @@ export const request = async (
 
 export const generateApiCallHeadersAndFetchOptions = (
   method: RequestMethod,
-  opts: RequestOptions
+  opts: RequestOptions,
 ) => {
   const headers = new Headers();
   if (!opts.noHeaderAccept) {

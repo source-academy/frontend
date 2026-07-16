@@ -1,18 +1,17 @@
 import { Dialog, DialogBody } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 import Markdown from '../Markdown';
 import { Links } from '../utils/Constants';
-import { useTypedSelector } from '../utils/Hooks';
+import { useAppSelector } from '../utils/Hooks';
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-const DropdownHelp: React.FC<Props> = props => {
-  const moduleHelpText = useTypedSelector(store => store.session.moduleHelpText);
+function DropdownHelp(props: Props) {
+  const moduleHelpText = useAppSelector(store => store.session.moduleHelpText);
 
   return (
     <Dialog
@@ -42,5 +41,6 @@ const DropdownHelp: React.FC<Props> = props => {
       </DialogBody>
     </Dialog>
   );
-};
+}
+
 export default DropdownHelp;

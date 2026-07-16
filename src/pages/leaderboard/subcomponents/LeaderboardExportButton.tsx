@@ -1,14 +1,16 @@
 import 'src/styles/Leaderboard.scss';
 
-import React from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import {
   getAllOverallLeaderboardXP,
   getContestPopularVoteLeaderboard,
-  getContestScoreLeaderboard
+  getContestScoreLeaderboard,
 } from 'src/commons/sagas/RequestsSaga';
 import { useSession } from 'src/commons/utils/Hooks';
-import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
+import type {
+  ContestLeaderboardRow,
+  LeaderboardRow,
+} from 'src/features/leaderboard/LeaderboardTypes';
 
 type Props = {
   type: string;
@@ -16,7 +18,7 @@ type Props = {
   contestID?: number;
 };
 
-const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) => {
+function LeaderboardExportButton({ type, contest, contestID }: Props) {
   const { role, accessToken, refreshToken } = useSession();
 
   const onExportClick = async () => {
@@ -36,7 +38,7 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) 
       const resp = await getContestPopularVoteLeaderboard(
         contestID!,
         Number.MAX_SAFE_INTEGER,
-        tokens
+        tokens,
       );
       if (resp) {
         exportCSV(resp);
@@ -56,7 +58,7 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) 
       'Name',
       'Username',
       type === 'overall' ? 'XP' : 'Score',
-      type === 'overall' ? 'Achievements' : 'Code'
+      type === 'overall' ? 'Achievements' : 'Code',
     ];
     const rows = data.map(
       (player: {
@@ -79,8 +81,8 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) 
           : (player as ContestLeaderboardRow).score,
         type === 'overall'
           ? (player as LeaderboardRow).achievements
-          : escapeCodeField((player as ContestLeaderboardRow).code)
-      ]
+          : escapeCodeField((player as ContestLeaderboardRow).code),
+      ],
     );
 
     // Combine headers and rows
@@ -105,6 +107,6 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) 
   ) : (
     ''
   );
-};
+}
 
 export default LeaderboardExportButton;

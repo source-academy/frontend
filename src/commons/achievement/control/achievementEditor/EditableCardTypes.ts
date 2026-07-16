@@ -1,4 +1,4 @@
-import { AchievementItem, AchievementView } from 'src/features/achievement/AchievementTypes';
+import type { AchievementItem, AchievementView } from 'src/features/achievement/AchievementTypes';
 
 export enum EditableCardActionType {
   CHANGE_CARD_BACKGROUND = 'CHANGE_CARD_BACKGROUND',
@@ -13,7 +13,7 @@ export enum EditableCardActionType {
   CHANGE_XP = 'CHANGE_XP',
   DELETE_ACHIEVEMENT = 'DELETE_ACHIEVEMENT',
   DISCARD_CHANGES = 'DISCARD_CHANGES',
-  SAVE_CHANGES = 'SAVE_CHANGES'
+  SAVE_CHANGES = 'SAVE_CHANGES',
 }
 
 export type EditableCardAction =

@@ -1,16 +1,16 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 import EditableGoal from './goalEditor/EditableGoal';
 import GoalAdder from './goalEditor/GoalAdder';
 
-let editableGoals: JSX.Element[] = [];
+let editableGoals: React.ReactElement[] = [];
 
 type Props = {
   requestPublish: () => void;
 };
 
-const GoalEditor: React.FC<Props> = ({ requestPublish }) => {
+function GoalEditor({ requestPublish }: Props) {
   const inferencer = useContext(AchievementContext);
 
   /**
@@ -67,6 +67,6 @@ const GoalEditor: React.FC<Props> = ({ requestPublish }) => {
       <ul className="goal-container">{editableGoals}</ul>
     </div>
   );
-};
+}
 
 export default GoalEditor;

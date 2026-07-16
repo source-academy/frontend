@@ -1,12 +1,11 @@
 import { Drawer, DrawerSize, NonIdealState, Spinner } from '@blueprintjs/core';
-import { IconName, IconNames } from '@blueprintjs/icons';
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { type IconName, IconNames } from '@blueprintjs/icons';
+import { useEffect, useState } from 'react';
 
 import SessionActions from '../application/actions/SessionActions';
-import { AssessmentStatuses, AssessmentType } from '../assessment/AssessmentTypes';
+import { AssessmentStatuses, type AssessmentType } from '../assessment/AssessmentTypes';
 import Constants from '../utils/Constants';
-import { useSession } from '../utils/Hooks';
+import { useAppDispatch, useSession } from '../utils/Hooks';
 import ProfileCard from './ProfileCard';
 
 export type ProfileProps = OwnProps;
@@ -16,7 +15,7 @@ type OwnProps = {
   onClose: () => void;
 };
 
-const Profile: React.FC<ProfileProps> = props => {
+function Profile(props: ProfileProps) {
   // FIXME: `xp` is actually of type number | undefined here!
   // Fix the session type, then remove the typecast below
   const {
@@ -27,10 +26,10 @@ const Profile: React.FC<ProfileProps> = props => {
     assessmentOverviews,
     assessmentConfigurations,
     xp,
-    courseId
+    courseId,
   } = useSession();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     if (isLoggedIn && isEnrolledInACourse && !assessmentOverviews) {
       // If assessment overviews are not loaded, fetch them
@@ -45,7 +44,7 @@ const Profile: React.FC<ProfileProps> = props => {
   }, [isEnrolledInACourse, dispatch, xp]);
 
   const [isLoaded, setIsLoaded] = useState(
-    isLoggedIn && isEnrolledInACourse && assessmentOverviews
+    isLoggedIn && isEnrolledInACourse && assessmentOverviews,
   );
 
   useEffect(() => {
@@ -53,14 +52,14 @@ const Profile: React.FC<ProfileProps> = props => {
   }, [assessmentOverviews, isLoggedIn, isEnrolledInACourse]);
 
   // Render
-  let content: JSX.Element;
+  let content: React.ReactElement;
 
   if (!isLoaded) {
     content = <NonIdealState description="Loading..." icon={<Spinner />} />;
   } else {
     // Check if there are any closed assessments, else render a placeholder <div>
     const numClosed = assessmentOverviews!.filter(
-      item => item.status === AssessmentStatuses.submitted
+      item => item.status === AssessmentStatuses.submitted,
     ).length;
 
     const userXp = xp || 0;
@@ -68,19 +67,22 @@ const Profile: React.FC<ProfileProps> = props => {
     const fullXp = caFulfillmentLevel * 1000;
 
     const userDetails = (
-      <div className="profile-header">
+      <div className="profile-header shrink-0 text-center pb-[1.75em]">
         <div className="profile-username">
-          <div className="name">{name}</div>
-          <div className="role">{role}</div>
+          <div className="name text-2xl font-extrabold mb-[0.3em]">{name}</div>
+          <div className="role text-base italic">{role}</div>
         </div>
       </div>
     );
 
     if (numClosed === 0) {
       content = (
-        <div className="profile-content">
+        <div className="profile-content h-[calc(100vh-40px)] flex-1 p-5 leading-[18px] flex flex-col">
           {userDetails}
-          <div className="profile-placeholder" data-testid="profile-placeholder">
+          <div
+            className="profile-placeholder shrink-0 text-center"
+            data-testid="profile-placeholder"
+          >
             There are no closed assessments to render grade and XP of.
           </div>
         </div>
@@ -96,10 +98,10 @@ const Profile: React.FC<ProfileProps> = props => {
         return frac < 0
           ? ''
           : frac >= 0.8
-            ? ' progress-steelblue'
+            ? ' [&_svg_path:last-of-type]:stroke-[#137cbd] [&>div:empty]:bg-[#137cbd]'
             : frac >= 0.45
-              ? ' progress-deepskyblue'
-              : ' progress-skyblue';
+              ? ' [&_svg_path:last-of-type]:stroke-[#579ecb] [&>div:empty]:bg-[#579ecb]'
+              : ' [&_svg_path:last-of-type]:stroke-[#9ac0d8] [&>div:empty]:bg-[#9ac0d8]';
       };
 
       // Given an assessment category, return its icon
@@ -109,7 +111,7 @@ const Profile: React.FC<ProfileProps> = props => {
           IconNames.LIGHTBULB,
           IconNames.PREDICTIVE_ANALYSIS,
           IconNames.COMPARISON,
-          IconNames.MANUAL
+          IconNames.MANUAL,
         ];
         if (assessmentConfigurations) {
           const index = assessmentConfigurations.findIndex(c => c.type === assessmentType);
@@ -141,32 +143,47 @@ const Profile: React.FC<ProfileProps> = props => {
         });
 
       content = (
-        <div className="profile-content">
+        <div className="h-[calc(100vh-40px)] flex-1 p-5 leading-[18px] flex flex-col">
           {userDetails}
 
-          <div className="profile-progress" data-testid="profile-progress">
-            <div className="profile-xp">
+          <div
+            className="profile-progress shrink-0 flex flex-row pb-3 justify-around items-stretch"
+            data-testid="profile-progress"
+          >
+            <div className="profile-xp relative w-[42%] shrink-0 mb-[0.3em]">
               <Spinner
                 className={'profile-spinner' + parseColour(getFrac(userXp, fullXp))}
                 size={144}
                 value={getFrac(userXp, fullXp)}
                 data-testid="profile-spinner"
               />
-              <div className="type" data-testid="profile-type">
+              <div
+                className="type absolute text-center w-full font-bold text-[1.35em] top-[35%]"
+                data-testid="profile-type"
+              >
                 XP Progress
               </div>
-              <div className="total-value" data-testid="profile-total-value">
+              <div
+                className="total-value absolute text-center w-full text-[1.15em] top-[52%]"
+                data-testid="profile-total-value"
+              >
                 {userXp} / {fullXp}*
               </div>
-              <div className="percentage" data-testid="profile-percentage">
+              <div
+                className="percentage absolute text-center w-full text-[0.95em] top-[78%]"
+                data-testid="profile-percentage"
+              >
                 {(getFrac(userXp, fullXp) * 100).toFixed(2)}%
               </div>
             </div>
           </div>
-          <div className="profile-xp-footer">
+          <div className="profile-xp-footer italic text-center pb-3">
             *{fullXp}XP needed to reach full CA level of {caFulfillmentLevel}
           </div>
-          <div className="profile-callouts" data-testid="profile-callouts">
+          <div
+            className="profile-callouts flex-1 overflow-y-auto space-y-2"
+            data-testid="profile-callouts"
+          >
             {summaryCallouts}
           </div>
         </div>
@@ -176,9 +193,9 @@ const Profile: React.FC<ProfileProps> = props => {
 
   return (
     <Drawer
-      className="profile"
+      className="profile min-w-[410px]"
       icon={IconNames.USER}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={props.isOpen}
       onClose={props.onClose}
       title="User Profile"
@@ -188,6 +205,6 @@ const Profile: React.FC<ProfileProps> = props => {
       {content}
     </Drawer>
   );
-};
+}
 
 export default Profile;

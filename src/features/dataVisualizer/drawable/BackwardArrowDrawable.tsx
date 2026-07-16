@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { Arrow } from 'react-konva';
 
 import { Config } from '../Config';
@@ -12,7 +12,7 @@ type Props = {
  * Represents an arrow used to connect a parent node and a child node that has been drawn before,
  * that is positioned to the top left of the parent node.
  */
-const BackwardArrowDrawable: React.FC<Props> = ({ from, to }) => {
+function BackwardArrowDrawable({ from, to }: Props) {
   /*
    *  Connects a box to a previously known box, the arrow path is more complicated.
    *
@@ -47,7 +47,7 @@ const BackwardArrowDrawable: React.FC<Props> = ({ from, to }) => {
     to.x + Config.ArrowPointerOffsetHorizontal,
     topY,
     to.x + Config.ArrowPointerOffsetHorizontal,
-    to.y + Config.ArrowPointerOffsetVertical
+    to.y + Config.ArrowPointerOffsetVertical,
   ];
 
   return (
@@ -61,6 +61,6 @@ const BackwardArrowDrawable: React.FC<Props> = ({ from, to }) => {
       preventDefault={false}
     />
   );
-};
+}
 
-export default React.memo(BackwardArrowDrawable);
+export default memo(BackwardArrowDrawable);

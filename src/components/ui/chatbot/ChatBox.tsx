@@ -1,0 +1,196 @@
+import { Button } from '@blueprintjs/core';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { Tokens } from 'src/commons/application/types/SessionTypes';
+import { useTokens } from 'src/commons/utils/Hooks';
+import { v4 as uuid } from 'uuid';
+
+import classes from './ChatBox.module.css';
+import type { ChatMessage, InitChatResponse, SendMessageResponse } from './types';
+
+export type RenderMessageContext = {
+  activeSnippetId: string;
+  setActiveSnippetId: (id: string) => void;
+};
+
+const scrollToBottom = (ref: React.RefObject<HTMLDivElement | null>): void => {
+  ref.current?.scrollTo({ top: ref.current?.scrollHeight });
+};
+
+type Props = {
+  // From FloatingChatbot render prop
+  activeSnippetId: string;
+  setActiveSnippetId: (id: string) => void;
+  isExpanded: boolean;
+  toggleExpanded: () => void;
+  // Backend wiring
+  initChat: (tokens: Tokens) => Promise<InitChatResponse>;
+  sendMessage: (tokens: Tokens, userInput: string) => Promise<SendMessageResponse>;
+  // Strings
+  initialMessage: string;
+  errorMessage: string;
+  inputPlaceholder: string;
+  // Render
+  renderMessage: (message: ChatMessage, ctx: RenderMessageContext) => React.ReactNode;
+  // Optional header bits
+  feedbackUrl?: string;
+};
+
+function ChatBox({
+  activeSnippetId,
+  setActiveSnippetId,
+  isExpanded,
+  toggleExpanded,
+  initChat,
+  sendMessage: handleSendMessage,
+  initialMessage,
+  errorMessage,
+  inputPlaceholder,
+  renderMessage,
+  feedbackUrl,
+}: Props) {
+  const chatRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [
+    { id: uuid(), role: 'assistant', content: initialMessage },
+  ]);
+  const [userInput, setUserInput] = useState('');
+  const [maxContentSize, setMaxContentSize] = useState(1000);
+  const tokens = useTokens({ throwWhenEmpty: false });
+
+  const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUserInput(event.target.value);
+  };
+
+  const sendMessage = useCallback(() => {
+    if (userInput.trim() === '' || !tokens.accessToken || !tokens.refreshToken) {
+      return;
+    }
+    const authedTokens: Tokens = {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    };
+    setUserInput('');
+    setMessages(prev => [...prev, { id: uuid(), role: 'user', content: userInput }]);
+    setIsLoading(true);
+
+    handleSendMessage(authedTokens, userInput)
+      .then(resp => {
+        setMessages(prev => [...prev, { id: uuid(), role: 'assistant', content: resp.response }]);
+      })
+      .catch(() => {
+        setMessages(prev => [...prev, { id: uuid(), role: 'assistant', content: errorMessage }]);
+      })
+      .finally(() => setIsLoading(false));
+  }, [tokens.accessToken, tokens.refreshToken, userInput, handleSendMessage, errorMessage]);
+
+  const keyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
+    e => {
+      if (e.key === 'Enter' && !isLoading) {
+        sendMessage();
+      }
+    },
+    [isLoading, sendMessage],
+  );
+
+  const resetChat = useCallback(() => {
+    if (!tokens.accessToken || !tokens.refreshToken) {
+      return;
+    }
+    const authedTokens: Tokens = {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    };
+
+    initChat(authedTokens)
+      .then(resp => {
+        const conversationMessages = resp.messages;
+        const maxMessageSize = resp.maxContentSize;
+        if (conversationMessages && conversationMessages.length > 0) {
+          const messagesWithIds = conversationMessages.map(msg => ({
+            ...msg,
+            id: msg.id || uuid(),
+          }));
+          setMessages(messagesWithIds);
+        } else {
+          setMessages([{ id: uuid(), role: 'assistant', content: initialMessage }]);
+        }
+        setMaxContentSize(maxMessageSize);
+        setUserInput('');
+      })
+      .catch(() => {
+        setMessages([{ id: uuid(), role: 'assistant', content: initialMessage }]);
+      });
+  }, [tokens.accessToken, tokens.refreshToken, initChat, initialMessage]);
+
+  useEffect(() => {
+    resetChat();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    scrollToBottom(chatRef);
+  }, [messages, isLoading]);
+
+  return (
+    <div
+      className={`${classes['chat-container']} ${isExpanded ? classes['chat-container-expanded'] : ''}`}
+    >
+      <div className={classes['chat-header']}>
+        <Button
+          size="small"
+          variant="minimal"
+          icon={isExpanded ? 'minimize' : 'maximize'}
+          onClick={toggleExpanded}
+          title={isExpanded ? 'Shrink chat' : 'Expand chat'}
+          className={classes['expand-button']}
+        />
+        {feedbackUrl && (
+          <a
+            href={feedbackUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={classes['feedback-link']}
+          >
+            Any feedback?
+          </a>
+        )}
+      </div>
+      <div className={classes['chat-message']} ref={chatRef}>
+        {messages.map(message => (
+          <div key={message.id} className={classes[message.role]}>
+            {message.role === 'assistant'
+              ? renderMessage(message, { activeSnippetId, setActiveSnippetId })
+              : message.content}
+          </div>
+        ))}
+        {isLoading && <p>loading...</p>}
+      </div>
+      <div className={classes['control-container']}>
+        <input
+          type="text"
+          disabled={isLoading}
+          className={classes['user-input']}
+          placeholder={isLoading ? 'Waiting for response...' : inputPlaceholder}
+          value={userInput}
+          onChange={handleUserInput}
+          onKeyDown={keyDown}
+          maxLength={maxContentSize}
+        />
+        <div className={classes['input-count-container']}>
+          <div className={classes['input-count']}>{`${userInput.length}/${maxContentSize}`}</div>
+        </div>
+
+        <div className={classes['button-container']}>
+          <Button disabled={isLoading} className={classes['button-send']} onClick={sendMessage}>
+            Send
+          </Button>
+          <Button className={classes['button-clean']} onClick={resetChat}>
+            Clean
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default ChatBox;

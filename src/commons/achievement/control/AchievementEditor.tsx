@@ -1,16 +1,16 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 import AchievementAdder from './achievementEditor/AchievementAdder';
 import EditableCard from './achievementEditor/EditableCard';
 
-let editableCards: JSX.Element[] = [];
+let editableCards: React.ReactElement[] = [];
 
 type Props = {
   requestPublish: () => void;
 };
 
-const AchievementEditor: React.FC<Props> = ({ requestPublish }) => {
+function AchievementEditor({ requestPublish }: Props) {
   const inferencer = useContext(AchievementContext);
 
   /**
@@ -69,6 +69,6 @@ const AchievementEditor: React.FC<Props> = ({ requestPublish }) => {
       <ul className="achievement-container">{editableCards}</ul>
     </div>
   );
-};
+}
 
 export default AchievementEditor;

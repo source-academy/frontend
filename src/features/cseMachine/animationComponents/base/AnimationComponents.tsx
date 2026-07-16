@@ -1,13 +1,12 @@
 import Konva from 'konva';
-import { AnimationFn } from 'konva/lib/types';
-import React from 'react';
-import { Arrow, KonvaNodeComponent, Path, Rect, Text } from 'react-konva';
+import type { AnimationFn } from 'konva/lib/types';
+import { Arrow, Circle, type KonvaNodeComponent, Line, Path, Rect, Text } from 'react-konva';
 
 import { CseAnimation } from '../../CseMachineAnimation';
 import { Config } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { defaultStrokeColor, defaultTextColor } from '../../CseMachineUtils';
-import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
+import { Animatable, AnimatableTo, type AnimationConfig } from './Animatable';
 import { lerp } from './AnimationUtils';
 
 type AnimationData<KonvaConfig extends Konva.NodeConfig> = {
@@ -21,14 +20,16 @@ type AnimationData<KonvaConfig extends Konva.NodeConfig> = {
 };
 
 abstract class BaseAnimationComponent<
-  KonvaConfig extends Konva.NodeConfig
+  KonvaConfig extends Konva.NodeConfig,
 > extends AnimatableTo<KonvaConfig> {
   private isDestroyed = false;
   private animationData: AnimationData<KonvaConfig>[] = [];
   private animation: Konva.Animation;
 
   private animationFn: AnimationFn = frame => {
-    if (!frame || this.animationData.length === 0) return false;
+    if (!frame || this.animationData.length === 0) {
+      return false;
+    }
     if (!this.ref.current) {
       this.animationData.forEach(data => data.resolve());
       this.animation.stop();
@@ -65,10 +66,18 @@ abstract class BaseAnimationComponent<
       for (const attr in data.to) {
         const value = lerp(delta, attr, data.from[attr], data.to[attr], data.easing);
         data.current[attr] = value;
-        if (attr === 'x') this._x = value;
-        if (attr === 'y') this._y = value;
-        if (attr === 'width') this._width = value;
-        if (attr === 'height') this._height = value;
+        if (attr === 'x') {
+          this._x = value;
+        }
+        if (attr === 'y') {
+          this._y = value;
+        }
+        if (attr === 'width') {
+          this._width = value;
+        }
+        if (attr === 'height') {
+          this._height = value;
+        }
       }
       // Add the new attributes and values into the main attrs object
       Object.assign(attrs, data.current);
@@ -87,7 +96,9 @@ abstract class BaseAnimationComponent<
       this.ref.current.setAttrs(attrs);
       this.listeners.forEach(f => f({ ...attrs }));
     }
-    if (animationComplete) this.animation.stop();
+    if (animationComplete) {
+      this.animation.stop();
+    }
     // Promises are only resolved after attributes have been fully set on the Konva node
     resolveList.forEach(r => r());
     return;
@@ -101,10 +112,18 @@ abstract class BaseAnimationComponent<
       throw new Error('Missing animation layer! Unable to create animation component!');
     }
     this.animation = new Konva.Animation(this.animationFn, CseAnimation.getLayer());
-    if (props.x) this._x = props.x;
-    if (props.y) this._y = props.y;
-    if (props.width) this._width = props.width;
-    if (props.height) this._height = props.height;
+    if (props.x !== undefined) {
+      this._x = props.x;
+    }
+    if (props.y !== undefined) {
+      this._y = props.y;
+    }
+    if (props.width !== undefined) {
+      this._width = props.width;
+    }
+    if (props.height !== undefined) {
+      this._height = props.height;
+    }
   }
 
   animateTo(to: Partial<KonvaConfig>, animationConfig?: AnimationConfig): Promise<void> {
@@ -125,7 +144,9 @@ abstract class BaseAnimationComponent<
       const data = { startTime, endTime, to, easing, resolve };
       this.animationData.push(data);
       // Play animation
-      if (!this.animation.isRunning()) this.animation.start();
+      if (!this.animation.isRunning()) {
+        this.animation.start();
+      }
     });
   }
 
@@ -143,7 +164,7 @@ abstract class BaseAnimationComponent<
 
 export class AnimationComponent<
   KonvaNode extends Konva.Node,
-  KonvaConfig extends Konva.NodeConfig
+  KonvaConfig extends Konva.NodeConfig,
 > extends BaseAnimationComponent<KonvaConfig> {
   constructor(
     /**
@@ -156,7 +177,7 @@ export class AnimationComponent<
     private type: KonvaNodeComponent<KonvaNode, KonvaConfig>,
     /** The props we want our konva node to have initially. It should match the correct
      *  subtype of `NodeConfig` that the konva node requires. */
-    props: KonvaConfig
+    props: KonvaConfig,
   ) {
     super(props);
   }
@@ -182,7 +203,7 @@ export class AnimatedTextComponent extends AnimationComponent<Konva.Text, Konva.
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: ControlStashConfig.FontSize,
       fontStyle: ControlStashConfig.FontStyle,
-      fontVariant: ControlStashConfig.FontVariant
+      fontVariant: ControlStashConfig.FontVariant,
     };
     super(Text, { ...defaultProps, ...props, width: undefined });
   }
@@ -196,7 +217,7 @@ export class AnimatedRectComponent extends AnimationComponent<Konva.Rect, Konva.
   constructor(props: Konva.RectConfig) {
     const defaultProps = {
       stroke: defaultStrokeColor(),
-      cornerRadius: ControlStashConfig.ControlItemCornerRadius
+      cornerRadius: ControlStashConfig.ControlItemCornerRadius,
     };
     super(Rect, { ...defaultProps, ...props });
   }
@@ -206,7 +227,7 @@ export class AnimatedPathComponent extends AnimationComponent<Konva.Path, Konva.
   constructor(props: Konva.PathConfig & Required<Pick<Konva.PathConfig, 'data'>>) {
     const defaultProps = {
       stroke: defaultStrokeColor(),
-      strokeWidth: Config.ArrowStrokeWidth
+      strokeWidth: Config.ArrowStrokeWidth,
     };
     super(Path, { ...defaultProps, ...props });
   }
@@ -217,8 +238,28 @@ export class AnimatedArrowComponent extends AnimationComponent<Konva.Arrow, Konv
     const defaultProps = {
       fill: defaultStrokeColor(),
       strokeEnabled: false,
-      pointerWidth: Config.ArrowHeadSize
+      pointerWidth: Config.ArrowHeadSize,
     };
     super(Arrow, { ...defaultProps, ...props });
+  }
+}
+
+// Mainly for animating function object
+export class AnimatedCircleComponent extends AnimationComponent<Konva.Circle, Konva.CircleConfig> {
+  constructor(props: Konva.CircleConfig) {
+    const defaultProps = {
+      radius: Config.FnRadius,
+      stroke: defaultStrokeColor(),
+    };
+    super(Circle, { ...defaultProps, ...props });
+  }
+}
+
+export class AnimatedLineComponent extends AnimationComponent<Konva.Line, Konva.LineConfig> {
+  constructor(props: Konva.LineConfig) {
+    const defaultProps = {
+      stroke: defaultStrokeColor(),
+    };
+    super(Line, { ...defaultProps, ...props });
   }
 }

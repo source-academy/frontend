@@ -1,22 +1,23 @@
 import { Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useLocalStorageState } from 'src/commons/hooks/useLocalStorageState';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { logOut } from '../application/actions/CommonsActions';
 import { Role } from '../application/ApplicationTypes';
 import ControlButton from '../ControlButton';
 import Profile from '../profile/Profile';
 import Constants from '../utils/Constants';
-import { useLocalStorageState, useSession } from '../utils/Hooks';
+import { useSession } from '../utils/Hooks';
 import DropdownAbout from './DropdownAbout';
 import DropdownCourses from './DropdownCourses';
 import DropdownCreateCourse from './DropdownCreateCourse';
 import DropdownHelp from './DropdownHelp';
 import DropdownSettings from './DropdownSettings';
 
-const Dropdown: React.FC = () => {
+function Dropdown() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
@@ -31,7 +32,7 @@ const Dropdown: React.FC = () => {
   const { t } = useTranslation('commons', { keyPrefix: 'dropdown' });
 
   const { isLoggedIn, name, courses, courseId, enableExamMode, role } = useSession();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const handleLogOut = () => dispatch(logOut());
 
   const toggleSettingsOpen = () => {
@@ -52,16 +53,24 @@ const Dropdown: React.FC = () => {
     ) : null;
 
   const myCourses = isLoggedIn ? (
-    <MenuItem icon={IconNames.PROPERTIES} onClick={toggleMyCoursesOpen} text={t('My Courses')} />
+    <MenuItem
+      icon={IconNames.PROPERTIES}
+      onClick={toggleMyCoursesOpen}
+      text={t($ => $['My Courses'])}
+    />
   ) : null;
 
   const createCourse =
     isLoggedIn && !isPreviewExamMode && (!enableExamMode || role !== Role.Student) ? (
-      <MenuItem icon={IconNames.ADD} onClick={toggleCreateCourseOpen} text={t('Create Course')} />
+      <MenuItem
+      icon={IconNames.ADD}
+      onClick={toggleCreateCourseOpen}
+      text={t($ => $['Create Course'])}
+    />
     ) : null;
 
   const logout = isLoggedIn ? (
-    <MenuItem icon={IconNames.LOG_OUT} text={t('Logout')} onClick={handleLogOut} />
+    <MenuItem icon={IconNames.LOG_OUT} text={t($ => $['Logout'])} onClick={handleLogOut} />
   ) : null;
 
   const menu = (
@@ -69,9 +78,9 @@ const Dropdown: React.FC = () => {
       {profile}
       {myCourses}
       {createCourse}
-      <MenuItem icon={IconNames.COG} onClick={toggleSettingsOpen} text={t('Settings')} />
-      <MenuItem icon={IconNames.HELP} onClick={toggleAboutOpen} text={t('About')} />
-      <MenuItem icon={IconNames.ERROR} onClick={toggleHelpOpen} text={t('Help')} />
+      <MenuItem icon={IconNames.COG} onClick={toggleSettingsOpen} text={t($ => $['Settings'])} />
+      <MenuItem icon={IconNames.HELP} onClick={toggleAboutOpen} text={t($ => $['About'])} />
+      <MenuItem icon={IconNames.ERROR} onClick={toggleHelpOpen} text={t($ => $['Help'])} />
       {logout}
     </Menu>
   );
@@ -98,9 +107,9 @@ const Dropdown: React.FC = () => {
       ) : null}
     </>
   );
-};
+}
 
 const titleCase = (str: string) =>
-  str.replace(/\w\S*/g, wrd => wrd.charAt(0).toUpperCase() + wrd.substr(1).toLowerCase());
+  str.replace(/\w\S*/g, wrd => wrd.charAt(0).toUpperCase() + wrd.slice(1).toLowerCase());
 
 export default Dropdown;

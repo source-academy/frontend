@@ -1,13 +1,13 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 
-import { GameState, Role } from '../application/ApplicationTypes';
-import {
+import { type GameState, Role } from '../application/ApplicationTypes';
+import type {
   AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
-  User
+  User,
 } from '../application/types/SessionTypes';
-import { Notification, NotificationTypes } from '../notificationBadge/NotificationBadgeTypes';
+import { type Notification, NotificationTypes } from '../notificationBadge/NotificationBadgeTypes';
 
 /**
  * Mock for fetching a role, given an access token. A null
@@ -33,12 +33,12 @@ export type StudentInfo = {
 const mockStudentInfo = [
   {
     id: 0,
-    totalXP: 69
+    totalXP: 69,
   },
   {
     id: 1,
-    totalXP: 1000
-  }
+    totalXP: 1000,
+  },
 ];
 
 export const mockUser: User = {
@@ -52,23 +52,23 @@ export const mockUser: User = {
       courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
       courseShortName: `CS1101S`,
       role: Role.Admin,
-      viewable: true
+      viewable: true,
     },
     {
       courseId: 2,
       courseName: `CS2040S Data Structures and Algorithms (AY20/21 Sem 2)`,
       courseShortName: `CS2040S`,
       role: Role.Admin,
-      viewable: false
+      viewable: false,
     },
     {
       courseId: 3,
       courseName: `CS2030S Programming Methodology II (AY21/22 Sem 1)`,
       courseShortName: `CS2030S`,
       role: Role.Staff,
-      viewable: false
-    }
-  ]
+      viewable: false,
+    },
+  ],
 };
 
 export const mockStudents: User[] = [
@@ -83,9 +83,9 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   },
   {
     userId: 102,
@@ -98,9 +98,9 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   },
   {
     userId: 103,
@@ -113,9 +113,9 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   },
   {
     userId: 104,
@@ -128,9 +128,9 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   },
   {
     userId: 105,
@@ -143,9 +143,9 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   },
   {
     userId: 106,
@@ -158,9 +158,9 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   },
   {
     userId: 107,
@@ -173,9 +173,9 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   },
   {
     userId: 108,
@@ -188,9 +188,9 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   },
   {
     userId: 109,
@@ -203,9 +203,9 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   },
   {
     userId: 110,
@@ -218,9 +218,9 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   },
   {
     userId: 111,
@@ -233,9 +233,9 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   },
   {
     userId: 112,
@@ -248,9 +248,9 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   },
   {
     userId: 113,
@@ -263,9 +263,9 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   },
   {
     userId: 114,
@@ -278,9 +278,9 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   },
   {
     userId: 115,
@@ -293,9 +293,9 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   },
   {
     userId: 116,
@@ -308,9 +308,9 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
+        viewable: true,
+      },
+    ],
   },
   {
     userId: 117,
@@ -323,10 +323,10 @@ export const mockStudents: User[] = [
         courseName: `CS1101S Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
         role: Role.Student,
-        viewable: true
-      }
-    ]
-  }
+        viewable: true,
+      },
+    ],
+  },
 ];
 
 export const mockCourseRegistrations: CourseRegistration[] = [
@@ -339,9 +339,9 @@ export const mockCourseRegistrations: CourseRegistration[] = [
     xp: 0,
     story: {
       story: 'mission-1',
-      playStory: true
+      playStory: true,
     },
-    agreedToResearch: true
+    agreedToResearch: true,
   },
   {
     courseRegId: 2,
@@ -352,10 +352,10 @@ export const mockCourseRegistrations: CourseRegistration[] = [
     xp: 0,
     story: {
       story: 'mission-1',
-      playStory: true
+      playStory: true,
     },
-    agreedToResearch: true
-  }
+    agreedToResearch: true,
+  },
 ];
 
 export const mockAdminPanelCourseRegistrations: AdminPanelCourseRegistration[] = [
@@ -364,22 +364,22 @@ export const mockAdminPanelCourseRegistrations: AdminPanelCourseRegistration[] =
     courseId: 1,
     name: 'DevAdmin',
     username: 'test/admin',
-    role: Role.Admin
+    role: Role.Admin,
   },
   {
     courseRegId: 3,
     courseId: 1,
     name: 'Dummy student',
     username: 'test/student',
-    role: Role.Student
+    role: Role.Student,
   },
   {
     courseRegId: 4,
     courseId: 1,
     name: 'Dummy staff',
     username: 'test/staff',
-    role: Role.Staff
-  }
+    role: Role.Staff,
+  },
 ];
 
 export const mockCourseConfigurations: CourseConfiguration[] = [
@@ -389,8 +389,6 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     viewable: true,
     enableGame: false,
     enableAchievements: true,
-    enableSourcecast: true,
-    enableStories: false,
     enableOverallLeaderboard: true,
     enableContestLeaderboard: true,
     topLeaderboardDisplay: 100,
@@ -401,7 +399,7 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: '',
     assetsPrefix: '',
-    isOfficialCourse: false
+    isOfficialCourse: false,
   },
   {
     courseName: `CS2040S Data Structures and Algorithms (AY20/21 Sem 2)`,
@@ -409,8 +407,6 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     viewable: true,
     enableGame: false,
     enableAchievements: false,
-    enableSourcecast: false,
-    enableStories: false,
     enableOverallLeaderboard: true,
     enableContestLeaderboard: true,
     topLeaderboardDisplay: 100,
@@ -421,8 +417,8 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text!',
     assetsPrefix: '',
-    isOfficialCourse: false
-  }
+    isOfficialCourse: false,
+  },
 ];
 
 /**
@@ -465,34 +461,34 @@ export const mockNotifications: Notification[] = [
     type: NotificationTypes.new,
     assessment_id: 6,
     assessment_type: 'Paths',
-    assessment_title: 'Basic Logic'
+    assessment_title: 'Basic Logic',
   },
   {
     id: 2,
     type: NotificationTypes.new,
     assessment_id: 7,
     assessment_type: 'Missions',
-    assessment_title: 'Symphony of the Winds'
+    assessment_title: 'Symphony of the Winds',
   },
   {
     id: 3,
     type: NotificationTypes.submitted,
     submission_id: 1,
     assessment_type: 'Missions',
-    assessment_title: 'Mission 0'
+    assessment_title: 'Mission 0',
   },
   {
     id: 4,
     type: NotificationTypes.submitted,
     submission_id: 2,
     assessment_type: 'Missions',
-    assessment_title: 'Mission 1'
+    assessment_title: 'Mission 1',
   },
   {
     id: 5,
     type: NotificationTypes.submitted,
     submission_id: 3,
     assessment_type: 'Missions',
-    assessment_title: 'Mission 0'
-  }
+    assessment_title: 'Mission 0',
+  },
 ];

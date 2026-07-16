@@ -1,6 +1,5 @@
-import React, { useEffect, useMemo, useReducer, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 
 import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';
 import AchievementPreview from '../../../commons/achievement/control/AchievementPreview';
@@ -9,17 +8,20 @@ import AchievementInferencer from '../../../commons/achievement/utils/Achievemen
 import { Prompt } from '../../../commons/ReactRouterPrompt';
 import AchievementActions from '../../../features/achievement/AchievementActions';
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
-import { AchievementItem, GoalDefinition } from '../../../features/achievement/AchievementTypes';
+import type {
+  AchievementItem,
+  GoalDefinition,
+} from '../../../features/achievement/AchievementTypes';
 
-const AchievementControl: React.FC = () => {
-  const dispatch = useDispatch();
+function AchievementControl() {
+  const dispatch = useAppDispatch();
   const {
     handleBulkUpdateAchievements,
     handleBulkUpdateGoals,
     handleGetAchievements,
     handleGetOwnGoals,
     handleRemoveAchievement,
-    handleRemoveGoal
+    handleRemoveGoal,
   } = useMemo(
     () => ({
       handleBulkUpdateAchievements: (achievement: AchievementItem[]) =>
@@ -30,18 +32,18 @@ const AchievementControl: React.FC = () => {
       handleGetOwnGoals: () => dispatch(AchievementActions.getOwnGoals()),
       handleRemoveAchievement: (uuid: string) =>
         dispatch(AchievementActions.removeAchievement(uuid)),
-      handleRemoveGoal: (uuid: string) => dispatch(AchievementActions.removeGoal(uuid))
+      handleRemoveGoal: (uuid: string) => dispatch(AchievementActions.removeGoal(uuid)),
     }),
-    [dispatch]
+    [dispatch],
   );
 
-  const [initialAchievements, initialGoals] = useTypedSelector(state => [
+  const [initialAchievements, initialGoals] = useAppSelector(state => [
     state.achievement.achievements,
-    state.achievement.goals
+    state.achievement.goals,
   ]);
   const inferencer = useMemo(
     () => new AchievementInferencer(initialAchievements, initialGoals),
-    [initialAchievements, initialGoals]
+    [initialAchievements, initialGoals],
   );
 
   /**
@@ -99,6 +101,6 @@ const AchievementControl: React.FC = () => {
       </div>
     </AchievementContext.Provider>
   );
-};
+}
 
-export default AchievementControl;
+export const Component = AchievementControl;

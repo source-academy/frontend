@@ -1,30 +1,28 @@
 import { Button, Checkbox, MenuItem, NumericInput } from '@blueprintjs/core';
-import { ItemPredicate, ItemRenderer, Select } from '@blueprintjs/select';
-import React, { useContext, useEffect, useState } from 'react';
+import { type ItemPredicate, type ItemRenderer, Select } from '@blueprintjs/select';
+import { useContext, useEffect, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
-import {
+import type {
   AchievementGoal,
   AchievementUser,
-  GoalProgress
+  GoalProgress,
 } from 'src/features/achievement/AchievementTypes';
 
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
-const GoalSelect = Select.ofType<AchievementGoal>();
 const goalRenderer: ItemRenderer<AchievementGoal> = (goal, { handleClick }) => (
   <MenuItem key={goal.uuid} onClick={handleClick} text={goal.text} />
 );
 const goalPredicate: ItemPredicate<AchievementGoal> = (query, item) =>
   item.text.toLowerCase().includes(query.toLowerCase());
 
-const UserSelect = Select.ofType<AchievementUser>();
 const userRenderer: ItemRenderer<AchievementUser> = (user, { handleClick }) => (
   <MenuItem key={user.courseRegId} onClick={handleClick} text={user.name || user.username} />
 );
 const userPredicate: ItemPredicate<AchievementUser> = (query, item) =>
   [item.name, item.username, item.group].reduce(
     (acc: boolean, x) => (x ? acc || x.toLowerCase().includes(query.toLowerCase()) : acc),
-    false
+    false,
   );
 
 export function updateGoalProcessed() {
@@ -40,7 +38,7 @@ type Props = {
   updateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) => void;
 };
 
-const AchievementManualEditor: React.FC<Props> = props => {
+function AchievementManualEditor(props: Props) {
   const { userState, hiddenState, studio, getUsers, updateGoalProgress } = props;
   const users =
     studio === 'Staff'
@@ -51,7 +49,7 @@ const AchievementManualEditor: React.FC<Props> = props => {
               ? user1.name.localeCompare(user2.name)
               : user1.name == null
                 ? 1 // user1.name is null, user1 > user2
-                : -1 // user2.name is null, user1 < user2
+                : -1, // user2.name is null, user1 < user2
         )
       : props.users
           .filter(user => user.group === studio)
@@ -61,7 +59,7 @@ const AchievementManualEditor: React.FC<Props> = props => {
                 ? user1.name.localeCompare(user2.name)
                 : user1.name == null
                   ? 1 // user1.name is null, user1 > user2
-                  : -1 // user2.name is null, user1 < user2
+                  : -1, // user2.name is null, user1 < user2
           );
 
   useEffect(() => {
@@ -84,7 +82,7 @@ const AchievementManualEditor: React.FC<Props> = props => {
         uuid: goal.uuid,
         count: count < 0 ? 0 : Math.floor(count),
         targetCount: goal.targetCount,
-        completed: count >= goal.targetCount
+        completed: count >= goal.targetCount,
       };
       updateGoalProgress(selectedUser.courseRegId, progress);
     } else {
@@ -101,34 +99,34 @@ const AchievementManualEditor: React.FC<Props> = props => {
     <div className="achievement-manual-editor">
       <div className="editor-section">
         <h3>User: </h3>
-        <UserSelect
-          filterable={true}
+        <Select<AchievementUser>
+          filterable
           items={users}
           itemRenderer={userRenderer}
           itemPredicate={userPredicate}
           onItemSelect={changeSelectedUser}
-          noResults={<MenuItem disabled={true} text="No matching user" />}
+          noResults={<MenuItem disabled text="No matching user" />}
         >
           <Button
-            outlined={true}
+            variant="outlined"
             text={selectedUser ? selectedUser.name || selectedUser.username : 'No User Selected'}
             color="White"
           />
-        </UserSelect>
+        </Select>
       </div>
 
       <div className="editor-section">
         <h3>Goal: </h3>
-        <GoalSelect
-          filterable={true}
+        <Select<AchievementGoal>
+          filterable
           items={manualAchievements}
           itemRenderer={goalRenderer}
           itemPredicate={goalPredicate}
           onItemSelect={changeGoal}
-          noResults={<MenuItem disabled={true} text="No matching goal" />}
+          noResults={<MenuItem disabled text="No matching goal" />}
         >
-          <Button outlined={true} text={goal ? goal.text : 'No Goal Selected'} color="White" />
-        </GoalSelect>
+          <Button variant="outlined" text={goal ? goal.text : 'No Goal Selected'} color="White" />
+        </Select>
       </div>
 
       <div className="editor-section">
@@ -136,7 +134,7 @@ const AchievementManualEditor: React.FC<Props> = props => {
         <NumericInput
           value={count}
           min={0}
-          allowNumericCharactersOnly={true}
+          allowNumericCharactersOnly
           minorStepSize={null}
           placeholder="Count"
           onValueChange={changeCount}
@@ -144,7 +142,7 @@ const AchievementManualEditor: React.FC<Props> = props => {
       </div>
 
       <div className="editor-section">
-        <Button outlined={true} text="Update Goal" onClick={updateGoal} intent="primary" />
+        <Button variant="outlined" text="Update Goal" onClick={updateGoal} intent="primary" />
       </div>
 
       <div className="editor-section">
@@ -156,6 +154,6 @@ const AchievementManualEditor: React.FC<Props> = props => {
       </div>
     </div>
   );
-};
+}
 
 export default AchievementManualEditor;

@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { AchievementUser } from 'src/features/achievement/AchievementTypes';
+import { useEffect } from 'react';
+import type { AchievementUser } from 'src/features/achievement/AchievementTypes';
 
 import SessionActions from '../application/actions/SessionActions';
-import { useTypedSelector } from '../utils/Hooks';
+import { useAppDispatch, useAppSelector } from '../utils/Hooks';
 import AchievementLevel from './overview/AchievementLevel';
 
 type Props = {
@@ -11,12 +10,12 @@ type Props = {
   userState: [AchievementUser | undefined, any];
 };
 
-const AchievementOverview: React.FC<Props> = ({ name, userState }) => {
+function AchievementOverview({ name, userState }: Props) {
   const [selectedUser] = userState;
   const crid = selectedUser?.courseRegId;
-  const userCrid = useTypedSelector(store => store.session.courseRegId);
+  const userCrid = useAppSelector(store => store.session.courseRegId);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     // If user is student, fetch assessment details from assessment route instead, as seen below
     if (crid && crid !== userCrid) {
@@ -26,7 +25,7 @@ const AchievementOverview: React.FC<Props> = ({ name, userState }) => {
     }
   }, [crid, userCrid, dispatch]);
 
-  const studentXp = useTypedSelector(store => store.session.xp);
+  const studentXp = useAppSelector(store => store.session.xp);
 
   return (
     <div className="achievement-overview">
@@ -34,6 +33,6 @@ const AchievementOverview: React.FC<Props> = ({ name, userState }) => {
       <h3>{name}</h3>
     </div>
   );
-};
+}
 
 export default AchievementOverview;

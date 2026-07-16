@@ -2,7 +2,7 @@
 /// <reference types="gapi.client.drive-v3" />
 /// <reference types="google.picker" />
 import { Intent } from '@blueprintjs/core';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { call, put, select } from 'redux-saga/effects';
 
 import type { PersistenceFile } from '../../features/persistence/PersistenceTypes';
@@ -17,7 +17,7 @@ import {
   dismiss,
   showMessage,
   showSuccessMessage,
-  showWarningMessage
+  showWarningMessage,
 } from '../utils/notifications/NotificationsHelper';
 import type { AsyncReturnType } from '../utils/TypeHelper';
 import { selectWorkspace } from './SafeEffects';
@@ -38,7 +38,7 @@ const PersistenceSaga = combineSagaHandlers({
       yield put(actions.playgroundUpdatePersistenceFile(undefined));
       yield call(ensureInitialised);
       yield call([gapi.auth2.getAuthInstance(), 'signOut']);
-    }
+    },
   },
   [actions.persistenceOpenPicker.type]: {
     takeLatest: function* () {
@@ -59,7 +59,7 @@ const PersistenceSaga = combineSagaHandlers({
             </p>
           ),
           positiveLabel: 'Open',
-          negativeLabel: 'Cancel'
+          negativeLabel: 'Cancel',
         });
         if (!confirmOpen) {
           return;
@@ -68,16 +68,16 @@ const PersistenceSaga = combineSagaHandlers({
         toastKey = yield call(showMessage, {
           message: 'Opening file...',
           timeout: 0,
-          intent: Intent.PRIMARY
+          intent: Intent.PRIMARY,
         });
 
         const { result: meta } = yield call([gapi.client.drive.files, 'get'], {
           fileId: id,
-          fields: 'appProperties'
+          fields: 'appProperties',
         });
         const contents = yield call([gapi.client.drive.files, 'get'], { fileId: id, alt: 'media' });
         const activeEditorTabIndex: number | null = yield select(
-          (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
+          (state: OverallState) => state.workspaces.playground.activeEditorTabIndex,
         );
         if (activeEditorTabIndex === null) {
           throw new Error('No active editor tab found.');
@@ -89,15 +89,15 @@ const PersistenceSaga = combineSagaHandlers({
             actions.chapterSelect(
               parseInt(meta.appProperties.chapter || '4', 10) as Chapter,
               meta.appProperties.variant || Variant.DEFAULT,
-              'playground'
-            )
+              'playground',
+            ),
           );
           yield put(
             actions.externalLibrarySelect(
               Object.values(ExternalLibraryName).find(v => v === meta.appProperties.external) ||
                 ExternalLibraryName.NONE,
-              'playground'
-            )
+              'playground',
+            ),
           );
         }
 
@@ -110,7 +110,7 @@ const PersistenceSaga = combineSagaHandlers({
           dismiss(toastKey);
         }
       }
-    }
+    },
   },
   [actions.persistenceSaveFileAs.type]: {
     takeLatest: function* () {
@@ -124,8 +124,8 @@ const PersistenceSaga = combineSagaHandlers({
             state.workspaces.playground.editorTabs,
             state.workspaces.playground.context.chapter,
             state.workspaces.playground.context.variant,
-            state.workspaces.playground.externalLibrary
-          ]
+            state.workspaces.playground.externalLibrary,
+          ],
         );
 
         if (activeEditorTabIndex === null) {
@@ -139,8 +139,8 @@ const PersistenceSaga = combineSagaHandlers({
           {
             pickFolders: true,
             showFolders: true,
-            showFiles: false
-          }
+            showFiles: false,
+          },
         );
 
         const saveToDir: PersistenceFile = pickedDir.picked
@@ -154,8 +154,8 @@ const PersistenceSaga = combineSagaHandlers({
             pickFolders: false,
             showFolders: false,
             showFiles: true,
-            rootFolder: saveToDir.id
-          }
+            rootFolder: saveToDir.id,
+          },
         );
 
         if (pickedFile.picked) {
@@ -165,7 +165,7 @@ const PersistenceSaga = combineSagaHandlers({
               <span>
                 Really overwrite <strong>{pickedFile.name}</strong>?
               </span>
-            )
+            ),
           });
           if (!reallyOverwrite) {
             return;
@@ -188,9 +188,9 @@ const PersistenceSaga = combineSagaHandlers({
               positiveLabel: 'Save as new file',
               negativeLabel: 'Cancel',
               props: {
-                validationFunction: value => !!value
-              }
-            }
+                validationFunction: value => !!value,
+              },
+            },
           );
 
           if (!response.buttonResponse) {
@@ -200,13 +200,13 @@ const PersistenceSaga = combineSagaHandlers({
           const config: IPlaygroundConfig = {
             chapter,
             variant,
-            external
+            external,
           };
 
           toastKey = yield call(showMessage, {
             message: `Saving as ${response.value}...`,
             timeout: 0,
-            intent: Intent.PRIMARY
+            intent: Intent.PRIMARY,
           });
 
           const newFile = yield call(
@@ -215,14 +215,14 @@ const PersistenceSaga = combineSagaHandlers({
             saveToDir.id,
             MIME_SOURCE,
             code,
-            config
+            config,
           );
 
           yield put(actions.playgroundUpdatePersistenceFile({ ...newFile, lastSaved: new Date() }));
           yield call(
             showSuccessMessage,
             `${response.value} successfully saved to Google Drive.`,
-            1000
+            1000,
           );
         }
       } catch (ex) {
@@ -233,7 +233,7 @@ const PersistenceSaga = combineSagaHandlers({
           dismiss(toastKey);
         }
       }
-    }
+    },
   },
   [actions.persistenceSaveFile.type]: function* ({ payload: { id, name } }) {
     let toastKey: string | undefined;
@@ -241,7 +241,7 @@ const PersistenceSaga = combineSagaHandlers({
       toastKey = yield call(showMessage, {
         message: `Saving as ${name}...`,
         timeout: 0,
-        intent: Intent.PRIMARY
+        intent: Intent.PRIMARY,
       });
 
       yield call(ensureInitialisedAndAuthorised);
@@ -250,7 +250,7 @@ const PersistenceSaga = combineSagaHandlers({
         activeEditorTabIndex,
         editorTabs,
         context: { chapter, variant },
-        externalLibrary: external
+        externalLibrary: external,
       } = yield* selectWorkspace('playground');
 
       if (activeEditorTabIndex === null) {
@@ -261,7 +261,7 @@ const PersistenceSaga = combineSagaHandlers({
       const config: IPlaygroundConfig = {
         chapter,
         variant,
-        external
+        external,
       };
       yield call(updateFile, id, name, MIME_SOURCE, code, config);
       yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
@@ -275,7 +275,7 @@ const PersistenceSaga = combineSagaHandlers({
       }
     }
   },
-  [actions.persistenceInitialise.type]: ensureInitialised as any
+  [actions.persistenceInitialise.type]: ensureInitialised as any,
 });
 
 interface IPlaygroundConfig {
@@ -301,19 +301,19 @@ const initialisationPromise: Promise<void> = new Promise(res => {
 
 function handleUserChanged(user: gapi.auth2.GoogleUser) {
   store.dispatch(
-    actions.setGoogleUser(user.isSignedIn() ? user.getBasicProfile().getEmail() : undefined)
+    actions.setGoogleUser(user.isSignedIn() ? user.getBasicProfile().getEmail() : undefined),
   );
 }
 
 async function initialise() {
   await new Promise((resolve, reject) =>
-    gapi.load('client:auth2', { callback: resolve, onerror: reject })
+    gapi.load('client:auth2', { callback: resolve, onerror: reject }),
   );
   await gapi.client.init({
     apiKey: Constants.googleApiKey,
     clientId: Constants.googleClientId,
     discoveryDocs: DISCOVERY_DOCS,
-    scope: SCOPES
+    scope: SCOPES,
   });
   gapi.auth2.getAuthInstance().currentUser.listen(handleUserChanged);
   handleUserChanged(gapi.auth2.getAuthInstance().currentUser.get());
@@ -342,7 +342,7 @@ function pickFile(
     showFolders?: boolean;
     showFiles?: boolean;
     rootFolder?: string;
-  }
+  },
 ): Promise<PickFileResult> {
   const pickFolders = typeof options?.pickFolders === 'undefined' ? false : options?.pickFolders;
   const showFolders = typeof options?.showFolders === 'undefined' ? true : options?.showFolders;
@@ -350,7 +350,7 @@ function pickFile(
   return new Promise(res => {
     gapi.load('picker', () => {
       const view = new google.picker.DocsView(
-        showFiles ? google.picker.ViewId.DOCS : google.picker.ViewId.FOLDERS
+        showFiles ? google.picker.ViewId.DOCS : google.picker.ViewId.FOLDERS,
       );
       if (options?.rootFolder) {
         view.setParent(options.rootFolder);
@@ -365,7 +365,7 @@ function pickFile(
         .enableFeature(google.picker.Feature.NAV_HIDDEN)
         .addView(view)
         .setOAuthToken(
-          gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token
+          gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token,
         )
         .setAppId(Constants.googleAppId!)
         .setDeveloperKey(Constants.googleApiKey!)
@@ -393,7 +393,7 @@ async function createFile(
   parent: string,
   mimeType: string,
   contents: string = '',
-  config: IPlaygroundConfig | {}
+  config: IPlaygroundConfig | {},
 ): Promise<PersistenceFile> {
   const name = filename;
   const meta = {
@@ -402,8 +402,8 @@ async function createFile(
     parents: [parent],
     appProperties: {
       source: true,
-      ...config
-    }
+      ...config,
+    },
   };
 
   const { body, headers } = createMultipartBody(meta, contents, mimeType);
@@ -412,10 +412,10 @@ async function createFile(
     path: UPLOAD_PATH,
     method: 'POST',
     params: {
-      uploadType: 'multipart'
+      uploadType: 'multipart',
     },
     headers,
-    body
+    body,
   });
   return { id: result.id, name: result.name };
 }
@@ -425,15 +425,15 @@ function updateFile(
   name: string,
   mimeType: string,
   contents: string = '',
-  config: IPlaygroundConfig | {}
+  config: IPlaygroundConfig | {},
 ): Promise<any> {
   const meta = {
     name,
     mimeType,
     appProperties: {
       source: true,
-      ...config
-    }
+      ...config,
+    },
   };
 
   const { body, headers } = createMultipartBody(meta, contents, mimeType);
@@ -442,17 +442,17 @@ function updateFile(
     path: UPLOAD_PATH + '/' + id,
     method: 'PATCH',
     params: {
-      uploadType: 'multipart'
+      uploadType: 'multipart',
     },
     headers,
-    body
+    body,
   });
 }
 
 function createMultipartBody(
   meta: any,
   contents: string,
-  contentsMime: string
+  contentsMime: string,
 ): { body: string; boundary: string; headers: { [name: string]: string } } {
   const metaJson = JSON.stringify(meta);
   let boundary: string;

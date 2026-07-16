@@ -1,14 +1,14 @@
 import { Octokit } from '@octokit/rest';
-import {
+import type {
   GetResponseDataTypeFromEndpointMethod,
-  GetResponseTypeFromEndpointMethod
+  GetResponseTypeFromEndpointMethod,
 } from '@octokit/types';
 
 import { actions } from '../../commons/utils/ActionsHelper';
 import { showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
 import {
   showSuccessMessage,
-  showWarningMessage
+  showWarningMessage,
 } from '../../commons/utils/notifications/NotificationsHelper';
 import { store } from '../../pages/createStore';
 
@@ -21,14 +21,14 @@ import { store } from '../../pages/createStore';
  */
 export async function exchangeAccessCode(
   backendLink: string,
-  messageBody: string
+  messageBody: string,
 ): Promise<Response> {
   return await fetch(backendLink, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
     },
-    body: messageBody
+    body: messageBody,
   });
 }
 
@@ -50,7 +50,7 @@ export async function checkIfFileCanBeOpened(
   octokit: Octokit,
   repoOwner: string,
   repoName: string,
-  filePath: string
+  filePath: string,
 ) {
   if (octokit === undefined) {
     showWarningMessage('Please log in and try again', 2000);
@@ -70,7 +70,7 @@ export async function checkIfFileCanBeOpened(
     const results: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
-      path: filePath
+      path: filePath,
     });
 
     files = results.data;
@@ -102,7 +102,7 @@ export async function checkIfFileCanBeSavedAndGetSaveType(
   octokit: Octokit,
   repoOwner: string,
   repoName: string,
-  filePath: string
+  filePath: string,
 ) {
   let saveType = '';
 
@@ -123,7 +123,7 @@ export async function checkIfFileCanBeSavedAndGetSaveType(
     const results: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
-      path: filePath
+      path: filePath,
     });
 
     files = results.data;
@@ -153,12 +153,12 @@ export async function checkIfUserAgreesToOverwriteEditorData() {
     contents: (
       <div>
         <p>Warning: opening this file will overwrite the text data in the editor.</p>
-        <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
+        <p>Please click &ldquo;Confirm&rdquo; to continue, or &ldquo;Cancel&rdquo; to go back.</p>
       </div>
     ),
     negativeLabel: 'Cancel',
     positiveIntent: 'primary',
-    positiveLabel: 'Confirm'
+    positiveLabel: 'Confirm',
   });
 }
 
@@ -167,12 +167,12 @@ export async function checkIfUserAgreesToPerformOverwritingSave() {
     contents: (
       <div>
         <p>Warning: You are saving over an existing file in the repository.</p>
-        <p>Please click 'Confirm' to continue, or 'Cancel' to go back.</p>
+        <p>Please click &ldquo;Confirm&rdquo; to continue, or &ldquo;Cancel&rdquo; to go back.</p>
       </div>
     ),
     negativeLabel: 'Cancel',
     positiveIntent: 'primary',
-    positiveLabel: 'Confirm'
+    positiveLabel: 'Confirm',
   });
 }
 
@@ -180,15 +180,17 @@ export async function openFileInEditor(
   octokit: Octokit,
   repoOwner: string,
   repoName: string,
-  filePath: string
+  filePath: string,
 ) {
-  if (octokit === undefined) return;
+  if (octokit === undefined) {
+    return;
+  }
 
   type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
   const results: GetContentResponse = await octokit.repos.getContent({
     owner: repoOwner,
     repo: repoName,
-    path: filePath
+    path: filePath,
   });
 
   const content = (results.data as any).content;
@@ -213,9 +215,11 @@ export async function performOverwritingSave(
   githubName: string | null,
   githubEmail: string | null,
   commitMessage: string,
-  content: string
+  content: string,
 ) {
-  if (octokit === undefined) return;
+  if (octokit === undefined) {
+    return;
+  }
 
   githubEmail = githubEmail || 'No public email provided';
   githubName = githubName || 'Source Academy User';
@@ -229,7 +233,7 @@ export async function performOverwritingSave(
     const results: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
-      path: filePath
+      path: filePath,
     });
 
     type GetContentData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getContent>;
@@ -250,7 +254,7 @@ export async function performOverwritingSave(
       content: contentEncoded,
       sha: sha,
       committer: { name: githubName, email: githubEmail },
-      author: { name: githubName, email: githubEmail }
+      author: { name: githubName, email: githubEmail },
     });
     store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
     showSuccessMessage('Successfully saved file!', 1000);
@@ -268,9 +272,11 @@ export async function performCreatingSave(
   githubName: string | null,
   githubEmail: string | null,
   commitMessage: string,
-  content: string
+  content: string,
 ) {
-  if (octokit === undefined) return;
+  if (octokit === undefined) {
+    return;
+  }
 
   githubEmail = githubEmail || 'No public email provided';
   githubName = githubName || 'Source Academy User';
@@ -287,7 +293,7 @@ export async function performCreatingSave(
       message: commitMessage,
       content: contentEncoded,
       committer: { name: githubName, email: githubEmail },
-      author: { name: githubName, email: githubEmail }
+      author: { name: githubName, email: githubEmail },
     });
     store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
     showSuccessMessage('Successfully created file!', 1000);
@@ -304,9 +310,11 @@ export async function performFolderDeletion(
   filePath: string,
   githubName: string | null,
   githubEmail: string | null,
-  commitMessage: string
+  commitMessage: string,
 ) {
-  if (octokit === undefined) return;
+  if (octokit === undefined) {
+    return;
+  }
 
   githubEmail = githubEmail || 'No public email provided';
   githubName = githubName || 'Source Academy User';
@@ -316,7 +324,7 @@ export async function performFolderDeletion(
     const results = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
-      path: filePath
+      path: filePath,
     });
 
     const files = results.data;
@@ -335,7 +343,7 @@ export async function performFolderDeletion(
         repo: repoName,
         path: file.path,
         message: commitMessage,
-        sha: file.sha
+        sha: file.sha,
       });
     }
 

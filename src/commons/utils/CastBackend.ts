@@ -1,5 +1,5 @@
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { Library } from '../assessment/AssessmentTypes';
+import type { ExternalLibraryName } from '../application/types/ExternalTypes';
+import type { Library } from '../assessment/AssessmentTypes';
 
 /**
  * Casts a library returned by an API call to a
@@ -10,7 +10,7 @@ export const castLibrary = (lib: any): Library => ({
   external: {
     /** external names are lowercase for API results */
     name: lib.external.name.toUpperCase() as ExternalLibraryName,
-    symbols: lib.external.symbols
+    symbols: lib.external.symbols,
   },
   // backend provides `null` if these fields are not set, but frontend wants undefined (for defaulting)
   execTimeMs: lib.execTimeMs == null ? undefined : lib.execTimeMs,
@@ -22,5 +22,5 @@ export const castLibrary = (lib: any): Library => ({
       entry[1] = (window as any).eval(entry[1]);
     } catch (e) {}
     return entry;
-  })
+  }),
 });

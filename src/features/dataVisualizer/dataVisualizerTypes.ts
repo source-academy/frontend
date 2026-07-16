@@ -5,5 +5,5 @@ export type EmptyList = null;
 export type List = [Data, List] | EmptyList;
 
 // Drawing-related types
-export type Drawing = JSX.Element;
+export type Drawing = React.ReactElement;
 export type Step = Drawing[];

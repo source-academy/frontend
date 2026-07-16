@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { ColumnFilterBadge } from './GradingBadges';
+import ColumnFilterBadge from './gradingBadges/ColumnFilterBadge';
 
 type Props = {
   filters: string[];
@@ -8,7 +6,7 @@ type Props = {
   filtersName: string[];
 };
 
-const GradingColumnFilters: React.FC<Props> = ({ filters, onFilterRemove, filtersName }) => {
+function GradingColumnFilters({ filters, onFilterRemove, filtersName }: Props) {
   return (
     <div>
       {filters.map((filter, index) => (
@@ -21,6 +19,6 @@ const GradingColumnFilters: React.FC<Props> = ({ filters, onFilterRemove, filter
       ))}
     </div>
   );
-};
+}
 
 export default GradingColumnFilters;

@@ -1,28 +1,34 @@
-import '@tremor/react/dist/esm/tremor.css';
-
 import { Button } from '@blueprintjs/core';
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Form, useNavigate, useParams } from 'react-router';
-import Select, { ActionMeta, MultiValue } from 'react-select';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import type { ActionMeta, MultiValue } from 'react-select';
+import Select from 'react-select';
 import SessionActions from 'src/commons/application/actions/SessionActions';
-import { User } from 'src/commons/application/types/SessionTypes';
-import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
-import { useSession } from 'src/commons/utils/Hooks';
-import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
-import classes from 'src/styles/TeamFormation.module.scss';
+import type { User } from 'src/commons/application/types/SessionTypes';
+import type { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
+import {
+  FormContainer,
+  FormField,
+  FormFieldRow,
+  FormFooter,
+  InputContainer,
+  RemoveButton,
+  StudentFormField,
+} from 'src/components/ui/form';
+import type { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 
 export type OptionType = {
   label: string | null;
   value: User | null;
 } | null;
 
-const TeamFormationForm: React.FC = () => {
-  const { teamId } = useParams(); // Retrieve the team ID from the URL
+function TeamFormationForm() {
+  const { teamId } = useParams();
   const { courseId, students, assessmentOverviews, teamFormationOverviews } = useSession();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [selectedAssessment, setSelectedAssessment] = useState<AssessmentOverview | undefined>(
-    undefined
+    undefined,
   );
   const [teams, setTeams] = useState<OptionType[][]>([[]]);
   const navigate = useNavigate();
@@ -32,12 +38,12 @@ const TeamFormationForm: React.FC = () => {
   useEffect(() => {
     if (teamId) {
       const existingTeam: TeamFormationOverview | undefined = teamFormationOverviews?.find(
-        team => team.teamId.toString() === teamId
+        team => team.teamId.toString() === teamId,
       );
 
       if (existingTeam) {
         const existingAssessment: AssessmentOverview | undefined = assessmentOverviews?.find(
-          assessment => assessment.id === existingTeam.assessmentId
+          assessment => assessment.id === existingTeam.assessmentId,
         );
         setSelectedAssessment(existingAssessment);
 
@@ -48,8 +54,8 @@ const TeamFormationForm: React.FC = () => {
                 ?.filter(student => existingTeam.studentIds.includes(student.userId))
                 .map(student => ({
                   label: student.name,
-                  value: student
-                })) as OptionType[]
+                  value: student,
+                })) as OptionType[],
           )
           .slice(0, 1);
         setTeams(existingTeams);
@@ -60,7 +66,7 @@ const TeamFormationForm: React.FC = () => {
   const handleTeamChange = (
     index: number,
     selectedOption: MultiValue<OptionType>,
-    actionMeta: ActionMeta<OptionType>
+    actionMeta: ActionMeta<OptionType>,
   ) => {
     const updatedTeams = [...teams];
     updatedTeams[index] = selectedOption as unknown as OptionType[];
@@ -113,102 +119,81 @@ const TeamFormationForm: React.FC = () => {
   };
 
   return (
-    <div className={classes['form-container']}>
-      <Form>
-        <h2>{teamId ? 'Edit' : 'Create New'} Team</h2>
-        <div className={classes['form-field-row']}>
-          <div className={classes['form-field']}>
-            <label htmlFor="assessment" className={classes['form-label']}>
-              Assessment
-            </label>
-            <Select
-              id="assessment"
-              options={assessmentOverviews?.map(assessment => ({
-                label: assessment.title,
-                value: assessment
-              }))}
-              value={
-                selectedAssessment
-                  ? { label: selectedAssessment.title, value: selectedAssessment }
-                  : null
-              }
-              onChange={option => handleAssessmentChange(option?.value)}
-              isSearchable
-              className={classes['form-select']}
+    <FormContainer heading={teamId ? 'Edit' : 'Create New'}>
+      <FormFieldRow>
+        <FormField label="Assessment" htmlFor="assessment">
+          <Select
+            id="assessment"
+            options={assessmentOverviews?.map(assessment => ({
+              label: assessment.title,
+              value: assessment,
+            }))}
+            value={
+              selectedAssessment
+                ? { label: selectedAssessment.title, value: selectedAssessment }
+                : null
+            }
+            onChange={option => handleAssessmentChange(option?.value)}
+            isSearchable
+          />
+        </FormField>
+        {selectedAssessment && (
+          <FormField label="Max No. of Students:">
+            <input
+              type="text"
+              className="flex-1 w-full h-9 rounded text-sm transition-all"
+              value={maxNoOfStudents}
+              readOnly
+              disabled
             />
-          </div>
-          {selectedAssessment && (
-            <div className={classes['form-field']}>
-              <label className={classes['form-label']}>Max No. of Students:</label>
-              <input
-                type="text"
-                className={classes['form-select']}
-                value={maxNoOfStudents}
-                readOnly
-                disabled // Make the input read-only and disabled
-              />
-            </div>
-          )}
-        </div>
+          </FormField>
+        )}
+      </FormFieldRow>
 
-        {teams.map((t, index) => (
-          <div className={classes['student-form-field']} key={index}>
-            <label htmlFor={`team-${index}`} className={classes['form-label']}>
-              Students
-            </label>
-            <div className={classes['input-container']}>
-              <Select
-                id={`team-${index}`}
-                options={students?.map(student => ({
-                  label: student.name,
-                  value: student
-                }))}
-                isMulti
-                isSearchable
-                value={t}
-                onChange={(
-                  selectedOption: MultiValue<OptionType>,
-                  actionMeta: ActionMeta<OptionType>
-                ) => handleTeamChange(index, selectedOption, actionMeta)}
-                className={classes['form-select']}
-              />
-              {index > 0 && (
-                <button
-                  type="button"
-                  onClick={() => removeTeam(index)}
-                  className={classes['remove-button']}
-                >
-                  Remove Team
-                </button>
-              )}
-            </div>
-          </div>
-        ))}
-        {!teamId ? (
-          <Button onClick={addAnotherTeam} intent="primary">
-            Add Another Team
+      {teams.map((t, index) => (
+        <StudentFormField label="Students" htmlFor={`team-${index}`} key={index}>
+          <InputContainer>
+            <Select
+              id={`team-${index}`}
+              options={students?.map(student => ({
+                label: student.name,
+                value: student,
+              }))}
+              isMulti
+              isSearchable
+              value={t}
+              onChange={(
+                selectedOption: MultiValue<OptionType>,
+                actionMeta: ActionMeta<OptionType>,
+              ) => handleTeamChange(index, selectedOption, actionMeta)}
+            />
+            {index > 0 && (
+              <RemoveButton onClick={() => removeTeam(index)}>Remove Team</RemoveButton>
+            )}
+          </InputContainer>
+        </StudentFormField>
+      ))}
+      {!teamId ? (
+        <Button onClick={addAnotherTeam} intent="primary">
+          Add Another Team
+        </Button>
+      ) : null}
+
+      <FormFooter>
+        <Button onClick={backToTeamDashboard} intent="danger">
+          Back
+        </Button>
+
+        <div>
+          <Button onClick={submitForm} intent="success">
+            Submit
           </Button>
-        ) : null}
-
-        <div className={classes['form-footer']}>
-          <Button onClick={backToTeamDashboard} intent="danger">
-            Back
-          </Button>
-
-          <div>
-            <Button onClick={submitForm} intent="success">
-              Submit
-            </Button>
-          </div>
         </div>
-      </Form>
-    </div>
+      </FormFooter>
+    </FormContainer>
   );
-};
+}
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = TeamFormationForm;
-Component.displayName = 'TeamFormationForm';
 
 export default TeamFormationForm;

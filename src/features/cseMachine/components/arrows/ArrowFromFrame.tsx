@@ -1,13 +1,29 @@
 import { Config } from '../../CseMachineConfig';
-import { StepsArray } from '../../CseMachineTypes';
+import { Layout } from '../../CseMachineLayout';
+import type { StepsArray } from '../../CseMachineTypes';
 import { Frame } from '../Frame';
 import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromFrame extends GenericArrow<Frame, Frame> {
+  constructor(from: Frame) {
+    super(from);
+    this.isLive = from.environment && Layout.liveEnvIDs.has(from.environment.id);
+  }
+
+  protected updateIsLive(): void {
+    this.isLive = this.source.environment && Layout.liveEnvIDs.has(this.source.environment.id);
+  }
+
+  protected getOriginFilterKey() {
+    return 'frame' as const;
+  }
+
   protected calculateSteps() {
     const to = this.target;
-    if (!to) return [];
+    if (!to) {
+      return [];
+    }
 
     const steps: StepsArray = [(x, y) => [x + Config.FramePaddingX, y]];
 

@@ -2,12 +2,13 @@ import { compileFromSource, ECE, typeCheck } from 'java-slang';
 import { BinaryWriter } from 'java-slang/dist/compiler/binary-writer';
 import setupJVM, { parseBin } from 'java-slang/dist/jvm';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
-import { Context, Result } from 'js-slang';
-import loadSourceModules from 'js-slang/dist/modules/loader';
-import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
+import type { Context, Result } from 'js-slang';
+import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors/base';
+import loadSourceModules, { memoizedGetModuleManifestAsync } from 'js-slang/dist/modules/loader';
+import type { ModuleInfo } from 'js-slang/dist/modules/moduleTypes';
 
 import { CseMachine } from '../../features/cseMachine/java/CseMachine';
-import { UploadResult } from '../sideContent/content/SideContentUpload';
+import type { UploadResult } from '../sideContent/content/SideContentUpload';
 import Constants from './Constants';
 import DisplayBufferService from './DisplayBufferService';
 
@@ -16,7 +17,7 @@ export async function javaRun(
   context: Context,
   targetStep: number,
   isUsingCse: boolean,
-  options?: { uploadIsActive?: boolean; uploads?: UploadResult }
+  options?: { uploadIsActive?: boolean; uploads?: UploadResult },
 ) {
   let compiled = {};
 
@@ -26,7 +27,7 @@ export async function javaRun(
       severity: 'Error' as any,
       location: { start: { line: -1, column: -1 }, end: { line: -1, column: -1 } },
       explain: () => msg,
-      elaborate: () => msg
+      elaborate: () => msg,
     });
   };
 
@@ -72,8 +73,20 @@ export async function javaRun(
     // dynamic load modules
     if (path.startsWith('modules')) {
       const module = path.split('/')[1] as string;
-      const moduleFuncs = await loadSourceModules(new Set([module]), context, true);
-      const { proxy } = createModuleProxy(module, moduleFuncs[module]);
+      const manifest = await memoizedGetModuleManifestAsync();
+      if (!manifest[module]) {
+        throw new Error(`Module "${module}" not found in the Source modules manifest.`);
+      }
+      const sourceModulesToImport: Record<string, ModuleInfo> = {
+        [module]: { name: module, ...manifest[module] },
+      };
+      const moduleFuncs = await loadSourceModules(sourceModulesToImport, context, {
+        loadTabs: true,
+      });
+      const { proxy } = createModuleProxy(
+        module,
+        moduleFuncs[module] as { [key: string]: Function | object },
+      );
       return { default: proxy };
     }
     return await import(`java-slang/dist/jvm/stdlib/${path}.js`);
@@ -112,7 +125,7 @@ export async function javaRun(
     try {
       const classFile = compileFromSource(javaCode);
       compiled = {
-        'Main.class': Buffer.from(new BinaryWriter().generateBinary(classFile)).toString('base64')
+        'Main.class': Buffer.from(new BinaryWriter().generateBinary(classFile)).toString('base64'),
       };
     } catch (e) {
       stderr('Compile', e);
@@ -127,12 +140,12 @@ export async function javaRun(
       .then(res => res.json())
       .then((obj: { [key: string]: string }) => {
         return obj;
-      })
+      }),
   )
     .then(stdlib => {
       files = {
         ...stdlib,
-        ...compiled
+        ...compiled,
       };
 
       // run the JVM
@@ -156,12 +169,12 @@ export async function javaRun(
                         toString() {
                           return ' ';
                         }
-                      })()
-                    }
+                      })(),
+                    },
               );
-            }
+            },
           },
-          natives: {}
+          natives: {},
         })();
       });
     })
@@ -186,15 +199,15 @@ export async function runJavaCseMachine(code: string, targetStep: number, contex
     location: {
       start: {
         line: 0,
-        column: 0
+        column: 0,
       },
       end: {
         line: 0,
-        column: 0
-      }
+        column: 0,
+      },
     },
     explain: () => e.explain(),
-    elaborate: () => e.explain()
+    elaborate: () => e.explain(),
   });
   context.executionMethod = 'cse-machine';
   return ECE.runECEvaluator(code, targetStep)
@@ -207,7 +220,7 @@ export async function runJavaCseMachine(code: string, targetStep: number, contex
     })
     .catch(e => {
       console.error(e);
-      const errorResult: Result = { status: 'error' };
+      const errorResult: Result = { status: 'error', context };
       return errorResult;
     });
 }

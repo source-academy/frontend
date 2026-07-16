@@ -10,9 +10,9 @@ import { selectWorkspace } from '../../SafeEffects';
 
 export function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCode: string) {
   const {
-    context: { chapter, externalSymbols: symbols, variant },
+    context: { chapter, externalSymbols: symbols, variant, languageOptions },
     externalLibrary: externalLibraryName,
-    globals
+    globals,
   } = yield* selectWorkspace(workspaceLocation);
 
   const library = {
@@ -20,9 +20,10 @@ export function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCo
     variant,
     external: {
       name: externalLibraryName,
-      symbols
+      symbols,
     },
-    globals
+    globals,
+    languageOptions,
   };
 
   // Clear the context, with the same chapter and externalSymbols as before.
@@ -31,7 +32,7 @@ export function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCo
   yield take(WorkspaceActions.endClearContext.type);
 
   const context: Context = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].context
+    (state: OverallState) => state.workspaces[workspaceLocation].context,
   );
   defineSymbol(context, '__PROGRAM__', entrypointCode);
 }

@@ -9,10 +9,11 @@ import {
   type Module,
   ModuleRegistry,
   PaginationModule,
+  RowApiModule,
   RowDragModule,
   TextEditorModule,
   TextFilterModule,
-  ValidationModule
+  ValidationModule,
 } from 'ag-grid-community';
 
 const productionModules: readonly Module[] = [
@@ -24,10 +25,11 @@ const productionModules: readonly Module[] = [
   DateFilterModule,
   InfiniteRowModelModule,
   PaginationModule,
+  RowApiModule,
   RowDragModule,
   TextEditorModule,
   TextFilterModule,
-  ValidationModule
+  ValidationModule,
 ];
 
 export const initializeAgGridModules = () => {

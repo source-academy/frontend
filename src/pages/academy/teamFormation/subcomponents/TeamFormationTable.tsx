@@ -1,37 +1,21 @@
-import '@tremor/react/dist/esm/tremor.css';
-
-import { Icon as BpIcon } from '@blueprintjs/core';
+import { Button, HTMLTable, Icon, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import type { Column, ColumnFilter, ColumnFiltersState, Row } from '@tanstack/react-table';
 import {
-  Column,
-  ColumnFilter,
-  ColumnFiltersState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  Row,
-  useReactTable
+  useReactTable,
 } from '@tanstack/react-table';
-import {
-  Bold,
-  Button,
-  Flex,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeaderCell,
-  TableRow,
-  Text,
-  TextInput
-} from '@tremor/react';
-import React, { useState } from 'react';
+import { Fragment, useState } from 'react';
+import GradingFlex from 'src/commons/grading/GradingFlex';
+import GradingText from 'src/commons/grading/GradingText';
 import { objectKeys } from 'src/commons/utils/TypeHelper';
-import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
+import type { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 
-import { AssessmentTypeBadge } from '../../grading/subcomponents/GradingBadges';
+import AssessmentTypeBadge from '../../grading/subcomponents/gradingBadges/AssessmentTypeBadge';
 import TeamFormationFilters from '../../teamFormation/subcomponents/TeamFormationFilters';
 import TeamFormationActions from './TeamFormationActions';
 
@@ -40,7 +24,7 @@ const columnHelper = createColumnHelper<TeamFormationOverview>();
 const columns = [
   columnHelper.accessor('assessmentName', {
     header: 'Assessment',
-    cell: info => <Filterable column={info.column} value={info.getValue()} />
+    cell: info => <Filterable column={info.column} value={info.getValue()} />,
   }),
   columnHelper.accessor('assessmentType', {
     header: 'Type',
@@ -48,18 +32,18 @@ const columns = [
       <Filterable column={info.column} value={info.getValue()}>
         <AssessmentTypeBadge type={info.getValue()} />
       </Filterable>
-    )
+    ),
   }),
   columnHelper.accessor('studentNames', {
     header: 'Students',
     cell: info =>
       info.getValue().map((name: string, index: number) => (
-        <React.Fragment key={index}>
+        <Fragment key={index}>
           <Filterable column={info.column} value={name}>
             {name}
           </Filterable>
           {', '}
-        </React.Fragment>
+        </Fragment>
       )),
     filterFn: (row, id: string | number, filterValue: any): boolean => {
       const rowValue = row.original[id as keyof typeof row.original];
@@ -67,7 +51,7 @@ const columns = [
         return rowValue === filterValue;
       }
       return rowValue.some(v => v === filterValue);
-    }
+    },
   }),
   columnHelper.accessor(({ teamId }) => ({ teamId }), {
     header: 'Actions',
@@ -75,8 +59,8 @@ const columns = [
     cell: info => {
       const { teamId } = info.getValue();
       return <TeamFormationActions teamId={teamId} />;
-    }
-  })
+    },
+  }),
 ];
 
 type TeamFormationTableProps = {
@@ -84,12 +68,12 @@ type TeamFormationTableProps = {
   teams: TeamFormationOverview[];
 };
 
-const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams }) => {
+function TeamFormationTable({ group, teams }: TeamFormationTableProps) {
   const defaultFilters = [];
   if (group) {
     defaultFilters.push({
       id: 'groupName',
-      value: group
+      value: group,
     });
   }
 
@@ -99,7 +83,7 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
   const globalFilterFn = (
     row: Row<TeamFormationOverview>,
     columnId: string | number,
-    filterValue: any
+    filterValue: any,
   ): boolean => {
     for (const column of objectKeys(row.original)) {
       const rowValue = row.original[column];
@@ -123,14 +107,14 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
     columns,
     state: {
       columnFilters,
-      globalFilter
+      globalFilter,
     },
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: globalFilterFn,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel()
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const handleFilterRemove = ({ id, value }: ColumnFilter) => {
@@ -140,76 +124,76 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
 
   return (
     <>
-      <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
-        <Flex alignItems="items-center" spaceX="space-x-2">
-          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', height: '1.75rem' }}>
-            <BpIcon icon={IconNames.FILTER_LIST} />
-            <Text>
+      <GradingFlex
+        justifyContent="space-between"
+        alignItems="center"
+        style={{ marginTop: '0.5rem' }}
+      >
+        <GradingFlex alignItems="center" style={{ columnGap: '0.5rem' }}>
+          <GradingFlex alignItems="center" style={{ columnGap: '0.5rem', height: '1.75rem' }}>
+            <Icon icon={IconNames.FILTER_LIST} />
+            <GradingText>
               {columnFilters.length > 0
                 ? 'Filters: '
                 : 'No filters applied. Click on any cell to filter by its value.'}{' '}
-            </Text>
-          </div>
+            </GradingText>
+          </GradingFlex>
           <TeamFormationFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
-        </Flex>
+        </GradingFlex>
 
-        <TextInput
-          maxWidth="max-w-sm"
-          icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
+        <InputGroup
+          style={{ maxWidth: '14rem' }}
+          leftIcon={IconNames.SEARCH}
           placeholder="Search for any value here..."
           onChange={e => setGlobalFilter(e.target.value)}
         />
-      </Flex>
-      <Table marginTop="mt-2">
-        <TableHead>
+      </GradingFlex>
+      <HTMLTable style={{ marginTop: '0.5rem', width: '100%' }}>
+        <thead>
           {table.getHeaderGroups().map(headerGroup => (
-            <TableRow key={headerGroup.id}>
+            <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => (
-                <TableHeaderCell key={header.id}>
+                <th key={header.id}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(header.column.columnDef.header, header.getContext())}
-                </TableHeaderCell>
+                </th>
               ))}
-            </TableRow>
+            </tr>
           ))}
-        </TableHead>
-        <TableBody>
+        </thead>
+        <tbody>
           {table.getRowModel().rows.map(row => (
-            <TableRow key={row.id}>
+            <tr key={row.id}>
               {row.getVisibleCells().map(cell => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
+                <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
               ))}
-            </TableRow>
+            </tr>
           ))}
-        </TableBody>
-      </Table>
+        </tbody>
+      </HTMLTable>
       <div>
-        <Flex justifyContent="justify-center" spaceX="space-x-3">
+        <GradingFlex justifyContent="center" style={{ columnGap: '0.75rem' }}>
           <Button
-            size="xs"
-            icon={() => <BpIcon icon={IconNames.ARROW_LEFT} />}
-            variant="light"
+            variant="minimal"
+            icon={IconNames.ARROW_LEFT}
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           />
-          <Bold>
+          <GradingText style={{ fontWeight: 'bold' }}>
             Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-          </Bold>
+          </GradingText>
           <Button
-            size="xs"
-            icon={() => <BpIcon icon={IconNames.ARROW_RIGHT} />}
-            variant="light"
+            variant="minimal"
+            icon={IconNames.ARROW_RIGHT}
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           />
-        </Flex>
+        </GradingFlex>
       </div>
     </>
   );
-};
+}
 
 type FilterableProps = {
   column: Column<any, unknown>;
@@ -217,16 +201,16 @@ type FilterableProps = {
   children?: React.ReactNode;
 };
 
-const Filterable: React.FC<FilterableProps> = ({ column, value, children }) => {
+function Filterable({ column, value, children }: FilterableProps) {
   const handleFilterChange = () => {
     column.setFilterValue(value);
   };
 
   return (
-    <button type="button" onClick={handleFilterChange} style={{ padding: 0 }}>
+    <Button variant="minimal" onClick={handleFilterChange} style={{ padding: 0 }}>
       {children || value}
-    </button>
+    </Button>
   );
-};
+}
 
 export default TeamFormationTable;

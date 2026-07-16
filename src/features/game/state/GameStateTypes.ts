@@ -1,4 +1,4 @@
-import { ItemId } from '../commons/CommonTypes';
+import type { ItemId } from '../commons/CommonTypes';
 
 export enum GameStateStorage {
   UserState = 'UserState',
@@ -6,7 +6,7 @@ export enum GameStateStorage {
   TasklistState = 'TasklistState',
   AttemptedQuizState = 'AttemptedQuizState',
   PassedQuizState = 'PassedQuizState',
-  QuizScoreState = 'QuizScoreState'
+  QuizScoreState = 'QuizScoreState',
 }
 
 /**
@@ -15,7 +15,7 @@ export enum GameStateStorage {
 export enum UserStateType {
   collectibles = 'collectibles',
   assessments = 'assessments',
-  achievements = 'achievements'
+  achievements = 'achievements',
 }
 
 /**

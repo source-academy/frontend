@@ -9,37 +9,37 @@ import {
   Position,
   Spinner,
   Text,
-  Tooltip
+  Tooltip,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { sortBy } from 'lodash';
-import React, { useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { sortBy } from 'lodash-es';
+import { useEffect, useMemo, useState } from 'react';
 import { Navigate, useLoaderData, useParams } from 'react-router';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import Messages, { sendToWebview } from 'src/features/vscode/messages';
 
 import SessionActions from '../application/actions/SessionActions';
 import { Role } from '../application/ApplicationTypes';
 import AssessmentWorkspace, {
-  AssessmentWorkspaceProps
+  type AssessmentWorkspaceProps,
 } from '../assessmentWorkspace/AssessmentWorkspace';
 import ContentDisplay from '../ContentDisplay';
 import ControlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 import { beforeNow } from '../utils/DateHelper';
-import { useSession, useTypedSelector } from '../utils/Hooks';
+import { useAppSelector, useSession } from '../utils/Hooks';
 import { convertParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
 import AssessmentOverviewCard from './AssessmentOverviewCard';
 import {
-  AssessmentConfiguration,
-  AssessmentOverview,
+  type AssessmentConfiguration,
+  type AssessmentOverview,
   AssessmentStatuses,
-  AssessmentWorkspaceParams
+  type AssessmentWorkspaceParams,
 } from './AssessmentTypes';
 
-const Assessment: React.FC = () => {
+function Assessment() {
   const params = useParams<AssessmentWorkspaceParams>();
   const [betchaAssessment, setBetchaAssessment] = useState<AssessmentOverview | null>(null);
   const [showClosedAssessments, setShowClosedAssessments] = useState(false);
@@ -47,7 +47,7 @@ const Assessment: React.FC = () => {
   const [showUpcomingAssessments, setShowUpcomingAssessments] = useState(true);
 
   const { courseId, role, assessmentOverviews: assessmentOverviewsUnfiltered } = useSession();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (assessmentOverviewsUnfiltered && courseId) {
@@ -58,10 +58,10 @@ const Assessment: React.FC = () => {
             closeAt: oa.closeAt,
             id: oa.id,
             isPublished: oa.isPublished,
-            title: oa.title
+            title: oa.title,
           })),
-          courseId
-        )
+          courseId,
+        ),
       );
     }
   }, [assessmentOverviewsUnfiltered, courseId]);
@@ -104,10 +104,10 @@ const Assessment: React.FC = () => {
   const assessmentConfigToLoad = useLoaderData() as AssessmentConfiguration;
   const assessmentOverviews = useMemo(
     () => assessmentOverviewsUnfiltered?.filter(ao => ao.type === assessmentConfigToLoad.type),
-    [assessmentConfigToLoad.type, assessmentOverviewsUnfiltered]
+    [assessmentConfigToLoad.type, assessmentOverviewsUnfiltered],
   );
 
-  const fromLeaderboard: boolean = useTypedSelector(store => store.leaderboard.code) ? true : false;
+  const fromLeaderboard: boolean = useAppSelector(store => store.leaderboard.code) ? true : false;
 
   // If assessmentId or questionId is defined but not numeric, redirect back to the Assessment overviews page
   if (
@@ -138,13 +138,13 @@ const Assessment: React.FC = () => {
         role !== Role.Student ||
         (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt)),
       assessmentConfiguration: assessmentConfigToLoad,
-      fromContestLeaderboard: fromLeaderboard
+      fromContestLeaderboard: fromLeaderboard,
     };
     return <AssessmentWorkspace {...assessmentWorkspaceProps} />;
   }
 
   // Otherwise, render a list of assOwnProps
-  let display: JSX.Element;
+  let display: React.ReactElement;
   if (assessmentOverviews === undefined) {
     display = <NonIdealState description="Fetching assessment..." icon={<Spinner />} />;
   } else if (assessmentOverviews.length === 0) {
@@ -162,7 +162,7 @@ const Assessment: React.FC = () => {
           renderGradingTooltip={false}
           makeSubmissionButton={makeSubmissionButton}
         />
-      )
+      ),
     );
 
     /** Opened assessments, that are released and can be attempted. */
@@ -171,7 +171,7 @@ const Assessment: React.FC = () => {
       beforeNow(overview.openAt) &&
       overview.status !== AssessmentStatuses.submitted;
     const openedCards = sortAssessments(
-      assessmentOverviews.filter(overview => isOverviewOpened(overview))
+      assessmentOverviews.filter(overview => isOverviewOpened(overview)),
     ).map(overview => (
       <AssessmentOverviewCard
         key={overview.id}
@@ -185,8 +185,8 @@ const Assessment: React.FC = () => {
     /** Closed assessments, that are past the due date or cannot be attempted further. */
     const closedCards = sortAssessments(
       assessmentOverviews.filter(
-        overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview)
-      )
+        overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview),
+      ),
     ).map(overview => (
       <AssessmentOverviewCard
         key={overview.id}
@@ -261,7 +261,7 @@ const Assessment: React.FC = () => {
     <Dialog
       className="betcha-dialog"
       icon={IconNames.ERROR}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={betchaAssessment !== null}
       onClose={setBetchaAssessmentNull}
       title="Finalise submission?"
@@ -275,12 +275,12 @@ const Assessment: React.FC = () => {
             <ControlButton
               label="Cancel"
               onClick={setBetchaAssessmentNull}
-              options={{ minimal: false }}
+              options={{ variant: 'default' }}
             />
             <ControlButton
               label="Finalise"
               onClick={handleSubmitAssessment}
-              options={{ minimal: false, intent: Intent.DANGER }}
+              options={{ variant: 'default', intent: Intent.DANGER }}
             />
           </>
         }
@@ -298,20 +298,17 @@ const Assessment: React.FC = () => {
       {betchaDialog}
     </div>
   );
-};
+}
 
 const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) => (
   <ControlButton
     label={label}
     icon={isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
     onClick={toggleFunc}
-    options={{ minimal: true, className: 'collapse-button' }}
+    options={{ variant: 'minimal', className: 'collapse-button' }}
   />
 );
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
 export const Component = Assessment;
-Component.displayName = 'Assessment';
 
 export default Assessment;

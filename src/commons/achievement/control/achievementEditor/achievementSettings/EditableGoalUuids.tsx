@@ -1,25 +1,25 @@
 import { MenuItem } from '@blueprintjs/core';
-import { ItemPredicate, ItemRenderer, MultiSelect } from '@blueprintjs/select';
-import { without } from 'lodash';
-import React, { useContext } from 'react';
+import type { ItemPredicate, ItemRenderer } from '@blueprintjs/select';
+import { MultiSelect } from '@blueprintjs/select';
+import { without } from 'lodash-es';
+import { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
-import { AchievementGoal } from 'src/features/achievement/AchievementTypes';
+import type { AchievementGoal } from 'src/features/achievement/AchievementTypes';
 
 type Props = {
   changeGoalUuids: (goalUuids: string[]) => void;
   goalUuids: string[];
 };
 
-const EditableGoalUuids: React.FC<Props> = ({ changeGoalUuids, goalUuids }) => {
+function EditableGoalUuids({ changeGoalUuids, goalUuids }: Props) {
   const inferencer = useContext(AchievementContext);
   const allGoalUuids = inferencer.getAllGoalUuids();
   const selectedUuids = goalUuids.filter(
-    uuid => !inferencer.isInvalidGoal(inferencer.getGoal(uuid))
+    uuid => !inferencer.isInvalidGoal(inferencer.getGoal(uuid)),
   );
 
   const getUuid = (text: string) => inferencer.getUuidByText(text);
 
-  const GoalSelect = MultiSelect.ofType<AchievementGoal>();
   const goalRenderer: ItemRenderer<AchievementGoal> = (goal, { handleClick }) => (
     <MenuItem key={goal.uuid} onClick={handleClick} text={goal.text} />
   );
@@ -36,7 +36,9 @@ const EditableGoalUuids: React.FC<Props> = ({ changeGoalUuids, goalUuids }) => {
   };
 
   const removeGoal = (removeUuid?: string) => {
-    if (removeGoal === undefined) return;
+    if (removeGoal === undefined) {
+      return;
+    }
 
     selectedGoals.delete(removeUuid!);
     availableGoals.add(removeUuid!);
@@ -44,18 +46,18 @@ const EditableGoalUuids: React.FC<Props> = ({ changeGoalUuids, goalUuids }) => {
   };
 
   return (
-    <GoalSelect
+    <MultiSelect<AchievementGoal>
       itemRenderer={goalRenderer}
       items={[...availableGoals].map(uuid => inferencer.getGoal(uuid))}
-      noResults={<MenuItem disabled={true} text="No available goal" />}
+      noResults={<MenuItem disabled text="No available goal" />}
       onItemSelect={goal => selectGoal(goal.uuid)}
       selectedItems={[...selectedGoals].map(uuid => inferencer.getGoal(uuid))}
       tagInputProps={{ onRemove: text => removeGoal(getUuid(text!.toString())) }}
       tagRenderer={goal => goal.text}
       itemPredicate={goalPredicate}
-      resetOnSelect={true}
+      resetOnSelect
     />
   );
-};
+}
 
 export default EditableGoalUuids;

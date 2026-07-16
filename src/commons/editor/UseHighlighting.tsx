@@ -1,15 +1,15 @@
 import { Ace, Range as AceRange } from 'ace-builds';
 import { createContext, getAllOccurrencesInScope, getScope } from 'js-slang';
-import React from 'react';
+import { useCallback, useRef } from 'react';
 
-import { EditorHook } from './Editor';
+import type { EditorHook } from './Editor';
 
 const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
-  const propsRef = React.useRef(inProps);
+  const propsRef = useRef(inProps);
   propsRef.current = inProps;
-  const markerIdsRef = React.useRef<Array<number>>([]);
+  const markerIdsRef = useRef<Array<number>>([]);
 
-  const handleVariableHighlighting = React.useCallback(() => {
+  const handleVariableHighlighting = useCallback(() => {
     // using Ace Editor's way of highlighting as seen here: https://github.com/ajaxorg/ace/blob/master/lib/ace/editor.js#L497
     // We use async blocks so we don't block the browser during editing
 
@@ -30,9 +30,9 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
       });
       const ranges = getAllOccurrencesInScope(code, createContext(chapterNumber), {
         line: position.row + 1,
-        column: position.column
+        column: position.column,
       }).map(
-        loc => new AceRange(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column)
+        loc => new AceRange(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column),
       );
 
       const markerType = 'ace_variable_highlighting';
@@ -43,7 +43,7 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
     }, 10);
   }, [reactAceRef]);
 
-  const handleHighlightScope = React.useCallback(() => {
+  const handleHighlightScope = useCallback(() => {
     if (!reactAceRef.current) {
       return;
     }
@@ -54,7 +54,7 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
 
     const ranges = getScope(code, createContext(chapter), {
       line: position.row + 1,
-      column: position.column
+      column: position.column,
     });
 
     if (ranges.length !== 0) {
@@ -66,30 +66,30 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
               range.start.line - 1,
               range.start.column,
               range.end.line - 1,
-              range.end.column
+              range.end.column,
             ),
             'ace_selection',
-            'text'
-          )
+            'text',
+          ),
         );
       });
     }
   }, [reactAceRef]);
 
   const { onChange: prevOnChange, onCursorChange: prevOnCursorChange } = outProps;
-  outProps.onChange = React.useCallback(
+  outProps.onChange = useCallback(
     (value: string, event?: any) => {
       handleVariableHighlighting();
       prevOnChange?.(value, event);
     },
-    [handleVariableHighlighting, prevOnChange]
+    [handleVariableHighlighting, prevOnChange],
   );
-  outProps.onCursorChange = React.useCallback(
+  outProps.onCursorChange = useCallback(
     (value: any, event?: any) => {
       handleVariableHighlighting();
       prevOnCursorChange?.(value, event);
     },
-    [handleVariableHighlighting, prevOnCursorChange]
+    [handleVariableHighlighting, prevOnCursorChange],
   );
   keyBindings.highlightScope = handleHighlightScope;
 };

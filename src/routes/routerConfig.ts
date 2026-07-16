@@ -1,154 +1,171 @@
-import * as Sentry from '@sentry/react';
-import { redirect, replace, type RouteObject, Routes } from 'react-router';
+import { type MiddlewareFunction, redirect, replace, type RouteObject } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
+import { store } from 'src/pages/createStore';
 
-import { GuardedRoute } from './routeGuard';
+import { createRoutes } from './routeUtils';
 
-/**
- * Partial migration to be compatible with react-router v6.4 data loader APIs.
- *
- * Note that to use data loader APIs, the routes utilizing loader functions must be defined before passing
- * them to createBrowserRouter. They cannot be defined in some child/nested <Routes /> component that can only be known
- * during render time.
- * https://stackoverflow.com/questions/73875903/react-router-route-loader-not-working-on-nested-components
- */
-
-// Conditionally allow access to route via `loader` instead of conditionally defining these routes in react-router v6.4.
-// See https://github.com/remix-run/react-router/discussions/10223#discussioncomment-5909050
-// const conditionalLoader = (condition: boolean, redirectTo: string, returnValue?: any) => () => {
-//   if (condition) {
-//     return redirect(redirectTo);
-//   }
-//   return returnValue ?? null;
-// };
-
-const Application = () => import('../commons/application/Application');
+const RootLayout = () => import('../new_routes/_layout');
 const Login = () => import('../pages/login/Login');
-const LoginPage = () => import('../pages/login/LoginPage');
-const LoginCallback = () => import('../pages/login/LoginCallback');
-const LoginVscodeCallback = () => import('../pages/login/LoginVscodeCallback');
-const NusLogin = () => import('../pages/login/NusLogin');
-const Contributors = () => import('../pages/contributors/Contributors');
-const GitHubCallback = () => import('../pages/githubCallback/GitHubCallback');
-const Sicp = () => import('../pages/sicp/Sicp');
 const Playground = () => import('../pages/playground/Playground');
-const NotFound = () => import('../pages/notFound/NotFound');
-const Welcome = () => import('../pages/welcome/Welcome');
-const Academy = () => import('../pages/academy/Academy');
-const MissionControl = () => import('../pages/missionControl/MissionControl');
-const EditStory = async () => {
-  const { EditStoryComponent } = await import('../pages/stories/Story');
-  return { Component: EditStoryComponent };
-};
-const ViewStory = async () => {
-  const { ViewStoryComponent } = await import('../pages/stories/Story');
-  return { Component: ViewStoryComponent };
-};
-const Stories = () => import('../pages/stories/Stories');
-const Features = () => import('../pages/featureFlags/FeatureFlags');
+const MissionControl = () => import('../new_routes/mission-control/[assessmentId]/[questionId]');
 
-const commonChildrenRoutes: RouteObject[] = [
-  { path: 'contributors', lazy: Contributors },
-  { path: 'callback/github', lazy: GitHubCallback },
-  { path: 'sicpjs/:section?', lazy: Sicp },
-  { path: 'features', lazy: Features }
-];
+const commonRoutes: RouteObject = {
+  lazy: RootLayout,
+  children: [
+    ...createRoutes({
+      contributors: () => import('../new_routes/contributors'),
+      'callback/github': () => import('../new_routes/callback/github'),
+      features: () => import('../new_routes/features'),
+      '*': () => import('../new_routes/not-found'),
+    }),
+    {
+      path: 'sicpjs',
+      lazy: () => import('../new_routes/sicpjs/_layout'),
+      children: [{ path: ':section', lazy: () => import('../new_routes/sicpjs/[section]') }],
+    },
+    {
+      path: 'sicpy',
+      lazy: () => import('../new_routes/sicpy/_layout'),
+      children: [{ path: ':section', lazy: () => import('../new_routes/sicpy/[section]') }],
+    },
+  ],
+};
 
 export const playgroundOnlyRouterConfig: RouteObject[] = [
+  commonRoutes,
   {
-    path: '*',
-    lazy: Application,
+    lazy: RootLayout,
     children: [
-      { path: '', loader: () => replace('/playground') },
+      { index: true, loader: () => replace('/playground') },
       { path: 'playground', lazy: Playground },
-      ...commonChildrenRoutes,
-      { path: '*', lazy: NotFound }
-    ]
-  }
+    ],
+  },
+];
+
+const loginRoutes: RouteObject[] = [
+  {
+    path: 'nus_login',
+    lazy: Login,
+    middleware: [
+      () => {
+        if (Constants.hasNusAuthProviders) {
+          return null;
+        }
+        throw redirect('/login');
+      },
+    ],
+    children: [{ index: true, lazy: () => import('../new_routes/nus_login') }],
+  },
+  {
+    lazy: RootLayout,
+    children: [
+      { path: 'login/vscode_callback', lazy: () => import('../new_routes/login/vscode_callback') },
+      {
+        path: 'login',
+        lazy: Login,
+        children: [
+          {
+            index: true,
+            middleware: [
+              () => {
+                if (Constants.hasDefaultAuthProviders) {
+                  return null;
+                }
+                throw redirect('/nus_login');
+              },
+            ],
+            lazy: () => import('../new_routes/login'),
+          },
+          { path: 'callback', lazy: () => import('../new_routes/login/callback') },
+        ],
+      },
+    ],
+  },
 ];
 
 export const getFullAcademyRouterConfig = ({
   name,
   isLoggedIn,
   courseId,
-  academyRoutes = []
+  academyRoutes = [],
 }: {
   name?: string;
   isLoggedIn: boolean;
   courseId?: number | null;
   academyRoutes?: RouteObject[];
 }): RouteObject[] => {
-  const welcomeLoader = () => {
+  const welcomeMiddleware = (() => {
     if (name === undefined) {
-      return redirect('/login');
+      throw redirect('/login');
     }
     if (courseId !== null && courseId !== undefined) {
-      return redirect(`/courses/${courseId}`);
+      throw redirect(`/courses/${courseId}`);
     }
     return null;
-  };
+  }) satisfies MiddlewareFunction;
 
-  const ensureUserAndRole = (r: RouteObject) => {
-    return new GuardedRoute(r)
-      .check(s => s.session.name !== undefined, '/login')
-      .check(s => s.session.role !== undefined, '/welcome')
-      .build();
-  };
-
-  const homePageRedirect = () => {
+  const homePageRedirect = (() => {
     if (!isLoggedIn) {
-      return redirect('/login');
+      throw redirect('/login');
     }
-    if (courseId === null) {
-      return redirect('/welcome');
+    if (courseId == null) {
+      throw redirect('/welcome');
     }
     return null;
-  };
+  }) satisfies MiddlewareFunction;
 
   return [
+    commonRoutes,
+    ...loginRoutes,
     {
-      path: 'nus_login',
-      lazy: Login,
-      loader: () => (Constants.hasNusAuthProviders ? null : redirect('/login')),
-      children: [{ path: '', lazy: NusLogin }]
-    },
-    {
-      path: '*',
-      lazy: Application,
+      lazy: RootLayout,
       children: [
         {
-          path: '',
-          loader: () => homePageRedirect() || replace(`/courses/${courseId}`)
+          index: true,
+          middleware: [
+            homePageRedirect,
+            () => {
+              throw replace(`/courses/${courseId}`);
+            },
+          ],
         },
         {
-          path: 'login',
-          lazy: Login,
-          loader: () => (Constants.hasOtherAuthProviders ? null : redirect('/nus_login')),
-          children: [{ path: '', lazy: LoginPage }]
+          path: 'welcome',
+          middleware: [welcomeMiddleware],
+          lazy: () => import('../new_routes/welcome'),
         },
         {
-          path: 'login',
-          lazy: Login,
-          children: [{ path: 'callback', lazy: LoginCallback }]
+          path: 'courses',
+          middleware: [
+            () => {
+              throw redirect('/');
+            },
+          ],
         },
         {
-          path: 'login',
-          children: [{ path: 'vscode_callback', lazy: LoginVscodeCallback }]
+          middleware: [
+            () => {
+              const state = store.getState();
+              if (!state.session.name) {
+                throw redirect('/login');
+              }
+              if (state.session.role == undefined) {
+                throw redirect('/welcome');
+              }
+              return null;
+            },
+          ],
+          children: [
+            {
+              path: 'courses/:courseId',
+              lazy: () => import('../new_routes/courses/[courseId]/_layout'),
+              children: academyRoutes,
+            },
+            { path: 'playground/:playgroundCode?', lazy: Playground },
+          ],
         },
-        { path: 'welcome', lazy: Welcome, loader: welcomeLoader },
-        { path: 'courses', loader: () => redirect('/') },
-        ensureUserAndRole({ path: 'courses/:courseId/*', lazy: Academy, children: academyRoutes }),
-        ensureUserAndRole({ path: 'playground/:playgroundCode?', lazy: Playground }),
         { path: 'mission-control/:assessmentId?/:questionId?', lazy: MissionControl },
-        ensureUserAndRole({ path: 'courses/:courseId/stories/new', lazy: EditStory }),
-        ensureUserAndRole({ path: 'courses/:courseId/stories/view/:id', lazy: ViewStory }),
-        ensureUserAndRole({ path: 'courses/:courseId/stories/edit/:id', lazy: EditStory }),
-        ensureUserAndRole({ path: 'courses/:courseId/stories', lazy: Stories }),
-        ...commonChildrenRoutes,
-        { path: '*', lazy: NotFound }
-      ]
-    }
+      ],
+    },
   ];
 };
-
-export const SentryRoutes = Sentry.withSentryReactRouterV7Routing(Routes);

@@ -14,17 +14,17 @@ export const Constants = {
   defaultFontStyle: {
     key: FontAssets.zektonFont.key,
     size: 30,
-    align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+    align: Phaser.GameObjects.BitmapText.ALIGN_CENTER,
   },
-  defaultCursor: ''
+  defaultCursor: '',
 };
 
 export const screenSize = {
   x: 1920,
-  y: 1080
+  y: 1080,
 };
 
 export const screenCenter = {
   x: screenSize.x / 2,
-  y: screenSize.y / 2
+  y: screenSize.y / 2,
 };

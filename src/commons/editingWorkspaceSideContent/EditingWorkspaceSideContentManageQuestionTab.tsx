@@ -1,25 +1,21 @@
 import { Button, Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { Assessment, mcqTemplate, programmingTemplate } from '../assessment/AssessmentTypes';
+import type { Assessment } from '../assessment/AssessmentTypes';
+import { mcqTemplate, programmingTemplate } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
 
-type ManageQuestionTabProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   updateAssessment: (assessment: Assessment) => void;
-};
-
-type StateProps = {
   assessment: Assessment;
   hasUnsavedChanges: boolean;
   questionId: number;
 };
 
-const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
+function ManageQuestionTab(props: Props) {
   const navigate = useNavigate();
   const [showSaveOverlay, setShowSaveOverlay] = useState(false);
   const [modifyAssessment, setModifyAssessment] = useState<VoidFunction>(() => {});
@@ -31,7 +27,7 @@ const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
           label="Clone"
           icon={IconNames.DOCUMENT}
           onClick={confirmSave(
-            makeQuestion(() => deepCopy(props.assessment.questions[index]), index)
+            makeQuestion(() => deepCopy(props.assessment.questions[index]), index),
           )}
         />
         <ControlButton
@@ -116,7 +112,7 @@ const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
     <Dialog
       className="assessment-reset"
       icon={IconNames.ERROR}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={showSaveOverlay}
       title="Confirmation: Save unsaved changes?"
     >
@@ -129,7 +125,7 @@ const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
             <ControlButton
               label="Cancel"
               onClick={() => setShowSaveOverlay(false)}
-              options={{ minimal: false }}
+              options={{ variant: 'default' }}
             />
             <ControlButton
               label="Confirm"
@@ -137,7 +133,7 @@ const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
                 modifyAssessment();
                 setShowSaveOverlay(false);
               }}
-              options={{ minimal: false, intent: Intent.DANGER }}
+              options={{ variant: 'default', intent: Intent.DANGER }}
             />
           </>
         }
@@ -152,7 +148,7 @@ const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
         <div key={index}>
           Question {index + 1}
           <br />
-          <Button className="mcq-option col-xs-12" minimal={true}>
+          <Button className="mcq-option col-xs-12" variant="minimal">
             <Markdown
               content={q.content.length > 200 ? q.content.substring(0, 300) + '...' : q.content}
             />
@@ -164,7 +160,7 @@ const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
       ))}
     </div>
   );
-};
+}
 
 const deepCopy = (arr: any) => {
   return JSON.parse(JSON.stringify(arr));

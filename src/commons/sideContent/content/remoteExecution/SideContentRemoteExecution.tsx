@@ -5,37 +5,37 @@ import {
   MenuDivider,
   MenuItem,
   NonIdealState,
-  Spinner
+  Spinner,
 } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React, { SetStateAction, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useCallback, useEffect, useState } from 'react';
 import { NavLink } from 'react-router';
 import BrickSvg from 'src/assets/BrickSvg';
 import PortSvg from 'src/assets/PortSvg';
 import { deleteDevice } from 'src/commons/sagas/RequestsSaga';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import PeripheralContainer from 'src/features/remoteExecution/PeripheralContainer';
 import RemoteExecutionAddDeviceDialog from 'src/features/remoteExecution/RemoteExecutionDeviceDialog';
 import {
   ev3PeripheralToComponentMap,
-  ev3SensorModeToValueTransformerMap
+  ev3SensorModeToValueTransformerMap,
 } from 'src/features/remoteExecution/RemoteExecutionEv3Types';
-import { Device, DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
+import type { Device, DeviceSession } from 'src/features/remoteExecution/RemoteExecutionTypes';
 
 import { actions } from '../../../utils/ActionsHelper';
-import { useTypedSelector } from '../../../utils/Hooks';
-import { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import { useAppSelector } from '../../../utils/Hooks';
+import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import DeviceMenuItemButtons from './DeviceMenuItemButtons';
 
 interface SideContentRemoteExecutionProps {
   workspace: WorkspaceLocation;
   secretParams?: string;
-  callbackFunction?: React.Dispatch<SetStateAction<string | undefined>>;
+  callbackFunction?: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
-const DeviceContent = ({ session }: { session?: DeviceSession }) => {
+function DeviceContent({ session }: { session?: DeviceSession }) {
   if (!session) {
     return (
       <>
@@ -62,49 +62,49 @@ const DeviceContent = ({ session }: { session?: DeviceSession }) => {
         </Callout>
       );
   }
-};
+}
 
 const motorPorts = ['portA', 'portB', 'portC', 'portD'] as const;
 const sensorPorts = ['port1', 'port2', 'port3', 'port4'] as const;
 
-const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = props => {
-  const [dialogState, setDialogState] = React.useState<Device | true | undefined>(
-    props.secretParams ? true : undefined
+function SideContentRemoteExecution(props: SideContentRemoteExecutionProps) {
+  const [dialogState, setDialogState] = useState<Device | true | undefined>(
+    props.secretParams ? true : undefined,
   );
-  const [secretParams, setSecretParams] = React.useState(props.secretParams);
+  const [secretParams, setSecretParams] = useState(props.secretParams);
 
-  const isLoggedIn = useTypedSelector(state => !!state.session.accessToken && !!state.session.role);
-  const devices = useTypedSelector(state => state.session.remoteExecutionDevices);
-  const currentSession = useTypedSelector(state => state.session.remoteExecutionSession);
-  const dispatch = useDispatch();
+  const isLoggedIn = useAppSelector(state => !!state.session.accessToken && !!state.session.role);
+  const devices = useAppSelector(state => state.session.remoteExecutionDevices);
+  const currentSession = useAppSelector(state => state.session.remoteExecutionSession);
+  const dispatch = useAppDispatch();
 
   const isConnected = currentSession?.connection.status === 'CONNECTED';
 
-  React.useEffect(() => {
+  useEffect(() => {
     // this is not supposed to happen - the destructor below should disconnect
     // once the user navigates away from the workspace
     if (currentSession && currentSession.workspace !== props.workspace) {
       dispatch(
         actions.remoteExecUpdateSession({
           ...currentSession,
-          workspace: props.workspace
-        })
+          workspace: props.workspace,
+        }),
       );
     }
   }, [currentSession, dispatch, props.workspace]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!devices && isLoggedIn) {
       dispatch(actions.remoteExecFetchDevices());
     }
   }, [dispatch, devices, isLoggedIn]);
 
-  React.useEffect(
+  useEffect(
     () => () => {
       // note the double () => - this function is a destructor
       dispatch(actions.remoteExecDisconnect());
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleDelete = useCallback(
@@ -115,7 +115,7 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
         positiveLabel: 'Delete',
         positiveIntent: 'danger',
         negativeLabel: 'No',
-        icon: 'trash'
+        icon: 'trash',
       });
       if (!confirm) {
         return;
@@ -131,7 +131,7 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
       }
       dispatch(actions.remoteExecFetchDevices());
     },
-    [dispatch, isConnected]
+    [dispatch, isConnected],
   );
 
   if (!isLoggedIn) {
@@ -201,7 +201,7 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
               textAlign: 'center',
               maxWidth: 480,
               marginInline: 'auto',
-              marginBlock: '2rem'
+              marginBlock: '2rem',
             }}
           >
             <div className="sa-remote-execution row">
@@ -236,6 +236,6 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
       )}
     </>
   );
-};
+}
 
 export default SideContentRemoteExecution;

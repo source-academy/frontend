@@ -1,5 +1,5 @@
 import type { FSModule } from 'browserfs/dist/node/core/FS';
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
 import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
 import { call, delay, put, race, select } from 'redux-saga/effects';
@@ -7,11 +7,7 @@ import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
 import PlaygroundActions from '../../features/playground/PlaygroundActions';
-import {
-  isSchemeLanguage,
-  isSourceLanguage,
-  type OverallState
-} from '../application/ApplicationTypes';
+import { isSourceLanguage, type OverallState } from '../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
 import { combineSagaHandlers } from '../redux/utils';
 import SideContentActions from '../sideContent/SideContentActions';
@@ -33,7 +29,7 @@ const PlaygroundSaga = combineSagaHandlers({
     try {
       const { result, hasTimedOut } = yield race({
         result: call(shortenURLRequest, queryString, keyword),
-        hasTimedOut: delay(10000)
+        hasTimedOut: delay(10000),
       });
 
       resp = result;
@@ -56,9 +52,11 @@ const PlaygroundSaga = combineSagaHandlers({
     yield put(PlaygroundActions.updateShortURL(Constants.urlShortenerBase + resp.url.keyword));
   },
   [SideContentActions.visitSideContent.type]: function* ({
-    payload: { newId, prevId, workspaceLocation }
+    payload: { newId, prevId, workspaceLocation },
   }) {
-    if (workspaceLocation !== 'playground' || newId === prevId) return;
+    if ((workspaceLocation !== 'playground' && workspaceLocation !== 'sicp') || newId === prevId) {
+      return;
+    }
 
     // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
     if (prevId === SideContentType.substVisualizer && newId === SideContentType.mobileEditorRun) {
@@ -67,12 +65,11 @@ const PlaygroundSaga = combineSagaHandlers({
 
     const {
       context: { chapter: playgroundSourceChapter },
-      editorTabs
-    } = yield* selectWorkspace('playground');
+      editorTabs,
+    } = yield* selectWorkspace(workspaceLocation);
 
     if (prevId === SideContentType.substVisualizer) {
-      if (newId === SideContentType.mobileEditorRun) return;
-      const hasBreakpoints = editorTabs.find(({ breakpoints }) => breakpoints.find(x => !!x));
+      const hasBreakpoints = editorTabs.some(({ breakpoints }) => breakpoints.some(Boolean));
 
       if (!hasBreakpoints) {
         yield put(WorkspaceActions.toggleUsingSubst(false, workspaceLocation));
@@ -110,23 +107,19 @@ const PlaygroundSaga = combineSagaHandlers({
     } else {
       yield put(WorkspaceActions.toggleUsingUpload(false, workspaceLocation));
     }
-
-    if (isSchemeLanguage(playgroundSourceChapter) && newId === SideContentType.cseMachine) {
-      yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
-    }
-  }
+  },
 });
 
 export default PlaygroundSaga;
 
 function* updateQueryString() {
   const fileSystem: FSModule = yield select(
-    (state: OverallState) => state.fileSystem.inBrowserFileSystem
+    (state: OverallState) => state.fileSystem.inBrowserFileSystem,
   );
   const files: Record<string, string> = yield call(
     retrieveFilesInWorkspaceAsRecord,
     'playground',
-    fileSystem
+    fileSystem,
   );
 
   const {
@@ -135,7 +128,7 @@ function* updateQueryString() {
     editorTabs,
     execTime,
     externalLibrary: external,
-    isFolderModeEnabled
+    isFolderModeEnabled,
   } = yield* selectWorkspace('playground');
 
   const editorTabFilePaths = editorTabs
@@ -150,7 +143,7 @@ function* updateQueryString() {
     chap: chapter,
     variant,
     ext: external,
-    exec: execTime
+    exec: execTime,
   });
   yield put(PlaygroundActions.changeQueryString(newQueryString));
 }
@@ -161,7 +154,7 @@ function* updateQueryString() {
  */
 export async function shortenURLRequest(
   queryString: string,
-  keyword: string
+  keyword: string,
 ): Promise<Response | null> {
   const url = `${window.location.protocol}//${window.location.host}/playground#${queryString}`;
 
@@ -170,14 +163,14 @@ export async function shortenURLRequest(
     action: 'shorturl',
     format: 'json',
     keyword,
-    url
+    url,
   };
   const fetchOpts: RequestInit = {
     method: 'POST',
     body: Object.entries(params).reduce((formData, [k, v]) => {
       formData.append(k, v!);
       return formData;
-    }, new FormData())
+    }, new FormData()),
   };
 
   const resp = await fetch(`${Constants.urlShortenerBase}yourls-api.php`, fetchOpts);

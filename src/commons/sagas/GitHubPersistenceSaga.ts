@@ -1,6 +1,6 @@
 import type {
   GetResponseDataTypeFromEndpointMethod,
-  GetResponseTypeFromEndpointMethod
+  GetResponseTypeFromEndpointMethod,
 } from '@octokit/types';
 import { call, put, select } from 'redux-saga/effects';
 import GitHubActions from 'src/features/github/GitHubActions';
@@ -11,7 +11,7 @@ import { store } from '../../pages/createStore';
 import SessionActions from '../application/actions/SessionActions';
 import type { OverallState } from '../application/ApplicationTypes';
 import FileExplorerDialog, {
-  type FileExplorerDialogProps
+  type FileExplorerDialogProps,
 } from '../gitHubOverlay/FileExplorerDialog';
 import RepositoryDialog, { type RepositoryDialogProps } from '../gitHubOverlay/RepositoryDialog';
 import { combineSagaHandlers } from '../redux/utils';
@@ -26,7 +26,7 @@ export const GitHubPersistenceSaga = combineSagaHandlers({
   [SessionActions.logoutGitHub.type]: githubLogoutSaga,
   [GitHubActions.githubOpenFile.type]: githubOpenFileSaga,
   [GitHubActions.githubSaveFile.type]: githubSaveFileSaga,
-  [GitHubActions.githubSaveFileAs.type]: githubSaveFileAsSaga
+  [GitHubActions.githubSaveFileAs.type]: githubSaveFileAsSaga,
 });
 
 function* githubLoginSaga() {
@@ -72,14 +72,14 @@ function* githubOpenFileSaga(): any {
     async () =>
       await octokit.paginate(octokit.repos.listForAuthenticatedUser, {
         // 100 is the maximum number of results that can be retrieved per page.
-        per_page: 100
-      })
+        per_page: 100,
+      }),
   );
 
   const getRepoName = async () =>
     await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
       userRepos: userRepos,
-      onSubmit: resolve
+      onSubmit: resolve,
     }));
   const repoName = yield call(getRepoName);
 
@@ -93,7 +93,7 @@ function* githubOpenFileSaga(): any {
         pickerType: pickerType,
         octokit: octokit,
         editorContent: editorContent,
-        onSubmit: resolve
+        onSubmit: resolve,
       }));
 
     yield call(promisifiedDialog);
@@ -102,7 +102,9 @@ function* githubOpenFileSaga(): any {
 
 function* githubSaveFileSaga(): any {
   const octokit = getGitHubOctokitInstance();
-  if (octokit === undefined) return;
+  if (octokit === undefined) {
+    return;
+  }
 
   type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
     typeof octokit.users.getAuthenticated
@@ -116,13 +118,13 @@ function* githubSaveFileSaga(): any {
   const githubName = authUser.data.name;
   const commitMessage = 'Changes made from Source Academy';
   const activeEditorTabIndex: number | null = yield select(
-    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
+    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex,
   );
   if (activeEditorTabIndex === null) {
     throw new Error('No active editor tab found.');
   }
   const editorTabs: EditorTabState[] = yield select(
-    (state: OverallState) => state.workspaces.playground.editorTabs
+    (state: OverallState) => state.workspaces.playground.editorTabs,
   );
   const content = editorTabs[activeEditorTabIndex].value;
 
@@ -134,7 +136,7 @@ function* githubSaveFileSaga(): any {
     githubEmail,
     githubName,
     commitMessage,
-    content
+    content,
   );
 }
 
@@ -151,25 +153,25 @@ function* githubSaveFileAsSaga(): any {
     async () =>
       await octokit.paginate(octokit.repos.listForAuthenticatedUser, {
         // 100 is the maximum number of results that can be retrieved per page.
-        per_page: 100
-      })
+        per_page: 100,
+      }),
   );
 
   const getRepoName = async () =>
     await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
       userRepos: userRepos,
-      onSubmit: resolve
+      onSubmit: resolve,
     }));
   const repoName = yield call(getRepoName);
 
   const activeEditorTabIndex: number | null = yield select(
-    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
+    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex,
   );
   if (activeEditorTabIndex === null) {
     throw new Error('No active editor tab found.');
   }
   const editorTabs: EditorTabState[] = yield select(
-    (state: OverallState) => state.workspaces.playground.editorTabs
+    (state: OverallState) => state.workspaces.playground.editorTabs,
   );
   const editorContent = editorTabs[activeEditorTabIndex].value;
 
@@ -182,7 +184,7 @@ function* githubSaveFileAsSaga(): any {
         pickerType: pickerType,
         octokit: octokit,
         editorContent: editorContent,
-        onSubmit: resolve
+        onSubmit: resolve,
       }));
 
     yield call(promisifiedFileExplorer);

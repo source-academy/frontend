@@ -1,15 +1,14 @@
-import React from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
-import { ColumnFilter, ColumnFiltersState } from 'src/features/grading/GradingTypes';
+import type { ColumnFilter, ColumnFiltersState } from 'src/features/grading/GradingTypes';
 
-import { FilterBadge } from './GradingBadges';
+import FilterBadge from './gradingBadges/FilterBadge';
 
 type Props = {
   filters: ColumnFiltersState;
   onFilterRemove: (filter: ColumnFilter) => void;
 };
 
-const GradingSubmissionFilters: React.FC<Props> = ({ filters, onFilterRemove }) => {
+function GradingSubmissionFilters({ filters, onFilterRemove }: Props) {
   return (
     <GradingFlex
       justifyContent="flex-start"
@@ -20,6 +19,6 @@ const GradingSubmissionFilters: React.FC<Props> = ({ filters, onFilterRemove }) 
       ))}
     </GradingFlex>
   );
-};
+}
 
 export default GradingSubmissionFilters;

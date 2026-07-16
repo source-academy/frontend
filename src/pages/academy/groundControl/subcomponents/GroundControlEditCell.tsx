@@ -1,10 +1,10 @@
 import { Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
-import { DateInput } from '@blueprintjs/datetime';
 import { IconNames } from '@blueprintjs/icons';
 import dayjs from 'dayjs';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
+import { DateInput } from 'src/commons/DateTimePickers';
 
-import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
 import { showWarningMessage } from '../../../../commons/utils/notifications/NotificationsHelper';
 
@@ -16,7 +16,7 @@ type Props = {
 
 const dateDisplayFormat = 'YYYY-MM-DD HH:mm:ss ZZ';
 
-const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDate }) => {
+function EditCell({ data, forOpenDate, handleAssessmentChangeDate }: Props) {
   const minDate = new Date(2010, 0, 0);
   const maxDate = new Date(2030, 11, 31);
 
@@ -39,7 +39,7 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
       handleAssessmentChangeDate(
         id,
         forOpenDate ? newDate.toISOString() : openAt,
-        forOpenDate ? closeAt : newDate.toISOString()
+        forOpenDate ? closeAt : newDate.toISOString(),
       );
       handleCloseDialog();
     }
@@ -51,11 +51,11 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
   };
   const handleFormatDate = (date: Date) => dayjs(date).format(dateDisplayFormat);
 
-  const handleDateChange = React.useCallback(
+  const handleDateChange = useCallback(
     (selectedDate: string | null) => setNewDate(dayjs(selectedDate)),
-    []
+    [],
   );
-  const handleDateError = React.useCallback(() => {
+  const handleDateError = useCallback(() => {
     // Reset date to current date if user enters an invalid date string
     showWarningMessage('Failed to parse date string! Defaulting to current date.', 2000);
     setNewDate(currentDate);
@@ -87,7 +87,7 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         title="Updating assessment settings"
-        canOutsideClickClose={true}
+        canOutsideClickClose
       >
         <DialogBody>
           <p>{forOpenDate ? 'Opening' : 'Closing'} date and time:</p>
@@ -100,13 +100,13 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
                 label="Cancel"
                 icon={IconNames.CROSS}
                 onClick={handleCloseDialog}
-                options={{ minimal: false }}
+                options={{ variant: 'default' }}
               />
               <ControlButton
                 label="Confirm"
                 icon={IconNames.TICK}
                 onClick={handleUpdateDate}
-                options={{ minimal: false, intent: Intent.DANGER }}
+                options={{ variant: 'default', intent: Intent.DANGER }}
               />
             </>
           }
@@ -114,6 +114,6 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
       </Dialog>
     </>
   );
-};
+}
 
 export default EditCell;

@@ -1,8 +1,8 @@
-import { ItemId } from '../commons/CommonTypes';
+import type { ItemId } from '../commons/CommonTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import ActionConditionChecker from './GameActionConditionChecker';
 import GameActionExecuter from './GameActionExecuter';
-import { ActionCondition } from './GameActionTypes';
+import type { ActionCondition, GameActionType } from './GameActionTypes';
 
 /**
  * This class manages all game actions, and is called whenever
@@ -16,7 +16,9 @@ export default class GameActionManager {
    * @param actionIds ids of the actions
    */
   public async fastForwardGameActions(actionIds?: ItemId[]): Promise<void> {
-    if (!actionIds) return;
+    if (!actionIds) {
+      return;
+    }
     for (const actionId of actionIds) {
       const { actionType, actionParams } = GameGlobalAPI.getInstance().getActionById(actionId);
       await GameActionExecuter.executeGameAction(actionType, actionParams);
@@ -31,11 +33,16 @@ export default class GameActionManager {
    * @param actionIds ids of the actions
    */
   public async processGameActions(actionIds?: ItemId[]): Promise<void> {
-    if (!actionIds) return;
+    if (!actionIds) {
+      return;
+    }
     for (const actionId of actionIds) {
       await this.processGameAction(actionId);
     }
     await GameGlobalAPI.getInstance().saveGame();
+
+    // Notify the GameManager that we just saved
+    GameGlobalAPI.getInstance().getGameManager().notifyActionJustSaved();
   }
 
   /**
@@ -70,11 +77,31 @@ export default class GameActionManager {
   private async checkCanPlayAction(
     isRepeatable: boolean,
     interactionId: string,
-    actionConditions: ActionCondition[]
+    actionConditions: ActionCondition[],
   ) {
     return (
       (isRepeatable || !GameGlobalAPI.getInstance().hasTriggeredInteraction(interactionId)) &&
       (await ActionConditionChecker.checkAllConditionsSatisfied(actionConditions))
     );
+  }
+
+  /**
+   * check if the action is about talking to change the cursor
+   *
+   * @param actionType action type
+   * @returns
+   */
+  public isTalkAction(actionType: GameActionType): boolean {
+    return GameActionExecuter.isTalkAction(actionType);
+  }
+
+  /**
+   * Check if the action is about moving to change the cursor
+   *
+   * @param actionType action type
+   * @returns
+   */
+  public isMoveAction(actionType: GameActionType): boolean {
+    return GameActionExecuter.isMoveAction(actionType);
   }
 }

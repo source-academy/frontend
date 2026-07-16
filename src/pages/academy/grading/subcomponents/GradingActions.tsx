@@ -1,13 +1,12 @@
 import { Button, Icon, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
-import { ProgressStatus, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
+import type { ProgressStatus } from 'src/commons/assessment/AssessmentTypes';
+import { ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
 
 type Props = {
   submissionId: number;
@@ -16,8 +15,8 @@ type Props = {
   filterMode: boolean;
 };
 
-const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filterMode }) => {
-  const dispatch = useDispatch();
+function GradingActions({ submissionId, style, progress, filterMode }: Props) {
+  const dispatch = useAppDispatch();
   const { courseId } = useSession();
 
   const handleReautogradeClick = async () => {
@@ -29,7 +28,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
         </>
       ),
       positiveIntent: 'danger',
-      positiveLabel: 'Reautograde'
+      positiveLabel: 'Reautograde',
     });
     if (confirm) {
       dispatch(SessionActions.reautogradeSubmission(submissionId));
@@ -40,7 +39,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
     const confirm = await showSimpleConfirmDialog({
       contents: 'Are you sure you want to unsubmit?',
       positiveIntent: 'danger',
-      positiveLabel: 'Unsubmit'
+      positiveLabel: 'Unsubmit',
     });
     if (confirm) {
       dispatch(SessionActions.unsubmitSubmission(submissionId));
@@ -51,7 +50,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
     const confirm = await showSimpleConfirmDialog({
       contents: "Publish this assessment's grading?",
       positiveIntent: 'primary',
-      positiveLabel: 'Publish'
+      positiveLabel: 'Publish',
     });
     if (confirm) {
       dispatch(SessionActions.publishGrading(submissionId));
@@ -62,7 +61,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
     const confirm = await showSimpleConfirmDialog({
       contents: "Unpublish this assessment's grading?",
       positiveIntent: 'primary',
-      positiveLabel: 'Unpublish'
+      positiveLabel: 'Unpublish',
     });
     if (confirm) {
       dispatch(SessionActions.unpublishGrading(submissionId));
@@ -92,7 +91,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       {(isGraded || isSubmitted) && (
         <Button
           className="grading-action-icons"
-          minimal
+          variant="minimal"
           style={{ padding: 0 }}
           onClick={handleReautogradeClick}
         >
@@ -105,7 +104,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       {(isGraded || isSubmitted) && (
         <Button
           className="grading-action-icons"
-          minimal
+          variant="minimal"
           style={{ padding: 0 }}
           onClick={handleUnsubmitClick}
         >
@@ -116,7 +115,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       )}
 
       {isGraded && (
-        <Button className="grading-action-icons" minimal onClick={handlePublishClick}>
+        <Button className="grading-action-icons" variant="minimal" onClick={handlePublishClick}>
           <Tooltip position={Position.TOP} content="Publish">
             <Icon icon={IconNames.SEND_TO_GRAPH} />
           </Tooltip>
@@ -124,7 +123,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       )}
 
       {isPublished && (
-        <Button className="grading-action-icons" minimal onClick={handleUnpublishClick}>
+        <Button className="grading-action-icons" variant="minimal" onClick={handleUnpublishClick}>
           <Tooltip position={Position.TOP} content="Unpublish">
             <Icon icon={IconNames.EXCLUDE_ROW} />
           </Tooltip>
@@ -132,6 +131,6 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       )}
     </GradingFlex>
   );
-};
+}
 
 export default GradingActions;

@@ -6,10 +6,10 @@ import { i18nLanguageCode, resources } from 'src/i18n/locales';
 
 const languageOptions = Object.keys(resources).map(abbr => ({
   label: resources[abbr as keyof typeof resources]?.name,
-  value: abbr
+  value: abbr,
 }));
 
-const LocaleSelector: React.FC = () => {
+function LocaleSelector() {
   const [currI18nLanguage, setI18nLanguage] = useState(i18n.language)!;
 
   const handleLanguageChange: React.ChangeEventHandler<HTMLSelectElement> = e => {
@@ -29,13 +29,13 @@ const LocaleSelector: React.FC = () => {
       />
       <Tooltip
         position={PopoverPosition.TOP}
-        className="form-field-help-text"
+        className="form-field-help-text ml-2.5"
         content="Choose your language."
       >
         <Icon icon={IconNames.Help} />
       </Tooltip>
     </FormGroup>
   );
-};
+}
 
 export default LocaleSelector;

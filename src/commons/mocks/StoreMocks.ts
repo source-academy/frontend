@@ -1,5 +1,5 @@
-import { Store } from '@reduxjs/toolkit';
-import _ from 'lodash';
+import type { Store } from '@reduxjs/toolkit';
+import { isObject, mergeWith } from 'lodash-es';
 import mockStore from 'redux-mock-store';
 
 import {
@@ -13,17 +13,16 @@ import {
   defaultRouter,
   defaultSession,
   defaultSideContentManager,
-  defaultStories,
   defaultVscode,
   defaultWorkspaceManager,
-  OverallState
+  type OverallState,
 } from '../application/ApplicationTypes';
 import { defaultFeatureFlags } from '../featureFlags';
-import { SourceActionType } from '../utils/ActionsHelper';
-import { DeepPartial } from '../utils/TypeHelper';
+import type { SourceActionType } from '../utils/ActionsHelper';
+import type { DeepPartial } from '../utils/TypeHelper';
 
 export function mockInitialStore(
-  overrides?: DeepPartial<OverallState>
+  overrides?: DeepPartial<OverallState>,
 ): Store<OverallState, SourceActionType> {
   const createStore = (mockStore as any)();
   const state: OverallState = {
@@ -34,23 +33,22 @@ export function mockInitialStore(
     playground: defaultPlayground,
     workspaces: defaultWorkspaceManager,
     session: defaultSession,
-    stories: defaultStories,
     featureFlags: defaultFeatureFlags,
     fileSystem: defaultFileSystem,
     sideContent: defaultSideContentManager,
     vscode: defaultVscode,
     languageDirectory: defaultLanguageDirectory,
-    pluginDirectory: defaultPluginDirectory
+    pluginDirectory: defaultPluginDirectory,
   };
 
   const lodashMergeCustomizer = (objValue: any, srcValue: any) => {
-    if (_.isObject(objValue)) {
+    if (isObject(objValue)) {
       return {
         ...objValue, // destination object
-        ...srcValue // overrides
+        ...srcValue, // overrides
       };
     }
   };
 
-  return createStore(_.mergeWith(state, overrides, lodashMergeCustomizer));
+  return createStore(mergeWith(state, overrides, lodashMergeCustomizer));
 }

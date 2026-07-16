@@ -1,8 +1,8 @@
 import { SlingClient } from '@sourceacademy/sling-client';
 import { assemble, compileFiles, type Context } from 'js-slang';
 import { ExceptionError } from 'js-slang/dist/errors/errors';
-import { Chapter, Variant } from 'js-slang/dist/types';
-import _ from 'lodash';
+import { Chapter, Variant } from 'js-slang/dist/langs';
+import { pickBy } from 'lodash-es';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import RemoteExecutionActions from 'src/features/remoteExecution/RemoteExecutionActions';
 import {
@@ -10,13 +10,13 @@ import {
   type Ev3MotorData,
   Ev3MotorTypes,
   type Ev3SensorData,
-  type Ev3SensorTypes
+  type Ev3SensorTypes,
 } from 'src/features/remoteExecution/RemoteExecutionEv3Types';
 import {
   type Device,
   type DeviceSession,
   deviceTypesById,
-  type WebSocketEndpointInformation
+  type WebSocketEndpointInformation,
 } from 'src/features/remoteExecution/RemoteExecutionTypes';
 import { store } from 'src/pages/createStore';
 
@@ -30,7 +30,7 @@ import { fetchDevices, getDeviceWSEndpoint } from './RequestsSaga';
 
 const dummyLocation = {
   start: { line: 0, column: 0 },
-  end: { line: 0, column: 0 }
+  end: { line: 0, column: 0 },
 };
 
 const RemoteExecutionSaga = combineSagaHandlers({
@@ -40,10 +40,10 @@ const RemoteExecutionSaga = combineSagaHandlers({
         (state: OverallState) => [
           {
             accessToken: state.session.accessToken,
-            refreshToken: state.session.refreshToken
+            refreshToken: state.session.refreshToken,
           },
-          state.session.remoteExecutionSession
-        ]
+          state.session.remoteExecutionSession,
+        ],
       );
       const devices: Device[] = yield call(fetchDevices, tokens);
 
@@ -57,41 +57,41 @@ const RemoteExecutionSaga = combineSagaHandlers({
         yield put(
           actions.remoteExecUpdateSession({
             ...session,
-            device: updatedDevice
-          })
+            device: updatedDevice,
+          }),
         );
       }
-    }
+    },
   },
   [RemoteExecutionActions.remoteExecConnect.type]: function* (action): any {
     const [tokens, session]: [any, DeviceSession | undefined] = yield select(
       (state: OverallState) => [
         {
           accessToken: state.session.accessToken,
-          refreshToken: state.session.refreshToken
+          refreshToken: state.session.refreshToken,
         },
-        state.session.remoteExecutionSession
-      ]
+        state.session.remoteExecutionSession,
+      ],
     );
     const { device, workspace } = action.payload;
     yield put(
       actions.remoteExecUpdateSession({
         device,
         workspace,
-        connection: { status: 'CONNECTING' }
-      })
+        connection: { status: 'CONNECTING' },
+      }),
     );
     const endpoint: WebSocketEndpointInformation | null = yield call(
       getDeviceWSEndpoint,
       device,
-      tokens
+      tokens,
     );
     if (!endpoint) {
       yield put(
         actions.remoteExecUpdateSession({
           ...action.payload,
-          connection: { status: 'FAILED', error: 'Could not retrieve MQTT endpoint' }
-        })
+          connection: { status: 'FAILED', error: 'Could not retrieve MQTT endpoint' },
+        }),
       );
       return;
     }
@@ -105,13 +105,13 @@ const RemoteExecutionSaga = combineSagaHandlers({
     const client: SlingClient = new SlingClient({
       clientId: `${endpoint.clientNamePrefix}${generateClientNonce()}`,
       deviceId: endpoint.thingName,
-      websocketEndpoint: endpoint.endpoint
+      websocketEndpoint: endpoint.endpoint,
     });
     client.on('statusChange', isRunning => {
       store.dispatch(
         actions.updateWorkspace(workspace, {
-          isRunning
-        })
+          isRunning,
+        }),
       );
     });
     client.on('monitor', message => {
@@ -126,14 +126,14 @@ const RemoteExecutionSaga = combineSagaHandlers({
             device: {
               ...currentSession.device,
               peripherals: {
-                ..._.pickBy(
+                ...pickBy(
                   currentSession.device.peripherals,
-                  p => Date.now() - p.lastUpdated < 3000
+                  p => Date.now() - p.lastUpdated < 3000,
                 ),
-                [key]: { ...peripheralData, lastUpdated: Date.now() }
-              }
-            }
-          })
+                [key]: { ...peripheralData, lastUpdated: Date.now() },
+              },
+            },
+          }),
         );
 
       if (message[1].endsWith('motor')) {
@@ -172,17 +172,16 @@ const RemoteExecutionSaga = combineSagaHandlers({
       actions.remoteExecUpdateSession({
         device,
         workspace,
-        connection: { status: 'CONNECTING', client, endpoint }
-      })
+        connection: { status: 'CONNECTING', client, endpoint },
+      }),
     );
     yield put(
       actions.updateWorkspace(workspace, {
         isRunning: false,
-        isEditorAutorun: false,
         isDebugging: false,
         externalLibrary: deviceType?.deviceLibraryName,
-        output: []
-      })
+        output: [],
+      }),
     );
     yield put(
       actions.beginClearContext(
@@ -192,12 +191,12 @@ const RemoteExecutionSaga = combineSagaHandlers({
           variant: Variant.DEFAULT,
           external: {
             name: deviceType?.deviceLibraryName || ExternalLibraryName.NONE,
-            symbols: deviceType?.internalFunctions || []
+            symbols: deviceType?.internalFunctions || [],
           },
-          globals: []
+          globals: [],
         },
-        false
-      )
+        false,
+      ),
     );
     try {
       const connectPromise = new Promise((resolve, reject) => {
@@ -214,14 +213,14 @@ const RemoteExecutionSaga = combineSagaHandlers({
       } = yield race({
         connect: connectPromise,
         reconnect: take(RemoteExecutionActions.remoteExecConnect.type),
-        disconnect: take(RemoteExecutionActions.remoteExecDisconnect.type)
+        disconnect: take(RemoteExecutionActions.remoteExecDisconnect.type),
       });
       if (connectOrCancel.connect) {
         yield put(
           actions.remoteExecUpdateSession({
             ...action.payload,
-            connection: { status: 'CONNECTED', client, endpoint }
-          })
+            connection: { status: 'CONNECTED', client, endpoint },
+          }),
         );
       } else {
         client.disconnect();
@@ -231,14 +230,14 @@ const RemoteExecutionSaga = combineSagaHandlers({
       yield put(
         actions.remoteExecUpdateSession({
           ...action.payload,
-          connection: { status: 'FAILED', client, error: err.toString() }
-        })
+          connection: { status: 'FAILED', client, error: err.toString() },
+        }),
       );
     }
   },
   [RemoteExecutionActions.remoteExecDisconnect.type]: function* (action) {
     const session: DeviceSession | undefined = yield select(
-      (state: OverallState) => state.session.remoteExecutionSession
+      (state: OverallState) => state.session.remoteExecutionSession,
     );
     if (!session) {
       return;
@@ -254,7 +253,7 @@ const RemoteExecutionSaga = combineSagaHandlers({
     const { files, entrypointFilePath } = action.payload;
 
     const session: DeviceSession | undefined = yield select(
-      (state: OverallState) => state.session.remoteExecutionSession
+      (state: OverallState) => state.session.remoteExecutionSession,
     );
     if (!session) {
       return;
@@ -262,8 +261,8 @@ const RemoteExecutionSaga = combineSagaHandlers({
     if (session.connection.status !== 'CONNECTED') {
       yield put(
         actions.updateWorkspace(session.workspace, {
-          isRunning: false
-        })
+          isRunning: false,
+        }),
       );
       return;
     }
@@ -272,7 +271,7 @@ const RemoteExecutionSaga = combineSagaHandlers({
 
     const client = session.connection.client;
     const context: Context = yield select(
-      (state: OverallState) => state.workspaces[session.workspace].context
+      (state: OverallState) => state.workspaces[session.workspace].context,
     );
     // clear the context of errors (note: the way this works is that the context
     // is mutated by js-slang anyway, so it's ok to do it like this)
@@ -282,7 +281,7 @@ const RemoteExecutionSaga = combineSagaHandlers({
       files,
       entrypointFilePath,
       context,
-      deviceTypesById.get(session.device.type)?.internalFunctions
+      deviceTypesById.get(session.device.type)?.internalFunctions,
     );
     if (!compiled) {
       yield put(actions.evalInterpreterError(context.errors, session.workspace));
@@ -294,14 +293,14 @@ const RemoteExecutionSaga = combineSagaHandlers({
   },
   [InterpreterActions.beginInterruptExecution.type]: function* () {
     const session: DeviceSession | undefined = yield select(
-      (state: OverallState) => state.session.remoteExecutionSession
+      (state: OverallState) => state.session.remoteExecutionSession,
     );
     if (!session || session.connection.status !== 'CONNECTED') {
       return;
     }
 
     session.connection.client.sendStop();
-  }
+  },
 });
 
 const ALPHANUMERIC = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

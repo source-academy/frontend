@@ -1,4 +1,3 @@
-import React from 'react';
 import { Group } from 'react-konva';
 
 import { Binding } from '../components/Binding';
@@ -29,21 +28,21 @@ export class AssignmentAnimation extends Animatable {
     private asgnItem: ControlItemComponent,
     private stashItem: StashItemComponent,
     private frame: Frame,
-    private binding: Binding
+    private binding: Binding,
   ) {
     super();
     this.stashItemIsFirst = stashItem.index === 0;
     this.asgnItemAnimation = new AnimatedTextbox(asgnItem.text, getNodePosition(asgnItem), {
-      rectProps: { stroke: defaultActiveColor() }
+      rectProps: { stroke: defaultActiveColor() },
     });
     this.stashItemAnimation = new AnimatedTextbox(stashItem.text, getNodePosition(stashItem));
     if (this.binding.value instanceof PrimitiveValue && this.binding.value.text instanceof Text) {
       this.bindingAnimation = new AnimatedTextComponent({
         ...defaultOptions,
         ...getNodePosition(this.binding.value.text),
-        text: this.binding.value.text.partialStr,
+        text: this.binding.value.text['partialStr'],
         x: this.binding.value.text.x() - 16,
-        opacity: 0
+        opacity: 0,
       });
     }
   }
@@ -67,7 +66,9 @@ export class AssignmentAnimation extends Animatable {
     const minAsgnItemWidth =
       getTextWidth(this.asgnItem.text) + ControlStashConfig.ControlItemTextPadding * 2;
     // hide value of binding
-    if (this.bindingAnimation) this.binding.value.ref.current?.hide();
+    if (this.bindingAnimation) {
+      this.binding.value.ref.current?.hide();
+    }
     // hide arrow
     this.binding.arrow?.ref.current?.hide();
     // move asgn instruction next to stash item, while also decreasing its width
@@ -76,8 +77,8 @@ export class AssignmentAnimation extends Animatable {
       this.asgnItemAnimation.animateTo({
         x: this.stashItem.x() - (this.stashItemIsFirst ? minAsgnItemWidth : 0),
         y: this.stashItem.y() + (this.stashItemIsFirst ? 0 : this.stashItem.height()),
-        width: minAsgnItemWidth
-      })
+        width: minAsgnItemWidth,
+      }),
     ]);
     // move both asgn instruction and stash item down to the frame the binding is in
     await Promise.all([
@@ -86,35 +87,35 @@ export class AssignmentAnimation extends Animatable {
           x: this.frame.x() - this.asgnItemAnimation.width() - this.stashItemAnimation.width(),
           y: this.bindingAnimation
             ? this.binding.y() + this.binding.height() / 2 - this.asgnItemAnimation.height() / 2
-            : this.binding.y()
+            : this.binding.y(),
         },
-        { duration: 1.2 }
+        { duration: 1.2 },
       ),
       this.stashItemAnimation.animateTo(
         {
           x: this.frame.x() - this.stashItem.width(),
           y: this.bindingAnimation
             ? this.binding.y() + this.binding.height() / 2 - this.asgnItemAnimation.height() / 2
-            : this.binding.y()
+            : this.binding.y(),
         },
-        { duration: 1.2 }
-      )
+        { duration: 1.2 },
+      ),
     ]);
     // move both asgn instruction and stash item right, fade in the binding value and binding arrow
     await Promise.all([
       this.asgnItemAnimation.animateTo({
         x: this.binding.x() - this.asgnItemAnimation.width(),
-        opacity: 0
+        opacity: 0,
       }),
       this.stashItemAnimation.animateTo({
         x: this.binding.x(),
-        opacity: 0
+        opacity: 0,
       }),
       this.bindingAnimation?.animateTo(
         { x: (this.binding.value as PrimitiveValue).text.x(), opacity: 1 },
-        { duration: 0.5, delay: 0.5 }
+        { duration: 0.5, delay: 0.5 },
       ),
-      this.arrowAnimation?.animateTo({ x: 0, opacity: 1 }, { duration: 0.5, delay: 0.5 })
+      this.arrowAnimation?.animateTo({ x: 0, opacity: 1 }, { duration: 0.5, delay: 0.5 }),
     ]);
     this.destroy();
   }

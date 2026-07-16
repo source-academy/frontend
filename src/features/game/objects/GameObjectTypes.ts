@@ -1,5 +1,5 @@
-import { IGameActionable } from '../action/GameActionTypes';
-import { AssetKey, ItemId, TrackInteraction } from '../commons/CommonTypes';
+import type { IGameActionable } from '../action/GameActionTypes';
+import type { AssetKey, ItemId, TrackInteraction } from '../commons/CommonTypes';
 import GlowingImage from '../effects/GlowingObject';
 
 /**
@@ -20,11 +20,10 @@ export type ObjectProperty = TrackInteraction &
     y: number;
     width?: number;
     height?: number;
+    isDoor: boolean;
+    isChat: boolean;
+    leadTo: string;
   };
-
-export type ObjectLayerProps = {
-  cursor?: string;
-};
 
 /**
  * Data that represents the object on screen.

@@ -1,10 +1,12 @@
 import type { Context } from 'js-slang';
+import { Variant } from 'js-slang/dist/langs';
 import { call } from 'redux-saga/effects';
 
 import {
   getBlockExtraMethodsString,
+  getBlockExtraMethodsStringTypedVariant,
   getDifferenceInMethods,
-  getStoreExtraMethodsString
+  getStoreExtraMethodsString,
 } from '../../../utils/JsSlangHelper';
 import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { evalCodeSaga } from './evalCode';
@@ -14,7 +16,7 @@ export function* blockExtraMethods(
   context: Context,
   execTime: number,
   workspaceLocation: WorkspaceLocation,
-  unblockKey?: string
+  unblockKey?: string,
 ) {
   // Extract additional methods available in the elevated context relative to the context
   const toBeBlocked = getDifferenceInMethods(elevatedContext, context);
@@ -22,7 +24,7 @@ export function* blockExtraMethods(
     const storeValues = getStoreExtraMethodsString(toBeBlocked, unblockKey);
     const storeValuesFilePath = '/storeValues.js';
     const storeValuesFiles = {
-      [storeValuesFilePath]: storeValues
+      [storeValuesFilePath]: storeValues,
     };
     yield call(
       evalCodeSaga,
@@ -31,14 +33,17 @@ export function* blockExtraMethods(
       elevatedContext,
       execTime,
       EVAL_SILENT,
-      workspaceLocation
+      workspaceLocation,
     );
   }
 
-  const nullifier = getBlockExtraMethodsString(toBeBlocked);
+  const nullifier =
+    context.variant === Variant.TYPED
+      ? getBlockExtraMethodsStringTypedVariant(toBeBlocked)
+      : getBlockExtraMethodsString(toBeBlocked);
   const nullifierFilePath = '/nullifier.js';
   const nullifierFiles = {
-    [nullifierFilePath]: nullifier
+    [nullifierFilePath]: nullifier,
   };
   yield call(
     evalCodeSaga,
@@ -47,6 +52,6 @@ export function* blockExtraMethods(
     elevatedContext,
     execTime,
     EVAL_SILENT,
-    workspaceLocation
+    workspaceLocation,
   );
 }

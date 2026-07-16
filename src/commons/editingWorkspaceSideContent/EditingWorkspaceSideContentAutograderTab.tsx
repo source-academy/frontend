@@ -1,30 +1,20 @@
 import { Card, Elevation, H6 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
-import {
-  Assessment,
-  IProgrammingQuestion,
-  Testcase,
-  testcaseTemplate
-} from '../assessment/AssessmentTypes';
+import type { Assessment, IProgrammingQuestion, Testcase } from '../assessment/AssessmentTypes';
+import { testcaseTemplate } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import { getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 
-type AutograderProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   handleTestcaseEval: (testcase: Testcase) => void;
   updateAssessment: (assessment: Assessment) => void;
-};
-
-type StateProps = {
   assessment: Assessment;
   questionId: number;
 };
 
-export const AutograderTab: React.FC<AutograderProps> = props => {
+export function AutograderTab(props: Props) {
   const addTestcase = (testcases: Testcase[]) => () => {
     testcases.push(testcaseTemplate());
     props.updateAssessment(props.assessment);
@@ -49,7 +39,7 @@ export const AutograderTab: React.FC<AutograderProps> = props => {
                 <TextAreaContent
                   assessment={props.assessment}
                   path={testcasePath.concat([index, 'program'])}
-                  useRawValue={true}
+                  useRawValue
                   updateAssessment={props.updateAssessment}
                 />
               </H6>
@@ -59,7 +49,7 @@ export const AutograderTab: React.FC<AutograderProps> = props => {
                 Score:
                 <TextAreaContent
                   assessment={props.assessment}
-                  isNumber={true}
+                  isNumber
                   path={testcasePath.concat([index, 'score'])}
                   updateAssessment={props.updateAssessment}
                 />
@@ -71,7 +61,7 @@ export const AutograderTab: React.FC<AutograderProps> = props => {
                 <TextAreaContent
                   assessment={props.assessment}
                   path={testcasePath.concat([index, 'answer'])}
-                  useRawValue={true}
+                  useRawValue
                   updateAssessment={props.updateAssessment}
                 />
               </H6>
@@ -128,4 +118,4 @@ export const AutograderTab: React.FC<AutograderProps> = props => {
       />
     </div>
   );
-};
+}

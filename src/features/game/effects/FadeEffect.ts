@@ -1,5 +1,5 @@
 import { Constants, screenCenter, screenSize } from '../commons/CommonConstants';
-import { IBaseScene } from '../commons/CommonTypes';
+import type { IBaseScene } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { sleep } from '../utils/GameUtils';
 import { HexColor } from '../utils/StyleUtils';
@@ -13,12 +13,12 @@ import { HexColor } from '../utils/StyleUtils';
  */
 export const fadeOut = (
   targets: Phaser.GameObjects.GameObject[],
-  duration = Constants.fadeDuration
+  duration = Constants.fadeDuration,
 ) => ({
   alpha: 0,
   targets,
   duration,
-  ease: 'Power2'
+  ease: 'Power2',
 });
 
 /**
@@ -31,12 +31,12 @@ export const fadeOut = (
  */
 export const fadeIn = (
   targets: Phaser.GameObjects.GameObject[],
-  duration = Constants.fadeDuration
+  duration = Constants.fadeDuration,
 ) => ({
   alpha: 1,
   targets,
   duration,
-  ease: 'Power2'
+  ease: 'Power2',
 });
 
 /**
@@ -58,9 +58,11 @@ type FadeProps = {
 export function fadeAndDestroy(
   scene: Phaser.Scene,
   object: Phaser.GameObjects.GameObject | null,
-  { fadeDuration }: FadeProps = {}
+  { fadeDuration }: FadeProps = {},
 ) {
-  if (!object) return;
+  if (!object) {
+    return;
+  }
   scene.add.tween(fadeOut([object], fadeDuration || Constants.fadeDuration));
   setTimeout(() => object.destroy(), fadeDuration || Constants.fadeDuration);
 }
@@ -77,7 +79,7 @@ export function blackScreen(scene: Phaser.Scene) {
     screenCenter.y,
     screenSize.x,
     screenSize.y,
-    0
+    0,
   );
 }
 
@@ -93,7 +95,7 @@ export function whiteScreen(scene: Phaser.Scene) {
     screenCenter.y,
     screenSize.x,
     screenSize.y,
-    HexColor.white
+    HexColor.white,
   );
 }
 
@@ -109,7 +111,7 @@ export const blackFade = async (
   scene: IBaseScene,
   fadeDuration: number,
   delay: number,
-  callback: any
+  callback: any,
 ) => {
   const fadeBlack = blackScreen(scene);
   scene.getLayerManager().addToLayer(Layer.Effects, fadeBlack);
@@ -137,7 +139,7 @@ export const blackFade = async (
  */
 export function blink(
   scene: Phaser.Scene,
-  gameObject: Phaser.GameObjects.Image | Phaser.GameObjects.Container
+  gameObject: Phaser.GameObjects.Image | Phaser.GameObjects.Container,
 ) {
   let i = 0;
   const blink = setInterval(() => {

@@ -1,32 +1,26 @@
 import { Card } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
-import { Assessment, IMCQQuestion } from '../assessment/AssessmentTypes';
+import type { Assessment, IMCQQuestion } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import { limitNumberRange } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 
-type MCQQuestionTemplateTabProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   updateAssessment: (assessment: Assessment) => void;
-};
-
-type StateProps = {
   assessment: Assessment;
   questionId: number;
 };
 
-const MCQQuestionTemplateTab: React.FC<MCQQuestionTemplateTabProps> = props => {
+function MCQQuestionTemplateTab(props: Props) {
   const addOption = () => {
     const { assessment, questionId } = props;
     const question = assessment!.questions[questionId] as IMCQQuestion;
     const choices = question.choices.concat([
       {
         content: 'A',
-        hint: null
-      }
+        hint: null,
+      },
     ]);
     question.choices = choices;
     assessment!.questions[questionId] = question;
@@ -45,13 +39,13 @@ const MCQQuestionTemplateTab: React.FC<MCQQuestionTemplateTabProps> = props => {
   const textareaContent = (
     path: Array<string | number>,
     isNumber: boolean = false,
-    range: number[] = [0]
+    range: number[] = [0],
   ) => {
     if (isNumber) {
       return (
         <TextAreaContent
           assessment={props.assessment}
-          isNumber={true}
+          isNumber
           path={path}
           processResults={limitNumberRange(range[0], range[1])}
           updateAssessment={props.updateAssessment}
@@ -91,7 +85,7 @@ const MCQQuestionTemplateTab: React.FC<MCQQuestionTemplateTabProps> = props => {
           Solution:
           {textareaContent(['questions', questionId, 'solution'], true, [
             0,
-            question.choices.length
+            question.choices.length,
           ])}
           <br />
           <ControlButton label="Add Option" icon={IconNames.CONFIRM} onClick={addOption} />
@@ -100,6 +94,6 @@ const MCQQuestionTemplateTab: React.FC<MCQQuestionTemplateTabProps> = props => {
       </Card>
     </div>
   );
-};
+}
 
 export default MCQQuestionTemplateTab;

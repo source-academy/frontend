@@ -1,23 +1,18 @@
 import { Classes, Colors, Divider, FormGroup, Popover, Text, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import * as CopyToClipboard from 'react-copy-to-clipboard';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
+import CopyToClipboard from 'src/commons/utils/CopyToClipboard';
 
 import { createNewSession, getDocInfoFromSessionId } from '../collabEditing/CollabEditingHelper';
 import ControlButton from '../ControlButton';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
-type ControlBarSessionButtonsProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   handleSetEditorSessionId?: (editorSessionId: string) => void;
   handleSetSessionDetails?: (
-    sessionDetails: { docId: string; readOnly: boolean; owner: boolean } | null
+    sessionDetails: { docId: string; readOnly: boolean; owner: boolean } | null,
   ) => void;
-};
-
-type StateProps = {
   isFolderModeEnabled: boolean;
   editorSessionId?: string;
   getEditorValue: () => string;
@@ -29,7 +24,7 @@ function handleError(error: any) {
   showWarningMessage(`Could not connect: ${(error && error.message) || error || 'Unknown error'}`);
 }
 
-export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
+function ControlBarSessionButtons(props: Props) {
   const joinElemRef = useRef('');
   const [sessionId, setSessionId] = useState('');
   const [defaultReadOnly, setDefaultReadOnly] = useState(true);
@@ -64,7 +59,7 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
             props.handleSetSessionDetails!({
               docId: docInfo.docId,
               readOnly: docInfo.defaultReadOnly,
-              owner: false
+              owner: false,
             });
             setSessionId(joinElemValue);
             setDefaultReadOnly(docInfo.defaultReadOnly);
@@ -84,10 +79,10 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
         error => {
           props.handleSetEditorSessionId!('');
           handleError(error);
-        }
+        },
       );
     },
-    [props.handleSetEditorSessionId, props.handleSetSessionDetails]
+    [props.handleSetEditorSessionId, props.handleSetSessionDetails],
   );
 
   const leaveButton = (
@@ -111,7 +106,7 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
             padding: '10px',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center'
+            justifyContent: 'center',
           }}
         >
           <Text>You are not currently in any session.</Text>
@@ -147,11 +142,11 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-evenly',
-                alignItems: 'center'
+                alignItems: 'center',
               }}
             >
               <FormGroup subLabel="Invite other users to this session">
-                <input value={sessionId} readOnly={true} />
+                <input value={sessionId} readOnly />
               </FormGroup>
               <CopyToClipboard
                 text={sessionId}
@@ -191,7 +186,7 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
                 ? undefined
                 : props.sharedbConnected
                   ? Colors.GREEN3
-                  : Colors.RED3
+                  : Colors.RED3,
           }}
           isDisabled={props.isFolderModeEnabled}
         />
@@ -199,3 +194,5 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
     </Tooltip>
   );
 }
+
+export default ControlBarSessionButtons;

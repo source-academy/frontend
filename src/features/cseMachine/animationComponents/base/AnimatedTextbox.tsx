@@ -1,10 +1,10 @@
-import { RectConfig } from 'konva/lib/shapes/Rect';
-import { TextConfig } from 'konva/lib/shapes/Text';
+import type { RectConfig } from 'konva/lib/shapes/Rect';
+import type { TextConfig } from 'konva/lib/shapes/Text';
 import { Group } from 'react-konva';
-import { SharedProperties } from 'src/commons/utils/TypeHelper';
+import type { SharedProperties } from 'src/commons/utils/TypeHelper';
 
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
-import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
+import { Animatable, AnimatableTo, type AnimationConfig } from './Animatable';
 import { AnimatedRectComponent, AnimatedTextComponent } from './AnimationComponents';
 
 type TextRectSharedConfig = SharedProperties<TextConfig, RectConfig>;
@@ -15,16 +15,24 @@ export class AnimatedTextbox extends AnimatableTo<TextRectSharedConfig> {
 
   // Update the current component's dimensions based on the inner rect component's dimensions
   private onPropsChange = (props: RectConfig) => {
-    if (props.x) this._x = props.x;
-    if (props.y) this._y = props.y;
-    if (props.width) this._width = props.width;
-    if (props.height) this._height = props.height;
+    if (props.x) {
+      this._x = props.x;
+    }
+    if (props.y) {
+      this._y = props.y;
+    }
+    if (props.width) {
+      this._width = props.width;
+    }
+    if (props.height) {
+      this._height = props.height;
+    }
   };
 
   constructor(
     text: string,
     sharedProps: TextRectSharedConfig,
-    additionalProps?: { rectProps?: RectConfig; textProps?: TextConfig }
+    additionalProps?: { rectProps?: RectConfig; textProps?: TextConfig },
   ) {
     super();
     const rectProps = { ...sharedProps, ...additionalProps?.rectProps };
@@ -35,7 +43,7 @@ export class AnimatedTextbox extends AnimatableTo<TextRectSharedConfig> {
       padding: ControlStashConfig.ControlItemTextPadding,
       ...sharedProps,
       ...additionalProps?.textProps,
-      text
+      text,
     };
     this.textComponent = new AnimatedTextComponent(textProps);
   }
@@ -60,7 +68,7 @@ export class AnimatedTextbox extends AnimatableTo<TextRectSharedConfig> {
   async animateTo(to: Partial<TextRectSharedConfig>, animationConfig?: AnimationConfig) {
     await Promise.all([
       this.animateRectTo(to, animationConfig),
-      this.animateTextTo(to, animationConfig)
+      this.animateTextTo(to, animationConfig),
     ]);
   }
 

@@ -1,6 +1,8 @@
-import { GameAction, GameActionType } from '../action/GameActionTypes';
-import { ItemId } from '../commons/CommonTypes';
+import type { GameAction } from '../action/GameActionTypes';
+import { GameActionType } from '../action/GameActionTypes';
+import type { ItemId } from '../commons/CommonTypes';
 import { GameItemType } from '../location/GameMapTypes';
+import type { ObjectProperty } from '../objects/GameObjectTypes';
 import StringUtils from '../utils/StringUtils';
 import ConditionParser from './ConditionParser';
 import Parser from './Parser';
@@ -38,7 +40,7 @@ export default class ActionParser {
     const gameAction = this.parseActionContent(actionString);
     if (conditionalsString) {
       gameAction.actionConditions = StringUtils.splitByChar(conditionalsString, 'AND').map(
-        condition => ConditionParser.parse(condition)
+        condition => ConditionParser.parse(condition),
       );
     }
 
@@ -194,6 +196,13 @@ export default class ActionParser {
         actionParamObj.id = actionParams[0];
         Parser.validator.assertItemType(GameItemType.quizzes, actionParams[0], actionType);
         break;
+
+      case GameActionType.ChangeLocationTo:
+        actionParamObj.id = actionParams[0];
+        break;
+
+      case GameActionType.ShowTopics:
+        break;
     }
 
     const actionId = Parser.generateActionId();
@@ -203,7 +212,60 @@ export default class ActionParser {
       actionConditions: [],
       interactionId: actionId,
       isInteractive: false,
-      isRepeatable: repeatable
+      isRepeatable: repeatable,
     };
+  }
+
+  /**
+   * detect if the object is a door with the action changeLocationTo
+   * @param fullActionStrings
+   * @returns
+   */
+  public static haveMoveAction(fullActionStrings: string[], object: ObjectProperty): boolean {
+    for (let i = 0; i < fullActionStrings.length; i = i + 1) {
+      const [actionString] = StringUtils.splitByChar(fullActionStrings[i], 'if');
+      const [action, actionParamString] = StringUtils.splitByChar(actionString, '(');
+      let actionType = action;
+      if (action[action.length - 1] === '*') {
+        actionType = actionType.slice(0, -1);
+      }
+      const actionParams = StringUtils.splitByChar(actionParamString.slice(0, -1), ',');
+      const gameActionType = ParserConverter.stringToActionType(actionType);
+
+      switch (gameActionType) {
+        case GameActionType.ChangeLocationTo:
+          object.leadTo = actionParams[0];
+          return true;
+        default:
+          break;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * detect if the object can be used to show topics
+   * @param fullActionStrings
+   * @returns
+   */
+  public static haveTopicAction(fullActionStrings: string[]): boolean {
+    for (let i = 0; i < fullActionStrings.length; i = i + 1) {
+      const [actionString] = StringUtils.splitByChar(fullActionStrings[i], 'if');
+      const [action] = StringUtils.splitByChar(actionString, '(');
+      let actionType = action;
+      if (action[action.length - 1] === '*') {
+        actionType = actionType.slice(0, -1);
+      }
+
+      const gameActionType = ParserConverter.stringToActionType(actionType);
+
+      switch (gameActionType) {
+        case GameActionType.ShowTopics:
+          return true;
+        default:
+          break;
+      }
+    }
+    return false;
   }
 }

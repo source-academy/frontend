@@ -1,36 +1,36 @@
 import { FileInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useCallback, useEffect, useState } from 'react';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import { parseString } from 'xml2js';
 
 import SessionActions from '../application/actions/SessionActions';
 import {
-  Assessment,
-  AssessmentOverview,
+  type Assessment,
+  type AssessmentOverview,
   assessmentTemplate,
-  overviewTemplate
+  overviewTemplate,
 } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import {
   makeEntireAssessment,
   retrieveLocalAssessment,
   storeLocalAssessment,
-  storeLocalAssessmentOverview
+  storeLocalAssessmentOverview,
 } from '../XMLParser/XMLParserHelper';
 
 type Props = {
   updateEditingOverview: (overview: AssessmentOverview) => void;
 };
 
-const MissionCreator: React.FC<Props> = props => {
+function MissionCreator(props: Props) {
   const [fileInputText, setFileInputText] = useState('Import XML');
   let fileReader: FileReader | undefined = undefined;
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const newAssessment = useCallback(
     (assessment: Assessment) => dispatch(SessionActions.updateAssessment(assessment)),
-    [dispatch]
+    [dispatch],
   );
 
   useEffect(() => {
@@ -94,6 +94,6 @@ const MissionCreator: React.FC<Props> = props => {
       </div>
     </div>
   );
-};
+}
 
 export default MissionCreator;

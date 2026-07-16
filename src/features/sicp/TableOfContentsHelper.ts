@@ -1,20 +1,25 @@
-import { DistributedKeyOf, Merge } from 'src/commons/utils/TypeHelper';
+/**
+ * Each entry in a toc-navigation JSON maps a section slug to its neighbours.
+ * Both `next` and `prev` are optional because the first entry has no `prev`
+ * and the last entry has no `next`.
+ */
+type TocNavigationNode = { next?: string; prev?: string };
+type TocNavigation = Record<string, TocNavigationNode>;
 
-import tocNavigation from './data/toc-navigation.json';
-
-type MergeAll<T extends Record<any, Record<any, any>>> = {
-  [K in keyof T]: Merge<T[K], Record<DistributedKeyOf<T[keyof T]>, undefined>>;
+/**
+ * Returns the section slug that follows `section` in the textbook, per the supplied
+ * toc-navigation JSON. Returns `undefined` if `section` is not present, or if the
+ * entry has no `next`.
+ */
+export const getNext = (tocNavigation: TocNavigation, section: string): string | undefined => {
+  return tocNavigation[section]?.next;
 };
 
-type NodeTree = MergeAll<typeof tocNavigation>;
-type Node = NodeTree[keyof NodeTree];
-
-export const getNext = (section: string): string | undefined => {
-  const node = tocNavigation[section as keyof typeof tocNavigation] as Node;
-  return node && node.next;
-};
-
-export const getPrev = (section: string): string | undefined => {
-  const node = tocNavigation[section as keyof typeof tocNavigation] as Node;
-  return node && node.prev;
+/**
+ * Returns the section slug that precedes `section` in the textbook, per the
+ * supplied toc-navigation JSON. Returns `undefined` if `section` is not present,
+ * or if the entry has no `prev`.
+ */
+export const getPrev = (tocNavigation: TocNavigation, section: string): string | undefined => {
+  return tocNavigation[section]?.prev;
 };

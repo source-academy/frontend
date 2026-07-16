@@ -1,17 +1,19 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useContext, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useContext, useEffect } from 'react';
 
 import {
   AchievementContext,
   getAbilityBackground,
-  getAbilityGlow
+  getAbilityGlow,
 } from '../../features/achievement/AchievementConstants';
-import { AchievementStatus, AchievementUser } from '../../features/achievement/AchievementTypes';
+import {
+  AchievementStatus,
+  type AchievementUser,
+} from '../../features/achievement/AchievementTypes';
 import SessionActions from '../application/actions/SessionActions';
-import { Assessment } from '../assessment/AssessmentTypes';
-import { useTypedSelector } from '../utils/Hooks';
+import type { Assessment } from '../assessment/AssessmentTypes';
+import { useAppDispatch, useAppSelector } from '../utils/Hooks';
 import AchievementCommentCard from './AchievementCommentCard';
 import { prettifyDate } from './utils/DateHelper';
 import AchievementViewCompletion from './view/AchievementViewCompletion';
@@ -23,7 +25,7 @@ type Props = {
   userState?: [AchievementUser | undefined, any];
 };
 
-const AchievementView: React.FC<Props> = ({ focusUuid, userState }) => {
+function AchievementView({ focusUuid, userState }: Props) {
   const assessmentId = !Number.isNaN(+focusUuid) && +focusUuid !== 0 ? +focusUuid : undefined;
   let courseRegId: number | undefined;
 
@@ -31,10 +33,10 @@ const AchievementView: React.FC<Props> = ({ focusUuid, userState }) => {
     const [selectedUser] = userState!;
     courseRegId = selectedUser?.courseRegId;
   }
-  const userCrid = useTypedSelector(store => store.session.courseRegId);
+  const userCrid = useAppSelector(store => store.session.courseRegId);
   const isAdminView: boolean = courseRegId !== undefined && courseRegId !== userCrid;
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(SessionActions.fetchAssessmentOverviews());
     if (!assessmentId) {
@@ -51,9 +53,9 @@ const AchievementView: React.FC<Props> = ({ focusUuid, userState }) => {
   }, [dispatch, assessmentId, courseRegId, isAdminView]);
 
   const inferencer = useContext(AchievementContext);
-  const assessments = useTypedSelector(store => store.session.assessments);
+  const assessments = useAppSelector(store => store.session.assessments);
   const selectedAssessment: Assessment | undefined = assessments[assessmentId!];
-  const allAssessmentConfigs = useTypedSelector(store => store.session.assessmentOverviews) ?? [];
+  const allAssessmentConfigs = useAppSelector(store => store.session.assessmentOverviews) ?? [];
   const selectedAssessmentConfig = allAssessmentConfigs.find(config => config.id === assessmentId);
 
   if (focusUuid === '') {
@@ -79,7 +81,7 @@ const AchievementView: React.FC<Props> = ({ focusUuid, userState }) => {
         className="cover"
         style={{
           background: `rgba(0, 0, 0, 0.5) url(${coverImage}) center/cover`,
-          backgroundBlendMode: `darken`
+          backgroundBlendMode: `darken`,
         }}
       >
         <h1>{title.toUpperCase()}</h1>
@@ -116,6 +118,6 @@ const AchievementView: React.FC<Props> = ({ focusUuid, userState }) => {
       )}
     </div>
   );
-};
+}
 
 export default AchievementView;

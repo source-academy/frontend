@@ -1,12 +1,12 @@
 import { useMediaQuery } from '@mantine/hooks';
-import React, { RefObject } from 'react';
+import { useEffect, useState } from 'react';
 // eslint-disable-next-line no-restricted-imports
-import { TypedUseSelectorHook, useSelector } from 'react-redux';
+import { type TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
-import { OverallState } from '../application/ApplicationTypes';
-import { Tokens } from '../application/types/SessionTypes';
+import type { OverallState } from '../application/ApplicationTypes';
+import type { Tokens } from '../application/types/SessionTypes';
+import type { SourceActionType } from './ActionsHelper';
 import Constants from './Constants';
-import { readLocalStorage, setLocalStorage } from './LocalStorageHelper';
 
 /**
  * This hook sends a request to the backend to fetch the initial state of the field
@@ -15,9 +15,9 @@ import { readLocalStorage, setLocalStorage } from './LocalStorageHelper';
  * @param defaultValue T
  */
 export function useRequest<T>(requestFn: () => Promise<T>, defaultValue: T) {
-  const [value, setValue] = React.useState<T>(defaultValue);
+  const [value, setValue] = useState<T>(defaultValue);
 
-  React.useEffect(() => {
+  useEffect(() => {
     (async () => {
       const fetchedValue = await requestFn();
       setValue(fetchedValue);
@@ -36,7 +36,7 @@ export function useRequest<T>(requestFn: () => Promise<T>, defaultValue: T) {
  * @param defaultValue default value of input field
  */
 export function useInput<T>(defaultValue: T) {
-  const [value, setValue] = React.useState<T>(defaultValue);
+  const [value, setValue] = useState<T>(defaultValue);
 
   return {
     value,
@@ -45,70 +45,14 @@ export function useInput<T>(defaultValue: T) {
       value,
       onChange: (event: any) => {
         setValue(event.target.value);
-      }
-    }
+      },
+    },
   };
 }
 
-/**
- * This hook usage is similar to React.useState, the only difference
- * being that the state is also written to local storage at the specified key on state updates.
- *
- * When calling this hook, the value will take on the stored value in local storage (if any).
- * If this key-value does not exist in local storage yet, the default value will be used.
- */
-export function useLocalStorageState<T>(
-  key: string,
-  defaultValue: T
-): [T, React.Dispatch<React.SetStateAction<T>>] {
-  const [value, setValue] = React.useState<T>(readLocalStorage(key, defaultValue));
-
-  React.useEffect(() => {
-    setLocalStorage(key, value);
-  }, [key, value]);
-
-  return [value, setValue];
-}
-
 /** Typed version of useSelector. Use this instead of the useSelector hook. */
-export const useTypedSelector: TypedUseSelectorHook<OverallState> = useSelector;
-/**
- * Dynamically returns the dimensions (width & height) of an HTML element, updating whenever the
- * element is loaded or resized.
- *
- * @param ref A reference to the underlying HTML element.
- */
-
-export const useDimensions = (ref: RefObject<HTMLElement>): [width: number, height: number] => {
-  const [width, setWidth] = React.useState(0);
-  const [height, setHeight] = React.useState(0);
-
-  const resizeObserver = React.useMemo(
-    () =>
-      new ResizeObserver((entries: ResizeObserverEntry[], observer: ResizeObserver) => {
-        if (entries.length !== 1) {
-          throw new Error(
-            'Expected only a single HTML element to be observed by the ResizeObserver.'
-          );
-        }
-        const contentRect = entries[0].contentRect;
-        setWidth(contentRect.width);
-        setHeight(contentRect.height);
-      }),
-    []
-  );
-
-  React.useEffect(() => {
-    const htmlElement = ref.current;
-    if (htmlElement === null) {
-      return;
-    }
-    resizeObserver.observe(htmlElement);
-    return () => resizeObserver.disconnect();
-  }, [ref, resizeObserver]);
-
-  return [width, height];
-};
+export const useAppSelector: TypedUseSelectorHook<OverallState> = useSelector;
+export const useAppDispatch: () => React.Dispatch<SourceActionType> = useDispatch;
 
 /**
  * Returns whether the current view falls under mobile
@@ -129,7 +73,7 @@ export const useResponsive = () => {
     md,
     lg,
     isMobileBreakpoint: isMobileBreakpoint,
-    isDesktopBreakpoint: isMobileBreakpoint === undefined ? undefined : !isMobileBreakpoint
+    isDesktopBreakpoint: isMobileBreakpoint === undefined ? undefined : !isMobileBreakpoint,
   };
 };
 
@@ -137,14 +81,14 @@ export const useResponsive = () => {
  * Returns session related information.
  */
 export const useSession = () => {
-  const session = useTypedSelector(state => state.session);
+  const session = useAppSelector(state => state.session);
   const isLoggedIn = typeof session.name === 'string';
   const isEnrolledInACourse = !!session.role;
 
   return {
     ...session,
     isEnrolledInACourse,
-    isLoggedIn
+    isLoggedIn,
   };
 };
 
@@ -160,8 +104,8 @@ type UseTokens = {
  * @param throwWhenEmpty (optional) If true, throws an error if no tokens are found.
  */
 export const useTokens: UseTokens = ({ throwWhenEmpty = true } = {}) => {
-  const accessToken = useTypedSelector(state => state.session.accessToken);
-  const refreshToken = useTypedSelector(state => state.session.refreshToken);
+  const accessToken = useAppSelector(state => state.session.accessToken);
+  const refreshToken = useAppSelector(state => state.session.refreshToken);
   if (throwWhenEmpty && (!accessToken || !refreshToken)) {
     throw new Error('No access token or refresh token found');
   }

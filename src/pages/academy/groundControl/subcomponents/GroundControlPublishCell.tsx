@@ -1,8 +1,8 @@
 import { Dialog, DialogBody, DialogFooter, Intent, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
-import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
   data: AssessmentOverview;
 };
 
-const PublishCell: React.FC<Props> = ({ data, handlePublishAssessment }) => {
+function PublishCell({ data, handlePublishAssessment }: Props) {
   const [isDialogOpen, setDialogState] = useState(false);
   const [isPublished] = useState(!!data.isPublished);
 
@@ -31,7 +31,7 @@ const PublishCell: React.FC<Props> = ({ data, handlePublishAssessment }) => {
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
         title={`${isPublished ? 'Unpublish' : 'Publish'} assessment`}
-        canOutsideClickClose={true}
+        canOutsideClickClose
       >
         <DialogBody>
           <p>
@@ -54,13 +54,13 @@ const PublishCell: React.FC<Props> = ({ data, handlePublishAssessment }) => {
                 label="Cancel"
                 icon={IconNames.CROSS}
                 onClick={handleCloseDialog}
-                options={{ minimal: false }}
+                options={{ variant: 'default' }}
               />
               <ControlButton
                 label="Confirm"
                 icon={IconNames.CONFIRM}
                 onClick={handleTogglePublished}
-                options={{ minimal: false, intent: Intent.DANGER }}
+                options={{ variant: 'default', intent: Intent.DANGER }}
               />
             </>
           }
@@ -68,6 +68,6 @@ const PublishCell: React.FC<Props> = ({ data, handlePublishAssessment }) => {
       </Dialog>
     </>
   );
-};
+}
 
 export default PublishCell;

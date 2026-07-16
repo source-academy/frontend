@@ -1,5 +1,6 @@
 import { AssetType } from '../assets/AssetsTypes';
-import { GameItemType, GameLocation, LocationId } from '../location/GameMapTypes';
+import type { GameLocation, LocationId } from '../location/GameMapTypes';
+import { GameItemType } from '../location/GameMapTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
@@ -59,6 +60,12 @@ export default class LocationParser {
           location.navigation.add(otherLocationId);
         });
         break;
+      case 'back':
+        configValues.forEach(backLocationId => {
+          Parser.validator.assertEntityType(GameEntityType.locations, backLocationId);
+          location.back = backLocationId;
+        });
+        break;
       case 'talkTopics': {
         const talkTopics = configValues;
         Parser.validator.assertItemTypes(GameItemType.dialogues, talkTopics);
@@ -72,7 +79,7 @@ export default class LocationParser {
           Parser.checkpoint.map.addMapAsset(previewKey, {
             type: AssetType.Image,
             key: location.id + 'Preview',
-            path: previewPath
+            path: previewPath,
           });
           location.previewKey = previewKey;
         }
@@ -94,7 +101,7 @@ export default class LocationParser {
   private static parseLocationParagraphs(
     location: GameLocation,
     entityHeader: string,
-    body: string[]
+    body: string[],
   ) {
     switch (entityHeader) {
       case 'objects':

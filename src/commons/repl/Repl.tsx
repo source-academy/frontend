@@ -2,18 +2,16 @@ import { Card, Pre } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
 import classNames from 'classnames';
 import { parseError } from 'js-slang';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { stringify } from 'js-slang/dist/utils/stringify';
-import React from 'react';
+import { useMemo } from 'react';
 
 import type { InterpreterOutput, ResultOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { ReplInput } from './ReplInput';
 import type { OutputProps } from './ReplTypes';
 
-export type ReplProps = DispatchProps & StateProps & OwnProps;
-
-type StateProps = {
+export type ReplProps = {
   output: InterpreterOutput[];
   replValue: string;
   hidden?: boolean;
@@ -23,28 +21,24 @@ type StateProps = {
   sourceVariant: Variant;
   externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
-};
-
-type DispatchProps = {
+  showStepperPrompt?: boolean;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleReplEval: () => void;
   handleReplValueChange: (newCode: string) => void;
   onFocus?: (editor: Ace.Editor) => void;
   onBlur?: () => void;
+  replButtons: Array<React.ReactElement | null>;
 };
 
-type OwnProps = {
-  replButtons: Array<JSX.Element | null>;
-};
-
-const Repl: React.FC<ReplProps> = props => {
+function Repl(props: ReplProps) {
   const cards = props.output.map((slice, index) => (
     <Output
       output={slice}
       key={index}
       usingSubst={props.usingSubst ?? false}
       isHtml={props.sourceChapter === Chapter.HTML}
+      showStepperPrompt={props.showStepperPrompt}
     />
   ));
   return (
@@ -59,12 +53,10 @@ const Repl: React.FC<ReplProps> = props => {
       </div>
     </div>
   );
-};
+}
 
-const ResultOutputDisplay: React.FC<{ output: ResultOutput }> = ({
-  output: { value, consoleLogs }
-}) => {
-  const stringified = React.useMemo(() => stringify(value), [value]);
+function ResultOutputDisplay({ output: { value, consoleLogs } }: { output: ResultOutput }) {
+  const stringified = useMemo(() => stringify(value), [value]);
   if (consoleLogs.length === 0) {
     return (
       <Card>
@@ -79,9 +71,9 @@ const ResultOutputDisplay: React.FC<{ output: ResultOutput }> = ({
       </Card>
     );
   }
-};
+}
 
-export const Output: React.FC<OutputProps> = props => {
+export function Output(props: OutputProps) {
   switch (props.output.type) {
     case 'code':
       return (
@@ -95,9 +87,10 @@ export const Output: React.FC<OutputProps> = props => {
           <Pre className="log-output">{props.output.consoleLogs.join('\n')}</Pre>
         </Card>
       );
-    case 'result':
+    case 'result': {
       // We check if we are using Stepper, so we can process the REPL results properly
-      if (props.usingSubst && props.output.value instanceof Array) {
+      const shouldShowStepperPrompt = props.showStepperPrompt ?? false;
+      if (shouldShowStepperPrompt && props.output.value instanceof Array) {
         return (
           <Card>
             <Pre className="log-output">Check out the Stepper tab!</Pre>
@@ -112,6 +105,7 @@ export const Output: React.FC<OutputProps> = props => {
       } else {
         return <ResultOutputDisplay output={props.output} />;
       }
+    }
     case 'errors':
       if (props.output.consoleLogs.length === 0) {
         return (
@@ -135,8 +129,8 @@ export const Output: React.FC<OutputProps> = props => {
         </Card>
       );
     default:
-      return <Card>''</Card>;
+      return <Card>&apos;&apos;</Card>;
   }
-};
+}
 
 export default Repl;

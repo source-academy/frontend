@@ -1,0 +1,27 @@
+const translations = {
+  navigationBar: {
+    'Ground Control': '课程管理',
+    Dashboard: '仪表板',
+    'Team Formation': '团队组建',
+    Grading: '评分',
+    'Game Simulator': '游戏模拟器',
+    'Admin Panel': '管理面板',
+    Playground: '游乐场',
+    'SICP JS': 'SICP JS',
+    Achievements: '成就',
+    Quests: '任务',
+    Paths: '路径',
+    Contests: '比赛',
+    Others: '其他',
+  },
+  dropdown: {
+    'My Courses': '我的课程',
+    'Create Course': '创建课程',
+    Logout: '登出',
+    Settings: '设置',
+    About: '关于',
+    Help: '帮助',
+  },
+};
+
+export default translations;

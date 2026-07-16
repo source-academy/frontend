@@ -268,7 +268,7 @@ $code-color-notification: #f9f0d7;
     word-break: break-word;
     color: $code-color-result;
     text-align: justify;
-    overflow-x: auto;
+    overflow-x: hidden;
     /* Respect padding of containing bp3 Card when scrollable */
     margin-bottom: 0.4rem;
 
@@ -406,7 +406,8 @@ $code-color-notification: #f9f0d7;
 
     // Specific CSS for the Stepper and CSE Machine tab, since REPL is hidden
     ##{$ns}-tab-panel_side-content-tabs_subst_visualiser,
-    ##{$ns}-tab-panel_side-content-tabs_cse_machine {
+    ##{$ns}-tab-panel_side-content-tabs_cse_machine,
+    ##{$ns}-tab-panel_side-content-tabs_stepper {
       height: calc(100% - 60px);
       margin-top: -45px;
 
@@ -424,6 +425,10 @@ $code-color-notification: #f9f0d7;
               'Consolas',
               monospace;
           }
+          // for ? :
+          .stepper-conditional-operator {
+            color: #ffffff;
+          }
 
           .stepper-literal {
             color: #ff6078;
@@ -437,24 +442,29 @@ $code-color-notification: #f9f0d7;
             color: #f8d871;
           }
 
+          // this is used for hoverable
+          // add bold font
+          // removed background since it clashes with the after/bef sub bg
           .stepper-mu-term {
+            font-weight: bold;
             pointer-events: auto;
             cursor: pointer;
             z-index: 20;
             padding: 0px 3px;
             border-radius: 5px;
-            background: rgba(255, 83, 83, 0.2);
+            background: transparent;
           }
-
+          // removed background since it clashes with the after/bef sub bg
+          // maybe not neccessary to exist anymore
           .stepper-mu-term:hover {
-            background: rgba(255, 83, 83, 0.5);
+            background: transparent;
           }
 
           .beforeMarker {
             position: relative;
             -webkit-box-decoration-break: slice;
             box-decoration-break: slice;
-            background: rgba(179, 101, 57, 0.75);
+            background: rgba(172, 0, 0, 0.75);
             pointer-events: auto;
             cursor: pointer;
             z-index: 20;
@@ -573,47 +583,6 @@ $code-color-notification: #f9f0d7;
         -moz-animation: none;
         -o-animation: none;
         animation: none;
-      }
-    }
-
-    .sa-video {
-      min-width: min-content;
-
-      .sa-video-header {
-        justify-content: space-around;
-        display: flex;
-        background: rgba(26, 37, 48, 0.5);
-        border-radius: 3px 3px 0 0;
-
-        .sa-video-header-element {
-          display: inherit;
-          padding: 5px 0px;
-
-          .#{$ns}-button-group {
-            width: max-content;
-
-            .#{$ns}-button.sa-live-video-button.#{$ns}-active {
-              pointer-events: none;
-            }
-          }
-
-          .sa-video-header-numeric-input {
-            margin-left: 5px;
-            margin-right: 5px;
-          }
-        }
-
-        .#{$ns}-divider {
-          margin: 0;
-        }
-      }
-
-      .sa-video-element {
-        width: 100%;
-        text-align: center;
-        padding: 10px;
-        background: $cadet-color-1;
-        border-radius: 0 0 3px 3px;
       }
     }
 
@@ -1330,10 +1299,6 @@ $code-color-notification: #f9f0d7;
 
       .testcase-actual {
         width: 26%;
-      }
-
-      .testcase-button {
-        width: 0.1%;
       }
 
       /* Following two are styles for rendered WebGL elements (runes, curves) */

@@ -1,25 +1,20 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Textarea from 'react-textarea-autosize';
 
-import { Assessment } from '../assessment/AssessmentTypes';
+import type { Assessment } from '../assessment/AssessmentTypes';
 import Markdown from '../Markdown';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
-type TextAreaContentProps = DispatchProps & StateProps;
-
-type DispatchProps = {
+type Props = {
   processResults?: (newVal: string | number) => string | number;
   updateAssessment: (assessment: Assessment) => void;
-};
-
-type StateProps = {
   assessment: Assessment;
   isNumber?: boolean;
   path: Array<string | number>;
   useRawValue?: boolean;
 };
 
-export const TextAreaContent: React.FC<TextAreaContentProps> = props => {
+export function TextAreaContent(props: Props) {
   const isNumberVal = props.isNumber || false;
 
   const [isEditing, setIsEditing] = useState(false);
@@ -56,7 +51,7 @@ export const TextAreaContent: React.FC<TextAreaContentProps> = props => {
 
   const makeEditingTextarea = () => (
     <Textarea
-      autoFocus={true}
+      autoFocus
       className="editing-textarea"
       onChange={handleEditAssessment}
       onBlur={saveEditAssessment}
@@ -89,6 +84,6 @@ export const TextAreaContent: React.FC<TextAreaContentProps> = props => {
     }
   }
   return <div onClick={toggleEditField()}>{display}</div>;
-};
+}
 
 export default TextAreaContent;

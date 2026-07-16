@@ -1,7 +1,7 @@
 import ImageAssets from '../assets/ImageAssets';
 import { Constants } from '../commons/CommonConstants';
-import { IBaseScene } from '../commons/CommonTypes';
-import { DashboardPageManager } from '../dashboard/GameDashboardTypes';
+import type { IBaseScene } from '../commons/CommonTypes';
+import type { DashboardPageManager } from '../dashboard/GameDashboardTypes';
 import { createButton } from '../utils/ButtonUtils';
 import { limitNumber } from '../utils/GameUtils';
 import { resizeUnderflow } from '../utils/SpriteUtils';
@@ -11,10 +11,10 @@ import AwardsConstants, {
   awardDescStyle,
   awardKeyStyle,
   awardTitleStyle,
-  listBannerTextStyle
+  listBannerTextStyle,
 } from './GameAwardsConstants';
 import { createAssetKeyPreviewCont, getAwardProps } from './GameAwardsHelper';
-import { AwardProperty } from './GameAwardsTypes';
+import type { AwardProperty } from './GameAwardsTypes';
 
 /**
  * Manager for an award page on the dashboard (either collectibles or achievements).
@@ -44,24 +44,24 @@ class GameAwardsManager implements DashboardPageManager {
     // Add page arrows
     const arrowLeft = createButton(this.scene, {
       assetKey: ImageAssets.arrow.key,
-      onUp: () => this.nextPage(false)
+      onUp: () => this.nextPage(false),
     })
       .setScale(AwardsConstants.arrow.yScale, AwardsConstants.arrow.yScale)
       .setRotation((-90 * Math.PI) / 180)
       .setPosition(
         AwardsConstants.arrow.x - AwardsConstants.arrow.xOffset,
-        AwardsConstants.arrow.y
+        AwardsConstants.arrow.y,
       );
 
     const arrowRight = createButton(this.scene, {
       assetKey: ImageAssets.arrow.key,
-      onUp: () => this.nextPage(true)
+      onUp: () => this.nextPage(true),
     })
       .setScale(AwardsConstants.arrow.xScale, AwardsConstants.arrow.yScale)
       .setRotation((90 * Math.PI) / 180)
       .setPosition(
         AwardsConstants.arrow.x + AwardsConstants.arrow.xOffset,
-        AwardsConstants.arrow.y
+        AwardsConstants.arrow.y,
       );
     awardContainer.add([arrowLeft, arrowRight]);
 
@@ -70,7 +70,7 @@ class GameAwardsManager implements DashboardPageManager {
       this.scene,
       AwardsConstants.preview.rect.x,
       AwardsConstants.preview.rect.y,
-      ImageAssets.popUpFrame.key
+      ImageAssets.popUpFrame.key,
     ).setScale(1.2);
     awardContainer.add(frame);
 
@@ -91,7 +91,9 @@ class GameAwardsManager implements DashboardPageManager {
    */
   private setPage() {
     if (this.uiContainer) {
-      if (this.itemsContainer) this.itemsContainer.destroy();
+      if (this.itemsContainer) {
+        this.itemsContainer.destroy();
+      }
 
       // Update
       this.itemsContainer = this.createItemsContainer();
@@ -112,13 +114,17 @@ class GameAwardsManager implements DashboardPageManager {
    */
   private setPreview(award?: AwardProperty) {
     if (this.uiContainer) {
-      if (this.previewContainer) this.previewContainer.destroy();
-      if (!award) return;
+      if (this.previewContainer) {
+        this.previewContainer.destroy();
+      }
+      if (!award) {
+        return;
+      }
 
       this.previewContainer = new Phaser.GameObjects.Container(
         this.scene,
         AwardsConstants.preview.rect.xOffset,
-        AwardsConstants.preview.rect.yOffset
+        AwardsConstants.preview.rect.yOffset,
       );
 
       // Preview image
@@ -129,7 +135,7 @@ class GameAwardsManager implements DashboardPageManager {
           this.scene,
           'No preview available',
           AwardsConstants.noPreviewTextConfig,
-          awardKeyStyle
+          awardKeyStyle,
         );
       } else {
         const previewRect = AwardsConstants.preview.rect;
@@ -143,7 +149,7 @@ class GameAwardsManager implements DashboardPageManager {
         this.scene,
         award.title,
         AwardsConstants.preview.titleTextConfig,
-        awardTitleStyle
+        awardTitleStyle,
       );
 
       // Preview description
@@ -152,7 +158,7 @@ class GameAwardsManager implements DashboardPageManager {
         AwardsConstants.preview.rect.x,
         AwardsConstants.preview.rect.y + AwardsConstants.preview.descText.yOffset,
         award.description,
-        awardDescStyle
+        awardDescStyle,
       ).setOrigin(0.5, 0.0);
 
       // Preview asset key, use only empty string if award is not completed
@@ -161,7 +167,7 @@ class GameAwardsManager implements DashboardPageManager {
         this.scene,
         assetKey,
         AwardsConstants.preview.keyTextConfig,
-        awardKeyStyle
+        awardKeyStyle,
       );
 
       // Black tint to overlay the asset if award is not completed
@@ -171,7 +177,7 @@ class GameAwardsManager implements DashboardPageManager {
         AwardsConstants.preview.rect.y,
         AwardsConstants.preview.rect.dim,
         AwardsConstants.preview.rect.dim,
-        0
+        0,
       ).setAlpha(award.completed ? 0 : 0.8);
 
       this.previewContainer.add([previewAsset, blackTint, previewTitle, previewDesc, previewKey]);
@@ -197,7 +203,7 @@ class GameAwardsManager implements DashboardPageManager {
     const newPageNum = limitNumber(
       next ? currPageNum + 1 : currPageNum - 1,
       0,
-      Number.MAX_SAFE_INTEGER
+      Number.MAX_SAFE_INTEGER,
     );
     const itemLength = this.getItems(newPageNum).length;
 
@@ -219,7 +225,7 @@ class GameAwardsManager implements DashboardPageManager {
     const itemPositions = calcListFormatPos({
       numOfItems: items.length,
       xSpacing: 0,
-      ySpacing: AwardsConstants.list.ySpace
+      ySpacing: AwardsConstants.list.ySpace,
     });
 
     // Populate container with all the item buttons
@@ -230,9 +236,9 @@ class GameAwardsManager implements DashboardPageManager {
           itemPositions[index][0],
           itemPositions[index][1] + AwardsConstants.list.yStart,
           () => this.setPreview(awardProp),
-          awardProp.completed !== false
-        )
-      )
+          awardProp.completed !== false,
+        ),
+      ),
     );
     return itemsContainer;
   }
@@ -252,7 +258,7 @@ class GameAwardsManager implements DashboardPageManager {
     xPos: number,
     yPos: number,
     callback: any,
-    completed: boolean
+    completed: boolean,
   ) {
     const button = createButton(this.scene, {
       assetKey: ImageAssets.awardsBanner.key,
@@ -260,11 +266,13 @@ class GameAwardsManager implements DashboardPageManager {
       textConfig: AwardsConstants.listTextConfig,
       bitMapTextStyle: listBannerTextStyle,
       onUp: callback,
-      onHoverEffect: completed
+      onHoverEffect: completed,
     }).setPosition(xPos, yPos);
 
     // For non completed award, they do not hover effect and is less visible
-    if (!completed) button.setAlpha(0.5);
+    if (!completed) {
+      button.setAlpha(0.5);
+    }
     return button;
   }
 

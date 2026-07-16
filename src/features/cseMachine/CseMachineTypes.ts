@@ -1,19 +1,16 @@
-import { _Symbol } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
-import { SchemeNumber } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/core';
 import {
   EnvTree as EnvironmentTree,
-  EnvTreeNode as EnvironmentTreeNode
+  EnvTreeNode as EnvironmentTreeNode,
 } from 'js-slang/dist/createContext';
 import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
-import { Environment } from 'js-slang/dist/types';
-import { KonvaEventObject } from 'konva/lib/Node';
-import React from 'react';
+import type { Environment } from 'js-slang/dist/types';
+import type { KonvaEventObject } from 'konva/lib/Node';
 
 import { ArrayUnit } from './components/ArrayUnit';
 import { Binding } from './components/Binding';
 import { Frame } from './components/Frame';
 import { Level } from './components/Level';
-import { Continuation } from './utils/scheme';
+import { Continuation } from './utils/continuation';
 
 /** this interface defines a drawing function */
 export interface Drawable {
@@ -42,6 +39,8 @@ export interface IVisible extends Drawable {
   height(): number;
 
   ref?: React.RefObject<any>;
+  setArrowSourceHighlightedStyle?(): void;
+  setArrowSourceNormalStyle?(): void;
 }
 
 /** unassigned is internally represented as a symbol */
@@ -87,15 +86,7 @@ export type DataArray = Data[] & {
 };
 
 /** the types of data in the JS Slang context */
-export type Data =
-  | Primitive
-  | NonGlobalFn
-  | GlobalFn
-  | Unassigned
-  | DataArray
-  | SchemeNumber
-  | _Symbol
-  | Continuation;
+export type Data = Primitive | NonGlobalFn | GlobalFn | Unassigned | DataArray | Continuation;
 
 /** modified `Environment` to store children and associated frame */
 export type Env = Environment;
@@ -122,3 +113,9 @@ export type ReferenceType = Binding | ArrayUnit;
 
 /** type of an array of steps (as defined by a function), for the arrow classes */
 export type StepsArray = Array<(x: number, y: number) => [number, number]>;
+
+/** categories for filtering arrows by source/origin */
+export type ArrowOriginFilterKey = 'text' | 'frame' | 'function' | 'array' | 'control' | 'stash';
+
+/** visibility map for arrow origin categories */
+export type ArrowOriginFilters = Record<ArrowOriginFilterKey, boolean>;

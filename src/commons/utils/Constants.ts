@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 
 import { AuthProviderType } from './AuthHelper';
 
@@ -17,10 +17,14 @@ const sourceAcademyDeploymentName = isTest
   : process.env.REACT_APP_DEPLOYMENT_NAME || 'Source Academy';
 const showResearchPrompt = isTest || isTrue(process.env.REACT_APP_SHOW_RESEARCH_PROMPT);
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
-const storiesBackendUrl = process.env.REACT_APP_STORIES_BACKEND_URL;
 const cadetLoggerUrl = isTest ? undefined : process.env.REACT_APP_CADET_LOGGER;
 const cadetLoggerInterval = parseInt(process.env.REACT_APP_CADET_LOGGER_INTERVAL || '10000', 10);
 const useBackend = !isTest && isTrue(process.env.REACT_APP_USE_BACKEND);
+/**
+ * Whether or not attach cookies to every API call. Useful for load balancers that
+ * route requests based on cookies (e.g. for sticky sessions).
+ */
+const forwardLoadBalancerCookies = isTrue(process.env.REACT_APP_FORWARD_LOAD_BALANCER_COOKIES);
 const useEmptyAssetPrefix = isTrue(process.env.REACT_APP_USE_EMPTY_ASSET_PREFIX);
 const defaultSourceChapter = Chapter.SOURCE_4;
 const defaultSourceVariant = Variant.DEFAULT;
@@ -51,36 +55,21 @@ const caFulfillmentLevel = isTest
   ? 24
   : parseInt(process.env.REACT_APP_CA_FULFILLMENT_LEVEL || '0');
 
-const authProviders: Map<
-  string,
-  { name: string; endpoint: string; isDefault: boolean; type: AuthProviderType }
-> = new Map();
+type AuthProvider = {
+  name: string;
+  endpoint: string;
+  isDefault: boolean;
+  type: AuthProviderType;
+  screen: 'default' | 'nus';
+};
 
-let hasNusAuthProviders = false;
-const nusAuthProviders: Map<
-  string,
-  { name: string; endpoint: string; isDefault: boolean; type: AuthProviderType }
-> = new Map();
+const authProviders: Map<string, AuthProvider> = new Map();
 
-for (let i = 1; ; ++i) {
-  const id = process.env[`REACT_APP_NUS_SAML_PROVIDER${i}`];
-  if (!id) {
-    break;
-  }
-
-  hasNusAuthProviders = true;
-  const name = process.env[`REACT_APP_NUS_SAML_PROVIDER${i}_NAME`] || 'Unnamed provider';
-  const endpoint = process.env[`REACT_APP_NUS_SAML_PROVIDER${i}_ENDPOINT`] || '';
-
-  authProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.SAML_SSO });
-  nusAuthProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.SAML_SSO });
-}
-
-let hasOtherAuthProviders = false;
-const otherAuthProviders: Map<
-  string,
-  { name: string; endpoint: string; isDefault: boolean; type: AuthProviderType }
-> = new Map();
+// Helper to read screen configuration, defaulting to 'default'
+const getProviderScreen = (prefix: string, i: number): 'default' | 'nus' => {
+  const screen = process.env[`${prefix}${i}_SHOW_FOR_SCREEN`]?.trim().toLowerCase();
+  return screen === 'nus' ? 'nus' : 'default';
+};
 
 for (let i = 1; ; ++i) {
   const id = process.env[`REACT_APP_OAUTH2_PROVIDER${i}`];
@@ -88,12 +77,17 @@ for (let i = 1; ; ++i) {
     break;
   }
 
-  hasOtherAuthProviders = true;
   const name = process.env[`REACT_APP_OAUTH2_PROVIDER${i}_NAME`] || 'Unnamed provider';
   const endpoint = process.env[`REACT_APP_OAUTH2_PROVIDER${i}_ENDPOINT`] || '';
+  const screen = getProviderScreen('REACT_APP_OAUTH2_PROVIDER', i);
 
-  authProviders.set(id, { name, endpoint, isDefault: i === 1, type: AuthProviderType.OAUTH2 });
-  otherAuthProviders.set(id, { name, endpoint, isDefault: i === 1, type: AuthProviderType.OAUTH2 });
+  authProviders.set(id, {
+    name,
+    endpoint,
+    isDefault: i === 1,
+    type: AuthProviderType.OAUTH2,
+    screen,
+  });
 }
 
 for (let i = 1; ; ++i) {
@@ -102,12 +96,11 @@ for (let i = 1; ; ++i) {
     break;
   }
 
-  hasOtherAuthProviders = true;
   const name = process.env[`REACT_APP_CAS_PROVIDER${i}_NAME`] || 'Unnamed provider';
   const endpoint = process.env[`REACT_APP_CAS_PROVIDER${i}_ENDPOINT`] || '';
+  const screen = getProviderScreen('REACT_APP_CAS_PROVIDER', i);
 
-  authProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.CAS });
-  otherAuthProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.CAS });
+  authProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.CAS, screen });
 }
 
 for (let i = 1; ; ++i) {
@@ -116,16 +109,32 @@ for (let i = 1; ; ++i) {
     break;
   }
 
-  hasOtherAuthProviders = true;
   const name = process.env[`REACT_APP_SAML_PROVIDER${i}_NAME`] || 'Unnamed provider';
   const endpoint = process.env[`REACT_APP_SAML_PROVIDER${i}_ENDPOINT`] || '';
+  const screen = getProviderScreen('REACT_APP_SAML_PROVIDER', i);
 
-  authProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.SAML_SSO });
-  otherAuthProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.SAML_SSO });
+  authProviders.set(id, {
+    name,
+    endpoint,
+    isDefault: false,
+    type: AuthProviderType.SAML_SSO,
+    screen,
+  });
 }
 
+// Computed providers filtered by screen
+const defaultAuthProviders = new Map(
+  [...authProviders.entries()].filter(([, p]) => p.screen === 'default'),
+);
+const nusAuthProviders = new Map(
+  [...authProviders.entries()].filter(([, p]) => p.screen === 'nus'),
+);
+
+const hasDefaultAuthProviders = defaultAuthProviders.size > 0;
+const hasNusAuthProviders = nusAuthProviders.size > 0;
+
 const featureFlags = {
-  enableSicpChatbot: isTrue(process.env.REACT_APP_FEATURE_ENABLE_SICP_CHATBOT)
+  enableSicpChatbot: isTrue(process.env.REACT_APP_FEATURE_ENABLE_SICP_CHATBOT),
 };
 
 export enum Links {
@@ -147,7 +156,7 @@ export enum Links {
 
   ecmaScript_2021 = 'https://262.ecma-international.org/12.0/',
 
-  vscode = 'vscode://source-academy.source-academy/sso'
+  vscode = 'vscode://source-academy.source-academy/sso',
 }
 
 const Constants = {
@@ -156,9 +165,9 @@ const Constants = {
   sourceAcademyDeploymentName,
   showResearchPrompt,
   backendUrl,
-  storiesBackendUrl,
   cadetLoggerUrl,
   useBackend,
+  forwardLoadBalancerCookies,
   useEmptyAssetPrefix,
   defaultSourceChapter,
   defaultSourceVariant,
@@ -171,8 +180,8 @@ const Constants = {
   authProviders,
   hasNusAuthProviders,
   nusAuthProviders,
-  hasOtherAuthProviders,
-  otherAuthProviders,
+  hasDefaultAuthProviders,
+  defaultAuthProviders,
   playgroundOnly,
   sentryDsn,
   googleClientId,
@@ -188,7 +197,7 @@ const Constants = {
   collabSessionIdLocalStorageKey,
   caFulfillmentLevel,
   featureFlags,
-  isPreviewExamModeLocalStorageKey
+  isPreviewExamModeLocalStorageKey,
 };
 
 export default Constants;

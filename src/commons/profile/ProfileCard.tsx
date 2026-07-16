@@ -1,40 +1,34 @@
 import { Callout, ProgressBar } from '@blueprintjs/core';
-import { IconName } from '@blueprintjs/icons';
-import React from 'react';
+import type { IconName } from '@blueprintjs/icons';
 import { NavLink } from 'react-router';
 
-import { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
+import type { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 
-type ProfileCardProps = DispatchProps & StateProps;
-
-type StateProps = {
+type Props = {
   item: AssessmentOverview;
   courseId?: number;
-};
-
-type DispatchProps = {
   getFrac: (num: number, den: number) => number;
   parseColour: (frac: number) => string;
   renderIcon: (category: AssessmentType) => IconName;
 };
 
-const ProfileCard: React.FC<ProfileCardProps> = props => {
+function ProfileCard(props: Props) {
   const { item } = props;
 
   const isInvalidXP = item.maxXp <= 0 && item.xp === 0;
 
   const xpDetails = (
-    <div className="xp-details" data-testid="profile-xp-details">
-      <div className="title" data-testid="profile-title">
+    <div className="xp-details [&>*]:inline-block" data-testid="profile-xp-details">
+      <div className="title w-[12%] text-left" data-testid="profile-title">
         XP
       </div>
-      <div className="value" data-testid="profile-value">
+      <div className="value w-[35%] text-center" data-testid="profile-value">
         {item.xp} / {item.maxXp}
       </div>
       <ProgressBar
         animate={false}
-        className={'value-bar' + props.parseColour(props.getFrac(item.xp, item.maxXp))}
+        className={'value-bar w-[53%]' + props.parseColour(props.getFrac(item.xp, item.maxXp))}
         stripes={false}
         value={props.getFrac(item.xp, item.maxXp)}
       />
@@ -44,14 +38,14 @@ const ProfileCard: React.FC<ProfileCardProps> = props => {
   return (
     // Make each card navigate the user to the respective assessment
     <NavLink
-      className="profile-summary-navlink"
+      className="profile-summary-navlink text-black no-underline"
       key={`${item.title}-${item.id}`}
       target="_blank"
       to={`/courses/${props.courseId}/${assessmentTypeLink(item.type)}/${item.id}/0`}
       data-testid="profile-summary-navlink"
     >
       <Callout
-        className="profile-summary-callout"
+        className="profile-summary-callout relative leading-none py-1 px-3 pl-7.5 rounded-md hover:bg-[rgba(138,155,168,0.25)] [&>div:not(:first-of-type)]:mt-[0.2em] [&_[class*='-icon']]:absolute [&_[class*='-icon']]:top-1.5 [&_[class*='-icon']]:left-1.5 [&_svg]:h-4.5 [&_svg]:w-4.5"
         key={`${item.title}-${item.id}`}
         icon={props.renderIcon(item.type)}
         title={item.title}
@@ -61,6 +55,6 @@ const ProfileCard: React.FC<ProfileCardProps> = props => {
       </Callout>
     </NavLink>
   );
-};
+}
 
 export default ProfileCard;

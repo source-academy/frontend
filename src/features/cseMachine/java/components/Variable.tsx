@@ -1,5 +1,4 @@
 import { ECE } from 'java-slang';
-import React from 'react';
 import { Group, Rect } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
@@ -24,7 +23,7 @@ export const defaultOptions: TextOptions = {
   fontSize: Number(Config.FontSize), // in pixels. Default is 12
   fontStyle: Config.FontStyle.toString(), // can be normal, bold, or italic. Default is normal
   fontVariant: Config.FontVariant.toString(), // can be normal or small-caps. Default is normal
-  isStringIdentifiable: false // if true, contain strings within double quotation marks "". Default is false
+  isStringIdentifiable: false, // if true, contain strings within double quotation marks "". Default is false
 };
 
 export class Variable extends Visible {
@@ -34,7 +33,7 @@ export class Variable extends Visible {
   constructor(
     x: number,
     y: number,
-    private readonly _variable: ECE.Variable
+    private readonly _variable: ECE.Variable,
   ) {
     super();
 
@@ -50,19 +49,19 @@ export class Variable extends Visible {
       this._value = new Text(
         this.variable.value.literalType.value,
         this._x + Config.TextPaddingX,
-        this._y + this._type.height() + Config.TextPaddingX
+        this._y + this._type.height() + Config.TextPaddingX,
       );
     } else if (this.variable.value.kind === ECE.StructType.SYMBOL) {
       this._value = new Text(
         '',
         this._x + Config.TextPaddingX,
-        this._y + this._type.height() + Config.TextPaddingX
+        this._y + this._type.height() + Config.TextPaddingX,
       );
     } else {
       this._value = new Text(
         '',
         this._x + Config.TextPaddingX,
-        this._y + this._type.height() + Config.TextPaddingX
+        this._y + this._type.height() + Config.TextPaddingX,
       );
     }
 

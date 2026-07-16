@@ -1,6 +1,6 @@
 import { Blockquote, Code, H1, H2, H4, Icon, OL, Pre, UL } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
+import { Fragment } from 'react';
 import { Link } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
 import SicpExercise from 'src/pages/sicp/subcomponents/SicpExercise';
@@ -40,7 +40,7 @@ export type JsonType = {
   prependLength?: number;
 };
 
-type RefType = React.MutableRefObject<Record<string, HTMLElement | null>>;
+type RefType = React.RefObject<Record<string, HTMLElement | null>>;
 type AnchorLinkType = {
   children: React.ReactNode;
   id: string | undefined;
@@ -48,14 +48,16 @@ type AnchorLinkType = {
   top: number;
 };
 
-const AnchorLink: React.FC<AnchorLinkType> = ({ refs, id, children, top }) => {
+function AnchorLink({ refs, id, children, top }: AnchorLinkType) {
   return (
     <div className="sicp-anchor-link-container">
       {id && (
         <Link
           className="sicp-anchor-link"
           style={{ top: top }}
-          ref={ref => (refs.current[id] = ref)}
+          ref={ref => {
+            refs.current[id] = ref;
+          }}
           to={id}
         >
           <Icon icon={IconNames.LINK} />
@@ -64,14 +66,18 @@ const AnchorLink: React.FC<AnchorLinkType> = ({ refs, id, children, top }) => {
       {children}
     </div>
   );
-};
+}
 
 const handleFootnote = (obj: JsonType, refs: RefType) => {
   return (
     <>
       {obj.count === 1 && <hr />}
       <div className="sicp-footnote">
-        <div ref={ref => (refs.current[obj.id!] = ref)} />
+        <div
+          ref={ref => {
+            refs.current[obj.id!] = ref;
+          }}
+        />
         <a href={obj.href}>{'[' + obj.count + '] '}</a>
         {parseArr(obj.child!, refs)}
       </div>
@@ -81,7 +87,12 @@ const handleFootnote = (obj: JsonType, refs: RefType) => {
 
 const handleRef = (obj: JsonType, refs: RefType) => {
   return (
-    <Link ref={ref => (refs.current[obj.id!] = ref)} to={obj.href!}>
+    <Link
+      ref={ref => {
+        refs.current[obj.id!] = ref;
+      }}
+      to={obj.href!}
+    >
       {obj.body}
     </Link>
   );
@@ -93,10 +104,10 @@ const handleEpigraph = (obj: JsonType, refs: RefType) => {
   const hasAttribution = author || title || date;
 
   const attribution = [];
-  attribution.push(<React.Fragment key="attribution">-</React.Fragment>);
+  attribution.push(<Fragment key="attribution">-</Fragment>);
 
   if (author) {
-    attribution.push(<React.Fragment key="author">{author}</React.Fragment>);
+    attribution.push(<Fragment key="author">{author}</Fragment>);
   }
 
   if (title) {
@@ -104,7 +115,7 @@ const handleEpigraph = (obj: JsonType, refs: RefType) => {
   }
 
   if (date) {
-    attribution.push(<React.Fragment key="date">{date}</React.Fragment>);
+    attribution.push(<Fragment key="date">{date}</Fragment>);
   }
 
   const text = child && parseArr(child, refs);
@@ -143,7 +154,7 @@ const handleSnippet = (obj: JsonType) => {
       id: obj.id!,
       initialEditorValueHash: obj.program!,
       prependLength: obj.prependLength!,
-      output: obj.output!
+      output: obj.output!,
     };
     return <CodeSnippet {...CodeSnippetProps} />;
   }
@@ -209,7 +220,10 @@ const handleLatex = (math: string) => {
   return <SicpLatex math={math} />;
 };
 
-export const processingFunctions: Record<string, (obj: JsonType, refs: RefType) => JSX.Element> = {
+export const processingFunctions: Record<
+  string,
+  (obj: JsonType, refs: RefType) => React.ReactElement
+> = {
   '#text': (obj, _refs) => handleText(obj.body!),
 
   B: (obj, refs) => <b>{parseArr(obj.child!, refs)}</b>,
@@ -227,10 +241,17 @@ export const processingFunctions: Record<string, (obj: JsonType, refs: RefType) 
   FIGURE: handleFigure,
 
   FOOTNOTE_REF: (obj, refs) => (
-    <sup ref={ref => (refs.current[obj.id!] = ref)}>{handleRef(obj, refs)}</sup>
+    <sup
+      ref={ref => {
+        refs.current[obj.id!] = ref;
+      }}
+    >
+      {handleRef(obj, refs)}
+    </sup>
   ),
 
   JAVASCRIPTINLINE: (obj, _refs) => <Code>{obj.body}</Code>,
+  PYTHONINLINE: (obj, _refs) => <Code>{obj.body}</Code>,
 
   LATEX: (obj, _refs) => handleLatex(obj.body!),
 
@@ -279,7 +300,7 @@ export const processingFunctions: Record<string, (obj: JsonType, refs: RefType) 
 
   TT: (obj, refs) => <Code>{parseArr(obj.child!, refs)}</Code>,
 
-  UL: (obj, refs) => <UL>{parseArr(obj.child!, refs)}</UL>
+  UL: (obj, refs) => <UL>{parseArr(obj.child!, refs)}</UL>,
 };
 
 // Parse array of objects. An array of objects represent sibling nodes.
@@ -295,12 +316,12 @@ export const parseArr = (arr: Array<JsonType>, refs: RefType) => {
 export const parseObj = (obj: JsonType, index: number | undefined, refs: RefType) => {
   if (obj.tag) {
     if (processingFunctions[obj.tag]) {
-      return <React.Fragment key={index}>{processingFunctions[obj.tag](obj, refs)}</React.Fragment>;
+      return <Fragment key={index}>{processingFunctions[obj.tag](obj, refs)}</Fragment>;
     } else {
       throw new ParseJsonError('Unrecognised Tag: ' + obj.tag);
     }
   } else {
     // Handle case where tag does not exists. Should not happen if json file is created properly.
-    return <React.Fragment key={index}>{parseArr(obj.child!, refs)}</React.Fragment>;
+    return <Fragment key={index}>{parseArr(obj.child!, refs)}</Fragment>;
   }
 };

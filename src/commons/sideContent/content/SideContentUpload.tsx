@@ -1,10 +1,10 @@
 import { FileInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { t } from 'i18next';
-import React, { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SideContentTab, SideContentType } from '../SideContentTypes';
+import { type SideContentTab, SideContentType } from '../SideContentTypes';
 
 export type UploadResult = {
   [key: string]: any;
@@ -29,9 +29,9 @@ type Props = {
 /**
  * This component is responsible for uploading Java class files to bypass the compiler.
  */
-const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
+function SideContentUpload({ onUpload }: Props) {
   const { t } = useTranslation('sideContent', { keyPrefix: 'upload' });
-  const [count, setCount] = React.useState(0);
+  const [count, setCount] = useState(0);
 
   const handleFileUpload: React.ChangeEventHandler<HTMLInputElement> = useCallback(
     e => {
@@ -42,7 +42,7 @@ const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
           promises.push(
             getBase64(file, (b64: string) => {
               ret[file.name] = b64;
-            })
+            }),
           );
         }
       }
@@ -51,35 +51,35 @@ const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
         setCount(promises.length);
       });
     },
-    [onUpload]
+    [onUpload],
   );
 
   return (
     <div>
-      <p>{t('description')}</p>
-      <p>{t('acceptedFiles')}</p>
-      <p>{t('compileCommand')}</p>
+      <p>{t($ => $.description)}</p>
+      <p>{t($ => $.acceptedFiles)}</p>
+      <p>{t($ => $.compileCommand)}</p>
       <pre>
-        <code>{t('javacCommand')}</code>
+        <code>{t($ => $.javacCommand)}</code>
       </pre>
-      <p>{t('warning')}</p>
+      <p>{t($ => $.warning)}</p>
       <p>
-        <strong>{t('mainClass')}</strong>
+        <strong>{t($ => $.mainClass)}</strong>
       </p>
       <FileInput
         inputProps={{ multiple: true, accept: '.class' }}
         onInputChange={handleFileUpload}
-        text={count === 0 ? t('chooseFiles') : `${count} ${t('filesUploaded')}`}
+        text={count === 0 ? t($ => $.chooseFiles) : `${count} ${t($ => $.filesUploaded)}`}
       />
     </div>
   );
-};
+}
 
 const makeUploadTabFrom = (onUpload: (files: UploadResult) => void): SideContentTab => ({
-  label: t('sideContent:upload.label'),
+  label: t($ => $.upload.label, { ns: 'sideContent' }),
   iconName: IconNames.Upload,
   body: <SideContentUpload onUpload={onUpload} />,
-  id: SideContentType.upload
+  id: SideContentType.upload,
 });
 
 export default makeUploadTabFrom;

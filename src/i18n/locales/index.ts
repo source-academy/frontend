@@ -6,7 +6,7 @@ export enum i18nLanguageCode {
   ENGLISH = 'en',
   CHINESE = 'zh',
   PSEUDO = 'pseudo',
-  DEFAULT = ENGLISH
+  DEFAULT = ENGLISH,
 }
 
 /**
@@ -16,8 +16,8 @@ export enum i18nLanguageCode {
 export const defaultLanguage = {
   [i18nLanguageCode.ENGLISH]: {
     name: 'English',
-    ...translationEN
-  }
+    ...translationEN,
+  },
 };
 
 const productionReadyLanguages = {};
@@ -25,16 +25,16 @@ const productionReadyLanguages = {};
 const developmentOnlyLanguages = {
   [i18nLanguageCode.PSEUDO]: {
     name: 'Pseudo',
-    ...translationPSEUDO
+    ...translationPSEUDO,
   },
   [i18nLanguageCode.CHINESE]: {
     name: '中文',
-    ...translationZH
-  }
+    ...translationZH,
+  },
 };
 
 export const resources = {
   ...defaultLanguage,
   ...productionReadyLanguages,
-  ...(process.env.NODE_ENV === 'development' ? developmentOnlyLanguages : {})
+  ...(process.env.NODE_ENV === 'development' ? developmentOnlyLanguages : {}),
 };

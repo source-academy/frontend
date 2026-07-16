@@ -7,10 +7,10 @@ import {
   DialogFooter,
   Intent,
   Radio,
-  RadioGroup
+  RadioGroup,
 } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
@@ -19,11 +19,11 @@ export type RepositoryDialogProps = {
   onSubmit: (repoName: string) => void;
 };
 
-const RepositoryDialog: React.FC<RepositoryDialogProps> = props => {
+function RepositoryDialog(props: RepositoryDialogProps) {
   const [repoName, setRepoName] = useState('');
 
   return (
-    <Dialog className="githubDialog" isOpen={true} onClose={handleClose}>
+    <Dialog className="githubDialog" isOpen onClose={handleClose}>
       <div className={classNames('githubDialogHeader', Classes.DIALOG_HEADER)}>
         <h3>Select a Repository</h3>
       </div>
@@ -66,6 +66,6 @@ const RepositoryDialog: React.FC<RepositoryDialogProps> = props => {
       props.onSubmit(repoName);
     }
   }
-};
+}
 
 export default RepositoryDialog;
