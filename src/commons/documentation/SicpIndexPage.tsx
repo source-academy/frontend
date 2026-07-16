@@ -1,4 +1,4 @@
-import { H1, H2, H4, TreeNodeInfo } from '@blueprintjs/core';
+import { H1, H2, H4, type TreeNodeInfo } from '@blueprintjs/core';
 import React from 'react';
 
 import SicpToc from './SicpToc';

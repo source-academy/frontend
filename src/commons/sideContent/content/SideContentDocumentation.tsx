@@ -1,12 +1,12 @@
 import { Button } from '@blueprintjs/core';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Sicp from 'src/commons/documentation/Sicp';
 
-const SideContentDocumentation: React.FC = () => {
+function SideContentDocumentation() {
   const pages: {
     name: string;
     src: string;
-    component: JSX.Element | null;
+    component: React.ReactElement | null;
   }[] = [
     {
       name: 'Modules',
@@ -102,19 +102,19 @@ const SideContentDocumentation: React.FC = () => {
       >
         <Button
           style={{ padding: '0 2ch 0 2ch', margin: '0px 5px 0px 5px', textWrap: 'nowrap' }}
-          small={true}
+          size="small"
           text={'Home'}
-          minimal={true}
+          variant="minimal"
           onClick={() => handleDocsHome()}
         />
-        <div style={{ width: '100%' }}></div>
+        <div style={{ width: '100%' }} />
         {pages.map((page, index) => (
           <Button
             active={page.name === activePage.name}
             style={{ padding: '0 2ch 0 2ch', margin: '0px 5px 0px 5px', textWrap: 'nowrap' }}
             text={page.name}
-            minimal={true}
-            small={true}
+            variant="minimal"
+            size="small"
             onClick={() => changeActivePage(index)}
           />
         ))}
@@ -153,6 +153,6 @@ const SideContentDocumentation: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default SideContentDocumentation;

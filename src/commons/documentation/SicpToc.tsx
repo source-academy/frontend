@@ -1,7 +1,7 @@
-import { Tree, TreeNodeInfo } from '@blueprintjs/core';
+import { Tree, type TreeNodeInfo } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
 import React, { useState } from 'react';
-import toc from 'src/features/sicp/data/toc.json';
+import toc from 'src/features/textbook/toc/data/sicpjs-toc.json';
 
 type Props = {
   handleCloseToc?: () => void;

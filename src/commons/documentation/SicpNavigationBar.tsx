@@ -11,7 +11,7 @@ import {
   Position,
   Tag,
   Text,
-  TreeNodeInfo,
+  type TreeNodeInfo,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Omnibar } from '@blueprintjs/select';

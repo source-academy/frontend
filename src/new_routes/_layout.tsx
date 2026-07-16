@@ -1,5 +1,5 @@
 import disableDevtool from 'disable-devtool';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Outlet } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { useLocalStorageState } from 'src/commons/hooks/useLocalStorageState';
@@ -17,12 +17,15 @@ import VscodeActions from '../commons/application/actions/VscodeActions';
 import NavigationBar from '../commons/navigationBar/NavigationBar';
 import Constants from '../commons/utils/Constants';
 import { useSession } from '../commons/utils/Hooks';
+import {
+  showDangerMessage,
+  showWarningMessage,
+} from '../commons/utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../commons/workspace/WorkspaceActions';
 import {
   defaultWorkspaceSettings,
   WorkspaceSettingsContext,
 } from '../commons/WorkspaceSettingsContext';
-import { showDangerMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
 function RootLayout() {
   const dispatch = useAppDispatch();
@@ -40,7 +43,7 @@ function RootLayout() {
   );
   const [pauseAcademy, setPauseAcademy] = useState(false);
   const [pauseAcademyReason, setPauseAcademyReason] = useState('');
-  const hasSentPauseUserRequest = React.useRef<boolean>(false);
+  const hasSentPauseUserRequest = useRef<boolean>(false);
   const { role } = useSession();
 
   // Effect to fetch the latest user info and course configurations from the backend on refresh,
