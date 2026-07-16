@@ -1,5 +1,7 @@
 import type { ITabService, Tab } from '@sourceacademy/common-tabs';
 
+import { store } from '../../pages/createStore';
+import { visitSideContent } from './SideContentActions';
 import type { SideContentLocation, SideContentTab } from './SideContentTypes';
 
 type Listener = () => void;
@@ -34,6 +36,11 @@ export class TabService implements ITabService {
 
   showTab(id: string): void {
     this.setTabVisibility(id, true);
+    // A module deciding to show its tab (e.g. the moment it starts using the host, like sound's
+    // play()/record()) means it wants the student looking at it right now, not just present in the
+    // tab bar - so also focus it, rather than leaving that to a separate, unbuilt API.
+    const previousSelectedTab = store.getState().sideContent[this.workspaceLocation]?.selectedTab;
+    store.dispatch(visitSideContent(id, previousSelectedTab, this.workspaceLocation));
   }
 
   hideTab(id: string): void {
