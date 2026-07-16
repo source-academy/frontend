@@ -26,6 +26,7 @@ type Props = {
 };
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
+const embeddedContentClassName = 'sicp-content px-10 text-base text-[#333333]';
 
 function Sicp({ section, onNavigate }: Props) {
   const parentRef = useRef<HTMLDivElement>(null);
@@ -73,13 +74,13 @@ function Sicp({ section, onNavigate }: Props) {
         queryKey="sicpSearchData"
         fetchSearchData={fetchSicpSearchData}
         toc={toc}
-        tocClassName="sicp-toc-assessment"
+        tocTreeClassName="bg-white text-base"
         sticky
       />
       <SicpErrorBoundary>
         <CodeSnippetProvider key={section}>
           {isLoading ? (
-            <div className="sicp-content sicp-assessment">{loadingComponent}</div>
+            <div className={embeddedContentClassName}>{loadingComponent}</div>
           ) : error ? (
             error.message === 'Not Found' ? (
               getSicpError(SicpErrorType.PAGE_NOT_FOUND_ERROR)
@@ -91,7 +92,7 @@ function Sicp({ section, onNavigate }: Props) {
           ) : section === SICP_INDEX ? (
             <SicpIndexPage titleImageUrl={titleImageUrl} onNavigate={handleNavigation} />
           ) : (
-            <div className="sicp-content sicp-assessment">
+            <div className={embeddedContentClassName}>
               <div id="begin" />
               {data}
               <div className="sicp-navigation-buttons">

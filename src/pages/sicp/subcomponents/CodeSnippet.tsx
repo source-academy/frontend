@@ -93,7 +93,11 @@ function CodeSnippet(props: CodeSnippetProps) {
           )}
         </div>
       ) : (
-        <Card className="sicp-code-snippet-closed" interactive elevation={Elevation.TWO}>
+        <Card
+          className="sicp-code-snippet-closed text-inherit"
+          interactive
+          elevation={Elevation.TWO}
+        >
           <SyntaxHighlighter language="javascript" style={SourceTheme} onClick={handleOpen}>
             {body}
           </SyntaxHighlighter>

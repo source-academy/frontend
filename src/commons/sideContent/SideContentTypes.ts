@@ -66,6 +66,8 @@ export type SideContentTab = {
   body: React.ReactElement | null;
   id?: SideContentTabId;
   disabled?: boolean;
+  panelClassName?: string;
+  bodyClassName?: string;
 };
 
 /**

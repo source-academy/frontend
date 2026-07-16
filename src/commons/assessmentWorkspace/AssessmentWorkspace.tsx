@@ -687,6 +687,8 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
         iconName: IconNames.BOOK,
         body: <SideContentDocumentation />,
         id: SideContentType.documentation,
+        panelClassName: 'h-full overflow-hidden',
+        bodyClassName: 'h-full overflow-hidden',
       });
     }
 

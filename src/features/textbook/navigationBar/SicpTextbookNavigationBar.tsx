@@ -1,6 +1,7 @@
 import type { TreeNodeInfo } from '@blueprintjs/core';
 import { Alignment, Drawer, Navbar, NavbarGroup, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import classNames from 'classnames';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
@@ -29,8 +30,8 @@ type Props = {
   onNavigate?: (section: string) => void;
   /** Keeps the navigation controls visible in a scrolling embedding view. */
   sticky?: boolean;
-  /** Additional class applied to the table of contents. */
-  tocClassName?: string;
+  /** Additional class applied directly to the table-of-contents tree. */
+  tocTreeClassName?: string;
 };
 
 function SicpTextbookNavigationBar({
@@ -43,7 +44,7 @@ function SicpTextbookNavigationBar({
   section: controlledSection,
   onNavigate,
   sticky = false,
-  tocClassName,
+  tocTreeClassName,
 }: Props) {
   const [isTocOpen, setIsTocOpen] = useState(false);
   const { section: routeSection } = useParams<{ section: string }>();
@@ -121,7 +122,7 @@ function SicpTextbookNavigationBar({
         </NavbarGroup>
       </Navbar>
       <Drawer {...drawerProps} className="sicp-toc-drawer">
-        <SicpToc handleClick={handleClickToc} toc={toc} className={tocClassName} />
+        <SicpToc handleClick={handleClickToc} toc={toc} treeClassName={tocTreeClassName} />
       </Drawer>
     </>
   );

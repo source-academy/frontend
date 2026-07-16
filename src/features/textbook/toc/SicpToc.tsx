@@ -6,13 +6,13 @@ import { useState } from 'react';
 type Props = {
   handleClick?: (node: TreeNodeInfo) => void;
   toc: TreeNodeInfo[];
-  className?: string;
+  treeClassName?: string;
 };
 
 /**
  * Table of contents of SICP.
  */
-function SicpToc({ handleClick, toc, className }: Props) {
+function SicpToc({ handleClick, toc, treeClassName }: Props) {
   const [sidebarContent, setSidebarContent] = useState(toc);
 
   // Note: Technically this should have a useEffect to sync the state whenever
@@ -32,9 +32,9 @@ function SicpToc({ handleClick, toc, className }: Props) {
   };
 
   return (
-    <div className={classNames('sicp-toc', className)}>
+    <div className="sicp-toc">
       <Tree
-        className="sicp-toc-tree"
+        className={classNames('sicp-toc-tree', treeClassName)}
         contents={sidebarContent}
         onNodeClick={handleClick}
         onNodeCollapse={handleNodeCollapse}

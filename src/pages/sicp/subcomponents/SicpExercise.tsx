@@ -27,7 +27,7 @@ function SicpExercise(props: Props) {
   };
 
   return (
-    <Card className="sicp-exercise" interactive={false} elevation={Elevation.ONE}>
+    <Card className="sicp-exercise text-inherit" interactive={false} elevation={Elevation.ONE}>
       <b>{props.title}</b>
       <div>{props.body}</div>
       <div className="sicp-button-container">
