@@ -2,7 +2,7 @@ import type { ITabService, Tab } from '@sourceacademy/common-tabs';
 
 import { store } from '../../pages/createStore';
 import { visitSideContent } from './SideContentActions';
-import type { SideContentLocation, SideContentTab } from './SideContentTypes';
+import { type SideContentLocation, type SideContentTab, SideContentType } from './SideContentTypes';
 
 type Listener = () => void;
 
@@ -37,9 +37,15 @@ export class TabService implements ITabService {
   showTab(id: string): void {
     this.setTabVisibility(id, true);
     // A module deciding to show its tab (e.g. the moment it starts using the host, like sound's
-    // play()/record()) means it wants the student looking at it right now, not just present in the
-    // tab bar - so also focus it, rather than leaving that to a separate, unbuilt API.
+    // play()/record()) means it wants the student looking at it right now - but only if they're
+    // still on the workspace's home tab (undefined selectedTab means no explicit navigation has
+    // happened yet, i.e. still showing whatever default the caller's useSideContent() falls back
+    // to). If the student has deliberately navigated to some other tab (including a previously
+    // auto-shown one), a new module claiming the host shouldn't yank them away from it.
     const previousSelectedTab = store.getState().sideContent[this.workspaceLocation]?.selectedTab;
+    if (previousSelectedTab !== undefined && previousSelectedTab !== SideContentType.introduction) {
+      return;
+    }
     store.dispatch(visitSideContent(id, previousSelectedTab, this.workspaceLocation));
   }
 
