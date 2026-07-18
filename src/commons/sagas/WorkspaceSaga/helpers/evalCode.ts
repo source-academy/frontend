@@ -645,6 +645,7 @@ function* handleCseSnapshots(
 function* handleStatuses(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
+  runOutcome: { naturalCompletion: boolean },
 ): SagaIterator {
   const statusChan = eventChannel<{ status: RunnerStatus; isActive: boolean }>(emitter => {
     const onStatusUpdate = (status: RunnerStatus, isActive: boolean) =>
@@ -665,6 +666,7 @@ function* handleStatuses(
         yield put(actions.setIsRunning(isActive, workspaceLocation));
       }
       if (isTerminalStatus) {
+        runOutcome.naturalCompletion = true;
         // Unblock the REPL loop via the shared termination signal.
         yield put(actions.beginInterruptExecution(workspaceLocation));
       }
@@ -673,6 +675,36 @@ function* handleStatuses(
     statusChan.close();
   }
 }
+
+/**
+ * Terminates `conduit` after `graceMs`. Spawned detached (not forked) so it outlives
+ * `evalCodeConductorSaga` returning - the whole point is letting the Worker linger past this Run's
+ * own saga completing.
+ *
+ * `graceMs` is the same `execTime + 10000` budget the watchdog below already computes, not an
+ * arbitrary guess: some modules (e.g. sound_matrix's `set_timeout`, used to build a Tone Matrix
+ * player per Quest Q5B) schedule native `setTimeout` callbacks *inside* the Worker that are
+ * expected to keep firing indefinitely (`play_matrix` loops forever until the student's own
+ * `stop_matrix()` calls `clear_all_timeout()`) - but the runner reports STOPPED as soon as the
+ * top-level statement that merely *scheduled* the first callback returns, long before those
+ * callbacks are done firing. The original (pre-Conductor) implementation never tore the
+ * environment down at all, so this was never an issue. Source Academy already bounds how long any
+ * single Run may execute via `execTime` (e.g. Quest Q5B's own deployment sets `exectime="30000"`),
+ * so reusing that same budget here - rather than terminating within ~50ms of STOPPED - means a
+ * naturally-completed Run gets to actually use the execution time it was already allotted, whether
+ * or not the runner happened to report STOPPED early. A manual interrupt (Stop button) or the
+ * watchdog genuinely timing out still terminate immediately - see `runOutcome` below.
+ */
+function* terminateAfterGrace(conduit: IConduit, graceMs: number): SagaIterator {
+  yield call(() => new Promise(resolve => setTimeout(resolve, graceMs)));
+  try {
+    yield call([conduit, 'terminate']);
+  } catch {
+    // Already terminated via some other path (e.g. the evaluator was switched, which tears down
+    // every preloaded/active conductor) - nothing left to clean up.
+  }
+}
+
 /**
  * Runs code using the evaluators in the Language Directory using the Conductor framework.
  * Invoked when the conductor.enable feature flag is enabled.
@@ -720,6 +752,7 @@ export function* evalCodeConductorSaga(
   let errorTask: any;
   let statusTask: any;
   let cseTask: any;
+  const runOutcome = { naturalCompletion: false };
 
   try {
     // Reuse a preloaded conductor instance when available.
@@ -740,7 +773,7 @@ export function* evalCodeConductorSaga(
     inputTask = yield fork(handleInputRequest, hostPlugin, workspaceLocation);
     resultTask = yield fork(handleResults, hostPlugin, workspaceLocation);
     errorTask = yield fork(handleErrors, hostPlugin, workspaceLocation);
-    statusTask = yield fork(handleStatuses, hostPlugin, workspaceLocation);
+    statusTask = yield fork(handleStatuses, hostPlugin, workspaceLocation, runOutcome);
     cseTask = yield fork(handleCseSnapshots, csePlugin, workspaceLocation);
 
     yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
@@ -787,6 +820,21 @@ export function* evalCodeConductorSaga(
     // timeout skips the drain.
     if (done) {
       yield call(() => new Promise(resolve => setTimeout(resolve, 50)));
+    } else {
+      // The watchdog fired without the runner ever reporting STOPPED/ERROR and without a manual
+      // interrupt - the Worker is presumed stuck (an actual infinite loop, or a call that
+      // structurally must finish but needs far more CSE-machine steps than fit in the time budget -
+      // e.g. a Conductor module sampling a student-authored closure at audio rate). Previously this
+      // branch surfaced nothing at all: the Run just went idle with no explanation, indistinguishable
+      // from the page having hung. Mirror js-slang's own PotentialInfiniteLoopError messaging
+      // (timeoutErrors.ts) so this failure is at least as clearly explained as the non-Conductor
+      // path's.
+      yield* surfaceConductorError(
+        new Error(
+          `Potential infinite loop detected: execution exceeded ${execTime / 1000}s. If you are certain your program is correct, press Run again.`,
+        ),
+        workspaceLocation,
+      );
     }
   } catch (runError) {
     // Defensive: surface any setup error (e.g. failing to obtain the conductor) or synchronous
@@ -797,9 +845,16 @@ export function* evalCodeConductorSaga(
     try {
       // getPreparedConductorSaga's contract: a consumed conductor "should be terminated by the
       // caller" - this is that caller. Without this, every Run leaks its Worker instead of
-      // shutting it down.
+      // shutting it down. A Run that finished naturally gets to keep its Worker alive for the same
+      // execTime + 10000 budget the watchdog above already allows (see terminateAfterGrace) so
+      // modules with pending Worker-native timers get a chance to fire; a manual interrupt or the
+      // exec-time watchdog genuinely timing out still terminates immediately.
       if (conduit) {
-        yield call([conduit, 'terminate']);
+        if (runOutcome.naturalCompletion) {
+          yield spawn(terminateAfterGrace, conduit, execTime + 10000);
+        } else {
+          yield call([conduit, 'terminate']);
+        }
       }
       if (cseTask) {
         yield cancel(cseTask);
