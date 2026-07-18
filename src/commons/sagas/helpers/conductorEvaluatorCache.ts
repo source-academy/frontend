@@ -1,7 +1,9 @@
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { PluginType } from '@sourceacademy/plugin-directory';
+import { ModuleLoaderWebPlugin } from '@sourceacademy/web-module-loader';
 import type { SagaIterator } from 'redux-saga';
-import { call } from 'redux-saga/effects';
+import { call, select } from 'redux-saga/effects';
+import { selectDirectoryModulesUrl } from 'src/features/directory/flagDirectoryModulesUrl';
 
 import type { BrowserHostPlugin } from '../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../features/conductor/createConductor';
@@ -9,6 +11,8 @@ import type { CseMachineHostPlugin } from '../../../features/conductor/CseMachin
 import { DeferredConductorTabService } from '../../../features/conductor/deferredConductorTabService';
 import { importAndRegisterWebPlugin } from '../../../features/conductor/importExternalWebPlugin';
 import { store } from '../../../pages/createStore';
+import sideContentManager from '../../sideContent/SideContentManager';
+import type { SideContentLocation } from '../../sideContent/SideContentTypes';
 
 type PreparedConductor = {
   path: string;
@@ -17,12 +21,14 @@ type PreparedConductor = {
   csePlugin: CseMachineHostPlugin;
   conduit: IConduit;
   tabService: DeferredConductorTabService;
+  moduleLoaderPlugin: ModuleLoaderWebPlugin;
   setFiles: (files: Record<string, string>) => void;
 };
 
 type GetPreparedConductorOptions = {
   files?: Record<string, string>;
   consume?: boolean;
+  workspaceLocation?: SideContentLocation;
 };
 
 let preparedConductorPath: string | null = null;
@@ -60,6 +66,7 @@ async function terminatePreparedConductor(conductor: PreparedConductor | null) {
   }
 
   await conductor.conduit.terminate();
+  sideContentManager.clearTabs();
   URL.revokeObjectURL(conductor.evaluatorUrl);
 }
 
@@ -83,12 +90,19 @@ function* cleanupPreparedConductorSaga(): SagaIterator {
  * Resolves a plugin's web-half URL from the plugin directory. The runner may request a plugin
  * before the directory has finished loading, so we poll briefly for it.
  */
-async function resolveWebPluginUrl(pluginId: string): Promise<string | undefined> {
+async function resolveWebPluginUrl(
+  pluginId: string,
+  moduleLoaderPlugin: ModuleLoaderWebPlugin,
+): Promise<string | undefined> {
   for (let attempt = 0; attempt < 50; attempt++) {
     const url =
       store.getState().pluginDirectory.pluginMap?.[pluginId]?.resolutions?.[PluginType.WEB];
     if (url) {
       return url;
+    }
+    const moduleUrl = moduleLoaderPlugin.getModuleTabLocation(pluginId);
+    if (moduleUrl) {
+      return moduleUrl;
     }
     await new Promise(resolve => setTimeout(resolve, 100));
   }
@@ -99,11 +113,12 @@ async function loadWebPlugin(
   hostPlugin: BrowserHostPlugin | undefined,
   pluginId: string,
   tabService: DeferredConductorTabService,
+  moduleLoaderPlugin: ModuleLoaderWebPlugin,
 ): Promise<void> {
   if (!hostPlugin) {
     return;
   }
-  const url = await resolveWebPluginUrl(pluginId);
+  const url = await resolveWebPluginUrl(pluginId, moduleLoaderPlugin);
   if (!url) {
     console.warn(
       `Conductor: no web resolution for plugin "${pluginId}" (is directory.plugin.url set?)`,
@@ -126,11 +141,11 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
   let currentFiles: Record<string, string> = {};
   let hostPluginRef: BrowserHostPlugin | undefined = undefined;
   const tabService = new DeferredConductorTabService();
-  const { hostPlugin, csePlugin, conduit } = createConductor(
+  const { hostPlugin, csePlugin, conduit, moduleLoaderPlugin } = createConductor(
     evaluatorUrl,
     async (fileName: string) => currentFiles[fileName],
     (pluginName: string) => {
-      void loadWebPlugin(hostPluginRef, pluginName, tabService);
+      void loadWebPlugin(hostPluginRef, pluginName, tabService, moduleLoaderPlugin);
     },
   );
   hostPluginRef = hostPlugin;
@@ -142,6 +157,7 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
     csePlugin,
     conduit,
     tabService,
+    moduleLoaderPlugin,
     setFiles: (files: Record<string, string>) => {
       currentFiles = files;
     },
@@ -159,19 +175,23 @@ function* ensurePreparedConductorSaga(path: string): SagaIterator<PreparedConduc
 
   // A new evaluator path is requested, so release the old preloaded conductor first.
   yield call(cleanupPreparedConductorSaga);
+  const moduleDirectory = yield select(selectDirectoryModulesUrl);
 
   loadingConductorPath = path;
   loadingConductorPromise = createPreparedConductor(path)
     .then(prepared => {
       preparedConductorPath = path;
       preparedConductor = prepared;
+      // Use this conductor's own instance, not the class's shared static `.instance` - by the time
+      // this resolves, a *different* conductor being prepared concurrently elsewhere may already
+      // have overwritten it.
+      void prepared.moduleLoaderPlugin.onModuleDirectoryURLChange(moduleDirectory);
       return prepared;
     })
     .finally(() => {
       loadingConductorPath = null;
       loadingConductorPromise = null;
     });
-
   return yield call(() => loadingConductorPromise as Promise<PreparedConductor>);
 }
 
@@ -206,6 +226,9 @@ export function* getPreparedConductorSaga(options?: GetPreparedConductorOptions)
   }
 
   const path = currentEvaluatorPath;
+  if (options?.workspaceLocation) {
+    sideContentManager.setWorkspaceLocation(options.workspaceLocation);
+  }
   const prepared: PreparedConductor = yield call(ensurePreparedConductorSaga, path);
   const files = options?.files;
   const consume = options?.consume ?? false;

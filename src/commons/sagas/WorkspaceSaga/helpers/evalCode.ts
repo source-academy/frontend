@@ -27,6 +27,8 @@ import { CONDUCTOR_STEPPER_TAB_ID } from '../../../../features/conductor/stepper
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { type OverallState } from '../../../application/ApplicationTypes';
 import { visitSideContent } from '../../../sideContent/SideContentActions';
+import { getTabId } from '../../../sideContent/SideContentHelper';
+import sideContentManager from '../../../sideContent/SideContentManager';
 import { type SideContentTabId, SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import { closeDialog, showSimplePromptDialog } from '../../../utils/DialogHelper';
@@ -540,9 +542,9 @@ function* handleResults(
 
 /**
  * Surfaces a conductor evaluation error: appends it to the REPL and, when the (REPL-hiding) conductor
- * Stepper or CSE Machine tab is active, switches to the Introduction tab so the error is visible
- * rather than failing silently — the conductor analogue of the legacy `usingSubst`/`usingCse` path.
- * Also unblocks the run loop.
+ * Stepper or CSE Machine tab is active, or any other tab a module dynamically registered (e.g. sound's
+ * tab), switches to the Introduction tab so the error is visible rather than failing silently — the
+ * conductor analogue of the legacy `usingSubst`/`usingCse` path. Also unblocks the run loop.
  */
 function* surfaceConductorError(
   error: unknown,
@@ -552,7 +554,14 @@ function* surfaceConductorError(
   const selectedTab: SideContentTabId | undefined = yield select(
     (state: OverallState) => state.sideContent[workspaceLocation]?.selectedTab,
   );
-  if (selectedTab === CONDUCTOR_STEPPER_TAB_ID || selectedTab === SideContentType.cseMachine) {
+  const isModuleTabSelected = sideContentManager
+    .getTabs(workspaceLocation)
+    .some(tab => getTabId(tab) === selectedTab);
+  if (
+    selectedTab === CONDUCTOR_STEPPER_TAB_ID ||
+    selectedTab === SideContentType.cseMachine ||
+    isModuleTabSelected
+  ) {
     yield put(visitSideContent(SideContentType.introduction, selectedTab, workspaceLocation));
   }
   // Unblock the run loop (the runner should also send a terminal status, but this is a safety net).
@@ -786,6 +795,12 @@ export function* evalCodeConductorSaga(
     yield* surfaceConductorError(runError, workspaceLocation);
   } finally {
     try {
+      // getPreparedConductorSaga's contract: a consumed conductor "should be terminated by the
+      // caller" - this is that caller. Without this, every Run leaks its Worker instead of
+      // shutting it down.
+      if (conduit) {
+        yield call([conduit, 'terminate']);
+      }
       if (cseTask) {
         yield cancel(cseTask);
       }
@@ -803,13 +818,6 @@ export function* evalCodeConductorSaga(
       }
       if (errorTask) {
         yield cancel(errorTask);
-      }
-      if (conduit) {
-        try {
-          yield call([conduit, 'terminate']);
-        } catch (e) {
-          console.warn('[conductor] failed to terminate conduit', e);
-        }
       }
     } finally {
       yield put(actions.endInterruptExecution(workspaceLocation));

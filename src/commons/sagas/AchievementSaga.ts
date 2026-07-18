@@ -10,7 +10,7 @@ import type { Tokens } from '../application/types/SessionTypes';
 import { combineSagaHandlers } from '../redux/utils';
 import SideContentActions from '../sideContent/SideContentActions';
 import { getLocation } from '../sideContent/SideContentHelper';
-import { SideContentType } from '../sideContent/SideContentTypes';
+import { type SideContentTabId, SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { selectTokens } from './BackendSaga';
@@ -145,7 +145,7 @@ const AchievementSaga = combineSagaHandlers({
       (state: OverallState) => state.session.enableAchievements,
     );
     if (workspaceLocation !== undefined && eventNames.find(e => e === EventType.ERROR)) {
-      const selectedTab: SideContentType | undefined = yield select((state: OverallState) => {
+      const selectedTab: SideContentTabId | undefined = yield select((state: OverallState) => {
         const [loc] = getLocation(workspaceLocation);
         return state.sideContent[loc].selectedTab;
       });
