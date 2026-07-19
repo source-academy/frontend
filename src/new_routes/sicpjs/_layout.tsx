@@ -22,7 +22,7 @@ const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner /
 // Chatbot utilities removed from JS layout
 
 function SicpLayout() {
-  const { section } = useParams<{ section: string }>();
+  const { section } = useParams();
   const parentRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
