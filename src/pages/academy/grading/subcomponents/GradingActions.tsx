@@ -81,67 +81,67 @@ function GradingActions({ submissionId, style, progress, filterMode }: Props) {
   return (
     <GradingFlex justifyContent="flex-start" className="gap-x-1.25 [&>a]:flex" style={style}>
       {filterMode && (
-        <Link to={`/courses/${courseId}/grading/${submissionId}`}>
+        <Tooltip position={Position.TOP} content="Grade">
+          <Link to={`/courses/${courseId}/grading/${submissionId}`}>
+            <Button
+              variant="minimal"
+              className={classNames(
+                ...buttonClasses,
+                'bg-[#7dbcff80] hover:bg-[#7dbcffb3] [&_svg]:fill-blue-500',
+              )}
+            >
+              <Icon icon={IconNames.EDIT} />
+            </Button>
+          </Link>
+        </Tooltip>
+      )}
+
+      {(isGraded || isSubmitted) && (
+        <Tooltip position={Position.TOP} content="Reautograde">
+          <Button
+            className={classNames(...buttonClasses, '[&_svg]:fill-blue-500')}
+            variant="minimal"
+            onClick={handleReautogradeClick}
+          >
+            <Icon icon={IconNames.REFRESH} />
+          </Button>
+        </Tooltip>
+      )}
+
+      {(isGraded || isSubmitted) && (
+        <Tooltip position={Position.TOP} content="Unsubmit">
           <Button
             variant="minimal"
-            className={classNames(
-              ...buttonClasses,
-              'bg-[#7dbcff80] hover:bg-[#7dbcffb3] [&_svg]:fill-blue-500',
-            )}
+            className={classNames(...buttonClasses, '[&_svg]:fill-blue-500')}
+            onClick={handleUnsubmitClick}
           >
-            <Tooltip position={Position.TOP} content="Grade">
-              <Icon icon={IconNames.EDIT} />
-            </Tooltip>
-          </Button>
-        </Link>
-      )}
-
-      {(isGraded || isSubmitted) && (
-        <Button
-          className={classNames(...buttonClasses, '[&_svg]:fill-blue-500')}
-          variant="minimal"
-          onClick={handleReautogradeClick}
-        >
-          <Tooltip position={Position.TOP} content="Reautograde">
-            <Icon icon={IconNames.REFRESH} />
-          </Tooltip>
-        </Button>
-      )}
-
-      {(isGraded || isSubmitted) && (
-        <Button
-          variant="minimal"
-          className={classNames(...buttonClasses, '[&_svg]:fill-blue-500')}
-          onClick={handleUnsubmitClick}
-        >
-          <Tooltip position={Position.TOP} content="Unsubmit">
             <Icon icon={IconNames.UNDO} />
-          </Tooltip>
-        </Button>
+          </Button>
+        </Tooltip>
       )}
 
       {isGraded && (
-        <Button
-          variant="minimal"
-          className={classNames(...buttonClasses, '[&_svg]:fill-blue-500')}
-          onClick={handlePublishClick}
-        >
-          <Tooltip position={Position.TOP} content="Publish">
+        <Tooltip position={Position.TOP} content="Publish">
+          <Button
+            variant="minimal"
+            className={classNames(...buttonClasses, '[&_svg]:fill-blue-500')}
+            onClick={handlePublishClick}
+          >
             <Icon icon={IconNames.SEND_TO_GRAPH} />
-          </Tooltip>
-        </Button>
+          </Button>
+        </Tooltip>
       )}
 
       {isPublished && (
-        <Button
-          variant="minimal"
-          className={classNames(...buttonClasses, '[&_svg]:fill-blue-500')}
-          onClick={handleUnpublishClick}
-        >
-          <Tooltip position={Position.TOP} content="Unpublish">
+        <Tooltip position={Position.TOP} content="Unpublish">
+          <Button
+            variant="minimal"
+            className={classNames(...buttonClasses, '[&_svg]:fill-blue-500')}
+            onClick={handleUnpublishClick}
+          >
             <Icon icon={IconNames.EXCLUDE_ROW} />
-          </Tooltip>
-        </Button>
+          </Button>
+        </Tooltip>
       )}
     </GradingFlex>
   );
