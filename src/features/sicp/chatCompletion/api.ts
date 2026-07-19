@@ -1,5 +1,6 @@
 import type { Tokens } from 'src/commons/application/types/SessionTypes';
 import { request } from 'src/commons/utils/RequestHelper';
+import type { InitChatResponse, SendMessageResponse } from 'src/components/ui/chatbot/types';
 
 export async function initChat(tokens: Tokens): Promise<InitChatResponse> {
   const response = await request('chats', 'POST', {
@@ -22,7 +23,7 @@ export async function continueChat(
   userMessage: string,
   section: string,
   visibleText: string,
-): Promise<ContinueChatResponse> {
+): Promise<SendMessageResponse> {
   const response = await request(`chats/message`, 'POST', {
     ...tokens,
     body: {

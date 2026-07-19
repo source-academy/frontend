@@ -22,7 +22,7 @@
     "flexboxgrid",
     "flexboxgrid-helpers",
     "identity-obj-proxy",
-    "sass",
+    "sass-embedded",
     "tailwindcss",
     "@types/gapi.client",
     "@types/gapi",

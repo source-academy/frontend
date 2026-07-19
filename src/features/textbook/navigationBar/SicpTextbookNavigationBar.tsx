@@ -1,19 +1,38 @@
+import type { TreeNodeInfo } from '@blueprintjs/core';
 import { Alignment, Drawer, Navbar, NavbarGroup, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
-import {
-  getNextPy as getNext,
-  getPrevPy as getPrev,
-} from 'src/features/sicp/TableOfContentsHelperPy';
+import { TableOfContentsButton } from 'src/features/sicp/TableOfContentsButton';
+import SicpToc from 'src/features/textbook/toc/SicpToc';
 
-import { TableOfContentsButton } from '../../../features/sicp/TableOfContentsButton';
-import SicpPyToc from '../../../pages/sicp/subcomponents/SicpPyToc';
-import { fetchSicpySearchData } from './autocomplete/query';
 import SearchAutocomplete from './autocomplete/SearchAutocomplete';
+import type { SearchData } from './autocomplete/types';
 
-function SicpPyNavigationBar() {
+type Props = {
+  /** Route prefix appended to the section slug, e.g. '/sicpjs'. No trailing slash. */
+  routePrefix: string;
+  /** Resolves the section slug that precedes `section`. */
+  getPrev: (section: string) => string | undefined;
+  /** Resolves the section slug that follows `section`. */
+  getNext: (section: string) => string | undefined;
+  /** React Query cache key passed through to SearchAutocomplete. */
+  queryKey: string;
+  /** Async fetcher for the textbook search-data JSON. */
+  fetchSearchData: () => Promise<SearchData>;
+  /** Pre-built TreeNodeInfo[] from the textbook's TOC JSON. */
+  toc: TreeNodeInfo[];
+};
+
+function SicpTextbookNavigationBar({
+  routePrefix,
+  getPrev,
+  getNext,
+  queryKey,
+  fetchSearchData,
+  toc,
+}: Props) {
   const [isTocOpen, setIsTocOpen] = useState(false);
   const { section } = useParams<{ section: string }>();
   const navigate = useNavigate();
@@ -22,9 +41,13 @@ function SicpPyNavigationBar() {
 
   const handleOpenToc = () => setIsTocOpen(true);
   const handleCloseToc = () => setIsTocOpen(false);
+  const handleClickToc = (node: TreeNodeInfo) => {
+    setIsTocOpen(false);
+    handleNavigation(String(node.nodeData));
+  };
 
   const handleNavigation = (sect: string) => {
-    navigate('/sicpy/' + sect);
+    navigate(`${routePrefix}/${sect}`);
   };
 
   // Button to open table of contents
@@ -72,17 +95,17 @@ function SicpPyNavigationBar() {
         <NavbarGroup align={Alignment.END}>{[prevButton, nextButton]}</NavbarGroup>
         <NavbarGroup align={Alignment.CENTER}>
           <SearchAutocomplete
-            queryKey="sicpPySearchData"
-            fetchSearchData={fetchSicpySearchData}
+            queryKey={queryKey}
+            fetchSearchData={fetchSearchData}
             onNavigate={handleNavigation}
           />
         </NavbarGroup>
       </Navbar>
       <Drawer {...drawerProps} className="sicp-toc-drawer">
-        <SicpPyToc handleCloseToc={() => setIsTocOpen(false)} />
+        <SicpToc handleClick={handleClickToc} toc={toc} />
       </Drawer>
     </>
   );
 }
 
-export default SicpPyNavigationBar;
+export default SicpTextbookNavigationBar;

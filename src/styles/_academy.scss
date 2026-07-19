@@ -301,13 +301,6 @@
   margin: 12px 0 12px 0;
 }
 
-.Grid {
-  :focus {
-    /* Disable rendering blue border when a sub-component in grid is in focus */
-    outline: none;
-  }
-}
-
 .GridControls {
   display: flex;
   align-items: center;

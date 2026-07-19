@@ -1,31 +1,8 @@
-import * as BlueprintCore from '@blueprintjs/core';
+import type { ITabService } from '@sourceacademy/common-tabs';
 import type { PluginClass } from '@sourceacademy/conductor/conduit';
-import React from 'react';
-import * as ReactJsxRuntime from 'react/jsx-runtime';
+import { requireProvider } from 'src/commons/sideContent/SideContentHelper';
 
 import type { BrowserHostPlugin } from './BrowserHostPlugin';
-import type { ITabService } from './commonTabs';
-
-/**
- * Modules the host exposes to Conductor web plugins through their `require` shim. Web plugins are
- * built with React/Blueprint as externals so they reuse the host's singletons (a second React copy
- * would break hooks and make the plugin's elements incompatible with the host renderer). The host
- * owns these deps, which keeps plugins lightweight and free of per-plugin frontend wiring.
- */
-const HOST_PROVIDED_MODULES: Record<string, unknown> = {
-  react: React,
-  'react/jsx-runtime': ReactJsxRuntime,
-  '@blueprintjs/core': BlueprintCore,
-};
-
-function hostRequire(moduleName: string): unknown {
-  const resolved = HOST_PROVIDED_MODULES[moduleName];
-  if (resolved === undefined) {
-    throw new Error(`Conductor web plugin require()'d an unavailable module: "${moduleName}"`);
-  }
-  return resolved;
-}
-
 type PluginExports = { plugin?: unknown; default?: unknown };
 
 /**
@@ -52,7 +29,9 @@ function resolvePluginClass(moduleNamespace: PluginExports): unknown {
     return defaultExport;
   }
 
-  const exported = (defaultExport as (require: typeof hostRequire) => PluginExports)(hostRequire);
+  const exported = (defaultExport as (require: typeof requireProvider) => PluginExports)(
+    requireProvider,
+  );
   return exported?.plugin ?? exported?.default ?? exported;
 }
 

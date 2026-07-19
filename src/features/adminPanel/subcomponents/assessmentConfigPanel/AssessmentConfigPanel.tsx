@@ -2,52 +2,51 @@ import { Button, H2 } from '@blueprintjs/core';
 import {
   type CellValueChangedEvent,
   type ColDef,
-  type GridApi,
-  type GridReadyEvent,
+  type GetRowIdParams,
   type RowDragEvent,
-  themeBalham,
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { cloneDeep, isEqual } from 'lodash-es';
-import {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { isEqual } from 'lodash-es';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { themeSource } from 'src/commons/agGrid/theme';
 import type { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
-import type { WithImperativeApi } from 'src/commons/utils/TypeHelper';
+import type { KeysOfType } from 'src/commons/utils/TypeHelper';
 
 import BooleanCell from './BooleanCell';
 import DeleteRowCell from './DeleteRowCell';
 import NumericCell from './NumericCell';
 
-const defaultAssessmentConfig: AssessmentConfiguration = {
-  assessmentConfigId: -1,
-  type: 'untitled',
-  isManuallyGraded: true,
-  isGradingAutoPublished: false,
-  displayInDashboard: true,
-  isMinigame: false,
-  hoursBeforeEarlyXpDecay: 0,
-  hasTokenCounter: false,
-  hasVotingFeatures: false,
-  earlySubmissionXp: 0,
-  isAutosaveEnabled: true,
-};
+const MAX_ROWS = 8;
+const MIN_ROWS = 1;
 
-export type ImperativeAssessmentConfigPanel = {
-  getData: () => AssessmentConfiguration[];
-  resetData: () => void;
+// Negative ids mark rows that have not yet been persisted; the backend treats
+// `assessmentConfigId: <negative>` as "create" (see the course-creation flow in
+// BackendSaga) and assigns real ids on the next fetchAssessmentConfigs round
+// trip. We use a per-mount monotonic counter so that multiple newly-added rows
+// in the same session get unique `getRowId`s.
+const defaultAssessmentConfig = (seqRef: { current: number }): AssessmentConfiguration => {
+  seqRef.current += 1;
+  return {
+    assessmentConfigId: -(Date.now() + seqRef.current),
+    type: 'untitled',
+    isManuallyGraded: true,
+    isGradingAutoPublished: false,
+    displayInDashboard: true,
+    isMinigame: false,
+    hoursBeforeEarlyXpDecay: 0,
+    hasTokenCounter: false,
+    hasVotingFeatures: false,
+    earlySubmissionXp: 0,
+    isAutosaveEnabled: true,
+  };
 };
 
 type Props = {
+  configs: AssessmentConfiguration[];
+  onChange: (next: AssessmentConfiguration[]) => void;
+  onHasChangesChange: (val: boolean) => void;
   initialConfigs: AssessmentConfiguration[];
-  setHasChangesAssessmentConfig: (val: boolean) => void;
 };
 
 const defaultColumnDefs: ColDef = {
@@ -58,329 +57,277 @@ const defaultColumnDefs: ColDef = {
   sortable: false,
 };
 
-const AssessmentConfigPanel: WithImperativeApi<
-  ImperativeAssessmentConfigPanel,
-  React.FC<Props>
-> = forwardRef<ImperativeAssessmentConfigPanel, Props>(
-  ({ setHasChangesAssessmentConfig, initialConfigs }, imperativeRef) => {
-    const gridApi = useRef<GridApi<AssessmentConfiguration>>(null);
-    // Create a mutable copy of the initialConfigs to track changes
-    // to prevent UI flicker during state changes.
-    const tableState = useRef(cloneDeep(initialConfigs));
+function AssessmentConfigPanel({ configs, onChange, onHasChangesChange, initialConfigs }: Props) {
+  // Per-mount counter for generating unique transient ids for brand-new rows.
+  const newRowSeq = useRef(0);
 
-    const [configs, setConfigs] = useState(initialConfigs);
-    useEffect(() => {
-      setHasChangesAssessmentConfig(!isEqual(configs, initialConfigs));
-    }, [configs, initialConfigs, setHasChangesAssessmentConfig]);
+  // Identify rows by their (eventual) assessmentConfigId. Transient new rows
+  // get a unique negative id (see `defaultAssessmentConfig`) so ag-grid can
+  // track them across reorders until the backend assigns real ids.
+  const getRowId = useCallback(
+    (params: GetRowIdParams<AssessmentConfiguration>) => String(params.data.assessmentConfigId),
+    [],
+  );
 
-    // Register the imperative API so that parents can access the current data
-    useImperativeHandle<ImperativeAssessmentConfigPanel, ImperativeAssessmentConfigPanel>(
-      imperativeRef,
-      () => ({
-        getData: () => configs,
-        resetData: () => {
-          setConfigs(initialConfigs);
-          tableState.current = cloneDeep(initialConfigs);
-        },
-      }),
-    );
+  // Single updater for every column. Immutably replaces the row, so ag-grid
+  // re-renders from the new rowData with no manual API calls needed.
+  const updateRow = useCallback(
+    (id: number, partial: Partial<AssessmentConfiguration>) => {
+      onChange(configs.map(row => (row.assessmentConfigId === id ? { ...row, ...partial } : row)));
+    },
+    [configs, onChange],
+  );
 
-    // Manually graded assessments should not be auto-published
-    // Check and ensure that isManuallyGraded = true and isGradingAutoPublished = true cannot be set simultaneously
-    const setIsManuallyGraded = useCallback((index: number, value: boolean) => {
-      setConfigs(prev => {
-        const newConfigs = cloneDeep(prev) ?? [];
-        newConfigs[index].isManuallyGraded = value;
-
-        if (value) {
-          newConfigs[index].isGradingAutoPublished = false;
-          gridApi.current
-            ?.getDisplayedRowAtIndex(index)
-            ?.setDataValue('isGradingAutoPublished', false);
-        }
-        gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isManuallyGraded', value);
-        return newConfigs;
+  // isManuallyGraded and isGradingAutoPublished are mutually exclusive.
+  const handleManuallyGradedChange = useCallback(
+    (
+      row: AssessmentConfiguration,
+      field: KeysOfType<AssessmentConfiguration, boolean>,
+      value: boolean,
+    ) => {
+      updateRow(row.assessmentConfigId, {
+        isManuallyGraded: value,
+        isGradingAutoPublished: value ? false : row.isGradingAutoPublished,
       });
-    }, []);
+    },
+    [updateRow],
+  );
 
-    const setIsGradingAutoPublished = useCallback((index: number, value: boolean) => {
-      setConfigs(prev => {
-        const newConfigs = cloneDeep(prev) ?? [];
-        newConfigs[index].isGradingAutoPublished = value;
-
-        if (value) {
-          newConfigs[index].isManuallyGraded = false;
-          gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isManuallyGraded', false);
-        }
-        gridApi.current
-          ?.getDisplayedRowAtIndex(index)
-          ?.setDataValue('isGradingAutoPublished', value);
-        return newConfigs;
+  const handleAutoPublishedChange = useCallback(
+    (
+      row: AssessmentConfiguration,
+      field: KeysOfType<AssessmentConfiguration, boolean>,
+      value: boolean,
+    ) => {
+      updateRow(row.assessmentConfigId, {
+        isGradingAutoPublished: value,
+        isManuallyGraded: value ? false : row.isManuallyGraded,
       });
-    }, []);
+    },
+    [updateRow],
+  );
 
-    const valueSetter = useCallback(
-      <T extends keyof AssessmentConfiguration>(field: T) =>
-        (index: number, value: AssessmentConfiguration[T]) => {
-          setConfigs(prev => {
-            const newConfigs = cloneDeep(prev) ?? [];
-            newConfigs[index][field] = value;
-            gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue(field, value);
-            return newConfigs;
-          });
-        },
-      [],
-    );
+  // Generic field handler for non-mutually-exclusive columns. The cell passes
+  // (row, field, value); we route it through updateRow keyed by id.
+  const updateBooleanField = useCallback(
+    (
+      row: AssessmentConfiguration,
+      field: KeysOfType<AssessmentConfiguration, boolean>,
+      value: boolean,
+    ) => {
+      updateRow(row.assessmentConfigId, { [field]: value } as Partial<AssessmentConfiguration>);
+    },
+    [updateRow],
+  );
 
-    /* eslint-disable react-hooks/exhaustive-deps */
-    const setDisplayInDashboard = useCallback(valueSetter('displayInDashboard'), []);
-    const setIsMinigame = useCallback(valueSetter('isMinigame'), []);
-    const setHasTokenCounter = useCallback(valueSetter('hasTokenCounter'), []);
-    const setHasVotingFeatures = useCallback(valueSetter('hasVotingFeatures'), []);
-    const setEarlyXp = useCallback(valueSetter('earlySubmissionXp'), []);
-    const setHoursBeforeDecay = useCallback(valueSetter('hoursBeforeEarlyXpDecay'), []);
-    const setIsAutosaveEnabled = useCallback(valueSetter('isAutosaveEnabled'), []);
-    /* eslint-enable */
+  const updateNumericField = useCallback(
+    (
+      row: AssessmentConfiguration,
+      field: KeysOfType<AssessmentConfiguration, number>,
+      value: number,
+    ) => {
+      updateRow(row.assessmentConfigId, { [field]: value } as Partial<AssessmentConfiguration>);
+    },
+    [updateRow],
+  );
 
-    const addRowHandler = useCallback(() => {
-      if (configs.length >= 8) {
-        showWarningMessage('You can have at most 8 assessment types!');
-        return;
-      }
-      // Make sure to spread defaultAssessmentConfig twice
-      // so that the (mutable) UI copy is not the same as the
-      // (immutable) data copy.
-      setConfigs(prev => [...prev, { ...defaultAssessmentConfig }]);
-      gridApi.current?.applyTransaction({ add: [{ ...defaultAssessmentConfig }] });
-    }, [configs.length]);
-
-    const deleteRowHandler = useCallback(
-      (index: number) => {
-        if (configs.length <= 1) {
-          showWarningMessage('You must have at least 1 assessment type!');
-          return;
-        }
-        setConfigs(prev => {
-          const newConfigs = cloneDeep(prev) ?? [];
-          newConfigs.splice(index, 1);
-          return newConfigs;
-        });
-        const rowToRemove = gridApi.current?.getDisplayedRowAtIndex(index)?.data;
-        gridApi.current?.applyTransaction({ remove: [rowToRemove!] });
-      },
-      [configs.length],
-    );
-
-    const columnDefs: ColDef<AssessmentConfiguration>[] = useMemo(
-      () => [
-        {
-          headerName: 'Assessment Type',
-          field: 'type',
-          rowDrag: true,
-          editable: true,
-        },
-        {
-          headerName: 'Is Manually Graded',
-          field: 'isManuallyGraded',
-          cellRenderer: BooleanCell,
-          cellRendererParams: {
-            setStateHandler: setIsManuallyGraded,
-            field: 'isManuallyGraded',
-          },
-        },
-        {
-          headerName: 'Is Auto-published',
-          field: 'isGradingAutoPublished',
-          cellRenderer: BooleanCell,
-          cellRendererParams: {
-            setStateHandler: setIsGradingAutoPublished,
-            field: 'isGradingAutoPublished',
-          },
-        },
-        {
-          headerName: 'Display in Dashboard',
-          field: 'displayInDashboard',
-          cellRenderer: BooleanCell,
-          cellRendererParams: {
-            setStateHandler: setDisplayInDashboard,
-            field: 'displayInDashboard',
-          },
-        },
-        {
-          headerName: 'Is Minigame',
-          field: 'isMinigame',
-          cellRenderer: BooleanCell,
-          cellRendererParams: {
-            setStateHandler: setIsMinigame,
-            field: 'isMinigame',
-          },
-        },
-        {
-          headerName: 'Voting Features*',
-          field: 'hasVotingFeatures',
-          cellRenderer: BooleanCell,
-          cellRendererParams: {
-            setStateHandler: setHasVotingFeatures,
-            field: 'hasVotingFeatures',
-          },
-        },
-        {
-          headerName: 'Token Counter*',
-          field: 'hasTokenCounter',
-          cellRenderer: BooleanCell,
-          cellRendererParams: {
-            setStateHandler: setHasTokenCounter,
-            field: 'hasTokenCounter',
-          },
-        },
-        {
-          headerName: 'Autosave',
-          field: 'isAutosaveEnabled',
-          cellRenderer: BooleanCell,
-          cellRendererParams: {
-            setStateHandler: setIsAutosaveEnabled,
-            field: 'isAutosaveEnabled',
-          },
-        },
-        {
-          headerName: 'Max Bonus XP',
-          field: 'earlySubmissionXp',
-          cellRenderer: NumericCell,
-          cellRendererParams: {
-            setStateHandler: setEarlyXp,
-            field: 'earlySubmissionXp',
-          },
-        },
-        {
-          headerName: 'Early Hours Before Decay',
-          field: 'hoursBeforeEarlyXpDecay',
-          cellRenderer: NumericCell,
-          cellRendererParams: {
-            setStateHandler: setHoursBeforeDecay,
-            field: 'hoursBeforeEarlyXpDecay',
-          },
-        },
-        {
-          headerName: 'Delete',
-          field: 'placeholderToPreventColumnRerender' as any,
-          cellRenderer: DeleteRowCell,
-          cellRendererParams: {
-            deleteRowHandler: deleteRowHandler,
-          },
-          resizable: false,
-          flex: 2,
-        },
-      ],
-      [
-        deleteRowHandler,
-        setDisplayInDashboard,
-        setIsAutosaveEnabled,
-        setIsMinigame,
-        setEarlyXp,
-        setHasTokenCounter,
-        setHasVotingFeatures,
-        setHoursBeforeDecay,
-        setIsGradingAutoPublished,
-        setIsManuallyGraded,
-      ],
-    );
-
-    // Tracks the movement of rows in our local React state while dragging
-    const onRowDragMove = useCallback(
-      (event: RowDragEvent) => {
-        const movingNode = event.node;
-        const overNode = event.overNode;
-        const rowNeedsToMove = movingNode !== overNode;
-        if (rowNeedsToMove) {
-          const movingData = movingNode.data;
-          const overData = overNode?.data;
-          const fromIndex = indexOfObject(configs, movingData);
-          const toIndex = indexOfObject(configs, overData);
-
-          const temp = [...configs];
-          moveInArray(temp, fromIndex, toIndex);
-          setConfigs(temp);
-        }
-      },
-      [configs],
-    );
-
-    // Updates the data passed into ag-grid
-    // (this is necessary to update the rowIndex in our custom cellRenderer)
-    const onRowDragLeaveOrEnd = (event: RowDragEvent) => {
-      gridApi.current?.setGridOption('rowData', configs);
-    };
-
-    // Updates our local React state whenever there are changes
-    // to the Assessment Type column.
-    const onCellValueChanged = (event: CellValueChangedEvent) => {
-      if (event.colDef.field !== 'type') {
-        return;
-      }
-      setConfigs(prev => {
-        const newConfigs = cloneDeep(prev) ?? [];
-        newConfigs[event.rowIndex!].type = event.value;
-        return newConfigs;
-      });
-    };
-
-    const onGridReady = (params: GridReadyEvent) => {
-      gridApi.current = params.api;
-    };
-
-    const grid = (
-      <div className="Grid">
-        <AgGridReact
-          theme={themeBalham}
-          domLayout="autoHeight"
-          columnDefs={columnDefs}
-          defaultColDef={defaultColumnDefs}
-          onGridReady={onGridReady}
-          rowData={tableState.current}
-          rowHeight={36}
-          rowDragManaged
-          suppressCellFocus
-          suppressMovableColumns
-          suppressPaginationPanel
-          onRowDragMove={onRowDragMove}
-          onRowDragLeave={onRowDragLeaveOrEnd}
-          onRowDragEnd={onRowDragLeaveOrEnd}
-          onCellValueChanged={onCellValueChanged}
-        />
-        <div className="footer-text">
-          *If you create an assessment with these toggles enabled, they will be activated within the
-          assessment <b>by default</b>. However, you can also visit ground control to manually
-          override these settings if needed.
-        </div>
-      </div>
-    );
-
-    return (
-      <div className="assessment-configuration">
-        <div className="assessment-configuration-header-container">
-          <H2>Assessment Configuration</H2>
-          <Button text="Add Row" onClick={addRowHandler} className="add-row-button" />
-        </div>
-        {grid}
-      </div>
-    );
-  },
-);
-AssessmentConfigPanel.displayName = 'AssessmentConfigPanel';
-
-function moveInArray(arr: any[], fromIndex: number, toIndex: number): void {
-  const element = arr[fromIndex];
-  arr.splice(fromIndex, 1);
-  arr.splice(toIndex, 0, element);
-}
-
-function indexOfObject(arr: any[], obj: any): number {
-  for (let i = 0; i < arr.length; i++) {
-    if (isEqual(arr[i], obj)) {
-      return i;
+  const handleAddRow = useCallback(() => {
+    if (configs.length >= MAX_ROWS) {
+      showWarningMessage(`You can have at most ${MAX_ROWS} assessment types!`);
+      return;
     }
-  }
-  return -1;
+    onChange([...configs, defaultAssessmentConfig(newRowSeq)]);
+  }, [configs, onChange, newRowSeq]);
+
+  const handleRemoveRow = useCallback(
+    (row: AssessmentConfiguration) => {
+      if (configs.length <= MIN_ROWS) {
+        showWarningMessage(`You must have at least ${MIN_ROWS} assessment type!`);
+        return;
+      }
+      onChange(configs.filter(r => r.assessmentConfigId !== row.assessmentConfigId));
+    },
+    [configs, onChange],
+  );
+
+  // Diff the current configs against the last-known saved snapshot to drive
+  // the "Save" button's enabled state. Replaces the old tableState ref.
+  useEffect(() => {
+    const sameLength = configs.length === initialConfigs.length;
+    const sameContent = sameLength && configs.every((row, i) => isEqual(row, initialConfigs[i]));
+    onHasChangesChange(!sameContent);
+  }, [configs, initialConfigs, onHasChangesChange]);
+
+  const columnDefs: ColDef<AssessmentConfiguration>[] = useMemo(
+    () => [
+      {
+        headerName: 'Assessment Type',
+        field: 'type',
+        rowDrag: true,
+        editable: true,
+      },
+      {
+        headerName: 'Is Manually Graded',
+        field: 'isManuallyGraded',
+        cellRenderer: BooleanCell,
+        cellRendererParams: {
+          onChange: handleManuallyGradedChange,
+          field: 'isManuallyGraded',
+        },
+      },
+      {
+        headerName: 'Is Auto-published',
+        field: 'isGradingAutoPublished',
+        cellRenderer: BooleanCell,
+        cellRendererParams: {
+          onChange: handleAutoPublishedChange,
+          field: 'isGradingAutoPublished',
+        },
+      },
+      {
+        headerName: 'Display in Dashboard',
+        field: 'displayInDashboard',
+        cellRenderer: BooleanCell,
+        cellRendererParams: {
+          onChange: updateBooleanField,
+          field: 'displayInDashboard',
+        },
+      },
+      {
+        headerName: 'Is Minigame',
+        field: 'isMinigame',
+        cellRenderer: BooleanCell,
+        cellRendererParams: {
+          onChange: updateBooleanField,
+          field: 'isMinigame',
+        },
+      },
+      {
+        headerName: 'Voting Features*',
+        field: 'hasVotingFeatures',
+        cellRenderer: BooleanCell,
+        cellRendererParams: {
+          onChange: updateBooleanField,
+          field: 'hasVotingFeatures',
+        },
+      },
+      {
+        headerName: 'Token Counter*',
+        field: 'hasTokenCounter',
+        cellRenderer: BooleanCell,
+        cellRendererParams: {
+          onChange: updateBooleanField,
+          field: 'hasTokenCounter',
+        },
+      },
+      {
+        headerName: 'Autosave',
+        field: 'isAutosaveEnabled',
+        cellRenderer: BooleanCell,
+        cellRendererParams: {
+          onChange: updateBooleanField,
+          field: 'isAutosaveEnabled',
+        },
+      },
+      {
+        headerName: 'Max Bonus XP',
+        field: 'earlySubmissionXp',
+        cellRenderer: NumericCell,
+        cellRendererParams: {
+          onChange: updateNumericField,
+          field: 'earlySubmissionXp',
+        },
+      },
+      {
+        headerName: 'Early Hours Before Decay',
+        field: 'hoursBeforeEarlyXpDecay',
+        cellRenderer: NumericCell,
+        cellRendererParams: {
+          onChange: updateNumericField,
+          field: 'hoursBeforeEarlyXpDecay',
+        },
+      },
+      {
+        headerName: 'Delete',
+        field: 'actions' as any,
+        cellRenderer: DeleteRowCell,
+        cellRendererParams: {
+          onRemove: handleRemoveRow,
+        },
+        resizable: false,
+        flex: 2,
+      },
+    ],
+    [
+      handleAutoPublishedChange,
+      handleManuallyGradedChange,
+      handleRemoveRow,
+      updateBooleanField,
+      updateNumericField,
+    ],
+  );
+
+  // Live-reorder rows while the user drags them
+  const onRowDragMove = useCallback(
+    (event: RowDragEvent<AssessmentConfiguration>) => {
+      const movingNode = event.node;
+      const overNode = event.overNode;
+      if (!overNode || movingNode === overNode) {
+        return;
+      }
+      // Prefer the event's overIndex when available (ag-grid v35 exposes it).
+      const overIndex = typeof event.overIndex === 'number' ? event.overIndex! : overNode.rowIndex;
+      const fromIndex = movingNode.rowIndex;
+      if (fromIndex == null || overIndex == null || fromIndex === overIndex) {
+        return;
+      }
+      const next = [...configs];
+      const [moved] = next.splice(fromIndex, 1);
+      next.splice(overIndex, 0, moved);
+      onChange(next);
+    },
+    [configs, onChange],
+  );
+
+  // Only the editable `type` column needs this; everything else is dispatched
+  // directly by its cell renderer through `updateRow`.
+  const onCellValueChanged = useCallback(
+    (event: CellValueChangedEvent<AssessmentConfiguration>) => {
+      if (event.colDef.field !== 'type' || event.data == null) {
+        return;
+      }
+      updateRow(event.data.assessmentConfigId, { type: event.newValue });
+    },
+    [updateRow],
+  );
+
+  return (
+    <div className="assessment-configuration">
+      <div className="assessment-configuration-header-container">
+        <H2>Assessment Configuration</H2>
+        <Button text="Add Row" onClick={handleAddRow} className="add-row-button" />
+      </div>
+      <AgGridReact
+        theme={themeSource}
+        domLayout="autoHeight"
+        columnDefs={columnDefs}
+        defaultColDef={defaultColumnDefs}
+        getRowId={getRowId}
+        rowData={configs}
+        rowHeight={36}
+        suppressCellFocus
+        suppressMovableColumns
+        suppressPaginationPanel
+        onRowDragMove={onRowDragMove}
+        onCellValueChanged={onCellValueChanged}
+      />
+      <div className="footer-text">
+        *If you create an assessment with these toggles enabled, they will be activated within the
+        assessment <b>by default</b>. However, you can also visit ground control to manually
+        override these settings if needed.
+      </div>
+    </div>
+  );
 }
 
 export default AssessmentConfigPanel;
