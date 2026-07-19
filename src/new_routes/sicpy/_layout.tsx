@@ -45,7 +45,7 @@ const getText = () => {
 };
 
 function SicPyLayout() {
-  const { section } = useParams<{ section: string }>();
+  const { section } = useParams();
   const parentRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
