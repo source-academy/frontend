@@ -5441,32 +5441,40 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ag-charts-types@npm:13.3.1":
-  version: 13.3.1
-  resolution: "ag-charts-types@npm:13.3.1"
-  checksum: 10c0/8b083402a3a2dc15c2fe005a2fa8d7c305ce0568ba4567dff266d34d1cc20dfa5a983822cbe37aa1aa7062c60f2c918f83b4416212109384f9ea9e014987f61b
+"ag-charts-types@npm:14.0.1":
+  version: 14.0.1
+  resolution: "ag-charts-types@npm:14.0.1"
+  checksum: 10c0/0f251dda2270e6cd05b38fd67a60b893fc5052e25708d118998c4de0c6c32f2b507b43eedff230d9d638188fb0fbbed4e7102a087f9709344bb274d3535b1390
   languageName: node
   linkType: hard
 
-"ag-grid-community@npm:35.3.1, ag-grid-community@npm:^35.0.0":
-  version: 35.3.1
-  resolution: "ag-grid-community@npm:35.3.1"
+"ag-grid-community@npm:36.0.1, ag-grid-community@npm:^36.0.0":
+  version: 36.0.1
+  resolution: "ag-grid-community@npm:36.0.1"
   dependencies:
-    ag-charts-types: "npm:13.3.1"
-  checksum: 10c0/65acd61236907b66133f464757fa5bb120c35b17fa30bd434cea15e59b948e211560890f19b864a07456b50bdb2e5bda4a8c1f85e715762492bcab803e7e1e9c
+    ag-charts-types: "npm:14.0.1"
+    ag-stack: "npm:36.0.1"
+  checksum: 10c0/fabab698362f41dbfbee4ab36d92f26b59342c28e3b3a5c2a2fcd7f35696b175be70b2b572f852f2c073d8491c68a2514b36b174ddf4b53835a8b081d6b37c8e
   languageName: node
   linkType: hard
 
-"ag-grid-react@npm:^35.0.0":
-  version: 35.3.1
-  resolution: "ag-grid-react@npm:35.3.1"
+"ag-grid-react@npm:^36.0.0":
+  version: 36.0.1
+  resolution: "ag-grid-react@npm:36.0.1"
   dependencies:
-    ag-grid-community: "npm:35.3.1"
+    ag-grid-community: "npm:36.0.1"
     prop-types: "npm:^15.8.1"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/77c9c3d890c2ed9b43b711d46baa2f2097d579880c7bacb46c7902827c8b969506435eac2c492f9873527ade89941723f3a30013aa8ba0a52669559a5ac565ea
+  checksum: 10c0/5a0e009d5d481acadf4263aab96e734eef4d51debbef70eb2e1cd34dbf442858a8080da693f5215be53901fdc0cbc4bd9abe02f961c85495e4f1bab338f632bc
+  languageName: node
+  linkType: hard
+
+"ag-stack@npm:36.0.1":
+  version: 36.0.1
+  resolution: "ag-stack@npm:36.0.1"
+  checksum: 10c0/995d8d70a4701c43490561452da642d1663012ce2fa5c87b6c355646e7f11718d76dd650128db28d7338d29859ab53d8eac8e70513d601eca01c38ba5d362220
   languageName: node
   linkType: hard
 
@@ -8260,8 +8268,8 @@ __metadata:
     ace-builds: "npm:^1.42.1"
     ace-diff: "npm:^4.0.0"
     acorn: "npm:^8.9.0"
-    ag-grid-community: "npm:^35.0.0"
-    ag-grid-react: "npm:^35.0.0"
+    ag-grid-community: "npm:^36.0.0"
+    ag-grid-react: "npm:^36.0.0"
     browserfs: "npm:^1.4.3"
     canvas: "npm:^3.1.0"
     classnames: "npm:^2.3.2"
