@@ -436,11 +436,6 @@
   }
 }
 
-.ag-header-cell.hide-cols-btn {
-  width: 32px;
-  height: 32px;
-}
-
 .grading-table-footer {
   padding-top: 15px;
   margin-bottom: 15px;
@@ -480,49 +475,8 @@
   color: #374151;
 }
 
-.grading-actions-btn-wrappers {
-  > a {
-    display: flex;
-  }
-}
-
-.grading-action-icons {
-  color: #3b82f6;
-  border-radius: 10px;
-  margin: auto 0;
-  background-color: #7dbcff00;
-  transition: 0.1s ease;
-
-  svg {
-    fill: #3b82f6 !important;
-  }
-
-  &.grading-action-icons-bg {
-    background-color: #7dbcff80;
-
-    &:hover {
-      background-color: #7dbcffb3;
-    }
-  }
-
-  .#{$ns}-icon {
-    margin: 6px;
-  }
-
-  .#{$ns}-popover-target {
-    max-height: 32px;
-  }
-}
-
 .grading-table-wrapper {
   padding: 1rem 1.5rem 0 1.5rem;
-
-  * {
-    border: none;
-    outline: none;
-    text-decoration: none;
-    background-color: transparent;
-  }
 
   button {
     cursor: pointer;
