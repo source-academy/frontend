@@ -372,6 +372,9 @@ function GradingSubmissionTable({
             enableClickSelection: !tableProperties.suppressRowClickSelection,
           }}
           domLayout="autoHeight"
+          enableCellTextSelection
+          ensureDomOrder
+          suppressCellFocus
           onFilterChanged={e => {
             if (!e.afterFloatingFilter) {
               return;

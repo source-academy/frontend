@@ -1,27 +1,3 @@
-.grading-overview-unfilterable-btns,
-.grading-overview-filterable-btns {
-  padding: 0 2px;
-  text-align: inherit;
-  outline: none;
-  line-height: 1.5;
-
-  a {
-    text-decoration: none;
-    color: black;
-  }
-
-  &,
-  p {
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-}
-
-.grading-overview-unfilterable-btns,
-.grading-overview-filterable-btns {
-  border-radius: 9999px;
-}
-
 .grading-filter-btn {
   padding: 7.5px 15px;
   border-radius: 25px;
