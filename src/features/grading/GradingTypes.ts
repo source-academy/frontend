@@ -149,7 +149,6 @@ export type IGradingTableProperties = {
   overlayNoRowsTemplate: string;
   pageSize: number;
   pagination: boolean;
-  rowClass: string;
   rowHeight: number;
   suppressMenuHide: boolean;
   suppressPaginationPanel: boolean;

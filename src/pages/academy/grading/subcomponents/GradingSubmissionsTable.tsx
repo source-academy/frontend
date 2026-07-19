@@ -1,12 +1,15 @@
 import { Button, H6, Icon, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import type { CellClickedEvent, ColDef } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react';
+import { AgGridReact, type CustomHeaderProps } from 'ag-grid-react';
 import classNames from 'classnames';
 import { debounce } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
+import ColumnHeader from 'src/commons/agGrid/ColumnHeader';
+import HiddenColumnsBar from 'src/commons/agGrid/HiddenColumnsBar';
 import { themeSource } from 'src/commons/agGrid/theme';
+import { useColumnVisibility } from 'src/commons/agGrid/useColumnVisibility';
 import { ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
@@ -16,8 +19,6 @@ import type {
   ColumnFieldsKeys,
   ColumnFilter,
   ColumnFiltersState,
-  ColumnNameKeys,
-  GradingColumnVisibility,
   GradingOverview,
   IGradingTableProperties,
   IGradingTableRow,
@@ -27,8 +28,8 @@ import { ColumnFields, ColumnName, SortStates } from 'src/features/grading/Gradi
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import classes from '../Grading.module.css';
-import GradingColumnCustomHeaders from './GradingColumnCustomHeaders';
-import GradingColumnFilters from './GradingColumnFilters';
+import { getBadgeColorFromLabel } from './gradingBadges/gradingBadgeColors';
+import GradingSortIcon from './GradingSortIcon';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 import { generateCols } from './gradingSubmissionsTableUtils';
 
@@ -79,7 +80,6 @@ function GradingSubmissionTable({
   const navigate = useNavigate();
 
   const tableFilters = useAppSelector(state => state.workspaces.grading.submissionsTableFilters);
-  const columnVisibility = useAppSelector(state => state.workspaces.grading.columnVisiblity);
   const requestCounter = useAppSelector(state => state.workspaces.grading.requestCounter);
   const courseId = useAppSelector(store => store.session.courseId);
 
@@ -94,9 +94,9 @@ function GradingSubmissionTable({
     ...tableFilters.columnFilters,
   ]);
   const [cellFilters, setCellFilters] = useState<{ id: ColumnFields; value: string }[]>([]);
-  const [hiddenColumns, setHiddenColumns] = useState<GradingColumnVisibility>(
-    columnVisibility ? columnVisibility : [],
-  );
+  const columnVisibility = useColumnVisibility({
+    getColumnLabel: id => ColumnName[id as ColumnFieldsKeys],
+  });
   const [rowData, setRowData] = useState<IGradingTableRow[]>([]);
   const [colDefs, setColDefs] = useState<ColDef<IGradingTableRow>[]>();
   // This is what that controls Grading Mode. If future feedback says it's better to default to filter mode, change it here.
@@ -113,20 +113,12 @@ function GradingSubmissionTable({
     resizable: true,
     sortable: true,
     headerComponentParams: {
-      hideColumn: (id: ColumnNameKeys) => handleColumnFilterAdd(id),
-      updateSortState: (affectedID: ColumnNameKeys, sortDirection: SortStates) => {
-        if (!disabledSortCols.includes(affectedID)) {
-          const newState: SortStateProperties = { ...freshSortState };
-          newState[affectedID] = sortDirection;
-          dispatch(
-            WorkspaceActions.updateAllColsSortStates({
-              currentState: newState,
-              sortBy: affectedID,
-            }),
-          );
-        }
-      },
-      disabledSortCols: disabledSortCols,
+      ...columnVisibility.headerProps,
+      hideDisabledCols: [],
+      extraActions: (headerProps: CustomHeaderProps) =>
+        disabledSortCols.includes(headerProps.column.getColId()) ? null : (
+          <GradingSortIcon headerProps={headerProps} />
+        ),
     },
   };
 
@@ -135,7 +127,7 @@ function GradingSubmissionTable({
 
   const tableProperties: IGradingTableProperties = {
     customComponents: {
-      agColumnHeader: GradingColumnCustomHeaders,
+      agColumnHeader: ColumnHeader,
     },
     defaultColDefs: defaultColumnDefs,
     headerHeight: HEADER_HEIGHT,
@@ -144,7 +136,6 @@ function GradingSubmissionTable({
       "Hmm... we didn't find any submissions, you might want to debug your filter() function.",
     pageSize: pageSize,
     pagination: true,
-    rowClass: classNames(classes['grading-left-align'], classes['grading-table-rows']),
     rowHeight: ROW_HEIGHT,
     suppressMenuHide: true,
     suppressPaginationPanel: true,
@@ -216,20 +207,6 @@ function GradingSubmissionTable({
     resetPage();
   };
 
-  // Column Filter is to hide Columns
-  const handleColumnFilterRemove = (toRemove: string) => {
-    if (gridRef.current?.api) {
-      setHiddenColumns((prev: GradingColumnVisibility) =>
-        prev.filter(column => column !== toRemove),
-      );
-      gridRef.current.api.setColumnsVisible([toRemove], true);
-    }
-  };
-
-  const handleColumnFilterAdd = (toAdd: ColumnNameKeys) => {
-    setHiddenColumns((prev: GradingColumnVisibility) => [...prev, toAdd]);
-  };
-
   useEffect(() => {
     if (
       !showAllSubmissions &&
@@ -250,13 +227,6 @@ function GradingSubmissionTable({
     }
     dispatch(WorkspaceActions.updateSubmissionsTableFilters({ columnFilters }));
   }, [columnFilters, showAllSubmissions, dispatch, resetPage]);
-
-  useEffect(() => {
-    dispatch(WorkspaceActions.updateGradingColumnVisibility(hiddenColumns));
-    if (gridRef.current?.api) {
-      gridRef.current.api.setColumnsVisible(hiddenColumns, false);
-    }
-  }, [hiddenColumns, dispatch]);
 
   useEffect(() => {
     resetPage();
@@ -329,22 +299,12 @@ function GradingSubmissionTable({
 
   return (
     <>
-      {hiddenColumns.length > 0 ? (
-        <GradingFlex justifyContent="space-between" alignItems="center" className="mt-2">
-          <GradingFlex>
-            <GradingText isSecondaryText>Columns Hidden:</GradingText>
-            <GradingColumnFilters
-              filters={hiddenColumns}
-              filtersName={hiddenColumns.map((id: ColumnFieldsKeys) => {
-                return ColumnName[id];
-              })}
-              onFilterRemove={handleColumnFilterRemove}
-            />
-          </GradingFlex>
-        </GradingFlex>
-      ) : (
-        <></>
-      )}
+      <HiddenColumnsBar
+        {...columnVisibility.chipsProps}
+        getBadgeColor={getBadgeColorFromLabel}
+        className="mt-2"
+        label={<GradingText isSecondaryText>Columns Hidden:</GradingText>}
+      />
 
       <GradingFlex justifyContent="space-between" alignItems="center" className="mt-2">
         <GradingFlex alignItems="center">
@@ -355,7 +315,7 @@ function GradingSubmissionTable({
                 'Filters: '
               ) : filterMode === true ? (
                 'No filters applied. Click on any cell to filter by its value.' +
-                (hiddenColumns.length === 0
+                (columnVisibility.hiddenColumns.length === 0
                   ? " Click on any column header's eye icon to hide it."
                   : '')
               ) : (
@@ -390,6 +350,8 @@ function GradingSubmissionTable({
       <div className="mt-4">
         <AgGridReact
           theme={themeSource}
+          onGridReady={grid => columnVisibility.onReady(grid.api)}
+          onFirstDataRendered={columnVisibility.onFirstDataRendered}
           columnDefs={colDefs}
           onCellClicked={cellClickedEvent}
           ref={gridRef}
@@ -402,7 +364,6 @@ function GradingSubmissionTable({
           overlayNoRowsTemplate={tableProperties.overlayNoRowsTemplate}
           pagination={tableProperties.pagination}
           paginationPageSize={tableProperties.pageSize}
-          rowClass={tableProperties.rowClass}
           rowHeight={tableProperties.rowHeight}
           suppressMenuHide={tableProperties.suppressMenuHide}
           suppressPaginationPanel={tableProperties.suppressPaginationPanel}
