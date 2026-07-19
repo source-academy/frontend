@@ -5,15 +5,18 @@ import classNames from 'classnames';
 import { useEffect, useRef } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router';
 import { readLocalStorage } from 'src/commons/hooks/useLocalStorageState';
+import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
+import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
 import { ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { scrollRefIntoView } from 'src/features/sicp/utils/SicpUtils';
 import {
-  SICPY_CACHE_KEY,
-  SICPY_INDEX,
-  useSicPySectionQuery,
+    SICPY_CACHE_KEY,
+    SICPY_INDEX,
+    useSicPySectionQuery,
 } from 'src/features/textbook/hooks/useTextbookSectionQuery';
+import Chatbot from 'src/pages/sicp/subcomponents/chatbot/Chatbot';
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
@@ -49,9 +52,9 @@ function SicPyLayout() {
 
   const { isLoggedIn } = useSession();
 
-  function getSection() {
+  function getSection(): SicpSection {
     // To discard the '/sicpy/'
-    return location.pathname.replace('/sicpy/', '');
+    return location.pathname.replace('/sicpy/', '') as SicpSection;
   }
 
   // Handle rerouting to the latest viewed section when clicking from the main
