@@ -69,6 +69,8 @@ type Props = {
   updateEntries: (page: number, filterParams: object) => void;
 };
 
+const HEADER_HEIGHT: number = 48; // in px, declared here to calculate table height
+
 function GradingSubmissionTable({
   showAllSubmissions,
   totalRows,
@@ -122,9 +124,6 @@ function GradingSubmissionTable({
     },
   };
 
-  const ROW_HEIGHT: number = 60; // in px, declared here to calculate table height
-  const HEADER_HEIGHT: number = 48; // in px, declared here to calculate table height
-
   const tableProperties: IGradingTableProperties = {
     customComponents: {
       agColumnHeader: ColumnHeader,
@@ -136,7 +135,6 @@ function GradingSubmissionTable({
       "Hmm... we didn't find any submissions, you might want to debug your filter() function.",
     pageSize: pageSize,
     pagination: true,
-    rowHeight: ROW_HEIGHT,
     suppressMenuHide: true,
     suppressPaginationPanel: true,
     suppressRowClickSelection: true,
@@ -364,7 +362,6 @@ function GradingSubmissionTable({
           overlayNoRowsTemplate={tableProperties.overlayNoRowsTemplate}
           pagination={tableProperties.pagination}
           paginationPageSize={tableProperties.pageSize}
-          rowHeight={tableProperties.rowHeight}
           suppressMenuHide={tableProperties.suppressMenuHide}
           suppressPaginationPanel={tableProperties.suppressPaginationPanel}
           rowSelection={{
