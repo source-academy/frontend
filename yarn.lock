@@ -3222,10 +3222,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/conductor@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "@sourceacademy/conductor@npm:0.5.0"
-  checksum: 10c0/e87c54febc0c68498ba4ebb29de79028798fa2d3183e2f4b09ba8d7992f44f8a04600409fa08a7b2e07d38261e23ee300140e6c982181d0a549636c0a944813d
+"@sourceacademy/conductor@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "@sourceacademy/conductor@npm:0.6.0"
+  checksum: 10c0/51c38382854718c10594534e59746309dbd9c6ee919bdec87fc4f9d4c74bb6ac3fd3ad7a7b0a56911bda4ac12241c4231a09e48aa0f56080cdd8286abf78c0ba
   languageName: node
   linkType: hard
 
@@ -7292,8 +7292,12 @@ __metadata:
     "@sourceacademy/conductor": "npm:^0.6.0"
 =======
     "@sourceacademy/common-cse-machine": "npm:^0.2.0"
+<<<<<<< HEAD
     "@sourceacademy/conductor": "npm:^0.5.0"
 >>>>>>> decc3587 (feat(cseMachine): rename global/program frames and annotate globals (#4068))
+=======
+    "@sourceacademy/conductor": "npm:^0.6.0"
+>>>>>>> 373e239d (Show a popup for input() requests instead of hanging (py-slang#190) (#4084))
     "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.12"
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.3"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
