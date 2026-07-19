@@ -1,5 +1,4 @@
 import type { ColDef, ICellRendererParams } from 'ag-grid-community';
-import classNames from 'classnames';
 import type { IGradingTableRow } from 'src/features/grading/GradingTypes';
 import { ColumnFields, ColumnName } from 'src/features/grading/GradingTypes';
 
@@ -13,14 +12,9 @@ import ProgressStatusBadge from './gradingBadges/ProgressStatusBadge';
 export const generateCols = (filterMode: boolean) => {
   const cols: ColDef<IGradingTableRow>[] = [];
 
-  // Cell content is vertically centred via a forced flex-column: ag-grid cells are `inline-block`
-  // by default and its CSS is injected unlayered (so it beats layered Tailwind utilities), hence the
-  // `flex!` important modifier. Click behaviour comes from the grid's `onCellClicked`; text selection
-  // from the grid's `enableCellTextSelection`. No custom cell wrappers are needed.
+  // Click behaviour comes from the grid's `onCellClicked`; text selection from `enableCellTextSelection`.
   const generalColProperties = {
     suppressMovable: true,
-    cellClass: 'flex! flex-col justify-center cursor-pointer',
-    headerClass: '[&_.ag-header-cell-text]:text-left',
     flex: 1, // weight of column width
   } satisfies ColDef<IGradingTableRow>;
 
@@ -28,6 +22,7 @@ export const generateCols = (filterMode: boolean) => {
     ...generalColProperties,
     headerName: ColumnName.assessmentName,
     field: ColumnFields.assessmentName,
+    cellClass: 'text-left',
     flex: 3,
   });
 
@@ -35,7 +30,7 @@ export const generateCols = (filterMode: boolean) => {
     ...generalColProperties,
     headerName: ColumnName.assessmentType,
     field: ColumnFields.assessmentType,
-    headerClass: '[&_.ag-header-cell-text]:text-center',
+    cellClass: 'flex! flex-col justify-center',
     cellRenderer: (params: ICellRendererParams<IGradingTableRow>) =>
       params.data ? <AssessmentTypeBadge type={params.data.assessmentType} /> : null,
   });
@@ -44,6 +39,7 @@ export const generateCols = (filterMode: boolean) => {
     ...generalColProperties,
     headerName: ColumnName.studentName,
     field: ColumnFields.studentName,
+    cellClass: 'text-left',
     filter: true,
     flex: 1.5,
   });
@@ -67,7 +63,7 @@ export const generateCols = (filterMode: boolean) => {
     ...generalColProperties,
     headerName: ColumnName.progressStatus,
     field: ColumnFields.progressStatus,
-    headerClass: '[&_.ag-header-cell-text]:text-center',
+    cellClass: 'flex! flex-col justify-center',
     cellRenderer: (params: ICellRendererParams<IGradingTableRow>) =>
       params.data ? <ProgressStatusBadge progress={params.data.progressStatus} /> : null,
   });
@@ -76,10 +72,6 @@ export const generateCols = (filterMode: boolean) => {
     ...generalColProperties,
     headerName: ColumnName.xp,
     field: ColumnFields.xp,
-    cellClass: classNames(
-      'flex! flex-col justify-center whitespace-normal',
-      filterMode ? 'cursor-text' : 'cursor-pointer',
-    ),
   });
 
   cols.push({
@@ -87,6 +79,7 @@ export const generateCols = (filterMode: boolean) => {
     headerName: ColumnName.actionsIndex,
     field: ColumnFields.actionsIndex,
     flex: 1.4,
+    cellClass: 'flex! flex-col justify-center',
     cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
       return params.data !== undefined
         ? {

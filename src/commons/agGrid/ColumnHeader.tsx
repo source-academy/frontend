@@ -18,9 +18,8 @@ type Props = CustomHeaderProps & ColumnHeaderParams;
 /**
  * Generic ag-grid `agColumnHeader`. Renders the header label plus a
  * hover-revealed action cluster containing any consumer `extraActions` and an
- * opt-in eye-off (hide-column) button. The reveal-on-hover is self-contained via
- * Tailwind `group`/`group-hover` — no global CSS required. Left-align a header by
- * adding `headerClass: '[&_.ag-header-cell-text]:text-left'` to that column's ColDef.
+ * opt-in eye-off (hide-column) button. Header text is left-aligned by default;
+ * center a column via `headerClass: '[&_.ag-header-cell-text]:text-center!'` on its ColDef.
  */
 function ColumnHeader(props: Props) {
   const { displayName, onHide, hideDisabledCols, extraActions } = props;
@@ -29,7 +28,7 @@ function ColumnHeader(props: Props) {
 
   return (
     <div className="group relative flex h-full w-full items-center">
-      <span className="ag-header-cell-text w-full truncate text-center">{displayName}</span>
+      <span className="ag-header-cell-text w-full truncate text-left">{displayName}</span>
 
       <div className="pointer-events-none absolute right-0 flex items-center gap-0.5 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100">
         {extraActions?.(props)}
