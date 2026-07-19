@@ -73,14 +73,13 @@ function GradingActions({ submissionId, style, progress, filterMode }: Props) {
   const isPublished = progress === ProgressStatuses.published;
 
   return (
-    <GradingFlex
-      justifyContent="flex-start"
-      className="grading-actions-btn-wrappers"
-      style={{ columnGap: '5px', ...style }}
-    >
+    <GradingFlex justifyContent="flex-start" className="gap-x-1.25 [&>a]:flex" style={style}>
       {filterMode && (
         <Link to={`/courses/${courseId}/grading/${submissionId}`}>
-          <GradingFlex alignItems="center" className="grading-action-icons grading-action-icons-bg">
+          <GradingFlex
+            alignItems="center"
+            className="my-auto rounded-[10px] bg-[#7dbcff80] text-blue-500 transition-[background-color] duration-100 ease-in-out hover:bg-[#7dbcffb3] [&_svg]:fill-blue-500!"
+          >
             <Tooltip position={Position.TOP} content="Grade">
               <Icon icon={IconNames.EDIT} />
             </Tooltip>
@@ -90,9 +89,8 @@ function GradingActions({ submissionId, style, progress, filterMode }: Props) {
 
       {(isGraded || isSubmitted) && (
         <Button
-          className="grading-action-icons"
+          className="my-auto rounded-[10px] bg-transparent! p-0! text-blue-500 transition-[background-color] duration-100 ease-in-out [&_svg]:fill-blue-500!"
           variant="minimal"
-          style={{ padding: 0 }}
           onClick={handleReautogradeClick}
         >
           <Tooltip position={Position.TOP} content="Reautograde">
@@ -103,9 +101,8 @@ function GradingActions({ submissionId, style, progress, filterMode }: Props) {
 
       {(isGraded || isSubmitted) && (
         <Button
-          className="grading-action-icons"
+          className="my-auto rounded-[10px] bg-transparent! p-0! text-blue-500 transition-[background-color] duration-100 ease-in-out [&_svg]:fill-blue-500!"
           variant="minimal"
-          style={{ padding: 0 }}
           onClick={handleUnsubmitClick}
         >
           <Tooltip position={Position.TOP} content="Unsubmit">
@@ -115,7 +112,11 @@ function GradingActions({ submissionId, style, progress, filterMode }: Props) {
       )}
 
       {isGraded && (
-        <Button className="grading-action-icons" variant="minimal" onClick={handlePublishClick}>
+        <Button
+          className="my-auto rounded-[10px] bg-transparent! text-blue-500 transition-[background-color] duration-100 ease-in-out [&_svg]:fill-blue-500!"
+          variant="minimal"
+          onClick={handlePublishClick}
+        >
           <Tooltip position={Position.TOP} content="Publish">
             <Icon icon={IconNames.SEND_TO_GRAPH} />
           </Tooltip>
@@ -123,7 +124,11 @@ function GradingActions({ submissionId, style, progress, filterMode }: Props) {
       )}
 
       {isPublished && (
-        <Button className="grading-action-icons" variant="minimal" onClick={handleUnpublishClick}>
+        <Button
+          className="my-auto rounded-[10px] bg-transparent! text-blue-500 transition-[background-color] duration-100 ease-in-out [&_svg]:fill-blue-500!"
+          variant="minimal"
+          onClick={handleUnpublishClick}
+        >
           <Tooltip position={Position.TOP} content="Unpublish">
             <Icon icon={IconNames.EXCLUDE_ROW} />
           </Tooltip>
