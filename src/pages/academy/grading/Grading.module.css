@@ -58,7 +58,6 @@
 
   :global(span.ag-header-cell-text) {
     margin: 0 auto;
-    font-size: 0.8rem;
     color: #6b7280;
     font-weight: 600;
     margin: auto;
@@ -114,7 +113,6 @@
   display: flex !important;
   justify-content: center;
   flex-direction: column;
-  font-size: 0.875rem;
   user-select: text;
   border: 0px !important;
 

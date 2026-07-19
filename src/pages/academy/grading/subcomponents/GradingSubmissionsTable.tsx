@@ -1,12 +1,12 @@
 import { Button, H6, Icon, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import type { CellClickedEvent, ColDef } from 'ag-grid-community';
-import { themeQuartz } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import classNames from 'classnames';
 import { debounce } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { themeSource } from 'src/commons/agGrid/theme';
 import { ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
@@ -149,7 +149,6 @@ function GradingSubmissionTable({
     suppressMenuHide: true,
     suppressPaginationPanel: true,
     suppressRowClickSelection: true,
-    tableMargins: '1rem 0 0 0',
   };
 
   // Placing searchValue as a dependency for triggering a page reset will result in double-querying.
@@ -331,11 +330,7 @@ function GradingSubmissionTable({
   return (
     <>
       {hiddenColumns.length > 0 ? (
-        <GradingFlex
-          justifyContent="space-between"
-          alignItems="center"
-          style={{ marginTop: '0.5rem' }}
-        >
+        <GradingFlex justifyContent="space-between" alignItems="center" className="mt-2">
           <GradingFlex>
             <GradingText isSecondaryText>Columns Hidden:</GradingText>
             <GradingColumnFilters
@@ -351,15 +346,11 @@ function GradingSubmissionTable({
         <></>
       )}
 
-      <GradingFlex
-        justifyContent="space-between"
-        alignItems="center"
-        style={{ marginTop: '0.5rem' }}
-      >
+      <GradingFlex justifyContent="space-between" alignItems="center" className="mt-2">
         <GradingFlex alignItems="center">
-          <GradingFlex style={{ alignItems: 'center', height: '1.75rem', width: '100%' }}>
+          <GradingFlex alignItems="center" className="h-7 w-full">
             <Icon icon={IconNames.FILTER_LIST} />
-            <GradingText isSecondaryText style={{ marginLeft: '7.5px' }}>
+            <GradingText isSecondaryText className="ml-[7.5px]">
               {columnFilters.length > 0 ? (
                 'Filters: '
               ) : filterMode === true ? (
@@ -396,9 +387,9 @@ function GradingSubmissionTable({
         />
       </GradingFlex>
 
-      <div style={{ margin: tableProperties.tableMargins }}>
+      <div className="mt-4">
         <AgGridReact
-          theme={themeQuartz}
+          theme={themeSource}
           columnDefs={colDefs}
           onCellClicked={cellClickedEvent}
           ref={gridRef}
@@ -441,11 +432,7 @@ function GradingSubmissionTable({
         />
       </div>
 
-      <GradingFlex
-        justifyContent="center"
-        className="grading-table-footer"
-        style={{ width: '100%', columnGap: '5px' }}
-      >
+      <GradingFlex justifyContent="center" className="grading-table-footer w-full gap-x-1.25">
         <Button
           size="small"
           variant="minimal"
@@ -460,7 +447,7 @@ function GradingSubmissionTable({
           onClick={() => setPage(page - 1)}
           disabled={page <= 0 || isLoading}
         />
-        <H6 style={{ margin: 'auto 0' }}>
+        <H6 className="my-auto">
           Page {maxPage + 1 === 0 ? 0 : page + 1} of {maxPage + 1}
         </H6>
         <Button
