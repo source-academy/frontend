@@ -1,5 +1,6 @@
 import { Button, Icon, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import classNames from 'classnames';
 import { Link } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import type { ProgressStatus } from 'src/commons/assessment/AssessmentTypes';
@@ -14,6 +15,11 @@ type Props = {
   progress: ProgressStatus;
   filterMode: boolean;
 };
+
+const buttonClasses = [
+  'my-auto rounded-[10px]',
+  'text-blue-500 transition-[background-color] duration-100 ease-in-out',
+];
 
 function GradingActions({ submissionId, style, progress, filterMode }: Props) {
   const dispatch = useAppDispatch();
@@ -76,20 +82,23 @@ function GradingActions({ submissionId, style, progress, filterMode }: Props) {
     <GradingFlex justifyContent="flex-start" className="gap-x-1.25 [&>a]:flex" style={style}>
       {filterMode && (
         <Link to={`/courses/${courseId}/grading/${submissionId}`}>
-          <GradingFlex
-            alignItems="center"
-            className="my-auto rounded-[10px] bg-[#7dbcff80] text-blue-500 transition-[background-color] duration-100 ease-in-out hover:bg-[#7dbcffb3] [&_svg]:fill-blue-500!"
+          <Button
+            variant="minimal"
+            className={classNames(
+              ...buttonClasses,
+              'bg-[#7dbcff80] hover:bg-[#7dbcffb3] [&_svg]:fill-blue-500',
+            )}
           >
             <Tooltip position={Position.TOP} content="Grade">
               <Icon icon={IconNames.EDIT} />
             </Tooltip>
-          </GradingFlex>
+          </Button>
         </Link>
       )}
 
       {(isGraded || isSubmitted) && (
         <Button
-          className="my-auto rounded-[10px] bg-transparent! p-0! text-blue-500 transition-[background-color] duration-100 ease-in-out [&_svg]:fill-blue-500!"
+          className={classNames(...buttonClasses, '[&_svg]:fill-blue-500')}
           variant="minimal"
           onClick={handleReautogradeClick}
         >
@@ -101,8 +110,8 @@ function GradingActions({ submissionId, style, progress, filterMode }: Props) {
 
       {(isGraded || isSubmitted) && (
         <Button
-          className="my-auto rounded-[10px] bg-transparent! p-0! text-blue-500 transition-[background-color] duration-100 ease-in-out [&_svg]:fill-blue-500!"
           variant="minimal"
+          className={classNames(...buttonClasses, '[&_svg]:fill-blue-500')}
           onClick={handleUnsubmitClick}
         >
           <Tooltip position={Position.TOP} content="Unsubmit">
@@ -113,8 +122,8 @@ function GradingActions({ submissionId, style, progress, filterMode }: Props) {
 
       {isGraded && (
         <Button
-          className="my-auto rounded-[10px] bg-transparent! text-blue-500 transition-[background-color] duration-100 ease-in-out [&_svg]:fill-blue-500!"
           variant="minimal"
+          className={classNames(...buttonClasses, '[&_svg]:fill-blue-500')}
           onClick={handlePublishClick}
         >
           <Tooltip position={Position.TOP} content="Publish">
@@ -125,8 +134,8 @@ function GradingActions({ submissionId, style, progress, filterMode }: Props) {
 
       {isPublished && (
         <Button
-          className="my-auto rounded-[10px] bg-transparent! text-blue-500 transition-[background-color] duration-100 ease-in-out [&_svg]:fill-blue-500!"
           variant="minimal"
+          className={classNames(...buttonClasses, '[&_svg]:fill-blue-500')}
           onClick={handleUnpublishClick}
         >
           <Tooltip position={Position.TOP} content="Unpublish">
