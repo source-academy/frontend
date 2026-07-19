@@ -1,4 +1,4 @@
-import { Icon } from '@blueprintjs/core';
+import { Button, Icon, Tooltip } from '@blueprintjs/core';
 import type { CustomHeaderProps } from 'ag-grid-react';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
@@ -7,6 +7,12 @@ import type { ColumnFieldsKeys, SortStateProperties } from 'src/features/grading
 import { SortStates } from 'src/features/grading/GradingTypes';
 
 import { freshSortState, getNextSortState } from './GradingSubmissionsTable';
+
+const SORT_TOOLTIP = {
+  [SortStates.ASC]: 'Ascending',
+  [SortStates.DESC]: 'Descending',
+  [SortStates.NONE]: 'Default',
+};
 
 type Props = {
   headerProps: CustomHeaderProps;
@@ -39,14 +45,22 @@ function GradingSortIcon({ headerProps }: Props) {
   };
 
   return (
-    <button
-      type="button"
-      aria-label={`Sort by ${headerProps.displayName}`}
-      className="flex cursor-pointer rounded p-1.5 hover:bg-black/10"
-      onClick={handleClick}
+    <Tooltip
+      content={
+        sortState === SortStates.NONE
+          ? `Click to sort by ${headerProps.displayName}`
+          : `Sorted by ${headerProps.displayName} (${SORT_TOOLTIP[sortState]})`
+      }
+      position="bottom"
     >
-      <Icon icon={sortState} />
-    </button>
+      <Button
+        variant="minimal"
+        className="flex cursor-pointer rounded p-1.5 hover:bg-black/10"
+        onClick={handleClick}
+      >
+        <Icon icon={sortState} />
+      </Button>
+    </Tooltip>
   );
 }
 
