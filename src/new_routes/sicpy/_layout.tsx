@@ -10,9 +10,9 @@ import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
 import { ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { scrollRefIntoView } from 'src/features/sicp/utils/SicpUtils';
 import {
-    SICPY_CACHE_KEY,
-    SICPY_INDEX,
-    useSicPySectionQuery,
+  SICPY_CACHE_KEY,
+  SICPY_INDEX,
+  useSicPySectionQuery,
 } from 'src/features/textbook/hooks/useTextbookSectionQuery';
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
@@ -102,9 +102,9 @@ function SicPyLayout() {
           )}
         </CodeSnippetProvider>
       </SicpErrorBoundary>
-        {isLoggedIn && Constants.featureFlags.enableSicpChatbot && (
-          <Chatbot getSection={getSection} getText={getText} />
-        )}
+      {isLoggedIn && Constants.featureFlags.enableSicpChatbot && (
+        <Chatbot getSection={getSection} getText={getText} />
+      )}
     </div>
   );
 }
