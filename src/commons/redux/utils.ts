@@ -49,7 +49,8 @@ type SagaHandler<T extends SourceActionType['type']> = (
 
 type SagaHandlers = {
   [K in SourceActionType['type']]?:
-    SagaHandler<K> | Partial<Record<'takeEvery' | 'takeLatest' | 'takeLeading', SagaHandler<K>>>;
+    | SagaHandler<K>
+    | Partial<Record<'takeEvery' | 'takeLatest' | 'takeLeading', SagaHandler<K>>>;
 };
 
 export function combineSagaHandlers(handlers: SagaHandlers) {
@@ -79,7 +80,8 @@ export function combineSagaHandlers(handlers: SagaHandlers) {
 
 export function saferTakeEvery<
   Action extends
-    ActionCreatorWithOptionalPayload<any> | ActionCreatorWithPreparedPayload<any[], any>,
+    | ActionCreatorWithOptionalPayload<any>
+    | ActionCreatorWithPreparedPayload<any[], any>,
 >(actionPattern: Action, fn: (action: ReturnType<Action>) => Generator<StrictEffect<any>>) {
   return safeTakeEvery(actionPattern.type, fn);
 }

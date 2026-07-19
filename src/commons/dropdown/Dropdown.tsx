@@ -2,7 +2,7 @@ import { Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { logOut } from '../application/actions/CommonsActions';
 import ControlButton from '../ControlButton';
@@ -25,7 +25,7 @@ function Dropdown() {
   const { t } = useTranslation('commons', { keyPrefix: 'dropdown' });
 
   const { isLoggedIn, name, courses, courseId } = useSession();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const handleLogOut = () => dispatch(logOut());
 
   const toggleSettingsOpen = () => {

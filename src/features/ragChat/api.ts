@@ -1,22 +1,6 @@
 import type { Tokens } from 'src/commons/application/types/SessionTypes';
 import { request } from 'src/commons/utils/RequestHelper';
-
-type ChatMessage = {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-};
-
-type InitChatResponse = {
-  messages: ChatMessage[];
-  conversationId: number;
-  maxContentSize: number;
-};
-
-type ContinueChatResponse = {
-  response: string;
-  conversationId: number;
-};
+import type { InitChatResponse, SendMessageResponse } from 'src/components/ui/chatbot/types';
 
 export async function initRagChat(tokens: Tokens): Promise<InitChatResponse> {
   const response = await request('rag_chat', 'POST', {
@@ -36,7 +20,7 @@ export async function initRagChat(tokens: Tokens): Promise<InitChatResponse> {
 export async function sendRagMessage(
   tokens: Tokens,
   userMessage: string,
-): Promise<ContinueChatResponse> {
+): Promise<SendMessageResponse> {
   const response = await request('rag_chat/message', 'POST', {
     ...tokens,
     body: { message: userMessage },

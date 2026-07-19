@@ -344,7 +344,8 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
         return undefined;
       }
       return state.session.assessments[assessmentId]?.questions[questionIndex]?.answer as
-        string | undefined;
+        | string
+        | undefined;
     });
 
     if (code === lastSubmittedAnswer) {

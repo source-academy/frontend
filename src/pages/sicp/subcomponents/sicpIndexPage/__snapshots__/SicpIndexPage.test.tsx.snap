@@ -8,10 +8,6 @@ exports[`Sicp index page 1`] = `
     <div
       class="sicp-cover"
     >
-      <img
-        alt="SICP"
-        src="https://source-academy.github.io/sicp/sicpjs.png"
-      />
       <div
         class="sicp-cover-text"
       >

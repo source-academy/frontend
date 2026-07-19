@@ -1,6 +1,5 @@
 import { Position } from '@blueprintjs/core';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import {
   cLanguages,
   getLanguageConfig,
@@ -11,14 +10,14 @@ import {
   SupportedLanguage,
 } from 'src/commons/application/ApplicationTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { playgroundConfigLanguage } from 'src/features/playground/PlaygroundActions';
 
 const LegacyNavigationBarLangSelectButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const lang = useTypedSelector(store => store.playground.languageConfig.mainLanguage);
-  const dispatch = useDispatch();
+  const lang = useAppSelector(store => store.playground.languageConfig.mainLanguage);
+  const dispatch = useAppDispatch();
 
   // Legacy default sublanguage mapping
   const defaultSublanguages: { [lang in SupportedLanguage]: SALanguage } = {

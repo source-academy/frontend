@@ -1,14 +1,13 @@
 import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useCallback, useEffect, useState } from 'react';
+import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
 import AcademyActions from 'src/features/academy/AcademyActions';
 
 import SessionActions from '../../../commons/application/actions/SessionActions';
 import type { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
+import type { AssessmentConfiguration } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import AddUserPanel from '../../../features/adminPanel/subcomponents/AddUserPanel';
-import type { ImperativeAssessmentConfigPanel } from '../../../features/adminPanel/subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
 import AssessmentConfigPanel from '../../../features/adminPanel/subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
 import CourseConfigPanel from '../../../features/adminPanel/subcomponents/CourseConfigPanel';
 import PixelbotConfigPanel from '../../../features/adminPanel/subcomponents/PixelbotConfigPanel';
@@ -39,8 +38,11 @@ function AdminPanel() {
   const [hasChangesCourseConfig, setHasChangesCourseConfig] = useState(false);
   const [hasChangesAssessmentConfig, setHasChangesAssessmentConfig] = useState(false);
   const [courseConfiguration, setCourseConfiguration] = useState(defaultCourseConfig);
+  // Lifted from AssessmentConfigPanel: we own the configs state, derive
+  // `hasChangesAssessmentConfig` inside the panel, and dispatch on save.
+  const [assessmentConfigs, setAssessmentConfigs] = useState<AssessmentConfiguration[]>([]);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const session = useSession();
 
   useEffect(() => {
@@ -89,9 +91,10 @@ function AdminPanel() {
     session.feedbackUrl,
   ]);
 
-  const tableRef = useRef<ImperativeAssessmentConfigPanel>(null);
+  // Re-sync local state whenever the backend's assessment configs change
+  // (initial fetch, save round-trip, or another admin edited the same course).
   useEffect(() => {
-    tableRef.current?.resetData();
+    setAssessmentConfigs(session.assessmentConfigurations ?? []);
   }, [session.assessmentConfigurations]);
 
   const courseConfigPanelProps = {
@@ -102,25 +105,29 @@ function AdminPanel() {
     },
   };
 
-  // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
+  // Handler to submit changes to Course Configuration and Assessment Configuration to the backend.
   // Changes made to users are handled separately.
   const submitHandler = useCallback(() => {
     if (hasChangesCourseConfig) {
       dispatch(SessionActions.updateCourseConfig(courseConfiguration));
       setHasChangesCourseConfig(false);
     }
-    const tableState = tableRef.current?.getData() ?? [];
     const currentConfigs = session.assessmentConfigurations ?? [];
-    const currentIds = new Set(tableState.map(config => config.assessmentConfigId));
+    const currentIds = new Set(assessmentConfigs.map(config => config.assessmentConfigId));
     const configsToDelete = currentConfigs.filter(
       config => !currentIds.has(config.assessmentConfigId),
     );
     configsToDelete.forEach(config => dispatch(SessionActions.deleteAssessmentConfig(config)));
     if (hasChangesAssessmentConfig) {
-      dispatch(SessionActions.updateAssessmentConfigs(tableState));
+      // New rows carry a negative transient id assigned client-side; the
+      // backend treats `assessmentConfigId: -1` as "create" (see the course
+      // creation flow in BackendSaga) and returns real ids on the next
+      // fetchAssessmentConfigs round-trip, which re-syncs `assessmentConfigs`.
+      dispatch(SessionActions.updateAssessmentConfigs(assessmentConfigs));
       setHasChangesAssessmentConfig(false);
     }
   }, [
+    assessmentConfigs,
     courseConfiguration,
     dispatch,
     hasChangesAssessmentConfig,
@@ -141,9 +148,10 @@ function AdminPanel() {
               <CourseConfigPanel {...courseConfigPanelProps} />
               <Divider />
               <AssessmentConfigPanel
-                ref={tableRef}
+                configs={assessmentConfigs}
+                onChange={setAssessmentConfigs}
                 initialConfigs={session.assessmentConfigurations ?? []}
-                setHasChangesAssessmentConfig={setHasChangesAssessmentConfig}
+                onHasChangesChange={setHasChangesAssessmentConfig}
               />
               <Button
                 text="Save"

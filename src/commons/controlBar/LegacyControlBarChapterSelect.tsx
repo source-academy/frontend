@@ -13,7 +13,7 @@ import {
   styliseSublanguage,
 } from '../application/ApplicationTypes';
 import Constants from '../utils/Constants';
-import { useTypedSelector } from '../utils/Hooks';
+import { useAppSelector } from '../utils/Hooks';
 
 type Props = {
   handleChapterSelect?: (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => void;
@@ -69,7 +69,7 @@ function LegacyControlBarChapterSelect({
   handleChapterSelect = () => {},
   disabled = false,
 }: Props) {
-  const selectedLang = useTypedSelector(store => store.playground.languageConfig.mainLanguage);
+  const selectedLang = useAppSelector(store => store.playground.languageConfig.mainLanguage);
 
   const choices = [
     ...sourceLanguages,

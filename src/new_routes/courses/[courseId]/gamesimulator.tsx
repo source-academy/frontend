@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppSelector } from 'src/commons/utils/Hooks';
 import type { AccountInfo } from 'src/features/game/SourceAcademyGame';
 import SourceAcademyGame, { GameType } from 'src/features/game/SourceAcademyGame';
 import { gameSimulatorConfig } from 'src/features/gameSimulator/GameSimulatorConstants';
@@ -26,7 +26,7 @@ const createGameSimulatorGame = () => {
  * are able to control what is shown on the Game Simulator panel.
  */
 function GameSimulator() {
-  const session = useTypedSelector(state => state.session);
+  const session = useAppSelector(state => state.session);
   const [gameSimulatorState, setGameSimulatorState] = useState<string>(GameSimulatorState.DEFAULT);
 
   useEffect(() => {
@@ -49,9 +49,9 @@ function GameSimulator() {
   }, [session]);
 
   return (
-    <div className="GameSimulatorWrapper">
+    <div className="flex flex-row m-7.5 rounded-[10px] overflow-hidden">
       <div id="game-display" />
-      <div className="LeftAlign GameSimulatorPanel">
+      <div className="flex flex-col items-start bg-white w-200 h-full overflow-scroll p-5">
         {gameSimulatorState === GameSimulatorState.DEFAULT && <h3>Welcome to Game simulator!</h3>}
         {gameSimulatorState === GameSimulatorState.CHAPTERSIMULATOR && <ChapterSimulator />}
         {gameSimulatorState === GameSimulatorState.CHAPTERPUBLISHER && <ChapterPublisher />}

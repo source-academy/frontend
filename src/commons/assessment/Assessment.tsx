@@ -14,8 +14,8 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { sortBy } from 'lodash-es';
 import { useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Navigate, useLoaderData, useParams } from 'react-router';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import Messages, { sendToWebview } from 'src/features/vscode/messages';
 
@@ -28,7 +28,7 @@ import ContentDisplay from '../ContentDisplay';
 import ControlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 import { beforeNow } from '../utils/DateHelper';
-import { useSession, useTypedSelector } from '../utils/Hooks';
+import { useAppSelector, useSession } from '../utils/Hooks';
 import { convertParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
 import AssessmentOverviewCard from './AssessmentOverviewCard';
@@ -47,7 +47,7 @@ function Assessment() {
   const [showUpcomingAssessments, setShowUpcomingAssessments] = useState(true);
 
   const { courseId, role, assessmentOverviews: assessmentOverviewsUnfiltered } = useSession();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (assessmentOverviewsUnfiltered && courseId) {
@@ -107,7 +107,7 @@ function Assessment() {
     [assessmentConfigToLoad.type, assessmentOverviewsUnfiltered],
   );
 
-  const fromLeaderboard: boolean = useTypedSelector(store => store.leaderboard.code) ? true : false;
+  const fromLeaderboard: boolean = useAppSelector(store => store.leaderboard.code) ? true : false;
 
   // If assessmentId or questionId is defined but not numeric, redirect back to the Assessment overviews page
   if (

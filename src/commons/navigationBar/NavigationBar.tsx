@@ -19,19 +19,19 @@ import { Translation } from 'react-i18next';
 import { type Location, NavLink, useLocation, useMatch } from 'react-router';
 import type { i18nDefaultLangKeys } from 'src/i18n/i18next';
 
+import SicpNavigationBar from '../../features/textbook/navigationBar/SicpNavigationBar';
+import SicPyNavigationBar from '../../features/textbook/navigationBar/SicPyNavigationBar';
 import Dropdown from '../dropdown/Dropdown';
 import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByType } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
-import { useResponsive, useSession, useTypedSelector } from '../utils/Hooks';
+import { useAppSelector, useResponsive, useSession } from '../utils/Hooks';
 import classes from './NavigationBar.module.css';
 import AcademyNavigationBar, {
   assessmentTypesToNavlinkInfo,
   getAcademyNavbarRightInfo,
 } from './subcomponents/AcademyNavigationBar';
 import NavigationBarLangSelectButton from './subcomponents/NavigationBarLangSelectButton';
-import SicpNavigationBar from './subcomponents/SicpNavigationBar';
-import SicpPyNavigationBar from './subcomponents/SicpPyNavigationBar';
 
 export type NavbarEntryInfo = {
   to: string;
@@ -140,7 +140,7 @@ function NavigationBar() {
     [assessmentTypes, courseId, isEnrolledInACourse],
   );
 
-  const selectedLanguage = useTypedSelector(s => {
+  const selectedLanguage = useAppSelector(s => {
     const id = s.languageDirectory.selectedLanguageId;
     return id ? s.languageDirectory.languageMap[id] : null;
   });
@@ -338,7 +338,7 @@ function NavigationBar() {
       </Navbar>
 
       {navbarType === 'hidden' ? null : navbarType === 'sicppy' ? (
-        <SicpPyNavigationBar />
+        <SicPyNavigationBar />
       ) : navbarType === 'sicp' ? (
         <SicpNavigationBar />
       ) : !Constants.playgroundOnly && isEnrolledInACourse && !isMobileBreakpoint ? (

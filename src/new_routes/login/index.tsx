@@ -3,9 +3,9 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { useCallback } from 'react';
 import { Translation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/Login.module.scss';
 
 import Constants from '../../commons/utils/Constants';
@@ -16,7 +16,7 @@ const providers = [...Constants.defaultAuthProviders.entries()].map(([id, { name
 }));
 
 function LoginPage() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const handleLogin = useCallback(
     (providerId: string) => dispatch(SessionActions.login(providerId)),
     [dispatch],

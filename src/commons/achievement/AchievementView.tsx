@@ -1,7 +1,6 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useContext, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 
 import {
   AchievementContext,
@@ -14,7 +13,7 @@ import {
 } from '../../features/achievement/AchievementTypes';
 import SessionActions from '../application/actions/SessionActions';
 import type { Assessment } from '../assessment/AssessmentTypes';
-import { useTypedSelector } from '../utils/Hooks';
+import { useAppDispatch, useAppSelector } from '../utils/Hooks';
 import AchievementCommentCard from './AchievementCommentCard';
 import { prettifyDate } from './utils/DateHelper';
 import AchievementViewCompletion from './view/AchievementViewCompletion';
@@ -34,10 +33,10 @@ function AchievementView({ focusUuid, userState }: Props) {
     const [selectedUser] = userState!;
     courseRegId = selectedUser?.courseRegId;
   }
-  const userCrid = useTypedSelector(store => store.session.courseRegId);
+  const userCrid = useAppSelector(store => store.session.courseRegId);
   const isAdminView: boolean = courseRegId !== undefined && courseRegId !== userCrid;
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(SessionActions.fetchAssessmentOverviews());
     if (!assessmentId) {
@@ -54,9 +53,9 @@ function AchievementView({ focusUuid, userState }: Props) {
   }, [dispatch, assessmentId, courseRegId, isAdminView]);
 
   const inferencer = useContext(AchievementContext);
-  const assessments = useTypedSelector(store => store.session.assessments);
+  const assessments = useAppSelector(store => store.session.assessments);
   const selectedAssessment: Assessment | undefined = assessments[assessmentId!];
-  const allAssessmentConfigs = useTypedSelector(store => store.session.assessmentOverviews) ?? [];
+  const allAssessmentConfigs = useAppSelector(store => store.session.assessmentOverviews) ?? [];
   const selectedAssessmentConfig = allAssessmentConfigs.find(config => config.id === assessmentId);
 
   if (focusUuid === '') {

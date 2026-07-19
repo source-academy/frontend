@@ -574,7 +574,8 @@ const newBackendSagaOne = combineSagaHandlers({
 
 function* sendGrade(
   action:
-    ReturnType<typeof actions.submitGrading> | ReturnType<typeof actions.submitGradingAndContinue>,
+    | ReturnType<typeof actions.submitGrading>
+    | ReturnType<typeof actions.submitGradingAndContinue>,
 ): any {
   const role: Role = yield select((state: OverallState) => state.session.role!);
   if (role === Role.Student) {
