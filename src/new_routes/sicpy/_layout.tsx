@@ -12,9 +12,9 @@ import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
 import { ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { scrollRefIntoView } from 'src/features/sicp/utils/SicpUtils';
 import {
-    SICPY_CACHE_KEY,
-    SICPY_INDEX,
-    useSicPySectionQuery,
+  SICPY_CACHE_KEY,
+  SICPY_INDEX,
+  useSicPySectionQuery,
 } from 'src/features/textbook/hooks/useTextbookSectionQuery';
 import Chatbot from 'src/pages/sicp/subcomponents/chatbot/Chatbot';
 
