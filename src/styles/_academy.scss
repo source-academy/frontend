@@ -436,11 +436,6 @@
   }
 }
 
-.ag-header-cell.hide-cols-btn {
-  width: 32px;
-  height: 32px;
-}
-
 .grading-table-footer {
   padding-top: 15px;
   margin-bottom: 15px;
@@ -516,13 +511,6 @@
 
 .grading-table-wrapper {
   padding: 1rem 1.5rem 0 1.5rem;
-
-  * {
-    border: none;
-    outline: none;
-    text-decoration: none;
-    background-color: transparent;
-  }
 
   button {
     cursor: pointer;
