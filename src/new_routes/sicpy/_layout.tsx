@@ -50,7 +50,7 @@ function SicPyLayout() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { isLoggedIn } = useSession();
+  const { isLoggedIn, enableLouisChatbot } = useSession();
 
   function getSection(): SicpSection {
     // To discard the '/sicpy/'
@@ -105,7 +105,7 @@ function SicPyLayout() {
           )}
         </CodeSnippetProvider>
       </SicpErrorBoundary>
-      {isLoggedIn && Constants.featureFlags.enableSicpChatbot && (
+      {isLoggedIn && enableLouisChatbot && Constants.featureFlags.enableSicpChatbot && (
         <Chatbot getSection={getSection} getText={getText} />
       )}
     </div>
