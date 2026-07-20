@@ -16,7 +16,7 @@ main() {
     fi
 
     tsc="yarn run tsc"
-    eslint="yarn run eslint"
+    eslint="yarn run lint"
     oxfmt="yarn run format:ci"
     jest_ts="yarn test"
 

@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 
 const BADGE_SIZE_CLASS_NAMES = {
-  xs: 'px-2.5 py-1 text-[0.7rem]',
-  sm: 'px-[0.8rem] py-[0.4rem] text-[0.8rem]',
+  xs: 'px-2 py-1 text-[0.7rem]',
+  sm: 'px-2.5 py-1 text-[0.8rem]',
   md: 'px-4 py-2 text-[0.9rem]',
   lg: 'px-6 py-3 text-base',
   xl: 'px-8 py-4 text-xl',

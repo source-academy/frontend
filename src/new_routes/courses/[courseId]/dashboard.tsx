@@ -1,6 +1,7 @@
-import { type ColDef, themeBalham } from 'ag-grid-community';
+import type { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { startCase } from 'lodash-es';
+import { themeSource } from 'src/commons/agGrid/theme';
 import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
@@ -28,7 +29,7 @@ function Dashboard() {
     <div className="Dashboard">
       <div className="Grid">
         <AgGridReact
-          theme={themeBalham}
+          theme={themeSource}
           domLayout="autoHeight"
           columnDefs={columnDefs}
           defaultColDef={defaultColumnDefs}
