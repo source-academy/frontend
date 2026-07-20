@@ -1,6 +1,5 @@
 import { Position } from '@blueprintjs/core';
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
 import { useFeature } from 'src/commons/featureFlags/useFeature';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
@@ -18,12 +17,9 @@ function useDirectoryOptions() {
 const NavigationBarLangSelectButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const selectedDirLanguageId = useAppSelector(s => s.languageDirectory.selectedLanguageId);
-  const languageMap = useAppSelector(s => s.languageDirectory.languageMap);
 
   const dispatch = useAppDispatch();
   const dirOptions = useDirectoryOptions();
-  const location = useLocation();
-  const navigate = useNavigate();
 
   const directoryEnabled = useFeature(flagConductorEnable);
   if (!directoryEnabled) {
@@ -33,20 +29,6 @@ const NavigationBarLangSelectButton = () => {
   const selectDirLanguage = (languageId: string) => {
     dispatch(LanguageDirectoryActions.setSelectedLanguage(languageId));
     setIsOpen(false);
-
-    const isInTextbook =
-      location.pathname.startsWith('/sicpjs') || location.pathname.startsWith('/sicpy');
-    if (isInTextbook) {
-      const newLang = languageMap[languageId];
-      if (newLang?.textbook) {
-        const newPath = newLang.textbook.url.endsWith('json_py/')
-          ? '/sicpy/index'
-          : '/sicpjs/index';
-        navigate(newPath);
-      } else {
-        navigate('/playground');
-      }
-    }
   };
 
   return (
