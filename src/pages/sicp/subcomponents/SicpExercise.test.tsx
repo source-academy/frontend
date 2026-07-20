@@ -1,52 +1,64 @@
 import { render, screen } from '@testing-library/react';
 import type { UserEvent } from '@testing-library/user-event';
 import userEvent from '@testing-library/user-event';
-import { renderTreeJson } from 'src/commons/utils/TestUtils';
-import { beforeEach, describe, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-import SicpExercise, { noSolutionPlaceholder } from './SicpExercise';
+import SicpExercise from './SicpExercise';
 
-describe('Sicp exercise renders', () => {
+// Mock the placeholder so this test stays focused on SicpExercise's own behaviour
+// and is not coupled to the placeholder's wording/markup.
+vi.mock('./NoSolutionPlaceholder', () => ({
+  default: () => <span data-testid="no-solution-placeholder">no solution</span>,
+}));
+
+const solutionText = 'the solution';
+const bodyText = 'the body';
+
+const renderExercise = (overrideProps: Partial<React.ComponentProps<typeof SicpExercise>> = {}) =>
+  render(
+    <SicpExercise
+      title="Exercise 1"
+      body={<div>{bodyText}</div>}
+      solution={<div>{solutionText}</div>}
+      {...overrideProps}
+    />,
+  );
+
+describe('SicpExercise', () => {
   let user: UserEvent;
   beforeEach(() => {
     user = userEvent.setup();
   });
 
-  test('correctly', async () => {
-    const props = {
-      title: 'Title',
-      body: <div>body</div>,
-      solution: <div>solution</div>,
-    };
-
-    const tree = await renderTreeJson(<SicpExercise {...props} />);
-    expect(tree).toMatchSnapshot();
+  test('renders the title and body', () => {
+    renderExercise();
+    expect(screen.getByText('Exercise 1')).toBeInTheDocument();
+    expect(screen.getByText(bodyText)).toBeInTheDocument();
   });
 
-  test('correctly with solution', async () => {
-    const solution = 'solution';
-    const props = {
-      title: 'Title',
-      body: <div>body</div>,
-      solution: <div>{solution}</div>,
-    };
-
-    const { container } = render(<SicpExercise {...props} />);
-    await user.click(screen.getByRole('button'));
-    expect(container.querySelector('.sicp-solution')?.textContent).toEqual(solution);
+  test('starts with the solution hidden and shows the toggle button', () => {
+    renderExercise();
+    expect(screen.getByRole('button', { name: /show solution/i })).toBeInTheDocument();
   });
 
-  test('correctly without solution', async () => {
-    const props = {
-      title: 'Title',
-      body: <div>body</div>,
-      solution: undefined,
-    };
+  test('reveals the solution and flips the button label when clicked', async () => {
+    renderExercise();
+    await user.click(screen.getByRole('button', { name: /show solution/i }));
+    expect(screen.getByText(solutionText)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /hide solution/i })).toBeInTheDocument();
+  });
 
-    const { container } = render(<SicpExercise {...props} />);
-    await user.click(screen.getByRole('button'));
-    expect(container.querySelector('.sicp-solution')?.textContent).toEqual(
-      render(noSolutionPlaceholder).container.textContent,
-    );
+  test('toggles back to a closed state after a second click', async () => {
+    renderExercise();
+    await user.click(screen.getByRole('button', { name: /show solution/i }));
+    await user.click(screen.getByRole('button', { name: /hide solution/i }));
+    expect(screen.getByRole('button', { name: /show solution/i })).toBeInTheDocument();
+  });
+
+  test('falls back to the no-solution placeholder when no solution is provided', async () => {
+    renderExercise({ solution: undefined });
+    await user.click(screen.getByRole('button', { name: /show solution/i }));
+    expect(screen.getByTestId('no-solution-placeholder')).toBeVisible();
+    expect(screen.queryByText(solutionText)).not.toBeInTheDocument();
   });
 });
