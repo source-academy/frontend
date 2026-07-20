@@ -12613,8 +12613,8 @@ __metadata:
   linkType: hard
 
 "react-router@npm:^8.0.0":
-  version: 8.0.1
-  resolution: "react-router@npm:8.0.1"
+  version: 8.2.0
+  resolution: "react-router@npm:8.2.0"
   dependencies:
     cookie-es: "npm:^3.1.1"
   peerDependencies:
@@ -12623,7 +12623,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/7ffcac5caf209b6988a0e045fd044f5f8e91e7f677475f707becd514f316f6c2d556f90e371c5a41f6033da891a2d97370b1c5d443ba96991ab0f4f71252c8ba
+  checksum: 10c0/6137d8db61f1a011d40a1b167d509c806a15ea9a04d238d9ea149d9063b640e4cccbf45974a85924fe44bd3e1080fecc613fe6e5af1d7e7caf648bba16280f6f
   languageName: node
   linkType: hard
 
