@@ -25,7 +25,7 @@
     "test:ui": "cross-env TZ=Asia/Singapore vitest --ui --no-open",
     "test-coveralls": "./scripts/test-coveralls.sh",
     "update-ui-snapshots": "vitest run --update",
-    "eslint": "eslint src",
+    "lint": "eslint src",
     "knip": "knip",
     "knip:fix": "knip --fix",
     "prepare": "husky",
