@@ -1,5 +1,6 @@
 import { type MiddlewareFunction, redirect, replace, type RouteObject } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
+import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
 import { store } from 'src/pages/createStore';
 
 import { createRoutes } from './routeUtils';
@@ -8,6 +9,18 @@ const RootLayout = () => import('../new_routes/_layout');
 const Login = () => import('../pages/login/Login');
 const Playground = () => import('../pages/playground/Playground');
 const MissionControl = () => import('../new_routes/mission-control/[assessmentId]/[questionId]');
+
+/**
+ * Route middleware that keeps the selected language in sync with the textbook route being viewed
+ * (issue #4091). It runs on navigation to the textbook routes — including direct/cold loads — so
+ * the language selector reflects the textbook without the button needing to own any routing logic.
+ */
+export const selectTextbookLanguageMiddleware =
+  (languageId: string): MiddlewareFunction =>
+  () => {
+    store.dispatch(LanguageDirectoryActions.setSelectedLanguage(languageId));
+    return null;
+  };
 
 const commonRoutes: RouteObject = {
   lazy: RootLayout,
@@ -21,11 +34,13 @@ const commonRoutes: RouteObject = {
     {
       path: 'sicpjs',
       lazy: () => import('../new_routes/sicpjs/_layout'),
+      middleware: [selectTextbookLanguageMiddleware('source1')],
       children: [{ path: ':section', lazy: () => import('../new_routes/sicpjs/[section]') }],
     },
     {
       path: 'sicpy',
       lazy: () => import('../new_routes/sicpy/_layout'),
+      middleware: [selectTextbookLanguageMiddleware('python1')],
       children: [{ path: ':section', lazy: () => import('../new_routes/sicpy/[section]') }],
     },
   ],
