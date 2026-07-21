@@ -1,17 +1,13 @@
-import type {
-  IChannel,
-  IConduit,
-  IPlugin,
-} from "@sourceacademy/conductor/conduit";
+import type { IChannel, IConduit, IPlugin } from '@sourceacademy/conductor/conduit';
 
-const CHANNEL_ID = "test";
+const CHANNEL_ID = 'test';
 
 export type PySlangMessage =
-  | { type: "run"; code: string }
-  | { type: "result"; output: string }
-  | { type: "error"; message: string };
+  | { type: 'run'; code: string }
+  | { type: 'result'; output: string }
+  | { type: 'error'; message: string };
 
-const WEB_ID = "__web_test";
+const WEB_ID = '__web_test';
 
 export class Ev3WebPlugin implements IPlugin {
   readonly id: string = WEB_ID;
@@ -26,15 +22,15 @@ export class Ev3WebPlugin implements IPlugin {
     this.__channel = channel;
 
     this.__channel.subscribe((message: PySlangMessage) => {
-      if (message.type === "result") {
+      if (message.type === 'result') {
         this.onResult?.(message.output);
-      } else if (message.type === "error") {
+      } else if (message.type === 'error') {
         this.onError?.(message.message);
       }
     });
   }
 
   run(code: string): void {
-    this.__channel.send({ type: "run", code });
+    this.__channel.send({ type: 'run', code });
   }
 }
