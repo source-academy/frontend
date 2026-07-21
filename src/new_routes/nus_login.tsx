@@ -1,9 +1,9 @@
 import { Button, ButtonGroup, Card, Divider, Elevation, H1, H3 } from '@blueprintjs/core';
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import Constants from 'src/commons/utils/Constants';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import sourceAcademyLogo from '../assets/SA.jpg';
 import classes from './nus_login.module.css';
@@ -17,7 +17,7 @@ const NUS_LOGO = '/nus_logo.png';
 const BLUE_BG = '/nus_login_background.svg';
 
 function NusLogin() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const handleLogin = useCallback(
     (providerId: string) => dispatch(SessionActions.login(providerId)),
     [dispatch],

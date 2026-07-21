@@ -1,13 +1,10 @@
 import type { ColDef, ICellRendererParams } from 'ag-grid-community';
-import classNames from 'classnames';
 import type { IGradingTableRow } from 'src/features/grading/GradingTypes';
 import { ColumnFields, ColumnName } from 'src/features/grading/GradingTypes';
 
-import classes from '../Grading.module.css';
 import GradingActions from './GradingActions';
 import AssessmentTypeBadge from './gradingBadges/AssessmentTypeBadge';
 import ProgressStatusBadge from './gradingBadges/ProgressStatusBadge';
-import GradingFilterable from './GradingFilterable';
 
 /**
  * Initialises the columns (and headers). The rows with data are added in the useEffect with ignored dependencies.
@@ -15,10 +12,9 @@ import GradingFilterable from './GradingFilterable';
 export const generateCols = (filterMode: boolean) => {
   const cols: ColDef<IGradingTableRow>[] = [];
 
+  // Click behaviour comes from the grid's `onCellClicked`; text selection from `enableCellTextSelection`.
   const generalColProperties = {
     suppressMovable: true,
-    cellClass: classNames(classes['grading-def-cell'], classes['grading-def-cell-pointer']),
-    headerClass: classes['grading-default-headers'],
     flex: 1, // weight of column width
   } satisfies ColDef<IGradingTableRow>;
 
@@ -26,60 +22,26 @@ export const generateCols = (filterMode: boolean) => {
     ...generalColProperties,
     headerName: ColumnName.assessmentName,
     field: ColumnFields.assessmentName,
+    cellClass: 'text-left',
     flex: 3,
-    cellClass: classNames(generalColProperties.cellClass, classes['grading-cell-align-left']),
-    headerClass: classNames(generalColProperties.headerClass, classes['grading-left-align']),
-    cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
-      return params.data !== undefined
-        ? {
-            component: GradingFilterable,
-            params: {
-              value: params.data.assessmentName,
-              filterMode: filterMode,
-            },
-          }
-        : undefined;
-    },
   });
 
   cols.push({
     ...generalColProperties,
     headerName: ColumnName.assessmentType,
     field: ColumnFields.assessmentType,
-    cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
-      return params.data !== undefined
-        ? {
-            component: GradingFilterable,
-            params: {
-              value: params.data.assessmentType,
-              // eslint-disable-next-line react/jsx-key
-              children: [<AssessmentTypeBadge type={params.data.assessmentType} />],
-              filterMode: filterMode,
-            },
-          }
-        : undefined;
-    },
+    cellClass: 'flex! flex-col justify-center',
+    cellRenderer: (params: ICellRendererParams<IGradingTableRow>) =>
+      params.data ? <AssessmentTypeBadge type={params.data.assessmentType} /> : null,
   });
 
   cols.push({
     ...generalColProperties,
     headerName: ColumnName.studentName,
     field: ColumnFields.studentName,
+    cellClass: 'text-left',
     filter: true,
     flex: 1.5,
-    cellClass: classNames(generalColProperties.cellClass, classes['grading-cell-align-left']),
-    headerClass: classNames(generalColProperties.headerClass, classes['grading-left-align']),
-    cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
-      return params.data !== undefined
-        ? {
-            component: GradingFilterable,
-            params: {
-              value: params.data.studentName,
-              filterMode: filterMode,
-            },
-          }
-        : undefined;
-    },
   });
 
   cols.push({
@@ -87,17 +49,6 @@ export const generateCols = (filterMode: boolean) => {
     headerName: ColumnName.studentUsername,
     field: ColumnFields.studentUsername,
     filter: true,
-    cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
-      return params.data !== undefined
-        ? {
-            component: GradingFilterable,
-            params: {
-              value: params.data.studentUsername,
-              filterMode: filterMode,
-            },
-          }
-        : undefined;
-    },
   });
 
   cols.push({
@@ -106,47 +57,21 @@ export const generateCols = (filterMode: boolean) => {
     field: ColumnFields.groupName,
     filter: true,
     flex: 0.75,
-    cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
-      return params.data !== undefined
-        ? {
-            component: GradingFilterable,
-            params: {
-              value: params.data.groupName,
-              filterMode: filterMode,
-            },
-          }
-        : undefined;
-    },
   });
 
   cols.push({
     ...generalColProperties,
     headerName: ColumnName.progressStatus,
     field: ColumnFields.progressStatus,
-    cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
-      return params.data !== undefined
-        ? {
-            component: GradingFilterable,
-            params: {
-              value: params.data.progressStatus,
-              // eslint-disable-next-line react/jsx-key
-              children: [<ProgressStatusBadge progress={params.data.progressStatus} />],
-              filterMode: filterMode,
-            },
-          }
-        : undefined;
-    },
+    cellClass: 'flex! flex-col justify-center',
+    cellRenderer: (params: ICellRendererParams<IGradingTableRow>) =>
+      params.data ? <ProgressStatusBadge progress={params.data.progressStatus} /> : null,
   });
 
   cols.push({
     ...generalColProperties,
     headerName: ColumnName.xp,
     field: ColumnFields.xp,
-    cellClass: classNames(
-      generalColProperties.cellClass,
-      classes['grading-xp-cell'],
-      !filterMode ? classes['grading-def-cell-pointer'] : classes['grading-def-cell-selectable'],
-    ),
   });
 
   cols.push({
@@ -154,7 +79,7 @@ export const generateCols = (filterMode: boolean) => {
     headerName: ColumnName.actionsIndex,
     field: ColumnFields.actionsIndex,
     flex: 1.4,
-    headerClass: classNames(generalColProperties.headerClass, classes['grading-left-align']),
+    cellClass: 'flex! flex-col justify-center',
     cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
       return params.data !== undefined
         ? {

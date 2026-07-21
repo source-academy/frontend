@@ -12,11 +12,12 @@ import {
   Position,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { type ColDef, themeBalham } from 'ag-grid-community';
+import type { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { uniqBy } from 'lodash-es';
 import { useState } from 'react';
 import { useCSVReader } from 'react-papaparse';
+import { themeSource } from 'src/commons/agGrid/theme';
 import { Role } from 'src/commons/application/ApplicationTypes';
 
 import Constants from '../../../commons/utils/Constants';
@@ -52,7 +53,7 @@ function AddUserPanel(props: Props) {
   const grid = (
     <div className="Grid">
       <AgGridReact
-        theme={themeBalham}
+        theme={themeSource}
         domLayout="autoHeight"
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}

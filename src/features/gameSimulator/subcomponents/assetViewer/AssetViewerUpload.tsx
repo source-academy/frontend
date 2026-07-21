@@ -58,7 +58,7 @@ function AssetViewerUpload() {
     </Menu>
   );
   return (
-    <div className="LeftAlign">
+    <div className="flex flex-col items-start">
       <h4>Choose a Folder to upload an asset to:</h4>
       <Popover placement={Position.BOTTOM} content={uploadButtonPopoverContent}>
         <Button text={uploadFolder} />

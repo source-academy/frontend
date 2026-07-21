@@ -46,7 +46,7 @@ function AcademyNavigationBar({ assessmentTypes }: Props) {
   );
 }
 
-export const icons: IconName[] = [
+const icons: IconName[] = [
   IconNames.FLAME,
   IconNames.LIGHTBULB,
   IconNames.PREDICTIVE_ANALYSIS,

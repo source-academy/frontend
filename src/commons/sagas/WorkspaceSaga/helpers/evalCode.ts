@@ -27,8 +27,11 @@ import { CONDUCTOR_STEPPER_TAB_ID } from '../../../../features/conductor/stepper
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { type OverallState } from '../../../application/ApplicationTypes';
 import { visitSideContent } from '../../../sideContent/SideContentActions';
+import { getTabId } from '../../../sideContent/SideContentHelper';
+import sideContentManager from '../../../sideContent/SideContentManager';
 import { type SideContentTabId, SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
+import { closeDialog, showSimplePromptDialog } from '../../../utils/DialogHelper';
 import DisplayBufferService from '../../../utils/DisplayBufferService';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
@@ -457,6 +460,55 @@ function* handleStdout(
   }
 }
 
+/**
+ * Listens for the runner requesting standard-input (e.g. Python's `input(...)`), shows a
+ * blocking popup asking the user for a string, and sends the answer back via `hostPlugin.sendInput`.
+ * Runs for the lifetime of the evaluation so a program may call `input()` any number of times.
+ */
+function* handleInputRequest(
+  hostPlugin: BrowserHostPlugin,
+  workspaceLocation: WorkspaceLocation,
+): SagaIterator {
+  const inputRequestChan = eventChannel<string>(emitter => {
+    hostPlugin.receiveInputRequest = emitter;
+    return () => {
+      if (hostPlugin.receiveInputRequest === emitter) {
+        delete hostPlugin.receiveInputRequest;
+      }
+    };
+  });
+  try {
+    while (true) {
+      const prompt: string = yield take(inputRequestChan);
+      yield put(actions.setIsWaitingForInput(true, workspaceLocation));
+      try {
+        const response: { buttonResponse: boolean; value: string } = yield call(
+          showSimplePromptDialog,
+          {
+            title: 'Program is requesting input',
+            contents: prompt || undefined,
+            positiveLabel: 'Submit',
+          },
+        );
+        hostPlugin.sendInput(response.buttonResponse ? response.value : '');
+      } catch {
+        // showSimplePromptDialog's underlying promise rejects if the dialog is dismissed via its
+        // onClose path (e.g. clicking outside) rather than a button response. Without this catch,
+        // that rejection would escape the while(true) loop and kill this saga permanently, leaving
+        // the runner blocked forever with no way to answer any future input() call either.
+        hostPlugin.sendInput('');
+      } finally {
+        yield put(actions.setIsWaitingForInput(false, workspaceLocation));
+      }
+    }
+  } finally {
+    if (yield cancelled()) {
+      inputRequestChan.close();
+      closeDialog();
+    }
+  }
+}
+
 function* handleResults(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
@@ -490,9 +542,9 @@ function* handleResults(
 
 /**
  * Surfaces a conductor evaluation error: appends it to the REPL and, when the (REPL-hiding) conductor
- * Stepper or CSE Machine tab is active, switches to the Introduction tab so the error is visible
- * rather than failing silently — the conductor analogue of the legacy `usingSubst`/`usingCse` path.
- * Also unblocks the run loop.
+ * Stepper or CSE Machine tab is active, or any other tab a module dynamically registered (e.g. sound's
+ * tab), switches to the Introduction tab so the error is visible rather than failing silently — the
+ * conductor analogue of the legacy `usingSubst`/`usingCse` path. Also unblocks the run loop.
  */
 function* surfaceConductorError(
   error: unknown,
@@ -502,7 +554,14 @@ function* surfaceConductorError(
   const selectedTab: SideContentTabId | undefined = yield select(
     (state: OverallState) => state.sideContent[workspaceLocation]?.selectedTab,
   );
-  if (selectedTab === CONDUCTOR_STEPPER_TAB_ID || selectedTab === SideContentType.cseMachine) {
+  const isModuleTabSelected = sideContentManager
+    .getTabs(workspaceLocation)
+    .some(tab => getTabId(tab) === selectedTab);
+  if (
+    selectedTab === CONDUCTOR_STEPPER_TAB_ID ||
+    selectedTab === SideContentType.cseMachine ||
+    isModuleTabSelected
+  ) {
     yield put(visitSideContent(SideContentType.introduction, selectedTab, workspaceLocation));
   }
   // Unblock the run loop (the runner should also send a terminal status, but this is a safety net).
@@ -544,28 +603,34 @@ function* handleErrors(
   }
 }
 
+type CseSnapshotBatch = { snapshots: CseSnapshot[]; breakpointSteps: number[] };
+
 function* handleCseSnapshots(
   csePlugin: CseMachineHostPlugin,
   workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
-  const snapshotChan = eventChannel<CseSnapshot[]>(emitter => {
-    csePlugin.receiveSnapshots = emitter;
+  const snapshotChan = eventChannel<CseSnapshotBatch>(emitter => {
+    const receive = (snapshots: CseSnapshot[], breakpointSteps: number[]) =>
+      emitter({ snapshots, breakpointSteps });
+    csePlugin.receiveSnapshots = receive;
     return () => {
-      if (csePlugin.receiveSnapshots === emitter) {
+      if (csePlugin.receiveSnapshots === receive) {
         csePlugin.receiveSnapshots = () => {};
       }
     };
   });
   try {
     while (true) {
-      const snapshots: CseSnapshot[] | typeof END = yield take(snapshotChan);
-      if (snapshots === END || !Array.isArray(snapshots)) {
+      const batch: CseSnapshotBatch | typeof END = yield take(snapshotChan);
+      if (!('snapshots' in batch) || !Array.isArray(batch.snapshots)) {
         break;
       }
+      const { snapshots, breakpointSteps } = batch;
       yield put(WorkspaceActions.updateCseSnapshots(snapshots, workspaceLocation));
       yield put(
         WorkspaceActions.updateStepsTotal(Math.max(0, snapshots.length - 1), workspaceLocation),
       );
+      yield put(WorkspaceActions.updateBreakpointSteps(breakpointSteps ?? [], workspaceLocation));
       yield put(
         WorkspaceActions.toggleUpdateCse(false, workspaceLocation as WorkspaceLocationsWithTools),
       );
@@ -650,6 +715,7 @@ export function* evalCodeConductorSaga(
 
   let conduit: IConduit | undefined;
   let stdoutTask: any;
+  let inputTask: any;
   let resultTask: any;
   let errorTask: any;
   let statusTask: any;
@@ -671,6 +737,7 @@ export function* evalCodeConductorSaga(
 
     // Begin evaluation
     stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
+    inputTask = yield fork(handleInputRequest, hostPlugin, workspaceLocation);
     resultTask = yield fork(handleResults, hostPlugin, workspaceLocation);
     errorTask = yield fork(handleErrors, hostPlugin, workspaceLocation);
     statusTask = yield fork(handleStatuses, hostPlugin, workspaceLocation);
@@ -679,10 +746,35 @@ export function* evalCodeConductorSaga(
     yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
 
     // OneShot: wait for the runner to send STOPPED/ERROR (dispatched by handleStatuses),
-    // or for the user to manually interrupt execution.
+    // or for the user to manually interrupt execution. The watchdog below is suspended
+    // for as long as the program is waiting on an input() popup, so a user who takes a
+    // while to type an answer doesn't get their run killed out from under them.
     const { done } = yield race({
       done: take(actions.beginInterruptExecution.type),
-      timeout: call(() => new Promise(resolve => setTimeout(resolve, execTime + 10000))),
+      timeout: call(function* (): SagaIterator {
+        while (true) {
+          const { timedOut } = yield race({
+            timedOut: call(() => new Promise(resolve => setTimeout(resolve, execTime + 10000))),
+            waiting: take(
+              (a: any) =>
+                a.type === actions.setIsWaitingForInput.type &&
+                a.payload.workspaceLocation === workspaceLocation &&
+                a.payload.isWaitingForInput === true,
+            ),
+          });
+          if (timedOut) {
+            return;
+          }
+          // Waiting on the input() popup: suspend the watchdog entirely until it's answered,
+          // then restart a fresh execTime window.
+          yield take(
+            (a: any) =>
+              a.type === actions.setIsWaitingForInput.type &&
+              a.payload.workspaceLocation === workspaceLocation &&
+              a.payload.isWaitingForInput === false,
+          );
+        }
+      }),
     });
 
     // Drain pending result/error/output before teardown. Each conductor channel is its own
@@ -703,6 +795,12 @@ export function* evalCodeConductorSaga(
     yield* surfaceConductorError(runError, workspaceLocation);
   } finally {
     try {
+      // getPreparedConductorSaga's contract: a consumed conductor "should be terminated by the
+      // caller" - this is that caller. Without this, every Run leaks its Worker instead of
+      // shutting it down.
+      if (conduit) {
+        yield call([conduit, 'terminate']);
+      }
       if (cseTask) {
         yield cancel(cseTask);
       }
@@ -712,18 +810,14 @@ export function* evalCodeConductorSaga(
       if (stdoutTask) {
         yield cancel(stdoutTask);
       }
+      if (inputTask) {
+        yield cancel(inputTask);
+      }
       if (resultTask) {
         yield cancel(resultTask);
       }
       if (errorTask) {
         yield cancel(errorTask);
-      }
-      if (conduit) {
-        try {
-          yield call([conduit, 'terminate']);
-        } catch (e) {
-          console.warn('[conductor] failed to terminate conduit', e);
-        }
       }
     } finally {
       yield put(actions.endInterruptExecution(workspaceLocation));

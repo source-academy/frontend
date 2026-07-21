@@ -1,7 +1,6 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { type HotkeyItem, useHotkeys } from '@mantine/hooks';
-import type { AnyAction, Dispatch } from '@reduxjs/toolkit';
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { Ace, Range } from 'ace-builds';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
@@ -10,7 +9,7 @@ import { Chapter, Variant } from 'js-slang/dist/langs';
 import { isEqual } from 'lodash-es';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch, useStore } from 'react-redux';
+import { useStore } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import SessionActions from 'src/commons/application/actions/SessionActions';
@@ -26,7 +25,8 @@ import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentH
 import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
-import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
+import { useAppDispatch, useAppSelector, useResponsive } from 'src/commons/utils/Hooks';
 import {
   showFullJSWarningOnUrlLoad,
   showFulTSWarningOnUrlLoad,
@@ -119,7 +119,7 @@ export async function handleHash(
     handleChangeExecTime: (execTime: number) => void;
   },
   workspaceLocation: WorkspaceLocation,
-  dispatch: Dispatch<AnyAction>,
+  dispatch: React.Dispatch<SourceActionType>,
   fileSystem: FSModule | null,
 ) {
   // Make the parsed query string object a Partial because we might access keys which are not set.
@@ -204,7 +204,7 @@ function Playground(props: PlaygroundProps) {
   const { isSicpEditor } = props;
   const workspaceLocation: WorkspaceLocation = isSicpEditor ? 'sicp' : 'playground';
   const { isMobileBreakpoint } = useResponsive();
-  const isVscode = useTypedSelector(state => state.vscode.isVscode);
+  const isVscode = useAppSelector(state => state.vscode.isVscode);
 
   const [deviceSecret, setDeviceSecret] = useState<string | undefined>();
   const location = useLocation();
@@ -230,9 +230,9 @@ function Playground(props: PlaygroundProps) {
     isFolderModeEnabled,
     activeEditorTabIndex,
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant },
-  } = useTypedSelector(state => state.workspaces[workspaceLocation]);
-  const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
-  const { queryString, shortURL, persistenceFile, githubSaveInfo } = useTypedSelector(
+  } = useAppSelector(state => state.workspaces[workspaceLocation]);
+  const fileSystem = useAppSelector(state => state.fileSystem.inBrowserFileSystem);
+  const { queryString, shortURL, persistenceFile, githubSaveInfo } = useAppSelector(
     state => state.playground,
   );
   const {
@@ -240,9 +240,9 @@ function Playground(props: PlaygroundProps) {
     sourceVariant: courseSourceVariant,
     googleUser: persistenceUser,
     githubOctokitObject,
-  } = useTypedSelector(state => state.session);
+  } = useAppSelector(state => state.session);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     handleChangeExecTime,
     handleChapterSelect,
@@ -321,12 +321,10 @@ function Playground(props: PlaygroundProps) {
   }, [users, editorSessionId, sessionDetails?.readOnly]);
 
   const usingRemoteExecution =
-    useTypedSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
+    useAppSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
   // this is still used by remote execution (EV3)
   // specifically, for the editor Ctrl+B to work
-  const externalLibraryName = useTypedSelector(
-    state => state.workspaces.playground.externalLibrary,
-  );
+  const externalLibraryName = useAppSelector(state => state.workspaces.playground.externalLibrary);
 
   useEffect(() => {
     // When the editor session Id changes, then treat it as a new session.
@@ -463,7 +461,7 @@ function Playground(props: PlaygroundProps) {
     handleUsingSubst,
   ]);
 
-  const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
+  const languageConfig: SALanguage = useAppSelector(state => state.playground.languageConfig);
 
   const autorunButtons = useMemo(() => {
     return (
@@ -737,10 +735,10 @@ function Playground(props: PlaygroundProps) {
   }, [dispatch, playgroundSourceChapter, playgroundSourceVariant]);
 
   const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer;
-  const hasCseSnapshots = useTypedSelector(
+  const hasCseSnapshots = useAppSelector(
     state => state.workspaces[workspaceLocation].cseSnapshots !== null,
   );
-  const conductorEvaluatorSupportsCse = useTypedSelector(state => {
+  const conductorEvaluatorSupportsCse = useAppSelector(state => {
     if (!selectConductorEnable(state)) {
       return false;
     }
@@ -752,7 +750,7 @@ function Playground(props: PlaygroundProps) {
     const evaluator = lang?.evaluators.find(e => e.id === selectedEvaluatorId);
     return (evaluator?.capabilities as string[] | undefined)?.includes('cse') ?? false;
   });
-  const conductorLanguageActive = useTypedSelector(
+  const conductorLanguageActive = useAppSelector(
     state => selectConductorEnable(state) && !!state.languageDirectory.selectedLanguageId,
   );
   // For conductor languages: show CSE tab proactively when the evaluator declares "cse"
@@ -763,16 +761,14 @@ function Playground(props: PlaygroundProps) {
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
   // When the Conductor framework is enabled, the stepper (and other tools) are provided by web
   // plugins loaded dynamically, so the legacy in-frontend tabs are hidden in favour of plugin tabs.
-  const conductorEnabled = useTypedSelector(selectConductorEnable);
+  const conductorEnabled = useAppSelector(selectConductorEnable);
 
   // Stepper tab wiring (conductor only). The Stepper tab is offered for any language that has a
   // stepper-capability evaluator; opening the tab selects that (dropdown-hidden) evaluator so a Run
   // produces steps, and leaving it restores the language's default evaluator. See the effect below.
-  const selectedLanguageId = useTypedSelector(state => state.languageDirectory.selectedLanguageId);
-  const selectedEvaluatorId = useTypedSelector(
-    state => state.languageDirectory.selectedEvaluatorId,
-  );
-  const stepperEvaluatorId = useTypedSelector(state => {
+  const selectedLanguageId = useAppSelector(state => state.languageDirectory.selectedLanguageId);
+  const selectedEvaluatorId = useAppSelector(state => state.languageDirectory.selectedEvaluatorId);
+  const stepperEvaluatorId = useAppSelector(state => {
     if (!selectConductorEnable(state)) {
       return null;
     }
@@ -783,7 +779,7 @@ function Playground(props: PlaygroundProps) {
     );
     return evaluator?.id ?? null;
   });
-  const defaultEvaluatorId = useTypedSelector(state => {
+  const defaultEvaluatorId = useAppSelector(state => {
     if (!selectConductorEnable(state)) {
       return null;
     }
@@ -836,7 +832,7 @@ function Playground(props: PlaygroundProps) {
     }
   }, [selectedLanguageId, setSelectedTab]);
 
-  const conductorWelcomeText = useTypedSelector(state => {
+  const conductorWelcomeText = useAppSelector(state => {
     if (!selectConductorEnable(state)) {
       return null;
     }

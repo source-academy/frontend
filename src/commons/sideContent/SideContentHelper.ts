@@ -7,6 +7,7 @@ import * as jsslangErrors from 'js-slang/dist/errors/base';
 import * as rttcErrors from 'js-slang/dist/errors/rttcErrors';
 import * as jsslangOperators from 'js-slang/dist/utils/operators';
 import * as jsslangRttc from 'js-slang/dist/utils/rttc';
+import Konva from 'konva';
 import * as lodash from 'lodash-es';
 // We need it to inject modules into the context
 // eslint-disable-next-line no-restricted-imports
@@ -16,9 +17,10 @@ import JSXRuntime from 'react/jsx-runtime';
 import ace from 'react-ace';
 import ReactDOM from 'react-dom';
 import * as ReactDOMClient from 'react-dom/client';
-import { useDispatch } from 'react-redux';
+import * as ReactKonva from 'react-konva';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
-import { useTypedSelector } from '../utils/Hooks';
+import { useAppSelector } from '../utils/Hooks';
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
 import { visitSideContent } from './SideContentActions';
 import type {
@@ -36,6 +38,8 @@ export const requireProvider = (x: string) => {
     'react/jsx-runtime': JSXRuntime,
     'react-ace': ace,
     'react-dom': ReactDOM,
+    'react-konva': ReactKonva,
+    konva: Konva,
     'react-dom/client': ReactDOMClient,
     '@blueprintjs/core': bpcore,
     '@blueprintjs/icons': bpicons,
@@ -91,10 +95,10 @@ export const generateTabAlert = (shouldAlert: boolean) =>
 
 export const useSideContent = (location: SideContentLocation, defaultTab?: SideContentTabId) => {
   const [workspaceLocation] = getLocation(location);
-  const { alerts, dynamicTabs, selectedTab, height }: SideContentState = useTypedSelector(
+  const { alerts, dynamicTabs, selectedTab, height }: SideContentState = useAppSelector(
     state => state.sideContent[workspaceLocation],
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const setSelectedTab = useCallback(
     (newId: SideContentTabId) => {
       if (

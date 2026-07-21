@@ -1,5 +1,5 @@
 import { Intent, Popover, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../application/actions/SessionActions';
 import { useSession } from '../utils/Hooks';
@@ -15,7 +15,7 @@ type Props = {
 };
 
 function NotificationBadge(props: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { notifications: initialNotifications } = useSession();
 
   const notifications = props.notificationFilter

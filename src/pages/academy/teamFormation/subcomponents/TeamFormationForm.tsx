@@ -1,13 +1,12 @@
 import { Button } from '@blueprintjs/core';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 import type { ActionMeta, MultiValue } from 'react-select';
 import Select from 'react-select';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import type { User } from 'src/commons/application/types/SessionTypes';
 import type { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
 import {
   FormContainer,
   FormField,
@@ -27,7 +26,7 @@ export type OptionType = {
 function TeamFormationForm() {
   const { teamId } = useParams();
   const { courseId, students, assessmentOverviews, teamFormationOverviews } = useSession();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [selectedAssessment, setSelectedAssessment] = useState<AssessmentOverview | undefined>(
     undefined,
   );

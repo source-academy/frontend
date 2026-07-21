@@ -13,6 +13,25 @@ import { pluginTailwindcss } from '@rsbuild/plugin-tailwindcss';
 const { publicVars, rawPublicVars } = loadEnv({ prefixes: ['REACT_APP_'] });
 
 export default defineConfig({
+  splitChunks: {
+    cacheGroups: {
+      // Split icons from `@blueprintjs/icons` into a separate chunk to avoid bloating the main bundle with icons that are not used in the initial render.
+      'blueprintjs-icons': {
+        test: /[\\/]node_modules[\\/]@blueprintjs[\\/]icons[\\/]/,
+        name: 'blueprintjs-icons',
+        chunks: 'all',
+        enforce: true,
+      },
+      // Split js-slang's ts-morph dependency into a separate chunk to avoid bloating the main bundle with ts-morph's large TypeScript compiler dependency.
+      'ts-morph': {
+        test: /[\\/]node_modules[\\/]@ts-morph[\\/]/,
+        name: 'ts-morph',
+        chunks: 'all',
+        enforce: true,
+      },
+    },
+  },
+  performance: {},
   plugins: [
     pluginReact(),
     pluginSvgr({ mixedImport: true }),

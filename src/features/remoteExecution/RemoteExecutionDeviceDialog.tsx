@@ -13,7 +13,7 @@ import {
 import classNames from 'classnames';
 import { useState } from 'react';
 import { QrReader } from 'react-qr-reader';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { editDevice, registerDevice } from '../../commons/sagas/RequestsSaga';
 import { actions } from '../../commons/utils/ActionsHelper';
@@ -41,7 +41,7 @@ const enum FACING_MODE {
 }
 
 function RemoteExecutionDeviceDialog({ isOpen, onClose, deviceToEdit, defaultSecret }: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const nameField = useField<HTMLInputElement>(validateNotEmpty);
   const typeField = useField<HTMLSelectElement>();
   const secretField = useField<HTMLInputElement>(validateNotEmpty);

@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
 type CodeSnippetContextState = {
@@ -23,7 +23,7 @@ export function useCodeSnippetContext() {
 export function CodeSnippetProvider({ children }: { children: React.ReactNode }) {
   const [active, setActive] = useState('0');
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const handleSnippetEditorOpen = useCallback(
     (s: string) => {
       setActive(s);

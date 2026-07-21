@@ -107,7 +107,11 @@ export type NotificationOutput = {
 };
 
 export type InterpreterOutput =
-  RunningOutput | CodeOutput | ResultOutput | ErrorOutput | NotificationOutput;
+  | RunningOutput
+  | CodeOutput
+  | ResultOutput
+  | ErrorOutput
+  | NotificationOutput;
 
 export enum Role {
   Student = 'student',
@@ -372,6 +376,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   stepLimit: 1000,
   globals: [],
   isRunning: false,
+  isWaitingForInput: false,
   isDebugging: false,
   enableDebugging: true,
   debuggerContext: {} as DebuggerContext,
@@ -412,7 +417,6 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     hasUnsavedChanges: false,
     // TODO: The below should be a separate state
     // instead of using the grading workspace state
-    columnVisiblity: [],
     requestCounter: 0,
     allColsSortStates: {
       currentState: freshSortState,

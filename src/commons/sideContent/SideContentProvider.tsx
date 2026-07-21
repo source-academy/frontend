@@ -57,9 +57,8 @@ export default function SideContentProvider({
     workspaceLocation,
     defaultTab,
   );
-  const serviceTabs = useSyncExternalStore(
-    sideContentManager.subscribe.bind(sideContentManager),
-    () => sideContentManager.getTabs(workspaceLocation),
+  const serviceTabs = useSyncExternalStore(sideContentManager.subscribe, () =>
+    sideContentManager.getTabs(workspaceLocation),
   );
 
   const combinedTabs = tabs

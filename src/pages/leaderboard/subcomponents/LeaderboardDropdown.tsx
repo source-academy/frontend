@@ -2,16 +2,12 @@ import 'src/styles/Leaderboard.scss';
 
 import { Fragment } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useAppSelector } from 'src/commons/utils/Hooks';
 
 function LeaderboardDropdown() {
-  const enableOverallLeaderboard = useTypedSelector(
-    store => store.session.enableOverallLeaderboard,
-  );
-  const enableContestLeaderboard = useTypedSelector(
-    store => store.session.enableContestLeaderboard,
-  );
-  const crid = useTypedSelector(store => store.session.courseId);
+  const enableOverallLeaderboard = useAppSelector(store => store.session.enableOverallLeaderboard);
+  const enableContestLeaderboard = useAppSelector(store => store.session.enableContestLeaderboard);
+  const crid = useAppSelector(store => store.session.courseId);
   const baseLink = `/courses/${crid}/leaderboard`;
 
   // Handle Navigation to other contest leaderboards
@@ -23,7 +19,7 @@ function LeaderboardDropdown() {
   };
 
   const currentPath = location.pathname;
-  const contests = useTypedSelector(state => state.leaderboard.contests);
+  const contests = useAppSelector(state => state.leaderboard.contests);
   const publishedContests = enableContestLeaderboard
     ? contests.filter(contest => contest.published)
     : [];

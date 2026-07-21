@@ -1,6 +1,8 @@
-import type { ITabService, Tab } from 'src/features/conductor/commonTabs';
+import type { ITabService, Tab } from '@sourceacademy/common-tabs';
 
-import type { SideContentLocation, SideContentTab } from './SideContentTypes';
+import { store } from '../../pages/createStore';
+import { visitSideContent } from './SideContentActions';
+import { type SideContentLocation, type SideContentTab, SideContentType } from './SideContentTypes';
 
 type Listener = () => void;
 
@@ -34,6 +36,17 @@ export class TabService implements ITabService {
 
   showTab(id: string): void {
     this.setTabVisibility(id, true);
+    // A module deciding to show its tab (e.g. the moment it starts using the host, like sound's
+    // play()/record()) means it wants the student looking at it right now - but only if they're
+    // still on the workspace's home tab (undefined selectedTab means no explicit navigation has
+    // happened yet, i.e. still showing whatever default the caller's useSideContent() falls back
+    // to). If the student has deliberately navigated to some other tab (including a previously
+    // auto-shown one), a new module claiming the host shouldn't yank them away from it.
+    const previousSelectedTab = store.getState().sideContent[this.workspaceLocation]?.selectedTab;
+    if (previousSelectedTab !== undefined && previousSelectedTab !== SideContentType.introduction) {
+      return;
+    }
+    store.dispatch(visitSideContent(id, previousSelectedTab, this.workspaceLocation));
   }
 
   hideTab(id: string): void {
@@ -63,10 +76,13 @@ export class TabService implements ITabService {
     this.emit();
   }
 
-  subscribe(listener: Listener): () => void {
+  // An arrow-function property (not a method) so it has a stable `this`-bound identity that can be
+  // passed directly to useSyncExternalStore - a plain method would need `.bind()` on every render
+  // (a new function reference each time), causing needless unsubscribe/resubscribe churn.
+  subscribe = (listener: Listener): (() => void) => {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);
-  }
+  };
 
   private emit(): void {
     this.visibleTabs = Array.from(this.tabs.values())

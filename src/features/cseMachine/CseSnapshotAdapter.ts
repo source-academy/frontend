@@ -244,6 +244,7 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
       head,
       tail: null as Environment | null,
       heap: new Heap(),
+      globalNames: f.globalNames,
     } as unknown as Environment;
     envMap.set(f.id, env);
   }

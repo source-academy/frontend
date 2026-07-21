@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
 
 import type { Assessment } from '../assessment/AssessmentTypes';
-import { useTypedSelector } from '../utils/Hooks';
+import { useAppSelector } from '../utils/Hooks';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 
@@ -13,7 +13,7 @@ type Props = {
 
 function AchievementCommentCard({ assessment, showToQuestion }: Props) {
   const navigate = useNavigate();
-  const courseId = useTypedSelector(store => store.session.courseId);
+  const courseId = useAppSelector(store => store.session.courseId);
   const toMission = useMemo(
     () => (questionId: number) => {
       if (!courseId) {

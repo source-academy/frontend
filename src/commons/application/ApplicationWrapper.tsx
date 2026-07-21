@@ -3,8 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
 import { useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import { academyRoutes } from 'src/pages/academy/academyRoutes';
 
 import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from '../../routes/routerConfig';
@@ -21,7 +21,7 @@ import { updateReactRouter } from './actions/CommonsActions';
  * 2. Full Academy (full SA to be deployed and configured with the backend - e.g. https://sourceacademy.nus.edu.sg)
  */
 function ApplicationWrapper() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { isLoggedIn, name, courseId } = useSession();
   const [isApiHealthy, setIsApiHealthy] = useState(true);
 
