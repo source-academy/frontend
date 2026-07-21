@@ -1,7 +1,14 @@
-import { CHANNEL_ID, type PySlangMessage } from '@sourceacademy/common-test';
 import type { IChannel, IConduit, IPlugin } from '@sourceacademy/conductor/conduit';
 
+const CHANNEL_ID = 'test';
+
+export type PySlangMessage =
+  | { type: 'run'; code: string }
+  | { type: 'result'; output: string }
+  | { type: 'error'; message: string };
+
 const WEB_ID = '__web_test';
+
 
 export class Ev3WebPlugin implements IPlugin {
   readonly id: string = WEB_ID;

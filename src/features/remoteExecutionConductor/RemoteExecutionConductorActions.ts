@@ -1,5 +1,6 @@
 import { createActions } from 'src/commons/redux/utils';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+
 import type { Device, DeviceSession } from '../remoteExecution/RemoteExecutionTypes';
 
 const RemoteExecutionConductorActions = createActions('remoteExecutionConductor', {

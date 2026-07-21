@@ -1,6 +1,7 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects';
-import { actions } from 'src/commons/utils/ActionsHelper';
 import type { OverallState } from 'src/commons/application/ApplicationTypes';
+import { actions } from 'src/commons/utils/ActionsHelper';
+
 import type { DeviceSession } from '../remoteExecution/RemoteExecutionTypes';
 import { createEv3Conductor } from './createEv3Conductor';
 import RemoteExecutionConductorActions from './RemoteExecutionConductorActions';
@@ -34,6 +35,7 @@ function* handleConductorRun(
 function* handleConductorDisconnect(): any {
   activeConductor?.conduit.terminate?.();
   activeConductor = null;
+  yield; // satisfies require-yield
 }
 
 export function* remoteExecutionConductorSaga() {

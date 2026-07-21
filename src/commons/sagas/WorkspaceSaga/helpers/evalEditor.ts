@@ -1,11 +1,13 @@
-import type { FSModule } from 'browserfs/dist/nodeclearContext/core/FS';
+import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { Variant } from 'js-slang/dist/langs';
 import { call, put, select, type StrictEffect } from 'redux-saga/effects';
+import { featureSelector } from 'src/commons/featureFlags/featureSelector';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
+import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import CseMachine from 'src/features/cseMachine/CseMachine';
+
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import type { DeviceSession } from '../../../../features/remoteExecution/RemoteExecutionTypes';
-import { selectConductorEv3Enable } from '../../../../features/remoteExecutionConductor/flagConductorEv3Enable';
 import { WORKSPACE_BASE_PATHS } from '../../../../pages/fileSystem/createInBrowserFileSystem';
 import type { OverallState } from '../../../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../../../fileSystem/utils';
@@ -53,7 +55,7 @@ export function* evalEditorSaga(
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
-    const isConductorEv3: boolean = yield select(selectConductorEv3Enable);
+    const isConductorEv3: boolean = yield select(featureSelector(flagConductorEnable));
     if (isConductorEv3) {
       yield put(actions.remoteExecConductorRun(files, entrypointFilePath));
     } else {
