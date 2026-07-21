@@ -37,7 +37,7 @@ export function createEv3Conductor(
 
   plugin.onError = (message: string) => {
     const currentSession = store.getState().session.remoteExecutionSession;
-    if (!currentSession) return;
+    if (!currentSession) {return;}
     const error = new ExceptionError(new Error(`${message}`), dummyLocation);
     store.dispatch(actions.evalInterpreterError([error], currentSession.workspace));
   };
@@ -82,7 +82,7 @@ export function createEv3Conductor(
 
   client.on('display', (message, type) => {
     const currentSession = store.getState().session.remoteExecutionSession;
-    if (!currentSession) return;
+    if (!currentSession) {return;}
     const workspace = currentSession.workspace;
     switch (type) {
       case 'output':

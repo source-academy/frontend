@@ -19,7 +19,7 @@ export class Ev3WebPlugin implements IPlugin {
   onResult?: (output: string) => void;
   onError?: (message: string) => void;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   constructor(_conduit: IConduit, [channel]: IChannel<any>[]) {
     this.__channel = channel;
 
