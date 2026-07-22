@@ -1,7 +1,7 @@
 import { languages } from '@sourceacademy/language-directory';
 import type {
   IEvaluatorDefinition,
-  ILanguageDefinition
+  ILanguageDefinition,
 } from '@sourceacademy/language-directory/dist/types';
 import { getEvaluatorDefinition } from '@sourceacademy/language-directory/dist/util';
 import { call, fork, put, select } from 'redux-saga/effects';
