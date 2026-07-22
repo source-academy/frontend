@@ -43,9 +43,21 @@ export function* getEvaluatorDefinitionSaga() {
 const languageDirectoryHandlers = combineSagaHandlers({
   [LanguageDirectoryActions.setLanguages.type]: function* () {
     const directory = yield select((state: OverallState) => state.languageDirectory);
-    if (directory.languages.length > 0) {
-      yield put(LanguageDirectoryActions.setSelectedLanguage(directory.languages[0].id));
+    if (directory.languages.length === 0) {
+      return;
     }
+    // Something (e.g. a share link's handleHash) may have already requested a language
+    // before the directory finished loading; at that point languageMap was still empty, so
+    // the setSelectedLanguage handler below couldn't resolve it and bailed out early. Re-run
+    // that same selection now that the directory is populated, instead of unconditionally
+    // overwriting it with the first language.
+    const languageId = directory.selectedLanguageId ?? directory.languages[0].id;
+    yield put(
+      LanguageDirectoryActions.setSelectedLanguage(
+        languageId,
+        directory.selectedEvaluatorId ?? undefined,
+      ),
+    );
   },
   [LanguageDirectoryActions.fetchLanguages.type]: function* () {
     const url: string = yield select(selectDirectoryLanguageUrl);

@@ -41,6 +41,7 @@ import {
 } from 'src/features/conductor/stepperTab';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
+import { joinEvaluatorId, joinLanguageId } from 'src/features/directory/languageIdCodec';
 import GithubActions from 'src/features/github/GitHubActions';
 import PersistenceActions from 'src/features/persistence/PersistenceActions';
 import {
@@ -191,10 +192,13 @@ export async function handleHash(
       // Hardcoded for Playground only for now, while we await workspace refactoring
       // to decouple the SicpWorkspace from the Playground.
       dispatch(playgroundConfigLanguage(languageConfig));
-    } else if (qs.lang) {
-      // Conductor-based languages (e.g. Python) aren't part of the js-slang Chapter
-      // enum, so they're shared via separate `lang`/`evaluator` params instead of `chap`/`variant`.
-      dispatch(LanguageDirectoryActions.setSelectedLanguage(qs.lang, qs.evaluator));
+    } else if (qs.language) {
+      // Conductor-based languages (e.g. Python) aren't part of the js-slang Chapter enum, so
+      // they're shared via separate `language`/`variant`/`evaluator` params instead of
+      // `chap`/`variant`. Reassemble the directory's compound ids from those three fields.
+      const languageId = joinLanguageId(qs.language, qs.variant);
+      const evaluatorId = qs.evaluator ? joinEvaluatorId(languageId, qs.evaluator) : undefined;
+      dispatch(LanguageDirectoryActions.setSelectedLanguage(languageId, evaluatorId));
     }
 
     const execTime = Math.max(convertParamToInt(qs.exec || '1000') || 1000, 1000);
