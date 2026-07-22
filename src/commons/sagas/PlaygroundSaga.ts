@@ -3,6 +3,7 @@ import { Chapter } from 'js-slang/dist/langs';
 import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
 import { call, delay, put, race, select } from 'redux-saga/effects';
+import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
@@ -131,6 +132,7 @@ function* updateQueryString() {
     isFolderModeEnabled,
   } = yield* selectWorkspace('playground');
 
+  const conductorEnabled: boolean = yield select(selectConductorEnable);
   const { selectedLanguageId, selectedEvaluatorId } = yield select(
     (state: OverallState) => state.languageDirectory,
   );
@@ -144,10 +146,13 @@ function* updateQueryString() {
     files: compressToEncodedURIComponent(qs.stringify(files)),
     tabs: editorTabFilePaths.map(compressToEncodedURIComponent),
     tabIdx: activeEditorTabIndex,
-    chap: chapter,
-    variant,
-    lang: selectedLanguageId ?? undefined,
-    evaluator: selectedEvaluatorId ?? undefined,
+    // Conductor-based languages (e.g. Python) and legacy js-slang chapters are mutually
+    // exclusive, so only one pair is ever meaningful. Encoding both unconditionally would
+    // make `chap` (which always has a real default value) win on decode and shadow `lang`.
+    chap: conductorEnabled ? undefined : chapter,
+    variant: conductorEnabled ? undefined : variant,
+    lang: conductorEnabled ? (selectedLanguageId ?? undefined) : undefined,
+    evaluator: conductorEnabled ? (selectedEvaluatorId ?? undefined) : undefined,
     ext: external,
     exec: execTime,
   });
