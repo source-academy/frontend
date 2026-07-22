@@ -1,5 +1,8 @@
 import { languages } from '@sourceacademy/language-directory';
-import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
+import type {
+  IEvaluatorDefinition,
+  ILanguageDefinition,
+} from '@sourceacademy/language-directory/dist/types';
 import { getEvaluatorDefinition } from '@sourceacademy/language-directory/dist/util';
 import { call, fork, put, select } from 'redux-saga/effects';
 import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
@@ -97,16 +100,25 @@ const languageDirectoryHandlers = combineSagaHandlers({
       console.error('Failed to preload:', error);
     }
   },
-  [LanguageDirectoryActions.setSelectedLanguage.type]: function* () {
-    // Selecting a language defaults its evaluator to the first one. The actual conductor preload
-    // happens in the setSelectedEvaluator handler above (this dispatch triggers it), so switching
-    // evaluators afterwards re-preloads the correct one.
+  [LanguageDirectoryActions.setSelectedLanguage.type]: function* (
+    action: ReturnType<typeof LanguageDirectoryActions.setSelectedLanguage>,
+  ) {
+    // Selecting a language defaults its evaluator to the first one, unless a specific evaluator
+    // was requested (e.g. restoring a share link) and it's valid for this language. The actual
+    // conductor preload happens in the setSelectedEvaluator handler above (this dispatch triggers
+    // it), so switching evaluators afterwards re-preloads the correct one.
     const language = yield call(getLanguageDefinitionSaga);
     if (!language) {
       return;
     }
-    if (language.evaluators.length > 0) {
-      yield put(LanguageDirectoryActions.setSelectedEvaluator(language.evaluators[0].id));
+    const requestedEvaluatorId = action.payload.evaluatorId;
+    const evaluatorId = language.evaluators.some(
+      (e: IEvaluatorDefinition) => e.id === requestedEvaluatorId,
+    )
+      ? requestedEvaluatorId
+      : language.evaluators[0]?.id;
+    if (evaluatorId) {
+      yield put(LanguageDirectoryActions.setSelectedEvaluator(evaluatorId));
     }
   },
 });

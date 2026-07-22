@@ -131,6 +131,10 @@ function* updateQueryString() {
     isFolderModeEnabled,
   } = yield* selectWorkspace('playground');
 
+  const { selectedLanguageId, selectedEvaluatorId } = yield select(
+    (state: OverallState) => state.languageDirectory,
+  );
+
   const editorTabFilePaths = editorTabs
     .map(editorTab => editorTab.filePath)
     .filter((filePath): filePath is string => filePath !== undefined);
@@ -142,6 +146,8 @@ function* updateQueryString() {
     tabIdx: activeEditorTabIndex,
     chap: chapter,
     variant,
+    lang: selectedLanguageId ?? undefined,
+    evaluator: selectedEvaluatorId ?? undefined,
     ext: external,
     exec: execTime,
   });

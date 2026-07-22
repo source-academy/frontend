@@ -191,6 +191,10 @@ export async function handleHash(
       // Hardcoded for Playground only for now, while we await workspace refactoring
       // to decouple the SicpWorkspace from the Playground.
       dispatch(playgroundConfigLanguage(languageConfig));
+    } else if (qs.lang) {
+      // Conductor-based languages (e.g. Python) aren't part of the js-slang Chapter
+      // enum, so they're shared via separate `lang`/`evaluator` params instead of `chap`/`variant`.
+      dispatch(LanguageDirectoryActions.setSelectedLanguage(qs.lang, qs.evaluator));
     }
 
     const execTime = Math.max(convertParamToInt(qs.exec || '1000') || 1000, 1000);
