@@ -3,7 +3,7 @@ import { featureSelector } from '../../commons/featureFlags/featureSelector';
 
 export const flagConductorEnable = createFeatureFlag(
   'conductor.enable',
-  false,
+  true,
   'Enables the Conductor framework for evaluation of user programs.',
 );
 
