@@ -3955,10 +3955,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.14":
+"@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.15":
   version: 0.0.14
-  resolution: "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#commit=e87eae67ae68443593bb92c1338b0cd5c26adc75"
-  checksum: 10c0/6a07dac199f46ad10730a8103ab5e4c377af38167b20117fe65118ef28ef774a272d6b5c0410ded66961233a099aa153a5ecb672bd9c0a6614e8e02b13032ebe
+  resolution: "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#commit=8942d409cd44435d7c5312abec041cbbf01868da"
+  checksum: 10c0/9dbd1a639963cc91f918040315f53269fc754a6abba7ac223899ec47c51b3416bf1d8474e5b943152b94cb24cf21c83ac7b48824049a4364a4a1801ac63ac0d2
   languageName: node
   linkType: hard
 
@@ -8250,7 +8250,7 @@ __metadata:
     "@sourceacademy/common-cse-machine": "npm:^0.3.0"
     "@sourceacademy/common-tabs": "npm:^0.0.1"
     "@sourceacademy/conductor": "npm:^0.7.1"
-    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.14"
+    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.15"
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.3"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
