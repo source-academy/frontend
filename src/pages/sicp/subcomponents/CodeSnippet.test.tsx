@@ -5,12 +5,16 @@ import { describe, expect, test, vi } from 'vitest';
 
 import CodeSnippet from './CodeSnippet';
 
-describe('Sicp Code Snippet', () => {
-  vi.mock('react-redux', async importActual => ({
-    ...(await importActual()),
-    useDispatch: () => vi.fn(),
-  }));
+// setupTests.ts imports flagConductorEnable, which pulls in src/commons/utils/Hooks
+// before this file's imports run. Hooks.ts captures `useAppDispatch = useDispatch`
+// as a one-time alias at module-load, so mocking 'react-redux' here is too late to
+// affect it — mock the alias's own module instead.
+vi.mock('src/commons/utils/Hooks', async importActual => ({
+  ...(await importActual()),
+  useAppDispatch: () => vi.fn(),
+}));
 
+describe('Sicp Code Snippet', () => {
   const body = 'const a = 1;\na+1;';
   const output = '2';
   const program = lzString.compressToEncodedURIComponent(body);
