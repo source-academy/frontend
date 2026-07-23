@@ -1,7 +1,9 @@
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { Variant } from 'js-slang/dist/langs';
 import { call, put, select, type StrictEffect } from 'redux-saga/effects';
+import { featureSelector } from 'src/commons/featureFlags/featureSelector';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
+import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
@@ -53,7 +55,12 @@ export function* evalEditorSaga(
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
-    yield put(actions.remoteExecRun(files, entrypointFilePath));
+    const isConductorEv3: boolean = yield select(featureSelector(flagConductorEnable));
+    if (isConductorEv3) {
+      yield put(actions.remoteExecConductorRun(files, entrypointFilePath));
+    } else {
+      yield put(actions.remoteExecRun(files, entrypointFilePath));
+    }
   } else {
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
