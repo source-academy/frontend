@@ -1,8 +1,7 @@
 import { IconNames } from '@blueprintjs/icons';
 
-import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
+import { useConductorEnable } from '../../features/conductor/flagConductorEnable';
 import ControlButton from '../ControlButton';
-import { useFeature } from '../featureFlags/useFeature';
 import { useResponsive } from '../utils/Hooks';
 import ControlBarRunButton from './ControlBarRunButton';
 
@@ -34,7 +33,7 @@ function ControlBarAutorunButtons(props: Props) {
 
   // stop button does not do anything due to the blocking nature of eval methods (e.g. runInContext)
   // to prevent "flickering", we will just disable Stop Button for now
-  const conductorEnabled = useFeature(flagConductorEnable);
+  const conductorEnabled = useConductorEnable();
   const showStopButton = conductorEnabled && props.isRunning && (
     <ControlButton label="Stop" icon={IconNames.STOP} onClick={props.handleInterruptEval} />
   );
