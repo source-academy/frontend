@@ -80,6 +80,10 @@ export const Config = Object.freeze({
   PrintActiveColor: '#3d5afe',
   DangerColor: '#ff1744',
   PrintDangerColor: '#f44336',
+  // Marks a control item that is an expression statement (its value is about to be
+  // discarded by a "pop"), so it's visually distinct from a plain sub-expression (py-slang#270).
+  ExprStmtColor: '#ff9800',
+  PrintExprStmtColor: '#e65100',
   HoverColor: '#25c225',
   HoverDeadColor: '#127a12',
   PrintHoverColor: '#0dbf0d',

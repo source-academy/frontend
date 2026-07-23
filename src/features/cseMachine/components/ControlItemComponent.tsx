@@ -9,6 +9,7 @@ import { Layout } from '../CseMachineLayout';
 import type { IHoverable } from '../CseMachineTypes';
 import {
   defaultActiveColor,
+  defaultExprStmtColor,
   defaultStrokeColor,
   defaultTextColor,
   getTextHeight,
@@ -40,6 +41,8 @@ export class ControlItemComponent extends Visible implements IHoverable {
     readonly unhighlightOnHover: () => void,
     readonly topItem: boolean,
     arrowTo?: Frame,
+    /** true if this control item is an expression statement (py-slang#270) */
+    readonly isExpressionStatement: boolean = false,
   ) {
     super();
     this.text = truncateText(
@@ -97,8 +100,18 @@ export class ControlItemComponent extends Visible implements IHoverable {
     this.secItem?.fill(Config.HoverColor);
   }
 
+  private strokeColor(): string {
+    if (this.topItem) {
+      return defaultActiveColor();
+    }
+    if (this.isExpressionStatement) {
+      return defaultExprStmtColor();
+    }
+    return defaultStrokeColor();
+  }
+
   setArrowSourceNormalStyle(): void {
-    this.tag?.stroke(this.topItem ? defaultActiveColor() : defaultStrokeColor());
+    this.tag?.stroke(this.strokeColor());
     this.secItem?.fill(defaultTextColor());
   }
 
@@ -116,7 +129,7 @@ export class ControlItemComponent extends Visible implements IHoverable {
       fontVariant: ControlStashConfig.FontVariant,
     };
     const tagProps = {
-      stroke: this.topItem ? defaultActiveColor() : defaultStrokeColor(),
+      stroke: this.strokeColor(),
       cornerRadius: ControlStashConfig.ControlItemCornerRadius,
     };
     return (
