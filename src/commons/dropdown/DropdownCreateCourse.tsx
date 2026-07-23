@@ -39,6 +39,7 @@ function DropdownCreateCourse(props: Props) {
     enableGame: true,
     enableAchievements: true,
     enableLlmGrading: false,
+    enableExamMode: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: '',

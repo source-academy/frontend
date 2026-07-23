@@ -8,6 +8,7 @@ export enum SideContentType {
   contestVoting = 'contest_voting',
   cseMachine = 'cse_machine',
   dataVisualizer = 'data_visualizer',
+  documentation = 'documentation',
   editorGrading = 'editor_grading',
   editorAutograder = 'editor_autograder',
   editorBriefing = 'editor_briefing',
@@ -65,6 +66,8 @@ export type SideContentTab = {
   body: React.ReactElement | null;
   id?: SideContentTabId;
   disabled?: boolean;
+  panelClassName?: string;
+  bodyClassName?: string;
 };
 
 /**

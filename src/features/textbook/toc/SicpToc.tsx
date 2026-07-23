@@ -1,16 +1,18 @@
 import { Tree, type TreeNodeInfo } from '@blueprintjs/core';
+import classNames from 'classnames';
 import { cloneDeep } from 'lodash-es';
 import { useState } from 'react';
 
 type Props = {
   handleClick?: (node: TreeNodeInfo) => void;
   toc: TreeNodeInfo[];
+  treeClassName?: string;
 };
 
 /**
  * Table of contents of SICP.
  */
-function SicpToc({ handleClick, toc }: Props) {
+function SicpToc({ handleClick, toc, treeClassName }: Props) {
   const [sidebarContent, setSidebarContent] = useState(toc);
 
   // Note: Technically this should have a useEffect to sync the state whenever
@@ -32,7 +34,7 @@ function SicpToc({ handleClick, toc }: Props) {
   return (
     <div className="sicp-toc">
       <Tree
-        className="sicp-toc-tree"
+        className={classNames('sicp-toc-tree', treeClassName)}
         contents={sidebarContent}
         onNodeClick={handleClick}
         onNodeCollapse={handleNodeCollapse}

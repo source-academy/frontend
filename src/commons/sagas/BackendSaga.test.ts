@@ -104,6 +104,7 @@ const mockUser: User = {
       viewable: true,
     },
   ],
+  isPaused: false,
 };
 
 const mockCourseRegistration1: CourseRegistration = {
@@ -131,12 +132,15 @@ const mockCourseConfiguration1: CourseConfiguration = {
   enableAchievements: true,
   enableOverallLeaderboard: true,
   enableContestLeaderboard: true,
+  enableExamMode: false,
   topLeaderboardDisplay: 100,
   topContestLeaderboardDisplay: 10,
   sourceChapter: Chapter.SOURCE_1,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
   assetsPrefix: '',
+  isOfficialCourse: false,
+  resumeCode: '',
 };
 
 const mockCourseRegistration2: CourseRegistration = {
@@ -166,10 +170,13 @@ const mockCourseConfiguration2: CourseConfiguration = {
   enableContestLeaderboard: true,
   topLeaderboardDisplay: 100,
   topContestLeaderboardDisplay: 10,
+  enableExamMode: false,
   sourceChapter: Chapter.SOURCE_4,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
   assetsPrefix: '',
+  isOfficialCourse: false,
+  resumeCode: '',
 };
 
 const mockAssessmentConfigurations: AssessmentConfiguration[] = [
@@ -952,10 +959,13 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
     enableContestLeaderboard: true,
     topLeaderboardDisplay: 100,
     topContestLeaderboardDisplay: 10,
+    enableExamMode: false,
     sourceChapter: Chapter.SOURCE_4,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help',
     assetsPrefix: '',
+    isOfficialCourse: false,
+    resumeCode: '',
   };
 
   test('when course config is changed', () => {
@@ -1050,9 +1060,12 @@ describe('Test CREATE_COURSE action', () => {
     enableAchievements: true,
     enableOverallLeaderboard: true,
     enableContestLeaderboard: true,
+    enableExamMode: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text',
+    isOfficialCourse: false,
+    resumeCode: '',
   };
   const user = mockUser;
   const courseConfiguration = mockCourseConfiguration1;

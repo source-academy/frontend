@@ -21,6 +21,7 @@ export type SessionState = {
   readonly userId?: number;
   readonly name?: string;
   readonly courses: UserCourse[];
+  readonly isPaused?: boolean;
 
   // Course Registration
   readonly courseRegId?: number;
@@ -48,10 +49,13 @@ export type SessionState = {
   readonly enableContestLeaderboard?: boolean;
   readonly topLeaderboardDisplay?: number;
   readonly topContestLeaderboardDisplay?: number;
+  readonly enableExamMode?: boolean;
+  readonly resumeCode?: string;
   readonly sourceChapter?: Chapter;
   readonly sourceVariant?: Variant;
   readonly moduleHelpText?: string;
   readonly assetsPrefix?: string;
+  readonly isOfficialCourse?: boolean;
 
   readonly assessmentConfigurations?: AssessmentConfiguration[];
   readonly userCourseRegistrations?: AdminPanelCourseRegistration[];
@@ -93,6 +97,7 @@ export type User = {
   name: string;
   username: string;
   courses: UserCourse[];
+  isPaused: boolean;
 };
 
 export type CourseRegistration = {
@@ -117,6 +122,8 @@ export type CourseConfiguration = {
   enableContestLeaderboard: boolean;
   topLeaderboardDisplay: number;
   topContestLeaderboardDisplay: number;
+  enableExamMode: boolean;
+  resumeCode: string;
   sourceChapter: Chapter;
   sourceVariant: Variant;
   moduleHelpText: string;
@@ -127,6 +134,7 @@ export type CourseConfiguration = {
   pixelbotRoutingPrompt?: string;
   pixelbotAnswerPrompt?: string;
   feedbackUrl?: string;
+  isOfficialCourse: boolean;
 };
 
 export type AdminPanelCourseRegistration = {

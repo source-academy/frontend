@@ -1,6 +1,7 @@
 import type { TreeNodeInfo } from '@blueprintjs/core';
 import { Alignment, Drawer, Navbar, NavbarGroup, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import classNames from 'classnames';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import ControlButton from 'src/commons/ControlButton';
@@ -23,6 +24,14 @@ type Props = {
   fetchSearchData: () => Promise<SearchData>;
   /** Pre-built TreeNodeInfo[] from the textbook's TOC JSON. */
   toc: TreeNodeInfo[];
+  /** Current section when navigation is controlled by an embedding view. */
+  section?: string;
+  /** Overrides route navigation when the textbook is embedded. */
+  onNavigate?: (section: string) => void;
+  /** Keeps the navigation controls visible in a scrolling embedding view. */
+  sticky?: boolean;
+  /** Additional class applied directly to the table-of-contents tree. */
+  tocTreeClassName?: string;
 };
 
 function SicpTextbookNavigationBar({
@@ -32,12 +41,17 @@ function SicpTextbookNavigationBar({
   queryKey,
   fetchSearchData,
   toc,
+  section: controlledSection,
+  onNavigate,
+  sticky = false,
+  tocTreeClassName,
 }: Props) {
   const [isTocOpen, setIsTocOpen] = useState(false);
-  const { section } = useParams<{ section: string }>();
+  const { section: routeSection } = useParams<{ section: string }>();
   const navigate = useNavigate();
-  const prev = getPrev(section ?? '');
-  const next = getNext(section ?? '');
+  const section = controlledSection ?? routeSection ?? '';
+  const prev = getPrev(section);
+  const next = getNext(section);
 
   const handleOpenToc = () => setIsTocOpen(true);
   const handleCloseToc = () => setIsTocOpen(false);
@@ -47,7 +61,11 @@ function SicpTextbookNavigationBar({
   };
 
   const handleNavigation = (sect: string) => {
-    navigate(`${routePrefix}/${sect}`);
+    if (onNavigate) {
+      onNavigate(sect);
+    } else {
+      navigate(`${routePrefix}/${sect}`);
+    }
   };
 
   // Button to open table of contents
@@ -90,7 +108,9 @@ function SicpTextbookNavigationBar({
 
   return (
     <>
-      <Navbar className="SicpNavigationBar secondary-navbar">
+      <Navbar
+        className={classNames('SicpNavigationBar secondary-navbar', sticky && 'sticky top-0')}
+      >
         <NavbarGroup align={Alignment.START}>{tocButton}</NavbarGroup>
         <NavbarGroup align={Alignment.END}>{[prevButton, nextButton]}</NavbarGroup>
         <NavbarGroup align={Alignment.CENTER}>
@@ -102,7 +122,7 @@ function SicpTextbookNavigationBar({
         </NavbarGroup>
       </Navbar>
       <Drawer {...drawerProps} className="sicp-toc-drawer">
-        <SicpToc handleClick={handleClickToc} toc={toc} />
+        <SicpToc handleClick={handleClickToc} toc={toc} treeClassName={tocTreeClassName} />
       </Drawer>
     </>
   );

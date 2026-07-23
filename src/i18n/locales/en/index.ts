@@ -6,6 +6,7 @@ import contestLeaderboard from './sideContent/contestLeaderboard';
 import contestVoting from './sideContent/contestVoting';
 import cseMachine from './sideContent/cseMachine';
 import dataVisualizer from './sideContent/dataVisualizer';
+import documentation from './sideContent/documentation';
 import faceapiDisplay from './sideContent/faceapiDisplay';
 import htmlDisplay from './sideContent/htmlDisplay';
 import resultCard from './sideContent/resultCard';
@@ -27,6 +28,7 @@ export default {
     contestVoting,
     cseMachine,
     dataVisualizer,
+    documentation,
     faceapiDisplay,
     htmlDisplay,
     resultCard,

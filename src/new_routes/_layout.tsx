@@ -1,7 +1,10 @@
-import { useEffect } from 'react';
+import disableDevtool from 'disable-devtool';
+import { useEffect, useRef, useState } from 'react';
 import { Outlet } from 'react-router';
+import { Role } from 'src/commons/application/ApplicationTypes';
 import { useLocalStorageState } from 'src/commons/hooks/useLocalStorageState';
 import { useOrientationChangeHandler } from 'src/commons/hooks/useOrientationChangeHandler';
+import { PauseAcademyOverlay } from 'src/commons/pauseAcademyOverlay/PauseAcademyOverlay';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
 import Messages, {
   type MessageType,
@@ -14,6 +17,10 @@ import VscodeActions from '../commons/application/actions/VscodeActions';
 import NavigationBar from '../commons/navigationBar/NavigationBar';
 import Constants from '../commons/utils/Constants';
 import { useSession } from '../commons/utils/Hooks';
+import {
+  showDangerMessage,
+  showWarningMessage,
+} from '../commons/utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../commons/workspace/WorkspaceActions';
 import {
   defaultWorkspaceSettings,
@@ -22,12 +29,22 @@ import {
 
 function RootLayout() {
   const dispatch = useAppDispatch();
-  const { isLoggedIn } = useSession();
+  const { isLoggedIn, isPaused, enableExamMode } = useSession();
 
   const [workspaceSettings, setWorkspaceSettings] = useLocalStorageState(
     Constants.workspaceSettingsLocalStorageKey,
     defaultWorkspaceSettings,
   );
+
+  // Used for dev tools detection
+  const [isPreviewExamMode] = useLocalStorageState(
+    Constants.isPreviewExamModeLocalStorageKey,
+    false,
+  );
+  const [pauseAcademy, setPauseAcademy] = useState(false);
+  const [pauseAcademyReason, setPauseAcademyReason] = useState('');
+  const hasSentPauseUserRequest = useRef<boolean>(false);
+  const { role } = useSession();
 
   // Effect to fetch the latest user info and course configurations from the backend on refresh,
   // if the user was previously logged in
@@ -116,14 +133,90 @@ function RootLayout() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Effect for dev tools blocking/detection when exam mode enabled
+  useEffect(() => {
+    if (role !== Role.Student && !isPreviewExamMode) {
+      return;
+    }
+
+    const showPauseAcademyOverlay = (reason: string) => {
+      setPauseAcademy(true);
+      setPauseAcademyReason(reason);
+      if (hasSentPauseUserRequest.current === false) {
+        dispatch(SessionActions.pauseUser());
+        hasSentPauseUserRequest.current = true;
+      }
+    };
+
+    if (enableExamMode || isPreviewExamMode) {
+      dispatch(SessionActions.reportFocusRegain());
+
+      if (isPaused !== undefined && isPaused) {
+        showPauseAcademyOverlay('Browser was refreshed when Source Academy was paused');
+      } else {
+        hasSentPauseUserRequest.current = false;
+      }
+
+      // Disable/Detect dev tools
+      disableDevtool({
+        ondevtoolopen: () => {
+          showPauseAcademyOverlay('Developer tools detected');
+        },
+      });
+
+      document.addEventListener('contextmenu', event => event.preventDefault());
+      document.addEventListener('keydown', event => {
+        if (
+          event.key === 'F12' ||
+          ((event.key === 'I' || event.key === 'J' || event.key === 'C') &&
+            event.ctrlKey &&
+            event.shiftKey)
+        ) {
+          event.preventDefault();
+        }
+      });
+
+      // Detect when Source Academy tab's content are hidden (e.g., user changes tab while Source Academy is active)
+      document.addEventListener('visibilitychange', _ => {
+        if (document.visibilityState === 'hidden') {
+          dispatch(SessionActions.reportFocusLost());
+        } else {
+          showDangerMessage('Source Academy was out of focus.', 5000);
+          dispatch(SessionActions.reportFocusRegain());
+        }
+      });
+    }
+  }, [dispatch, enableExamMode, isPaused, hasSentPauseUserRequest, role, isPreviewExamMode]);
+
+  const resumeCodeSubmitHandler = (resumeCode: string) => {
+    if (!resumeCode || resumeCode.length === 0) {
+      showWarningMessage('Resume code cannot be empty.');
+    } else {
+      dispatch(
+        SessionActions.validateResumeCode(resumeCode, (isResumeCodeValid: boolean) => {
+          if (isResumeCodeValid) {
+            setPauseAcademy(false);
+            hasSentPauseUserRequest.current = false;
+          } else {
+            showWarningMessage('Resume code is invalid.');
+          }
+        }),
+      );
+    }
+  };
+
   return (
     <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>
-      <div className="Application">
-        <NavigationBar />
-        <div className="Application__main">
-          <Outlet />
+      {pauseAcademy ? (
+        <PauseAcademyOverlay reason={pauseAcademyReason} onSubmit={resumeCodeSubmitHandler} />
+      ) : (
+        <div className="Application">
+          <NavigationBar />
+          <div className="Application__main">
+            <Outlet />
+          </div>
         </div>
-      </div>
+      )}
     </WorkspaceSettingsContext.Provider>
   );
 }

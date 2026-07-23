@@ -65,6 +65,7 @@ test('SET_USER works correctly', () => {
         role: Role.Staff,
       },
     ],
+    isPaused: false,
   };
 
   const action = {

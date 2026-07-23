@@ -148,6 +148,13 @@ const SessionActions = createActions('session', {
   updateUserRole: (courseRegId: number, role: Role) => ({ courseRegId, role }),
   deleteUserCourseRegistration: (courseRegId: number) => ({ courseRegId }),
   updateCourseResearchAgreement: (agreedToResearch: boolean) => ({ agreedToResearch }),
+  validateResumeCode: (resumeCode: string, callback: (isResumeCodeValid: boolean) => any) => ({
+    resumeCode,
+    callback,
+  }),
+  pauseUser: () => ({}),
+  reportFocusLost: () => ({}),
+  reportFocusRegain: () => ({}),
 });
 
 // For compatibility with existing code (actions helper)

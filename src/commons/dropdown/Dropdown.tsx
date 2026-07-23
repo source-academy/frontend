@@ -2,11 +2,14 @@ import { Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocalStorageState } from 'src/commons/hooks/useLocalStorageState';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { logOut } from '../application/actions/CommonsActions';
+import { Role } from '../application/ApplicationTypes';
 import ControlButton from '../ControlButton';
 import Profile from '../profile/Profile';
+import Constants from '../utils/Constants';
 import { useSession } from '../utils/Hooks';
 import DropdownAbout from './DropdownAbout';
 import DropdownCourses from './DropdownCourses';
@@ -21,10 +24,14 @@ function Dropdown() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMyCoursesOpen, setIsMyCoursesOpen] = useState(false);
   const [isCreateCourseOpen, setIsCreateCourseOpen] = useState(false);
+  const [isPreviewExamMode] = useLocalStorageState(
+    Constants.isPreviewExamModeLocalStorageKey,
+    false,
+  );
 
   const { t } = useTranslation('commons', { keyPrefix: 'dropdown' });
 
-  const { isLoggedIn, name, courses, courseId } = useSession();
+  const { isLoggedIn, name, courses, courseId, enableExamMode, role } = useSession();
   const dispatch = useAppDispatch();
   const handleLogOut = () => dispatch(logOut());
 
@@ -53,13 +60,14 @@ function Dropdown() {
     />
   ) : null;
 
-  const createCourse = isLoggedIn ? (
-    <MenuItem
-      icon={IconNames.ADD}
-      onClick={toggleCreateCourseOpen}
-      text={t($ => $['Create Course'])}
-    />
-  ) : null;
+  const createCourse =
+    isLoggedIn && !isPreviewExamMode && (!enableExamMode || role !== Role.Student) ? (
+      <MenuItem
+        icon={IconNames.ADD}
+        onClick={toggleCreateCourseOpen}
+        text={t($ => $['Create Course'])}
+      />
+    ) : null;
 
   const logout = isLoggedIn ? (
     <MenuItem icon={IconNames.LOG_OUT} text={t($ => $['Logout'])} onClick={handleLogOut} />
