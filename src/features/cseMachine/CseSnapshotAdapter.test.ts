@@ -74,6 +74,29 @@ describe('buildFakeEnvTreeFromSnapshot', () => {
     const globalNode = findNode(envTree, 'g');
     expect((globalNode?.environment as any).globalNames).toBeUndefined();
   });
+
+  it('renders a Python None binding as "None", not JS null (#4111)', () => {
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        {
+          id: 'g',
+          name: 'global',
+          parentId: null,
+          bindings: [{ name: 'x', value: { displayValue: 'None', label: 'nonetype' } }],
+          isActive: true,
+        },
+      ],
+    };
+
+    const { envTree } = buildFakeEnvTreeFromSnapshot(snapshot);
+    const globalNode = findNode(envTree, 'g');
+    const head = (globalNode?.environment as any).head;
+    expect(head.x).not.toBeNull();
+    expect((head.x as { toReplString(): string }).toReplString()).toBe('None');
+  });
 });
 
 describe('Python LEGB frame labels (#4042) only apply in snapshot mode', () => {

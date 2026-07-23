@@ -67,7 +67,10 @@ function toJsValue(
     return v.displayValue.replace(/^["']|["']$/g, '');
   }
   if (label === 'nonetype' || label === 'none' || label === 'null') {
-    return null;
+    // Return a source object so PrimitiveValue/Text use toReplString() instead of
+    // String(value) or the empty-list ArrayNullUnit visual, both of which render JS `null`
+    // as "null" rather than Python's `None`.
+    return { toReplString: () => 'None' };
   }
   if (label === 'undefined') {
     return undefined;
