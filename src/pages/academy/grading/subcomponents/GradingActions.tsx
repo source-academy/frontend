@@ -1,4 +1,4 @@
-import { Button, Icon, Position, Tooltip } from '@blueprintjs/core';
+import { Button, Classes, Icon, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Link } from 'react-router';
@@ -82,16 +82,16 @@ function GradingActions({ submissionId, style, progress, filterMode }: Props) {
     <GradingFlex justifyContent="flex-start" className="gap-x-1.25 [&>a]:flex" style={style}>
       {filterMode && (
         <Tooltip position={Position.TOP} content="Grade">
-          <Link to={`/courses/${courseId}/grading/${submissionId}`}>
-            <Button
-              variant="minimal"
-              className={classNames(
-                ...buttonClasses,
-                'bg-[#7dbcff80] hover:bg-[#7dbcffb3] [&_svg]:fill-blue-500',
-              )}
-            >
-              <Icon icon={IconNames.EDIT} />
-            </Button>
+          <Link
+            to={`/courses/${courseId}/grading/${submissionId}`}
+            className={classNames(
+              Classes.BUTTON,
+              Classes.MINIMAL,
+              ...buttonClasses,
+              'bg-[#7dbcff80] hover:bg-[#7dbcffb3] [&_svg]:fill-blue-500',
+            )}
+          >
+            <Icon icon={IconNames.EDIT} />
           </Link>
         </Tooltip>
       )}

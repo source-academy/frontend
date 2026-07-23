@@ -1,4 +1,4 @@
-import { Icon } from '@blueprintjs/core';
+import { Button, Icon, Tooltip } from '@blueprintjs/core';
 import type { CustomHeaderProps } from 'ag-grid-react';
 
 export type ColumnHeaderParams = {
@@ -27,20 +27,21 @@ function ColumnHeader(props: Props) {
   const canHide = onHide !== undefined && !hideDisabledCols?.includes(colId);
 
   return (
-    <div className="group relative flex h-full w-full items-center">
+    <div className="group flex h-full w-full items-center">
       <span className="ag-header-cell-text w-full truncate text-left">{displayName}</span>
 
-      <div className="pointer-events-none absolute right-0 flex items-center gap-0.5 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100">
+      <div className="w-0 group-hover:w-fit pointer-events-none flex items-center gap-0.5 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100">
         {extraActions?.(props)}
         {canHide && (
-          <button
-            type="button"
-            aria-label={`Hide ${displayName} column`}
-            className="flex cursor-pointer rounded p-1.5 hover:bg-black/10"
-            onClick={() => onHide(colId)}
-          >
-            <Icon icon="eye-off" />
-          </button>
+          <Tooltip content="Hide column" position="bottom">
+            <Button
+              variant="minimal"
+              className="flex cursor-pointer rounded p-1.5 hover:bg-black/10"
+              onClick={() => onHide(colId)}
+            >
+              <Icon icon="eye-off" />
+            </Button>
+          </Tooltip>
         )}
       </div>
     </div>
