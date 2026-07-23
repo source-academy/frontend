@@ -99,6 +99,20 @@ describe('buildFakeEnvTreeFromSnapshot', () => {
     expect((head.x as { toReplString(): string }).toReplString()).toBe('None');
   });
 
+  it('renders a Python None value on the stash as "None", not JS null (#4111)', () => {
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [{ displayValue: 'None', label: 'nonetype' }],
+      environments: [{ id: 'g', name: 'global', parentId: null, bindings: [], isActive: true }],
+    };
+
+    const { fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
+    const [value] = fakeStash.getStack();
+    expect(value).not.toBeNull();
+    expect((value as { toReplString(): string }).toReplString()).toBe('None');
+  });
+
   it('renders a Python builtin function on the stash unquoted, not as a JS string (#302)', () => {
     const snapshot: CseSnapshot = {
       stepIndex: 0,
