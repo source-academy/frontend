@@ -5,6 +5,7 @@ import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
+import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 import type { DeviceSession } from '../../../../features/remoteExecution/RemoteExecutionTypes';
 import { WORKSPACE_BASE_PATHS } from '../../../../pages/fileSystem/createInBrowserFileSystem';
 import type { OverallState } from '../../../application/ApplicationTypes';
@@ -69,6 +70,8 @@ export function* evalEditorSaga(
       CseMachine.clearRenderedLayouts();
     }
 
+    const isConductorEnabled: boolean = yield select(selectConductorEnable);
+
     // Insert debugger statements at the lines of the program with a breakpoint.
     for (const editorTab of editorTabs) {
       const filePath = editorTab.filePath ?? defaultFilePath;
@@ -79,11 +82,16 @@ export function* evalEditorSaga(
         code,
         breakpoints,
         context,
+        isConductorEnabled,
       );
     }
 
-    // Evaluate the prepend silently with a privileged context, if it exists
-    if (prepend.length) {
+    // Evaluate the prepend silently with a privileged context, if it exists.
+    // Skipped under Conductor: each evalCodeSaga call runs in its own fresh,
+    // isolated worker with no shared state, so evaluating the prepend separately
+    // (and the privileged-context method-blocking that depends on it) has no
+    // effect on the entrypoint's run. It's concatenated into the entrypoint below instead.
+    if (prepend.length && !isConductorEnabled) {
       const elevatedContext = makeElevatedContext(context);
       const prependFilePath = '/prepend.js';
       const prependFiles = {
@@ -110,6 +118,8 @@ export function* evalEditorSaga(
       // This is to avoid extra lines in the editor which affects the error message location
       const prependSingleLine = prepend.split('\n').join('');
       files[entrypointFilePath] = prependSingleLine + files[entrypointFilePath];
+    } else if (prepend.length && isConductorEnabled) {
+      files[entrypointFilePath] = `${prepend}\n${files[entrypointFilePath]}`;
     }
     yield call(
       evalCodeSaga,

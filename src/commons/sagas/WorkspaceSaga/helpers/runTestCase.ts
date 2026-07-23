@@ -2,7 +2,10 @@ import type { Context } from 'js-slang';
 import { random } from 'lodash-es';
 import { call, put, select, type StrictEffect } from 'redux-saga/effects';
 
+import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 import type { OverallState } from '../../../application/ApplicationTypes';
+import type { TestcaseType } from '../../../assessment/AssessmentTypes';
+import { TestcaseTypes } from '../../../assessment/AssessmentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import { makeElevatedContext } from '../../../utils/JsSlangHelper';
 import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
@@ -12,6 +15,99 @@ import { clearContext } from './clearContext';
 import { evalCodeSaga } from './evalCode';
 import { evalTestCode } from './evalTestCode';
 import { restoreExtraMethods } from './restoreExtraMethods';
+
+/**
+ * Runs a testcase under Conductor.
+ *
+ * Conductor gives every evalCodeSaga call its own fresh, isolated worker that is
+ * terminated afterwards - there is no persistent privileged context to run prepend,
+ * student code, postpend, and the testcase separately into, unlike the legacy
+ * js-slang path below. Instead, concatenate all four into a single file and run it
+ * in one Conductor call: prepend and postpend definitions stay visible to the
+ * student's code and to each other in the same order they'd run in normally, and
+ * any prepend-defined mutable state (e.g. a counter incremented by a prepend
+ * function that postpend later checks) is preserved since it's all one execution.
+ *
+ * Unlike js-slang, ordinary Python statements don't produce a REPL-style "value of
+ * the last expression" - running a .py script bare-expression-statement-last, e.g.
+ * `lte(x, y)`, discards the result exactly like it would in a real Python
+ * interpreter. So testcases are expected to `print(...)` what they want graded, and
+ * grading compares the last printed line against the testcase's `answer`, not a
+ * returned value.
+ *
+ * That comparison is re-dispatched via evalTestcaseSuccess/Failure so the existing
+ * testcase UI (which reads editorTestcases[index].result and compares
+ * stringify(result) against .answer) keeps working - the captured output line is
+ * wrapped in a toReplString() so stringify() renders it verbatim instead of adding
+ * the JSON-style quoting it'd otherwise apply to a plain string.
+ */
+export function* runTestCaseConductor(
+  workspaceLocation: WorkspaceLocation,
+  index: number,
+  value: string,
+  testcase: string,
+  type: TestcaseType,
+  prepend: string,
+  postpend: string,
+  execTime: number,
+): Generator<StrictEffect, boolean, any> {
+  const context: Context<any> = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].context,
+  );
+
+  const combinedFilePath = '/testcase.py';
+  const combinedCode = [prepend, value, postpend, testcase]
+    .filter(part => part && part.trim().length > 0)
+    .join('\n');
+
+  yield put(actions.resetTestcase(workspaceLocation, index));
+
+  yield call(
+    evalCodeSaga,
+    { [combinedFilePath]: combinedCode },
+    combinedFilePath,
+    context,
+    execTime,
+    EVAL_SILENT,
+    workspaceLocation,
+  );
+
+  const output: Array<{ type: string; consoleLogs?: string[]; errors?: any }> = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].output,
+  );
+  const lastOutput = output[output.length - 1];
+
+  let passed: boolean;
+  if (lastOutput?.type === 'errors') {
+    yield put(actions.evalTestcaseFailure(lastOutput.errors, workspaceLocation, index));
+    passed = false;
+  } else {
+    // The testcase's own print(...) is the last line printed, since nothing runs
+    // after it in the combined file; earlier prints (if any) belong to
+    // prepend/value/postpend and aren't part of what's being graded. consoleLogs
+    // isn't guaranteed to be on the absolute last output entry - stdout and result
+    // messages travel on separate Conductor channels with no guaranteed relative
+    // ordering, and output is never cleared between testcase runs - so search
+    // backward for the last entry that actually carries console logs.
+    const lastLogOutput = [...output].reverse().find(entry => entry?.consoleLogs?.length);
+    const printedLines = lastLogOutput?.consoleLogs ?? [];
+    const printedResult = printedLines.length > 0 ? printedLines[printedLines.length - 1].trim() : '';
+    yield put(
+      actions.evalTestcaseSuccess(
+        { toReplString: () => printedResult },
+        workspaceLocation,
+        index,
+      ),
+    );
+    passed = true;
+  }
+
+  if (type === TestcaseTypes.opaque) {
+    yield put(actions.clearReplOutputLast(workspaceLocation));
+  }
+
+  return passed;
+}
 
 export function* runTestCase(
   workspaceLocation: WorkspaceLocation,
@@ -32,6 +128,20 @@ export function* runTestCase(
   yield* clearContext(workspaceLocation, value);
 
   // Do NOT clear the REPL output!
+
+  const isConductorEnabled: boolean = yield select(selectConductorEnable);
+  if (isConductorEnabled) {
+    return yield* runTestCaseConductor(
+      workspaceLocation,
+      index,
+      value,
+      testcase,
+      type,
+      prepend,
+      postpend,
+      execTime,
+    );
+  }
 
   /**
    *  Shard a new privileged context elevated to use Source chapter 4 for testcases - enables
