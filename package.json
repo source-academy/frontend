@@ -117,10 +117,10 @@
   },
   "devDependencies": {
     "@aaroon/workbox-rspack-plugin": "^1.0.0",
-    "@babel/core": "^7.24.5",
+    "@babel/core": "^8.0.0",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@babel/preset-typescript": "^7.24.1",
-    "@babel/runtime": "^7.24.5",
+    "@babel/preset-typescript": "^8.0.0",
+    "@babel/runtime": "^8.0.0",
     "@eslint/js": "^9.39.5",
     "@octokit/types": "^16.0.0",
     "@redux-saga/types": "^1.4.0",
