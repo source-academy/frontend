@@ -1,4 +1,5 @@
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTree } from 'src/commons/utils/TestUtils';
 import { expect, test } from 'vitest';
@@ -25,7 +26,9 @@ test('Editor renders correctly', async () => {
   function Element() {
     return (
       <Provider store={mockInitialStore()}>
-        <Editor {...props} />
+        <MemoryRouter>
+          <Editor {...props} />
+        </MemoryRouter>
       </Provider>
     );
   }
