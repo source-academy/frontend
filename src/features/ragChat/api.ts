@@ -23,7 +23,9 @@ export async function sendRagMessage(
 ): Promise<SendMessageResponse> {
   const response = await request('rag_chat/message', 'POST', {
     ...tokens,
-    body: { message: userMessage },
+    body: {
+      message: userMessage,
+    },
   });
   if (!response) {
     throw new Error('Unknown error occurred.');
