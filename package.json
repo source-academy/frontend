@@ -45,7 +45,7 @@
     "@octokit/rest": "^22.0.0",
     "@reduxjs/toolkit": "^1.9.7",
     "@sentry/react": "^10.5.0",
-    "@sourceacademy/autocomplete": "github:source-academy/autocomplete#d476416170412c4726c7becc2a5c0018fb7cc4f7",
+    "@sourceacademy/autocomplete": "github:source-academy/autocomplete#d86ddc7f264c5867f916538f4ce7ae8f58ecdca8",
     "@sourceacademy/c-slang": "^1.0.21",
     "@sourceacademy/common-cse-machine": "^0.3.0",
     "@sourceacademy/common-tabs": "^0.0.1",
