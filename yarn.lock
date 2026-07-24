@@ -8645,7 +8645,7 @@ __metadata:
     js-cookie: "npm:^3.0.5"
     js-slang: "npm:^1.0.94"
     jsdom: "npm:^29.0.0"
-    katex: "npm:^0.16.10"
+    katex: "npm:^0.18.0"
     knip: "npm:^6.23.0"
     konva: "npm:^10.0.0"
     lodash-es: "npm:^4.18.1"
@@ -10247,7 +10247,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"katex@npm:^0.16.0, katex@npm:^0.16.10":
+"katex@npm:^0.16.0":
   version: 0.16.47
   resolution: "katex@npm:0.16.47"
   dependencies:
@@ -10255,6 +10255,17 @@ __metadata:
   bin:
     katex: cli.js
   checksum: 10c0/b10f4d0651c60771a48444879e4227255e26e2b2ec061b1ee4b08934863ad2324ba8dbb772455f7768aeb14dfcc13bcd309174a0ddd5ef954a607f644a197710
+  languageName: node
+  linkType: hard
+
+"katex@npm:^0.18.0":
+  version: 0.18.1
+  resolution: "katex@npm:0.18.1"
+  dependencies:
+    commander: "npm:^8.3.0"
+  bin:
+    katex: cli.js
+  checksum: 10c0/287994eef74096044127f0adde40b284c5dd914e7642212d957da5b62ed8312ace8c87701ddf0cf06ce484aa6ba72f4344376fa3f2d785e5ee65bfa1141f7fc2
   languageName: node
   linkType: hard
 
