@@ -3911,9 +3911,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/autocomplete@github:source-academy/autocomplete#d476416170412c4726c7becc2a5c0018fb7cc4f7":
+"@sourceacademy/autocomplete@github:source-academy/autocomplete#d86ddc7f264c5867f916538f4ce7ae8f58ecdca8":
   version: 0.0.1
-  resolution: "@sourceacademy/autocomplete@https://github.com/source-academy/autocomplete.git#commit=d476416170412c4726c7becc2a5c0018fb7cc4f7"
+  resolution: "@sourceacademy/autocomplete@https://github.com/source-academy/autocomplete.git#commit=d86ddc7f264c5867f916538f4ce7ae8f58ecdca8"
   peerDependencies:
     "@sourceacademy/conductor": ">=0.3.0"
   checksum: 10c0/0c75481ab156e019665179447d3d9e427910277871a157916a081047da5b5e66429ceb6fb04667d14f5e73ddcc0f09307cb00eda0e444490575b5fa87f1e0c30
@@ -8245,7 +8245,7 @@ __metadata:
     "@rsbuild/plugin-tailwindcss": "npm:^2.0.3"
     "@rsdoctor/rspack-plugin": "npm:^1.5.18"
     "@sentry/react": "npm:^10.5.0"
-    "@sourceacademy/autocomplete": "github:source-academy/autocomplete#d476416170412c4726c7becc2a5c0018fb7cc4f7"
+    "@sourceacademy/autocomplete": "github:source-academy/autocomplete#d86ddc7f264c5867f916538f4ce7ae8f58ecdca8"
     "@sourceacademy/c-slang": "npm:^1.0.21"
     "@sourceacademy/common-cse-machine": "npm:^0.3.0"
     "@sourceacademy/common-tabs": "npm:^0.0.1"
