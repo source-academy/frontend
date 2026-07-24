@@ -5,11 +5,10 @@ import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dis
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
 
-import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
+import { useConductorEnable } from '../../features/conductor/flagConductorEnable';
 import { STEPPER_EVALUATOR_CAPABILITY } from '../../features/conductor/stepperTab';
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
 import type { SALanguage } from '../application/ApplicationTypes';
-import { useFeature } from '../featureFlags/useFeature';
 import { useAppSelector } from '../utils/Hooks';
 import LegacyControlBarChapterSelect from './LegacyControlBarChapterSelect';
 
@@ -29,7 +28,7 @@ function ControlBarChapterSelect({
   disabled = false,
 }: Props) {
   const dispatch = useAppDispatch();
-  const directoryEnabled = useFeature(flagConductorEnable);
+  const directoryEnabled = useConductorEnable();
   const selectedLanguageId = useAppSelector(s => s.languageDirectory.selectedLanguageId);
   const selectedEvaluatorId = useAppSelector(s => s.languageDirectory.selectedEvaluatorId);
   const dirLanguages = useAppSelector(s => s.languageDirectory.languages);

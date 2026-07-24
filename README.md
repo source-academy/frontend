@@ -43,8 +43,9 @@ If you wish to set up the GitHub or Google Drive integrations, copy the `.env.ex
 ### Python
 
 To work with
-the Python edition of Source Academy, you need to turn on the Conductor feature flag: Click on the top right down-arrow button, then
-Settings, then Feature Flags. Toggle `conductor.enable` to `true`.
+the Python edition of Source Academy, the Conductor feature flag (`conductor.enable`) must be
+enabled. It is on by default; if it has been turned off, click on the top right down-arrow
+button, then Settings, then Feature Flags, and toggle `conductor.enable` back to `true`.
 
 ```
 directory.language.url
