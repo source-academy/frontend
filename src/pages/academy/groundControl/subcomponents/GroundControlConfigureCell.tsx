@@ -4,17 +4,18 @@ import {
   DialogBody,
   DialogFooter,
   Divider,
-  InputGroup,
+  HTMLSelect,
   Intent,
   NumericInput,
   Switch,
   Tooltip,
 } from '@blueprintjs/core';
 import { IconNames, Team } from '@blueprintjs/icons';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import type { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
+import { useAppSelector } from '../../../../commons/utils/Hooks';
 import CalculateContestScoreButton from '../configureControls/CalculateContestScoreButton';
 import DispatchContestXpButton from '../configureControls/DispatchContestXpButton';
 import ExportScoreLeaderboardButton from '../configureControls/ExportScoreLeaderboardButton';
@@ -44,8 +45,24 @@ function ConfigureCell({ handleConfigureAssessment, handleAssignEntriesForVoting
   const [languageId, setLanguageId] = useState(data.languageId ?? '');
   const [evaluatorId, setEvaluatorId] = useState(data.evaluatorId ?? '');
 
+  const languages = useAppSelector(s => s.languageDirectory.languages);
+  const currentLanguage = useMemo(
+    () => languages.find(l => l.id === languageId),
+    [languages, languageId],
+  );
+  const evaluators = currentLanguage?.evaluators ?? [];
+
   const handleOpenDialog = useCallback(() => setDialogState(true), []);
   const handleCloseDialog = useCallback(() => setDialogState(false), []);
+
+  // Switching language invalidates the previously selected evaluator (it belongs to the old language)
+  const handleLanguageChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    setLanguageId(e.target.value);
+    setEvaluatorId('');
+  }, []);
+  const handleEvaluatorChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    setEvaluatorId(e.target.value);
+  }, []);
 
   // Updates assessment overview with changes to hasVotingFeatures, hasTokenCounter, isAutosaveEnabled and language config
   const handleConfigure = useCallback(() => {
@@ -119,21 +136,36 @@ function ConfigureCell({ handleConfigureAssessment, handleAssignEntriesForVoting
             </p>
             <Divider />
             <p>
-              Leave both fields blank to keep using the default Source/js-slang evaluator. Values
-              must match ids from the language directory.
+              Leave as <b>Default</b> to keep using the current per-question chapter/variant
+              (js-slang).
             </p>
-            <InputGroup
+            <HTMLSelect
               className="language-id"
-              placeholder="Language id (e.g. full-python)"
               value={languageId}
-              onChange={e => setLanguageId(e.target.value)}
-            />
-            <InputGroup
+              onChange={handleLanguageChange}
+              fill
+            >
+              <option value="">Default (js-slang)</option>
+              {languages.map(language => (
+                <option key={language.id} value={language.id}>
+                  {language.name}
+                </option>
+              ))}
+            </HTMLSelect>
+            <HTMLSelect
               className="evaluator-id"
-              placeholder="Evaluator id"
               value={evaluatorId}
-              onChange={e => setEvaluatorId(e.target.value)}
-            />
+              onChange={handleEvaluatorChange}
+              disabled={!languageId}
+              fill
+            >
+              <option value="">Select an evaluator</option>
+              {evaluators.map(evaluator => (
+                <option key={evaluator.id} value={evaluator.id}>
+                  {evaluator.name}
+                </option>
+              ))}
+            </HTMLSelect>
           </div>
           <div className="team-related-configs">
             <p>
