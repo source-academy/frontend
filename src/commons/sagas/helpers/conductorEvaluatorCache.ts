@@ -144,8 +144,8 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
   const { hostPlugin, csePlugin, conduit, moduleLoaderPlugin } = createConductor(
     evaluatorUrl,
     async (fileName: string) => currentFiles[fileName],
-    (pluginName: string) => {
-      void loadWebPlugin(hostPluginRef, pluginName, tabService, moduleLoaderPlugin);
+    async (pluginName: string) => {
+      await loadWebPlugin(hostPluginRef, pluginName, tabService, moduleLoaderPlugin);
     },
   );
   hostPluginRef = hostPlugin;
