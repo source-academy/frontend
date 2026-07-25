@@ -91,13 +91,10 @@ export function* runTestCaseConductor(
     // backward for the last entry that actually carries console logs.
     const lastLogOutput = [...output].reverse().find(entry => entry?.consoleLogs?.length);
     const printedLines = lastLogOutput?.consoleLogs ?? [];
-    const printedResult = printedLines.length > 0 ? printedLines[printedLines.length - 1].trim() : '';
+    const printedResult =
+      printedLines.length > 0 ? printedLines[printedLines.length - 1].trim() : '';
     yield put(
-      actions.evalTestcaseSuccess(
-        { toReplString: () => printedResult },
-        workspaceLocation,
-        index,
-      ),
+      actions.evalTestcaseSuccess({ toReplString: () => printedResult }, workspaceLocation, index),
     );
     passed = true;
   }

@@ -692,10 +692,7 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
           // stdout and result messages travel on separate Conductor channels with no
           // guaranteed relative ordering, and output is never cleared between runs -
           // so the printed text can end up on an earlier entry than the trailing one.
-          output: [
-            { type: 'result', consoleLogs: ['True'] },
-            { type: 'result' },
-          ] as any,
+          output: [{ type: 'result', consoleLogs: ['True'] }, { type: 'result' }] as any,
         }),
       )
       .provide([
