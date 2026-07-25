@@ -3,7 +3,9 @@ import type { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import type { UsernameRoleGroup } from 'src/features/adminPanel/subcomponents/AddUserPanel';
+import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import DashboardActions from 'src/features/dashboard/DashboardActions';
+import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
 import GroundControlActions from 'src/features/groundControl/GroundControlActions';
 
 import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
@@ -106,6 +108,24 @@ function selectRouter() {
 export function* routerNavigate(path: string) {
   const router: RouterState = yield selectRouter();
   return router?.navigate(path);
+}
+
+/**
+ * Assessments configured with a Conductor language (languageId/evaluatorId) don't expose a
+ * language dropdown of their own — the assessment workspace shares the same global
+ * languageDirectory Redux slice the Playground dropdown writes to. Setting it here on assessment
+ * load is what makes the assessment's Run/testcase-grading use that language instead of whatever
+ * was last selected in the Playground (or falling through to js-slang when unset).
+ */
+function* selectAssessmentLanguageSaga(assessment: Assessment) {
+  const conductorEnabled: boolean = yield select(selectConductorEnable);
+  if (!conductorEnabled || !assessment.languageId) {
+    return;
+  }
+  yield put(LanguageDirectoryActions.setSelectedLanguage(assessment.languageId));
+  if (assessment.evaluatorId) {
+    yield put(LanguageDirectoryActions.setSelectedEvaluator(assessment.evaluatorId));
+  }
 }
 
 const newBackendSagaOne = combineSagaHandlers({
@@ -231,6 +251,7 @@ const newBackendSagaOne = combineSagaHandlers({
     );
     if (assessment) {
       yield put(actions.updateAssessment(assessment));
+      yield call(selectAssessmentLanguageSaga, assessment);
     }
   },
   [SessionActions.fetchAssessmentAdmin.type]: function* (action) {
@@ -246,6 +267,7 @@ const newBackendSagaOne = combineSagaHandlers({
     );
     if (assessment) {
       yield put(actions.updateAssessment(assessment));
+      yield call(selectAssessmentLanguageSaga, assessment);
     }
   },
   [SessionActions.submitAnswer.type]: function* (action) {
@@ -1049,10 +1071,12 @@ function* oldBackendSagaThree(): SagaIterator {
       const hasVotingFeatures = action.payload.hasVotingFeatures;
       const hasTokenCounter = action.payload.hasTokenCounter;
       const isAutosaveEnabled = action.payload.isAutosaveEnabled;
+      const languageId = action.payload.languageId;
+      const evaluatorId = action.payload.evaluatorId;
 
       const resp: Response | null = yield updateAssessment(
         id,
-        { hasVotingFeatures, hasTokenCounter, isAutosaveEnabled },
+        { hasVotingFeatures, hasTokenCounter, isAutosaveEnabled, languageId, evaluatorId },
         tokens,
       );
       if (!resp || !resp.ok) {

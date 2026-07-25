@@ -150,6 +150,8 @@ function GroundControl() {
                   hasVotingFeatures: boolean,
                   hasTokenCounter: boolean,
                   isAutosaveEnabled: boolean,
+                  languageId?: string,
+                  evaluatorId?: string,
                 ) =>
                   dispatch(
                     GroundControlActions.configureAssessment(
@@ -157,6 +159,8 @@ function GroundControl() {
                       hasVotingFeatures,
                       hasTokenCounter,
                       isAutosaveEnabled,
+                      languageId,
+                      evaluatorId,
                     ),
                   )
                 }

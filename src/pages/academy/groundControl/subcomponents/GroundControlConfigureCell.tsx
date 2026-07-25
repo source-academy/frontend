@@ -4,6 +4,7 @@ import {
   DialogBody,
   DialogFooter,
   Divider,
+  InputGroup,
   Intent,
   NumericInput,
   Switch,
@@ -26,6 +27,8 @@ type Props = {
     hasVotingFeatures: boolean,
     hasTokenCounter: boolean,
     isAutosaveEnabled: boolean,
+    languageId?: string,
+    evaluatorId?: string,
   ) => void;
   handleAssignEntriesForVoting: (id: number) => void;
   data: AssessmentOverview;
@@ -38,14 +41,23 @@ function ConfigureCell({ handleConfigureAssessment, handleAssignEntriesForVoting
   const [isAutosaveEnabled, setIsAutosaveEnabled] = useState(data.isAutosaveEnabled ?? false);
   const [isTeamAssessment, setIsTeamAssessment] = useState(false);
   const [isVotingPublished] = useState(!!data.isVotingPublished);
+  const [languageId, setLanguageId] = useState(data.languageId ?? '');
+  const [evaluatorId, setEvaluatorId] = useState(data.evaluatorId ?? '');
 
   const handleOpenDialog = useCallback(() => setDialogState(true), []);
   const handleCloseDialog = useCallback(() => setDialogState(false), []);
 
-  // Updates assessment overview with changes to hasVotingFeatures, hasTokenCounter and isAutosaveEnabled
+  // Updates assessment overview with changes to hasVotingFeatures, hasTokenCounter, isAutosaveEnabled and language config
   const handleConfigure = useCallback(() => {
     const { id } = data;
-    handleConfigureAssessment(id, hasVotingFeatures, hasTokenCounter, isAutosaveEnabled);
+    handleConfigureAssessment(
+      id,
+      hasVotingFeatures,
+      hasTokenCounter,
+      isAutosaveEnabled,
+      languageId || undefined,
+      evaluatorId || undefined,
+    );
     handleCloseDialog();
   }, [
     data,
@@ -54,6 +66,8 @@ function ConfigureCell({ handleConfigureAssessment, handleAssignEntriesForVoting
     hasTokenCounter,
     hasVotingFeatures,
     isAutosaveEnabled,
+    languageId,
+    evaluatorId,
   ]);
 
   // Toggles in configuration pannel
@@ -97,6 +111,28 @@ function ConfigureCell({ handleConfigureAssessment, handleAssignEntriesForVoting
               onChange={toggleIsAutosaveEnabled}
               inline
               label="Enable autosave"
+            />
+          </div>
+          <div className="language-config">
+            <p>
+              <b>Language Configuration</b>
+            </p>
+            <Divider />
+            <p>
+              Leave both fields blank to keep using the default Source/js-slang evaluator. Values
+              must match ids from the language directory.
+            </p>
+            <InputGroup
+              className="language-id"
+              placeholder="Language id (e.g. full-python)"
+              value={languageId}
+              onChange={e => setLanguageId(e.target.value)}
+            />
+            <InputGroup
+              className="evaluator-id"
+              placeholder="Evaluator id"
+              value={evaluatorId}
+              onChange={e => setEvaluatorId(e.target.value)}
             />
           </div>
           <div className="team-related-configs">

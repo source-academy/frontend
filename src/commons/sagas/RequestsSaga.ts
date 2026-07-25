@@ -1363,6 +1363,8 @@ export const updateAssessment = async (
     hasVotingFeatures?: boolean;
     isAutosaveEnabled?: boolean;
     assignEntriesForVoting?: boolean;
+    languageId?: string;
+    evaluatorId?: string;
   },
   tokens: Tokens,
 ): Promise<Response | null> => {
