@@ -4260,10 +4260,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/conductor@npm:^0.7.1":
-  version: 0.7.1
-  resolution: "@sourceacademy/conductor@npm:0.7.1"
-  checksum: 10c0/293cdd2552eeb6cebd795806d841ef4118eb9aeedbfb1e3000c38032b55466269da31b524e37d58d52a068b96522766642ccc7838a4fbc23c9b244fd04cb44da
+"@sourceacademy/conductor@npm:^0.8.0":
+  version: 0.8.0
+  resolution: "@sourceacademy/conductor@npm:0.8.0"
+  checksum: 10c0/8b970b1f5fffbcb5242f5c358fb25af8d916cb5af9ca7fa9e0128928fde1783ed65465241858a82002bd8b5f21f5f5b80d3ea57bbd05faed604e6dd1c36600e9
   languageName: node
   linkType: hard
 
@@ -8580,7 +8580,7 @@ __metadata:
     "@sourceacademy/c-slang": "npm:^1.0.21"
     "@sourceacademy/common-cse-machine": "npm:^0.3.0"
     "@sourceacademy/common-tabs": "npm:^0.0.1"
-    "@sourceacademy/conductor": "npm:^0.7.1"
+    "@sourceacademy/conductor": "npm:^0.8.0"
     "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.16"
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.3"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
