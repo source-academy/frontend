@@ -20,8 +20,8 @@ const GroundControlActions = createActions('groundControl', {
     hasVotingFeatures: boolean,
     hasTokenCounter: boolean,
     isAutosaveEnabled: boolean,
-    languageId?: string,
-    evaluatorId?: string,
+    languageId: string | null,
+    evaluatorId: string | null,
   ) => ({
     id,
     hasVotingFeatures,

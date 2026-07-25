@@ -28,8 +28,8 @@ type Props = {
     hasVotingFeatures: boolean,
     hasTokenCounter: boolean,
     isAutosaveEnabled: boolean,
-    languageId?: string,
-    evaluatorId?: string,
+    languageId: string | null,
+    evaluatorId: string | null,
   ) => void;
   handleAssignEntriesForVoting: (id: number) => void;
   data: AssessmentOverview;
@@ -72,8 +72,8 @@ function ConfigureCell({ handleConfigureAssessment, handleAssignEntriesForVoting
       hasVotingFeatures,
       hasTokenCounter,
       isAutosaveEnabled,
-      languageId || undefined,
-      evaluatorId || undefined,
+      languageId || null,
+      evaluatorId || null,
     );
     handleCloseDialog();
   }, [

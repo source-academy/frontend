@@ -119,7 +119,12 @@ export function* routerNavigate(path: string) {
  */
 function* selectAssessmentLanguageSaga(assessment: Assessment) {
   const conductorEnabled: boolean = yield select(selectConductorEnable);
-  if (!conductorEnabled || !assessment.languageId) {
+  if (!conductorEnabled) {
+    return;
+  }
+  if (!assessment.languageId) {
+    // Otherwise a prior Conductor assessment's selection would leak into this js-slang one.
+    yield put(LanguageDirectoryActions.clearSelectedLanguage());
     return;
   }
   yield put(LanguageDirectoryActions.setSelectedLanguage(assessment.languageId));
