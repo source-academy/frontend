@@ -1,10 +1,9 @@
 import { Position } from '@blueprintjs/core';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { useFeature } from 'src/commons/featureFlags/useFeature';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
-import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
+import { useConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
 
 //TODO <remove legacy>: Remove when conductors.languageDirectory is default behaviour
@@ -25,7 +24,7 @@ const NavigationBarLangSelectButton = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const directoryEnabled = useFeature(flagConductorEnable);
+  const directoryEnabled = useConductorEnable();
   if (!directoryEnabled) {
     return <LegacyNavigationBarLangSelectButton />;
   }

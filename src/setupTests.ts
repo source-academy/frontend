@@ -4,6 +4,16 @@ import 'src/i18n/i18n';
 import { cleanup } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
 
+import { flagConductorEnable } from './features/conductor/flagConductorEnable';
+
+// The existing saga/component test suite asserts against the legacy (non-Conductor)
+// evaluation path and doesn't stand up a Conductor evaluator/worker, so it predates
+// conductor.enable defaulting to true (#4074). Pin the flag's default off for tests
+// (defaultFeatureFlags.modifiedFlags itself can't be touched — Immer freezes it once
+// the featureFlags slice is created); individual tests that exercise the Conductor
+// path already override it via state/modifiedFlags.
+Object.defineProperty(flagConductorEnable, 'defaultValue', { value: false, configurable: true });
+
 // Mock ResizeObserver in tests
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 global.ResizeObserver = require('resize-observer-polyfill');

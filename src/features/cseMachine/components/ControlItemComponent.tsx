@@ -9,13 +9,12 @@ import { Layout } from '../CseMachineLayout';
 import type { IHoverable } from '../CseMachineTypes';
 import {
   defaultActiveColor,
+  defaultExprStmtColor,
   defaultStrokeColor,
   defaultTextColor,
   getTextHeight,
   setHoveredCursor,
-  setHoveredStyle,
   setUnhoveredCursor,
-  setUnhoveredStyle,
   truncateText,
 } from '../CseMachineUtils';
 import { ArrowFromControlItemComponent } from './arrows/ArrowFromControlItemComponent';
@@ -40,6 +39,8 @@ export class ControlItemComponent extends Visible implements IHoverable {
     readonly unhighlightOnHover: () => void,
     readonly topItem: boolean,
     arrowTo?: Frame,
+    /** true if this control item is an expression statement (py-slang#270) */
+    readonly isExpressionStatement: boolean = false,
   ) {
     super();
     this.text = truncateText(
@@ -73,7 +74,10 @@ export class ControlItemComponent extends Visible implements IHoverable {
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
     this.highlightOnHover();
     if (!this.topItem) {
-      setHoveredStyle(e.currentTarget);
+      // Not the generic setHoveredStyle() util — it hardcodes the "normal" colors it
+      // restores to and doesn't know about isExpressionStatement, so use the
+      // component's own (already-correct) highlight logic instead.
+      this.setArrowSourceHighlightedStyle();
     }
     setHoveredCursor(e.currentTarget);
     this.zIndex = Math.max(this.ref.current.zIndex(), 1);
@@ -87,7 +91,10 @@ export class ControlItemComponent extends Visible implements IHoverable {
     setUnhoveredCursor(e.currentTarget);
     this.tooltipRef.current.hide();
     if (!this.topItem) {
-      setUnhoveredStyle(e.currentTarget);
+      // See onMouseEnter — setUnhoveredStyle() resets Text fill to defaultTextColor()
+      // unconditionally, which wiped the expression-statement color back to white on
+      // unhover. setArrowSourceNormalStyle() restores textColor()/strokeColor() instead.
+      this.setArrowSourceNormalStyle();
     }
     this.ref.current.zIndex(this.zIndex);
   };
@@ -97,9 +104,21 @@ export class ControlItemComponent extends Visible implements IHoverable {
     this.secItem?.fill(Config.HoverColor);
   }
 
+  private strokeColor(): string {
+    return this.topItem ? defaultActiveColor() : defaultStrokeColor();
+  }
+
+  // Expression statements (py-slang#270) are marked by the TEXT color, not the border —
+  // the border already conveys "top of control" (active color) independently, and an
+  // expression statement should stay visually flagged even while it's the top item, not
+  // just once it's buried under other items.
+  private textColor(): string {
+    return this.isExpressionStatement ? defaultExprStmtColor() : defaultTextColor();
+  }
+
   setArrowSourceNormalStyle(): void {
-    this.tag?.stroke(this.topItem ? defaultActiveColor() : defaultStrokeColor());
-    this.secItem?.fill(defaultTextColor());
+    this.tag?.stroke(this.strokeColor());
+    this.secItem?.fill(this.textColor());
   }
 
   destroy() {
@@ -108,7 +127,7 @@ export class ControlItemComponent extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     const textProps = {
-      fill: defaultTextColor(),
+      fill: this.textColor(),
       padding: ControlStashConfig.ControlItemTextPadding,
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: ControlStashConfig.FontSize,
@@ -116,7 +135,7 @@ export class ControlItemComponent extends Visible implements IHoverable {
       fontVariant: ControlStashConfig.FontVariant,
     };
     const tagProps = {
-      stroke: this.topItem ? defaultActiveColor() : defaultStrokeColor(),
+      stroke: this.strokeColor(),
       cornerRadius: ControlStashConfig.ControlItemCornerRadius,
     };
     return (
