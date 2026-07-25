@@ -695,7 +695,20 @@ function* handleStatuses(
         // matching output/result/error may still be in flight on their own MessagePort (no
         // cross-channel ordering guarantee against STATUS). Wait for our own receivedCount to
         // catch up before unblocking the REPL loop, instead of guessing with a fixed delay.
+        // Bounded, not open-ended: the program has already finished by this point (STATUS said
+        // so), so this is only ever waiting on a few already-sent straggler bytes, not gating a
+        // student program's own run time the way the removed execTime watchdog did. A message
+        // that's merely delayed clears this in low single-digit milliseconds; only a genuine bug
+        // elsewhere (a sibling handler dying before consuming its channel, a runner misreporting
+        // sentCount) would ever run out this clock, and this is the fallback for exactly that.
+        const drainDeadline = Date.now() + 5000;
         while (receivedCount.count < sentCount) {
+          if (Date.now() > drainDeadline) {
+            console.warn(
+              `Timed out waiting for ${sentCount - receivedCount.count} pending message(s) before interrupting ${workspaceLocation}.`,
+            );
+            break;
+          }
           yield call(() => new Promise(resolve => setTimeout(resolve, 5)));
         }
         yield put(actions.beginInterruptExecution(workspaceLocation));
