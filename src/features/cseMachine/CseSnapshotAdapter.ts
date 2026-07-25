@@ -67,7 +67,10 @@ function toJsValue(
     return v.displayValue.replace(/^["']|["']$/g, '');
   }
   if (label === 'nonetype' || label === 'none' || label === 'null') {
-    return null;
+    // Return a source object so PrimitiveValue/Text use toReplString() instead of
+    // String(value) or the empty-list ArrayNullUnit visual, both of which render JS `null`
+    // as "null" rather than Python's `None`.
+    return { toReplString: () => 'None' };
   }
   if (label === 'undefined') {
     return undefined;
@@ -130,9 +133,29 @@ function toJsValue(
     return arr;
   }
 
-  if (/closure|function|lambda|method/.test(label) && (v.metadata as any)?.closureFrameId) {
+  if (/closure|function|lambda|method/.test(label)) {
     const meta = v.metadata as any;
-    const closureEnvId: string = meta?.closureFrameId ?? '';
+    const closureFrameId: string | undefined = meta?.closureFrameId;
+
+    if (!closureFrameId) {
+      // Built-ins (e.g. Python's `abs`, `print`) have no defining Python frame — py-slang
+      // sends no closureFrameId for them. Without this branch they fell through to the
+      // generic string fallback below, and StashItemComponent's `typeof val === 'string'`
+      // check then wrapped the bare name in quotes as if it were a Python string value
+      // (issue #302). Render as a plain JS function instead: isBuiltInFn() (no 'environment'
+      // own property, not a duck-typed closure) picks it up, and its toString() supplies
+      // the unquoted display text.
+      const cacheKey = `builtin@${v.displayValue}`;
+      if (closureCache.has(cacheKey)) {
+        return closureCache.get(cacheKey);
+      }
+      const builtinFn: any = function PyBuiltinFunction() {};
+      builtinFn.toString = () => v.displayValue;
+      closureCache.set(cacheKey, builtinFn);
+      return builtinFn;
+    }
+
+    const closureEnvId: string = closureFrameId;
     const params: string[] = meta?.params ?? [];
     const funcName: string = meta?.funcName ?? v.displayValue.split('(')[0] ?? 'fn';
 
@@ -424,6 +447,10 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
         loc,
         __snapAnimType: nodeType,
         __snapBody: body,
+        // Marks an expression statement (py-slang#270) so getControlItemComponent can
+        // color it distinctly — otherwise it's indistinguishable from a bare sub-expression
+        // until the "pop" that discards its value shows up on a later step.
+        __snapTag: instr.tag,
       } as any;
     }
 
@@ -431,7 +458,7 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
     // isNode() accepts any object with a .type field; the animation system will
     // treat this as a generic identifier lookup (and the try/catch in Layout
     // absorbs any animation failure without breaking the visualisation).
-    return { type: 'Identifier' as const, name: instr.displayText, loc };
+    return { type: 'Identifier' as const, name: instr.displayText, loc, __snapTag: instr.tag };
   });
 
   // py-slang now emits real ENVIRONMENT instructions (pointing to the caller's env) for

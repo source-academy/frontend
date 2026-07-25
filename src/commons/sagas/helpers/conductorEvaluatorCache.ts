@@ -4,6 +4,7 @@ import { ModuleLoaderWebPlugin } from '@sourceacademy/web-module-loader';
 import type { SagaIterator } from 'redux-saga';
 import { call, select } from 'redux-saga/effects';
 import { selectDirectoryModulesUrl } from 'src/features/directory/flagDirectoryModulesUrl';
+import { selectDirectoryPluginUrl } from 'src/features/directory/flagDirectoryPluginUrl';
 
 import type { BrowserHostPlugin } from '../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../features/conductor/createConductor';
@@ -98,7 +99,12 @@ async function resolveWebPluginUrl(
     const url =
       store.getState().pluginDirectory.pluginMap?.[pluginId]?.resolutions?.[PluginType.WEB];
     if (url) {
-      return url;
+      // Resolutions are relative to the plugin directory's own URL (e.g. "./web/stepper/index.mjs"
+      // relative to .../plugins/directory.json), not to wherever this bundle happens to be served
+      // from. A bare relative string handed to import() resolves against the importing module's own
+      // URL instead, silently 404ing (or worse, resolving to an unrelated same-origin path) - resolve
+      // it against the directory's URL explicitly so import() always gets an absolute URL.
+      return new URL(url, selectDirectoryPluginUrl(store.getState())).href;
     }
     const moduleUrl = moduleLoaderPlugin.getModuleTabLocation(pluginId);
     if (moduleUrl) {

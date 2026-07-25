@@ -37,9 +37,8 @@ import type { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 // TODO: Should further refactor into EditorBase + different variants.
 // Ideally, hooks should be specified by the parent component instead.
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
-import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
+import { useConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { useFeature } from '../featureFlags/useFeature';
 import { useAppSelector } from '../utils/Hooks';
 import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
@@ -470,7 +469,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     },
   };
 
-  const conductorEnabled = useFeature(flagConductorEnable);
+  const conductorEnabled = useConductorEnable();
   const selectedEvaluatorId = useAppSelector(s => s.languageDirectory.selectedEvaluatorId)!;
   useEffect(() => {
     if (!conductorEnabled || !reactAceRef.current || !selectedEvaluatorId) {

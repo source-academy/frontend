@@ -1,5 +1,8 @@
 import { languages } from '@sourceacademy/language-directory';
-import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
+import type {
+  IEvaluatorDefinition,
+  ILanguageDefinition,
+} from '@sourceacademy/language-directory/dist/types';
 import { getEvaluatorDefinition } from '@sourceacademy/language-directory/dist/util';
 import { call, fork, put, select } from 'redux-saga/effects';
 import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
@@ -40,9 +43,21 @@ export function* getEvaluatorDefinitionSaga() {
 const languageDirectoryHandlers = combineSagaHandlers({
   [LanguageDirectoryActions.setLanguages.type]: function* () {
     const directory = yield select((state: OverallState) => state.languageDirectory);
-    if (directory.languages.length > 0) {
-      yield put(LanguageDirectoryActions.setSelectedLanguage(directory.languages[0].id));
+    if (directory.languages.length === 0) {
+      return;
     }
+    // Something (e.g. a share link's handleHash) may have already requested a language
+    // before the directory finished loading; at that point languageMap was still empty, so
+    // the setSelectedLanguage handler below couldn't resolve it and bailed out early. Re-run
+    // that same selection now that the directory is populated, instead of unconditionally
+    // overwriting it with the first language.
+    const languageId = directory.selectedLanguageId ?? directory.languages[0].id;
+    yield put(
+      LanguageDirectoryActions.setSelectedLanguage(
+        languageId,
+        directory.selectedEvaluatorId ?? undefined,
+      ),
+    );
   },
   [LanguageDirectoryActions.fetchLanguages.type]: function* () {
     const url: string = yield select(selectDirectoryLanguageUrl);
@@ -97,16 +112,25 @@ const languageDirectoryHandlers = combineSagaHandlers({
       console.error('Failed to preload:', error);
     }
   },
-  [LanguageDirectoryActions.setSelectedLanguage.type]: function* () {
-    // Selecting a language defaults its evaluator to the first one. The actual conductor preload
-    // happens in the setSelectedEvaluator handler above (this dispatch triggers it), so switching
-    // evaluators afterwards re-preloads the correct one.
+  [LanguageDirectoryActions.setSelectedLanguage.type]: function* (
+    action: ReturnType<typeof LanguageDirectoryActions.setSelectedLanguage>,
+  ) {
+    // Selecting a language defaults its evaluator to the first one, unless a specific evaluator
+    // was requested (e.g. restoring a share link) and it's valid for this language. The actual
+    // conductor preload happens in the setSelectedEvaluator handler above (this dispatch triggers
+    // it), so switching evaluators afterwards re-preloads the correct one.
     const language = yield call(getLanguageDefinitionSaga);
     if (!language) {
       return;
     }
-    if (language.evaluators.length > 0) {
-      yield put(LanguageDirectoryActions.setSelectedEvaluator(language.evaluators[0].id));
+    const requestedEvaluatorId = action.payload.evaluatorId;
+    const evaluatorId = language.evaluators.some(
+      (e: IEvaluatorDefinition) => e.id === requestedEvaluatorId,
+    )
+      ? requestedEvaluatorId
+      : language.evaluators[0]?.id;
+    if (evaluatorId) {
+      yield put(LanguageDirectoryActions.setSelectedEvaluator(evaluatorId));
     }
   },
 });
