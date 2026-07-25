@@ -9,7 +9,7 @@ import { CseMachineHostPlugin } from './CseMachineHostPlugin';
 export function createConductor(
   evaluatorPath: string,
   onRequestFile: (fileName: string) => Promise<string | undefined>,
-  onRequestLoadPlugin: (pluginName: string) => void,
+  onRequestLoadPlugin: (pluginName: string) => Promise<void>,
 ): {
   hostPlugin: BrowserHostPlugin;
   csePlugin: CseMachineHostPlugin;

@@ -5,8 +5,8 @@ export class BrowserHostPlugin extends BasicHostPlugin {
   requestFile(fileName: string): Promise<string | undefined> {
     return this.__onRequestFile(fileName);
   }
-  requestLoadPlugin(pluginName: string): void {
-    return this.__onRequestLoadPlugin(pluginName);
+  async requestLoadPlugin(pluginName: string): Promise<void> {
+    await this.__onRequestLoadPlugin(pluginName);
   }
   queryPluginResolutions(pluginId: string): Record<string, string> {
     // Fallback identity resolution; host can still load explicit plugin URLs/IDs.
@@ -15,13 +15,13 @@ export class BrowserHostPlugin extends BasicHostPlugin {
   receiveResult?(result: any): void;
 
   private __onRequestFile: (fileName: string) => Promise<string | undefined>;
-  private __onRequestLoadPlugin: (pluginName: string) => void;
+  private __onRequestLoadPlugin: (pluginName: string) => Promise<void>;
 
   constructor(
     conduit: IConduit,
     channels: IChannel<any>[],
     onRequestFile: (fileName: string) => Promise<string | undefined>,
-    onRequestLoadPlugin: (pluginName: string) => void,
+    onRequestLoadPlugin: (pluginName: string) => Promise<void>,
   ) {
     super(conduit, channels);
     this.__onRequestFile = onRequestFile;
