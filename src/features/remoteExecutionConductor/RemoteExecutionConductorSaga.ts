@@ -38,7 +38,7 @@ function* handleConductorDisconnect(): any {
   yield; // satisfies require-yield
 }
 
-export function* remoteExecutionConductorSaga() {
+export function* RemoteExecutionConductorSaga() {
   yield takeEvery(RemoteExecutionConductorActions.remoteExecConductorRun, handleConductorRun);
   yield takeEvery(
     RemoteExecutionConductorActions.remoteExecConductorDisconnect,
@@ -46,4 +46,4 @@ export function* remoteExecutionConductorSaga() {
   );
 }
 
-export default remoteExecutionConductorSaga;
+export default RemoteExecutionConductorSaga;
