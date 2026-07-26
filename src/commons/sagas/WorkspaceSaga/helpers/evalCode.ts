@@ -458,7 +458,20 @@ function* handleStdout(
   });
   try {
     while (true) {
-      const output = yield take(outputChan);
+      const { output, interrupted } = yield race({
+        output: take(outputChan),
+        interrupted: take(actions.beginInterruptExecution.type),
+      });
+      if (interrupted) {
+        // Stop is a hard Worker.terminate(), not a cooperative signal the runner checks - so a
+        // fast-but-large output burst (e.g. a module's per-sample loop calling print() tens of
+        // thousands of times) can already be fully buffered and about to flood this channel by
+        // the time Stop is clicked. Once interrupted, stop rendering: the runner is already gone,
+        // so draining and dispatching every remaining queued message would just make the REPL
+        // look like the program kept running long after Stop was pressed.
+        outputChan.close();
+        break;
+      }
       receivedCount.count++;
       yield put(actions.handleConsoleLog(workspaceLocation, output));
     }
