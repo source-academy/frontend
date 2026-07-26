@@ -261,7 +261,6 @@ const WorkspaceSaga = combineSagaHandlers({
         { [codeFilePath]: code },
         codeFilePath,
         context,
-        execTime,
         workspaceLocation,
         WorkspaceActions.evalRepl.type,
       );

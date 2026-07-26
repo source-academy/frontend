@@ -188,7 +188,6 @@ export function* evalCodeSaga(
       files,
       entrypointFilePath,
       context,
-      execTime,
       workspaceLocation,
       actionType,
     );
@@ -436,9 +435,18 @@ export function* evalCodeSaga(
   }
 }
 
+/**
+ * Shared, mutable count of sendOutput/sendResult/sendError messages actually received so far in
+ * the current run — incremented by handleStdout/handleResults/handleErrors as each one arrives,
+ * and compared by handleStatuses against a terminal status's own sentCount (see IStatusMessage)
+ * to wait for genuine delivery instead of guessing with a fixed delay.
+ */
+type ReceivedCount = { count: number };
+
 function* handleStdout(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
+  receivedCount: ReceivedCount,
 ): SagaIterator {
   const outputChan = eventChannel(emitter => {
     hostPlugin.receiveOutput = emitter;
@@ -450,7 +458,21 @@ function* handleStdout(
   });
   try {
     while (true) {
-      const output = yield take(outputChan);
+      const { output, interrupted } = yield race({
+        output: take(outputChan),
+        interrupted: take(actions.beginInterruptExecution.type),
+      });
+      if (interrupted) {
+        // Stop is a hard Worker.terminate(), not a cooperative signal the runner checks - so a
+        // fast-but-large output burst (e.g. a module's per-sample loop calling print() tens of
+        // thousands of times) can already be fully buffered and about to flood this channel by
+        // the time Stop is clicked. Once interrupted, stop rendering: the runner is already gone,
+        // so draining and dispatching every remaining queued message would just make the REPL
+        // look like the program kept running long after Stop was pressed.
+        outputChan.close();
+        break;
+      }
+      receivedCount.count++;
       yield put(actions.handleConsoleLog(workspaceLocation, output));
     }
   } finally {
@@ -512,6 +534,7 @@ function* handleInputRequest(
 function* handleResults(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
+  receivedCount: ReceivedCount,
 ): SagaIterator {
   const resultChan = eventChannel(emitter => {
     const onReceiveResult = (result: any) => emitter({ value: result });
@@ -525,13 +548,14 @@ function* handleResults(
   try {
     while (true) {
       const { value: result } = yield take(resultChan);
+      receivedCount.count++;
       if (result !== undefined) {
         yield put(actions.appendInterpreterResult(result, workspaceLocation));
       }
-      // The OneShot evaluator sends exactly one result then stops. Trigger cleanup
-      // via beginInterruptExecution so the parent saga exits even if the STATUS
-      // channel is broken (e.g. const-enum erasure in older evaluator bundles).
-      yield put(actions.beginInterruptExecution(workspaceLocation));
+      // Completion is signalled by a genuine terminal STATUS (handleStatuses), not by RESULT:
+      // an evaluator may still have pending async work after sending its result (e.g. Python's
+      // set_timeout — see BasicEvaluator's beginPendingWork/endPendingWork), so treating RESULT
+      // itself as "done" would tear the runner down before that work has a chance to run.
     }
   } finally {
     if (yield cancelled()) {
@@ -544,11 +568,18 @@ function* handleResults(
  * Surfaces a conductor evaluation error: appends it to the REPL and, when the (REPL-hiding) conductor
  * Stepper or CSE Machine tab is active, or any other tab a module dynamically registered (e.g. sound's
  * tab), switches to the Introduction tab so the error is visible rather than failing silently — the
- * conductor analogue of the legacy `usingSubst`/`usingCse` path. Also unblocks the run loop.
+ * conductor analogue of the legacy `usingSubst`/`usingCse` path.
+ *
+ * `interrupt` (default true) additionally unblocks the run loop right away — appropriate when there is
+ * no runner left to send a terminal status at all (a rejected startEvaluator, or a setup failure before
+ * one even exists). A genuine `sendError` from a still-running evaluator (handleErrors' normal path)
+ * passes `interrupt: false`: the runner is expected to still send its own terminal STOPPED/ERROR once
+ * any pending work (e.g. Python's set_timeout) settles, and handleStatuses drives the interrupt then.
  */
 function* surfaceConductorError(
   error: unknown,
   workspaceLocation: WorkspaceLocation,
+  interrupt: boolean = true,
 ): SagaIterator {
   yield put(actions.appendInterpreterError([toConductorSourceError(error)], workspaceLocation));
   const selectedTab: SideContentTabId | undefined = yield select(
@@ -564,13 +595,15 @@ function* surfaceConductorError(
   ) {
     yield put(visitSideContent(SideContentType.introduction, selectedTab, workspaceLocation));
   }
-  // Unblock the run loop (the runner should also send a terminal status, but this is a safety net).
-  yield put(actions.beginInterruptExecution(workspaceLocation));
+  if (interrupt) {
+    yield put(actions.beginInterruptExecution(workspaceLocation));
+  }
 }
 
 function* handleErrors(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
+  receivedCount: ReceivedCount,
 ): SagaIterator {
   const errorChan = eventChannel(emitter => {
     hostPlugin.receiveError = emitter;
@@ -583,14 +616,16 @@ function* handleErrors(
   try {
     while (true) {
       const error = yield take(errorChan);
-      yield* surfaceConductorError(error, workspaceLocation);
+      receivedCount.count++;
+      yield* surfaceConductorError(error, workspaceLocation, false);
     }
   } catch (e) {
     // A conductor evaluator may report a preprocessing/syntax error by rejecting its run rather than
     // via the error channel (the Python stepper does this: the rejection is thrown into this forked
     // task by redux-saga). Handle it the same way and do NOT re-throw — otherwise it aborts the run
     // saga and escapes as an uncaught error (invisible to the user). redux-saga task cancellations are
-    // not Error instances, so re-raise those to preserve normal teardown.
+    // not Error instances, so re-raise those to preserve normal teardown. No runner is expected to send
+    // a terminal status after this kind of failure, so this path still interrupts immediately.
     if (e instanceof Error) {
       yield* surfaceConductorError(e, workspaceLocation);
     } else {
@@ -645,27 +680,50 @@ function* handleCseSnapshots(
 function* handleStatuses(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
+  receivedCount: ReceivedCount,
 ): SagaIterator {
-  const statusChan = eventChannel<{ status: RunnerStatus; isActive: boolean }>(emitter => {
-    const onStatusUpdate = (status: RunnerStatus, isActive: boolean) =>
-      emitter({ status, isActive });
-    hostPlugin.receiveStatusUpdate = onStatusUpdate;
-    return () => {
-      if (hostPlugin.receiveStatusUpdate === onStatusUpdate) {
-        delete hostPlugin.receiveStatusUpdate;
-      }
-    };
-  });
+  const statusChan = eventChannel<{ status: RunnerStatus; isActive: boolean; sentCount: number }>(
+    emitter => {
+      const onStatusUpdate = (status: RunnerStatus, isActive: boolean, sentCount: number) =>
+        emitter({ status, isActive, sentCount });
+      hostPlugin.receiveStatusUpdate = onStatusUpdate;
+      return () => {
+        if (hostPlugin.receiveStatusUpdate === onStatusUpdate) {
+          delete hostPlugin.receiveStatusUpdate;
+        }
+      };
+    },
+  );
   try {
     while (true) {
-      const { status, isActive } = yield take(statusChan);
+      const { status, isActive, sentCount } = yield take(statusChan);
       const isTerminalStatus =
         isActive && (status === RunnerStatus.STOPPED || status === RunnerStatus.ERROR);
       if (status === RunnerStatus.RUNNING) {
         yield put(actions.setIsRunning(isActive, workspaceLocation));
       }
       if (isTerminalStatus) {
-        // Unblock the REPL loop via the shared termination signal.
+        // The runner has genuinely finished (including any pending async work — e.g. Python's
+        // set_timeout — see BasicEvaluator's beginPendingWork/endPendingWork), but sentCount's
+        // matching output/result/error may still be in flight on their own MessagePort (no
+        // cross-channel ordering guarantee against STATUS). Wait for our own receivedCount to
+        // catch up before unblocking the REPL loop, instead of guessing with a fixed delay.
+        // Bounded, not open-ended: the program has already finished by this point (STATUS said
+        // so), so this is only ever waiting on a few already-sent straggler bytes, not gating a
+        // student program's own run time the way the removed execTime watchdog did. A message
+        // that's merely delayed clears this in low single-digit milliseconds; only a genuine bug
+        // elsewhere (a sibling handler dying before consuming its channel, a runner misreporting
+        // sentCount) would ever run out this clock, and this is the fallback for exactly that.
+        const drainDeadline = Date.now() + 5000;
+        while (receivedCount.count < sentCount) {
+          if (Date.now() > drainDeadline) {
+            console.warn(
+              `Timed out waiting for ${sentCount - receivedCount.count} pending message(s) before interrupting ${workspaceLocation}.`,
+            );
+            break;
+          }
+          yield call(() => new Promise(resolve => setTimeout(resolve, 5)));
+        }
         yield put(actions.beginInterruptExecution(workspaceLocation));
       }
     }
@@ -682,7 +740,6 @@ export function* evalCodeConductorSaga(
   files: Record<string, string>,
   entrypointFilePath: string,
   context: Context,
-  execTime: number,
   workspaceLocation: WorkspaceLocation,
   actionType: string,
   storyEnv?: string,
@@ -735,59 +792,36 @@ export function* evalCodeConductorSaga(
     // Immediately start warming the next conductor in the background
     yield spawn(preloadConductorEvaluatorSaga, evaluator.path);
 
-    // Begin evaluation
-    stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
+    // Begin evaluation. receivedCount is shared by the four handlers below: handleStdout/
+    // handleResults/handleErrors increment it as each output/result/error message actually
+    // arrives, and handleStatuses waits for it to reach a terminal status's own sentCount before
+    // treating the run as over (see ReceivedCount's doc comment).
+    const receivedCount: ReceivedCount = { count: 0 };
+    stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation, receivedCount);
     inputTask = yield fork(handleInputRequest, hostPlugin, workspaceLocation);
-    resultTask = yield fork(handleResults, hostPlugin, workspaceLocation);
-    errorTask = yield fork(handleErrors, hostPlugin, workspaceLocation);
-    statusTask = yield fork(handleStatuses, hostPlugin, workspaceLocation);
+    resultTask = yield fork(handleResults, hostPlugin, workspaceLocation, receivedCount);
+    errorTask = yield fork(handleErrors, hostPlugin, workspaceLocation, receivedCount);
+    statusTask = yield fork(handleStatuses, hostPlugin, workspaceLocation, receivedCount);
     cseTask = yield fork(handleCseSnapshots, csePlugin, workspaceLocation);
 
     yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
 
-    // OneShot: wait for the runner to send STOPPED/ERROR (dispatched by handleStatuses),
-    // or for the user to manually interrupt execution. The watchdog below is suspended
-    // for as long as the program is waiting on an input() popup, so a user who takes a
-    // while to type an answer doesn't get their run killed out from under them.
-    const { done } = yield race({
-      done: take(actions.beginInterruptExecution.type),
-      timeout: call(function* (): SagaIterator {
-        while (true) {
-          const { timedOut } = yield race({
-            timedOut: call(() => new Promise(resolve => setTimeout(resolve, execTime + 10000))),
-            waiting: take(
-              (a: any) =>
-                a.type === actions.setIsWaitingForInput.type &&
-                a.payload.workspaceLocation === workspaceLocation &&
-                a.payload.isWaitingForInput === true,
-            ),
-          });
-          if (timedOut) {
-            return;
-          }
-          // Waiting on the input() popup: suspend the watchdog entirely until it's answered,
-          // then restart a fresh execTime window.
-          yield take(
-            (a: any) =>
-              a.type === actions.setIsWaitingForInput.type &&
-              a.payload.workspaceLocation === workspaceLocation &&
-              a.payload.isWaitingForInput === false,
-          );
-        }
-      }),
-    });
+    // Wait for the runner to send a genuine terminal STATUS (STOPPED/ERROR, dispatched by
+    // handleStatuses only once the evaluator's own pending work — e.g. Python's set_timeout —
+    // has settled), or for the user to manually interrupt execution (Stop, or starting another
+    // Run — see evalEditorSaga's own beginInterruptExecution dispatch). No watchdog timeout:
+    // the Conductor framework gives every run a dedicated Worker that Stop/Run-again can always
+    // reclaim, so student programs are free to run (or wait on set_timeout/input()) indefinitely
+    // without an arbitrary deadline killing them out from under a legitimate long-running task.
+    yield take(actions.beginInterruptExecution.type);
 
     // Drain pending result/error/output before teardown. Each conductor channel is its own
-    // MessagePort with no cross-channel ordering, so the terminal STOPPED status (which resolves the
-    // race above) can be handled before the result/error/output posted just before it on their own
+    // MessagePort with no cross-channel ordering, so the terminal STATUS (which just resolved the
+    // take above) can be handled before the result/error/output posted just before it on their own
     // ports. Cancelling the forks immediately would drop those still-in-flight messages (e.g. an
     // evaluator that reports an error via `sendError` rather than by rejecting — see the catch below).
-    // Give the forks a brief window to process what the runner already sent. `done` is set on runner
-    // completion and on manual interrupt (both may have a trailing message to flush); only a hard
-    // timeout skips the drain.
-    if (done) {
-      yield call(() => new Promise(resolve => setTimeout(resolve, 50)));
-    }
+    // Give the forks a brief window to process what the runner already sent.
+    yield call(() => new Promise(resolve => setTimeout(resolve, 50)));
   } catch (runError) {
     // Defensive: surface any setup error (e.g. failing to obtain the conductor) or synchronous
     // startEvaluator rejection here rather than letting it escape as an uncaught saga error. The
