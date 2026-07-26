@@ -55,8 +55,20 @@ export function* runTestCaseConductor(
     (state: OverallState) => state.workspaces[workspaceLocation].context,
   );
 
+  // Testing always runs the full concatenated bundle under Python's top chapter,
+  // regardless of the student's own assigned sub-chapter, so a sub-chapter's syntax
+  // restrictions (e.g. recursion-only, no loops) aren't enforced by the evaluator here.
+  // A postpend that needs to check the student didn't use a disallowed construct can
+  // call the chapter-4 `parse(__program__)` builtin and walk the returned tree itself
+  // (loop nodes come back tagged "while_loop"/"for_loop") - __program__ is the
+  // student's own source as a string, injected here since `value` only exists as
+  // executed code otherwise. JSON.stringify produces a valid Python string literal for
+  // any source text (its backslash/quote/control-char/unicode escapes are a subset of
+  // Python's).
+  const studentSourceLiteral = `__program__ = ${JSON.stringify(value)}`;
+
   const combinedFilePath = '/testcase.py';
-  const combinedCode = [prepend, value, postpend, testcase]
+  const combinedCode = [prepend, value, studentSourceLiteral, postpend, testcase]
     .filter(part => part && part.trim().length > 0)
     .join('\n');
 

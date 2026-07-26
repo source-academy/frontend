@@ -615,6 +615,50 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
             '/testcase.py': [
               programPrependValue,
               editorValue,
+              `__program__ = ${JSON.stringify(editorValue)}`,
+              programPostpendValue,
+              testcaseProgram,
+            ].join('\n'),
+          },
+        ],
+      })
+      .silentRun();
+  });
+
+  test('makes the student source available as a string for postpend to inspect', () => {
+    // Since grading always runs under the top chapter regardless of the student's own
+    // sub-chapter, a postpend wanting to enforce e.g. "no loops" has to do so itself via
+    // the chapter-4 parse() builtin - which needs the student's source as a string, not
+    // just as already-executed code.
+    const context = createContext();
+    const editorValueWithQuotesAndNewlines = 'x = "a\\nb"\ndef f():\n    return x';
+
+    return expectSaga(
+      runTestCaseConductor,
+      workspaceLocation,
+      testcaseId,
+      editorValueWithQuotesAndNewlines,
+      testcaseProgram,
+      TestcaseTypes.public,
+      programPrependValue,
+      programPostpendValue,
+      execTime,
+    )
+      .withState(
+        generateDefaultState(workspaceLocation, {
+          context,
+          output: [],
+        }),
+      )
+      .provide([[matchers.call.fn(evalCodeSaga), undefined]])
+      .call.like({
+        fn: evalCodeSaga,
+        args: [
+          {
+            '/testcase.py': [
+              programPrependValue,
+              editorValueWithQuotesAndNewlines,
+              `__program__ = ${JSON.stringify(editorValueWithQuotesAndNewlines)}`,
               programPostpendValue,
               testcaseProgram,
             ].join('\n'),
