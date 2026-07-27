@@ -14,6 +14,7 @@ import ace, { require as acequire } from 'ace-builds/src-noconflict/ace';
 import type { EventChannel, Unsubscribe } from 'redux-saga';
 import { eventChannel } from 'redux-saga';
 
+import { isKeywordMapperToken } from './autocompleteHighlightRules';
 import { createAutocompleteModePublisher, normalizeAceModeId } from './autocompleteModeStore';
 
 export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
@@ -42,12 +43,7 @@ export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
     const CustomHighlightRules = function (this: any) {
       for (const state in data) {
         data[state].forEach(rule => {
-          if (
-            'token' in rule &&
-            typeof rule.token === 'object' &&
-            'map' in rule.token &&
-            !Array.isArray(rule.token)
-          ) {
+          if ('token' in rule && isKeywordMapperToken(rule.token)) {
             const { map, defaultToken } = rule.token;
             rule.token = this.createKeywordMapper(map, defaultToken);
           }
