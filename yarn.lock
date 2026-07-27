@@ -4223,15 +4223,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/autocomplete@github:source-academy/autocomplete#d86ddc7f264c5867f916538f4ce7ae8f58ecdca8":
-  version: 0.0.1
-  resolution: "@sourceacademy/autocomplete@https://github.com/source-academy/autocomplete.git#commit=d86ddc7f264c5867f916538f4ce7ae8f58ecdca8"
-  peerDependencies:
-    "@sourceacademy/conductor": ">=0.3.0"
-  checksum: 10c0/0c75481ab156e019665179447d3d9e427910277871a157916a081047da5b5e66429ceb6fb04667d14f5e73ddcc0f09307cb00eda0e444490575b5fa87f1e0c30
-  languageName: node
-  linkType: hard
-
 "@sourceacademy/c-slang@npm:^1.0.21":
   version: 1.0.21
   resolution: "@sourceacademy/c-slang@npm:1.0.21"
@@ -4240,6 +4231,13 @@ __metadata:
     peggy: "npm:^3.0.2"
     wabt: "npm:^1.0.32"
   checksum: 10c0/281d07a1b9db3a87beb029ee25afcb241abf211864a7fd8df1533898273a8c06cbe999167e037b9ee47700eaab064c3df54f0788da5c6296174edac44f9bdf31
+  languageName: node
+  linkType: hard
+
+"@sourceacademy/common-autocomplete@file:..\\plugins\\src\\common\\autocomplete::locator=frontend%40workspace%3A.":
+  version: 0.0.1
+  resolution: "@sourceacademy/common-autocomplete@file:../plugins/src/common/autocomplete#../plugins/src/common/autocomplete::hash=31bc8d&locator=frontend%40workspace%3A."
+  checksum: 10c0/516ffdf17154b257da5ef9515159a68b9f30272ef66e2233ca5e98890a75af97a56fa8797bdb9b729c4aadaafaf27ef506fed8a1c020b16cb71172cf9ef078d0
   languageName: node
   linkType: hard
 
@@ -4281,6 +4279,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sourceacademy/runner-module-loader@file:..\\plugins\\src\\runner\\module-loader::locator=frontend%40workspace%3A.":
+  version: 0.0.1
+  resolution: "@sourceacademy/runner-module-loader@file:../plugins/src/runner/module-loader#../plugins/src/runner/module-loader::hash=325a6f&locator=frontend%40workspace%3A."
+  peerDependencies:
+    "@sourceacademy/conductor": ">=0.3.0"
+  checksum: 10c0/34162fc3899b42ccb5da569b15aa4bf6b6d19679b4ceba6024aa9e06b85c534aefe020d1cbaf366fe5242fc54fbbf2649c21f673ad2f125e0eec4342d998eee4
+  languageName: node
+  linkType: hard
+
 "@sourceacademy/sharedb-ace@npm:2.1.1":
   version: 2.1.1
   resolution: "@sourceacademy/sharedb-ace@npm:2.1.1"
@@ -4300,6 +4307,15 @@ __metadata:
     mqtt: "npm:^4.2.1"
     tiny-typed-emitter: "npm:^2.0.3"
   checksum: 10c0/d7cb2ce7136811c5eb185d013fe2d62c22bc4bcb50952621f734d816b0a428e1a09d22c284bcc564025e2adb4aad5f85a0ad9a12f633d0c8a264deb22b577d4c
+  languageName: node
+  linkType: hard
+
+"@sourceacademy/web-autocomplete@file:..\\plugins\\src\\web\\autocomplete::locator=frontend%40workspace%3A.":
+  version: 0.0.1
+  resolution: "@sourceacademy/web-autocomplete@file:../plugins/src/web/autocomplete#../plugins/src/web/autocomplete::hash=297aba&locator=frontend%40workspace%3A."
+  peerDependencies:
+    "@sourceacademy/conductor": ">=0.3.0"
+  checksum: 10c0/f122060f6ee90100346ac388face23f6c0fc5a4eb6a4dac19283058896e09e4ff64e67054aac6351dc5dc124481b0c27d7b2b53107705dedbb5463145678c0f7
   languageName: node
   linkType: hard
 
@@ -8578,15 +8594,17 @@ __metadata:
     "@rsbuild/plugin-tailwindcss": "npm:^2.0.3"
     "@rsdoctor/rspack-plugin": "npm:^1.5.18"
     "@sentry/react": "npm:^10.5.0"
-    "@sourceacademy/autocomplete": "github:source-academy/autocomplete#d86ddc7f264c5867f916538f4ce7ae8f58ecdca8"
     "@sourceacademy/c-slang": "npm:^1.0.21"
+    "@sourceacademy/common-autocomplete": "file:..\\plugins\\src\\common\\autocomplete"
     "@sourceacademy/common-cse-machine": "npm:^0.3.0"
     "@sourceacademy/common-tabs": "npm:^0.0.1"
     "@sourceacademy/conductor": "npm:^0.8.1"
     "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.17"
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.3"
+    "@sourceacademy/runner-module-loader": "file:..\\plugins\\src\\runner\\module-loader"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
+    "@sourceacademy/web-autocomplete": "file:..\\plugins\\src\\web\\autocomplete"
     "@sourceacademy/web-cse-machine": "npm:^3.0.0"
     "@sourceacademy/web-module-loader": "npm:^0.0.2"
     "@sourceacademy/web-test": "npm:^0.0.2"

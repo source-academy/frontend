@@ -1,4 +1,4 @@
-import type { AutoCompleteEntry } from '@sourceacademy/autocomplete';
+import { type AutoCompleteEntry, WEB_PLUGIN_ID } from '@sourceacademy/common-autocomplete';
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { type Context, findDeclaration, getNames } from 'js-slang';
@@ -165,7 +165,7 @@ const WorkspaceSaga = combineSagaHandlers({
       const { conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } =
         yield call(getPreparedConductorSaga);
 
-      const plugin = conduit.lookupPlugin('__autocomplete_plugin_web') as AutoCompletePlugin;
+      const plugin = conduit.lookupPlugin(WEB_PLUGIN_ID) as AutoCompletePlugin;
       if (plugin) {
         const channel: EventChannel<AutoCompleteEntry[]> = yield call(
           [plugin, 'complete'],
