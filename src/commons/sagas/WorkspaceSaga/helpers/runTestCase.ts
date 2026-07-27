@@ -3,6 +3,11 @@ import { random } from 'lodash-es';
 import { call, put, select, type StrictEffect } from 'redux-saga/effects';
 
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
+import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
+import {
+  TEST_CASE_EVALUATOR_ID,
+  TEST_CASE_LANGUAGE_ID,
+} from '../../../../features/directory/testCaseLanguage';
 import type { OverallState } from '../../../application/ApplicationTypes';
 import type { TestcaseType } from '../../../assessment/AssessmentTypes';
 import { TestcaseTypes } from '../../../assessment/AssessmentTypes';
@@ -74,15 +79,35 @@ export function* runTestCaseConductor(
 
   yield put(actions.resetTestcase(workspaceLocation, index));
 
-  yield call(
-    evalCodeSaga,
-    { [combinedFilePath]: combinedCode },
-    combinedFilePath,
-    context,
-    execTime,
-    EVAL_SILENT,
-    workspaceLocation,
-  );
+  // Grading always runs under TEST_CASE_LANGUAGE_ID/EVALUATOR_ID (see testCaseLanguage.ts),
+  // regardless of the assessment's own chapter-derived language - temporarily override the
+  // shared selection for this call, then restore it, so a subsequent Run (outside the testing
+  // tab) goes back to using the student's assigned sub-chapter.
+  const { selectedLanguageId, selectedEvaluatorId }: OverallState['languageDirectory'] =
+    yield select((state: OverallState) => state.languageDirectory);
+  yield put(LanguageDirectoryActions.setSelectedLanguage(TEST_CASE_LANGUAGE_ID));
+  yield put(LanguageDirectoryActions.setSelectedEvaluator(TEST_CASE_EVALUATOR_ID));
+
+  try {
+    yield call(
+      evalCodeSaga,
+      { [combinedFilePath]: combinedCode },
+      combinedFilePath,
+      context,
+      execTime,
+      EVAL_SILENT,
+      workspaceLocation,
+    );
+  } finally {
+    if (selectedLanguageId) {
+      yield put(LanguageDirectoryActions.setSelectedLanguage(selectedLanguageId));
+      if (selectedEvaluatorId) {
+        yield put(LanguageDirectoryActions.setSelectedEvaluator(selectedEvaluatorId));
+      }
+    } else {
+      yield put(LanguageDirectoryActions.clearSelectedLanguage());
+    }
+  }
 
   const output: Array<{ type: string; consoleLogs?: string[]; errors?: any }> = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].output,

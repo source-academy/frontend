@@ -1,3 +1,4 @@
+import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
 import { camelCase, mapKeys } from 'lodash-es';
 import type { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
@@ -5,6 +6,7 @@ import AcademyActions from 'src/features/academy/AcademyActions';
 import type { UsernameRoleGroup } from 'src/features/adminPanel/subcomponents/AddUserPanel';
 import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import DashboardActions from 'src/features/dashboard/DashboardActions';
+import { deriveLanguageFromChapter } from 'src/features/directory/chapterLanguage';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
 import GroundControlActions from 'src/features/groundControl/GroundControlActions';
 
@@ -111,26 +113,33 @@ export function* routerNavigate(path: string) {
 }
 
 /**
- * Assessments configured with a Conductor language (languageId/evaluatorId) don't expose a
- * language dropdown of their own — the assessment workspace shares the same global
- * languageDirectory Redux slice the Playground dropdown writes to. Setting it here on assessment
- * load is what makes the assessment's Run/testcase-grading use that language instead of whatever
- * was last selected in the Playground (or falling through to js-slang when unset).
+ * Assessment workspaces don't expose a language dropdown of their own — they share the same
+ * global languageDirectory Redux slice the Playground dropdown writes to. Setting it here on
+ * assessment load is what makes the assessment's Run/testcase-grading use the right language
+ * instead of whatever was last selected in the Playground.
+ *
+ * The language is derived from the assessment's own chapter (the first question's
+ * library.chapter — assessments don't mix chapters across their own questions), which is a
+ * 1-based index into the language directory's array once Conductor is enabled (see
+ * chapterLanguage.ts) - not a separate assessment-level field.
  */
 function* selectAssessmentLanguageSaga(assessment: Assessment) {
   const conductorEnabled: boolean = yield select(selectConductorEnable);
   if (!conductorEnabled) {
     return;
   }
-  if (!assessment.languageId) {
-    // Otherwise a prior Conductor assessment's selection would leak into this js-slang one.
+  const languages: ILanguageDefinition[] = yield select(
+    (state: OverallState) => state.languageDirectory.languages,
+  );
+  const derived = deriveLanguageFromChapter(languages, assessment.questions[0]?.library.chapter);
+
+  if (!derived) {
+    // Otherwise a prior assessment's selection would leak into this one.
     yield put(LanguageDirectoryActions.clearSelectedLanguage());
     return;
   }
-  yield put(LanguageDirectoryActions.setSelectedLanguage(assessment.languageId));
-  if (assessment.evaluatorId) {
-    yield put(LanguageDirectoryActions.setSelectedEvaluator(assessment.evaluatorId));
-  }
+  yield put(LanguageDirectoryActions.setSelectedLanguage(derived.languageId));
+  yield put(LanguageDirectoryActions.setSelectedEvaluator(derived.evaluatorId));
 }
 
 const newBackendSagaOne = combineSagaHandlers({
@@ -1076,12 +1085,10 @@ function* oldBackendSagaThree(): SagaIterator {
       const hasVotingFeatures = action.payload.hasVotingFeatures;
       const hasTokenCounter = action.payload.hasTokenCounter;
       const isAutosaveEnabled = action.payload.isAutosaveEnabled;
-      const languageId = action.payload.languageId;
-      const evaluatorId = action.payload.evaluatorId;
 
       const resp: Response | null = yield updateAssessment(
         id,
-        { hasVotingFeatures, hasTokenCounter, isAutosaveEnabled, languageId, evaluatorId },
+        { hasVotingFeatures, hasTokenCounter, isAutosaveEnabled },
         tokens,
       );
       if (!resp || !resp.ok) {

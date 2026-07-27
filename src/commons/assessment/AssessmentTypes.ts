@@ -85,8 +85,6 @@ export type AssessmentOverview = {
   xp: number;
   maxTeamSize: number; // For team assessment
   hoursBeforeEarlyXpDecay: number;
-  languageId?: string | null; // Conductor language directory id, null/undefined means js-slang
-  evaluatorId?: string | null; // Conductor evaluator id within the language
 };
 
 /*
@@ -103,8 +101,6 @@ export type Assessment = {
   missionPDF: string;
   title: string;
   questions: Question[];
-  languageId?: string | null; // Conductor language directory id, null/undefined means js-slang
-  evaluatorId?: string | null; // Conductor evaluator id within the language
 };
 
 export type AssessmentConfiguration = {
