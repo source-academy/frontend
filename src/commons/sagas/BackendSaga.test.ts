@@ -1,3 +1,4 @@
+import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { createMemoryRouter } from 'react-router';
 import { call } from 'redux-saga/effects';
@@ -8,8 +9,10 @@ import type { UsernameRoleGroup } from 'src/features/adminPanel/subcomponents/Ad
 import { describe, expect, test, vi } from 'vitest';
 
 import DashboardActions from '../../features/dashboard/DashboardActions';
+import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
 import SessionActions from '../application/actions/SessionActions';
 import {
+  defaultLanguageDirectory,
   type GameState,
   Role,
   type SALanguage,
@@ -75,6 +78,19 @@ import {
 // Constants to use for testing
 
 const mockAssessment: Assessment = mockAssessments[0];
+
+function makeMockLanguageDefinition(id: string, evaluatorIds: string[]): ILanguageDefinition {
+  return {
+    id,
+    name: id,
+    evaluators: evaluatorIds.map(evaluatorId => ({
+      id: evaluatorId,
+      name: evaluatorId,
+      path: `https://example.com/${evaluatorId}.js`,
+      capabilities: [],
+    })),
+  };
+}
 
 const mockMapAssessments = Object.fromEntries(mockAssessments.map(a => [a.id, a]));
 
@@ -638,6 +654,66 @@ describe('Test FETCH_ASSESSMENT action', () => {
       .call(getAssessment, mockId, mockTokens, undefined, undefined)
       .not.put.actionType(SessionActions.updateAssessment.type)
       .hasFinalState({ session: mockTokens })
+      .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
+      .silentRun();
+  });
+
+  test('selects the Conductor language derived from the first question chapter, when Conductor is enabled', () => {
+    const mockId = mockAssessment.id;
+    // mockAssessment's first question has library.chapter === Chapter.SOURCE_1 (1), which under
+    // the language directory index scheme (see chapterLanguage.ts) is python1.
+    const languages = [
+      makeMockLanguageDefinition('python1', ['python1Py2js', 'python1Pvml']),
+      makeMockLanguageDefinition('python2', ['python2Py2js']),
+    ];
+
+    return expectSaga(BackendSaga)
+      .withState({
+        session: mockTokens,
+        featureFlags: { modifiedFlags: { 'conductor.enable': true } },
+        languageDirectory: { ...defaultLanguageDirectory, languages },
+      })
+      .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), mockAssessment]])
+      .put(LanguageDirectoryActions.setSelectedLanguage('python1'))
+      .put(LanguageDirectoryActions.setSelectedEvaluator('python1Py2js'))
+      .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
+      .silentRun();
+  });
+
+  test('clears the selected language when Conductor is enabled but the chapter is out of range', () => {
+    const mockId = mockAssessment.id;
+    const assessmentWithNoQuestions = { ...mockAssessment, questions: [] };
+
+    return expectSaga(BackendSaga)
+      .withState({
+        session: mockTokens,
+        featureFlags: { modifiedFlags: { 'conductor.enable': true } },
+        languageDirectory: {
+          ...defaultLanguageDirectory,
+          languages: [makeMockLanguageDefinition('python1', ['python1Py2js'])],
+          selectedLanguageId: 'python1',
+        },
+      })
+      .provide([
+        [call(getAssessment, mockId, mockTokens, undefined, undefined), assessmentWithNoQuestions],
+      ])
+      .put(LanguageDirectoryActions.clearSelectedLanguage())
+      .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
+      .silentRun();
+  });
+
+  test('does not touch the selected language when Conductor is disabled', () => {
+    const mockId = mockAssessment.id;
+
+    return expectSaga(BackendSaga)
+      .withState({
+        session: mockTokens,
+        featureFlags: { modifiedFlags: { 'conductor.enable': false } },
+        languageDirectory: defaultLanguageDirectory,
+      })
+      .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), mockAssessment]])
+      .not.put.actionType(LanguageDirectoryActions.setSelectedLanguage.type)
+      .not.put.actionType(LanguageDirectoryActions.clearSelectedLanguage.type)
       .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
       .silentRun();
   });

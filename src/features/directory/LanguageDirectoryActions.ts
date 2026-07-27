@@ -11,6 +11,8 @@ const LanguageDirectoryActions = createActions('directory/languages', {
   setSelectedLanguage: (languageId: string, evaluatorId?: string) => ({ languageId, evaluatorId }),
   /** Set selected evaluator explicitly */
   setSelectedEvaluator: (evaluatorId: string) => ({ evaluatorId }),
+  /** Clear the selected language and evaluator, falling back to js-slang */
+  clearSelectedLanguage: null,
 });
 
 export default LanguageDirectoryActions;
