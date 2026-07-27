@@ -7,8 +7,9 @@ import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist
  * from. This mirrors the backend's PROGRAMMINGLANGUAGE `interpreter` attribute, which is stored
  * verbatim into `chapter` with no translation.
  *
- * Picks the Py2JS evaluator when the language has one (python1-python4); languages without a
- * Py2JS option (pythonFull, scheme) fall back to their only/first evaluator.
+ * Always picks the language's first listed evaluator - Py2JS for python1-python4 (each lists
+ * Py2JS first, e.g. python1Language's `evaluators: [python1Py2js, python1Pvml, ...]`), and the
+ * only evaluator for pythonFull/scheme (which have just one each).
  */
 export function deriveLanguageFromChapter(
   languages: ILanguageDefinition[],
@@ -18,11 +19,7 @@ export function deriveLanguageFromChapter(
     return undefined;
   }
   const language = languages[chapter - 1];
-  if (!language) {
-    return undefined;
-  }
-  const evaluator =
-    language.evaluators.find(e => e.id.toLowerCase().endsWith('py2js')) ?? language.evaluators[0];
+  const evaluator = language?.evaluators[0];
   if (!evaluator) {
     return undefined;
   }

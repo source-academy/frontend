@@ -26,7 +26,7 @@ const languages: ILanguageDefinition[] = [
 ];
 
 describe('deriveLanguageFromChapter', () => {
-  test('maps chapter 1-4 to python1-python4, always picking the Py2js evaluator', () => {
+  test('maps chapter 1-4 to python1-python4, picking the first-listed evaluator (Py2js)', () => {
     expect(deriveLanguageFromChapter(languages, 1)).toEqual({
       languageId: 'python1',
       evaluatorId: 'python1Py2js',
@@ -45,7 +45,7 @@ describe('deriveLanguageFromChapter', () => {
     });
   });
 
-  test('falls back to the only evaluator when a language has no Py2js option', () => {
+  test('falls back to the only evaluator when a language has just one', () => {
     expect(deriveLanguageFromChapter(languages, 5)).toEqual({
       languageId: 'pythonFull',
       evaluatorId: 'pythonFullPyodide',
@@ -53,6 +53,17 @@ describe('deriveLanguageFromChapter', () => {
     expect(deriveLanguageFromChapter(languages, 6)).toEqual({
       languageId: 'scheme',
       evaluatorId: 'schemeDefault',
+    });
+  });
+
+  test('picks the first evaluator unconditionally, not specifically one named Py2js', () => {
+    const languagesWithNonPy2jsFirst: ILanguageDefinition[] = [
+      makeLanguage('python1', ['python1Pvml', 'python1Py2js', 'python1Cse']),
+    ];
+
+    expect(deriveLanguageFromChapter(languagesWithNonPy2jsFirst, 1)).toEqual({
+      languageId: 'python1',
+      evaluatorId: 'python1Pvml',
     });
   });
 
