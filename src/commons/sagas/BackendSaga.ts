@@ -1,9 +1,13 @@
+import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
 import { camelCase, mapKeys } from 'lodash-es';
 import type { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import type { UsernameRoleGroup } from 'src/features/adminPanel/subcomponents/AddUserPanel';
+import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import DashboardActions from 'src/features/dashboard/DashboardActions';
+import { deriveLanguageFromChapter } from 'src/features/directory/chapterLanguage';
+import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
 import GroundControlActions from 'src/features/groundControl/GroundControlActions';
 
 import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
@@ -106,6 +110,36 @@ function selectRouter() {
 export function* routerNavigate(path: string) {
   const router: RouterState = yield selectRouter();
   return router?.navigate(path);
+}
+
+/**
+ * Assessment workspaces don't expose a language dropdown of their own — they share the same
+ * global languageDirectory Redux slice the Playground dropdown writes to. Setting it here on
+ * assessment load is what makes the assessment's Run/testcase-grading use the right language
+ * instead of whatever was last selected in the Playground.
+ *
+ * The language is derived from the assessment's own chapter (the first question's
+ * library.chapter — assessments don't mix chapters across their own questions), which is a
+ * 1-based index into the language directory's array once Conductor is enabled (see
+ * chapterLanguage.ts) - not a separate assessment-level field.
+ */
+function* selectAssessmentLanguageSaga(assessment: Assessment) {
+  const conductorEnabled: boolean = yield select(selectConductorEnable);
+  if (!conductorEnabled) {
+    return;
+  }
+  const languages: ILanguageDefinition[] = yield select(
+    (state: OverallState) => state.languageDirectory.languages,
+  );
+  const derived = deriveLanguageFromChapter(languages, assessment.questions[0]?.library.chapter);
+
+  if (!derived) {
+    // Otherwise a prior assessment's selection would leak into this one.
+    yield put(LanguageDirectoryActions.clearSelectedLanguage());
+    return;
+  }
+  yield put(LanguageDirectoryActions.setSelectedLanguage(derived.languageId));
+  yield put(LanguageDirectoryActions.setSelectedEvaluator(derived.evaluatorId));
 }
 
 const newBackendSagaOne = combineSagaHandlers({
@@ -231,6 +265,7 @@ const newBackendSagaOne = combineSagaHandlers({
     );
     if (assessment) {
       yield put(actions.updateAssessment(assessment));
+      yield call(selectAssessmentLanguageSaga, assessment);
     }
   },
   [SessionActions.fetchAssessmentAdmin.type]: function* (action) {
@@ -246,6 +281,7 @@ const newBackendSagaOne = combineSagaHandlers({
     );
     if (assessment) {
       yield put(actions.updateAssessment(assessment));
+      yield call(selectAssessmentLanguageSaga, assessment);
     }
   },
   [SessionActions.submitAnswer.type]: function* (action) {
