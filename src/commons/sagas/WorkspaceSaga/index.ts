@@ -165,7 +165,13 @@ const WorkspaceSaga = combineSagaHandlers({
       const { conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } =
         yield call(getPreparedConductorSaga);
 
-      const plugin = conduit.lookupPlugin(WEB_PLUGIN_ID) as AutoCompletePlugin;
+      let plugin: AutoCompletePlugin;
+      try {
+        plugin = conduit.lookupPlugin(WEB_PLUGIN_ID) as AutoCompletePlugin;
+      } catch {
+        return;
+      }
+      
       if (plugin) {
         const channel: EventChannel<AutoCompleteEntry[]> = yield call(
           [plugin, 'complete'],
