@@ -1,16 +1,17 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import {
   defaultWorkspaceSettings,
   WorkspaceSettingsContext,
 } from 'src/commons/WorkspaceSettingsContext';
 import { flagMonacoEditorEnable } from 'src/features/monaco/flagMonacoEditorEnable';
-import { vi } from 'vitest';
+import { expect, test, vi } from 'vitest';
 
-import EditorContainer, { type EditorContainerProps } from '../EditorContainer';
+import EditorContainer, { type EditorContainerProps } from './EditorContainer';
 
-vi.mock('../MonacoEditor', () => ({
+vi.mock('./MonacoEditor', () => ({
   default: (props: any) => (
     <textarea
       data-testid="MonacoEditorMock"
@@ -39,7 +40,6 @@ const createProps = (overrides: Partial<EditorContainerProps> = {}): EditorConta
   handleEditorUpdateBreakpoints: () => {},
   handleEditorValueChange: () => {},
   handlePromptAutocomplete: () => {},
-  isEditorAutorun: false,
   isFolderModeEnabled: false,
   removeEditorTabByIndex: () => {},
   sessionDetails: null,
@@ -59,9 +59,11 @@ const renderEditorContainer = (
 
   return render(
     <Provider store={store}>
-      <WorkspaceSettingsContext.Provider value={[defaultWorkspaceSettings, () => {}]}>
-        <EditorContainer {...props} />
-      </WorkspaceSettingsContext.Provider>
+      <MemoryRouter>
+        <WorkspaceSettingsContext.Provider value={[defaultWorkspaceSettings, () => {}]}>
+          <EditorContainer {...props} />
+        </WorkspaceSettingsContext.Provider>
+      </MemoryRouter>
     </Provider>,
   );
 };

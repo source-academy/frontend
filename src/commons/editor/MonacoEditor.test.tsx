@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
+import { beforeEach, expect, test, vi } from 'vitest';
 
-import type { EditorProps } from '../Editor';
-import MonacoEditor from '../MonacoEditor';
+import type { EditorProps } from './Editor';
+import MonacoEditor from './MonacoEditor';
 
 const monacoReactMock = vi.hoisted(() => ({
   addCommand: vi.fn(),
@@ -56,7 +56,6 @@ const createProps = (overrides: Partial<EditorProps> = {}): EditorProps => ({
   handleEditorValueChange: () => {},
   handlePromptAutocomplete: () => {},
   highlightedLines: [],
-  isEditorAutorun: false,
   sessionDetails: null,
   ...overrides,
 });
