@@ -3547,8 +3547,8 @@ __metadata:
   linkType: hard
 
 "@rsbuild/core@npm:^2.0.3":
-  version: 2.1.7
-  resolution: "@rsbuild/core@npm:2.1.7"
+  version: 2.1.8
+  resolution: "@rsbuild/core@npm:2.1.8"
   dependencies:
     "@rspack/core": "npm:~2.1.5"
     "@swc/helpers": "npm:^0.5.23"
@@ -3559,7 +3559,7 @@ __metadata:
       optional: true
   bin:
     rsbuild: ./bin/rsbuild.js
-  checksum: 10c0/f3c5ac89f0e4c0981cf40e6e1ccde7bb3c3abaf4141da1726f7594b5e198631bf310476f2579d6de69da07c382544c05ddb688f75719f754cfffaf9d3b52fb85
+  checksum: 10c0/28b5f88854e10dea6ca24466f9260edde4d320a391ff0261832e7d0293a86b7f0036208fb39ba9d34c14734881f2181bb3ffb408f338901f6c8a8fb09c848358
   languageName: node
   linkType: hard
 
