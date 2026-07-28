@@ -1,6 +1,7 @@
 import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
 import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import AcademyActions from 'src/features/academy/AcademyActions';
 
 import SessionActions from '../../../commons/application/actions/SessionActions';
@@ -25,6 +26,8 @@ const defaultCourseConfig: UpdateCourseConfiguration = {
   topContestLeaderboardDisplay: 10,
   enableLlmGrading: false,
   moduleHelpText: '',
+  enableExamMode: false,
+  resumeCode: '',
   llmApiKey: '',
   llmModel: '',
   llmApiUrl: '',
@@ -63,7 +66,10 @@ function AdminPanel() {
       topLeaderboardDisplay: session.topLeaderboardDisplay,
       topContestLeaderboardDisplay: session.topContestLeaderboardDisplay,
       enableLlmGrading: session.enableLlmGrading,
+      enableExamMode: session.enableExamMode,
+      resumeCode: session.resumeCode,
       moduleHelpText: session.moduleHelpText,
+      isOfficialCourse: session.isOfficialCourse,
       llmModel: session.llmModel,
       llmApiUrl: session.llmApiUrl,
       llmCourseLevelPrompt: session.llmCourseLevelPrompt,
@@ -81,8 +87,11 @@ function AdminPanel() {
     session.topContestLeaderboardDisplay,
     session.enableGame,
     session.enableLlmGrading,
+    session.enableExamMode,
     session.moduleHelpText,
+    session.isOfficialCourse,
     session.viewable,
+    session.resumeCode,
     session.llmModel,
     session.llmApiUrl,
     session.llmCourseLevelPrompt,
@@ -109,8 +118,12 @@ function AdminPanel() {
   // Changes made to users are handled separately.
   const submitHandler = useCallback(() => {
     if (hasChangesCourseConfig) {
-      dispatch(SessionActions.updateCourseConfig(courseConfiguration));
-      setHasChangesCourseConfig(false);
+      if (!courseConfiguration.resumeCode || courseConfiguration.resumeCode.length === 0) {
+        showWarningMessage('Resume code cannot be empty.');
+      } else {
+        dispatch(SessionActions.updateCourseConfig(courseConfiguration));
+        setHasChangesCourseConfig(false);
+      }
     }
     const currentConfigs = session.assessmentConfigurations ?? [];
     const currentIds = new Set(assessmentConfigs.map(config => config.assessmentConfigId));

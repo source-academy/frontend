@@ -1,9 +1,12 @@
 import { Dialog, DialogBody, HTMLSelect } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useNavigate } from 'react-router';
+import { useLocalStorageState } from 'src/commons/hooks/useLocalStorageState';
 
 import { Role } from '../application/ApplicationTypes';
 import type { UserCourse } from '../application/types/SessionTypes';
+import Constants from '../utils/Constants';
+import { useSession } from '../utils/Hooks';
 
 type Props = {
   isOpen: boolean;
@@ -14,6 +17,11 @@ type Props = {
 
 function DropdownCourses({ isOpen, onClose, courses, courseId }: Props) {
   const navigate = useNavigate();
+  const { enableExamMode, role } = useSession();
+  const [isPreviewExamMode] = useLocalStorageState(
+    Constants.isPreviewExamModeLocalStorageKey,
+    false,
+  );
 
   const options = courses.map(course => ({
     value: course.courseId,
@@ -41,7 +49,9 @@ function DropdownCourses({ isOpen, onClose, courses, courseId }: Props) {
           options={options}
           fill
           onChange={onChangeHandler}
-          disabled={courses.length <= 1}
+          disabled={
+            courses.length <= 1 || isPreviewExamMode || (enableExamMode && role === Role.Student)
+          }
         />
       </DialogBody>
     </Dialog>

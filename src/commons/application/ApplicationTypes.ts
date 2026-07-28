@@ -488,6 +488,7 @@ export const defaultSession: SessionState = {
   teamFormationOverviews: undefined,
   gradings: {},
   notifications: [],
+  isPaused: undefined,
 };
 
 export const defaultFileSystem: FileSystemState = {

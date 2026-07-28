@@ -68,6 +68,7 @@ import MobileWorkspace, { type MobileWorkspaceProps } from '../mobileWorkspace/M
 import SideContentAutograder from '../sideContent/content/SideContentAutograder';
 import SideContentContestLeaderboard from '../sideContent/content/SideContentContestLeaderboard';
 import SideContentContestVotingContainer from '../sideContent/content/SideContentContestVotingContainer';
+import SideContentDocumentation from '../sideContent/content/SideContentDocumentation';
 import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import type { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight } from '../sideContent/SideContentActions';
@@ -516,6 +517,7 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
       assessmentOverview !== undefined ? assessmentOverview.maxTeamSize > 1 : false;
     const isContestVoting = question?.type === QuestionTypes.voting;
     const isPublished = assessmentOverview?.isPublished;
+    const isPrivate = assessmentOverview?.private ?? false;
     const handleContestEntryClick = (_submissionId: number, answer: string) => {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, answer);
@@ -676,6 +678,17 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
         id: SideContentType.toneMatrix,
+      });
+    }
+
+    if (isPrivate) {
+      tabs.push({
+        label: `Documentation`,
+        iconName: IconNames.BOOK,
+        body: <SideContentDocumentation />,
+        id: SideContentType.documentation,
+        panelClassName: 'h-full overflow-hidden',
+        bodyClassName: 'h-full overflow-hidden',
       });
     }
 

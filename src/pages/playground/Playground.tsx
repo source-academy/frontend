@@ -19,6 +19,7 @@ import {
   setSharedbConnected,
 } from 'src/commons/collabEditing/CollabEditingActions';
 import ControlBarExecutionTime from 'src/commons/controlBar/ControlBarExecutionTime';
+import { useLocalStorageState } from 'src/commons/hooks/useLocalStorageState';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
@@ -59,6 +60,7 @@ import {
   isSourceLanguage,
   type OverallState,
   type ResultOutput,
+  Role,
   type SALanguage,
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -248,6 +250,8 @@ function Playground(props: PlaygroundProps) {
     sourceVariant: courseSourceVariant,
     googleUser: persistenceUser,
     githubOctokitObject,
+    enableExamMode,
+    role,
   } = useAppSelector(state => state.session);
 
   const dispatch = useAppDispatch();
@@ -863,6 +867,14 @@ function Playground(props: PlaygroundProps) {
       makeIntroductionTabFrom(conductorWelcomeText ?? generateLanguageIntroduction(languageConfig)),
     [conductorWelcomeText, languageConfig],
   );
+
+  // Exam mode variables
+  const [isPreviewExamMode] = useLocalStorageState(
+    Constants.isPreviewExamModeLocalStorageKey,
+    false,
+  );
+  const applyEnableExamMode = isPreviewExamMode || (enableExamMode && role === Role.Student);
+
   const tabs = useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
@@ -905,7 +917,7 @@ function Playground(props: PlaygroundProps) {
       // injected automatically by SideContentProvider (via the shared tab service), not here.
     }
 
-    if (!isSicpEditor && !Constants.playgroundOnly) {
+    if (!isSicpEditor && !Constants.playgroundOnly && !applyEnableExamMode) {
       tabs.push(remoteExecutionTab);
       if (editorSessionId !== '') {
         tabs.push(sessionManagementTab);
@@ -928,6 +940,7 @@ function Playground(props: PlaygroundProps) {
     remoteExecutionTab,
     editorSessionId,
     sessionManagementTab,
+    applyEnableExamMode,
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
@@ -1143,12 +1156,12 @@ function Playground(props: PlaygroundProps) {
     controlBarProps: {
       editorButtons: [
         autorunButtons,
-        languageConfig.chapter === Chapter.FULL_JS ? null : shareButton,
+        languageConfig.chapter === Chapter.FULL_JS || applyEnableExamMode ? null : shareButton,
         chapterSelectButton,
-        isSicpEditor ? null : sessionButtons,
+        isSicpEditor || applyEnableExamMode ? null : sessionButtons,
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
-        persistenceButtons,
-        githubButtons,
+        applyEnableExamMode ? null : persistenceButtons,
+        applyEnableExamMode ? null : githubButtons,
         usingSubst || usingCse || isCseVariant(languageConfig.variant)
           ? stepperStepLimit
           : isSourceLanguage(languageConfig.chapter)

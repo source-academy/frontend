@@ -199,6 +199,7 @@ test('setUser generates correct action object', () => {
         viewable: true,
       },
     ],
+    isPaused: false,
   };
   const action = SessionActions.setUser(user);
   expect(action).toEqual({

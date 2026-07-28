@@ -1,4 +1,5 @@
 import {
+  Button,
   Divider,
   FormGroup,
   H2,
@@ -14,7 +15,13 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useCallback, useState } from 'react';
+import { useLocalStorageState } from 'src/commons/hooks/useLocalStorageState';
+import Constants from 'src/commons/utils/Constants';
 import { useResponsive } from 'src/commons/utils/Hooks';
+import {
+  showSuccessMessage,
+  showWarningMessage,
+} from 'src/commons/utils/notifications/NotificationsHelper';
 import classes from 'src/styles/CourseConfig.module.scss';
 
 import type { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
@@ -31,6 +38,10 @@ type Props = {
 };
 
 function CourseConfigPanel(props: Props) {
+  const [isPreviewExamMode, setIsPreviewExamMode] = useLocalStorageState(
+    Constants.isPreviewExamModeLocalStorageKey,
+    false,
+  );
   const { isMobileBreakpoint } = useResponsive();
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
     useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
@@ -46,7 +57,10 @@ function CourseConfigPanel(props: Props) {
     topLeaderboardDisplay,
     topContestLeaderboardDisplay,
     enableLlmGrading,
+    enableExamMode,
+    resumeCode,
     moduleHelpText,
+    isOfficialCourse,
     llmApiKey,
     llmModel,
     llmApiUrl,
@@ -87,6 +101,27 @@ function CourseConfigPanel(props: Props) {
     },
     [setCourseHelpTextSelectedTab],
   );
+
+  const previewExamModeHandler = () => {
+    if (isPreviewExamMode) {
+      showWarningMessage(
+        <div>
+          <span>Exam mode preview has been disabled.&nbsp;</span>
+          <Button text={'Refresh Now'} onClick={() => window.location.reload()} />
+        </div>,
+        10000,
+      );
+    } else {
+      showSuccessMessage(
+        <div>
+          <span>Exam mode preview has been enabled.&nbsp;</span>
+          <Button text={'Refresh Now'} onClick={() => window.location.reload()} />
+        </div>,
+        10000,
+      );
+    }
+    setIsPreviewExamMode(i => !i);
+  };
 
   return (
     <div className={classes['course-configuration']}>
@@ -354,6 +389,39 @@ function CourseConfigPanel(props: Props) {
               })
             }
           />
+          {isOfficialCourse && (
+            <Switch
+              checked={enableExamMode}
+              label="Enable Exam Mode"
+              onChange={e =>
+                props.setCourseConfiguration({
+                  ...props.courseConfiguration,
+                  enableExamMode: (e.target as HTMLInputElement).checked,
+                })
+              }
+            />
+          )}
+          {isOfficialCourse && (
+            <FormGroup inline label="Course Resume Code" labelFor="courseResumeCode">
+              <InputGroup
+                id="courseResumeCode"
+                value={resumeCode}
+                onChange={e =>
+                  props.setCourseConfiguration({
+                    ...props.courseConfiguration,
+                    resumeCode: (e.target as HTMLInputElement).value.trim(),
+                  })
+                }
+              />
+            </FormGroup>
+          )}
+          {isOfficialCourse && (
+            <Button
+              active={isPreviewExamMode}
+              text={'Preview Exam Mode'}
+              onClick={previewExamModeHandler}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -2,9 +2,10 @@ import { Card, Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs
 import classNames from 'classnames';
 import { useEffect } from 'react';
 import { Navigate, Outlet, useNavigate, useParams } from 'react-router';
+import { Role } from 'src/commons/application/ApplicationTypes';
 import ResearchAgreementPrompt from 'src/commons/researchAgreementPrompt/ResearchAgreementPrompt';
 import Constants from 'src/commons/utils/Constants';
-import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector, useSession } from 'src/commons/utils/Hooks';
 import classes from 'src/pages/academy/Academy.module.scss';
 
 import SessionActions from '../../../commons/application/actions/SessionActions';
@@ -35,7 +36,8 @@ function Academy() {
 function CourseSelectingAcademy() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { courseId } = useSession();
+  const { courseId, enableExamMode, role } = useAppSelector(state => state.session);
+  const applyEnableExamMode = enableExamMode && role === Role.Student;
   const { courseId: routeCourseIdStr } = useParams<{ courseId?: string }>();
   const routeCourseId = routeCourseIdStr != null ? parseInt(routeCourseIdStr, 10) : undefined;
 
@@ -49,7 +51,11 @@ function CourseSelectingAcademy() {
     if (routeCourseId !== undefined && !Number.isNaN(routeCourseId) && courseId !== routeCourseId) {
       dispatch(SessionActions.updateLatestViewedCourse(routeCourseId));
     }
-  }, [courseId, dispatch, routeCourseId, navigate, routeCourseIdStr]);
+
+    if (applyEnableExamMode) {
+      navigate(`/courses/${courseId}`);
+    }
+  }, [courseId, dispatch, routeCourseId, navigate, routeCourseIdStr, applyEnableExamMode]);
 
   return Number.isNaN(routeCourseId) ? (
     <Navigate to="/" />
