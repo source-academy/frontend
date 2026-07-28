@@ -37,6 +37,7 @@ import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import {
   CONDUCTOR_STEPPER_TAB_ID,
+  CSE_EVALUATOR_CAPABILITY,
   STEPPER_EVALUATOR_CAPABILITY,
 } from 'src/features/conductor/stepperTab';
 import CseMachine from 'src/features/cseMachine/CseMachine';
@@ -529,6 +530,10 @@ function Playground(props: PlaygroundProps) {
     ],
   );
 
+  // When the Conductor framework is enabled, the stepper (and other tools) are provided by web
+  // plugins loaded dynamically, so the legacy in-frontend tabs are hidden in favour of plugin tabs.
+  const conductorEnabled = useAppSelector(selectConductorEnable);
+
   const chapterSelectButton = useMemo(
     () => (
       <ControlBarChapterSelect
@@ -537,10 +542,15 @@ function Playground(props: PlaygroundProps) {
         sourceChapter={languageConfig.chapter}
         sourceVariant={languageConfig.variant}
         key="chapter"
-        // While the Stepper tab is active the evaluator is pinned to the (hidden) stepper evaluator,
-        // so disable the dropdown: changing evaluator here would fight the tab-to-evaluator sync.
-        // The 'stepper' tab id only exists under the conductor, so this never disables Source's select.
-        disabled={usingRemoteExecution || selectedTab === CONDUCTOR_STEPPER_TAB_ID}
+        // While the Stepper or CSE Machine tab is active the evaluator is pinned to that (hidden) tool
+        // evaluator, so disable the dropdown: changing evaluator here would fight the tab-to-evaluator
+        // sync. The 'stepper' tab id only exists under the conductor; the CSE Machine tab also exists
+        // for legacy Source, so that check is additionally gated on the conductor being enabled.
+        disabled={
+          usingRemoteExecution ||
+          selectedTab === CONDUCTOR_STEPPER_TAB_ID ||
+          (conductorEnabled && selectedTab === SideContentType.cseMachine)
+        }
       />
     ),
     [
@@ -550,6 +560,7 @@ function Playground(props: PlaygroundProps) {
       languageConfig.variant,
       usingRemoteExecution,
       selectedTab,
+      conductorEnabled,
     ],
   );
 
@@ -746,34 +757,14 @@ function Playground(props: PlaygroundProps) {
   const hasCseSnapshots = useAppSelector(
     state => state.workspaces[workspaceLocation].cseSnapshots !== null,
   );
-  const conductorEvaluatorSupportsCse = useAppSelector(state => {
-    if (!selectConductorEnable(state)) {
-      return false;
-    }
-    const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
-    if (!selectedLanguageId || !selectedEvaluatorId) {
-      return false;
-    }
-    const lang = languageMap[selectedLanguageId];
-    const evaluator = lang?.evaluators.find(e => e.id === selectedEvaluatorId);
-    return (evaluator?.capabilities as string[] | undefined)?.includes('cse') ?? false;
-  });
   const conductorLanguageActive = useAppSelector(
     state => selectConductorEnable(state) && !!state.languageDirectory.selectedLanguageId,
   );
-  // For conductor languages: show CSE tab proactively when the evaluator declares "cse"
-  // capability, or reactively once snapshots arrive. For Source languages use the usual flag.
-  const shouldShowCseMachine = conductorLanguageActive
-    ? conductorEvaluatorSupportsCse || hasCseSnapshots
-    : languageConfig.supports.cseMachine || hasCseSnapshots;
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
-  // When the Conductor framework is enabled, the stepper (and other tools) are provided by web
-  // plugins loaded dynamically, so the legacy in-frontend tabs are hidden in favour of plugin tabs.
-  const conductorEnabled = useAppSelector(selectConductorEnable);
 
-  // Stepper tab wiring (conductor only). The Stepper tab is offered for any language that has a
-  // stepper-capability evaluator; opening the tab selects that (dropdown-hidden) evaluator so a Run
-  // produces steps, and leaving it restores the language's default evaluator. See the effect below.
+  // Stepper/CSE Machine tab wiring (conductor only). Each tool's tab is offered for any language that
+  // has a matching-capability evaluator; opening the tab selects that (dropdown-hidden) evaluator so a
+  // Run drives the tool, and leaving it restores the language's default evaluator. See the effect below.
   const selectedLanguageId = useAppSelector(state => state.languageDirectory.selectedLanguageId);
   const selectedEvaluatorId = useAppSelector(state => state.languageDirectory.selectedEvaluatorId);
   const stepperEvaluatorId = useAppSelector(state => {
@@ -787,36 +778,67 @@ function Playground(props: PlaygroundProps) {
     );
     return evaluator?.id ?? null;
   });
+  const cseEvaluatorId = useAppSelector(state => {
+    if (!selectConductorEnable(state)) {
+      return null;
+    }
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    const lang = langId ? languageMap[langId] : undefined;
+    const evaluator = lang?.evaluators.find(e =>
+      (e.capabilities as string[] | undefined)?.includes(CSE_EVALUATOR_CAPABILITY),
+    );
+    return evaluator?.id ?? null;
+  });
   const defaultEvaluatorId = useAppSelector(state => {
     if (!selectConductorEnable(state)) {
       return null;
     }
     const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
     const lang = langId ? languageMap[langId] : undefined;
-    const evaluator = lang?.evaluators.find(
-      e => !(e.capabilities as string[] | undefined)?.includes(STEPPER_EVALUATOR_CAPABILITY),
-    );
+    const evaluator = lang?.evaluators.find(e => {
+      const capabilities = e.capabilities as string[] | undefined;
+      return (
+        !capabilities?.includes(STEPPER_EVALUATOR_CAPABILITY) &&
+        !capabilities?.includes(CSE_EVALUATOR_CAPABILITY)
+      );
+    });
     return evaluator?.id ?? null;
   });
 
-  // Keep the selected evaluator in sync with the Stepper tab. Opening the tab selects the stepper
-  // evaluator (so a Run produces steps); leaving it restores the default. Each branch dispatches only
-  // on a real mismatch, so this converges rather than looping.
+  // For conductor languages: show the CSE tab proactively when the language has a cse-capability
+  // evaluator — regardless of which evaluator is currently selected, mirroring the Stepper tab below —
+  // or reactively once snapshots arrive. For Source languages use the usual flag.
+  const shouldShowCseMachine = conductorLanguageActive
+    ? cseEvaluatorId !== null || hasCseSnapshots
+    : languageConfig.supports.cseMachine || hasCseSnapshots;
+
+  // Keep the selected evaluator in sync with the Stepper/CSE Machine tabs. Opening one of these tabs
+  // selects its evaluator (so a Run drives that tool); leaving it restores the default. Each branch
+  // dispatches only on a real mismatch, so this converges rather than looping.
   useEffect(() => {
     if (!conductorEnabled) {
       return;
     }
-    const onStepperTab = selectedTab === CONDUCTOR_STEPPER_TAB_ID;
-    if (onStepperTab) {
-      if (stepperEvaluatorId && selectedEvaluatorId !== stepperEvaluatorId) {
-        dispatch(LanguageDirectoryActions.setSelectedEvaluator(stepperEvaluatorId));
+    const toolTabs: [tabId: string, evaluatorId: string | null][] = [
+      [CONDUCTOR_STEPPER_TAB_ID, stepperEvaluatorId],
+      [SideContentType.cseMachine, cseEvaluatorId],
+    ];
+    const activeTool = toolTabs.find(([tabId]) => tabId === selectedTab);
+    if (activeTool) {
+      const [, toolEvaluatorId] = activeTool;
+      if (toolEvaluatorId && selectedEvaluatorId !== toolEvaluatorId) {
+        dispatch(LanguageDirectoryActions.setSelectedEvaluator(toolEvaluatorId));
       }
-    } else if (selectedEvaluatorId === stepperEvaluatorId && defaultEvaluatorId) {
+    } else if (
+      toolTabs.some(([, toolEvaluatorId]) => toolEvaluatorId === selectedEvaluatorId) &&
+      defaultEvaluatorId
+    ) {
       dispatch(LanguageDirectoryActions.setSelectedEvaluator(defaultEvaluatorId));
     }
   }, [
     conductorEnabled,
     stepperEvaluatorId,
+    cseEvaluatorId,
     defaultEvaluatorId,
     selectedEvaluatorId,
     selectedTab,
