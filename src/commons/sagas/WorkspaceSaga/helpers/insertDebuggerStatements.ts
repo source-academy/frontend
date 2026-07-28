@@ -34,13 +34,23 @@ import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
  * @param code              The code which debugger statements should be inserted into.
  * @param breakpoints       The breakpoints corresponding to the code.
  * @param context           The context in which the code should be evaluated in.
+ * @param isConductorEnabled Whether the code will be run via Conductor. `debugger;` is a
+ *                           JS/Source-specific statement and context.chapter (a legacy
+ *                           Source-chapter field required on assessment questions) does not
+ *                           reliably indicate the language actually running under Conductor,
+ *                           so this insertion is skipped entirely in that case.
  */
 export function* insertDebuggerStatements(
   workspaceLocation: WorkspaceLocation,
   code: string,
   breakpoints: string[],
   context: Context,
+  isConductorEnabled: boolean,
 ): Generator<StrictEffect, string, any> {
+  if (isConductorEnabled) {
+    return code;
+  }
+
   // Check for initial syntax errors.
   if (isSourceLanguage(context.chapter)) {
     parse(code, context);
