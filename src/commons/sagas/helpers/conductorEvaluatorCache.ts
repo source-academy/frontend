@@ -1,3 +1,4 @@
+import { WEB_PLUGIN_ID } from '@sourceacademy/common-autocomplete';
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { PluginType } from '@sourceacademy/plugin-directory';
 import { ModuleLoaderWebPlugin } from '@sourceacademy/web-module-loader';
@@ -6,11 +7,14 @@ import { call, select } from 'redux-saga/effects';
 import { selectDirectoryModulesUrl } from 'src/features/directory/flagDirectoryModulesUrl';
 import { selectDirectoryPluginUrl } from 'src/features/directory/flagDirectoryPluginUrl';
 
+import { associateAutocompleteEvaluator } from '../../../features/conductor/autocompleteModeStore';
+import type AutoCompletePlugin from '../../../features/conductor/AutocompletePlugin';
 import type { BrowserHostPlugin } from '../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../features/conductor/createConductor';
 import type { CseMachineHostPlugin } from '../../../features/conductor/CseMachineHostPlugin';
 import { DeferredConductorTabService } from '../../../features/conductor/deferredConductorTabService';
 import { importAndRegisterWebPlugin } from '../../../features/conductor/importExternalWebPlugin';
+import { registry } from '../../../features/conductor/Registry';
 import { store } from '../../../pages/createStore';
 import sideContentManager from '../../sideContent/SideContentManager';
 import type { SideContentLocation } from '../../sideContent/SideContentTypes';
@@ -66,6 +70,16 @@ async function terminatePreparedConductor(conductor: PreparedConductor | null) {
     return;
   }
 
+  // lookupPlugin throws (rather than returning null) when the plugin was never registered on
+  // this conductor instance, e.g. if it was cleaned up before the runner ever requested the
+  // autocomplete plugin.
+  let autocompletePlugin: AutoCompletePlugin | null = null;
+  try {
+    autocompletePlugin = conductor.conduit.lookupPlugin(WEB_PLUGIN_ID) as AutoCompletePlugin;
+  } catch {
+    // not registered on this conductor instance; nothing to dispose
+  }
+  autocompletePlugin?.dispose();
   await conductor.conduit.terminate();
   sideContentManager.clearTabs();
   URL.revokeObjectURL(conductor.evaluatorUrl);
@@ -120,8 +134,17 @@ async function loadWebPlugin(
   pluginId: string,
   tabService: DeferredConductorTabService,
   moduleLoaderPlugin: ModuleLoaderWebPlugin,
+  evaluatorPath: string,
 ): Promise<void> {
   if (!hostPlugin) {
+    return;
+  }
+  const builtInPlugin = registry.get(pluginId);
+  if (builtInPlugin) {
+    if (pluginId === WEB_PLUGIN_ID) {
+      associateAutocompleteEvaluator(tabService, evaluatorPath);
+    }
+    hostPlugin.registerPlugin(builtInPlugin, tabService);
     return;
   }
   const url = await resolveWebPluginUrl(pluginId, moduleLoaderPlugin);
@@ -151,7 +174,7 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
     evaluatorUrl,
     async (fileName: string) => currentFiles[fileName],
     (pluginName: string) =>
-      loadWebPlugin(hostPluginRef, pluginName, tabService, moduleLoaderPlugin),
+      loadWebPlugin(hostPluginRef, pluginName, tabService, moduleLoaderPlugin, path),
   );
   hostPluginRef = hostPlugin;
 
