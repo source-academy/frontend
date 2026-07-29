@@ -49,6 +49,10 @@ export class TabService implements ITabService {
     store.dispatch(visitSideContent(id, previousSelectedTab, this.workspaceLocation));
   }
 
+  revealTab(id: string): void {
+    this.setTabVisibility(id, true);
+  }
+
   hideTab(id: string): void {
     this.setTabVisibility(id, false);
   }

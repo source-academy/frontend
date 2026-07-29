@@ -913,10 +913,17 @@ function Playground(props: PlaygroundProps) {
 
     if (!usingRemoteExecution) {
       // Don't show the following when using remote execution
-      if (shouldShowDataVisualizer) {
+      // The legacy data visualizer tab is only shown with the old (non-conductor) pipeline — under
+      // the conductor, `languageConfig` (the old Source-only SALanguage config) is never updated when
+      // selecting a Conductor language, so `shouldShowDataVisualizer` stays stuck at whatever it was
+      // last set to (e.g. true, from the Source §4 default) and would otherwise show this dead tab
+      // alongside the real, dynamically-loaded Conductor plugin tab.
+      if (shouldShowDataVisualizer && !conductorEnabled) {
         tabs.push(makeDataVisualizerTabFrom(workspaceLocation));
       }
-      if (shouldShowCseMachine) {
+      // Under the conductor, CSE Machine's tab is pushed via afterDynamicTabs instead, so it lands
+      // after the dynamically-loaded plugin tabs (e.g. Data Visualizer) rather than before them.
+      if (shouldShowCseMachine && !conductorEnabled) {
         tabs.push(makeCseMachineTabFrom(workspaceLocation));
       }
       // The legacy stepper tab is only shown with the old (non-conductor) pipeline.
@@ -955,14 +962,23 @@ function Playground(props: PlaygroundProps) {
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs].filter(({ id }) => !(id && desktopOnlyTabIds.includes(id)));
 
-  // For a conductor language that offers stepping, keep a placeholder Stepper tab visible so it can be
-  // opened before its evaluator loads. It sits after the dynamic tabs so the stepper plugin's live tab
-  // (registered once the evaluator is selected) lands in the same slot and de-duplicates the
-  // placeholder away (see SideContentProvider), avoiding both a disappearing tab and a duplicate.
-  const afterDynamicTabs: SideContentTab[] = useMemo(
-    () => (conductorEnabled && stepperEvaluatorId ? [makeConductorStepperPlaceholderTab()] : []),
-    [conductorEnabled, stepperEvaluatorId],
-  );
+  const afterDynamicTabs: SideContentTab[] = useMemo(() => {
+    const tabs: SideContentTab[] = [];
+    // Under the conductor, CSE Machine's tab lives here (rather than in `tabs`/beforeDynamicTabs)
+    // so it lands after the dynamically-loaded plugin tabs (e.g. Data Visualizer), not before them.
+    if (conductorEnabled && shouldShowCseMachine) {
+      tabs.push(makeCseMachineTabFrom(workspaceLocation));
+    }
+    // For a conductor language that offers stepping, keep a placeholder Stepper tab visible so it
+    // can be opened before its evaluator loads. It sits after the dynamic tabs so the stepper
+    // plugin's live tab (registered once the evaluator is selected) lands in the same slot and
+    // de-duplicates the placeholder away (see SideContentProvider), avoiding both a disappearing tab
+    // and a duplicate.
+    if (conductorEnabled && stepperEvaluatorId) {
+      tabs.push(makeConductorStepperPlaceholderTab());
+    }
+    return tabs;
+  }, [conductorEnabled, shouldShowCseMachine, stepperEvaluatorId, workspaceLocation]);
 
   const onLoadMethod = useCallback(
     (editor: Ace.Editor) => {
