@@ -171,7 +171,7 @@ const WorkspaceSaga = combineSagaHandlers({
       } catch {
         return;
       }
-      
+
       if (plugin) {
         const channel: EventChannel<AutoCompleteEntry[]> = yield call(
           [plugin, 'complete'],
