@@ -181,4 +181,34 @@ describe('DeferredConductorTabService', () => {
 
     expect(sideContentManager.getTabs('playground').map(t => t.id)).toContain('data-visualizer');
   });
+
+  describe('hasForwardedTabs()', () => {
+    test('false when nothing has ever been registered', () => {
+      const service = new DeferredConductorTabService('evaluator-a');
+      expect(service.hasForwardedTabs()).toBe(false);
+    });
+
+    test('true once a tab is forwarded and still owned', () => {
+      const service = new DeferredConductorTabService('evaluator-a');
+      service.registerTab(tab('data-visualizer'));
+      service.activate();
+      expect(service.hasForwardedTabs()).toBe(true);
+    });
+
+    // The identity check this exists for: `forwarded` alone can't tell the difference, since it only
+    // tracks what *this* conductor forwarded, not whether a newer instance has since taken ownership.
+    test('false once a newer same-path instance takes over every tab this one forwarded', () => {
+      const conductorA = new DeferredConductorTabService('py2js');
+      const conductorB = new DeferredConductorTabService('py2js');
+      conductorA.registerTab(tab('data-visualizer'));
+      conductorA.activate();
+      expect(conductorA.hasForwardedTabs()).toBe(true);
+
+      conductorB.registerTab(tab('data-visualizer'));
+      conductorB.activate();
+
+      expect(conductorA.hasForwardedTabs()).toBe(false);
+      expect(conductorB.hasForwardedTabs()).toBe(true);
+    });
+  });
 });

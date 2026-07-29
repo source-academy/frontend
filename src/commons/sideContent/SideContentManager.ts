@@ -53,6 +53,13 @@ export class TabService implements ITabService {
     return this.tabOwners.get(id)?.evaluatorPath;
   }
 
+  // Identity, not just path - getTabOwnerPath alone can't tell a caller whether *it specifically*
+  // still owns `id`, since another owner with the same evaluatorPath (e.g. a newer same-path
+  // conductor instance that has since taken over) would return an indistinguishable path string.
+  isOwner(id: string, owner: TabOwner): boolean {
+    return this.tabOwners.get(id) === owner;
+  }
+
   showTab(id: string): void {
     this.setTabVisibility(id, true);
     // A module deciding to show its tab (e.g. the moment it starts using the host, like sound's

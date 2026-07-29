@@ -93,6 +93,17 @@ export class DeferredConductorTabService implements ITabService {
     }
   }
 
+  /** True if this conductor is still the current owner of at least one tab in the shared manager.
+   * {@link forwarded} alone isn't enough to answer this - it only tracks what *this* conductor has
+   * forwarded, not whether a newer instance of the same evaluator has since taken over the same tab
+   * id (see `sideContentManager.registerTab`'s overwrite-by-id behavior), so this checks current
+   * ownership by identity via `sideContentManager.isOwner`. Used by conductorEvaluatorCache to decide
+   * whether a consumed, inactive conductor is safe to fully release rather than kept around
+   * indefinitely for tabs it no longer actually owns. */
+  hasForwardedTabs(): boolean {
+    return [...this.forwarded].some(id => sideContentManager.isOwner(id, this));
+  }
+
   /** Unregisters every tab this conductor has ever forwarded to the shared manager — for when the
    * conductor itself is being torn down (see `terminatePreparedConductor`), as opposed to merely
    * becoming inactive. Iterates {@link forwarded} (not `tabs` — see its doc comment) and, unlike the

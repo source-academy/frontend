@@ -361,6 +361,30 @@ export function* preloadConductorEvaluatorSaga(
 }
 
 /**
+ * Releases consumed conductors that are no longer contributing anything to `session`: not the
+ * currently displayed one, and no longer the current owner of any tab they once forwarded (a newer
+ * same-path instance - e.g. the post-Run warm spare - has since taken over). Without this, a session
+ * where the same evaluator is Run many times in a row would accumulate dead conductor objects - and
+ * their unrevoked evaluator blob URLs - for as long as the session lasts, since `session.conductors`
+ * otherwise only ever shrinks when the whole session ends. A not-yet-consumed conductor is never
+ * pruned here regardless of activity - it's still a legitimate candidate for reuse (see
+ * `ensurePreparedConductorSaga`).
+ */
+function pruneConsumedConductors(session: ConductorSession): void {
+  for (let i = session.conductors.length - 1; i >= 0; i--) {
+    const conductor = session.conductors[i];
+    if (conductor === session.activeConductor || !conductor.consumed) {
+      continue;
+    }
+    if (conductor.tabService.hasForwardedTabs()) {
+      continue;
+    }
+    session.conductors.splice(i, 1);
+    terminatePreparedConductor(conductor);
+  }
+}
+
+/**
  * Returns a conductor for the current session's selected evaluator path, for either an actual Run
  * (`consume: true`) or an autocomplete request. Both need a conduit that's actually alive, so this
  * always resolves via `ensurePreparedConductorSaga`'s `forceFresh` path rather than whatever's
@@ -395,6 +419,7 @@ export function* getPreparedConductorSaga(options?: GetPreparedConductorOptions)
   if (consume) {
     prepared.consumed = true;
     activateConductor(session, prepared);
+    pruneConsumedConductors(session);
   }
 
   return {

@@ -111,6 +111,31 @@ describe('conductorEvaluatorCache', () => {
     expect(secondRun.conduit).not.toBe(first.conduit);
   });
 
+  test('a superseded, tab-less consumed conductor is pruned and terminated without ending the session', async () => {
+    // Regression: session.conductors used to only ever shrink when the whole session ended, so
+    // repeatedly Running the same evaluator without ever switching language would accumulate dead
+    // conductor objects (and their unrevoked blob URLs) for as long as the session lasted.
+    const languageId = 'lang-prune';
+    const env = makeEnv(() => languageId);
+    const first = mockCreateConductorOnce();
+
+    await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator.mjs').toPromise();
+    await runSaga(env, getPreparedConductorSaga, { consume: true }).toPromise();
+    expect(first.conduit.terminate).not.toHaveBeenCalled(); // still the active, displayed conductor
+
+    mockCreateConductorOnce();
+    await runSaga(env, getPreparedConductorSaga, { consume: true }).toPromise();
+
+    // `first` never registered any tabs (this test's fake createConductor never wires up real plugin
+    // registration - see mockCreateConductorOnce), so it owns nothing once superseded by `second` and
+    // is safe to fully release, even though the session itself is still very much alive.
+    expect(first.conduit.terminate).toHaveBeenCalled();
+    // The session survives pruning - a third Run still works normally.
+    const third = mockCreateConductorOnce();
+    const thirdRun = await runSaga(env, getPreparedConductorSaga, { consume: true }).toPromise();
+    expect(thirdRun.conduit).toBe(third.conduit);
+  });
+
   test('switching language ids tears down every conductor from the old session', async () => {
     let languageId = 'lang-old';
     const env = makeEnv(() => languageId);
