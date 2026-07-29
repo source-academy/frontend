@@ -37,7 +37,9 @@ const getText = () => {
       rect.right >= 0
     ) {
       const text = div.textContent;
-      visibleParagraphs += text + '\n';
+      if (text) {
+        visibleParagraphs += text + '\n';
+      }
     }
   });
 
