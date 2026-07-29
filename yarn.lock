@@ -4185,15 +4185,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/autocomplete@github:source-academy/autocomplete#d86ddc7f264c5867f916538f4ce7ae8f58ecdca8":
-  version: 0.0.1
-  resolution: "@sourceacademy/autocomplete@https://github.com/source-academy/autocomplete.git#commit=d86ddc7f264c5867f916538f4ce7ae8f58ecdca8"
-  peerDependencies:
-    "@sourceacademy/conductor": ">=0.3.0"
-  checksum: 10c0/0c75481ab156e019665179447d3d9e427910277871a157916a081047da5b5e66429ceb6fb04667d14f5e73ddcc0f09307cb00eda0e444490575b5fa87f1e0c30
-  languageName: node
-  linkType: hard
-
 "@sourceacademy/c-slang@npm:^1.0.21":
   version: 1.0.21
   resolution: "@sourceacademy/c-slang@npm:1.0.21"
@@ -4202,6 +4193,13 @@ __metadata:
     peggy: "npm:^3.0.2"
     wabt: "npm:^1.0.32"
   checksum: 10c0/281d07a1b9db3a87beb029ee25afcb241abf211864a7fd8df1533898273a8c06cbe999167e037b9ee47700eaab064c3df54f0788da5c6296174edac44f9bdf31
+  languageName: node
+  linkType: hard
+
+"@sourceacademy/common-autocomplete@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "@sourceacademy/common-autocomplete@npm:0.0.1"
+  checksum: 10c0/24be061f41ba6629585681abafb8b29e00f3f6e79723ca92d242655324c12e9de8f38e041192040f1271d24a71974920bf48bf4aa26cc0163e221806fe15917e
   languageName: node
   linkType: hard
 
@@ -4229,17 +4227,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.18":
+"@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.19":
   version: 0.0.14
-  resolution: "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#commit=b735c7a7613d749b19eb29dc275576148d4c42d2"
-  checksum: 10c0/390657cb498c4dcd26d27a238559f3816dc9259b4ffc0229c7a23c600badf1cfa45deb944108e2a38148d781f84024a27d4853211bc3d7a8f0c5fc60ff3bb943
+  resolution: "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#commit=0a7228d795da0655bfd98499e91841b2e31b94b9"
+  checksum: 10c0/986cd49cce88b21f5f7bc74f991918f86f13dce556f37f33f4d435b6221050c286b810679fc810045d4580d6497a12e146d0b372f5b55b9eabaca9b5e5326457
   languageName: node
   linkType: hard
 
-"@sourceacademy/plugin-directory@https://github.com/source-academy/plugin-directory.git#0.0.3":
+"@sourceacademy/plugin-directory@https://github.com/source-academy/plugin-directory.git#0.0.4":
   version: 0.0.3
-  resolution: "@sourceacademy/plugin-directory@https://github.com/source-academy/plugin-directory.git#commit=bdc6343a30009fb91077410c2ea4652fea945f64"
-  checksum: 10c0/5534d545a900722ae5ddcb6ea822d1d20de1d464e54cf6c6774bc1ba52ff2832d6a6f1ce9815917a61b5239fb4f8a5a72d8ce02eb42c6922c39bf5bb614fa0f3
+  resolution: "@sourceacademy/plugin-directory@https://github.com/source-academy/plugin-directory.git#commit=40114e84bf5753cce6c9a98569fc13940737a0a3"
+  checksum: 10c0/31879f7deb6cf3ae1a86a7d75675a98cc3be90a95ba2044bd98b8c56eeb0d7e15cbbdb8a0d367c6ffa7232f992be924e2d0ddbf2edd20b8f88f76f96f6b26e41
+  languageName: node
+  linkType: hard
+
+"@sourceacademy/runner-module-loader@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "@sourceacademy/runner-module-loader@npm:0.1.0"
+  peerDependencies:
+    "@sourceacademy/conductor": ">=0.3.0"
+  checksum: 10c0/2407f19946e6b81435895b3a156c1c0d12bfc8176b923f3646f7c3b6e6cda9c9a284ab309e494e06c33df99ea697024cb87a1f34c5da7e41a38a8ccde737b5a8
   languageName: node
   linkType: hard
 
@@ -4262,6 +4269,17 @@ __metadata:
     mqtt: "npm:^4.2.1"
     tiny-typed-emitter: "npm:^2.0.3"
   checksum: 10c0/d7cb2ce7136811c5eb185d013fe2d62c22bc4bcb50952621f734d816b0a428e1a09d22c284bcc564025e2adb4aad5f85a0ad9a12f633d0c8a264deb22b577d4c
+  languageName: node
+  linkType: hard
+
+"@sourceacademy/web-autocomplete@npm:^0.0.2":
+  version: 0.0.2
+  resolution: "@sourceacademy/web-autocomplete@npm:0.0.2"
+  dependencies:
+    "@sourceacademy/common-autocomplete": "npm:^0.0.1"
+  peerDependencies:
+    "@sourceacademy/conductor": ">=0.3.0"
+  checksum: 10c0/a3d542da7a72f199bfb6741ddd088da8a8eb6c386b39f59a4790702d506bb3905cd0055433669afd577cb0ef81a09a0823b1ede5db0f669b49bedda067e3f169
   languageName: node
   linkType: hard
 
@@ -8540,15 +8558,17 @@ __metadata:
     "@rsbuild/plugin-tailwindcss": "npm:^2.0.3"
     "@rsdoctor/rspack-plugin": "npm:^1.5.18"
     "@sentry/react": "npm:^10.5.0"
-    "@sourceacademy/autocomplete": "github:source-academy/autocomplete#d86ddc7f264c5867f916538f4ce7ae8f58ecdca8"
     "@sourceacademy/c-slang": "npm:^1.0.21"
+    "@sourceacademy/common-autocomplete": "npm:^0.0.1"
     "@sourceacademy/common-cse-machine": "npm:^0.3.0"
     "@sourceacademy/common-tabs": "npm:^0.0.1"
     "@sourceacademy/conductor": "npm:^0.8.2"
-    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.18"
-    "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.3"
+    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.19"
+    "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.4"
+    "@sourceacademy/runner-module-loader": "npm:^0.1.0"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
+    "@sourceacademy/web-autocomplete": "npm:^0.0.2"
     "@sourceacademy/web-cse-machine": "npm:^3.0.0"
     "@sourceacademy/web-module-loader": "npm:^0.0.2"
     "@sourceacademy/web-test": "npm:^0.0.2"
