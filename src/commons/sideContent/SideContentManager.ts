@@ -1,4 +1,5 @@
 import type { ITabService, Tab } from '@sourceacademy/common-tabs';
+import { useCallback, useSyncExternalStore } from 'react';
 
 import { store } from '../../pages/createStore';
 import { visitSideContent } from './SideContentActions';
@@ -11,27 +12,45 @@ type RegisteredTab = {
   visible: boolean;
 };
 
+export type TabOwner = { readonly evaluatorPath: string };
+
 export class TabService implements ITabService {
   private readonly emptyTabs: SideContentTab[] = [];
   private readonly listeners = new Set<Listener>();
   private readonly tabs = new Map<string, RegisteredTab>();
+  private readonly tabOwners = new Map<string, TabOwner>();
   private visibleTabs: SideContentTab[] = [];
   private workspaceLocation: SideContentLocation = 'playground';
 
-  registerTab(tab: Tab): void {
+  registerTab(tab: Tab, owner?: TabOwner): void {
     const currentTab = this.tabs.get(tab.id);
     this.tabs.set(tab.id, {
       tab,
       visible: currentTab?.visible ?? false,
     });
+    if (owner) {
+      this.tabOwners.set(tab.id, owner);
+    } else {
+      this.tabOwners.delete(tab.id);
+    }
     this.emit();
   }
 
-  unregisterTab(id: string): void {
+  unregisterTab(id: string, owner?: TabOwner): void {
+    // Only the current owner can remove a tab - a superseded conductor releasing itself must not
+    // rip out a tab that's since been re-registered by whoever replaced it.
+    if (owner && this.tabOwners.get(id) !== owner) {
+      return;
+    }
+    this.tabOwners.delete(id);
     if (!this.tabs.delete(id)) {
       return;
     }
     this.emit();
+  }
+
+  getTabOwnerPath(id: string): string | undefined {
+    return this.tabOwners.get(id)?.evaluatorPath;
   }
 
   showTab(id: string): void {
@@ -101,5 +120,18 @@ export class TabService implements ITabService {
 }
 
 const sideContentManager = new TabService();
+
+/**
+ * The evaluator path that registered `tabId`, or undefined if it has no tracked owner (not a
+ * conductor-produced tab, or not currently registered) - drives generic tab-ownership UI like
+ * locking the evaluator dropdown to whichever evaluator produced the selected tab.
+ */
+export function useTabOwnerPath(tabId: string | undefined): string | undefined {
+  const getSnapshot = useCallback(
+    () => (tabId === undefined ? undefined : sideContentManager.getTabOwnerPath(tabId)),
+    [tabId],
+  );
+  return useSyncExternalStore(sideContentManager.subscribe, getSnapshot);
+}
 
 export default sideContentManager;

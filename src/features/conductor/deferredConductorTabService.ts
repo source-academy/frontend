@@ -43,10 +43,15 @@ export class DeferredConductorTabService implements ITabService {
   private lastSelectedId: string | undefined;
   private active = false;
 
+  // The owning evaluator's path doubles as this instance's owner-token identity for
+  // sideContentManager - identity (not just path) matters because a consumed conductor and its
+  // just-built successor share a path but must not be able to unregister each other's tabs.
+  constructor(readonly evaluatorPath: string) {}
+
   registerTab(tab: Tab): void {
     this.tabs.set(tab.id, tab);
     if (this.active) {
-      sideContentManager.registerTab(tab);
+      sideContentManager.registerTab(tab, this);
       this.forwarded.add(tab.id);
     }
   }
@@ -58,7 +63,7 @@ export class DeferredConductorTabService implements ITabService {
       this.lastSelectedId = undefined;
     }
     if (this.active) {
-      sideContentManager.unregisterTab(id);
+      sideContentManager.unregisterTab(id, this);
       this.forwarded.delete(id);
     }
   }
@@ -98,7 +103,7 @@ export class DeferredConductorTabService implements ITabService {
    * this class, but iterating a Set while clearing it in the same pass is easy to get wrong later. */
   unregisterAll(): void {
     for (const id of [...this.forwarded]) {
-      sideContentManager.unregisterTab(id);
+      sideContentManager.unregisterTab(id, this);
     }
     this.forwarded.clear();
     this.tabs.clear();
@@ -120,7 +125,7 @@ export class DeferredConductorTabService implements ITabService {
     // Forwarded before, but unregistered locally while inactive: drop from the shared manager too.
     for (const id of [...this.forwarded]) {
       if (!this.tabs.has(id)) {
-        sideContentManager.unregisterTab(id);
+        sideContentManager.unregisterTab(id, this);
         this.forwarded.delete(id);
       }
     }
@@ -128,7 +133,7 @@ export class DeferredConductorTabService implements ITabService {
     // re-registration of an already-forwarded id preserves its existing visibility (see
     // TabService.registerTab), so this can't clobber the reveal/hide reconciliation just below.
     for (const tab of this.tabs.values()) {
-      sideContentManager.registerTab(tab);
+      sideContentManager.registerTab(tab, this);
       this.forwarded.add(tab.id);
     }
     // Reconcile visibility: reveal/hide calls made while inactive only updated visibleTabIds locally.
@@ -139,8 +144,12 @@ export class DeferredConductorTabService implements ITabService {
         sideContentManager.hideTab(id);
       }
     }
+    // Replayed once only: conductor reuse (the new session model) means a conductor can now be
+    // reactivated after already being displayed once, and re-showing a tab the user has since
+    // navigated away from would yank focus back unexpectedly.
     if (this.lastSelectedId !== undefined) {
       sideContentManager.showTab(this.lastSelectedId);
+      this.lastSelectedId = undefined;
     }
   }
 
