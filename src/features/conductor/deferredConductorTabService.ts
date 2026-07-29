@@ -25,6 +25,17 @@ import sideContentManager from '../../commons/sideContent/SideContentManager';
 export class DeferredConductorTabService implements ITabService {
   private readonly tabs = new Map<string, Tab>();
   private readonly visibleTabIds = new Set<string>();
+  // Ids this conductor has actually forwarded to sideContentManager and not yet unregistered from
+  // there — the source of truth for what activate()/unregisterAll() need to touch there, kept
+  // separate from `tabs`/`visibleTabIds` because the two can drift apart while inactive:
+  // registerTab/unregisterTab/hideTab/revealTab always update the local buffer immediately, but only
+  // reach sideContentManager while `active` (see each method below). E.g. unregisterTab(id) called
+  // while inactive removes `id` from `tabs` right away, but `id` stays in `forwarded` — and thus
+  // still visible in sideContentManager — until the next activate() reconciles the two, or
+  // unregisterAll() tears the whole conductor down. Only ever contains ids this conductor itself
+  // registered, so every use below only ever touches this conductor's own entries in the shared
+  // manager, never another conductor's.
+  private readonly forwarded = new Set<string>();
   // The last tab this conductor explicitly focused via showTab(), if any - replayed as a single
   // showTab() call after all tabs are revealed on activate(), so activation doesn't just reproduce
   // visibility but also which tab (if any) this conductor wanted focused. Tabs only ever revealed
@@ -36,6 +47,7 @@ export class DeferredConductorTabService implements ITabService {
     this.tabs.set(tab.id, tab);
     if (this.active) {
       sideContentManager.registerTab(tab);
+      this.forwarded.add(tab.id);
     }
   }
 
@@ -47,6 +59,7 @@ export class DeferredConductorTabService implements ITabService {
     }
     if (this.active) {
       sideContentManager.unregisterTab(id);
+      this.forwarded.delete(id);
     }
   }
 
@@ -75,29 +88,56 @@ export class DeferredConductorTabService implements ITabService {
     }
   }
 
-  /** Unregisters every tab this conductor has ever registered — for when the conductor itself is
-   * being torn down (see `terminatePreparedConductor`), as opposed to merely becoming inactive.
-   * Only affects {@link sideContentManager} for the ids this conductor actually owns; other
-   * conductors' tabs are untouched, same as everywhere else in this class. */
+  /** Unregisters every tab this conductor has ever forwarded to the shared manager — for when the
+   * conductor itself is being torn down (see `terminatePreparedConductor`), as opposed to merely
+   * becoming inactive. Iterates {@link forwarded} (not `tabs` — see its doc comment) and, unlike the
+   * per-id methods above, acts regardless of {@link active}: a conductor is very often inactive by
+   * the time it's actually torn down (deactivated when some other conductor took over, then later
+   * discarded), and forwarded entries left over from its last active period still need to go. Copies
+   * `forwarded` to an array first since sideContentManager.unregisterTab has no reason to reenter
+   * this class, but iterating a Set while clearing it in the same pass is easy to get wrong later. */
   unregisterAll(): void {
-    for (const id of this.tabs.keys()) {
-      this.unregisterTab(id);
+    for (const id of [...this.forwarded]) {
+      sideContentManager.unregisterTab(id);
     }
+    this.forwarded.clear();
+    this.tabs.clear();
+    this.visibleTabIds.clear();
+    this.lastSelectedId = undefined;
   }
 
-  /** Surfaces this conductor's already-buffered tabs in the UI (any registered later while active
-   * forward immediately, same as normal). Does not touch other conductors' tabs — see this class's
-   * doc comment. */
+  /** Surfaces this conductor's tabs in the UI, reconciling against whatever's still forwarded from a
+   * previous active period — registrations, unregistrations, reveals and hides made while inactive
+   * only ever touched the local buffer (see {@link forwarded}'s doc comment), so this is where they
+   * finally catch up with the shared manager. Only ever adds, removes or updates entries under ids
+   * this conductor itself owns, so other conductors' tabs are untouched either way. */
   activate(): void {
     if (this.active) {
       return;
     }
     this.active = true;
+
+    // Forwarded before, but unregistered locally while inactive: drop from the shared manager too.
+    for (const id of [...this.forwarded]) {
+      if (!this.tabs.has(id)) {
+        sideContentManager.unregisterTab(id);
+        this.forwarded.delete(id);
+      }
+    }
+    // Everything currently wanted: (re-)register so the shared manager has a current copy. A
+    // re-registration of an already-forwarded id preserves its existing visibility (see
+    // TabService.registerTab), so this can't clobber the reveal/hide reconciliation just below.
     for (const tab of this.tabs.values()) {
       sideContentManager.registerTab(tab);
+      this.forwarded.add(tab.id);
     }
-    for (const id of this.visibleTabIds) {
-      sideContentManager.revealTab(id);
+    // Reconcile visibility: reveal/hide calls made while inactive only updated visibleTabIds locally.
+    for (const id of this.forwarded) {
+      if (this.visibleTabIds.has(id)) {
+        sideContentManager.revealTab(id);
+      } else {
+        sideContentManager.hideTab(id);
+      }
     }
     if (this.lastSelectedId !== undefined) {
       sideContentManager.showTab(this.lastSelectedId);
@@ -105,8 +145,9 @@ export class DeferredConductorTabService implements ITabService {
   }
 
   /** Stops forwarding to the UI. This conductor's own tabs are left as they were in the shared
-   * manager — see this class's doc comment for why — until it either reactivates or is torn down
-   * (see {@link unregisterAll}). */
+   * manager — see this class's doc comment for why — until it either reactivates (which reconciles
+   * any changes made while inactive, see {@link activate}) or is torn down (see {@link unregisterAll}).
+   */
   deactivate(): void {
     this.active = false;
   }
