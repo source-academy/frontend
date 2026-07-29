@@ -58,14 +58,23 @@ export function associateAutocompleteEvaluator(
   evaluatorPaths.set(tabService, evaluatorPath);
 }
 
+const currentOwners = new Map<string, symbol>();
+
 export function createAutocompleteModePublisher(tabService: ITabService) {
   const evaluatorPath = evaluatorPaths.get(tabService);
   if (!evaluatorPath) {
     throw new Error('Autocomplete tab service is not associated with an evaluator');
   }
   const owner = Symbol(evaluatorPath);
+  currentOwners.set(evaluatorPath, owner);
   return {
     publish(modeId: string): void {
+      // Without this check, an older publisher that hasn't been disposed yet (evaluator
+      // preparation and cleanup can overlap - see conductorEvaluatorCache.ts) could publish
+      // after a newer instance already has, clobbering the newer mode with stale data.
+      if (currentOwners.get(evaluatorPath) !== owner) {
+        return;
+      }
       snapshots.set(evaluatorPath, {
         modeId: normalizeAceModeId(modeId),
         owner,

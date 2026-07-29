@@ -24,9 +24,6 @@ export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
   constructor(conduit: IConduit, channels: IChannel<unknown>[], tabService: ITabService) {
     super(conduit, channels);
     this.modePublisher = createAutocompleteModePublisher(tabService);
-    if (this.currentMode) {
-      this.modePublisher.publish(this.currentMode);
-    }
   }
 
   public getMode(): string | null {
@@ -71,7 +68,11 @@ export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
         );
         return textMode[method];
       }
-      return new (acequire(definition.hookFrom).Mode)()[method];
+      // Modes that delegate to internal state (e.g. matching_brace_outdent's this.$outdent) need
+      // that receiver bound - returning the bare function loses `this` once it's assigned onto
+      // our own Mode.prototype below.
+      const sourceMode = new (acequire(definition.hookFrom).Mode)();
+      return sourceMode[method].bind(sourceMode);
     };
     const Mode = function (this: any) {
       this.HighlightRules = highlightRules;
