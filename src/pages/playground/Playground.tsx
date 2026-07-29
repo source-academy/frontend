@@ -1,6 +1,7 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { type HotkeyItem, useHotkeys } from '@mantine/hooks';
+import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { Ace, Range } from 'ace-builds';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
@@ -25,6 +26,7 @@ import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentH
 import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
+import { useTabOwnerPath } from 'src/commons/sideContent/SideContentManager';
 import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 import { useAppDispatch, useAppSelector, useResponsive } from 'src/commons/utils/Hooks';
 import {
@@ -38,6 +40,7 @@ import { selectConductorEnable } from 'src/features/conductor/flagConductorEnabl
 import {
   CONDUCTOR_STEPPER_TAB_ID,
   CSE_EVALUATOR_CAPABILITY,
+  isToolEvaluator,
   STEPPER_EVALUATOR_CAPABILITY,
 } from 'src/features/conductor/stepperTab';
 import CseMachine from 'src/features/cseMachine/CseMachine';
@@ -208,6 +211,11 @@ export async function handleHash(
     }
   }
 }
+
+// Stable empty-array identity for the `conductorEvaluators` selector's not-a-conductor-language
+// fallback - a fresh `[]` literal there would make useSelector see a "changed" value on every
+// render (it compares by reference), forcing this component to re-render in a loop.
+const EMPTY_EVALUATORS: readonly IEvaluatorDefinition[] = [];
 
 function Playground(props: PlaygroundProps) {
   const { isSicpEditor } = props;
@@ -534,36 +542,6 @@ function Playground(props: PlaygroundProps) {
   // plugins loaded dynamically, so the legacy in-frontend tabs are hidden in favour of plugin tabs.
   const conductorEnabled = useAppSelector(selectConductorEnable);
 
-  const chapterSelectButton = useMemo(
-    () => (
-      <ControlBarChapterSelect
-        handleChapterSelect={chapterSelectHandler}
-        isFolderModeEnabled={isFolderModeEnabled}
-        sourceChapter={languageConfig.chapter}
-        sourceVariant={languageConfig.variant}
-        key="chapter"
-        // While the Stepper or CSE Machine tab is active the evaluator is pinned to that (hidden) tool
-        // evaluator, so disable the dropdown: changing evaluator here would fight the tab-to-evaluator
-        // sync. The 'stepper' tab id only exists under the conductor; the CSE Machine tab also exists
-        // for legacy Source, so that check is additionally gated on the conductor being enabled.
-        disabled={
-          usingRemoteExecution ||
-          selectedTab === CONDUCTOR_STEPPER_TAB_ID ||
-          (conductorEnabled && selectedTab === SideContentType.cseMachine)
-        }
-      />
-    ),
-    [
-      chapterSelectHandler,
-      isFolderModeEnabled,
-      languageConfig.chapter,
-      languageConfig.variant,
-      usingRemoteExecution,
-      selectedTab,
-      conductorEnabled,
-    ],
-  );
-
   const clearButton = useMemo(
     () =>
       selectedTab === SideContentType.substVisualizer ? null : (
@@ -812,36 +790,103 @@ function Playground(props: PlaygroundProps) {
     ? cseEvaluatorId !== null || hasCseSnapshots
     : languageConfig.supports.cseMachine || hasCseSnapshots;
 
-  // Keep the selected evaluator in sync with the Stepper/CSE Machine tabs. Opening one of these tabs
-  // selects its evaluator (so a Run drives that tool); leaving it restores the default. Each branch
-  // dispatches only on a real mismatch, so this converges rather than looping.
+  // Every evaluator the current sublanguage offers (conductor only) - the full list, including the
+  // hidden tool evaluators, so lookups below can resolve any tab's owner by path or id.
+  const conductorEvaluators = useAppSelector(state => {
+    if (!selectConductorEnable(state)) {
+      return EMPTY_EVALUATORS;
+    }
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    return (langId ? languageMap[langId]?.evaluators : undefined) ?? EMPTY_EVALUATORS;
+  });
+
+  const selectedTabOwnerPath = useTabOwnerPath(selectedTab);
+
+  // The evaluator that owns the selected tab, or null for Home (which owns nothing - it's where the
+  // dropdown is free) and for tabs no conductor produced. Generalizes the old hardcoded Stepper/CSE
+  // checks: every tab a conductor registers now records which evaluator put it there (see
+  // DeferredConductorTabService/SideContentManager's TabOwner tracking).
+  const selectedTabOwnerId = useMemo<string | null>(() => {
+    if (!conductorEnabled || !selectedTab || selectedTab === SideContentType.introduction) {
+      return null;
+    }
+    const dynamicOwner =
+      selectedTabOwnerPath && conductorEvaluators.find(e => e.path === selectedTabOwnerPath);
+    if (dynamicOwner) {
+      return dynamicOwner.id;
+    }
+    // Fallback for the two tabs the Playground renders itself before their plugin's own tab ever
+    // registers (the CSE Machine tab, and the Stepper placeholder shown while its plugin loads).
+    if (selectedTab === CONDUCTOR_STEPPER_TAB_ID) {
+      return stepperEvaluatorId;
+    }
+    if (selectedTab === SideContentType.cseMachine) {
+      return cseEvaluatorId;
+    }
+    return null;
+  }, [
+    conductorEnabled,
+    selectedTab,
+    selectedTabOwnerPath,
+    conductorEvaluators,
+    stepperEvaluatorId,
+    cseEvaluatorId,
+  ]);
+
+  const chapterSelectButton = useMemo(
+    () => (
+      <ControlBarChapterSelect
+        handleChapterSelect={chapterSelectHandler}
+        isFolderModeEnabled={isFolderModeEnabled}
+        sourceChapter={languageConfig.chapter}
+        sourceVariant={languageConfig.variant}
+        key="chapter"
+        // While a tab owned by a specific evaluator is selected (Stepper, CSE Machine, or a
+        // tool-produced tab like Data Visualizer), the evaluator is pinned to whichever evaluator
+        // produced it, so disable the dropdown: changing evaluator here would fight the
+        // tab-to-evaluator sync below.
+        disabled={usingRemoteExecution || selectedTabOwnerId !== null}
+      />
+    ),
+    [
+      chapterSelectHandler,
+      isFolderModeEnabled,
+      languageConfig.chapter,
+      languageConfig.variant,
+      usingRemoteExecution,
+      selectedTabOwnerId,
+    ],
+  );
+
+  // Keep the selected evaluator in sync with whichever tab is selected. A tab with an owner (directly
+  // tracked, like Data Visualizer, or one of the two Playground-rendered fallbacks above) pins the
+  // dropdown to that evaluator so a Run drives the right tool; leaving it for a tab with no owner
+  // (Home, or an untracked tab) restores the default evaluator - but only if a *tool* evaluator
+  // (Stepper/CSE, unreachable except through their own tab) was selected. A normal selectable
+  // evaluator (e.g. whichever produced Data Visualizer) is left selected instead of being yanked away.
   useEffect(() => {
     if (!conductorEnabled) {
       return;
     }
-    const toolTabs: [tabId: string, evaluatorId: string | null][] = [
-      [CONDUCTOR_STEPPER_TAB_ID, stepperEvaluatorId],
-      [SideContentType.cseMachine, cseEvaluatorId],
-    ];
-    const activeTool = toolTabs.find(([tabId]) => tabId === selectedTab);
-    if (activeTool) {
-      const [, toolEvaluatorId] = activeTool;
-      if (toolEvaluatorId && selectedEvaluatorId !== toolEvaluatorId) {
-        dispatch(LanguageDirectoryActions.setSelectedEvaluator(toolEvaluatorId));
+    if (selectedTabOwnerId) {
+      if (selectedEvaluatorId !== selectedTabOwnerId) {
+        dispatch(LanguageDirectoryActions.setSelectedEvaluator(selectedTabOwnerId));
       }
-    } else if (
-      toolTabs.some(([, toolEvaluatorId]) => toolEvaluatorId === selectedEvaluatorId) &&
-      defaultEvaluatorId
-    ) {
+      return;
+    }
+    if (!selectedEvaluatorId || !defaultEvaluatorId || selectedEvaluatorId === defaultEvaluatorId) {
+      return;
+    }
+    const selected = conductorEvaluators.find(e => e.id === selectedEvaluatorId);
+    if (selected && isToolEvaluator(selected)) {
       dispatch(LanguageDirectoryActions.setSelectedEvaluator(defaultEvaluatorId));
     }
   }, [
     conductorEnabled,
-    stepperEvaluatorId,
-    cseEvaluatorId,
-    defaultEvaluatorId,
+    selectedTabOwnerId,
     selectedEvaluatorId,
-    selectedTab,
+    defaultEvaluatorId,
+    conductorEvaluators,
     dispatch,
   ]);
 

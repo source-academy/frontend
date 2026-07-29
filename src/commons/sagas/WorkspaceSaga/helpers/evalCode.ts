@@ -793,8 +793,11 @@ export function* evalCodeConductorSaga(
     const csePlugin = prepared.csePlugin;
     conduit = prepared.conduit;
 
-    // Immediately start warming the next conductor in the background
-    yield spawn(preloadConductorEvaluatorSaga, evaluator.path);
+    // Immediately start warming the next conductor in the background. forceFresh is required here:
+    // the instance just obtained above is now consumed (this run's finally below terminates its
+    // Worker unconditionally), so without it this would just find that same consumed instance again
+    // and do nothing, leaving the *next* Run to build fresh from scratch instead of reusing a spare.
+    yield spawn(preloadConductorEvaluatorSaga, evaluator.path, { forceFresh: true });
 
     // Begin evaluation. receivedCount is shared by the four handlers below: handleStdout/
     // handleResults/handleErrors increment it as each output/result/error message actually
@@ -833,9 +836,10 @@ export function* evalCodeConductorSaga(
     yield* surfaceConductorError(runError, workspaceLocation);
   } finally {
     try {
-      // getPreparedConductorSaga's contract: a consumed conductor "should be terminated by the
-      // caller" - this is that caller. Without this, every Run leaks its Worker instead of
-      // shutting it down.
+      // A consumed conductor's Worker is this run's responsibility to shut down - the conductor
+      // cache itself keeps the conductor around afterward (its tabs stay on screen), but never
+      // touches its Worker again. Without this, every Run leaks its Worker instead of shutting it
+      // down.
       if (conduit) {
         yield call([conduit, 'terminate']);
       }
