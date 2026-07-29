@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import logo from 'src/assets/SA.jpg';
 import type { Tokens } from 'src/commons/application/types/SessionTypes';
+import { useSession } from 'src/commons/utils/Hooks';
 import ChatBox from 'src/components/ui/chatbot/ChatBox';
 import FloatingChatbot from 'src/components/ui/chatbot/FloatingChatbot';
 import { continueChat, initChat } from 'src/features/sicp/chatCompletion/api';
@@ -8,17 +9,23 @@ import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletio
 
 import SicpMessageRenderer from './SicpMessageRenderer';
 
-const init = (tokens: Tokens) => initChat(tokens);
-
 type Props = {
   getSection: () => SicpSection;
   getText: () => string;
 };
 
 function Chatbot({ getSection, getText }: Props) {
+  const { louisChatbotPrompt } = useSession();
+
+  const init = useCallback(
+    (tokens: Tokens) => initChat(tokens, louisChatbotPrompt || ''),
+    [louisChatbotPrompt],
+  );
+
   const send = useCallback(
-    (tokens: Tokens, userInput: string) => continueChat(tokens, userInput, getSection(), getText()),
-    [getSection, getText],
+    (tokens: Tokens, userInput: string) =>
+      continueChat(tokens, userInput, getSection(), getText(), louisChatbotPrompt || ''),
+    [getSection, getText, louisChatbotPrompt],
   );
 
   return (

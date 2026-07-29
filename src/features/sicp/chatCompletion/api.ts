@@ -2,10 +2,13 @@ import type { Tokens } from 'src/commons/application/types/SessionTypes';
 import { request } from 'src/commons/utils/RequestHelper';
 import type { InitChatResponse, SendMessageResponse } from 'src/components/ui/chatbot/types';
 
-export async function initChat(tokens: Tokens): Promise<InitChatResponse> {
+export async function initChat(
+  tokens: Tokens,
+  louisChatbotPrompt: string,
+): Promise<InitChatResponse> {
   const response = await request('chats', 'POST', {
     ...tokens,
-    body: {}, // Empty body
+    body: { louisChatbotPrompt },
   });
   if (!response) {
     throw new Error('Unknown error occurred.');
@@ -23,6 +26,7 @@ export async function continueChat(
   userMessage: string,
   section: string,
   visibleText: string,
+  louisChatbotPrompt: string,
 ): Promise<SendMessageResponse> {
   const response = await request(`chats/message`, 'POST', {
     ...tokens,
@@ -30,6 +34,7 @@ export async function continueChat(
       message: userMessage,
       section: section,
       initialContext: visibleText,
+      louisChatbotPrompt,
     },
   });
   if (!response) {
