@@ -68,9 +68,10 @@ async function terminatePreparedConductor(conductor: PreparedConductor | null) {
 
   await conductor.conduit.terminate();
   // Precise, not a blanket clear: a preloaded-but-never-activated spare never touched
-  // sideContentManager in the first place (see DeferredConductorTabService), so this only ever has
-  // an effect when the terminated conductor actually was the active one — and even then it only
-  // removes tabs this conductor itself registered, leaving any other conductor's tabs alone.
+  // sideContentManager in the first place (see DeferredConductorTabService), so this only ever
+  // removes tabs this conductor itself registered, leaving any other conductor's tabs alone. By the
+  // time this runs, the conductor being terminated is never the active one either — see the guard in
+  // cleanupPreparedConductorSaga below — so in practice this is cleaning up an unused spare.
   conductor.tabService.unregisterAll();
   URL.revokeObjectURL(conductor.evaluatorUrl);
 }
@@ -83,6 +84,17 @@ function resetPreparedConductor() {
 function* cleanupPreparedConductorSaga(): SagaIterator {
   const conductorToTerminate = preparedConductor;
   resetPreparedConductor();
+  // The conductor sitting in the "prepared" slot may also be the one currently active/displayed —
+  // this happens whenever an evaluator has been selected/previewed but never actually Run (a real
+  // Run's `consume` branch below is what normally decouples the two once it happens). Don't terminate
+  // it just because a *different* evaluator is now being prepared: it's still legitimately in use, and
+  // tearing it down would take its tabs (e.g. Data Visualizer) down with it via unregisterAll, even
+  // though nothing about it actually changed. Forgetting it via resetPreparedConductor above is
+  // already enough — the next ensurePreparedConductorSaga call for its own path will no longer find it
+  // cached and will prepare a fresh one, same end state as if it had been terminated here.
+  if (conductorToTerminate?.tabService === activeTabService) {
+    return;
+  }
   yield call(terminatePreparedConductor, conductorToTerminate);
 }
 
