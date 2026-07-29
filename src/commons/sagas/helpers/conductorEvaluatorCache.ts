@@ -67,7 +67,11 @@ async function terminatePreparedConductor(conductor: PreparedConductor | null) {
   }
 
   await conductor.conduit.terminate();
-  sideContentManager.clearTabs();
+  // Precise, not a blanket clear: a preloaded-but-never-activated spare never touched
+  // sideContentManager in the first place (see DeferredConductorTabService), so this only ever has
+  // an effect when the terminated conductor actually was the active one — and even then it only
+  // removes tabs this conductor itself registered, leaving any other conductor's tabs alone.
+  conductor.tabService.unregisterAll();
   URL.revokeObjectURL(conductor.evaluatorUrl);
 }
 

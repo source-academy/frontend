@@ -57,14 +57,6 @@ export class TabService implements ITabService {
     this.setTabVisibility(id, false);
   }
 
-  clearTabs(): void {
-    if (this.tabs.size === 0) {
-      return;
-    }
-    this.tabs.clear();
-    this.emit();
-  }
-
   getTabs(workspaceLocation: SideContentLocation): SideContentTab[] {
     if (workspaceLocation !== this.workspaceLocation) {
       return this.emptyTabs;

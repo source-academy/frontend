@@ -11,8 +11,16 @@ import sideContentManager from '../../commons/sideContent/SideContentManager';
  * web plugin boots and registers its tab immediately; but the global manager keys tabs by plugin
  * id, so a freshly-booted spare would overwrite the running conductor's populated tab — e.g. the
  * Stepper's steps flash, then revert to its empty "welcome" view as the idle spare re-registers an
- * empty tab. Buffering per conductor and surfacing only the active one keeps the visible tab tied
- * to the conductor the user actually ran.
+ * empty tab. Buffering per conductor and gating every forward on {@link active} prevents that: an
+ * inactive spare never touches {@link sideContentManager} at all, so it cannot clobber anything.
+ *
+ * Deliberately does *not* clear other conductors' tabs on activation or deactivation — e.g. opening
+ * the Stepper tab switches the active evaluator to a separate stepper-only conductor, but the
+ * regular conductor's Data Visualizer tab (registered by a plugin the stepper conductor never
+ * loads) should stay put rather than vanish. Each tab is independently identified by its id, so a
+ * fresh same-id registration (the warm-spare-replaces-populated-tab case above) already overwrites
+ * correctly via {@link sideContentManager}'s own per-id `Map`; nothing here needs to clear first.
+ * {@link unregisterAll} is the precise counterpart for when a conductor is actually torn down.
  */
 export class DeferredConductorTabService implements ITabService {
   private readonly tabs = new Map<string, Tab>();
@@ -67,13 +75,24 @@ export class DeferredConductorTabService implements ITabService {
     }
   }
 
-  /** Surfaces this conductor's tabs in the UI, replacing whatever the previous active one showed. */
+  /** Unregisters every tab this conductor has ever registered — for when the conductor itself is
+   * being torn down (see `terminatePreparedConductor`), as opposed to merely becoming inactive.
+   * Only affects {@link sideContentManager} for the ids this conductor actually owns; other
+   * conductors' tabs are untouched, same as everywhere else in this class. */
+  unregisterAll(): void {
+    for (const id of this.tabs.keys()) {
+      this.unregisterTab(id);
+    }
+  }
+
+  /** Surfaces this conductor's already-buffered tabs in the UI (any registered later while active
+   * forward immediately, same as normal). Does not touch other conductors' tabs — see this class's
+   * doc comment. */
   activate(): void {
     if (this.active) {
       return;
     }
     this.active = true;
-    sideContentManager.clearTabs();
     for (const tab of this.tabs.values()) {
       sideContentManager.registerTab(tab);
     }
@@ -85,7 +104,9 @@ export class DeferredConductorTabService implements ITabService {
     }
   }
 
-  /** Stops forwarding to the UI. The next conductor to activate clears and replays the manager. */
+  /** Stops forwarding to the UI. This conductor's own tabs are left as they were in the shared
+   * manager — see this class's doc comment for why — until it either reactivates or is torn down
+   * (see {@link unregisterAll}). */
   deactivate(): void {
     this.active = false;
   }
