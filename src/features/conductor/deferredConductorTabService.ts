@@ -16,7 +16,12 @@ import sideContentManager from '../../commons/sideContent/SideContentManager';
  */
 export class DeferredConductorTabService implements ITabService {
   private readonly tabs = new Map<string, Tab>();
-  private readonly shownTabIds = new Set<string>();
+  private readonly visibleTabIds = new Set<string>();
+  // The last tab this conductor explicitly focused via showTab(), if any - replayed as a single
+  // showTab() call after all tabs are revealed on activate(), so activation doesn't just reproduce
+  // visibility but also which tab (if any) this conductor wanted focused. Tabs only ever revealed
+  // via revealTab() never touch this, matching showTab()/revealTab()'s focus-vs-visibility split.
+  private lastSelectedId: string | undefined;
   private active = false;
 
   registerTab(tab: Tab): void {
@@ -28,21 +33,35 @@ export class DeferredConductorTabService implements ITabService {
 
   unregisterTab(id: string): void {
     this.tabs.delete(id);
-    this.shownTabIds.delete(id);
+    this.visibleTabIds.delete(id);
+    if (this.lastSelectedId === id) {
+      this.lastSelectedId = undefined;
+    }
     if (this.active) {
       sideContentManager.unregisterTab(id);
     }
   }
 
   showTab(id: string): void {
-    this.shownTabIds.add(id);
+    this.visibleTabIds.add(id);
+    this.lastSelectedId = id;
     if (this.active) {
       sideContentManager.showTab(id);
     }
   }
 
+  revealTab(id: string): void {
+    this.visibleTabIds.add(id);
+    if (this.active) {
+      sideContentManager.revealTab(id);
+    }
+  }
+
   hideTab(id: string): void {
-    this.shownTabIds.delete(id);
+    this.visibleTabIds.delete(id);
+    if (this.lastSelectedId === id) {
+      this.lastSelectedId = undefined;
+    }
     if (this.active) {
       sideContentManager.hideTab(id);
     }
@@ -58,8 +77,11 @@ export class DeferredConductorTabService implements ITabService {
     for (const tab of this.tabs.values()) {
       sideContentManager.registerTab(tab);
     }
-    for (const id of this.shownTabIds) {
-      sideContentManager.showTab(id);
+    for (const id of this.visibleTabIds) {
+      sideContentManager.revealTab(id);
+    }
+    if (this.lastSelectedId !== undefined) {
+      sideContentManager.showTab(this.lastSelectedId);
     }
   }
 
