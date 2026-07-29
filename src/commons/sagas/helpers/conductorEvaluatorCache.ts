@@ -41,18 +41,30 @@ let preparedConductor: PreparedConductor | null = null;
 let loadingConductorPath: string | null = null;
 let loadingConductorPromise: Promise<PreparedConductor> | null = null;
 let currentEvaluatorPath: string | null = null;
-let activeTabService: DeferredConductorTabService | null = null;
+let activeConductor: PreparedConductor | null = null;
+// The conductor that was `activeConductor` one switch ago. Kept alive (not terminated) for exactly
+// one more switch after being superseded, so its tabs are still there if the student switches back
+// right away (e.g. selects an evaluator, previews the Stepper tab, and expects the previous
+// evaluator's Data Visualizer tab to still be showing — see DeferredConductorTabService's own doc
+// comment for why deactivate() alone never hides a conductor's tabs). Whatever was already sitting
+// here from an *earlier* switch has already had its one grace switch, so it's terminated for real —
+// conduit and tabs both — the moment a second switch happens.
+let pendingTermination: PreparedConductor | null = null;
 
 /**
- * Makes `tabService` the sole conductor surfacing tabs in the UI, deactivating the previous one.
+ * Makes `prepared` the sole conductor surfacing tabs in the UI, deactivating the previous one.
  * Only the selected/running conductor shows its tabs; preloaded spares buffer silently until run.
  */
-function activateConductorTabs(tabService: DeferredConductorTabService): void {
-  if (activeTabService !== tabService) {
-    activeTabService?.deactivate();
-    activeTabService = tabService;
+function activateConductorTabs(prepared: PreparedConductor): void {
+  if (activeConductor !== prepared) {
+    if (pendingTermination) {
+      void terminatePreparedConductor(pendingTermination);
+    }
+    pendingTermination = activeConductor;
+    activeConductor?.tabService.deactivate();
+    activeConductor = prepared;
   }
-  tabService.activate();
+  prepared.tabService.activate();
 }
 
 async function fetchEvaluatorObjectUrl(path: string): Promise<string> {
@@ -83,9 +95,10 @@ async function terminatePreparedConductor(conductor: PreparedConductor | null) {
   await conductor.conduit.terminate();
   // Precise, not a blanket clear: a preloaded-but-never-activated spare never touched
   // sideContentManager in the first place (see DeferredConductorTabService), so this only ever
-  // removes tabs this conductor itself registered, leaving any other conductor's tabs alone. By the
-  // time this runs, the conductor being terminated is never the active one either — see the guard in
-  // cleanupPreparedConductorSaga below — so in practice this is cleaning up an unused spare.
+  // removes tabs this conductor itself registered, leaving any other conductor's tabs alone. Called
+  // from two places: cleanupPreparedConductorSaga below (an unused spare, never active) and
+  // activateConductorTabs's pendingTermination handoff (a conductor that *was* active up to one
+  // switch ago) — either way, by the time this runs it's no longer reachable as the active one.
   conductor.tabService.unregisterAll();
   URL.revokeObjectURL(conductor.evaluatorUrl);
 }
@@ -105,8 +118,11 @@ function* cleanupPreparedConductorSaga(): SagaIterator {
   // tearing it down would take its tabs (e.g. Data Visualizer) down with it via unregisterAll, even
   // though nothing about it actually changed. Forgetting it via resetPreparedConductor above is
   // already enough — the next ensurePreparedConductorSaga call for its own path will no longer find it
-  // cached and will prepare a fresh one, same end state as if it had been terminated here.
-  if (conductorToTerminate?.tabService === activeTabService) {
+  // cached and will prepare a fresh one, same end state as if it had been terminated here. It doesn't
+  // go completely unterminated forever, either: the caller below activates the newly-prepared
+  // conductor right after this returns, and activateConductorTabs's pendingTermination handoff is
+  // what finally cleans this one up, once *it* in turn gets superseded.
+  if (conductorToTerminate === activeConductor) {
     return;
   }
   yield call(terminatePreparedConductor, conductorToTerminate);
@@ -252,7 +268,7 @@ export function* preloadConductorEvaluatorSaga(path?: string): SagaIterator {
   // empty welcome tab on selection). A same-evaluator warm-up spawned after a Run leaves the active
   // conductor untouched, so its populated tab is not replaced by the idle spare.
   if (evaluatorChanged) {
-    activateConductorTabs(prepared.tabService);
+    activateConductorTabs(prepared);
   }
 }
 
@@ -285,7 +301,7 @@ export function* getPreparedConductorSaga(options?: GetPreparedConductorOptions)
   // this conductor's tabs to the UI so a Run shows the conductor that actually executed, and keep
   // them shown while the next (idle) conductor is warmed in the background.
   if (consume) {
-    activateConductorTabs(prepared.tabService);
+    activateConductorTabs(prepared);
     if (preparedConductor === prepared) {
       resetPreparedConductor();
     }
