@@ -70,9 +70,15 @@ async function terminatePreparedConductor(conductor: PreparedConductor | null) {
     return;
   }
 
-  const autocompletePlugin = conductor.conduit.lookupPlugin(
-    WEB_PLUGIN_ID,
-  ) as AutoCompletePlugin | null;
+  // lookupPlugin throws (rather than returning null) when the plugin was never registered on
+  // this conductor instance, e.g. if it was cleaned up before the runner ever requested the
+  // autocomplete plugin.
+  let autocompletePlugin: AutoCompletePlugin | null = null;
+  try {
+    autocompletePlugin = conductor.conduit.lookupPlugin(WEB_PLUGIN_ID) as AutoCompletePlugin;
+  } catch {
+    // not registered on this conductor instance; nothing to dispose
+  }
   autocompletePlugin?.dispose();
   await conductor.conduit.terminate();
   sideContentManager.clearTabs();
