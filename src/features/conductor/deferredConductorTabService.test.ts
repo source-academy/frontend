@@ -1,6 +1,5 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest';
-
 import type { Tab } from '@sourceacademy/common-tabs';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('../../commons/sideContent/SideContentManager', () => ({
   default: {
@@ -15,7 +14,12 @@ vi.mock('../../commons/sideContent/SideContentManager', () => ({
 import sideContentManager from '../../commons/sideContent/SideContentManager';
 import { DeferredConductorTabService } from './deferredConductorTabService';
 
-const tab = (id: string): Tab => ({ id, label: id, iconName: 'flow-review', body: null });
+const tab = (id: string): Tab => ({
+  id,
+  label: id,
+  iconName: 'flow-review',
+  body: null,
+});
 
 describe('DeferredConductorTabService', () => {
   beforeEach(() => {
@@ -131,7 +135,7 @@ describe('DeferredConductorTabService', () => {
     }
   });
 
-  test('two independent conductors never forward or remove each other\'s tabs', () => {
+  test("two independent conductors never forward or remove each other's tabs", () => {
     const conductorA = new DeferredConductorTabService();
     const conductorB = new DeferredConductorTabService();
     conductorA.registerTab(tab('only-a'));
