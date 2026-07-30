@@ -3264,17 +3264,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redux-saga/core@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "@redux-saga/core@npm:1.5.0"
+"@redux-saga/core@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "@redux-saga/core@npm:1.5.1"
   dependencies:
     "@babel/runtime": "npm:^7.28.4"
     "@redux-saga/deferred": "npm:^1.3.1"
     "@redux-saga/delay-p": "npm:^1.3.1"
     "@redux-saga/is": "npm:^1.2.1"
     "@redux-saga/symbols": "npm:^1.2.1"
-    "@redux-saga/types": "npm:^1.4.0"
-  checksum: 10c0/e258daf214bbd4867b5db27f66a16a2c96fac81700922410c287e6ed8d284ccce61b68c23e3654ddff1903b39af3b047f0606438fd9356cfd93320fcb1a6a9c6
+    "@redux-saga/types": "npm:^1.4.1"
+  checksum: 10c0/48469b841e212038fa00770426823c08ec1cbd5274d4dd61aa7d93f7f5057f9fa9d1125668f9315bb7c01598b0f2fc9d2b1d048b9a5fff2cd75fe08ecc13f08e
   languageName: node
   linkType: hard
 
@@ -3315,6 +3315,13 @@ __metadata:
   version: 1.4.0
   resolution: "@redux-saga/types@npm:1.4.0"
   checksum: 10c0/76701690aeda8a6cf683a1160590428ff0e00a16ef6595bc6874cc1797706d6db2ddd91c0330c238d07ba4c23f780d4db2c6c556c02d2b221634478e71be1d91
+  languageName: node
+  linkType: hard
+
+"@redux-saga/types@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "@redux-saga/types@npm:1.4.1"
+  checksum: 10c0/e5a762c48701e2206d2192a858773d30f7c3d569042131fe5f651696a9090281074679c630e6db2765af83a49b5260ec499cccd0aa1faf54ba5dea099a5e1e8c
   languageName: node
   linkType: hard
 
@@ -13158,12 +13165,12 @@ __metadata:
   linkType: hard
 
 "redux-saga@npm:^1.2.3":
-  version: 1.5.0
-  resolution: "redux-saga@npm:1.5.0"
+  version: 1.5.1
+  resolution: "redux-saga@npm:1.5.1"
   dependencies:
     "@babel/runtime": "npm:^7.28.4"
-    "@redux-saga/core": "npm:^1.5.0"
-  checksum: 10c0/e33e239e9ed04fba9567eb1d9975e13d253dd939bd25796847226ef346f89640861bcc723824f78a9ca000f5d8a486abf1bc0d6fdbaf2d00b3d54d00bbe0cc8a
+    "@redux-saga/core": "npm:^1.5.1"
+  checksum: 10c0/cf030108274ab908d3532392819d18e9c1f611b44976543eccaf0b137c0ef2a8180b1255143c5f25ee04788f7823e59d3741eadc9346f2963c358a63d55095cc
   languageName: node
   linkType: hard
 
