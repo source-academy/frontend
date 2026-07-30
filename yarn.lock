@@ -2449,11 +2449,11 @@ __metadata:
   linkType: hard
 
 "@mantine/hooks@npm:^9.4.1":
-  version: 9.4.2
-  resolution: "@mantine/hooks@npm:9.4.2"
+  version: 9.5.0
+  resolution: "@mantine/hooks@npm:9.5.0"
   peerDependencies:
     react: ^19.2.0
-  checksum: 10c0/780c01be169ec6fecdb229f7e06a42dcee769b09a5158c7913677daf70336a0e643b857e70069d29a2c4a050f11b2ced2eb699483e4bd82651fc7e81e64e76ec
+  checksum: 10c0/b67dbced8d47400aa6badffff66e564dab9392e657060b457c1402557675aa1707cf78502cbd17624557648a76750367ecd706765a3cb509d77c88fbd860f178
   languageName: node
   linkType: hard
 
