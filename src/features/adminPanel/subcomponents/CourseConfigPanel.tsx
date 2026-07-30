@@ -74,7 +74,7 @@ function CourseConfigPanel(props: Props) {
   );
 
   const previewPanel = (
-    <div className="p-2.5 h-25 bg-[#f5f5f5] rounded overflow-auto">
+    <div className="p-2.5 h-25 bg-[#f5f5f5] rounded overflow-auto [box-shadow:inset_0_0_0_1px_rgba(16,22,26,0.15),inset_0_1px_1px_rgba(16,22,26,0.2)] [&>div>*]:m-0">
       <Markdown content={moduleHelpText || ''} openLinksInNewWindow />
     </div>
   );
@@ -193,7 +193,7 @@ function CourseConfigPanel(props: Props) {
           {enableLlmGrading && (
             <>
               <Divider className="my-5" />
-              <h3>LLM Grading Configuration</h3>
+              <H3>LLM Grading Configuration</H3>
               <FormGroup
                 helperText="Please enter the LLM Model Name."
                 inline
@@ -287,7 +287,7 @@ function CourseConfigPanel(props: Props) {
                 }
                 inline
                 label={fieldLabel('LLM Course Prompt')}
-                labelFor="llmCoursePrompt"
+                labelFor="llmCourseLevelPrompt"
               >
                 <TextArea
                   id="llmCourseLevelPrompt"
