@@ -9,6 +9,7 @@ import { CseAnimation } from './CseMachineAnimation';
 import { Config } from './CseMachineConfig';
 import { Layout } from './CseMachineLayout';
 import type { EnvTree } from './CseMachineTypes';
+import { isBuiltInFn } from './CseMachineUtils';
 import { buildFakeEnvTreeFromSnapshot } from './CseSnapshotAdapter';
 
 // Real (headless) Konva stage/layer so animation components — which need a live layer
@@ -73,6 +74,62 @@ describe('buildFakeEnvTreeFromSnapshot', () => {
     const { envTree } = buildFakeEnvTreeFromSnapshot(snapshot);
     const globalNode = findNode(envTree, 'g');
     expect((globalNode?.environment as any).globalNames).toBeUndefined();
+  });
+
+  it('renders a Python None binding as "None", not JS null (#4111)', () => {
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        {
+          id: 'g',
+          name: 'global',
+          parentId: null,
+          bindings: [{ name: 'x', value: { displayValue: 'None', label: 'nonetype' } }],
+          isActive: true,
+        },
+      ],
+    };
+
+    const { envTree } = buildFakeEnvTreeFromSnapshot(snapshot);
+    const globalNode = findNode(envTree, 'g');
+    const head = (globalNode?.environment as any).head;
+    expect(head.x).not.toBeNull();
+    expect((head.x as { toReplString(): string }).toReplString()).toBe('None');
+  });
+
+  it('renders a Python None value on the stash as "None", not JS null (#4111)', () => {
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [{ displayValue: 'None', label: 'nonetype' }],
+      environments: [{ id: 'g', name: 'global', parentId: null, bindings: [], isActive: true }],
+    };
+
+    const { fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
+    const [value] = fakeStash.getStack();
+    expect(value).not.toBeNull();
+    expect((value as { toReplString(): string }).toReplString()).toBe('None');
+  });
+
+  it('renders a Python builtin function on the stash unquoted, not as a JS string (#302)', () => {
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      // No metadata.closureFrameId — matches what PyCseMachinePlugin actually sends
+      // for builtins (only closures/lists get metadata).
+      stash: [{ displayValue: 'abs', label: 'builtin_function_or_method' }],
+      environments: [{ id: 'g', name: 'global', parentId: null, bindings: [], isActive: true }],
+    };
+
+    const { fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
+    const [value] = fakeStash.getStack();
+    // The old fallback returned the bare displayValue string, which StashItemComponent's
+    // `typeof val === 'string'` check then wrapped in quotes as if it were a Python str.
+    expect(typeof value).not.toBe('string');
+    expect(isBuiltInFn(value)).toBe(true);
+    expect(String(value)).toBe('abs');
   });
 });
 

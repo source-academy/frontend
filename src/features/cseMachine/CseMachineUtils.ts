@@ -949,6 +949,8 @@ export function getControlItemComponent(
           highlightOnHover,
           unhighlightOnHover,
           topItem,
+          undefined,
+          (controlItem as any).__snapTag === 'expressionStatement',
         );
       }
     }
@@ -1254,3 +1256,6 @@ export const defaultActiveColor = () =>
 
 export const defaultDangerColor = () =>
   CseMachine.getPrintableMode() ? Config.PrintDangerColor : Config.DangerColor;
+
+export const defaultExprStmtColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintExprStmtColor : Config.ExprStmtColor;

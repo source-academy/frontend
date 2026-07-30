@@ -3,8 +3,10 @@ import { Chapter } from 'js-slang/dist/langs';
 import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
 import { call, delay, put, race, select } from 'redux-saga/effects';
+import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
+import { splitEvaluatorId, splitLanguageId } from 'src/features/directory/languageIdCodec';
 
 import PlaygroundActions from '../../features/playground/PlaygroundActions';
 import { isSourceLanguage, type OverallState } from '../application/ApplicationTypes';
@@ -131,6 +133,21 @@ function* updateQueryString() {
     isFolderModeEnabled,
   } = yield* selectWorkspace('playground');
 
+  const conductorEnabled: boolean = yield select(selectConductorEnable);
+  const { selectedLanguageId, selectedEvaluatorId } = yield select(
+    (state: OverallState) => state.languageDirectory,
+  );
+
+  // Decompose the compound directory ids (e.g. "python2" / "python2Pvml") into the three
+  // fields a share link exposes, instead of leaking the raw id-concatenation convention.
+  const { language: dirLanguage, variant: dirVariant } = selectedLanguageId
+    ? splitLanguageId(selectedLanguageId)
+    : { language: undefined, variant: undefined };
+  const dirEvaluator =
+    selectedLanguageId && selectedEvaluatorId
+      ? splitEvaluatorId(selectedLanguageId, selectedEvaluatorId)
+      : undefined;
+
   const editorTabFilePaths = editorTabs
     .map(editorTab => editorTab.filePath)
     .filter((filePath): filePath is string => filePath !== undefined);
@@ -140,8 +157,15 @@ function* updateQueryString() {
     files: compressToEncodedURIComponent(qs.stringify(files)),
     tabs: editorTabFilePaths.map(compressToEncodedURIComponent),
     tabIdx: activeEditorTabIndex,
-    chap: chapter,
-    variant,
+    // Conductor-based languages (e.g. Python) and legacy js-slang chapters are mutually
+    // exclusive, so only one set is ever meaningful. Encoding both unconditionally would
+    // make `chap` (which always has a real default value) win on decode and shadow `language`.
+    chap: conductorEnabled ? undefined : chapter,
+    // `variant` doubles as the js-slang Variant enum (legacy chapters) or the directory
+    // language's chapter number (Conductor languages) — the two are mutually exclusive.
+    variant: conductorEnabled ? dirVariant : variant,
+    language: conductorEnabled ? dirLanguage : undefined,
+    evaluator: conductorEnabled ? dirEvaluator : undefined,
     ext: external,
     exec: execTime,
   });

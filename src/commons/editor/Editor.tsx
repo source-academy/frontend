@@ -37,9 +37,12 @@ import type { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 // TODO: Should further refactor into EditorBase + different variants.
 // Ideally, hooks should be specified by the parent component instead.
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
-import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
+import {
+  normalizeAceModeId,
+  useAutocompleteMode,
+} from 'src/features/conductor/autocompleteModeStore';
+import { useConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { useFeature } from '../featureFlags/useFeature';
 import { useAppSelector } from '../utils/Hooks';
 import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
@@ -470,74 +473,64 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     },
   };
 
-  const conductorEnabled = useFeature(flagConductorEnable);
-  const selectedEvaluatorId = useAppSelector(s => s.languageDirectory.selectedEvaluatorId)!;
-  useEffect(() => {
-    if (!conductorEnabled || !reactAceRef.current || !selectedEvaluatorId) {
+  const conductorEnabled = useConductorEnable();
+  const selectedEvaluatorPath = useAppSelector(state => {
+    const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
+    if (!selectedLanguageId || !selectedEvaluatorId) {
+      return undefined;
+    }
+    return languageMap[selectedLanguageId]?.evaluators.find(
+      evaluator => evaluator.id === selectedEvaluatorId,
+    )?.path;
+  });
+  const directoryAceMode = useAppSelector(state => {
+    const { selectedLanguageId, languageMap } = state.languageDirectory;
+    const editorConfig = selectedLanguageId
+      ? (languageMap[selectedLanguageId]?.editorConfig as { aceMode?: unknown } | undefined)
+      : undefined;
+    return typeof editorConfig?.aceMode === 'string'
+      ? normalizeAceModeId(editorConfig.aceMode)
+      : 'ace/mode/text';
+  });
+  const autocompleteMode = useAutocompleteMode(
+    conductorEnabled ? selectedEvaluatorPath : undefined,
+  );
+  const conductorMode = autocompleteMode ?? directoryAceMode;
+
+  useLayoutEffect(() => {
+    if (!conductorEnabled || !reactAceRef.current) {
       return;
     }
 
     const editor = reactAceRef.current.editor;
-    const modeId = `ace/mode/${selectedEvaluatorId}`;
-    let modeChangeUnsub: (() => void) | undefined;
-    let pollHandle: ReturnType<typeof setInterval> | undefined;
-
-    const apply = (session: any) => {
+    const apply = (session: Ace.EditSession) => {
       let modeModule: any;
       try {
-        modeModule = acequire(modeId);
+        modeModule = acequire(conductorMode);
       } catch {
-        return false;
+        modeModule = acequire('ace/mode/text');
       }
       if (!modeModule?.Mode) {
-        return false;
+        modeModule = acequire('ace/mode/text');
       }
+      const modeId = modeModule.Mode.prototype?.$id ?? conductorMode;
       if ((session.getMode() as any).$id === modeId) {
-        return true;
+        return;
       }
       session.setMode(new modeModule.Mode());
-      return true;
     };
 
-    const attachToSession = (session: any) => {
-      modeChangeUnsub?.();
-      if (pollHandle) {
-        clearInterval(pollHandle);
-      }
+    apply(editor.getSession());
 
-      const onChangeMode = () => {
-        if ((session.getMode() as any).$id !== modeId) {
-          apply(session);
-        }
-      };
-      session.on('changeMode', onChangeMode);
-      modeChangeUnsub = () => session.off('changeMode', onChangeMode);
-
-      if (!apply(session)) {
-        pollHandle = setInterval(() => {
-          if (apply(session)) {
-            clearInterval(pollHandle);
-            pollHandle = undefined;
-          }
-        }, 200);
-      }
-    };
-
-    attachToSession(editor.getSession());
-
-    const onChangeSession = (e: any) => {
-      attachToSession(e.session);
+    const onChangeSession = (event: { session: Ace.EditSession }) => {
+      apply(event.session);
     };
     editor.on('changeSession', onChangeSession);
 
     return () => {
-      modeChangeUnsub?.();
-      if (pollHandle) {
-        clearInterval(pollHandle);
-      }
       editor.off('changeSession', onChangeSession);
     };
-  }, [conductorEnabled, selectedEvaluatorId]);
+  }, [conductorEnabled, conductorMode]);
 
   const aceEditorProps: IAceEditorProps = {
     className: 'react-ace',

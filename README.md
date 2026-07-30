@@ -42,17 +42,25 @@ If you wish to set up the GitHub or Google Drive integrations, copy the `.env.ex
 
 ### Python
 
-To work with
-the Python edition of Source Academy, you need to turn on the Conductor feature flag: Click on the top right down-arrow button, then
-Settings, then Feature Flags. Toggle `conductor.enable` to `true`.
+To work with the Python edition of Source Academy, the Conductor feature flag (`conductor.enable`) must be
+enabled. It is on by default; if it has been turned off, click on the top right down-arrow
+button, then Settings, then Feature Flags, and toggle `conductor.enable` back to `true`. If your
+deployment pins the flag (see below), it is read-only there and can only be changed in `.env`.
+
+The directories Conductor loads from also default to the public ones, and are editable on the same feature flags page:
 
 ```
 directory.language.url
 https://source-academy.github.io/language-directory/directory.json
 
 directory.plugin.url
-https://source-academy.github.io/plugin-directory/directory.json
+https://source-academy.github.io/plugins/directory.json
+
+directory.modules.url
+https://source-academy.github.io/modules-conductor/modules.json
 ```
+
+A deployment can pin these instead of leaving them to each user's browser. Set `REACT_APP_CONDUCTOR_ENABLE` to `TRUE` or `FALSE` in `.env` to fix `conductor.enable` for everyone; while it is `TRUE`, the three `REACT_APP_*_DIRECTORY_URL` variables likewise pin the directory URLs. Pinned flags are shown read-only on the Feature Flags page, and take precedence over anything a user has previously set there.
 
 ### Installation of [Source Academy @ NUS](https://sourceacademy.nus.edu.sg)
 
