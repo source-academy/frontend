@@ -170,7 +170,7 @@
     "eslint-plugin-simple-import-sort": "^14.0.0",
     "husky": "^9.0.0",
     "identity-obj-proxy": "^3.0.0",
-    "jsdom": "^29.0.0",
+    "jsdom": "^30.0.0",
     "knip": "^6.23.0",
     "oxfmt": "^0.61.0",
     "phaser3spectorjs": "^0.0.8",
