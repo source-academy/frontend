@@ -20,4 +20,12 @@ describe('featureSelector', () => {
     expect(featureSelector(createFeatureFlag('number', 1))(makeState({ number: 0 }))).toBe(0);
     expect(featureSelector(createFeatureFlag('text', 'default'))(makeState({ text: '' }))).toBe('');
   });
+
+  test('a locked value wins over both a user override and the default', () => {
+    const flag = createFeatureFlag('locked', true, undefined, false);
+    const selectFlag = featureSelector(flag);
+
+    expect(selectFlag(makeState({ locked: true }))).toBe(false);
+    expect(selectFlag(makeState({}))).toBe(false);
+  });
 });

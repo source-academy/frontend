@@ -47,13 +47,20 @@ the Python edition of Source Academy, the Conductor feature flag (`conductor.ena
 enabled. It is on by default; if it has been turned off, click on the top right down-arrow
 button, then Settings, then Feature Flags, and toggle `conductor.enable` back to `true`.
 
+The directories Conductor loads from also default to the public ones, and are editable on the same feature flags page:
+
 ```
 directory.language.url
 https://source-academy.github.io/language-directory/directory.json
 
 directory.plugin.url
-https://source-academy.github.io/plugin-directory/directory.json
+https://source-academy.github.io/plugins/directory.json
+
+directory.modules.url
+https://source-academy.github.io/modules-conductor/modules.json
 ```
+
+A deployment can pin these instead of leaving them to each user's browser. Set `REACT_APP_CONDUCTOR_ENABLE` to `TRUE` or `FALSE` in `.env` to fix `conductor.enable` for everyone; while it is `TRUE`, the three `REACT_APP_*_DIRECTORY_URL` variables likewise pin the directory URLs. Pinned flags are shown read-only on the Feature Flags page, and take precedence over anything a user has previously set there.
 
 ### Installation of [Source Academy @ NUS](https://sourceacademy.nus.edu.sg)
 

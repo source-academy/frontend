@@ -6,7 +6,10 @@ import type {
 import { getEvaluatorDefinition } from '@sourceacademy/language-directory/dist/util';
 import { call, fork, put, select } from 'redux-saga/effects';
 import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
-import { selectDirectoryLanguageUrl } from 'src/features/directory/flagDirectoryLanguageUrl';
+import {
+  flagDirectoryLanguageUrl,
+  selectDirectoryLanguageUrl,
+} from 'src/features/directory/flagDirectoryLanguageUrl';
 
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
 import type { LanguageDirectoryState } from '../../features/directory/LanguageDirectoryTypes';
@@ -61,9 +64,8 @@ const languageDirectoryHandlers = combineSagaHandlers({
   },
   [LanguageDirectoryActions.fetchLanguages.type]: function* () {
     const url: string = yield select(selectDirectoryLanguageUrl);
-    const defaultUrl = 'https://source-academy.github.io/language-directory/directory.json';
     let result: ILanguageDefinition[];
-    if (url === defaultUrl) {
+    if (url === flagDirectoryLanguageUrl.defaultValue) {
       result = yield call(() => Promise.resolve(languages));
     } else {
       const response = yield call(fetch, url);

@@ -3,12 +3,14 @@ import { useLocation } from 'react-router';
 import type { OverallState } from '../../commons/application/ApplicationTypes';
 import { createFeatureFlag } from '../../commons/featureFlags';
 import { featureSelector } from '../../commons/featureFlags/featureSelector';
+import Constants from '../../commons/utils/Constants';
 import { useAppSelector } from '../../commons/utils/Hooks';
 
 export const flagConductorEnable = createFeatureFlag(
   'conductor.enable',
   true,
   'Enables the Conductor framework for evaluation of user programs.',
+  Constants.conductorConfig.enable,
 );
 
 const selectConductorEnableFlag = featureSelector(flagConductorEnable);

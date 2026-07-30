@@ -19,6 +19,9 @@ const featureFlagsSlice = createSlice({
       state: FeatureFlagsState,
       action: { payload: { featureFlag: FeatureFlag<T>; value: T } },
     ) {
+      if (action.payload.featureFlag.isLocked) {
+        return;
+      }
       state.modifiedFlags[action.payload.featureFlag.flagName] = action.payload.value;
     },
     resetFlag<T>(state: FeatureFlagsState, action: { payload: { featureFlag: FeatureFlag<T> } }) {
@@ -35,7 +38,8 @@ export function createFeatureFlag<T>(
   flagName: string,
   defaultValue: T,
   flagDesc?: string,
+  lockedValue?: T,
   callback?: (newValue: T) => SagaIterator,
 ): FeatureFlag<T> {
-  return new FeatureFlag<T>(flagName, defaultValue, flagDesc, callback);
+  return new FeatureFlag<T>(flagName, defaultValue, flagDesc, lockedValue, callback);
 }
