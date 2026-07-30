@@ -17,8 +17,7 @@ function Chatbot({ getSection, getText }: Props) {
   const init = useCallback((tokens: Tokens) => initChat(tokens), []);
 
   const send = useCallback(
-    (tokens: Tokens, userInput: string) =>
-      continueChat(tokens, userInput, getSection(), getText()),
+    (tokens: Tokens, userInput: string) => continueChat(tokens, userInput, getSection(), getText()),
     [getSection, getText],
   );
 
