@@ -16,10 +16,7 @@ describe('selectFeatureSaga', () => {
       .silentRun());
 
   test('returns the locked value regardless of the user override', () =>
-    expectSaga(
-      selectFeatureSaga,
-      createFeatureFlag('locked', 'default', undefined, 'pinned'),
-    )
+    expectSaga(selectFeatureSaga, createFeatureFlag('locked', 'default', undefined, 'pinned'))
       .withState(makeState({ locked: 'override' }))
       .returns('pinned')
       .silentRun());

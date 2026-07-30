@@ -8,7 +8,9 @@ import { createFeatureFlag } from '.';
 import { useFeature } from './useFeature';
 
 const renderUseFeature = <T,>(flag: Parameters<typeof useFeature<T>>[0], modifiedFlags: object) => {
-  const store = createMockStore<OverallState>()({ featureFlags: { modifiedFlags } } as OverallState);
+  const store = createMockStore<OverallState>()({
+    featureFlags: { modifiedFlags },
+  } as OverallState);
   return renderHook(() => useFeature(flag), {
     wrapper: ({ children }) => <Provider store={store}>{children}</Provider>,
   }).result.current;
