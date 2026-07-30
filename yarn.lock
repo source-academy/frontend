@@ -3311,14 +3311,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redux-saga/types@npm:^1.3.1, @redux-saga/types@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@redux-saga/types@npm:1.4.0"
-  checksum: 10c0/76701690aeda8a6cf683a1160590428ff0e00a16ef6595bc6874cc1797706d6db2ddd91c0330c238d07ba4c23f780d4db2c6c556c02d2b221634478e71be1d91
-  languageName: node
-  linkType: hard
-
-"@redux-saga/types@npm:^1.4.1":
+"@redux-saga/types@npm:^1.3.1, @redux-saga/types@npm:^1.4.0, @redux-saga/types@npm:^1.4.1":
   version: 1.4.1
   resolution: "@redux-saga/types@npm:1.4.1"
   checksum: 10c0/e5a762c48701e2206d2192a858773d30f7c3d569042131fe5f651696a9090281074679c630e6db2765af83a49b5260ec499cccd0aa1faf54ba5dea099a5e1e8c
