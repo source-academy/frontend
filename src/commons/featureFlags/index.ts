@@ -25,6 +25,9 @@ const featureFlagsSlice = createSlice({
       state.modifiedFlags[action.payload.featureFlag.flagName] = action.payload.value;
     },
     resetFlag<T>(state: FeatureFlagsState, action: { payload: { featureFlag: FeatureFlag<T> } }) {
+      if (action.payload.featureFlag.isLocked) {
+        return;
+      }
       delete state.modifiedFlags[action.payload.featureFlag.flagName];
     },
   },
