@@ -6,6 +6,7 @@ import { CHATBOT_BUTTON_DRAG_HANDLE_CLASS_NAME } from './constants';
 type Props = {
   src: string;
   alt?: string;
+  isChatOpen: boolean;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   onClick: () => void;
@@ -14,6 +15,7 @@ type Props = {
 function FloatingChatbotButton({
   src,
   alt = 'Chatbot logo',
+  isChatOpen,
   onMouseEnter,
   onMouseLeave,
   onClick,
@@ -22,8 +24,10 @@ function FloatingChatbotButton({
     <Button
       className={classNames(
         CHATBOT_BUTTON_DRAG_HANDLE_CLASS_NAME,
-        'absolute right-2.5 bottom-2.5 flex size-12.5 cursor-grab select-none items-center justify-center rounded-full border-0 bg-transparent p-0 active:cursor-grabbing [-webkit-user-select:none]',
+        'absolute right-2.5 flex size-12.5 cursor-grab select-none items-center justify-center rounded-full border-0 bg-transparent p-0 active:cursor-grabbing [-webkit-user-select:none]',
+        isChatOpen ? 'bottom-full mb-2.5' : 'bottom-2.5',
       )}
+      title={isChatOpen ? 'Close chat' : 'Open chat'}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={onClick}
