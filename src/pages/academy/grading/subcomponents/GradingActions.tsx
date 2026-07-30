@@ -84,6 +84,7 @@ function GradingActions({ submissionId, style, progress, filterMode }: Props) {
         <Tooltip position={Position.TOP} content="Grade">
           <Link
             to={`/courses/${courseId}/grading/${submissionId}`}
+            aria-label="Grade"
             className={classNames(
               Classes.BUTTON,
               Classes.MINIMAL,

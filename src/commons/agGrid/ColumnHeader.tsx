@@ -30,12 +30,13 @@ function ColumnHeader(props: Props) {
     <div className="group flex h-full w-full items-center">
       <span className="ag-header-cell-text w-full truncate text-left">{displayName}</span>
 
-      <div className="w-0 group-hover:w-fit pointer-events-none flex items-center gap-0.5 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100">
+      <div className="w-0 group-hover:w-fit group-focus-within:w-fit pointer-events-none flex items-center gap-0.5 opacity-0 transition-opacity group-hover:pointer-events-auto group-focus-within:pointer-events-auto group-hover:opacity-100 group-focus-within:opacity-100">
         {extraActions?.(props)}
         {canHide && (
           <Tooltip content="Hide column" position="bottom">
             <Button
               variant="minimal"
+              aria-label={`Hide ${displayName} column`}
               className="flex cursor-pointer rounded p-1.5 hover:bg-black/10"
               onClick={() => onHide(colId)}
             >

@@ -30,9 +30,11 @@ type Props = {
   setCourseConfiguration: (courseConfiguration: UpdateCourseConfiguration) => void;
 };
 
-// Fixed-width label keeps every field's input aligned on a common left edge.
+// On wider screens a fixed-width, right-aligned label keeps every field's input
+// aligned on a common left edge; on mobile it collapses to a natural-width,
+// left-aligned label so the fixed column doesn't crowd out the inputs.
 const fieldLabel = (text: React.ReactNode) => (
-  <span className="inline-block w-60 text-right">{text}</span>
+  <span className="inline-block text-left md:w-60 md:text-right">{text}</span>
 );
 
 function CourseConfigPanel(props: Props) {

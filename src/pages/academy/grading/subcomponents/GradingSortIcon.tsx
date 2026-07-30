@@ -55,6 +55,7 @@ function GradingSortIcon({ headerProps }: Props) {
     >
       <Button
         variant="minimal"
+        aria-label={`Sort by ${headerProps.displayName}`}
         className="flex cursor-pointer rounded p-1.5 hover:bg-black/10"
         onClick={handleClick}
       >
