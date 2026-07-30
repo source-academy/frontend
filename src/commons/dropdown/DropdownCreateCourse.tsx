@@ -154,7 +154,7 @@ function DropdownCreateCourse(props: Props) {
           {courseHelpTextSelectedTab === CourseHelpTextEditorTab.WRITE && (
             <TextArea
               id="moduleHelpText"
-              className="input-textarea h-25"
+              className="h-25"
               fill
               value={courseConfig.moduleHelpText}
               onChange={e =>
@@ -166,7 +166,7 @@ function DropdownCreateCourse(props: Props) {
             />
           )}
           {courseHelpTextSelectedTab === CourseHelpTextEditorTab.PREVIEW && (
-            <div className="input-markdown p-2.5 h-25 bg-[#f5f5f5] rounded overflow-auto [box-shadow:inset_0_0_0_1px_rgba(16,22,26,0.15),inset_0_1px_1px_rgba(16,22,26,0.2)] [&>div>*]:m-0">
+            <div className="p-2.5 h-25 bg-[#f5f5f5] rounded overflow-auto [box-shadow:inset_0_0_0_1px_rgba(16,22,26,0.15),inset_0_1px_1px_rgba(16,22,26,0.2)] [&>div>*]:m-0">
               <Markdown content={courseConfig.moduleHelpText || ''} openLinksInNewWindow />
             </div>
           )}
