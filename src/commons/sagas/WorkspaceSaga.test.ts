@@ -703,6 +703,30 @@ describe('EVAL_REPL session persistence under Conductor', () => {
     expect(fake.hostPlugin.startEvaluator).toHaveBeenCalledWith('/code.js');
     expect(fake.terminate).toHaveBeenCalledTimes(1);
   });
+
+  test('the evalRepl handler does not dispatch beginInterruptExecution before the Conductor branch', () => {
+    // Dispatch-level check (through the real workspaceSaga -> evalRepl handler, not
+    // evalCodeConductorSaga directly, unlike the tests above): a regression where
+    // workspaceSaga's evalRepl handler dispatches beginInterruptExecution before reaching the
+    // Conductor branch would end the live REPL session on every single submission, even though
+    // evalCodeConductorSaga itself never called anything that would catch that.
+    const replValue = 'x = 1';
+    const newState = {
+      ...generateDefaultState(workspaceLocation, { replValue }),
+      featureFlags: { modifiedFlags: { [flagConductorEnable.flagName]: true } },
+    };
+
+    return expectSaga(workspaceSaga)
+      .withState(newState)
+      .provide([[matchers.call.fn(evalCodeConductorSaga), undefined]])
+      .not.put(InterpreterActions.beginInterruptExecution(workspaceLocation))
+      .call.like({ fn: evalCodeConductorSaga })
+      .dispatch({
+        type: WorkspaceActions.evalRepl.type,
+        payload: { workspaceLocation },
+      })
+      .silentRun();
+  });
 });
 
 describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {

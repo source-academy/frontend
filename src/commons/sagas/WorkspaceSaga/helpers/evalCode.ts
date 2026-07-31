@@ -9,7 +9,7 @@ import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { pick } from 'lodash-es';
-import { channel, END, eventChannel, type SagaIterator } from 'redux-saga';
+import { channel, END, eventChannel, type SagaIterator, type Task } from 'redux-saga';
 import { call, cancel, cancelled, put, race, select, spawn, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
@@ -776,7 +776,7 @@ type ReplSession = {
    * handleCseSnapshots, spawn()ed (not fork()ed) when the session was established - their
    * lifetime is this session's, not tied to whichever saga call happens to be sending the
    * current chunk, so they must keep running after that call returns. */
-  tasks: any[];
+  tasks: Task[];
 };
 
 const replSessions = new Map<WorkspaceLocation, ReplSession>();
@@ -792,26 +792,33 @@ function* endReplSessionSaga(workspaceLocation: WorkspaceLocation): SagaIterator
     return;
   }
   replSessions.delete(workspaceLocation);
-  // Each conductor channel is its own MessagePort with no cross-channel ordering, so a chunk's
-  // terminal/boundary STATUS can be handled before output/result/error posted just before it on
-  // their own ports. Cancelling the tasks immediately would drop those still-in-flight messages -
-  // give them a brief window to process what the runner already sent first.
-  yield call(() => new Promise(resolve => setTimeout(resolve, 50)));
-  for (const task of session.tasks) {
-    yield cancel(task);
-  }
-  session.chunkSettledChan.close();
   try {
-    // This session's Worker is nobody else's responsibility to shut down - the conductor cache
-    // keeps the underlying conductor object around afterward (its tabs stay on screen), but never
-    // touches its Worker again. Without this, every session leaks its Worker instead of shutting
-    // it down.
-    session.conduit.terminate();
-  } catch {
-    // already terminated (e.g. the runner tore itself down before we got here)
+    // Each conductor channel is its own MessagePort with no cross-channel ordering, so a chunk's
+    // terminal/boundary STATUS can be handled before output/result/error posted just before it on
+    // their own ports. Cancelling the tasks immediately would drop those still-in-flight messages -
+    // give them a brief window to process what the runner already sent first.
+    yield call(() => new Promise(resolve => setTimeout(resolve, 50)));
+  } finally {
+    // Runs even if the delay above is itself cancelled (e.g. a second Run's takeLatest
+    // superseding whichever saga call ended up in here) - the session was already removed from
+    // replSessions above, so this is the only remaining chance to cancel its tasks and kill its
+    // Worker; skipping it would leak both for the rest of the page session.
+    for (const task of session.tasks) {
+      yield cancel(task);
+    }
+    session.chunkSettledChan.close();
+    try {
+      // This session's Worker is nobody else's responsibility to shut down - the conductor cache
+      // keeps the underlying conductor object around afterward (its tabs stay on screen), but never
+      // touches its Worker again. Without this, every session leaks its Worker instead of shutting
+      // it down.
+      session.conduit.terminate();
+    } catch {
+      // already terminated (e.g. the runner tore itself down before we got here)
+    }
+    yield put(actions.endInterruptExecution(workspaceLocation));
+    yield put(actions.setIsRunning(false, workspaceLocation));
   }
-  yield put(actions.endInterruptExecution(workspaceLocation));
-  yield put(actions.setIsRunning(false, workspaceLocation));
 }
 
 /**
@@ -825,11 +832,19 @@ function* endReplSessionSaga(workspaceLocation: WorkspaceLocation): SagaIterator
  * endReplSessionSaga when this resolves `terminal: true`.
  */
 function* waitForChunkSettled(
+  workspaceLocation: WorkspaceLocation,
   chunkSettledChan: ReturnType<typeof channel<ChunkSettled>>,
 ): SagaIterator<ChunkSettled> {
   const { settled, interrupted } = yield race({
     settled: take(chunkSettledChan),
-    interrupted: take(actions.beginInterruptExecution.type),
+    // Matched by payload, not just type: beginInterruptExecution is dispatched per-workspace
+    // (Stop, or evalEditorSaga starting a new Run), and an unfiltered take here would let a
+    // Stop/Run in a *different* workspace end this workspace's session and Worker too.
+    interrupted: take(
+      (action: any) =>
+        action.type === actions.beginInterruptExecution.type &&
+        action.payload?.workspaceLocation === workspaceLocation,
+    ),
   });
   return interrupted ? { terminal: true } : settled;
 }
@@ -889,7 +904,10 @@ export function* evalCodeConductorSaga(
       yield* endReplSessionSaga(workspaceLocation);
       return;
     }
-    const { terminal } = yield* waitForChunkSettled(existingSession.chunkSettledChan);
+    const { terminal } = yield* waitForChunkSettled(
+      workspaceLocation,
+      existingSession.chunkSettledChan,
+    );
     if (terminal) {
       yield* endReplSessionSaga(workspaceLocation);
     }
@@ -929,31 +947,34 @@ export function* evalCodeConductorSaga(
     // running for every later chunk sent to this session, until endReplSessionSaga explicitly
     // cancels them - fork()'s attached-fork semantics would instead tie their lifetime to this
     // call's own completion.
+    //
+    // The session is registered *before* any handler is spawned, with an empty tasks list that
+    // each spawn() below appends to - so a cancellation at any point during this setup (e.g. a
+    // second Run's takeLatest superseding this one) always finds a registered session for the
+    // `finally` guard below to hand to endReplSessionSaga, instead of orphaning whichever tasks
+    // had already been spawned by that point.
     const receivedCount: ReceivedCount = { count: 0 };
     const chunkSettledChan = channel<ChunkSettled>();
-    const stdoutTask = yield spawn(handleStdout, hostPlugin, workspaceLocation, receivedCount);
-    const inputTask = yield spawn(handleInputRequest, hostPlugin, workspaceLocation);
-    const resultTask = yield spawn(handleResults, hostPlugin, workspaceLocation, receivedCount);
-    const errorTask = yield spawn(handleErrors, hostPlugin, workspaceLocation, receivedCount);
-    const statusTask = yield spawn(
-      handleStatuses,
-      hostPlugin,
-      workspaceLocation,
-      receivedCount,
-      chunkSettledChan,
-    );
-    const cseTask = yield spawn(handleCseSnapshots, csePlugin, workspaceLocation);
-    replSessions.set(workspaceLocation, {
+    const session: ReplSession = {
       hostPlugin,
       conduit,
       evaluatorPath: evaluator.path,
       chunkSettledChan,
-      tasks: [stdoutTask, inputTask, resultTask, errorTask, statusTask, cseTask],
-    });
+      tasks: [],
+    };
+    replSessions.set(workspaceLocation, session);
+    session.tasks.push(yield spawn(handleStdout, hostPlugin, workspaceLocation, receivedCount));
+    session.tasks.push(yield spawn(handleInputRequest, hostPlugin, workspaceLocation));
+    session.tasks.push(yield spawn(handleResults, hostPlugin, workspaceLocation, receivedCount));
+    session.tasks.push(yield spawn(handleErrors, hostPlugin, workspaceLocation, receivedCount));
+    session.tasks.push(
+      yield spawn(handleStatuses, hostPlugin, workspaceLocation, receivedCount, chunkSettledChan),
+    );
+    session.tasks.push(yield spawn(handleCseSnapshots, csePlugin, workspaceLocation));
 
     yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
 
-    const { terminal } = yield* waitForChunkSettled(chunkSettledChan);
+    const { terminal } = yield* waitForChunkSettled(workspaceLocation, chunkSettledChan);
     if (terminal) {
       yield* endReplSessionSaga(workspaceLocation);
     }
@@ -965,9 +986,12 @@ export function* evalCodeConductorSaga(
     yield* endReplSessionSaga(workspaceLocation);
   } finally {
     // Guards against this call itself being cancelled mid-setup (e.g. a second Run's takeLatest
-    // superseding this one before replSessions.set() ever ran) - without this, the tasks/conduit
-    // spawned just above would be orphaned: spawn()'s whole point is that they don't die with this
-    // call, so nothing else would ever clean them up.
+    // superseding this one) - without this, the tasks/conduit spawned just above would be
+    // orphaned: spawn()'s whole point is that they don't die with this call, so nothing else
+    // would ever clean them up. Safe (and a no-op) even before replSessions.set() has run yet,
+    // since endReplSessionSaga simply returns when there's nothing registered for this
+    // workspace - see its own early-registration comment above for why any cancellation from
+    // that point onward always does find something to tear down.
     if (yield cancelled()) {
       yield* endReplSessionSaga(workspaceLocation);
     }
