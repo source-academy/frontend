@@ -252,7 +252,6 @@ const WorkspaceSaga = combineSagaHandlers({
     const workspaceLocation = action.payload.workspaceLocation;
     const { replValue: code, execTime } = yield* selectWorkspace(workspaceLocation);
 
-    yield put(actions.beginInterruptExecution(workspaceLocation));
     yield put(actions.clearReplInput(workspaceLocation));
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
 
@@ -272,6 +271,13 @@ const WorkspaceSaga = combineSagaHandlers({
       );
       return;
     }
+
+    // Interrupt any evaluation currently in flight before starting this one - legacy,
+    // non-Conductor path only. The Conductor path above manages its own persistent REPL
+    // session (see evalCodeConductorSaga's doc comment) and must not be interrupted just
+    // because a new REPL line was submitted, or every line would tear down and rebuild the
+    // session instead of building on it.
+    yield put(actions.beginInterruptExecution(workspaceLocation));
 
     // Reset old context.errors
     context.errors = [];
