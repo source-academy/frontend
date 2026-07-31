@@ -724,18 +724,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                             
 
                             <p>
-                              The book 
-                              <a
-                                href="https://sourceacademy.org/sicpjs/"
-                                rel="noopener noreferrer"
-                                target="_blank"
-                              >
-                                <em>
-                                  Structure and Interpretation of Computer Programs, JavaScript Edition
-                                </em>
-                              </a>
-                              
-uses JavaScript sublanguages that we call 
+                              This language is 
                               <a
                                 href="https://docs.sourceacademy.org/"
                                 rel="noopener noreferrer"
@@ -743,6 +732,17 @@ uses JavaScript sublanguages that we call
                               >
                                 <em>
                                   Source
+                                </em>
+                              </a>
+                              , a family of JavaScript sublanguages designed
+for the book 
+                              <a
+                                href="https://sourceacademy.org/sicpjs/"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                              >
+                                <em>
+                                  Structure and Interpretation of Computer Programs, JavaScript Edition
                                 </em>
                               </a>
                               . You have chosen the sublanguage 
@@ -2339,18 +2339,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                             
 
                             <p>
-                              The book 
-                              <a
-                                href="https://sourceacademy.org/sicpjs/"
-                                rel="noopener noreferrer"
-                                target="_blank"
-                              >
-                                <em>
-                                  Structure and Interpretation of Computer Programs, JavaScript Edition
-                                </em>
-                              </a>
-                              
-uses JavaScript sublanguages that we call 
+                              This language is 
                               <a
                                 href="https://docs.sourceacademy.org/"
                                 rel="noopener noreferrer"
@@ -2358,6 +2347,17 @@ uses JavaScript sublanguages that we call
                               >
                                 <em>
                                   Source
+                                </em>
+                              </a>
+                              , a family of JavaScript sublanguages designed
+for the book 
+                              <a
+                                href="https://sourceacademy.org/sicpjs/"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                              >
+                                <em>
+                                  Structure and Interpretation of Computer Programs, JavaScript Edition
                                 </em>
                               </a>
                               . You have chosen the sublanguage 
