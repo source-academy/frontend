@@ -4217,10 +4217,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/conductor@npm:^0.8.2":
-  version: 0.8.2
-  resolution: "@sourceacademy/conductor@npm:0.8.2"
-  checksum: 10c0/a37dbed6c9ff1f92cb1b7938366c4647cc7c89aaa54b9b843ceaa2088933e251b84b2acae61753bad599c11f0becf95013a771bd7c999735ed8896c3195c9f53
+"@sourceacademy/conductor@npm:^0.8.3":
+  version: 0.8.3
+  resolution: "@sourceacademy/conductor@npm:0.8.3"
+  checksum: 10c0/25a35004fd92abc3f9342c1928a6be884388d3a8465cdc26491ccf56566121dd7a68a0c305defe668dfe7b96eebe61e93059631f80a92e0d9a4dc2775090f3e5
   languageName: node
   linkType: hard
 
@@ -8559,7 +8559,7 @@ __metadata:
     "@sourceacademy/common-autocomplete": "npm:^0.0.1"
     "@sourceacademy/common-cse-machine": "npm:^0.3.0"
     "@sourceacademy/common-tabs": "npm:^0.0.1"
-    "@sourceacademy/conductor": "npm:^0.8.2"
+    "@sourceacademy/conductor": "npm:^0.8.3"
     "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.19"
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.4"
     "@sourceacademy/runner-module-loader": "npm:^0.1.0"
