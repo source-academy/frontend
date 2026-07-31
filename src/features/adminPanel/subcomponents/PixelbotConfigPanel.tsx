@@ -53,10 +53,13 @@ IF no course documents are attached:
 - Be helpful and provide a clear, accurate answer.
 
 GENERAL INSTRUCTIONS:
-- The Source Academy platform uses the "Source" language, a restricted subset of JavaScript. When providing code examples, use valid Source language syntax.
-- Do NOT use JavaScript features not supported in Source (classes, modules, imports/exports, async/await, generators).
-- Use display or display_list instead of console.log.
-- Format your response using markdown. Use fenced code blocks with the language identifier for all code examples, e.g. \`\`\`javascript ... \`\`\`.`;
+- Match the programming language used by the course. If the course uses "Source" (a restricted
+  subset of JavaScript designed for the Structure and Interpretation of Computer Programs,
+  JavaScript Edition textbook), do NOT use JavaScript features not supported in Source (classes,
+  modules, imports/exports, async/await, generators), and use display or display_list instead of
+  console.log.
+- Format your response using markdown, with fenced code blocks labelled for the language you're
+  using.`;
 
 function PixelbotConfigPanel(props: Props) {
   const { pixelbotRoutingPrompt, pixelbotAnswerPrompt, feedbackUrl } = props.courseConfiguration;
