@@ -9,8 +9,8 @@ import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { pick } from 'lodash-es';
-import { END, eventChannel, type SagaIterator } from 'redux-saga';
-import { call, cancel, cancelled, fork, put, race, select, spawn, take } from 'redux-saga/effects';
+import { channel, END, eventChannel, type SagaIterator } from 'redux-saga';
+import { call, cancel, cancelled, put, race, select, spawn, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
 import InterpreterActions from '../../../../commons/application/actions/InterpreterActions';
@@ -443,6 +443,12 @@ export function* evalCodeSaga(
  */
 type ReceivedCount = { count: number };
 
+/** Reported by handleStatuses (via a session's chunkSettledChan) each time a chunk finishes:
+ * `terminal: false` for an ordinary chunk boundary (RunnerStatus.EVAL_READY - the evaluator is
+ * alive and waiting for the next chunk), `terminal: true` when the session is actually over
+ * (STOPPED/ERROR, or the caller was interrupted while waiting - see waitForChunkSettled). */
+type ChunkSettled = { terminal: boolean };
+
 function* handleStdout(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
@@ -685,6 +691,7 @@ function* handleStatuses(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
   receivedCount: ReceivedCount,
+  chunkSettledChan: ReturnType<typeof channel<ChunkSettled>>,
 ): SagaIterator {
   const statusChan = eventChannel<{ status: RunnerStatus; isActive: boolean; sentCount: number }>(
     emitter => {
@@ -701,19 +708,27 @@ function* handleStatuses(
   try {
     while (true) {
       const { status, isActive, sentCount } = yield take(statusChan);
+      // A chunk boundary: the evaluator finished whatever it was just sent (the entrypoint file,
+      // or a later REPL line) and is waiting for the next one - see conductor's
+      // BasicEvaluator.startEvaluator, which reports EVAL_READY between chunks instead of
+      // STOPPED so the session (and everything declared in it) survives. STOPPED/ERROR are
+      // genuinely terminal: the evaluator crashed, or setup (e.g. loading the entrypoint file)
+      // failed before the chunk loop ever started.
+      const isChunkBoundary = isActive && status === RunnerStatus.EVAL_READY;
       const isTerminalStatus =
         isActive && (status === RunnerStatus.STOPPED || status === RunnerStatus.ERROR);
       if (status === RunnerStatus.RUNNING) {
         yield put(actions.setIsRunning(isActive, workspaceLocation));
       }
-      if (isTerminalStatus) {
-        // The runner has genuinely finished (including any pending async work — e.g. Python's
+      if (isChunkBoundary || isTerminalStatus) {
+        yield put(actions.setIsRunning(false, workspaceLocation));
+        // The runner has finished this chunk (including any pending async work — e.g. Python's
         // set_timeout — see BasicEvaluator's beginPendingWork/endPendingWork), but sentCount's
         // matching output/result/error may still be in flight on their own MessagePort (no
         // cross-channel ordering guarantee against STATUS). Wait for our own receivedCount to
-        // catch up before unblocking the REPL loop, instead of guessing with a fixed delay.
-        // Bounded, not open-ended: the program has already finished by this point (STATUS said
-        // so), so this is only ever waiting on a few already-sent straggler bytes, not gating a
+        // catch up before reporting this chunk settled, instead of guessing with a fixed delay.
+        // Bounded, not open-ended: the chunk has already finished by this point (STATUS said so),
+        // so this is only ever waiting on a few already-sent straggler bytes, not gating a
         // student program's own run time the way the removed execTime watchdog did. A message
         // that's merely delayed clears this in low single-digit milliseconds; only a genuine bug
         // elsewhere (a sibling handler dying before consuming its channel, a runner misreporting
@@ -722,23 +737,113 @@ function* handleStatuses(
         while (receivedCount.count < sentCount) {
           if (Date.now() > drainDeadline) {
             console.warn(
-              `Timed out waiting for ${sentCount - receivedCount.count} pending message(s) before interrupting ${workspaceLocation}.`,
+              `Timed out waiting for ${sentCount - receivedCount.count} pending message(s) before continuing ${workspaceLocation}.`,
             );
             break;
           }
           yield call(() => new Promise(resolve => setTimeout(resolve, 5)));
         }
-        yield put(actions.beginInterruptExecution(workspaceLocation));
+        chunkSettledChan.put({ terminal: isTerminalStatus });
+        if (isTerminalStatus) {
+          // The session itself is over - nothing more will ever come through this channel.
+          statusChan.close();
+          return;
+        }
       }
     }
   } finally {
     statusChan.close();
   }
 }
+
+/**
+ * A REPL session: one live conductor Worker that survives across a Run's initial chunk and every
+ * REPL line submitted afterward, so a later chunk can see an earlier chunk's declarations (e.g.
+ * `x` from an earlier line) — see conductor's BasicEvaluator.startEvaluator, which loops on
+ * further chunks instead of stopping after the first (source-academy/conductor#66). Ends (Worker
+ * killed, background tasks cancelled) only via endReplSessionSaga: explicitly on Stop or the next
+ * Run, never automatically just because one chunk finished, the way a Run or REPL submission used
+ * to tear its own one-shot Worker down unconditionally.
+ */
+type ReplSession = {
+  hostPlugin: BrowserHostPlugin;
+  conduit: IConduit;
+  /** The evaluator path this session was established against - see evalCodeConductorSaga's own
+   * evaluatorPath check for why a REPL chunk send validates this before reusing a session. */
+  evaluatorPath: string;
+  chunkSettledChan: ReturnType<typeof channel<ChunkSettled>>;
+  /** handleStdout/handleInputRequest/handleResults/handleErrors/handleStatuses/
+   * handleCseSnapshots, spawn()ed (not fork()ed) when the session was established - their
+   * lifetime is this session's, not tied to whichever saga call happens to be sending the
+   * current chunk, so they must keep running after that call returns. */
+  tasks: any[];
+};
+
+const replSessions = new Map<WorkspaceLocation, ReplSession>();
+
+/**
+ * Ends `workspaceLocation`'s live REPL session, if any — the only place a session's Worker is
+ * actually terminated. Idempotent and safe to call whether or not a session is currently live:
+ * both Stop and starting a new Run call this unconditionally before doing anything else.
+ */
+function* endReplSessionSaga(workspaceLocation: WorkspaceLocation): SagaIterator {
+  const session = replSessions.get(workspaceLocation);
+  if (!session) {
+    return;
+  }
+  replSessions.delete(workspaceLocation);
+  // Each conductor channel is its own MessagePort with no cross-channel ordering, so a chunk's
+  // terminal/boundary STATUS can be handled before output/result/error posted just before it on
+  // their own ports. Cancelling the tasks immediately would drop those still-in-flight messages -
+  // give them a brief window to process what the runner already sent first.
+  yield call(() => new Promise(resolve => setTimeout(resolve, 50)));
+  for (const task of session.tasks) {
+    yield cancel(task);
+  }
+  session.chunkSettledChan.close();
+  try {
+    // This session's Worker is nobody else's responsibility to shut down - the conductor cache
+    // keeps the underlying conductor object around afterward (its tabs stay on screen), but never
+    // touches its Worker again. Without this, every session leaks its Worker instead of shutting
+    // it down.
+    session.conduit.terminate();
+  } catch {
+    // already terminated (e.g. the runner tore itself down before we got here)
+  }
+  yield put(actions.endInterruptExecution(workspaceLocation));
+  yield put(actions.setIsRunning(false, workspaceLocation));
+}
+
+/**
+ * Waits for the chunk the caller just sent to settle: naturally (chunkSettledChan, written by
+ * handleStatuses), or because the user hit Stop, or because evalEditorSaga is about to start a
+ * fresh Run over this same session (both dispatch beginInterruptExecution — see its own doc
+ * comment). No watchdog timeout either way: the Conductor framework gives every session a
+ * dedicated Worker that Stop/Run-again can always reclaim, so student programs are free to run
+ * (or wait on set_timeout/input()) indefinitely without an arbitrary deadline killing them out
+ * from under a legitimate long-running task. The caller is responsible for calling
+ * endReplSessionSaga when this resolves `terminal: true`.
+ */
+function* waitForChunkSettled(
+  chunkSettledChan: ReturnType<typeof channel<ChunkSettled>>,
+): SagaIterator<ChunkSettled> {
+  const { settled, interrupted } = yield race({
+    settled: take(chunkSettledChan),
+    interrupted: take(actions.beginInterruptExecution.type),
+  });
+  return interrupted ? { terminal: true } : settled;
+}
+
 /**
  * Runs code using the evaluators in the Language Directory using the Conductor framework.
  * Invoked when the conductor.enable feature flag is enabled.
- * Uses a preloaded Conductor instance when available to reduce startup latency.
+ *
+ * A Run (EVAL_EDITOR) always starts a fresh REPL session, ending whatever was live before it -
+ * matching the classic (non-Conductor) REPL's own "Run rebuilds the context" behavior. A REPL
+ * submission (EVAL_REPL) sends its code as another chunk to the current session if one is live,
+ * or - if the REPL is used before any Run - starts a fresh one-chunk session from just that line,
+ * the same way Run does. Either way, the session (and everything declared in it) survives until
+ * the next Run, Stop, or evaluator/language switch (see endReplSessionSaga / endConductorSession).
  */
 export function* evalCodeConductorSaga(
   files: Record<string, string>,
@@ -748,6 +853,11 @@ export function* evalCodeConductorSaga(
   actionType: string,
   storyEnv?: string,
 ): SagaIterator {
+  // Clear stale CSE snapshots from the previous chunk, whether or not this one produces any of
+  // its own (e.g. a REPL line at a chapter below §3) - otherwise the CSE Machine tab would keep
+  // showing an earlier chunk's steps well after that chunk is no longer the "current" one.
+  yield put(WorkspaceActions.updateCseSnapshots(null, workspaceLocation));
+
   // Wait 5 seconds for language directory to initialise before continuing evaluation
   let evaluator: IEvaluatorDefinition | undefined = yield call(getEvaluatorDefinitionSaga);
   if (!evaluator?.path) {
@@ -764,8 +874,31 @@ export function* evalCodeConductorSaga(
     }
   }
 
-  // Clear stale CSE snapshots from the previous run
-  yield put(WorkspaceActions.updateCseSnapshots(null, workspaceLocation));
+  const isReplChunk = actionType === WorkspaceActions.evalRepl.type;
+  const existingSession = replSessions.get(workspaceLocation);
+
+  // A live session only gets a chunk sent to it if it belongs to the currently selected
+  // evaluator - one for a since-changed evaluator/language is stale (its Worker may already be
+  // gone via endConductorSession's own teardown on a language switch) and must not receive a
+  // chunk meant for a different evaluator; fall through to establishing a fresh one instead.
+  if (isReplChunk && existingSession && existingSession.evaluatorPath === evaluator.path) {
+    try {
+      existingSession.hostPlugin.sendChunk(files[entrypointFilePath]);
+    } catch (runError) {
+      yield* surfaceConductorError(runError, workspaceLocation);
+      yield* endReplSessionSaga(workspaceLocation);
+      return;
+    }
+    const { terminal } = yield* waitForChunkSettled(existingSession.chunkSettledChan);
+    if (terminal) {
+      yield* endReplSessionSaga(workspaceLocation);
+    }
+    return;
+  }
+
+  // Starting a fresh session: a Run always supersedes whatever REPL session was live before it; a
+  // REPL line with no live (same-evaluator) session establishes one from just that line.
+  yield* endReplSessionSaga(workspaceLocation);
 
   // Inject step limit so the evaluator knows how many snapshots to collect
   const { stepLimit }: { stepLimit: number } = yield* selectWorkspace(workspaceLocation);
@@ -774,14 +907,6 @@ export function* evalCodeConductorSaga(
     '/__cse_config__': JSON.stringify({ stepLimit }),
   };
 
-  let conduit: IConduit | undefined;
-  let stdoutTask: any;
-  let inputTask: any;
-  let resultTask: any;
-  let errorTask: any;
-  let statusTask: any;
-  let cseTask: any;
-
   try {
     // Reuse a preloaded conductor instance when available.
     const prepared: {
@@ -789,81 +914,62 @@ export function* evalCodeConductorSaga(
       csePlugin: CseMachineHostPlugin;
       conduit: IConduit;
     } = yield call(getPreparedConductorSaga, { files: filesWithConfig, consume: true });
-    const hostPlugin = prepared.hostPlugin;
-    const csePlugin = prepared.csePlugin;
-    conduit = prepared.conduit;
+    const { hostPlugin, csePlugin, conduit } = prepared;
 
-    // Immediately start warming the next conductor in the background. forceFresh is required here:
-    // the instance just obtained above is now consumed (this run's finally below terminates its
-    // Worker unconditionally), so without it this would just find that same consumed instance again
-    // and do nothing, leaving the *next* Run to build fresh from scratch instead of reusing a spare.
+    // Immediately start warming the next conductor in the background. forceFresh is required
+    // here: the instance just obtained above is now consumed and kept alive as this workspace's
+    // live REPL session, so without it this would just find that same consumed instance again and
+    // do nothing, leaving the *next* Run to build fresh from scratch instead of reusing a spare.
     yield spawn(preloadConductorEvaluatorSaga, evaluator.path, { forceFresh: true });
 
-    // Begin evaluation. receivedCount is shared by the four handlers below: handleStdout/
-    // handleResults/handleErrors increment it as each output/result/error message actually
-    // arrives, and handleStatuses waits for it to reach a terminal status's own sentCount before
-    // treating the run as over (see ReceivedCount's doc comment).
+    // receivedCount is shared by the background handlers below (see ReceivedCount's doc comment).
+    // chunkSettledChan is how handleStatuses reports each chunk boundary back to whichever saga
+    // call is currently waiting on one - this session's first chunk right now, or a later REPL
+    // chunk send. spawn(), not fork(): these tasks must outlive this particular saga call and keep
+    // running for every later chunk sent to this session, until endReplSessionSaga explicitly
+    // cancels them - fork()'s attached-fork semantics would instead tie their lifetime to this
+    // call's own completion.
     const receivedCount: ReceivedCount = { count: 0 };
-    stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation, receivedCount);
-    inputTask = yield fork(handleInputRequest, hostPlugin, workspaceLocation);
-    resultTask = yield fork(handleResults, hostPlugin, workspaceLocation, receivedCount);
-    errorTask = yield fork(handleErrors, hostPlugin, workspaceLocation, receivedCount);
-    statusTask = yield fork(handleStatuses, hostPlugin, workspaceLocation, receivedCount);
-    cseTask = yield fork(handleCseSnapshots, csePlugin, workspaceLocation);
+    const chunkSettledChan = channel<ChunkSettled>();
+    const stdoutTask = yield spawn(handleStdout, hostPlugin, workspaceLocation, receivedCount);
+    const inputTask = yield spawn(handleInputRequest, hostPlugin, workspaceLocation);
+    const resultTask = yield spawn(handleResults, hostPlugin, workspaceLocation, receivedCount);
+    const errorTask = yield spawn(handleErrors, hostPlugin, workspaceLocation, receivedCount);
+    const statusTask = yield spawn(
+      handleStatuses,
+      hostPlugin,
+      workspaceLocation,
+      receivedCount,
+      chunkSettledChan,
+    );
+    const cseTask = yield spawn(handleCseSnapshots, csePlugin, workspaceLocation);
+    replSessions.set(workspaceLocation, {
+      hostPlugin,
+      conduit,
+      evaluatorPath: evaluator.path,
+      chunkSettledChan,
+      tasks: [stdoutTask, inputTask, resultTask, errorTask, statusTask, cseTask],
+    });
 
     yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
 
-    // Wait for the runner to send a genuine terminal STATUS (STOPPED/ERROR, dispatched by
-    // handleStatuses only once the evaluator's own pending work — e.g. Python's set_timeout —
-    // has settled), or for the user to manually interrupt execution (Stop, or starting another
-    // Run — see evalEditorSaga's own beginInterruptExecution dispatch). No watchdog timeout:
-    // the Conductor framework gives every run a dedicated Worker that Stop/Run-again can always
-    // reclaim, so student programs are free to run (or wait on set_timeout/input()) indefinitely
-    // without an arbitrary deadline killing them out from under a legitimate long-running task.
-    yield take(actions.beginInterruptExecution.type);
-
-    // Drain pending result/error/output before teardown. Each conductor channel is its own
-    // MessagePort with no cross-channel ordering, so the terminal STATUS (which just resolved the
-    // take above) can be handled before the result/error/output posted just before it on their own
-    // ports. Cancelling the forks immediately would drop those still-in-flight messages (e.g. an
-    // evaluator that reports an error via `sendError` rather than by rejecting — see the catch below).
-    // Give the forks a brief window to process what the runner already sent.
-    yield call(() => new Promise(resolve => setTimeout(resolve, 50)));
+    const { terminal } = yield* waitForChunkSettled(chunkSettledChan);
+    if (terminal) {
+      yield* endReplSessionSaga(workspaceLocation);
+    }
   } catch (runError) {
     // Defensive: surface any setup error (e.g. failing to obtain the conductor) or synchronous
     // startEvaluator rejection here rather than letting it escape as an uncaught saga error. The
     // Python stepper's async rejection is delivered to and handled in `handleErrors`, not here.
     yield* surfaceConductorError(runError, workspaceLocation);
+    yield* endReplSessionSaga(workspaceLocation);
   } finally {
-    try {
-      // A consumed conductor's Worker is this run's responsibility to shut down - the conductor
-      // cache itself keeps the conductor around afterward (its tabs stay on screen), but never
-      // touches its Worker again. Without this, every Run leaks its Worker instead of shutting it
-      // down.
-      if (conduit) {
-        yield call([conduit, 'terminate']);
-      }
-      if (cseTask) {
-        yield cancel(cseTask);
-      }
-      if (statusTask) {
-        yield cancel(statusTask);
-      }
-      if (stdoutTask) {
-        yield cancel(stdoutTask);
-      }
-      if (inputTask) {
-        yield cancel(inputTask);
-      }
-      if (resultTask) {
-        yield cancel(resultTask);
-      }
-      if (errorTask) {
-        yield cancel(errorTask);
-      }
-    } finally {
-      yield put(actions.endInterruptExecution(workspaceLocation));
-      yield put(actions.setIsRunning(false, workspaceLocation));
+    // Guards against this call itself being cancelled mid-setup (e.g. a second Run's takeLatest
+    // superseding this one before replSessions.set() ever ran) - without this, the tasks/conduit
+    // spawned just above would be orphaned: spawn()'s whole point is that they don't die with this
+    // call, so nothing else would ever clean them up.
+    if (yield cancelled()) {
+      yield* endReplSessionSaga(workspaceLocation);
     }
   }
 }
