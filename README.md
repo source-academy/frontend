@@ -57,7 +57,7 @@ directory.plugin.url
 https://source-academy.github.io/plugins/directory.json
 
 directory.modules.url
-https://source-academy.github.io/modules-conductor/modules.json
+https://source-academy.github.io/modules/modules.json
 ```
 
 A deployment can pin these instead of leaving them to each user's browser. Set `REACT_APP_CONDUCTOR_ENABLE` to `TRUE` or `FALSE` in `.env` to fix `conductor.enable` for everyone; while it is `TRUE`, the three `REACT_APP_*_DIRECTORY_URL` variables likewise pin the directory URLs. Pinned flags are shown read-only on the Feature Flags page, and take precedence over anything a user has previously set there.
