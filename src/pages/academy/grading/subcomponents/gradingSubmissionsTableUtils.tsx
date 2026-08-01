@@ -24,12 +24,14 @@ export const generateCols = (filterMode: boolean) => {
     field: ColumnFields.assessmentName,
     cellClass: 'text-left',
     flex: 3,
+    minWidth: 160,
   });
 
   cols.push({
     ...generalColProperties,
     headerName: ColumnName.assessmentType,
     field: ColumnFields.assessmentType,
+    minWidth: 100,
     cellClass: 'flex! flex-col justify-center',
     cellRenderer: (params: ICellRendererParams<IGradingTableRow>) =>
       params.data ? <AssessmentTypeBadge type={params.data.assessmentType} /> : null,
@@ -42,12 +44,14 @@ export const generateCols = (filterMode: boolean) => {
     cellClass: 'text-left',
     filter: true,
     flex: 1.5,
+    minWidth: 140,
   });
 
   cols.push({
     ...generalColProperties,
     headerName: ColumnName.studentUsername,
     field: ColumnFields.studentUsername,
+    minWidth: 120,
     filter: true,
   });
 
@@ -57,12 +61,14 @@ export const generateCols = (filterMode: boolean) => {
     field: ColumnFields.groupName,
     filter: true,
     flex: 0.75,
+    minWidth: 90,
   });
 
   cols.push({
     ...generalColProperties,
     headerName: ColumnName.progressStatus,
     field: ColumnFields.progressStatus,
+    minWidth: 115,
     cellClass: 'flex! flex-col justify-center',
     cellRenderer: (params: ICellRendererParams<IGradingTableRow>) =>
       params.data ? <ProgressStatusBadge progress={params.data.progressStatus} /> : null,
@@ -72,6 +78,7 @@ export const generateCols = (filterMode: boolean) => {
     ...generalColProperties,
     headerName: ColumnName.xp,
     field: ColumnFields.xp,
+    minWidth: 120,
   });
 
   cols.push({
@@ -79,6 +86,7 @@ export const generateCols = (filterMode: boolean) => {
     headerName: ColumnName.actionsIndex,
     field: ColumnFields.actionsIndex,
     flex: 1.4,
+    minWidth: 130,
     cellClass: 'flex! flex-col justify-center',
     cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
       return params.data !== undefined
