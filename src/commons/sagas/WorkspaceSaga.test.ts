@@ -1,3 +1,4 @@
+import { RunnerStatus } from '@sourceacademy/conductor/types';
 import {
   type Context,
   type IOptions,
@@ -12,6 +13,7 @@ import { Chapter, Variant } from 'js-slang/dist/langs';
 import { type Finished } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
+import type { Matcher } from 'redux-saga-test-plan/matchers';
 import * as matchers from 'redux-saga-test-plan/matchers';
 import { showFullJSDisclaimer, showFullTSDisclaimer } from 'src/commons/utils/WarningDialogHelper';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
@@ -46,9 +48,14 @@ import { mockTestcases } from '../mocks/GradingMocks';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 import type { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+import {
+  getPreparedConductorSaga,
+  preloadConductorEvaluatorSaga,
+} from './helpers/conductorEvaluatorCache';
+import { getEvaluatorDefinitionSaga } from './LanguageDirectorySaga';
 import { getVersionHistory, updateVersionName } from './RequestsSaga';
 import workspaceSaga from './WorkspaceSaga';
-import { evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
+import { evalCodeConductorSaga, evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
 import { evalEditorSaga } from './WorkspaceSaga/helpers/evalEditor';
 import { evalTestCode } from './WorkspaceSaga/helpers/evalTestCode';
 import { insertDebuggerStatements } from './WorkspaceSaga/helpers/insertDebuggerStatements';
@@ -572,6 +579,150 @@ describe('EVAL_EDITOR under Conductor', () => {
       })
       .dispatch({
         type: WorkspaceActions.evalEditor.type,
+        payload: { workspaceLocation },
+      })
+      .silentRun();
+  });
+});
+
+describe('EVAL_REPL session persistence under Conductor', () => {
+  const workspaceLocation: WorkspaceLocation = 'playground';
+
+  /**
+   * A minimal fake Conductor host driving evalCodeConductorSaga's real session-management logic
+   * (everything this describe block cares about) while faking only the underlying Worker
+   * transport. startEvaluator()/sendChunk() each simulate a chunk settling on the next
+   * microtask by calling back through whatever handleStatuses (spawned for real, not mocked)
+   * assigned to hostPlugin.receiveStatusUpdate - mirroring conductor's own BasicEvaluator
+   * chunk loop (RUNNING, then EVAL_READY between chunks - see source-academy/conductor#66),
+   * unless overridden via `nextStatus`.
+   */
+  function makeFakeConductor() {
+    const sentChunks: string[] = [];
+    const terminate = vi.fn();
+    let nextStatus: RunnerStatus = RunnerStatus.EVAL_READY;
+    const settle = () => {
+      Promise.resolve().then(() => {
+        hostPlugin.receiveStatusUpdate?.(RunnerStatus.RUNNING, true, 0);
+        hostPlugin.receiveStatusUpdate?.(nextStatus, true, 0);
+      });
+    };
+    const hostPlugin: any = {
+      startEvaluator: vi.fn(() => settle()),
+      sendChunk: vi.fn((chunk: string) => {
+        sentChunks.push(chunk);
+        settle();
+      }),
+    };
+    const csePlugin: any = { sendSnapshots: vi.fn() };
+    const conduit: any = { terminate };
+    return {
+      hostPlugin,
+      csePlugin,
+      conduit,
+      sentChunks,
+      terminate,
+      /** Makes the *next* settle() report `status` instead of the default EVAL_READY - e.g.
+       * RunnerStatus.STOPPED, to simulate the runner (or Stop) ending the session. */
+      setNextStatus: (status: RunnerStatus) => {
+        nextStatus = status;
+      },
+    };
+  }
+
+  test('a REPL chunk after a Run reuses the live session instead of requesting a new conductor', async () => {
+    const fake = makeFakeConductor();
+    const context = createContext();
+    const state = generateDefaultState(workspaceLocation, { context });
+    const providers: [Matcher, unknown][] = [
+      [matchers.call.fn(getEvaluatorDefinitionSaga), { path: 'fake-evaluator-path' }],
+      [matchers.call.fn(getPreparedConductorSaga), fake],
+      [matchers.spawn.fn(preloadConductorEvaluatorSaga), undefined],
+    ];
+
+    // A Run establishes the session.
+    await expectSaga(
+      evalCodeConductorSaga,
+      { '/code.js': 'x = 1' },
+      '/code.js',
+      context,
+      workspaceLocation,
+      WorkspaceActions.evalEditor.type,
+    )
+      .withState(state)
+      .provide([...providers])
+      .call.fn(getPreparedConductorSaga)
+      .silentRun();
+
+    expect(fake.hostPlugin.startEvaluator).toHaveBeenCalledTimes(1);
+
+    // A REPL line reuses that same session: no new conductor requested, the line is sent as a
+    // chunk to the already-live evaluator, and (since this test ends it with STOPPED) the
+    // session's own conduit - not a fresh one - is what gets terminated.
+    fake.setNextStatus(RunnerStatus.STOPPED);
+    await expectSaga(
+      evalCodeConductorSaga,
+      { '/code.js': 'print(x)' },
+      '/code.js',
+      context,
+      workspaceLocation,
+      WorkspaceActions.evalRepl.type,
+    )
+      .withState(state)
+      .provide([...providers])
+      .not.call.fn(getPreparedConductorSaga)
+      .silentRun();
+
+    expect(fake.sentChunks).toEqual(['print(x)']);
+    expect(fake.terminate).toHaveBeenCalledTimes(1);
+  });
+
+  test('a REPL submission with no prior Run establishes its own session from just that line', async () => {
+    const fake = makeFakeConductor();
+    const context = createContext();
+    const state = generateDefaultState(workspaceLocation, { context });
+
+    fake.setNextStatus(RunnerStatus.STOPPED);
+    await expectSaga(
+      evalCodeConductorSaga,
+      { '/code.js': 'x = 1' },
+      '/code.js',
+      context,
+      workspaceLocation,
+      WorkspaceActions.evalRepl.type,
+    )
+      .withState(state)
+      .provide([
+        [matchers.call.fn(getEvaluatorDefinitionSaga), { path: 'fake-evaluator-path' }],
+        [matchers.call.fn(getPreparedConductorSaga), fake],
+        [matchers.spawn.fn(preloadConductorEvaluatorSaga), undefined],
+      ])
+      .call.fn(getPreparedConductorSaga)
+      .silentRun();
+
+    expect(fake.hostPlugin.startEvaluator).toHaveBeenCalledWith('/code.js');
+    expect(fake.terminate).toHaveBeenCalledTimes(1);
+  });
+
+  test('the evalRepl handler does not dispatch beginInterruptExecution before the Conductor branch', () => {
+    // Dispatch-level check (through the real workspaceSaga -> evalRepl handler, not
+    // evalCodeConductorSaga directly, unlike the tests above): a regression where
+    // workspaceSaga's evalRepl handler dispatches beginInterruptExecution before reaching the
+    // Conductor branch would end the live REPL session on every single submission, even though
+    // evalCodeConductorSaga itself never called anything that would catch that.
+    const replValue = 'x = 1';
+    const newState = {
+      ...generateDefaultState(workspaceLocation, { replValue }),
+      featureFlags: { modifiedFlags: { [flagConductorEnable.flagName]: true } },
+    };
+
+    return expectSaga(workspaceSaga)
+      .withState(newState)
+      .provide([[matchers.call.fn(evalCodeConductorSaga), undefined]])
+      .not.put(InterpreterActions.beginInterruptExecution(workspaceLocation))
+      .call.like({ fn: evalCodeConductorSaga })
+      .dispatch({
+        type: WorkspaceActions.evalRepl.type,
         payload: { workspaceLocation },
       })
       .silentRun();
