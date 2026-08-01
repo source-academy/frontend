@@ -71,7 +71,14 @@ function DropdownCreateCourse(props: Props) {
       showWarningMessage('Course Name cannot be empty!');
       return;
     }
-    dispatch(AcademyActions.createCourse(courseConfig));
+    // Do not submit the LLM API key when LLM grading is disabled. Hiding the
+    // input is purely a UI concern; a previously typed key would otherwise be
+    // dispatched with the rest of the configuration.
+    const { llmApiKey: _llmApiKey, ...configToSubmit } = courseConfig;
+    const payload = courseConfig.enableLlmGrading
+      ? courseConfig
+      : (configToSubmit as UpdateCourseConfiguration);
+    dispatch(AcademyActions.createCourse(payload));
     props.onClose();
   };
 
