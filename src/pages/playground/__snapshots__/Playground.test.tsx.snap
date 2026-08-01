@@ -151,8 +151,12 @@ exports[`Playground tests > Playground renders correctly 1`] = `
           <span
             class="bp6-popover-target"
           >
-            <button
-              class="bp6-button bp6-minimal"
+            <a
+              aria-disabled="true"
+              class="bp6-button bp6-disabled bp6-minimal"
+              disabled=""
+              role="button"
+              tabindex="-1"
             >
               <span
                 aria-hidden="true"
@@ -176,7 +180,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
               >
                 Folder
               </span>
-            </button>
+            </a>
           </span>
           <span
             class="bp6-popover-target"
@@ -1766,8 +1770,12 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
           <span
             class="bp6-popover-target"
           >
-            <button
-              class="bp6-button bp6-minimal"
+            <a
+              aria-disabled="true"
+              class="bp6-button bp6-disabled bp6-minimal"
+              disabled=""
+              role="button"
+              tabindex="-1"
             >
               <span
                 aria-hidden="true"
@@ -1791,7 +1799,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
               >
                 Folder
               </span>
-            </button>
+            </a>
           </span>
           <span
             class="bp6-popover-target"

@@ -6,6 +6,7 @@ import CseMachine from 'src/features/cseMachine/CseMachine';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
+import { getDefaultFileExtension } from '../../../../features/directory/LanguageDirectoryTypes';
 import type { DeviceSession } from '../../../../features/remoteExecution/RemoteExecutionTypes';
 import { WORKSPACE_BASE_PATHS } from '../../../../pages/fileSystem/createInBrowserFileSystem';
 import type { OverallState } from '../../../application/ApplicationTypes';
@@ -41,7 +42,11 @@ export function* evalEditorSaga(
     throw new Error('Cannot evaluate program without an entrypoint file.');
   }
 
-  const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
+  const extension: string = yield select((state: OverallState) => {
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    return getDefaultFileExtension(langId ? languageMap[langId] : undefined);
+  });
+  const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.${extension}`;
   let files: Record<string, string>;
   if (isFolderModeEnabled) {
     files = yield call(retrieveFilesInWorkspaceAsRecord, workspaceLocation, fileSystem);
