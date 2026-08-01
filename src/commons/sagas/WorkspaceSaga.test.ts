@@ -31,6 +31,7 @@ import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFile
 import InterpreterActions from '../application/actions/InterpreterActions';
 import SessionActions from '../application/actions/SessionActions';
 import {
+  defaultEditorValue,
   defaultState,
   fullJSLanguage,
   fullTSLanguage,
@@ -45,6 +46,7 @@ import {
 } from '../assessment/AssessmentTypes';
 import { mockRuntimeContext } from '../mocks/ContextMocks';
 import { mockTestcases } from '../mocks/GradingMocks';
+import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 import type { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
@@ -101,6 +103,49 @@ beforeEach(() => {
   (window as any).Inspector = vi.fn();
   (window as any).Inspector.highlightClean = vi.fn();
   (window as any).Inspector.highlightLine = vi.fn();
+});
+
+function withSelectedLanguage(
+  state: OverallState,
+  language: Partial<OverallState['languageDirectory']['languageMap'][string]> & { id: string },
+): OverallState {
+  return {
+    ...state,
+    languageDirectory: {
+      ...state.languageDirectory,
+      selectedLanguageId: language.id,
+      languageMap: { ...state.languageDirectory.languageMap, [language.id]: language as any },
+    },
+  };
+}
+
+describe('SET_FOLDER_MODE', () => {
+  test('names the added editor tab using the selected language defaultFileExtension', () => {
+    const workspaceLocation = 'playground';
+    const currentWorkspaceFields: Partial<WorkspaceState> = {
+      isFolderModeEnabled: false,
+      editorTabs: [],
+    };
+    const stateWithNoTabs = withSelectedLanguage(
+      generateDefaultState(workspaceLocation, currentWorkspaceFields),
+      { id: 'python2', name: 'Python §2', evaluators: [], defaultFileExtension: 'py' },
+    );
+
+    return expectSaga(workspaceSaga)
+      .withState(stateWithNoTabs)
+      .put(
+        actions.addEditorTab(
+          workspaceLocation,
+          `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.py`,
+          defaultEditorValue,
+        ),
+      )
+      .dispatch({
+        type: WorkspaceActions.setFolderMode.type,
+        payload: { workspaceLocation, isFolderModeEnabled: false },
+      })
+      .silentRun();
+  });
 });
 
 describe('TOGGLE_FOLDER_MODE', () => {
@@ -569,6 +614,41 @@ describe('EVAL_EDITOR under Conductor', () => {
     };
 
     const entrypointFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
+
+    return expectSaga(workspaceSaga)
+      .withState(newDefaultState)
+      .provide([[matchers.call.fn(evalCodeSaga), undefined]])
+      .call.like({
+        fn: evalCodeSaga,
+        args: [{ [entrypointFilePath]: editorValue }],
+      })
+      .dispatch({
+        type: WorkspaceActions.evalEditor.type,
+        payload: { workspaceLocation },
+      })
+      .silentRun();
+  });
+
+  test("names the entrypoint using the selected language's defaultFileExtension", () => {
+    const workspaceLocation = 'playground';
+    const editorValue = 'print(1)';
+    const execTime = 1000;
+    const context = createContext();
+
+    const newDefaultState = {
+      ...withSelectedLanguage(
+        generateDefaultState(workspaceLocation, {
+          editorTabs: [{ value: editorValue, highlightedLines: [], breakpoints: [] }],
+          programPrependValue: '',
+          execTime,
+          context,
+        }),
+        { id: 'python2', name: 'Python §2', evaluators: [], defaultFileExtension: 'py' },
+      ),
+      featureFlags: { modifiedFlags: { [flagConductorEnable.flagName]: true } },
+    };
+
+    const entrypointFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.py`;
 
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)

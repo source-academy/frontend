@@ -703,6 +703,28 @@ function Playground(props: PlaygroundProps) {
     );
   }, [dispatch, isSicpEditor, props.initialEditorValueHash, queryString, shortURL]);
 
+  // Language Directory's foldersEnabled (defaults to true when the field is
+  // absent — legacy/non-directory languages, and any directory language
+  // predating this field, are unaffected). false for e.g. Python §1, which
+  // has no pair/list library to build the exports-transfer structure
+  // local-file imports rely on.
+  const foldersEnabled = useAppSelector(state => {
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    const lang = langId ? languageMap[langId] : undefined;
+    return lang?.foldersEnabled ?? true;
+  });
+
+  // Folder mode can already be active (restored from a share link's `isFolder`
+  // param, or left on from a previous language) when the user switches to a
+  // language that doesn't support it — the toggle button alone only stops
+  // *new* enabling, since it becomes disabled once foldersEnabled is false,
+  // which would otherwise leave the user stuck unable to turn it back off.
+  useEffect(() => {
+    if (!foldersEnabled && isFolderModeEnabled) {
+      dispatch(WorkspaceActions.setFolderMode(workspaceLocation, false));
+    }
+  }, [dispatch, foldersEnabled, isFolderModeEnabled, workspaceLocation]);
+
   const toggleFolderModeButton = useMemo(() => {
     return (
       <ControlBarToggleFolderModeButton
@@ -710,6 +732,7 @@ function Playground(props: PlaygroundProps) {
         isSessionActive={editorSessionId !== ''}
         isPersistenceActive={persistenceFile !== undefined || githubSaveInfo.repoName !== ''}
         toggleFolderMode={() => dispatch(WorkspaceActions.toggleFolderMode(workspaceLocation))}
+        foldersEnabled={foldersEnabled}
         key="folder"
       />
     );
@@ -720,6 +743,7 @@ function Playground(props: PlaygroundProps) {
     persistenceFile,
     editorSessionId,
     workspaceLocation,
+    foldersEnabled,
   ]);
 
   useEffect(() => {

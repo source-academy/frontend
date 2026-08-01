@@ -16,6 +16,7 @@ import { EventType } from '../../../features/achievement/AchievementTypes';
 import { selectConductorEnable } from '../../../features/conductor/flagConductorEnable';
 import CseMachine from '../../../features/cseMachine/CseMachine';
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
+import { selectDefaultFileExtension } from '../../../features/directory/LanguageDirectoryTypes';
 import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';
 import {
   defaultEditorValue,
@@ -74,7 +75,10 @@ const WorkspaceSaga = combineSagaHandlers({
 
     // If Folder mode is disabled and there are no open editor tabs, add an editor tab.
     if (editorTabs.length === 0) {
-      const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
+      const extension: string = yield select((state: OverallState) =>
+        selectDefaultFileExtension(state.languageDirectory),
+      );
+      const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.${extension}`;
       const fileSystem: FSModule | null = yield select(
         (state: OverallState) => state.fileSystem.inBrowserFileSystem,
       );
