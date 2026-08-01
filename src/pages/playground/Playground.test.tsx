@@ -13,6 +13,7 @@ import {
 import type { Router } from 'src/commons/application/types/CommonsTypes';
 import { visitSideContent } from 'src/commons/sideContent/SideContentActions';
 import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
 import { createStore } from 'src/pages/createStore';
@@ -124,6 +125,35 @@ describe('Playground tests', () => {
     expect(mockStore.getState().sideContent.playground.selectedTab).toBe(
       SideContentType.introduction,
     );
+  });
+
+  test('switching to a language without folder support turns folder mode off', async () => {
+    const router = createMemoryRouter(routes, {
+      initialEntries: ['/playground'],
+      initialIndex: 0,
+    });
+    await renderTree(router);
+
+    await act(() => {
+      mockStore.dispatch(
+        LanguageDirectoryActions.setLanguages([
+          { id: 'python1', name: 'Python §1', evaluators: [], foldersEnabled: false },
+          { id: 'python2', name: 'Python §2', evaluators: [] },
+        ]),
+      );
+      mockStore.dispatch(LanguageDirectoryActions.setSelectedLanguage('python2'));
+      mockStore.dispatch(WorkspaceActions.setFolderMode('playground', true));
+    });
+    expect(mockStore.getState().workspaces.playground.isFolderModeEnabled).toBe(true);
+
+    // Switch to Python §1, which doesn't support folder mode. Without a
+    // safeguard, folder mode would stay on with no way to turn it off (the
+    // toggle button disables itself along with foldersEnabled).
+    await act(() => {
+      mockStore.dispatch(LanguageDirectoryActions.setSelectedLanguage('python1'));
+    });
+
+    expect(mockStore.getState().workspaces.playground.isFolderModeEnabled).toBe(false);
   });
 
   describe('handleHash', () => {

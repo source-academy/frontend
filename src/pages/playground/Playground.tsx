@@ -714,6 +714,17 @@ function Playground(props: PlaygroundProps) {
     return lang?.foldersEnabled ?? true;
   });
 
+  // Folder mode can already be active (restored from a share link's `isFolder`
+  // param, or left on from a previous language) when the user switches to a
+  // language that doesn't support it — the toggle button alone only stops
+  // *new* enabling, since it becomes disabled once foldersEnabled is false,
+  // which would otherwise leave the user stuck unable to turn it back off.
+  useEffect(() => {
+    if (!foldersEnabled && isFolderModeEnabled) {
+      dispatch(WorkspaceActions.setFolderMode(workspaceLocation, false));
+    }
+  }, [dispatch, foldersEnabled, isFolderModeEnabled, workspaceLocation]);
+
   const toggleFolderModeButton = useMemo(() => {
     return (
       <ControlBarToggleFolderModeButton
