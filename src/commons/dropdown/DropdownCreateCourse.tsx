@@ -260,24 +260,26 @@ function DropdownCreateCourse(props: Props) {
               fill
             />
           </FormGroup>
-          <FormGroup
-            helperText="API Key for LLM endpoint. This key will be encrypted and will not be retrievable on the frontend after."
-            label={'LLM API Key'}
-            labelInfo="(optional)"
-            labelFor="llmApiKey"
-          >
-            <InputGroup
-              id="llmApiKey"
-              type="password"
-              value={courseConfig.llmApiKey}
-              onChange={e =>
-                setCourseConfig({
-                  ...courseConfig,
-                  llmApiKey: e.target.value,
-                })
-              }
-            />
-          </FormGroup>
+          {courseConfig.enableLlmGrading && (
+            <FormGroup
+              helperText="API Key for LLM endpoint. This key will be encrypted and will not be retrievable on the frontend after."
+              label={'LLM API Key'}
+              labelInfo="(optional)"
+              labelFor="llmApiKey"
+            >
+              <InputGroup
+                id="llmApiKey"
+                type="password"
+                value={courseConfig.llmApiKey}
+                onChange={e =>
+                  setCourseConfig({
+                    ...courseConfig,
+                    llmApiKey: e.target.value,
+                  })
+                }
+              />
+            </FormGroup>
+          )}
         </div>
         <div className="create-course-button-container mt-5 flex justify-center items-center">
           <Button text="Create Course" onClick={submitHandler} />
