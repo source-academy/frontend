@@ -1,7 +1,10 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { type HotkeyItem, useHotkeys } from '@mantine/hooks';
-import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
+import type {
+  IEvaluatorDefinition,
+  ILanguageDefinition,
+} from '@sourceacademy/language-directory/dist/types';
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { Ace, Range } from 'ace-builds';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
@@ -703,6 +706,22 @@ function Playground(props: PlaygroundProps) {
     );
   }, [dispatch, isSicpEditor, props.initialEditorValueHash, queryString, shortURL]);
 
+  // Language Directory's foldersEnabled (defaults to true when the field is
+  // absent — legacy/non-directory languages, and any directory language
+  // predating this field, are unaffected). false for e.g. Python §1, which
+  // has no pair/list library to build the exports-transfer structure
+  // local-file imports rely on.
+  const foldersEnabled = useAppSelector(state => {
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    const lang = langId ? languageMap[langId] : undefined;
+    // TODO: drop this cast once @sourceacademy/language-directory is bumped
+    // past the version that adds `foldersEnabled` to ILanguageDefinition —
+    // the field is already present at runtime (directory.json), just not
+    // yet in the pinned package's type declarations.
+    return (lang as (ILanguageDefinition & { foldersEnabled?: boolean }) | undefined)
+      ?.foldersEnabled ?? true;
+  });
+
   const toggleFolderModeButton = useMemo(() => {
     return (
       <ControlBarToggleFolderModeButton
@@ -710,6 +729,7 @@ function Playground(props: PlaygroundProps) {
         isSessionActive={editorSessionId !== ''}
         isPersistenceActive={persistenceFile !== undefined || githubSaveInfo.repoName !== ''}
         toggleFolderMode={() => dispatch(WorkspaceActions.toggleFolderMode(workspaceLocation))}
+        foldersEnabled={foldersEnabled}
         key="folder"
       />
     );
@@ -720,6 +740,7 @@ function Playground(props: PlaygroundProps) {
     persistenceFile,
     editorSessionId,
     workspaceLocation,
+    foldersEnabled,
   ]);
 
   useEffect(() => {
