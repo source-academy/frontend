@@ -14,6 +14,7 @@ import { call, cancel, cancelled, put, race, select, spawn, take } from 'redux-s
 import * as Sourceror from 'sourceror';
 
 import InterpreterActions from '../../../../commons/application/actions/InterpreterActions';
+import { getBreakpointLineNumbers } from '../../../../commons/editor/Editor';
 import { makeCCompilerConfig, specialCReturnObject } from '../../../../commons/utils/CToWasmHelper';
 import { javaRun } from '../../../../commons/utils/JavaHelper';
 import { EventType } from '../../../../features/achievement/AchievementTypes';
@@ -919,10 +920,20 @@ export function* evalCodeConductorSaga(
   yield* endReplSessionSaga(workspaceLocation);
 
   // Inject step limit so the evaluator knows how many snapshots to collect
-  const { stepLimit }: { stepLimit: number } = yield* selectWorkspace(workspaceLocation);
+  const { stepLimit, editorTabs, activeEditorTabIndex } = yield* selectWorkspace(workspaceLocation);
+  // Gutter-click breakpoints (py-slang#383): the active tab's ace breakpoints, resolved to
+  // 1-indexed lines and threaded into /__cse_config__ so the evaluator can mark the closest
+  // enclosing statement, exactly like an explicit `breakpoint()` call. Conductor's own analogue of
+  // insertDebuggerStatements.ts's `debugger;` insertion (which is a no-op under Conductor, see its
+  // own doc comment) - a *line* is host-side editor state, so the host, not the evaluator bundle,
+  // is what can resolve "the active tab's breakpoints" in the first place.
+  const activeEditorTab = editorTabs[activeEditorTabIndex ?? 0];
+  const breakpointLines = getBreakpointLineNumbers(activeEditorTab?.breakpoints ?? []).map(
+    line => line + 1,
+  );
   const filesWithConfig = {
     ...files,
-    '/__cse_config__': JSON.stringify({ stepLimit }),
+    '/__cse_config__': JSON.stringify({ stepLimit, breakpointLines }),
   };
 
   try {

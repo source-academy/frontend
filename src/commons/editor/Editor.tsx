@@ -176,15 +176,19 @@ const makeHandleGutterClick =
   };
 
 /**
- * Returns an array of breakpoint line numbers from the Ace Editor's breakpoint
+ * Returns an array of breakpoint line numbers (0-indexed) from the Ace Editor's breakpoint
  * array representation.
  *
  * Breakpoints are elements in the array with the value 'ace_breakpoint' where
  * the associated line number is the index of the element in the array.
  *
+ * Exported for evalCode.ts, which threads these into a Conductor run's /__cse_config__ (as
+ * 1-indexed lines) so a gutter click resolves to a breakpoint the same way an explicit
+ * `breakpoint()`/`debugger;` call does - see py-slang#383.
+ *
  * @param breakpoints The Ace Editor's breakpoint representation.
  */
-const getBreakpointLineNumbers = (breakpoints: string[]): number[] => {
+export const getBreakpointLineNumbers = (breakpoints: string[]): number[] => {
   const breakpointLineNumbers: number[] = [];
   breakpoints.forEach((value: string, index: number) => {
     if (value !== 'ace_breakpoint') {
