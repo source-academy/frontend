@@ -12,7 +12,7 @@ import { type ItemListRenderer, type ItemRenderer, Select } from '@blueprintjs/s
 import { Variant } from 'js-slang/dist/langs';
 import { useCallback, useState } from 'react';
 import Constants from 'src/commons/utils/Constants';
-import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector, useSession } from 'src/commons/utils/Hooks';
 
 import {
   type SALanguage,
@@ -21,9 +21,18 @@ import {
 } from '../../../../commons/application/ApplicationTypes';
 import ControlButton from '../../../../commons/ControlButton';
 import WorkspaceActions from '../../../../commons/workspace/WorkspaceActions';
+import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
+
+/**
+ * Just the fields `changeSublanguage` actually persists (course config only stores
+ * `sourceChapter`/`sourceVariant`) - lets a Conductor language-directory entry (which has no
+ * `variant`, `mainLanguage` or `supports` of its own) be selected through the same menu/dialog
+ * as a legacy Source `SALanguage` without having to fake those fields.
+ */
+type LanguageChoice = Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>;
 
 function DefaultChapterSelect() {
-  const [chosenSublang, setSublanguage] = useState<SALanguage>(sourceLanguages[0]);
+  const [chosenLanguage, setChosenLanguage] = useState<LanguageChoice>(sourceLanguages[0]);
   const [isDialogOpen, setDialogState] = useState(false);
 
   const {
@@ -32,35 +41,53 @@ function DefaultChapterSelect() {
     sourceVariant = Constants.defaultSourceVariant,
   } = useSession();
 
+  const isConductorEnabled = useAppSelector(selectConductorEnable);
+  const languages = useAppSelector(state => state.languageDirectory.languages);
+
+  // Once Conductor is enabled, `sourceChapter` is a 1-based index into the language directory's
+  // `languages` array (see chapterLanguage.ts's `deriveLanguageFromChapter`) rather than a Source
+  // chapter - Source is no longer used, so there's no other meaning to distinguish from.
+  const items: LanguageChoice[] = isConductorEnabled
+    ? languages.map((lang, index) => ({
+        chapter: index + 1,
+        variant: Variant.DEFAULT,
+        displayName: lang.name,
+      }))
+    : sourceLanguages;
+
+  const currentLanguageName = isConductorEnabled
+    ? (languages[sourceChapter - 1]?.name ?? 'Loading…')
+    : styliseSublanguage(sourceChapter, sourceVariant);
+
   const dispatch = useAppDispatch();
-  const handleUpdateSublanguage = useCallback(
-    (sublang: SALanguage) => dispatch(WorkspaceActions.changeSublanguage(sublang)),
+  const handleUpdateLanguage = useCallback(
+    (lang: LanguageChoice) => dispatch(WorkspaceActions.changeSublanguage(lang)),
     [dispatch],
   );
 
   const handleOpenDialog = useCallback(
-    (choice: SALanguage) => {
+    (choice: LanguageChoice) => {
       setDialogState(true);
-      setSublanguage(choice);
+      setChosenLanguage(choice);
     },
-    [setDialogState, setSublanguage],
+    [setDialogState, setChosenLanguage],
   );
   const handleCloseDialog = useCallback(() => {
     setDialogState(false);
   }, [setDialogState]);
   const handleConfirmDialog = useCallback(() => {
     setDialogState(false);
-    handleUpdateSublanguage(chosenSublang);
-  }, [chosenSublang, setDialogState, handleUpdateSublanguage]);
+    handleUpdateLanguage(chosenLanguage);
+  }, [chosenLanguage, setDialogState, handleUpdateLanguage]);
 
-  const chapterRenderer: ItemRenderer<SALanguage> = useCallback(
+  const chapterRenderer: ItemRenderer<LanguageChoice> = useCallback(
     (lang, { handleClick }) => (
       <MenuItem key={lang.displayName} onClick={handleClick} text={lang.displayName} />
     ),
     [],
   );
 
-  const chapterListRenderer: ItemListRenderer<SALanguage> = useCallback(
+  const chapterListRenderer: ItemListRenderer<LanguageChoice> = useCallback(
     ({ itemsParentRef, renderItem, items }) => {
       const defaultChoices = items.filter(({ variant }) => variant === Variant.DEFAULT);
       const variantChoices = items.filter(({ variant }) => variant !== Variant.DEFAULT);
@@ -88,11 +115,11 @@ function DefaultChapterSelect() {
       isCloseButtonShown
       isOpen={isDialogOpen}
       onClose={handleCloseDialog}
-      title="Updating default Source sublanguage"
+      title="Updating default language"
     >
       <DialogBody>
-        Are you sure you want to update the <b>default Playground Source sublanguage</b> from{' '}
-        {styliseSublanguage(sourceChapter, sourceVariant)} to <b>{chosenSublang.displayName}</b>?
+        Are you sure you want to update the <b>default Playground language</b> from{' '}
+        {currentLanguageName} to <b>{chosenLanguage.displayName}</b>?
       </DialogBody>
       <DialogFooter
         actions={
@@ -115,16 +142,16 @@ function DefaultChapterSelect() {
 
   return (
     <>
-      <Select<SALanguage>
-        items={sourceLanguages}
+      <Select<LanguageChoice>
+        items={items}
         onItemSelect={handleOpenDialog}
         itemRenderer={chapterRenderer}
         itemListRenderer={chapterListRenderer}
         filterable={false}
       >
         <Button endIcon={IconNames.DOUBLE_CARET_VERTICAL}>
-          <span className="hidden-xs hidden-sm">Default sublanguage: </span>
-          <span>{styliseSublanguage(sourceChapter, sourceVariant)}</span>
+          <span className="hidden-xs hidden-sm">Default language: </span>
+          <span>{currentLanguageName}</span>
         </Button>
       </Select>
       {dialog}

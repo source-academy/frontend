@@ -215,7 +215,7 @@ const newActions = createActions('workspace', {
     workspaceLocation,
     hasUnsavedChanges,
   }),
-  changeSublanguage: (sublang: SALanguage) => ({ sublang }),
+  changeSublanguage: (sublang: Pick<SALanguage, 'chapter' | 'variant'>) => ({ sublang }),
   updateSublanguage: (sublang: SALanguage) => ({ sublang }),
   promptAutocomplete: (
     workspaceLocation: WorkspaceLocation,

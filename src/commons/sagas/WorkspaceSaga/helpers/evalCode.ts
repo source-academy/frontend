@@ -931,7 +931,11 @@ export function* evalCodeConductorSaga(
       hostPlugin: BrowserHostPlugin;
       csePlugin: CseMachineHostPlugin;
       conduit: IConduit;
-    } = yield call(getPreparedConductorSaga, { files: filesWithConfig, consume: true });
+    } = yield call(getPreparedConductorSaga, {
+      files: filesWithConfig,
+      consume: true,
+      workspaceLocation,
+    });
     const { hostPlugin, csePlugin, conduit } = prepared;
 
     // Immediately start warming the next conductor in the background. forceFresh is required
