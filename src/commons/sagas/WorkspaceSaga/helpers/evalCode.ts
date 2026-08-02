@@ -920,16 +920,36 @@ export function* evalCodeConductorSaga(
   yield* endReplSessionSaga(workspaceLocation);
 
   // Inject step limit so the evaluator knows how many snapshots to collect
-  const { stepLimit, editorTabs, activeEditorTabIndex } = yield* selectWorkspace(workspaceLocation);
+  const { stepLimit, editorTabs, activeEditorTabIndex, programPrependValue } =
+    yield* selectWorkspace(workspaceLocation);
   // Gutter-click breakpoints (py-slang#383): the active tab's ace breakpoints, resolved to
   // 1-indexed lines and threaded into /__cse_config__ so the evaluator can mark the closest
   // enclosing statement, exactly like an explicit `breakpoint()` call. Conductor's own analogue of
   // insertDebuggerStatements.ts's `debugger;` insertion (which is a no-op under Conductor, see its
   // own doc comment) - a *line* is host-side editor state, so the host, not the evaluator bundle,
   // is what can resolve "the active tab's breakpoints" in the first place.
-  const activeEditorTab = editorTabs[activeEditorTabIndex ?? 0];
+  //
+  // Only a Run (EVAL_EDITOR) has editor-authored `entrypointFilePath` content to speak of - a REPL
+  // chunk (isReplChunk, above) is unrelated one-off input that just happens to run through this
+  // same saga, so a gutter breakpoint must not leak into it (nor into e.g. a test-case or
+  // block/restoreExtraMethods run - none of those are "the student's Run" either). No active tab
+  // (activeEditorTabIndex === null) likewise means there is nothing to source breakpoints from -
+  // never guess by falling back to the first tab.
+  const isEditorRun = actionType === WorkspaceActions.evalEditor.type;
+  const activeEditorTab =
+    isEditorRun && activeEditorTabIndex !== null ? editorTabs[activeEditorTabIndex] : undefined;
+  // evalEditorSaga (evalEditor.ts) concatenates `${programPrependValue}\n` onto the entrypoint
+  // before this saga ever runs, for a non-TYPED Conductor Run with a non-empty prepend - shifting
+  // every line of the student's own code down by the prepend's own line count. (The TYPED-variant
+  // prepend, by contrast, is joined onto line 1 with no newlines - no lines shift, so no offset is
+  // needed there.) Breakpoints are recorded against the student's un-prepended editor content, so
+  // that same shift must be applied here to still land on the right line post-concatenation.
+  const preludeLineOffset =
+    isEditorRun && context.variant !== Variant.TYPED && programPrependValue.length > 0
+      ? programPrependValue.split('\n').length
+      : 0;
   const breakpointLines = getBreakpointLineNumbers(activeEditorTab?.breakpoints ?? []).map(
-    line => line + 1,
+    line => line + 1 + preludeLineOffset,
   );
   const filesWithConfig = {
     ...files,
