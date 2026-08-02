@@ -172,11 +172,16 @@ export const getFullAcademyRouterConfig = ({
           ],
           children: [
             {
-              path: 'courses/:courseId',
-              lazy: () => import('../new_routes/courses/[courseId]/_layout'),
-              children: academyRoutes,
+              lazy: () => import('../new_routes/_chatbotLayout'),
+              children: [
+                {
+                  path: 'courses/:courseId',
+                  lazy: () => import('../new_routes/courses/[courseId]/_layout'),
+                  children: academyRoutes,
+                },
+                { path: 'playground/:playgroundCode?', lazy: Playground },
+              ],
             },
-            { path: 'playground/:playgroundCode?', lazy: Playground },
           ],
         },
         { path: 'mission-control/:assessmentId?/:questionId?', lazy: MissionControl },
