@@ -1,7 +1,7 @@
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/theme-twilight';
-import 'ace-diff/styles-twilight.css';
 import 'ace-diff/styles.css';
+import 'ace-diff/styles-twilight.css';
 
 import * as ace from 'ace-builds';
 import AceDiff from 'ace-diff';
