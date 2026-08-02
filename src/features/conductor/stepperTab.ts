@@ -29,3 +29,16 @@ export const STEPPER_EVALUATOR_CAPABILITY = 'stepper';
  * right one.
  */
 export const CSE_EVALUATOR_CAPABILITY = 'cse';
+
+/**
+ * True for evaluators reachable only through their own side-content tab (Stepper/CSE Machine) —
+ * hidden from the evaluator dropdown, never a fallback/default. Shared by the Playground's
+ * tab-to-evaluator sync effect and the evaluator dropdown's own filtering so both agree on exactly
+ * which evaluators are "tool" evaluators.
+ */
+export function isToolEvaluator(evaluator: { capabilities?: readonly string[] }): boolean {
+  return (
+    !!evaluator.capabilities?.includes(STEPPER_EVALUATOR_CAPABILITY) ||
+    !!evaluator.capabilities?.includes(CSE_EVALUATOR_CAPABILITY)
+  );
+}

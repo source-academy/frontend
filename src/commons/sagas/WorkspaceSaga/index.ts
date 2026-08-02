@@ -16,6 +16,7 @@ import { EventType } from '../../../features/achievement/AchievementTypes';
 import { selectConductorEnable } from '../../../features/conductor/flagConductorEnable';
 import CseMachine from '../../../features/cseMachine/CseMachine';
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
+import { selectDefaultFileExtension } from '../../../features/directory/LanguageDirectoryTypes';
 import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';
 import {
   defaultEditorValue,
@@ -74,7 +75,10 @@ const WorkspaceSaga = combineSagaHandlers({
 
     // If Folder mode is disabled and there are no open editor tabs, add an editor tab.
     if (editorTabs.length === 0) {
-      const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
+      const extension: string = yield select((state: OverallState) =>
+        selectDefaultFileExtension(state.languageDirectory),
+      );
+      const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.${extension}`;
       const fileSystem: FSModule | null = yield select(
         (state: OverallState) => state.fileSystem.inBrowserFileSystem,
       );
@@ -252,7 +256,6 @@ const WorkspaceSaga = combineSagaHandlers({
     const workspaceLocation = action.payload.workspaceLocation;
     const { replValue: code, execTime } = yield* selectWorkspace(workspaceLocation);
 
-    yield put(actions.beginInterruptExecution(workspaceLocation));
     yield put(actions.clearReplInput(workspaceLocation));
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
 
@@ -272,6 +275,13 @@ const WorkspaceSaga = combineSagaHandlers({
       );
       return;
     }
+
+    // Interrupt any evaluation currently in flight before starting this one - legacy,
+    // non-Conductor path only. The Conductor path above manages its own persistent REPL
+    // session (see evalCodeConductorSaga's doc comment) and must not be interrupted just
+    // because a new REPL line was submitted, or every line would tear down and rebuild the
+    // session instead of building on it.
+    yield put(actions.beginInterruptExecution(workspaceLocation));
 
     // Reset old context.errors
     context.errors = [];

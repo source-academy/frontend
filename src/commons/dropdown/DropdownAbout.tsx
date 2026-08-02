@@ -21,13 +21,14 @@ function DropdownAbout(props: Props) {
       <DialogBody>
         <p>
           The <i>Source Academy</i> is a computer-mediated learning environment for studying the
-          structure and interpretation of computer programs. Students write and run their programs
-          in their web browser, using sublanguages of JavaScript called{' '}
-          <a href={Links.sourceDocs}>Source</a>, designed for the textbook{' '}
+          structure and interpretation of computer programs, across multiple programming languages.
+          Students write and run their programs in their web browser, in a language chosen for their
+          course — including <a href={Links.sourceDocs}>Source</a>, a family of JavaScript
+          sublanguages designed for the textbook{' '}
           <a href={Links.textbook}>
             Structure and Interpretation of Computer Programs, JavaScript Edition
           </a>
-          .
+          , and other languages such as Python.
         </p>
         <p>
           The Source Academy is available under the Apache License 2.0 at the GitHub organisation{' '}
