@@ -16,7 +16,12 @@ import { EventType } from '../../../features/achievement/AchievementTypes';
 import { selectConductorEnable } from '../../../features/conductor/flagConductorEnable';
 import CseMachine from '../../../features/cseMachine/CseMachine';
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
+import LanguageDirectoryActions from '../../../features/directory/LanguageDirectoryActions';
 import { selectDefaultFileExtension } from '../../../features/directory/LanguageDirectoryTypes';
+import {
+  TEST_CASE_EVALUATOR_ID,
+  TEST_CASE_LANGUAGE_ID,
+} from '../../../features/directory/testCaseLanguage';
 import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';
 import {
   defaultEditorValue,
@@ -530,18 +535,57 @@ const WorkspaceSaga = combineSagaHandlers({
         (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases,
       );
       // Avoid displaying message if there are no testcases
-      if (testcases.length > 0) {
-        // Display a message to the user
-        yield call(showSuccessMessage, `Running all testcases!`, 2000);
+      if (testcases.length === 0) {
+        return;
+      }
+
+      // Display a message to the user
+      yield call(showSuccessMessage, `Running all testcases!`, 2000);
+
+      // Grading always runs under TEST_CASE_LANGUAGE_ID/EVALUATOR_ID (see testCaseLanguage.ts) -
+      // switch once for this whole batch (rather than once per testcase inside
+      // runTestCaseConductor), since each switch tears down and rebuilds the Conductor session
+      // (conductorEvaluatorCache.ts's ensureConductorSessionSaga). Doing that up to 2N times in
+      // quick succession raced with Conductor's own internal teardown often enough to throw an
+      // uncaught "Conduit already terminated" from inside the vendored library - see
+      // source-academy/frontend#4232.
+      const isConductorEnabled: boolean = yield select(selectConductorEnable);
+      let selectedLanguageId: string | null = null;
+      let selectedEvaluatorId: string | null = null;
+      if (isConductorEnabled) {
+        ({ selectedLanguageId, selectedEvaluatorId } = yield select(
+          (state: OverallState) => state.languageDirectory,
+        ));
+        yield put(LanguageDirectoryActions.setSelectedLanguage(TEST_CASE_LANGUAGE_ID));
+        yield put(LanguageDirectoryActions.setSelectedEvaluator(TEST_CASE_EVALUATOR_ID));
+      }
+
+      try {
         for (const idx of testcases.keys()) {
           // break each testcase up into separate event loop iterations
           // so that the UI updates
           yield new Promise(resolve => setTimeout(resolve, 0));
 
-          const programSucceeded: boolean = yield call(runTestCase, workspaceLocation, idx);
+          const programSucceeded: boolean = yield call(
+            runTestCase,
+            workspaceLocation,
+            idx,
+            isConductorEnabled,
+          );
           // Prematurely terminate if execution of the program failed (not the testcase)
           if (!programSucceeded) {
             return;
+          }
+        }
+      } finally {
+        if (isConductorEnabled) {
+          if (selectedLanguageId) {
+            yield put(LanguageDirectoryActions.setSelectedLanguage(selectedLanguageId));
+            if (selectedEvaluatorId) {
+              yield put(LanguageDirectoryActions.setSelectedEvaluator(selectedEvaluatorId));
+            }
+          } else {
+            yield put(LanguageDirectoryActions.clearSelectedLanguage());
           }
         }
       }

@@ -517,11 +517,11 @@ function GradingWorkspace(props: Props) {
   };
 
   const handleEval = () => {
-    handleEditorEval();
-
     // Run testcases when the autograder tab is selected
     if (selectedTab === SideContentType.autograder) {
       handleRunAllTestcases();
+    } else {
+      handleEditorEval();
     }
   };
 
