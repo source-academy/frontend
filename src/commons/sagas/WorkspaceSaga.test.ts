@@ -670,50 +670,64 @@ describe('EVAL_EDITOR under Conductor', () => {
   });
 });
 
+/**
+ * A minimal fake Conductor host driving evalCodeConductorSaga's real session-management logic
+ * while faking only the underlying Worker transport. startEvaluator()/sendChunk() each simulate a
+ * chunk settling on the next microtask by calling back through whatever handleStatuses (spawned
+ * for real, not mocked) assigned to hostPlugin.receiveStatusUpdate - mirroring conductor's own
+ * BasicEvaluator chunk loop (RUNNING, then EVAL_READY between chunks - see
+ * source-academy/conductor#66), unless overridden via `nextStatus`.
+ *
+ * `options.error`, if given, is delivered through hostPlugin.receiveError on the *next* settle -
+ * simulating the runner reporting an error (e.g. a py-slang EvaluatorError) on this chunk, the way
+ * conductor's RunnerPlugin.sendError does - before the chunk's own status update. Like
+ * `setNextStatus` below, it can also be changed later via `setNextError` for a later chunk (e.g. a
+ * REPL line sent to an already-live session) sent to this same fake.
+ */
+function makeFakeConductor(options: { error?: unknown } = {}) {
+  const sentChunks: string[] = [];
+  const terminate = vi.fn();
+  let nextStatus: RunnerStatus = RunnerStatus.EVAL_READY;
+  let nextError: unknown = options.error;
+  const settle = () => {
+    Promise.resolve().then(() => {
+      if (nextError !== undefined) {
+        hostPlugin.receiveError?.(nextError);
+      }
+      hostPlugin.receiveStatusUpdate?.(RunnerStatus.RUNNING, true, 0);
+      hostPlugin.receiveStatusUpdate?.(nextStatus, true, 0);
+    });
+  };
+  const hostPlugin: any = {
+    startEvaluator: vi.fn(() => settle()),
+    sendChunk: vi.fn((chunk: string) => {
+      sentChunks.push(chunk);
+      settle();
+    }),
+  };
+  const csePlugin: any = { sendSnapshots: vi.fn() };
+  const conduit: any = { terminate };
+  return {
+    hostPlugin,
+    csePlugin,
+    conduit,
+    sentChunks,
+    terminate,
+    /** Makes the *next* settle() report `status` instead of the default EVAL_READY - e.g.
+     * RunnerStatus.STOPPED, to simulate the runner (or Stop) ending the session. */
+    setNextStatus: (status: RunnerStatus) => {
+      nextStatus = status;
+    },
+    /** Makes the *next* settle() also deliver `error` through hostPlugin.receiveError first, or
+     * stop delivering one if called with `undefined`. */
+    setNextError: (error: unknown) => {
+      nextError = error;
+    },
+  };
+}
+
 describe('EVAL_REPL session persistence under Conductor', () => {
   const workspaceLocation: WorkspaceLocation = 'playground';
-
-  /**
-   * A minimal fake Conductor host driving evalCodeConductorSaga's real session-management logic
-   * (everything this describe block cares about) while faking only the underlying Worker
-   * transport. startEvaluator()/sendChunk() each simulate a chunk settling on the next
-   * microtask by calling back through whatever handleStatuses (spawned for real, not mocked)
-   * assigned to hostPlugin.receiveStatusUpdate - mirroring conductor's own BasicEvaluator
-   * chunk loop (RUNNING, then EVAL_READY between chunks - see source-academy/conductor#66),
-   * unless overridden via `nextStatus`.
-   */
-  function makeFakeConductor() {
-    const sentChunks: string[] = [];
-    const terminate = vi.fn();
-    let nextStatus: RunnerStatus = RunnerStatus.EVAL_READY;
-    const settle = () => {
-      Promise.resolve().then(() => {
-        hostPlugin.receiveStatusUpdate?.(RunnerStatus.RUNNING, true, 0);
-        hostPlugin.receiveStatusUpdate?.(nextStatus, true, 0);
-      });
-    };
-    const hostPlugin: any = {
-      startEvaluator: vi.fn(() => settle()),
-      sendChunk: vi.fn((chunk: string) => {
-        sentChunks.push(chunk);
-        settle();
-      }),
-    };
-    const csePlugin: any = { sendSnapshots: vi.fn() };
-    const conduit: any = { terminate };
-    return {
-      hostPlugin,
-      csePlugin,
-      conduit,
-      sentChunks,
-      terminate,
-      /** Makes the *next* settle() report `status` instead of the default EVAL_READY - e.g.
-       * RunnerStatus.STOPPED, to simulate the runner (or Stop) ending the session. */
-      setNextStatus: (status: RunnerStatus) => {
-        nextStatus = status;
-      },
-    };
-  }
 
   test('a REPL chunk after a Run reuses the live session instead of requesting a new conductor', async () => {
     const fake = makeFakeConductor();
@@ -811,6 +825,137 @@ describe('EVAL_REPL session persistence under Conductor', () => {
         payload: { workspaceLocation },
       })
       .silentRun();
+  });
+});
+
+describe('Conductor errors subtract the prepend line shift (source-academy/frontend#4244)', () => {
+  const workspaceLocation: WorkspaceLocation = 'playground';
+
+  test("a one-line prepend shifts a reported error line back to the student's own line", async () => {
+    // Mirrors the reported bug exactly: a one-line PREPEND made every error line off-by-one.
+    // evalEditorSaga concatenates `${prepend}\n${entrypoint}` before this saga ever runs (see
+    // toConductorSourceError's doc comment), so the student's own first line becomes combined-file
+    // line 2 - simulate the evaluator (e.g. py-slang) reporting an error there via a structured,
+    // EvaluatorError-shaped object (line/column/rawMessage own properties survive a Worker's
+    // postMessage structured clone even though the class prototype doesn't).
+    const programPrependValue = 'COUNTER = 0';
+    const editorValue = 'undefined_name';
+    const entrypointFilePath = '/code.py';
+    const fakeError = {
+      name: 'EvaluatorRuntimeError',
+      line: 2,
+      column: 0,
+      rawMessage: "NameError: name 'undefined_name' is not defined",
+      message: "2:0: NameError: name 'undefined_name' is not defined",
+    };
+    const fake = makeFakeConductor({ error: fakeError });
+    fake.setNextStatus(RunnerStatus.STOPPED);
+    const context = createContext();
+    const state = generateDefaultState(workspaceLocation, {
+      context,
+      programPrependValue,
+      editorTabs: [{ value: editorValue, highlightedLines: [], breakpoints: [] }],
+      activeEditorTabIndex: 0,
+    });
+
+    let capturedErrors: SourceError[] | undefined;
+    await expectSaga(
+      evalCodeConductorSaga,
+      { [entrypointFilePath]: `${programPrependValue}\n${editorValue}` },
+      entrypointFilePath,
+      context,
+      workspaceLocation,
+      WorkspaceActions.evalEditor.type,
+    )
+      .withState(state)
+      .provide([
+        [matchers.call.fn(getEvaluatorDefinitionSaga), { path: 'fake-evaluator-path' }],
+        [matchers.call.fn(getPreparedConductorSaga), fake],
+        [matchers.spawn.fn(preloadConductorEvaluatorSaga), undefined],
+        {
+          put(effect, next) {
+            if (effect.action.type === InterpreterActions.appendInterpreterError.type) {
+              capturedErrors = effect.action.payload.errors;
+            }
+            return next();
+          },
+        },
+      ])
+      .silentRun();
+
+    expect(capturedErrors).toHaveLength(1);
+    // Corrected back to the student's own line 1 (2 minus the 1-line prepend), not the raw
+    // combined-file line 2 the evaluator actually reported.
+    expect(capturedErrors![0].location.start.line).toBe(1);
+    expect(capturedErrors![0].explain()).toBe("NameError: name 'undefined_name' is not defined");
+  });
+
+  test("a REPL chunk sent to an already-live session is not shifted by that session's own prepend", async () => {
+    // The offset only applies to a session's initial entrypoint chunk (which had prepend
+    // concatenated onto it) - a REPL line sent afterwards is raw input with no prepend involved,
+    // so an error there must be reported as-is, not shifted by the Run's prepend all over again.
+    const programPrependValue = 'COUNTER = 0';
+    const context = createContext();
+    const state = generateDefaultState(workspaceLocation, { context, programPrependValue });
+    const providers: [Matcher, unknown][] = [
+      [matchers.call.fn(getEvaluatorDefinitionSaga), { path: 'fake-evaluator-path' }],
+      [matchers.spawn.fn(preloadConductorEvaluatorSaga), undefined],
+    ];
+
+    // A Run establishes the session (no error on this chunk). handleErrors is spawn()ed as a
+    // detached task inside *this* expectSaga call and keeps running (and keeps dispatching
+    // through *this* call's own store/middleware) after this call's own silentRun() resolves -
+    // it's the same task that later handles the REPL chunk's error below, so the put-capturing
+    // provider has to be registered here, not on the second expectSaga call, to see it.
+    let capturedErrors: SourceError[] | undefined;
+    const runFake = makeFakeConductor();
+    await expectSaga(
+      evalCodeConductorSaga,
+      { '/code.py': `${programPrependValue}\nx = 1` },
+      '/code.py',
+      context,
+      workspaceLocation,
+      WorkspaceActions.evalEditor.type,
+    )
+      .withState(state)
+      .provide([
+        ...providers,
+        [matchers.call.fn(getPreparedConductorSaga), runFake],
+        {
+          put(effect, next) {
+            if (effect.action.type === InterpreterActions.appendInterpreterError.type) {
+              capturedErrors = effect.action.payload.errors;
+            }
+            return next();
+          },
+        },
+      ])
+      .silentRun();
+
+    // A later REPL line reuses that live session and errors on its own (unshifted) line 1.
+    runFake.setNextError({
+      name: 'EvaluatorRuntimeError',
+      line: 1,
+      column: 0,
+      rawMessage: "NameError: name 'undefined_name' is not defined",
+      message: "1:0: NameError: name 'undefined_name' is not defined",
+    });
+    runFake.setNextStatus(RunnerStatus.STOPPED);
+    await expectSaga(
+      evalCodeConductorSaga,
+      { '/code.py': 'undefined_name' },
+      '/code.py',
+      context,
+      workspaceLocation,
+      WorkspaceActions.evalRepl.type,
+    )
+      .withState(state)
+      .provide([...providers])
+      .silentRun();
+
+    expect(capturedErrors).toHaveLength(1);
+    // Reported as-is (line 1), not shifted down by the Run's prepend all over again.
+    expect(capturedErrors![0].location.start.line).toBe(1);
   });
 });
 
