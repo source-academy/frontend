@@ -27,6 +27,11 @@ vi.mock('../../pages/createStore', () => ({
 }));
 
 import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
+import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
+import {
+  TEST_CASE_EVALUATOR_ID,
+  TEST_CASE_LANGUAGE_ID,
+} from '../../features/directory/testCaseLanguage';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import InterpreterActions from '../application/actions/InterpreterActions';
 import SessionActions from '../application/actions/SessionActions';
@@ -1857,15 +1862,15 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
       })
       .call(showSuccessMessage, 'Running all testcases!', 2000)
       .call.fn(evalEditorSaga)
-      .call(runTestCase, workspaceLocation, 0)
-      .call(runTestCase, workspaceLocation, 1)
-      .call(runTestCase, workspaceLocation, 2)
-      .call(runTestCase, workspaceLocation, 3)
+      .call(runTestCase, workspaceLocation, 0, false)
+      .call(runTestCase, workspaceLocation, 1, false)
+      .call(runTestCase, workspaceLocation, 2, false)
+      .call(runTestCase, workspaceLocation, 3, false)
       .provide([
-        [call(runTestCase, workspaceLocation, 0), true],
-        [call(runTestCase, workspaceLocation, 1), true],
-        [call(runTestCase, workspaceLocation, 2), true],
-        [call(runTestCase, workspaceLocation, 3), true],
+        [call(runTestCase, workspaceLocation, 0, false), true],
+        [call(runTestCase, workspaceLocation, 1, false), true],
+        [call(runTestCase, workspaceLocation, 2, false), true],
+        [call(runTestCase, workspaceLocation, 3, false), true],
       ])
       .silentRun(2000);
   });
@@ -1883,12 +1888,77 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
       })
       .call(showSuccessMessage, 'Running all testcases!', 2000)
       .call.fn(evalEditorSaga)
-      .call(runTestCase, workspaceLocation, 0)
-      .not.call(runTestCase, workspaceLocation, 1)
-      .not.call(runTestCase, workspaceLocation, 2)
-      .not.call(runTestCase, workspaceLocation, 3)
-      .provide([[call(runTestCase, workspaceLocation, 0), false]])
+      .call(runTestCase, workspaceLocation, 0, false)
+      .not.call(runTestCase, workspaceLocation, 1, false)
+      .not.call(runTestCase, workspaceLocation, 2, false)
+      .not.call(runTestCase, workspaceLocation, 3, false)
+      .provide([[call(runTestCase, workspaceLocation, 0, false), false]])
       .silentRun(2000);
+  });
+
+  test('under Conductor, switches the test-case language once for the whole batch instead of once per testcase', () => {
+    state = {
+      ...generateDefaultState(workspaceLocation, {
+        editorTestcases: mockTestcases,
+      }),
+      featureFlags: { modifiedFlags: { [flagConductorEnable.flagName]: true } },
+      languageDirectory: {
+        ...defaultState.languageDirectory,
+        selectedLanguageId: 'python1',
+        selectedEvaluatorId: 'python1Py2js',
+      },
+    };
+
+    const capturedSkipFlags: unknown[] = [];
+    let setTestCaseLanguageCount = 0;
+    let setTestCaseEvaluatorCount = 0;
+    let restoreLanguageCount = 0;
+    let restoreEvaluatorCount = 0;
+
+    return expectSaga(workspaceSaga)
+      .withState(state)
+      .provide([
+        {
+          call(effect, next) {
+            if (effect.fn === runTestCase) {
+              capturedSkipFlags.push(effect.args[2]);
+              return true;
+            }
+            return next();
+          },
+          put(effect, next) {
+            if (effect.action.type === LanguageDirectoryActions.setSelectedLanguage.type) {
+              if (effect.action.payload.languageId === TEST_CASE_LANGUAGE_ID) {
+                setTestCaseLanguageCount++;
+              } else if (effect.action.payload.languageId === 'python1') {
+                restoreLanguageCount++;
+              }
+            }
+            if (effect.action.type === LanguageDirectoryActions.setSelectedEvaluator.type) {
+              if (effect.action.payload.evaluatorId === TEST_CASE_EVALUATOR_ID) {
+                setTestCaseEvaluatorCount++;
+              } else if (effect.action.payload.evaluatorId === 'python1Py2js') {
+                restoreEvaluatorCount++;
+              }
+            }
+            return next();
+          },
+        },
+        [matchers.call.fn(evalEditorSaga), undefined],
+        [matchers.call.fn(showSuccessMessage), undefined],
+      ])
+      .dispatch({
+        type: WorkspaceActions.runAllTestcases.type,
+        payload: { workspaceLocation },
+      })
+      .run(2000)
+      .then(() => {
+        expect(capturedSkipFlags).toEqual([true, true, true, true]);
+        expect(setTestCaseLanguageCount).toBe(1);
+        expect(setTestCaseEvaluatorCount).toBe(1);
+        expect(restoreLanguageCount).toBe(1);
+        expect(restoreEvaluatorCount).toBe(1);
+      });
   });
 });
 
