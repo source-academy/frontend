@@ -172,7 +172,7 @@ export const getFullAcademyRouterConfig = ({
           ],
           children: [
             {
-              lazy: () => import('../new_routes/_chatbotLayout'),
+              lazy: () => import('../new_routes/_chatbot/_layout'),
               children: [
                 {
                   path: 'courses/:courseId',
