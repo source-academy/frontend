@@ -70,7 +70,7 @@ import SideContentContestLeaderboard from '../sideContent/content/SideContentCon
 import SideContentContestVotingContainer from '../sideContent/content/SideContentContestVotingContainer';
 import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import type { SideContentProps } from '../sideContent/SideContent';
-import { changeSideContentHeight } from '../sideContent/SideContentActions';
+import { changeSideContentHeight, resetSideContent } from '../sideContent/SideContentActions';
 import { useSideContent } from '../sideContent/SideContentHelper';
 import {
   type SideContentTab,
@@ -456,6 +456,9 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
       question.library.execTimeMs ?? defaultWorkspaceManager.assessment.execTime,
     );
     handleClearContext(question.library, true);
+    // Clear out any module tabs (e.g. Runes, Curves) left over from the
+    // previous question, so they don't linger until the next run.
+    dispatch(resetSideContent(workspaceLocation));
     handleUpdateHasUnsavedChanges(false);
     handleFetchVersionHistory();
 
