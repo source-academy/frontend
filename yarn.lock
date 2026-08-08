@@ -8665,7 +8665,7 @@ __metadata:
     react-dom: "npm:^19.2.4"
     react-drag-drop-files: "npm:^3.0.0"
     react-draggable: "npm:^4.4.5"
-    react-dropzone: "npm:^19.0.0"
+    react-dropzone: "npm:^20.0.0"
     react-error-overlay: "npm:^6.0.11"
     react-i18next: "npm:^17.0.2"
     react-konva: "npm:^19.0.7"
@@ -12760,9 +12760,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dropzone@npm:^19.0.0":
-  version: 19.3.0
-  resolution: "react-dropzone@npm:19.3.0"
+"react-dropzone@npm:^20.0.0":
+  version: 20.0.0
+  resolution: "react-dropzone@npm:20.0.0"
   dependencies:
     attr-accept: "npm:^2.2.5"
     file-selector: "npm:^4.1.0"
@@ -12772,7 +12772,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10c0/be438ed32a5a51f5c276b2e7244d2b51fb63c93cf3728a811f42ee60bf5943fad3a813911648b5c070eb6f7a320b7a817e1c9df9637b0435c92b242a2a767df2
+  checksum: 10c0/8a430bd22ba0350ecfc4872da80f27ddd7061a45d66d7b1612d94d82afa1c3fbff7476a8bf30582c38449f136223cfa5e052cbb6072800dc61f01ceea6770dd6
   languageName: node
   linkType: hard
 
