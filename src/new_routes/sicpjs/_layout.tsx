@@ -1,6 +1,6 @@
 import 'katex/dist/katex.min.css';
 
-import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
+import { Classes } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { useEffect, useRef } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router';
@@ -9,6 +9,7 @@ import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
+import LoadingContent from 'src/features/sicp/LoadingContent';
 import { ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { scrollRefIntoView } from 'src/features/sicp/utils/SicpUtils';
 import {
@@ -20,8 +21,6 @@ import {
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
 import Chatbot from '../../pages/sicp/subcomponents/chatbot/Chatbot';
-
-const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
 const getText = () => {
   const divs = document.querySelectorAll('p.sicp-text');
@@ -91,7 +90,9 @@ function SicpLayout() {
         {/* Close all active code snippet when new page is loaded */}
         <CodeSnippetProvider key={section}>
           {isLoading ? (
-            <div className="sicp-content">{loadingComponent}</div>
+            <div className="sicp-content">
+              <LoadingContent />
+            </div>
           ) : error ? (
             error.message === 'Not Found' ? (
               getSicpError(SicpErrorType.PAGE_NOT_FOUND_ERROR)

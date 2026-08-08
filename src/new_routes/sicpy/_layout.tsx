@@ -1,11 +1,12 @@
 import 'katex/dist/katex.min.css';
 
-import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
+import { Classes } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { useEffect, useRef } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router';
 import { readLocalStorage } from 'src/commons/hooks/useLocalStorageState';
 import { CodeSnippetProvider } from 'src/features/sicp/CodeSnippetProvider';
+import LoadingContent from 'src/features/sicp/LoadingContent';
 import { ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { scrollRefIntoView } from 'src/features/sicp/utils/SicpUtils';
 import {
@@ -16,8 +17,6 @@ import {
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
-
-const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
 function SicPyLayout() {
   const { section } = useParams<{ section: string }>();
@@ -59,7 +58,9 @@ function SicPyLayout() {
         {/* Close all active code snippet when new page is loaded */}
         <CodeSnippetProvider key={section}>
           {isLoading ? (
-            <div className="sicp-content">{loadingComponent}</div>
+            <div className="sicp-content">
+              <LoadingContent />
+            </div>
           ) : error ? (
             error.message === 'Not Found' ? (
               getSicpError(SicpErrorType.PAGE_NOT_FOUND_ERROR)
