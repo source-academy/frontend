@@ -27,7 +27,11 @@ function ControlBarStepLimit(props: Props) {
         value={props.stepLimit}
         stepSize={props.stepSize}
         onBlur={onBlurAutoScale}
-        onValueChange={props.handleChangeStepLimit}
+        onValueChange={limit => {
+          if (Number.isFinite(limit) && limit >= 1) {
+            props.handleChangeStepLimit?.(limit);
+          }
+        }}
       />
     </Tooltip>
   );
