@@ -162,13 +162,11 @@ describe('Playground tests', () => {
 
       const mockHandleEditorValueChanged = vi.fn();
       const mockHandleChapterSelect = vi.fn();
-      const mockHandleChangeExecTime = vi.fn();
 
       handleHash(
         testHash,
         {
           handleChapterSelect: mockHandleChapterSelect,
-          handleChangeExecTime: mockHandleChangeExecTime,
         },
         'playground',
         // We cannot make use of 'dispatch' & BrowserFS in test cases. However, the
@@ -180,7 +178,6 @@ describe('Playground tests', () => {
 
       expect(mockHandleEditorValueChanged).not.toHaveBeenCalled();
       expect(mockHandleChapterSelect).not.toHaveBeenCalled();
-      expect(mockHandleChangeExecTime).not.toHaveBeenCalled();
     });
   });
 });
