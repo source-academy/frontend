@@ -23,8 +23,7 @@ function ControlBarStepLimit(props: Props) {
       <NumericInput
         leftIcon={IconNames.VERTICAL_BAR_CHART_ASC}
         style={{ width: 80 }}
-        min={500}
-        max={5000}
+        min={1}
         value={props.stepLimit}
         stepSize={props.stepSize}
         onBlur={onBlurAutoScale}
