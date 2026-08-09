@@ -304,12 +304,14 @@ export const getAllUsers = async (tokens: Tokens): Promise<AchievementUser[] | n
 
   const users = await resp.json();
 
-  return users.map((user: any): AchievementUser => ({
-    name: user.name,
-    courseRegId: user.courseRegId,
-    group: user.group,
-    username: user.username,
-  }));
+  return users.map(
+    (user: any): AchievementUser => ({
+      name: user.name,
+      courseRegId: user.courseRegId,
+      group: user.group,
+      username: user.username,
+    }),
+  );
 };
 
 /**
@@ -475,14 +477,16 @@ export const getAllOverallLeaderboardXP = async (
 
   const rows = await resp.json();
 
-  return rows.users.map((row: any): LeaderboardRow => ({
-    rank: row.rank,
-    name: row.name,
-    username: row.username,
-    xp: row.total_xp,
-    avatar: '',
-    achievements: '',
-  }));
+  return rows.users.map(
+    (row: any): LeaderboardRow => ({
+      rank: row.rank,
+      name: row.name,
+      username: row.username,
+      xp: row.total_xp,
+      avatar: '',
+      achievements: '',
+    }),
+  );
 };
 
 /**
@@ -505,14 +509,16 @@ export const getOverallLeaderboardXP = async (
 
   const data = await resp.json();
 
-  const rows = data.users.map((row: any): LeaderboardRow => ({
-    rank: row.rank,
-    name: row.name,
-    username: row.username,
-    xp: row.total_xp,
-    avatar: '',
-    achievements: '',
-  }));
+  const rows = data.users.map(
+    (row: any): LeaderboardRow => ({
+      rank: row.rank,
+      name: row.name,
+      username: row.username,
+      xp: row.total_xp,
+      avatar: '',
+      achievements: '',
+    }),
+  );
 
   return { rows: rows, userCount: data.total_count };
 };
@@ -540,16 +546,18 @@ export const getContestScoreLeaderboard = async (
 
   const rows = await resp.json();
 
-  return rows.leaderboard.map((row: any): ContestLeaderboardRow => ({
-    rank: row.rank,
-    name: row.student_name,
-    username: row.student_username,
-    score: row.final_score,
-    avatar: '',
-    code: row.answer,
-    submissionId: row.submission_id,
-    votingId: rows.voting_id,
-  }));
+  return rows.leaderboard.map(
+    (row: any): ContestLeaderboardRow => ({
+      rank: row.rank,
+      name: row.student_name,
+      username: row.student_username,
+      score: row.final_score,
+      avatar: '',
+      code: row.answer,
+      submissionId: row.submission_id,
+      votingId: rows.voting_id,
+    }),
+  );
 };
 
 /**
@@ -575,16 +583,18 @@ export const getContestPopularVoteLeaderboard = async (
 
   const rows = await resp.json();
 
-  return rows.leaderboard.map((row: any): ContestLeaderboardRow => ({
-    rank: row.rank,
-    name: row.student_name,
-    username: row.student_username,
-    score: row.final_score,
-    avatar: '',
-    code: row.answer,
-    submissionId: row.submission_id,
-    votingId: rows.voting_id,
-  }));
+  return rows.leaderboard.map(
+    (row: any): ContestLeaderboardRow => ({
+      rank: row.rank,
+      name: row.student_name,
+      username: row.student_username,
+      score: row.final_score,
+      avatar: '',
+      code: row.answer,
+      submissionId: row.submission_id,
+      votingId: rows.voting_id,
+    }),
+  );
 };
 
 /**
@@ -1297,13 +1307,15 @@ export const getScoreLeaderboard = async (
   }
   const scoreLeaderboard = await resp.json();
 
-  return scoreLeaderboard.leaderboard.map((row: any): ContestEntry => ({
-    rank: row.rank,
-    student_name: row.student_name,
-    final_score: row.final_score,
-    answer: row.answer,
-    submission_id: row.submission_id,
-  }));
+  return scoreLeaderboard.leaderboard.map(
+    (row: any): ContestEntry => ({
+      rank: row.rank,
+      student_name: row.student_name,
+      final_score: row.final_score,
+      answer: row.answer,
+      submission_id: row.submission_id,
+    }),
+  );
 };
 
 /**
@@ -1326,13 +1338,15 @@ export const getPopularVoteLeaderboard = async (
     return null; // invalid accessToken _and_ refreshToken
   }
   const popularVoteLeaderboard = await resp.json();
-  return popularVoteLeaderboard.leaderboard.map((row: any): ContestEntry => ({
-    rank: row.rank,
-    student_name: row.student_name,
-    final_score: row.final_score,
-    answer: row.answer,
-    submission_id: row.submission_id,
-  }));
+  return popularVoteLeaderboard.leaderboard.map(
+    (row: any): ContestEntry => ({
+      rank: row.rank,
+      student_name: row.student_name,
+      final_score: row.final_score,
+      answer: row.answer,
+      submission_id: row.submission_id,
+    }),
+  );
 };
 
 /**
