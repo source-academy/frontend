@@ -1,6 +1,7 @@
 import { H2 } from '@blueprintjs/core';
+import { useQuery } from '@tanstack/react-query';
+import { queries } from 'src/queryKeys';
 
-import toc from '../../../../features/textbook/toc/data/sicpy-toc.json';
 import SicpIndexPageWrapper from './SicpIndexPageWrapper';
 
 type Props = {
@@ -8,9 +9,11 @@ type Props = {
 };
 
 function SicPyIndexPage({ titleImageUrl }: Props) {
+  const { data: toc } = useQuery(queries.sicp.tocPy);
+
   return (
     <SicpIndexPageWrapper
-      toc={toc}
+      toc={toc ?? []}
       routePrefix="/sicpy"
       titleImageUrl={titleImageUrl ?? undefined}
       titleAlt="SICPy"

@@ -62,7 +62,7 @@ function SicPyLayout() {
             <div className="sicp-content">{loadingComponent}</div>
           ) : error ? (
             error.message === 'Not Found' ? (
-              getSicpError(SicpErrorType.PAGE_NOT_FOUND_ERROR)
+              getSicpError(SicpErrorType.SECTION_IN_PREPARATION)
             ) : error instanceof ParseJsonError ? (
               getSicpError(SicpErrorType.PARSING_ERROR)
             ) : (

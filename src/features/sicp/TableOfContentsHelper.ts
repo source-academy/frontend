@@ -4,7 +4,7 @@
  * and the last entry has no `next`.
  */
 type TocNavigationNode = { next?: string; prev?: string };
-type TocNavigation = Record<string, TocNavigationNode>;
+export type TocNavigation = Record<string, TocNavigationNode>;
 
 /**
  * Returns the section slug that follows `section` in the textbook, per the supplied
