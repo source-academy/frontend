@@ -164,10 +164,6 @@ function FloatingChatbot({
         <FloatingChatbotButton
           src={avatarSrc}
           alt={avatarAlt}
-          // While closed, the button rests at the wrapper's bottom-right corner. The chat panel
-          // is the wrapper's only sized content, so once it's open that same corner is now the
-          // panel's bottom-right - bottom-full lifts the button to sit just above the panel's
-          // top edge instead, clear of any overlap regardless of collapsed/expanded height.
           positionClassName={isOpen ? 'right-2.5 bottom-full mb-2' : 'right-2.5 bottom-2.5'}
           onMouseEnter={() => !isDragging && setIsTipsVisible(true)}
           onMouseLeave={() => setIsTipsVisible(false)}
