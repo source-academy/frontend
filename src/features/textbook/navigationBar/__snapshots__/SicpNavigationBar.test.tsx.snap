@@ -20,24 +20,7 @@ exports[`Navbar renders correctly 1`] = `
     </div>
     <div
       class="bp6-navbar-group bp6-align-right"
-    >
-      <div>
-        <button
-          class="bp6-button bp6-minimal"
-        >
-          <span
-            class="bp6-button-text"
-          >
-            Next
-          </span>
-          <span
-            aria-hidden="true"
-            class="bp6-icon bp6-icon-standard bp6-icon-arrow-right"
-            data-icon="arrow-right"
-          />
-        </button>
-      </div>
-    </div>
+    />
     <div
       class="bp6-navbar-group"
     >
