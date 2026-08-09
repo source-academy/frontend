@@ -138,9 +138,10 @@ function FloatingChatbot({
       >
         {isTipsVisible && (
           <div
-            className={
-              'absolute right-16.25 bottom-2.5 h-auto w-65 rounded-[5px] border border-black bg-[#f1f1f1] pr-2.5'
-            }
+            className={classNames(
+              isOpen ? 'right-16.25 bottom-full mb-2' : 'right-16.25 bottom-2.5',
+              'absolute h-auto w-65 rounded-[5px] border border-black bg-[#f1f1f1] pr-2.5',
+            )}
           >
             <p className="m-0 whitespace-normal break-normal px-2 py-1 text-right text-[13px]">
               {introMessage}
@@ -163,6 +164,11 @@ function FloatingChatbot({
         <FloatingChatbotButton
           src={avatarSrc}
           alt={avatarAlt}
+          // While closed, the button rests at the wrapper's bottom-right corner. The chat panel
+          // is the wrapper's only sized content, so once it's open that same corner is now the
+          // panel's bottom-right - bottom-full lifts the button to sit just above the panel's
+          // top edge instead, clear of any overlap regardless of collapsed/expanded height.
+          positionClassName={isOpen ? 'right-2.5 bottom-full mb-2' : 'right-2.5 bottom-2.5'}
           onMouseEnter={() => !isDragging && setIsTipsVisible(true)}
           onMouseLeave={() => setIsTipsVisible(false)}
           onClick={toggleOpen}
