@@ -55,6 +55,18 @@ export function* runTestCaseConductor(
   prepend: string,
   postpend: string,
   execTime: number,
+  /**
+   * Skip this call's own switch-to-TEST_CASE-language/restore dance - set by runAllTestcases
+   * (WorkspaceSaga/index.ts), which switches once for the whole batch of testcases instead of
+   * once per testcase. Repeatedly switching `state.languageDirectory`'s selection back and forth
+   * between every testcase (each switch tears down and rebuilds the Conductor session - see
+   * conductorEvaluatorCache.ts's ensureConductorSessionSaga) raced with Conductor's own internal
+   * teardown often enough to throw an uncaught "Conduit already terminated" from inside the
+   * vendored library - see source-academy/frontend#4232. A single testcase run from the
+   * Autograder tab's individual "click to test" button still does its own switch/restore, since
+   * there's no batch to hoist it out of.
+   */
+  skipLanguageSwitch?: boolean,
 ): Generator<StrictEffect, boolean, any> {
   const context: Context<any> = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].context,
@@ -82,11 +94,17 @@ export function* runTestCaseConductor(
   // Grading always runs under TEST_CASE_LANGUAGE_ID/EVALUATOR_ID (see testCaseLanguage.ts),
   // regardless of the assessment's own chapter-derived language - temporarily override the
   // shared selection for this call, then restore it, so a subsequent Run (outside the testing
-  // tab) goes back to using the student's assigned sub-chapter.
-  const { selectedLanguageId, selectedEvaluatorId }: OverallState['languageDirectory'] =
-    yield select((state: OverallState) => state.languageDirectory);
-  yield put(LanguageDirectoryActions.setSelectedLanguage(TEST_CASE_LANGUAGE_ID));
-  yield put(LanguageDirectoryActions.setSelectedEvaluator(TEST_CASE_EVALUATOR_ID));
+  // tab) goes back to using the student's assigned sub-chapter. Skipped when the caller (see
+  // runAllTestcases in WorkspaceSaga/index.ts) already switched once for the whole batch.
+  let selectedLanguageId: string | null = null;
+  let selectedEvaluatorId: string | null = null;
+  if (!skipLanguageSwitch) {
+    ({ selectedLanguageId, selectedEvaluatorId } = yield select(
+      (state: OverallState) => state.languageDirectory,
+    ));
+    yield put(LanguageDirectoryActions.setSelectedLanguage(TEST_CASE_LANGUAGE_ID));
+    yield put(LanguageDirectoryActions.setSelectedEvaluator(TEST_CASE_EVALUATOR_ID));
+  }
 
   try {
     yield call(
@@ -99,13 +117,15 @@ export function* runTestCaseConductor(
       workspaceLocation,
     );
   } finally {
-    if (selectedLanguageId) {
-      yield put(LanguageDirectoryActions.setSelectedLanguage(selectedLanguageId));
-      if (selectedEvaluatorId) {
-        yield put(LanguageDirectoryActions.setSelectedEvaluator(selectedEvaluatorId));
+    if (!skipLanguageSwitch) {
+      if (selectedLanguageId) {
+        yield put(LanguageDirectoryActions.setSelectedLanguage(selectedLanguageId));
+        if (selectedEvaluatorId) {
+          yield put(LanguageDirectoryActions.setSelectedEvaluator(selectedEvaluatorId));
+        }
+      } else {
+        yield put(LanguageDirectoryActions.clearSelectedLanguage());
       }
-    } else {
-      yield put(LanguageDirectoryActions.clearSelectedLanguage());
     }
   }
 
@@ -146,6 +166,7 @@ export function* runTestCaseConductor(
 export function* runTestCase(
   workspaceLocation: WorkspaceLocation,
   index: number,
+  skipLanguageSwitch?: boolean,
 ): Generator<StrictEffect, boolean, any> {
   const {
     editorTabs: {
@@ -174,6 +195,7 @@ export function* runTestCase(
       prepend,
       postpend,
       execTime,
+      skipLanguageSwitch,
     );
   }
 

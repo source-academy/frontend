@@ -49,7 +49,8 @@ import type { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import type { SideContentProps } from '../sideContent/SideContent';
-import { changeSideContentHeight } from '../sideContent/SideContentActions';
+import { changeSideContentHeight, resetSideContent } from '../sideContent/SideContentActions';
+import { useSideContent } from '../sideContent/SideContentHelper';
 import type { SideContentTab } from '../sideContent/SideContentTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { useAppSelector } from '../utils/Hooks';
@@ -91,6 +92,8 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
     currentAssessment: storedAssessmentId,
     currentQuestion: storedQuestionId,
   } = useAppSelector(store => store.workspaces[workspaceLocation]);
+
+  const { selectedTab } = useSideContent(workspaceLocation);
 
   /**
    * After mounting (either an older copy of the assessment
@@ -289,6 +292,8 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
       };
     }
     handleClearContext(library, true);
+    // Clear out any module tabs left over from the previous question/library.
+    dispatch(resetSideContent(workspaceLocation));
   };
 
   const resetWorkspaceValues = () => {
@@ -328,6 +333,23 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
     const editorTestcases = [testcase];
     handleUpdateWorkspace({ editorTestcases });
     dispatch(WorkspaceActions.evalTestcase(workspaceLocation, 0));
+  };
+
+  const handleRunAllTestcases = () => {
+    const question = assessment!.questions[formatedQuestionId()] as IProgrammingQuestion;
+    const editorTestcases = question.testcases.concat(question.testcasesPrivate ?? []);
+    handleUpdateWorkspace({ editorTestcases });
+    dispatch(WorkspaceActions.runAllTestcases(workspaceLocation));
+  };
+
+  // Run all testcases (instead of just evaluating the editor) when the Run button/shift-enter
+  // is used while the Autograder tab is active - matches AssessmentWorkspace/GradingWorkspace.
+  const handleEval = () => {
+    if (selectedTab === SideContentType.editorAutograder) {
+      handleRunAllTestcases();
+    } else {
+      handleEditorEval();
+    }
   };
 
   const handleSave = () => {
@@ -603,7 +625,7 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
     const runButton = (
       <ControlBarRunButton
         isEntrypointFileDefined={activeEditorTabIndex !== null}
-        handleEditorEval={handleEditorEval}
+        handleEditorEval={handleEval}
         key="run"
       />
     );
@@ -675,7 +697,7 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
             editorSessionId: '',
             sessionDetails: null,
             handleDeclarationNavigate: handleDeclarationNavigate,
-            handleEditorEval: handleEditorEval,
+            handleEditorEval: handleEval,
             handleEditorValueChange: handleEditorValueChange,
             handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
             handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,

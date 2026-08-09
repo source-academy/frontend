@@ -19,7 +19,6 @@ import {
   setSessionDetails,
   setSharedbConnected,
 } from 'src/commons/collabEditing/CollabEditingActions';
-import ControlBarExecutionTime from 'src/commons/controlBar/ControlBarExecutionTime';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
@@ -81,7 +80,7 @@ import {
   type NormalEditorContainerProps,
 } from '../../commons/editor/EditorContainer';
 import type { Position } from '../../commons/editor/EditorTypes';
-import { overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';
+import { ensureLeadingSlash, overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';
 import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import MobileWorkspace, {
   type MobileWorkspaceProps,
@@ -121,7 +120,6 @@ export async function handleHash(
   hash: string,
   handlers: {
     handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
-    handleChangeExecTime: (execTime: number) => void;
   },
   workspaceLocation: WorkspaceLocation,
   dispatch: React.Dispatch<SourceActionType>,
@@ -148,12 +146,20 @@ export async function handleHash(
 
     // By default, create just the default file.
     const defaultFilePath = getDefaultFilePath(workspaceLocation);
+    // Some share links have historically encoded file paths without a leading slash (e.g.
+    // `playground/program.py` instead of `/playground/program.py`). Normalize them here so
+    // they match WORKSPACE_BASE_PATHS everywhere else they're used below (the BrowserFS write,
+    // and the removeEditorTabsForDirectory/addEditorTab dispatches).
     const files: Record<string, string> =
       qs.files === undefined
         ? {
             [defaultFilePath]: program,
           }
-        : parseQuery(decompressFromEncodedURIComponent(qs.files));
+        : Object.fromEntries(
+            Object.entries(parseQuery(decompressFromEncodedURIComponent(qs.files))).map(
+              ([filePath, contents]) => [ensureLeadingSlash(filePath), contents],
+            ),
+          );
     if (fileSystem !== null) {
       await overwriteFilesInWorkspace(workspaceLocation, fileSystem, files);
     }
@@ -169,9 +175,9 @@ export async function handleHash(
     dispatch(WorkspaceActions.setFolderMode(workspaceLocation, isFolderModeEnabled));
 
     // By default, open a single editor tab containing the default playground file.
-    const editorTabFilePaths = qs.tabs?.split(',').map(decompressFromEncodedURIComponent) ?? [
-      defaultFilePath,
-    ];
+    const editorTabFilePaths = (
+      qs.tabs?.split(',').map(decompressFromEncodedURIComponent) ?? [defaultFilePath]
+    ).map(ensureLeadingSlash);
     // Remove all editor tabs before populating with the ones from the query string.
     dispatch(
       WorkspaceActions.removeEditorTabsForDirectory(
@@ -204,11 +210,6 @@ export async function handleHash(
       const evaluatorId = qs.evaluator ? joinEvaluatorId(languageId, qs.evaluator) : undefined;
       dispatch(LanguageDirectoryActions.setSelectedLanguage(languageId, evaluatorId));
     }
-
-    const execTime = Math.max(convertParamToInt(qs.exec || '1000') || 1000, 1000);
-    if (execTime) {
-      handlers.handleChangeExecTime(execTime);
-    }
   }
 }
 
@@ -236,7 +237,6 @@ function Playground(props: PlaygroundProps) {
     editorSessionId,
     sessionDetails,
     stepLimit,
-    execTime,
     isRunning,
     isDebugging,
     output,
@@ -261,7 +261,6 @@ function Playground(props: PlaygroundProps) {
 
   const dispatch = useAppDispatch();
   const {
-    handleChangeExecTime,
     handleChapterSelect,
     handleEditorValueChange,
     handleSetEditorBreakpoints,
@@ -270,8 +269,6 @@ function Playground(props: PlaygroundProps) {
     handleUsingSubst,
   } = useMemo(() => {
     return {
-      handleChangeExecTime: (execTime: number) =>
-        dispatch(WorkspaceActions.changeExecTime(execTime, workspaceLocation)),
       handleChapterSelect: (chapter: Chapter, variant: Variant) =>
         dispatch(WorkspaceActions.chapterSelect(chapter, variant, workspaceLocation)),
       handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
@@ -374,13 +371,7 @@ function Playground(props: PlaygroundProps) {
       }
       return;
     }
-    handleHash(
-      hash,
-      { handleChangeExecTime, handleChapterSelect },
-      workspaceLocation,
-      dispatch,
-      fileSystem,
-    );
+    handleHash(hash, { handleChapterSelect }, workspaceLocation, dispatch, fileSystem);
   }, [
     dispatch,
     fileSystem,
@@ -389,7 +380,6 @@ function Playground(props: PlaygroundProps) {
     courseSourceVariant,
     workspaceLocation,
     handleChapterSelect,
-    handleChangeExecTime,
   ]);
 
   /**
@@ -611,17 +601,6 @@ function Playground(props: PlaygroundProps) {
     isFolderModeEnabled,
   ]);
 
-  const executionTime = useMemo(
-    () => (
-      <ControlBarExecutionTime
-        execTime={execTime}
-        handleChangeExecTime={handleChangeExecTime}
-        key="execution_time"
-      />
-    ),
-    [execTime, handleChangeExecTime],
-  );
-
   const stepperStepLimit = useMemo(
     () => (
       <ControlBarStepLimit
@@ -703,6 +682,28 @@ function Playground(props: PlaygroundProps) {
     );
   }, [dispatch, isSicpEditor, props.initialEditorValueHash, queryString, shortURL]);
 
+  // Language Directory's foldersEnabled (defaults to true when the field is
+  // absent — legacy/non-directory languages, and any directory language
+  // predating this field, are unaffected). false for e.g. Python §1, which
+  // has no pair/list library to build the exports-transfer structure
+  // local-file imports rely on.
+  const foldersEnabled = useAppSelector(state => {
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    const lang = langId ? languageMap[langId] : undefined;
+    return lang?.foldersEnabled ?? true;
+  });
+
+  // Folder mode can already be active (restored from a share link's `isFolder`
+  // param, or left on from a previous language) when the user switches to a
+  // language that doesn't support it — the toggle button alone only stops
+  // *new* enabling, since it becomes disabled once foldersEnabled is false,
+  // which would otherwise leave the user stuck unable to turn it back off.
+  useEffect(() => {
+    if (!foldersEnabled && isFolderModeEnabled) {
+      dispatch(WorkspaceActions.setFolderMode(workspaceLocation, false));
+    }
+  }, [dispatch, foldersEnabled, isFolderModeEnabled, workspaceLocation]);
+
   const toggleFolderModeButton = useMemo(() => {
     return (
       <ControlBarToggleFolderModeButton
@@ -710,6 +711,7 @@ function Playground(props: PlaygroundProps) {
         isSessionActive={editorSessionId !== ''}
         isPersistenceActive={persistenceFile !== undefined || githubSaveInfo.repoName !== ''}
         toggleFolderMode={() => dispatch(WorkspaceActions.toggleFolderMode(workspaceLocation))}
+        foldersEnabled={foldersEnabled}
         key="folder"
       />
     );
@@ -720,6 +722,7 @@ function Playground(props: PlaygroundProps) {
     persistenceFile,
     editorSessionId,
     workspaceLocation,
+    foldersEnabled,
   ]);
 
   useEffect(() => {
@@ -1232,11 +1235,15 @@ function Playground(props: PlaygroundProps) {
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
         persistenceButtons,
         githubButtons,
-        usingSubst || usingCse || isCseVariant(languageConfig.variant)
+        usingSubst ||
+        usingCse ||
+        isCseVariant(languageConfig.variant) ||
+        // Conductor languages (e.g. Python) whose selected sublanguage offers a stepper or CSE
+        // machine evaluator: their step limit is user-configurable too, driven by this same
+        // control through the /__cse_config__ file the host serves per run.
+        (conductorLanguageActive && (stepperEvaluatorId !== null || cseEvaluatorId !== null))
           ? stepperStepLimit
-          : isSourceLanguage(languageConfig.chapter)
-            ? executionTime
-            : null,
+          : null,
       ],
     },
     editorContainerProps: editorContainerProps,

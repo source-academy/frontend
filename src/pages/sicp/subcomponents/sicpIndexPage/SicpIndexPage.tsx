@@ -1,4 +1,6 @@
-import toc from '../../../../features/textbook/toc/data/sicpjs-toc.json';
+import { useQuery } from '@tanstack/react-query';
+import { queries } from 'src/queryKeys';
+
 import SicpIndexPageWrapper from './SicpIndexPageWrapper';
 import SicpAuthors from './subcomponents/SicpAuthors';
 import SicpLicenses from './subcomponents/SicpLicenses';
@@ -9,9 +11,12 @@ type Props = {
 };
 
 function SicpIndexPage({ titleImageUrl }: Props) {
+  const { data: toc, isError: tocError } = useQuery(queries.sicp.tocJs);
+
   return (
     <SicpIndexPageWrapper
-      toc={toc}
+      toc={toc ?? []}
+      tocError={tocError}
       routePrefix="/sicpjs"
       titleImageUrl={titleImageUrl}
       titleNode={

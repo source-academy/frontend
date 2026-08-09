@@ -11,6 +11,16 @@ type File = {
 };
 
 /**
+ * Ensures a file path is absolute. Playground share links have historically encoded
+ * file paths without a leading slash (e.g. `playground/program.py` instead of
+ * `/playground/program.py`); left as-is, such a path silently fails to match against
+ * `WORKSPACE_BASE_PATHS` (which are always absolute) in prefix comparisons, and would
+ * be written outside its intended BrowserFS mount point.
+ */
+export const ensureLeadingSlash = (filePath: string): string =>
+  filePath.startsWith('/') ? filePath : `/${filePath}`;
+
+/**
  * Retrieves the files in the specified workspace as a record that maps from
  * file path to file content. Because BrowserFS lacks an equivalent to Node.js's
  * Promises API, we need to wrap each asynchronous call to the file system with

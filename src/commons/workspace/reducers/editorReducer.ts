@@ -1,5 +1,6 @@
 import type { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
+import { ensureLeadingSlash } from '../../fileSystem/utils';
 import WorkspaceActions from '../WorkspaceActions';
 import { getWorkspaceLocation } from '../WorkspaceReducer';
 import type { EditorTabState, WorkspaceManagerState } from '../WorkspaceTypes';
@@ -212,12 +213,22 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
     })
     .addCase(WorkspaceActions.removeEditorTabsForDirectory, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
-      const removedDirectoryPath = action.payload.removedDirectoryPath;
+      // Normalized so this still matches tabs whose filePath was persisted (e.g. from an
+      // older share link) without a leading slash. The path is also slash-terminated (except
+      // for the root) so a plain startsWith check can't wrongly match a sibling directory that
+      // merely shares the same string prefix (e.g. `/dir1/dir20` when removing `/dir1/dir2`).
+      const normalizedDirectoryPath =
+        ensureLeadingSlash(action.payload.removedDirectoryPath).replace(/\/+$/, '') || '/';
+      const directoryPrefix = normalizedDirectoryPath === '/' ? '/' : `${normalizedDirectoryPath}/`;
 
       const editorTabs = state[workspaceLocation].editorTabs;
       const editorTabIndicesToRemove = editorTabs
         .map((editorTab: EditorTabState, index: number) => {
-          if (editorTab.filePath?.startsWith(removedDirectoryPath)) {
+          if (
+            editorTab.filePath !== undefined &&
+            (ensureLeadingSlash(editorTab.filePath) === normalizedDirectoryPath ||
+              ensureLeadingSlash(editorTab.filePath).startsWith(directoryPrefix))
+          ) {
             return index;
           }
           return null;

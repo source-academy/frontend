@@ -1,10 +1,11 @@
 import 'katex/dist/katex.min.css';
 
 import { Button } from '@blueprintjs/core';
+import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate, useOutletContext, useParams } from 'react-router';
 import { useAppSelector } from 'src/commons/utils/Hooks';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
-import tocNavigation from 'src/features/textbook/toc/data/sicpjs-navigation.json';
+import { queries } from 'src/queryKeys';
 
 import SicpIndexPage from '../../pages/sicp/subcomponents/sicpIndexPage/SicpIndexPage';
 
@@ -14,10 +15,11 @@ function SicpPage() {
   const titleImageUrl = useAppSelector(
     s => s.languageDirectory.languageMap['source1']?.textbook?.titleImageUrl,
   );
+  const { data: tocNavigation } = useQuery(queries.sicp.tocNavigationJs);
 
   // `section` is always defined due to the route configuration
-  const prev = getPrev(tocNavigation, section ?? '');
-  const next = getNext(tocNavigation, section ?? '');
+  const prev = getPrev(tocNavigation ?? {}, section ?? '');
+  const next = getNext(tocNavigation ?? {}, section ?? '');
   const handleNavigation = (sect: string) => navigate('/sicpjs/' + sect);
 
   const navigationButtons = (
