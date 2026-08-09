@@ -6,7 +6,10 @@ import type { DropEvent, FileRejection } from 'react-dropzone';
 import { useDropzone } from 'react-dropzone';
 
 import type { Tokens } from '../../../commons/application/types/SessionTypes';
-import { savePixelbotDocuments, uploadPixelbotDocuments } from '../../../commons/sagas/RequestsSaga';
+import {
+  savePixelbotDocuments,
+  uploadPixelbotDocuments,
+} from '../../../commons/sagas/RequestsSaga';
 import classes from './DocumentDirectory.module.css';
 import type { PixelbotCategory, PixelbotDocumentSaveEntry } from './PixelbotDocumentsTypes';
 
@@ -66,7 +69,9 @@ function AddDocumentsModal({
 
   const runUpload = useCallback(
     async (files: BatchFile[]) => {
-      if (files.length === 0) {return;}
+      if (files.length === 0) {
+        return;
+      }
       const categoryId = files[0].categoryId;
       const entries = await uploadPixelbotDocuments(
         categoryId,
@@ -79,7 +84,9 @@ function AddDocumentsModal({
           // same name (e.g. two "report.pdf") would otherwise both resolve to the first entry.
           // The backend preserves input order in its response, so index lookup is exact.
           const index = files.findIndex(uploaded => uploaded.id === f.id);
-          if (index === -1) {return f;}
+          if (index === -1) {
+            return f;
+          }
           const match = entries?.[index];
           if (!match) {
             return { ...f, phase: 'error', errorMessage: 'Upload failed. Please retry.' };
@@ -105,7 +112,9 @@ function AddDocumentsModal({
   const addFiles = useCallback(
     (files: File[]) => {
       const categoryId = defaultCategoryId ?? categories[0]?.id;
-      if (!categoryId) {return;}
+      if (!categoryId) {
+        return;
+      }
       const newFiles: BatchFile[] = files.map(file => ({
         id: nid(),
         file,
@@ -142,7 +151,9 @@ function AddDocumentsModal({
 
   const patchSelected = useCallback(
     (patch: Partial<BatchFile>) => {
-      if (!selected) {return;}
+      if (!selected) {
+        return;
+      }
       setBatch(prev => prev.map(f => (f.id === selected.id ? { ...f, ...patch } : f)));
     },
     [selected],
@@ -159,7 +170,9 @@ function AddDocumentsModal({
   const retryFile = useCallback(
     (file: BatchFile) => {
       setBatch(prev =>
-        prev.map(f => (f.id === file.id ? { ...f, phase: 'uploading', errorMessage: undefined } : f)),
+        prev.map(f =>
+          f.id === file.id ? { ...f, phase: 'uploading', errorMessage: undefined } : f,
+        ),
       );
       runUpload([file]);
     },
@@ -183,7 +196,9 @@ function AddDocumentsModal({
   }, [onClose]);
 
   const handleSaveAll = useCallback(async () => {
-    if (!allReady) {return;}
+    if (!allReady) {
+      return;
+    }
     setIsSaving(true);
     const entries: PixelbotDocumentSaveEntry[] = batch.map(f => ({
       categoryId: f.categoryId,
@@ -202,9 +217,10 @@ function AddDocumentsModal({
     }
   }, [allReady, batch, tokens, onSaved, handleClose]);
 
-  const categoryOptions = useMemo(() => categories.map(c => ({ value: c.id, label: c.name })), [
-    categories,
-  ]);
+  const categoryOptions = useMemo(
+    () => categories.map(c => ({ value: c.id, label: c.name })),
+    [categories],
+  );
 
   return (
     <Dialog
@@ -348,7 +364,9 @@ function AddDocumentsModal({
 
         <div className={classes.formPane}>
           {!selected && (
-            <div className={classes.emptyFormPane}>Add a file to start building its document map.</div>
+            <div className={classes.emptyFormPane}>
+              Add a file to start building its document map.
+            </div>
           )}
 
           {selected?.phase === 'uploading' && (
@@ -398,7 +416,10 @@ function AddDocumentsModal({
                 <div className={classes.formGroup}>
                   <label className={classes.formLabel}>Category *</label>
                   <HTMLSelect
-                    className={classNames(classes.formSelect, missingCategory && classes.formFieldError)}
+                    className={classNames(
+                      classes.formSelect,
+                      missingCategory && classes.formFieldError,
+                    )}
                     fill
                     value={selected.categoryChosen ? selected.categoryId : ''}
                     onChange={e =>

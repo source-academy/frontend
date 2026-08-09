@@ -78,7 +78,9 @@ function PixelbotDocumentsPanel() {
   }, [refresh]);
 
   useEffect(() => {
-    if (!infoOpen) {return;}
+    if (!infoOpen) {
+      return;
+    }
     const onClickAway = (e: MouseEvent) => {
       if (infoRef.current && !infoRef.current.contains(e.target as Node)) {
         setInfoOpen(false);
@@ -117,11 +119,15 @@ function PixelbotDocumentsPanel() {
   }, []);
 
   const commitRenameCategory = useCallback(async () => {
-    if (renamingCategoryId === null) {return;}
+    if (renamingCategoryId === null) {
+      return;
+    }
     const name = renameDraft.trim();
     const categoryId = renamingCategoryId;
     setRenamingCategoryId(null);
-    if (!name) {return;}
+    if (!name) {
+      return;
+    }
     const renamed = await renamePixelbotCategory(categoryId, name, tokens);
     if (renamed) {
       await refresh();
@@ -151,7 +157,9 @@ function PixelbotDocumentsPanel() {
     const name = newCategoryName.trim();
     setNewCategoryActive(false);
     setNewCategoryName('');
-    if (!name) {return;}
+    if (!name) {
+      return;
+    }
     const category = await createPixelbotCategory(name, tokens);
     if (category) {
       await refresh();
@@ -159,7 +167,9 @@ function PixelbotDocumentsPanel() {
   }, [newCategoryName, tokens, refresh]);
 
   const handleDeleteDocument = useCallback(async () => {
-    if (confirmDeleteId === null) {return;}
+    if (confirmDeleteId === null) {
+      return;
+    }
     const ok = await deletePixelbotDocument(confirmDeleteId, tokens);
     setConfirmDeleteId(null);
     if (ok) {
@@ -193,13 +203,18 @@ function PixelbotDocumentsPanel() {
           </button>
           {infoOpen && (
             <div className={classes.infoPopover}>
-              Documents in this directory are indexed for Pixel&apos;s retrieval. Students only
-              see a document once its release date has passed and its status is Live.
+              Documents in this directory are indexed for Pixel&apos;s retrieval. Students only see
+              a document once its release date has passed and its status is Live.
             </div>
           )}
         </div>
         <div className={classes.headerRight}>
-          <Button minimal icon={IconNames.EYE_OPEN} text="View document map" onClick={handleOpenMapPreview} />
+          <Button
+            minimal
+            icon={IconNames.EYE_OPEN}
+            text="View document map"
+            onClick={handleOpenMapPreview}
+          />
           <Button
             intent={Intent.PRIMARY}
             icon={IconNames.PLUS}
@@ -236,8 +251,12 @@ function PixelbotDocumentsPanel() {
                     onChange={e => setRenameDraft(e.target.value)}
                     onBlur={commitRenameCategory}
                     onKeyDown={e => {
-                      if (e.key === 'Enter') {(e.target as HTMLInputElement).blur();}
-                      if (e.key === 'Escape') {setRenamingCategoryId(null);}
+                      if (e.key === 'Enter') {
+                        (e.target as HTMLInputElement).blur();
+                      }
+                      if (e.key === 'Escape') {
+                        setRenamingCategoryId(null);
+                      }
                     }}
                   />
                 ) : (
@@ -270,41 +289,39 @@ function PixelbotDocumentsPanel() {
               {isOpen && docs.length > 0 && (
                 <div className={classes.categoryBody}>
                   {docs.map(doc => (
-                        <div key={doc.id} className={classes.docRow}>
-                          <span className={classes.docTitle}>{doc.title}</span>
-                          <span className={classes.docDate}>
-                            {formatReleaseDate(doc.releaseDate)}
-                          </span>
-                          <span className={classes.docStatus}>
-                            {pixelbotDocumentStatus(doc.releaseDate)}
-                          </span>
-                          <span className={classes.docActions}>
-                            <button
-                              type="button"
-                              className={classes.iconButton}
-                              onClick={() => setDetail({ documentId: doc.id, mode: 'view' })}
-                              aria-label="View document"
-                            >
-                              <Icon icon={IconNames.EYE_OPEN} size={13} />
-                            </button>
-                            <button
-                              type="button"
-                              className={classes.iconButton}
-                              onClick={() => setDetail({ documentId: doc.id, mode: 'edit' })}
-                              aria-label="Edit document"
-                            >
-                              <Icon icon={IconNames.EDIT} size={13} />
-                            </button>
-                            <button
-                              type="button"
-                              className={classNames(classes.iconButton, classes.iconButtonDanger)}
-                              onClick={() => setConfirmDeleteId(doc.id)}
-                              aria-label="Delete document"
-                            >
-                              <Icon icon={IconNames.TRASH} size={13} />
-                            </button>
-                          </span>
-                        </div>
+                    <div key={doc.id} className={classes.docRow}>
+                      <span className={classes.docTitle}>{doc.title}</span>
+                      <span className={classes.docDate}>{formatReleaseDate(doc.releaseDate)}</span>
+                      <span className={classes.docStatus}>
+                        {pixelbotDocumentStatus(doc.releaseDate)}
+                      </span>
+                      <span className={classes.docActions}>
+                        <button
+                          type="button"
+                          className={classes.iconButton}
+                          onClick={() => setDetail({ documentId: doc.id, mode: 'view' })}
+                          aria-label="View document"
+                        >
+                          <Icon icon={IconNames.EYE_OPEN} size={13} />
+                        </button>
+                        <button
+                          type="button"
+                          className={classes.iconButton}
+                          onClick={() => setDetail({ documentId: doc.id, mode: 'edit' })}
+                          aria-label="Edit document"
+                        >
+                          <Icon icon={IconNames.EDIT} size={13} />
+                        </button>
+                        <button
+                          type="button"
+                          className={classNames(classes.iconButton, classes.iconButtonDanger)}
+                          onClick={() => setConfirmDeleteId(doc.id)}
+                          aria-label="Delete document"
+                        >
+                          <Icon icon={IconNames.TRASH} size={13} />
+                        </button>
+                      </span>
+                    </div>
                   ))}
                 </div>
               )}
@@ -322,7 +339,9 @@ function PixelbotDocumentsPanel() {
               onChange={e => setNewCategoryName(e.target.value)}
               onBlur={commitNewCategory}
               onKeyDown={e => {
-                if (e.key === 'Enter') {(e.target as HTMLInputElement).blur();}
+                if (e.key === 'Enter') {
+                  (e.target as HTMLInputElement).blur();
+                }
                 if (e.key === 'Escape') {
                   setNewCategoryActive(false);
                   setNewCategoryName('');
@@ -378,15 +397,19 @@ function PixelbotDocumentsPanel() {
       >
         <DialogBody>
           <p>
-            &ldquo;{confirmDeleteTitle}&rdquo; will be removed from the directory and de-indexed,
-            so Pixel can no longer retrieve it. This can&apos;t be undone.
+            &ldquo;{confirmDeleteTitle}&rdquo; will be removed from the directory and de-indexed, so
+            Pixel can no longer retrieve it. This can&apos;t be undone.
           </p>
         </DialogBody>
         <DialogFooter
           actions={
             <>
               <Button text="Cancel" onClick={() => setConfirmDeleteId(null)} />
-              <Button text="Delete document" intent={Intent.DANGER} onClick={handleDeleteDocument} />
+              <Button
+                text="Delete document"
+                intent={Intent.DANGER}
+                onClick={handleDeleteDocument}
+              />
             </>
           }
         />
@@ -399,7 +422,12 @@ function PixelbotDocumentsPanel() {
         style={{ width: 'min(680px, 92vw)' }}
       >
         <DialogBody>
-          <TextArea readOnly fill value={mapPreview} style={{ height: 400, fontFamily: 'monospace', fontSize: 12.5 }} />
+          <TextArea
+            readOnly
+            fill
+            value={mapPreview}
+            style={{ height: 400, fontFamily: 'monospace', fontSize: 12.5 }}
+          />
         </DialogBody>
         <DialogFooter actions={<Button text="Close" onClick={() => setMapPreviewOpen(false)} />} />
       </Dialog>

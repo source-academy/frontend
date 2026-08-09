@@ -1550,11 +1550,10 @@ export const renamePixelbotDocument = async (
   filename: string,
   tokens: Tokens,
 ): Promise<PixelbotDocument | null> => {
-  const resp = await request(
-    `${courseId()}/admin/pixelbot_documents/${documentId}/rename`,
-    'PUT',
-    { ...tokens, body: { filename } },
-  );
+  const resp = await request(`${courseId()}/admin/pixelbot_documents/${documentId}/rename`, 'PUT', {
+    ...tokens,
+    body: { filename },
+  });
   if (!resp || !resp.ok) {
     return null;
   }

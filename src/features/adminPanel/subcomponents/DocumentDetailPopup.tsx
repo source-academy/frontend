@@ -55,7 +55,9 @@ function DocumentDetailPopup({
   }, [document?.id]);
 
   const dirty = useMemo(() => {
-    if (!document || !draft) {return false;}
+    if (!document || !draft) {
+      return false;
+    }
     const saved = draftFrom(document);
     return (
       saved.title !== draft.title ||
@@ -65,9 +67,10 @@ function DocumentDetailPopup({
     );
   }, [document, draft]);
 
-  const categoryOptions = useMemo(() => categories.map(c => ({ value: c.id, label: c.name })), [
-    categories,
-  ]);
+  const categoryOptions = useMemo(
+    () => categories.map(c => ({ value: c.id, label: c.name })),
+    [categories],
+  );
 
   if (!document || !draft) {
     return null;
@@ -138,7 +141,12 @@ function DocumentDetailPopup({
           {mode === 'view' && (
             <Button small icon={IconNames.EDIT} text="Edit" onClick={() => setMode('edit')} />
           )}
-          <button type="button" className={classes.iconButton} onClick={onClose} aria-label="Close panel">
+          <button
+            type="button"
+            className={classes.iconButton}
+            onClick={onClose}
+            aria-label="Close panel"
+          >
             <Icon icon={IconNames.CROSS} size={14} />
           </button>
         </div>
@@ -169,7 +177,9 @@ function DocumentDetailPopup({
               />
             </div>
             <div className={classes.formGroup}>
-              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+              <div
+                style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}
+              >
                 <label className={classes.formLabel}>Release date {!readOnly && '*'}</label>
                 <span style={{ fontSize: 11, color: '#5f6b7c' }}>{status}</span>
               </div>

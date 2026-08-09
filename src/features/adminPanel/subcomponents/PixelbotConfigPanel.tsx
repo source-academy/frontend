@@ -1,12 +1,4 @@
-import {
-  Button,
-  Divider,
-  FormGroup,
-  H2,
-  Icon,
-  InputGroup,
-  TextArea,
-} from '@blueprintjs/core';
+import { Button, Divider, FormGroup, H2, Icon, InputGroup, TextArea } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useCallback, useState } from 'react';
 
