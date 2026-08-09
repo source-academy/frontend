@@ -5,6 +5,7 @@ export enum SicpErrorType {
   UNEXPECTED_ERROR,
   PAGE_NOT_FOUND_ERROR,
   PARSING_ERROR,
+  SECTION_IN_PREPARATION,
 }
 
 const unexpectedError = (
@@ -29,6 +30,13 @@ const pageNotFoundError = (
   </div>
 );
 
+const sectionInPreparation = (
+  <div data-testid="sicp-section-in-preparation">
+    This section is in preparation. Please check back soon, or read one of the chapters that have
+    already been published in the meantime.
+  </div>
+);
+
 const parsingError = (
   <div data-testid="sicp-parsing-error">
     An error occured while loading the page. Kindly let us know by filing an issue at{' '}
@@ -39,9 +47,11 @@ const parsingError = (
   </div>
 );
 
-const errorComponent = (description: React.ReactElement) => (
-  <NonIdealState title="Something went wrong :(" description={description} icon={IconNames.ERROR} />
-);
+const errorComponent = (
+  description: React.ReactElement,
+  title: string = 'Something went wrong :(',
+  icon = IconNames.ERROR,
+) => <NonIdealState title={title} description={description} icon={icon} />;
 
 const getSicpError = (type: SicpErrorType) => {
   switch (type) {
@@ -49,6 +59,12 @@ const getSicpError = (type: SicpErrorType) => {
       return errorComponent(pageNotFoundError);
     case SicpErrorType.PARSING_ERROR:
       return errorComponent(parsingError);
+    case SicpErrorType.SECTION_IN_PREPARATION:
+      return errorComponent(
+        sectionInPreparation,
+        'This section is in preparation',
+        IconNames.BUILD,
+      );
     default:
       // handle unexpected error case
       return errorComponent(unexpectedError);

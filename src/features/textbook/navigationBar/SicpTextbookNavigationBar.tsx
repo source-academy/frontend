@@ -23,6 +23,8 @@ type Props = {
   fetchSearchData: () => Promise<SearchData>;
   /** Pre-built TreeNodeInfo[] from the textbook's TOC JSON. */
   toc: TreeNodeInfo[];
+  /** True when the toc fetch (see queryKeys/sicp.ts) failed, as opposed to still loading. */
+  tocError?: boolean;
 };
 
 function SicpTextbookNavigationBar({
@@ -32,6 +34,7 @@ function SicpTextbookNavigationBar({
   queryKey,
   fetchSearchData,
   toc,
+  tocError,
 }: Props) {
   const [isTocOpen, setIsTocOpen] = useState(false);
   const { section } = useParams<{ section: string }>();
@@ -102,7 +105,11 @@ function SicpTextbookNavigationBar({
         </NavbarGroup>
       </Navbar>
       <Drawer {...drawerProps} className="sicp-toc-drawer">
-        <SicpToc handleClick={handleClickToc} toc={toc} />
+        {tocError ? (
+          <p>Could not load the table of contents. Please try refreshing the page.</p>
+        ) : (
+          <SicpToc handleClick={handleClickToc} toc={toc} />
+        )}
       </Drawer>
     </>
   );

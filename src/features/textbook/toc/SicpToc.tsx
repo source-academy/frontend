@@ -1,6 +1,6 @@
 import { Tree, type TreeNodeInfo } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash-es';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
   handleClick?: (node: TreeNodeInfo) => void;
@@ -13,9 +13,11 @@ type Props = {
 function SicpToc({ handleClick, toc }: Props) {
   const [sidebarContent, setSidebarContent] = useState(toc);
 
-  // Note: Technically this should have a useEffect to sync the state whenever
-  // toc props changes, but since our usage uses a static toc, we can skip that for now.
-  // https://github.com/source-academy/frontend/pull/4096#discussion_r3576815218
+  // toc now arrives from a network fetch (see queryKeys/sicp.ts), so it starts
+  // out empty and is replaced once the request resolves.
+  useEffect(() => {
+    setSidebarContent(toc);
+  }, [toc]);
 
   const handleNodeExpand = (_node: TreeNodeInfo, path: number[]) => {
     const newState = cloneDeep(sidebarContent);
