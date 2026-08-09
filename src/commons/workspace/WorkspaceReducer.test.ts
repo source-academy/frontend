@@ -2376,6 +2376,44 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
       );
     });
   });
+
+  test('removes editor tabs whose filePath is missing a leading slash, given a removed directory path that has one', () => {
+    // Share links have historically encoded file paths without a leading slash (e.g.
+    // `playground/program.py` instead of `/playground/program.py`). Restoring such a tab
+    // from a previous session should still be recognized as being under the removed
+    // directory, rather than silently surviving the removal.
+    const unprefixedEditorTab: EditorTabState = {
+      filePath: 'dir1/dir2/c.js',
+      value: 'Stale content from a previous session',
+      highlightedLines: [],
+      breakpoints: [],
+    };
+    const removedDirectoryPath = '/dir1/dir2';
+    const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
+      activeEditorTabIndex: 0,
+      editorTabs: [unprefixedEditorTab, secondEditorTab],
+    });
+
+    const actions = generateActions(l =>
+      WorkspaceActions.removeEditorTabsForDirectory(l, removedDirectoryPath),
+    );
+    actions.forEach(action => {
+      const result = WorkspaceReducer(defaultWorkspaceState, action);
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            activeEditorTabIndex: 0,
+            editorTabs: [secondEditorTab],
+          },
+        }),
+      );
+    });
+  });
 });
 
 describe('RENAME_EDITOR_TAB_FOR_FILE', () => {

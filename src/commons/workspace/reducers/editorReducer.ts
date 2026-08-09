@@ -1,5 +1,6 @@
 import type { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
+import { ensureLeadingSlash } from '../../fileSystem/utils';
 import WorkspaceActions from '../WorkspaceActions';
 import { getWorkspaceLocation } from '../WorkspaceReducer';
 import type { EditorTabState, WorkspaceManagerState } from '../WorkspaceTypes';
@@ -212,12 +213,17 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
     })
     .addCase(WorkspaceActions.removeEditorTabsForDirectory, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
-      const removedDirectoryPath = action.payload.removedDirectoryPath;
+      // Normalized so this still matches tabs whose filePath was persisted (e.g. from an
+      // older share link) without a leading slash.
+      const removedDirectoryPath = ensureLeadingSlash(action.payload.removedDirectoryPath);
 
       const editorTabs = state[workspaceLocation].editorTabs;
       const editorTabIndicesToRemove = editorTabs
         .map((editorTab: EditorTabState, index: number) => {
-          if (editorTab.filePath?.startsWith(removedDirectoryPath)) {
+          if (
+            editorTab.filePath !== undefined &&
+            ensureLeadingSlash(editorTab.filePath).startsWith(removedDirectoryPath)
+          ) {
             return index;
           }
           return null;
