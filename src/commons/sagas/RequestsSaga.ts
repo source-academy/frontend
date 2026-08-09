@@ -15,6 +15,13 @@ import type {
   GoalProgress,
 } from '../../features/achievement/AchievementTypes';
 import type { UsernameRoleGroup } from '../../features/adminPanel/subcomponents/AddUserPanel';
+import type {
+  PixelbotCategory,
+  PixelbotDocument,
+  PixelbotDocumentSaveEntry,
+  PixelbotDocumentsIndex,
+  PixelbotDocumentUploadEntry,
+} from '../../features/adminPanel/subcomponents/PixelbotDocumentsTypes';
 import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import type {
   GradingAnswer,
@@ -1457,10 +1464,26 @@ export const getAssessmentConfigs = async (
 };
 
 /**
- * GET /courses/{courseId}/admin/config/pixelbot_document_map
+ * GET /courses/{courseId}/admin/pixelbot_documents
  */
-export const getPixelbotDocumentMap = async (tokens: Tokens): Promise<any[] | null> => {
-  const resp = await request(`${courseId()}/admin/config/pixelbot_document_map`, 'GET', {
+export const getPixelbotDocuments = async (
+  tokens: Tokens,
+): Promise<PixelbotDocumentsIndex | null> => {
+  const resp = await request(`${courseId()}/admin/pixelbot_documents`, 'GET', {
+    ...tokens,
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
+};
+
+/**
+ * GET /courses/{courseId}/admin/pixelbot_documents/map_preview
+ */
+export const getPixelbotDocumentMapPreview = async (tokens: Tokens): Promise<any[] | null> => {
+  const resp = await request(`${courseId()}/admin/pixelbot_documents/map_preview`, 'GET', {
     ...tokens,
   });
   if (!resp || !resp.ok) {
@@ -1469,6 +1492,142 @@ export const getPixelbotDocumentMap = async (tokens: Tokens): Promise<any[] | nu
 
   const data = await resp.json();
   return data.documentMap;
+};
+
+/**
+ * POST /courses/{courseId}/admin/pixelbot_documents/upload
+ */
+export const uploadPixelbotDocuments = async (
+  categoryId: number,
+  files: File[],
+  tokens: Tokens,
+): Promise<PixelbotDocumentUploadEntry[] | null> => {
+  const formData = new FormData();
+  formData.append('category_id', String(categoryId));
+  files.forEach(file => formData.append('files[]', file));
+
+  const resp = await request(`${courseId()}/admin/pixelbot_documents/upload`, 'POST', {
+    ...tokens,
+    body: formData,
+    noContentType: true,
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  const data = await resp.json();
+  return data.entries;
+};
+
+/**
+ * PUT /courses/{courseId}/admin/pixelbot_documents
+ *
+ * Bulk-saves proposed uploads (as inserts) and edits to already-saved documents (as updates).
+ */
+export const savePixelbotDocuments = async (
+  entries: PixelbotDocumentSaveEntry[],
+  tokens: Tokens,
+): Promise<PixelbotDocumentsIndex | null> => {
+  const resp = await request(`${courseId()}/admin/pixelbot_documents`, 'PUT', {
+    ...tokens,
+    body: { entries },
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
+};
+
+/**
+ * PUT /courses/{courseId}/admin/pixelbot_documents/{documentId}/rename
+ *
+ * Renames a single document's underlying file, which moves it to a new S3 key. Safe to do for
+ * one document at a time (unlike a category rename, which would touch every document in it).
+ */
+export const renamePixelbotDocument = async (
+  documentId: number,
+  filename: string,
+  tokens: Tokens,
+): Promise<PixelbotDocument | null> => {
+  const resp = await request(
+    `${courseId()}/admin/pixelbot_documents/${documentId}/rename`,
+    'PUT',
+    { ...tokens, body: { filename } },
+  );
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
+};
+
+/**
+ * DELETE /courses/{courseId}/admin/pixelbot_documents/{documentId}
+ */
+export const deletePixelbotDocument = async (
+  documentId: number,
+  tokens: Tokens,
+): Promise<boolean> => {
+  const resp = await request(`${courseId()}/admin/pixelbot_documents/${documentId}`, 'DELETE', {
+    ...tokens,
+    noHeaderAccept: true,
+  });
+  return !!resp && resp.ok;
+};
+
+/**
+ * POST /courses/{courseId}/admin/pixelbot_categories
+ */
+export const createPixelbotCategory = async (
+  name: string,
+  tokens: Tokens,
+): Promise<PixelbotCategory | null> => {
+  const resp = await request(`${courseId()}/admin/pixelbot_categories`, 'POST', {
+    ...tokens,
+    body: { name },
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
+};
+
+/**
+ * PUT /courses/{courseId}/admin/pixelbot_categories/{categoryId}
+ */
+export const renamePixelbotCategory = async (
+  categoryId: number,
+  name: string,
+  tokens: Tokens,
+): Promise<PixelbotCategory | null> => {
+  const resp = await request(`${courseId()}/admin/pixelbot_categories/${categoryId}`, 'PUT', {
+    ...tokens,
+    body: { name },
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
+};
+
+/**
+ * DELETE /courses/{courseId}/admin/pixelbot_categories/{categoryId}
+ *
+ * Blocked by the backend (400) while the category still has documents in it. The panel checks
+ * the document count itself before offering delete, so this is mainly a backstop.
+ */
+export const deletePixelbotCategory = async (
+  categoryId: number,
+  tokens: Tokens,
+): Promise<boolean> => {
+  const resp = await request(`${courseId()}/admin/pixelbot_categories/${categoryId}`, 'DELETE', {
+    ...tokens,
+    noHeaderAccept: true,
+  });
+  return !!resp && resp.ok;
 };
 
 /**
