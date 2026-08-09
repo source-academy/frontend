@@ -1,6 +1,5 @@
 .header,
 .categoryRow,
-.docRow,
 .fileItem,
 .rowActions,
 .stateLabel {
@@ -62,20 +61,26 @@
 }
 
 .docRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 128px 108px 96px;
+  align-items: center;
   min-height: 32px;
   padding: 0 8px;
   font-weight: 400;
 }
 
+.docTitle,
+.docMeta {
+  text-align: left;
+}
+
 .docTitle {
-  flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .docMeta {
-  width: 110px;
   color: #5f6b7c;
   font-size: 12px;
 }

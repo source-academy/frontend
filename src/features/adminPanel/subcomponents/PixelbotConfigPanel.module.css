@@ -20,6 +20,19 @@
       margin-bottom: 8px;
     }
 
+    .section-header-center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 8px;
+      position: relative;
+
+      .edit-icon {
+        position: absolute;
+        right: 0;
+      }
+    }
+
     .section-title {
       font-size: 16px;
       font-weight: 600;

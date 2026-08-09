@@ -38,6 +38,7 @@ export type SessionState = {
   readonly enableGame?: boolean;
   readonly enableAchievements?: boolean;
   readonly enableLlmGrading?: boolean;
+  readonly enablePixelbot?: boolean;
   readonly llmModel?: string;
   readonly llmApiUrl?: string;
   readonly llmCourseLevelPrompt?: string;
@@ -113,6 +114,7 @@ export type CourseConfiguration = {
   enableGame: boolean;
   enableAchievements: boolean;
   enableLlmGrading?: boolean;
+  enablePixelbot?: boolean;
   enableOverallLeaderboard: boolean;
   enableContestLeaderboard: boolean;
   topLeaderboardDisplay: number;
