@@ -5,6 +5,8 @@ import SicpToc from '../../../../features/textbook/toc/SicpToc';
 
 type Props = {
   toc: TreeNodeInfo[];
+  /** True when the toc fetch (see queryKeys/sicp.ts) failed, as opposed to still loading. */
+  tocError?: boolean;
   routePrefix: string;
   titleImageUrl?: string;
   titleAlt?: string;
@@ -23,6 +25,7 @@ type Props = {
  */
 function SicpIndexPageWrapper({
   toc,
+  tocError,
   routePrefix,
   titleImageUrl,
   titleAlt = 'SICP',
@@ -42,7 +45,11 @@ function SicpIndexPageWrapper({
       </div>
       {showTopBreak && <br />}
       <H2 style={contentHeadingStyle}>{contentHeading}</H2>
-      <SicpToc toc={toc} handleClick={node => navigate(`${routePrefix}/${node.nodeData}`)} />
+      {tocError ? (
+        <p>Could not load the table of contents. Please try refreshing the page.</p>
+      ) : (
+        <SicpToc toc={toc} handleClick={node => navigate(`${routePrefix}/${node.nodeData}`)} />
+      )}
       {licenses && (
         <>
           <br />

@@ -11,11 +11,12 @@ type Props = {
 };
 
 function SicpIndexPage({ titleImageUrl }: Props) {
-  const { data: toc } = useQuery(queries.sicp.tocJs);
+  const { data: toc, isError: tocError } = useQuery(queries.sicp.tocJs);
 
   return (
     <SicpIndexPageWrapper
       toc={toc ?? []}
+      tocError={tocError}
       routePrefix="/sicpjs"
       titleImageUrl={titleImageUrl}
       titleNode={

@@ -6,7 +6,7 @@ import { fetchSicpSearchData } from './autocomplete/query';
 import SicpTextbookNavigationBar from './SicpTextbookNavigationBar';
 
 function SicpNavigationBar() {
-  const { data: toc } = useQuery(queries.sicp.tocJs);
+  const { data: toc, isError: tocError } = useQuery(queries.sicp.tocJs);
   const { data: tocNavigation } = useQuery(queries.sicp.tocNavigationJs);
 
   return (
@@ -17,6 +17,7 @@ function SicpNavigationBar() {
       queryKey="sicpSearchData"
       fetchSearchData={fetchSicpSearchData}
       toc={toc ?? []}
+      tocError={tocError}
     />
   );
 }

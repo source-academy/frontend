@@ -9,11 +9,12 @@ type Props = {
 };
 
 function SicPyIndexPage({ titleImageUrl }: Props) {
-  const { data: toc } = useQuery(queries.sicp.tocPy);
+  const { data: toc, isError: tocError } = useQuery(queries.sicp.tocPy);
 
   return (
     <SicpIndexPageWrapper
       toc={toc ?? []}
+      tocError={tocError}
       routePrefix="/sicpy"
       titleImageUrl={titleImageUrl ?? undefined}
       titleAlt="SICPy"
