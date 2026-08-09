@@ -2,6 +2,8 @@ import type { Dispatch, Store } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { Chapter } from 'js-slang/dist/langs';
+import { compressToEncodedURIComponent } from 'lz-string';
+import qs from 'query-string';
 import { act } from 'react';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, type RouteObject, RouterProvider } from 'react-router';
@@ -93,6 +95,35 @@ describe('Playground tests', () => {
     expect(getEditorValueFromStore(mockStore)).toBe("display('hello!');");
   });
 
+  test('loading a share link overwrites a stale editor tab left over from a previous session, even if its filePath predates leading-slash normalization (#4268)', async () => {
+    // Simulate a tab restored from a previous session's localStorage `storedState`, whose
+    // filePath was persisted without a leading slash (as some share links have historically
+    // encoded them).
+    mockStore.dispatch(WorkspaceActions.removeEditorTabsForDirectory('playground', '/playground'));
+    mockStore.dispatch(
+      WorkspaceActions.addEditorTab(
+        'playground',
+        'playground/program.js',
+        'stale content from a previous session',
+      ),
+    );
+
+    const filePath = 'playground/program.js';
+    const filesParam = compressToEncodedURIComponent(
+      qs.stringify({ [filePath]: 'fresh content from the share link' }),
+    );
+    const tabsParam = compressToEncodedURIComponent(filePath);
+
+    const router = createMemoryRouter(routes, {
+      initialEntries: [`/playground#files=${filesParam}&tabs=${tabsParam}&tabIdx=0`],
+      initialIndex: 0,
+    });
+
+    await renderTree(router);
+
+    expect(getEditorValueFromStore(mockStore)).toBe('fresh content from the share link');
+  });
+
   test('switching the Conductor-selected language resets the side content tab to Introduction (#4061)', async () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ['/playground'],
@@ -162,13 +193,11 @@ describe('Playground tests', () => {
 
       const mockHandleEditorValueChanged = vi.fn();
       const mockHandleChapterSelect = vi.fn();
-      const mockHandleChangeExecTime = vi.fn();
 
       handleHash(
         testHash,
         {
           handleChapterSelect: mockHandleChapterSelect,
-          handleChangeExecTime: mockHandleChangeExecTime,
         },
         'playground',
         // We cannot make use of 'dispatch' & BrowserFS in test cases. However, the
@@ -180,7 +209,6 @@ describe('Playground tests', () => {
 
       expect(mockHandleEditorValueChanged).not.toHaveBeenCalled();
       expect(mockHandleChapterSelect).not.toHaveBeenCalled();
-      expect(mockHandleChangeExecTime).not.toHaveBeenCalled();
     });
   });
 });

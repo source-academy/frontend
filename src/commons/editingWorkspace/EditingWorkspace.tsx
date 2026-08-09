@@ -49,7 +49,7 @@ import type { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import type { SideContentProps } from '../sideContent/SideContent';
-import { changeSideContentHeight } from '../sideContent/SideContentActions';
+import { changeSideContentHeight, resetSideContent } from '../sideContent/SideContentActions';
 import { useSideContent } from '../sideContent/SideContentHelper';
 import type { SideContentTab } from '../sideContent/SideContentTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
@@ -292,6 +292,8 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
       };
     }
     handleClearContext(library, true);
+    // Clear out any module tabs left over from the previous question/library.
+    dispatch(resetSideContent(workspaceLocation));
   };
 
   const resetWorkspaceValues = () => {

@@ -5,7 +5,10 @@ import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
-import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
+import {
+  changeSideContentHeight,
+  resetSideContent,
+} from 'src/commons/sideContent/SideContentActions';
 import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
 import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
@@ -322,6 +325,8 @@ function GradingWorkspace(props: Props) {
     });
     handleChangeExecTime(question.library.execTimeMs ?? defaultWorkspaceManager.grading.execTime);
     handleClearContext(question.library, true);
+    // Clear out any module tabs left over from the previously viewed submission.
+    dispatch(resetSideContent(workspaceLocation));
     handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.

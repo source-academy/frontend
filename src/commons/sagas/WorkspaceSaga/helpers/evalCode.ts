@@ -51,7 +51,49 @@ import { selectWorkspace } from '../../SafeEffects';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
 import { updateInspector } from './updateInspector';
 
-function toConductorSourceError(error: unknown): SourceError {
+/**
+ * `lineOffset` is the number of prepend lines concatenated onto the entrypoint before it was sent
+ * to the evaluator (see evalEditorSaga's Conductor branch, which joins `${prepend}\n` onto the
+ * entrypoint, and evalCodeConductorSaga's own `preludeLineOffset`, which shifts breakpointLines the
+ * other way for the same reason) - without subtracting it back out here, an error at the student's
+ * own line 1 would be reported as `prepend line count + 1` (source-academy/frontend#4244).
+ *
+ * A Worker's postMessage clones a thrown EvaluatorError via the structured clone algorithm, which
+ * drops its prototype chain (EvaluatorError's `name` isn't a recognised built-in Error subtype, so
+ * the clone lands on plain `Error.prototype`) but keeps custom own properties like
+ * `line`/`column`/`rawMessage` intact - so this checks shape rather than `instanceof
+ * EvaluatorError`.
+ */
+function toConductorSourceError(error: unknown, lineOffset: number = 0): SourceError {
+  if (
+    typeof error === 'object' &&
+    error !== null &&
+    'line' in error &&
+    typeof (error as { line: unknown }).line === 'number'
+  ) {
+    const evaluatorError = error as {
+      line: number;
+      column?: number;
+      rawMessage?: string;
+      message?: unknown;
+    };
+    const line = Math.max(1, evaluatorError.line - lineOffset);
+    const column = evaluatorError.column ?? 0;
+    const explanation =
+      typeof evaluatorError.rawMessage === 'string'
+        ? evaluatorError.rawMessage
+        : String(evaluatorError.message);
+    return {
+      type: ErrorType.RUNTIME,
+      severity: ErrorSeverity.ERROR,
+      location: {
+        start: { line, column },
+        end: { line, column },
+      },
+      explain: () => explanation,
+      elaborate: () => '',
+    };
+  }
   const message =
     typeof error === 'object' && error !== null && 'message' in error
       ? String((error as { message?: unknown }).message)
@@ -444,6 +486,17 @@ export function* evalCodeSaga(
  */
 type ReceivedCount = { count: number };
 
+/**
+ * Mutable box holding the prepend line-offset (see toConductorSourceError's doc comment) to apply
+ * to errors from whichever chunk a session is currently evaluating. It's mutable, not a value
+ * baked into handleErrors at spawn time, because a single session's handleErrors task outlives
+ * every chunk sent to it (see ReplSession's own doc comment): the offset applies to the initial
+ * entrypoint chunk (which had prepend concatenated onto it), but must be reset to 0 before any
+ * later REPL chunk is sent to that same session, since sendChunk sends raw REPL input with no
+ * prepend concatenation at all.
+ */
+type LineOffsetRef = { current: number };
+
 /** Reported by handleStatuses (via a session's chunkSettledChan) each time a chunk finishes:
  * `terminal: false` for an ordinary chunk boundary (RunnerStatus.EVAL_READY - the evaluator is
  * alive and waiting for the next chunk), `terminal: true` when the session is actually over
@@ -582,13 +635,18 @@ function* handleResults(
  * one even exists). A genuine `sendError` from a still-running evaluator (handleErrors' normal path)
  * passes `interrupt: false`: the runner is expected to still send its own terminal STOPPED/ERROR once
  * any pending work (e.g. Python's set_timeout) settles, and handleStatuses drives the interrupt then.
+ *
+ * `lineOffset` is forwarded to toConductorSourceError - see its own doc comment for why.
  */
 function* surfaceConductorError(
   error: unknown,
   workspaceLocation: WorkspaceLocation,
   interrupt: boolean = true,
+  lineOffset: number = 0,
 ): SagaIterator {
-  yield put(actions.appendInterpreterError([toConductorSourceError(error)], workspaceLocation));
+  yield put(
+    actions.appendInterpreterError([toConductorSourceError(error, lineOffset)], workspaceLocation),
+  );
   const selectedTab: SideContentTabId | undefined = yield select(
     (state: OverallState) => state.sideContent[workspaceLocation]?.selectedTab,
   );
@@ -611,6 +669,7 @@ function* handleErrors(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
   receivedCount: ReceivedCount,
+  lineOffsetRef: LineOffsetRef,
 ): SagaIterator {
   const errorChan = eventChannel(emitter => {
     // Same undefined-forbidden-by-eventChannel issue as the result channel: the
@@ -628,7 +687,7 @@ function* handleErrors(
     while (true) {
       const error = yield take(errorChan);
       receivedCount.count++;
-      yield* surfaceConductorError(error, workspaceLocation, false);
+      yield* surfaceConductorError(error, workspaceLocation, false, lineOffsetRef.current);
     }
   } catch (e) {
     // A conductor evaluator may report a preprocessing/syntax error by rejecting its run rather than
@@ -638,7 +697,7 @@ function* handleErrors(
     // not Error instances, so re-raise those to preserve normal teardown. No runner is expected to send
     // a terminal status after this kind of failure, so this path still interrupts immediately.
     if (e instanceof Error) {
-      yield* surfaceConductorError(e, workspaceLocation);
+      yield* surfaceConductorError(e, workspaceLocation, true, lineOffsetRef.current);
     } else {
       throw e;
     }
@@ -778,6 +837,9 @@ type ReplSession = {
    * lifetime is this session's, not tied to whichever saga call happens to be sending the
    * current chunk, so they must keep running after that call returns. */
   tasks: Task[];
+  /** See LineOffsetRef's own doc comment - shared with handleErrors so this session's error
+   * offset can be updated in place per chunk without restarting that task. */
+  lineOffsetRef: LineOffsetRef;
 };
 
 const replSessions = new Map<WorkspaceLocation, ReplSession>();
@@ -898,6 +960,11 @@ export function* evalCodeConductorSaga(
   // gone via endConductorSession's own teardown on a language switch) and must not receive a
   // chunk meant for a different evaluator; fall through to establishing a fresh one instead.
   if (isReplChunk && existingSession && existingSession.evaluatorPath === evaluator.path) {
+    // A REPL chunk sent to an already-live session is raw REPL input with no prepend
+    // concatenated onto it (unlike the session's own initial entrypoint chunk, see
+    // toConductorSourceError's doc comment) - reset the shared offset so errors from *this*
+    // chunk aren't corrected using whatever offset applied to the session's first chunk.
+    existingSession.lineOffsetRef.current = 0;
     try {
       existingSession.hostPlugin.sendChunk(files[entrypointFilePath]);
     } catch (runError) {
@@ -990,18 +1057,25 @@ export function* evalCodeConductorSaga(
     // had already been spawned by that point.
     const receivedCount: ReceivedCount = { count: 0 };
     const chunkSettledChan = channel<ChunkSettled>();
+    // preludeLineOffset only ever applies to this session's initial entrypoint chunk (the one
+    // about to be sent via startEvaluator, below) - see LineOffsetRef's own doc comment for why a
+    // later REPL chunk reuses this same ref but resets it to 0 first.
+    const lineOffsetRef: LineOffsetRef = { current: preludeLineOffset };
     const session: ReplSession = {
       hostPlugin,
       conduit,
       evaluatorPath: evaluator.path,
       chunkSettledChan,
       tasks: [],
+      lineOffsetRef,
     };
     replSessions.set(workspaceLocation, session);
     session.tasks.push(yield spawn(handleStdout, hostPlugin, workspaceLocation, receivedCount));
     session.tasks.push(yield spawn(handleInputRequest, hostPlugin, workspaceLocation));
     session.tasks.push(yield spawn(handleResults, hostPlugin, workspaceLocation, receivedCount));
-    session.tasks.push(yield spawn(handleErrors, hostPlugin, workspaceLocation, receivedCount));
+    session.tasks.push(
+      yield spawn(handleErrors, hostPlugin, workspaceLocation, receivedCount, lineOffsetRef),
+    );
     session.tasks.push(
       yield spawn(handleStatuses, hostPlugin, workspaceLocation, receivedCount, chunkSettledChan),
     );

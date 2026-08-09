@@ -23,12 +23,15 @@ function ControlBarStepLimit(props: Props) {
       <NumericInput
         leftIcon={IconNames.VERTICAL_BAR_CHART_ASC}
         style={{ width: 80 }}
-        min={500}
-        max={5000}
+        min={1}
         value={props.stepLimit}
         stepSize={props.stepSize}
         onBlur={onBlurAutoScale}
-        onValueChange={props.handleChangeStepLimit}
+        onValueChange={limit => {
+          if (Number.isFinite(limit) && limit >= 1) {
+            props.handleChangeStepLimit?.(limit);
+          }
+        }}
       />
     </Tooltip>
   );

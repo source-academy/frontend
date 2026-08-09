@@ -128,7 +128,6 @@ function* updateQueryString() {
     activeEditorTabIndex,
     context: { chapter, variant },
     editorTabs,
-    execTime,
     externalLibrary: external,
     isFolderModeEnabled,
   } = yield* selectWorkspace('playground');
@@ -167,7 +166,6 @@ function* updateQueryString() {
     language: conductorEnabled ? dirLanguage : undefined,
     evaluator: conductorEnabled ? dirEvaluator : undefined,
     ext: external,
-    exec: execTime,
   });
   yield put(PlaygroundActions.changeQueryString(newQueryString));
 }
