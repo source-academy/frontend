@@ -1473,9 +1473,7 @@ export const getPixelbotDocuments = async (
   tokens: Tokens,
 ): Promise<PixelbotDocumentsIndex | null> => pixelbotRequest('pixelbot_documents', 'GET', tokens);
 
-export const getPixelbotDocumentMapPreview = async (
-  tokens: Tokens,
-): Promise<unknown[] | null> => {
+export const getPixelbotDocumentMapPreview = async (tokens: Tokens): Promise<unknown[] | null> => {
   const data = await pixelbotRequest<{ documentMap: unknown[] }>(
     'pixelbot_documents/map_preview',
     'GET',
