@@ -48,24 +48,7 @@ export type PixelbotDocumentSaveEntry = {
   mediaType?: string;
 };
 
-export type PixelbotDocumentStatus = 'Live' | 'Scheduled';
+export const pixelbotDocumentStatus = (releaseDate: string | null) =>
+  !releaseDate || releaseDate <= new Date().toISOString().slice(0, 10) ? 'Live' : 'Scheduled';
 
-export function pixelbotDocumentStatus(releaseDate: string | null): PixelbotDocumentStatus {
-  if (!releaseDate) {
-    return 'Live';
-  }
-  const today = new Date().toISOString().slice(0, 10);
-  return releaseDate <= today ? 'Live' : 'Scheduled';
-}
-
-export function formatReleaseDate(releaseDate: string | null): string {
-  if (!releaseDate) {
-    return '—';
-  }
-  return new Intl.DateTimeFormat('en-US', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-    timeZone: 'UTC',
-  }).format(new Date(`${releaseDate}T00:00:00Z`));
-}
+export const formatReleaseDate = (releaseDate: string | null) => releaseDate ?? '—';

@@ -8,6 +8,7 @@ import {
   HTMLSelect,
   InputGroup,
   Intent,
+  Switch,
   TextArea,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
@@ -18,28 +19,90 @@ import type { Tokens } from '../../../commons/application/types/SessionTypes';
 import { savePixelbotDocuments } from '../../../commons/sagas/RequestsSaga';
 import classes from './DocumentDirectory.module.css';
 import type { PixelbotCategory, PixelbotDocument } from './PixelbotDocumentsTypes';
-import { formatReleaseDate, pixelbotDocumentStatus } from './PixelbotDocumentsTypes';
 
-type Draft = {
+/** The editable part of a document, shared by the add-documents modal and this popup. */
+export type DocumentDraft = {
   title: string;
   description: string;
   releaseDate: string | null;
-  categoryId: number;
+  categoryId: number | null;
 };
 
-function draftFrom(document: PixelbotDocument): Draft {
-  return {
-    title: document.title,
-    description: document.description,
-    releaseDate: document.releaseDate,
-    categoryId: document.categoryId,
-  };
+export const isDraftComplete = (draft: DocumentDraft) =>
+  draft.categoryId !== null && !!draft.releaseDate;
+
+const REQUIRED_HELPER = 'Required before this document can be saved.';
+
+const todayIso = () => new Date().toISOString().slice(0, 10);
+
+export function DocumentFields({
+  draft,
+  categories,
+  onChange,
+}: {
+  draft: DocumentDraft;
+  categories: PixelbotCategory[];
+  onChange: (patch: Partial<DocumentDraft>) => void;
+}) {
+  const missingCategory = draft.categoryId === null;
+  const missingDate = !draft.releaseDate;
+  const releaseNow = draft.releaseDate === todayIso();
+
+  return (
+    <>
+      <FormGroup label="Title">
+        <InputGroup value={draft.title} onChange={e => onChange({ title: e.target.value })} />
+      </FormGroup>
+      <div className={classes.formRow2}>
+        <FormGroup
+          label="Category *"
+          intent={missingCategory ? Intent.DANGER : Intent.NONE}
+          helperText={missingCategory ? REQUIRED_HELPER : null}
+        >
+          <HTMLSelect
+            fill
+            value={draft.categoryId ?? ''}
+            onChange={e => onChange({ categoryId: Number(e.target.value) })}
+            options={[
+              { value: '', label: 'Select a category', disabled: true },
+              ...categories.map(c => ({ value: c.id, label: c.name })),
+            ]}
+          />
+        </FormGroup>
+        <FormGroup
+          label="Release date *"
+          intent={missingDate ? Intent.DANGER : Intent.NONE}
+          helperText={missingDate ? REQUIRED_HELPER : null}
+        >
+          <Switch
+            checked={releaseNow}
+            label="Release immediately"
+            onChange={() => onChange({ releaseDate: releaseNow ? null : todayIso() })}
+          />
+          <input
+            type="date"
+            className={classNames(Classes.INPUT, Classes.FILL)}
+            value={draft.releaseDate ?? ''}
+            disabled={releaseNow}
+            onChange={e => onChange({ releaseDate: e.target.value || null })}
+          />
+        </FormGroup>
+      </div>
+      <FormGroup label="Summary">
+        <TextArea
+          fill
+          rows={4}
+          value={draft.description}
+          onChange={e => onChange({ description: e.target.value })}
+        />
+      </FormGroup>
+    </>
+  );
 }
 
 type Props = {
-  document: PixelbotDocument | null;
+  document: PixelbotDocument;
   categories: PixelbotCategory[];
-  initialMode: 'view' | 'edit';
   tokens: Tokens;
   onClose: () => void;
   onSaved: () => Promise<void> | void;
@@ -49,147 +112,63 @@ type Props = {
 function DocumentDetailPopup({
   document,
   categories,
-  initialMode,
   tokens,
   onClose,
   onSaved,
   onDeleteRequested,
 }: Props) {
-  const [mode, setMode] = useState<'view' | 'edit'>(initialMode);
-  const [draft, setDraft] = useState<Draft | null>(document ? draftFrom(document) : null);
+  const [draft, setDraft] = useState<DocumentDraft>({
+    title: document.title,
+    description: document.description,
+    releaseDate: document.releaseDate,
+    categoryId: document.categoryId,
+  });
   const [isSaving, setIsSaving] = useState(false);
-
-  if (!document || !draft) {
-    return null;
-  }
-
-  const saved = draftFrom(document);
-  const dirty = JSON.stringify(saved) !== JSON.stringify(draft);
-  const categoryOptions = categories.map(c => ({ value: c.id, label: c.name }));
-  const status = pixelbotDocumentStatus(draft.releaseDate);
-  const readOnly = mode === 'view';
-
-  const handleCancelEdit = () => {
-    setDraft(draftFrom(document));
-    setMode('view');
-  };
 
   const handleSave = async () => {
     setIsSaving(true);
     const result = await savePixelbotDocuments(
-      [
-        {
-          id: document.id,
-          categoryId: draft.categoryId,
-          title: draft.title,
-          description: draft.description,
-          releaseDate: draft.releaseDate,
-        },
-      ],
+      [{ ...draft, id: document.id, categoryId: draft.categoryId! }],
       tokens,
     );
     setIsSaving(false);
     if (result) {
       await onSaved();
-      setMode('view');
+      onClose();
     }
   };
 
   return (
-    <Dialog
-      className={classes.detailDialog}
-      isOpen
-      onClose={onClose}
-      title={mode === 'edit' ? 'Edit document' : document.title}
-    >
+    <Dialog className={classes.detailDialog} isOpen onClose={onClose} title="Edit document">
       <DialogBody>
-        <div className={classes.formStack}>
-          <FormGroup label="Title">
-            <InputGroup
-              value={draft.title}
-              disabled={readOnly}
-              onChange={e => setDraft({ ...draft, title: e.target.value })}
-            />
-          </FormGroup>
-          <div className={classes.formRow2}>
-            <FormGroup label="Category">
-              <HTMLSelect
-                fill
-                disabled={readOnly}
-                value={draft.categoryId}
-                onChange={e => setDraft({ ...draft, categoryId: Number(e.target.value) })}
-                options={categoryOptions}
-              />
-            </FormGroup>
-            <FormGroup
-              label={`Release date${readOnly ? '' : ' *'}`}
-              labelInfo={status}
-              intent={!readOnly && !draft.releaseDate ? Intent.DANGER : Intent.NONE}
-              helperText={
-                readOnly
-                  ? formatReleaseDate(draft.releaseDate)
-                  : !draft.releaseDate
-                    ? 'Select a release date before this document can be saved.'
-                    : null
-              }
-            >
-              <input
-                type="date"
-                className={classNames(Classes.INPUT, Classes.FILL)}
-                disabled={readOnly}
-                value={draft.releaseDate ?? ''}
-                onChange={e => setDraft({ ...draft, releaseDate: e.target.value || null })}
-                aria-invalid={!readOnly && !draft.releaseDate}
-              />
-            </FormGroup>
-          </div>
-          <FormGroup label="Summary">
-            <TextArea
-              fill
-              rows={4}
-              disabled={readOnly}
-              value={draft.description}
-              onChange={e => setDraft({ ...draft, description: e.target.value })}
-            />
-          </FormGroup>
-        </div>
+        <DocumentFields
+          draft={draft}
+          categories={categories}
+          onChange={patch => setDraft({ ...draft, ...patch })}
+        />
       </DialogBody>
-
-      {mode === 'view' ? (
-        <DialogFooter
-          actions={
+      <DialogFooter
+        actions={
+          <>
+            <Button text="Cancel" onClick={onClose} />
             <Button
               intent={Intent.PRIMARY}
-              icon={IconNames.EDIT}
-              text="Edit"
-              onClick={() => setMode('edit')}
+              text="Save changes"
+              disabled={!isDraftComplete(draft) || isSaving}
+              loading={isSaving}
+              onClick={handleSave}
             />
-          }
+          </>
+        }
+      >
+        <Button
+          minimal
+          intent={Intent.DANGER}
+          icon={IconNames.TRASH}
+          text="Delete document"
+          onClick={onDeleteRequested}
         />
-      ) : (
-        <DialogFooter
-          actions={
-            <>
-              <Button text="Cancel" onClick={handleCancelEdit} />
-              <Button
-                intent={dirty && !!draft.releaseDate ? Intent.PRIMARY : Intent.NONE}
-                text="Save changes"
-                disabled={!dirty || !draft.releaseDate || isSaving}
-                loading={isSaving}
-                onClick={handleSave}
-              />
-            </>
-          }
-        >
-          <Button
-            minimal
-            intent={Intent.DANGER}
-            icon={IconNames.TRASH}
-            text="Delete document"
-            onClick={onDeleteRequested}
-          />
-        </DialogFooter>
-      )}
+      </DialogFooter>
     </Dialog>
   );
 }

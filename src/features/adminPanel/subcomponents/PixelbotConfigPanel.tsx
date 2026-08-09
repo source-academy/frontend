@@ -122,7 +122,7 @@ function PixelbotConfigPanel(props: Props) {
       </div>
 
       <div className={classes['section']}>
-        <div className={classes['section-header-center']}>
+        <div className={classes['section-header']}>
           <div>
             <div className={classes['section-title']}>Feedback URL</div>
             <div className={classes['section-helper']}>
@@ -153,7 +153,7 @@ function PixelbotConfigPanel(props: Props) {
       </div>
 
       <div className={classes['section']}>
-        <div className={classes['section-header-center']}>
+        <div className={classes['section-header']}>
           <div>
             <div className={classes['section-title']}>Routing Prompt (System Prompt 1)</div>
             <div className={classes['section-helper']}>
@@ -187,7 +187,7 @@ function PixelbotConfigPanel(props: Props) {
       </div>
 
       <div className={classes['section']}>
-        <div className={classes['section-header-center']}>
+        <div className={classes['section-header']}>
           <div>
             <div className={classes['section-title']}>Answer Prompt (System Prompt 2)</div>
             <div className={classes['section-helper']}>

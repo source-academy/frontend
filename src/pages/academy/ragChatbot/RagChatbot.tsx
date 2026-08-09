@@ -14,40 +14,22 @@ function RagChatbot() {
   const { feedbackUrl } = useSession();
   const assessmentId = useAppSelector(state => state.workspaces.assessment.currentAssessment);
   const questionId = useAppSelector(state => state.workspaces.assessment.currentQuestion);
-  const assessmentEditorTabs = useAppSelector(state => state.workspaces.assessment.editorTabs);
-  const assessmentActiveTab = useAppSelector(
-    state => state.workspaces.assessment.activeEditorTabIndex,
-  );
-  const assessmentQuestionContent = useAppSelector(state => {
-    if (assessmentId === undefined || questionId === undefined) {
-      return undefined;
-    }
-    return state.session.assessments[assessmentId]?.questions[questionId]?.content;
+  const onAssessment = assessmentId !== undefined && questionId !== undefined;
+
+  // Code from whichever workspace the student is currently in, plus the question they're on.
+  const code = useAppSelector(state => {
+    const workspace = onAssessment ? state.workspaces.assessment : state.workspaces.playground;
+    return workspace.editorTabs[workspace.activeEditorTabIndex ?? 0]?.value;
   });
-  const playgroundEditorTabs = useAppSelector(state => state.workspaces.playground.editorTabs);
-  const playgroundActiveTab = useAppSelector(
-    state => state.workspaces.playground.activeEditorTabIndex,
+  const question = useAppSelector(state =>
+    assessmentId !== undefined && questionId !== undefined
+      ? state.session.assessments[assessmentId]?.questions[questionId]?.content
+      : undefined,
   );
 
   const send = useCallback(
-    (tokens: Tokens, userInput: string) => {
-      const onAssessment = assessmentId !== undefined && questionId !== undefined;
-      const code = onAssessment
-        ? assessmentEditorTabs[assessmentActiveTab ?? 0]?.value
-        : playgroundEditorTabs[playgroundActiveTab ?? 0]?.value;
-      const question = onAssessment ? assessmentQuestionContent : undefined;
-
-      return sendRagMessage(tokens, userInput, { code, question });
-    },
-    [
-      assessmentId,
-      questionId,
-      assessmentEditorTabs,
-      assessmentActiveTab,
-      assessmentQuestionContent,
-      playgroundEditorTabs,
-      playgroundActiveTab,
-    ],
+    (tokens: Tokens, userInput: string) => sendRagMessage(tokens, userInput, { code, question }),
+    [code, question],
   );
 
   return (

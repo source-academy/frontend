@@ -1,150 +1,83 @@
-.directory,
-.uploadDialog,
-.detailDialog {
-  --border: #dce0e5;
-  --hairline: #e5e8eb;
-  --surface: #fff;
-  --muted-surface: #f6f7f9;
-  --hover: #edeff2;
-  --text: #252a31;
-  --muted: #5f6b7c;
-  --faint: #738091;
-  --accent: #2d72d2;
-  --danger: #cd4246;
-  color: var(--text);
-}
-
 .header,
-.headerLeft,
-.headerRight,
 .categoryRow,
-.rowActions,
-.docActions,
-.batchLabelRow,
+.docRow,
 .fileItem,
-.readyState,
-.errorState,
-.fileStateLabel,
-.loadingState {
+.rowActions,
+.stateLabel {
   display: flex;
   align-items: center;
+  gap: 8px;
 }
 
 .header {
   justify-content: space-between;
-  gap: 24px;
-  padding-bottom: 18px;
+  padding-bottom: 12px;
 }
 
-.headerLeft {
-  gap: 4px;
-}
-
-.headerLeft h4 {
+.header h4 {
   margin: 0;
 }
 
-.headerRight {
-  gap: 6px;
+.muted {
+  color: #5f6b7c;
+  font-size: 12px;
 }
 
 .infoPopover {
-  width: 280px;
+  width: 260px;
   padding: 12px;
-  color: #5f6b7c;
 }
 
 .list {
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgb(17 20 24 / 15%);
 }
 
 .categoryBlock {
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgb(17 20 24 / 15%);
 }
 
 .categoryRow {
-  gap: 10px;
-  min-height: 44px;
-  padding: 0 8px 0 6px;
+  min-height: 40px;
+  padding: 0 8px;
   cursor: pointer;
+  font-weight: 600;
 }
 
 .categoryRow:hover,
 .docRow:hover {
-  background: var(--hover);
-}
-
-.chevron {
-  width: 18px;
-  color: var(--faint);
-  transition: transform 120ms ease;
-}
-
-.chevronOpen {
-  transform: rotate(90deg);
-}
-
-.categoryName,
-.categoryNameInput {
-  color: #1c2127;
-  font-size: 13px;
-  font-weight: 600;
+  background: rgb(17 20 24 / 5%);
 }
 
 .categoryNameInput {
   width: 260px;
 }
 
-.categoryCount,
-.footerStatus {
-  color: var(--faint);
-  font-size: 11.5px;
-}
-
-.spacer {
-  flex: 1;
-}
-
-.rowActions,
-.docActions {
+.rowActions {
   gap: 2px;
+  margin-left: auto;
 }
 
 .categoryBody {
-  padding: 0 0 10px 28px;
+  padding-left: 28px;
 }
 
 .docRow {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 128px 108px 96px;
-  align-items: center;
-  min-height: 34px;
+  min-height: 32px;
   padding: 0 8px;
-  border-bottom: 1px solid var(--hairline);
+  font-weight: 400;
 }
 
 .docTitle {
+  flex: 1;
   overflow: hidden;
-  padding-right: 12px;
-  font-size: 12.5px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.docDate,
-.docStatus {
-  color: var(--muted);
+.docMeta {
+  width: 110px;
+  color: #5f6b7c;
   font-size: 12px;
-}
-
-.docTitle,
-.docDate,
-.docStatus {
-  text-align: left;
-}
-
-.docActions {
-  justify-content: flex-end;
 }
 
 .newCategoryInput,
@@ -153,20 +86,19 @@
 }
 
 .uploadDialog {
-  width: min(1080px, 96vw);
-  height: min(700px, 90vh);
+  width: min(1000px, 96vw);
+  height: min(680px, 90vh);
   padding-bottom: 0;
   overflow: hidden;
 }
 
 .detailDialog {
-  width: min(680px, 94vw);
-  max-height: min(760px, 88vh);
+  width: min(640px, 94vw);
 }
 
 .modalBody {
   display: grid;
-  grid-template-columns: minmax(240px, 32%) 1fr;
+  grid-template-columns: minmax(220px, 32%) 1fr;
   flex: 1;
   min-height: 0;
   margin: 0;
@@ -176,28 +108,26 @@
 .uploadPane {
   display: flex;
   flex-direction: column;
+  gap: 6px;
   min-height: 0;
-  border-right: 1px solid var(--border);
-  background: var(--muted-surface);
+  padding: 12px;
+  border-right: 1px solid rgb(17 20 24 / 15%);
+  overflow-y: auto;
 }
 
 .dropzone {
   display: grid;
   place-items: center;
-  gap: 5px;
-  min-height: 92px;
-  margin: 12px;
-  padding: 12px;
-  border: 1px dashed var(--border);
-  border-radius: 8px;
-  background: var(--surface);
+  gap: 4px;
+  padding: 20px 12px;
+  border: 1px dashed rgb(17 20 24 / 25%);
+  border-radius: 6px;
   cursor: pointer;
   text-align: center;
 }
 
 .dropzoneDragging {
-  border-color: var(--accent);
-  background: rgb(45 114 210 / 10%);
+  border-color: #2d72d2;
 }
 
 .dropzoneDisabled {
@@ -205,100 +135,42 @@
   opacity: 0.55;
 }
 
-.dropzoneLabel,
-.batchReadyCount {
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.batchLabelRow {
-  justify-content: space-between;
-  padding: 0 12px 4px;
-}
-
-.batchLabel {
-  color: var(--faint);
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-}
-
-.batchReadyCount {
-  font-size: 11px;
-}
-
-.batchList {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 2px;
-  padding: 4px 8px 12px;
-  overflow-y: auto;
-}
-
 .fileItem {
   align-items: flex-start;
-  gap: 8px;
-  padding: 8px;
-  border-radius: 6px;
+  padding: 6px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
 .fileItemActive {
-  background: rgb(45 114 210 / 8%);
-  box-shadow: inset 0 0 0 1px rgb(45 114 210 / 35%);
+  box-shadow: inset 0 0 0 1px #2d72d2;
 }
 
 .fileMeta {
-  display: flex;
   flex: 1;
-  flex-direction: column;
-  gap: 3px;
   min-width: 0;
-}
-
-.fileName {
   overflow: hidden;
-  font-size: 12px;
-  font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.fileStateLabel,
-.readyState,
-.errorState {
+.stateLabel {
   gap: 4px;
-  font-size: 10.5px;
+  font-size: 11px;
 }
 
-.fileStateLabel {
-  color: var(--muted);
-}
-
-.readyState {
+.ok {
   color: #238551;
 }
 
-.errorState {
-  color: var(--danger);
+.err {
+  color: #cd4246;
 }
 
 .formPane {
   min-height: 0;
-  padding: 20px 24px;
+  padding: 16px 20px;
   overflow-y: auto;
-}
-
-.formStack {
-  display: flex;
-  flex-direction: column;
-  max-width: 620px;
-}
-
-.formStack :global(.bp6-form-group) {
-  margin-bottom: 16px;
 }
 
 .formRow2 {
@@ -312,53 +184,7 @@
   margin-bottom: 8px;
 }
 
-.formRow2 input[aria-invalid='true'] {
-  border-color: var(--danger);
-}
-
-.loadingState,
-.emptyFormPane {
-  justify-content: center;
-  height: 100%;
-  color: var(--faint);
-}
-
-.loadingState {
-  flex-direction: column;
-  gap: 12px;
-}
-
-.footerStatus {
-  align-self: center;
-}
-
-@media (max-width: 700px) {
-  .header {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .headerRight {
-    flex-wrap: wrap;
-  }
-
-  .modalBody,
-  .formRow2 {
-    grid-template-columns: 1fr;
-  }
-
-  .uploadPane {
-    max-height: 260px;
-    border-right: 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .docRow {
-    grid-template-columns: minmax(0, 1fr) 80px 76px;
-  }
-
-  .docDate {
-    display: none;
-  }
+.emptyPane {
+  padding: 24px;
+  text-align: center;
 }
