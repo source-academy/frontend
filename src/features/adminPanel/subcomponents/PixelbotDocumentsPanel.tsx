@@ -5,7 +5,6 @@ import {
   DialogBody,
   DialogFooter,
   H4,
-  Icon,
   InputGroup,
   Intent,
   Popover,
@@ -13,6 +12,7 @@ import {
   TextArea,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppSelector } from 'src/commons/utils/Hooks';
 
@@ -35,6 +35,9 @@ import { formatReleaseDate, pixelbotDocumentStatus } from './PixelbotDocumentsTy
 
 /** Commits an inline name input on Enter / cancels on Escape. */
 const inlineInputKeys = (cancel: () => void) => (e: React.KeyboardEvent) => {
+  if ((e.nativeEvent as KeyboardEvent).isComposing) {
+    return;
+  }
   if (e.key === 'Enter') {
     (e.target as HTMLInputElement).blur();
   }
@@ -193,7 +196,13 @@ function PixelbotDocumentsPanel() {
           return (
             <div key={category.id} className={classes.categoryBlock}>
               <div className={classes.categoryRow} onClick={() => toggleCategoryOpen(category.id)}>
-                <Icon icon={isOpen ? IconNames.CHEVRON_DOWN : IconNames.CHEVRON_RIGHT} size={12} />
+                <Button
+                  minimal
+                  small
+                  icon={isOpen ? IconNames.CHEVRON_DOWN : IconNames.CHEVRON_RIGHT}
+                  aria-expanded={isOpen}
+                  aria-label={`${isOpen ? 'Collapse' : 'Expand'} ${category.name}`}
+                />
                 {renamingCategoryId === category.id ? (
                   <InputGroup
                     small
@@ -236,6 +245,11 @@ function PixelbotDocumentsPanel() {
 
               {isOpen && (
                 <div className={classes.categoryBody}>
+                  {docs.length === 0 && (
+                    <div className={classNames(classes.docRow, classes.muted)}>
+                      No documents yet
+                    </div>
+                  )}
                   {docs.map(doc => (
                     <div key={doc.id} className={classes.docRow}>
                       <span className={classes.docTitle}>{doc.title}</span>

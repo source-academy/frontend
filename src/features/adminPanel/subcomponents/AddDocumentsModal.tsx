@@ -18,6 +18,7 @@ import {
   savePixelbotDocuments,
   uploadPixelbotDocuments,
 } from '../../../commons/sagas/RequestsSaga';
+import { showDangerMessage } from '../../../commons/utils/notifications/NotificationsHelper';
 import type { DocumentDraft } from './DocumentDetailPopup';
 import { DocumentFields, isDraftComplete } from './DocumentDetailPopup';
 import classes from './DocumentDirectory.module.css';
@@ -31,6 +32,8 @@ const ACCEPTED_MIME_TYPES = {
   'application/xml': ['.xml'],
   'text/xml': ['.xml'],
 };
+
+const ACCEPTED_EXTENSIONS = [...new Set(Object.values(ACCEPTED_MIME_TYPES).flat())].join(', ');
 
 type BatchFile = DocumentDraft & {
   id: string;
@@ -70,14 +73,14 @@ function AddDocumentsModal({ isOpen, categories, tokens, onClose, onSaved }: Pro
       uploadCategoryId!,
       files.map(f => f.file),
       tokens,
-    );
+    ).catch(() => null);
     setBatch(prev =>
       prev.map(file => {
         const index = files.findIndex(uploaded => uploaded.id === file.id);
         if (index < 0) {
           return file;
         }
-        const match = entries?.[index];
+        const match = entries?.length === files.length ? entries[index] : undefined;
         if (!match || match.status === 'error') {
           return {
             ...file,
@@ -121,17 +124,22 @@ function AddDocumentsModal({ isOpen, categories, tokens, onClose, onSaved }: Pro
     accept: ACCEPTED_MIME_TYPES,
     disabled: categories.length === 0,
     onDropAccepted: addFiles,
+    onDropRejected: rejected =>
+      showDangerMessage(
+        `Couldn't add ${rejected.map(r => r.file.name).join(', ')}. Accepted file types: ${ACCEPTED_EXTENSIONS}.`,
+        4000,
+      ),
   });
 
   const patchFile = (id: string, patch: Partial<BatchFile>) =>
     setBatch(prev => prev.map(f => (f.id === id ? { ...f, ...patch } : f)));
 
   const removeFile = (id: string) => {
-    setBatch(prev => {
-      const next = prev.filter(f => f.id !== id);
-      setSelectedFileId(sel => (sel === id ? (next[0]?.id ?? null) : sel));
-      return next;
-    });
+    const next = batch.filter(f => f.id !== id);
+    setBatch(next);
+    if (selectedFileId === id) {
+      setSelectedFileId(next[0]?.id ?? null);
+    }
   };
 
   const retryFile = (file: BatchFile) => {
@@ -160,11 +168,14 @@ function AddDocumentsModal({ isOpen, categories, tokens, onClose, onSaved }: Pro
       filename: f.file.name,
       mediaType: f.mediaType,
     }));
-    const result = await savePixelbotDocuments(entries, tokens);
-    setIsSaving(false);
-    if (result) {
-      await onSaved();
-      handleClose();
+    try {
+      const result = await savePixelbotDocuments(entries, tokens);
+      if (result) {
+        await onSaved();
+        handleClose();
+      }
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -207,6 +218,12 @@ function AddDocumentsModal({ isOpen, categories, tokens, onClose, onSaved }: Pro
                 f.id === selectedFileId && classes.fileItemActive,
               )}
               onClick={() => setSelectedFileId(f.id)}
+              tabIndex={0}
+              onKeyDown={e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  setSelectedFileId(f.id);
+                }
+              }}
             >
               <Icon
                 icon={IconNames.DOCUMENT}

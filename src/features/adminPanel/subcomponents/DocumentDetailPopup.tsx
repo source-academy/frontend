@@ -50,16 +50,22 @@ export function DocumentFields({
 
   return (
     <>
-      <FormGroup label="Title">
-        <InputGroup value={draft.title} onChange={e => onChange({ title: e.target.value })} />
+      <FormGroup label="Title" labelFor="doc-title">
+        <InputGroup
+          id="doc-title"
+          value={draft.title}
+          onChange={e => onChange({ title: e.target.value })}
+        />
       </FormGroup>
       <div className={classes.formRow2}>
         <FormGroup
           label="Category *"
+          labelFor="doc-category"
           intent={missingCategory ? Intent.DANGER : Intent.NONE}
           helperText={missingCategory ? REQUIRED_HELPER : null}
         >
           <HTMLSelect
+            id="doc-category"
             fill
             value={draft.categoryId ?? ''}
             onChange={e => onChange({ categoryId: Number(e.target.value) })}
@@ -71,6 +77,7 @@ export function DocumentFields({
         </FormGroup>
         <FormGroup
           label="Release date *"
+          labelFor="doc-release-date"
           intent={missingDate ? Intent.DANGER : Intent.NONE}
           helperText={missingDate ? REQUIRED_HELPER : null}
         >
@@ -80,6 +87,7 @@ export function DocumentFields({
             onChange={() => onChange({ releaseDate: releaseNow ? null : todayIso() })}
           />
           <input
+            id="doc-release-date"
             type="date"
             className={classNames(Classes.INPUT, Classes.FILL)}
             value={draft.releaseDate ?? ''}
@@ -88,8 +96,9 @@ export function DocumentFields({
           />
         </FormGroup>
       </div>
-      <FormGroup label="Summary">
+      <FormGroup label="Summary" labelFor="doc-summary">
         <TextArea
+          id="doc-summary"
           fill
           rows={4}
           value={draft.description}
@@ -127,14 +136,17 @@ function DocumentDetailPopup({
 
   const handleSave = async () => {
     setIsSaving(true);
-    const result = await savePixelbotDocuments(
-      [{ ...draft, id: document.id, categoryId: draft.categoryId! }],
-      tokens,
-    );
-    setIsSaving(false);
-    if (result) {
-      await onSaved();
-      onClose();
+    try {
+      const result = await savePixelbotDocuments(
+        [{ ...draft, id: document.id, categoryId: draft.categoryId! }],
+        tokens,
+      );
+      if (result) {
+        await onSaved();
+        onClose();
+      }
+    } finally {
+      setIsSaving(false);
     }
   };
 
