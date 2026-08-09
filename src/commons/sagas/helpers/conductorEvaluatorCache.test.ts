@@ -205,4 +205,40 @@ describe('conductorEvaluatorCache', () => {
     expect(conductor.conduit.terminate).toHaveBeenCalled();
     expect(unregisterAllSpy).toHaveBeenCalled();
   });
+
+  test('a preload that fails once still activates on a later retry for the same path', async () => {
+    // Regression: activation used to be gated on "did the requested path change since the last
+    // call", which stays false forever once a path is requested - even if that attempt failed
+    // (e.g. the evaluator's own fetch failing, such as a transient failure fetching the
+    // plugin/evaluator from an external host). So once a transient failure hit here, no amount of
+    // re-selecting the very same path (e.g. re-opening the Stepper tab) would ever activate it
+    // again, even after the underlying issue resolved - only a differently-triggered Run (which
+    // bypasses this gate entirely - see getPreparedConductorSaga) could still show it.
+    const languageId = 'lang-retry-after-failure';
+    const env = makeEnv(() => languageId);
+    const activateSpy = vi.spyOn(DeferredConductorTabService.prototype, 'activate');
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        throw new TypeError('Failed to fetch');
+      }),
+    );
+    await expect(
+      runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-flaky.mjs').toPromise(),
+    ).rejects.toThrow();
+    expect(createConductorMock).not.toHaveBeenCalled();
+    expect(activateSpy).not.toHaveBeenCalled();
+
+    // The network recovers; re-selecting the very same path (e.g. re-opening the Stepper tab)
+    // must still activate it now that preparation actually succeeds.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({ ok: true, blob: async () => new Blob() }) as unknown as Response),
+    );
+    mockCreateConductorOnce();
+    await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-flaky.mjs').toPromise();
+
+    expect(activateSpy).toHaveBeenCalledTimes(1);
+  });
 });
