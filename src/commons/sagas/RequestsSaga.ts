@@ -17,7 +17,6 @@ import type {
 import type { UsernameRoleGroup } from '../../features/adminPanel/subcomponents/AddUserPanel';
 import type {
   PixelbotCategory,
-  PixelbotDocument,
   PixelbotDocumentSaveEntry,
   PixelbotDocumentsIndex,
   PixelbotDocumentUploadEntry,
@@ -66,7 +65,7 @@ import type { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { castLibrary } from '../utils/CastBackend';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { request } from '../utils/RequestHelper';
+import { request, type RequestMethod } from '../utils/RequestHelper';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const XLSX = require('xlsx');
@@ -1463,40 +1462,40 @@ export const getAssessmentConfigs = async (
   return await resp.json();
 };
 
-/**
- * GET /courses/{courseId}/admin/pixelbot_documents
- */
+const pixelbotRequest = async <T>(
+  path: string,
+  method: RequestMethod,
+  tokens: Tokens,
+  body?: object,
+): Promise<T | null> => {
+  const resp = await request(`${courseId()}/admin/${path}`, method, {
+    ...tokens,
+    ...(body && { body }),
+  });
+  return resp?.ok ? resp.json() : null;
+};
+
+const deletePixelbotResource = async (path: string, tokens: Tokens): Promise<boolean> => {
+  const resp = await request(`${courseId()}/admin/${path}`, 'DELETE', {
+    ...tokens,
+    noHeaderAccept: true,
+  });
+  return !!resp?.ok;
+};
+
 export const getPixelbotDocuments = async (
   tokens: Tokens,
-): Promise<PixelbotDocumentsIndex | null> => {
-  const resp = await request(`${courseId()}/admin/pixelbot_documents`, 'GET', {
-    ...tokens,
-  });
-  if (!resp || !resp.ok) {
-    return null;
-  }
+): Promise<PixelbotDocumentsIndex | null> => pixelbotRequest('pixelbot_documents', 'GET', tokens);
 
-  return await resp.json();
-};
-
-/**
- * GET /courses/{courseId}/admin/pixelbot_documents/map_preview
- */
 export const getPixelbotDocumentMapPreview = async (tokens: Tokens): Promise<any[] | null> => {
-  const resp = await request(`${courseId()}/admin/pixelbot_documents/map_preview`, 'GET', {
-    ...tokens,
-  });
-  if (!resp || !resp.ok) {
-    return null;
-  }
-
-  const data = await resp.json();
-  return data.documentMap;
+  const data = await pixelbotRequest<{ documentMap: any[] }>(
+    'pixelbot_documents/map_preview',
+    'GET',
+    tokens,
+  );
+  return data?.documentMap ?? null;
 };
 
-/**
- * POST /courses/{courseId}/admin/pixelbot_documents/upload
- */
 export const uploadPixelbotDocuments = async (
   categoryId: number,
   files: File[],
@@ -1519,115 +1518,34 @@ export const uploadPixelbotDocuments = async (
   return data.entries;
 };
 
-/**
- * PUT /courses/{courseId}/admin/pixelbot_documents
- *
- * Bulk-saves proposed uploads (as inserts) and edits to already-saved documents (as updates).
- */
 export const savePixelbotDocuments = async (
   entries: PixelbotDocumentSaveEntry[],
   tokens: Tokens,
-): Promise<PixelbotDocumentsIndex | null> => {
-  const resp = await request(`${courseId()}/admin/pixelbot_documents`, 'PUT', {
-    ...tokens,
-    body: { entries },
-  });
-  if (!resp || !resp.ok) {
-    return null;
-  }
+): Promise<PixelbotDocumentsIndex | null> =>
+  pixelbotRequest('pixelbot_documents', 'PUT', tokens, { entries });
 
-  return await resp.json();
-};
-
-/**
- * PUT /courses/{courseId}/admin/pixelbot_documents/{documentId}/rename
- *
- * Renames a single document's underlying file, which moves it to a new S3 key. Safe to do for
- * one document at a time (unlike a category rename, which would touch every document in it).
- */
-export const renamePixelbotDocument = async (
-  documentId: number,
-  filename: string,
-  tokens: Tokens,
-): Promise<PixelbotDocument | null> => {
-  const resp = await request(`${courseId()}/admin/pixelbot_documents/${documentId}/rename`, 'PUT', {
-    ...tokens,
-    body: { filename },
-  });
-  if (!resp || !resp.ok) {
-    return null;
-  }
-
-  return await resp.json();
-};
-
-/**
- * DELETE /courses/{courseId}/admin/pixelbot_documents/{documentId}
- */
 export const deletePixelbotDocument = async (
   documentId: number,
   tokens: Tokens,
-): Promise<boolean> => {
-  const resp = await request(`${courseId()}/admin/pixelbot_documents/${documentId}`, 'DELETE', {
-    ...tokens,
-    noHeaderAccept: true,
-  });
-  return !!resp && resp.ok;
-};
+): Promise<boolean> => deletePixelbotResource(`pixelbot_documents/${documentId}`, tokens);
 
-/**
- * POST /courses/{courseId}/admin/pixelbot_categories
- */
 export const createPixelbotCategory = async (
   name: string,
   tokens: Tokens,
-): Promise<PixelbotCategory | null> => {
-  const resp = await request(`${courseId()}/admin/pixelbot_categories`, 'POST', {
-    ...tokens,
-    body: { name },
-  });
-  if (!resp || !resp.ok) {
-    return null;
-  }
+): Promise<PixelbotCategory | null> =>
+  pixelbotRequest('pixelbot_categories', 'POST', tokens, { name });
 
-  return await resp.json();
-};
-
-/**
- * PUT /courses/{courseId}/admin/pixelbot_categories/{categoryId}
- */
 export const renamePixelbotCategory = async (
   categoryId: number,
   name: string,
   tokens: Tokens,
-): Promise<PixelbotCategory | null> => {
-  const resp = await request(`${courseId()}/admin/pixelbot_categories/${categoryId}`, 'PUT', {
-    ...tokens,
-    body: { name },
-  });
-  if (!resp || !resp.ok) {
-    return null;
-  }
+): Promise<PixelbotCategory | null> =>
+  pixelbotRequest(`pixelbot_categories/${categoryId}`, 'PUT', tokens, { name });
 
-  return await resp.json();
-};
-
-/**
- * DELETE /courses/{courseId}/admin/pixelbot_categories/{categoryId}
- *
- * Blocked by the backend (400) while the category still has documents in it. The panel checks
- * the document count itself before offering delete, so this is mainly a backstop.
- */
 export const deletePixelbotCategory = async (
   categoryId: number,
   tokens: Tokens,
-): Promise<boolean> => {
-  const resp = await request(`${courseId()}/admin/pixelbot_categories/${categoryId}`, 'DELETE', {
-    ...tokens,
-    noHeaderAccept: true,
-  });
-  return !!resp && resp.ok;
-};
+): Promise<boolean> => deletePixelbotResource(`pixelbot_categories/${categoryId}`, tokens);
 
 /**
  * PUT /courses/{courseId}/admin/config/assessment_configs

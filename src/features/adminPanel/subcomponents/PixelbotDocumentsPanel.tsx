@@ -1,15 +1,20 @@
 import {
   Button,
+  Callout,
   Dialog,
   DialogBody,
   DialogFooter,
+  H4,
   Icon,
+  InputGroup,
   Intent,
+  Popover,
+  Position,
   TextArea,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppSelector } from 'src/commons/utils/Hooks';
 
 import type { Tokens } from '../../../commons/application/types/SessionTypes';
@@ -42,7 +47,6 @@ function PixelbotDocumentsPanel() {
   const [documents, setDocuments] = useState<PixelbotDocument[]>([]);
   const [loadError, setLoadError] = useState('');
 
-  const [infoOpen, setInfoOpen] = useState(false);
   const [openCategoryIds, setOpenCategoryIds] = useState<Set<number>>(new Set());
   const [renamingCategoryId, setRenamingCategoryId] = useState<number | null>(null);
   const [renameDraft, setRenameDraft] = useState('');
@@ -56,8 +60,6 @@ function PixelbotDocumentsPanel() {
 
   const [detail, setDetail] = useState<DetailState | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
-
-  const infoRef = useRef<HTMLDivElement>(null);
 
   const refresh = useCallback(async () => {
     if (!tokens.accessToken || !tokens.refreshToken) {
@@ -77,19 +79,6 @@ function PixelbotDocumentsPanel() {
     refresh();
   }, [refresh]);
 
-  useEffect(() => {
-    if (!infoOpen) {
-      return;
-    }
-    const onClickAway = (e: MouseEvent) => {
-      if (infoRef.current && !infoRef.current.contains(e.target as Node)) {
-        setInfoOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', onClickAway);
-    return () => document.removeEventListener('mousedown', onClickAway);
-  }, [infoOpen]);
-
   const documentsByCategory = useMemo(() => {
     const map = new Map<number, PixelbotDocument[]>();
     documents.forEach(doc => {
@@ -100,7 +89,7 @@ function PixelbotDocumentsPanel() {
     return map;
   }, [documents]);
 
-  const toggleCategoryOpen = useCallback((categoryId: number) => {
+  const toggleCategoryOpen = (categoryId: number) => {
     setOpenCategoryIds(prev => {
       const next = new Set(prev);
       if (next.has(categoryId)) {
@@ -110,15 +99,15 @@ function PixelbotDocumentsPanel() {
       }
       return next;
     });
-  }, []);
+  };
 
-  const startRenameCategory = useCallback((e: React.MouseEvent, category: PixelbotCategory) => {
+  const startRenameCategory = (e: React.MouseEvent, category: PixelbotCategory) => {
     e.stopPropagation();
     setRenamingCategoryId(category.id);
     setRenameDraft(category.name);
-  }, []);
+  };
 
-  const commitRenameCategory = useCallback(async () => {
+  const commitRenameCategory = async () => {
     if (renamingCategoryId === null) {
       return;
     }
@@ -132,28 +121,22 @@ function PixelbotDocumentsPanel() {
     if (renamed) {
       await refresh();
     }
-  }, [renamingCategoryId, renameDraft, tokens, refresh]);
+  };
 
-  const handleDeleteCategory = useCallback(
-    async (e: React.MouseEvent, category: PixelbotCategory) => {
-      e.stopPropagation();
-      const count = documentsByCategory.get(category.id)?.length ?? 0;
-      if (count > 0) {
-        showDangerMessage(
-          `"${category.name}" still contains ${count} document${count === 1 ? '' : 's'}. Move or delete them first.`,
-          4000,
-        );
-        return;
-      }
-      const ok = await deletePixelbotCategory(category.id, tokens);
-      if (ok) {
-        await refresh();
-      }
-    },
-    [documentsByCategory, tokens, refresh],
-  );
+  const handleDeleteCategory = async (e: React.MouseEvent, category: PixelbotCategory) => {
+    e.stopPropagation();
+    const count = documentsByCategory.get(category.id)?.length ?? 0;
+    if (count > 0) {
+      showDangerMessage(
+        `"${category.name}" still contains ${count} document${count === 1 ? '' : 's'}. Move or delete them first.`,
+        4000,
+      );
+      return;
+    }
+    if (await deletePixelbotCategory(category.id, tokens)) await refresh();
+  };
 
-  const commitNewCategory = useCallback(async () => {
+  const commitNewCategory = async () => {
     const name = newCategoryName.trim();
     setNewCategoryActive(false);
     setNewCategoryName('');
@@ -164,9 +147,9 @@ function PixelbotDocumentsPanel() {
     if (category) {
       await refresh();
     }
-  }, [newCategoryName, tokens, refresh]);
+  };
 
-  const handleDeleteDocument = useCallback(async () => {
+  const handleDeleteDocument = async () => {
     if (confirmDeleteId === null) {
       return;
     }
@@ -178,35 +161,31 @@ function PixelbotDocumentsPanel() {
       }
       await refresh();
     }
-  }, [confirmDeleteId, tokens, detail, refresh]);
+  };
 
-  const handleOpenMapPreview = useCallback(async () => {
+  const handleOpenMapPreview = async () => {
     setMapPreviewOpen(true);
     const data = await getPixelbotDocumentMapPreview(tokens);
     setMapPreview(data ? JSON.stringify(data, null, 2) : 'Failed to load document map.');
-  }, [tokens]);
+  };
 
   const confirmDeleteTitle = documents.find(d => d.id === confirmDeleteId)?.title ?? '';
 
   return (
     <div className={classes.directory}>
       <div className={classes.header}>
-        <div className={classes.headerLeft} ref={infoRef}>
-          <h3 className={classes.headerTitle}>Document Directory</h3>
-          <button
-            type="button"
-            className={classes.infoButton}
-            onClick={() => setInfoOpen(prev => !prev)}
-            aria-label="About this screen"
+        <div className={classes.headerLeft}>
+          <H4>Document Directory</H4>
+          <Popover
+            position={Position.BOTTOM_LEFT}
+            content={
+              <div className={classes.infoPopover}>
+                Documents are available to Pixel after their release date.
+              </div>
+            }
           >
-            <Icon icon={IconNames.INFO_SIGN} size={13} />
-          </button>
-          {infoOpen && (
-            <div className={classes.infoPopover}>
-              Documents in this directory are indexed for Pixel&apos;s retrieval. Students only see
-              a document once its release date has passed and its status is Live.
-            </div>
-          )}
+            <Button minimal small icon={IconNames.INFO_SIGN} aria-label="About this screen" />
+          </Popover>
         </div>
         <div className={classes.headerRight}>
           <Button
@@ -228,7 +207,7 @@ function PixelbotDocumentsPanel() {
         </div>
       </div>
 
-      {loadError && <p className={classes.emptyRow}>{loadError}</p>}
+      {loadError && <Callout intent={Intent.DANGER}>{loadError}</Callout>}
 
       <div className={classes.list}>
         {categories.map(category => {
@@ -243,7 +222,8 @@ function PixelbotDocumentsPanel() {
                   <Icon icon={IconNames.CHEVRON_RIGHT} size={12} />
                 </span>
                 {isRenaming ? (
-                  <input
+                  <InputGroup
+                    small
                     className={classes.categoryNameInput}
                     value={renameDraft}
                     autoFocus
@@ -267,22 +247,21 @@ function PixelbotDocumentsPanel() {
                 </span>
                 <span className={classes.spacer} />
                 <span className={classes.rowActions}>
-                  <button
-                    type="button"
-                    className={classes.iconButton}
+                  <Button
+                    minimal
+                    small
+                    icon={IconNames.EDIT}
                     onClick={e => startRenameCategory(e, category)}
                     aria-label="Rename category"
-                  >
-                    <Icon icon={IconNames.EDIT} size={13} />
-                  </button>
-                  <button
-                    type="button"
-                    className={classNames(classes.iconButton, classes.iconButtonDanger)}
+                  />
+                  <Button
+                    minimal
+                    small
+                    icon={IconNames.TRASH}
+                    intent={Intent.DANGER}
                     onClick={e => handleDeleteCategory(e, category)}
                     aria-label="Delete category"
-                  >
-                    <Icon icon={IconNames.TRASH} size={13} />
-                  </button>
+                  />
                 </span>
               </div>
 
@@ -296,30 +275,28 @@ function PixelbotDocumentsPanel() {
                         {pixelbotDocumentStatus(doc.releaseDate)}
                       </span>
                       <span className={classes.docActions}>
-                        <button
-                          type="button"
-                          className={classes.iconButton}
+                        <Button
+                          minimal
+                          small
+                          icon={IconNames.EYE_OPEN}
                           onClick={() => setDetail({ documentId: doc.id, mode: 'view' })}
                           aria-label="View document"
-                        >
-                          <Icon icon={IconNames.EYE_OPEN} size={13} />
-                        </button>
-                        <button
-                          type="button"
-                          className={classes.iconButton}
+                        />
+                        <Button
+                          minimal
+                          small
+                          icon={IconNames.EDIT}
                           onClick={() => setDetail({ documentId: doc.id, mode: 'edit' })}
                           aria-label="Edit document"
-                        >
-                          <Icon icon={IconNames.EDIT} size={13} />
-                        </button>
-                        <button
-                          type="button"
-                          className={classNames(classes.iconButton, classes.iconButtonDanger)}
+                        />
+                        <Button
+                          minimal
+                          small
+                          icon={IconNames.TRASH}
+                          intent={Intent.DANGER}
                           onClick={() => setConfirmDeleteId(doc.id)}
                           aria-label="Delete document"
-                        >
-                          <Icon icon={IconNames.TRASH} size={13} />
-                        </button>
+                        />
                       </span>
                     </div>
                   ))}
@@ -330,38 +307,37 @@ function PixelbotDocumentsPanel() {
         })}
 
         {newCategoryActive ? (
-          <div className={classes.newCategoryActive}>
-            <input
-              className={classes.newCategoryInput}
-              placeholder="Category name"
-              autoFocus
-              value={newCategoryName}
-              onChange={e => setNewCategoryName(e.target.value)}
-              onBlur={commitNewCategory}
-              onKeyDown={e => {
-                if (e.key === 'Enter') {
-                  (e.target as HTMLInputElement).blur();
-                }
-                if (e.key === 'Escape') {
-                  setNewCategoryActive(false);
-                  setNewCategoryName('');
-                }
-              }}
-            />
-            <span className={classes.newCategoryHint}>Enter to save · Esc to cancel</span>
-          </div>
+          <InputGroup
+            className={classes.newCategoryInput}
+            leftIcon={IconNames.PLUS}
+            placeholder="Category name"
+            autoFocus
+            value={newCategoryName}
+            onChange={e => setNewCategoryName(e.target.value)}
+            onBlur={commitNewCategory}
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                (e.target as HTMLInputElement).blur();
+              }
+              if (e.key === 'Escape') {
+                setNewCategoryActive(false);
+                setNewCategoryName('');
+              }
+            }}
+          />
         ) : (
-          <button
-            type="button"
-            className={classes.newCategoryRow}
+          <Button
+            fill
+            outlined
+            alignText="left"
+            className={classes.newCategoryButton}
+            icon={IconNames.PLUS}
+            text="New category"
             onClick={() => {
               setNewCategoryActive(true);
               setNewCategoryName('');
             }}
-          >
-            <Icon icon={IconNames.PLUS} size={13} />
-            New category
-          </button>
+          />
         )}
       </div>
 
@@ -379,6 +355,7 @@ function PixelbotDocumentsPanel() {
 
       {detail && (
         <DocumentDetailPopup
+          key={detail.documentId}
           document={documents.find(d => d.id === detail.documentId) ?? null}
           categories={categories}
           initialMode={detail.mode}

@@ -1,8 +1,22 @@
-import { Button, Dialog, HTMLSelect, Icon, Intent } from '@blueprintjs/core';
+import {
+  Button,
+  Callout,
+  Classes,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  FormGroup,
+  HTMLSelect,
+  Icon,
+  InputGroup,
+  Intent,
+  Spinner,
+  Switch,
+  TextArea,
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { useCallback, useMemo, useState } from 'react';
-import type { DropEvent, FileRejection } from 'react-dropzone';
+import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import type { Tokens } from '../../../commons/application/types/SessionTypes';
@@ -28,7 +42,6 @@ type BatchFile = {
   id: string;
   file: File;
   name: string;
-  ext: string;
   categoryId: number;
   categoryChosen: boolean;
   phase: 'uploading' | 'ready' | 'error';
@@ -67,117 +80,81 @@ function AddDocumentsModal({
 
   const selected = batch.find(f => f.id === selectedFileId) ?? null;
 
-  const runUpload = useCallback(
-    async (files: BatchFile[]) => {
-      if (files.length === 0) {
-        return;
-      }
-      const categoryId = files[0].categoryId;
-      const entries = await uploadPixelbotDocuments(
-        categoryId,
-        files.map(f => f.file),
-        tokens,
-      );
-      setBatch(prev =>
-        prev.map(f => {
-          // Match by position within this upload batch, not by filename — two files with the
-          // same name (e.g. two "report.pdf") would otherwise both resolve to the first entry.
-          // The backend preserves input order in its response, so index lookup is exact.
-          const index = files.findIndex(uploaded => uploaded.id === f.id);
-          if (index === -1) {
-            return f;
-          }
-          const match = entries?.[index];
-          if (!match) {
-            return { ...f, phase: 'error', errorMessage: 'Upload failed. Please retry.' };
-          }
-          if (match.status === 'error') {
-            return { ...f, phase: 'error', errorMessage: match.error };
-          }
-          return {
-            ...f,
-            phase: 'ready',
-            title: match.title,
-            description: match.description,
-            releaseDate: match.releaseDate,
-            s3Key: match.s3Key,
-            mediaType: match.mediaType,
-          };
-        }),
-      );
-    },
-    [tokens],
-  );
+  const runUpload = async (files: BatchFile[]) => {
+    if (files.length === 0) return;
 
-  const addFiles = useCallback(
-    (files: File[]) => {
-      const categoryId = defaultCategoryId ?? categories[0]?.id;
-      if (!categoryId) {
-        return;
-      }
-      const newFiles: BatchFile[] = files.map(file => ({
-        id: nid(),
-        file,
-        name: file.name,
-        ext: (file.name.split('.').pop() ?? 'file').slice(0, 3).toUpperCase(),
-        categoryId,
-        categoryChosen: defaultCategoryId !== null,
-        phase: 'uploading',
-        title: '',
-        description: '',
-        releaseDate: null,
-        releaseNow: false,
-      }));
-      setBatch(prev => [...prev, ...newFiles]);
-      setSelectedFileId(prev => prev ?? newFiles[0]?.id ?? null);
-      runUpload(newFiles);
-    },
-    [defaultCategoryId, categories, runUpload],
-  );
+    const entries = await uploadPixelbotDocuments(
+      files[0].categoryId,
+      files.map(f => f.file),
+      tokens,
+    );
+    setBatch(prev =>
+      prev.map(file => {
+        const index = files.findIndex(uploaded => uploaded.id === file.id);
+        if (index < 0) return file;
+        const match = entries?.[index];
+        if (!match)
+          return { ...file, phase: 'error', errorMessage: 'Upload failed. Please retry.' };
+        if (match.status === 'error') return { ...file, phase: 'error', errorMessage: match.error };
+        return {
+          ...file,
+          phase: 'ready',
+          title: match.title,
+          description: match.description,
+          releaseDate: match.releaseDate,
+          s3Key: match.s3Key,
+          mediaType: match.mediaType,
+        };
+      }),
+    );
+  };
 
-  const onDropAccepted = useCallback(
-    (files: File[], _event: DropEvent) => addFiles(files),
-    [addFiles],
-  );
-  const onDropRejected = useCallback((_rejections: FileRejection[]) => {}, []);
+  const addFiles = (files: File[]) => {
+    const categoryId = defaultCategoryId ?? categories[0]?.id;
+    if (!categoryId) return;
+
+    const newFiles: BatchFile[] = files.map(file => ({
+      id: nid(),
+      file,
+      name: file.name,
+      categoryId,
+      categoryChosen: defaultCategoryId !== null,
+      phase: 'uploading',
+      title: '',
+      description: '',
+      releaseDate: null,
+      releaseNow: false,
+    }));
+    setBatch(prev => [...prev, ...newFiles]);
+    setSelectedFileId(prev => prev ?? newFiles[0]?.id ?? null);
+    runUpload(newFiles);
+  };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     multiple: true,
     accept: ACCEPTED_MIME_TYPES,
     disabled: categories.length === 0,
-    onDropAccepted,
-    onDropRejected,
+    onDropAccepted: addFiles,
   });
 
-  const patchSelected = useCallback(
-    (patch: Partial<BatchFile>) => {
-      if (!selected) {
-        return;
-      }
-      setBatch(prev => prev.map(f => (f.id === selected.id ? { ...f, ...patch } : f)));
-    },
-    [selected],
-  );
+  const patchSelected = (patch: Partial<BatchFile>) => {
+    if (selected) setBatch(prev => prev.map(f => (f.id === selected.id ? { ...f, ...patch } : f)));
+  };
 
-  const removeFile = useCallback((id: string) => {
+  const removeFile = (id: string) => {
     setBatch(prev => {
       const next = prev.filter(f => f.id !== id);
       setSelectedFileId(sel => (sel === id ? (next[0]?.id ?? null) : sel));
       return next;
     });
-  }, []);
+  };
 
-  const retryFile = useCallback(
-    (file: BatchFile) => {
-      setBatch(prev =>
-        prev.map(f =>
-          f.id === file.id ? { ...f, phase: 'uploading', errorMessage: undefined } : f,
-        ),
-      );
-      runUpload([file]);
-    },
-    [runUpload],
-  );
+  const retryFile = (file: BatchFile) => {
+    setBatch(prev =>
+      prev.map(f => (f.id === file.id ? { ...f, phase: 'uploading', errorMessage: undefined } : f)),
+    );
+    runUpload([file]);
+  };
 
   const hasReleaseDate = (f: BatchFile) => f.releaseNow || !!f.releaseDate;
   const isComplete = (f: BatchFile) => f.categoryChosen && hasReleaseDate(f);
@@ -189,16 +166,14 @@ function AddDocumentsModal({
   const missingReleaseDate = selected?.phase === 'ready' && !hasReleaseDate(selected);
   const missingCategory = selected?.phase === 'ready' && !selected.categoryChosen;
 
-  const handleClose = useCallback(() => {
+  const handleClose = () => {
     setBatch([]);
     setSelectedFileId(null);
     onClose();
-  }, [onClose]);
+  };
 
-  const handleSaveAll = useCallback(async () => {
-    if (!allReady) {
-      return;
-    }
+  const handleSaveAll = async () => {
+    if (!allReady) return;
     setIsSaving(true);
     const entries: PixelbotDocumentSaveEntry[] = batch.map(f => ({
       categoryId: f.categoryId,
@@ -215,54 +190,19 @@ function AddDocumentsModal({
       await onSaved();
       handleClose();
     }
-  }, [allReady, batch, tokens, onSaved, handleClose]);
+  };
 
-  const categoryOptions = useMemo(
-    () => categories.map(c => ({ value: c.id, label: c.name })),
-    [categories],
-  );
+  const categoryOptions = categories.map(c => ({ value: c.id, label: c.name }));
 
   return (
     <Dialog
+      className={classes.uploadDialog}
       isOpen={isOpen}
       onClose={handleClose}
       canOutsideClickClose={false}
-      style={{
-        width: 'min(1080px, 96vw)',
-        height: 'min(700px, 90vh)',
-        maxWidth: 'min(1080px, 96vw)',
-        padding: 0,
-        background: '#ffffff',
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-      }}
+      title="Add documents"
     >
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          height: 46,
-          padding: '0 14px',
-          borderBottom: '1px solid #dce0e5',
-          flex: 'none',
-        }}
-      >
-        <span style={{ fontSize: 13.5, fontWeight: 620, letterSpacing: '-0.005em' }}>
-          Add documents
-        </span>
-        <button
-          type="button"
-          className={classes.iconButton}
-          onClick={handleClose}
-          aria-label="Close"
-        >
-          <Icon icon={IconNames.CROSS} size={14} />
-        </button>
-      </div>
-
-      <div className={classes.modalBody}>
+      <DialogBody className={classes.modalBody}>
         <div className={classes.uploadPane}>
           <div
             {...getRootProps()}
@@ -298,21 +238,16 @@ function AddDocumentsModal({
                 )}
                 onClick={() => setSelectedFileId(f.id)}
               >
-                <span
-                  className={classNames(
-                    classes.fileIconChip,
-                    f.phase === 'error' && classes.fileIconChipError,
-                  )}
-                >
-                  {f.ext}
-                </span>
+                <Icon
+                  icon={IconNames.DOCUMENT}
+                  intent={f.phase === 'error' ? Intent.DANGER : Intent.NONE}
+                />
                 <div className={classes.fileMeta}>
                   <span className={classes.fileName}>{f.name}</span>
                   {f.phase === 'uploading' && (
-                    <>
-                      <div className={classes.shimmerBar} />
-                      <span className={classes.fileStateLabel}>Uploading &amp; analyzing…</span>
-                    </>
+                    <span className={classes.fileStateLabel}>
+                      <Spinner size={12} /> Uploading &amp; analyzing…
+                    </span>
                   )}
                   {f.phase === 'ready' && isComplete(f) && (
                     <span className={classes.readyState}>
@@ -321,42 +256,37 @@ function AddDocumentsModal({
                     </span>
                   )}
                   {f.phase === 'ready' && !f.categoryChosen && (
-                    <span className={classes.fileStateLabel} style={{ color: '#cd4246' }}>
-                      Needs a category
-                    </span>
+                    <span className={classes.errorState}>Needs a category</span>
                   )}
                   {f.phase === 'ready' && f.categoryChosen && !hasReleaseDate(f) && (
-                    <span className={classes.fileStateLabel} style={{ color: '#cd4246' }}>
-                      Needs a release date
-                    </span>
+                    <span className={classes.errorState}>Needs a release date</span>
                   )}
                   {f.phase === 'error' && (
                     <span className={classes.errorState}>
                       Couldn&apos;t process file
-                      <button
-                        type="button"
-                        className={classes.retryLink}
+                      <Button
+                        minimal
+                        small
+                        intent={Intent.DANGER}
+                        text="Retry"
                         onClick={e => {
                           e.stopPropagation();
                           retryFile(f);
                         }}
-                      >
-                        Retry
-                      </button>
+                      />
                     </span>
                   )}
                 </div>
-                <button
-                  type="button"
-                  className={classes.removeButton}
+                <Button
+                  minimal
+                  small
+                  icon={IconNames.CROSS}
                   onClick={e => {
                     e.stopPropagation();
                     removeFile(f.id);
                   }}
                   aria-label="Remove from batch"
-                >
-                  <Icon icon={IconNames.CROSS} size={10} />
-                </button>
+                />
               </div>
             ))}
           </div>
@@ -370,56 +300,46 @@ function AddDocumentsModal({
           )}
 
           {selected?.phase === 'uploading' && (
-            <div className={classes.skeletonStack}>
-              <div className={classes.formGroup}>
-                <div className={classes.skeletonLabel} />
-                <div className={classes.skeletonField} />
-              </div>
-              <div className={classes.formGroup}>
-                <div className={classes.skeletonLabel} />
-                <div className={classNames(classes.skeletonField, classes.skeletonFieldTall)} />
-              </div>
-              <span className={classes.skeletonHint}>Reading document and drafting the map…</span>
+            <div className={classes.loadingState}>
+              <Spinner />
+              <span>Reading document and drafting the map…</span>
             </div>
           )}
 
           {selected?.phase === 'error' && (
-            <div className={classes.errorBlock}>
-              <span className={classes.errorBlockTitle}>This file couldn&apos;t be processed</span>
-              <span className={classes.errorBlockBody}>
+            <Callout intent={Intent.DANGER} title="This file couldn't be processed">
+              <p>
                 Pixel couldn&apos;t process {selected.name}. {selected.errorMessage}
-              </span>
-              <Button text="Retry processing" onClick={() => retryFile(selected)} />
-            </div>
+              </p>
+              <Button small text="Retry processing" onClick={() => retryFile(selected)} />
+            </Callout>
           )}
 
           {selected?.phase === 'ready' && (
             <div className={classes.formStack}>
-              <div className={classes.formGroup}>
-                <label className={classes.formLabel}>Title</label>
-                <input
-                  className={classes.formInput}
+              <FormGroup label="Title">
+                <InputGroup
                   value={selected.title}
                   onChange={e => patchSelected({ title: e.target.value })}
                 />
-              </div>
-              <div className={classes.formGroup}>
-                <label className={classes.formLabel}>Summary</label>
-                <textarea
-                  className={classes.formTextarea}
+              </FormGroup>
+              <FormGroup label="Summary">
+                <TextArea
+                  fill
                   rows={5}
                   value={selected.description}
                   onChange={e => patchSelected({ description: e.target.value })}
                 />
-              </div>
+              </FormGroup>
               <div className={classes.formRow2}>
-                <div className={classes.formGroup}>
-                  <label className={classes.formLabel}>Category *</label>
+                <FormGroup
+                  label="Category *"
+                  intent={missingCategory ? Intent.DANGER : Intent.NONE}
+                  helperText={
+                    missingCategory ? 'Select a category before this document can be saved.' : null
+                  }
+                >
                   <HTMLSelect
-                    className={classNames(
-                      classes.formSelect,
-                      missingCategory && classes.formFieldError,
-                    )}
                     fill
                     value={selected.categoryChosen ? selected.categoryId : ''}
                     onChange={e =>
@@ -430,89 +350,60 @@ function AddDocumentsModal({
                       ...categoryOptions,
                     ]}
                   />
-                  {missingCategory && (
-                    <span style={{ fontSize: 11.5, color: '#cd4246' }}>
-                      Select a category before this document can be saved.
-                    </span>
-                  )}
-                </div>
-                <div className={classes.formGroup}>
-                  <div className={classes.releaseRow}>
-                    <label className={classes.formLabel}>Release date *</label>
-                    <button
-                      type="button"
-                      className={classes.releaseToggle}
-                      onClick={() => patchSelected({ releaseNow: !selected.releaseNow })}
-                    >
-                      Release immediately
-                      <span
-                        className={classNames(
-                          classes.toggleTrack,
-                          selected.releaseNow && classes.toggleTrackOn,
-                        )}
-                      >
-                        <span
-                          className={classNames(
-                            classes.toggleKnob,
-                            selected.releaseNow && classes.toggleKnobOn,
-                          )}
-                        />
-                      </span>
-                    </button>
-                  </div>
+                </FormGroup>
+                <FormGroup
+                  label="Release date *"
+                  intent={missingReleaseDate ? Intent.DANGER : Intent.NONE}
+                  helperText={
+                    missingReleaseDate
+                      ? 'Select a release date before this document can be saved.'
+                      : null
+                  }
+                >
+                  <Switch
+                    checked={selected.releaseNow}
+                    label="Release immediately"
+                    onChange={() => patchSelected({ releaseNow: !selected.releaseNow })}
+                  />
                   <input
                     type="date"
-                    className={classes.formInput}
+                    className={classNames(Classes.INPUT, Classes.FILL)}
                     value={selected.releaseNow ? todayIso() : (selected.releaseDate ?? '')}
                     disabled={selected.releaseNow}
                     onChange={e => patchSelected({ releaseDate: e.target.value || null })}
-                    style={missingReleaseDate ? { borderColor: '#cd4246' } : undefined}
+                    aria-invalid={missingReleaseDate}
                   />
-                  {missingReleaseDate && (
-                    <span style={{ fontSize: 11.5, color: '#cd4246' }}>
-                      Select a release date before this document can be saved.
-                    </span>
-                  )}
-                </div>
+                </FormGroup>
               </div>
             </div>
           )}
         </div>
-      </div>
+      </DialogBody>
 
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 16,
-          height: 54,
-          padding: '0 14px',
-          borderTop: '1px solid #dce0e5',
-          background: '#fbfbfd',
-          flex: 'none',
-        }}
+      <DialogFooter
+        actions={
+          <>
+            <Button text="Cancel" onClick={handleClose} />
+            <Button
+              intent={allReady ? Intent.PRIMARY : Intent.NONE}
+              text={
+                allReady
+                  ? 'Save all documents'
+                  : `Save all documents (${readyToSaveCount}/${batch.length})`
+              }
+              disabled={!allReady || isSaving}
+              loading={isSaving}
+              onClick={handleSaveAll}
+            />
+          </>
+        }
       >
-        <span style={{ fontSize: 11.5, color: '#5f6b7c' }}>
+        <span className={classes.footerStatus}>
           {allProcessed
             ? `${readyToSaveCount} of ${batch.length} have a category and release date`
             : `${readyCount} of ${batch.length} ready`}
         </span>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <Button text="Cancel" onClick={handleClose} />
-          <Button
-            intent={allReady ? Intent.PRIMARY : Intent.NONE}
-            text={
-              allReady
-                ? 'Save all documents'
-                : `Save all documents (${readyToSaveCount}/${batch.length})`
-            }
-            disabled={!allReady || isSaving}
-            loading={isSaving}
-            onClick={handleSaveAll}
-          />
-        </div>
-      </div>
+      </DialogFooter>
     </Dialog>
   );
 }
