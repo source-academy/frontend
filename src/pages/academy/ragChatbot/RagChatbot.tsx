@@ -10,10 +10,14 @@ import RagMessageRenderer from './RagMessageRenderer';
 
 const init = (tokens: Tokens) => initRagChat(tokens);
 
-function RagChatbot() {
+type Props = {
+  /** The assessment/question the user is currently viewing, if any. Supplied by the route. */
+  assessmentId?: number;
+  questionId?: number;
+};
+
+function RagChatbot({ assessmentId, questionId }: Props) {
   const { feedbackUrl } = useSession();
-  const assessmentId = useAppSelector(state => state.workspaces.assessment.currentAssessment);
-  const questionId = useAppSelector(state => state.workspaces.assessment.currentQuestion);
   const onAssessment = assessmentId !== undefined && questionId !== undefined;
 
   // Code from whichever workspace the student is currently in, plus the question they're on.

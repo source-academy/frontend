@@ -62,15 +62,11 @@ function AddDocumentsModal({ isOpen, categories, tokens, onClose, onSaved }: Pro
 
   const selected = batch.find(f => f.id === selectedFileId) ?? null;
 
-  // The upload endpoint needs a category up front; the one that actually sticks is chosen on save.
-  const uploadCategoryId = categories[0]?.id;
-
   const runUpload = async (files: BatchFile[]) => {
     if (files.length === 0) {
       return;
     }
     const entries = await uploadPixelbotDocuments(
-      uploadCategoryId!,
       files.map(f => f.file),
       tokens,
     ).catch(() => null);
@@ -102,7 +98,9 @@ function AddDocumentsModal({ isOpen, categories, tokens, onClose, onSaved }: Pro
   };
 
   const addFiles = (files: File[]) => {
-    if (!uploadCategoryId) {
+    // Uploading doesn't need a category, but saving does, so there is nothing to gain from a batch
+    // that can never be filed. Mirrors the dropzone's own `disabled` below.
+    if (categories.length === 0) {
       return;
     }
     const newFiles: BatchFile[] = files.map(file => ({

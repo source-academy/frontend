@@ -1483,12 +1483,10 @@ export const getPixelbotDocumentMapPreview = async (tokens: Tokens): Promise<unk
 };
 
 export const uploadPixelbotDocuments = async (
-  categoryId: number,
   files: File[],
   tokens: Tokens,
 ): Promise<PixelbotDocumentUploadEntry[] | null> => {
   const formData = new FormData();
-  formData.append('category_id', String(categoryId));
   files.forEach(file => formData.append('files[]', file));
 
   const resp = await request(`${courseId()}/admin/pixelbot_documents/upload`, 'POST', {

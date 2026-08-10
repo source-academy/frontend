@@ -164,7 +164,7 @@ function FloatingChatbot({
         <FloatingChatbotButton
           src={avatarSrc}
           alt={avatarAlt}
-          positionClassName={isOpen ? 'right-2.5 bottom-full mb-2' : 'right-2.5 bottom-2.5'}
+          isChatOpen={isOpen}
           onMouseEnter={() => !isDragging && setIsTipsVisible(true)}
           onMouseLeave={() => setIsTipsVisible(false)}
           onClick={toggleOpen}

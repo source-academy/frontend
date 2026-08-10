@@ -22,7 +22,6 @@ export type PixelbotDocumentsIndex = {
 export type PixelbotDocumentUploadEntry =
   | {
       status: 'ready';
-      categoryId: number;
       s3Key: string;
       filename: string;
       mediaType: string;
@@ -32,7 +31,6 @@ export type PixelbotDocumentUploadEntry =
     }
   | {
       status: 'error';
-      categoryId: number;
       filename: string;
       error: string;
     };
