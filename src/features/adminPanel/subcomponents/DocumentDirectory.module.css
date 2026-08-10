@@ -1,0 +1,195 @@
+.header,
+.categoryRow,
+.fileItem,
+.rowActions,
+.stateLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header {
+  justify-content: space-between;
+  padding-bottom: 12px;
+}
+
+.header h4 {
+  margin: 0;
+}
+
+.muted {
+  color: #5f6b7c;
+  font-size: 12px;
+}
+
+.infoPopover {
+  width: 260px;
+  padding: 12px;
+}
+
+.list {
+  border-top: 1px solid rgb(17 20 24 / 15%);
+}
+
+.categoryBlock {
+  border-bottom: 1px solid rgb(17 20 24 / 15%);
+}
+
+.categoryRow {
+  min-height: 40px;
+  padding: 0 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.categoryRow:hover,
+.docRow:hover {
+  background: rgb(17 20 24 / 5%);
+}
+
+.categoryNameInput {
+  width: 260px;
+}
+
+.rowActions {
+  gap: 2px;
+  margin-left: auto;
+}
+
+.categoryBody {
+  padding-left: 28px;
+}
+
+.docRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 128px 108px 96px;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 8px;
+  font-weight: 400;
+}
+
+.docTitle,
+.docMeta {
+  text-align: left;
+}
+
+.docTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.docMeta {
+  color: #5f6b7c;
+  font-size: 12px;
+}
+
+.newCategoryInput,
+.newCategoryButton {
+  margin-top: 10px;
+}
+
+.uploadDialog {
+  width: min(1000px, 96vw);
+  height: min(680px, 90vh);
+  padding-bottom: 0;
+  overflow: hidden;
+}
+
+.detailDialog {
+  width: min(640px, 94vw);
+}
+
+.modalBody {
+  display: grid;
+  grid-template-columns: minmax(220px, 32%) 1fr;
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.uploadPane {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+  padding: 12px;
+  border-right: 1px solid rgb(17 20 24 / 15%);
+  overflow-y: auto;
+}
+
+.dropzone {
+  display: grid;
+  place-items: center;
+  gap: 4px;
+  padding: 20px 12px;
+  border: 1px dashed rgb(17 20 24 / 25%);
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.dropzoneDragging {
+  border-color: #2d72d2;
+}
+
+.dropzoneDisabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.fileItem {
+  align-items: flex-start;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.fileItemActive {
+  box-shadow: inset 0 0 0 1px #2d72d2;
+}
+
+.fileMeta {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stateLabel {
+  gap: 4px;
+  font-size: 11px;
+}
+
+.ok {
+  color: #238551;
+}
+
+.err {
+  color: #cd4246;
+}
+
+.formPane {
+  min-height: 0;
+  padding: 16px 20px;
+  overflow-y: auto;
+}
+
+.formRow2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.formRow2 :global(.bp6-switch) {
+  margin-bottom: 8px;
+}
+
+.emptyPane {
+  padding: 24px;
+  text-align: center;
+}

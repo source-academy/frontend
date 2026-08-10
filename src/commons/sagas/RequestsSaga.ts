@@ -15,6 +15,12 @@ import type {
   GoalProgress,
 } from '../../features/achievement/AchievementTypes';
 import type { UsernameRoleGroup } from '../../features/adminPanel/subcomponents/AddUserPanel';
+import type {
+  PixelbotCategory,
+  PixelbotDocumentSaveEntry,
+  PixelbotDocumentsIndex,
+  PixelbotDocumentUploadEntry,
+} from '../../features/adminPanel/subcomponents/PixelbotDocumentsTypes';
 import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import type {
   GradingAnswer,
@@ -59,7 +65,7 @@ import type { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { castLibrary } from '../utils/CastBackend';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { request } from '../utils/RequestHelper';
+import { request, type RequestMethod } from '../utils/RequestHelper';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const XLSX = require('xlsx');
@@ -1442,20 +1448,88 @@ export const getAssessmentConfigs = async (
   return await resp.json();
 };
 
-/**
- * GET /courses/{courseId}/admin/config/pixelbot_document_map
- */
-export const getPixelbotDocumentMap = async (tokens: Tokens): Promise<any[] | null> => {
-  const resp = await request(`${courseId()}/admin/config/pixelbot_document_map`, 'GET', {
+const pixelbotRequest = async <T>(
+  path: string,
+  method: RequestMethod,
+  tokens: Tokens,
+  body?: object,
+): Promise<T | null> => {
+  const resp = await request(`${courseId()}/admin/${path}`, method, {
     ...tokens,
+    ...(body && { body }),
+  });
+  return resp?.ok ? resp.json() : null;
+};
+
+const deletePixelbotResource = async (path: string, tokens: Tokens): Promise<boolean> => {
+  const resp = await request(`${courseId()}/admin/${path}`, 'DELETE', {
+    ...tokens,
+    noHeaderAccept: true,
+  });
+  return !!resp?.ok;
+};
+
+export const getPixelbotDocuments = async (
+  tokens: Tokens,
+): Promise<PixelbotDocumentsIndex | null> => pixelbotRequest('pixelbot_documents', 'GET', tokens);
+
+export const getPixelbotDocumentMapPreview = async (tokens: Tokens): Promise<unknown[] | null> => {
+  const data = await pixelbotRequest<{ documentMap: unknown[] }>(
+    'pixelbot_documents/map_preview',
+    'GET',
+    tokens,
+  );
+  return data?.documentMap ?? null;
+};
+
+export const uploadPixelbotDocuments = async (
+  files: File[],
+  tokens: Tokens,
+): Promise<PixelbotDocumentUploadEntry[] | null> => {
+  const formData = new FormData();
+  files.forEach(file => formData.append('files[]', file));
+
+  const resp = await request(`${courseId()}/admin/pixelbot_documents/upload`, 'POST', {
+    ...tokens,
+    body: formData,
+    noContentType: true,
   });
   if (!resp || !resp.ok) {
     return null;
   }
 
   const data = await resp.json();
-  return data.documentMap;
+  return data.entries;
 };
+
+export const savePixelbotDocuments = async (
+  entries: PixelbotDocumentSaveEntry[],
+  tokens: Tokens,
+): Promise<PixelbotDocumentsIndex | null> =>
+  pixelbotRequest('pixelbot_documents', 'PUT', tokens, { entries });
+
+export const deletePixelbotDocument = async (
+  documentId: number,
+  tokens: Tokens,
+): Promise<boolean> => deletePixelbotResource(`pixelbot_documents/${documentId}`, tokens);
+
+export const createPixelbotCategory = async (
+  name: string,
+  tokens: Tokens,
+): Promise<PixelbotCategory | null> =>
+  pixelbotRequest('pixelbot_categories', 'POST', tokens, { name });
+
+export const renamePixelbotCategory = async (
+  categoryId: number,
+  name: string,
+  tokens: Tokens,
+): Promise<PixelbotCategory | null> =>
+  pixelbotRequest(`pixelbot_categories/${categoryId}`, 'PUT', tokens, { name });
+
+export const deletePixelbotCategory = async (
+  categoryId: number,
+  tokens: Tokens,
+): Promise<boolean> => deletePixelbotResource(`pixelbot_categories/${categoryId}`, tokens);
 
 /**
  * PUT /courses/{courseId}/admin/config/assessment_configs

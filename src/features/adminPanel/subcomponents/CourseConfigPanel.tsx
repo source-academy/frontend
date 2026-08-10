@@ -53,6 +53,7 @@ function CourseConfigPanel(props: Props) {
     topLeaderboardDisplay,
     topContestLeaderboardDisplay,
     enableLlmGrading,
+    enablePixelbot,
     moduleHelpText,
     llmApiKey,
     llmModel,
@@ -347,6 +348,16 @@ function CourseConfigPanel(props: Props) {
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
                 enableLlmGrading: (e.target as HTMLInputElement).checked,
+              })
+            }
+          />
+          <Switch
+            checked={enablePixelbot !== false}
+            label="Enable Pixel Chatbot"
+            onChange={e =>
+              props.setCourseConfiguration({
+                ...props.courseConfiguration,
+                enablePixelbot: (e.target as HTMLInputElement).checked,
               })
             }
           />

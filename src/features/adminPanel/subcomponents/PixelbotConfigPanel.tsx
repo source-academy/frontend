@@ -1,24 +1,10 @@
-import {
-  Button,
-  Callout,
-  Divider,
-  FormGroup,
-  H2,
-  Icon,
-  InputGroup,
-  Intent,
-  TextArea,
-} from '@blueprintjs/core';
+import { Button, Divider, FormGroup, H2, Icon, InputGroup, TextArea } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { useCallback, useEffect, useState } from 'react';
-import { useAppSelector } from 'src/commons/utils/Hooks';
+import { useCallback, useState } from 'react';
 
-import type {
-  Tokens,
-  UpdateCourseConfiguration,
-} from '../../../commons/application/types/SessionTypes';
-import { getPixelbotDocumentMap } from '../../../commons/sagas/RequestsSaga';
+import type { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
 import classes from './PixelbotConfigPanel.module.css';
+import PixelbotDocumentsPanel from './PixelbotDocumentsPanel';
 
 type Props = {
   courseConfiguration: UpdateCourseConfiguration;
@@ -34,6 +20,9 @@ Here is the list of available documents (JSON):
 Instructions:
 - Return ONLY a JSON array of document IDs that are relevant to the student's question.
 - Select at most 5 documents.
+- FIRST, check for a direct name match: if the student's message is a prefix, substring, or fuzzy match (typos, different spacing/casing/punctuation, missing trailing numbers/versions) of any document's "id" or "title", always include that document. This check takes priority over everything below.
+- You will be told today's date above. If the student asks about a time period (e.g. "this week", "last week", "today"), use each document's "release_date" against today's date to determine which documents fall in that period.
+- Cast a wide net: a topic can appear across multiple document types (lectures, exercises, past papers, etc.), so a document may be relevant even if its title doesn't mention the topic directly — use its "doc_type" as an additional signal.
 - If no documents are relevant (e.g. the question is about the SICP textbook only), return an empty array: []
 - Do NOT include any explanation, just the JSON array.
 
@@ -42,9 +31,9 @@ Example response for no relevant documents: []`;
 
 const DEFAULT_ANSWER_PROMPT = `You are a competent tutor assisting a computer science student on the Source Academy platform.
 
-IF course documents (exams, lecture slides, tutorial sheets, or recitation sheets) are attached as PDF files:
+IF course documents (lecture slides, tutorial sheets, recitation sheets, past exams, or other course materials) are attached:
 - Answer using ONLY the provided documents. Do not make up information.
-- When citing information from a document, mention the document title and year.
+- When citing information from a document, mention its title.
 - If the provided documents do not contain enough information to answer, say so clearly.
 
 IF no course documents are attached:
@@ -54,44 +43,19 @@ IF no course documents are attached:
 
 GENERAL INSTRUCTIONS:
 - Match the programming language used by the course. If the course uses "Source" (a restricted
-  subset of JavaScript designed for the Structure and Interpretation of Computer Programs,
-  JavaScript Edition textbook), do NOT use JavaScript features not supported in Source (classes,
-  modules, imports/exports, async/await, generators), and use display or display_list instead of
-  console.log.
+  subset of Python), do NOT use Python features not supported in Source (classes, decorators,
+  comprehensions, imports, async/await, generators, exception handling), and use display or
+  display_list instead of print.
 - Format your response using markdown, with fenced code blocks labelled for the language you're
-  using.`;
+  using (e.g. \`\`\`python ... \`\`\`).`;
 
 function PixelbotConfigPanel(props: Props) {
   const { pixelbotRoutingPrompt, pixelbotAnswerPrompt, feedbackUrl } = props.courseConfiguration;
 
-  const [documentMap, setDocumentMap] = useState<string>('');
-  const [documentMapError, setDocumentMapError] = useState<string>('');
   const [editingRouting, setEditingRouting] = useState(false);
   const [editingAnswer, setEditingAnswer] = useState(false);
   const [routingDraft, setRoutingDraft] = useState('');
   const [answerDraft, setAnswerDraft] = useState('');
-
-  const accessToken = useAppSelector(state => state.session.accessToken);
-  const refreshToken = useAppSelector(state => state.session.refreshToken);
-
-  useEffect(() => {
-    if (!accessToken || !refreshToken) {
-      return;
-    }
-    const fetchDocumentMap = async () => {
-      try {
-        const data = await getPixelbotDocumentMap({ accessToken, refreshToken } as Tokens);
-        if (data) {
-          setDocumentMap(JSON.stringify(data, null, 2));
-        } else {
-          setDocumentMapError('Failed to fetch document map.');
-        }
-      } catch {
-        setDocumentMapError('Failed to fetch document map.');
-      }
-    };
-    fetchDocumentMap();
-  }, [accessToken, refreshToken]);
 
   const startEditRouting = useCallback(() => {
     setRoutingDraft(pixelbotRoutingPrompt || DEFAULT_ROUTING_PROMPT);
@@ -152,6 +116,10 @@ function PixelbotConfigPanel(props: Props) {
       </p>
 
       <Divider style={{ marginBottom: '24px' }} />
+
+      <div className={classes['section']}>
+        <PixelbotDocumentsPanel />
+      </div>
 
       <div className={classes['section']}>
         <div className={classes['section-header-center']}>
@@ -215,28 +183,6 @@ function PixelbotConfigPanel(props: Props) {
             <Button text="Reset to Default" onClick={resetRouting} />
             <Button text="Cancel" onClick={cancelRouting} />
           </div>
-        )}
-      </div>
-
-      <div className={classes['section']}>
-        <div className={classes['section-header-center']}>
-          <div>
-            <div className={classes['section-title']}>Document Directory (read-only)</div>
-            <div className={classes['section-helper']}>
-              The current document map used by Pixel for routing. This is managed on the server.
-            </div>
-          </div>
-        </div>
-        {documentMapError ? (
-          <Callout intent={Intent.WARNING}>{documentMapError}</Callout>
-        ) : (
-          <TextArea
-            id="pixelbotDocumentMap"
-            className={classes['document-map-textarea']}
-            fill
-            readOnly
-            value={documentMap}
-          />
         )}
       </div>
 
