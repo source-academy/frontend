@@ -184,6 +184,50 @@ describe('conductorEvaluatorCache', () => {
     expect(abandonedConductor!.conduit.terminate).toHaveBeenCalled();
   });
 
+  test('a stale preload for an older selection does not deactivate a newer one that already won', async () => {
+    // Regression for source-academy/frontend#4275: on SICP pages, opening a snippet auto-selects the
+    // default evaluator (kicking off its own preload) and the user can click straight into the
+    // Stepper tab - a second, concurrent preload for a different path - before the first settles.
+    // Nothing guarantees the two resolve in request order; if the older, slower preload wins the
+    // race, it must not retroactively deactivate the newer conductor's tabService.
+    const languageId = 'lang-tab-race';
+    const env = makeEnv(() => languageId);
+    let resolveOld: () => void = () => {};
+    const oldGate = new Promise<void>(resolve => {
+      resolveOld = resolve;
+    });
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (path: string) => {
+        if (path === '/evaluator-old.mjs') {
+          await oldGate;
+        }
+        return { ok: true, blob: async () => new Blob() } as unknown as Response;
+      }),
+    );
+    mockCreateConductorOnce();
+    mockCreateConductorOnce();
+
+    const activateSpy = vi.spyOn(DeferredConductorTabService.prototype, 'activate');
+
+    // The older (default-evaluator) selection starts first but is stuck resolving its evaluator...
+    const oldTask = runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-old.mjs').toPromise();
+    // ...the user immediately picks something else (e.g. clicking the Stepper tab) before it settles.
+    await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-new.mjs').toPromise();
+    const activatedPaths = () =>
+      activateSpy.mock.instances.map(
+        instance => (instance as DeferredConductorTabService).evaluatorPath,
+      );
+    expect(activatedPaths()).toEqual(['/evaluator-new.mjs']);
+
+    // Now let the stale, older request finally resolve - it must not activate at all, since a newer
+    // selection has since superseded it.
+    resolveOld();
+    await oldTask;
+    expect(activatedPaths()).toEqual(['/evaluator-new.mjs']);
+  });
+
   test('a conductor whose conduit.terminate() throws still gets its tabs unregistered', async () => {
     let languageId = 'lang-throw-old';
     const env = makeEnv(() => languageId);
@@ -204,5 +248,41 @@ describe('conductorEvaluatorCache', () => {
 
     expect(conductor.conduit.terminate).toHaveBeenCalled();
     expect(unregisterAllSpy).toHaveBeenCalled();
+  });
+
+  test('a preload that fails once still activates on a later retry for the same path', async () => {
+    // Regression: activation used to be gated on "did the requested path change since the last
+    // call", which stays false forever once a path is requested - even if that attempt failed
+    // (e.g. the evaluator's own fetch failing, such as a transient failure fetching the
+    // plugin/evaluator from an external host). So once a transient failure hit here, no amount of
+    // re-selecting the very same path (e.g. re-opening the Stepper tab) would ever activate it
+    // again, even after the underlying issue resolved - only a differently-triggered Run (which
+    // bypasses this gate entirely - see getPreparedConductorSaga) could still show it.
+    const languageId = 'lang-retry-after-failure';
+    const env = makeEnv(() => languageId);
+    const activateSpy = vi.spyOn(DeferredConductorTabService.prototype, 'activate');
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        throw new TypeError('Failed to fetch');
+      }),
+    );
+    await expect(
+      runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-flaky.mjs').toPromise(),
+    ).rejects.toThrow();
+    expect(createConductorMock).not.toHaveBeenCalled();
+    expect(activateSpy).not.toHaveBeenCalled();
+
+    // The network recovers; re-selecting the very same path (e.g. re-opening the Stepper tab)
+    // must still activate it now that preparation actually succeeds.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({ ok: true, blob: async () => new Blob() }) as unknown as Response),
+    );
+    mockCreateConductorOnce();
+    await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-flaky.mjs').toPromise();
+
+    expect(activateSpy).toHaveBeenCalledTimes(1);
   });
 });

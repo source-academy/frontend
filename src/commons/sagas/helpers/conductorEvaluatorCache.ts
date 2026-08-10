@@ -334,7 +334,17 @@ export function* preloadConductorEvaluatorSaga(
   }
 
   const session: ConductorSession = yield call(ensureConductorSessionSaga);
-  const evaluatorChanged = session.currentEvaluatorPath !== path;
+  // Whether *activation* is still needed for `path`, i.e. whether it isn't already the one whose
+  // tabs are surfaced. Deliberately checked against activeConductor (what actually got activated),
+  // not currentEvaluatorPath (what was last *requested*, set unconditionally just below regardless
+  // of outcome) - otherwise a preload that fails here (e.g. the evaluator fetch itself failing,
+  // such as a transient fetch of the plugin/evaluator from an external host) would leave
+  // currentEvaluatorPath already pointing at `path`, so every later retry for the very same path
+  // (e.g. re-opening the Stepper tab) would see "no change" and skip activateConductor even once
+  // preparation finally succeeds - stuck showing the tab's loading placeholder indefinitely, since
+  // nothing but a differently-pathed Run (which never consults this flag - see
+  // getPreparedConductorSaga) would ever surface it.
+  const needsActivation = session.activeConductor?.path !== path;
   session.currentEvaluatorPath = path;
 
   let prepared: PreparedConductor;
@@ -352,10 +362,22 @@ export function* preloadConductorEvaluatorSaga(
     throw error;
   }
 
-  // On an evaluator switch, surface the newly-prepared conductor's tabs (e.g. show the Stepper's
-  // empty welcome tab on selection). A same-evaluator warm-up spawned after a Run leaves the active
-  // conductor untouched, so its populated tab is not replaced by the idle spare.
-  if (evaluatorChanged) {
+  // Surface the newly-prepared conductor's tabs (e.g. show the Stepper's empty welcome tab on
+  // selection) whenever it isn't already the active one. A same-evaluator warm-up spawned after a
+  // Run leaves the active conductor untouched, so its populated tab is not replaced by the idle
+  // spare.
+  //
+  // Also re-checked against currentEvaluatorPath (the most recently *requested* path, set
+  // synchronously above before any yield) rather than acting unconditionally on `needsActivation`
+  // alone: two preloads for different paths can run concurrently (e.g. a hash-driven default-
+  // evaluator selection racing a near-immediate Stepper-tab click), and nothing here guarantees
+  // they resolve in request order. Without this check, a stale request for the *older* selection
+  // resolving after a newer one would call activateConductor and deactivate the newer conductor's
+  // tabService - and if that conductor's web plugin hadn't registered its tab yet, the
+  // registration would land after deactivation and never reach the shared sideContentManager,
+  // leaving the tab (e.g. the Stepper) stuck on its loading placeholder forever. See
+  // source-academy/frontend#4275.
+  if (needsActivation && session.currentEvaluatorPath === path) {
     activateConductor(session, prepared);
   }
 }
