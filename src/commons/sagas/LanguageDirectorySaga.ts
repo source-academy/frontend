@@ -78,21 +78,18 @@ const languageDirectoryHandlers = combineSagaHandlers({
   },
   [LanguageDirectoryActions.setSelectedEvaluator.type]: function* () {
     const evaluator = yield call(getEvaluatorDefinitionSaga);
+    const language: ILanguageDefinition = yield call(getLanguageDefinitionSaga);
 
-    // Set the evaluator's default editor program when switching evaluators, but only while the
-    // editor still holds the untouched default (never clobber code the user has written).
-    if (evaluator?.defaultProgram != null) {
+    // Set the default editor program when switching evaluators, preferring the evaluator's own
+    // default and falling back to the language's, but only while the editor still holds the
+    // untouched default (never clobber code the user has written).
+    const defaultProgram = evaluator?.defaultProgram ?? language?.defaultProgram;
+    if (defaultProgram != null) {
       const playground = yield select((state: OverallState) => state.workspaces.playground);
       const activeTabIndex: number = playground.activeEditorTabIndex ?? 0;
       const editorValue: string = playground.editorTabs[activeTabIndex]?.value ?? '';
       if (editorValue === defaultEditorValue) {
-        yield put(
-          WorkspaceActions.updateEditorValue(
-            'playground',
-            activeTabIndex,
-            evaluator.defaultProgram,
-          ),
-        );
+        yield put(WorkspaceActions.updateEditorValue('playground', activeTabIndex, defaultProgram));
       }
     }
 

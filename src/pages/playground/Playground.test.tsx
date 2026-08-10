@@ -80,7 +80,10 @@ describe('Playground tests', () => {
     expect(tree).toMatchSnapshot();
 
     expect(getSourceChapterFromStore(mockStore)).toBe(defaultPlayground.languageConfig.chapter);
-    expect(getEditorValueFromStore(mockStore)).toBe(defaultEditorValue);
+    // The bundled language directory's first language (Python §1) supplies its own
+    // defaultProgram, which should replace the generic JS-flavoured defaultEditorValue.
+    expect(getEditorValueFromStore(mockStore)).not.toBe(defaultEditorValue);
+    expect(getEditorValueFromStore(mockStore)).toBe('# Type your program in here!\n\n');
   });
 
   test('Playground with link renders correctly', async () => {
