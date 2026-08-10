@@ -14,6 +14,7 @@ import {
 } from 'src/commons/application/ApplicationTypes';
 import type { Router } from 'src/commons/application/types/CommonsTypes';
 import { visitSideContent } from 'src/commons/sideContent/SideContentActions';
+import sideContentManager from 'src/commons/sideContent/SideContentManager';
 import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
@@ -185,6 +186,49 @@ describe('Playground tests', () => {
     });
 
     expect(mockStore.getState().workspaces.playground.isFolderModeEnabled).toBe(false);
+  });
+
+  test('a conductor tab registered before any Run is visible immediately on a SICP page (#4277 follow-up)', async () => {
+    // sideContentManager is a single app-wide singleton keyed by one "current" workspace location
+    // (see its own getTabs()/setWorkspaceLocation()), and previously only Run's own
+    // getPreparedConductorSaga ever called setWorkspaceLocation() - so a conductor tab (e.g. the
+    // Stepper's) registered by a mere preload, before any Run, forwarded into sideContentManager
+    // correctly but stayed invisible: getTabs('sicp') still saw whichever location the singleton
+    // was last left on (typically 'playground'). Reproduced here without the conductor machinery -
+    // registerTab()/revealTab() stand in for what its web plugin does once loaded.
+    const sicpRoutes: RouteObject[] = [
+      {
+        path: '/sicpy',
+        element: (
+          <Provider store={mockStore}>
+            <WorkspaceSettingsContext.Provider
+              value={[{ editorBinding: EditorBinding.NONE }, vi.fn()]}
+            >
+              <Playground isSicpEditor initialEditorValueHash="" />
+            </WorkspaceSettingsContext.Provider>
+          </Provider>
+        ),
+      },
+    ];
+    const router = createMemoryRouter(sicpRoutes, {
+      initialEntries: ['/sicpy'],
+      initialIndex: 0,
+    });
+    await renderTree(router);
+
+    sideContentManager.registerTab({
+      id: 'stepper',
+      label: 'Stepper',
+      iconName: 'flow-review',
+      body: null,
+    });
+    sideContentManager.revealTab('stepper');
+
+    expect(sideContentManager.getTabs('sicp').map(t => t.id)).toContain('stepper');
+
+    // Avoid leaking singleton state into other tests in this file.
+    sideContentManager.unregisterTab('stepper');
+    sideContentManager.setWorkspaceLocation('playground');
   });
 
   describe('handleHash', () => {
