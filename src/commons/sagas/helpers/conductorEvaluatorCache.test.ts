@@ -184,6 +184,50 @@ describe('conductorEvaluatorCache', () => {
     expect(abandonedConductor!.conduit.terminate).toHaveBeenCalled();
   });
 
+  test('a stale preload for an older selection does not deactivate a newer one that already won', async () => {
+    // Regression for source-academy/frontend#4275: on SICP pages, opening a snippet auto-selects the
+    // default evaluator (kicking off its own preload) and the user can click straight into the
+    // Stepper tab - a second, concurrent preload for a different path - before the first settles.
+    // Nothing guarantees the two resolve in request order; if the older, slower preload wins the
+    // race, it must not retroactively deactivate the newer conductor's tabService.
+    const languageId = 'lang-tab-race';
+    const env = makeEnv(() => languageId);
+    let resolveOld: () => void = () => {};
+    const oldGate = new Promise<void>(resolve => {
+      resolveOld = resolve;
+    });
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (path: string) => {
+        if (path === '/evaluator-old.mjs') {
+          await oldGate;
+        }
+        return { ok: true, blob: async () => new Blob() } as unknown as Response;
+      }),
+    );
+    mockCreateConductorOnce();
+    mockCreateConductorOnce();
+
+    const activateSpy = vi.spyOn(DeferredConductorTabService.prototype, 'activate');
+
+    // The older (default-evaluator) selection starts first but is stuck resolving its evaluator...
+    const oldTask = runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-old.mjs').toPromise();
+    // ...the user immediately picks something else (e.g. clicking the Stepper tab) before it settles.
+    await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-new.mjs').toPromise();
+    const activatedPaths = () =>
+      activateSpy.mock.instances.map(
+        instance => (instance as DeferredConductorTabService).evaluatorPath,
+      );
+    expect(activatedPaths()).toEqual(['/evaluator-new.mjs']);
+
+    // Now let the stale, older request finally resolve - it must not activate at all, since a newer
+    // selection has since superseded it.
+    resolveOld();
+    await oldTask;
+    expect(activatedPaths()).toEqual(['/evaluator-new.mjs']);
+  });
+
   test('a conductor whose conduit.terminate() throws still gets its tabs unregistered', async () => {
     let languageId = 'lang-throw-old';
     const env = makeEnv(() => languageId);
