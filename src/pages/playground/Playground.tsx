@@ -25,7 +25,7 @@ import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentH
 import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
-import { useTabOwnerPath } from 'src/commons/sideContent/SideContentManager';
+import sideContentManager, { useTabOwnerPath } from 'src/commons/sideContent/SideContentManager';
 import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 import { useAppDispatch, useAppSelector, useResponsive } from 'src/commons/utils/Hooks';
 import {
@@ -221,6 +221,18 @@ const EMPTY_EVALUATORS: readonly IEvaluatorDefinition[] = [];
 function Playground(props: PlaygroundProps) {
   const { isSicpEditor } = props;
   const workspaceLocation: WorkspaceLocation = isSicpEditor ? 'sicp' : 'playground';
+  // sideContentManager only shows tabs registered for whichever workspace it currently thinks is
+  // active (see its own getTabs()/setWorkspaceLocation() - it's a single app-wide value, not scoped
+  // per Provider). Previously the only place that ever called setWorkspaceLocation() was Run's own
+  // getPreparedConductorSaga, so a conductor tab (e.g. the Stepper's) that got registered by a mere
+  // preload - selecting the Stepper tab before ever pressing Run - forwarded into sideContentManager
+  // correctly, but stayed invisible: getTabs('sicp') still saw whatever location the last Run (on
+  // any workspace) had left behind, most often the default 'playground'. The tab only appeared once
+  // a Run finally called setWorkspaceLocation('sicp'). Setting it here as soon as this Playground
+  // instance knows its own location closes that gap for every conductor tab, not just the Stepper's.
+  useEffect(() => {
+    sideContentManager.setWorkspaceLocation(workspaceLocation);
+  }, [workspaceLocation]);
   const { isMobileBreakpoint } = useResponsive();
   const isVscode = useAppSelector(state => state.vscode.isVscode);
 
