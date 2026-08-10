@@ -214,21 +214,28 @@ describe('Playground tests', () => {
       initialEntries: ['/sicpy'],
       initialIndex: 0,
     });
-    await renderTree(router);
 
-    sideContentManager.registerTab({
-      id: 'stepper',
-      label: 'Stepper',
-      iconName: 'flow-review',
-      body: null,
-    });
-    sideContentManager.revealTab('stepper');
-
-    expect(sideContentManager.getTabs('sicp').map(t => t.id)).toContain('stepper');
-
-    // Avoid leaking singleton state into other tests in this file.
-    sideContentManager.unregisterTab('stepper');
+    // Deterministic regardless of what a prior test in this file left the singleton on - otherwise
+    // this test could pass for the wrong reason if something upstream already left it at 'sicp'.
     sideContentManager.setWorkspaceLocation('playground');
+    try {
+      await renderTree(router);
+
+      sideContentManager.registerTab({
+        id: 'stepper',
+        label: 'Stepper',
+        iconName: 'flow-review',
+        body: null,
+      });
+      sideContentManager.revealTab('stepper');
+
+      expect(sideContentManager.getTabs('sicp').map(t => t.id)).toContain('stepper');
+    } finally {
+      // Runs even if the assertion above fails, so a failure here can't leak singleton state into
+      // other tests in this file.
+      sideContentManager.unregisterTab('stepper');
+      sideContentManager.setWorkspaceLocation('playground');
+    }
   });
 
   describe('handleHash', () => {
