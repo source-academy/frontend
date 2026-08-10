@@ -1,4 +1,5 @@
 import {
+  AnchorButton,
   Button,
   Callout,
   Dialog,
@@ -10,6 +11,7 @@ import {
   Popover,
   Position,
   TextArea,
+  Tooltip,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
@@ -176,13 +178,19 @@ function PixelbotDocumentsPanel() {
             text="View document map"
             onClick={handleOpenMapPreview}
           />
-          <Button
-            intent={Intent.PRIMARY}
-            icon={IconNames.PLUS}
-            text="Add documents"
-            onClick={() => setAddModalOpen(true)}
-            disabled={categories.length === 0}
-          />
+          <Tooltip
+            content="Create a category first"
+            disabled={categories.length > 0}
+            position={Position.BOTTOM}
+          >
+            <AnchorButton
+              intent={Intent.PRIMARY}
+              icon={IconNames.PLUS}
+              text="Add documents"
+              onClick={() => setAddModalOpen(true)}
+              disabled={categories.length === 0}
+            />
+          </Tooltip>
         </span>
       </div>
 
