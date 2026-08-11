@@ -58,6 +58,7 @@ function CourseConfigPanel(props: Props) {
     llmApiKey,
     llmModel,
     llmApiUrl,
+    pixelbotModel,
     llmCourseLevelPrompt,
   } = props.courseConfiguration;
 
@@ -193,28 +194,10 @@ function CourseConfigPanel(props: Props) {
             />
           </FormGroup>
 
-          {enableLlmGrading && (
+          {(enableLlmGrading || enablePixelbot) && (
             <>
               <Divider className="my-5" />
-              <H3>LLM Grading Configuration</H3>
-              <FormGroup
-                helperText="Please enter the LLM Model Name."
-                inline
-                label={fieldLabel('LLM Model Name')}
-                labelFor="llmModel"
-              >
-                <InputGroup
-                  id="llmModel"
-                  defaultValue={llmModel}
-                  placeholder="e.g gpt-5-mini, gpt-4o"
-                  onChange={e =>
-                    props.setCourseConfiguration({
-                      ...props.courseConfiguration,
-                      llmModel: e.target.value,
-                    })
-                  }
-                />
-              </FormGroup>
+              <H3>LLM Provider</H3>
               <FormGroup
                 helperText="Please enter the LLM API's Provider URL."
                 inline
@@ -247,6 +230,56 @@ function CourseConfigPanel(props: Props) {
                     props.setCourseConfiguration({
                       ...props.courseConfiguration,
                       llmApiKey: e.target.value,
+                    })
+                  }
+                />
+              </FormGroup>
+            </>
+          )}
+
+          {enablePixelbot && (
+            <>
+              <Divider className="my-5" />
+              <H3>Pixel Chatbot Configuration</H3>
+              <FormGroup
+                helperText="The model Pixel answers students with. Leave blank to use the default."
+                inline
+                label={fieldLabel('Pixel Model Name')}
+                labelFor="pixelbotModel"
+              >
+                <InputGroup
+                  id="pixelbotModel"
+                  defaultValue={pixelbotModel}
+                  placeholder="e.g gpt-4o"
+                  onChange={e =>
+                    props.setCourseConfiguration({
+                      ...props.courseConfiguration,
+                      pixelbotModel: e.target.value,
+                    })
+                  }
+                />
+              </FormGroup>
+            </>
+          )}
+
+          {enableLlmGrading && (
+            <>
+              <Divider className="my-5" />
+              <H3>LLM Grading Configuration</H3>
+              <FormGroup
+                helperText="The model used to generate grading comments."
+                inline
+                label={fieldLabel('LLM Model Name')}
+                labelFor="llmModel"
+              >
+                <InputGroup
+                  id="llmModel"
+                  defaultValue={llmModel}
+                  placeholder="e.g gpt-5-mini, gpt-4o"
+                  onChange={e =>
+                    props.setCourseConfiguration({
+                      ...props.courseConfiguration,
+                      llmModel: e.target.value,
                     })
                   }
                 />
