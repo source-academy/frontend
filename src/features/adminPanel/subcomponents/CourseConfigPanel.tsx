@@ -385,7 +385,7 @@ function CourseConfigPanel(props: Props) {
             }
           />
           <Switch
-            checked={enablePixelbot !== false}
+            checked={enablePixelbot}
             label="Enable Pixel Chatbot"
             onChange={e =>
               props.setCourseConfiguration({

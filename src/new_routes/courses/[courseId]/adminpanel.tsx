@@ -24,6 +24,7 @@ const defaultCourseConfig: UpdateCourseConfiguration = {
   topLeaderboardDisplay: 100,
   topContestLeaderboardDisplay: 10,
   enableLlmGrading: false,
+  enablePixelbot: false,
   moduleHelpText: '',
   llmApiKey: '',
   llmModel: '',
