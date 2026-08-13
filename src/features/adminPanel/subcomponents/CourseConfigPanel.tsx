@@ -196,7 +196,20 @@ function CourseConfigPanel(props: Props) {
           {(enableLlmGrading || enablePixelbot) && (
             <>
               <Divider className="my-5" />
-              <H3>LLM Provider</H3>
+              <H3>
+                LLM Provider
+                <Popover
+                  content={
+                    <div className="p-2.5 max-w-md">
+                      These credentials are shared by both LLM Grading and the Pixel Chatbot.
+                    </div>
+                  }
+                  interactionKind="hover"
+                  position={Position.TOP}
+                >
+                  <Icon icon={IconNames.HELP} className="ml-1.5 cursor-help align-middle" />
+                </Popover>
+              </H3>
               <FormGroup
                 helperText="Please enter the LLM API's Provider URL."
                 inline
