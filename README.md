@@ -1,6 +1,6 @@
 # Source Academy Frontend
 
-[![Build Status](https://travis-ci.org/source-academy/frontend.svg?branch=master)](https://travis-ci.org/source-academy/frontend)
+[![Build Status](https://github.com/source-academy/frontend/actions/workflows/build-development.yml/badge.svg)](https://github.com/source-academy/frontend/actions)
 [![Coverage Status](https://coveralls.io/repos/github/source-academy/frontend/badge.svg?branch=master)](https://coveralls.io/github/source-academy/frontend?branch=master)
 [![License](https://img.shields.io/github/license/source-academy/frontend)](https://github.com/source-academy/frontend/blob/master/LICENSE)
 
