@@ -58,7 +58,6 @@ function CourseConfigPanel(props: Props) {
     llmApiKey,
     llmModel,
     llmApiUrl,
-    pixelbotModel,
     llmCourseLevelPrompt,
   } = props.courseConfiguration;
 
@@ -230,31 +229,6 @@ function CourseConfigPanel(props: Props) {
                     props.setCourseConfiguration({
                       ...props.courseConfiguration,
                       llmApiKey: e.target.value,
-                    })
-                  }
-                />
-              </FormGroup>
-            </>
-          )}
-
-          {enablePixelbot && (
-            <>
-              <Divider className="my-5" />
-              <H3>Pixel Chatbot Configuration</H3>
-              <FormGroup
-                helperText="The model Pixel answers students with. Leave blank to use the default."
-                inline
-                label={fieldLabel('Pixel Model Name')}
-                labelFor="pixelbotModel"
-              >
-                <InputGroup
-                  id="pixelbotModel"
-                  defaultValue={pixelbotModel}
-                  placeholder="e.g gpt-4o"
-                  onChange={e =>
-                    props.setCourseConfiguration({
-                      ...props.courseConfiguration,
-                      pixelbotModel: e.target.value,
                     })
                   }
                 />
