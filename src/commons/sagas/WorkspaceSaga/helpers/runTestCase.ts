@@ -166,7 +166,9 @@ export function* runTestCaseConductor(
   if (lastOutput?.type === 'errors') {
     const errors: SourceError[] = lastOutput.errors;
     const correctedErrors =
-      prependLineOffset > 0 ? errors.map(error => shiftErrorLines(error, prependLineOffset)) : errors;
+      prependLineOffset > 0
+        ? errors.map(error => shiftErrorLines(error, prependLineOffset))
+        : errors;
     yield put(actions.evalTestcaseFailure(correctedErrors, workspaceLocation, index));
     passed = false;
   } else {
