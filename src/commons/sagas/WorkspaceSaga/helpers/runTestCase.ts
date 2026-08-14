@@ -1,4 +1,5 @@
 import type { Context } from 'js-slang';
+import type { SourceError } from 'js-slang/dist/errors/base';
 import { random } from 'lodash-es';
 import { call, put, select, type StrictEffect } from 'redux-saga/effects';
 
@@ -46,6 +47,30 @@ import { restoreExtraMethods } from './restoreExtraMethods';
  * wrapped in a toReplString() so stringify() renders it verbatim instead of adding
  * the JSON-style quoting it'd otherwise apply to a plain string.
  */
+
+/**
+ * Shifts a Conductor-reported error's line numbers back by the number of prepend lines baked
+ * into runTestCaseConductor's combined file, mirroring evalCode.ts's toConductorSourceError -
+ * without this, an error in the student's own first line is reported at
+ * `prepend line count + 1` (source-academy/frontend#4244), same off-by-N bug, different call
+ * site: this saga concatenates prepend into the combined file itself (see runTestCaseConductor's
+ * own doc comment) rather than going through evalEditorSaga's Run-only concatenation, so
+ * evalCodeConductorSaga's own prepend-offset correction (gated on an editor Run's actionType)
+ * never applies here. A location's line of 0 means "no location info"
+ * (toConductorSourceError's own fallback for an error shape it doesn't recognise) and is left
+ * untouched rather than shifted into a misleadingly specific line 1.
+ */
+function shiftErrorLines(error: SourceError, lineOffset: number): SourceError {
+  const shift = (line: number) => (line > 0 ? Math.max(1, line - lineOffset) : line);
+  return {
+    ...error,
+    location: {
+      start: { ...error.location.start, line: shift(error.location.start.line) },
+      end: { ...error.location.end, line: shift(error.location.end.line) },
+    },
+  };
+}
+
 export function* runTestCaseConductor(
   workspaceLocation: WorkspaceLocation,
   index: number,
@@ -88,6 +113,9 @@ export function* runTestCaseConductor(
   const combinedCode = [prepend, value, studentSourceLiteral, postpend, testcase]
     .filter(part => part && part.trim().length > 0)
     .join('\n');
+  // Matches the filter above: an empty/whitespace-only prepend contributes no line to
+  // combinedCode at all, so it must not shift error line numbers either.
+  const prependLineOffset = prepend.trim().length > 0 ? prepend.split('\n').length : 0;
 
   yield put(actions.resetTestcase(workspaceLocation, index));
 
@@ -136,7 +164,10 @@ export function* runTestCaseConductor(
 
   let passed: boolean;
   if (lastOutput?.type === 'errors') {
-    yield put(actions.evalTestcaseFailure(lastOutput.errors, workspaceLocation, index));
+    const errors: SourceError[] = lastOutput.errors;
+    const correctedErrors =
+      prependLineOffset > 0 ? errors.map(error => shiftErrorLines(error, prependLineOffset)) : errors;
+    yield put(actions.evalTestcaseFailure(correctedErrors, workspaceLocation, index));
     passed = false;
   } else {
     // The testcase's own print(...) is the last line printed, since nothing runs
