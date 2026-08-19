@@ -8,14 +8,14 @@ import type { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletio
 
 import SicpMessageRenderer from './SicpMessageRenderer';
 
-const init = (tokens: Tokens) => initChat(tokens);
-
 type Props = {
   getSection: () => SicpSection;
   getText: () => string;
 };
 
 function Chatbot({ getSection, getText }: Props) {
+  const init = useCallback((tokens: Tokens) => initChat(tokens), []);
+
   const send = useCallback(
     (tokens: Tokens, userInput: string) => continueChat(tokens, userInput, getSection(), getText()),
     [getSection, getText],
