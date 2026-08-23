@@ -157,8 +157,8 @@
     "@types/showdown": "^2.0.1",
     "@types/xml2js": "^0.4.11",
     "@vitejs/plugin-react": "6.0.5",
-    "@vitest/coverage-v8": "4.1.10",
-    "@vitest/ui": "4.1.10",
+    "@vitest/coverage-v8": "4.1.11",
+    "@vitest/ui": "4.1.11",
     "canvas": "^3.1.0",
     "coveralls": "^3.1.1",
     "cross-env": "^10.1.0",
@@ -182,7 +182,7 @@
     "tailwindcss": "^4.3.0",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.1.0",
-    "vitest": "4.1.10"
+    "vitest": "4.1.11"
   },
   "dependenciesMeta": {
     "@parcel/watcher": {
