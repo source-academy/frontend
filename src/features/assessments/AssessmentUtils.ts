@@ -1,12 +1,27 @@
 import { stringify } from 'js-slang/dist/utils/stringify';
 
+import { Role } from '../../commons/application/ApplicationTypes';
 import {
+  type AssessmentOverview,
+  AssessmentStatuses,
   type IMCQQuestion,
   type Question,
   QuestionTypes,
   type Testcase,
 } from '../../commons/assessment/AssessmentTypes';
+import { beforeNow } from '../../commons/utils/DateHelper';
 import { showWarningMessage } from '../../commons/utils/notifications/NotificationsHelper';
+
+/**
+ * Whether the user may save answers: students cannot once the submission is finalised
+ * or past the close date; staff/admin always can.
+ */
+export const canSaveAssessment = (
+  role: Role | undefined,
+  overview: AssessmentOverview,
+): boolean =>
+  role !== Role.Student ||
+  (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt));
 
 /**
  * Returns a nullary function that defers the navigation of the browser window, until the

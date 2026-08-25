@@ -1,6 +1,7 @@
 import type { SagaIterator } from 'redux-saga';
 import { call, debounce, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
 
+import { canSaveAssessment } from '../../../../features/assessments/AssessmentUtils';
 import SessionActions from '../../../application/actions/SessionActions';
 import type { OverallState } from '../../../application/ApplicationTypes';
 import type { Tokens } from '../../../application/types/SessionTypes';
@@ -266,6 +267,20 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
   // Skip auto-save if autosave is disabled for this assessment
   const autosaveEnabled: boolean = yield call(isAutosaveEnabledForCurrentAssessment);
   if (!autosaveEnabled) {
+    return false;
+  }
+
+  const canSave: boolean = yield select((state: OverallState) => {
+    const assessmentId = state.workspaces.assessment.currentAssessment;
+    if (assessmentId === undefined) {
+      return false;
+    }
+    const overview = state.session.assessmentOverviews?.find(o => o.id === assessmentId);
+    return overview ? canSaveAssessment(state.session.role, overview) : false;
+  });
+
+  // Disable auto-save if cannot save (i.e. finalised/closed)
+  if (!canSave) {
     return false;
   }
 
