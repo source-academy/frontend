@@ -16,10 +16,7 @@ import { showWarningMessage } from '../../commons/utils/notifications/Notificati
  * Whether the user may save answers: students cannot once the submission is finalised
  * or past the close date; staff/admin always can.
  */
-export const canSaveAssessment = (
-  role: Role | undefined,
-  overview: AssessmentOverview,
-): boolean =>
+export const canSaveAssessment = (role: Role | undefined, overview: AssessmentOverview): boolean =>
   role !== Role.Student ||
   (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt));
 
