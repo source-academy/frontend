@@ -4,6 +4,7 @@ import type { CellClickedEvent, ColDef } from 'ag-grid-community';
 import { AgGridReact, type CustomHeaderProps } from 'ag-grid-react';
 import classNames from 'classnames';
 import { debounce } from 'lodash-es';
+import { parseAsJson, parseAsString, useQueryState } from 'nuqs';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import ColumnHeader from 'src/commons/agGrid/ColumnHeader';
@@ -13,8 +14,7 @@ import { useColumnVisibility } from 'src/commons/agGrid/useColumnVisibility';
 import { ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
-import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
-import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
+import { useAppSelector } from 'src/commons/utils/Hooks';
 import type {
   ColumnFieldsKeys,
   ColumnFilter,
@@ -61,6 +61,17 @@ const disabledFilterModeCols: string[] = [ColumnFields.xp, ColumnFields.actionsI
 
 const disabledSortCols: string[] = [ColumnFields.actionsIndex];
 
+const parseColumnFilters = (value: unknown): ColumnFiltersState =>
+  Array.isArray(value)
+    ? value.filter(
+        (filter): filter is ColumnFilter =>
+          typeof filter === 'object' && filter !== null && 'id' in filter && 'value' in filter,
+      )
+    : [];
+
+// Defined at module scope so the default value keeps a stable reference across renders.
+const filtersParser = parseAsJson(parseColumnFilters).withDefault([]);
+
 type Props = {
   showAllSubmissions: boolean;
   totalRows: number;
@@ -78,23 +89,19 @@ function GradingSubmissionTable({
   submissions,
   updateEntries,
 }: Props) {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const tableFilters = useAppSelector(state => state.workspaces.grading.submissionsTableFilters);
   const requestCounter = useAppSelector(state => state.workspaces.grading.requestCounter);
   const courseId = useAppSelector(store => store.session.courseId);
 
   const gridRef = useRef<AgGridReact<IGradingTableRow>>(null);
 
   const [page, setPage] = useState(0);
-  /** The value to be shown in the search bar */
-  const [searchQuery, setSearchQuery] = useState('');
   /** The actual value sent to the backend */
-  const [searchValue, setSearchValue] = useState('');
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
-    ...tableFilters.columnFilters,
-  ]);
+  const [search, setSearch] = useQueryState('search', parseAsString.withDefault(''));
+  /** The value to be shown in the search bar */
+  const [searchQuery, setSearchQuery] = useState(search);
+  const [columnFilters, setColumnFilters] = useQueryState('filters', filtersParser);
   const [cellFilters, setCellFilters] = useState<{ id: ColumnFields; value: string }[]>([]);
   const columnVisibility = useColumnVisibility({
     getColumnLabel: id => ColumnName[id as ColumnFieldsKeys],
@@ -145,9 +152,9 @@ function GradingSubmissionTable({
     () =>
       debounce((newValue: string) => {
         resetPage();
-        setSearchValue(newValue);
+        setSearch(newValue);
       }, 300),
-    [resetPage],
+    [resetPage, setSearch],
   );
 
   const handleSearchQueryUpdate: React.ChangeEventHandler<HTMLInputElement> = e => {
@@ -160,7 +167,7 @@ function GradingSubmissionTable({
   // Converts the columnFilters array into backend query parameters.
   const backendFilterParams = useMemo(() => {
     const filters: Array<{ [key: string]: any }> = [
-      { id: ColumnFields.assessmentName, value: searchValue },
+      { id: ColumnFields.assessmentName, value: search },
       ...columnFilters,
       ...cellFilters,
     ].map(convertFilterToBackendParams);
@@ -172,7 +179,7 @@ function GradingSubmissionTable({
       });
     });
     return params;
-  }, [cellFilters, columnFilters, searchValue]);
+  }, [cellFilters, columnFilters, search]);
 
   const cellClickedEvent = (event: CellClickedEvent) => {
     const colClicked: string = event.colDef.field ? event.colDef.field : '';
@@ -221,10 +228,8 @@ function GradingSubmissionTable({
         prev.filter(filter => filter.id !== ColumnFields.progressStatus),
       );
       resetPage();
-      return;
     }
-    dispatch(WorkspaceActions.updateSubmissionsTableFilters({ columnFilters }));
-  }, [columnFilters, showAllSubmissions, dispatch, resetPage]);
+  }, [columnFilters, showAllSubmissions, resetPage, setColumnFilters]);
 
   useEffect(() => {
     resetPage();
