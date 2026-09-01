@@ -15,6 +15,7 @@ import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import type { GradingOverview } from 'src/features/grading/GradingTypes';
 import {
   exportGradingCSV,
+  gradingSortParser,
   paginationToBackendParams,
   unpublishedToBackendParams,
 } from 'src/features/grading/GradingUtils';
@@ -62,7 +63,7 @@ function Grading() {
   const [submissions, setSubmissions] = useState<GradingOverview[]>([]);
 
   const dispatch = useAppDispatch();
-  const allColsSortStates = useAppSelector(state => state.workspaces.grading.allColsSortStates);
+  const [allColsSortStates] = useQueryState('sort', gradingSortParser);
   const hasLoadedBefore = useAppSelector(state => state.workspaces.grading.hasLoadedBefore);
   const requestCounter = useAppSelector(state => state.workspaces.grading.requestCounter);
   const accessToken = useAppSelector(state => state.session.accessToken);

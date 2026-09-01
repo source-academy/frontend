@@ -22,9 +22,8 @@ import type {
   GradingOverview,
   IGradingTableProperties,
   IGradingTableRow,
-  SortStateProperties,
 } from 'src/features/grading/GradingTypes';
-import { ColumnFields, ColumnName, SortStates } from 'src/features/grading/GradingTypes';
+import { ColumnFields, ColumnName } from 'src/features/grading/GradingTypes';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import classes from '../Grading.module.css';
@@ -32,28 +31,6 @@ import { getBadgeColorFromLabel } from './gradingBadges/gradingBadgeColors';
 import GradingSortIcon from './GradingSortIcon';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 import { generateCols } from './gradingSubmissionsTableUtils';
-
-export const getNextSortState = (current: SortStates) => {
-  switch (current) {
-    case SortStates.NONE:
-      return SortStates.ASC;
-    case SortStates.ASC:
-      return SortStates.DESC;
-    case SortStates.DESC:
-      return SortStates.NONE;
-  }
-};
-
-export const freshSortState: SortStateProperties = {
-  assessmentName: SortStates.NONE,
-  assessmentType: SortStates.NONE,
-  studentName: SortStates.NONE,
-  studentUsername: SortStates.NONE,
-  groupName: SortStates.NONE,
-  progressStatus: SortStates.NONE,
-  xp: SortStates.NONE,
-  actionsIndex: SortStates.NONE,
-};
 
 const disabledEditModeCols: string[] = [ColumnFields.actionsIndex];
 

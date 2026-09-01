@@ -6,9 +6,9 @@ import type { AchievementState } from '../../features/achievement/AchievementTyp
 import type { DashboardState } from '../../features/dashboard/DashboardTypes';
 import type { LanguageDirectoryState } from '../../features/directory/LanguageDirectoryTypes';
 import type { PluginDirectoryState } from '../../features/directory/PluginDirectoryTypes';
+import { freshSortState } from '../../features/grading/GradingUtils';
 import type { LeaderboardState } from '../../features/leaderboard/LeaderboardTypes';
 import type { PlaygroundState } from '../../features/playground/PlaygroundTypes';
-import { freshSortState } from '../../pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { defaultFeatureFlags, type FeatureFlagsState } from '../featureFlags';
 import type { FileSystemState } from '../fileSystem/FileSystemTypes';

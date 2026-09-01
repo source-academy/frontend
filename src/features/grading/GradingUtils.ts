@@ -1,9 +1,10 @@
 import type { ColumnFilter } from '@tanstack/react-table';
 import { t } from 'i18next';
+import { parseAsJson } from 'nuqs';
 import type { AssessmentStatus, ProgressStatus } from 'src/commons/assessment/AssessmentTypes';
 import { AssessmentStatuses, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 
-import type { AllColsSortStates, GradingOverview } from './GradingTypes';
+import type { AllColsSortStates, GradingOverview, SortStateProperties } from './GradingTypes';
 import { ColumnFields, SortStates } from './GradingTypes';
 
 export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined) => {
@@ -140,6 +141,39 @@ export const toBackendSortParams = (allColsSortStates: AllColsSortStates) => {
 
   return sortedBy;
 };
+
+export const getNextSortState = (current: SortStates) => {
+  switch (current) {
+    case SortStates.NONE:
+      return SortStates.ASC;
+    case SortStates.ASC:
+      return SortStates.DESC;
+    case SortStates.DESC:
+      return SortStates.NONE;
+  }
+};
+
+export const freshSortState: SortStateProperties = {
+  assessmentName: SortStates.NONE,
+  assessmentType: SortStates.NONE,
+  studentName: SortStates.NONE,
+  studentUsername: SortStates.NONE,
+  groupName: SortStates.NONE,
+  progressStatus: SortStates.NONE,
+  xp: SortStates.NONE,
+  actionsIndex: SortStates.NONE,
+};
+
+const parseSortStates = (value: unknown): AllColsSortStates =>
+  typeof value === 'object' && value !== null && 'currentState' in value && 'sortBy' in value
+    ? (value as AllColsSortStates)
+    : { currentState: freshSortState, sortBy: '' };
+
+// Defined at module scope so the default value keeps a stable reference across renders.
+export const gradingSortParser = parseAsJson(parseSortStates).withDefault({
+  currentState: freshSortState,
+  sortBy: '',
+});
 
 /**
  * Converts multiple backend parameters into a single comprehensive grading status for use in the grading dashboard.

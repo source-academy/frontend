@@ -4,7 +4,7 @@ import {
   paginationToBackendParams,
   unpublishedToBackendParams,
 } from 'src/features/grading/GradingUtils';
-import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
+import { freshSortState } from 'src/features/grading/GradingUtils';
 import { expect, test, vi } from 'vitest';
 
 import type { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';

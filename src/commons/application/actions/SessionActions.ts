@@ -3,7 +3,7 @@ import {
   paginationToBackendParams,
   unpublishedToBackendParams,
 } from 'src/features/grading/GradingUtils';
-import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
+import { freshSortState } from 'src/features/grading/GradingUtils';
 import type { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
 import type {
