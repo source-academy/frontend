@@ -47,6 +47,8 @@ type GradingWorkspaceAttr = {
   readonly currentSubmission?: number;
   readonly currentQuestion?: number;
   readonly hasUnsavedChanges: boolean;
+  // TODO: The below should be a separate state
+  // instead of using the grading workspace state
   readonly requestCounter: number;
   readonly allColsSortStates: AllColsSortStates;
   readonly hasLoadedBefore: boolean;
