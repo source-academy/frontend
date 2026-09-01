@@ -3,8 +3,8 @@ import { t } from 'i18next';
 import type { AssessmentStatus, ProgressStatus } from 'src/commons/assessment/AssessmentTypes';
 import { AssessmentStatuses, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 
-import type { GradingOverview } from './GradingTypes';
-import { ColumnFields } from './GradingTypes';
+import type { AllColsSortStates, GradingOverview } from './GradingTypes';
+import { ColumnFields, SortStates } from './GradingTypes';
 
 export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined) => {
   if (!gradingOverviews) {
@@ -118,6 +118,27 @@ export const unpublishedToBackendParams = (showAll: boolean) => {
     isManuallyGraded: true,
     isGradingPublished: false,
   };
+};
+
+// Flattens the per-column sort state into the { sortBy, sortDirection } shape the backend expects.
+export const toBackendSortParams = (allColsSortStates: AllColsSortStates) => {
+  const sortedBy = {
+    sortBy: allColsSortStates.sortBy as string,
+    sortDirection: '',
+  };
+
+  Object.entries(allColsSortStates.currentState).forEach(([key, value]) => {
+    if (allColsSortStates.sortBy === key && key !== '') {
+      if (value !== SortStates.NONE) {
+        sortedBy.sortDirection = value;
+      } else {
+        sortedBy.sortBy = '';
+        sortedBy.sortDirection = '';
+      }
+    }
+  });
+
+  return sortedBy;
 };
 
 /**
