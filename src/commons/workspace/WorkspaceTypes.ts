@@ -2,7 +2,6 @@ import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
 import type { Context } from 'js-slang';
 
 import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
-import type { AllColsSortStates } from '../../features/grading/GradingTypes';
 import type { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import type { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
@@ -47,11 +46,6 @@ type GradingWorkspaceAttr = {
   readonly currentSubmission?: number;
   readonly currentQuestion?: number;
   readonly hasUnsavedChanges: boolean;
-  // TODO: The below should be a separate state
-  // instead of using the grading workspace state
-  readonly requestCounter: number;
-  readonly allColsSortStates: AllColsSortStates;
-  readonly hasLoadedBefore: boolean;
 };
 
 type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;

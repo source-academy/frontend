@@ -2,7 +2,6 @@ import type { Context } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 
 import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
-import type { AllColsSortStates } from '../../features/grading/GradingTypes';
 import type { SALanguage } from '../application/ApplicationTypes';
 import type { ExternalLibraryName } from '../application/types/ExternalTypes';
 import type { Library } from '../assessment/AssessmentTypes';
@@ -281,11 +280,6 @@ const newActions = createActions('workspace', {
     files,
     workspaceLocation,
   }),
-  // For grading table
-  increaseRequestCounter: 0,
-  decreaseRequestCounter: 0,
-  setGradingHasLoadedBefore: () => true,
-  updateAllColsSortStates: (sortStates: AllColsSortStates) => ({ sortStates }),
   fetchVersionHistory: (workspaceLocation: WorkspaceLocation, skipAutoSave?: boolean) => ({
     workspaceLocation,
     skipAutoSave: skipAutoSave ?? false,

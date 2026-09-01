@@ -8,7 +8,6 @@ import type { LanguageDirectoryState } from '../../features/directory/LanguageDi
 import type { PluginDirectoryState } from '../../features/directory/PluginDirectoryTypes';
 import type { LeaderboardState } from '../../features/leaderboard/LeaderboardTypes';
 import type { PlaygroundState } from '../../features/playground/PlaygroundTypes';
-import { freshSortState } from '../../pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { defaultFeatureFlags, type FeatureFlagsState } from '../featureFlags';
 import type { FileSystemState } from '../fileSystem/FileSystemTypes';
@@ -412,14 +411,6 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     currentSubmission: undefined,
     currentQuestion: undefined,
     hasUnsavedChanges: false,
-    // TODO: The below should be a separate state
-    // instead of using the grading workspace state
-    requestCounter: 0,
-    allColsSortStates: {
-      currentState: freshSortState,
-      sortBy: '',
-    },
-    hasLoadedBefore: false,
   },
   playground: {
     ...createDefaultWorkspace('playground'),
@@ -480,7 +471,6 @@ export const defaultSession: SessionState = {
   agreedToResearch: undefined,
   sessionId: Date.now(),
   githubOctokitObject: { octokit: undefined },
-  gradingOverviews: undefined,
   students: undefined,
   teamFormationOverviews: undefined,
   gradings: {},

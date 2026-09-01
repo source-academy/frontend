@@ -80,6 +80,14 @@ export type AllColsSortStates = {
   sortBy: ColumnFieldsKeys | '';
 };
 
+export type GradingOverviewsParams = {
+  group: boolean;
+  graded: Record<string, unknown> | undefined;
+  pageParams: Record<string, unknown>;
+  filterParams: Record<string, unknown>;
+  sortedBy: Record<string, unknown>;
+};
+
 export type ColumnFiltersState = ColumnFilter[];
 
 export type ColumnFilter = { id: string; value: unknown };

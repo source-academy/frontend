@@ -1,16 +1,7 @@
 import { createActions } from 'src/commons/redux/utils';
-import {
-  paginationToBackendParams,
-  unpublishedToBackendParams,
-} from 'src/features/grading/GradingUtils';
-import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import type { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
-import type {
-  AllColsSortStates,
-  GradingOverviews,
-  GradingQuery,
-} from '../../../features/grading/GradingTypes';
+import type { GradingQuery } from '../../../features/grading/GradingTypes';
 import type { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
 import type {
   Assessment,
@@ -49,24 +40,6 @@ const SessionActions = createActions('session', {
   fetchTotalXp: () => ({}),
   fetchTotalXpAdmin: (courseRegId: number) => courseRegId,
   fetchGrading: (submissionId: number) => submissionId,
-  /**
-   * @param filterToGroup - param that when set to true, only shows submissions under the group
-   * of the grader
-   * @param publishedFilter - backend params to filter to unpublished
-   * @param pageParams - param that contains offset and pageSize, informing backend about how
-   * many entries, starting from what offset, to get
-   * @param filterParams - param that contains columnFilters converted into JSON for
-   * processing into query parameters
-   * @param allColsSortStates - param that contains the sort states of all columns and
-   * the col it should be sorted by
-   */
-  fetchGradingOverviews: (
-    filterToGroup = true,
-    publishedFilter = unpublishedToBackendParams(false),
-    pageParams = paginationToBackendParams(0, 10),
-    filterParams = {},
-    allColsSortStates: AllColsSortStates = { currentState: freshSortState, sortBy: '' },
-  ) => ({ filterToGroup, publishedFilter, pageParams, filterParams, allColsSortStates }),
   fetchTeamFormationOverviews: (filterToGroup = true) => filterToGroup,
   fetchStudents: () => ({}),
   login: (providerId: string) => providerId,
@@ -104,12 +77,10 @@ const SessionActions = createActions('session', {
     xpAdjustment: number = 0,
     comments?: string,
   ) => ({ submissionId, questionId, xpAdjustment, comments }),
-  reautogradeSubmission: (submissionId: number) => submissionId,
   reautogradeAnswer: (submissionId: number, questionId: number) => ({ submissionId, questionId }),
   updateAssessmentOverviews: (overviews: AssessmentOverview[]) => overviews,
   updateTotalXp: (totalXp: number) => totalXp,
   updateAssessment: (assessment: Assessment) => assessment,
-  updateGradingOverviews: (overviews: GradingOverviews) => overviews,
   fetchTeamFormationOverview: (assessmentId: number) => ({ assessmentId }),
   createTeam: (assessment: AssessmentOverview, teams: OptionType[][]) => ({ assessment, teams }),
   updateTeam: (teamId: number, assessment: AssessmentOverview, teams: OptionType[][]) => ({
@@ -131,10 +102,6 @@ const SessionActions = createActions('session', {
    * no id for Grading.
    */
   updateGrading: (submissionId: number, grading: GradingQuery) => ({ submissionId, grading }),
-  unsubmitSubmission: (submissionId: number) => ({ submissionId }),
-  // Publishing / unpublishing actions
-  publishGrading: (submissionId: number) => ({ submissionId }),
-  unpublishGrading: (submissionId: number) => ({ submissionId }),
   // Notification actions
   fetchNotifications: () => ({}),
   acknowledgeNotifications: (withFilter?: NotificationFilterFunction) => ({ withFilter }),

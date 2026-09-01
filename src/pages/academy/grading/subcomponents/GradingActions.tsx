@@ -2,12 +2,17 @@ import { Button, Classes, Icon, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Link } from 'react-router';
-import SessionActions from 'src/commons/application/actions/SessionActions';
 import type { ProgressStatus } from 'src/commons/assessment/AssessmentTypes';
 import { ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
-import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
+import {
+  usePublishGrading,
+  useReautogradeSubmission,
+  useUnpublishGrading,
+  useUnsubmitSubmission,
+} from 'src/features/grading/hooks/useGradingMutations';
 
 type Props = {
   submissionId: number;
@@ -22,8 +27,11 @@ const buttonClasses = [
 ];
 
 function GradingActions({ submissionId, style, progress, filterMode }: Props) {
-  const dispatch = useAppDispatch();
   const { courseId } = useSession();
+  const reautograde = useReautogradeSubmission();
+  const unsubmit = useUnsubmitSubmission();
+  const publish = usePublishGrading();
+  const unpublish = useUnpublishGrading();
 
   const handleReautogradeClick = async () => {
     const confirm = await showSimpleConfirmDialog({
@@ -37,7 +45,7 @@ function GradingActions({ submissionId, style, progress, filterMode }: Props) {
       positiveLabel: 'Reautograde',
     });
     if (confirm) {
-      dispatch(SessionActions.reautogradeSubmission(submissionId));
+      reautograde.mutate(submissionId);
     }
   };
 
@@ -48,7 +56,7 @@ function GradingActions({ submissionId, style, progress, filterMode }: Props) {
       positiveLabel: 'Unsubmit',
     });
     if (confirm) {
-      dispatch(SessionActions.unsubmitSubmission(submissionId));
+      unsubmit.mutate(submissionId);
     }
   };
 
@@ -59,7 +67,7 @@ function GradingActions({ submissionId, style, progress, filterMode }: Props) {
       positiveLabel: 'Publish',
     });
     if (confirm) {
-      dispatch(SessionActions.publishGrading(submissionId));
+      publish.mutate(submissionId);
     }
   };
 
@@ -70,7 +78,7 @@ function GradingActions({ submissionId, style, progress, filterMode }: Props) {
       positiveLabel: 'Unpublish',
     });
     if (confirm) {
-      dispatch(SessionActions.unpublishGrading(submissionId));
+      unpublish.mutate(submissionId);
     }
   };
 

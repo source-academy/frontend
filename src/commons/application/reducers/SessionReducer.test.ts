@@ -1,12 +1,11 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { expect, test, vi } from 'vitest';
 
-import type { GradingOverview, GradingQuery } from '../../../features/grading/GradingTypes';
+import type { GradingQuery } from '../../../features/grading/GradingTypes';
 import {
   type Assessment,
   type AssessmentOverview,
   AssessmentStatuses,
-  ProgressStatuses,
 } from '../../assessment/AssessmentTypes';
 import type { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import CommonsActions from '../actions/CommonsActions';
@@ -526,96 +525,6 @@ test('UPDATE_GRADING works correctly in updating gradings', () => {
 
   const gradingMap = SessionsReducer(newDefaultSession, action).gradings;
   expect(gradingMap[submissionId]).toEqual(gradingTest2);
-});
-
-// UPDATE_GRADING_OVERVIEWS test data
-const gradingOverviewTest1: GradingOverview[] = [
-  {
-    assessmentId: 1,
-    assessmentNumber: 'M1A',
-    assessmentName: 'test assessment',
-    assessmentType: 'Contests',
-    initialXp: 0,
-    xpBonus: 100,
-    xpAdjustment: 50,
-    currentXp: 50,
-    maxXp: 500,
-    studentId: 100,
-    studentName: 'test student',
-    studentNames: [],
-    studentUsername: 'E0123456',
-    studentUsernames: [],
-    submissionId: 1,
-    submissionStatus: AssessmentStatuses.attempting,
-    progress: ProgressStatuses.attempting,
-    isGradingPublished: false,
-    groupName: 'group',
-    questionCount: 4,
-    gradedCount: 2,
-  },
-];
-
-const gradingOverviewTest2: GradingOverview[] = [
-  {
-    assessmentId: 2,
-    assessmentNumber: 'P2',
-    assessmentName: 'another assessment',
-    assessmentType: 'Quests',
-    initialXp: 20,
-    xpBonus: 250,
-    xpAdjustment: 100,
-    currentXp: 300,
-    maxXp: 1000,
-    studentId: 20,
-    studentName: 'another student',
-    studentNames: [],
-    studentUsername: 'E0000000',
-    studentUsernames: [],
-    submissionId: 2,
-    submissionStatus: AssessmentStatuses.attempted,
-    progress: ProgressStatuses.graded,
-    isGradingPublished: false,
-    groupName: 'another group',
-    questionCount: 3,
-    gradedCount: 3,
-  },
-];
-
-test('UPDATE_GRADING_OVERVIEWS works correctly in inserting grading overviews', () => {
-  const action = {
-    type: SessionActions.updateGradingOverviews.type,
-    payload: {
-      count: gradingOverviewTest1.length,
-      data: gradingOverviewTest1,
-    },
-  } as const;
-  const result: SessionState = SessionsReducer(defaultSession, action);
-
-  expect(result.gradingOverviews).toEqual({
-    count: gradingOverviewTest1.length,
-    data: gradingOverviewTest1,
-  });
-});
-
-test('UPDATE_GRADING_OVERVIEWS works correctly in updating grading overviews', () => {
-  const newDefaultSession = {
-    ...defaultSession,
-    gradingOverviews: {
-      count: gradingOverviewTest1.length,
-      data: gradingOverviewTest1,
-    },
-  };
-  const gradingOverviewsPayload = {
-    count: gradingOverviewTest1.length + gradingOverviewTest2.length,
-    data: [...gradingOverviewTest2, ...gradingOverviewTest1],
-  };
-  const action = {
-    type: SessionActions.updateGradingOverviews.type,
-    payload: gradingOverviewsPayload,
-  } as const;
-  const result: SessionState = SessionsReducer(newDefaultSession, action);
-
-  expect(result.gradingOverviews).toEqual(gradingOverviewsPayload);
 });
 
 test('UPDATE_NOTIFICATIONS works correctly in updating notifications', () => {

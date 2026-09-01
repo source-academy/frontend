@@ -1,7 +1,7 @@
 import { Octokit } from '@octokit/rest';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 
-import type { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
+import type { GradingQuery } from '../../../features/grading/GradingTypes';
 import type { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import type { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
 import type {
@@ -63,7 +63,6 @@ export type SessionState = {
 
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: { [id: number]: Assessment };
-  readonly gradingOverviews?: GradingOverviews;
   readonly students?: User[];
   readonly teamFormationOverview?: TeamFormationOverview;
   readonly teamFormationOverviews?: TeamFormationOverview[];

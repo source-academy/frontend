@@ -59,9 +59,6 @@ const newSessionsReducer = createReducer(defaultSession, builder => {
     .addCase(SessionActions.updateGrading, (state, action) => {
       state.gradings[action.payload.submissionId] = action.payload.grading;
     })
-    .addCase(SessionActions.updateGradingOverviews, (state, action) => {
-      state.gradingOverviews = action.payload;
-    })
     .addCase(SessionActions.updateNotifications, (state, action) => {
       state.notifications = action.payload;
     })
