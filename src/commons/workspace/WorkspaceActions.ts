@@ -13,7 +13,6 @@ import type {
   CodeVersionMetadata,
   EditorTabState,
   SaveStatus,
-  SubmissionsTableFilters,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
   WorkspaceState,
@@ -202,7 +201,6 @@ const newActions = createActions('workspace', {
     workspaceLocation,
     isEditorReadonly,
   }),
-  updateSubmissionsTableFilters: (filters: SubmissionsTableFilters) => ({ filters }),
   updateCurrentAssessmentId: (assessmentId: number, questionId: number) => ({
     assessmentId,
     questionId,
