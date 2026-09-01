@@ -2,11 +2,7 @@ import type { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 import DashboardActions from 'src/features/dashboard/DashboardActions';
 
-import type {
-  GradingOverviews,
-  GradingQuery,
-  GradingQuestion,
-} from '../../features/grading/GradingTypes';
+import type { GradingQuery, GradingQuestion } from '../../features/grading/GradingTypes';
 import { SortStates } from '../../features/grading/GradingTypes';
 import SessionActions from '../application/actions/SessionActions';
 import {
@@ -20,7 +16,6 @@ import type { AdminPanelCourseRegistration, Tokens } from '../application/types/
 import {
   type AssessmentOverview,
   AssessmentStatuses,
-  ProgressStatuses,
   type Question,
 } from '../assessment/AssessmentTypes';
 import type {
@@ -291,37 +286,6 @@ export function* mockBackendSaga(): SagaIterator {
       if (grading !== null) {
         yield put(actions.updateGrading(submissionId, grading));
       }
-    },
-  );
-
-  yield takeEvery(
-    SessionActions.unsubmitSubmission.type,
-    function* (action: ReturnType<typeof actions.unsubmitSubmission>) {
-      const { submissionId } = action.payload;
-      const overviews: GradingOverviews = yield select(
-        (state: OverallState) =>
-          state.session.gradingOverviews || {
-            count: 0,
-            data: [],
-          },
-      );
-      const index = overviews.data.findIndex(
-        overview =>
-          overview.submissionId === submissionId &&
-          overview.progress === ProgressStatuses.submitted,
-      );
-      if (index === -1) {
-        yield call(showWarningMessage, '400: Bad Request');
-        return;
-      }
-      const newOverviews = overviews.data.map(overview => {
-        if (overview.submissionId === submissionId) {
-          overview.progress = ProgressStatuses.attempted;
-        }
-        return overview;
-      });
-      yield call(showSuccessMessage, 'Unsubmit successful!', 1000);
-      yield put(actions.updateGradingOverviews({ ...overviews, data: newOverviews }));
     },
   );
 

@@ -64,7 +64,6 @@ import {
   postAuth,
   postCreateCourse,
   postReautogradeAnswer,
-  postReautogradeSubmission,
   putAssessmentConfigs,
   putCourseConfig,
   putCourseResearchAgreement,
@@ -1423,31 +1422,6 @@ describe('Test FETCH_GROUP_GRADING_SUMMARY action', () => {
       .not.put.actionType(DashboardActions.updateGroupGradingSummary.type)
       .hasFinalState({ session: { ...mockTokens, role: Role.Staff } })
       .dispatch({ type: DashboardActions.fetchGroupGradingSummary.type })
-      .silentRun();
-  });
-});
-
-describe('Test REAUTOGRADE_SUBMISSION Action', () => {
-  const submissionId = 123;
-  test('when successful', () => {
-    return expectSaga(BackendSaga)
-      .withState({ session: { ...mockTokens, role: Role.Staff } })
-      .provide([[call(postReautogradeSubmission, submissionId, mockTokens), okResp]])
-      .call(postReautogradeSubmission, submissionId, mockTokens)
-      .call.fn(showSuccessMessage)
-      .not.call.fn(showWarningMessage)
-      .dispatch({ type: SessionActions.reautogradeSubmission.type, payload: submissionId })
-      .silentRun();
-  });
-
-  test('when unsuccessful', () => {
-    return expectSaga(BackendSaga)
-      .withState({ session: { ...mockTokens, role: Role.Staff } })
-      .provide([[call(postReautogradeSubmission, submissionId, mockTokens), errorResp]])
-      .call(postReautogradeSubmission, submissionId, mockTokens)
-      .not.call.fn(showSuccessMessage)
-      .call.fn(showWarningMessage)
-      .dispatch({ type: SessionActions.reautogradeSubmission.type, payload: submissionId })
       .silentRun();
   });
 });

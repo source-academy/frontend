@@ -104,7 +104,6 @@ const SessionActions = createActions('session', {
     xpAdjustment: number = 0,
     comments?: string,
   ) => ({ submissionId, questionId, xpAdjustment, comments }),
-  reautogradeSubmission: (submissionId: number) => submissionId,
   reautogradeAnswer: (submissionId: number, questionId: number) => ({ submissionId, questionId }),
   updateAssessmentOverviews: (overviews: AssessmentOverview[]) => overviews,
   updateTotalXp: (totalXp: number) => totalXp,
@@ -131,10 +130,6 @@ const SessionActions = createActions('session', {
    * no id for Grading.
    */
   updateGrading: (submissionId: number, grading: GradingQuery) => ({ submissionId, grading }),
-  unsubmitSubmission: (submissionId: number) => ({ submissionId }),
-  // Publishing / unpublishing actions
-  publishGrading: (submissionId: number) => ({ submissionId }),
-  unpublishGrading: (submissionId: number) => ({ submissionId }),
   // Notification actions
   fetchNotifications: () => ({}),
   acknowledgeNotifications: (withFilter?: NotificationFilterFunction) => ({ withFilter }),

@@ -437,15 +437,6 @@ test('submitGradingAndContinue generates correct action object', () => {
   });
 });
 
-test('reautogradeSubmission generates correct action object', () => {
-  const submissionId = 123;
-  const action = SessionActions.reautogradeSubmission(submissionId);
-  expect(action).toEqual({
-    type: SessionActions.reautogradeSubmission.type,
-    payload: submissionId,
-  });
-});
-
 test('reautogradeAnswer generates correct action object', () => {
   const submissionId = 123;
   const questionId = 456;
@@ -453,17 +444,6 @@ test('reautogradeAnswer generates correct action object', () => {
   expect(action).toEqual({
     type: SessionActions.reautogradeAnswer.type,
     payload: { submissionId, questionId },
-  });
-});
-
-test('unsubmitSubmission generates correct action object', () => {
-  const submissionId = 10;
-  const action = SessionActions.unsubmitSubmission(submissionId);
-  expect(action).toEqual({
-    type: SessionActions.unsubmitSubmission.type,
-    payload: {
-      submissionId,
-    },
   });
 });
 

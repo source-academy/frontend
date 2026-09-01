@@ -12,7 +12,6 @@ import GroundControlActions from 'src/features/groundControl/GroundControlAction
 
 import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import {
-  type GradingOverview,
   type GradingOverviews,
   type GradingQuery,
   type GradingQuestion,
@@ -35,7 +34,6 @@ import {
   type AssessmentConfiguration,
   type AssessmentOverview,
   AssessmentStatuses,
-  ProgressStatuses,
   type Question,
 } from '../assessment/AssessmentTypes';
 import type {
@@ -75,11 +73,8 @@ import {
   postCreateCourse,
   postGrading,
   postReautogradeAnswer,
-  postReautogradeSubmission,
   postTeams,
-  postUnsubmit,
   postUploadTeams,
-  publishGrading,
   publishGradingAll,
   putAssessmentConfigs,
   putCourseConfig,
@@ -90,7 +85,6 @@ import {
   putUserRole,
   removeAssessmentConfig,
   removeUserCourseRegistration,
-  unpublishGrading,
   unpublishGradingAll,
   updateAssessment,
   uploadAssessment,
@@ -523,87 +517,6 @@ const newBackendSagaOne = combineSagaHandlers({
       yield put(actions.updateGrading(id, grading));
     }
   },
-  /**
-   * Unsubmits the submission and updates the grading overviews of the new status.
-   */
-  [SessionActions.unsubmitSubmission.type]: function* (action) {
-    const tokens: Tokens = yield selectTokens();
-    const { submissionId } = action.payload;
-
-    const resp: Response | null = yield postUnsubmit(submissionId, tokens);
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
-    }
-
-    const overviews: GradingOverview[] = yield select(
-      (state: OverallState) => state.session.gradingOverviews?.data || [],
-    );
-    const newOverviews = overviews.map(overview => {
-      if (overview.submissionId === submissionId) {
-        return { ...overview, progress: ProgressStatuses.attempted };
-      }
-      return overview;
-    });
-
-    const totalPossibleEntries = yield select(
-      (state: OverallState) => state.session.gradingOverviews?.count,
-    );
-
-    yield call(showSuccessMessage, 'Unsubmit successful', 1000);
-    yield put(actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews }));
-  },
-  [SessionActions.publishGrading.type]: function* (action) {
-    const tokens: Tokens = yield selectTokens();
-    const { submissionId } = action.payload;
-
-    const resp: Response | null = yield publishGrading(submissionId, tokens);
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
-    }
-
-    const overviews: GradingOverview[] = yield select(
-      (state: OverallState) => state.session.gradingOverviews?.data || [],
-    );
-    const newOverviews = overviews.map(overview => {
-      if (overview.submissionId === submissionId) {
-        return { ...overview, progress: ProgressStatuses.published };
-      }
-      return overview;
-    });
-
-    const totalPossibleEntries = yield select(
-      (state: OverallState) => state.session.gradingOverviews?.count,
-    );
-
-    yield call(showSuccessMessage, 'Publish grading successful', 1000);
-    yield put(actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews }));
-  },
-  [SessionActions.unpublishGrading.type]: function* (action) {
-    const tokens: Tokens = yield selectTokens();
-    const { submissionId } = action.payload;
-
-    const resp: Response | null = yield unpublishGrading(submissionId, tokens);
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
-    }
-
-    const overviews: GradingOverview[] = yield select(
-      (state: OverallState) => state.session.gradingOverviews?.data || [],
-    );
-    const newOverviews = overviews.map(overview => {
-      if (overview.submissionId === submissionId) {
-        return { ...overview, progress: ProgressStatuses.graded };
-      }
-      return overview;
-    });
-
-    const totalPossibleEntries = yield select(
-      (state: OverallState) => state.session.gradingOverviews?.count,
-    );
-
-    yield call(showSuccessMessage, 'Unpublish grading successful', 1000);
-    yield put(actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews }));
-  },
   [SessionActions.submitGrading.type]: sendGrade,
   [SessionActions.submitGradingAndContinue.type]: sendGradeAndContinue,
 });
@@ -681,13 +594,6 @@ function* sendGradeAndContinue(action: ReturnType<typeof actions.submitGradingAn
 }
 
 const newBackendSagaTwo = combineSagaHandlers({
-  [SessionActions.reautogradeSubmission.type]: function* (action) {
-    const submissionId = action.payload;
-    const tokens: Tokens = yield selectTokens();
-    const resp: Response | null = yield call(postReautogradeSubmission, submissionId, tokens);
-
-    yield call(handleReautogradeResponse, resp);
-  },
   [SessionActions.reautogradeAnswer.type]: function* (action) {
     const { submissionId, questionId } = action.payload;
     const tokens: Tokens = yield selectTokens();
