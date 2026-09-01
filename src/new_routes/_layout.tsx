@@ -1,3 +1,4 @@
+import { NuqsAdapter } from 'nuqs/adapters/react-router/v8';
 import { useEffect } from 'react';
 import { Outlet } from 'react-router';
 import { useLocalStorageState } from 'src/commons/hooks/useLocalStorageState';
@@ -117,14 +118,16 @@ function RootLayout() {
   }, []);
 
   return (
-    <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>
-      <div className="Application">
-        <NavigationBar />
-        <div className="Application__main">
-          <Outlet />
+    <NuqsAdapter>
+      <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>
+        <div className="Application">
+          <NavigationBar />
+          <div className="Application__main">
+            <Outlet />
+          </div>
         </div>
-      </div>
-    </WorkspaceSettingsContext.Provider>
+      </WorkspaceSettingsContext.Provider>
+    </NuqsAdapter>
   );
 }
 
