@@ -19,12 +19,19 @@ import type {
   ColumnFieldsKeys,
   ColumnFilter,
   ColumnFiltersState,
-  GradingOverview,
+  GradingOverviewsParams,
   IGradingTableProperties,
   IGradingTableRow,
 } from 'src/features/grading/GradingTypes';
 import { ColumnFields, ColumnName } from 'src/features/grading/GradingTypes';
-import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
+import {
+  convertFilterToBackendParams,
+  gradingSortParser,
+  paginationToBackendParams,
+  toBackendSortParams,
+  unpublishedToBackendParams,
+} from 'src/features/grading/GradingUtils';
+import { useGradingOverviewsQuery } from 'src/features/grading/hooks/useGradingOverviewsQuery';
 
 import classes from '../Grading.module.css';
 import { getBadgeColorFromLabel } from './gradingBadges/gradingBadgeColors';
@@ -50,25 +57,16 @@ const parseColumnFilters = (value: unknown): ColumnFiltersState =>
 const filtersParser = parseAsJson(parseColumnFilters).withDefault([]);
 
 type Props = {
+  showUserGroups: boolean;
   showAllSubmissions: boolean;
-  totalRows: number;
   pageSize: number;
-  submissions: GradingOverview[];
-  updateEntries: (page: number, filterParams: object) => void;
 };
 
 const HEADER_HEIGHT: number = 48; // in px, declared here to calculate table height
 
-function GradingSubmissionTable({
-  showAllSubmissions,
-  totalRows,
-  pageSize,
-  submissions,
-  updateEntries,
-}: Props) {
+function GradingSubmissionTable({ showUserGroups, showAllSubmissions, pageSize }: Props) {
   const navigate = useNavigate();
 
-  const requestCounter = useAppSelector(state => state.workspaces.grading.requestCounter);
   const courseId = useAppSelector(store => store.session.courseId);
 
   const gridRef = useRef<AgGridReact<IGradingTableRow>>(null);
@@ -80,6 +78,7 @@ function GradingSubmissionTable({
   const [searchQuery, setSearchQuery] = useState(search);
   const [columnFilters, setColumnFilters] = useQueryState('filters', filtersParser);
   const [cellFilters, setCellFilters] = useState<{ id: ColumnFields; value: string }[]>([]);
+  const [sort] = useQueryState('sort', gradingSortParser);
   const columnVisibility = useColumnVisibility({
     getColumnLabel: id => ColumnName[id as ColumnFieldsKeys],
   });
@@ -88,10 +87,54 @@ function GradingSubmissionTable({
   // This is what that controls Grading Mode. If future feedback says it's better to default to filter mode, change it here.
   const [filterMode, setFilterMode] = useState<boolean>(false);
 
-  const isLoading = useMemo(() => requestCounter > 0, [requestCounter]);
+  const resetPage = useCallback(() => setPage(0), [setPage]);
+
+  // Placing searchValue as a dependency for triggering a page reset will result in double-querying.
+  const debouncedUpdateSearchValue = useMemo(
+    () =>
+      debounce((newValue: string) => {
+        resetPage();
+        setSearch(newValue);
+      }, 300),
+    [resetPage, setSearch],
+  );
+
+  const debouncedUpdateCellFilters = useMemo(() => debounce(setCellFilters, 300), []);
+
+  // Converts the columnFilters array into backend query parameters.
+  const backendFilterParams = useMemo(() => {
+    const filters: Array<{ [key: string]: any }> = [
+      { id: ColumnFields.assessmentName, value: search },
+      ...columnFilters,
+      ...cellFilters,
+    ].map(convertFilterToBackendParams);
+
+    const params: Record<string, any> = {};
+    filters.forEach(e => {
+      Object.keys(e).forEach(key => {
+        params[key] = e[key];
+      });
+    });
+    return params;
+  }, [cellFilters, columnFilters, search]);
+
+  const queryParams: GradingOverviewsParams = useMemo(
+    () => ({
+      group: showUserGroups,
+      graded: unpublishedToBackendParams(showAllSubmissions),
+      pageParams: paginationToBackendParams(page, pageSize),
+      filterParams: backendFilterParams,
+      sortedBy: toBackendSortParams(sort),
+    }),
+    [showUserGroups, showAllSubmissions, page, pageSize, backendFilterParams, sort],
+  );
+
+  const { data, isFetching } = useGradingOverviewsQuery(queryParams);
+  const submissions = useMemo(() => data?.data ?? [], [data]);
+  const totalRows = data?.count ?? 0;
+  const isLoading = isFetching;
 
   const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
-  const resetPage = useCallback(() => setPage(0), [setPage]);
 
   const defaultColumnDefs: ColDef = {
     filter: false,
@@ -124,39 +167,10 @@ function GradingSubmissionTable({
     suppressRowClickSelection: true,
   };
 
-  // Placing searchValue as a dependency for triggering a page reset will result in double-querying.
-  const debouncedUpdateSearchValue = useMemo(
-    () =>
-      debounce((newValue: string) => {
-        resetPage();
-        setSearch(newValue);
-      }, 300),
-    [resetPage, setSearch],
-  );
-
   const handleSearchQueryUpdate: React.ChangeEventHandler<HTMLInputElement> = e => {
     setSearchQuery(e.target.value);
     debouncedUpdateSearchValue(e.target.value);
   };
-
-  const debouncedUpdateCellFilters = useMemo(() => debounce(setCellFilters, 300), []);
-
-  // Converts the columnFilters array into backend query parameters.
-  const backendFilterParams = useMemo(() => {
-    const filters: Array<{ [key: string]: any }> = [
-      { id: ColumnFields.assessmentName, value: search },
-      ...columnFilters,
-      ...cellFilters,
-    ].map(convertFilterToBackendParams);
-
-    const params: Record<string, any> = {};
-    filters.forEach(e => {
-      Object.keys(e).forEach(key => {
-        params[key] = e[key];
-      });
-    });
-    return params;
-  }, [cellFilters, columnFilters, search]);
 
   const cellClickedEvent = (event: CellClickedEvent) => {
     const colClicked: string = event.colDef.field ? event.colDef.field : '';
@@ -208,13 +222,10 @@ function GradingSubmissionTable({
     }
   }, [columnFilters, showAllSubmissions, resetPage, setColumnFilters]);
 
+  // Reset to the first page whenever a top-level query parameter changes.
   useEffect(() => {
     resetPage();
-  }, [updateEntries, resetPage]);
-
-  useEffect(() => {
-    updateEntries(page, backendFilterParams);
-  }, [updateEntries, page, backendFilterParams]);
+  }, [showUserGroups, showAllSubmissions, pageSize, sort, resetPage]);
 
   useEffect(() => {
     if (gridRef.current?.api) {
@@ -262,14 +273,14 @@ function GradingSubmissionTable({
 
       gridRef.current!.api.hideOverlay();
 
-      if (newData.length === 0 && requestCounter <= 0) {
+      if (newData.length === 0 && !isFetching) {
         gridRef.current!.api.showNoRowsOverlay();
       }
     }
     // We ignore the dependency on rowData purposely as we setRowData above.
     // If not, it could cause a double execution, which is a bit expensive.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requestCounter, submissions, courseId]);
+  }, [isFetching, submissions, courseId]);
 
   const columns = useMemo(() => generateCols(filterMode), [filterMode]);
 
