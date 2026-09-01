@@ -11,12 +11,7 @@ import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryAc
 import GroundControlActions from 'src/features/groundControl/GroundControlActions';
 
 import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
-import {
-  type GradingOverviews,
-  type GradingQuery,
-  type GradingQuestion,
-  SortStates,
-} from '../../features/grading/GradingTypes';
+import type { GradingQuery, GradingQuestion } from '../../features/grading/GradingTypes';
 import type { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
 import SessionActions from '../application/actions/SessionActions';
 import { type OverallState, Role } from '../application/ApplicationTypes';
@@ -55,7 +50,6 @@ import {
   getAssessmentOverviews,
   getCourseConfig,
   getGrading,
-  getGradingOverviews,
   getGradingSummary,
   getLatestCourseRegistrationAndConfiguration,
   getNotifications,
@@ -348,46 +342,6 @@ const newBackendSagaOne = combineSagaHandlers({
     });
 
     return yield put(actions.updateAssessmentOverviews(newOverviews));
-  },
-  [SessionActions.fetchGradingOverviews.type]: function* (action) {
-    const tokens: Tokens = yield selectTokens();
-
-    const role: Role = yield select((state: OverallState) => state.session.role!);
-    if (role === Role.Student) {
-      return;
-    }
-
-    const { filterToGroup, publishedFilter, pageParams, filterParams, allColsSortStates } =
-      action.payload;
-
-    const sortedBy = {
-      sortBy: allColsSortStates.sortBy,
-      sortDirection: '',
-    };
-
-    Object.entries(allColsSortStates.currentState).forEach(([key, value]) => {
-      if (allColsSortStates.sortBy === key && key !== '') {
-        if (value !== SortStates.NONE) {
-          sortedBy.sortDirection = value;
-        } else {
-          sortedBy.sortBy = '';
-          sortedBy.sortDirection = '';
-        }
-      }
-    });
-
-    const gradingOverviews: GradingOverviews | null = yield call(
-      getGradingOverviews,
-      tokens,
-      filterToGroup,
-      publishedFilter,
-      pageParams,
-      filterParams,
-      sortedBy,
-    );
-    if (gradingOverviews) {
-      yield put(actions.updateGradingOverviews(gradingOverviews));
-    }
   },
   [SessionActions.fetchTeamFormationOverview.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();

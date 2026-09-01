@@ -1,21 +1,14 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { mockStudents } from 'src/commons/mocks/UserMocks';
-import {
-  paginationToBackendParams,
-  unpublishedToBackendParams,
-} from 'src/features/grading/GradingUtils';
-import { freshSortState } from 'src/features/grading/GradingUtils';
 import { expect, test, vi } from 'vitest';
 
-import type { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
-import { ColumnFields } from '../../../features/grading/GradingTypes';
+import type { GradingQuery } from '../../../features/grading/GradingTypes';
 import type { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
 import {
   type Assessment,
   type AssessmentConfiguration,
   type AssessmentOverview,
   AssessmentStatuses,
-  ProgressStatuses,
 } from '../../assessment/AssessmentTypes';
 import type { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { type GameState, Role, type Story } from '../ApplicationTypes';
@@ -81,45 +74,6 @@ test('fetchGrading generates correct action object', () => {
   expect(action).toEqual({
     type: SessionActions.fetchGrading.type,
     payload: submissionId,
-  });
-});
-
-test('fetchGradingOverviews generates correct default action object', () => {
-  const action = SessionActions.fetchGradingOverviews();
-  expect(action).toEqual({
-    type: SessionActions.fetchGradingOverviews.type,
-    payload: {
-      filterToGroup: true,
-      publishedFilter: unpublishedToBackendParams(false),
-      pageParams: paginationToBackendParams(0, 10),
-      filterParams: {},
-      allColsSortStates: { currentState: freshSortState, sortBy: '' },
-    },
-  });
-});
-
-test('fetchGradingOverviews generates correct action object', () => {
-  const filterToGroup = false;
-  const publishedFilter = unpublishedToBackendParams(true);
-  const pageParams = { offset: 123, pageSize: 456 };
-  const filterParams = { abc: 'xxx', def: 'yyy' };
-  const allColsSortStates = { currentState: freshSortState, sortBy: ColumnFields.assessmentName };
-  const action = SessionActions.fetchGradingOverviews(
-    filterToGroup,
-    publishedFilter,
-    pageParams,
-    filterParams,
-    allColsSortStates,
-  );
-  expect(action).toEqual({
-    type: SessionActions.fetchGradingOverviews.type,
-    payload: {
-      filterToGroup: filterToGroup,
-      publishedFilter: publishedFilter,
-      pageParams: pageParams,
-      filterParams: filterParams,
-      allColsSortStates: allColsSortStates,
-    },
   });
 });
 
@@ -493,43 +447,6 @@ test('updateAssessment generates correct action object', () => {
   expect(action).toEqual({
     type: SessionActions.updateAssessment.type,
     payload: assessment,
-  });
-});
-
-test('updateGradingOverviews generates correct action object', () => {
-  const overviews: GradingOverviews = {
-    count: 1,
-    data: [
-      {
-        assessmentId: 1,
-        assessmentNumber: 'M1A',
-        assessmentName: 'test assessment',
-        assessmentType: 'Contests',
-        initialXp: 0,
-        xpBonus: 100,
-        xpAdjustment: 50,
-        currentXp: 50,
-        maxXp: 500,
-        studentId: 100,
-        studentName: 'test student',
-        studentNames: [],
-        studentUsername: 'E0123456',
-        studentUsernames: [],
-        submissionId: 1,
-        isGradingPublished: false,
-        progress: ProgressStatuses.attempting,
-        groupName: 'group',
-        submissionStatus: AssessmentStatuses.attempting,
-        questionCount: 6,
-        gradedCount: 0,
-      },
-    ],
-  };
-
-  const action = SessionActions.updateGradingOverviews(overviews);
-  expect(action).toEqual({
-    type: SessionActions.updateGradingOverviews.type,
-    payload: overviews,
   });
 });
 

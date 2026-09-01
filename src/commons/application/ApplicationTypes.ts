@@ -480,7 +480,6 @@ export const defaultSession: SessionState = {
   agreedToResearch: undefined,
   sessionId: Date.now(),
   githubOctokitObject: { octokit: undefined },
-  gradingOverviews: undefined,
   students: undefined,
   teamFormationOverviews: undefined,
   gradings: {},

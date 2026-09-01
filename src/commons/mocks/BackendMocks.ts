@@ -3,7 +3,6 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 import DashboardActions from 'src/features/dashboard/DashboardActions';
 
 import type { GradingQuery, GradingQuestion } from '../../features/grading/GradingTypes';
-import { SortStates } from '../../features/grading/GradingTypes';
 import SessionActions from '../application/actions/SessionActions';
 import {
   type OverallState,
@@ -30,7 +29,7 @@ import {
   mockAssessmentOverviews,
   mockAssessments,
 } from './AssessmentMocks';
-import { mockFetchGrading, mockFetchGradingOverview, mockGradingSummary } from './GradingMocks';
+import { mockFetchGrading, mockGradingSummary } from './GradingMocks';
 import {
   mockBulkUploadTeam,
   mockCreateTeam,
@@ -154,36 +153,6 @@ export function* mockBackendSaga(): SagaIterator {
 
       yield call(showSuccessMessage, 'Submitted!', 2000);
       return yield put(actions.updateAssessmentOverviews(newOverviews));
-    },
-  );
-
-  yield takeEvery(
-    SessionActions.fetchGradingOverviews.type,
-    function* (action: ReturnType<typeof actions.fetchGradingOverviews>): any {
-      const accessToken = yield select((state: OverallState) => state.session.accessToken);
-      const { filterToGroup, pageParams, filterParams, allColsSortStates } = action.payload;
-      const sortedBy = {
-        sortBy: allColsSortStates.sortBy,
-        sortDirection: '',
-      };
-
-      Object.keys(allColsSortStates.currentState).forEach(key => {
-        if (allColsSortStates.sortBy === key && key) {
-          if (allColsSortStates.currentState[key] !== SortStates.NONE) {
-            sortedBy.sortDirection = allColsSortStates.currentState[key];
-          } else {
-            sortedBy.sortBy = '';
-            sortedBy.sortDirection = '';
-          }
-        }
-      });
-
-      const gradingOverviews = yield call(() =>
-        mockFetchGradingOverview(accessToken, filterToGroup, pageParams, filterParams, sortedBy),
-      );
-      if (gradingOverviews !== null) {
-        yield put(actions.updateGradingOverviews(gradingOverviews));
-      }
     },
   );
 
