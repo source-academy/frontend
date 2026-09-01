@@ -6,7 +6,6 @@ import type { AchievementState } from '../../features/achievement/AchievementTyp
 import type { DashboardState } from '../../features/dashboard/DashboardTypes';
 import type { LanguageDirectoryState } from '../../features/directory/LanguageDirectoryTypes';
 import type { PluginDirectoryState } from '../../features/directory/PluginDirectoryTypes';
-import { freshSortState } from '../../features/grading/GradingUtils';
 import type { LeaderboardState } from '../../features/leaderboard/LeaderboardTypes';
 import type { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
@@ -412,14 +411,6 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     currentSubmission: undefined,
     currentQuestion: undefined,
     hasUnsavedChanges: false,
-    // TODO: The below should be a separate state
-    // instead of using the grading workspace state
-    requestCounter: 0,
-    allColsSortStates: {
-      currentState: freshSortState,
-      sortBy: '',
-    },
-    hasLoadedBefore: false,
   },
   playground: {
     ...createDefaultWorkspace('playground'),
