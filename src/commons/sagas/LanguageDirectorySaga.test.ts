@@ -1,6 +1,6 @@
 import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
 import { expectSaga } from 'redux-saga-test-plan';
-import { describe, expect, test } from 'vitest';
+import { describe, test } from 'vitest';
 
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
 import SessionActions from '../application/actions/SessionActions';
