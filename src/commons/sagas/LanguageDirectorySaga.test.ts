@@ -106,6 +106,26 @@ describe('setCourseConfiguration', () => {
       .silentRun();
   });
 
+  test('falls back to the first directory entry when the newly-loaded course has no valid configured language', () => {
+    // Regression: previously this bailed out and left python2 (the prior course's language)
+    // selected, even though the selection was still marked as a default rather than something
+    // the user picked for this course.
+    return expectSaga(languageDirectoryHandlers)
+      .withState({
+        session: { sourceChapter: 99 },
+        featureFlags: conductorEnabledFlags,
+        languageDirectory: {
+          ...defaultLanguageDirectory,
+          languages,
+          selectedLanguageId: 'python2',
+          isDefaultSelection: true,
+        },
+      })
+      .put(LanguageDirectoryActions.setSelectedLanguage('python1', undefined, true))
+      .dispatch(SessionActions.setCourseConfiguration({ sourceChapter: 99 } as any))
+      .silentRun();
+  });
+
   test('does not clobber a deliberate selection the user already made', () => {
     return expectSaga(languageDirectoryHandlers)
       .withState({

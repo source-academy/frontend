@@ -68,6 +68,24 @@ export function* getCourseDefaultSelectionSaga() {
   return deriveLanguageFromChapter(languages, sourceChapter);
 }
 
+/**
+ * Applies the default selection for `directory`: the course's configured language if one exists,
+ * otherwise the first directory entry. Callers must ensure `directory.languages` is non-empty.
+ *
+ * Always dispatches - including when there's no course default - so that a course whose
+ * `sourceChapter` doesn't resolve to a directory entry (no course, or a stale/out-of-range value)
+ * still lands on a valid selection instead of leaving a previous course's language selected.
+ */
+function* applyDefaultSelectionSaga(directory: Pick<LanguageDirectoryState, 'languages'>) {
+  const courseDefault: { languageId: string; evaluatorId: string } | undefined = yield call(
+    getCourseDefaultSelectionSaga,
+  );
+  const languageId = courseDefault?.languageId ?? directory.languages[0].id;
+  yield put(
+    LanguageDirectoryActions.setSelectedLanguage(languageId, courseDefault?.evaluatorId, true),
+  );
+}
+
 export const languageDirectoryHandlers = combineSagaHandlers({
   [LanguageDirectoryActions.setLanguages.type]: function* () {
     const directory: LanguageDirectoryState = yield select(
@@ -94,13 +112,7 @@ export const languageDirectoryHandlers = combineSagaHandlers({
     // configured language if one exists and the session has already loaded, otherwise the first
     // directory entry. If the course config arrives later, its handler below re-applies this -
     // `isDefaultSelection` stays true until something deliberate overrides it.
-    const courseDefault: { languageId: string; evaluatorId: string } | undefined = yield call(
-      getCourseDefaultSelectionSaga,
-    );
-    const languageId = courseDefault?.languageId ?? directory.languages[0].id;
-    yield put(
-      LanguageDirectoryActions.setSelectedLanguage(languageId, courseDefault?.evaluatorId, true),
-    );
+    yield call(applyDefaultSelectionSaga, directory);
   },
   [SessionActions.setCourseConfiguration.type]: function* () {
     const directory: LanguageDirectoryState = yield select(
@@ -112,19 +124,10 @@ export const languageDirectoryHandlers = combineSagaHandlers({
     if (directory.languages.length === 0 || !directory.isDefaultSelection) {
       return;
     }
-    const courseDefault: { languageId: string; evaluatorId: string } | undefined = yield call(
-      getCourseDefaultSelectionSaga,
-    );
-    if (!courseDefault) {
-      return;
-    }
-    yield put(
-      LanguageDirectoryActions.setSelectedLanguage(
-        courseDefault.languageId,
-        courseDefault.evaluatorId,
-        true,
-      ),
-    );
+    // Re-apply the default even if the new course has no valid configured language (a stale or
+    // out-of-range sourceChapter): otherwise the previous course's language would stay selected,
+    // even though it's still marked as a default rather than something the user chose here.
+    yield call(applyDefaultSelectionSaga, directory);
   },
   [LanguageDirectoryActions.fetchLanguages.type]: function* () {
     const url: string = yield select(selectDirectoryLanguageUrl);
