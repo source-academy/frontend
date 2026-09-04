@@ -1175,6 +1175,108 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       })
       .silentRun();
   });
+
+  test('excludes prepend from a Conductor testcase error location (source-academy/frontend#4244)', () => {
+    const context = createContext();
+    // Two lines, so combinedCode's own line 3 is `editorValue`'s line 1 - see
+    // runTestCaseConductor's combinedCode, which joins prepend/value/.../testcase with '\n'.
+    const twoLinePrepend = 'COUNTER = 0\nDOUBLE = 2';
+    const errors: SourceError[] = [
+      {
+        type: ErrorType.RUNTIME,
+        severity: 'Error' as any,
+        location: { start: { line: 3, column: 2 }, end: { line: 3, column: 2 } },
+        explain: () => 'boom',
+        elaborate: () => '',
+      },
+    ];
+    let capturedErrors: SourceError[] | undefined;
+
+    return expectSaga(
+      runTestCaseConductor,
+      workspaceLocation,
+      testcaseId,
+      editorValue,
+      testcaseProgram,
+      TestcaseTypes.public,
+      twoLinePrepend,
+      programPostpendValue,
+      execTime,
+    )
+      .withState(
+        generateDefaultState(workspaceLocation, {
+          context,
+          output: [{ type: 'errors', errors } as any],
+        }),
+      )
+      .provide([
+        [matchers.call.fn(evalCodeSaga), undefined],
+        {
+          put(effect, next) {
+            if (effect.action.type === InterpreterActions.evalTestcaseFailure.type) {
+              capturedErrors = effect.action.payload.value;
+            }
+            return next();
+          },
+        },
+      ])
+      .silentRun()
+      .then(() => {
+        expect(capturedErrors).toHaveLength(1);
+        // Reported as line 1 of the student's own code, not line 3 of the prepend-inclusive
+        // combined file.
+        expect(capturedErrors![0].location.start.line).toBe(1);
+        expect(capturedErrors![0].location.end.line).toBe(1);
+      });
+  });
+
+  test('leaves a Conductor testcase error with no location info (line 0) unshifted', () => {
+    const context = createContext();
+    const errors: SourceError[] = [
+      {
+        type: ErrorType.RUNTIME,
+        severity: 'Error' as any,
+        location: { start: { line: 0, column: 0 }, end: { line: 0, column: 0 } },
+        explain: () => 'boom',
+        elaborate: () => '',
+      },
+    ];
+    let capturedErrors: SourceError[] | undefined;
+
+    return expectSaga(
+      runTestCaseConductor,
+      workspaceLocation,
+      testcaseId,
+      editorValue,
+      testcaseProgram,
+      TestcaseTypes.public,
+      programPrependValue,
+      programPostpendValue,
+      execTime,
+    )
+      .withState(
+        generateDefaultState(workspaceLocation, {
+          context,
+          output: [{ type: 'errors', errors } as any],
+        }),
+      )
+      .provide([
+        [matchers.call.fn(evalCodeSaga), undefined],
+        {
+          put(effect, next) {
+            if (effect.action.type === InterpreterActions.evalTestcaseFailure.type) {
+              capturedErrors = effect.action.payload.value;
+            }
+            return next();
+          },
+        },
+      ])
+      .silentRun()
+      .then(() => {
+        expect(capturedErrors).toHaveLength(1);
+        expect(capturedErrors![0].location.start.line).toBe(0);
+      });
+  });
 });
 
 describe('CHAPTER_SELECT', () => {
