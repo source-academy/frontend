@@ -10333,8 +10333,8 @@ __metadata:
   linkType: hard
 
 "knip@npm:^6.23.0":
-  version: 6.33.0
-  resolution: "knip@npm:6.33.0"
+  version: 6.34.0
+  resolution: "knip@npm:6.34.0"
   dependencies:
     fdir: "npm:^6.5.0"
     formatly: "npm:^0.7.0"
@@ -10352,7 +10352,7 @@ __metadata:
   bin:
     knip: bin/knip.js
     knip-bun: bin/knip-bun.js
-  checksum: 10c0/088128141936510933278c630e0059659fc040b8045435aa508af9b861392166912dbce03b493eb10d41dbb24bcf498288c8e19f234da7efc9a00016bb7251cb
+  checksum: 10c0/9513231e803726630ce48cff7330ef87f69835b51d0c4502ba191ced11ea930f4c14477b54e297fdfa26088e6b807c2f8c08b12bda9ed4c88d4422db4d77a086
   languageName: node
   linkType: hard
 
