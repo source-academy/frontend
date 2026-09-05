@@ -358,6 +358,7 @@ function GradingSubmissionTable({
           overlayNoRowsTemplate={tableProperties.overlayNoRowsTemplate}
           pagination={tableProperties.pagination}
           paginationPageSize={tableProperties.pageSize}
+          paginationPageSizeSelector={false}
           suppressMenuHide={tableProperties.suppressMenuHide}
           suppressPaginationPanel={tableProperties.suppressPaginationPanel}
           rowSelection={{
