@@ -292,6 +292,10 @@ const newBackendSagaOne = combineSagaHandlers({
     const resp: Response | null = yield call(postAnswer, questionId, answer, tokens);
     if (!resp || !resp.ok) {
       yield put(WorkspaceActions.updateSaveStatus('assessment', 'saveFailed'));
+      // The save may have been rejected because the assessment became read-only
+      // (e.g. finalised, or the close time was moved forward). Refetch overviews so
+      // canSave recomputes and the UI reflects the new state.
+      yield put(actions.fetchAssessmentOverviews());
       return yield handleResponseError(resp);
     }
 
