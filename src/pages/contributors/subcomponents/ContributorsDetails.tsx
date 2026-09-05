@@ -47,6 +47,20 @@ function ContributorsDetails() {
             <br />
             <strong>(Frontend and Plugins)</strong>
           </p>
+          {dot}
+          <p>
+            Boyd Anderson,
+            <br />
+            Martin Henz,
+            <br />
+            Eldric Liew,
+            <br />
+            Low Kok Lim,
+            <br />
+            Sanka Rasnayaka
+            <br />
+            <strong>(Coordination)</strong>
+          </p>
         </div>
         <div className={classes['hallOfFame']}>
           <H5>
@@ -371,20 +385,6 @@ function ContributorsDetails() {
             Lee Yi
             <br />
             <strong>(Modules)</strong>
-          </p>
-          {dot}
-          <p>
-            Boyd Anderson,
-            <br />
-            Martin Henz,
-            <br />
-            Eldric Liew,
-            <br />
-            Low Kok Lim,
-            <br />
-            Sanka Rasnayaka
-            <br />
-            <strong>(Coordination)</strong>
           </p>
         </div>
         <div className={classes['contributors']}>
