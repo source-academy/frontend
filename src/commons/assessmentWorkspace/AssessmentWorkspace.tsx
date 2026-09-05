@@ -866,7 +866,11 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
 
     const saveStatusIndicator =
       question.type !== QuestionTypes.mcq && !isTeamAssessment && isAutosaveEnabled ? (
-        <ControlBarSaveStatusIndicator saveStatus={saveStatus} key="save_status" />
+        <ControlBarSaveStatusIndicator
+          saveStatus={saveStatus}
+          isReadOnly={!props.canSave}
+          key="save_status"
+        />
       ) : null;
 
     const chapterSelect = (

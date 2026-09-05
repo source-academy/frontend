@@ -1,10 +1,11 @@
-import { Intent, type MaybeElement, Spinner, SpinnerSize, Tag } from '@blueprintjs/core';
+import { Intent, type MaybeElement, Spinner, SpinnerSize, Tag, Tooltip } from '@blueprintjs/core';
 import { type IconName, IconNames } from '@blueprintjs/icons';
 
 import type { SaveStatus } from '../workspace/WorkspaceTypes';
 
 type Props = {
   saveStatus: SaveStatus;
+  isReadOnly?: boolean;
 };
 
 type StatusConfig = {
@@ -31,7 +32,17 @@ const statusConfig: Record<Exclude<SaveStatus, 'idle'>, StatusConfig> = {
   },
 };
 
-function ControlBarSaveStatusIndicator({ saveStatus }: Props) {
+function ControlBarSaveStatusIndicator({ saveStatus, isReadOnly = false }: Props) {
+  if (isReadOnly) {
+    return (
+      <Tooltip content="Submission already finalized or closed">
+        <Tag minimal intent={Intent.WARNING} icon={IconNames.LOCK}>
+          Unable to save
+        </Tag>
+      </Tooltip>
+    );
+  }
+
   if (saveStatus === 'idle') {
     return null;
   }

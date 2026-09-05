@@ -22,3 +22,8 @@ test('renders saveFailed status', () => {
   render(<ControlBarSaveStatusIndicator saveStatus="saveFailed" />);
   expect(screen.getByText('Saving failed')).toBeDefined();
 });
+
+test('renders read-only status regardless of saveStatus if read-only', () => {
+  render(<ControlBarSaveStatusIndicator saveStatus="idle" isReadOnly />);
+  expect(screen.getByText('Unable to save')).toBeDefined();
+});
