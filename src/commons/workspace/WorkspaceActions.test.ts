@@ -479,28 +479,6 @@ test('resetWorkspace generates correct action object with provided workspace', (
   });
 });
 
-test('updateSubmissionsTableFilters generates correct action object', () => {
-  const columnFilters = [
-    {
-      id: 'groupName',
-      value: '1A',
-    },
-    {
-      id: 'assessmentType',
-      value: 'Missions',
-    },
-  ];
-  const action = WorkspaceActions.updateSubmissionsTableFilters({ columnFilters });
-  expect(action).toEqual({
-    type: WorkspaceActions.updateSubmissionsTableFilters.type,
-    payload: {
-      filters: {
-        columnFilters,
-      },
-    },
-  });
-});
-
 test('updateCurrentAssessmentId generates correct action object', () => {
   const assessmentId = 2;
   const questionId = 4;

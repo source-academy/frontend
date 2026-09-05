@@ -346,9 +346,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].sharedbConnected = action.payload.connected;
     })
-    .addCase(WorkspaceActions.updateSubmissionsTableFilters, (state, action) => {
-      state.grading.submissionsTableFilters = action.payload.filters;
-    })
     .addCase(WorkspaceActions.updateAllColsSortStates, (state, action) => {
       state.grading.allColsSortStates = action.payload.sortStates;
     })

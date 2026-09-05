@@ -49,7 +49,6 @@ type GradingWorkspaceAttr = {
   readonly hasUnsavedChanges: boolean;
   // TODO: The below should be a separate state
   // instead of using the grading workspace state
-  readonly submissionsTableFilters: SubmissionsTableFilters;
   readonly requestCounter: number;
   readonly allColsSortStates: AllColsSortStates;
   readonly hasLoadedBefore: boolean;
@@ -134,10 +133,6 @@ export type DebuggerContext = {
   code: string;
   context: Context;
   workspaceLocation?: WorkspaceLocation;
-};
-
-export type SubmissionsTableFilters = {
-  columnFilters: { id: string; value: unknown }[];
 };
 
 export type TeamFormationsTableFilters = {

@@ -1,5 +1,6 @@
 import { Button, Icon, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { parseAsBoolean, parseAsInteger, useQueryState } from 'nuqs';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Navigate, useParams } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
@@ -45,10 +46,16 @@ function Grading() {
   const params = useParams<{ submissionId: string; questionId: string }>();
 
   const isAdmin = role === Role.Admin;
-  const [showUserGroups, setShowUserGroups] = useState(!isAdmin && group !== null);
+  const [showUserGroups, setShowUserGroups] = useQueryState(
+    'myGroups',
+    parseAsBoolean.withDefault(!isAdmin && group !== null),
+  );
 
-  const [pageSize, setPageSize] = useState(10);
-  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
+  const [pageSize, setPageSize] = useQueryState('pageSize', parseAsInteger.withDefault(10));
+  const [showAllSubmissions, setShowAllSubmissions] = useQueryState(
+    'showAll',
+    parseAsBoolean.withDefault(false),
+  );
   const [refreshQueryData, setRefreshQueryData] = useState({ page: 1, filterParams: {} });
   const [refreshQueried, setRefreshQueried] = useState(false); // for callback (immediately becomes false)
   const [animateRefresh, setAnimateRefresh] = useState(false); // for animation (becomes false on animation end)

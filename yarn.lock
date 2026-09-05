@@ -4364,7 +4364,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@standard-schema/spec@npm:^1.1.0":
+"@standard-schema/spec@npm:1.1.0, @standard-schema/spec@npm:^1.1.0":
   version: 1.1.0
   resolution: "@standard-schema/spec@npm:1.1.0"
   checksum: 10c0/d90f55acde4b2deb983529c87e8025fa693de1a5e8b49ecc6eb84d1fd96328add0e03d7d551442156c7432fd78165b2c26ff561b970a9a881f046abb78d6a526
@@ -8706,6 +8706,7 @@ __metadata:
     konva: "npm:^10.0.0"
     lodash-es: "npm:^4.18.1"
     lz-string: "npm:^1.4.4"
+    nuqs: "npm:^2.10.1"
     oxfmt: "npm:^0.65.0"
     phaser: "npm:~3.90.0"
     phaser3spectorjs: "npm:^0.0.8"
@@ -11797,6 +11798,33 @@ __metadata:
     debug: "npm:^4.3.1"
     js-sdsl: "npm:4.3.0"
   checksum: 10c0/273fc81f61018fddaee4277cb08a7d994838e9d202cf90f5f329d087e605e4ac82405b397f1ea608f46ae26f47e17b7b4318ed2a8dd6541bf794c1ced47b876a
+  languageName: node
+  linkType: hard
+
+"nuqs@npm:^2.10.1":
+  version: 2.10.1
+  resolution: "nuqs@npm:2.10.1"
+  dependencies:
+    "@standard-schema/spec": "npm:1.1.0"
+  peerDependencies:
+    "@remix-run/react": ">=2"
+    "@tanstack/react-router": ^1
+    next: ">=14.2.0"
+    react: ">=18.2.0 || ^19.0.0-0"
+    react-router: ^5 || ^6 || ^7 || ^8
+    react-router-dom: ^5 || ^6 || ^7
+  peerDependenciesMeta:
+    "@remix-run/react":
+      optional: true
+    "@tanstack/react-router":
+      optional: true
+    next:
+      optional: true
+    react-router:
+      optional: true
+    react-router-dom:
+      optional: true
+  checksum: 10c0/e1f59c87b9d59daedeb9bf39c00c7e7d6d614ea53d441a139b3be279bd10b6215941b02f3ac7e7ff6bcdf1532cda797745781b451c0ae1cf849a064d52d32bfa
   languageName: node
   linkType: hard
 
