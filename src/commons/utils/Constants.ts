@@ -136,6 +136,17 @@ const featureFlags = {
   enableSicpChatbot: isTrue(process.env.REACT_APP_FEATURE_ENABLE_SICP_CHATBOT),
 };
 
+// Deployment-pinned Conductor settings; `undefined` leaves the corresponding feature flag under
+// the user's control on /features.
+const conductorConfig = {
+  enable: process.env.REACT_APP_CONDUCTOR_ENABLE
+    ? isTrue(process.env.REACT_APP_CONDUCTOR_ENABLE)
+    : undefined,
+  languageDirectoryUrl: process.env.REACT_APP_LANGUAGE_DIRECTORY_URL || undefined,
+  pluginDirectoryUrl: process.env.REACT_APP_PLUGIN_DIRECTORY_URL || undefined,
+  modulesDirectoryUrl: process.env.REACT_APP_MODULES_DIRECTORY_URL || undefined,
+};
+
 export enum Links {
   githubIssues = 'https://github.com/source-academy/frontend/issues',
   githubOrg = 'https://github.com/source-academy',
@@ -196,6 +207,7 @@ const Constants = {
   collabSessionIdLocalStorageKey,
   caFulfillmentLevel,
   featureFlags,
+  conductorConfig,
 };
 
 export default Constants;

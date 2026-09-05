@@ -184,9 +184,6 @@ function ChatBox({
           <Button disabled={isLoading} className={classes['button-send']} onClick={sendMessage}>
             Send
           </Button>
-          <Button className={classes['button-clean']} onClick={resetChat}>
-            Clean
-          </Button>
         </div>
       </div>
     </div>

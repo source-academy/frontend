@@ -13,9 +13,9 @@ import {
   TextArea,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import classNames from 'classnames';
 import { useCallback, useState } from 'react';
 import { useResponsive } from 'src/commons/utils/Hooks';
-import classes from 'src/styles/CourseConfig.module.scss';
 
 import type { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
 import Markdown from '../../../commons/Markdown';
@@ -29,6 +29,13 @@ type Props = {
   courseConfiguration: UpdateCourseConfiguration;
   setCourseConfiguration: (courseConfiguration: UpdateCourseConfiguration) => void;
 };
+
+// On wider screens a fixed-width, right-aligned label keeps every field's input
+// aligned on a common left edge; on mobile it collapses to a natural-width,
+// left-aligned label so the fixed column doesn't crowd out the inputs.
+const fieldLabel = (text: React.ReactNode) => (
+  <span className="inline-block text-left md:w-60 md:text-right">{text}</span>
+);
 
 function CourseConfigPanel(props: Props) {
   const { isMobileBreakpoint } = useResponsive();
@@ -46,6 +53,7 @@ function CourseConfigPanel(props: Props) {
     topLeaderboardDisplay,
     topContestLeaderboardDisplay,
     enableLlmGrading,
+    enablePixelbot,
     moduleHelpText,
     llmApiKey,
     llmModel,
@@ -56,7 +64,7 @@ function CourseConfigPanel(props: Props) {
   const writePanel = (
     <TextArea
       id="moduleHelpText"
-      className={classes['input-textarea']}
+      className="h-25"
       fill
       value={moduleHelpText || ''}
       onChange={e =>
@@ -69,7 +77,7 @@ function CourseConfigPanel(props: Props) {
   );
 
   const previewPanel = (
-    <div className={classes['input-markdown']}>
+    <div className="p-2.5 h-25 bg-[#f5f5f5] rounded overflow-auto [box-shadow:inset_0_0_0_1px_rgba(16,22,26,0.15),inset_0_1px_1px_rgba(16,22,26,0.2)] [&>div>*]:m-0">
       <Markdown content={moduleHelpText || ''} openLinksInNewWindow />
     </div>
   );
@@ -89,15 +97,20 @@ function CourseConfigPanel(props: Props) {
   );
 
   return (
-    <div className={classes['course-configuration']}>
+    <div>
       <H2>{courseName}</H2>
       <H3>{courseShortName}</H3>
-      <div className={classes.inputs}>
-        <div className={classes.text}>
+      <div
+        className={classNames(
+          'flex max-w-225 w-full gap-x-6 mx-auto',
+          isMobileBreakpoint ? 'flex-col' : 'flex-row',
+        )}
+      >
+        <div>
           <FormGroup
             helperText="Please enter the course name that will be used for course selection."
             inline
-            label="Course Name"
+            label={fieldLabel('Course Name')}
             labelFor="courseName"
           >
             <InputGroup
@@ -114,7 +127,7 @@ function CourseConfigPanel(props: Props) {
           <FormGroup
             helperText="Please enter the course short name. This will be displayed on the top left."
             inline
-            label="Course Short Name"
+            label={fieldLabel('Course Short Name')}
             labelFor="courseShortName"
           >
             <InputGroup
@@ -131,10 +144,14 @@ function CourseConfigPanel(props: Props) {
           <FormGroup
             helperText="Please enter the module help text that will be used in the course help dialog."
             inline
-            label="Module Help Text"
+            label={fieldLabel('Module Help Text')}
             labelFor="moduleHelpText"
           >
-            <Tabs selectedTabId={courseHelpTextSelectedTab} onChange={onChangeTabs}>
+            <Tabs
+              selectedTabId={courseHelpTextSelectedTab}
+              onChange={onChangeTabs}
+              className="ml-2"
+            >
               <Tab id={CourseHelpTextEditorTab.WRITE} title="Write" />
               <Tab id={CourseHelpTextEditorTab.PREVIEW} title="Preview" />
             </Tabs>
@@ -144,7 +161,7 @@ function CourseConfigPanel(props: Props) {
           <FormGroup
             helperText="Enter the Top XX students to be displayed on the Overall Leaderboard"
             inline
-            label="Top Leaderboard Display"
+            label={fieldLabel('Top Leaderboard Display')}
             labelFor="topLeaderboardDisplay"
           >
             <InputGroup
@@ -161,7 +178,7 @@ function CourseConfigPanel(props: Props) {
           <FormGroup
             helperText="Enter the Top XX students to be displayed on the Contest Leaderboard"
             inline
-            label="Top Contest Leaderboard Display"
+            label={fieldLabel('Top Contest Leaderboard Display')}
             labelFor="topContestLeaderboardDisplay"
           >
             <InputGroup
@@ -177,13 +194,13 @@ function CourseConfigPanel(props: Props) {
           </FormGroup>
 
           {enableLlmGrading && (
-            <div className={classes['llm-grading-config']}>
-              <Divider style={{ marginTop: '20px', marginBottom: '20px' }} />
-              <h3>LLM Grading Configuration</h3>
+            <>
+              <Divider className="my-5" />
+              <H3>LLM Grading Configuration</H3>
               <FormGroup
                 helperText="Please enter the LLM Model Name."
                 inline
-                label="LLM Model Name"
+                label={fieldLabel('LLM Model Name')}
                 labelFor="llmModel"
               >
                 <InputGroup
@@ -201,7 +218,7 @@ function CourseConfigPanel(props: Props) {
               <FormGroup
                 helperText="Please enter the LLM API's Provider URL."
                 inline
-                label="LLM Provider URL"
+                label={fieldLabel('LLM Provider URL')}
                 labelFor="llmApiUrl"
               >
                 <InputGroup
@@ -219,7 +236,7 @@ function CourseConfigPanel(props: Props) {
               <FormGroup
                 helperText="Please enter the LLM API Key. This key is encrypted and will not be viewable after."
                 inline
-                label="LLM API Key"
+                label={fieldLabel('LLM API Key')}
                 labelFor="llmApiKey"
               >
                 <InputGroup
@@ -267,17 +284,17 @@ function CourseConfigPanel(props: Props) {
                       interactionKind="hover"
                       position={Position.TOP}
                     >
-                      <Icon icon={IconNames.HELP} className={classes['llm-course-prompt-icon']} />
+                      <Icon icon={IconNames.HELP} className="ml-1.5 cursor-help" />
                     </Popover>
                   </span>
                 }
                 inline
-                label="LLM Course Prompt"
-                labelFor="llmCoursePrompt"
+                label={fieldLabel('LLM Course Prompt')}
+                labelFor="llmCourseLevelPrompt"
               >
                 <TextArea
                   id="llmCourseLevelPrompt"
-                  className={classes['llm-prompt-input-textarea']}
+                  className="h-75"
                   fill
                   placeholder="You are looking at a modified version of Javascript"
                   value={llmCourseLevelPrompt}
@@ -289,11 +306,11 @@ function CourseConfigPanel(props: Props) {
                   }
                 />
               </FormGroup>
-            </div>
+            </>
           )}
         </div>
         {!isMobileBreakpoint && <Divider />}
-        <div className={classes.booleans}>
+        <div className={classNames('space-y-4', !isMobileBreakpoint && 'text-left')}>
           <Switch
             checked={viewable}
             label="Viewable"
@@ -331,6 +348,16 @@ function CourseConfigPanel(props: Props) {
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
                 enableLlmGrading: (e.target as HTMLInputElement).checked,
+              })
+            }
+          />
+          <Switch
+            checked={enablePixelbot !== false}
+            label="Enable Pixel Chatbot"
+            onChange={e =>
+              props.setCourseConfiguration({
+                ...props.courseConfiguration,
+                enablePixelbot: (e.target as HTMLInputElement).checked,
               })
             }
           />

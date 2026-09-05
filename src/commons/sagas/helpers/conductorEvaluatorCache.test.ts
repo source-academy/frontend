@@ -1,0 +1,288 @@
+import type { IConduit } from '@sourceacademy/conductor/conduit';
+import { runSaga } from 'redux-saga';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+
+vi.mock('../../../features/conductor/createConductor', () => ({
+  createConductor: vi.fn(),
+}));
+
+import { createConductor } from '../../../features/conductor/createConductor';
+import { DeferredConductorTabService } from '../../../features/conductor/deferredConductorTabService';
+import { getPreparedConductorSaga, preloadConductorEvaluatorSaga } from './conductorEvaluatorCache';
+
+type FakeConductor = {
+  hostPlugin: object;
+  csePlugin: object;
+  conduit: IConduit & {
+    terminate: ReturnType<typeof vi.fn>;
+    lookupPlugin: ReturnType<typeof vi.fn>;
+  };
+  moduleLoaderPlugin: { onModuleDirectoryURLChange: ReturnType<typeof vi.fn> };
+};
+
+function makeFakeConductor(): FakeConductor {
+  const conduit = {
+    terminate: vi.fn(),
+    lookupPlugin: vi.fn(() => {
+      throw new Error('plugin not registered on this fake conduit');
+    }),
+  } as unknown as FakeConductor['conduit'];
+  return {
+    hostPlugin: {},
+    csePlugin: {},
+    conduit,
+    moduleLoaderPlugin: { onModuleDirectoryURLChange: vi.fn(async () => {}) },
+  };
+}
+
+const createConductorMock = createConductor as unknown as ReturnType<typeof vi.fn>;
+
+// Queues the next fake conductor that createConductor() will return, in call order - tests that race
+// two concurrent conductor creations queue one call per expected createConductor() invocation, in the
+// order those invocations actually happen (which is not always textual call order - see the
+// session-race test below).
+function mockCreateConductorOnce(): FakeConductor {
+  const fake = makeFakeConductor();
+  createConductorMock.mockReturnValueOnce(fake);
+  return fake;
+}
+
+function makeEnv(getLanguageId: () => string | null) {
+  return {
+    dispatch: () => {},
+    getState: () => ({
+      languageDirectory: { selectedLanguageId: getLanguageId() },
+      featureFlags: { modifiedFlags: {} },
+    }),
+  };
+}
+
+describe('conductorEvaluatorCache', () => {
+  beforeEach(() => {
+    createConductorMock.mockReset();
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({ ok: true, blob: async () => new Blob() }) as unknown as Response),
+    );
+    vi.stubGlobal('URL', {
+      ...URL,
+      createObjectURL: vi.fn(() => 'blob:fake'),
+      revokeObjectURL: vi.fn(),
+    });
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  test('selecting the same evaluator path twice within a session reuses the identical conductor', async () => {
+    const languageId = 'lang-reuse';
+    const env = makeEnv(() => languageId);
+    mockCreateConductorOnce();
+
+    await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator.mjs').toPromise();
+    const first = await runSaga(env, getPreparedConductorSaga, undefined).toPromise();
+    const second = await runSaga(env, getPreparedConductorSaga, undefined).toPromise();
+
+    expect(second.conduit).toBe(first.conduit);
+    expect(createConductorMock).toHaveBeenCalledTimes(1);
+  });
+
+  test('a consumed conductor is reused for display, but a second Run gets a different instance', async () => {
+    const languageId = 'lang-consume';
+    const env = makeEnv(() => languageId);
+    const first = mockCreateConductorOnce();
+
+    await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator.mjs').toPromise();
+    const runResult = await runSaga(env, getPreparedConductorSaga, { consume: true }).toPromise();
+    expect(runResult.conduit).toBe(first.conduit);
+
+    // Re-selecting the same evaluator (e.g. clicking back into a tab it owns) must reuse the same,
+    // now-consumed instance rather than rebuilding - its tabs are what's already on screen.
+    await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator.mjs').toPromise();
+    expect(createConductorMock).toHaveBeenCalledTimes(1);
+
+    // A second real Run must not reuse the already-consumed instance - evalCode.ts's own teardown
+    // already killed its Worker unconditionally after the first run.
+    const second = mockCreateConductorOnce();
+    const secondRun = await runSaga(env, getPreparedConductorSaga, { consume: true }).toPromise();
+    expect(secondRun.conduit).toBe(second.conduit);
+    expect(secondRun.conduit).not.toBe(first.conduit);
+  });
+
+  test('a superseded, tab-less consumed conductor is pruned and terminated without ending the session', async () => {
+    // Regression: session.conductors used to only ever shrink when the whole session ended, so
+    // repeatedly Running the same evaluator without ever switching language would accumulate dead
+    // conductor objects (and their unrevoked blob URLs) for as long as the session lasted.
+    const languageId = 'lang-prune';
+    const env = makeEnv(() => languageId);
+    const first = mockCreateConductorOnce();
+
+    await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator.mjs').toPromise();
+    await runSaga(env, getPreparedConductorSaga, { consume: true }).toPromise();
+    expect(first.conduit.terminate).not.toHaveBeenCalled(); // still the active, displayed conductor
+
+    mockCreateConductorOnce();
+    await runSaga(env, getPreparedConductorSaga, { consume: true }).toPromise();
+
+    // `first` never registered any tabs (this test's fake createConductor never wires up real plugin
+    // registration - see mockCreateConductorOnce), so it owns nothing once superseded by `second` and
+    // is safe to fully release, even though the session itself is still very much alive.
+    expect(first.conduit.terminate).toHaveBeenCalled();
+    // The session survives pruning - a third Run still works normally.
+    const third = mockCreateConductorOnce();
+    const thirdRun = await runSaga(env, getPreparedConductorSaga, { consume: true }).toPromise();
+    expect(thirdRun.conduit).toBe(third.conduit);
+  });
+
+  test('switching language ids tears down every conductor from the old session', async () => {
+    let languageId = 'lang-old';
+    const env = makeEnv(() => languageId);
+    const unregisterAllSpy = vi.spyOn(DeferredConductorTabService.prototype, 'unregisterAll');
+    const conductorA = mockCreateConductorOnce();
+
+    await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-a.mjs').toPromise();
+    expect(conductorA.conduit.terminate).not.toHaveBeenCalled();
+
+    languageId = 'lang-new';
+    mockCreateConductorOnce();
+    await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-b.mjs').toPromise();
+
+    // The old session's only conductor is torn down completely: tabs unregistered and conduit
+    // terminated, even though it was never explicitly consumed by a Run.
+    expect(unregisterAllSpy).toHaveBeenCalled();
+    expect(conductorA.conduit.terminate).toHaveBeenCalled();
+  });
+
+  test('a conductor whose creation resolves after a session switch is discarded, not adopted', async () => {
+    let languageId = 'lang-race-old';
+    const env = makeEnv(() => languageId);
+    let abandonedConductor: FakeConductor | undefined;
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (path: string) => {
+        if (path === '/evaluator-race.mjs') {
+          // The session ends - a language switch - while this evaluator's own creation is still
+          // mid-flight (this fetch hasn't even resolved yet, so its own conductor doesn't exist).
+          // The new session's own selection is driven to completion first (so its createConductor
+          // call is queued and consumed before this one's), then this fetch itself resolves,
+          // letting the abandoned creation catch up afterward.
+          languageId = 'lang-race-new';
+          mockCreateConductorOnce();
+          await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-b.mjs').toPromise();
+          abandonedConductor = mockCreateConductorOnce();
+        }
+        return { ok: true, blob: async () => new Blob() } as unknown as Response;
+      }),
+    );
+
+    await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-race.mjs').toPromise();
+
+    expect(abandonedConductor).toBeDefined();
+    expect(abandonedConductor!.conduit.terminate).toHaveBeenCalled();
+  });
+
+  test('a stale preload for an older selection does not deactivate a newer one that already won', async () => {
+    // Regression for source-academy/frontend#4275: on SICP pages, opening a snippet auto-selects the
+    // default evaluator (kicking off its own preload) and the user can click straight into the
+    // Stepper tab - a second, concurrent preload for a different path - before the first settles.
+    // Nothing guarantees the two resolve in request order; if the older, slower preload wins the
+    // race, it must not retroactively deactivate the newer conductor's tabService.
+    const languageId = 'lang-tab-race';
+    const env = makeEnv(() => languageId);
+    let resolveOld: () => void = () => {};
+    const oldGate = new Promise<void>(resolve => {
+      resolveOld = resolve;
+    });
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (path: string) => {
+        if (path === '/evaluator-old.mjs') {
+          await oldGate;
+        }
+        return { ok: true, blob: async () => new Blob() } as unknown as Response;
+      }),
+    );
+    mockCreateConductorOnce();
+    mockCreateConductorOnce();
+
+    const activateSpy = vi.spyOn(DeferredConductorTabService.prototype, 'activate');
+
+    // The older (default-evaluator) selection starts first but is stuck resolving its evaluator...
+    const oldTask = runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-old.mjs').toPromise();
+    // ...the user immediately picks something else (e.g. clicking the Stepper tab) before it settles.
+    await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-new.mjs').toPromise();
+    const activatedPaths = () =>
+      activateSpy.mock.instances.map(
+        instance => (instance as DeferredConductorTabService).evaluatorPath,
+      );
+    expect(activatedPaths()).toEqual(['/evaluator-new.mjs']);
+
+    // Now let the stale, older request finally resolve - it must not activate at all, since a newer
+    // selection has since superseded it.
+    resolveOld();
+    await oldTask;
+    expect(activatedPaths()).toEqual(['/evaluator-new.mjs']);
+  });
+
+  test('a conductor whose conduit.terminate() throws still gets its tabs unregistered', async () => {
+    let languageId = 'lang-throw-old';
+    const env = makeEnv(() => languageId);
+    const conductor = mockCreateConductorOnce();
+    conductor.conduit.terminate.mockImplementation(() => {
+      throw new Error('Conduit already terminated');
+    });
+
+    await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-throw.mjs').toPromise();
+    const unregisterAllSpy = vi.spyOn(DeferredConductorTabService.prototype, 'unregisterAll');
+
+    languageId = 'lang-throw-new';
+    mockCreateConductorOnce();
+    // Must resolve cleanly despite the throw inside teardown - this is the exact bug the rewrite
+    // fixes: the pre-rewrite code awaited conduit.terminate() before unregistering tabs, so this
+    // throw used to prevent unregisterAll() from ever running.
+    await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-b.mjs').toPromise();
+
+    expect(conductor.conduit.terminate).toHaveBeenCalled();
+    expect(unregisterAllSpy).toHaveBeenCalled();
+  });
+
+  test('a preload that fails once still activates on a later retry for the same path', async () => {
+    // Regression: activation used to be gated on "did the requested path change since the last
+    // call", which stays false forever once a path is requested - even if that attempt failed
+    // (e.g. the evaluator's own fetch failing, such as a transient failure fetching the
+    // plugin/evaluator from an external host). So once a transient failure hit here, no amount of
+    // re-selecting the very same path (e.g. re-opening the Stepper tab) would ever activate it
+    // again, even after the underlying issue resolved - only a differently-triggered Run (which
+    // bypasses this gate entirely - see getPreparedConductorSaga) could still show it.
+    const languageId = 'lang-retry-after-failure';
+    const env = makeEnv(() => languageId);
+    const activateSpy = vi.spyOn(DeferredConductorTabService.prototype, 'activate');
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        throw new TypeError('Failed to fetch');
+      }),
+    );
+    await expect(
+      runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-flaky.mjs').toPromise(),
+    ).rejects.toThrow();
+    expect(createConductorMock).not.toHaveBeenCalled();
+    expect(activateSpy).not.toHaveBeenCalled();
+
+    // The network recovers; re-selecting the very same path (e.g. re-opening the Stepper tab)
+    // must still activate it now that preparation actually succeeds.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => ({ ok: true, blob: async () => new Blob() }) as unknown as Response),
+    );
+    mockCreateConductorOnce();
+    await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-flaky.mjs').toPromise();
+
+    expect(activateSpy).toHaveBeenCalledTimes(1);
+  });
+});

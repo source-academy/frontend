@@ -6,7 +6,7 @@ import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { useConductorEnable } from '../../features/conductor/flagConductorEnable';
-import { STEPPER_EVALUATOR_CAPABILITY } from '../../features/conductor/stepperTab';
+import { isToolEvaluator } from '../../features/conductor/stepperTab';
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
 import type { SALanguage } from '../application/ApplicationTypes';
 import { useAppSelector } from '../utils/Hooks';
@@ -47,12 +47,11 @@ function ControlBarChapterSelect({
 
   const currentLanguage = dirLanguages.find(l => l.id === selectedLanguageId);
   const evaluators = currentLanguage?.evaluators ?? [];
-  // The stepper evaluator is hidden from the dropdown: it is reached only via the Stepper tab, which
-  // selects it automatically (see Playground). The button label still resolves against the full list
-  // so it shows the true current evaluator (e.g. "Stepper") even while that entry is unselectable.
-  const selectableEvaluators = evaluators.filter(
-    e => !(e.capabilities as string[] | undefined)?.includes(STEPPER_EVALUATOR_CAPABILITY),
-  );
+  // The stepper and CSE machine evaluators are hidden from the dropdown: each is reached only via its
+  // own tab, which selects it automatically (see Playground). The button label still resolves against
+  // the full list so it shows the true current evaluator (e.g. "Stepper"/"CSE") even while that entry
+  // is unselectable.
+  const selectableEvaluators = evaluators.filter(e => !isToolEvaluator(e));
   const selectedEvaluator = evaluators.find(e => e.id === selectedEvaluatorId);
 
   const evaluatorListRenderer: ItemListRenderer<IEvaluatorDefinition> = ({

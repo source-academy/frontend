@@ -2,7 +2,6 @@ import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { Conduit } from '@sourceacademy/conductor/conduit';
 import { ModuleLoaderWebPlugin } from '@sourceacademy/web-module-loader';
 
-import AutoCompletePlugin from './AutocompletePlugin';
 import { BrowserHostPlugin } from './BrowserHostPlugin';
 import { CseMachineHostPlugin } from './CseMachineHostPlugin';
 
@@ -19,7 +18,6 @@ export function createConductor(
   const worker = new Worker(evaluatorPath);
   const conduit = new Conduit(worker, true);
   const hostPlugin = conduit.registerPlugin(BrowserHostPlugin, onRequestFile, onRequestLoadPlugin);
-  hostPlugin.registerPlugin(AutoCompletePlugin);
   const csePlugin = conduit.registerPlugin(CseMachineHostPlugin);
   // Captured directly (rather than read back later via the class's static `.instance`, which is
   // shared page-wide and gets overwritten by every new conductor - including a warm spare prepared

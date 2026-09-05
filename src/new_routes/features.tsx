@@ -8,6 +8,7 @@ import {
   Section,
   SectionCard,
   SwitchCard,
+  Tag,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import type { BlueprintIcons_16Id } from '@blueprintjs/icons/lib/esm/generated/16px/blueprint-icons-16';
@@ -24,7 +25,7 @@ type FlagCardProps<T> = React.PropsWithChildren<{
 }>;
 
 function BooleanFlagCard({ flag, modifiedFlag }: FlagCardProps<boolean>) {
-  const currentFlag = modifiedFlag ?? flag.defaultValue;
+  const currentFlag = flag.lockedValue ?? modifiedFlag ?? flag.defaultValue;
   const isModified = modifiedFlag !== undefined;
 
   const dispatch = useAppDispatch();
@@ -34,14 +35,19 @@ function BooleanFlagCard({ flag, modifiedFlag }: FlagCardProps<boolean>) {
   };
 
   return (
-    <SwitchCard checked={currentFlag} onChange={onChange} selected={isModified}>
+    <SwitchCard
+      checked={currentFlag}
+      onChange={onChange}
+      selected={isModified}
+      disabled={flag.isLocked}
+    >
       {isModified ? <b>{String(currentFlag)}</b> : String(currentFlag)}
     </SwitchCard>
   );
 }
 
 function NumberFlagCard({ flag, modifiedFlag }: FlagCardProps<number>) {
-  const currentFlag = modifiedFlag ?? flag.defaultValue;
+  const currentFlag = flag.lockedValue ?? modifiedFlag ?? flag.defaultValue;
   const isModified = modifiedFlag !== undefined;
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -57,6 +63,7 @@ function NumberFlagCard({ flag, modifiedFlag }: FlagCardProps<number>) {
       <NumericInput
         fill
         selectAllOnFocus
+        disabled={flag.isLocked}
         defaultValue={String(currentFlag)}
         onValueChange={onValueChange}
         rightElement={isModified ? <Icon icon={IconNames.ASTERISK} /> : undefined}
@@ -67,7 +74,7 @@ function NumberFlagCard({ flag, modifiedFlag }: FlagCardProps<number>) {
 }
 
 function StringFlagCard({ flag, modifiedFlag }: FlagCardProps<string>) {
-  const currentFlag = modifiedFlag ?? flag.defaultValue;
+  const currentFlag = flag.lockedValue ?? modifiedFlag ?? flag.defaultValue;
   const isModified = modifiedFlag !== undefined;
 
   const inputRef = useRef<HTMLDivElement>(null);
@@ -77,6 +84,10 @@ function StringFlagCard({ flag, modifiedFlag }: FlagCardProps<string>) {
   const onConfirm = (value: string) => {
     dispatch(FeatureFlagsActions.setFlag({ featureFlag: flag, value: value }));
   };
+
+  if (flag.isLocked) {
+    return <Card style={{ overflowY: 'hidden' }}>{currentFlag}</Card>;
+  }
 
   let inputField = (
     <EditableText onConfirm={onConfirm} defaultValue={currentFlag} elementRef={inputRef} />
@@ -132,13 +143,19 @@ function FeatureFlagSection({
     onToggle: toggleIsOpen,
   };
 
+  const rightElement = flag.isLocked ? (
+    <Tag minimal>set by deployment</Tag>
+  ) : isModified ? (
+    <Button icon={IconNames.RESET} onClick={onReset} />
+  ) : undefined;
+
   return (
     <Section
       title={flag.flagName}
       subtitle={flag.flagDesc}
       collapsible
       collapseProps={collapseProps}
-      rightElement={isModified ? <Button icon={IconNames.RESET} onClick={onReset} /> : undefined}
+      rightElement={rightElement}
       icon={icon}
     >
       <SectionCard>

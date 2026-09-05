@@ -138,9 +138,10 @@ function FloatingChatbot({
       >
         {isTipsVisible && (
           <div
-            className={
-              'absolute right-16.25 bottom-2.5 h-auto w-65 rounded-[5px] border border-black bg-[#f1f1f1] pr-2.5'
-            }
+            className={classNames(
+              isOpen ? 'right-16.25 bottom-full mb-2' : 'right-16.25 bottom-2.5',
+              'absolute h-auto w-65 rounded-[5px] border border-black bg-[#f1f1f1] pr-2.5',
+            )}
           >
             <p className="m-0 whitespace-normal break-normal px-2 py-1 text-right text-[13px]">
               {introMessage}
@@ -163,6 +164,7 @@ function FloatingChatbot({
         <FloatingChatbotButton
           src={avatarSrc}
           alt={avatarAlt}
+          isChatOpen={isOpen}
           onMouseEnter={() => !isDragging && setIsTipsVisible(true)}
           onMouseLeave={() => setIsTipsVisible(false)}
           onClick={toggleOpen}

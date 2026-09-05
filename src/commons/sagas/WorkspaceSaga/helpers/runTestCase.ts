@@ -1,4 +1,5 @@
 import type { Context } from 'js-slang';
+import type { SourceError } from 'js-slang/dist/errors/base';
 import { random } from 'lodash-es';
 import { call, put, select, type StrictEffect } from 'redux-saga/effects';
 
@@ -46,6 +47,30 @@ import { restoreExtraMethods } from './restoreExtraMethods';
  * wrapped in a toReplString() so stringify() renders it verbatim instead of adding
  * the JSON-style quoting it'd otherwise apply to a plain string.
  */
+
+/**
+ * Shifts a Conductor-reported error's line numbers back by the number of prepend lines baked
+ * into runTestCaseConductor's combined file, mirroring evalCode.ts's toConductorSourceError -
+ * without this, an error in the student's own first line is reported at
+ * `prepend line count + 1` (source-academy/frontend#4244), same off-by-N bug, different call
+ * site: this saga concatenates prepend into the combined file itself (see runTestCaseConductor's
+ * own doc comment) rather than going through evalEditorSaga's Run-only concatenation, so
+ * evalCodeConductorSaga's own prepend-offset correction (gated on an editor Run's actionType)
+ * never applies here. A location's line of 0 means "no location info"
+ * (toConductorSourceError's own fallback for an error shape it doesn't recognise) and is left
+ * untouched rather than shifted into a misleadingly specific line 1.
+ */
+function shiftErrorLines(error: SourceError, lineOffset: number): SourceError {
+  const shift = (line: number) => (line > 0 ? Math.max(1, line - lineOffset) : line);
+  return {
+    ...error,
+    location: {
+      start: { ...error.location.start, line: shift(error.location.start.line) },
+      end: { ...error.location.end, line: shift(error.location.end.line) },
+    },
+  };
+}
+
 export function* runTestCaseConductor(
   workspaceLocation: WorkspaceLocation,
   index: number,
@@ -55,6 +80,18 @@ export function* runTestCaseConductor(
   prepend: string,
   postpend: string,
   execTime: number,
+  /**
+   * Skip this call's own switch-to-TEST_CASE-language/restore dance - set by runAllTestcases
+   * (WorkspaceSaga/index.ts), which switches once for the whole batch of testcases instead of
+   * once per testcase. Repeatedly switching `state.languageDirectory`'s selection back and forth
+   * between every testcase (each switch tears down and rebuilds the Conductor session - see
+   * conductorEvaluatorCache.ts's ensureConductorSessionSaga) raced with Conductor's own internal
+   * teardown often enough to throw an uncaught "Conduit already terminated" from inside the
+   * vendored library - see source-academy/frontend#4232. A single testcase run from the
+   * Autograder tab's individual "click to test" button still does its own switch/restore, since
+   * there's no batch to hoist it out of.
+   */
+  skipLanguageSwitch?: boolean,
 ): Generator<StrictEffect, boolean, any> {
   const context: Context<any> = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].context,
@@ -76,17 +113,26 @@ export function* runTestCaseConductor(
   const combinedCode = [prepend, value, studentSourceLiteral, postpend, testcase]
     .filter(part => part && part.trim().length > 0)
     .join('\n');
+  // Matches the filter above: an empty/whitespace-only prepend contributes no line to
+  // combinedCode at all, so it must not shift error line numbers either.
+  const prependLineOffset = prepend.trim().length > 0 ? prepend.split('\n').length : 0;
 
   yield put(actions.resetTestcase(workspaceLocation, index));
 
   // Grading always runs under TEST_CASE_LANGUAGE_ID/EVALUATOR_ID (see testCaseLanguage.ts),
   // regardless of the assessment's own chapter-derived language - temporarily override the
   // shared selection for this call, then restore it, so a subsequent Run (outside the testing
-  // tab) goes back to using the student's assigned sub-chapter.
-  const { selectedLanguageId, selectedEvaluatorId }: OverallState['languageDirectory'] =
-    yield select((state: OverallState) => state.languageDirectory);
-  yield put(LanguageDirectoryActions.setSelectedLanguage(TEST_CASE_LANGUAGE_ID));
-  yield put(LanguageDirectoryActions.setSelectedEvaluator(TEST_CASE_EVALUATOR_ID));
+  // tab) goes back to using the student's assigned sub-chapter. Skipped when the caller (see
+  // runAllTestcases in WorkspaceSaga/index.ts) already switched once for the whole batch.
+  let selectedLanguageId: string | null = null;
+  let selectedEvaluatorId: string | null = null;
+  if (!skipLanguageSwitch) {
+    ({ selectedLanguageId, selectedEvaluatorId } = yield select(
+      (state: OverallState) => state.languageDirectory,
+    ));
+    yield put(LanguageDirectoryActions.setSelectedLanguage(TEST_CASE_LANGUAGE_ID));
+    yield put(LanguageDirectoryActions.setSelectedEvaluator(TEST_CASE_EVALUATOR_ID));
+  }
 
   try {
     yield call(
@@ -99,13 +145,15 @@ export function* runTestCaseConductor(
       workspaceLocation,
     );
   } finally {
-    if (selectedLanguageId) {
-      yield put(LanguageDirectoryActions.setSelectedLanguage(selectedLanguageId));
-      if (selectedEvaluatorId) {
-        yield put(LanguageDirectoryActions.setSelectedEvaluator(selectedEvaluatorId));
+    if (!skipLanguageSwitch) {
+      if (selectedLanguageId) {
+        yield put(LanguageDirectoryActions.setSelectedLanguage(selectedLanguageId));
+        if (selectedEvaluatorId) {
+          yield put(LanguageDirectoryActions.setSelectedEvaluator(selectedEvaluatorId));
+        }
+      } else {
+        yield put(LanguageDirectoryActions.clearSelectedLanguage());
       }
-    } else {
-      yield put(LanguageDirectoryActions.clearSelectedLanguage());
     }
   }
 
@@ -116,7 +164,12 @@ export function* runTestCaseConductor(
 
   let passed: boolean;
   if (lastOutput?.type === 'errors') {
-    yield put(actions.evalTestcaseFailure(lastOutput.errors, workspaceLocation, index));
+    const errors: SourceError[] = lastOutput.errors;
+    const correctedErrors =
+      prependLineOffset > 0
+        ? errors.map(error => shiftErrorLines(error, prependLineOffset))
+        : errors;
+    yield put(actions.evalTestcaseFailure(correctedErrors, workspaceLocation, index));
     passed = false;
   } else {
     // The testcase's own print(...) is the last line printed, since nothing runs
@@ -146,6 +199,7 @@ export function* runTestCaseConductor(
 export function* runTestCase(
   workspaceLocation: WorkspaceLocation,
   index: number,
+  skipLanguageSwitch?: boolean,
 ): Generator<StrictEffect, boolean, any> {
   const {
     editorTabs: {
@@ -174,6 +228,7 @@ export function* runTestCase(
       prepend,
       postpend,
       execTime,
+      skipLanguageSwitch,
     );
   }
 

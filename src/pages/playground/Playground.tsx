@@ -1,6 +1,7 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { type HotkeyItem, useHotkeys } from '@mantine/hooks';
+import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { Ace, Range } from 'ace-builds';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
@@ -18,13 +19,13 @@ import {
   setSessionDetails,
   setSharedbConnected,
 } from 'src/commons/collabEditing/CollabEditingActions';
-import ControlBarExecutionTime from 'src/commons/controlBar/ControlBarExecutionTime';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
 import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
+import sideContentManager, { useTabOwnerPath } from 'src/commons/sideContent/SideContentManager';
 import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 import { useAppDispatch, useAppSelector, useResponsive } from 'src/commons/utils/Hooks';
 import {
@@ -37,6 +38,8 @@ import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import {
   CONDUCTOR_STEPPER_TAB_ID,
+  CSE_EVALUATOR_CAPABILITY,
+  isToolEvaluator,
   STEPPER_EVALUATOR_CAPABILITY,
 } from 'src/features/conductor/stepperTab';
 import CseMachine from 'src/features/cseMachine/CseMachine';
@@ -77,7 +80,7 @@ import {
   type NormalEditorContainerProps,
 } from '../../commons/editor/EditorContainer';
 import type { Position } from '../../commons/editor/EditorTypes';
-import { overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';
+import { ensureLeadingSlash, overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';
 import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import MobileWorkspace, {
   type MobileWorkspaceProps,
@@ -117,7 +120,6 @@ export async function handleHash(
   hash: string,
   handlers: {
     handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
-    handleChangeExecTime: (execTime: number) => void;
   },
   workspaceLocation: WorkspaceLocation,
   dispatch: React.Dispatch<SourceActionType>,
@@ -144,12 +146,20 @@ export async function handleHash(
 
     // By default, create just the default file.
     const defaultFilePath = getDefaultFilePath(workspaceLocation);
+    // Some share links have historically encoded file paths without a leading slash (e.g.
+    // `playground/program.py` instead of `/playground/program.py`). Normalize them here so
+    // they match WORKSPACE_BASE_PATHS everywhere else they're used below (the BrowserFS write,
+    // and the removeEditorTabsForDirectory/addEditorTab dispatches).
     const files: Record<string, string> =
       qs.files === undefined
         ? {
             [defaultFilePath]: program,
           }
-        : parseQuery(decompressFromEncodedURIComponent(qs.files));
+        : Object.fromEntries(
+            Object.entries(parseQuery(decompressFromEncodedURIComponent(qs.files))).map(
+              ([filePath, contents]) => [ensureLeadingSlash(filePath), contents],
+            ),
+          );
     if (fileSystem !== null) {
       await overwriteFilesInWorkspace(workspaceLocation, fileSystem, files);
     }
@@ -165,9 +175,9 @@ export async function handleHash(
     dispatch(WorkspaceActions.setFolderMode(workspaceLocation, isFolderModeEnabled));
 
     // By default, open a single editor tab containing the default playground file.
-    const editorTabFilePaths = qs.tabs?.split(',').map(decompressFromEncodedURIComponent) ?? [
-      defaultFilePath,
-    ];
+    const editorTabFilePaths = (
+      qs.tabs?.split(',').map(decompressFromEncodedURIComponent) ?? [defaultFilePath]
+    ).map(ensureLeadingSlash);
     // Remove all editor tabs before populating with the ones from the query string.
     dispatch(
       WorkspaceActions.removeEditorTabsForDirectory(
@@ -200,17 +210,29 @@ export async function handleHash(
       const evaluatorId = qs.evaluator ? joinEvaluatorId(languageId, qs.evaluator) : undefined;
       dispatch(LanguageDirectoryActions.setSelectedLanguage(languageId, evaluatorId));
     }
-
-    const execTime = Math.max(convertParamToInt(qs.exec || '1000') || 1000, 1000);
-    if (execTime) {
-      handlers.handleChangeExecTime(execTime);
-    }
   }
 }
+
+// Stable empty-array identity for the `conductorEvaluators` selector's not-a-conductor-language
+// fallback - a fresh `[]` literal there would make useSelector see a "changed" value on every
+// render (it compares by reference), forcing this component to re-render in a loop.
+const EMPTY_EVALUATORS: readonly IEvaluatorDefinition[] = [];
 
 function Playground(props: PlaygroundProps) {
   const { isSicpEditor } = props;
   const workspaceLocation: WorkspaceLocation = isSicpEditor ? 'sicp' : 'playground';
+  // sideContentManager only shows tabs registered for whichever workspace it currently thinks is
+  // active (see its own getTabs()/setWorkspaceLocation() - it's a single app-wide value, not scoped
+  // per Provider). Previously the only place that ever called setWorkspaceLocation() was Run's own
+  // getPreparedConductorSaga, so a conductor tab (e.g. the Stepper's) that got registered by a mere
+  // preload - selecting the Stepper tab before ever pressing Run - forwarded into sideContentManager
+  // correctly, but stayed invisible: getTabs('sicp') still saw whatever location the last Run (on
+  // any workspace) had left behind, most often the default 'playground'. The tab only appeared once
+  // a Run finally called setWorkspaceLocation('sicp'). Setting it here as soon as this Playground
+  // instance knows its own location closes that gap for every conductor tab, not just the Stepper's.
+  useEffect(() => {
+    sideContentManager.setWorkspaceLocation(workspaceLocation);
+  }, [workspaceLocation]);
   const { isMobileBreakpoint } = useResponsive();
   const isVscode = useAppSelector(state => state.vscode.isVscode);
 
@@ -227,7 +249,6 @@ function Playground(props: PlaygroundProps) {
     editorSessionId,
     sessionDetails,
     stepLimit,
-    execTime,
     isRunning,
     isDebugging,
     output,
@@ -249,10 +270,14 @@ function Playground(props: PlaygroundProps) {
     googleUser: persistenceUser,
     githubOctokitObject,
   } = useAppSelector(state => state.session);
+  // When the Conductor framework is enabled, LanguageDirectorySaga applies the course's configured
+  // default language itself (see setCourseConfiguration/setLanguages handlers), so the legacy
+  // chapter/variant path below must not also apply it - `getLanguageConfig` has no entries for
+  // languages 5+ (Python Full, Scheme) and throws for them.
+  const conductorEnabled = useAppSelector(selectConductorEnable);
 
   const dispatch = useAppDispatch();
   const {
-    handleChangeExecTime,
     handleChapterSelect,
     handleEditorValueChange,
     handleSetEditorBreakpoints,
@@ -261,8 +286,6 @@ function Playground(props: PlaygroundProps) {
     handleUsingSubst,
   } = useMemo(() => {
     return {
-      handleChangeExecTime: (execTime: number) =>
-        dispatch(WorkspaceActions.changeExecTime(execTime, workspaceLocation)),
       handleChapterSelect: (chapter: Chapter, variant: Variant) =>
         dispatch(WorkspaceActions.chapterSelect(chapter, variant, workspaceLocation)),
       handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
@@ -350,8 +373,13 @@ function Playground(props: PlaygroundProps) {
 
   useEffect(() => {
     if (!hash) {
-      // If not a accessing via shared link, use the Source chapter and variant in the current course
-      if (courseSourceChapter && courseSourceVariant) {
+      // Under Conductor, LanguageDirectorySaga applies the course's configured default language
+      // itself (driven off the same courseSourceChapter, reinterpreted as a directory index - see
+      // getCourseDefaultSelectionSaga), so this legacy path must stand down: courseSourceChapter
+      // values above Source §4 (Python Full, Scheme) have no `getLanguageConfig` match and throw,
+      // and even for §1-4 this would resolve the wrong sublanguage (Source's, not the directory's).
+      if (!conductorEnabled && courseSourceChapter && courseSourceVariant) {
+        // If not a accessing via shared link, use the Source chapter and variant in the current course
         handleChapterSelect(courseSourceChapter, courseSourceVariant);
         // TODO: To migrate the state logic away from playgroundSourceChapter
         //       and playgroundSourceVariant into the language config instead
@@ -365,22 +393,16 @@ function Playground(props: PlaygroundProps) {
       }
       return;
     }
-    handleHash(
-      hash,
-      { handleChangeExecTime, handleChapterSelect },
-      workspaceLocation,
-      dispatch,
-      fileSystem,
-    );
+    handleHash(hash, { handleChapterSelect }, workspaceLocation, dispatch, fileSystem);
   }, [
     dispatch,
     fileSystem,
     hash,
+    conductorEnabled,
     courseSourceChapter,
     courseSourceVariant,
     workspaceLocation,
     handleChapterSelect,
-    handleChangeExecTime,
   ]);
 
   /**
@@ -529,29 +551,9 @@ function Playground(props: PlaygroundProps) {
     ],
   );
 
-  const chapterSelectButton = useMemo(
-    () => (
-      <ControlBarChapterSelect
-        handleChapterSelect={chapterSelectHandler}
-        isFolderModeEnabled={isFolderModeEnabled}
-        sourceChapter={languageConfig.chapter}
-        sourceVariant={languageConfig.variant}
-        key="chapter"
-        // While the Stepper tab is active the evaluator is pinned to the (hidden) stepper evaluator,
-        // so disable the dropdown: changing evaluator here would fight the tab-to-evaluator sync.
-        // The 'stepper' tab id only exists under the conductor, so this never disables Source's select.
-        disabled={usingRemoteExecution || selectedTab === CONDUCTOR_STEPPER_TAB_ID}
-      />
-    ),
-    [
-      chapterSelectHandler,
-      isFolderModeEnabled,
-      languageConfig.chapter,
-      languageConfig.variant,
-      usingRemoteExecution,
-      selectedTab,
-    ],
-  );
+  // conductorEnabled is read earlier (see its declaration above) - when true, the stepper (and
+  // other tools) are provided by web plugins loaded dynamically, so the legacy in-frontend tabs
+  // are hidden in favour of plugin tabs.
 
   const clearButton = useMemo(
     () =>
@@ -621,17 +623,6 @@ function Playground(props: PlaygroundProps) {
     githubSaveInfo,
     isFolderModeEnabled,
   ]);
-
-  const executionTime = useMemo(
-    () => (
-      <ControlBarExecutionTime
-        execTime={execTime}
-        handleChangeExecTime={handleChangeExecTime}
-        key="execution_time"
-      />
-    ),
-    [execTime, handleChangeExecTime],
-  );
 
   const stepperStepLimit = useMemo(
     () => (
@@ -714,6 +705,28 @@ function Playground(props: PlaygroundProps) {
     );
   }, [dispatch, isSicpEditor, props.initialEditorValueHash, queryString, shortURL]);
 
+  // Language Directory's foldersEnabled (defaults to true when the field is
+  // absent — legacy/non-directory languages, and any directory language
+  // predating this field, are unaffected). false for e.g. Python §1, which
+  // has no pair/list library to build the exports-transfer structure
+  // local-file imports rely on.
+  const foldersEnabled = useAppSelector(state => {
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    const lang = langId ? languageMap[langId] : undefined;
+    return lang?.foldersEnabled ?? true;
+  });
+
+  // Folder mode can already be active (restored from a share link's `isFolder`
+  // param, or left on from a previous language) when the user switches to a
+  // language that doesn't support it — the toggle button alone only stops
+  // *new* enabling, since it becomes disabled once foldersEnabled is false,
+  // which would otherwise leave the user stuck unable to turn it back off.
+  useEffect(() => {
+    if (!foldersEnabled && isFolderModeEnabled) {
+      dispatch(WorkspaceActions.setFolderMode(workspaceLocation, false));
+    }
+  }, [dispatch, foldersEnabled, isFolderModeEnabled, workspaceLocation]);
+
   const toggleFolderModeButton = useMemo(() => {
     return (
       <ControlBarToggleFolderModeButton
@@ -721,6 +734,7 @@ function Playground(props: PlaygroundProps) {
         isSessionActive={editorSessionId !== ''}
         isPersistenceActive={persistenceFile !== undefined || githubSaveInfo.repoName !== ''}
         toggleFolderMode={() => dispatch(WorkspaceActions.toggleFolderMode(workspaceLocation))}
+        foldersEnabled={foldersEnabled}
         key="folder"
       />
     );
@@ -731,6 +745,7 @@ function Playground(props: PlaygroundProps) {
     persistenceFile,
     editorSessionId,
     workspaceLocation,
+    foldersEnabled,
   ]);
 
   useEffect(() => {
@@ -746,34 +761,14 @@ function Playground(props: PlaygroundProps) {
   const hasCseSnapshots = useAppSelector(
     state => state.workspaces[workspaceLocation].cseSnapshots !== null,
   );
-  const conductorEvaluatorSupportsCse = useAppSelector(state => {
-    if (!selectConductorEnable(state)) {
-      return false;
-    }
-    const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
-    if (!selectedLanguageId || !selectedEvaluatorId) {
-      return false;
-    }
-    const lang = languageMap[selectedLanguageId];
-    const evaluator = lang?.evaluators.find(e => e.id === selectedEvaluatorId);
-    return (evaluator?.capabilities as string[] | undefined)?.includes('cse') ?? false;
-  });
   const conductorLanguageActive = useAppSelector(
     state => selectConductorEnable(state) && !!state.languageDirectory.selectedLanguageId,
   );
-  // For conductor languages: show CSE tab proactively when the evaluator declares "cse"
-  // capability, or reactively once snapshots arrive. For Source languages use the usual flag.
-  const shouldShowCseMachine = conductorLanguageActive
-    ? conductorEvaluatorSupportsCse || hasCseSnapshots
-    : languageConfig.supports.cseMachine || hasCseSnapshots;
   const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
-  // When the Conductor framework is enabled, the stepper (and other tools) are provided by web
-  // plugins loaded dynamically, so the legacy in-frontend tabs are hidden in favour of plugin tabs.
-  const conductorEnabled = useAppSelector(selectConductorEnable);
 
-  // Stepper tab wiring (conductor only). The Stepper tab is offered for any language that has a
-  // stepper-capability evaluator; opening the tab selects that (dropdown-hidden) evaluator so a Run
-  // produces steps, and leaving it restores the language's default evaluator. See the effect below.
+  // Stepper/CSE Machine tab wiring (conductor only). Each tool's tab is offered for any language that
+  // has a matching-capability evaluator; opening the tab selects that (dropdown-hidden) evaluator so a
+  // Run drives the tool, and leaving it restores the language's default evaluator. See the effect below.
   const selectedLanguageId = useAppSelector(state => state.languageDirectory.selectedLanguageId);
   const selectedEvaluatorId = useAppSelector(state => state.languageDirectory.selectedEvaluatorId);
   const stepperEvaluatorId = useAppSelector(state => {
@@ -787,39 +782,137 @@ function Playground(props: PlaygroundProps) {
     );
     return evaluator?.id ?? null;
   });
+  const cseEvaluatorId = useAppSelector(state => {
+    if (!selectConductorEnable(state)) {
+      return null;
+    }
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    const lang = langId ? languageMap[langId] : undefined;
+    const evaluator = lang?.evaluators.find(e =>
+      (e.capabilities as string[] | undefined)?.includes(CSE_EVALUATOR_CAPABILITY),
+    );
+    return evaluator?.id ?? null;
+  });
   const defaultEvaluatorId = useAppSelector(state => {
     if (!selectConductorEnable(state)) {
       return null;
     }
     const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
     const lang = langId ? languageMap[langId] : undefined;
-    const evaluator = lang?.evaluators.find(
-      e => !(e.capabilities as string[] | undefined)?.includes(STEPPER_EVALUATOR_CAPABILITY),
-    );
+    const evaluator = lang?.evaluators.find(e => {
+      const capabilities = e.capabilities as string[] | undefined;
+      return (
+        !capabilities?.includes(STEPPER_EVALUATOR_CAPABILITY) &&
+        !capabilities?.includes(CSE_EVALUATOR_CAPABILITY)
+      );
+    });
     return evaluator?.id ?? null;
   });
 
-  // Keep the selected evaluator in sync with the Stepper tab. Opening the tab selects the stepper
-  // evaluator (so a Run produces steps); leaving it restores the default. Each branch dispatches only
-  // on a real mismatch, so this converges rather than looping.
+  // For conductor languages: show the CSE tab proactively when the language has a cse-capability
+  // evaluator — regardless of which evaluator is currently selected, mirroring the Stepper tab below —
+  // or reactively once snapshots arrive. For Source languages use the usual flag.
+  const shouldShowCseMachine = conductorLanguageActive
+    ? cseEvaluatorId !== null || hasCseSnapshots
+    : languageConfig.supports.cseMachine || hasCseSnapshots;
+
+  // Every evaluator the current sublanguage offers (conductor only) - the full list, including the
+  // hidden tool evaluators, so lookups below can resolve any tab's owner by path or id.
+  const conductorEvaluators = useAppSelector(state => {
+    if (!selectConductorEnable(state)) {
+      return EMPTY_EVALUATORS;
+    }
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    return (langId ? languageMap[langId]?.evaluators : undefined) ?? EMPTY_EVALUATORS;
+  });
+
+  const selectedTabOwnerPath = useTabOwnerPath(selectedTab);
+
+  // The evaluator that owns the selected tab, or null for Home (which owns nothing - it's where the
+  // dropdown is free) and for tabs no conductor produced. Generalizes the old hardcoded Stepper/CSE
+  // checks: every tab a conductor registers now records which evaluator put it there (see
+  // DeferredConductorTabService/SideContentManager's TabOwner tracking).
+  const selectedTabOwnerId = useMemo<string | null>(() => {
+    if (!conductorEnabled || !selectedTab || selectedTab === SideContentType.introduction) {
+      return null;
+    }
+    const dynamicOwner =
+      selectedTabOwnerPath && conductorEvaluators.find(e => e.path === selectedTabOwnerPath);
+    if (dynamicOwner) {
+      return dynamicOwner.id;
+    }
+    // Fallback for the two tabs the Playground renders itself before their plugin's own tab ever
+    // registers (the CSE Machine tab, and the Stepper placeholder shown while its plugin loads).
+    if (selectedTab === CONDUCTOR_STEPPER_TAB_ID) {
+      return stepperEvaluatorId;
+    }
+    if (selectedTab === SideContentType.cseMachine) {
+      return cseEvaluatorId;
+    }
+    return null;
+  }, [
+    conductorEnabled,
+    selectedTab,
+    selectedTabOwnerPath,
+    conductorEvaluators,
+    stepperEvaluatorId,
+    cseEvaluatorId,
+  ]);
+
+  const chapterSelectButton = useMemo(
+    () => (
+      <ControlBarChapterSelect
+        handleChapterSelect={chapterSelectHandler}
+        isFolderModeEnabled={isFolderModeEnabled}
+        sourceChapter={languageConfig.chapter}
+        sourceVariant={languageConfig.variant}
+        key="chapter"
+        // While a tab owned by a specific evaluator is selected (Stepper, CSE Machine, or a
+        // tool-produced tab like Data Visualizer), the evaluator is pinned to whichever evaluator
+        // produced it, so disable the dropdown: changing evaluator here would fight the
+        // tab-to-evaluator sync below.
+        disabled={usingRemoteExecution || selectedTabOwnerId !== null}
+      />
+    ),
+    [
+      chapterSelectHandler,
+      isFolderModeEnabled,
+      languageConfig.chapter,
+      languageConfig.variant,
+      usingRemoteExecution,
+      selectedTabOwnerId,
+    ],
+  );
+
+  // Keep the selected evaluator in sync with whichever tab is selected. A tab with an owner (directly
+  // tracked, like Data Visualizer, or one of the two Playground-rendered fallbacks above) pins the
+  // dropdown to that evaluator so a Run drives the right tool; leaving it for a tab with no owner
+  // (Home, or an untracked tab) restores the default evaluator - but only if a *tool* evaluator
+  // (Stepper/CSE, unreachable except through their own tab) was selected. A normal selectable
+  // evaluator (e.g. whichever produced Data Visualizer) is left selected instead of being yanked away.
   useEffect(() => {
     if (!conductorEnabled) {
       return;
     }
-    const onStepperTab = selectedTab === CONDUCTOR_STEPPER_TAB_ID;
-    if (onStepperTab) {
-      if (stepperEvaluatorId && selectedEvaluatorId !== stepperEvaluatorId) {
-        dispatch(LanguageDirectoryActions.setSelectedEvaluator(stepperEvaluatorId));
+    if (selectedTabOwnerId) {
+      if (selectedEvaluatorId !== selectedTabOwnerId) {
+        dispatch(LanguageDirectoryActions.setSelectedEvaluator(selectedTabOwnerId));
       }
-    } else if (selectedEvaluatorId === stepperEvaluatorId && defaultEvaluatorId) {
+      return;
+    }
+    if (!selectedEvaluatorId || !defaultEvaluatorId || selectedEvaluatorId === defaultEvaluatorId) {
+      return;
+    }
+    const selected = conductorEvaluators.find(e => e.id === selectedEvaluatorId);
+    if (selected && isToolEvaluator(selected)) {
       dispatch(LanguageDirectoryActions.setSelectedEvaluator(defaultEvaluatorId));
     }
   }, [
     conductorEnabled,
-    stepperEvaluatorId,
-    defaultEvaluatorId,
+    selectedTabOwnerId,
     selectedEvaluatorId,
-    selectedTab,
+    defaultEvaluatorId,
+    conductorEvaluators,
     dispatch,
   ]);
 
@@ -891,10 +984,17 @@ function Playground(props: PlaygroundProps) {
 
     if (!usingRemoteExecution) {
       // Don't show the following when using remote execution
-      if (shouldShowDataVisualizer) {
+      // The legacy data visualizer tab is only shown with the old (non-conductor) pipeline — under
+      // the conductor, `languageConfig` (the old Source-only SALanguage config) is never updated when
+      // selecting a Conductor language, so `shouldShowDataVisualizer` stays stuck at whatever it was
+      // last set to (e.g. true, from the Source §4 default) and would otherwise show this dead tab
+      // alongside the real, dynamically-loaded Conductor plugin tab.
+      if (shouldShowDataVisualizer && !conductorEnabled) {
         tabs.push(makeDataVisualizerTabFrom(workspaceLocation));
       }
-      if (shouldShowCseMachine) {
+      // Under the conductor, CSE Machine's tab is pushed via afterDynamicTabs instead, so it lands
+      // after the dynamically-loaded plugin tabs (e.g. Data Visualizer) rather than before them.
+      if (shouldShowCseMachine && !conductorEnabled) {
         tabs.push(makeCseMachineTabFrom(workspaceLocation));
       }
       // The legacy stepper tab is only shown with the old (non-conductor) pipeline.
@@ -933,14 +1033,23 @@ function Playground(props: PlaygroundProps) {
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs].filter(({ id }) => !(id && desktopOnlyTabIds.includes(id)));
 
-  // For a conductor language that offers stepping, keep a placeholder Stepper tab visible so it can be
-  // opened before its evaluator loads. It sits after the dynamic tabs so the stepper plugin's live tab
-  // (registered once the evaluator is selected) lands in the same slot and de-duplicates the
-  // placeholder away (see SideContentProvider), avoiding both a disappearing tab and a duplicate.
-  const afterDynamicTabs: SideContentTab[] = useMemo(
-    () => (conductorEnabled && stepperEvaluatorId ? [makeConductorStepperPlaceholderTab()] : []),
-    [conductorEnabled, stepperEvaluatorId],
-  );
+  const afterDynamicTabs: SideContentTab[] = useMemo(() => {
+    const tabs: SideContentTab[] = [];
+    // Under the conductor, CSE Machine's tab lives here (rather than in `tabs`/beforeDynamicTabs)
+    // so it lands after the dynamically-loaded plugin tabs (e.g. Data Visualizer), not before them.
+    if (conductorEnabled && shouldShowCseMachine) {
+      tabs.push(makeCseMachineTabFrom(workspaceLocation));
+    }
+    // For a conductor language that offers stepping, keep a placeholder Stepper tab visible so it
+    // can be opened before its evaluator loads. It sits after the dynamic tabs so the stepper
+    // plugin's live tab (registered once the evaluator is selected) lands in the same slot and
+    // de-duplicates the placeholder away (see SideContentProvider), avoiding both a disappearing tab
+    // and a duplicate.
+    if (conductorEnabled && stepperEvaluatorId) {
+      tabs.push(makeConductorStepperPlaceholderTab());
+    }
+    return tabs;
+  }, [conductorEnabled, shouldShowCseMachine, stepperEvaluatorId, workspaceLocation]);
 
   const onLoadMethod = useCallback(
     (editor: Ace.Editor) => {
@@ -1149,11 +1258,15 @@ function Playground(props: PlaygroundProps) {
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
         persistenceButtons,
         githubButtons,
-        usingSubst || usingCse || isCseVariant(languageConfig.variant)
+        usingSubst ||
+        usingCse ||
+        isCseVariant(languageConfig.variant) ||
+        // Conductor languages (e.g. Python) whose selected sublanguage offers a stepper or CSE
+        // machine evaluator: their step limit is user-configurable too, driven by this same
+        // control through the /__cse_config__ file the host serves per run.
+        (conductorLanguageActive && (stepperEvaluatorId !== null || cseEvaluatorId !== null))
           ? stepperStepLimit
-          : isSourceLanguage(languageConfig.chapter)
-            ? executionTime
-            : null,
+          : null,
       ],
     },
     editorContainerProps: editorContainerProps,

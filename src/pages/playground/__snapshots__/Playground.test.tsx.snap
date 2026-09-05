@@ -151,8 +151,12 @@ exports[`Playground tests > Playground renders correctly 1`] = `
           <span
             class="bp6-popover-target"
           >
-            <button
-              class="bp6-button bp6-minimal"
+            <a
+              aria-disabled="true"
+              class="bp6-button bp6-disabled bp6-minimal"
+              disabled=""
+              role="button"
+              tabindex="-1"
             >
               <span
                 aria-hidden="true"
@@ -176,7 +180,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
               >
                 Folder
               </span>
-            </button>
+            </a>
           </span>
           <span
             class="bp6-popover-target"
@@ -245,104 +249,6 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                 </span>
               </button>
             </span>
-          </span>
-          <span
-            class="bp6-popover-target"
-          >
-            <div
-              class="bp6-control-group bp6-numeric-input"
-              role="group"
-            >
-              <div
-                class="bp6-input-group"
-              >
-                <span
-                  aria-hidden="true"
-                  class="bp6-icon bp6-icon-time"
-                  tabindex="-1"
-                >
-                  <svg
-                    data-icon="time"
-                    height="16"
-                    role="img"
-                    viewBox="0 0 16 16"
-                    width="16"
-                  >
-                    <path
-                      d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8m0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6m1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42z"
-                      fill-rule="evenodd"
-                    />
-                  </svg>
-                </span>
-                <input
-                  aria-valuemin="1000"
-                  aria-valuenow="1000"
-                  autocomplete="off"
-                  class="bp6-input"
-                  id="numericInput-0"
-                  min="1000"
-                  role="spinbutton"
-                  style="width: 80px;"
-                  tabindex="0"
-                  type="text"
-                  value="1000"
-                />
-              </div>
-              <div
-                class="bp6-button-group bp6-vertical bp6-fixed"
-              >
-                <button
-                  aria-controls="numericInput-0"
-                  aria-label="increment"
-                  class="bp6-button"
-                  type="button"
-                >
-                  <span
-                    aria-hidden="true"
-                    class="bp6-icon bp6-icon-chevron-up"
-                  >
-                    <svg
-                      data-icon="chevron-up"
-                      height="16"
-                      role="img"
-                      viewBox="0 0 16 16"
-                      width="16"
-                    >
-                      <path
-                        d="m12.71 9.29-4-4C8.53 5.11 8.28 5 8 5s-.53.11-.71.29l-4 4a1.003 1.003 0 0 0 1.42 1.42L8 7.41l3.29 3.29c.18.19.43.3.71.3a1.003 1.003 0 0 0 .71-1.71"
-                        fill-rule="evenodd"
-                      />
-                    </svg>
-                  </span>
-                </button>
-                <button
-                  aria-controls="numericInput-0"
-                  aria-label="decrement"
-                  class="bp6-button bp6-disabled"
-                  disabled=""
-                  tabindex="-1"
-                  type="button"
-                >
-                  <span
-                    aria-hidden="true"
-                    class="bp6-icon bp6-icon-chevron-down"
-                  >
-                    <svg
-                      data-icon="chevron-down"
-                      height="16"
-                      role="img"
-                      viewBox="0 0 16 16"
-                      width="16"
-                    >
-                      <path
-                        d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 0 0-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0 0 12 5"
-                        fill-rule="evenodd"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </div>
-            </div>
           </span>
         </div>
         <div
@@ -724,18 +630,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                             
 
                             <p>
-                              The book 
-                              <a
-                                href="https://sourceacademy.org/sicpjs/"
-                                rel="noopener noreferrer"
-                                target="_blank"
-                              >
-                                <em>
-                                  Structure and Interpretation of Computer Programs, JavaScript Edition
-                                </em>
-                              </a>
-                              
-uses JavaScript sublanguages that we call 
+                              This language is 
                               <a
                                 href="https://docs.sourceacademy.org/"
                                 rel="noopener noreferrer"
@@ -743,6 +638,17 @@ uses JavaScript sublanguages that we call
                               >
                                 <em>
                                   Source
+                                </em>
+                              </a>
+                              , a family of JavaScript sublanguages designed
+for the book 
+                              <a
+                                href="https://sourceacademy.org/sicpjs/"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                              >
+                                <em>
+                                  Structure and Interpretation of Computer Programs, JavaScript Edition
                                 </em>
                               </a>
                               . You have chosen the sublanguage 
@@ -1766,8 +1672,12 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
           <span
             class="bp6-popover-target"
           >
-            <button
-              class="bp6-button bp6-minimal"
+            <a
+              aria-disabled="true"
+              class="bp6-button bp6-disabled bp6-minimal"
+              disabled=""
+              role="button"
+              tabindex="-1"
             >
               <span
                 aria-hidden="true"
@@ -1791,7 +1701,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
               >
                 Folder
               </span>
-            </button>
+            </a>
           </span>
           <span
             class="bp6-popover-target"
@@ -1860,104 +1770,6 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                 </span>
               </button>
             </span>
-          </span>
-          <span
-            class="bp6-popover-target"
-          >
-            <div
-              class="bp6-control-group bp6-numeric-input"
-              role="group"
-            >
-              <div
-                class="bp6-input-group"
-              >
-                <span
-                  aria-hidden="true"
-                  class="bp6-icon bp6-icon-time"
-                  tabindex="-1"
-                >
-                  <svg
-                    data-icon="time"
-                    height="16"
-                    role="img"
-                    viewBox="0 0 16 16"
-                    width="16"
-                  >
-                    <path
-                      d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8m0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6m1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 0 0 1.42-1.42z"
-                      fill-rule="evenodd"
-                    />
-                  </svg>
-                </span>
-                <input
-                  aria-valuemin="1000"
-                  aria-valuenow="1000"
-                  autocomplete="off"
-                  class="bp6-input"
-                  id="numericInput-1"
-                  min="1000"
-                  role="spinbutton"
-                  style="width: 80px;"
-                  tabindex="0"
-                  type="text"
-                  value="1000"
-                />
-              </div>
-              <div
-                class="bp6-button-group bp6-vertical bp6-fixed"
-              >
-                <button
-                  aria-controls="numericInput-1"
-                  aria-label="increment"
-                  class="bp6-button"
-                  type="button"
-                >
-                  <span
-                    aria-hidden="true"
-                    class="bp6-icon bp6-icon-chevron-up"
-                  >
-                    <svg
-                      data-icon="chevron-up"
-                      height="16"
-                      role="img"
-                      viewBox="0 0 16 16"
-                      width="16"
-                    >
-                      <path
-                        d="m12.71 9.29-4-4C8.53 5.11 8.28 5 8 5s-.53.11-.71.29l-4 4a1.003 1.003 0 0 0 1.42 1.42L8 7.41l3.29 3.29c.18.19.43.3.71.3a1.003 1.003 0 0 0 .71-1.71"
-                        fill-rule="evenodd"
-                      />
-                    </svg>
-                  </span>
-                </button>
-                <button
-                  aria-controls="numericInput-1"
-                  aria-label="decrement"
-                  class="bp6-button bp6-disabled"
-                  disabled=""
-                  tabindex="-1"
-                  type="button"
-                >
-                  <span
-                    aria-hidden="true"
-                    class="bp6-icon bp6-icon-chevron-down"
-                  >
-                    <svg
-                      data-icon="chevron-down"
-                      height="16"
-                      role="img"
-                      viewBox="0 0 16 16"
-                      width="16"
-                    >
-                      <path
-                        d="M12 5c-.28 0-.53.11-.71.29L8 8.59l-3.29-3.3a1.003 1.003 0 0 0-1.42 1.42l4 4c.18.18.43.29.71.29s.53-.11.71-.29l4-4A1.003 1.003 0 0 0 12 5"
-                        fill-rule="evenodd"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </div>
-            </div>
           </span>
         </div>
         <div
@@ -2339,18 +2151,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                             
 
                             <p>
-                              The book 
-                              <a
-                                href="https://sourceacademy.org/sicpjs/"
-                                rel="noopener noreferrer"
-                                target="_blank"
-                              >
-                                <em>
-                                  Structure and Interpretation of Computer Programs, JavaScript Edition
-                                </em>
-                              </a>
-                              
-uses JavaScript sublanguages that we call 
+                              This language is 
                               <a
                                 href="https://docs.sourceacademy.org/"
                                 rel="noopener noreferrer"
@@ -2358,6 +2159,17 @@ uses JavaScript sublanguages that we call
                               >
                                 <em>
                                   Source
+                                </em>
+                              </a>
+                              , a family of JavaScript sublanguages designed
+for the book 
+                              <a
+                                href="https://sourceacademy.org/sicpjs/"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                              >
+                                <em>
+                                  Structure and Interpretation of Computer Programs, JavaScript Edition
                                 </em>
                               </a>
                               . You have chosen the sublanguage 

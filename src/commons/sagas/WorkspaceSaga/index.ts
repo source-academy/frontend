@@ -1,4 +1,4 @@
-import type { AutoCompleteEntry } from '@sourceacademy/autocomplete';
+import { type AutoCompleteEntry, WEB_PLUGIN_ID } from '@sourceacademy/common-autocomplete';
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { type Context, findDeclaration, getNames } from 'js-slang';
@@ -16,6 +16,12 @@ import { EventType } from '../../../features/achievement/AchievementTypes';
 import { selectConductorEnable } from '../../../features/conductor/flagConductorEnable';
 import CseMachine from '../../../features/cseMachine/CseMachine';
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
+import LanguageDirectoryActions from '../../../features/directory/LanguageDirectoryActions';
+import { selectDefaultFileExtension } from '../../../features/directory/LanguageDirectoryTypes';
+import {
+  TEST_CASE_EVALUATOR_ID,
+  TEST_CASE_LANGUAGE_ID,
+} from '../../../features/directory/testCaseLanguage';
 import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';
 import {
   defaultEditorValue,
@@ -74,7 +80,10 @@ const WorkspaceSaga = combineSagaHandlers({
 
     // If Folder mode is disabled and there are no open editor tabs, add an editor tab.
     if (editorTabs.length === 0) {
-      const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
+      const extension: string = yield select((state: OverallState) =>
+        selectDefaultFileExtension(state.languageDirectory),
+      );
+      const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.${extension}`;
       const fileSystem: FSModule | null = yield select(
         (state: OverallState) => state.fileSystem.inBrowserFileSystem,
       );
@@ -165,7 +174,13 @@ const WorkspaceSaga = combineSagaHandlers({
       const { conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } =
         yield call(getPreparedConductorSaga);
 
-      const plugin = conduit.lookupPlugin('__autocomplete_plugin_web') as AutoCompletePlugin;
+      let plugin: AutoCompletePlugin;
+      try {
+        plugin = conduit.lookupPlugin(WEB_PLUGIN_ID) as AutoCompletePlugin;
+      } catch {
+        return;
+      }
+
       if (plugin) {
         const channel: EventChannel<AutoCompleteEntry[]> = yield call(
           [plugin, 'complete'],
@@ -246,7 +261,6 @@ const WorkspaceSaga = combineSagaHandlers({
     const workspaceLocation = action.payload.workspaceLocation;
     const { replValue: code, execTime } = yield* selectWorkspace(workspaceLocation);
 
-    yield put(actions.beginInterruptExecution(workspaceLocation));
     yield put(actions.clearReplInput(workspaceLocation));
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
 
@@ -266,6 +280,13 @@ const WorkspaceSaga = combineSagaHandlers({
       );
       return;
     }
+
+    // Interrupt any evaluation currently in flight before starting this one - legacy,
+    // non-Conductor path only. The Conductor path above manages its own persistent REPL
+    // session (see evalCodeConductorSaga's doc comment) and must not be interrupted just
+    // because a new REPL line was submitted, or every line would tear down and rebuild the
+    // session instead of building on it.
+    yield put(actions.beginInterruptExecution(workspaceLocation));
 
     // Reset old context.errors
     context.errors = [];
@@ -514,18 +535,57 @@ const WorkspaceSaga = combineSagaHandlers({
         (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases,
       );
       // Avoid displaying message if there are no testcases
-      if (testcases.length > 0) {
-        // Display a message to the user
-        yield call(showSuccessMessage, `Running all testcases!`, 2000);
+      if (testcases.length === 0) {
+        return;
+      }
+
+      // Display a message to the user
+      yield call(showSuccessMessage, `Running all testcases!`, 2000);
+
+      // Grading always runs under TEST_CASE_LANGUAGE_ID/EVALUATOR_ID (see testCaseLanguage.ts) -
+      // switch once for this whole batch (rather than once per testcase inside
+      // runTestCaseConductor), since each switch tears down and rebuilds the Conductor session
+      // (conductorEvaluatorCache.ts's ensureConductorSessionSaga). Doing that up to 2N times in
+      // quick succession raced with Conductor's own internal teardown often enough to throw an
+      // uncaught "Conduit already terminated" from inside the vendored library - see
+      // source-academy/frontend#4232.
+      const isConductorEnabled: boolean = yield select(selectConductorEnable);
+      let selectedLanguageId: string | null = null;
+      let selectedEvaluatorId: string | null = null;
+      if (isConductorEnabled) {
+        ({ selectedLanguageId, selectedEvaluatorId } = yield select(
+          (state: OverallState) => state.languageDirectory,
+        ));
+        yield put(LanguageDirectoryActions.setSelectedLanguage(TEST_CASE_LANGUAGE_ID));
+        yield put(LanguageDirectoryActions.setSelectedEvaluator(TEST_CASE_EVALUATOR_ID));
+      }
+
+      try {
         for (const idx of testcases.keys()) {
           // break each testcase up into separate event loop iterations
           // so that the UI updates
           yield new Promise(resolve => setTimeout(resolve, 0));
 
-          const programSucceeded: boolean = yield call(runTestCase, workspaceLocation, idx);
+          const programSucceeded: boolean = yield call(
+            runTestCase,
+            workspaceLocation,
+            idx,
+            isConductorEnabled,
+          );
           // Prematurely terminate if execution of the program failed (not the testcase)
           if (!programSucceeded) {
             return;
+          }
+        }
+      } finally {
+        if (isConductorEnabled) {
+          if (selectedLanguageId) {
+            yield put(LanguageDirectoryActions.setSelectedLanguage(selectedLanguageId));
+            if (selectedEvaluatorId) {
+              yield put(LanguageDirectoryActions.setSelectedEvaluator(selectedEvaluatorId));
+            }
+          } else {
+            yield put(LanguageDirectoryActions.clearSelectedLanguage());
           }
         }
       }

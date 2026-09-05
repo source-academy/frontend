@@ -17,14 +17,22 @@ export async function initRagChat(tokens: Tokens): Promise<InitChatResponse> {
   return await response.json();
 }
 
+export type ScreenContext = {
+  code?: string;
+  question?: string;
+};
+
 export async function sendRagMessage(
   tokens: Tokens,
   userMessage: string,
+  screenContext?: ScreenContext,
 ): Promise<SendMessageResponse> {
   const response = await request('rag_chat/message', 'POST', {
     ...tokens,
     body: {
       message: userMessage,
+      code: screenContext?.code,
+      question: screenContext?.question,
     },
   });
   if (!response) {

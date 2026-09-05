@@ -1,3 +1,4 @@
+import { RunnerStatus } from '@sourceacademy/conductor/types';
 import {
   type Context,
   type IOptions,
@@ -12,6 +13,7 @@ import { Chapter, Variant } from 'js-slang/dist/langs';
 import { type Finished } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
+import type { Matcher } from 'redux-saga-test-plan/matchers';
 import * as matchers from 'redux-saga-test-plan/matchers';
 import { showFullJSDisclaimer, showFullTSDisclaimer } from 'src/commons/utils/WarningDialogHelper';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
@@ -25,10 +27,16 @@ vi.mock('../../pages/createStore', () => ({
 }));
 
 import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
+import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
+import {
+  TEST_CASE_EVALUATOR_ID,
+  TEST_CASE_LANGUAGE_ID,
+} from '../../features/directory/testCaseLanguage';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import InterpreterActions from '../application/actions/InterpreterActions';
 import SessionActions from '../application/actions/SessionActions';
 import {
+  defaultEditorValue,
   defaultState,
   fullJSLanguage,
   fullTSLanguage,
@@ -43,12 +51,18 @@ import {
 } from '../assessment/AssessmentTypes';
 import { mockRuntimeContext } from '../mocks/ContextMocks';
 import { mockTestcases } from '../mocks/GradingMocks';
+import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 import type { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+import {
+  getPreparedConductorSaga,
+  preloadConductorEvaluatorSaga,
+} from './helpers/conductorEvaluatorCache';
+import { getEvaluatorDefinitionSaga } from './LanguageDirectorySaga';
 import { getVersionHistory, updateVersionName } from './RequestsSaga';
 import workspaceSaga from './WorkspaceSaga';
-import { evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
+import { evalCodeConductorSaga, evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
 import { evalEditorSaga } from './WorkspaceSaga/helpers/evalEditor';
 import { evalTestCode } from './WorkspaceSaga/helpers/evalTestCode';
 import { insertDebuggerStatements } from './WorkspaceSaga/helpers/insertDebuggerStatements';
@@ -94,6 +108,49 @@ beforeEach(() => {
   (window as any).Inspector = vi.fn();
   (window as any).Inspector.highlightClean = vi.fn();
   (window as any).Inspector.highlightLine = vi.fn();
+});
+
+function withSelectedLanguage(
+  state: OverallState,
+  language: Partial<OverallState['languageDirectory']['languageMap'][string]> & { id: string },
+): OverallState {
+  return {
+    ...state,
+    languageDirectory: {
+      ...state.languageDirectory,
+      selectedLanguageId: language.id,
+      languageMap: { ...state.languageDirectory.languageMap, [language.id]: language as any },
+    },
+  };
+}
+
+describe('SET_FOLDER_MODE', () => {
+  test('names the added editor tab using the selected language defaultFileExtension', () => {
+    const workspaceLocation = 'playground';
+    const currentWorkspaceFields: Partial<WorkspaceState> = {
+      isFolderModeEnabled: false,
+      editorTabs: [],
+    };
+    const stateWithNoTabs = withSelectedLanguage(
+      generateDefaultState(workspaceLocation, currentWorkspaceFields),
+      { id: 'python2', name: 'Python §2', evaluators: [], defaultFileExtension: 'py' },
+    );
+
+    return expectSaga(workspaceSaga)
+      .withState(stateWithNoTabs)
+      .put(
+        actions.addEditorTab(
+          workspaceLocation,
+          `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.py`,
+          defaultEditorValue,
+        ),
+      )
+      .dispatch({
+        type: WorkspaceActions.setFolderMode.type,
+        payload: { workspaceLocation, isFolderModeEnabled: false },
+      })
+      .silentRun();
+  });
 });
 
 describe('TOGGLE_FOLDER_MODE', () => {
@@ -576,6 +633,330 @@ describe('EVAL_EDITOR under Conductor', () => {
       })
       .silentRun();
   });
+
+  test("names the entrypoint using the selected language's defaultFileExtension", () => {
+    const workspaceLocation = 'playground';
+    const editorValue = 'print(1)';
+    const execTime = 1000;
+    const context = createContext();
+
+    const newDefaultState = {
+      ...withSelectedLanguage(
+        generateDefaultState(workspaceLocation, {
+          editorTabs: [{ value: editorValue, highlightedLines: [], breakpoints: [] }],
+          programPrependValue: '',
+          execTime,
+          context,
+        }),
+        { id: 'python2', name: 'Python §2', evaluators: [], defaultFileExtension: 'py' },
+      ),
+      featureFlags: { modifiedFlags: { [flagConductorEnable.flagName]: true } },
+    };
+
+    const entrypointFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.py`;
+
+    return expectSaga(workspaceSaga)
+      .withState(newDefaultState)
+      .provide([[matchers.call.fn(evalCodeSaga), undefined]])
+      .call.like({
+        fn: evalCodeSaga,
+        args: [{ [entrypointFilePath]: editorValue }],
+      })
+      .dispatch({
+        type: WorkspaceActions.evalEditor.type,
+        payload: { workspaceLocation },
+      })
+      .silentRun();
+  });
+});
+
+/**
+ * A minimal fake Conductor host driving evalCodeConductorSaga's real session-management logic
+ * while faking only the underlying Worker transport. startEvaluator()/sendChunk() each simulate a
+ * chunk settling on the next microtask by calling back through whatever handleStatuses (spawned
+ * for real, not mocked) assigned to hostPlugin.receiveStatusUpdate - mirroring conductor's own
+ * BasicEvaluator chunk loop (RUNNING, then EVAL_READY between chunks - see
+ * source-academy/conductor#66), unless overridden via `nextStatus`.
+ *
+ * `options.error`, if given, is delivered through hostPlugin.receiveError on the *next* settle -
+ * simulating the runner reporting an error (e.g. a py-slang EvaluatorError) on this chunk, the way
+ * conductor's RunnerPlugin.sendError does - before the chunk's own status update. Like
+ * `setNextStatus` below, it can also be changed later via `setNextError` for a later chunk (e.g. a
+ * REPL line sent to an already-live session) sent to this same fake.
+ */
+function makeFakeConductor(options: { error?: unknown } = {}) {
+  const sentChunks: string[] = [];
+  const terminate = vi.fn();
+  let nextStatus: RunnerStatus = RunnerStatus.EVAL_READY;
+  let nextError: unknown = options.error;
+  const settle = () => {
+    Promise.resolve().then(() => {
+      if (nextError !== undefined) {
+        hostPlugin.receiveError?.(nextError);
+      }
+      hostPlugin.receiveStatusUpdate?.(RunnerStatus.RUNNING, true, 0);
+      hostPlugin.receiveStatusUpdate?.(nextStatus, true, 0);
+    });
+  };
+  const hostPlugin: any = {
+    startEvaluator: vi.fn(() => settle()),
+    sendChunk: vi.fn((chunk: string) => {
+      sentChunks.push(chunk);
+      settle();
+    }),
+  };
+  const csePlugin: any = { sendSnapshots: vi.fn() };
+  const conduit: any = { terminate };
+  return {
+    hostPlugin,
+    csePlugin,
+    conduit,
+    sentChunks,
+    terminate,
+    /** Makes the *next* settle() report `status` instead of the default EVAL_READY - e.g.
+     * RunnerStatus.STOPPED, to simulate the runner (or Stop) ending the session. */
+    setNextStatus: (status: RunnerStatus) => {
+      nextStatus = status;
+    },
+    /** Makes the *next* settle() also deliver `error` through hostPlugin.receiveError first, or
+     * stop delivering one if called with `undefined`. */
+    setNextError: (error: unknown) => {
+      nextError = error;
+    },
+  };
+}
+
+describe('EVAL_REPL session persistence under Conductor', () => {
+  const workspaceLocation: WorkspaceLocation = 'playground';
+
+  test('a REPL chunk after a Run reuses the live session instead of requesting a new conductor', async () => {
+    const fake = makeFakeConductor();
+    const context = createContext();
+    const state = generateDefaultState(workspaceLocation, { context });
+    const providers: [Matcher, unknown][] = [
+      [matchers.call.fn(getEvaluatorDefinitionSaga), { path: 'fake-evaluator-path' }],
+      [matchers.call.fn(getPreparedConductorSaga), fake],
+      [matchers.spawn.fn(preloadConductorEvaluatorSaga), undefined],
+    ];
+
+    // A Run establishes the session.
+    await expectSaga(
+      evalCodeConductorSaga,
+      { '/code.js': 'x = 1' },
+      '/code.js',
+      context,
+      workspaceLocation,
+      WorkspaceActions.evalEditor.type,
+    )
+      .withState(state)
+      .provide([...providers])
+      .call.fn(getPreparedConductorSaga)
+      .silentRun();
+
+    expect(fake.hostPlugin.startEvaluator).toHaveBeenCalledTimes(1);
+
+    // A REPL line reuses that same session: no new conductor requested, the line is sent as a
+    // chunk to the already-live evaluator, and (since this test ends it with STOPPED) the
+    // session's own conduit - not a fresh one - is what gets terminated.
+    fake.setNextStatus(RunnerStatus.STOPPED);
+    await expectSaga(
+      evalCodeConductorSaga,
+      { '/code.js': 'print(x)' },
+      '/code.js',
+      context,
+      workspaceLocation,
+      WorkspaceActions.evalRepl.type,
+    )
+      .withState(state)
+      .provide([...providers])
+      .not.call.fn(getPreparedConductorSaga)
+      .silentRun();
+
+    expect(fake.sentChunks).toEqual(['print(x)']);
+    expect(fake.terminate).toHaveBeenCalledTimes(1);
+  });
+
+  test('a REPL submission with no prior Run establishes its own session from just that line', async () => {
+    const fake = makeFakeConductor();
+    const context = createContext();
+    const state = generateDefaultState(workspaceLocation, { context });
+
+    fake.setNextStatus(RunnerStatus.STOPPED);
+    await expectSaga(
+      evalCodeConductorSaga,
+      { '/code.js': 'x = 1' },
+      '/code.js',
+      context,
+      workspaceLocation,
+      WorkspaceActions.evalRepl.type,
+    )
+      .withState(state)
+      .provide([
+        [matchers.call.fn(getEvaluatorDefinitionSaga), { path: 'fake-evaluator-path' }],
+        [matchers.call.fn(getPreparedConductorSaga), fake],
+        [matchers.spawn.fn(preloadConductorEvaluatorSaga), undefined],
+      ])
+      .call.fn(getPreparedConductorSaga)
+      .silentRun();
+
+    expect(fake.hostPlugin.startEvaluator).toHaveBeenCalledWith('/code.js');
+    expect(fake.terminate).toHaveBeenCalledTimes(1);
+  });
+
+  test('the evalRepl handler does not dispatch beginInterruptExecution before the Conductor branch', () => {
+    // Dispatch-level check (through the real workspaceSaga -> evalRepl handler, not
+    // evalCodeConductorSaga directly, unlike the tests above): a regression where
+    // workspaceSaga's evalRepl handler dispatches beginInterruptExecution before reaching the
+    // Conductor branch would end the live REPL session on every single submission, even though
+    // evalCodeConductorSaga itself never called anything that would catch that.
+    const replValue = 'x = 1';
+    const newState = {
+      ...generateDefaultState(workspaceLocation, { replValue }),
+      featureFlags: { modifiedFlags: { [flagConductorEnable.flagName]: true } },
+    };
+
+    return expectSaga(workspaceSaga)
+      .withState(newState)
+      .provide([[matchers.call.fn(evalCodeConductorSaga), undefined]])
+      .not.put(InterpreterActions.beginInterruptExecution(workspaceLocation))
+      .call.like({ fn: evalCodeConductorSaga })
+      .dispatch({
+        type: WorkspaceActions.evalRepl.type,
+        payload: { workspaceLocation },
+      })
+      .silentRun();
+  });
+});
+
+describe('Conductor errors subtract the prepend line shift (source-academy/frontend#4244)', () => {
+  const workspaceLocation: WorkspaceLocation = 'playground';
+
+  test("a one-line prepend shifts a reported error line back to the student's own line", async () => {
+    // Mirrors the reported bug exactly: a one-line PREPEND made every error line off-by-one.
+    // evalEditorSaga concatenates `${prepend}\n${entrypoint}` before this saga ever runs (see
+    // toConductorSourceError's doc comment), so the student's own first line becomes combined-file
+    // line 2 - simulate the evaluator (e.g. py-slang) reporting an error there via a structured,
+    // EvaluatorError-shaped object (line/column/rawMessage own properties survive a Worker's
+    // postMessage structured clone even though the class prototype doesn't).
+    const programPrependValue = 'COUNTER = 0';
+    const editorValue = 'undefined_name';
+    const entrypointFilePath = '/code.py';
+    const fakeError = {
+      name: 'EvaluatorRuntimeError',
+      line: 2,
+      column: 0,
+      rawMessage: "NameError: name 'undefined_name' is not defined",
+      message: "2:0: NameError: name 'undefined_name' is not defined",
+    };
+    const fake = makeFakeConductor({ error: fakeError });
+    fake.setNextStatus(RunnerStatus.STOPPED);
+    const context = createContext();
+    const state = generateDefaultState(workspaceLocation, {
+      context,
+      programPrependValue,
+      editorTabs: [{ value: editorValue, highlightedLines: [], breakpoints: [] }],
+      activeEditorTabIndex: 0,
+    });
+
+    let capturedErrors: SourceError[] | undefined;
+    await expectSaga(
+      evalCodeConductorSaga,
+      { [entrypointFilePath]: `${programPrependValue}\n${editorValue}` },
+      entrypointFilePath,
+      context,
+      workspaceLocation,
+      WorkspaceActions.evalEditor.type,
+    )
+      .withState(state)
+      .provide([
+        [matchers.call.fn(getEvaluatorDefinitionSaga), { path: 'fake-evaluator-path' }],
+        [matchers.call.fn(getPreparedConductorSaga), fake],
+        [matchers.spawn.fn(preloadConductorEvaluatorSaga), undefined],
+        {
+          put(effect, next) {
+            if (effect.action.type === InterpreterActions.appendInterpreterError.type) {
+              capturedErrors = effect.action.payload.errors;
+            }
+            return next();
+          },
+        },
+      ])
+      .silentRun();
+
+    expect(capturedErrors).toHaveLength(1);
+    // Corrected back to the student's own line 1 (2 minus the 1-line prepend), not the raw
+    // combined-file line 2 the evaluator actually reported.
+    expect(capturedErrors![0].location.start.line).toBe(1);
+    expect(capturedErrors![0].explain()).toBe("NameError: name 'undefined_name' is not defined");
+  });
+
+  test("a REPL chunk sent to an already-live session is not shifted by that session's own prepend", async () => {
+    // The offset only applies to a session's initial entrypoint chunk (which had prepend
+    // concatenated onto it) - a REPL line sent afterwards is raw input with no prepend involved,
+    // so an error there must be reported as-is, not shifted by the Run's prepend all over again.
+    const programPrependValue = 'COUNTER = 0';
+    const context = createContext();
+    const state = generateDefaultState(workspaceLocation, { context, programPrependValue });
+    const providers: [Matcher, unknown][] = [
+      [matchers.call.fn(getEvaluatorDefinitionSaga), { path: 'fake-evaluator-path' }],
+      [matchers.spawn.fn(preloadConductorEvaluatorSaga), undefined],
+    ];
+
+    // A Run establishes the session (no error on this chunk). handleErrors is spawn()ed as a
+    // detached task inside *this* expectSaga call and keeps running (and keeps dispatching
+    // through *this* call's own store/middleware) after this call's own silentRun() resolves -
+    // it's the same task that later handles the REPL chunk's error below, so the put-capturing
+    // provider has to be registered here, not on the second expectSaga call, to see it.
+    let capturedErrors: SourceError[] | undefined;
+    const runFake = makeFakeConductor();
+    await expectSaga(
+      evalCodeConductorSaga,
+      { '/code.py': `${programPrependValue}\nx = 1` },
+      '/code.py',
+      context,
+      workspaceLocation,
+      WorkspaceActions.evalEditor.type,
+    )
+      .withState(state)
+      .provide([
+        ...providers,
+        [matchers.call.fn(getPreparedConductorSaga), runFake],
+        {
+          put(effect, next) {
+            if (effect.action.type === InterpreterActions.appendInterpreterError.type) {
+              capturedErrors = effect.action.payload.errors;
+            }
+            return next();
+          },
+        },
+      ])
+      .silentRun();
+
+    // A later REPL line reuses that live session and errors on its own (unshifted) line 1.
+    runFake.setNextError({
+      name: 'EvaluatorRuntimeError',
+      line: 1,
+      column: 0,
+      rawMessage: "NameError: name 'undefined_name' is not defined",
+      message: "1:0: NameError: name 'undefined_name' is not defined",
+    });
+    runFake.setNextStatus(RunnerStatus.STOPPED);
+    await expectSaga(
+      evalCodeConductorSaga,
+      { '/code.py': 'undefined_name' },
+      '/code.py',
+      context,
+      workspaceLocation,
+      WorkspaceActions.evalRepl.type,
+    )
+      .withState(state)
+      .provide([...providers])
+      .silentRun();
+
+    expect(capturedErrors).toHaveLength(1);
+    // Reported as-is (line 1), not shifted down by the Run's prepend all over again.
+    expect(capturedErrors![0].location.start.line).toBe(1);
+  });
 });
 
 describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
@@ -793,6 +1174,108 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
         },
       })
       .silentRun();
+  });
+
+  test('excludes prepend from a Conductor testcase error location (source-academy/frontend#4244)', () => {
+    const context = createContext();
+    // Two lines, so combinedCode's own line 3 is `editorValue`'s line 1 - see
+    // runTestCaseConductor's combinedCode, which joins prepend/value/.../testcase with '\n'.
+    const twoLinePrepend = 'COUNTER = 0\nDOUBLE = 2';
+    const errors: SourceError[] = [
+      {
+        type: ErrorType.RUNTIME,
+        severity: 'Error' as any,
+        location: { start: { line: 3, column: 2 }, end: { line: 3, column: 2 } },
+        explain: () => 'boom',
+        elaborate: () => '',
+      },
+    ];
+    let capturedErrors: SourceError[] | undefined;
+
+    return expectSaga(
+      runTestCaseConductor,
+      workspaceLocation,
+      testcaseId,
+      editorValue,
+      testcaseProgram,
+      TestcaseTypes.public,
+      twoLinePrepend,
+      programPostpendValue,
+      execTime,
+    )
+      .withState(
+        generateDefaultState(workspaceLocation, {
+          context,
+          output: [{ type: 'errors', errors } as any],
+        }),
+      )
+      .provide([
+        [matchers.call.fn(evalCodeSaga), undefined],
+        {
+          put(effect, next) {
+            if (effect.action.type === InterpreterActions.evalTestcaseFailure.type) {
+              capturedErrors = effect.action.payload.value;
+            }
+            return next();
+          },
+        },
+      ])
+      .silentRun()
+      .then(() => {
+        expect(capturedErrors).toHaveLength(1);
+        // Reported as line 1 of the student's own code, not line 3 of the prepend-inclusive
+        // combined file.
+        expect(capturedErrors![0].location.start.line).toBe(1);
+        expect(capturedErrors![0].location.end.line).toBe(1);
+      });
+  });
+
+  test('leaves a Conductor testcase error with no location info (line 0) unshifted', () => {
+    const context = createContext();
+    const errors: SourceError[] = [
+      {
+        type: ErrorType.RUNTIME,
+        severity: 'Error' as any,
+        location: { start: { line: 0, column: 0 }, end: { line: 0, column: 0 } },
+        explain: () => 'boom',
+        elaborate: () => '',
+      },
+    ];
+    let capturedErrors: SourceError[] | undefined;
+
+    return expectSaga(
+      runTestCaseConductor,
+      workspaceLocation,
+      testcaseId,
+      editorValue,
+      testcaseProgram,
+      TestcaseTypes.public,
+      programPrependValue,
+      programPostpendValue,
+      execTime,
+    )
+      .withState(
+        generateDefaultState(workspaceLocation, {
+          context,
+          output: [{ type: 'errors', errors } as any],
+        }),
+      )
+      .provide([
+        [matchers.call.fn(evalCodeSaga), undefined],
+        {
+          put(effect, next) {
+            if (effect.action.type === InterpreterActions.evalTestcaseFailure.type) {
+              capturedErrors = effect.action.payload.value;
+            }
+            return next();
+          },
+        },
+      ])
+      .silentRun()
+      .then(() => {
+        expect(capturedErrors).toHaveLength(1);
+        expect(capturedErrors![0].location.start.line).toBe(0);
+      });
   });
 });
 
@@ -1626,15 +2109,15 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
       })
       .call(showSuccessMessage, 'Running all testcases!', 2000)
       .call.fn(evalEditorSaga)
-      .call(runTestCase, workspaceLocation, 0)
-      .call(runTestCase, workspaceLocation, 1)
-      .call(runTestCase, workspaceLocation, 2)
-      .call(runTestCase, workspaceLocation, 3)
+      .call(runTestCase, workspaceLocation, 0, false)
+      .call(runTestCase, workspaceLocation, 1, false)
+      .call(runTestCase, workspaceLocation, 2, false)
+      .call(runTestCase, workspaceLocation, 3, false)
       .provide([
-        [call(runTestCase, workspaceLocation, 0), true],
-        [call(runTestCase, workspaceLocation, 1), true],
-        [call(runTestCase, workspaceLocation, 2), true],
-        [call(runTestCase, workspaceLocation, 3), true],
+        [call(runTestCase, workspaceLocation, 0, false), true],
+        [call(runTestCase, workspaceLocation, 1, false), true],
+        [call(runTestCase, workspaceLocation, 2, false), true],
+        [call(runTestCase, workspaceLocation, 3, false), true],
       ])
       .silentRun(2000);
   });
@@ -1652,12 +2135,77 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
       })
       .call(showSuccessMessage, 'Running all testcases!', 2000)
       .call.fn(evalEditorSaga)
-      .call(runTestCase, workspaceLocation, 0)
-      .not.call(runTestCase, workspaceLocation, 1)
-      .not.call(runTestCase, workspaceLocation, 2)
-      .not.call(runTestCase, workspaceLocation, 3)
-      .provide([[call(runTestCase, workspaceLocation, 0), false]])
+      .call(runTestCase, workspaceLocation, 0, false)
+      .not.call(runTestCase, workspaceLocation, 1, false)
+      .not.call(runTestCase, workspaceLocation, 2, false)
+      .not.call(runTestCase, workspaceLocation, 3, false)
+      .provide([[call(runTestCase, workspaceLocation, 0, false), false]])
       .silentRun(2000);
+  });
+
+  test('under Conductor, switches the test-case language once for the whole batch instead of once per testcase', () => {
+    state = {
+      ...generateDefaultState(workspaceLocation, {
+        editorTestcases: mockTestcases,
+      }),
+      featureFlags: { modifiedFlags: { [flagConductorEnable.flagName]: true } },
+      languageDirectory: {
+        ...defaultState.languageDirectory,
+        selectedLanguageId: 'python1',
+        selectedEvaluatorId: 'python1Py2js',
+      },
+    };
+
+    const capturedSkipFlags: unknown[] = [];
+    let setTestCaseLanguageCount = 0;
+    let setTestCaseEvaluatorCount = 0;
+    let restoreLanguageCount = 0;
+    let restoreEvaluatorCount = 0;
+
+    return expectSaga(workspaceSaga)
+      .withState(state)
+      .provide([
+        {
+          call(effect, next) {
+            if (effect.fn === runTestCase) {
+              capturedSkipFlags.push(effect.args[2]);
+              return true;
+            }
+            return next();
+          },
+          put(effect, next) {
+            if (effect.action.type === LanguageDirectoryActions.setSelectedLanguage.type) {
+              if (effect.action.payload.languageId === TEST_CASE_LANGUAGE_ID) {
+                setTestCaseLanguageCount++;
+              } else if (effect.action.payload.languageId === 'python1') {
+                restoreLanguageCount++;
+              }
+            }
+            if (effect.action.type === LanguageDirectoryActions.setSelectedEvaluator.type) {
+              if (effect.action.payload.evaluatorId === TEST_CASE_EVALUATOR_ID) {
+                setTestCaseEvaluatorCount++;
+              } else if (effect.action.payload.evaluatorId === 'python1Py2js') {
+                restoreEvaluatorCount++;
+              }
+            }
+            return next();
+          },
+        },
+        [matchers.call.fn(evalEditorSaga), undefined],
+        [matchers.call.fn(showSuccessMessage), undefined],
+      ])
+      .dispatch({
+        type: WorkspaceActions.runAllTestcases.type,
+        payload: { workspaceLocation },
+      })
+      .run(2000)
+      .then(() => {
+        expect(capturedSkipFlags).toEqual([true, true, true, true]);
+        expect(setTestCaseLanguageCount).toBe(1);
+        expect(setTestCaseEvaluatorCount).toBe(1);
+        expect(restoreLanguageCount).toBe(1);
+        expect(restoreEvaluatorCount).toBe(1);
+      });
   });
 });
 
