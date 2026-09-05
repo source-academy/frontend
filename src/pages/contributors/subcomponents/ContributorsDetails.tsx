@@ -47,18 +47,6 @@ function ContributorsDetails() {
             <br />
             <strong>(Frontend and Plugins)</strong>
           </p>
-          {dot}
-          <p>
-            Boyd Anderson,
-            <br />
-            Martin Henz,
-            <br />
-            Low Kok Lim,
-            <br />
-            Sanka Rasnayaka
-            <br />
-            <strong>(Coordination)</strong>
-          </p>
         </div>
         <div className={classes['hallOfFame']}>
           <H5>
