@@ -1,3 +1,4 @@
+import type { SlingClient } from '@sourceacademy/sling-client';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 import type { OverallState } from 'src/commons/application/ApplicationTypes';
 import { actions } from 'src/commons/utils/ActionsHelper';
@@ -7,6 +8,10 @@ import { createEv3Conductor } from './createEv3Conductor';
 import RemoteExecutionConductorActions from './RemoteExecutionConductorActions';
 
 let activeConductor: ReturnType<typeof createEv3Conductor> | null = null;
+// The client activeConductor was built against - if a run comes in for a different client (the
+// user reconnected, or switched devices), the old conductor is still wired to the old client's
+// events and must be torn down and rebuilt rather than reused as-is.
+let activeConductorClient: SlingClient | null = null;
 
 function* handleConductorRun(
   action: ReturnType<typeof RemoteExecutionConductorActions.remoteExecConductorRun>,
@@ -25,8 +30,15 @@ function* handleConductorRun(
   const { files, entrypointFilePath } = action.payload;
   const code = files[entrypointFilePath];
 
+  if (activeConductor && activeConductorClient !== session.connection.client) {
+    activeConductor.conduit.terminate?.();
+    activeConductor = null;
+    activeConductorClient = null;
+  }
+
   if (!activeConductor) {
     activeConductor = yield call(createEv3Conductor, session.connection.client);
+    activeConductorClient = session.connection.client;
   }
 
   yield call([activeConductor!.plugin, activeConductor!.plugin.run], code);
@@ -35,6 +47,7 @@ function* handleConductorRun(
 function* handleConductorDisconnect(): any {
   activeConductor?.conduit.terminate?.();
   activeConductor = null;
+  activeConductorClient = null;
   yield; // satisfies require-yield
 }
 

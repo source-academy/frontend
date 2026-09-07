@@ -49,7 +49,10 @@ export function createEv3Conductor(client: SlingClient): {
   client.on('monitor', message => {
     const port = message[0].split(':')[1];
     const key = `port${port.substring(port.length - 1)}` as keyof Ev3DevicePeripherals;
-    const currentSession = store.getState().session.remoteExecutionSession!;
+    const currentSession = store.getState().session.remoteExecutionSession;
+    if (!currentSession) {
+      return;
+    }
 
     const dispatchAction = (peripheralData: Ev3MotorData | Ev3SensorData) =>
       store.dispatch(
