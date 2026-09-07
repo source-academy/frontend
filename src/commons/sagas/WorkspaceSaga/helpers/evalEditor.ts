@@ -3,8 +3,8 @@ import { Variant } from 'js-slang/dist/langs';
 import { call, put, select, type StrictEffect } from 'redux-saga/effects';
 import { featureSelector } from 'src/commons/featureFlags/featureSelector';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
-import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import CseMachine from 'src/features/cseMachine/CseMachine';
+import { flagConductorEv3Enable } from 'src/features/remoteExecutionConductor/flagConductorEv3Enable';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
@@ -60,7 +60,11 @@ export function* evalEditorSaga(
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
-    const isConductorEv3: boolean = yield select(featureSelector(flagConductorEnable));
+    // Deliberately gated on the EV3-specific flag, not the general flagConductorEnable (which
+    // defaults to true) - the legacy Source path (js-slang -> SVML -> SlingClient, see
+    // RemoteExecutionSaga.ts) must stay the default for every device until the Conductor/py-slang
+    // pipeline is actually finished end-to-end, regardless of whether Conductor itself is on.
+    const isConductorEv3: boolean = yield select(featureSelector(flagConductorEv3Enable));
     if (isConductorEv3) {
       yield put(actions.remoteExecConductorRun(files, entrypointFilePath));
     } else {
