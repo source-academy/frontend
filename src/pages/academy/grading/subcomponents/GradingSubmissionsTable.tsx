@@ -277,12 +277,8 @@ function GradingSubmissionTable({
       if (!sameData) {
         setRowData(newData);
       }
-
-      gridRef.current!.api.hideOverlay();
-
-      if (newData.length === 0 && requestCounter <= 0) {
-        gridRef.current!.api.showNoRowsOverlay();
-      }
+      // Overlays are controlled declaratively via the `loading` prop; the no-rows
+      // overlay shows automatically when the grid has no data and is not loading.
     }
     // We ignore the dependency on rowData purposely as we setRowData above.
     // If not, it could cause a double execution, which is a bit expensive.
@@ -362,6 +358,7 @@ function GradingSubmissionTable({
           overlayNoRowsTemplate={tableProperties.overlayNoRowsTemplate}
           pagination={tableProperties.pagination}
           paginationPageSize={tableProperties.pageSize}
+          paginationPageSizeSelector={false}
           suppressMenuHide={tableProperties.suppressMenuHide}
           suppressPaginationPanel={tableProperties.suppressPaginationPanel}
           rowSelection={{
