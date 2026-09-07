@@ -20,6 +20,7 @@ export async function javaRun(
   options?: { uploadIsActive?: boolean; uploads?: UploadResult },
 ) {
   let compiled = {};
+  let mainClass = 'Main';
 
   const stderr = (type: 'TypeCheck' | 'Compile' | 'Runtime', msg: string) => {
     context.errors.push({
@@ -123,10 +124,18 @@ export async function javaRun(
     }
 
     try {
-      const classFile = compileFromSource(javaCode);
-      compiled = {
-        'Main.class': Buffer.from(new BinaryWriter().generateBinary(classFile)).toString('base64'),
-      };
+      // A single Java source compiles to more than one class file whenever it
+      // declares an enum or a nested class. Register every class the compiler
+      // returns, keyed by `<ClassName>.class` so the JVM's readFileSync callback
+      // can resolve them; index 0 is the entry class.
+      const classes = compileFromSource(javaCode);
+      compiled = Object.fromEntries(
+        classes.map(({ className, classFile }) => [
+          `${className}.class`,
+          Buffer.from(new BinaryWriter().generateBinary(classFile)).toString('base64'),
+        ]),
+      );
+      mainClass = classes[0]?.className ?? mainClass;
     } catch (e) {
       stderr('Compile', e);
       return Promise.resolve({ status: 'error' });
@@ -153,6 +162,7 @@ export async function javaRun(
         setupJVM({
           javaClassPath: '',
           nativesPath: '',
+          mainClass,
           callbacks: {
             readFileSync: readClassFiles,
             readFile: loadNatives,
