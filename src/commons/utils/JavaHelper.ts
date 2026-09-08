@@ -1,6 +1,5 @@
 import { compileFromSource, ECE, typeCheck } from 'java-slang';
-import { BinaryWriter } from 'java-slang/dist/compiler/binary-writer';
-import setupJVM, { parseBin } from 'java-slang/dist/jvm';
+import setupJVM, { parseBin, userClassFiles } from 'java-slang/dist/jvm';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
 import type { Context, Result } from 'js-slang';
 import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors/base';
@@ -59,6 +58,11 @@ export async function javaRun(
       }
 
       item = files[path];
+    }
+
+    // user classes come from `userClassFiles` already parsed; stdlib entries are base64
+    if (typeof item !== 'string') {
+      return item;
     }
 
     // convert base64 to classfile object
@@ -125,16 +129,11 @@ export async function javaRun(
 
     try {
       // A single Java source compiles to more than one class file whenever it
-      // declares an enum or a nested class. Register every class the compiler
-      // returns, keyed by `<ClassName>.class` so the JVM's readFileSync callback
-      // can resolve them; index 0 is the entry class.
+      // declares an enum or a nested class. `userClassFiles` registers every
+      // class the compiler returns, keyed by `<ClassName>.class` so the JVM's
+      // readFileSync callback can resolve them; index 0 is the entry class.
       const classes = compileFromSource(javaCode);
-      compiled = Object.fromEntries(
-        classes.map(({ className, classFile }) => [
-          `${className}.class`,
-          Buffer.from(new BinaryWriter().generateBinary(classFile)).toString('base64'),
-        ]),
-      );
+      compiled = userClassFiles(classes);
       mainClass = classes[0]?.className ?? mainClass;
     } catch (e) {
       stderr('Compile', e);
