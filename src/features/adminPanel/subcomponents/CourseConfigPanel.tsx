@@ -53,12 +53,14 @@ function CourseConfigPanel(props: Props) {
     topLeaderboardDisplay,
     topContestLeaderboardDisplay,
     enableLlmGrading,
+    enableLouisChatbot,
     enablePixelbot,
     moduleHelpText,
     llmApiKey,
     llmModel,
     llmApiUrl,
     llmCourseLevelPrompt,
+    louisChatbotPrompt,
   } = props.courseConfiguration;
 
   const writePanel = (
@@ -157,6 +159,25 @@ function CourseConfigPanel(props: Props) {
             </Tabs>
             {courseHelpTextSelectedTab === CourseHelpTextEditorTab.WRITE && writePanel}
             {courseHelpTextSelectedTab === CourseHelpTextEditorTab.PREVIEW && previewPanel}
+          </FormGroup>
+          <FormGroup
+            helperText="Please enter the system prompt that will be used by the Louis chatbot."
+            inline
+            label="Louis Chatbot Prompt"
+            labelFor="louisChatbotPrompt"
+          >
+            <TextArea
+              id="louisChatbotPrompt"
+              className={classes['input-textarea']}
+              fill
+              value={louisChatbotPrompt || ''}
+              onChange={e =>
+                props.setCourseConfiguration({
+                  ...props.courseConfiguration,
+                  louisChatbotPrompt: e.target.value,
+                })
+              }
+            />
           </FormGroup>
           <FormGroup
             helperText="Enter the Top XX students to be displayed on the Overall Leaderboard"
@@ -348,6 +369,16 @@ function CourseConfigPanel(props: Props) {
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
                 enableLlmGrading: (e.target as HTMLInputElement).checked,
+              })
+            }
+          />
+          <Switch
+            checked={enableLouisChatbot}
+            label="Enable Louis Chatbot"
+            onChange={e =>
+              props.setCourseConfiguration({
+                ...props.courseConfiguration,
+                enableLouisChatbot: (e.target as HTMLInputElement).checked,
               })
             }
           />
