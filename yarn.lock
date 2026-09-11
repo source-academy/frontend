@@ -13081,12 +13081,12 @@ __metadata:
   linkType: hard
 
 "react-simple-keyboard@npm:^3.6.27":
-  version: 3.8.264
-  resolution: "react-simple-keyboard@npm:3.8.264"
+  version: 3.8.266
+  resolution: "react-simple-keyboard@npm:3.8.266"
   peerDependencies:
     react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/e69df1f4fe865943573a6091b48c4508b718aa21c35863b38ced0ad98e3e99f308deecbe7acc44d4867a99216ea954c614451490aa8ca618275437f5e3e0a256
+  checksum: 10c0/e4100928580e94845503f96c57355db08db3acf4f728d607bfd3527d50f220307a1555e087d49b84817ecd91fdee9272a403945625605d4119d23e4173d56a96
   languageName: node
   linkType: hard
 
