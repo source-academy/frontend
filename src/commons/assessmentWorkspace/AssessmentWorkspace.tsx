@@ -68,6 +68,7 @@ import MobileWorkspace, { type MobileWorkspaceProps } from '../mobileWorkspace/M
 import SideContentAutograder from '../sideContent/content/SideContentAutograder';
 import SideContentContestLeaderboard from '../sideContent/content/SideContentContestLeaderboard';
 import SideContentContestVotingContainer from '../sideContent/content/SideContentContestVotingContainer';
+import SideContentDocumentation from '../sideContent/content/SideContentDocumentation';
 import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import type { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight, resetSideContent } from '../sideContent/SideContentActions';
@@ -679,6 +680,16 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
         id: SideContentType.toneMatrix,
+      });
+    }
+
+    const showDocumentationTab = assessment!.type === 'PA';
+    if (showDocumentationTab) {
+      tabs.push({
+        label: `Documentation`,
+        iconName: IconNames.MANUAL,
+        body: <SideContentDocumentation />,
+        id: SideContentType.documentation,
       });
     }
 
