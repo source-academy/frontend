@@ -157,6 +157,8 @@ export enum Links {
 
   sourceAcademyAssets = 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/',
   sourceDocs = 'https://docs.sourceacademy.org/',
+  pythonDocs = 'https://docs.sourceacademy.org/python/',
+  moduleDocs = 'https://source-academy.github.io/modules/documentation/',
   textbook = 'https://sourceacademy.org/sicpjs/',
   playground = 'https://sourceacademy.org/playground',
   textbookChapter2_2 = 'https://sourceacademy.org/sicpjs/2.2',
