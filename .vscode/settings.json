@@ -35,5 +35,6 @@
   },
   "files.associations": {
     "*.css": "tailwindcss"
-  }
+  },
+  "references.preferredLocation": "view"
 }

@@ -16,6 +16,7 @@ import LeaderboardActions from '../../features/leaderboard/LeaderboardActions';
 import PersistenceActions from '../../features/persistence/PersistenceActions';
 import PlaygroundActions from '../../features/playground/PlaygroundActions';
 import RemoteExecutionActions from '../../features/remoteExecution/RemoteExecutionActions';
+import RemoteExecutionConductorActions from '../../features/remoteExecutionConductor/RemoteExecutionConductorActions';
 import VscodeActions from '../application/actions/VscodeActions';
 import { FeatureFlagsActions } from '../featureFlags';
 import type { ActionType } from './TypeHelper';
@@ -35,6 +36,7 @@ export const actions = {
   ...AcademyActions,
   ...PersistenceActions,
   ...RemoteExecutionActions,
+  ...RemoteExecutionConductorActions,
   ...FileSystemActions,
   ...SideContentActions,
   ...VscodeActions,

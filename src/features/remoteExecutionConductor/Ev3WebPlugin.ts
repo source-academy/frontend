@@ -1,0 +1,36 @@
+import type { IChannel, IConduit, IPlugin } from '@sourceacademy/conductor/conduit';
+
+const CHANNEL_ID = 'test';
+
+export type PySlangMessage =
+  | { type: 'run'; code: string }
+  | { type: 'result'; output: string }
+  | { type: 'error'; message: string };
+
+const WEB_ID = '__web_test';
+
+export class Ev3WebPlugin implements IPlugin {
+  readonly id: string = WEB_ID;
+  static readonly channelAttach = [CHANNEL_ID];
+
+  private readonly __channel: IChannel<PySlangMessage>;
+
+  onResult?: (output: string) => void;
+  onError?: (message: string) => void;
+
+  constructor(_conduit: IConduit, [channel]: IChannel<any>[]) {
+    this.__channel = channel;
+
+    this.__channel.subscribe((message: PySlangMessage) => {
+      if (message.type === 'result') {
+        this.onResult?.(message.output);
+      } else if (message.type === 'error') {
+        this.onError?.(message.message);
+      }
+    });
+  }
+
+  run(code: string): void {
+    this.__channel.send({ type: 'run', code });
+  }
+}
