@@ -270,6 +270,11 @@ function Playground(props: PlaygroundProps) {
     googleUser: persistenceUser,
     githubOctokitObject,
   } = useAppSelector(state => state.session);
+  // When the Conductor framework is enabled, LanguageDirectorySaga applies the course's configured
+  // default language itself (see setCourseConfiguration/setLanguages handlers), so the legacy
+  // chapter/variant path below must not also apply it - `getLanguageConfig` has no entries for
+  // languages 5+ (Python Full, Scheme) and throws for them.
+  const conductorEnabled = useAppSelector(selectConductorEnable);
 
   const dispatch = useAppDispatch();
   const {
@@ -368,8 +373,13 @@ function Playground(props: PlaygroundProps) {
 
   useEffect(() => {
     if (!hash) {
-      // If not a accessing via shared link, use the Source chapter and variant in the current course
-      if (courseSourceChapter && courseSourceVariant) {
+      // Under Conductor, LanguageDirectorySaga applies the course's configured default language
+      // itself (driven off the same courseSourceChapter, reinterpreted as a directory index - see
+      // getCourseDefaultSelectionSaga), so this legacy path must stand down: courseSourceChapter
+      // values above Source §4 (Python Full, Scheme) have no `getLanguageConfig` match and throw,
+      // and even for §1-4 this would resolve the wrong sublanguage (Source's, not the directory's).
+      if (!conductorEnabled && courseSourceChapter && courseSourceVariant) {
+        // If not a accessing via shared link, use the Source chapter and variant in the current course
         handleChapterSelect(courseSourceChapter, courseSourceVariant);
         // TODO: To migrate the state logic away from playgroundSourceChapter
         //       and playgroundSourceVariant into the language config instead
@@ -388,6 +398,7 @@ function Playground(props: PlaygroundProps) {
     dispatch,
     fileSystem,
     hash,
+    conductorEnabled,
     courseSourceChapter,
     courseSourceVariant,
     workspaceLocation,
@@ -540,9 +551,9 @@ function Playground(props: PlaygroundProps) {
     ],
   );
 
-  // When the Conductor framework is enabled, the stepper (and other tools) are provided by web
-  // plugins loaded dynamically, so the legacy in-frontend tabs are hidden in favour of plugin tabs.
-  const conductorEnabled = useAppSelector(selectConductorEnable);
+  // conductorEnabled is read earlier (see its declaration above) - when true, the stepper (and
+  // other tools) are provided by web plugins loaded dynamically, so the legacy in-frontend tabs
+  // are hidden in favour of plugin tabs.
 
   const clearButton = useMemo(
     () =>

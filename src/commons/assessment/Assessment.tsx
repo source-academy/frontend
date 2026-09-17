@@ -17,6 +17,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Navigate, useLoaderData, useParams } from 'react-router';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
+import { canSaveAssessment } from 'src/features/assessments/AssessmentUtils';
 import Messages, { sendToWebview } from 'src/features/vscode/messages';
 
 import SessionActions from '../application/actions/SessionActions';
@@ -134,9 +135,7 @@ function Assessment() {
       questionId,
       notAttempted,
       needsPassword: !!overview.private && notAttempted,
-      canSave:
-        role !== Role.Student ||
-        (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt)),
+      canSave: canSaveAssessment(role, overview),
       assessmentConfiguration: assessmentConfigToLoad,
       fromContestLeaderboard: fromLeaderboard,
     };

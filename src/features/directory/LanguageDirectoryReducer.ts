@@ -15,6 +15,7 @@ export const LanguageDirectoryReducer: Reducer<LanguageDirectoryState, SourceAct
       })
       .addCase(Actions.setSelectedLanguage, (state, action) => {
         state.selectedLanguageId = action.payload.languageId;
+        state.isDefaultSelection = action.payload.isDefault;
         if (action.payload.evaluatorId) {
           state.selectedEvaluatorId = action.payload.evaluatorId;
         }
@@ -25,5 +26,6 @@ export const LanguageDirectoryReducer: Reducer<LanguageDirectoryState, SourceAct
       .addCase(Actions.clearSelectedLanguage, state => {
         state.selectedLanguageId = null;
         state.selectedEvaluatorId = null;
+        state.isDefaultSelection = true;
       });
   });

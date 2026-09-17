@@ -30,6 +30,7 @@ import type {
 import { routerNavigate } from '../sagas/BackendSaga';
 import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
+import WorkspaceActions from '../workspace/WorkspaceActions';
 import {
   mockAssessmentConfigurations,
   mockAssessmentOverviews,
@@ -99,6 +100,23 @@ export function* mockBackendSaga(): SagaIterator {
     const courseConfiguration = { ...mockCourseConfigurations[0] };
     yield put(actions.setCourseConfiguration(courseConfiguration));
   });
+
+  // Mirrors BackendSaga's changeSublanguage handler (Ground Control's "Default language"
+  // selector), minus the network round-trip - lets that control be exercised against the mock
+  // backend instead of silently no-oping.
+  yield takeEvery(
+    WorkspaceActions.changeSublanguage.type,
+    function* (action: ReturnType<typeof WorkspaceActions.changeSublanguage>) {
+      const { sublang } = action.payload;
+      yield put(
+        actions.setCourseConfiguration({
+          sourceChapter: sublang.chapter,
+          sourceVariant: sublang.variant,
+        }),
+      );
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    },
+  );
 
   yield takeEvery(SessionActions.fetchAssessmentOverviews.type, function* () {
     yield put(actions.updateAssessmentOverviews([...mockAssessmentOverviews]));
