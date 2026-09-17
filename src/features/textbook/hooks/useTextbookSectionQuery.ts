@@ -69,7 +69,7 @@ export function useSicPySectionQuery(section: string | undefined) {
     enabled: !!section && section !== SICPY_INDEX,
     select: json => {
       try {
-        return parseArr(json, refs);
+        return parseArr(json, refs, 'python');
       } catch (e) {
         throw new ParseJsonError('Failed to parse SICPy JSON', { cause: e });
       }
