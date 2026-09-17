@@ -8713,7 +8713,7 @@ __metadata:
     query-string: "npm:^9.0.0"
     re-resizable: "npm:^6.9.9"
     react: "npm:^19.2.4"
-    react-ace: "npm:^14.0.0"
+    react-ace: "npm:^15.0.0"
     react-dom: "npm:^19.2.4"
     react-drag-drop-files: "npm:^3.0.0"
     react-draggable: "npm:^4.4.5"
@@ -12756,9 +12756,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-ace@npm:^14.0.0":
-  version: 14.1.0
-  resolution: "react-ace@npm:14.1.0"
+"react-ace@npm:^15.0.0":
+  version: 15.0.0
+  resolution: "react-ace@npm:15.0.0"
   dependencies:
     ace-builds: "npm:^1.36.3"
     diff-match-patch: "npm:^1.0.5"
@@ -12767,7 +12767,7 @@ __metadata:
   peerDependencies:
     react: ^0.13.0 || ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^0.13.0 || ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/f76c42eab0bca529925b49ad80a6067c88ccd04fdb3cd9424f85e763517199ee7d8e011b61ce2c71f1e2a24282465a8fb1b39e3d090785699ca65798f20849f2
+  checksum: 10c0/29deb23b63b5f0665c3138fe9d3faacd68934639a0c68a3d59d5a216a66f52e7ef4389c7c8f9478bb51a3c25956c8b2cc70d4aebd040b48edc09e8d8714bd121
   languageName: node
   linkType: hard
 
