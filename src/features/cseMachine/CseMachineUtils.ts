@@ -283,12 +283,16 @@ function collectRootEnvIds(): Set<string> {
   return roots;
 }
 
-/** Adds values into liveObjectIds and pushes the values' environments for `markReachableEnvs` */
+/** Adds values into liveObjectIds and pushes the values' environments for `markReachableEnvs`.
+ * `markClosureHome`, when given, is called with the id of an environment that is some closure's
+ * or array's *own* defining environment specifically (not merely an ancestor reached by walking
+ * its tail chain) — see {@link computeLiveState}'s `closureHomeEnvIds`. */
 function pushEnvFromData(
   value: any,
   pushEnv: (e: Env | null | undefined) => void,
   markLiveObject?: (id: string) => void,
   visitedObjects = new Set<any>(),
+  markClosureHome?: (id: string) => void,
 ) {
   if (!value || visitedObjects.has(value)) {
     return;
@@ -303,6 +307,7 @@ function pushEnvFromData(
   if (isClosure(value) || isStreamFn(value)) {
     if (value.environment) {
       pushEnv((value as any).environment as Env);
+      markClosureHome?.((value as any).environment.id);
     }
     return;
   }
@@ -310,10 +315,11 @@ function pushEnvFromData(
   if (isDataArray(value)) {
     if ((value as any).environment) {
       pushEnv((value as any).environment as Env);
+      markClosureHome?.((value as any).environment.id);
     }
     const arr = value as any[]; // going through each element of the array for any references
     for (const elem of arr) {
-      pushEnvFromData(elem, pushEnv, markLiveObject, visitedObjects);
+      pushEnvFromData(elem, pushEnv, markLiveObject, visitedObjects, markClosureHome);
     }
     return;
   }
@@ -323,9 +329,10 @@ function pushEnvFromData(
 function markReachableEnvs(
   envTree: EnvTree,
   rootIds: Set<string>,
-): { liveEnvIds: Set<string>; liveObjectIds: Set<string> } {
+): { liveEnvIds: Set<string>; liveObjectIds: Set<string>; closureHomeEnvIds: Set<string> } {
   const visited = new Set<string>();
   const liveObjectIds = new Set<string>();
+  const closureHomeEnvIds = new Set<string>();
   const worklist: Env[] = [];
 
   const pushEnv = (env: Env | null | undefined) => {
@@ -340,6 +347,7 @@ function markReachableEnvs(
   };
 
   const markLiveObject = (id: string) => liveObjectIds.add(id);
+  const markClosureHome = (id: string) => closureHomeEnvIds.add(id);
   const visitedObjects = new Set<any>();
 
   rootIds.forEach(id => {
@@ -355,40 +363,51 @@ function markReachableEnvs(
     pushEnv(env.tail as Env); //add tail env to worklist since we only go through the head in one iteration
 
     Object.values(env.head).forEach(v => {
-      pushEnvFromData(v, pushEnv, markLiveObject, visitedObjects); //adds envs and objects referenced by this env's head
+      //adds envs and objects referenced by this env's head
+      pushEnvFromData(v, pushEnv, markLiveObject, visitedObjects, markClosureHome);
     });
   }
 
-  return { liveEnvIds: visited, liveObjectIds };
+  return { liveEnvIds: visited, liveObjectIds, closureHomeEnvIds };
 }
 
-/** Returns environment id and object id that are reachable from root environments and control/stash */
+/** Returns environment id and object id that are reachable from root environments and control/stash.
+ * `closureHomeEnvIds` is the subset of `liveEnvIds` that are some live closure's or array's *own*
+ * defining environment (as opposed to merely an ancestor reached via another live environment's
+ * tail chain) — an otherwise-empty frame in this set must not be pruned as "boring": it is the
+ * anchor a value elsewhere still draws its arrow to (#4380). */
 export function computeLiveState(envTree: EnvTree): {
   liveEnvIds: Set<string>;
   liveObjectIds: Set<string>;
+  closureHomeEnvIds: Set<string>;
 } {
   const roots = collectRootEnvIds();
 
   // Add envs reachable from objects on control/stash as extra roots
   const extraRootIds = new Set<string>();
+  const closureHomeEnvIds = new Set<string>();
   const pushEnv = (env: Env | null | undefined) => {
     //specially made ONLY for stack/control dummy bindings
     if (env && env.id) {
       extraRootIds.add(env.id);
     }
   };
+  const markClosureHome = (id: string) => closureHomeEnvIds.add(id);
 
   // const visitedObjects = new Set<any>();
 
   Layout.stash.getStack().forEach((item: any) => {
-    pushEnvFromData(item, pushEnv, undefined, new Set<any>());
+    pushEnvFromData(item, pushEnv, undefined, new Set<any>(), markClosureHome);
   });
   Layout.control.getStack().forEach((item: ControlItem) => {
-    pushEnvFromData(item as any, pushEnv, undefined, new Set<any>());
+    pushEnvFromData(item as any, pushEnv, undefined, new Set<any>(), markClosureHome);
   });
 
   const allRoots = new Set<string>([...roots, ...extraRootIds]); //combine both roots
   const liveState = markReachableEnvs(envTree, allRoots);
+  for (const id of closureHomeEnvIds) {
+    liveState.closureHomeEnvIds.add(id);
+  }
 
   // Mark objects that are live due to being on control/stash
   const markLiveObject = (id: string) => liveState.liveObjectIds.add(id);
@@ -795,7 +814,12 @@ export function deepCopyTree(value: EnvTree): EnvTree {
 }
 
 export function getNextChildren(c: EnvTreeNode): EnvTreeNode[] {
-  if (isEmptyEnvironment(c.environment)) {
+  // A bindingless frame is normally boring and safe to collapse, but not when it's still the
+  // defining environment some live closure/array elsewhere draws its arrow to (#4380) — there
+  // would be nothing left for that arrow to point at.
+  const isCollapsible =
+    isEmptyEnvironment(c.environment) && !Layout.closureHomeEnvIDs.has(c.environment.id);
+  if (isCollapsible) {
     const nextChildren: EnvTreeNode[] = [];
     c.children.forEach(gc => {
       nextChildren.push(...getNextChildren(gc as EnvTreeNode));

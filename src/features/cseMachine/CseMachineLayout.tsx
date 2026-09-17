@@ -108,6 +108,10 @@ export class Layout {
   /** all environment and value IDs that are live in the current context */
   static liveEnvIDs: Set<string> = new Set();
   static liveObjectIDs: Set<string> = new Set();
+  /** the subset of `liveEnvIDs` that are some live closure's/array's own defining environment —
+   * an otherwise-empty frame in this set must not be pruned in clear-dead-frames mode, since it is
+   * the anchor a value elsewhere still draws its arrow to (#4380) */
+  static closureHomeEnvIDs: Set<string> = new Set();
   /** hide non-live frames temporarily for the current step */
   static clearDeadFrames: boolean = false;
   /** set to true during renderSnapshot() to skip EnvTree deep-copy and changepointSteps tracking */
@@ -229,6 +233,7 @@ export class Layout {
     const liveState = computeLiveState({ root: Layout.globalEnvNode } as EnvTree);
     Layout.liveEnvIDs = liveState.liveEnvIds;
     Layout.liveObjectIDs = liveState.liveObjectIds;
+    Layout.closureHomeEnvIDs = liveState.closureHomeEnvIds;
 
     // initialize levels and frames
     Layout.initializeGrid();
@@ -480,7 +485,11 @@ export class Layout {
 
     const visit = (node: EnvTreeNode) => {
       const isLive = Layout.liveEnvIDs.has(node.environment.id);
-      const isEmpty = isEmptyEnvironment(node.environment);
+      // A bindingless frame is normally boring and safe to prune, but not when it's still the
+      // defining environment some live closure/array elsewhere draws its arrow to (#4380) — there
+      // would be nothing left for that arrow to point at.
+      const isEmpty =
+        isEmptyEnvironment(node.environment) && !Layout.closureHomeEnvIDs.has(node.environment.id);
       const shouldSkip = isEmpty || !isLive;
 
       if (!shouldSkip) {
