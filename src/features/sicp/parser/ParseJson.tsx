@@ -41,6 +41,7 @@ export type JsonType = {
 };
 
 type RefType = React.RefObject<Record<string, HTMLElement | null>>;
+type SnippetLanguage = 'javascript' | 'python';
 type AnchorLinkType = {
   children: React.ReactNode;
   id: string | undefined;
@@ -68,7 +69,7 @@ function AnchorLink({ refs, id, children, top }: AnchorLinkType) {
   );
 }
 
-const handleFootnote = (obj: JsonType, refs: RefType) => {
+const handleFootnote = (obj: JsonType, refs: RefType, language: SnippetLanguage) => {
   return (
     <>
       {obj.count === 1 && <hr />}
@@ -79,7 +80,7 @@ const handleFootnote = (obj: JsonType, refs: RefType) => {
           }}
         />
         <a href={obj.href}>{'[' + obj.count + '] '}</a>
-        {parseArr(obj.child!, refs)}
+        {parseArr(obj.child!, refs, language)}
       </div>
     </>
   );
@@ -98,7 +99,7 @@ const handleRef = (obj: JsonType, refs: RefType) => {
   );
 };
 
-const handleEpigraph = (obj: JsonType, refs: RefType) => {
+const handleEpigraph = (obj: JsonType, refs: RefType, language: SnippetLanguage) => {
   const { child, author, title, date } = obj;
 
   const hasAttribution = author || title || date;
@@ -118,7 +119,7 @@ const handleEpigraph = (obj: JsonType, refs: RefType) => {
     attribution.push(<Fragment key="date">{date}</Fragment>);
   }
 
-  const text = child && parseArr(child, refs);
+  const text = child && parseArr(child, refs, language);
 
   return text ? (
     <Blockquote className="sicp-epigraph">
@@ -130,7 +131,7 @@ const handleEpigraph = (obj: JsonType, refs: RefType) => {
   );
 };
 
-const handleSnippet = (obj: JsonType) => {
+const handleSnippet = (obj: JsonType, language: SnippetLanguage) => {
   if (obj.latex) {
     return <Pre>{handleLatex(obj.body!)}</Pre>;
   } else if (typeof obj.eval === 'boolean' && !obj.eval) {
@@ -155,21 +156,22 @@ const handleSnippet = (obj: JsonType) => {
       initialEditorValueHash: obj.program!,
       prependLength: obj.prependLength!,
       output: obj.output!,
+      language,
     };
     return <CodeSnippet {...CodeSnippetProps} />;
   }
 };
 
-const handleFigure = (obj: JsonType, refs: RefType) => (
+const handleFigure = (obj: JsonType, refs: RefType, language: SnippetLanguage) => (
   <AnchorLink id={obj.id} refs={refs} top={36}>
     <div className="sicp-figure">
       {obj.src && handleImage(obj, refs)}
-      {obj.snippet && processingFunctions['SNIPPET'](obj.snippet, refs)}
-      {obj.table && processingFunctions['TABLE'](obj.table, refs)}
+      {obj.snippet && processingFunctions['SNIPPET'](obj.snippet, refs, language)}
+      {obj.table && processingFunctions['TABLE'](obj.table, refs, language)}
       {obj.captionName && (
         <h5 className="sicp-caption">
           {obj.captionName}
-          {parseArr(obj.captionBody!, refs)}
+          {parseArr(obj.captionBody!, refs, language)}
         </h5>
       )}
     </div>
@@ -180,21 +182,21 @@ const handleImage = (obj: JsonType, _refs: RefType) => {
   return <img src={Constants.sicpBackendUrl + obj.src} alt={obj.id} width={obj.scale || '100%'} />;
 };
 
-const handleTR = (obj: JsonType, refs: RefType, index: number) => {
-  return <tr key={index}>{obj.child!.map((x, index) => handleTD(x, refs, index))}</tr>;
+const handleTR = (obj: JsonType, refs: RefType, index: number, language: SnippetLanguage) => {
+  return <tr key={index}>{obj.child!.map((x, index) => handleTD(x, refs, index, language))}</tr>;
 };
 
-const handleTD = (obj: JsonType, refs: RefType, index: number) => {
-  return <td key={index}>{parseArr(obj.child!, refs)}</td>;
+const handleTD = (obj: JsonType, refs: RefType, index: number, language: SnippetLanguage) => {
+  return <td key={index}>{parseArr(obj.child!, refs, language)}</td>;
 };
 
-const handleExercise = (obj: JsonType, refs: RefType) => {
+const handleExercise = (obj: JsonType, refs: RefType, language: SnippetLanguage) => {
   return (
     <AnchorLink id={obj.id} refs={refs} top={5}>
       <SicpExercise
         title={obj.title!}
-        body={parseArr(obj.child!, refs)}
-        solution={obj.solution && parseArr(obj.solution, refs)}
+        body={parseArr(obj.child!, refs, language)}
+        solution={obj.solution && parseArr(obj.solution, refs, language)}
       />
     </AnchorLink>
   );
@@ -208,8 +210,8 @@ const handleTitle = (obj: JsonType, refs: RefType) => {
   );
 };
 
-const handleReference = (obj: JsonType, refs: RefType) => {
-  return <div className="sicp-reference">{parseArr(obj.child!, refs)}</div>;
+const handleReference = (obj: JsonType, refs: RefType, language: SnippetLanguage) => {
+  return <div className="sicp-reference">{parseArr(obj.child!, refs, language)}</div>;
 };
 
 const handleText = (text: string) => {
@@ -222,17 +224,17 @@ const handleLatex = (math: string) => {
 
 export const processingFunctions: Record<
   string,
-  (obj: JsonType, refs: RefType) => React.ReactElement
+  (obj: JsonType, refs: RefType, language: SnippetLanguage) => React.ReactElement
 > = {
-  '#text': (obj, _refs) => handleText(obj.body!),
+  '#text': obj => handleText(obj.body!),
 
-  B: (obj, refs) => <b>{parseArr(obj.child!, refs)}</b>,
+  B: (obj, refs, language) => <b>{parseArr(obj.child!, refs, language)}</b>,
 
-  BR: (_obj, _refs) => <br />,
+  BR: () => <br />,
 
   DISPLAYFOOTNOTE: handleFootnote,
 
-  EM: (obj, refs) => <em>{parseArr(obj.child!, refs)}</em>,
+  EM: (obj, refs, language) => <em>{parseArr(obj.child!, refs, language)}</em>,
 
   EPIGRAPH: handleEpigraph,
 
@@ -250,78 +252,87 @@ export const processingFunctions: Record<
     </sup>
   ),
 
-  JAVASCRIPTINLINE: (obj, _refs) => <Code>{obj.body}</Code>,
-  PYTHONINLINE: (obj, _refs) => <Code>{obj.body}</Code>,
+  JAVASCRIPTINLINE: obj => <Code>{obj.body}</Code>,
+  PYTHONINLINE: obj => <Code>{obj.body}</Code>,
 
-  LATEX: (obj, _refs) => handleLatex(obj.body!),
+  LATEX: obj => handleLatex(obj.body!),
 
-  LI: (obj, refs) => <li>{parseArr(obj.child!, refs)}</li>,
+  LI: (obj, refs, language) => <li>{parseArr(obj.child!, refs, language)}</li>,
 
-  LINK: (obj, _refs) => <a href={obj.href}>{obj.body}</a>,
+  LINK: obj => <a href={obj.href}>{obj.body}</a>,
 
-  META: (obj, _refs) => <em>{obj.body}</em>,
+  META: obj => <em>{obj.body}</em>,
 
-  OL: (obj, refs) => <OL>{parseArr(obj.child!, refs)}</OL>,
+  OL: (obj, refs, language) => <OL>{parseArr(obj.child!, refs, language)}</OL>,
 
   REF: handleRef,
 
   REFERENCE: handleReference,
 
-  SNIPPET: (obj, _refs) => handleSnippet(obj),
+  SNIPPET: (obj, _refs, language) => handleSnippet(obj, language),
 
-  SUBHEADING: (obj, refs) => (
+  SUBHEADING: (obj, refs, language) => (
     <AnchorLink id={obj.id} refs={refs} top={2}>
-      <H2>{parseArr(obj.child!, refs)}</H2>
+      <H2>{parseArr(obj.child!, refs, language)}</H2>
     </AnchorLink>
   ),
 
-  SUBSUBHEADING: (obj, refs) => (
+  SUBSUBHEADING: (obj, refs, language) => (
     <AnchorLink id={obj.id} refs={refs} top={16}>
       <H4>
         <br />
-        {parseArr(obj.child!, refs)}
+        {parseArr(obj.child!, refs, language)}
       </H4>
     </AnchorLink>
   ),
 
-  TABLE: (obj, refs) => (
+  TABLE: (obj, refs, language) => (
     <table>
-      <tbody>{obj.child!.map((x, index) => handleTR(x, refs, index))}</tbody>
+      <tbody>{obj.child!.map((x, index) => handleTR(x, refs, index, language))}</tbody>
     </table>
   ),
 
-  TEXT: (obj, refs) => (
+  TEXT: (obj, refs, language) => (
     <AnchorLink id={obj.id} refs={refs} top={-3}>
-      <p className="sicp-text">{parseArr(obj.child!, refs)}</p>
+      <p className="sicp-text">{parseArr(obj.child!, refs, language)}</p>
     </AnchorLink>
   ),
 
   TITLE: handleTitle,
 
-  TT: (obj, refs) => <Code>{parseArr(obj.child!, refs)}</Code>,
+  TT: (obj, refs, language) => <Code>{parseArr(obj.child!, refs, language)}</Code>,
 
-  UL: (obj, refs) => <UL>{parseArr(obj.child!, refs)}</UL>,
+  UL: (obj, refs, language) => <UL>{parseArr(obj.child!, refs, language)}</UL>,
 };
 
 // Parse array of objects. An array of objects represent sibling nodes.
-export const parseArr = (arr: Array<JsonType>, refs: RefType) => {
+export const parseArr = (
+  arr: Array<JsonType>,
+  refs: RefType,
+  language: SnippetLanguage = 'javascript',
+) => {
   if (!arr) {
     return <></>;
   }
 
-  return <>{arr.map((item, index) => parseObj(item, index, refs))}</>;
+  return <>{arr.map((item, index) => parseObj(item, index, refs, language))}</>;
 };
 
 // Parse an object.
-export const parseObj = (obj: JsonType, index: number | undefined, refs: RefType) => {
+export const parseObj = (
+  obj: JsonType,
+  index: number | undefined,
+  refs: RefType,
+  language: SnippetLanguage = 'javascript',
+) => {
   if (obj.tag) {
     if (processingFunctions[obj.tag]) {
-      return <Fragment key={index}>{processingFunctions[obj.tag](obj, refs)}</Fragment>;
+      return <Fragment key={index}>{processingFunctions[obj.tag](obj, refs, language)}</Fragment>;
     } else {
       throw new ParseJsonError('Unrecognised Tag: ' + obj.tag);
     }
   } else {
     // Handle case where tag does not exists. Should not happen if json file is created properly.
-    return <Fragment key={index}>{parseArr(obj.child!, refs)}</Fragment>;
+    return <Fragment key={index}>{parseArr(obj.child!, refs, language)}</Fragment>;
   }
 };

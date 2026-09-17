@@ -57,7 +57,7 @@ const mockRef = { current: {} };
 const processTag = (tag: string, obj: JsonType) => {
   obj['tag'] = tag;
 
-  return processingFunctions[tag](obj, mockRef);
+  return processingFunctions[tag](obj, mockRef, 'javascript');
 };
 
 const testTagSuccessful = (obj: JsonType, tag: string, text: string = '') => {

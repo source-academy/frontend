@@ -17,6 +17,7 @@ type OwnProps = {
   id: string;
   initialEditorValueHash: string;
   prependLength: number | undefined;
+  language?: 'javascript' | 'python';
 };
 
 const resizableProps = {
@@ -39,7 +40,7 @@ const resizableProps = {
 };
 
 function CodeSnippet(props: CodeSnippetProps) {
-  const { body, output, id } = props;
+  const { body, output, id, language = 'javascript' } = props;
   const context = useCodeSnippetContext();
   const { isMobileBreakpoint } = useResponsive();
 
@@ -94,7 +95,7 @@ function CodeSnippet(props: CodeSnippetProps) {
         </div>
       ) : (
         <Card className="sicp-code-snippet-closed" interactive elevation={Elevation.TWO}>
-          <SyntaxHighlighter language="javascript" style={SourceTheme} onClick={handleOpen}>
+          <SyntaxHighlighter language={language} style={SourceTheme} onClick={handleOpen}>
             {body}
           </SyntaxHighlighter>
         </Card>
