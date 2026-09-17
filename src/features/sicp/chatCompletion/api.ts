@@ -5,7 +5,7 @@ import type { InitChatResponse, SendMessageResponse } from 'src/components/ui/ch
 export async function initChat(tokens: Tokens): Promise<InitChatResponse> {
   const response = await request('chats', 'POST', {
     ...tokens,
-    body: {}, // Empty body
+    body: {},
   });
   if (!response) {
     throw new Error('Unknown error occurred.');
@@ -24,6 +24,8 @@ export async function continueChat(
   section: string,
   visibleText: string,
 ): Promise<SendMessageResponse> {
+  // The system prompt is deliberately NOT sent: the backend reads it from the course config.
+  // Letting the client supply it would allow any student to replace the safety instructions.
   const response = await request(`chats/message`, 'POST', {
     ...tokens,
     body: {
