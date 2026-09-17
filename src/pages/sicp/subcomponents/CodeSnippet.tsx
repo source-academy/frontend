@@ -39,8 +39,14 @@ const resizableProps = {
   maxHeight: '2000px',
 };
 
-function CodeSnippet(props: CodeSnippetProps) {
-  const { body, output, id, language = 'javascript' } = props;
+function CodeSnippet({
+  body,
+  output,
+  id,
+  initialEditorValueHash,
+  prependLength,
+  language = 'javascript',
+}: CodeSnippetProps) {
   const context = useCodeSnippetContext();
   const { isMobileBreakpoint } = useResponsive();
 
@@ -53,8 +59,8 @@ function CodeSnippet(props: CodeSnippetProps) {
   }, [context]);
 
   const WorkspaceProps = {
-    initialEditorValueHash: props.initialEditorValueHash,
-    prependLength: props.prependLength,
+    initialEditorValueHash,
+    prependLength,
     isSicpEditor: true,
 
     handleCloseEditor: handleClose,

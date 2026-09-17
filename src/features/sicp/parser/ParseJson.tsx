@@ -2,7 +2,9 @@ import { Blockquote, Code, H1, H2, H4, Icon, OL, Pre, UL } from '@blueprintjs/co
 import { IconNames } from '@blueprintjs/icons';
 import { Fragment } from 'react';
 import { Link } from 'react-router';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import Constants from 'src/commons/utils/Constants';
+import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import SicpExercise from 'src/pages/sicp/subcomponents/SicpExercise';
 import SicpLatex from 'src/pages/sicp/subcomponents/SicpLatex';
 
@@ -137,7 +139,11 @@ const handleSnippet = (obj: JsonType, language: SnippetLanguage) => {
   } else if (typeof obj.eval === 'boolean' && !obj.eval) {
     return (
       <>
-        {obj.body && <Pre>{obj.body}</Pre>}
+        {obj.body && (
+          <SyntaxHighlighter language={language} style={SourceTheme}>
+            {obj.body}
+          </SyntaxHighlighter>
+        )}
         {obj.output && (
           <Pre>
             <em>{obj.output}</em>
