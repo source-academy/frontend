@@ -16,11 +16,14 @@ let activeConductorClient: SlingClient | null = null;
 function* handleConductorRun(
   action: ReturnType<typeof RemoteExecutionConductorActions.remoteExecConductorRun>,
 ): any {
+  console.log('[EV3 DEBUG] handleConductorRun invoked, payload:', action.payload); // TEMP DEBUG
   const session: DeviceSession | undefined = yield select(
     (state: OverallState) => state.session.remoteExecutionSession,
   );
+  console.log('[EV3 DEBUG] session:', session); // TEMP DEBUG
 
   if (!session || session.connection.status !== 'CONNECTED') {
+    console.log('[EV3 DEBUG] bailing - no session or not connected'); // TEMP DEBUG
     yield put(actions.updateWorkspace(session?.workspace ?? 'playground', { isRunning: false }));
     return;
   }
@@ -29,6 +32,7 @@ function* handleConductorRun(
 
   const { files, entrypointFilePath } = action.payload;
   const code = files[entrypointFilePath];
+  console.log('[EV3 DEBUG] code to run:', code); // TEMP DEBUG
 
   if (activeConductor && activeConductorClient !== session.connection.client) {
     activeConductor.conduit.terminate?.();

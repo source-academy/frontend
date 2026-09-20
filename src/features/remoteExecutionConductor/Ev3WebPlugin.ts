@@ -24,9 +24,12 @@ export class Ev3WebPlugin implements IPlugin {
   onError?: (message: string) => void;
 
   constructor(_conduit: IConduit, [channel]: IChannel<any>[]) {
+    // TEMP DEBUG
+    console.log('[EV3 DEBUG] Ev3WebPlugin constructed, channel:', channel);
     this.__channel = channel;
 
     this.__channel.subscribe((message: PySlangMessage) => {
+      console.log('[EV3 DEBUG] host received message:', message);
       if (message.type === 'result') {
         this.onResult?.(message.output);
       } else if (message.type === 'error') {
@@ -36,6 +39,7 @@ export class Ev3WebPlugin implements IPlugin {
   }
 
   run(code: string): void {
+    console.log('[EV3 DEBUG] host sending run, code:', code);
     this.__channel.send({ type: 'run', code });
   }
 }

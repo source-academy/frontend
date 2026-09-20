@@ -59,18 +59,21 @@ export function* evalEditorSaga(
   const entrypointFilePath = editorTabs[activeEditorTabIndex].filePath ?? defaultFilePath;
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
+  console.log('[EV3 DEBUG] evalEditorSaga routing check, remoteExecutionSession:', remoteExecutionSession, 'workspaceLocation:', workspaceLocation); // TEMP DEBUG
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
     // Deliberately gated on the EV3-specific flag, not the general flagConductorEnable (which
     // defaults to true) - the legacy Source path (js-slang -> SVML -> SlingClient, see
     // RemoteExecutionSaga.ts) must stay the default for every device until the Conductor/py-slang
     // pipeline is actually finished end-to-end, regardless of whether Conductor itself is on.
     const isConductorEv3: boolean = yield select(featureSelector(flagConductorEv3Enable));
+    console.log('[EV3 DEBUG] isConductorEv3:', isConductorEv3); // TEMP DEBUG
     if (isConductorEv3) {
       yield put(actions.remoteExecConductorRun(files, entrypointFilePath));
     } else {
       yield put(actions.remoteExecRun(files, entrypointFilePath));
     }
   } else {
+    console.log('[EV3 DEBUG] taking LOCAL evaluation branch'); // TEMP DEBUG
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
     const entrypointCode = files[entrypointFilePath];
