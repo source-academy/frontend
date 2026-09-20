@@ -32,17 +32,13 @@ export function createEv3Conductor(client: SlingClient): {
   const plugin = conduit.registerPlugin(Ev3WebPlugin);
 
   plugin.onResult = (svml: string) => {
-    console.log('[EV3 DEBUG] onResult, svml:', svml); // TEMP DEBUG
     const binary = Buffer.from(svml, 'base64');
     client.sendRun(binary);
-    console.log('[EV3 DEBUG] client.sendRun called with', binary.length, 'bytes'); // TEMP DEBUG
   };
 
   plugin.onError = (message: string) => {
-    console.log('[EV3 DEBUG] onError, message:', message); // TEMP DEBUG
     const currentSession = store.getState().session.remoteExecutionSession;
     if (!currentSession) {
-      console.log('[EV3 DEBUG] onError bailed - no currentSession'); // TEMP DEBUG
       return;
     }
     const error = new ExceptionError(new Error(`${message}`), dummyLocation);
