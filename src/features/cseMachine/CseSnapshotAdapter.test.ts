@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { CseSnapshot } from '../conductor/CseMachineHostPlugin';
 import { Frame } from './components/Frame';
+import { FnValue } from './components/values/FnValue';
 import CseMachine from './CseMachine';
 import { CseAnimation } from './CseMachineAnimation';
 import { Config } from './CseMachineConfig';
@@ -438,5 +439,58 @@ describe('assignment animation across a snapshot step (regression)', () => {
     }).not.toThrow();
 
     expect(CseAnimation.animations.map(a => a.constructor.name)).toContain('AssignmentAnimation');
+  });
+});
+
+describe('a closure whose home frame has no bindings keeps that frame visible (py-slang#469, frontend#4380)', () => {
+  it('gives a bare stash closure a frame to point to, with and without clear-dead-frames', () => {
+    CseMachine.init(
+      () => {},
+      1000,
+      1000,
+      () => {},
+      () => {},
+    );
+
+    // Mirrors what py-slang actually sends for a top-level `lambda x: x + 2` with no other
+    // top-level statement: `programEnvironment` has no bindings at all, yet the closure sitting
+    // on the stash still points to it as its defining environment.
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [
+        {
+          displayValue: 'lambda',
+          label: 'function',
+          metadata: { closureFrameId: 'p', params: ['x'], funcName: 'lambda' },
+        },
+      ],
+      environments: [
+        { id: 'g', name: 'global', parentId: null, bindings: [], isActive: false },
+        { id: 'p', name: 'programEnvironment', parentId: 'g', bindings: [], isActive: true },
+      ],
+    };
+
+    try {
+      for (const clearDeadFrames of [false, true]) {
+        CseMachine.setClearDeadFrames(clearDeadFrames);
+        CseMachine.renderSnapshot(snapshot);
+
+        const programEnv = findNode(
+          buildFakeEnvTreeFromSnapshot(snapshot).envTree,
+          'p',
+        )!.environment;
+        expect(Frame.getFrom(programEnv as any)).toBeDefined();
+
+        const fnValue = [...Layout.values.values()].find(v => v instanceof FnValue) as
+          | FnValue
+          | undefined;
+        expect(fnValue).toBeDefined();
+        expect(fnValue!.arrow()).toBeDefined();
+        expect(fnValue!.arrow()!.target).toBeDefined();
+      }
+    } finally {
+      CseMachine.setClearDeadFrames(false);
+    }
   });
 });
