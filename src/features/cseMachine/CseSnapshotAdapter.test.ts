@@ -659,10 +659,8 @@ describe('non-finite numbers reach the canvas as themselves', () => {
 
   it.each(['NaN', 'Infinity', '-Infinity'])('%s does not render as null', displayValue => {
     const value = renderedGlobal(displayValue) as { text?: { fullStr?: string } } | undefined;
-    const text = value?.text?.fullStr;
-    if (text !== undefined) {
-      expect(text).not.toBe('null');
-      expect(text).toBe(displayValue);
-    }
+    // Asserted unconditionally: a guard here would let the test pass vacuously if the binding
+    // text ever went missing, which is the regression most worth catching.
+    expect(value?.text?.fullStr).toBe(displayValue);
   });
 });
