@@ -51,8 +51,25 @@ function toJsValue(
   const label = v.label.toLowerCase();
 
   if (label === 'int' || label === 'number') {
-    const n = parseFloat(v.displayValue);
-    return isNaN(n) ? 0 : n;
+    // `Number` rather than `parseFloat`, and no NaN fallback: the three non-finite values are
+    // real Source values a student can produce and see bound in a frame — `NaN` and `Infinity`
+    // are predeclared globals. `parseFloat('NaN')` is NaN, which the old `isNaN(n) ? 0` turned
+    // into 0; `parseFloat` also stops at the first non-numeric character, so a displayValue of
+    // 'Infinity' parsed fine but anything it could not read became 0 too.
+    //
+    // Guarding on the exact spellings keeps the fallback for a genuinely unparseable
+    // displayValue, rather than silently rendering it as a number.
+    if (v.displayValue === 'NaN') {
+      return NaN;
+    }
+    if (v.displayValue === 'Infinity') {
+      return Infinity;
+    }
+    if (v.displayValue === '-Infinity') {
+      return -Infinity;
+    }
+    const n = Number(v.displayValue);
+    return Number.isNaN(n) ? 0 : n;
   }
   if (label === 'float' || label === 'complex') {
     // Return a source object so PrimitiveValue uses toReplString() instead of String(value).
