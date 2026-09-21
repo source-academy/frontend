@@ -494,3 +494,98 @@ describe('a closure whose home frame has no bindings keeps that frame visible (p
     }
   });
 });
+
+describe('Source-shaped snapshots (js-slang)', () => {
+  const globalFrame = (bindings: CseSnapshot['environments'][number]['bindings']) => ({
+    id: 'g',
+    name: 'global',
+    parentId: null,
+    bindings,
+    isActive: true,
+  });
+
+  it('renders the empty list as a real null, not as Python None', () => {
+    // js-slang labels Source's `null` 'empty_list' precisely so it does NOT take the
+    // 'nonetype|none|null' branch, which exists to keep Python's None away from the
+    // empty-list visual. Source wants that visual.
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [{ displayValue: 'null', label: 'empty_list' }],
+      environments: [globalFrame([])],
+    };
+    const { fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
+    expect(fakeStash.getStack()[0]).toBeNull();
+  });
+
+  it('omits the pre-declared-names sentinel when the global frame has its own bindings', () => {
+    // js-slang keeps every builtin in the global environment's head, so the frame arrives full
+    // and the sentinel would be a spurious extra row above the real bindings.
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        globalFrame([
+          { name: 'display', value: { displayValue: 'display', label: 'builtin' } },
+          { name: 'x', value: { displayValue: '1', label: 'number' }, isConst: true },
+        ]),
+      ],
+    };
+    const { envTree } = buildFakeEnvTreeFromSnapshot(snapshot);
+    const head = findNode(envTree, 'g')!.environment.head;
+    expect(Object.keys(head)).toEqual(['display', 'x']);
+    expect(Config.GlobalFrameDefaultText in head).toBe(false);
+  });
+
+  it('keeps the sentinel when the global frame is empty (py-slang shape)', () => {
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [globalFrame([])],
+    };
+    const { envTree } = buildFakeEnvTreeFromSnapshot(snapshot);
+    const head = findNode(envTree, 'g')!.environment.head;
+    expect(Config.GlobalFrameDefaultText in head).toBe(true);
+  });
+
+  it('does not reorder bindings when the global frame has no sentinel', () => {
+    // Frame's "move the sentinel first" step used to run findIndex -> -1 and then
+    // splice(-1, 1), which reads as "the last entry" and silently promoted an unrelated
+    // binding to the front of the global frame.
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        globalFrame([
+          { name: 'first', value: { displayValue: '1', label: 'number' } },
+          { name: 'middle', value: { displayValue: '2', label: 'number' } },
+          { name: 'last', value: { displayValue: '3', label: 'number' } },
+        ]),
+      ],
+    };
+    const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
+
+    Layout.snapshotMode = true;
+    try {
+      Layout.setContext(
+        envTree as unknown as EnvTree,
+        fakeControl as unknown as Control,
+        fakeStash as unknown as Stash,
+      );
+    } finally {
+      Layout.snapshotMode = false;
+    }
+
+    const env = findNode(envTree, 'g')!.environment;
+    const frame = Frame.getFrom(env as any)!;
+    expect(frame).toBeDefined();
+    expect(frame.bindings.map(b => b.keyString.replace(/[:\s]+$/, ''))).toEqual([
+      'first',
+      'middle',
+      'last',
+    ]);
+  });
+});
