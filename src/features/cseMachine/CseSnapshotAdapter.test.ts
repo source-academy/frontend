@@ -589,3 +589,78 @@ describe('Source-shaped snapshots (js-slang)', () => {
     ]);
   });
 });
+
+describe('non-finite numbers', () => {
+  // NaN and Infinity are predeclared globals in Source, so they appear bound in the global frame
+  // of every run. `parseFloat` plus an `isNaN(n) ? 0` fallback rendered NaN as 0 and left
+  // anything unparseable as 0 too.
+  const stashOf = (displayValue: string) =>
+    buildFakeEnvTreeFromSnapshot({
+      stepIndex: 0,
+      control: [],
+      stash: [{ displayValue, label: 'number' }],
+      environments: [{ id: 'g', name: 'global', parentId: null, bindings: [], isActive: true }],
+    }).fakeStash.getStack()[0];
+
+  it('renders NaN as NaN, not 0', () => {
+    expect(stashOf('NaN')).toBeNaN();
+  });
+
+  it('renders Infinity and -Infinity', () => {
+    expect(stashOf('Infinity')).toBe(Infinity);
+    expect(stashOf('-Infinity')).toBe(-Infinity);
+  });
+
+  it('still reads ordinary numbers', () => {
+    expect(stashOf('42')).toBe(42);
+    expect(stashOf('-3.5')).toBe(-3.5);
+    expect(stashOf('0')).toBe(0);
+  });
+
+  it('falls back to 0 for something genuinely unparseable', () => {
+    expect(stashOf('not a number')).toBe(0);
+  });
+});
+
+describe('non-finite numbers reach the canvas as themselves', () => {
+  // Text renders identifiable values with JSON.stringify, which turns every non-finite number
+  // into the *string* "null" — truthy, so the `|| String(data)` fallback never fired. All three
+  // are predeclared globals in Source, so this showed in the global frame of every run, and it
+  // affected the live (non-snapshot) renderer too.
+  const renderedGlobal = (displayValue: string) => {
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        {
+          id: 'g',
+          name: 'global',
+          parentId: null,
+          bindings: [{ name: 'v', value: { displayValue, label: 'number' } }],
+          isActive: true,
+        },
+      ],
+    };
+    const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
+    Layout.snapshotMode = true;
+    try {
+      Layout.setContext(
+        envTree as unknown as EnvTree,
+        fakeControl as unknown as Control,
+        fakeStash as unknown as Stash,
+      );
+    } finally {
+      Layout.snapshotMode = false;
+    }
+    const frame = Frame.getFrom(findNode(envTree, 'g')!.environment as any)!;
+    return frame.bindings.find(b => b.keyString.startsWith('v'))?.value;
+  };
+
+  it.each(['NaN', 'Infinity', '-Infinity'])('%s does not render as null', displayValue => {
+    const value = renderedGlobal(displayValue) as { text?: { fullStr?: string } } | undefined;
+    // Asserted unconditionally: a guard here would let the test pass vacuously if the binding
+    // text ever went missing, which is the regression most worth catching.
+    expect(value?.text?.fullStr).toBe(displayValue);
+  });
+});
