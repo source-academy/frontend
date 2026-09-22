@@ -1,4 +1,4 @@
-import { Button, H6, Icon, InputGroup } from '@blueprintjs/core';
+import { Button, H6, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import type { CellClickedEvent, ColDef } from 'ag-grid-community';
 import { AgGridReact, type CustomHeaderProps } from 'ag-grid-react';
@@ -88,10 +88,6 @@ function GradingSubmissionTable({
   const gridRef = useRef<AgGridReact<IGradingTableRow>>(null);
 
   const [page, setPage] = useState(0);
-  /** The value to be shown in the search bar */
-  const [searchQuery, setSearchQuery] = useState('');
-  /** The actual value sent to the backend */
-  const [searchValue, setSearchValue] = useState('');
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
     ...tableFilters.columnFilters,
   ]);
@@ -139,30 +135,13 @@ function GradingSubmissionTable({
     suppressPaginationPanel: true,
   };
 
-  // Placing searchValue as a dependency for triggering a page reset will result in double-querying.
-  const debouncedUpdateSearchValue = useMemo(
-    () =>
-      debounce((newValue: string) => {
-        resetPage();
-        setSearchValue(newValue);
-      }, 300),
-    [resetPage],
-  );
-
-  const handleSearchQueryUpdate: React.ChangeEventHandler<HTMLInputElement> = e => {
-    setSearchQuery(e.target.value);
-    debouncedUpdateSearchValue(e.target.value);
-  };
-
   const debouncedUpdateCellFilters = useMemo(() => debounce(setCellFilters, 300), []);
 
   // Converts the columnFilters array into backend query parameters.
   const backendFilterParams = useMemo(() => {
-    const filters: Array<{ [key: string]: any }> = [
-      { id: ColumnFields.assessmentName, value: searchValue },
-      ...columnFilters,
-      ...cellFilters,
-    ].map(convertFilterToBackendParams);
+    const filters: Array<{ [key: string]: any }> = [...columnFilters, ...cellFilters].map(
+      convertFilterToBackendParams,
+    );
 
     const params: Record<string, any> = {};
     filters.forEach(e => {
@@ -171,7 +150,7 @@ function GradingSubmissionTable({
       });
     });
     return params;
-  }, [cellFilters, columnFilters, searchValue]);
+  }, [cellFilters, columnFilters]);
 
   const cellClickedEvent = (event: CellClickedEvent) => {
     const colClicked: string = event.colDef.field ? event.colDef.field : '';
@@ -325,19 +304,10 @@ function GradingSubmissionTable({
             classes['grading-filter-btn'],
             filterMode && classes['grading-filter-btn-on'],
           )}
-          onClick={e => setFilterMode((prev: boolean) => !prev)}
+          onClick={() => setFilterMode((prev: boolean) => !prev)}
         >
           {filterMode ? 'Filter Mode' : 'Grading Mode'}
         </Button>
-
-        <InputGroup
-          className="grading-search-input"
-          placeholder="Search by assessment name"
-          leftIcon="search"
-          size="large"
-          value={searchQuery}
-          onChange={handleSearchQueryUpdate}
-        />
       </GradingFlex>
 
       <div className="mt-4">
@@ -373,6 +343,7 @@ function GradingSubmissionTable({
             for (const [key, { filter: query }] of Object.entries(filters)) {
               switch (key) {
                 // Fields that BE supports filtering on
+                case ColumnFields.assessmentName:
                 case ColumnFields.studentName:
                 case ColumnFields.studentUsername:
                 case ColumnFields.groupName:
