@@ -137,7 +137,6 @@ function GradingSubmissionTable({
     pagination: true,
     suppressMenuHide: true,
     suppressPaginationPanel: true,
-    suppressRowClickSelection: true,
   };
 
   // Placing searchValue as a dependency for triggering a page reset will result in double-querying.
@@ -361,10 +360,6 @@ function GradingSubmissionTable({
           paginationPageSizeSelector={false}
           suppressMenuHide={tableProperties.suppressMenuHide}
           suppressPaginationPanel={tableProperties.suppressPaginationPanel}
-          rowSelection={{
-            mode: 'singleRow',
-            enableClickSelection: !tableProperties.suppressRowClickSelection,
-          }}
           domLayout="autoHeight"
           enableCellTextSelection
           ensureDomOrder
