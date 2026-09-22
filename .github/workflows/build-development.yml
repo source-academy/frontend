@@ -47,6 +47,14 @@ jobs:
           REACT_APP_PLAYGROUND_ONLY: 'TRUE'
           REACT_APP_VERSION: ${{ format('{0}-{1}', github.sha, steps.get-time.outputs.time) }}
           REACT_APP_ENVIRONMENT: 'pages'
+          # Pins conductor.enable for every user of the production deployment — see
+          # flagConductorEnable.ts and Constants.ts's conductorConfig.enable: once this is set at
+          # build time, the flag is locked (setFlag/resetFlag become no-ops for it) and the
+          # /features page shows it as pinned rather than user-togglable. This is step one of
+          # deprecating the non-Conductor path (js-slang#2069/#2062): a non-Conductor frontend
+          # still exists, but only for someone who deliberately builds their own with this unset
+          # (or FALSE), not as a toggle any user of the official deployment can flip.
+          REACT_APP_CONDUCTOR_ENABLE: 'TRUE'
           REACT_APP_MODULE_BACKEND_URL: https://source-academy.github.io/modules
           REACT_APP_SHAREDB_BACKEND_URL: ${{ secrets.REACT_APP_SHAREDB_BACKEND_URL }}
           PUBLIC_URL: 'https://sourceacademy.org'
