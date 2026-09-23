@@ -1,8 +1,10 @@
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { Variant } from 'js-slang/dist/langs';
 import { call, put, select, type StrictEffect } from 'redux-saga/effects';
+import { featureSelector } from 'src/commons/featureFlags/featureSelector';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import CseMachine from 'src/features/cseMachine/CseMachine';
+import { flagConductorEv3Enable } from 'src/features/remoteExecutionConductor/flagConductorEv3Enable';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
@@ -54,11 +56,27 @@ export function* evalEditorSaga(
       [defaultFilePath]: editorTabs[activeEditorTabIndex].value,
     };
   }
-  const entrypointFilePath = editorTabs[activeEditorTabIndex].filePath ?? defaultFilePath;
+  // Outside folder mode, `files` above is always keyed by the freshly-computed `defaultFilePath`
+  // (never by the tab's own `filePath`) - falling back to `editorTab.filePath` here too, as this
+  // used to do unconditionally, could point entrypointFilePath at a key `files` doesn't have (e.g.
+  // a stale filePath left over from folder mode having been toggled on then off), making
+  // `files[entrypointFilePath]` resolve to `undefined` and silently running nothing.
+  const entrypointFilePath = isFolderModeEnabled
+    ? (editorTabs[activeEditorTabIndex].filePath ?? defaultFilePath)
+    : defaultFilePath;
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
-    yield put(actions.remoteExecRun(files, entrypointFilePath));
+    // Deliberately gated on the EV3-specific flag, not the general flagConductorEnable (which
+    // defaults to true) - the legacy Source path (js-slang -> SVML -> SlingClient, see
+    // RemoteExecutionSaga.ts) must stay the default for every device until the Conductor/py-slang
+    // pipeline is actually finished end-to-end, regardless of whether Conductor itself is on.
+    const isConductorEv3: boolean = yield select(featureSelector(flagConductorEv3Enable));
+    if (isConductorEv3) {
+      yield put(actions.remoteExecConductorRun(files, entrypointFilePath));
+    } else {
+      yield put(actions.remoteExecRun(files, entrypointFilePath));
+    }
   } else {
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
