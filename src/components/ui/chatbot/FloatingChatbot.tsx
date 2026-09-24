@@ -139,8 +139,8 @@ function FloatingChatbot({
         {isTipsVisible && (
           <div
             className={classNames(
-              isOpen ? 'right-16.25 bottom-full mb-2' : 'right-16.25 bottom-2.5',
-              'absolute h-auto w-65 rounded-[5px] border border-black bg-[#f1f1f1] pr-2.5',
+              'absolute right-16.25 h-auto w-65 rounded-[5px] border border-black bg-[#f1f1f1] pr-2.5',
+              isOpen ? 'bottom-full mb-2.5' : 'bottom-2.5',
             )}
           >
             <p className="m-0 whitespace-normal break-normal px-2 py-1 text-right text-[13px]">
