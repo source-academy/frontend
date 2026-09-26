@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { CseSnapshot } from '../conductor/CseMachineHostPlugin';
 import { Frame } from './components/Frame';
+import { FnValue } from './components/values/FnValue';
 import CseMachine from './CseMachine';
 import { CseAnimation } from './CseMachineAnimation';
 import { Config } from './CseMachineConfig';
@@ -438,5 +439,228 @@ describe('assignment animation across a snapshot step (regression)', () => {
     }).not.toThrow();
 
     expect(CseAnimation.animations.map(a => a.constructor.name)).toContain('AssignmentAnimation');
+  });
+});
+
+describe('a closure whose home frame has no bindings keeps that frame visible (py-slang#469, frontend#4380)', () => {
+  it('gives a bare stash closure a frame to point to, with and without clear-dead-frames', () => {
+    CseMachine.init(
+      () => {},
+      1000,
+      1000,
+      () => {},
+      () => {},
+    );
+
+    // Mirrors what py-slang actually sends for a top-level `lambda x: x + 2` with no other
+    // top-level statement: `programEnvironment` has no bindings at all, yet the closure sitting
+    // on the stash still points to it as its defining environment.
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [
+        {
+          displayValue: 'lambda',
+          label: 'function',
+          metadata: { closureFrameId: 'p', params: ['x'], funcName: 'lambda' },
+        },
+      ],
+      environments: [
+        { id: 'g', name: 'global', parentId: null, bindings: [], isActive: false },
+        { id: 'p', name: 'programEnvironment', parentId: 'g', bindings: [], isActive: true },
+      ],
+    };
+
+    try {
+      for (const clearDeadFrames of [false, true]) {
+        CseMachine.setClearDeadFrames(clearDeadFrames);
+        CseMachine.renderSnapshot(snapshot);
+
+        const programEnv = findNode(
+          buildFakeEnvTreeFromSnapshot(snapshot).envTree,
+          'p',
+        )!.environment;
+        expect(Frame.getFrom(programEnv as any)).toBeDefined();
+
+        const fnValue = [...Layout.values.values()].find(v => v instanceof FnValue) as
+          | FnValue
+          | undefined;
+        expect(fnValue).toBeDefined();
+        expect(fnValue!.arrow()).toBeDefined();
+        expect(fnValue!.arrow()!.target).toBeDefined();
+      }
+    } finally {
+      CseMachine.setClearDeadFrames(false);
+    }
+  });
+});
+
+describe('Source-shaped snapshots (js-slang)', () => {
+  const globalFrame = (bindings: CseSnapshot['environments'][number]['bindings']) => ({
+    id: 'g',
+    name: 'global',
+    parentId: null,
+    bindings,
+    isActive: true,
+  });
+
+  it('renders the empty list as a real null, not as Python None', () => {
+    // js-slang labels Source's `null` 'empty_list' precisely so it does NOT take the
+    // 'nonetype|none|null' branch, which exists to keep Python's None away from the
+    // empty-list visual. Source wants that visual.
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [{ displayValue: 'null', label: 'empty_list' }],
+      environments: [globalFrame([])],
+    };
+    const { fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
+    expect(fakeStash.getStack()[0]).toBeNull();
+  });
+
+  it('omits the pre-declared-names sentinel when the global frame has its own bindings', () => {
+    // js-slang keeps every builtin in the global environment's head, so the frame arrives full
+    // and the sentinel would be a spurious extra row above the real bindings.
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        globalFrame([
+          { name: 'display', value: { displayValue: 'display', label: 'builtin' } },
+          { name: 'x', value: { displayValue: '1', label: 'number' }, isConst: true },
+        ]),
+      ],
+    };
+    const { envTree } = buildFakeEnvTreeFromSnapshot(snapshot);
+    const head = findNode(envTree, 'g')!.environment.head;
+    expect(Object.keys(head)).toEqual(['display', 'x']);
+    expect(Config.GlobalFrameDefaultText in head).toBe(false);
+  });
+
+  it('keeps the sentinel when the global frame is empty (py-slang shape)', () => {
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [globalFrame([])],
+    };
+    const { envTree } = buildFakeEnvTreeFromSnapshot(snapshot);
+    const head = findNode(envTree, 'g')!.environment.head;
+    expect(Config.GlobalFrameDefaultText in head).toBe(true);
+  });
+
+  it('does not reorder bindings when the global frame has no sentinel', () => {
+    // Frame's "move the sentinel first" step used to run findIndex -> -1 and then
+    // splice(-1, 1), which reads as "the last entry" and silently promoted an unrelated
+    // binding to the front of the global frame.
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        globalFrame([
+          { name: 'first', value: { displayValue: '1', label: 'number' } },
+          { name: 'middle', value: { displayValue: '2', label: 'number' } },
+          { name: 'last', value: { displayValue: '3', label: 'number' } },
+        ]),
+      ],
+    };
+    const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
+
+    Layout.snapshotMode = true;
+    try {
+      Layout.setContext(
+        envTree as unknown as EnvTree,
+        fakeControl as unknown as Control,
+        fakeStash as unknown as Stash,
+      );
+    } finally {
+      Layout.snapshotMode = false;
+    }
+
+    const env = findNode(envTree, 'g')!.environment;
+    const frame = Frame.getFrom(env as any)!;
+    expect(frame).toBeDefined();
+    expect(frame.bindings.map(b => b.keyString.replace(/[:\s]+$/, ''))).toEqual([
+      'first',
+      'middle',
+      'last',
+    ]);
+  });
+});
+
+describe('non-finite numbers', () => {
+  // NaN and Infinity are predeclared globals in Source, so they appear bound in the global frame
+  // of every run. `parseFloat` plus an `isNaN(n) ? 0` fallback rendered NaN as 0 and left
+  // anything unparseable as 0 too.
+  const stashOf = (displayValue: string) =>
+    buildFakeEnvTreeFromSnapshot({
+      stepIndex: 0,
+      control: [],
+      stash: [{ displayValue, label: 'number' }],
+      environments: [{ id: 'g', name: 'global', parentId: null, bindings: [], isActive: true }],
+    }).fakeStash.getStack()[0];
+
+  it('renders NaN as NaN, not 0', () => {
+    expect(stashOf('NaN')).toBeNaN();
+  });
+
+  it('renders Infinity and -Infinity', () => {
+    expect(stashOf('Infinity')).toBe(Infinity);
+    expect(stashOf('-Infinity')).toBe(-Infinity);
+  });
+
+  it('still reads ordinary numbers', () => {
+    expect(stashOf('42')).toBe(42);
+    expect(stashOf('-3.5')).toBe(-3.5);
+    expect(stashOf('0')).toBe(0);
+  });
+
+  it('falls back to 0 for something genuinely unparseable', () => {
+    expect(stashOf('not a number')).toBe(0);
+  });
+});
+
+describe('non-finite numbers reach the canvas as themselves', () => {
+  // Text renders identifiable values with JSON.stringify, which turns every non-finite number
+  // into the *string* "null" — truthy, so the `|| String(data)` fallback never fired. All three
+  // are predeclared globals in Source, so this showed in the global frame of every run, and it
+  // affected the live (non-snapshot) renderer too.
+  const renderedGlobal = (displayValue: string) => {
+    const snapshot: CseSnapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        {
+          id: 'g',
+          name: 'global',
+          parentId: null,
+          bindings: [{ name: 'v', value: { displayValue, label: 'number' } }],
+          isActive: true,
+        },
+      ],
+    };
+    const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
+    Layout.snapshotMode = true;
+    try {
+      Layout.setContext(
+        envTree as unknown as EnvTree,
+        fakeControl as unknown as Control,
+        fakeStash as unknown as Stash,
+      );
+    } finally {
+      Layout.snapshotMode = false;
+    }
+    const frame = Frame.getFrom(findNode(envTree, 'g')!.environment as any)!;
+    return frame.bindings.find(b => b.keyString.startsWith('v'))?.value;
+  };
+
+  it.each(['NaN', 'Infinity', '-Infinity'])('%s does not render as null', displayValue => {
+    const value = renderedGlobal(displayValue) as { text?: { fullStr?: string } } | undefined;
+    // Asserted unconditionally: a guard here would let the test pass vacuously if the binding
+    // text ever went missing, which is the regression most worth catching.
+    expect(value?.text?.fullStr).toBe(displayValue);
   });
 });

@@ -142,7 +142,13 @@ export class Frame extends Visible implements IHoverable {
     // move the global frame default text to the first position if it isn't in there already
     if (this.environment.name === 'global' && entries[0][0] !== Config.GlobalFrameDefaultText) {
       const index = entries.findIndex(([key]) => key === Config.GlobalFrameDefaultText);
-      entries.unshift(entries.splice(index, 1)[0]);
+      // Guard the -1: a global frame can legitimately not carry the sentinel at all (js-slang
+      // keeps its builtins in the global frame's own head rather than hiding them), and
+      // `splice(-1, 1)` reads that as "the last entry", silently promoting an unrelated
+      // binding to the front.
+      if (index >= 0) {
+        entries.unshift(entries.splice(index, 1)[0]);
+      }
     }
 
     // get values that are unreferenced, which will used to created dummy bindings

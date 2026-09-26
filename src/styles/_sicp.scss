@@ -45,8 +45,16 @@ $sicp-content-lr-padding: 6em;
     font-size: 15pt;
   }
 
-  .sicp-text {
-    margin-bottom: 32px;
+  // Specificity must beat .sicp-content p below (0-1-1) since both target the same
+  // elements — every <p> the JSON-based renderer emits already carries this class
+  // (ParseJson.tsx's TEXT handler is the only producer of a bare <p>).
+  .sicp-content .sicp-text {
+    // Half a line of vertical space between paragraphs, matching the design brief:
+    // line-height is a unitless 2 (i.e. 2 x font-size), so half of that is 1 x
+    // font-size — using em keeps it exactly half a line at any font-size (e.g. the
+    // 13pt used inside footnotes/#text sizing overrides elsewhere in this file).
+    display: block;
+    margin-bottom: 1em;
   }
 
   .sicp-content {
@@ -96,7 +104,7 @@ $sicp-content-lr-padding: 6em;
       }
     }
 
-    p {
+    p:not(.sicp-text) {
       display: inline;
     }
 

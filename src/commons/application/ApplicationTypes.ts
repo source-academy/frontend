@@ -513,6 +513,7 @@ export const defaultVscode: VscodeState = {
 export const defaultLanguageDirectory: LanguageDirectoryState = {
   selectedLanguageId: null,
   selectedEvaluatorId: null,
+  isDefaultSelection: true,
   languages: [],
   languageMap: {},
 };

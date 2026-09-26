@@ -1,6 +1,7 @@
 import type { SagaIterator } from 'redux-saga';
 import { call, debounce, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
 
+import { canSaveAssessment } from '../../../../features/assessments/AssessmentUtils';
 import SessionActions from '../../../application/actions/SessionActions';
 import type { OverallState } from '../../../application/ApplicationTypes';
 import type { Tokens } from '../../../application/types/SessionTypes';
@@ -13,9 +14,10 @@ import { getVersionCode, getVersionHistory, updateVersionName } from '../../Requ
 /**
  * Checks whether autosave is enabled for the current assessment workspace.
  * Defaults to false if the config cannot be found.
- * Defaults to true for assessments created before feature implementation
+ * Defaults to true for assessments created before feature implementation.
+ * Also disabled once the student can no longer save (finalised/closed).
  */
-function* isAutosaveEnabledForCurrentAssessment(): SagaIterator<boolean> {
+function* shouldAutoSaveCurrentAssessment(): SagaIterator<boolean> {
   return yield select((state: OverallState) => {
     const assessmentId = state.workspaces.assessment.currentAssessment;
     if (assessmentId === undefined) {
@@ -25,7 +27,7 @@ function* isAutosaveEnabledForCurrentAssessment(): SagaIterator<boolean> {
     if (!overview) {
       return false;
     }
-    return overview.isAutosaveEnabled ?? true;
+    return (overview.isAutosaveEnabled ?? true) && canSaveAssessment(state.session.role, overview);
   });
 }
 
@@ -202,7 +204,7 @@ export function* restoreVersionSaga(
     return overview ? overview.maxTeamSize !== 1 : false;
   });
 
-  const autosaveEnabled: boolean = yield call(isAutosaveEnabledForCurrentAssessment);
+  const autosaveEnabled: boolean = yield call(shouldAutoSaveCurrentAssessment);
 
   if (isTeamAssessment || !autosaveEnabled) {
     // For team assessments, dont submit
@@ -264,7 +266,7 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
   }
 
   // Skip auto-save if autosave is disabled for this assessment
-  const autosaveEnabled: boolean = yield call(isAutosaveEnabledForCurrentAssessment);
+  const autosaveEnabled: boolean = yield call(shouldAutoSaveCurrentAssessment);
   if (!autosaveEnabled) {
     return false;
   }
@@ -390,7 +392,7 @@ export function* watchAutoSave() {
       if (workspaceLocation !== 'assessment') {
         return;
       }
-      const autosaveEnabled: boolean = yield call(isAutosaveEnabledForCurrentAssessment);
+      const autosaveEnabled: boolean = yield call(shouldAutoSaveCurrentAssessment);
       if (!autosaveEnabled) {
         return;
       }
@@ -411,7 +413,7 @@ export function* watchSavingStatus() {
       if (workspaceLocation !== 'assessment') {
         return;
       }
-      const autosaveEnabled: boolean = yield call(isAutosaveEnabledForCurrentAssessment);
+      const autosaveEnabled: boolean = yield call(shouldAutoSaveCurrentAssessment);
       if (!autosaveEnabled) {
         return;
       }

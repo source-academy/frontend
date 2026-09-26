@@ -51,8 +51,25 @@ function toJsValue(
   const label = v.label.toLowerCase();
 
   if (label === 'int' || label === 'number') {
-    const n = parseFloat(v.displayValue);
-    return isNaN(n) ? 0 : n;
+    // `Number` rather than `parseFloat`, and no NaN fallback: the three non-finite values are
+    // real Source values a student can produce and see bound in a frame — `NaN` and `Infinity`
+    // are predeclared globals. `parseFloat('NaN')` is NaN, which the old `isNaN(n) ? 0` turned
+    // into 0; `parseFloat` also stops at the first non-numeric character, so a displayValue of
+    // 'Infinity' parsed fine but anything it could not read became 0 too.
+    //
+    // Guarding on the exact spellings keeps the fallback for a genuinely unparseable
+    // displayValue, rather than silently rendering it as a number.
+    if (v.displayValue === 'NaN') {
+      return NaN;
+    }
+    if (v.displayValue === 'Infinity') {
+      return Infinity;
+    }
+    if (v.displayValue === '-Infinity') {
+      return -Infinity;
+    }
+    const n = Number(v.displayValue);
+    return Number.isNaN(n) ? 0 : n;
   }
   if (label === 'float' || label === 'complex') {
     // Return a source object so PrimitiveValue uses toReplString() instead of String(value).
@@ -65,6 +82,12 @@ function toJsValue(
   }
   if (label === 'str' || label === 'string') {
     return v.displayValue.replace(/^["']|["']$/g, '');
+  }
+  if (label === 'empty_list') {
+    // Source's empty list. A real `null` is what the renderer wants here: it drives the
+    // ArrayNullUnit visual and the box-and-pointer diagram's terminator. Kept separate from the
+    // Python labels below, which deliberately avoid exactly that visual.
+    return null;
   }
   if (label === 'nonetype' || label === 'none' || label === 'null') {
     // Return a source object so PrimitiveValue/Text use toReplString() instead of
@@ -259,8 +282,14 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
     // Frame.tsx accesses entries[0][0] for 'global' env without guarding for empty heads.
     // py-slang's global env has no head bindings (builtins live in nativeStorage), so we
     // pre-populate the same sentinel Source uses to keep Frame's constructor from crashing.
-    const head: Record<string, unknown> =
-      f.name === 'global' ? { [Config.GlobalFrameDefaultText]: Symbol() } : {};
+    // The sentinel stands in for "the builtins live somewhere you cannot see" — true for
+    // py-slang, whose builtins are in nativeStorage and whose global frame is genuinely empty.
+    // js-slang puts every builtin in the global environment's own head, so that frame arrives
+    // full and the sentinel would just be a spurious extra row above the real bindings.
+    const needsGlobalSentinel = f.name === 'global' && f.bindings.length === 0;
+    const head: Record<string, unknown> = needsGlobalSentinel
+      ? { [Config.GlobalFrameDefaultText]: Symbol() }
+      : {};
     const env = {
       id: f.id,
       name: f.name,

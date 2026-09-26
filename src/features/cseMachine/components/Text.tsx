@@ -72,7 +72,13 @@ export class Text extends Visible implements IHoverable {
     this.fullStr = this.partialStr = isSourceObject(data)
       ? data.toReplString()
       : isStringIdentifiable
-        ? JSON.stringify(data) || String(data)
+        ? // `JSON.stringify` renders every non-finite number as the *string* "null", which is
+          // truthy — so the `|| String(data)` fallback never fired and `NaN`, `Infinity` and
+          // `-Infinity` all displayed as `null`. All three are predeclared globals in Source,
+          // so this was visible in the global frame of every run.
+          typeof data === 'number' && !Number.isFinite(data)
+          ? String(data)
+          : (JSON.stringify(data) ?? String(data))
         : String(data);
     this._height = fontSize;
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
