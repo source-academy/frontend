@@ -497,6 +497,18 @@ type ReceivedCount = { count: number };
  */
 type LineOffsetRef = { current: number };
 
+/**
+ * Mutable box holding a chunk's result value once handleResults has received it, but not yet
+ * dispatched to Redux. Result and output travel on separate MessagePorts with no cross-channel
+ * ordering guarantee (same root cause ReceivedCount exists for against STATUS) - a chunk's
+ * `sendResult` is always logically the *last* thing that chunk does, but can still be delivered to
+ * the host before some of that chunk's own earlier `sendOutput` calls. Buffering it here instead of
+ * dispatching immediately, and letting handleStatuses flush it only once its own receivedCount wait
+ * confirms every message for the chunk has actually arrived, guarantees the result is always
+ * rendered after that chunk's output — matching the order the evaluator actually produced them in.
+ */
+type PendingResultRef = { current: { value: unknown } | null };
+
 /** Reported by handleStatuses (via a session's chunkSettledChan) each time a chunk finishes:
  * `terminal: false` for an ordinary chunk boundary (RunnerStatus.EVAL_READY - the evaluator is
  * alive and waiting for the next chunk), `terminal: true` when the session is actually over
@@ -595,6 +607,7 @@ function* handleResults(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
   receivedCount: ReceivedCount,
+  pendingResultRef: PendingResultRef,
 ): SagaIterator {
   const resultChan = eventChannel(emitter => {
     const onReceiveResult = (result: any) => emitter({ value: result });
@@ -609,8 +622,10 @@ function* handleResults(
     while (true) {
       const { value: result } = yield take(resultChan);
       receivedCount.count++;
+      // Buffered, not dispatched here - see PendingResultRef's doc comment. handleStatuses flushes
+      // this once its own receivedCount wait confirms the rest of this chunk's output has arrived.
       if (result !== undefined) {
-        yield put(actions.appendInterpreterResult(result, workspaceLocation));
+        pendingResultRef.current = { value: result };
       }
       // Completion is signalled by a genuine terminal STATUS (handleStatuses), not by RESULT:
       // an evaluator may still have pending async work after sending its result (e.g. Python's
@@ -752,6 +767,7 @@ function* handleStatuses(
   workspaceLocation: WorkspaceLocation,
   receivedCount: ReceivedCount,
   chunkSettledChan: ReturnType<typeof channel<ChunkSettled>>,
+  pendingResultRef: PendingResultRef,
 ): SagaIterator {
   const statusChan = eventChannel<{ status: RunnerStatus; isActive: boolean; sentCount: number }>(
     emitter => {
@@ -802,6 +818,13 @@ function* handleStatuses(
             break;
           }
           yield call(() => new Promise(resolve => setTimeout(resolve, 5)));
+        }
+        // Flush the buffered result (if any) now - receivedCount has just caught up to sentCount,
+        // so every sendOutput this chunk made has already been dispatched, and appending the result
+        // here is guaranteed to render after all of it (see PendingResultRef's doc comment).
+        if (pendingResultRef.current) {
+          yield put(actions.appendInterpreterResult(pendingResultRef.current.value, workspaceLocation));
+          pendingResultRef.current = null;
         }
         chunkSettledChan.put({ terminal: isTerminalStatus });
         if (isTerminalStatus) {
@@ -1061,6 +1084,8 @@ export function* evalCodeConductorSaga(
     // about to be sent via startEvaluator, below) - see LineOffsetRef's own doc comment for why a
     // later REPL chunk reuses this same ref but resets it to 0 first.
     const lineOffsetRef: LineOffsetRef = { current: preludeLineOffset };
+    // Shared between handleResults and handleStatuses - see PendingResultRef's doc comment.
+    const pendingResultRef: PendingResultRef = { current: null };
     const session: ReplSession = {
       hostPlugin,
       conduit,
@@ -1072,12 +1097,21 @@ export function* evalCodeConductorSaga(
     replSessions.set(workspaceLocation, session);
     session.tasks.push(yield spawn(handleStdout, hostPlugin, workspaceLocation, receivedCount));
     session.tasks.push(yield spawn(handleInputRequest, hostPlugin, workspaceLocation));
-    session.tasks.push(yield spawn(handleResults, hostPlugin, workspaceLocation, receivedCount));
+    session.tasks.push(
+      yield spawn(handleResults, hostPlugin, workspaceLocation, receivedCount, pendingResultRef),
+    );
     session.tasks.push(
       yield spawn(handleErrors, hostPlugin, workspaceLocation, receivedCount, lineOffsetRef),
     );
     session.tasks.push(
-      yield spawn(handleStatuses, hostPlugin, workspaceLocation, receivedCount, chunkSettledChan),
+      yield spawn(
+        handleStatuses,
+        hostPlugin,
+        workspaceLocation,
+        receivedCount,
+        chunkSettledChan,
+        pendingResultRef,
+      ),
     );
     session.tasks.push(yield spawn(handleCseSnapshots, csePlugin, workspaceLocation));
 
