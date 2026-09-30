@@ -68,7 +68,10 @@ function* handleConductorRun(
     // createEv3Conductor (worker fetch/creation) or plugin.run can throw - uncaught, this would
     // bubble through the saga tree since handleConductorRun is attached via takeEvery/fork/all,
     // stopping the whole conductor watcher rather than just failing this one run.
-    const error = new ExceptionError(err instanceof Error ? err : new Error(String(err)), dummyLocation);
+    const error = new ExceptionError(
+      err instanceof Error ? err : new Error(String(err)),
+      dummyLocation,
+    );
     yield put(actions.evalInterpreterError([error], session.workspace));
     yield put(actions.updateWorkspace(session.workspace, { isRunning: false }));
   }
