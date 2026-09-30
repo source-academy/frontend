@@ -799,13 +799,7 @@ function Playground(props: PlaygroundProps) {
     }
     const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
     const lang = langId ? languageMap[langId] : undefined;
-    const evaluator = lang?.evaluators.find(e => {
-      const capabilities = e.capabilities as string[] | undefined;
-      return (
-        !capabilities?.includes(STEPPER_EVALUATOR_CAPABILITY) &&
-        !capabilities?.includes(CSE_EVALUATOR_CAPABILITY)
-      );
-    });
+    const evaluator = lang?.evaluators.find(e => !isToolEvaluator(e));
     return evaluator?.id ?? null;
   });
 
