@@ -7,7 +7,7 @@ import type { DeviceSession } from '../remoteExecution/RemoteExecutionTypes';
 import { createEv3Conductor } from './createEv3Conductor';
 import RemoteExecutionConductorActions from './RemoteExecutionConductorActions';
 
-let activeConductor: ReturnType<typeof createEv3Conductor> | null = null;
+let activeConductor: Awaited<ReturnType<typeof createEv3Conductor>> | null = null;
 // The client activeConductor was built against - if a run comes in for a different client (the
 // user reconnected, or switched devices), the old conductor is still wired to the old client's
 // events and must be torn down and rebuilt rather than reused as-is.

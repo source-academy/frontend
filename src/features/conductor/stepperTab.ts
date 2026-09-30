@@ -31,7 +31,19 @@ export const STEPPER_EVALUATOR_CAPABILITY = 'stepper';
 export const CSE_EVALUATOR_CAPABILITY = 'cse';
 
 /**
- * True for evaluators reachable only through their own side-content tab (Stepper/CSE Machine) —
+ * Capability marking an evaluator as its language's EV3 remote-execution evaluator (see
+ * `EvaluatorCapability.EV3` in the language directory). Unlike STEPPER/CSE above, this evaluator is
+ * not reached through a side-content tab at all - it's selected by `createEv3Conductor.ts`
+ * (resolveEv3EvaluatorPath) purely to find this evaluator's script URL, entirely independent of
+ * `state.languageDirectory.selectedEvaluatorId`/the evaluator dropdown. It exists in the directory,
+ * carrying this capability, so the EV3 evaluator can be hosted as a live URL like every other
+ * evaluator rather than bundled locally - not so it can be picked via the normal selection UI.
+ */
+export const EV3_EVALUATOR_CAPABILITY = 'ev3';
+
+/**
+ * True for evaluators reachable only through their own side-content tab (Stepper/CSE Machine), or
+ * not reachable through ordinary selection UI at all (EV3 - see EV3_EVALUATOR_CAPABILITY above) —
  * hidden from the evaluator dropdown, never a fallback/default. Shared by the Playground's
  * tab-to-evaluator sync effect and the evaluator dropdown's own filtering so both agree on exactly
  * which evaluators are "tool" evaluators.
@@ -39,6 +51,7 @@ export const CSE_EVALUATOR_CAPABILITY = 'cse';
 export function isToolEvaluator(evaluator: { capabilities?: readonly string[] }): boolean {
   return (
     !!evaluator.capabilities?.includes(STEPPER_EVALUATOR_CAPABILITY) ||
-    !!evaluator.capabilities?.includes(CSE_EVALUATOR_CAPABILITY)
+    !!evaluator.capabilities?.includes(CSE_EVALUATOR_CAPABILITY) ||
+    !!evaluator.capabilities?.includes(EV3_EVALUATOR_CAPABILITY)
   );
 }
