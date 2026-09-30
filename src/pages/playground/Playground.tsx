@@ -1140,7 +1140,13 @@ function Playground(props: PlaygroundProps) {
     ],
   );
 
-  const replDisabled = !languageConfig.supports.repl || usingRemoteExecution;
+  // Unlike the other remote-execution disables above (chapter/language switching, visualizer tabs -
+  // things that genuinely don't apply mid-session), the REPL itself is fine to leave enabled while
+  // connected to a device: WorkspaceSaga's evalRepl handler now ships a REPL line to the connected
+  // device through the same Run pipeline as the editor's Run button (see its own remote-execution
+  // branch) instead of evaluating it locally, so there's no conflicting/stale local-context issue
+  // this needs to guard against.
+  const replDisabled = !languageConfig.supports.repl;
 
   const editorContainerHandlers = useMemo(() => {
     return {
