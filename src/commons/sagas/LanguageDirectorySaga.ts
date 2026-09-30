@@ -148,12 +148,26 @@ export const languageDirectoryHandlers = combineSagaHandlers({
     const language: ILanguageDefinition = yield call(getLanguageDefinitionSaga);
 
     // Set the language's default editor program when switching evaluators, but only while the
-    // editor still holds the untouched default (never clobber code the user has written).
+    // editor still holds an untouched default (never clobber code the user has written).
+    //
+    // "An untouched default" means the pristine `defaultEditorValue` *or* any language's own
+    // defaultProgram. Comparing against `defaultEditorValue` alone made the swap one-shot: the
+    // first switch replaced it with, say, Python's `# Type your program in here!`, and every
+    // later switch then failed the comparison and silently left the previous language's comment
+    // in place — so a student moving from Python to Source saw a `#` comment in a JavaScript
+    // editor.
     if (language?.defaultProgram != null) {
       const playground = yield select((state: OverallState) => state.workspaces.playground);
       const activeTabIndex: number = playground.activeEditorTabIndex ?? 0;
       const editorValue: string = playground.editorTabs[activeTabIndex]?.value ?? '';
-      if (editorValue === defaultEditorValue) {
+      const languages: ILanguageDefinition[] = yield select(
+        (state: OverallState) => state.languageDirectory.languages,
+      );
+      const untouchedDefaults = new Set<string>([
+        defaultEditorValue,
+        ...languages.flatMap(l => (l.defaultProgram != null ? [l.defaultProgram] : [])),
+      ]);
+      if (untouchedDefaults.has(editorValue)) {
         yield put(
           WorkspaceActions.updateEditorValue('playground', activeTabIndex, language.defaultProgram),
         );

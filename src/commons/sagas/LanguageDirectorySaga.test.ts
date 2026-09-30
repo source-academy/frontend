@@ -4,7 +4,8 @@ import { describe, test } from 'vitest';
 
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
 import SessionActions from '../application/actions/SessionActions';
-import { defaultLanguageDirectory } from '../application/ApplicationTypes';
+import { defaultEditorValue, defaultLanguageDirectory } from '../application/ApplicationTypes';
+import WorkspaceActions from '../workspace/WorkspaceActions';
 import { languageDirectoryHandlers } from './LanguageDirectorySaga';
 
 function makeMockLanguageDefinition(id: string, evaluatorIds: string[]): ILanguageDefinition {
@@ -152,6 +153,53 @@ describe('setCourseConfiguration', () => {
       })
       .not.put.actionType(LanguageDirectoryActions.setSelectedLanguage.type)
       .dispatch(SessionActions.setCourseConfiguration({ sourceChapter: 2 } as any))
+      .silentRun();
+  });
+});
+
+describe('setSelectedEvaluator: the default program', () => {
+  const withDefaults: ILanguageDefinition[] = [
+    { ...makeMockLanguageDefinition('python1', ['python1Py2js']), defaultProgram: '# python\n' },
+    { ...makeMockLanguageDefinition('source1', ['source1Default']), defaultProgram: '// source\n' },
+  ];
+
+  const stateSelecting = (selectedLanguageId: string, editorValue: string) => ({
+    session: { sourceChapter: 1 },
+    featureFlags: conductorEnabledFlags,
+    languageDirectory: {
+      ...defaultLanguageDirectory,
+      languages: withDefaults,
+      languageMap: Object.fromEntries(withDefaults.map(l => [l.id, l])),
+      selectedLanguageId,
+      selectedEvaluatorId: withDefaults.find(l => l.id === selectedLanguageId)!.evaluators[0].id,
+    },
+    workspaces: { playground: { activeEditorTabIndex: 0, editorTabs: [{ value: editorValue }] } },
+  });
+
+  test("replaces another language's default, not just the pristine one", () => {
+    // The guard used to compare only against `defaultEditorValue`, so once any language's own
+    // default was in the editor the swap stopped matching — switching Python -> Source left a
+    // `#` comment sitting in a JavaScript editor.
+    return expectSaga(languageDirectoryHandlers)
+      .withState(stateSelecting('source1', '# python\n'))
+      .put(WorkspaceActions.updateEditorValue('playground', 0, '// source\n'))
+      .dispatch(LanguageDirectoryActions.setSelectedEvaluator('source1Default'))
+      .silentRun();
+  });
+
+  test('still replaces the pristine default', () => {
+    return expectSaga(languageDirectoryHandlers)
+      .withState(stateSelecting('source1', defaultEditorValue))
+      .put(WorkspaceActions.updateEditorValue('playground', 0, '// source\n'))
+      .dispatch(LanguageDirectoryActions.setSelectedEvaluator('source1Default'))
+      .silentRun();
+  });
+
+  test('never clobbers code the student has written', () => {
+    return expectSaga(languageDirectoryHandlers)
+      .withState(stateSelecting('source1', 'const x = 1;'))
+      .not.put(WorkspaceActions.updateEditorValue('playground', 0, '// source\n'))
+      .dispatch(LanguageDirectoryActions.setSelectedEvaluator('source1Default'))
       .silentRun();
   });
 });
