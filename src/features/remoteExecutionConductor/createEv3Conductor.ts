@@ -51,6 +51,11 @@ async function createWorkerFromUrl(url: string): Promise<Worker> {
     return new Worker(url);
   }
   const response = await fetch(url);
+  if (!response.ok) {
+    // fetch() only rejects on network failure, not HTTP error status - without this check, an
+    // error response body (e.g. a 404 page) would silently become the Worker's script source.
+    throw new Error(`Failed to fetch EV3 evaluator (${response.status})`);
+  }
   const blob = await response.blob();
   const objectUrl = URL.createObjectURL(blob);
   return new Worker(objectUrl);
