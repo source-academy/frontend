@@ -23,6 +23,7 @@ export const generateCols = (filterMode: boolean) => {
     headerName: ColumnName.assessmentName,
     field: ColumnFields.assessmentName,
     cellClass: 'text-left',
+    filter: true,
     flex: 3,
     minWidth: 160,
   });
