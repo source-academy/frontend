@@ -5,35 +5,18 @@ import { ExceptionError } from 'js-slang/dist/errors/errors';
 import { actions } from 'src/commons/utils/ActionsHelper';
 import { store } from 'src/pages/createStore';
 
-import { EV3_EVALUATOR_CAPABILITY } from '../conductor/stepperTab';
 import { Ev3WebPlugin } from './Ev3WebPlugin';
-
-// Local fallback only: used if the language directory has no EV3-capability evaluator for the
-// currently selected language (e.g. local dev without a directory configured, or the directory
-// entry not deployed yet). The real evaluator now comes from the language directory - see
-// resolveEv3EvaluatorUrl below - so this file can be deleted once that's reliably in place
-// everywhere this runs.
-const EV3_EVALUATOR_FALLBACK_PATH = '/evaluators/ev3-remote-runner.js';
+import { resolveEv3EvaluatorPath } from './resolveEv3Evaluator';
 
 const dummyLocation = {
   start: { line: 0, column: 0 },
   end: { line: 0, column: 0 },
 };
 
-/**
- * Resolves the EV3 evaluator's script URL from the language directory (the same mechanism that
- * already provides every other conductor evaluator - Py2JS, PyStepper, etc. - as a live URL rather
- * than a bundled file), instead of a hardcoded local path. Falls back to the locally-bundled copy
- * if no matching evaluator is found, so this degrades gracefully rather than breaking remote
- * execution entirely if the directory entry is ever missing or not yet deployed.
- */
-function resolveEv3EvaluatorPath(): string {
+/** The selected language's EV3 evaluator URL, from the language directory - see resolveEv3Evaluator.ts. */
+function selectedEv3EvaluatorPath(): string {
   const { selectedLanguageId, languageMap } = store.getState().languageDirectory;
-  const language = selectedLanguageId ? languageMap[selectedLanguageId] : undefined;
-  const evaluator = language?.evaluators.find(e =>
-    (e.capabilities as string[] | undefined)?.includes(EV3_EVALUATOR_CAPABILITY),
-  );
-  return evaluator?.path ?? EV3_EVALUATOR_FALLBACK_PATH;
+  return resolveEv3EvaluatorPath(selectedLanguageId ? languageMap[selectedLanguageId] : undefined);
 }
 
 /**
@@ -47,7 +30,8 @@ function resolveEv3EvaluatorPath(): string {
  */
 async function createWorkerFromUrl(url: string): Promise<Worker> {
   if (url.startsWith('/')) {
-    // Same-origin local path (the fallback case) - no cross-origin issue, load directly.
+    // Same-origin path (e.g. a local-dev directory pointing at a locally served py-slang build) -
+    // no cross-origin issue, load directly.
     return new Worker(url);
   }
   const response = await fetch(url);
@@ -65,7 +49,7 @@ export async function createEv3Conductor(client: SlingClient): Promise<{
   plugin: Ev3WebPlugin;
   conduit: IConduit;
 }> {
-  const worker = await createWorkerFromUrl(resolveEv3EvaluatorPath());
+  const worker = await createWorkerFromUrl(selectedEv3EvaluatorPath());
   const conduit = new Conduit(worker, true);
 
   const plugin = conduit.registerPlugin(Ev3WebPlugin);
