@@ -1,7 +1,7 @@
 import type { IChannel, IConduit, IPlugin } from '@sourceacademy/conductor/conduit';
 
-// Must match the worker plugin's own channelAttach (see py-slang's EV3 engine /
-// public/evaluators/ev3-remote-runner.js) - 'test' was a placeholder left over from before that
+// Must match the worker plugin's own channelAttach (see py-slang's
+// src/conductor/plugins/Ev3ExecutionPlugin.ts) - 'test' was a placeholder left over from before that
 // worker existed, so the host and worker were attaching to different channels and every message
 // silently went nowhere (no error either side, since Conductor doesn't fail a send when nothing
 // is subscribed on the target channel - it just never gets delivered).
