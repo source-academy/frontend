@@ -28,8 +28,11 @@ export async function callGameManagerOnTxtLoad(
   await loadText(scene, filename, filename);
   await loadText(scene, textAssets.defaultCheckpoint.key, textAssets.defaultCheckpoint.path);
 
-  const text = scene.cache.text.get(filename);
-  const defaultCheckpointText = scene.cache.text.get(textAssets.defaultCheckpoint.key);
+  // Phaser's file loader only caches a loaded text asset when its contents are
+  // truthy, so a genuinely empty (0-byte) file loads successfully but is never
+  // added to the cache, and `get` returns undefined instead of ''.
+  const text = scene.cache.text.get(filename) ?? '';
+  const defaultCheckpointText = scene.cache.text.get(textAssets.defaultCheckpoint.key) ?? '';
 
   Parser.parse(defaultCheckpointText);
   Parser.parse(text, true);
@@ -58,8 +61,8 @@ export async function callGameManagerForSim() {
   await loadText(scene, filename, toTxtPath(filename));
   await loadText(scene, TextAssets.defaultCheckpoint.key, TextAssets.defaultCheckpoint.path);
 
-  const text = scene.cache.text.get(filename);
-  const defaultCheckpointText = scene.cache.text.get(TextAssets.defaultCheckpoint.key);
+  const text = scene.cache.text.get(filename) ?? '';
+  const defaultCheckpointText = scene.cache.text.get(TextAssets.defaultCheckpoint.key) ?? '';
 
   Parser.parse(defaultCheckpointText);
   Parser.parse(text, true);
