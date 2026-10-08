@@ -27,17 +27,15 @@ import {
   type WorkspaceLocation,
 } from 'src/commons/workspace/WorkspaceTypes';
 import { ClearDeadFramesAnimation } from 'src/features/cseMachine/animationComponents/ClearDeadFramesAnimation';
+import CseArrowFilterMenu from 'src/features/cseMachine/CseArrowFilterMenu';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
 import { Layout } from 'src/features/cseMachine/CseMachineLayout';
-import type { ArrowOriginFilterKey } from 'src/features/cseMachine/CseMachineTypes';
 import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils';
+import { snapshotWithDeadFrames } from 'src/features/cseMachine/cseSnapshotHistory';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
-import type {
-  CseSerializedEnvFrame,
-  CseSnapshot,
-} from '../../../features/conductor/CseMachineHostPlugin';
+import type { CseSnapshot } from '../../../features/conductor/CseMachineHostPlugin';
 import { selectConductorEnable } from '../../../features/conductor/flagConductorEnable';
 import type { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
 import type { HighlightedLines } from '../../editor/EditorTypes';
@@ -46,15 +44,6 @@ import WorkspaceActions from '../../workspace/WorkspaceActions';
 import { beginAlertSideContent } from '../SideContentActions';
 import { getLocation } from '../SideContentHelper';
 import { type SideContentTab, SideContentType } from '../SideContentTypes';
-
-const ALL_ARROW_FILTER_KEYS: ArrowOriginFilterKey[] = [
-  'text',
-  'frame',
-  'function',
-  'array',
-  'control',
-  'stash',
-];
 
 type State = {
   visualization: React.ReactNode;
@@ -106,8 +95,6 @@ type DispatchProps = {
 };
 
 class SideContentCseMachineBase extends Component<CseMachineProps, State> {
-  private accumulatedFrames = new Map<string, CseSerializedEnvFrame>();
-
   constructor(props: CseMachineProps) {
     super(props);
     this.state = {
@@ -305,28 +292,8 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
 
     this.props.setEditorHighlightedLines(0, []);
 
-    // Accumulate all frames seen up to this step so dead frames can be shown.
-    this.accumulatedFrames.clear();
-    for (let i = 0; i <= step; i++) {
-      const s = cseSnapshots[i];
-      if (!s) {
-        continue;
-      }
-      for (const frame of s.environments) {
-        this.accumulatedFrames.set(frame.id, frame);
-      }
-    }
-
-    const liveIds = new Set(snapshot.environments.map((f: CseSerializedEnvFrame) => f.id));
-    const deadFrames = [...this.accumulatedFrames.values()]
-      .filter(f => !liveIds.has(f.id))
-      .map(f => ({ ...f, isActive: false, isOnCallStack: false }));
-
     CseMachine.clearLiveLayouts();
-    CseMachine.renderSnapshot({
-      ...snapshot,
-      environments: [...snapshot.environments, ...deadFrames],
-    });
+    CseMachine.renderSnapshot(snapshotWithDeadFrames(cseSnapshots, step));
 
     this.props.setEditorHighlightedLinesStep(0, []);
     if (snapshot.currentLine !== undefined && snapshot.currentLine > 0) {
@@ -354,8 +321,6 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
   }
 
   public render() {
-    const arrowFilters = CseMachine.getArrowOriginFilters();
-    const areAllArrowFiltersSelected = ALL_ARROW_FILTER_KEYS.every(key => arrowFilters[key]);
     const hotkeyBindings: HotkeyItem[] = this.state.visualization
       ? [
           ['a', this.stepFirst],
@@ -462,49 +427,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                     isOpen={this.state.arrowFilterOpen}
                     onInteraction={nextOpen => this.setState({ arrowFilterOpen: nextOpen })}
                     position={Position.BOTTOM_LEFT}
-                    content={
-                      <div style={{ padding: '8px 10px', minWidth: '210px' }}>
-                        <div style={{ marginBottom: '8px', fontWeight: 600 }}>Filter Arrows</div>
-                        <Button
-                          size="small"
-                          variant="minimal"
-                          onClick={() => this.setAllArrowFilters(!areAllArrowFiltersSelected)}
-                          style={{ marginBottom: '8px' }}
-                        >
-                          {areAllArrowFiltersSelected ? 'Deselect all' : 'Select all'}
-                        </Button>
-                        <Checkbox
-                          checked={arrowFilters.text}
-                          label="From text"
-                          onChange={() => this.toggleArrowFilter('text')}
-                        />
-                        <Checkbox
-                          checked={arrowFilters.frame}
-                          label="From frames"
-                          onChange={() => this.toggleArrowFilter('frame')}
-                        />
-                        <Checkbox
-                          checked={arrowFilters.function}
-                          label="From function objects"
-                          onChange={() => this.toggleArrowFilter('function')}
-                        />
-                        <Checkbox
-                          checked={arrowFilters.array}
-                          label="From arrays"
-                          onChange={() => this.toggleArrowFilter('array')}
-                        />
-                        <Checkbox
-                          checked={arrowFilters.control}
-                          label="From control"
-                          onChange={() => this.toggleArrowFilter('control')}
-                        />
-                        <Checkbox
-                          checked={arrowFilters.stash}
-                          label="From stash"
-                          onChange={() => this.toggleArrowFilter('stash')}
-                        />
-                      </div>
-                    }
+                    content={<CseArrowFilterMenu onChange={this.refreshArrowFilters} />}
                   >
                     <AnchorButton icon="flow-branch" disabled={!this.state.visualization} />
                   </Popover>
@@ -775,17 +698,6 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     }
     this.sliderShift(0);
     this.sliderRelease(0);
-  };
-
-  private toggleArrowFilter = (origin: ArrowOriginFilterKey) => {
-    const filters = CseMachine.getArrowOriginFilters();
-    CseMachine.setArrowOriginVisible(origin, !filters[origin]);
-    this.refreshArrowFilters();
-  };
-
-  private setAllArrowFilters = (visible: boolean) => {
-    CseMachine.setAllArrowOriginsVisible(visible);
-    this.refreshArrowFilters();
   };
 
   private refreshArrowFilters = () => {
