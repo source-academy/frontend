@@ -84,7 +84,8 @@ export const makeConductorStepperPlaceholderTab = (): SideContentTab => ({
  */
 export const makeConductorEStepperPlaceholderTab = (): SideContentTab => ({
   label: 'E-Stepper',
-  iconName: IconNames.DIAGRAM_TREE,
+  // The Stepper's icon: the two never appear together (Stepper: Python §1-2, E-Stepper: §3-4).
+  iconName: IconNames.FLOW_REVIEW,
   body: <Markdown content="Loading the environment stepper…" />,
   id: CONDUCTOR_E_STEPPER_TAB_ID,
 });
