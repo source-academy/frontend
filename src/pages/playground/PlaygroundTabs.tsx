@@ -11,7 +11,10 @@ import {
   type SideContentTabId,
   SideContentType,
 } from 'src/commons/sideContent/SideContentTypes';
-import { CONDUCTOR_STEPPER_TAB_ID } from 'src/features/conductor/stepperTab';
+import {
+  CONDUCTOR_E_STEPPER_TAB_ID,
+  CONDUCTOR_STEPPER_TAB_ID,
+} from 'src/features/conductor/stepperTab';
 
 export const mobileOnlyTabIds: readonly SideContentTabId[] = [
   SideContentType.mobileEditor,
@@ -72,6 +75,18 @@ export const makeConductorStepperPlaceholderTab = (): SideContentTab => ({
   iconName: IconNames.FLOW_REVIEW,
   body: <Markdown content="Loading the stepper…" />,
   id: CONDUCTOR_STEPPER_TAB_ID,
+});
+
+/**
+ * The E-Stepper's placeholder tab, for conductor languages that offer the environment stepper —
+ * exactly like {@link makeConductorStepperPlaceholderTab}: opening it selects the e-stepper
+ * evaluator, and the e-stepper web plugin's live tab replaces it once that evaluator has loaded.
+ */
+export const makeConductorEStepperPlaceholderTab = (): SideContentTab => ({
+  label: 'E-Stepper',
+  iconName: IconNames.DIAGRAM_TREE,
+  body: <Markdown content="Loading the environment stepper…" />,
+  id: CONDUCTOR_E_STEPPER_TAB_ID,
 });
 
 export const makeSubstVisualizerTabFrom = (
