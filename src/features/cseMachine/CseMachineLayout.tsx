@@ -177,16 +177,14 @@ export class Layout {
     Layout.onFrameHover?.(entered ? frameId : null);
   }
 
-  /** Highlights the frame `frameId`, and returns the others to their normal style. */
+  /**
+   * Highlights the frame `frameId` by its background (darker, or in printable mode a light grey),
+   * leaving its outline (its colour, and the current frame's width) as it is; the other frames get
+   * their normal background.
+   */
   static highlightFrame(frameId: string | null) {
     Layout.levels.forEach(level =>
-      level.frames.forEach(frame => {
-        if (frame.environment.id === frameId) {
-          frame.setArrowSourceHighlightedStyle();
-        } else {
-          frame.setArrowSourceNormalStyle();
-        }
-      }),
+      level.frames.forEach(frame => frame.setHoverBackground(frame.environment.id === frameId)),
     );
     Layout.stageRef.current?.batchDraw();
   }

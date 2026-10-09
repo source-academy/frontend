@@ -159,6 +159,32 @@ describe('frame colours', () => {
     expect(framesById().get('47').boxStroke()).toBe(Config.ActiveColor);
   });
 
+  test('a hovered frame gets a darker background, a light grey one in printable mode', () => {
+    CseMachine.drawEnvironments(snapshots[1], {
+      width: 600,
+      height: 400,
+      clearDeadFrames: false,
+      frameColors: { '47': '#ffb74d' },
+    });
+    const frame = framesById().get('47');
+    const fill = vi.fn();
+    const stroke = vi.fn();
+    frame.rectRef.current = { fill, stroke };
+    frame.setHoverBackground(true);
+    expect(fill).toHaveBeenLastCalledWith(Config.HoverFrameBgColor);
+    CseMachine.togglePrintableMode();
+    try {
+      frame.setHoverBackground(true);
+      expect(fill).toHaveBeenLastCalledWith(Config.PrintHoverFrameBgColor);
+      frame.setHoverBackground(false);
+      expect(fill).toHaveBeenLastCalledWith(Config.PrintBgColor);
+    } finally {
+      CseMachine.togglePrintableMode();
+    }
+    // The outline (the frame's colour) is left alone.
+    expect(stroke).not.toHaveBeenCalled();
+  });
+
   test('frames report hovering only where they are coloured, and are highlighted', () => {
     const onFrameHover = vi.fn();
     Layout.onFrameHover = onFrameHover;
@@ -173,11 +199,11 @@ describe('frame colours', () => {
       frame.onMouseEnter();
       frame.onMouseLeave();
       expect(onFrameHover.mock.calls).toEqual([['47'], [null]]);
-      const highlighted = vi.spyOn(frame, 'setArrowSourceHighlightedStyle');
-      const other = vi.spyOn(framesById().get('45'), 'setArrowSourceNormalStyle');
+      const hovered = vi.spyOn(frame, 'setHoverBackground');
+      const other = vi.spyOn(framesById().get('45'), 'setHoverBackground');
       Layout.highlightFrame('47');
-      expect(highlighted).toHaveBeenCalled();
-      expect(other).toHaveBeenCalled();
+      expect(hovered).toHaveBeenCalledWith(true);
+      expect(other).toHaveBeenCalledWith(false);
 
       // A frame without a colour ('45' here) is not linked: no hover, and its style is the tab's.
       framesById().get('45').onMouseEnter();
