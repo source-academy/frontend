@@ -1940,17 +1940,17 @@ __metadata:
   linkType: hard
 
 "@daypicker/react@npm:^10.0.0":
-  version: 10.0.1
-  resolution: "@daypicker/react@npm:10.0.1"
+  version: 10.0.2
+  resolution: "@daypicker/react@npm:10.0.2"
   dependencies:
-    react-day-picker: "npm:10.0.1"
+    react-day-picker: "npm:10.0.2"
   peerDependencies:
     "@types/react": ">=16.8.0"
     react: ">=16.8.0"
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10c0/0a31153456a41c83b7af4eda0a050a0e92777871187e14b3be2000c8bf055dc4eb2e83a5a7def1ce055a79f15a521774ddfd56b527309468823d37ff66504dec
+  checksum: 10c0/9f67d2cfe6075bfa0a389b296f25e8f51f7ef523a53d4bcf817994b348b33365ae5bdaf39378e17cdaa13c2127716641e5f7c0d0cf23210b00effe91d0908047
   languageName: node
   linkType: hard
 
@@ -12838,9 +12838,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-day-picker@npm:10.0.1":
-  version: 10.0.1
-  resolution: "react-day-picker@npm:10.0.1"
+"react-day-picker@npm:10.0.2":
+  version: 10.0.2
+  resolution: "react-day-picker@npm:10.0.2"
   dependencies:
     "@date-fns/tz": "npm:^1.4.1"
     date-fns: "npm:^4.1.0"
@@ -12850,7 +12850,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10c0/2ca2690f5e8c22b0fd24079b68959110ec199ec7d5ac74f26cfe6dad3cadf7d781458a9a654673dd47009e4fbb8548711ec0ae048e41dd3cf1d4ede16dadad55
+  checksum: 10c0/3baa75fa21625357656b15425384b21729796c0ae5b2e638d4e7a08f01c3d31db051a1fb21da784f87862ce917383fddfe713164718b3899cc7b47314e46f4ec
   languageName: node
   linkType: hard
 
