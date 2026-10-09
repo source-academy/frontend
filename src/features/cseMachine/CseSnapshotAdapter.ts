@@ -100,9 +100,11 @@ function toJsValue(
     return undefined;
   }
   if (label === 'unassigned') {
-    // Reconstruct the js-slang uninitialized-const sentinel so Frame.tsx
-    // detects it via isUnassigned() and renders the binding as empty (no value shown).
-    return Symbol('const declaration');
+    // A symbol, so Frame.tsx detects it via isUnassigned() and renders the binding as empty (no
+    // value shown). Not js-slang's uninitialized-const sentinel (`Symbol('const declaration')`),
+    // which Frame.tsx also takes to mark a constant, drawn with `:=`: a binding is constant only if
+    // the snapshot says so (`isConst`), and Python's (e.g. a local not yet assigned) never are.
+    return Symbol('unassigned');
   }
 
   if (label === 'array') {
