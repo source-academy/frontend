@@ -29,8 +29,8 @@ import { Config } from './CseMachineConfig';
 // one circle — using a counter prevents that collision.
 let _closureSeq = 0;
 
-// Minimal stub AST node — getParamsText/getBodyText read .functionName and data.toString()
-// from the fake function, not from this node, so a stub is sufficient.
+// Minimal stub AST node — getParamsText/getBodyText read .functionName, .bodySource and
+// data.toString() from the fake function, not from this node, so a stub is sufficient.
 const STUB_BODY = { type: 'BlockStatement', body: [] };
 
 function makeStubNode(paramNames: string[]) {
@@ -202,7 +202,9 @@ function toJsValue(
       v.objectId !== undefined
         ? `object@${v.objectId}`
         : isNamed
-          ? `${funcName}@${closureEnvId}@${params.join(',')}`
+          ? // The body too, if sent: a function redefined under the same name (after `g = f`) is
+            // another function, with its own body.
+            `${funcName}@${closureEnvId}@${params.join(',')}@${typeof meta?.body === 'string' ? meta.body : ''}`
           : null;
     if (cacheKey && closureCache.has(cacheKey)) {
       return closureCache.get(cacheKey);
@@ -211,7 +213,12 @@ function toJsValue(
     const fakeFn: any = function SnapshotClosure() {};
     fakeFn.id = `snap_${++_closureSeq}_${closureEnvId}`;
     fakeFn.environment = envMap.get(closureEnvId) ?? null;
-    fakeFn.functionName = `${funcName}(${params.join(', ')}) => {}`;
+    // getParamsText reads the parameters from `functionName`, up to its `=>`.
+    fakeFn.functionName = `(${params.join(', ')}) => {}`;
+    // The body's source, if the evaluator sends it (py-slang's `metadata.body`), for getBodyText.
+    if (typeof meta?.body === 'string') {
+      fakeFn.bodySource = meta.body;
+    }
     fakeFn.predefined = false;
     fakeFn.node = makeStubNode(params);
     fakeFn.originalNode = fakeFn.node;
