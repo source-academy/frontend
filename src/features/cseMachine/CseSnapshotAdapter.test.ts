@@ -362,6 +362,37 @@ describe("Python's None in a box-and-pointer diagram", () => {
   });
 });
 
+describe('unassigned bindings', () => {
+  const snapshot = (isConst?: boolean) =>
+    ({
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        {
+          id: 'p',
+          name: 'programEnvironment',
+          parentId: null,
+          bindings: [{ name: 'n', value: { displayValue: '', label: 'unassigned' }, isConst }],
+          isActive: true,
+        },
+      ],
+    }) as unknown as CseSnapshot;
+  const keyOf = (s: CseSnapshot) => {
+    CseMachine.drawEnvironments(s, { width: 500, height: 500, clearDeadFrames: false });
+    const frame = Layout.levels.flatMap(level => level.frames)[0];
+    return frame.bindings.find(b => b.keyString.startsWith('n'))!.keyString;
+  };
+
+  it("are variables, with a colon, unless the snapshot says they are constants (Python's locals)", () => {
+    expect(keyOf(snapshot())).toBe('n' + Config.VariableColon);
+  });
+
+  it('are constants, with :=, when the snapshot says so', () => {
+    expect(keyOf(snapshot(true))).toBe('n' + Config.ConstantColon);
+  });
+});
+
 describe('values only the stash holds', () => {
   const pyList = (id: number, envId: string, elements: unknown[]) => ({
     displayValue: '[...]',
