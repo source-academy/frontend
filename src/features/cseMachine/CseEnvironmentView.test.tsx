@@ -176,10 +176,19 @@ describe('CseEnvironmentView', () => {
   test('gives the Layout back when it goes away', () => {
     sized();
     const theirs = { tab: 'cse' };
+    const scroll = { tab: 'cse-scroll' };
     (Layout.stageRef as React.RefObject<unknown>).current = theirs;
+    (Layout.scrollContainerRef as React.RefObject<unknown>).current = scroll;
+    Layout.visibleWidth = 321;
+    Layout.visibleHeight = 654;
     const { unmount } = render(<CseEnvironmentView snapshots={snapshots} step={0} />);
+    expect(Layout.visibleWidth).toBe(600);
     unmount();
     expect(Layout.stageRef.current).toBe(theirs);
+    expect(Layout.scrollContainerRef.current).toBe(scroll);
+    expect(Layout.visibleWidth).toBe(321);
+    expect(Layout.visibleHeight).toBe(654);
+    (Layout.scrollContainerRef as React.RefObject<unknown>).current = null;
   });
 
   test('links hovering with the plugin', () => {
