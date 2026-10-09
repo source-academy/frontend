@@ -626,6 +626,13 @@ export function getParamsText(data: Closure | GlobalFn | StreamFn): string {
 
 /** Returns the body string of the given function */
 export function getBodyText(data: Closure | GlobalFn | StreamFn): string {
+  // A function from a snapshot whose evaluator sent the body's source (e.g. Python's, which has
+  // no braces): one line as it is, several lines indented below the label.
+  const bodySource = (data as { bodySource?: unknown }).bodySource;
+  if (isClosure(data) && typeof bodySource === 'string') {
+    const lines = bodySource.split('\n');
+    return lines.length === 1 ? bodySource : '\n' + lines.map(line => '  ' + line).join('\n');
+  }
   const fnString = data.toString();
   if (isClosure(data)) {
     let body =
