@@ -7,13 +7,27 @@ import {
   Position,
   Tooltip,
 } from '@blueprintjs/core';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { CseSnapshot } from '../conductor/CseMachineHostPlugin';
+import { ArrayValue } from './components/values/ArrayValue';
+import { FnValue } from './components/values/FnValue';
 import CseArrowFilterMenu from './CseArrowFilterMenu';
 import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
 import { snapshotWithDeadFrames } from './cseSnapshotHistory';
+
+/** A point in the view's own coordinates: pixels from its top-left corner. */
+type AnchorPoint = { x: number; y: number };
+
+/**
+ * Finds where a heap object or a frame is drawn now (with the user's pan and zoom), for an arrow
+ * pointing at it: `null` if it is not drawn. See `onAnchors`.
+ */
+export type CseDiagramAnchorResolver = (target: {
+  kind: 'object' | 'frame';
+  id: string;
+}) => AnchorPoint | null;
 
 export type CseEnvironmentViewProps = {
   /** A run's snapshots; frames from earlier snapshots are shown as dead frames. */
@@ -30,6 +44,13 @@ export type CseEnvironmentViewProps = {
   hoveredFrame?: string | null;
   /** Called with a frame's id when the mouse enters it, and `null` when it leaves. */
   onHoverFrame?: (frameId: string | null) => void;
+  /**
+   * Offers the "Program references" arrow filter, off until the user turns it on. While it is on,
+   * called with a resolver of where objects and frames are drawn, again whenever the drawing moves
+   * (a redraw, pan, zoom), so the plugin can draw arrows into the diagram from its own panes; with
+   * `null` when it is off, and when the view goes away.
+   */
+  onAnchors?: (resolve: CseDiagramAnchorResolver | null) => void;
 };
 
 /**
@@ -57,8 +78,10 @@ function CseEnvironmentView({
   frameColors,
   hoveredFrame,
   onHoverFrame,
+  onAnchors,
 }: CseEnvironmentViewProps) {
   const [area, setArea] = useState<HTMLDivElement | null>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [visible, setVisible] = useState(false);
   const [clearDeadFrames, setClearDeadFrames] = useState(false);
@@ -168,6 +191,28 @@ function CseEnvironmentView({
     }
   }, [drawing, hoveredFrame]);
 
+  // Program references: while the filter is on, tell the plugin where things are drawn, and again
+  // whenever the user pans or zooms (the resolver reads the stage as it is when asked, but the
+  // plugin only asks again when told).
+  const programReferences = CseMachine.getArrowOriginFilters().program;
+  useEffect(() => {
+    if (!onAnchors) {
+      return;
+    }
+    const stage = Layout.stageRef.current;
+    if (!drawing || !programReferences || !stage) {
+      onAnchors(null);
+      return;
+    }
+    const announce = () => onAnchors(anchorResolver(rootRef.current));
+    announce();
+    stage.on('dragmove.anchors wheel.anchors', announce);
+    return () => {
+      stage.off('dragmove.anchors wheel.anchors');
+      onAnchors(null);
+    };
+  }, [onAnchors, drawing, programReferences, version]);
+
   const toggle = (label: string, icon: string, checked: boolean, onToggle: () => void) => (
     <Tooltip content={label} compact>
       <AnchorButton
@@ -185,6 +230,7 @@ function CseEnvironmentView({
 
   return (
     <div
+      ref={rootRef}
       className="sa-cse-environment-view"
       style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative' }}
     >
@@ -201,6 +247,7 @@ function CseEnvironmentView({
               content={
                 <CseArrowFilterMenu
                   exclude={['control', 'stash']}
+                  programReferences={onAnchors !== undefined}
                   onChange={() => {
                     CseMachine.clearRenderedLayouts();
                     redraw();
@@ -237,19 +284,70 @@ function CseEnvironmentView({
           <Button
             icon="plus"
             disabled={!drawing}
-            onClick={() => Layout.zoomStage(true, 5)}
+            onClick={() => {
+              Layout.zoomStage(true, 5);
+              redraw();
+            }}
             style={{ marginBottom: 5, borderRadius: 3 }}
           />
           <Button
             icon="minus"
             disabled={!drawing}
-            onClick={() => Layout.zoomStage(false, 5)}
+            onClick={() => {
+              Layout.zoomStage(false, 5);
+              redraw();
+            }}
             style={{ borderRadius: 3 }}
           />
         </ButtonGroup>
       </div>
     </div>
   );
+}
+
+/**
+ * A resolver of where heap objects and frames are drawn on the lent `Layout`'s stage, relative to
+ * `root`. Arrows end at the left edge of the object's drawing (its first circle or box), or of
+ * the frame's box.
+ */
+function anchorResolver(root: HTMLElement | null): CseDiagramAnchorResolver {
+  return ({ kind, id }) => {
+    const stage = Layout.stageRef.current;
+    if (!stage || !root) {
+      return null;
+    }
+    let at: AnchorPoint | undefined;
+    if (kind === 'object') {
+      for (const value of Layout.values.values()) {
+        if (
+          (value instanceof FnValue || value instanceof ArrayValue) &&
+          (value.data as { objectId?: string }).objectId === id
+        ) {
+          at = { x: value.x(), y: value.y() + value.height() / 2 };
+          break;
+        }
+      }
+    } else {
+      for (const level of Layout.levels) {
+        const frame = level.frames.find(f => f.environment.id === id);
+        if (frame) {
+          at = { x: frame.x(), y: frame.y() + frame.height() / 2 };
+          break;
+        }
+      }
+    }
+    if (!at) {
+      return null;
+    }
+    // The stage's own transform (pan and zoom), then where its container is, relative to the root.
+    const onStage = stage.getAbsoluteTransform().point(at);
+    const container = stage.container().getBoundingClientRect();
+    const origin = root.getBoundingClientRect();
+    return {
+      x: container.left + onStage.x - origin.left,
+      y: container.top + onStage.y - origin.top,
+    };
+  };
 }
 
 export default CseEnvironmentView;

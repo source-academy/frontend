@@ -11,6 +11,7 @@ const FILTERS: { key: ArrowOriginFilterKey; label: string }[] = [
   { key: 'array', label: 'From arrays' },
   { key: 'control', label: 'From control' },
   { key: 'stash', label: 'From stash' },
+  { key: 'program', label: 'Program references' },
 ];
 
 type Props = {
@@ -18,13 +19,18 @@ type Props = {
   onChange: () => void;
   /** Filter keys not offered (e.g. control and stash, for a diagram without them). */
   exclude?: ArrowOriginFilterKey[];
+  /**
+   * Offer "Program references": the arrows a plugin draws from its program pane into the diagram.
+   * Only for a diagram lent to a plugin that can draw them.
+   */
+  programReferences?: boolean;
 };
 
 /**
  * The CSE machine diagram's "Filter Arrows" menu: which kinds of arrows are drawn. Shared by the
  * CSE Machine tab and the environment view the frontend lends to web plugins.
  */
-function CseArrowFilterMenu({ onChange, exclude = [] }: Props) {
+function CseArrowFilterMenu({ onChange, exclude = [], programReferences = false }: Props) {
   // The filters live in CseMachine's static state; re-render this menu itself when they change.
   const [, setVersion] = useState(0);
   const changed = () => {
@@ -32,7 +38,9 @@ function CseArrowFilterMenu({ onChange, exclude = [] }: Props) {
     onChange();
   };
   const filters = CseMachine.getArrowOriginFilters();
-  const shown = FILTERS.filter(f => !exclude.includes(f.key));
+  const shown = FILTERS.filter(
+    f => !exclude.includes(f.key) && (f.key !== 'program' || programReferences),
+  );
   const allSelected = shown.every(f => filters[f.key]);
   return (
     <div style={{ padding: '8px 10px', minWidth: '210px' }}>

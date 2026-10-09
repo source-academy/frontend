@@ -237,6 +237,23 @@ describe('CseArrowFilterMenu', () => {
   });
 });
 
+describe('CseArrowFilterMenu program references', () => {
+  test('are offered only when asked for, and off until turned on', () => {
+    const onChange = vi.fn();
+    const { unmount } = render(<CseArrowFilterMenu onChange={onChange} />);
+    expect(screen.queryByText('Program references')).toBeNull();
+    unmount();
+    render(<CseArrowFilterMenu programReferences onChange={onChange} />);
+    expect(screen.getByText('Program references')).toBeTruthy();
+    expect(CseMachine.getArrowOriginFilters().program).toBe(false);
+    fireEvent.click(screen.getByText('Program references'));
+    expect(CseMachine.getArrowOriginFilters().program).toBe(true);
+    expect(onChange).toHaveBeenCalledTimes(1);
+    CseMachine.resetArrowOriginFilters();
+    expect(CseMachine.getArrowOriginFilters().program).toBe(false);
+  });
+});
+
 describe('CseEnvironmentView', () => {
   const sized = () =>
     vi
@@ -331,6 +348,53 @@ describe('CseEnvironmentView', () => {
     expect(highlight).toHaveBeenLastCalledWith('45');
     unmount();
     expect(Layout.onFrameHover).toBeUndefined();
+  });
+
+  test('reports no anchors until program references are turned on', () => {
+    sized();
+    const onAnchors = vi.fn();
+    const { unmount } = render(
+      <CseEnvironmentView snapshots={snapshots} step={0} onAnchors={onAnchors} />,
+    );
+    expect(onAnchors).toHaveBeenCalled();
+    expect(onAnchors.mock.calls.every(([resolve]) => resolve === null)).toBe(true);
+    unmount();
+  });
+
+  test('reports where frames are drawn once program references are on, and none when it goes away', () => {
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+      left: 10,
+      top: 20,
+      width: 600,
+      height: 400,
+    } as DOMRect);
+    CseMachine.setArrowOriginVisible('program', true);
+    const onAnchors = vi.fn();
+    try {
+      const { unmount } = render(
+        <CseEnvironmentView snapshots={snapshots} step={1} onAnchors={onAnchors} />,
+      );
+      const resolve = onAnchors.mock.calls.map(([r]) => r).findLast(r => r !== null);
+      expect(resolve).toBeDefined();
+      // The stage is panned by (5, 7) and zoomed 2x; its container and the view start at the
+      // same place, so only the stage's transform shows.
+      vi.spyOn(Layout.stageRef.current!, 'getAbsoluteTransform').mockReturnValue({
+        point: ({ x, y }: { x: number; y: number }) => ({ x: x * 2 + 5, y: y * 2 + 7 }),
+      } as never);
+      const frame = Layout.levels
+        .flatMap(level => level.frames)
+        .find(f => f.environment.id === '45')!;
+      expect(resolve({ kind: 'frame', id: '45' })).toEqual({
+        x: frame.x() * 2 + 5,
+        y: frame.y() * 2 + frame.height() + 7,
+      });
+      expect(resolve({ kind: 'frame', id: 'nope' })).toBeNull();
+      expect(resolve({ kind: 'object', id: 'nope' })).toBeNull();
+      unmount();
+      expect(onAnchors).toHaveBeenLastCalledWith(null);
+    } finally {
+      CseMachine.resetArrowOriginFilters();
+    }
   });
 
   test('draws nothing before it has a size', () => {
