@@ -10,7 +10,7 @@ import { CseAnimation } from './CseMachineAnimation';
 import { Config } from './CseMachineConfig';
 import { Layout } from './CseMachineLayout';
 import type { EnvTree } from './CseMachineTypes';
-import { isBuiltInFn } from './CseMachineUtils';
+import { getBodyText, getParamsText, isBuiltInFn } from './CseMachineUtils';
 import { buildFakeEnvTreeFromSnapshot } from './CseSnapshotAdapter';
 
 // Real (headless) Konva stage/layer so animation components — which need a live layer
@@ -175,6 +175,24 @@ describe('heap objects in Python snapshots', () => {
     expect(head.f.objectId).toBe('#1');
     expect(head.h).not.toBe(head.f);
     expect(head.k.objectId).toBeUndefined();
+  });
+
+  it("describes a function by its parameters and its body's source", () => {
+    const fn = (name: string, body?: string) => ({
+      displayValue: name,
+      label: 'function',
+      metadata: { closureFrameId: 'g', params: ['y', 'z'], funcName: name, body },
+    });
+    const head = headOf([
+      { name: 'f', value: fn('f', 'return x') },
+      { name: 'g', value: fn('g', 'if y:\n    return 1\nreturn z') },
+      { name: 'h', value: fn('h') },
+    ]);
+    expect(getParamsText(head.f)).toBe('(y, z)');
+    expect(getBodyText(head.f)).toBe('return x');
+    expect(getBodyText(head.g)).toBe('\n  if y:\n      return 1\n  return z');
+    // Without the source, the placeholder as before.
+    expect(getBodyText(head.h)).toContain('[Python]');
   });
 
   it('highlights the drawn object with an objectId, and reports hovering it', () => {
