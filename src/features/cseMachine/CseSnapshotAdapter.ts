@@ -202,7 +202,9 @@ function toJsValue(
       v.objectId !== undefined
         ? `object@${v.objectId}`
         : isNamed
-          ? `${funcName}@${closureEnvId}@${params.join(',')}`
+          ? // The body too, if sent: a function redefined under the same name (after `g = f`) is
+            // another function, with its own body.
+            `${funcName}@${closureEnvId}@${params.join(',')}@${typeof meta?.body === 'string' ? meta.body : ''}`
           : null;
     if (cacheKey && closureCache.has(cacheKey)) {
       return closureCache.get(cacheKey);

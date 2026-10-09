@@ -193,6 +193,14 @@ describe('heap objects in Python snapshots', () => {
     expect(getBodyText(head.g)).toBe('\n  if y:\n      return 1\n  return z');
     // Without the source, the placeholder as before.
     expect(getBodyText(head.h)).toContain('[Python]');
+
+    // A function redefined under the same name (g = f; def f...) keeps its own body.
+    const redefined = headOf([
+      { name: 'g', value: fn('f', 'return 1') },
+      { name: 'f', value: fn('f', 'return 2') },
+    ]);
+    expect(getBodyText(redefined.g)).toBe('return 1');
+    expect(getBodyText(redefined.f)).toBe('return 2');
   });
 
   it('highlights the drawn object with an objectId, and reports hovering it', () => {
