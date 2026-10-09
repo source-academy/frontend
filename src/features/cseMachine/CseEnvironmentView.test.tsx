@@ -152,10 +152,10 @@ describe('dead functions in an otherwise empty frame', () => {
     try {
       drawn(0);
       const value = [...Layout.values.values()][0];
-      // The function's y is the centre of its circles already.
+      // The horizontal centre of the top of the function's two circles (its y is their centre).
       expect(anchorResolver(root)({ kind: 'object', id: '#1' })).toEqual({
-        x: value.x(),
-        y: value.y(),
+        x: value.x() + value.width() / 2,
+        y: value.y() - value.height() / 2,
       });
       expect(anchorResolver(root)({ kind: 'object', id: 'nope' })).toBeNull();
       expect(anchorResolver(root)({ kind: 'frame', id: 'nope' })).toBeNull();

@@ -307,8 +307,8 @@ function CseEnvironmentView({
 
 /**
  * A resolver of where heap objects and frames are drawn on the lent `Layout`'s stage, relative to
- * `root`. Arrows end at the left edge of the object's drawing (its first circle or box), or of
- * the frame's box.
+ * `root`. Arrows end at the horizontal centre of the top of the object's drawing (its circles or
+ * boxes), or at the left edge of the frame's box.
  */
 export function anchorResolver(root: HTMLElement | null): CseDiagramAnchorResolver {
   return ({ kind, id }) => {
@@ -327,10 +327,11 @@ export function anchorResolver(root: HTMLElement | null): CseDiagramAnchorResolv
           if (Layout.clearDeadFrames && !value.isLive()) {
             return null;
           }
-          // A function's `y()` is already the centre of its circles; an array's is its top edge.
+          // The horizontal centre of its top: the arrow comes down onto it. A function's `y()` is
+          // the centre of its circles (its top is a radius above); an array's is its top edge.
           at = {
-            x: value.x(),
-            y: value instanceof FnValue ? value.y() : value.y() + value.height() / 2,
+            x: value.x() + value.width() / 2,
+            y: value instanceof FnValue ? value.y() - value.height() / 2 : value.y(),
           };
           break;
         }
