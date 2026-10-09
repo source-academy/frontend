@@ -92,8 +92,9 @@ function toJsValue(
   if (label === 'nonetype' || label === 'none' || label === 'null') {
     // Return a source object so PrimitiveValue/Text use toReplString() instead of
     // String(value) or the empty-list ArrayNullUnit visual, both of which render JS `null`
-    // as "null" rather than Python's `None`.
-    return { toReplString: () => 'None' };
+    // as "null" rather than Python's `None`. In a list's box, though, it is drawn like the
+    // empty list, as a slash (`isNone`; see isSnapshotNone).
+    return { toReplString: () => 'None', isNone: true };
   }
   if (label === 'undefined') {
     return undefined;

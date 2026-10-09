@@ -168,6 +168,17 @@ export function isNull(data: Data): data is null {
   return data === null;
 }
 
+/**
+ * Whether `data` is a snapshot's `None` (see CseSnapshotAdapter.ts): an object, so that a frame
+ * binding shows it as "None", not JS `null`'s "null"; but in a box of a box-and-pointer diagram,
+ * it is the empty list's terminator, drawn as a slash like `null`.
+ */
+export function isSnapshotNone(data: unknown): boolean {
+  return (
+    typeof data === 'object' && data !== null && (data as { isNone?: unknown }).isNone === true
+  );
+}
+
 /** Returns `true` if `data` is undefined */
 export function isUndefined(data: Data): data is undefined {
   return data === undefined;
