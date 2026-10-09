@@ -284,6 +284,32 @@ describe('values only the stash holds', () => {
     expect(ids).toEqual(expect.arrayContaining(['list_7', 'list_8']));
   });
 
+  it("puts a nested list into its own frame's heap, which may be another frame", () => {
+    const snapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [pyList(11, 'p', [pyList(12, 'f', [])])],
+      environments: [
+        { id: 'p', name: 'programEnvironment', parentId: null, bindings: [], isActive: true },
+        { id: 'f', name: 'f', parentId: 'p', bindings: [], isActive: false },
+      ],
+    } as unknown as CseSnapshot;
+    const { envTree } = buildFakeEnvTreeFromSnapshot(snapshot);
+    const heapIds = (id: string) =>
+      [...(findNode(envTree, id)!.environment as any).heap.getHeap()].map((v: any) => v.id);
+    expect(heapIds('p')).toContain('list_11');
+    expect(heapIds('f')).toContain('list_12');
+  });
+
+  it('is not thrown by a list that contains itself', () => {
+    const self = pyList(13, 'p', []);
+    (self.metadata.elements as unknown[]).push({
+      ...pyList(13, 'p', []),
+      metadata: { id: 13, envId: 'p', elements: [], backReference: true },
+    });
+    expect(() => buildFakeEnvTreeFromSnapshot(snapshotWithStash([self]))).not.toThrow();
+  });
+
   it('does not draw it without a frame to put it in', () => {
     CseMachine.drawEnvironments(snapshotWithStash([pyList(9, 'nowhere', [])]), {
       width: 500,
