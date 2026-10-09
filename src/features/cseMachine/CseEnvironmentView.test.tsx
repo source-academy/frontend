@@ -118,6 +118,21 @@ describe('CseEnvironmentView', () => {
     expect(Layout.stageRef.current).toBe(theirs);
   });
 
+  test('links hovering with the plugin', () => {
+    sized();
+    const highlight = vi.spyOn(Layout, 'highlightObject');
+    const onHover = vi.fn();
+    const { rerender, unmount } = render(
+      <CseEnvironmentView snapshots={snapshots} step={0} hovered={null} onHover={onHover} />,
+    );
+    expect(Layout.onObjectHover).toBe(onHover);
+    expect(highlight).toHaveBeenLastCalledWith(null);
+    rerender(<CseEnvironmentView snapshots={snapshots} step={0} hovered="#1" onHover={onHover} />);
+    expect(highlight).toHaveBeenLastCalledWith('#1');
+    unmount();
+    expect(Layout.onObjectHover).toBeUndefined();
+  });
+
   test('draws nothing before it has a size', () => {
     const draw = vi.spyOn(CseMachine, 'drawEnvironments');
     render(<CseEnvironmentView snapshots={snapshots} step={0} />);

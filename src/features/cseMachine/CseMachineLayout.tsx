@@ -123,6 +123,43 @@ export class Layout {
    */
   static values = new Map<string | (() => any), Value>();
 
+  /**
+   * Told which heap object the mouse enters in the diagram (by the `objectId` its snapshot value
+   * carries), and `null` when it leaves. Set by a view that lends the diagram to a plugin
+   * (`CseEnvironmentView`); the CSE Machine tab leaves it unset.
+   */
+  static onObjectHover: ((objectId: string | null) => void) | undefined = undefined;
+
+  /** Reports the mouse entering (or leaving) a closure or array to `onObjectHover`. */
+  static notifyObjectHover(data: unknown, entered: boolean) {
+    const objectId = (data as { objectId?: string } | null)?.objectId;
+    if (objectId !== undefined) {
+      Layout.onObjectHover?.(entered ? objectId : null);
+    }
+  }
+
+  /**
+   * Highlights the closures and arrays drawn for the heap object `objectId` (see
+   * `notifyObjectHover`), and returns the others to their normal style.
+   */
+  static highlightObject(objectId: string | null) {
+    Layout.values.forEach(value => {
+      if (!(value instanceof FnValue || value instanceof ArrayValue)) {
+        return;
+      }
+      const id = (value.data as { objectId?: string }).objectId;
+      if (id === undefined) {
+        return;
+      }
+      if (id === objectId) {
+        value.setArrowSourceHighlightedStyle();
+      } else {
+        value.setArrowSourceNormalStyle();
+      }
+    });
+    Layout.stageRef.current?.batchDraw();
+  }
+
   /** memoized layout */
   static prevLayout: React.ReactNode;
   static currentDark: React.ReactNode;

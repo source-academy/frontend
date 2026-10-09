@@ -20,6 +20,10 @@ export type CseEnvironmentViewProps = {
   snapshots: CseSnapshot[];
   /** The 0-based index of the snapshot to draw. */
   step: number;
+  /** The `objectId` of the heap object to highlight, if any. */
+  hovered?: string | null;
+  /** Called with a heap object's `objectId` when the mouse enters it, and `null` when it leaves. */
+  onHover?: (objectId: string | null) => void;
 };
 
 type LayoutRefs = {
@@ -39,8 +43,16 @@ type LayoutRefs = {
  * same time, so this view draws only while it is visible, and gives the `Layout`'s stage, scroll
  * container and size back to the CSE Machine tab when it is not. While it is visible, `Layout`'s
  * stage is this view's, so `Layout`'s own zoom and image export act on it.
+ *
+ * Closures and arrays whose snapshot values carry an `objectId` are linked to the plugin: the one
+ * that is `hovered` is highlighted, and `onHover` is told which one the mouse enters.
  */
-export default function CseEnvironmentView({ snapshots, step }: CseEnvironmentViewProps) {
+export default function CseEnvironmentView({
+  snapshots,
+  step,
+  hovered,
+  onHover,
+}: CseEnvironmentViewProps) {
   const [area, setArea] = useState<HTMLDivElement | null>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [visible, setVisible] = useState(false);
@@ -137,6 +149,26 @@ export default function CseEnvironmentView({ snapshots, step }: CseEnvironmentVi
     // `version` redraws after a change to the shared display preferences.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible, size, snapshots, step, clearDeadFrames, version]);
+
+  // Hovering: the diagram reports the object under the mouse while this view has the `Layout`,
+  // and highlights the hovered object (also when it is hovered elsewhere, e.g. in the plugin's
+  // program pane).
+  useEffect(() => {
+    if (!visible || !onHover) {
+      return;
+    }
+    Layout.onObjectHover = onHover;
+    return () => {
+      if (Layout.onObjectHover === onHover) {
+        Layout.onObjectHover = undefined;
+      }
+    };
+  }, [visible, onHover]);
+  useEffect(() => {
+    if (drawing) {
+      Layout.highlightObject(hovered ?? null);
+    }
+  }, [drawing, hovered]);
 
   const toggle = (label: string, icon: string, checked: boolean, onToggle: () => void) => (
     <Tooltip content={label} compact>

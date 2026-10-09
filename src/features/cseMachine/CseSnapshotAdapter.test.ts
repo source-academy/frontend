@@ -1,6 +1,6 @@
 import type { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import Konva from 'konva';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import type { CseSnapshot } from '../conductor/CseMachineHostPlugin';
 import { Frame } from './components/Frame';
@@ -131,6 +131,89 @@ describe('buildFakeEnvTreeFromSnapshot', () => {
     expect(typeof value).not.toBe('string');
     expect(isBuiltInFn(value)).toBe(true);
     expect(String(value)).toBe('abs');
+  });
+});
+
+describe('heap objects in Python snapshots', () => {
+  const list = (id: number, elements: unknown[], extra: object = {}) => ({
+    displayValue: '[...]',
+    label: 'list',
+    metadata: { id, envId: 'g', elements, ...extra },
+  });
+  const lambda = (objectId?: string) => ({
+    displayValue: 'lambda',
+    label: 'function',
+    metadata: { closureFrameId: 'g', params: ['x'], funcName: 'lambda' },
+    ...(objectId ? { objectId } : {}),
+  });
+  const headOf = (bindings: { name: string; value: unknown }[]) => {
+    const snapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [{ id: 'g', name: 'global', parentId: null, bindings, isActive: true }],
+    } as unknown as CseSnapshot;
+    return (findNode(buildFakeEnvTreeFromSnapshot(snapshot).envTree, 'g')!.environment as any).head;
+  };
+
+  it('resolves a back reference to the list itself, for a list that contains itself', () => {
+    const head = headOf([
+      { name: 'xs', value: { ...list(7, [list(7, [], { backReference: true })]), objectId: '#1' } },
+    ]);
+    expect(head.xs[0]).toBe(head.xs);
+    expect(head.xs.objectId).toBe('#1');
+  });
+
+  it('identifies closures by their objectId, lambdas included', () => {
+    const head = headOf([
+      { name: 'f', value: lambda('#1') },
+      { name: 'g', value: lambda('#1') },
+      { name: 'h', value: lambda('#2') },
+      { name: 'k', value: lambda() },
+    ]);
+    expect(head.f).toBe(head.g);
+    expect(head.f.objectId).toBe('#1');
+    expect(head.h).not.toBe(head.f);
+    expect(head.k.objectId).toBeUndefined();
+  });
+
+  it('highlights the drawn object with an objectId, and reports hovering it', () => {
+    const snapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        {
+          id: 'g',
+          name: 'global',
+          parentId: null,
+          bindings: [
+            { name: 'f', value: lambda('#1') },
+            { name: 'h', value: lambda('#2') },
+          ],
+          isActive: true,
+        },
+      ],
+    } as unknown as CseSnapshot;
+    CseMachine.drawEnvironments(snapshot, { width: 500, height: 500, clearDeadFrames: false });
+    const fns = [...Layout.values.values()].filter(v => v instanceof FnValue) as FnValue[];
+    const byId = (id: string) => fns.find(f => (f.data as any).objectId === id)!;
+    const highlighted = vi.spyOn(byId('#1'), 'setArrowSourceHighlightedStyle');
+    const normal = vi.spyOn(byId('#2'), 'setArrowSourceNormalStyle');
+    Layout.highlightObject('#1');
+    expect(highlighted).toHaveBeenCalled();
+    expect(normal).toHaveBeenCalled();
+
+    const onHover = vi.fn();
+    Layout.onObjectHover = onHover;
+    try {
+      Layout.notifyObjectHover(byId('#2').data, true);
+      Layout.notifyObjectHover(byId('#2').data, false);
+      Layout.notifyObjectHover({}, true);
+    } finally {
+      Layout.onObjectHover = undefined;
+    }
+    expect(onHover.mock.calls).toEqual([['#2'], [null]]);
   });
 });
 
