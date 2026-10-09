@@ -114,6 +114,11 @@ export class ArrayValue extends Value implements IHoverable {
     }
   }
 
+  /** Gives the array's boxes the hovered background, or their normal one. */
+  setHoverBackground(hovered: boolean): void {
+    this.units.forEach(unit => unit.setHoverBackground(hovered));
+  }
+
   setArrowSourceHighlightedStyle(): void {
     this.units.forEach(unit => unit.setArrowSourceHighlightedStyle());
   }

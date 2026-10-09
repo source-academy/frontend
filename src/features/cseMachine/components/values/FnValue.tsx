@@ -17,6 +17,7 @@ import {
   getParamsText,
   getTextHeight,
   getTextWidth,
+  hoverBackgroundColor,
   isMainReference,
   isStreamFn,
   setHoveredCursor,
@@ -216,6 +217,16 @@ export class FnValue extends Value implements IHoverable {
 
     return { x: baseX, y: baseY, width, height };
   };
+
+  /** Gives the function's two circles the hovered background, or their normal one. */
+  setHoverBackground(hovered: boolean): void {
+    (this.ref.current?.getChildren() ?? []).forEach((shape: any) => {
+      // The outer circles (the ones with an outline); the inner dots keep their colour.
+      if (shape.attrs?.stroke) {
+        shape.fill(hovered ? hoverBackgroundColor() : defaultBackgroundColor());
+      }
+    });
+  }
 
   setArrowSourceHighlightedStyle(): void {
     const color = this.isLive() ? Config.HoverColor : Config.HoverDeadColor;
