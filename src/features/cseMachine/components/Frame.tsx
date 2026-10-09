@@ -401,6 +401,17 @@ export class Frame extends Visible implements IHoverable {
     }
   };
 
+  /** Gives the frame's box the hovered background, or its normal one. */
+  setHoverBackground(hovered: boolean): void {
+    this.rectRef.current?.fill(
+      hovered
+        ? CseMachine.getPrintableMode()
+          ? Config.PrintHoverFrameBgColor
+          : Config.HoverFrameBgColor
+        : defaultBackgroundColor(),
+    );
+  }
+
   setArrowSourceHighlightedStyle(): void {
     if (this.isLive) {
       this.rectRef.current?.stroke(Config.HoverColor);

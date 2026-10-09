@@ -94,6 +94,9 @@ export const Config = Object.freeze({
   // Note that these are also applied with an opacity when drawn
   HoverBgColor: '#000',
   PrintHoverBgColor: '#bbb',
+  /** Background of a frame hovered in a plugin's linked diagram (see `Layout.highlightFrame`). */
+  HoverFrameBgColor: '#000',
+  PrintHoverFrameBgColor: '#e6e6e6',
 
   ConstantColon: ':= ',
   VariableColon: ': ',
