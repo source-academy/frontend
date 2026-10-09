@@ -204,6 +204,78 @@ describe('heap objects in Python snapshots', () => {
     expect(getBodyText(redefined.f)).toBe('return 2');
   });
 
+  it("gives a hovered object's circles or boxes a black background, light grey in printable mode", () => {
+    const snapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        {
+          id: 'g',
+          name: 'global',
+          parentId: null,
+          bindings: [
+            { name: 'f', value: lambda('#1') },
+            {
+              name: 'xs',
+              value: { ...list(31, [{ displayValue: '1', label: 'int' }]), objectId: '#2' },
+            },
+          ],
+          isActive: true,
+        },
+      ],
+    } as unknown as CseSnapshot;
+    CseMachine.drawEnvironments(snapshot, { width: 500, height: 500, clearDeadFrames: false });
+    const fn = [...Layout.values.values()].find(v => v instanceof FnValue) as FnValue;
+    const outer = { attrs: { stroke: '#999' }, fill: vi.fn() };
+    const dot = { attrs: { fill: '#999' }, fill: vi.fn() };
+    (fn.ref as any).current = { getChildren: () => [outer, dot] };
+    fn.setHoverBackground(true);
+    expect(outer.fill).toHaveBeenLastCalledWith(Config.HoverFrameBgColor);
+    expect(dot.fill).not.toHaveBeenCalled();
+    const array = [...Layout.values.values()].find(v => (v as any).data?.id === 'list_31') as any;
+    const box = { fill: vi.fn() };
+    array.units[0].ref.current = box;
+    CseMachine.togglePrintableMode();
+    try {
+      array.setHoverBackground(true);
+      expect(box.fill).toHaveBeenLastCalledWith(Config.PrintHoverFrameBgColor);
+    } finally {
+      CseMachine.togglePrintableMode();
+    }
+    array.setHoverBackground(false);
+    expect(box.fill).toHaveBeenLastCalledWith(Config.BgColor);
+  });
+
+  it('gives a hovered empty list its background too', () => {
+    const snapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        {
+          id: 'g',
+          name: 'global',
+          parentId: null,
+          bindings: [{ name: 'xs', value: { ...list(32, []), objectId: '#1' } }],
+          isActive: true,
+        },
+      ],
+    } as unknown as CseSnapshot;
+    const drawing = CseMachine.drawEnvironments(snapshot, {
+      width: 500,
+      height: 500,
+      clearDeadFrames: false,
+    });
+    expect(drawing).not.toBeNull();
+    const array = [...Layout.values.values()].find(v => (v as any).data?.id === 'list_32') as any;
+    expect(array.units).toHaveLength(0);
+    const box = { fill: vi.fn() };
+    array.emptyUnit.ref.current = box;
+    Layout.highlightObject('#1');
+    expect(box.fill).toHaveBeenLastCalledWith(Config.HoverFrameBgColor);
+  });
+
   it('highlights the drawn object with an objectId, and reports hovering it', () => {
     const snapshot = {
       stepIndex: 0,
@@ -225,11 +297,14 @@ describe('heap objects in Python snapshots', () => {
     CseMachine.drawEnvironments(snapshot, { width: 500, height: 500, clearDeadFrames: false });
     const fns = [...Layout.values.values()].filter(v => v instanceof FnValue) as FnValue[];
     const byId = (id: string) => fns.find(f => (f.data as any).objectId === id)!;
-    const highlighted = vi.spyOn(byId('#1'), 'setArrowSourceHighlightedStyle');
-    const normal = vi.spyOn(byId('#2'), 'setArrowSourceNormalStyle');
+    const hovered = vi.spyOn(byId('#1'), 'setHoverBackground');
+    const other = vi.spyOn(byId('#2'), 'setHoverBackground');
+    const green = vi.spyOn(byId('#1'), 'setArrowSourceHighlightedStyle');
     Layout.highlightObject('#1');
-    expect(highlighted).toHaveBeenCalled();
-    expect(normal).toHaveBeenCalled();
+    expect(hovered).toHaveBeenCalledWith(true);
+    expect(other).toHaveBeenCalledWith(false);
+    // Not the green highlight: frames are colour-coded.
+    expect(green).not.toHaveBeenCalled();
 
     const onHover = vi.fn();
     Layout.onObjectHover = onHover;

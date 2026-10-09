@@ -1274,6 +1274,14 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
 const isHulkModeEnabled = () =>
   typeof document !== 'undefined' && document.querySelector('.Playground.GreenScreen') !== null;
 
+/**
+ * The background of a frame or object hovered in a plugin's linked diagram (see
+ * `Layout.highlightFrame` / `Layout.highlightObject`): darker in the dark theme, a light grey in
+ * printable mode. A background, not a colour of its own, since frames carry colours of their own.
+ */
+export const hoverBackgroundColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintHoverFrameBgColor : Config.HoverFrameBgColor;
+
 export const defaultBackgroundColor = () =>
   isHulkModeEnabled()
     ? '#00ff00'

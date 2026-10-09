@@ -140,7 +140,8 @@ export class Layout {
 
   /**
    * Highlights the closures and arrays drawn for the heap object `objectId` (see
-   * `notifyObjectHover`), and returns the others to their normal style.
+   * `notifyObjectHover`) by their background, as frames are (`highlightFrame`), and returns the
+   * others to their normal background. Not by a colour: frames are colour-coded.
    */
   static highlightObject(objectId: string | null) {
     Layout.values.forEach(value => {
@@ -151,11 +152,7 @@ export class Layout {
       if (id === undefined) {
         return;
       }
-      if (id === objectId) {
-        value.setArrowSourceHighlightedStyle();
-      } else {
-        value.setArrowSourceNormalStyle();
-      }
+      value.setHoverBackground(id === objectId);
     });
     Layout.stageRef.current?.batchDraw();
   }

@@ -114,6 +114,15 @@ export class ArrayValue extends Value implements IHoverable {
     }
   }
 
+  /** The box drawn for an empty array (see `draw`), to highlight it like the units of others. */
+  private emptyUnit: ArrayEmptyUnit | undefined;
+
+  /** Gives the array's boxes (or an empty array's box) the hovered background, or their normal one. */
+  setHoverBackground(hovered: boolean): void {
+    this.units.forEach(unit => unit.setHoverBackground(hovered));
+    this.emptyUnit?.setHoverBackground(hovered);
+  }
+
   setArrowSourceHighlightedStyle(): void {
     this.units.forEach(unit => unit.setArrowSourceHighlightedStyle());
   }
@@ -175,7 +184,7 @@ export class ArrayValue extends Value implements IHoverable {
       >
         {this.units.length > 0
           ? this.units.map(unit => unit.draw())
-          : new ArrayEmptyUnit(this).draw()}
+          : (this.emptyUnit = new ArrayEmptyUnit(this)).draw()}
       </Group>
     );
   }
