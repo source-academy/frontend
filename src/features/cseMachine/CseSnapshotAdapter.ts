@@ -317,6 +317,8 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
       tail: null as Environment | null,
       heap: new Heap(),
       globalNames: f.globalNames,
+      // The frame's heading, if the evaluator chose one (see Frame.tsx's getFrameLabel).
+      label: (f as CseSerializedEnvFrame & { label?: string }).label,
     } as unknown as Environment;
     envMap.set(f.id, env);
   }

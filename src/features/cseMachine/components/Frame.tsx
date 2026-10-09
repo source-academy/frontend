@@ -42,20 +42,14 @@ const frameNames = new Map([
   ['functionBodyEnvironment', 'Function Body'],
 ]);
 
-// Python's LEGB terminology (#4042). Layout.snapshotMode is true only while rendering a
-// Conductor snapshot (currently Python-only) — the legacy non-conductor path (conductor.enable
-// off) always runs js-slang's own real-time interpreter and must keep js-slang's own
-// "Global"/"Program" names unchanged.
-const pythonFrameNames = new Map([
-  ['global', 'Built-in functions'],
-  ['programEnvironment', 'Globals'],
-]);
-
-function getFrameLabel(envName: string): string {
-  const label = Layout.snapshotMode
-    ? (pythonFrameNames.get(envName) ?? frameNames.get(envName))
-    : frameNames.get(envName);
-  return label ?? envName;
+/**
+ * A frame's heading: the one its evaluator chose (e.g. Python's "Global" and "Built-ins" for the
+ * frames JavaScript calls "Program" and "Global", #4042), which `CseSnapshotAdapter.ts` stashes on
+ * the fake Environment as `label`; otherwise derived from the environment's name.
+ */
+function getFrameLabel(environment: Env): string {
+  const label = (environment as unknown as { label?: string }).label;
+  return label ?? frameNames.get(environment.name) ?? environment.name;
 }
 
 // Height of one header row (frame name, or the globals annotation stacked below it).
@@ -292,7 +286,7 @@ export class Frame extends Visible implements IHoverable {
       ? lastVisibleBinding.y() - this.y() + lastVisibleBinding.height() + Config.FramePaddingY
       : Config.FramePaddingY * 2;
 
-    this._name = new Text(getFrameLabel(this.environment.name), this.x(), this.level.y(), {
+    this._name = new Text(getFrameLabel(this.environment), this.x(), this.level.y(), {
       maxWidth: this.width(),
       faded: !this.isLive,
     });
@@ -347,7 +341,7 @@ export class Frame extends Visible implements IHoverable {
       textOffset += Math.floor(this.width() / 2) - Math.floor(this.name.width() / 2);
     }
     this._name = new Text(
-      getFrameLabel(this.environment.name),
+      getFrameLabel(this.environment),
       this.x() + textOffset,
       this.level!.y(), // this method is only called after the frame is drawn
       { maxWidth: this.width(), faded: !this.isLive },
