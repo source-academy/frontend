@@ -42,11 +42,8 @@ function makeStubNode(paramNames: string[]) {
   };
 }
 
-// `objectId` is declared by @sourceacademy/common-cse-machine from 0.3.1 on.
-type SerializedValue = CseSerializedValue & { objectId?: string };
-
 function toJsValue(
-  v: SerializedValue,
+  v: CseSerializedValue,
   envMap: Map<string, Environment>,
   closureCache: Map<string, unknown>,
   listCache: Map<string | number, unknown>,
@@ -325,7 +322,7 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
       heap: new Heap(),
       globalNames: f.globalNames,
       // The frame's heading, if the evaluator chose one (see Frame.tsx's getFrameLabel).
-      label: (f as CseSerializedEnvFrame & { label?: string }).label,
+      label: f.label,
     } as unknown as Environment;
     envMap.set(f.id, env);
   }

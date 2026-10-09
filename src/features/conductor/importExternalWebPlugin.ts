@@ -1,9 +1,10 @@
+import type { IHostServices } from '@sourceacademy/common-cse-machine';
 import type { ITabService } from '@sourceacademy/common-tabs';
 import type { PluginClass } from '@sourceacademy/conductor/conduit';
 import { requireProvider } from 'src/commons/sideContent/SideContentHelper';
 
 import type { BrowserHostPlugin } from './BrowserHostPlugin';
-import { hostServices, type IHostServices } from './cseDiagramService';
+import { hostServices } from './cseDiagramService';
 type PluginExports = { plugin?: unknown; default?: unknown };
 
 /**
