@@ -4,7 +4,7 @@ import { afterEach, describe, expect, test, vi } from 'vitest';
 import { hostServices } from '../conductor/cseDiagramService';
 import type { CseSnapshot } from '../conductor/CseMachineHostPlugin';
 import CseArrowFilterMenu from './CseArrowFilterMenu';
-import CseEnvironmentView from './CseEnvironmentView';
+import CseEnvironmentView, { anchorResolver } from './CseEnvironmentView';
 import CseMachine from './CseMachine';
 import { CseAnimation } from './CseMachineAnimation';
 import { Config } from './CseMachineConfig';
@@ -89,6 +89,89 @@ describe('Layout.lend / Layout.reclaim', () => {
     expect(Layout.visibleWidth).toBe(321);
     expect(resize).toHaveBeenCalledWith(800, 500);
     refs.forEach(ref => (ref.current = null));
+  });
+});
+
+describe('dead functions in an otherwise empty frame', () => {
+  /** `lambda x: x` as an expression statement, from the e-stepper: while its value is on the
+   * stash the function is live; once the statement is finished it is a dead function in the
+   * (bindingless) program frame. */
+  const global = {
+    id: '-1',
+    name: 'global',
+    label: 'Built-ins',
+    parentId: null,
+    bindings: [],
+    isActive: false,
+    isOnCallStack: false,
+  };
+  const fn = {
+    displayValue: 'lambda',
+    label: 'function',
+    metadata: { closureFrameId: 'Global', params: ['x'], funcName: 'lambda', body: 'x' },
+    objectId: '#1',
+  };
+  const program = (heapObjects?: (typeof fn)[]) => ({
+    id: 'Global',
+    name: 'programEnvironment',
+    label: 'Global',
+    parentId: '-1',
+    bindings: [],
+    isActive: true,
+    isOnCallStack: true,
+    heapObjects,
+  });
+  const run = [
+    { stepIndex: 0, control: [], stash: [fn], environments: [program(), global] },
+    { stepIndex: 1, control: [], stash: [], environments: [program([fn]), global] },
+  ] as unknown as CseSnapshot[];
+  const drawn = (step: number, clearDeadFrames = false) => {
+    CseMachine.drawEnvironments(snapshotWithDeadFrames(run, step), {
+      width: 600,
+      height: 400,
+      clearDeadFrames,
+    });
+    return {
+      frames: Layout.levels.flatMap(l => l.frames).map(f => f.environment.id),
+      values: Layout.values.size,
+    };
+  };
+
+  test('the frame and the function stay, greyed out, once nothing reaches them', () => {
+    expect(drawn(0)).toEqual({ frames: ['-1', 'Global'], values: 1 });
+    expect(drawn(1)).toEqual({ frames: ['-1', 'Global'], values: 1 });
+  });
+
+  test('arrows can be anchored at the function circles, but not at what Clear Dead Frames hides', () => {
+    const stage = {
+      container: () => ({ getBoundingClientRect: () => ({ left: 0, top: 0 }) }),
+      getAbsoluteTransform: () => ({ point: (p: { x: number; y: number }) => p }),
+    };
+    (Layout.stageRef as React.RefObject<unknown>).current = stage;
+    const root = { getBoundingClientRect: () => ({ left: 0, top: 0 }) } as HTMLElement;
+    try {
+      drawn(0);
+      const value = [...Layout.values.values()][0];
+      // The function's y is the centre of its circles already.
+      expect(anchorResolver(root)({ kind: 'object', id: '#1' })).toEqual({
+        x: value.x(),
+        y: value.y(),
+      });
+      expect(anchorResolver(root)({ kind: 'object', id: 'nope' })).toBeNull();
+      expect(anchorResolver(root)({ kind: 'frame', id: 'nope' })).toBeNull();
+      expect(anchorResolver(null)({ kind: 'object', id: '#1' })).toBeNull();
+      // Dead, and hidden by Clear Dead Frames: not drawn, so no anchor.
+      drawn(1);
+      Layout.clearDeadFrames = true;
+      expect(anchorResolver(root)({ kind: 'object', id: '#1' })).toBeNull();
+    } finally {
+      Layout.clearDeadFrames = false;
+      (Layout.stageRef as React.RefObject<unknown>).current = null;
+    }
+  });
+
+  test('Clear Dead Frames still removes them', () => {
+    expect(drawn(1, true).frames).not.toContain('Global');
   });
 });
 
@@ -237,6 +320,23 @@ describe('CseArrowFilterMenu', () => {
   });
 });
 
+describe('CseArrowFilterMenu program references', () => {
+  test('are offered only when asked for, and off until turned on', () => {
+    const onChange = vi.fn();
+    const { unmount } = render(<CseArrowFilterMenu onChange={onChange} />);
+    expect(screen.queryByText('From program')).toBeNull();
+    unmount();
+    render(<CseArrowFilterMenu programReferences onChange={onChange} />);
+    expect(screen.getByText('From program')).toBeTruthy();
+    expect(CseMachine.getArrowOriginFilters().program).toBe(false);
+    fireEvent.click(screen.getByText('From program'));
+    expect(CseMachine.getArrowOriginFilters().program).toBe(true);
+    expect(onChange).toHaveBeenCalledTimes(1);
+    CseMachine.resetArrowOriginFilters();
+    expect(CseMachine.getArrowOriginFilters().program).toBe(false);
+  });
+});
+
 describe('CseEnvironmentView', () => {
   const sized = () =>
     vi
@@ -331,6 +431,53 @@ describe('CseEnvironmentView', () => {
     expect(highlight).toHaveBeenLastCalledWith('45');
     unmount();
     expect(Layout.onFrameHover).toBeUndefined();
+  });
+
+  test('reports no anchors until program references are turned on', () => {
+    sized();
+    const onAnchors = vi.fn();
+    const { unmount } = render(
+      <CseEnvironmentView snapshots={snapshots} step={0} onAnchors={onAnchors} />,
+    );
+    expect(onAnchors).toHaveBeenCalled();
+    expect(onAnchors.mock.calls.every(([resolve]) => resolve === null)).toBe(true);
+    unmount();
+  });
+
+  test('reports where frames are drawn once program references are on, and none when it goes away', () => {
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+      left: 10,
+      top: 20,
+      width: 600,
+      height: 400,
+    } as DOMRect);
+    CseMachine.setArrowOriginVisible('program', true);
+    const onAnchors = vi.fn();
+    try {
+      const { unmount } = render(
+        <CseEnvironmentView snapshots={snapshots} step={1} onAnchors={onAnchors} />,
+      );
+      const resolve = onAnchors.mock.calls.map(([r]) => r).findLast(r => r !== null);
+      expect(resolve).toBeDefined();
+      // The stage is panned by (5, 7) and zoomed 2x; its container and the view start at the
+      // same place, so only the stage's transform shows.
+      vi.spyOn(Layout.stageRef.current!, 'getAbsoluteTransform').mockReturnValue({
+        point: ({ x, y }: { x: number; y: number }) => ({ x: x * 2 + 5, y: y * 2 + 7 }),
+      } as never);
+      const frame = Layout.levels
+        .flatMap(level => level.frames)
+        .find(f => f.environment.id === '45')!;
+      expect(resolve({ kind: 'frame', id: '45' })).toEqual({
+        x: frame.x() * 2 + 5,
+        y: frame.y() * 2 + frame.height() + 7,
+      });
+      expect(resolve({ kind: 'frame', id: 'nope' })).toBeNull();
+      expect(resolve({ kind: 'object', id: 'nope' })).toBeNull();
+      unmount();
+      expect(onAnchors).toHaveBeenLastCalledWith(null);
+    } finally {
+      CseMachine.resetArrowOriginFilters();
+    }
   });
 
   test('draws nothing before it has a size', () => {
