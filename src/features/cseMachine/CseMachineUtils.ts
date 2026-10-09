@@ -97,6 +97,20 @@ export function isEmptyEnvironment(env: Env): env is Env & { head: EmptyObject }
   return env === null || isEmptyObject(env.head);
 }
 
+/**
+ * Returns `true` if a frame may be left out of the diagram as boring: it has no bindings, no live
+ * closure or array draws its arrow to it as its defining environment (#4380), and nothing is
+ * homed in it at all — not even a dead function or array, which the diagram draws greyed out
+ * beside its frame, so the frame stays too.
+ */
+export function isPrunableEnvironment(env: Env): boolean {
+  return (
+    isEmptyEnvironment(env) &&
+    !Layout.closureHomeEnvIDs.has(env.id) &&
+    !(env?.heap?.getHeap().size > 0)
+  );
+}
+
 /** Returns `true` if `data` is an array */
 export function isArray(data: any): data is any[] {
   return Array.isArray(data);
@@ -835,8 +849,7 @@ export function getNextChildren(c: EnvTreeNode): EnvTreeNode[] {
   // A bindingless frame is normally boring and safe to collapse, but not when it's still the
   // defining environment some live closure/array elsewhere draws its arrow to (#4380) — there
   // would be nothing left for that arrow to point at.
-  const isCollapsible =
-    isEmptyEnvironment(c.environment) && !Layout.closureHomeEnvIDs.has(c.environment.id);
+  const isCollapsible = isPrunableEnvironment(c.environment);
   if (isCollapsible) {
     const nextChildren: EnvTreeNode[] = [];
     c.children.forEach(gc => {

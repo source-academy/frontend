@@ -92,6 +92,61 @@ describe('Layout.lend / Layout.reclaim', () => {
   });
 });
 
+describe('dead functions in an otherwise empty frame', () => {
+  /** `lambda x: x` as an expression statement, from the e-stepper: while its value is on the
+   * stash the function is live; once the statement is finished it is a dead function in the
+   * (bindingless) program frame. */
+  const global = {
+    id: '-1',
+    name: 'global',
+    label: 'Built-ins',
+    parentId: null,
+    bindings: [],
+    isActive: false,
+    isOnCallStack: false,
+  };
+  const fn = {
+    displayValue: 'lambda',
+    label: 'function',
+    metadata: { closureFrameId: 'Global', params: ['x'], funcName: 'lambda', body: 'x' },
+    objectId: '#1',
+  };
+  const program = (heapObjects?: (typeof fn)[]) => ({
+    id: 'Global',
+    name: 'programEnvironment',
+    label: 'Global',
+    parentId: '-1',
+    bindings: [],
+    isActive: true,
+    isOnCallStack: true,
+    heapObjects,
+  });
+  const run = [
+    { stepIndex: 0, control: [], stash: [fn], environments: [program(), global] },
+    { stepIndex: 1, control: [], stash: [], environments: [program([fn]), global] },
+  ] as unknown as CseSnapshot[];
+  const drawn = (step: number, clearDeadFrames = false) => {
+    CseMachine.drawEnvironments(snapshotWithDeadFrames(run, step), {
+      width: 600,
+      height: 400,
+      clearDeadFrames,
+    });
+    return {
+      frames: Layout.levels.flatMap(l => l.frames).map(f => f.environment.id),
+      values: Layout.values.size,
+    };
+  };
+
+  test('the frame and the function stay, greyed out, once nothing reaches them', () => {
+    expect(drawn(0)).toEqual({ frames: ['-1', 'Global'], values: 1 });
+    expect(drawn(1)).toEqual({ frames: ['-1', 'Global'], values: 1 });
+  });
+
+  test('Clear Dead Frames still removes them', () => {
+    expect(drawn(1, true).frames).not.toContain('Global');
+  });
+});
+
 describe('CseMachine.drawEnvironments alignment', () => {
   /** The program frame (one on its level) above two call frames (two on theirs). */
   const wide: CseSnapshot = {
