@@ -243,6 +243,83 @@ describe('heap objects in Python snapshots', () => {
   });
 });
 
+describe('values only the stash holds', () => {
+  const pyList = (id: number, envId: string, elements: unknown[]) => ({
+    displayValue: '[...]',
+    label: 'list',
+    metadata: { id, envId, elements },
+  });
+  const snapshotWithStash = (stash: unknown[]) =>
+    ({
+      stepIndex: 0,
+      control: [],
+      stash,
+      environments: [
+        {
+          id: 'p',
+          name: 'programEnvironment',
+          parentId: null,
+          bindings: [{ name: 'x', value: { displayValue: '1', label: 'int' } }],
+          isActive: true,
+        },
+      ],
+    }) as unknown as CseSnapshot;
+  const drawnArrays = () =>
+    [...Layout.values.values()].filter(v => v.constructor.name === 'ArrayValue');
+
+  it('draws a list that only the stash holds, beside its frame (e.g. an argument not yet bound)', () => {
+    CseMachine.drawEnvironments(
+      snapshotWithStash([
+        pyList(7, 'p', [
+          { displayValue: '1', label: 'int' },
+          pyList(8, 'p', [
+            { displayValue: '2', label: 'int' },
+            { displayValue: 'None', label: 'NoneType' },
+          ]),
+        ]),
+      ]),
+      { width: 500, height: 500, clearDeadFrames: false },
+    );
+    const ids = drawnArrays().map(v => (v as any).data.id);
+    expect(ids).toEqual(expect.arrayContaining(['list_7', 'list_8']));
+  });
+
+  it("puts a nested list into its own frame's heap, which may be another frame", () => {
+    const snapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [pyList(11, 'p', [pyList(12, 'f', [])])],
+      environments: [
+        { id: 'p', name: 'programEnvironment', parentId: null, bindings: [], isActive: true },
+        { id: 'f', name: 'f', parentId: 'p', bindings: [], isActive: false },
+      ],
+    } as unknown as CseSnapshot;
+    const { envTree } = buildFakeEnvTreeFromSnapshot(snapshot);
+    const heapIds = (id: string) =>
+      [...(findNode(envTree, id)!.environment as any).heap.getHeap()].map((v: any) => v.id);
+    expect(heapIds('p')).toContain('list_11');
+    expect(heapIds('f')).toContain('list_12');
+  });
+
+  it('is not thrown by a list that contains itself', () => {
+    const self = pyList(13, 'p', []);
+    (self.metadata.elements as unknown[]).push({
+      ...pyList(13, 'p', []),
+      metadata: { id: 13, envId: 'p', elements: [], backReference: true },
+    });
+    expect(() => buildFakeEnvTreeFromSnapshot(snapshotWithStash([self]))).not.toThrow();
+  });
+
+  it('does not draw it without a frame to put it in', () => {
+    CseMachine.drawEnvironments(snapshotWithStash([pyList(9, 'nowhere', [])]), {
+      width: 500,
+      height: 500,
+      clearDeadFrames: false,
+    });
+    expect(drawnArrays().map(v => (v as any).data.id)).not.toContain('list_9');
+  });
+});
+
 describe('frame headings (#4042)', () => {
   /** A snapshot of the two top frames, with the given labels (none: as js-slang sends them). */
   const snapshotWith = (labels: { global?: string; program?: string }): CseSnapshot =>

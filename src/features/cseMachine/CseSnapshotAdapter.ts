@@ -233,6 +233,26 @@ function toJsValue(
   return v.displayValue;
 }
 
+/**
+ * Puts a list, and every list nested in it, into its own environment's heap. A nested list may
+ * belong to another environment than the list holding it (e.g. `[f()]`, where `f` returns a
+ * list), and is laid out from its own environment. `seen` guards against lists that contain
+ * themselves.
+ */
+function addListToHeaps(value: unknown, seen: Set<unknown>): void {
+  if (!Array.isArray(value) || seen.has(value)) {
+    return;
+  }
+  seen.add(value);
+  const environment = (value as any).environment;
+  if (environment) {
+    environment.heap.add(value);
+  }
+  for (const element of value) {
+    addListToHeaps(element, seen);
+  }
+}
+
 /** Build a duck-typed stack that satisfies the IStack interface used by ControlStack/StashStack. */
 function makeFakeStack<T>(items: T[]) {
   const storage = [...items];
@@ -529,18 +549,25 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
   const stashSv = [...snapshot.stash].reverse();
   const stashItems = stashSv.map(sv => toJsValue(sv, envMap, closureCache, listCache));
 
-  // Stash closures not yet assigned to a name still need to appear in their defining env's heap
-  // so getUnreferencedObjects() can render them as an unbound arrow in the program frame —
-  // matching the non-conductor CSE machine's behaviour at the step before `assign foo` runs.
+  // Stash closures and lists not yet assigned to a name still need to appear in their env's heap
+  // (a closure's defining env; a list's, from its metadata.envId) so getUnreferencedObjects() can
+  // render them as an unbound arrow in that frame — matching the non-conductor CSE machine's
+  // behaviour at the step before `assign foo` runs. Without this, a list that only the stash holds
+  // (e.g. the e-stepper's `length(llist(1, 2, 3))`, before the call binds it) is not drawn at all.
   for (let i = 0; i < stashSv.length; i++) {
     const sv = stashSv[i];
     const label = sv.label.toLowerCase();
-    if (/closure|function|lambda|method/.test(label) && (sv.metadata as any)?.closureFrameId) {
+    const isStashClosure =
+      /closure|function|lambda|method/.test(label) && (sv.metadata as any)?.closureFrameId;
+    const isStashList = label === 'list' || label === 'array';
+    if (isStashClosure) {
       const val = stashItems[i];
       const definingEnv = (val as any)?.environment;
       if (definingEnv) {
         definingEnv.heap.add(val);
       }
+    } else if (isStashList) {
+      addListToHeaps(stashItems[i], new Set());
     }
   }
 
