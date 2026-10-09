@@ -438,6 +438,80 @@ export default class CseMachine {
     Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
   }
 
+  /**
+   * Draws a snapshot's environments for a view other than the CSE Machine tab — the environment
+   * view lent to web plugins (e.g. the environment stepper's environment pane) — and returns the
+   * drawing instead of handing it to the CSE Machine tab (`setVis`), which may be mounted (hidden)
+   * at the same time. Control and stash are never drawn; the diagram's display preferences
+   * (alignment, printable mode, arrow filters) are the shared ones. Every other piece of global
+   * state this touches is restored, so the CSE Machine tab's next draw is unaffected.
+   */
+  static drawEnvironments(
+    snapshot: CseSnapshot,
+    options: { width: number; height: number; clearDeadFrames: boolean },
+  ): React.ReactNode {
+    const saved = {
+      controlStash: CseMachine.controlStash,
+      clearDeadFrames: Layout.clearDeadFrames,
+      currentEnvId: CseMachine.currentEnvId,
+      caches: [
+        CseMachine.normalLayoutCache,
+        CseMachine.normalLiveLayoutCache,
+        CseMachine.printLayoutCache,
+        CseMachine.printLiveLayoutCache,
+      ],
+    };
+    try {
+      CseMachine.controlStash = false;
+      Layout.clearDeadFrames = options.clearDeadFrames;
+      Layout.visibleWidth = options.width;
+      Layout.visibleHeight = options.height;
+      const activeEnv = snapshot.environments.find(env => env.isActive);
+      if (activeEnv) {
+        CseMachine.currentEnvId = activeEnv.id;
+      }
+      // Draw afresh, not the CSE Machine tab's memoized drawing.
+      CseMachine.clearMemoizedLayouts();
+      const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
+      const setContext = () => {
+        Layout.snapshotMode = true;
+        try {
+          Layout.setContext(
+            envTree as unknown as EnvTree,
+            fakeControl as unknown as Control,
+            fakeStash as unknown as Stash,
+          );
+        } finally {
+          Layout.snapshotMode = false;
+        }
+      };
+      // This snapshot's own layout cache, not the CSE Machine tab's (which belongs to another run):
+      // lay the frames out, record their positions, and place them from those, as `drawCse` does —
+      // that is where center alignment is applied.
+      CseMachine.normalLayoutCache = null;
+      CseMachine.normalLiveLayoutCache = null;
+      CseMachine.printLayoutCache = null;
+      CseMachine.printLiveLayoutCache = null;
+      setContext();
+      CseMachine.setMasterLayout(Layout.getLayoutPositions(false));
+      setContext();
+      Layout.applyFixedPositions();
+      return Layout.draw();
+    } finally {
+      [
+        CseMachine.normalLayoutCache,
+        CseMachine.normalLiveLayoutCache,
+        CseMachine.printLayoutCache,
+        CseMachine.printLiveLayoutCache,
+      ] = saved.caches;
+      CseMachine.controlStash = saved.controlStash;
+      Layout.clearDeadFrames = saved.clearDeadFrames;
+      CseMachine.currentEnvId = saved.currentEnvId;
+      // Nor may the CSE Machine tab's next redraw reuse this drawing.
+      CseMachine.clearMemoizedLayouts();
+    }
+  }
+
   static redraw() {
     // In snapshot mode, re-render from the last snapshot instead of the js-slang context.
     if (!CseMachine.environmentTree && CseMachine.lastSnapshot) {
@@ -523,6 +597,11 @@ export default class CseMachine {
   }
 
   static updateDimensions(width: number, height: number) {
+    if (Layout.isLent()) {
+      // The CSE Machine tab is hidden behind a view that borrows `Layout`; resize it once it is back.
+      Layout.deferDimensions(width, height);
+      return;
+    }
     if (Layout.stageRef != null && width !== null && height !== null) {
       Layout.updateDimensions(width, height);
     }

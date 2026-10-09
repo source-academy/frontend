@@ -42,8 +42,11 @@ function makeStubNode(paramNames: string[]) {
   };
 }
 
+// `objectId` is declared by @sourceacademy/common-cse-machine from 0.3.1 on.
+type SerializedValue = CseSerializedValue & { objectId?: string };
+
 function toJsValue(
-  v: CseSerializedValue,
+  v: SerializedValue,
   envMap: Map<string, Environment>,
   closureCache: Map<string, unknown>,
   listCache: Map<string | number, unknown>,
@@ -148,11 +151,19 @@ function toJsValue(
     }
 
     // Build a real JS array — isDataArray() checks Array.isArray + own 'id' + own 'environment'.
-    const arr: any = elements.map(el => toJsValue(el, envMap, closureCache, listCache));
+    // It is cached before its elements are converted, so a list that contains itself
+    // (`xs[0] = xs`, which py-slang sends as a back reference: the same id, no elements) has
+    // itself as that element.
+    const arr: any = [];
     arr.id = `list_${listId}`;
     arr.environment = envMap.get(envId) ?? null;
-
+    if (v.objectId !== undefined) {
+      arr.objectId = v.objectId;
+    }
     listCache.set(listId, arr);
+    for (const el of elements) {
+      arr.push(toJsValue(el, envMap, closureCache, listCache));
+    }
     return arr;
   }
 
@@ -185,8 +196,14 @@ function toJsValue(
     // Cache named functions only: same name + defining env + params uniquely identifies a named
     // closure. Anonymous lambdas cannot be distinguished by metadata alone — two lambdas with the
     // same params in the same scope would alias, producing incorrect shared JS objects.
+    // A closure the evaluator names (`objectId`) is identified by that, lambdas included.
     const isNamed = funcName !== 'lambda' && funcName !== 'anonymous';
-    const cacheKey = isNamed ? `${funcName}@${closureEnvId}@${params.join(',')}` : null;
+    const cacheKey =
+      v.objectId !== undefined
+        ? `object@${v.objectId}`
+        : isNamed
+          ? `${funcName}@${closureEnvId}@${params.join(',')}`
+          : null;
     if (cacheKey && closureCache.has(cacheKey)) {
       return closureCache.get(cacheKey);
     }
@@ -199,6 +216,9 @@ function toJsValue(
     fakeFn.node = makeStubNode(params);
     fakeFn.originalNode = fakeFn.node;
     fakeFn.toString = () => `function ${funcName}(${params.join(', ')}) { [Python] }`;
+    if (v.objectId !== undefined) {
+      fakeFn.objectId = v.objectId;
+    }
     if (cacheKey) {
       closureCache.set(cacheKey, fakeFn);
     }
