@@ -371,14 +371,18 @@ export class Frame extends Visible implements IHoverable {
   }
 
   /**
-   * This frame's colour, when it is drawn for a view that colours frames (`Layout.frameColors`,
+   * This frame's colour, when it is drawn for a view that gives it one (`Layout.frameColors`,
    * captured when drawn, since the drawing outlives that setting), and whether it is the current
-   * frame. Such a frame is hoverable, and its box takes its colour; the current one keeps its
-   * colour with a wider outline instead of the active colour.
+   * frame. A coloured frame is hoverable, and its box takes its colour; if current, it keeps its
+   * colour with a wider outline instead of the active colour. Frames without a colour (e.g. the
+   * builtins frame) are drawn as in the CSE Machine tab.
    */
   private color: string | undefined;
-  private colored: boolean = false;
   private isCurrent: boolean = false;
+
+  private get colored(): boolean {
+    return this.color !== undefined;
+  }
 
   private boxStroke(): string {
     if (this.color !== undefined && this.isLive) {
@@ -421,7 +425,6 @@ export class Frame extends Visible implements IHoverable {
     if (CseAnimation.shouldHideFrame(this.environment.id)) {
       return null;
     }
-    this.colored = Layout.frameColors !== undefined;
     this.color = Layout.frameColors?.get(this.environment.id);
     this.isCurrent = CseMachine.getCurrentEnvId() === this.environment?.id;
 

@@ -146,6 +146,15 @@ describe('frame colours', () => {
     expect(frames.get('47').isCurrent).toBe(true);
     expect(Layout.frameColors).toBeUndefined();
 
+    // A current frame without a colour keeps the active colour.
+    CseMachine.drawEnvironments(snapshots[1], {
+      width: 600,
+      height: 400,
+      clearDeadFrames: false,
+      frameColors: { '45': '#4fc3f7' },
+    });
+    expect(framesById().get('47').boxStroke()).toBe(Config.ActiveColor);
+
     CseMachine.drawEnvironments(snapshots[1], { width: 600, height: 400, clearDeadFrames: false });
     expect(framesById().get('47').boxStroke()).toBe(Config.ActiveColor);
   });
@@ -169,6 +178,10 @@ describe('frame colours', () => {
       Layout.highlightFrame('47');
       expect(highlighted).toHaveBeenCalled();
       expect(other).toHaveBeenCalled();
+
+      // A frame without a colour ('45' here) is not linked: no hover, and its style is the tab's.
+      framesById().get('45').onMouseEnter();
+      expect(onFrameHover).toHaveBeenCalledTimes(2);
 
       onFrameHover.mockClear();
       CseMachine.drawEnvironments(snapshots[1], {
