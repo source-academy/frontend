@@ -1,7 +1,10 @@
 import { act, renderHook } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import createMockStore from 'redux-mock-store';
-import { CONDUCTOR_STEPPER_TAB_ID } from 'src/features/conductor/stepperTab';
+import {
+  CONDUCTOR_E_STEPPER_TAB_ID,
+  CONDUCTOR_STEPPER_TAB_ID,
+} from 'src/features/conductor/stepperTab';
 import { describe, expect, test } from 'vitest';
 
 import type { OverallState } from '../application/ApplicationTypes';
@@ -27,6 +30,14 @@ const renderUseSideContent = (selectedTab: SideContentTabId) => {
 describe('useSideContent', () => {
   test('keeps the conductor Stepper selected when mobile Run is pressed', () => {
     const { hook, store } = renderUseSideContent(CONDUCTOR_STEPPER_TAB_ID);
+
+    act(() => hook.result.current.setSelectedTab(SideContentType.mobileEditorRun));
+
+    expect(store.getActions()).toEqual([]);
+  });
+
+  test('keeps the conductor E-Stepper selected when mobile Run is pressed', () => {
+    const { hook, store } = renderUseSideContent(CONDUCTOR_E_STEPPER_TAB_ID);
 
     act(() => hook.result.current.setSelectedTab(SideContentType.mobileEditorRun));
 

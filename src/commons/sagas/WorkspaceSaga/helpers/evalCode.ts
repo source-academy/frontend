@@ -24,7 +24,7 @@ import type {
   CseSnapshot,
 } from '../../../../features/conductor/CseMachineHostPlugin';
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
-import { CONDUCTOR_STEPPER_TAB_ID } from '../../../../features/conductor/stepperTab';
+import { isConductorStepperTab } from '../../../../features/conductor/stepperTab';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { type OverallState } from '../../../application/ApplicationTypes';
 import { visitSideContent } from '../../../sideContent/SideContentActions';
@@ -654,7 +654,7 @@ function* surfaceConductorError(
     .getTabs(workspaceLocation)
     .some(tab => getTabId(tab) === selectedTab);
   if (
-    selectedTab === CONDUCTOR_STEPPER_TAB_ID ||
+    isConductorStepperTab(selectedTab) ||
     selectedTab === SideContentType.cseMachine ||
     isModuleTabSelected
   ) {
