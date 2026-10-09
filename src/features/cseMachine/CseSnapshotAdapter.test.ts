@@ -243,6 +243,57 @@ describe('heap objects in Python snapshots', () => {
   });
 });
 
+describe('values only the stash holds', () => {
+  const pyList = (id: number, envId: string, elements: unknown[]) => ({
+    displayValue: '[...]',
+    label: 'list',
+    metadata: { id, envId, elements },
+  });
+  const snapshotWithStash = (stash: unknown[]) =>
+    ({
+      stepIndex: 0,
+      control: [],
+      stash,
+      environments: [
+        {
+          id: 'p',
+          name: 'programEnvironment',
+          parentId: null,
+          bindings: [{ name: 'x', value: { displayValue: '1', label: 'int' } }],
+          isActive: true,
+        },
+      ],
+    }) as unknown as CseSnapshot;
+  const drawnArrays = () =>
+    [...Layout.values.values()].filter(v => v.constructor.name === 'ArrayValue');
+
+  it('draws a list that only the stash holds, beside its frame (e.g. an argument not yet bound)', () => {
+    CseMachine.drawEnvironments(
+      snapshotWithStash([
+        pyList(7, 'p', [
+          { displayValue: '1', label: 'int' },
+          pyList(8, 'p', [
+            { displayValue: '2', label: 'int' },
+            { displayValue: 'None', label: 'NoneType' },
+          ]),
+        ]),
+      ]),
+      { width: 500, height: 500, clearDeadFrames: false },
+    );
+    const ids = drawnArrays().map(v => (v as any).data.id);
+    expect(ids).toEqual(expect.arrayContaining(['list_7', 'list_8']));
+  });
+
+  it('does not draw it without a frame to put it in', () => {
+    CseMachine.drawEnvironments(snapshotWithStash([pyList(9, 'nowhere', [])]), {
+      width: 500,
+      height: 500,
+      clearDeadFrames: false,
+    });
+    expect(drawnArrays().map(v => (v as any).data.id)).not.toContain('list_9');
+  });
+});
+
 describe('frame headings (#4042)', () => {
   /** A snapshot of the two top frames, with the given labels (none: as js-slang sends them). */
   const snapshotWith = (labels: { global?: string; program?: string }): CseSnapshot =>

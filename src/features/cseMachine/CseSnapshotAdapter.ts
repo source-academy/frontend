@@ -529,17 +529,22 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
   const stashSv = [...snapshot.stash].reverse();
   const stashItems = stashSv.map(sv => toJsValue(sv, envMap, closureCache, listCache));
 
-  // Stash closures not yet assigned to a name still need to appear in their defining env's heap
-  // so getUnreferencedObjects() can render them as an unbound arrow in the program frame —
-  // matching the non-conductor CSE machine's behaviour at the step before `assign foo` runs.
+  // Stash closures and lists not yet assigned to a name still need to appear in their env's heap
+  // (a closure's defining env; a list's, from its metadata.envId) so getUnreferencedObjects() can
+  // render them as an unbound arrow in that frame — matching the non-conductor CSE machine's
+  // behaviour at the step before `assign foo` runs. Without this, a list that only the stash holds
+  // (e.g. the e-stepper's `length(llist(1, 2, 3))`, before the call binds it) is not drawn at all.
   for (let i = 0; i < stashSv.length; i++) {
     const sv = stashSv[i];
     const label = sv.label.toLowerCase();
-    if (/closure|function|lambda|method/.test(label) && (sv.metadata as any)?.closureFrameId) {
+    const isStashClosure =
+      /closure|function|lambda|method/.test(label) && (sv.metadata as any)?.closureFrameId;
+    const isStashList = label === 'list' || label === 'array';
+    if (isStashClosure || isStashList) {
       const val = stashItems[i];
-      const definingEnv = (val as any)?.environment;
-      if (definingEnv) {
-        definingEnv.heap.add(val);
+      const homeEnv = (val as any)?.environment;
+      if (homeEnv) {
+        homeEnv.heap.add(val);
       }
     }
   }
