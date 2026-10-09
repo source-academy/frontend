@@ -246,6 +246,35 @@ describe('heap objects in Python snapshots', () => {
     expect(box.fill).toHaveBeenLastCalledWith(Config.BgColor);
   });
 
+  it('gives a hovered empty list its background too', () => {
+    const snapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        {
+          id: 'g',
+          name: 'global',
+          parentId: null,
+          bindings: [{ name: 'xs', value: { ...list(32, []), objectId: '#1' } }],
+          isActive: true,
+        },
+      ],
+    } as unknown as CseSnapshot;
+    const drawing = CseMachine.drawEnvironments(snapshot, {
+      width: 500,
+      height: 500,
+      clearDeadFrames: false,
+    });
+    expect(drawing).not.toBeNull();
+    const array = [...Layout.values.values()].find(v => (v as any).data?.id === 'list_32') as any;
+    expect(array.units).toHaveLength(0);
+    const box = { fill: vi.fn() };
+    array.emptyUnit.ref.current = box;
+    Layout.highlightObject('#1');
+    expect(box.fill).toHaveBeenLastCalledWith(Config.HoverFrameBgColor);
+  });
+
   it('highlights the drawn object with an objectId, and reports hovering it', () => {
     const snapshot = {
       stepIndex: 0,
