@@ -243,17 +243,26 @@ describe('heap objects in Python snapshots', () => {
   });
 });
 
-describe('Python LEGB frame labels (#4042) only apply in snapshot mode', () => {
-  it('renames "global"/"programEnvironment" for a Python snapshot', () => {
-    const snapshot: CseSnapshot = {
+describe('frame headings (#4042)', () => {
+  /** A snapshot of the two top frames, with the given labels (none: as js-slang sends them). */
+  const snapshotWith = (labels: { global?: string; program?: string }): CseSnapshot =>
+    ({
       stepIndex: 0,
       control: [],
       stash: [],
       environments: [
-        { id: 'g', name: 'global', parentId: null, bindings: [], isActive: false },
+        {
+          id: 'g',
+          name: 'global',
+          label: labels.global,
+          parentId: null,
+          bindings: [],
+          isActive: false,
+        },
         {
           id: 'p',
           name: 'programEnvironment',
+          label: labels.program,
           parentId: 'g',
           // A frame with a genuinely empty head gets collapsed by Layout's "skip empty
           // environments" behavior; give it one trivial binding to keep it visible.
@@ -261,10 +270,9 @@ describe('Python LEGB frame labels (#4042) only apply in snapshot mode', () => {
           isActive: true,
         },
       ],
-    };
-
+    }) as unknown as CseSnapshot;
+  const headings = (snapshot: CseSnapshot) => {
     const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
-
     Layout.snapshotMode = true;
     try {
       Layout.setContext(
@@ -275,13 +283,31 @@ describe('Python LEGB frame labels (#4042) only apply in snapshot mode', () => {
     } finally {
       Layout.snapshotMode = false;
     }
+    return ['g', 'p'].map(
+      id => Frame.getFrom(findNode(envTree, id)!.environment as any)!.name.partialStr,
+    );
+  };
 
-    expect(Frame.getFrom(findNode(envTree, 'g')!.environment as any)!.name.partialStr).toBe(
-      'Built-in functions',
-    );
-    expect(Frame.getFrom(findNode(envTree, 'p')!.environment as any)!.name.partialStr).toBe(
-      'Globals',
-    );
+  it("are the evaluator's labels when it sends them (Python)", () => {
+    expect(headings(snapshotWith({ global: 'Built-ins', program: 'Global' }))).toEqual([
+      'Built-ins',
+      'Global',
+    ]);
+  });
+
+  it('are derived from the frame names otherwise (JavaScript)', () => {
+    expect(headings(snapshotWith({}))).toEqual(['Global', 'Program']);
+  });
+
+  it("stay the evaluator's labels in a plugin's diagram, which places frames afresh", () => {
+    CseMachine.drawEnvironments(snapshotWith({ global: 'Built-ins', program: 'Global' }), {
+      width: 500,
+      height: 500,
+      clearDeadFrames: false,
+    });
+    const names = Layout.levels.flatMap(level => level.frames).map(f => f.name.partialStr);
+    expect(names).toEqual(expect.arrayContaining(['Built-ins', 'Global']));
+    expect(names).not.toContain('Program');
   });
 });
 
