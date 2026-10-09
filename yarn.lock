@@ -4361,10 +4361,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/common-cse-machine@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@sourceacademy/common-cse-machine@npm:0.3.0"
-  checksum: 10c0/c0462cc2dd8d779179c31d168aa3e71ea7f81818535166e38aeb3c048469fcf7eebc388ed4110d3300d6b6933cc310da3fbe4c3a4026746c5df409eb91dd7042
+"@sourceacademy/common-cse-machine@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@sourceacademy/common-cse-machine@npm:0.3.1"
+  checksum: 10c0/04d0a087d884ccd4433081dd04dd77a4c40d34ea5320638023b5ff803c4829c0e483b6fc6628e3c81eecc4683872f87dc9fbbc9895cc712427d4848734a92d06
   languageName: node
   linkType: hard
 
@@ -8747,7 +8747,7 @@ __metadata:
     "@sentry/react": "npm:^10.5.0"
     "@sourceacademy/c-slang": "npm:^1.0.21"
     "@sourceacademy/common-autocomplete": "npm:^0.0.1"
-    "@sourceacademy/common-cse-machine": "npm:^0.3.0"
+    "@sourceacademy/common-cse-machine": "npm:^0.3.1"
     "@sourceacademy/common-tabs": "npm:^0.0.1"
     "@sourceacademy/conductor": "npm:^0.8.3"
     "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.29"
