@@ -4,7 +4,7 @@ import { afterEach, describe, expect, test, vi } from 'vitest';
 import { hostServices } from '../conductor/cseDiagramService';
 import type { CseSnapshot } from '../conductor/CseMachineHostPlugin';
 import CseArrowFilterMenu from './CseArrowFilterMenu';
-import CseEnvironmentView from './CseEnvironmentView';
+import CseEnvironmentView, { anchorResolver } from './CseEnvironmentView';
 import CseMachine from './CseMachine';
 import { CseAnimation } from './CseMachineAnimation';
 import { Config } from './CseMachineConfig';
@@ -140,6 +140,34 @@ describe('dead functions in an otherwise empty frame', () => {
   test('the frame and the function stay, greyed out, once nothing reaches them', () => {
     expect(drawn(0)).toEqual({ frames: ['-1', 'Global'], values: 1 });
     expect(drawn(1)).toEqual({ frames: ['-1', 'Global'], values: 1 });
+  });
+
+  test('arrows can be anchored at the function circles, but not at what Clear Dead Frames hides', () => {
+    const stage = {
+      container: () => ({ getBoundingClientRect: () => ({ left: 0, top: 0 }) }),
+      getAbsoluteTransform: () => ({ point: (p: { x: number; y: number }) => p }),
+    };
+    (Layout.stageRef as React.RefObject<unknown>).current = stage;
+    const root = { getBoundingClientRect: () => ({ left: 0, top: 0 }) } as HTMLElement;
+    try {
+      drawn(0);
+      const value = [...Layout.values.values()][0];
+      // The function's y is the centre of its circles already.
+      expect(anchorResolver(root)({ kind: 'object', id: '#1' })).toEqual({
+        x: value.x(),
+        y: value.y(),
+      });
+      expect(anchorResolver(root)({ kind: 'object', id: 'nope' })).toBeNull();
+      expect(anchorResolver(root)({ kind: 'frame', id: 'nope' })).toBeNull();
+      expect(anchorResolver(null)({ kind: 'object', id: '#1' })).toBeNull();
+      // Dead, and hidden by Clear Dead Frames: not drawn, so no anchor.
+      drawn(1);
+      Layout.clearDeadFrames = true;
+      expect(anchorResolver(root)({ kind: 'object', id: '#1' })).toBeNull();
+    } finally {
+      Layout.clearDeadFrames = false;
+      (Layout.stageRef as React.RefObject<unknown>).current = null;
+    }
   });
 
   test('Clear Dead Frames still removes them', () => {

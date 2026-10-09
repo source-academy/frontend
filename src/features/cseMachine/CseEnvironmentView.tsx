@@ -310,7 +310,7 @@ function CseEnvironmentView({
  * `root`. Arrows end at the left edge of the object's drawing (its first circle or box), or of
  * the frame's box.
  */
-function anchorResolver(root: HTMLElement | null): CseDiagramAnchorResolver {
+export function anchorResolver(root: HTMLElement | null): CseDiagramAnchorResolver {
   return ({ kind, id }) => {
     const stage = Layout.stageRef.current;
     if (!stage || !root) {
@@ -323,7 +323,15 @@ function anchorResolver(root: HTMLElement | null): CseDiagramAnchorResolver {
           (value instanceof FnValue || value instanceof ArrayValue) &&
           (value.data as { objectId?: string }).objectId === id
         ) {
-          at = { x: value.x(), y: value.y() + value.height() / 2 };
+          // Not drawn: what Clear Dead Frames hides (as `ArrayValue.draw` skips it).
+          if (Layout.clearDeadFrames && !value.isLive()) {
+            return null;
+          }
+          // A function's `y()` is already the centre of its circles; an array's is its top edge.
+          at = {
+            x: value.x(),
+            y: value instanceof FnValue ? value.y() : value.y() + value.height() / 2,
+          };
           break;
         }
       }
