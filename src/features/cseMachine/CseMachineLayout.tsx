@@ -160,6 +160,37 @@ export class Layout {
     Layout.stageRef.current?.batchDraw();
   }
 
+  /**
+   * Frame colours by environment id, while drawing for a view that colours frames (a plugin's
+   * `frameColors`, see `CseMachine.drawEnvironments`); unset for the CSE Machine tab. A frame drawn
+   * with a colour is also hoverable (see `onFrameHover`).
+   */
+  static frameColors: Map<string, string> | undefined = undefined;
+
+  /**
+   * Told which frame the mouse enters (by its environment id), and `null` when it leaves. Set by a
+   * view that lends the diagram to a plugin (`CseEnvironmentView`).
+   */
+  static onFrameHover: ((frameId: string | null) => void) | undefined = undefined;
+
+  static notifyFrameHover(frameId: string, entered: boolean) {
+    Layout.onFrameHover?.(entered ? frameId : null);
+  }
+
+  /** Highlights the frame `frameId`, and returns the others to their normal style. */
+  static highlightFrame(frameId: string | null) {
+    Layout.levels.forEach(level =>
+      level.frames.forEach(frame => {
+        if (frame.environment.id === frameId) {
+          frame.setArrowSourceHighlightedStyle();
+        } else {
+          frame.setArrowSourceNormalStyle();
+        }
+      }),
+    );
+    Layout.stageRef.current?.batchDraw();
+  }
+
   /** memoized layout */
   static prevLayout: React.ReactNode;
   static currentDark: React.ReactNode;

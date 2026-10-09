@@ -370,9 +370,38 @@ export class Frame extends Visible implements IHoverable {
     this._width = newWidth;
   }
 
-  onMouseEnter = () => {};
+  /**
+   * This frame's colour, when it is drawn for a view that colours frames (`Layout.frameColors`,
+   * captured when drawn, since the drawing outlives that setting), and whether it is the current
+   * frame. Such a frame is hoverable, and its box takes its colour; the current one keeps its
+   * colour with a wider outline instead of the active colour.
+   */
+  private color: string | undefined;
+  private colored: boolean = false;
+  private isCurrent: boolean = false;
 
-  onMouseLeave = () => {};
+  private boxStroke(): string {
+    if (this.color !== undefined && this.isLive) {
+      return this.color;
+    }
+    return this.isCurrent && !this.colored
+      ? defaultActiveColor()
+      : this.isLive
+        ? defaultStrokeColor()
+        : fadedStrokeColor();
+  }
+
+  onMouseEnter = () => {
+    if (this.colored) {
+      Layout.notifyFrameHover(this.environment.id, true);
+    }
+  };
+
+  onMouseLeave = () => {
+    if (this.colored) {
+      Layout.notifyFrameHover(this.environment.id, false);
+    }
+  };
 
   setArrowSourceHighlightedStyle(): void {
     if (this.isLive) {
@@ -384,13 +413,7 @@ export class Frame extends Visible implements IHoverable {
   }
 
   setArrowSourceNormalStyle(): void {
-    this.rectRef.current?.stroke(
-      CseMachine.getCurrentEnvId() === this.environment?.id
-        ? defaultActiveColor()
-        : this.isLive
-          ? defaultStrokeColor()
-          : fadedStrokeColor(),
-    );
+    this.rectRef.current?.stroke(this.boxStroke());
     this.name.setArrowSourceNormalStyle();
   }
 
@@ -398,9 +421,17 @@ export class Frame extends Visible implements IHoverable {
     if (CseAnimation.shouldHideFrame(this.environment.id)) {
       return null;
     }
+    this.colored = Layout.frameColors !== undefined;
+    this.color = Layout.frameColors?.get(this.environment.id);
+    this.isCurrent = CseMachine.getCurrentEnvId() === this.environment?.id;
 
     return (
-      <Group ref={this.ref} key={Layout.key++}>
+      <Group
+        ref={this.ref}
+        key={Layout.key++}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+      >
         {/*
           The header rows (name, globals annotation) float above the frame's box, in the same
           gap that the parent/tail arrow passes through. Arrows are already drawn on a Konva
@@ -450,17 +481,11 @@ export class Frame extends Visible implements IHoverable {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={
-            CseMachine.getCurrentEnvId() === this.environment?.id
-              ? defaultActiveColor()
-              : this.isLive
-                ? defaultStrokeColor()
-                : fadedStrokeColor()
-          }
+          stroke={this.boxStroke()}
+          strokeWidth={this.colored && this.isCurrent ? Config.CurrentFrameStrokeWidth : 1}
           cornerRadius={Config.FrameCornerRadius}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-          listening={false}
+          // Hoverable only where frames are linked to a plugin (see `onMouseEnter`).
+          listening={this.colored}
           key={Layout.key++}
           fill={defaultBackgroundColor()}
         />
