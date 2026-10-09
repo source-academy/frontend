@@ -24,6 +24,12 @@ export type CseEnvironmentViewProps = {
   hovered?: string | null;
   /** Called with a heap object's `objectId` when the mouse enters it, and `null` when it leaves. */
   onHover?: (objectId: string | null) => void;
+  /** Frame colours by frame id: a frame's box takes its colour; the current one is wider. */
+  frameColors?: Record<string, string>;
+  /** The id of the frame to highlight, if any. */
+  hoveredFrame?: string | null;
+  /** Called with a frame's id when the mouse enters it, and `null` when it leaves. */
+  onHoverFrame?: (frameId: string | null) => void;
 };
 
 /**
@@ -39,9 +45,19 @@ export type CseEnvironmentViewProps = {
  * own zoom and image export act on it.
  *
  * Closures and arrays whose snapshot values carry an `objectId` are linked to the plugin: the one
- * that is `hovered` is highlighted, and `onHover` is told which one the mouse enters.
+ * that is `hovered` is highlighted, and `onHover` is told which one the mouse enters. Likewise for
+ * frames (`hoveredFrame`, `onHoverFrame`), which take the plugin's `frameColors`; the current frame
+ * keeps its colour, with a wider outline.
  */
-function CseEnvironmentView({ snapshots, step, hovered, onHover }: CseEnvironmentViewProps) {
+function CseEnvironmentView({
+  snapshots,
+  step,
+  hovered,
+  onHover,
+  frameColors,
+  hoveredFrame,
+  onHoverFrame,
+}: CseEnvironmentViewProps) {
   const [area, setArea] = useState<HTMLDivElement | null>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [visible, setVisible] = useState(false);
@@ -109,10 +125,11 @@ function CseEnvironmentView({ snapshots, step, hovered, onHover }: CseEnvironmen
       width: size.width,
       height: size.height,
       clearDeadFrames,
+      frameColors,
     });
     // `version` redraws after a change to the shared display preferences.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible, size, snapshots, step, clearDeadFrames, version]);
+  }, [visible, size, snapshots, step, clearDeadFrames, frameColors, version]);
 
   // Hovering: the diagram reports the object under the mouse while this view has the `Layout`,
   // and highlights the hovered object (also when it is hovered elsewhere, e.g. in the plugin's
@@ -133,6 +150,23 @@ function CseEnvironmentView({ snapshots, step, hovered, onHover }: CseEnvironmen
       Layout.highlightObject(hovered ?? null);
     }
   }, [drawing, hovered]);
+  // The same for frames.
+  useEffect(() => {
+    if (!visible || !onHoverFrame) {
+      return;
+    }
+    Layout.onFrameHover = onHoverFrame;
+    return () => {
+      if (Layout.onFrameHover === onHoverFrame) {
+        Layout.onFrameHover = undefined;
+      }
+    };
+  }, [visible, onHoverFrame]);
+  useEffect(() => {
+    if (drawing) {
+      Layout.highlightFrame(hoveredFrame ?? null);
+    }
+  }, [drawing, hoveredFrame]);
 
   const toggle = (label: string, icon: string, checked: boolean, onToggle: () => void) => (
     <Tooltip content={label} compact>
