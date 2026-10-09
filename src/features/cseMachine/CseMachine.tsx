@@ -448,7 +448,13 @@ export default class CseMachine {
    */
   static drawEnvironments(
     snapshot: CseSnapshot,
-    options: { width: number; height: number; clearDeadFrames: boolean },
+    options: {
+      width: number;
+      height: number;
+      clearDeadFrames: boolean;
+      /** Frame colours by frame id (see `Layout.frameColors`). */
+      frameColors?: Record<string, string>;
+    },
   ): React.ReactNode {
     const saved = {
       controlStash: CseMachine.controlStash,
@@ -463,6 +469,9 @@ export default class CseMachine {
     };
     try {
       CseMachine.controlStash = false;
+      Layout.frameColors = options.frameColors
+        ? new Map(Object.entries(options.frameColors))
+        : undefined;
       Layout.clearDeadFrames = options.clearDeadFrames;
       Layout.visibleWidth = options.width;
       Layout.visibleHeight = options.height;
@@ -507,6 +516,7 @@ export default class CseMachine {
       CseMachine.controlStash = saved.controlStash;
       Layout.clearDeadFrames = saved.clearDeadFrames;
       CseMachine.currentEnvId = saved.currentEnvId;
+      Layout.frameColors = undefined;
       // Nor may the CSE Machine tab's next redraw reuse this drawing.
       CseMachine.clearMemoizedLayouts();
     }

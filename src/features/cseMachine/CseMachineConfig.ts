@@ -45,6 +45,8 @@ export const Config = Object.freeze({
 
   ArrowHeadSize: 10,
   ArrowStrokeWidth: 1,
+  /** Outline width of the current frame where frames are coloured (see `Layout.frameColors`). */
+  CurrentFrameStrokeWidth: 3,
   ArrowHitStrokeWidth: 5,
   ArrowHoveredStrokeWidth: 2,
   ArrowHoveredHeadSize: 15,
