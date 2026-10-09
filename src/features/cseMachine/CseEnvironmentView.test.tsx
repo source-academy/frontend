@@ -7,6 +7,7 @@ import CseArrowFilterMenu from './CseArrowFilterMenu';
 import CseEnvironmentView from './CseEnvironmentView';
 import CseMachine from './CseMachine';
 import { CseAnimation } from './CseMachineAnimation';
+import { Config } from './CseMachineConfig';
 import { Layout } from './CseMachineLayout';
 import { snapshotWithDeadFrames } from './cseSnapshotHistory';
 
@@ -127,6 +128,75 @@ describe('CseMachine.drawEnvironments alignment', () => {
   });
 });
 
+describe('frame colours', () => {
+  const framesById = () =>
+    new Map(Layout.levels.flatMap(level => level.frames).map(f => [f.environment.id, f as any]));
+
+  test('colour frame boxes, the current one with a wider outline; the CSE tab is unchanged', () => {
+    CseMachine.drawEnvironments(snapshots[1], {
+      width: 600,
+      height: 400,
+      clearDeadFrames: false,
+      frameColors: { '45': '#4fc3f7', '47': '#ffb74d' },
+    });
+    const frames = framesById();
+    expect(frames.get('45').boxStroke()).toBe('#4fc3f7');
+    // The current frame ('47', active in snapshots[1]) keeps its colour instead of the active one.
+    expect(frames.get('47').boxStroke()).toBe('#ffb74d');
+    expect(frames.get('47').isCurrent).toBe(true);
+    expect(Layout.frameColors).toBeUndefined();
+
+    // A current frame without a colour keeps the active colour.
+    CseMachine.drawEnvironments(snapshots[1], {
+      width: 600,
+      height: 400,
+      clearDeadFrames: false,
+      frameColors: { '45': '#4fc3f7' },
+    });
+    expect(framesById().get('47').boxStroke()).toBe(Config.ActiveColor);
+
+    CseMachine.drawEnvironments(snapshots[1], { width: 600, height: 400, clearDeadFrames: false });
+    expect(framesById().get('47').boxStroke()).toBe(Config.ActiveColor);
+  });
+
+  test('frames report hovering only where they are coloured, and are highlighted', () => {
+    const onFrameHover = vi.fn();
+    Layout.onFrameHover = onFrameHover;
+    try {
+      CseMachine.drawEnvironments(snapshots[1], {
+        width: 600,
+        height: 400,
+        clearDeadFrames: false,
+        frameColors: { '47': '#ffb74d' },
+      });
+      const frame = framesById().get('47');
+      frame.onMouseEnter();
+      frame.onMouseLeave();
+      expect(onFrameHover.mock.calls).toEqual([['47'], [null]]);
+      const highlighted = vi.spyOn(frame, 'setArrowSourceHighlightedStyle');
+      const other = vi.spyOn(framesById().get('45'), 'setArrowSourceNormalStyle');
+      Layout.highlightFrame('47');
+      expect(highlighted).toHaveBeenCalled();
+      expect(other).toHaveBeenCalled();
+
+      // A frame without a colour ('45' here) is not linked: no hover, and its style is the tab's.
+      framesById().get('45').onMouseEnter();
+      expect(onFrameHover).toHaveBeenCalledTimes(2);
+
+      onFrameHover.mockClear();
+      CseMachine.drawEnvironments(snapshots[1], {
+        width: 600,
+        height: 400,
+        clearDeadFrames: false,
+      });
+      framesById().get('47').onMouseEnter();
+      expect(onFrameHover).not.toHaveBeenCalled();
+    } finally {
+      Layout.onFrameHover = undefined;
+    }
+  });
+});
+
 describe('CseArrowFilterMenu', () => {
   test('offers the filters not excluded, and reports changes', () => {
     const onChange = vi.fn();
@@ -204,6 +274,37 @@ describe('CseEnvironmentView', () => {
     expect(highlight).toHaveBeenLastCalledWith('#1');
     unmount();
     expect(Layout.onObjectHover).toBeUndefined();
+  });
+
+  test('links frames with the plugin: colours, hovering, highlighting', () => {
+    sized();
+    const draw = vi.spyOn(CseMachine, 'drawEnvironments');
+    const highlight = vi.spyOn(Layout, 'highlightFrame');
+    const onHoverFrame = vi.fn();
+    const frameColors = { '45': '#4fc3f7' };
+    const { rerender, unmount } = render(
+      <CseEnvironmentView
+        snapshots={snapshots}
+        step={0}
+        frameColors={frameColors}
+        hoveredFrame={null}
+        onHoverFrame={onHoverFrame}
+      />,
+    );
+    expect(draw.mock.lastCall![1].frameColors).toBe(frameColors);
+    expect(Layout.onFrameHover).toBe(onHoverFrame);
+    rerender(
+      <CseEnvironmentView
+        snapshots={snapshots}
+        step={0}
+        frameColors={frameColors}
+        hoveredFrame="45"
+        onHoverFrame={onHoverFrame}
+      />,
+    );
+    expect(highlight).toHaveBeenLastCalledWith('45');
+    unmount();
+    expect(Layout.onFrameHover).toBeUndefined();
   });
 
   test('draws nothing before it has a size', () => {
