@@ -296,12 +296,12 @@ describe('CseArrowFilterMenu program references', () => {
   test('are offered only when asked for, and off until turned on', () => {
     const onChange = vi.fn();
     const { unmount } = render(<CseArrowFilterMenu onChange={onChange} />);
-    expect(screen.queryByText('Program references')).toBeNull();
+    expect(screen.queryByText('From program')).toBeNull();
     unmount();
     render(<CseArrowFilterMenu programReferences onChange={onChange} />);
-    expect(screen.getByText('Program references')).toBeTruthy();
+    expect(screen.getByText('From program')).toBeTruthy();
     expect(CseMachine.getArrowOriginFilters().program).toBe(false);
-    fireEvent.click(screen.getByText('Program references'));
+    fireEvent.click(screen.getByText('From program'));
     expect(CseMachine.getArrowOriginFilters().program).toBe(true);
     expect(onChange).toHaveBeenCalledTimes(1);
     CseMachine.resetArrowOriginFilters();

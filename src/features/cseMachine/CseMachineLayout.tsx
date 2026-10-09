@@ -56,7 +56,6 @@ import {
   isGlobalFn,
   isNonGlobalFn,
   isPrimitiveData,
-  isPrunableEnvironment,
   isStreamFn,
   isUnassigned,
   setDifference,

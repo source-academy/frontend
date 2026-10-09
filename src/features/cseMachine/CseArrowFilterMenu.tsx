@@ -11,7 +11,7 @@ const FILTERS: { key: ArrowOriginFilterKey; label: string }[] = [
   { key: 'array', label: 'From arrays' },
   { key: 'control', label: 'From control' },
   { key: 'stash', label: 'From stash' },
-  { key: 'program', label: 'Program references' },
+  { key: 'program', label: 'From program' },
 ];
 
 type Props = {
@@ -20,7 +20,7 @@ type Props = {
   /** Filter keys not offered (e.g. control and stash, for a diagram without them). */
   exclude?: ArrowOriginFilterKey[];
   /**
-   * Offer "Program references": the arrows a plugin draws from its program pane into the diagram.
+   * Offer "From program": the arrows a plugin draws from its program pane into the diagram.
    * Only for a diagram lent to a plugin that can draw them.
    */
   programReferences?: boolean;

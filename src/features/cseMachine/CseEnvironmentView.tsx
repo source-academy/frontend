@@ -45,7 +45,7 @@ export type CseEnvironmentViewProps = {
   /** Called with a frame's id when the mouse enters it, and `null` when it leaves. */
   onHoverFrame?: (frameId: string | null) => void;
   /**
-   * Offers the "Program references" arrow filter, off until the user turns it on. While it is on,
+   * Offers the "From program" arrow filter, off until the user turns it on. While it is on,
    * called with a resolver of where objects and frames are drawn, again whenever the drawing moves
    * (a redraw, pan, zoom), so the plugin can draw arrows into the diagram from its own panes; with
    * `null` when it is off, and when the view goes away.
@@ -191,7 +191,7 @@ function CseEnvironmentView({
     }
   }, [drawing, hoveredFrame]);
 
-  // Program references: while the filter is on, tell the plugin where things are drawn, and again
+  // From program: while the filter is on, tell the plugin where things are drawn, and again
   // whenever the user pans or zooms (the resolver reads the stage as it is when asked, but the
   // plugin only asks again when told).
   const programReferences = CseMachine.getArrowOriginFilters().program;
