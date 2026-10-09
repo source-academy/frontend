@@ -3,6 +3,7 @@ import Konva from 'konva';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { CseSnapshot } from '../conductor/CseMachineHostPlugin';
+import { ArrayNullUnit } from './components/ArrayNullUnit';
 import { Frame } from './components/Frame';
 import { FnValue } from './components/values/FnValue';
 import CseMachine from './CseMachine';
@@ -240,6 +241,49 @@ describe('heap objects in Python snapshots', () => {
       Layout.onObjectHover = undefined;
     }
     expect(onHover.mock.calls).toEqual([['#2'], [null]]);
+  });
+});
+
+describe("Python's None in a box-and-pointer diagram", () => {
+  it('is a slash in a list box, and "None" in a frame', () => {
+    const none = { displayValue: 'None', label: 'NoneType' };
+    const snapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        {
+          id: 'p',
+          name: 'programEnvironment',
+          parentId: null,
+          bindings: [
+            {
+              name: 'xs',
+              value: {
+                displayValue: '[3, None]',
+                label: 'list',
+                metadata: {
+                  id: 21,
+                  envId: 'p',
+                  elements: [{ displayValue: '3', label: 'int' }, none],
+                },
+              },
+            },
+            { name: 'y', value: none },
+          ],
+          isActive: true,
+        },
+      ],
+    } as unknown as CseSnapshot;
+    CseMachine.drawEnvironments(snapshot, { width: 500, height: 500, clearDeadFrames: false });
+    const list = [...Layout.values.values()].find(v => (v as any).data?.id === 'list_21') as any;
+    const [first, second] = list.units.map((unit: any) => unit.value.text);
+    expect(second).toBeInstanceOf(ArrayNullUnit);
+    expect(first).not.toBeInstanceOf(ArrayNullUnit);
+    const frame = Layout.levels.flatMap(level => level.frames)[0];
+    const y = frame.bindings.find(b => b.keyString.startsWith('y'))!;
+    expect((y.value as any).text).not.toBeInstanceOf(ArrayNullUnit);
+    expect((y.value as any).text.partialStr).toBe('None');
   });
 });
 
