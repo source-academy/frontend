@@ -454,6 +454,12 @@ export default class CseMachine {
       controlStash: CseMachine.controlStash,
       clearDeadFrames: Layout.clearDeadFrames,
       currentEnvId: CseMachine.currentEnvId,
+      caches: [
+        CseMachine.normalLayoutCache,
+        CseMachine.normalLiveLayoutCache,
+        CseMachine.printLayoutCache,
+        CseMachine.printLiveLayoutCache,
+      ],
     };
     try {
       CseMachine.controlStash = false;
@@ -467,18 +473,37 @@ export default class CseMachine {
       // Draw afresh, not the CSE Machine tab's memoized drawing.
       CseMachine.clearMemoizedLayouts();
       const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
-      Layout.snapshotMode = true;
-      try {
-        Layout.setContext(
-          envTree as unknown as EnvTree,
-          fakeControl as unknown as Control,
-          fakeStash as unknown as Stash,
-        );
-      } finally {
-        Layout.snapshotMode = false;
-      }
+      const setContext = () => {
+        Layout.snapshotMode = true;
+        try {
+          Layout.setContext(
+            envTree as unknown as EnvTree,
+            fakeControl as unknown as Control,
+            fakeStash as unknown as Stash,
+          );
+        } finally {
+          Layout.snapshotMode = false;
+        }
+      };
+      // This snapshot's own layout cache, not the CSE Machine tab's (which belongs to another run):
+      // lay the frames out, record their positions, and place them from those, as `drawCse` does —
+      // that is where center alignment is applied.
+      CseMachine.normalLayoutCache = null;
+      CseMachine.normalLiveLayoutCache = null;
+      CseMachine.printLayoutCache = null;
+      CseMachine.printLiveLayoutCache = null;
+      setContext();
+      CseMachine.setMasterLayout(Layout.getLayoutPositions(false));
+      setContext();
+      Layout.applyFixedPositions();
       return Layout.draw();
     } finally {
+      [
+        CseMachine.normalLayoutCache,
+        CseMachine.normalLiveLayoutCache,
+        CseMachine.printLayoutCache,
+        CseMachine.printLiveLayoutCache,
+      ] = saved.caches;
       CseMachine.controlStash = saved.controlStash;
       Layout.clearDeadFrames = saved.clearDeadFrames;
       CseMachine.currentEnvId = saved.currentEnvId;
@@ -572,6 +597,11 @@ export default class CseMachine {
   }
 
   static updateDimensions(width: number, height: number) {
+    if (Layout.isLent()) {
+      // The CSE Machine tab is hidden behind a view that borrows `Layout`; resize it once it is back.
+      Layout.deferDimensions(width, height);
+      return;
+    }
     if (Layout.stageRef != null && width !== null && height !== null) {
       Layout.updateDimensions(width, height);
     }

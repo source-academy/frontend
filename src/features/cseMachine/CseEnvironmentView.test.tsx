@@ -6,6 +6,7 @@ import type { CseSnapshot } from '../conductor/CseMachineHostPlugin';
 import CseArrowFilterMenu from './CseArrowFilterMenu';
 import CseEnvironmentView from './CseEnvironmentView';
 import CseMachine from './CseMachine';
+import { CseAnimation } from './CseMachineAnimation';
 import { Layout } from './CseMachineLayout';
 import { snapshotWithDeadFrames } from './cseSnapshotHistory';
 
@@ -60,6 +61,69 @@ describe('CseMachine.drawEnvironments', () => {
     expect(CseMachine.getControlStash()).toBe(controlStash);
     expect(Layout.clearDeadFrames).toBe(false);
     CseMachine.toggleControlStash();
+  });
+});
+
+describe('Layout.lend / Layout.reclaim', () => {
+  test('give the CSE Machine tab back every shared ref, its dimensions, and its deferred resize', () => {
+    const refs = [
+      Layout.stageRef,
+      Layout.contentGroupRef,
+      Layout.animationGroupRef,
+      Layout.arrowUnderlayLayerRef,
+      Layout.liveArrowLayerRef,
+      Layout.scrollContainerRef,
+      CseAnimation.layerRef,
+    ] as { current: unknown }[];
+    const theirs = refs.map((ref, i) => (ref.current = { tab: i }));
+    Layout.visibleWidth = 321;
+    Layout.lend();
+    refs.forEach(ref => (ref.current = null));
+    Layout.visibleWidth = 600;
+    const resize = vi.spyOn(Layout, 'updateDimensions').mockImplementation(() => {});
+    CseMachine.updateDimensions(800, 500);
+    expect(resize).not.toHaveBeenCalled();
+    Layout.reclaim();
+    expect(refs.map(ref => ref.current)).toEqual(theirs);
+    expect(Layout.visibleWidth).toBe(321);
+    expect(resize).toHaveBeenCalledWith(800, 500);
+    refs.forEach(ref => (ref.current = null));
+  });
+});
+
+describe('CseMachine.drawEnvironments alignment', () => {
+  /** The program frame (one on its level) above two call frames (two on theirs). */
+  const wide: CseSnapshot = {
+    stepIndex: 0,
+    control: [],
+    stash: [],
+    environments: [
+      { ...call, id: '47', parentId: '45', isActive: true },
+      { ...call, id: '48', name: 'g', parentId: '45', isActive: false },
+      program(false, 1),
+      global,
+    ],
+  };
+  const programX = () => {
+    CseMachine.drawEnvironments(wide, { width: 600, height: 400, clearDeadFrames: false });
+    return Layout.levels
+      .flatMap(l => l.frames)
+      .find(f => f.environment.id === '45')!
+      .x();
+  };
+
+  test('centers levels when center alignment is on, leaving the tab its layout caches', () => {
+    const cache = { tab: true } as never;
+    CseMachine.normalLayoutCache = cache;
+    const left = programX();
+    CseMachine.toggleCenterAlignment();
+    try {
+      expect(programX()).toBeGreaterThan(left);
+    } finally {
+      CseMachine.toggleCenterAlignment();
+    }
+    expect(CseMachine.normalLayoutCache).toBe(cache);
+    CseMachine.normalLayoutCache = null;
   });
 });
 

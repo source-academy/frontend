@@ -24,7 +24,7 @@ type Props = {
  * The CSE machine diagram's "Filter Arrows" menu: which kinds of arrows are drawn. Shared by the
  * CSE Machine tab and the environment view the frontend lends to web plugins.
  */
-export default function CseArrowFilterMenu({ onChange, exclude = [] }: Props) {
+function CseArrowFilterMenu({ onChange, exclude = [] }: Props) {
   // The filters live in CseMachine's static state; re-render this menu itself when they change.
   const [, setVersion] = useState(0);
   const changed = () => {
@@ -64,3 +64,5 @@ export default function CseArrowFilterMenu({ onChange, exclude = [] }: Props) {
     </div>
   );
 }
+
+export default CseArrowFilterMenu;

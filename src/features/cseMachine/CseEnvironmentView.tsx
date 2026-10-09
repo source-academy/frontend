@@ -7,7 +7,7 @@ import {
   Position,
   Tooltip,
 } from '@blueprintjs/core';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { CseSnapshot } from '../conductor/CseMachineHostPlugin';
 import CseArrowFilterMenu from './CseArrowFilterMenu';
@@ -26,13 +26,6 @@ export type CseEnvironmentViewProps = {
   onHover?: (objectId: string | null) => void;
 };
 
-type LayoutRefs = {
-  stage: unknown;
-  scroll: unknown;
-  width: number;
-  height: number;
-};
-
 /**
  * The CSE machine diagram of one snapshot's environments (no control and stash), with the CSE
  * Machine tab's diagram toolbar: alignment, arrow filters, clearing dead frames, printable mode,
@@ -40,19 +33,15 @@ type LayoutRefs = {
  * `cseDiagramService.ts`) — the environment stepper's environment pane is one.
  *
  * The CSE machine `Layout` is a singleton, and the CSE Machine tab may be mounted (hidden) at the
- * same time, so this view draws only while it is visible, and gives the `Layout`'s stage, scroll
- * container and size back to the CSE Machine tab when it is not. While it is visible, `Layout`'s
- * stage is this view's, so `Layout`'s own zoom and image export act on it.
+ * same time, so this view draws only while it is visible, borrowing `Layout` (`Layout.lend`) and
+ * giving it back (`Layout.reclaim`: the tab's refs, dimensions and any resize it asked for
+ * meanwhile) when it is not. While it is visible, `Layout`'s stage is this view's, so `Layout`'s
+ * own zoom and image export act on it.
  *
  * Closures and arrays whose snapshot values carry an `objectId` are linked to the plugin: the one
  * that is `hovered` is highlighted, and `onHover` is told which one the mouse enters.
  */
-export default function CseEnvironmentView({
-  snapshots,
-  step,
-  hovered,
-  onHover,
-}: CseEnvironmentViewProps) {
+function CseEnvironmentView({ snapshots, step, hovered, onHover }: CseEnvironmentViewProps) {
   const [area, setArea] = useState<HTMLDivElement | null>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
   const [visible, setVisible] = useState(false);
@@ -61,31 +50,6 @@ export default function CseEnvironmentView({
   /** Bumped to redraw after a display preference changes. */
   const [version, setVersion] = useState(0);
   const redraw = useCallback(() => setVersion(v => v + 1), []);
-  /** The CSE Machine tab's `Layout` refs and size, while this view has taken them over. */
-  const saved = useRef<LayoutRefs | null>(null);
-
-  const takeOverLayout = useCallback(() => {
-    if (saved.current === null) {
-      saved.current = {
-        stage: Layout.stageRef.current,
-        scroll: Layout.scrollContainerRef.current,
-        width: Layout.visibleWidth,
-        height: Layout.visibleHeight,
-      };
-    }
-  }, []);
-  const giveBackLayout = useCallback(() => {
-    const previous = saved.current;
-    if (previous === null) {
-      return;
-    }
-    saved.current = null;
-    (Layout.stageRef as React.RefObject<unknown>).current = previous.stage;
-    (Layout.scrollContainerRef as React.RefObject<unknown>).current = previous.scroll;
-    Layout.visibleWidth = previous.width;
-    Layout.visibleHeight = previous.height;
-  }, []);
-
   // The diagram area's size.
   useEffect(() => {
     if (!area) {
@@ -111,28 +75,28 @@ export default function CseEnvironmentView({
       return;
     }
     if (typeof IntersectionObserver === 'undefined') {
-      takeOverLayout();
+      Layout.lend();
       setVisible(true);
       return;
     }
     const observer = new IntersectionObserver(entries => {
       const isVisible = entries[entries.length - 1].isIntersecting;
       if (isVisible) {
-        takeOverLayout();
+        Layout.lend();
       }
       setVisible(isVisible);
     });
     observer.observe(area);
     return () => observer.disconnect();
-  }, [area, takeOverLayout]);
+  }, [area]);
 
   // Once this view's drawing is gone (hidden or unmounted), give `Layout` back.
   useEffect(() => {
     if (!visible) {
-      giveBackLayout();
+      Layout.reclaim();
     }
-  }, [visible, giveBackLayout]);
-  useEffect(() => giveBackLayout, [giveBackLayout]);
+  }, [visible]);
+  useEffect(() => () => Layout.reclaim(), []);
 
   // As in the CSE Machine tab, moving to another step shows dead frames again.
   useEffect(() => setClearDeadFrames(false), [snapshots, step]);
@@ -253,3 +217,5 @@ export default function CseEnvironmentView({
     </div>
   );
 }
+
+export default CseEnvironmentView;

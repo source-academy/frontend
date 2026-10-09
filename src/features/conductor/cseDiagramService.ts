@@ -9,13 +9,13 @@ import CseEnvironmentView, { type CseEnvironmentViewProps } from '../cseMachine/
  * `@sourceacademy/common-cse-machine` (plugins#133), which the frontend can import once a version
  * with them is released.
  */
-export interface ICseDiagramService {
+export type ICseDiagramService = {
   createView(props: CseEnvironmentViewProps): unknown;
-}
+};
 
-export interface IHostServices {
+export type IHostServices = {
   cseDiagram?: ICseDiagramService;
-}
+};
 
 export const hostServices: IHostServices = {
   cseDiagram: {
