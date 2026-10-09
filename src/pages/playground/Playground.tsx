@@ -37,8 +37,11 @@ import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import {
+  CONDUCTOR_E_STEPPER_TAB_ID,
   CONDUCTOR_STEPPER_TAB_ID,
   CSE_EVALUATOR_CAPABILITY,
+  E_STEPPER_EVALUATOR_CAPABILITY,
+  isConductorStepperTab,
   isToolEvaluator,
   STEPPER_EVALUATOR_CAPABILITY,
 } from 'src/features/conductor/stepperTab';
@@ -101,6 +104,7 @@ import type {
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   desktopOnlyTabIds,
+  makeConductorEStepperPlaceholderTab,
   makeConductorStepperPlaceholderTab,
   makeIntroductionTabFrom,
   makeRemoteExecutionTabFrom,
@@ -782,6 +786,17 @@ function Playground(props: PlaygroundProps) {
     );
     return evaluator?.id ?? null;
   });
+  const eStepperEvaluatorId = useAppSelector(state => {
+    if (!selectConductorEnable(state)) {
+      return null;
+    }
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    const lang = langId ? languageMap[langId] : undefined;
+    const evaluator = lang?.evaluators.find(e =>
+      (e.capabilities as string[] | undefined)?.includes(E_STEPPER_EVALUATOR_CAPABILITY),
+    );
+    return evaluator?.id ?? null;
+  });
   const cseEvaluatorId = useAppSelector(state => {
     if (!selectConductorEnable(state)) {
       return null;
@@ -799,13 +814,7 @@ function Playground(props: PlaygroundProps) {
     }
     const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
     const lang = langId ? languageMap[langId] : undefined;
-    const evaluator = lang?.evaluators.find(e => {
-      const capabilities = e.capabilities as string[] | undefined;
-      return (
-        !capabilities?.includes(STEPPER_EVALUATOR_CAPABILITY) &&
-        !capabilities?.includes(CSE_EVALUATOR_CAPABILITY)
-      );
-    });
+    const evaluator = lang?.evaluators.find(e => !isToolEvaluator(e));
     return evaluator?.id ?? null;
   });
 
@@ -846,6 +855,9 @@ function Playground(props: PlaygroundProps) {
     if (selectedTab === CONDUCTOR_STEPPER_TAB_ID) {
       return stepperEvaluatorId;
     }
+    if (selectedTab === CONDUCTOR_E_STEPPER_TAB_ID) {
+      return eStepperEvaluatorId;
+    }
     if (selectedTab === SideContentType.cseMachine) {
       return cseEvaluatorId;
     }
@@ -856,6 +868,7 @@ function Playground(props: PlaygroundProps) {
     selectedTabOwnerPath,
     conductorEvaluators,
     stepperEvaluatorId,
+    eStepperEvaluatorId,
     cseEvaluatorId,
   ]);
 
@@ -1048,8 +1061,18 @@ function Playground(props: PlaygroundProps) {
     if (conductorEnabled && stepperEvaluatorId) {
       tabs.push(makeConductorStepperPlaceholderTab());
     }
+    // Likewise for a language that offers the environment stepper.
+    if (conductorEnabled && eStepperEvaluatorId) {
+      tabs.push(makeConductorEStepperPlaceholderTab());
+    }
     return tabs;
-  }, [conductorEnabled, shouldShowCseMachine, stepperEvaluatorId, workspaceLocation]);
+  }, [
+    conductorEnabled,
+    shouldShowCseMachine,
+    stepperEvaluatorId,
+    eStepperEvaluatorId,
+    workspaceLocation,
+  ]);
 
   const onLoadMethod = useCallback(
     (editor: Ace.Editor) => {
@@ -1140,7 +1163,13 @@ function Playground(props: PlaygroundProps) {
     ],
   );
 
-  const replDisabled = !languageConfig.supports.repl || usingRemoteExecution;
+  // Unlike the other remote-execution disables above (chapter/language switching, visualizer tabs -
+  // things that genuinely don't apply mid-session), the REPL itself is fine to leave enabled while
+  // connected to a device: WorkspaceSaga's evalRepl handler now ships a REPL line to the connected
+  // device through the same Run pipeline as the editor's Run button (see its own remote-execution
+  // branch) instead of evaluating it locally, so there's no conflicting/stale local-context issue
+  // this needs to guard against.
+  const replDisabled = !languageConfig.supports.repl;
 
   const editorContainerHandlers = useMemo(() => {
     return {
@@ -1214,7 +1243,7 @@ function Playground(props: PlaygroundProps) {
       selectedTab === SideContentType.substVisualizer ||
       selectedTab === SideContentType.cseMachine ||
       // When the conductor stepper plugin tab is active, also hide the REPL (matches legacy behaviour)
-      (conductorEnabled && (selectedTab as string) === CONDUCTOR_STEPPER_TAB_ID),
+      (conductorEnabled && isConductorStepperTab(selectedTab as string)),
     inputHidden: replDisabled,
     replButtons: [replDisabled ? null : evalButton, clearButton],
     disableScrolling: isSicpEditor,
@@ -1264,7 +1293,8 @@ function Playground(props: PlaygroundProps) {
         // Conductor languages (e.g. Python) whose selected sublanguage offers a stepper or CSE
         // machine evaluator: their step limit is user-configurable too, driven by this same
         // control through the /__cse_config__ file the host serves per run.
-        (conductorLanguageActive && (stepperEvaluatorId !== null || cseEvaluatorId !== null))
+        (conductorLanguageActive &&
+          (stepperEvaluatorId !== null || eStepperEvaluatorId !== null || cseEvaluatorId !== null))
           ? stepperStepLimit
           : null,
       ],
@@ -1288,7 +1318,7 @@ function Playground(props: PlaygroundProps) {
       selectedTab !== SideContentType.substVisualizer &&
       selectedTab !== SideContentType.cseMachine &&
       // When the conductor stepper plugin tab is active, also disable resizing (matches legacy behaviour)
-      !(conductorEnabled && (selectedTab as string) === CONDUCTOR_STEPPER_TAB_ID),
+      !(conductorEnabled && isConductorStepperTab(selectedTab as string)),
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {

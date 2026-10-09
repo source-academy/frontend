@@ -143,6 +143,7 @@ export class ArrayValue extends Value implements IHoverable {
 
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
     e.cancelBubble = true;
+    Layout.notifyObjectHover(this.data, true);
     for (const unit of this.units) {
       unit.showIndex();
     }
@@ -150,6 +151,7 @@ export class ArrayValue extends Value implements IHoverable {
 
   onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
     e.cancelBubble = true;
+    Layout.notifyObjectHover(this.data, false);
     for (const unit of this.units) {
       unit.hideIndex();
     }

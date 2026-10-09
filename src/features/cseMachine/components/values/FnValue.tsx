@@ -142,6 +142,7 @@ export class FnValue extends Value implements IHoverable {
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    Layout.notifyObjectHover(this.data, true);
     if (CseMachine.getPrintableMode()) {
       return;
     }
@@ -164,6 +165,7 @@ export class FnValue extends Value implements IHoverable {
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    Layout.notifyObjectHover(this.data, false);
     if (CseMachine.getPrintableMode()) {
       return;
     }

@@ -1,6 +1,6 @@
 import type { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import Konva from 'konva';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import type { CseSnapshot } from '../conductor/CseMachineHostPlugin';
 import { Frame } from './components/Frame';
@@ -10,7 +10,7 @@ import { CseAnimation } from './CseMachineAnimation';
 import { Config } from './CseMachineConfig';
 import { Layout } from './CseMachineLayout';
 import type { EnvTree } from './CseMachineTypes';
-import { isBuiltInFn } from './CseMachineUtils';
+import { getBodyText, getParamsText, isBuiltInFn } from './CseMachineUtils';
 import { buildFakeEnvTreeFromSnapshot } from './CseSnapshotAdapter';
 
 // Real (headless) Konva stage/layer so animation components — which need a live layer
@@ -134,17 +134,135 @@ describe('buildFakeEnvTreeFromSnapshot', () => {
   });
 });
 
-describe('Python LEGB frame labels (#4042) only apply in snapshot mode', () => {
-  it('renames "global"/"programEnvironment" for a Python snapshot', () => {
-    const snapshot: CseSnapshot = {
+describe('heap objects in Python snapshots', () => {
+  const list = (id: number, elements: unknown[], extra: object = {}) => ({
+    displayValue: '[...]',
+    label: 'list',
+    metadata: { id, envId: 'g', elements, ...extra },
+  });
+  const lambda = (objectId?: string) => ({
+    displayValue: 'lambda',
+    label: 'function',
+    metadata: { closureFrameId: 'g', params: ['x'], funcName: 'lambda' },
+    ...(objectId ? { objectId } : {}),
+  });
+  const headOf = (bindings: { name: string; value: unknown }[]) => {
+    const snapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [{ id: 'g', name: 'global', parentId: null, bindings, isActive: true }],
+    } as unknown as CseSnapshot;
+    return (findNode(buildFakeEnvTreeFromSnapshot(snapshot).envTree, 'g')!.environment as any).head;
+  };
+
+  it('resolves a back reference to the list itself, for a list that contains itself', () => {
+    const head = headOf([
+      { name: 'xs', value: { ...list(7, [list(7, [], { backReference: true })]), objectId: '#1' } },
+    ]);
+    expect(head.xs[0]).toBe(head.xs);
+    expect(head.xs.objectId).toBe('#1');
+  });
+
+  it('identifies closures by their objectId, lambdas included', () => {
+    const head = headOf([
+      { name: 'f', value: lambda('#1') },
+      { name: 'g', value: lambda('#1') },
+      { name: 'h', value: lambda('#2') },
+      { name: 'k', value: lambda() },
+    ]);
+    expect(head.f).toBe(head.g);
+    expect(head.f.objectId).toBe('#1');
+    expect(head.h).not.toBe(head.f);
+    expect(head.k.objectId).toBeUndefined();
+  });
+
+  it("describes a function by its parameters and its body's source", () => {
+    const fn = (name: string, body?: string) => ({
+      displayValue: name,
+      label: 'function',
+      metadata: { closureFrameId: 'g', params: ['y', 'z'], funcName: name, body },
+    });
+    const head = headOf([
+      { name: 'f', value: fn('f', 'return x') },
+      { name: 'g', value: fn('g', 'if y:\n    return 1\nreturn z') },
+      { name: 'h', value: fn('h') },
+    ]);
+    expect(getParamsText(head.f)).toBe('(y, z)');
+    expect(getBodyText(head.f)).toBe('return x');
+    expect(getBodyText(head.g)).toBe('\n  if y:\n      return 1\n  return z');
+    // Without the source, the placeholder as before.
+    expect(getBodyText(head.h)).toContain('[Python]');
+
+    // A function redefined under the same name (g = f; def f...) keeps its own body.
+    const redefined = headOf([
+      { name: 'g', value: fn('f', 'return 1') },
+      { name: 'f', value: fn('f', 'return 2') },
+    ]);
+    expect(getBodyText(redefined.g)).toBe('return 1');
+    expect(getBodyText(redefined.f)).toBe('return 2');
+  });
+
+  it('highlights the drawn object with an objectId, and reports hovering it', () => {
+    const snapshot = {
       stepIndex: 0,
       control: [],
       stash: [],
       environments: [
-        { id: 'g', name: 'global', parentId: null, bindings: [], isActive: false },
+        {
+          id: 'g',
+          name: 'global',
+          parentId: null,
+          bindings: [
+            { name: 'f', value: lambda('#1') },
+            { name: 'h', value: lambda('#2') },
+          ],
+          isActive: true,
+        },
+      ],
+    } as unknown as CseSnapshot;
+    CseMachine.drawEnvironments(snapshot, { width: 500, height: 500, clearDeadFrames: false });
+    const fns = [...Layout.values.values()].filter(v => v instanceof FnValue) as FnValue[];
+    const byId = (id: string) => fns.find(f => (f.data as any).objectId === id)!;
+    const highlighted = vi.spyOn(byId('#1'), 'setArrowSourceHighlightedStyle');
+    const normal = vi.spyOn(byId('#2'), 'setArrowSourceNormalStyle');
+    Layout.highlightObject('#1');
+    expect(highlighted).toHaveBeenCalled();
+    expect(normal).toHaveBeenCalled();
+
+    const onHover = vi.fn();
+    Layout.onObjectHover = onHover;
+    try {
+      Layout.notifyObjectHover(byId('#2').data, true);
+      Layout.notifyObjectHover(byId('#2').data, false);
+      Layout.notifyObjectHover({}, true);
+    } finally {
+      Layout.onObjectHover = undefined;
+    }
+    expect(onHover.mock.calls).toEqual([['#2'], [null]]);
+  });
+});
+
+describe('frame headings (#4042)', () => {
+  /** A snapshot of the two top frames, with the given labels (none: as js-slang sends them). */
+  const snapshotWith = (labels: { global?: string; program?: string }): CseSnapshot =>
+    ({
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        {
+          id: 'g',
+          name: 'global',
+          label: labels.global,
+          parentId: null,
+          bindings: [],
+          isActive: false,
+        },
         {
           id: 'p',
           name: 'programEnvironment',
+          label: labels.program,
           parentId: 'g',
           // A frame with a genuinely empty head gets collapsed by Layout's "skip empty
           // environments" behavior; give it one trivial binding to keep it visible.
@@ -152,10 +270,9 @@ describe('Python LEGB frame labels (#4042) only apply in snapshot mode', () => {
           isActive: true,
         },
       ],
-    };
-
+    }) as unknown as CseSnapshot;
+  const headings = (snapshot: CseSnapshot) => {
     const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
-
     Layout.snapshotMode = true;
     try {
       Layout.setContext(
@@ -166,13 +283,31 @@ describe('Python LEGB frame labels (#4042) only apply in snapshot mode', () => {
     } finally {
       Layout.snapshotMode = false;
     }
+    return ['g', 'p'].map(
+      id => Frame.getFrom(findNode(envTree, id)!.environment as any)!.name.partialStr,
+    );
+  };
 
-    expect(Frame.getFrom(findNode(envTree, 'g')!.environment as any)!.name.partialStr).toBe(
-      'Built-in functions',
-    );
-    expect(Frame.getFrom(findNode(envTree, 'p')!.environment as any)!.name.partialStr).toBe(
-      'Globals',
-    );
+  it("are the evaluator's labels when it sends them (Python)", () => {
+    expect(headings(snapshotWith({ global: 'Built-ins', program: 'Global' }))).toEqual([
+      'Built-ins',
+      'Global',
+    ]);
+  });
+
+  it('are derived from the frame names otherwise (JavaScript)', () => {
+    expect(headings(snapshotWith({}))).toEqual(['Global', 'Program']);
+  });
+
+  it("stay the evaluator's labels in a plugin's diagram, which places frames afresh", () => {
+    CseMachine.drawEnvironments(snapshotWith({ global: 'Built-ins', program: 'Global' }), {
+      width: 500,
+      height: 500,
+      clearDeadFrames: false,
+    });
+    const names = Layout.levels.flatMap(level => level.frames).map(f => f.name.partialStr);
+    expect(names).toEqual(expect.arrayContaining(['Built-ins', 'Global']));
+    expect(names).not.toContain('Program');
   });
 });
 

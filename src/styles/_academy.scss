@@ -441,24 +441,6 @@
   margin-bottom: 15px;
 }
 
-.grading-search-input {
-  max-width: 24rem;
-  width: 100%;
-  margin-left: 0.75rem;
-
-  > input {
-    height: 40px;
-    border-radius: 6px;
-    box-shadow: none;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    font-size: 0.875rem !important;
-
-    &::placeholder {
-      color: #b3b3b3;
-    }
-  }
-}
-
 .grading-loading-icon {
   animation: spin 1s linear infinite;
   margin: 4px;

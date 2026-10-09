@@ -29,8 +29,8 @@ import { Config } from './CseMachineConfig';
 // one circle — using a counter prevents that collision.
 let _closureSeq = 0;
 
-// Minimal stub AST node — getParamsText/getBodyText read .functionName and data.toString()
-// from the fake function, not from this node, so a stub is sufficient.
+// Minimal stub AST node — getParamsText/getBodyText read .functionName, .bodySource and
+// data.toString() from the fake function, not from this node, so a stub is sufficient.
 const STUB_BODY = { type: 'BlockStatement', body: [] };
 
 function makeStubNode(paramNames: string[]) {
@@ -42,8 +42,11 @@ function makeStubNode(paramNames: string[]) {
   };
 }
 
+// `objectId` is declared by @sourceacademy/common-cse-machine from 0.3.1 on.
+type SerializedValue = CseSerializedValue & { objectId?: string };
+
 function toJsValue(
-  v: CseSerializedValue,
+  v: SerializedValue,
   envMap: Map<string, Environment>,
   closureCache: Map<string, unknown>,
   listCache: Map<string | number, unknown>,
@@ -148,11 +151,19 @@ function toJsValue(
     }
 
     // Build a real JS array — isDataArray() checks Array.isArray + own 'id' + own 'environment'.
-    const arr: any = elements.map(el => toJsValue(el, envMap, closureCache, listCache));
+    // It is cached before its elements are converted, so a list that contains itself
+    // (`xs[0] = xs`, which py-slang sends as a back reference: the same id, no elements) has
+    // itself as that element.
+    const arr: any = [];
     arr.id = `list_${listId}`;
     arr.environment = envMap.get(envId) ?? null;
-
+    if (v.objectId !== undefined) {
+      arr.objectId = v.objectId;
+    }
     listCache.set(listId, arr);
+    for (const el of elements) {
+      arr.push(toJsValue(el, envMap, closureCache, listCache));
+    }
     return arr;
   }
 
@@ -185,8 +196,16 @@ function toJsValue(
     // Cache named functions only: same name + defining env + params uniquely identifies a named
     // closure. Anonymous lambdas cannot be distinguished by metadata alone — two lambdas with the
     // same params in the same scope would alias, producing incorrect shared JS objects.
+    // A closure the evaluator names (`objectId`) is identified by that, lambdas included.
     const isNamed = funcName !== 'lambda' && funcName !== 'anonymous';
-    const cacheKey = isNamed ? `${funcName}@${closureEnvId}@${params.join(',')}` : null;
+    const cacheKey =
+      v.objectId !== undefined
+        ? `object@${v.objectId}`
+        : isNamed
+          ? // The body too, if sent: a function redefined under the same name (after `g = f`) is
+            // another function, with its own body.
+            `${funcName}@${closureEnvId}@${params.join(',')}@${typeof meta?.body === 'string' ? meta.body : ''}`
+          : null;
     if (cacheKey && closureCache.has(cacheKey)) {
       return closureCache.get(cacheKey);
     }
@@ -194,11 +213,19 @@ function toJsValue(
     const fakeFn: any = function SnapshotClosure() {};
     fakeFn.id = `snap_${++_closureSeq}_${closureEnvId}`;
     fakeFn.environment = envMap.get(closureEnvId) ?? null;
-    fakeFn.functionName = `${funcName}(${params.join(', ')}) => {}`;
+    // getParamsText reads the parameters from `functionName`, up to its `=>`.
+    fakeFn.functionName = `(${params.join(', ')}) => {}`;
+    // The body's source, if the evaluator sends it (py-slang's `metadata.body`), for getBodyText.
+    if (typeof meta?.body === 'string') {
+      fakeFn.bodySource = meta.body;
+    }
     fakeFn.predefined = false;
     fakeFn.node = makeStubNode(params);
     fakeFn.originalNode = fakeFn.node;
     fakeFn.toString = () => `function ${funcName}(${params.join(', ')}) { [Python] }`;
+    if (v.objectId !== undefined) {
+      fakeFn.objectId = v.objectId;
+    }
     if (cacheKey) {
       closureCache.set(cacheKey, fakeFn);
     }
@@ -297,6 +324,8 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
       tail: null as Environment | null,
       heap: new Heap(),
       globalNames: f.globalNames,
+      // The frame's heading, if the evaluator chose one (see Frame.tsx's getFrameLabel).
+      label: (f as CseSerializedEnvFrame & { label?: string }).label,
     } as unknown as Environment;
     envMap.set(f.id, env);
   }

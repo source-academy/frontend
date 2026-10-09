@@ -19,7 +19,7 @@ import ReactDOM from 'react-dom';
 import * as ReactDOMClient from 'react-dom/client';
 import * as ReactKonva from 'react-konva';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
-import { CONDUCTOR_STEPPER_TAB_ID } from 'src/features/conductor/stepperTab';
+import { isConductorStepperTab } from 'src/features/conductor/stepperTab';
 
 import { useAppSelector } from '../utils/Hooks';
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
@@ -105,7 +105,7 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
       if (
         (selectedTab === SideContentType.substVisualizer ||
           selectedTab === SideContentType.cseMachine ||
-          selectedTab === CONDUCTOR_STEPPER_TAB_ID) &&
+          isConductorStepperTab(selectedTab)) &&
         newId === SideContentType.mobileEditorRun
       ) {
         return;

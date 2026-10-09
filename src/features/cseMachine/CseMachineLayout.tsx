@@ -123,6 +123,74 @@ export class Layout {
    */
   static values = new Map<string | (() => any), Value>();
 
+  /**
+   * Told which heap object the mouse enters in the diagram (by the `objectId` its snapshot value
+   * carries), and `null` when it leaves. Set by a view that lends the diagram to a plugin
+   * (`CseEnvironmentView`); the CSE Machine tab leaves it unset.
+   */
+  static onObjectHover: ((objectId: string | null) => void) | undefined = undefined;
+
+  /** Reports the mouse entering (or leaving) a closure or array to `onObjectHover`. */
+  static notifyObjectHover(data: unknown, entered: boolean) {
+    const objectId = (data as { objectId?: string } | null)?.objectId;
+    if (objectId !== undefined) {
+      Layout.onObjectHover?.(entered ? objectId : null);
+    }
+  }
+
+  /**
+   * Highlights the closures and arrays drawn for the heap object `objectId` (see
+   * `notifyObjectHover`), and returns the others to their normal style.
+   */
+  static highlightObject(objectId: string | null) {
+    Layout.values.forEach(value => {
+      if (!(value instanceof FnValue || value instanceof ArrayValue)) {
+        return;
+      }
+      const id = (value.data as { objectId?: string }).objectId;
+      if (id === undefined) {
+        return;
+      }
+      if (id === objectId) {
+        value.setArrowSourceHighlightedStyle();
+      } else {
+        value.setArrowSourceNormalStyle();
+      }
+    });
+    Layout.stageRef.current?.batchDraw();
+  }
+
+  /**
+   * Frame colours by environment id, while drawing for a view that colours frames (a plugin's
+   * `frameColors`, see `CseMachine.drawEnvironments`); unset for the CSE Machine tab. A frame drawn
+   * with a colour is also hoverable (see `onFrameHover`).
+   */
+  static frameColors: Map<string, string> | undefined = undefined;
+
+  /**
+   * Told which frame the mouse enters (by its environment id), and `null` when it leaves. Set by a
+   * view that lends the diagram to a plugin (`CseEnvironmentView`).
+   */
+  static onFrameHover: ((frameId: string | null) => void) | undefined = undefined;
+
+  static notifyFrameHover(frameId: string, entered: boolean) {
+    Layout.onFrameHover?.(entered ? frameId : null);
+  }
+
+  /** Highlights the frame `frameId`, and returns the others to their normal style. */
+  static highlightFrame(frameId: string | null) {
+    Layout.levels.forEach(level =>
+      level.frames.forEach(frame => {
+        if (frame.environment.id === frameId) {
+          frame.setArrowSourceHighlightedStyle();
+        } else {
+          frame.setArrowSourceNormalStyle();
+        }
+      }),
+    );
+    Layout.stageRef.current?.batchDraw();
+  }
+
   /** memoized layout */
   static prevLayout: React.ReactNode;
   static currentDark: React.ReactNode;
@@ -144,6 +212,102 @@ export class Layout {
   static invisiblePaddingVertical: number = 300;
   static invisiblePaddingHorizontal: number = 300;
   static scrollContainerRef: React.RefObject<HTMLDivElement | null> = createRef();
+
+  /**
+   * While a view other than the CSE Machine tab draws with `Layout` (`CseEnvironmentView`, see
+   * `lend`), the CSE Machine tab's refs and dimensions, to be given back by `reclaim`.
+   */
+  private static lentState: {
+    refs: unknown[];
+    dimensions: number[];
+  } | null = null;
+  /** The latest size the CSE Machine tab asked for while `Layout` was lent. */
+  private static pendingDimensions: { width: number; height: number } | null = null;
+
+  /** The refs a drawing attaches to (see `draw`). */
+  private static sharedRefs(): React.RefObject<unknown>[] {
+    return [
+      Layout.stageRef,
+      Layout.contentGroupRef,
+      Layout.animationGroupRef,
+      Layout.arrowUnderlayLayerRef,
+      Layout.liveArrowLayerRef,
+      Layout.scrollContainerRef,
+      CseAnimation.layerRef,
+    ];
+  }
+
+  private static getDimensions(): number[] {
+    return [
+      Layout._width,
+      Layout._height,
+      Layout.visibleWidth,
+      Layout.visibleHeight,
+      Layout.stageWidth,
+      Layout.stageHeight,
+      Layout.invisiblePaddingVertical,
+      Layout.invisiblePaddingHorizontal,
+    ];
+  }
+
+  private static setDimensions(dimensions: number[]) {
+    [
+      Layout._width,
+      Layout._height,
+      Layout.visibleWidth,
+      Layout.visibleHeight,
+      Layout.stageWidth,
+      Layout.stageHeight,
+      Layout.invisiblePaddingVertical,
+      Layout.invisiblePaddingHorizontal,
+    ] = dimensions;
+  }
+
+  /** Whether `Layout` is lent to a view other than the CSE Machine tab. */
+  static isLent(): boolean {
+    return Layout.lentState !== null;
+  }
+
+  /**
+   * Lends `Layout` to a view other than the CSE Machine tab, which may be mounted (hidden) at the
+   * same time: saves the tab's refs and dimensions, for `reclaim` to give back. Until then, the
+   * tab's resizes are deferred (see `CseMachine.updateDimensions`).
+   */
+  static lend() {
+    if (Layout.lentState !== null) {
+      return;
+    }
+    Layout.lentState = {
+      refs: Layout.sharedRefs().map(ref => ref.current),
+      dimensions: Layout.getDimensions(),
+    };
+  }
+
+  /**
+   * Gives `Layout` back to the CSE Machine tab once the borrowing view's drawing is gone: restores
+   * the tab's refs and dimensions, then applies the latest resize it asked for meanwhile.
+   */
+  static reclaim() {
+    const state = Layout.lentState;
+    if (state === null) {
+      return;
+    }
+    Layout.lentState = null;
+    Layout.sharedRefs().forEach((ref, i) => {
+      (ref as { current: unknown }).current = state.refs[i];
+    });
+    Layout.setDimensions(state.dimensions);
+    const pending = Layout.pendingDimensions;
+    Layout.pendingDimensions = null;
+    if (pending) {
+      CseMachine.updateDimensions(pending.width, pending.height);
+    }
+  }
+
+  /** Records a resize of the CSE Machine tab while `Layout` is lent, for `reclaim` to apply. */
+  static deferDimensions(width: number, height: number) {
+    Layout.pendingDimensions = { width, height };
+  }
 
   static resetUnderlayArrows() {
     Layout.deadUnderlayArrows = [];
