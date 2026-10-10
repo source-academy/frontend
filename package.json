@@ -61,7 +61,7 @@
     "@sourceacademy/web-test": "^0.0.2",
     "@szhsin/react-menu": "^4.0.0",
     "@tanstack/react-query": "^5.100.14",
-    "@tanstack/react-table": "^8.9.3",
+    "@tanstack/react-table": "^9.0.0",
     "ace-builds": "^1.42.1",
     "ace-diff": "^4.0.0",
     "acorn": "^8.9.0",
