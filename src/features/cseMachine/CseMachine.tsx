@@ -36,8 +36,7 @@ export default class CseMachine {
     array: true,
     control: true,
     stash: true,
-    // Off until the user asks: the plugin's arrows into the diagram are extra to the CSE machine's.
-    program: false,
+    program: true,
   };
   /** callback function to update the visualization state in the SideContentCseMachine component */
   private static setVis: SetVis;
