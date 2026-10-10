@@ -360,6 +360,24 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
     }
   }
 
+  // ── Pass 3-: reserve each binding's place, in the evaluator's order ─────
+  // The two passes below add non-closure and closure values separately, which would draw every
+  // function binding under all the others. A property keeps its place when it is redefined, so
+  // reserving the places first keeps the frame's rows in the order the evaluator listed them
+  // (a frame then only grows downwards). Places no pass fills are removed again after pass 3b.
+  const reserved = Symbol('reserved');
+  for (const f of frames) {
+    const env = envMap.get(f.id)!;
+    for (const b of f.bindings) {
+      Object.defineProperty(env.head, b.name, {
+        value: reserved,
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      });
+    }
+  }
+
   // ── Pass 3a: populate non-closure values ────────────────────────────────
   // Done first so the envMap is complete when closures look up their environments.
   // Use Object.defineProperty to preserve const (writable:false) vs let (writable:true)
@@ -402,6 +420,15 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
         if (definingEnv && definingEnv !== env) {
           definingEnv.heap.add(val);
         }
+      }
+    }
+  }
+
+  for (const f of frames) {
+    const head = envMap.get(f.id)!.head as Record<string, unknown>;
+    for (const b of f.bindings) {
+      if (head[b.name] === reserved) {
+        delete head[b.name];
       }
     }
   }
