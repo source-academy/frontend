@@ -471,7 +471,7 @@ describe('CseEnvironmentView', () => {
       vi.spyOn(Layout.stageRef.current!, 'getAbsoluteTransform').mockReturnValue({
         point: ({ x, y }: { x: number; y: number }) => ({ x: x * 2 + 5, y: y * 2 + 7 }),
       } as never);
-      vi.spyOn(Layout.stageRef.current!, 'scaleX').mockReturnValue(2);
+      vi.spyOn(Layout.stageRef.current!, 'scaleX').mockReturnValue(2 as never);
       const frame = Layout.levels
         .flatMap(level => level.frames)
         .find(f => f.environment.id === '45')!;
