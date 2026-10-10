@@ -165,6 +165,16 @@ describe('heap objects in Python snapshots', () => {
     expect(head.xs.objectId).toBe('#1');
   });
 
+  it("keeps a frame's bindings in the order the evaluator listed them, functions included", () => {
+    const head = headOf([
+      { name: 'f', value: lambda('#1') },
+      { name: 'q', value: list(2, []) },
+      { name: 'n', value: { displayValue: '3', label: 'int', metadata: {} } },
+      { name: 'g', value: lambda('#3') },
+    ]);
+    expect(Object.keys(head)).toEqual(['f', 'q', 'n', 'g']);
+  });
+
   it('identifies closures by their objectId, lambdas included', () => {
     const head = headOf([
       { name: 'f', value: lambda('#1') },
