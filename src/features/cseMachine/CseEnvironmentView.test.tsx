@@ -146,6 +146,7 @@ describe('dead functions in an otherwise empty frame', () => {
     const stage = {
       container: () => ({ getBoundingClientRect: () => ({ left: 0, top: 0 }) }),
       getAbsoluteTransform: () => ({ point: (p: { x: number; y: number }) => p }),
+      scaleX: () => 1.5,
     };
     (Layout.stageRef as React.RefObject<unknown>).current = stage;
     const root = { getBoundingClientRect: () => ({ left: 0, top: 0 }) } as HTMLElement;
@@ -156,6 +157,8 @@ describe('dead functions in an otherwise empty frame', () => {
       expect(anchorResolver(root)({ kind: 'object', id: '#1' })).toEqual({
         x: value.x() + value.width() / 2,
         y: value.y() - value.height() / 2,
+        // The stage's zoom, for the arrowhead.
+        scale: 1.5,
       });
       expect(anchorResolver(root)({ kind: 'object', id: 'nope' })).toBeNull();
       expect(anchorResolver(root)({ kind: 'frame', id: 'nope' })).toBeNull();
@@ -321,19 +324,19 @@ describe('CseArrowFilterMenu', () => {
 });
 
 describe('CseArrowFilterMenu program references', () => {
-  test('are offered only when asked for, and off until turned on', () => {
+  test('are offered only when asked for, and on until turned off', () => {
     const onChange = vi.fn();
     const { unmount } = render(<CseArrowFilterMenu onChange={onChange} />);
     expect(screen.queryByText('From program')).toBeNull();
     unmount();
     render(<CseArrowFilterMenu programReferences onChange={onChange} />);
     expect(screen.getByText('From program')).toBeTruthy();
-    expect(CseMachine.getArrowOriginFilters().program).toBe(false);
-    fireEvent.click(screen.getByText('From program'));
     expect(CseMachine.getArrowOriginFilters().program).toBe(true);
+    fireEvent.click(screen.getByText('From program'));
+    expect(CseMachine.getArrowOriginFilters().program).toBe(false);
     expect(onChange).toHaveBeenCalledTimes(1);
     CseMachine.resetArrowOriginFilters();
-    expect(CseMachine.getArrowOriginFilters().program).toBe(false);
+    expect(CseMachine.getArrowOriginFilters().program).toBe(true);
   });
 });
 
@@ -433,25 +436,29 @@ describe('CseEnvironmentView', () => {
     expect(Layout.onFrameHover).toBeUndefined();
   });
 
-  test('reports no anchors until program references are turned on', () => {
+  test('reports no anchors while program references are turned off', () => {
     sized();
+    CseMachine.setArrowOriginVisible('program', false);
     const onAnchors = vi.fn();
-    const { unmount } = render(
-      <CseEnvironmentView snapshots={snapshots} step={0} onAnchors={onAnchors} />,
-    );
-    expect(onAnchors).toHaveBeenCalled();
-    expect(onAnchors.mock.calls.every(([resolve]) => resolve === null)).toBe(true);
-    unmount();
+    try {
+      const { unmount } = render(
+        <CseEnvironmentView snapshots={snapshots} step={0} onAnchors={onAnchors} />,
+      );
+      expect(onAnchors).toHaveBeenCalled();
+      expect(onAnchors.mock.calls.every(([resolve]) => resolve === null)).toBe(true);
+      unmount();
+    } finally {
+      CseMachine.resetArrowOriginFilters();
+    }
   });
 
-  test('reports where frames are drawn once program references are on, and none when it goes away', () => {
+  test('reports where frames are drawn, and the zoom, by default, and none when it goes away', () => {
     vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
       left: 10,
       top: 20,
       width: 600,
       height: 400,
     } as DOMRect);
-    CseMachine.setArrowOriginVisible('program', true);
     const onAnchors = vi.fn();
     try {
       const { unmount } = render(
@@ -464,12 +471,14 @@ describe('CseEnvironmentView', () => {
       vi.spyOn(Layout.stageRef.current!, 'getAbsoluteTransform').mockReturnValue({
         point: ({ x, y }: { x: number; y: number }) => ({ x: x * 2 + 5, y: y * 2 + 7 }),
       } as never);
+      vi.spyOn(Layout.stageRef.current!, 'scaleX').mockReturnValue(2 as never);
       const frame = Layout.levels
         .flatMap(level => level.frames)
         .find(f => f.environment.id === '45')!;
       expect(resolve({ kind: 'frame', id: '45' })).toEqual({
         x: frame.x() * 2 + 5,
         y: frame.y() * 2 + frame.height() + 7,
+        scale: 2,
       });
       expect(resolve({ kind: 'frame', id: 'nope' })).toBeNull();
       expect(resolve({ kind: 'object', id: 'nope' })).toBeNull();

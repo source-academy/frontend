@@ -18,7 +18,12 @@ import { Layout } from './CseMachineLayout';
 import { snapshotWithDeadFrames } from './cseSnapshotHistory';
 
 /** A point in the view's own coordinates: pixels from its top-left corner. */
-type AnchorPoint = { x: number; y: number };
+type AnchorPoint = {
+  x: number;
+  y: number;
+  /** The stage's zoom: an arrow pointing here scales its head and line with it. */
+  scale: number;
+};
 
 /**
  * Finds where a heap object or a frame is drawn now (with the user's pan and zoom), for an arrow
@@ -45,7 +50,7 @@ export type CseEnvironmentViewProps = {
   /** Called with a frame's id when the mouse enters it, and `null` when it leaves. */
   onHoverFrame?: (frameId: string | null) => void;
   /**
-   * Offers the "From program" arrow filter, off until the user turns it on. While it is on,
+   * Offers the "From program" arrow filter, on until the user turns it off. While it is on,
    * called with a resolver of where objects and frames are drawn, again whenever the drawing moves
    * (a redraw, pan, zoom), so the plugin can draw arrows into the diagram from its own panes; with
    * `null` when it is off, and when the view goes away.
@@ -316,7 +321,7 @@ export function anchorResolver(root: HTMLElement | null): CseDiagramAnchorResolv
     if (!stage || !root) {
       return null;
     }
-    let at: AnchorPoint | undefined;
+    let at: { x: number; y: number } | undefined;
     if (kind === 'object') {
       for (const value of Layout.values.values()) {
         if (
@@ -355,6 +360,7 @@ export function anchorResolver(root: HTMLElement | null): CseDiagramAnchorResolv
     return {
       x: container.left + onStage.x - origin.left,
       y: container.top + onStage.y - origin.top,
+      scale: stage.scaleX(),
     };
   };
 }
