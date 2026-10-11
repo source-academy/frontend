@@ -44,7 +44,7 @@
     "@mantine/hooks": "^9.4.1",
     "@octokit/rest": "^22.0.0",
     "@reduxjs/toolkit": "^1.9.7",
-    "@sentry/react": "^10.5.0",
+    "@sentry/react": "^11.0.0",
     "@sourceacademy/c-slang": "^1.0.21",
     "@sourceacademy/common-autocomplete": "^0.0.1",
     "@sourceacademy/common-cse-machine": "^0.3.1",
