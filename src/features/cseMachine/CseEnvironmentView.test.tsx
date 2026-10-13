@@ -453,6 +453,36 @@ describe('CseEnvironmentView', () => {
     }
   });
 
+  test('says whether program references are on, as the filter changes, also when panning', () => {
+    sized();
+    const onAnchors = vi.fn();
+    const lastReported = () => onAnchors.mock.calls.findLast(([resolve]) => resolve !== null)![1];
+    try {
+      // A new element each time: React skips an identical one, and the filter is read in render.
+      const view = () => (
+        <CseEnvironmentView snapshots={snapshots} step={0} onAnchors={onAnchors} />
+      );
+      const { rerender, unmount } = render(view());
+      expect(lastReported()).toBe(true);
+      CseMachine.setArrowOriginVisible('program', false);
+      rerender(view());
+      expect(lastReported()).toBe(false);
+      // A pan or zoom announces again, still with the filter as it is now.
+      onAnchors.mockClear();
+      act(() => {
+        Layout.stageRef.current!.fire('dragmove');
+      });
+      expect(onAnchors).toHaveBeenCalledTimes(1);
+      expect(lastReported()).toBe(false);
+      CseMachine.setArrowOriginVisible('program', true);
+      rerender(view());
+      expect(lastReported()).toBe(true);
+      unmount();
+    } finally {
+      CseMachine.resetArrowOriginFilters();
+    }
+  });
+
   test('reports where frames are drawn, and the zoom, by default, and none when it goes away', () => {
     vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
       left: 10,
