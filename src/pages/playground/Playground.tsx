@@ -1054,10 +1054,7 @@ function Playground(props: PlaygroundProps) {
       tabs.push(makeCseMachineTabFrom(workspaceLocation));
     }
     // For a conductor language that offers stepping, keep a placeholder Stepper tab visible so it
-    // can be opened before its evaluator loads. It sits after the dynamic tabs so the stepper
-    // plugin's live tab (registered once the evaluator is selected) lands in the same slot and
-    // de-duplicates the placeholder away (see SideContentProvider), avoiding both a disappearing tab
-    // and a duplicate.
+    // can be opened before its evaluator loads. The stepper plugin's live tab replaces it in place.
     if (conductorEnabled && stepperEvaluatorId) {
       tabs.push(makeConductorStepperPlaceholderTab());
     }

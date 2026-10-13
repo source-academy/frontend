@@ -103,6 +103,11 @@ export type SideContentState = {
   selectedTab?: SideContentTabId;
 };
 
+export type PredefinedTabs = {
+  beforeDynamicTabs: SideContentTab[];
+  afterDynamicTabs: SideContentTab[];
+};
+
 export type ChangeTabsCallback = (
   newId: SideContentTabId,
   oldId: SideContentTabId,
