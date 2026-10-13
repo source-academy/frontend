@@ -25,7 +25,10 @@ import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentH
 import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
-import sideContentManager, { useTabOwnerPath } from 'src/commons/sideContent/SideContentManager';
+import sideContentManager, {
+  useIsServiceTabShown,
+  useTabOwnerPath,
+} from 'src/commons/sideContent/SideContentManager';
 import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 import { useAppDispatch, useAppSelector, useResponsive } from 'src/commons/utils/Hooks';
 import {
@@ -104,6 +107,7 @@ import type {
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   desktopOnlyTabIds,
+  makeConductorDataVisualizerPlaceholderTab,
   makeConductorEStepperPlaceholderTab,
   makeConductorStepperPlaceholderTab,
   makeIntroductionTabFrom,
@@ -969,6 +973,10 @@ function Playground(props: PlaygroundProps) {
       makeIntroductionTabFrom(conductorWelcomeText ?? generateLanguageIntroduction(languageConfig)),
     [conductorWelcomeText, languageConfig],
   );
+  const isDataVisualizerTabShown = useIsServiceTabShown(
+    SideContentType.dataVisualizer,
+    workspaceLocation,
+  );
   const tabs = useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
@@ -987,6 +995,10 @@ function Playground(props: PlaygroundProps) {
       return tabs;
     }
 
+    if (!isSicpEditor && !Constants.playgroundOnly) {
+      tabs.push(remoteExecutionTab);
+    }
+
     if (currentLang === Chapter.FULL_JAVA && process.env.NODE_ENV === 'development') {
       tabs.push(
         makeUploadTabFrom(files =>
@@ -997,31 +1009,27 @@ function Playground(props: PlaygroundProps) {
 
     if (!usingRemoteExecution) {
       // Don't show the following when using remote execution
-      // The legacy data visualizer tab is only shown with the old (non-conductor) pipeline — under
-      // the conductor, `languageConfig` (the old Source-only SALanguage config) is never updated when
-      // selecting a Conductor language, so `shouldShowDataVisualizer` stays stuck at whatever it was
-      // last set to (e.g. true, from the Source §4 default) and would otherwise show this dead tab
-      // alongside the real, dynamically-loaded Conductor plugin tab.
-      if (shouldShowDataVisualizer && !conductorEnabled) {
+      if (conductorEnabled) {
+        if (isDataVisualizerTabShown) {
+          tabs.push(makeConductorDataVisualizerPlaceholderTab());
+        }
+      } else if (shouldShowDataVisualizer) {
         tabs.push(makeDataVisualizerTabFrom(workspaceLocation));
       }
-      // Under the conductor, CSE Machine's tab is pushed via afterDynamicTabs instead, so it lands
-      // after the dynamically-loaded plugin tabs (e.g. Data Visualizer) rather than before them.
-      if (shouldShowCseMachine && !conductorEnabled) {
+      if (shouldShowCseMachine) {
         tabs.push(makeCseMachineTabFrom(workspaceLocation));
       }
-      // The legacy stepper tab is only shown with the old (non-conductor) pipeline.
-      if (shouldShowSubstVisualizer && !conductorEnabled) {
+      if (conductorEnabled) {
+        // Placeholders keep these tabs visible before their plugin loads; each plugin's live tab
+        // replaces its placeholder in place.
+        if (stepperEvaluatorId) {
+          tabs.push(makeConductorStepperPlaceholderTab());
+        }
+        if (eStepperEvaluatorId) {
+          tabs.push(makeConductorEStepperPlaceholderTab());
+        }
+      } else if (shouldShowSubstVisualizer) {
         tabs.push(makeSubstVisualizerTabFrom(workspaceLocation, output));
-      }
-      // Under the conductor, tools are contributed by dynamically-loaded web plugins; their tabs are
-      // injected automatically by SideContentProvider (via the shared tab service), not here.
-    }
-
-    if (!isSicpEditor && !Constants.playgroundOnly) {
-      tabs.push(remoteExecutionTab);
-      if (editorSessionId !== '') {
-        tabs.push(sessionManagementTab);
       }
     }
 
@@ -1035,44 +1043,25 @@ function Playground(props: PlaygroundProps) {
     workspaceLocation,
     dispatch,
     shouldShowDataVisualizer,
+    isDataVisualizerTabShown,
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
     conductorEnabled,
+    stepperEvaluatorId,
+    eStepperEvaluatorId,
     remoteExecutionTab,
-    editorSessionId,
-    sessionManagementTab,
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs].filter(({ id }) => !(id && desktopOnlyTabIds.includes(id)));
 
-  const afterDynamicTabs: SideContentTab[] = useMemo(() => {
-    const tabs: SideContentTab[] = [];
-    // Under the conductor, CSE Machine's tab lives here (rather than in `tabs`/beforeDynamicTabs)
-    // so it lands after the dynamically-loaded plugin tabs (e.g. Data Visualizer), not before them.
-    if (conductorEnabled && shouldShowCseMachine) {
-      tabs.push(makeCseMachineTabFrom(workspaceLocation));
-    }
-    // For a conductor language that offers stepping, keep a placeholder Stepper tab visible so it
-    // can be opened before its evaluator loads. It sits after the dynamic tabs so the stepper
-    // plugin's live tab (registered once the evaluator is selected) lands in the same slot and
-    // de-duplicates the placeholder away (see SideContentProvider), avoiding both a disappearing tab
-    // and a duplicate.
-    if (conductorEnabled && stepperEvaluatorId) {
-      tabs.push(makeConductorStepperPlaceholderTab());
-    }
-    // Likewise for a language that offers the environment stepper.
-    if (conductorEnabled && eStepperEvaluatorId) {
-      tabs.push(makeConductorEStepperPlaceholderTab());
-    }
-    return tabs;
-  }, [
-    conductorEnabled,
-    shouldShowCseMachine,
-    stepperEvaluatorId,
-    eStepperEvaluatorId,
-    workspaceLocation,
-  ]);
+  const afterDynamicTabs: SideContentTab[] = useMemo(
+    () =>
+      !isSicpEditor && !Constants.playgroundOnly && editorSessionId !== ''
+        ? [sessionManagementTab]
+        : [],
+    [isSicpEditor, editorSessionId, sessionManagementTab],
+  );
 
   const onLoadMethod = useCallback(
     (editor: Ace.Editor) => {

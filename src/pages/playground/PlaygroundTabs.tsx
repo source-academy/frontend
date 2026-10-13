@@ -67,7 +67,7 @@ export const makeRemoteExecutionTabFrom = (
  * A placeholder Stepper tab for conductor languages that offer stepping. It keeps the tab visible in
  * the tab bar so the user can open it (which selects the stepper evaluator — see Playground) even
  * before that evaluator's conductor has loaded. Once it has, the stepper web plugin registers the
- * live tab under the same id and it takes over (de-duplicated in SideContentProvider), so this body
+ * live tab under the same id and it takes over in the same position, so this body
  * only shows during that brief load.
  */
 export const makeConductorStepperPlaceholderTab = (): SideContentTab => ({
@@ -88,6 +88,13 @@ export const makeConductorEStepperPlaceholderTab = (): SideContentTab => ({
   iconName: IconNames.FLOW_REVIEW,
   body: <Markdown content="Loading the environment stepper…" />,
   id: CONDUCTOR_E_STEPPER_TAB_ID,
+});
+
+export const makeConductorDataVisualizerPlaceholderTab = (): SideContentTab => ({
+  label: 'Data Visualizer',
+  iconName: IconNames.EYE_OPEN,
+  body: <Markdown content="Call `draw_data` in your program to visualize data structures here." />,
+  id: SideContentType.dataVisualizer,
 });
 
 export const makeSubstVisualizerTabFrom = (

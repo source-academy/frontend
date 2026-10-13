@@ -26,6 +26,7 @@ import type { DebuggerContext } from '../workspace/WorkspaceTypes';
 import { visitSideContent } from './SideContentActions';
 import type {
   ModuleSideContent,
+  PredefinedTabs,
   SideContentLocation,
   SideContentState,
   SideContentTab,
@@ -91,6 +92,29 @@ export function getDynamicTabs(debuggerContext: DebuggerContext): SideContentTab
 export const generateIconId = (tabId: TabId) => `${tabId}-icon`;
 export const getTabId = (tab: SideContentTab) =>
   tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
+
+export function combineAllTabs(
+  { beforeDynamicTabs, afterDynamicTabs }: PredefinedTabs,
+  dynamicTabs: SideContentTab[],
+  serviceTabs: SideContentTab[],
+): SideContentTab[] {
+  const serviceTabsById = new Map(serviceTabs.map(tab => [getTabId(tab), tab]));
+  const predefinedTabIds = new Set([...beforeDynamicTabs, ...afterDynamicTabs].map(getTabId));
+
+  const takeServiceTabIfRegistered = (predefinedTab: SideContentTab) =>
+    serviceTabsById.get(getTabId(predefinedTab)) ?? predefinedTab;
+  const serviceTabsWithoutPredefinedSlot = serviceTabs.filter(
+    serviceTab => !predefinedTabIds.has(getTabId(serviceTab)),
+  );
+
+  return [
+    ...beforeDynamicTabs.map(takeServiceTabIfRegistered),
+    ...dynamicTabs,
+    ...serviceTabsWithoutPredefinedSlot,
+    ...afterDynamicTabs.map(takeServiceTabIfRegistered),
+  ];
+}
+
 export const generateTabAlert = (shouldAlert: boolean) =>
   `side-content-tooltip${shouldAlert ? ' side-content-tab-alert' : ''}`;
 
