@@ -1009,17 +1009,21 @@ function Playground(props: PlaygroundProps) {
       if (shouldShowDataVisualizer && !conductorEnabled) {
         tabs.push(makeDataVisualizerTabFrom(workspaceLocation));
       }
-      // Under the conductor, CSE Machine's tab is pushed via afterDynamicTabs instead, so it lands
-      // after the dynamically-loaded plugin tabs (e.g. Data Visualizer) rather than before them.
-      if (shouldShowCseMachine && !conductorEnabled) {
+      if (shouldShowCseMachine) {
         tabs.push(makeCseMachineTabFrom(workspaceLocation));
       }
-      // The legacy stepper tab is only shown with the old (non-conductor) pipeline.
-      if (shouldShowSubstVisualizer && !conductorEnabled) {
+      if (conductorEnabled) {
+        // Placeholders keep these tabs visible before their plugin loads; each plugin's live tab
+        // replaces its placeholder in place.
+        if (stepperEvaluatorId) {
+          tabs.push(makeConductorStepperPlaceholderTab());
+        }
+        if (eStepperEvaluatorId) {
+          tabs.push(makeConductorEStepperPlaceholderTab());
+        }
+      } else if (shouldShowSubstVisualizer) {
         tabs.push(makeSubstVisualizerTabFrom(workspaceLocation, output));
       }
-      // Under the conductor, tools are contributed by dynamically-loaded web plugins; their tabs are
-      // injected automatically by SideContentProvider (via the shared tab service), not here.
     }
 
     return tabs;
@@ -1035,42 +1039,21 @@ function Playground(props: PlaygroundProps) {
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
     conductorEnabled,
+    stepperEvaluatorId,
+    eStepperEvaluatorId,
     remoteExecutionTab,
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs].filter(({ id }) => !(id && desktopOnlyTabIds.includes(id)));
 
-  const afterDynamicTabs: SideContentTab[] = useMemo(() => {
-    const tabs: SideContentTab[] = [];
-    // Under the conductor, CSE Machine's tab lives here (rather than in `tabs`/beforeDynamicTabs)
-    // so it lands after the dynamically-loaded plugin tabs (e.g. Data Visualizer), not before them.
-    if (conductorEnabled && shouldShowCseMachine) {
-      tabs.push(makeCseMachineTabFrom(workspaceLocation));
-    }
-    // For a conductor language that offers stepping, keep a placeholder Stepper tab visible so it
-    // can be opened before its evaluator loads. The stepper plugin's live tab replaces it in place.
-    if (conductorEnabled && stepperEvaluatorId) {
-      tabs.push(makeConductorStepperPlaceholderTab());
-    }
-    // Likewise for a language that offers the environment stepper.
-    if (conductorEnabled && eStepperEvaluatorId) {
-      tabs.push(makeConductorEStepperPlaceholderTab());
-    }
-    if (!isSicpEditor && !Constants.playgroundOnly && editorSessionId !== '') {
-      tabs.push(sessionManagementTab);
-    }
-    return tabs;
-  }, [
-    conductorEnabled,
-    shouldShowCseMachine,
-    stepperEvaluatorId,
-    eStepperEvaluatorId,
-    workspaceLocation,
-    isSicpEditor,
-    editorSessionId,
-    sessionManagementTab,
-  ]);
+  const afterDynamicTabs: SideContentTab[] = useMemo(
+    () =>
+      !isSicpEditor && !Constants.playgroundOnly && editorSessionId !== ''
+        ? [sessionManagementTab]
+        : [],
+    [isSicpEditor, editorSessionId, sessionManagementTab],
+  );
 
   const onLoadMethod = useCallback(
     (editor: Ace.Editor) => {
