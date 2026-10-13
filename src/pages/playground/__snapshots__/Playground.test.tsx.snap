@@ -500,6 +500,43 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                           </span>
                         </div>
                         <div
+                          aria-controls="bp6-tab-panel_side-content-tabs_remote_execution"
+                          aria-expanded="false"
+                          aria-selected="false"
+                          class="bp6-tab side-content-tab"
+                          data-tab-id="remote_execution"
+                          id="bp6-tab-title_side-content-tabs_remote_execution"
+                          role="tab"
+                          tabindex="-1"
+                        >
+                          <span
+                            class="bp6-popover-target"
+                          >
+                            <div
+                              class="side-content-tooltip"
+                              tabindex="0"
+                            >
+                              <span
+                                aria-hidden="true"
+                                class="bp6-icon bp6-icon-satellite"
+                              >
+                                <svg
+                                  data-icon="satellite"
+                                  height="20"
+                                  role="img"
+                                  viewBox="0 0 20 20"
+                                  width="20"
+                                >
+                                  <path
+                                    d="M9 18c.6 0 1 .4 1 1s-.4 1-1 1c-5 0-9-4-9-9 0-.6.4-1 1-1s1 .4 1 1c0 3.9 3.1 7 7 7m0-4c.6 0 1 .4 1 1s-.4 1-1 1c-2.8 0-5-2.2-5-5 0-.6.4-1 1-1s1 .4 1 1c0 1.7 1.3 3 3 3m5.7-3.7c.4-.4 1-.4 1.4 0l3.6 3.6c.4.4.4 1 0 1.4l-1.4 1.4c-.4.4-1 .4-1.4 0l-3.6-3.6c-.4-.4-.4-1 0-1.4zM4.7.3c.4-.4 1-.4 1.4 0l3.6 3.6c.4.4.4 1 0 1.4L8.3 6.7c-.4.4-1 .4-1.4 0L3.3 3.1c-.4-.4-.4-1 0-1.4zm11.1 1c.4-.4 1-.4 1.4 0l1.6 1.6c.4.4.4 1 0 1.4l-6.5 6.5c-.4.4-1 .4-1.4 0L9.3 9.2c-.4-.4-.4-1 0-1.4zM9 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1"
+                                    fill-rule="evenodd"
+                                  />
+                                </svg>
+                              </span>
+                            </div>
+                          </span>
+                        </div>
+                        <div
                           aria-controls="bp6-tab-panel_side-content-tabs_data_visualizer"
                           aria-expanded="false"
                           aria-selected="false"
@@ -566,43 +603,6 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                                 >
                                   <path
                                     d="M7.53 4.37c.1-.1.1-.26 0-.35l-.68-.68c-.1-.1-.25-.1-.35 0s-.1.26 0 .35l.68.68c.1.1.25.1.35 0m3.17.06h.3c.09 0 .16-.01.16-.1s-.07-.1-.16-.1h-.3c-.09 0-.16.01-.16.1s.07.1.16.1m.98 1.15c.09 0 .19-.08.19-.17v-.42c0-.09-.1-.17-.19-.17s-.19.08-.19.17v.42c0 .09.1.17.19.17m-6.5 4.19c-.35 0-.56.28-.56.63v2.37c0 .35.21.62.56.62h.39v2.4c0 .34.33.61.67.61s.67-.27.67-.61v-1.44h-.02c.35 0 .6-.19.6-.54v-.41h.18c.35 0 .58-.28.58-.62v-.81c0-.01.01-.01 0-.02L6.1 9.77zM10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0m0 18c-4.42 0-8-3.58-8-8 0-.74.11-1.46.3-2.14h.03v.65c0 .28.25.5.53.5.05 0 .1-.01.15-.02l1.05 1.05c.1.11.28.11.38 0 .1-.1.11-.27 0-.38L3.42 8.59c0-.03.05-.05.05-.08v-.16c0-.22.12-.3.34-.49h.63c.12 0 .23-.01.32-.07.01-.01.02 0 .03-.01.02-.02.04-.03.06-.04.01-.01.02-.01.03-.02l.02-.02 2.15-2.15c.24-.24.24-.63 0-.86-.23-.24-.62-.19-.86.04l-.41.46H5v-.64c0-.01.07.07.07-.12h.87c.17 0 .3-.12.3-.29s-.13-.29-.3-.29H4.88C6.27 2.7 8.05 2 10 2s3.73.7 5.12 1.86h-1.58l-.01-.04c-.06 0-.12 0-.17.04l-.71.7c-.09.09-.09.23 0 .31.09.09.23.09.32 0l.56-.6.01-.03h.34c0 .19-.1.13-.1.16v.1c0 .29-.2.5-.49.5h-.51c-.25 0-.52.28-.52.54v.23h-.12c-.16 0-.27.08-.27.24v.33h-.32c-.23 0-.41.15-.41.38 0 .22.18.35.41.35.1 0 .19.04.26-.16l.06.01.66-.59h.23l.53.5c.04.04.11.03.16-.01.04-.04.04-.16 0-.2L13 6.15h.32l.12.16c.25.25.65.23.89-.02l.12-.14H15c.02 0 .11.07.11.07v.33s-.06-.01-.07-.01h-.49c-.16 0-.28.13-.28.29s.13.29.28.29h.49c.01 0 .07-.01.07-.01v.2c-.19.28-.33.57-.62.57h-1.28s0-.01-.01-.01l-.58-.58a.62.62 0 0 0-.89 0l-.58.58s0 .01-.01.01h-.34c-.35 0-.67.28-.67.63v1.25c0 .35.32.61.67.61h1.22c.46.19.78.48.97.94v2.28c0 .35.23.6.58.6h.98c.35 0 .54-.25.54-.6v-2.2l1.21-1.17.04-.02.02-.01h.04c.1-.11.2-.26.2-.42V8.49c0-.25-.22-.44-.42-.63h.58c.02.38.29.57.63.57h.43c.13.51.18 1.03.18 1.57 0 4.42-3.58 8-8 8m6.16-5.65c-.14 0-.29.11-.29.25v.77c0 .14.15.25.29.25s.29-.11.29-.25v-.77c0-.14-.15-.25-.29-.25M10.5 3.48c0-.34-.28-.57-.62-.57h-.74c-.34 0-.57.25-.57.59 0 .05-.13.06.06.1v.64c0 .2.09.36.29.36s.29-.16.29-.36v-.19h.68c.33 0 .61-.23.61-.57"
-                                    fill-rule="evenodd"
-                                  />
-                                </svg>
-                              </span>
-                            </div>
-                          </span>
-                        </div>
-                        <div
-                          aria-controls="bp6-tab-panel_side-content-tabs_remote_execution"
-                          aria-expanded="false"
-                          aria-selected="false"
-                          class="bp6-tab side-content-tab"
-                          data-tab-id="remote_execution"
-                          id="bp6-tab-title_side-content-tabs_remote_execution"
-                          role="tab"
-                          tabindex="-1"
-                        >
-                          <span
-                            class="bp6-popover-target"
-                          >
-                            <div
-                              class="side-content-tooltip"
-                              tabindex="0"
-                            >
-                              <span
-                                aria-hidden="true"
-                                class="bp6-icon bp6-icon-satellite"
-                              >
-                                <svg
-                                  data-icon="satellite"
-                                  height="20"
-                                  role="img"
-                                  viewBox="0 0 20 20"
-                                  width="20"
-                                >
-                                  <path
-                                    d="M9 18c.6 0 1 .4 1 1s-.4 1-1 1c-5 0-9-4-9-9 0-.6.4-1 1-1s1 .4 1 1c0 3.9 3.1 7 7 7m0-4c.6 0 1 .4 1 1s-.4 1-1 1c-2.8 0-5-2.2-5-5 0-.6.4-1 1-1s1 .4 1 1c0 1.7 1.3 3 3 3m5.7-3.7c.4-.4 1-.4 1.4 0l3.6 3.6c.4.4.4 1 0 1.4l-1.4 1.4c-.4.4-1 .4-1.4 0l-3.6-3.6c-.4-.4-.4-1 0-1.4zM4.7.3c.4-.4 1-.4 1.4 0l3.6 3.6c.4.4.4 1 0 1.4L8.3 6.7c-.4.4-1 .4-1.4 0L3.3 3.1c-.4-.4-.4-1 0-1.4zm11.1 1c.4-.4 1-.4 1.4 0l1.6 1.6c.4.4.4 1 0 1.4l-6.5 6.5c-.4.4-1 .4-1.4 0L9.3 9.2c-.4-.4-.4-1 0-1.4zM9 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1"
                                     fill-rule="evenodd"
                                   />
                                 </svg>
@@ -689,6 +689,49 @@ and also the
                               </a>
                               .
                             </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        aria-hidden="true"
+                        aria-labelledby="bp6-tab-title_side-content-tabs_remote_execution"
+                        class="bp6-tab-panel side-content-tab"
+                        id="bp6-tab-panel_side-content-tabs_remote_execution"
+                        role="tabpanel"
+                      >
+                        <div
+                          class="side-content-text"
+                        >
+                          <div
+                            class="bp6-callout bp6-intent-danger bp6-callout-has-body-content bp6-callout-icon"
+                          >
+                            <span
+                              aria-hidden="true"
+                              class="bp6-icon bp6-icon-error"
+                              tabindex="-1"
+                            >
+                              <svg
+                                data-icon="error"
+                                height="16"
+                                role="img"
+                                viewBox="0 0 16 16"
+                                width="16"
+                              >
+                                <path
+                                  d="M7.99-.01c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8m1 13h-2v-2h2zm0-3h-2v-7h2z"
+                                  fill-rule="evenodd"
+                                />
+                              </svg>
+                            </span>
+                            Please 
+                            <a
+                              class=""
+                              data-discover="true"
+                              href="/login"
+                            >
+                              log in
+                            </a>
+                             to execute on a remote device.
                           </div>
                         </div>
                       </div>
@@ -1275,49 +1318,6 @@ and also the
                                 </span>
                               </button>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        aria-hidden="true"
-                        aria-labelledby="bp6-tab-title_side-content-tabs_remote_execution"
-                        class="bp6-tab-panel side-content-tab"
-                        id="bp6-tab-panel_side-content-tabs_remote_execution"
-                        role="tabpanel"
-                      >
-                        <div
-                          class="side-content-text"
-                        >
-                          <div
-                            class="bp6-callout bp6-intent-danger bp6-callout-has-body-content bp6-callout-icon"
-                          >
-                            <span
-                              aria-hidden="true"
-                              class="bp6-icon bp6-icon-error"
-                              tabindex="-1"
-                            >
-                              <svg
-                                data-icon="error"
-                                height="16"
-                                role="img"
-                                viewBox="0 0 16 16"
-                                width="16"
-                              >
-                                <path
-                                  d="M7.99-.01c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8m1 13h-2v-2h2zm0-3h-2v-7h2z"
-                                  fill-rule="evenodd"
-                                />
-                              </svg>
-                            </span>
-                            Please 
-                            <a
-                              class=""
-                              data-discover="true"
-                              href="/login"
-                            >
-                              log in
-                            </a>
-                             to execute on a remote device.
                           </div>
                         </div>
                       </div>
@@ -2021,6 +2021,43 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                           </span>
                         </div>
                         <div
+                          aria-controls="bp6-tab-panel_side-content-tabs_remote_execution"
+                          aria-expanded="false"
+                          aria-selected="false"
+                          class="bp6-tab side-content-tab"
+                          data-tab-id="remote_execution"
+                          id="bp6-tab-title_side-content-tabs_remote_execution"
+                          role="tab"
+                          tabindex="-1"
+                        >
+                          <span
+                            class="bp6-popover-target"
+                          >
+                            <div
+                              class="side-content-tooltip"
+                              tabindex="0"
+                            >
+                              <span
+                                aria-hidden="true"
+                                class="bp6-icon bp6-icon-satellite"
+                              >
+                                <svg
+                                  data-icon="satellite"
+                                  height="20"
+                                  role="img"
+                                  viewBox="0 0 20 20"
+                                  width="20"
+                                >
+                                  <path
+                                    d="M9 18c.6 0 1 .4 1 1s-.4 1-1 1c-5 0-9-4-9-9 0-.6.4-1 1-1s1 .4 1 1c0 3.9 3.1 7 7 7m0-4c.6 0 1 .4 1 1s-.4 1-1 1c-2.8 0-5-2.2-5-5 0-.6.4-1 1-1s1 .4 1 1c0 1.7 1.3 3 3 3m5.7-3.7c.4-.4 1-.4 1.4 0l3.6 3.6c.4.4.4 1 0 1.4l-1.4 1.4c-.4.4-1 .4-1.4 0l-3.6-3.6c-.4-.4-.4-1 0-1.4zM4.7.3c.4-.4 1-.4 1.4 0l3.6 3.6c.4.4.4 1 0 1.4L8.3 6.7c-.4.4-1 .4-1.4 0L3.3 3.1c-.4-.4-.4-1 0-1.4zm11.1 1c.4-.4 1-.4 1.4 0l1.6 1.6c.4.4.4 1 0 1.4l-6.5 6.5c-.4.4-1 .4-1.4 0L9.3 9.2c-.4-.4-.4-1 0-1.4zM9 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1"
+                                    fill-rule="evenodd"
+                                  />
+                                </svg>
+                              </span>
+                            </div>
+                          </span>
+                        </div>
+                        <div
                           aria-controls="bp6-tab-panel_side-content-tabs_data_visualizer"
                           aria-expanded="false"
                           aria-selected="false"
@@ -2087,43 +2124,6 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                                 >
                                   <path
                                     d="M6.13 9.004A4.005 4.005 0 0 1 10.012 6c1.87 0 3.44 1.278 3.881 3.005h2.768l-2.354-2.317a.97.97 0 0 1-.283-.691c0-.536.462-.995 1-.995.273 0 .517.107.693.283l4 4.041a.97.97 0 0 1 .284.692.96.96 0 0 1-.293.682l-3.991 3.997a.94.94 0 0 1-.694.292c-.537 0-1-.46-1-.997a.97.97 0 0 1 .284-.692l2.345-2.29h-2.765a4.005 4.005 0 0 1-3.875 2.981 4.005 4.005 0 0 1-3.874-2.981H3.349l2.376 2.308a.97.97 0 0 1 .283.691 1 1 0 0 1-.994.983 1 1 0 0 1-.713-.291L.293 10.699A.96.96 0 0 1 0 10.017a.97.97 0 0 1 .283-.692l4.03-4.037a1 1 0 0 1 .701-.283c.537 0 .994.464.994 1a.97.97 0 0 1-.283.691L3.34 9.004z"
-                                    fill-rule="evenodd"
-                                  />
-                                </svg>
-                              </span>
-                            </div>
-                          </span>
-                        </div>
-                        <div
-                          aria-controls="bp6-tab-panel_side-content-tabs_remote_execution"
-                          aria-expanded="false"
-                          aria-selected="false"
-                          class="bp6-tab side-content-tab"
-                          data-tab-id="remote_execution"
-                          id="bp6-tab-title_side-content-tabs_remote_execution"
-                          role="tab"
-                          tabindex="-1"
-                        >
-                          <span
-                            class="bp6-popover-target"
-                          >
-                            <div
-                              class="side-content-tooltip"
-                              tabindex="0"
-                            >
-                              <span
-                                aria-hidden="true"
-                                class="bp6-icon bp6-icon-satellite"
-                              >
-                                <svg
-                                  data-icon="satellite"
-                                  height="20"
-                                  role="img"
-                                  viewBox="0 0 20 20"
-                                  width="20"
-                                >
-                                  <path
-                                    d="M9 18c.6 0 1 .4 1 1s-.4 1-1 1c-5 0-9-4-9-9 0-.6.4-1 1-1s1 .4 1 1c0 3.9 3.1 7 7 7m0-4c.6 0 1 .4 1 1s-.4 1-1 1c-2.8 0-5-2.2-5-5 0-.6.4-1 1-1s1 .4 1 1c0 1.7 1.3 3 3 3m5.7-3.7c.4-.4 1-.4 1.4 0l3.6 3.6c.4.4.4 1 0 1.4l-1.4 1.4c-.4.4-1 .4-1.4 0l-3.6-3.6c-.4-.4-.4-1 0-1.4zM4.7.3c.4-.4 1-.4 1.4 0l3.6 3.6c.4.4.4 1 0 1.4L8.3 6.7c-.4.4-1 .4-1.4 0L3.3 3.1c-.4-.4-.4-1 0-1.4zm11.1 1c.4-.4 1-.4 1.4 0l1.6 1.6c.4.4.4 1 0 1.4l-6.5 6.5c-.4.4-1 .4-1.4 0L9.3 9.2c-.4-.4-.4-1 0-1.4zM9 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1"
                                     fill-rule="evenodd"
                                   />
                                 </svg>
@@ -2210,6 +2210,49 @@ and also the
                               </a>
                               .
                             </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        aria-hidden="true"
+                        aria-labelledby="bp6-tab-title_side-content-tabs_remote_execution"
+                        class="bp6-tab-panel side-content-tab"
+                        id="bp6-tab-panel_side-content-tabs_remote_execution"
+                        role="tabpanel"
+                      >
+                        <div
+                          class="side-content-text"
+                        >
+                          <div
+                            class="bp6-callout bp6-intent-danger bp6-callout-has-body-content bp6-callout-icon"
+                          >
+                            <span
+                              aria-hidden="true"
+                              class="bp6-icon bp6-icon-error"
+                              tabindex="-1"
+                            >
+                              <svg
+                                data-icon="error"
+                                height="16"
+                                role="img"
+                                viewBox="0 0 16 16"
+                                width="16"
+                              >
+                                <path
+                                  d="M7.99-.01c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8m1 13h-2v-2h2zm0-3h-2v-7h2z"
+                                  fill-rule="evenodd"
+                                />
+                              </svg>
+                            </span>
+                            Please 
+                            <a
+                              class=""
+                              data-discover="true"
+                              href="/login"
+                            >
+                              log in
+                            </a>
+                             to execute on a remote device.
                           </div>
                         </div>
                       </div>
@@ -2444,49 +2487,6 @@ and also the
                                 Note that these shortcuts are only active when the browser focus is on this tab (click on or above the explanation text).
                               </div>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        aria-hidden="true"
-                        aria-labelledby="bp6-tab-title_side-content-tabs_remote_execution"
-                        class="bp6-tab-panel side-content-tab"
-                        id="bp6-tab-panel_side-content-tabs_remote_execution"
-                        role="tabpanel"
-                      >
-                        <div
-                          class="side-content-text"
-                        >
-                          <div
-                            class="bp6-callout bp6-intent-danger bp6-callout-has-body-content bp6-callout-icon"
-                          >
-                            <span
-                              aria-hidden="true"
-                              class="bp6-icon bp6-icon-error"
-                              tabindex="-1"
-                            >
-                              <svg
-                                data-icon="error"
-                                height="16"
-                                role="img"
-                                viewBox="0 0 16 16"
-                                width="16"
-                              >
-                                <path
-                                  d="M7.99-.01c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8m1 13h-2v-2h2zm0-3h-2v-7h2z"
-                                  fill-rule="evenodd"
-                                />
-                              </svg>
-                            </span>
-                            Please 
-                            <a
-                              class=""
-                              data-discover="true"
-                              href="/login"
-                            >
-                              log in
-                            </a>
-                             to execute on a remote device.
                           </div>
                         </div>
                       </div>

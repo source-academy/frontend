@@ -987,6 +987,10 @@ function Playground(props: PlaygroundProps) {
       return tabs;
     }
 
+    if (!isSicpEditor && !Constants.playgroundOnly) {
+      tabs.push(remoteExecutionTab);
+    }
+
     if (currentLang === Chapter.FULL_JAVA && process.env.NODE_ENV === 'development') {
       tabs.push(
         makeUploadTabFrom(files =>
@@ -1018,13 +1022,6 @@ function Playground(props: PlaygroundProps) {
       // injected automatically by SideContentProvider (via the shared tab service), not here.
     }
 
-    if (!isSicpEditor && !Constants.playgroundOnly) {
-      tabs.push(remoteExecutionTab);
-      if (editorSessionId !== '') {
-        tabs.push(sessionManagementTab);
-      }
-    }
-
     return tabs;
   }, [
     playgroundIntroductionTab,
@@ -1039,8 +1036,6 @@ function Playground(props: PlaygroundProps) {
     shouldShowSubstVisualizer,
     conductorEnabled,
     remoteExecutionTab,
-    editorSessionId,
-    sessionManagementTab,
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
@@ -1062,6 +1057,9 @@ function Playground(props: PlaygroundProps) {
     if (conductorEnabled && eStepperEvaluatorId) {
       tabs.push(makeConductorEStepperPlaceholderTab());
     }
+    if (!isSicpEditor && !Constants.playgroundOnly && editorSessionId !== '') {
+      tabs.push(sessionManagementTab);
+    }
     return tabs;
   }, [
     conductorEnabled,
@@ -1069,6 +1067,9 @@ function Playground(props: PlaygroundProps) {
     stepperEvaluatorId,
     eStepperEvaluatorId,
     workspaceLocation,
+    isSicpEditor,
+    editorSessionId,
+    sessionManagementTab,
   ]);
 
   const onLoadMethod = useCallback(
