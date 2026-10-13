@@ -744,28 +744,60 @@ and also the
                             style="height: 60vh;"
                           >
                             <div
-                              class="bp6-button-group mb-2 self-start"
+                              class="mb-2 flex justify-between"
                             >
-                              <button
-                                class="bp6-button bp6-active px-4 py-1.5 text-[15px]"
-                                type="button"
+                              <div
+                                class="bp6-button-group"
                               >
-                                <span
-                                  class="bp6-button-text"
+                                <button
+                                  class="bp6-button bp6-active px-4 py-1.5 text-[15px]"
+                                  type="button"
                                 >
-                                  Source §4
-                                </span>
-                              </button>
-                              <button
-                                class="bp6-button px-4 py-1.5 text-[15px]"
-                                type="button"
+                                  <span
+                                    class="bp6-button-text"
+                                  >
+                                    Source §4
+                                  </span>
+                                </button>
+                                <button
+                                  class="bp6-button px-4 py-1.5 text-[15px]"
+                                  type="button"
+                                >
+                                  <span
+                                    class="bp6-button-text"
+                                  >
+                                    Modules
+                                  </span>
+                                </button>
+                              </div>
+                              <span
+                                class="bp6-popover-target"
                               >
-                                <span
-                                  class="bp6-button-text"
+                                <button
+                                  aria-label="Reset documentation"
+                                  class="bp6-button"
+                                  tabindex="0"
+                                  type="button"
                                 >
-                                  Modules
-                                </span>
-                              </button>
+                                  <span
+                                    aria-hidden="true"
+                                    class="bp6-icon bp6-icon-home"
+                                  >
+                                    <svg
+                                      data-icon="home"
+                                      height="16"
+                                      role="img"
+                                      viewBox="0 0 16 16"
+                                      width="16"
+                                    >
+                                      <path
+                                        d="M2 10v5c0 .55.45 1 1 1h3v-5h4v5h3c.55 0 1-.45 1-1v-5L8 4zm13.71-2.71L14 5.59V2c0-.55-.45-1-1-1s-1 .45-1 1v1.59L8.71.29C8.53.11 8.28 0 8 0s-.53.11-.71.29l-7 7a1.003 1.003 0 0 0 1.42 1.42L8 2.41l6.29 6.29c.18.19.43.3.71.3a1.003 1.003 0 0 0 .71-1.71"
+                                        fill-rule="evenodd"
+                                      />
+                                    </svg>
+                                  </span>
+                                </button>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -2343,28 +2375,60 @@ and also the
                             style="height: 60vh;"
                           >
                             <div
-                              class="bp6-button-group mb-2 self-start"
+                              class="mb-2 flex justify-between"
                             >
-                              <button
-                                class="bp6-button bp6-active px-4 py-1.5 text-[15px]"
-                                type="button"
+                              <div
+                                class="bp6-button-group"
                               >
-                                <span
-                                  class="bp6-button-text"
+                                <button
+                                  class="bp6-button bp6-active px-4 py-1.5 text-[15px]"
+                                  type="button"
                                 >
-                                  Source §2
-                                </span>
-                              </button>
-                              <button
-                                class="bp6-button px-4 py-1.5 text-[15px]"
-                                type="button"
+                                  <span
+                                    class="bp6-button-text"
+                                  >
+                                    Source §2
+                                  </span>
+                                </button>
+                                <button
+                                  class="bp6-button px-4 py-1.5 text-[15px]"
+                                  type="button"
+                                >
+                                  <span
+                                    class="bp6-button-text"
+                                  >
+                                    Modules
+                                  </span>
+                                </button>
+                              </div>
+                              <span
+                                class="bp6-popover-target"
                               >
-                                <span
-                                  class="bp6-button-text"
+                                <button
+                                  aria-label="Reset documentation"
+                                  class="bp6-button"
+                                  tabindex="0"
+                                  type="button"
                                 >
-                                  Modules
-                                </span>
-                              </button>
+                                  <span
+                                    aria-hidden="true"
+                                    class="bp6-icon bp6-icon-home"
+                                  >
+                                    <svg
+                                      data-icon="home"
+                                      height="16"
+                                      role="img"
+                                      viewBox="0 0 16 16"
+                                      width="16"
+                                    >
+                                      <path
+                                        d="M2 10v5c0 .55.45 1 1 1h3v-5h4v5h3c.55 0 1-.45 1-1v-5L8 4zm13.71-2.71L14 5.59V2c0-.55-.45-1-1-1s-1 .45-1 1v1.59L8.71.29C8.53.11 8.28 0 8 0s-.53.11-.71.29l-7 7a1.003 1.003 0 0 0 1.42 1.42L8 2.41l6.29 6.29c.18.19.43.3.71.3a1.003 1.003 0 0 0 .71-1.71"
+                                        fill-rule="evenodd"
+                                      />
+                                    </svg>
+                                  </span>
+                                </button>
+                              </span>
                             </div>
                           </div>
                         </div>

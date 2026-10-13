@@ -108,4 +108,12 @@ describe('SideContentDocumentation', () => {
     renderDocumentation({ conductorEnabled: false, chapter: Chapter.FULL_JS });
     expect(screen.getByTitle('full JavaScript').getAttribute('src')).toBe(Links.sourceDocs);
   });
+
+  test('Home button reloads the active frame', () => {
+    renderDocumentation();
+    const frameBeforeReset = screen.getByTitle('Python §1');
+
+    fireEvent.click(screen.getByLabelText('Reset documentation'));
+    expect(screen.getByTitle('Python §1')).not.toBe(frameBeforeReset);
+  });
 });
