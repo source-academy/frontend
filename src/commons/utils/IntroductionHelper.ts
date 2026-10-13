@@ -6,7 +6,7 @@ import { Links } from './Constants';
 const MAIN_INTRODUCTION = `
 Welcome to the Source Academy playground!
 
-This language is [_Source_](${Links.sourceDocs}), a family of JavaScript sublanguages designed
+This language is [_Source_](${Links.javascriptDocs}), a family of JavaScript sublanguages designed
 for the book [_Structure and Interpretation of Computer Programs, JavaScript Edition_](${Links.textbook}). `;
 
 const HOTKEYS_INTRODUCTION = `
@@ -15,6 +15,17 @@ In the editor on the left, you can use the [_Ace keyboard shortcuts_](${Links.ac
 and also the [_Source Academy keyboard shortcuts_](${Links.sourceHotkeys}).
 
 `;
+
+export const getSourceDocsUrl = (chapter: Chapter, variant: Variant): string | undefined => {
+  const isSourceChapter = chapter >= Chapter.SOURCE_1 && chapter <= Chapter.SOURCE_4;
+  if (!isSourceChapter) {
+    return undefined;
+  }
+
+  const variantSuffix =
+    variant !== Variant.DEFAULT && variant !== Variant.NATIVE ? `_${variant}` : '';
+  return `${Links.javascriptDocs}javascript_${chapter}${variantSuffix}/`;
+};
 
 const generateSourceDocsLink = (sourceChapter: Chapter, sourceVariant: Variant) => {
   if (sourceChapter === Chapter.FULL_JS) {
@@ -34,9 +45,7 @@ const generateSourceDocsLink = (sourceChapter: Chapter, sourceVariant: Variant) 
     );
   }
 
-  const sourceDocsLink: string = `${Links.sourceDocs}source_${sourceChapter}${
-    sourceVariant !== Variant.DEFAULT && sourceVariant !== Variant.NATIVE ? `_${sourceVariant}` : ''
-  }/`;
+  const sourceDocsLink = getSourceDocsUrl(sourceChapter, sourceVariant) ?? Links.sourceDocs;
 
   return `You have chosen the sublanguage [_${styliseSublanguage(
     sourceChapter,

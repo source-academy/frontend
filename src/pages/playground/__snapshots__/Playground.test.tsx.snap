@@ -632,7 +632,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                             <p>
                               This language is 
                               <a
-                                href="https://docs.sourceacademy.org/"
+                                href="https://docs.sourceacademy.org/javascript/"
                                 rel="noopener noreferrer"
                                 target="_blank"
                               >
@@ -653,7 +653,7 @@ for the book
                               </a>
                               . You have chosen the sublanguage 
                               <a
-                                href="https://docs.sourceacademy.org/source_4/"
+                                href="https://docs.sourceacademy.org/javascript/javascript_4/"
                                 rel="noopener noreferrer"
                                 target="_blank"
                               >
@@ -2153,7 +2153,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                             <p>
                               This language is 
                               <a
-                                href="https://docs.sourceacademy.org/"
+                                href="https://docs.sourceacademy.org/javascript/"
                                 rel="noopener noreferrer"
                                 target="_blank"
                               >
@@ -2174,7 +2174,7 @@ for the book
                               </a>
                               . You have chosen the sublanguage 
                               <a
-                                href="https://docs.sourceacademy.org/source_2/"
+                                href="https://docs.sourceacademy.org/javascript/javascript_2/"
                                 rel="noopener noreferrer"
                                 target="_blank"
                               >
