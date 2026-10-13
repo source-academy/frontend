@@ -110,6 +110,7 @@ import {
   makeConductorDataVisualizerPlaceholderTab,
   makeConductorEStepperPlaceholderTab,
   makeConductorStepperPlaceholderTab,
+  makeDocumentationTabFrom,
   makeIntroductionTabFrom,
   makeRemoteExecutionTabFrom,
   makeSessionManagementTabFrom,
@@ -993,6 +994,10 @@ function Playground(props: PlaygroundProps) {
         );
       }
       return tabs;
+    }
+
+    if (!isSicpEditor) {
+      tabs.push(makeDocumentationTabFrom(workspaceLocation));
     }
 
     if (!isSicpEditor && !Constants.playgroundOnly) {

@@ -3,6 +3,7 @@ import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import type { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import Markdown from 'src/commons/Markdown';
 import SideContentRemoteExecution from 'src/commons/sideContent/content/remoteExecution/SideContentRemoteExecution';
+import SideContentDocumentation from 'src/commons/sideContent/content/SideContentDocumentation';
 import SideContentSessionManagement from 'src/commons/sideContent/content/SideContentSessionManagement';
 import SideContentSubstVisualizer from 'src/commons/sideContent/content/SideContentSubstVisualizer';
 import {
@@ -45,6 +46,15 @@ export const makeSessionManagementTabFrom = (
     />
   ),
   id: SideContentType.sessionManagement,
+});
+
+export const makeDocumentationTabFrom = (
+  workspaceLocation: SideContentLocation,
+): SideContentTab => ({
+  label: 'Documentation',
+  iconName: IconNames.MANUAL,
+  body: <SideContentDocumentation workspaceLocation={workspaceLocation} />,
+  id: SideContentType.documentation,
 });
 
 export const makeRemoteExecutionTabFrom = (
