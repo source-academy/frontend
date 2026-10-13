@@ -141,4 +141,15 @@ export function useTabOwnerPath(tabId: string | undefined): string | undefined {
   return useSyncExternalStore(sideContentManager.subscribe, getSnapshot);
 }
 
+export function useIsServiceTabShown(
+  tabId: string,
+  workspaceLocation: SideContentLocation,
+): boolean {
+  const getSnapshot = useCallback(
+    () => sideContentManager.getTabs(workspaceLocation).some(tab => tab.id === tabId),
+    [tabId, workspaceLocation],
+  );
+  return useSyncExternalStore(sideContentManager.subscribe, getSnapshot);
+}
+
 export default sideContentManager;

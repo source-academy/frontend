@@ -25,7 +25,10 @@ import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentH
 import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
-import sideContentManager, { useTabOwnerPath } from 'src/commons/sideContent/SideContentManager';
+import sideContentManager, {
+  useIsServiceTabShown,
+  useTabOwnerPath,
+} from 'src/commons/sideContent/SideContentManager';
 import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 import { useAppDispatch, useAppSelector, useResponsive } from 'src/commons/utils/Hooks';
 import {
@@ -104,6 +107,7 @@ import type {
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   desktopOnlyTabIds,
+  makeConductorDataVisualizerPlaceholderTab,
   makeConductorEStepperPlaceholderTab,
   makeConductorStepperPlaceholderTab,
   makeIntroductionTabFrom,
@@ -969,6 +973,10 @@ function Playground(props: PlaygroundProps) {
       makeIntroductionTabFrom(conductorWelcomeText ?? generateLanguageIntroduction(languageConfig)),
     [conductorWelcomeText, languageConfig],
   );
+  const isDataVisualizerTabShown = useIsServiceTabShown(
+    SideContentType.dataVisualizer,
+    workspaceLocation,
+  );
   const tabs = useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
@@ -1001,12 +1009,11 @@ function Playground(props: PlaygroundProps) {
 
     if (!usingRemoteExecution) {
       // Don't show the following when using remote execution
-      // The legacy data visualizer tab is only shown with the old (non-conductor) pipeline — under
-      // the conductor, `languageConfig` (the old Source-only SALanguage config) is never updated when
-      // selecting a Conductor language, so `shouldShowDataVisualizer` stays stuck at whatever it was
-      // last set to (e.g. true, from the Source §4 default) and would otherwise show this dead tab
-      // alongside the real, dynamically-loaded Conductor plugin tab.
-      if (shouldShowDataVisualizer && !conductorEnabled) {
+      if (conductorEnabled) {
+        if (isDataVisualizerTabShown) {
+          tabs.push(makeConductorDataVisualizerPlaceholderTab());
+        }
+      } else if (shouldShowDataVisualizer) {
         tabs.push(makeDataVisualizerTabFrom(workspaceLocation));
       }
       if (shouldShowCseMachine) {
@@ -1036,6 +1043,7 @@ function Playground(props: PlaygroundProps) {
     workspaceLocation,
     dispatch,
     shouldShowDataVisualizer,
+    isDataVisualizerTabShown,
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
     conductorEnabled,

@@ -90,6 +90,13 @@ export const makeConductorEStepperPlaceholderTab = (): SideContentTab => ({
   id: CONDUCTOR_E_STEPPER_TAB_ID,
 });
 
+export const makeConductorDataVisualizerPlaceholderTab = (): SideContentTab => ({
+  label: 'Data Visualizer',
+  iconName: IconNames.EYE_OPEN,
+  body: <Markdown content="Call `draw_data` in your program to visualize data structures here." />,
+  id: SideContentType.dataVisualizer,
+});
+
 export const makeSubstVisualizerTabFrom = (
   workspaceLocation: SideContentLocation,
   output: InterpreterOutput[],

@@ -537,12 +537,12 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                           </span>
                         </div>
                         <div
-                          aria-controls="bp6-tab-panel_side-content-tabs_data_visualizer"
+                          aria-controls="bp6-tab-panel_side-content-tabs_data-visualizer"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
-                          data-tab-id="data_visualizer"
-                          id="bp6-tab-title_side-content-tabs_data_visualizer"
+                          data-tab-id="data-visualizer"
+                          id="bp6-tab-title_side-content-tabs_data-visualizer"
                           role="tab"
                           tabindex="-1"
                         >
@@ -737,9 +737,9 @@ and also the
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp6-tab-title_side-content-tabs_data_visualizer"
+                        aria-labelledby="bp6-tab-title_side-content-tabs_data-visualizer"
                         class="bp6-tab-panel side-content-tab"
-                        id="bp6-tab-panel_side-content-tabs_data_visualizer"
+                        id="bp6-tab-panel_side-content-tabs_data-visualizer"
                         role="tabpanel"
                       >
                         <div
@@ -2058,12 +2058,12 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                           </span>
                         </div>
                         <div
-                          aria-controls="bp6-tab-panel_side-content-tabs_data_visualizer"
+                          aria-controls="bp6-tab-panel_side-content-tabs_data-visualizer"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
-                          data-tab-id="data_visualizer"
-                          id="bp6-tab-title_side-content-tabs_data_visualizer"
+                          data-tab-id="data-visualizer"
+                          id="bp6-tab-title_side-content-tabs_data-visualizer"
                           role="tab"
                           tabindex="-1"
                         >
@@ -2258,9 +2258,9 @@ and also the
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp6-tab-title_side-content-tabs_data_visualizer"
+                        aria-labelledby="bp6-tab-title_side-content-tabs_data-visualizer"
                         class="bp6-tab-panel side-content-tab"
-                        id="bp6-tab-panel_side-content-tabs_data_visualizer"
+                        id="bp6-tab-panel_side-content-tabs_data-visualizer"
                         role="tabpanel"
                       >
                         <div

@@ -7,7 +7,8 @@ export enum SideContentType {
   briefing = 'briefing',
   contestVoting = 'contest_voting',
   cseMachine = 'cse_machine',
-  dataVisualizer = 'data_visualizer',
+  // Also the tab id registered by the conductor data visualizer web plugin.
+  dataVisualizer = 'data-visualizer',
   documentation = 'documentation',
   editorGrading = 'editor_grading',
   editorAutograder = 'editor_autograder',
