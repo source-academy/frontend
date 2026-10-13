@@ -436,7 +436,7 @@ describe('CseEnvironmentView', () => {
     expect(Layout.onFrameHover).toBeUndefined();
   });
 
-  test('reports no anchors while program references are turned off', () => {
+  test('keeps reporting anchors while program references are turned off, saying they are', () => {
     sized();
     CseMachine.setArrowOriginVisible('program', false);
     const onAnchors = vi.fn();
@@ -444,8 +444,39 @@ describe('CseEnvironmentView', () => {
       const { unmount } = render(
         <CseEnvironmentView snapshots={snapshots} step={0} onAnchors={onAnchors} />,
       );
-      expect(onAnchors).toHaveBeenCalled();
-      expect(onAnchors.mock.calls.every(([resolve]) => resolve === null)).toBe(true);
+      const reported = onAnchors.mock.calls.filter(([resolve]) => resolve !== null);
+      expect(reported.length).toBeGreaterThan(0);
+      expect(reported.every(([, fromProgram]) => fromProgram === false)).toBe(true);
+      unmount();
+    } finally {
+      CseMachine.resetArrowOriginFilters();
+    }
+  });
+
+  test('says whether program references are on, as the filter changes, also when panning', () => {
+    sized();
+    const onAnchors = vi.fn();
+    const lastReported = () => onAnchors.mock.calls.findLast(([resolve]) => resolve !== null)![1];
+    try {
+      // A new element each time: React skips an identical one, and the filter is read in render.
+      const view = () => (
+        <CseEnvironmentView snapshots={snapshots} step={0} onAnchors={onAnchors} />
+      );
+      const { rerender, unmount } = render(view());
+      expect(lastReported()).toBe(true);
+      CseMachine.setArrowOriginVisible('program', false);
+      rerender(view());
+      expect(lastReported()).toBe(false);
+      // A pan or zoom announces again, still with the filter as it is now.
+      onAnchors.mockClear();
+      act(() => {
+        Layout.stageRef.current!.fire('dragmove');
+      });
+      expect(onAnchors).toHaveBeenCalledTimes(1);
+      expect(lastReported()).toBe(false);
+      CseMachine.setArrowOriginVisible('program', true);
+      rerender(view());
+      expect(lastReported()).toBe(true);
       unmount();
     } finally {
       CseMachine.resetArrowOriginFilters();
@@ -466,6 +497,7 @@ describe('CseEnvironmentView', () => {
       );
       const resolve = onAnchors.mock.calls.map(([r]) => r).findLast(r => r !== null);
       expect(resolve).toBeDefined();
+      expect(onAnchors.mock.calls.findLast(([r]) => r !== null)![1]).toBe(true);
       // The stage is panned by (5, 7) and zoomed 2x; its container and the view start at the
       // same place, so only the stage's transform shows.
       vi.spyOn(Layout.stageRef.current!, 'getAbsoluteTransform').mockReturnValue({
