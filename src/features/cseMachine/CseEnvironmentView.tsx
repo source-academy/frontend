@@ -50,12 +50,13 @@ export type CseEnvironmentViewProps = {
   /** Called with a frame's id when the mouse enters it, and `null` when it leaves. */
   onHoverFrame?: (frameId: string | null) => void;
   /**
-   * Offers the "From program" arrow filter, on until the user turns it off. While it is on,
-   * called with a resolver of where objects and frames are drawn, again whenever the drawing moves
-   * (a redraw, pan, zoom), so the plugin can draw arrows into the diagram from its own panes; with
-   * `null` when it is off, and when the view goes away.
+   * Offers the "From program" arrow filter, on until the user turns it off. Called with a
+   * resolver of where objects and frames are drawn, again whenever the drawing moves (a redraw,
+   * pan, zoom), so the plugin can draw arrows into the diagram from its own panes; with `null`
+   * when the view goes away. `fromProgram` is whether the filter is on: the plugin draws all
+   * arrows to objects then, and otherwise only the arrows to the hovered object or frame.
    */
-  onAnchors?: (resolve: CseDiagramAnchorResolver | null) => void;
+  onAnchors?: (resolve: CseDiagramAnchorResolver | null, fromProgram?: boolean) => void;
 };
 
 /**
@@ -196,20 +197,20 @@ function CseEnvironmentView({
     }
   }, [drawing, hoveredFrame]);
 
-  // From program: while the filter is on, tell the plugin where things are drawn, and again
-  // whenever the user pans or zooms (the resolver reads the stage as it is when asked, but the
-  // plugin only asks again when told).
+  // Anchors for the plugin's arrows: tell it where things are drawn, and again whenever the user
+  // pans or zooms (the resolver reads the stage as it is when asked, but the plugin only asks
+  // again when told). With "From program" off it draws only the arrows of what is hovered.
   const programReferences = CseMachine.getArrowOriginFilters().program;
   useEffect(() => {
     if (!onAnchors) {
       return;
     }
     const stage = Layout.stageRef.current;
-    if (!drawing || !programReferences || !stage) {
+    if (!drawing || !stage) {
       onAnchors(null);
       return;
     }
-    const announce = () => onAnchors(anchorResolver(rootRef.current));
+    const announce = () => onAnchors(anchorResolver(rootRef.current), programReferences);
     announce();
     stage.on('dragmove.anchors wheel.anchors', announce);
     return () => {
