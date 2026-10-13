@@ -142,6 +142,9 @@ const conductorConfig = {
   enable: process.env.REACT_APP_CONDUCTOR_ENABLE
     ? isTrue(process.env.REACT_APP_CONDUCTOR_ENABLE)
     : undefined,
+  ev3Enable: process.env.REACT_APP_CONDUCTOR_EV3_ENABLE
+    ? isTrue(process.env.REACT_APP_CONDUCTOR_EV3_ENABLE)
+    : undefined,
   languageDirectoryUrl: process.env.REACT_APP_LANGUAGE_DIRECTORY_URL || undefined,
   pluginDirectoryUrl: process.env.REACT_APP_PLUGIN_DIRECTORY_URL || undefined,
   modulesDirectoryUrl: process.env.REACT_APP_MODULES_DIRECTORY_URL || undefined,
