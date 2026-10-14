@@ -20,7 +20,7 @@ const pythonLanguage: ILanguageDefinition = {
 type StoreOptions = {
   isTabSelected?: boolean;
   conductorEnabled?: boolean;
-  language?: ILanguageDefinition & { documentation?: object };
+  language?: ILanguageDefinition;
   chapter?: Chapter;
   variant?: Variant;
 };
