@@ -175,10 +175,11 @@ export class Binding extends Visible {
 
     return (
       <Fragment key={Layout.key++}>
+        {/* Before the key: the arrow's in-frame part has a wide hit area that starts at the key. */}
+        {this.arrow?.draw()}
         {this.isDummyBinding
           ? null // omit the key since value is anonymous
           : this.key.draw()}
-        {this.arrow?.draw()}
         {shouldRenderReferencedValue ? this.value.draw() : null}
       </Fragment>
     );
