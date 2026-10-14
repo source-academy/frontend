@@ -58,13 +58,14 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
     const terminalSegmentLength = Math.max(Config.ArrowHeadSize, Config.MinTerminalSegmentLength);
     const verticalTerminalOffset = Math.max(Config.DataUnitHeight / 3, terminalSegmentLength);
     const postFrameStraightLength = Config.ArrowPostFrameStraightLength;
+    const fromFrameStraightLength = Config.ArrowFromFrameStraightLength;
 
     const steps: StepsArray = [(x, y) => [x + from.width(), y + from.height() / 2]];
 
     // If the text has a parent frame, extend straight out until exiting the frame
     const textRightEdge = from.x() + from.width();
     const frameExitX = from.options.parentFrame
-      ? from.options.parentFrame.x() + from.options.parentFrame.width() + postFrameStraightLength
+      ? from.options.parentFrame.x() + from.options.parentFrame.width() + fromFrameStraightLength
       : textRightEdge + postFrameStraightLength;
 
     // Extend straight from text to frame boundary
