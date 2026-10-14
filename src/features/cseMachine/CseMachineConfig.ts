@@ -59,6 +59,10 @@ export const Config = Object.freeze({
 
   MinTerminalSegmentLength: 30,
   ArrowPostFrameStraightLength: 10,
+  // How far an arrow from a binding runs straight out of its frame before turning: more than
+  // ArrowCornerRadius, or the turn starts inside the frame and ends right beside the arrowheads
+  // that point into the frame's edge.
+  ArrowFromFrameStraightLength: 30,
   // Canvas background color
   BgColor: '#2c3e50',
   PrintBgColor: '#fff',
