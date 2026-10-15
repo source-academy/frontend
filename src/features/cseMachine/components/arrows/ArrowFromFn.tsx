@@ -31,6 +31,29 @@ export class ArrowFromFn extends GenericArrow<FnValue | GlobalFnValue | ContValu
     return 'function' as const;
   }
 
+  /**
+   * The arrow starts at the center of the function object's right circle, but arrows are drawn
+   * beneath the circles' opaque fills, which hide its first part. So a short copy of it is drawn
+   * above the circle, clipped to the circle (see GenericArrow's source overlay).
+   */
+  protected getSourceFrameBounds() {
+    const from = this.source;
+    if (!(from instanceof FnValue)) {
+      return null;
+    }
+    const r = from.radius;
+    return { x: from.centerX, y: from.y() - r, width: 2 * r, height: 2 * r };
+  }
+
+  protected getSourceFrameSegmentPath(): string {
+    const from = this.source;
+    if (!(from instanceof FnValue)) {
+      return '';
+    }
+    const centerX = from.centerX + from.radius;
+    return `M ${centerX} ${from.y()} L ${centerX} ${from.y() - from.radius}`;
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
