@@ -867,6 +867,65 @@ describe('a closure whose home frame has no bindings keeps that frame visible (p
   });
 });
 
+describe.each(['list', 'array'])('a closure referred to only by a %s', label => {
+  // `def make(i): return lambda: i`, `out = pair(make(1), None)`: the lambda was made in make's
+  // frame, but only a list (or array) in the program's frame refers to it.
+  const snapshot = {
+    stepIndex: 0,
+    control: [],
+    stash: [],
+    environments: [
+      {
+        id: 'p',
+        name: 'programEnvironment',
+        parentId: null,
+        bindings: [
+          {
+            name: 'out',
+            value: {
+              displayValue: '[...]',
+              label,
+              metadata: {
+                id: 1,
+                envId: 'p',
+                elements: [
+                  {
+                    displayValue: '<lambda>',
+                    label: 'closure',
+                    metadata: { closureFrameId: 'f', params: [], funcName: 'lambda' },
+                  },
+                  { displayValue: 'None', label: 'NoneType' },
+                ],
+              },
+            },
+          },
+        ],
+        isActive: true,
+      },
+      {
+        id: 'f',
+        name: 'make',
+        parentId: 'p',
+        bindings: [{ name: 'i', value: { displayValue: '1', label: 'int' } }],
+        isActive: false,
+      },
+    ],
+  } as unknown as CseSnapshot;
+
+  it('is in the heap of the frame it was made in, so that frame draws it', () => {
+    const { envTree } = buildFakeEnvTreeFromSnapshot(snapshot);
+    const heap = [...(findNode(envTree, 'f')!.environment as any).heap.getHeap()];
+    expect(heap.some(v => typeof v === 'function' && v.environment.id === 'f')).toBe(true);
+  });
+
+  it('is drawn beside that frame, not at the origin of the drawing', () => {
+    CseMachine.drawEnvironments(snapshot, { width: 500, height: 500, clearDeadFrames: false });
+    const fns = [...Layout.values.values()].filter(v => v instanceof FnValue);
+    expect(fns).toHaveLength(1);
+    expect(fns[0].x()).toBeGreaterThan(0);
+  });
+});
+
 describe('Source-shaped snapshots (js-slang)', () => {
   const globalFrame = (bindings: CseSnapshot['environments'][number]['bindings']) => ({
     id: 'g',
