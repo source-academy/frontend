@@ -121,6 +121,7 @@ function toJsValue(
     const arr: any = elements.map((el: CseSerializedValue) =>
       toJsValue(el, envMap, closureCache, listCache),
     );
+    arr.forEach(addClosureToHeap);
     Object.defineProperties(arr, {
       id: { value: arrayId ?? `arr_${Math.random()}`, writable: true },
       environment: { value: envId ? (envMap.get(envId) ?? null) : null, writable: true },
@@ -162,7 +163,9 @@ function toJsValue(
     }
     listCache.set(listId, arr);
     for (const el of elements) {
-      arr.push(toJsValue(el, envMap, closureCache, listCache));
+      const element = toJsValue(el, envMap, closureCache, listCache);
+      arr.push(element);
+      addClosureToHeap(element);
     }
     return arr;
   }
@@ -234,6 +237,18 @@ function toJsValue(
 
   // Fallback: render as a string primitive (shows as PrimitiveValue)
   return v.displayValue;
+}
+
+/**
+ * Puts a closure that sits in a list or array into the heap of the frame it was made in, like a
+ * closure that is bound to a name in another frame (see pass 3b of buildFakeEnvTreeFromSnapshot).
+ * If nothing in that frame refers to it, getUnreferencedObjects() makes a dummy binding for it
+ * there, which places it beside its frame. Without one, nothing is its main reference (a
+ * reference from its own frame), so it would stay at the origin of the drawing.
+ */
+function addClosureToHeap(element: unknown): void {
+  const environment = typeof element === 'function' ? (element as any).environment : undefined;
+  environment?.heap?.add(element);
 }
 
 /**
