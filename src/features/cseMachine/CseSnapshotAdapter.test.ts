@@ -867,9 +867,9 @@ describe('a closure whose home frame has no bindings keeps that frame visible (p
   });
 });
 
-describe('a closure that only a list refers to', () => {
+describe.each(['list', 'array'])('a closure referred to only by a %s', label => {
   // `def make(i): return lambda: i`, `out = pair(make(1), None)`: the lambda was made in make's
-  // frame, but only a list in the program's frame refers to it.
+  // frame, but only a list (or array) in the program's frame refers to it.
   const snapshot = {
     stepIndex: 0,
     control: [],
@@ -884,7 +884,7 @@ describe('a closure that only a list refers to', () => {
             name: 'out',
             value: {
               displayValue: '[...]',
-              label: 'list',
+              label,
               metadata: {
                 id: 1,
                 envId: 'p',
