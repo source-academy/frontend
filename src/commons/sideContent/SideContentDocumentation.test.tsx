@@ -25,7 +25,7 @@ type StoreOptions = {
   variant?: Variant;
 };
 
-function renderDocumentation({
+function createDocumentation({
   isTabSelected = true,
   conductorEnabled = true,
   language = pythonLanguage,
@@ -54,13 +54,17 @@ function renderDocumentation({
     },
   });
 
-  return render(
+  return (
     <Provider store={store}>
       <MemoryRouter>
         <SideContentDocumentation workspaceLocation="playground" />
       </MemoryRouter>
-    </Provider>,
+    </Provider>
   );
+}
+
+function renderDocumentation(options?: StoreOptions) {
+  return render(createDocumentation(options));
 }
 
 describe('SideContentDocumentation', () => {
@@ -86,6 +90,25 @@ describe('SideContentDocumentation', () => {
     fireEvent.click(screen.getByText('Modules'));
     expect(screen.getByTitle('Modules').getAttribute('src')).toBe('https://example.com/modules/');
     expect(screen.getByTitle('Python §1').classList).toContain('hidden');
+  });
+
+  test('follows language changes while mounted', () => {
+    const { rerender } = renderDocumentation();
+    rerender(
+      createDocumentation({
+        language: {
+          id: 'source1',
+          name: 'Source §1',
+          evaluators: [],
+          documentation: { languageUrl: 'https://example.com/javascript_1/' },
+        },
+      }),
+    );
+
+    expect(screen.queryByTitle('Python §1')).toBeNull();
+    expect(screen.getByTitle('Source §1').getAttribute('src')).toBe(
+      'https://example.com/javascript_1/',
+    );
   });
 
   test('falls back to the default documentation URLs', () => {
