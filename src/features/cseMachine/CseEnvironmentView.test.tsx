@@ -200,7 +200,7 @@ describe('the program frame', () => {
   const drawnFrames = (environments: unknown[], clearDeadFrames: boolean) => {
     CseMachine.drawEnvironments(
       { stepIndex: 0, control: [], stash: [], environments } as unknown as CseSnapshot,
-      { width: 600, height: 400, clearDeadFrames }
+      { width: 600, height: 400, clearDeadFrames },
     );
     return Layout.levels.flatMap(l => l.frames).map(f => f.environment.id);
   };
@@ -214,7 +214,7 @@ describe('the program frame', () => {
     const empty = { ...program, id: 'E1', name: 'f', label: 'E1', parentId: 'Global' };
     expect(drawnFrames([{ ...program, isActive: false }, empty, global], false)).toEqual([
       '-1',
-      'Global'
+      'Global',
     ]);
   });
 });
