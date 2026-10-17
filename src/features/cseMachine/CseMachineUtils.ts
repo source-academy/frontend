@@ -98,6 +98,15 @@ export function isEmptyEnvironment(env: Env): env is Env & { head: EmptyObject }
 }
 
 /**
+ * Returns `true` if `env` is the program's own frame (the "Global" frame of the diagram). Unlike
+ * any other frame it is drawn even while it has no bindings: it is the only frame that grows
+ * dynamically, so it is there from the start of the program.
+ */
+export function isProgramEnvironment(env: Env): boolean {
+  return env?.name === 'programEnvironment';
+}
+
+/**
  * Returns `true` if a frame may be left out of the diagram as boring: it has no bindings, no live
  * closure or array draws its arrow to it as its defining environment (#4380), and nothing is
  * homed in it at all — not even a dead function or array, which the diagram draws greyed out
@@ -106,6 +115,7 @@ export function isEmptyEnvironment(env: Env): env is Env & { head: EmptyObject }
 export function isPrunableEnvironment(env: Env): boolean {
   return (
     isEmptyEnvironment(env) &&
+    !isProgramEnvironment(env) &&
     !Layout.closureHomeEnvIDs.has(env.id) &&
     !(env?.heap?.getHeap().size > 0)
   );

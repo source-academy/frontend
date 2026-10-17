@@ -173,8 +173,49 @@ describe('dead functions in an otherwise empty frame', () => {
     }
   });
 
-  test('Clear Dead Frames still removes them', () => {
-    expect(drawn(1, true).frames).not.toContain('Global');
+  test('Clear Dead Frames keeps the (empty) program frame', () => {
+    expect(drawn(1, true).frames).toContain('Global');
+  });
+});
+
+describe('the program frame', () => {
+  const program = {
+    id: 'Global',
+    name: 'programEnvironment',
+    label: 'Global',
+    parentId: '-1',
+    bindings: [],
+    isActive: true,
+    isOnCallStack: true,
+  };
+  const global = {
+    id: '-1',
+    name: 'global',
+    label: 'Built-ins',
+    parentId: null,
+    bindings: [],
+    isActive: false,
+    isOnCallStack: false,
+  };
+  const drawnFrames = (environments: unknown[], clearDeadFrames: boolean) => {
+    CseMachine.drawEnvironments(
+      { stepIndex: 0, control: [], stash: [], environments } as unknown as CseSnapshot,
+      { width: 600, height: 400, clearDeadFrames },
+    );
+    return Layout.levels.flatMap(l => l.frames).map(f => f.environment.id);
+  };
+
+  test('is drawn at the start of the program, while it is still empty', () => {
+    expect(drawnFrames([program, global], false)).toEqual(['-1', 'Global']);
+    expect(drawnFrames([program, global], true)).toEqual(['-1', 'Global']);
+  });
+
+  test('does not make other empty frames appear', () => {
+    const empty = { ...program, id: 'E1', name: 'f', label: 'E1', parentId: 'Global' };
+    expect(drawnFrames([{ ...program, isActive: false }, empty, global], false)).toEqual([
+      '-1',
+      'Global',
+    ]);
   });
 });
 
