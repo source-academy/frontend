@@ -1353,6 +1353,43 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with MCQ question render
                           </span>
                         </div>
                         <div
+                          aria-controls="bp6-tab-panel_side-content-tabs_documentation"
+                          aria-expanded="false"
+                          aria-selected="false"
+                          class="bp6-tab side-content-tab"
+                          data-tab-id="documentation"
+                          id="bp6-tab-title_side-content-tabs_documentation"
+                          role="tab"
+                          tabindex="-1"
+                        >
+                          <span
+                            class="bp6-popover-target"
+                          >
+                            <div
+                              class="side-content-tooltip"
+                              tabindex="0"
+                            >
+                              <span
+                                aria-hidden="true"
+                                class="bp6-icon bp6-icon-manual"
+                              >
+                                <svg
+                                  data-icon="manual"
+                                  height="20"
+                                  role="img"
+                                  viewBox="0 0 20 20"
+                                  width="20"
+                                >
+                                  <path
+                                    d="M20 1.1a.976.976 0 0 0-.83-.88C15.15-.43 12.07.34 10 2.5 7.93.34 4.85-.43.84.22.37.3.03.67 0 1.1v15.01c0 .07 0 .14.01.21.09.52.61.88 1.15.79 3.85-.62 6.4.16 8 2.46.02.02.03.04.05.07.02.02.04.04.06.07l.01.01a1 1 0 0 0 .28.19c.01 0 .01.01.02.01.03.01.07.03.1.04.01 0 .02.01.04.01.03.01.07.02.1.02.01 0 .02 0 .04.01H10c.04 0 .09 0 .13-.01.01 0 .03 0 .04-.01.03-.01.06-.01.1-.02.01 0 .03-.01.04-.01.03-.01.07-.02.1-.04.01 0 .02-.01.03-.01.07-.03.13-.07.19-.11.01 0 .01-.01.02-.01.02-.02.04-.03.06-.05.01-.01.02-.02.03-.02l.05-.05c.01-.01.02-.02.02-.03.01-.02.02-.03.04-.05 1.61-2.3 4.15-3.09 8-2.46.54.09 1.06-.26 1.15-.79-.01-.05 0-.09 0-.13zM9 16.63c-1.78-1.31-4.12-1.83-7-1.55V2c3.26-.37 5.51.39 7 2.35zm9-1.56c-2.88-.28-5.22.24-7 1.55V4.34c1.49-1.96 3.74-2.71 7-2.35z"
+                                    fill-rule="evenodd"
+                                  />
+                                </svg>
+                              </span>
+                            </div>
+                          </span>
+                        </div>
+                        <div
                           aria-controls="bp6-tab-panel_side-content-tabs_autograder"
                           aria-expanded="false"
                           aria-selected="false"
@@ -1425,6 +1462,79 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with MCQ question render
                             <p>
                               This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. 
                             </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        aria-hidden="true"
+                        aria-labelledby="bp6-tab-title_side-content-tabs_documentation"
+                        class="bp6-tab-panel side-content-tab"
+                        id="bp6-tab-panel_side-content-tabs_documentation"
+                        role="tabpanel"
+                      >
+                        <div
+                          class="side-content-text"
+                        >
+                          <div
+                            class="flex w-full flex-col"
+                            style="height: 60vh;"
+                          >
+                            <div
+                              class="mb-2 flex justify-between"
+                            >
+                              <div
+                                class="bp6-button-group"
+                              >
+                                <button
+                                  class="bp6-button bp6-active px-4 py-1.5 text-[15px]"
+                                  type="button"
+                                >
+                                  <span
+                                    class="bp6-button-text"
+                                  >
+                                    Source §4
+                                  </span>
+                                </button>
+                                <button
+                                  class="bp6-button px-4 py-1.5 text-[15px]"
+                                  type="button"
+                                >
+                                  <span
+                                    class="bp6-button-text"
+                                  >
+                                    Modules
+                                  </span>
+                                </button>
+                              </div>
+                              <span
+                                class="bp6-popover-target"
+                              >
+                                <button
+                                  aria-label="Reset documentation"
+                                  class="bp6-button"
+                                  tabindex="0"
+                                  type="button"
+                                >
+                                  <span
+                                    aria-hidden="true"
+                                    class="bp6-icon bp6-icon-home"
+                                  >
+                                    <svg
+                                      data-icon="home"
+                                      height="16"
+                                      role="img"
+                                      viewBox="0 0 16 16"
+                                      width="16"
+                                    >
+                                      <path
+                                        d="M2 10v5c0 .55.45 1 1 1h3v-5h4v5h3c.55 0 1-.45 1-1v-5L8 4zm13.71-2.71L14 5.59V2c0-.55-.45-1-1-1s-1 .45-1 1v1.59L8.71.29C8.53.11 8.28 0 8 0s-.53.11-.71.29l-7 7a1.003 1.003 0 0 0 1.42 1.42L8 2.41l6.29 6.29c.18.19.43.3.71.3a1.003 1.003 0 0 0 .71-1.71"
+                                        fill-rule="evenodd"
+                                      />
+                                    </svg>
+                                  </span>
+                                </button>
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -2232,6 +2342,43 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                           </span>
                         </div>
                         <div
+                          aria-controls="bp6-tab-panel_side-content-tabs_documentation"
+                          aria-expanded="false"
+                          aria-selected="false"
+                          class="bp6-tab side-content-tab"
+                          data-tab-id="documentation"
+                          id="bp6-tab-title_side-content-tabs_documentation"
+                          role="tab"
+                          tabindex="-1"
+                        >
+                          <span
+                            class="bp6-popover-target"
+                          >
+                            <div
+                              class="side-content-tooltip"
+                              tabindex="0"
+                            >
+                              <span
+                                aria-hidden="true"
+                                class="bp6-icon bp6-icon-manual"
+                              >
+                                <svg
+                                  data-icon="manual"
+                                  height="20"
+                                  role="img"
+                                  viewBox="0 0 20 20"
+                                  width="20"
+                                >
+                                  <path
+                                    d="M20 1.1a.976.976 0 0 0-.83-.88C15.15-.43 12.07.34 10 2.5 7.93.34 4.85-.43.84.22.37.3.03.67 0 1.1v15.01c0 .07 0 .14.01.21.09.52.61.88 1.15.79 3.85-.62 6.4.16 8 2.46.02.02.03.04.05.07.02.02.04.04.06.07l.01.01a1 1 0 0 0 .28.19c.01 0 .01.01.02.01.03.01.07.03.1.04.01 0 .02.01.04.01.03.01.07.02.1.02.01 0 .02 0 .04.01H10c.04 0 .09 0 .13-.01.01 0 .03 0 .04-.01.03-.01.06-.01.1-.02.01 0 .03-.01.04-.01.03-.01.07-.02.1-.04.01 0 .02-.01.03-.01.07-.03.13-.07.19-.11.01 0 .01-.01.02-.01.02-.02.04-.03.06-.05.01-.01.02-.02.03-.02l.05-.05c.01-.01.02-.02.02-.03.01-.02.02-.03.04-.05 1.61-2.3 4.15-3.09 8-2.46.54.09 1.06-.26 1.15-.79-.01-.05 0-.09 0-.13zM9 16.63c-1.78-1.31-4.12-1.83-7-1.55V2c3.26-.37 5.51.39 7 2.35zm9-1.56c-2.88-.28-5.22.24-7 1.55V4.34c1.49-1.96 3.74-2.71 7-2.35z"
+                                    fill-rule="evenodd"
+                                  />
+                                </svg>
+                              </span>
+                            </div>
+                          </span>
+                        </div>
+                        <div
                           aria-controls="bp6-tab-panel_side-content-tabs_autograder"
                           aria-expanded="false"
                           aria-selected="false"
@@ -2316,6 +2463,79 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                             <p>
                               This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. 
                             </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        aria-hidden="true"
+                        aria-labelledby="bp6-tab-title_side-content-tabs_documentation"
+                        class="bp6-tab-panel side-content-tab"
+                        id="bp6-tab-panel_side-content-tabs_documentation"
+                        role="tabpanel"
+                      >
+                        <div
+                          class="side-content-text"
+                        >
+                          <div
+                            class="flex w-full flex-col"
+                            style="height: 60vh;"
+                          >
+                            <div
+                              class="mb-2 flex justify-between"
+                            >
+                              <div
+                                class="bp6-button-group"
+                              >
+                                <button
+                                  class="bp6-button bp6-active px-4 py-1.5 text-[15px]"
+                                  type="button"
+                                >
+                                  <span
+                                    class="bp6-button-text"
+                                  >
+                                    Source §4
+                                  </span>
+                                </button>
+                                <button
+                                  class="bp6-button px-4 py-1.5 text-[15px]"
+                                  type="button"
+                                >
+                                  <span
+                                    class="bp6-button-text"
+                                  >
+                                    Modules
+                                  </span>
+                                </button>
+                              </div>
+                              <span
+                                class="bp6-popover-target"
+                              >
+                                <button
+                                  aria-label="Reset documentation"
+                                  class="bp6-button"
+                                  tabindex="0"
+                                  type="button"
+                                >
+                                  <span
+                                    aria-hidden="true"
+                                    class="bp6-icon bp6-icon-home"
+                                  >
+                                    <svg
+                                      data-icon="home"
+                                      height="16"
+                                      role="img"
+                                      viewBox="0 0 16 16"
+                                      width="16"
+                                    >
+                                      <path
+                                        d="M2 10v5c0 .55.45 1 1 1h3v-5h4v5h3c.55 0 1-.45 1-1v-5L8 4zm13.71-2.71L14 5.59V2c0-.55-.45-1-1-1s-1 .45-1 1v1.59L8.71.29C8.53.11 8.28 0 8 0s-.53.11-.71.29l-7 7a1.003 1.003 0 0 0 1.42 1.42L8 2.41l6.29 6.29c.18.19.43.3.71.3a1.003 1.003 0 0 0 .71-1.71"
+                                        fill-rule="evenodd"
+                                      />
+                                    </svg>
+                                  </span>
+                                </button>
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -3119,6 +3339,43 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                           </span>
                         </div>
                         <div
+                          aria-controls="bp6-tab-panel_side-content-tabs_documentation"
+                          aria-expanded="false"
+                          aria-selected="false"
+                          class="bp6-tab side-content-tab"
+                          data-tab-id="documentation"
+                          id="bp6-tab-title_side-content-tabs_documentation"
+                          role="tab"
+                          tabindex="-1"
+                        >
+                          <span
+                            class="bp6-popover-target"
+                          >
+                            <div
+                              class="side-content-tooltip"
+                              tabindex="0"
+                            >
+                              <span
+                                aria-hidden="true"
+                                class="bp6-icon bp6-icon-manual"
+                              >
+                                <svg
+                                  data-icon="manual"
+                                  height="20"
+                                  role="img"
+                                  viewBox="0 0 20 20"
+                                  width="20"
+                                >
+                                  <path
+                                    d="M20 1.1a.976.976 0 0 0-.83-.88C15.15-.43 12.07.34 10 2.5 7.93.34 4.85-.43.84.22.37.3.03.67 0 1.1v15.01c0 .07 0 .14.01.21.09.52.61.88 1.15.79 3.85-.62 6.4.16 8 2.46.02.02.03.04.05.07.02.02.04.04.06.07l.01.01a1 1 0 0 0 .28.19c.01 0 .01.01.02.01.03.01.07.03.1.04.01 0 .02.01.04.01.03.01.07.02.1.02.01 0 .02 0 .04.01H10c.04 0 .09 0 .13-.01.01 0 .03 0 .04-.01.03-.01.06-.01.1-.02.01 0 .03-.01.04-.01.03-.01.07-.02.1-.04.01 0 .02-.01.03-.01.07-.03.13-.07.19-.11.01 0 .01-.01.02-.01.02-.02.04-.03.06-.05.01-.01.02-.02.03-.02l.05-.05c.01-.01.02-.02.02-.03.01-.02.02-.03.04-.05 1.61-2.3 4.15-3.09 8-2.46.54.09 1.06-.26 1.15-.79-.01-.05 0-.09 0-.13zM9 16.63c-1.78-1.31-4.12-1.83-7-1.55V2c3.26-.37 5.51.39 7 2.35zm9-1.56c-2.88-.28-5.22.24-7 1.55V4.34c1.49-1.96 3.74-2.71 7-2.35z"
+                                    fill-rule="evenodd"
+                                  />
+                                </svg>
+                              </span>
+                            </div>
+                          </span>
+                        </div>
+                        <div
                           aria-controls="bp6-tab-panel_side-content-tabs_autograder"
                           aria-expanded="false"
                           aria-selected="false"
@@ -3203,6 +3460,79 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                             <p>
                               This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. 
                             </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        aria-hidden="true"
+                        aria-labelledby="bp6-tab-title_side-content-tabs_documentation"
+                        class="bp6-tab-panel side-content-tab"
+                        id="bp6-tab-panel_side-content-tabs_documentation"
+                        role="tabpanel"
+                      >
+                        <div
+                          class="side-content-text"
+                        >
+                          <div
+                            class="flex w-full flex-col"
+                            style="height: 60vh;"
+                          >
+                            <div
+                              class="mb-2 flex justify-between"
+                            >
+                              <div
+                                class="bp6-button-group"
+                              >
+                                <button
+                                  class="bp6-button bp6-active px-4 py-1.5 text-[15px]"
+                                  type="button"
+                                >
+                                  <span
+                                    class="bp6-button-text"
+                                  >
+                                    Source §4
+                                  </span>
+                                </button>
+                                <button
+                                  class="bp6-button px-4 py-1.5 text-[15px]"
+                                  type="button"
+                                >
+                                  <span
+                                    class="bp6-button-text"
+                                  >
+                                    Modules
+                                  </span>
+                                </button>
+                              </div>
+                              <span
+                                class="bp6-popover-target"
+                              >
+                                <button
+                                  aria-label="Reset documentation"
+                                  class="bp6-button"
+                                  tabindex="0"
+                                  type="button"
+                                >
+                                  <span
+                                    aria-hidden="true"
+                                    class="bp6-icon bp6-icon-home"
+                                  >
+                                    <svg
+                                      data-icon="home"
+                                      height="16"
+                                      role="img"
+                                      viewBox="0 0 16 16"
+                                      width="16"
+                                    >
+                                      <path
+                                        d="M2 10v5c0 .55.45 1 1 1h3v-5h4v5h3c.55 0 1-.45 1-1v-5L8 4zm13.71-2.71L14 5.59V2c0-.55-.45-1-1-1s-1 .45-1 1v1.59L8.71.29C8.53.11 8.28 0 8 0s-.53.11-.71.29l-7 7a1.003 1.003 0 0 0 1.42 1.42L8 2.41l6.29 6.29c.18.19.43.3.71.3a1.003 1.003 0 0 0 .71-1.71"
+                                        fill-rule="evenodd"
+                                      />
+                                    </svg>
+                                  </span>
+                                </button>
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -4006,6 +4336,43 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                           </span>
                         </div>
                         <div
+                          aria-controls="bp6-tab-panel_side-content-tabs_documentation"
+                          aria-expanded="false"
+                          aria-selected="false"
+                          class="bp6-tab side-content-tab"
+                          data-tab-id="documentation"
+                          id="bp6-tab-title_side-content-tabs_documentation"
+                          role="tab"
+                          tabindex="-1"
+                        >
+                          <span
+                            class="bp6-popover-target"
+                          >
+                            <div
+                              class="side-content-tooltip"
+                              tabindex="0"
+                            >
+                              <span
+                                aria-hidden="true"
+                                class="bp6-icon bp6-icon-manual"
+                              >
+                                <svg
+                                  data-icon="manual"
+                                  height="20"
+                                  role="img"
+                                  viewBox="0 0 20 20"
+                                  width="20"
+                                >
+                                  <path
+                                    d="M20 1.1a.976.976 0 0 0-.83-.88C15.15-.43 12.07.34 10 2.5 7.93.34 4.85-.43.84.22.37.3.03.67 0 1.1v15.01c0 .07 0 .14.01.21.09.52.61.88 1.15.79 3.85-.62 6.4.16 8 2.46.02.02.03.04.05.07.02.02.04.04.06.07l.01.01a1 1 0 0 0 .28.19c.01 0 .01.01.02.01.03.01.07.03.1.04.01 0 .02.01.04.01.03.01.07.02.1.02.01 0 .02 0 .04.01H10c.04 0 .09 0 .13-.01.01 0 .03 0 .04-.01.03-.01.06-.01.1-.02.01 0 .03-.01.04-.01.03-.01.07-.02.1-.04.01 0 .02-.01.03-.01.07-.03.13-.07.19-.11.01 0 .01-.01.02-.01.02-.02.04-.03.06-.05.01-.01.02-.02.03-.02l.05-.05c.01-.01.02-.02.02-.03.01-.02.02-.03.04-.05 1.61-2.3 4.15-3.09 8-2.46.54.09 1.06-.26 1.15-.79-.01-.05 0-.09 0-.13zM9 16.63c-1.78-1.31-4.12-1.83-7-1.55V2c3.26-.37 5.51.39 7 2.35zm9-1.56c-2.88-.28-5.22.24-7 1.55V4.34c1.49-1.96 3.74-2.71 7-2.35z"
+                                    fill-rule="evenodd"
+                                  />
+                                </svg>
+                              </span>
+                            </div>
+                          </span>
+                        </div>
+                        <div
                           aria-controls="bp6-tab-panel_side-content-tabs_autograder"
                           aria-expanded="false"
                           aria-selected="false"
@@ -4115,6 +4482,79 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                             <p>
                               This is the closed mission briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. 
                             </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        aria-hidden="true"
+                        aria-labelledby="bp6-tab-title_side-content-tabs_documentation"
+                        class="bp6-tab-panel side-content-tab"
+                        id="bp6-tab-panel_side-content-tabs_documentation"
+                        role="tabpanel"
+                      >
+                        <div
+                          class="side-content-text"
+                        >
+                          <div
+                            class="flex w-full flex-col"
+                            style="height: 60vh;"
+                          >
+                            <div
+                              class="mb-2 flex justify-between"
+                            >
+                              <div
+                                class="bp6-button-group"
+                              >
+                                <button
+                                  class="bp6-button bp6-active px-4 py-1.5 text-[15px]"
+                                  type="button"
+                                >
+                                  <span
+                                    class="bp6-button-text"
+                                  >
+                                    Source §4
+                                  </span>
+                                </button>
+                                <button
+                                  class="bp6-button px-4 py-1.5 text-[15px]"
+                                  type="button"
+                                >
+                                  <span
+                                    class="bp6-button-text"
+                                  >
+                                    Modules
+                                  </span>
+                                </button>
+                              </div>
+                              <span
+                                class="bp6-popover-target"
+                              >
+                                <button
+                                  aria-label="Reset documentation"
+                                  class="bp6-button"
+                                  tabindex="0"
+                                  type="button"
+                                >
+                                  <span
+                                    aria-hidden="true"
+                                    class="bp6-icon bp6-icon-home"
+                                  >
+                                    <svg
+                                      data-icon="home"
+                                      height="16"
+                                      role="img"
+                                      viewBox="0 0 16 16"
+                                      width="16"
+                                    >
+                                      <path
+                                        d="M2 10v5c0 .55.45 1 1 1h3v-5h4v5h3c.55 0 1-.45 1-1v-5L8 4zm13.71-2.71L14 5.59V2c0-.55-.45-1-1-1s-1 .45-1 1v1.59L8.71.29C8.53.11 8.28 0 8 0s-.53.11-.71.29l-7 7a1.003 1.003 0 0 0 1.42 1.42L8 2.41l6.29 6.29c.18.19.43.3.71.3a1.003 1.003 0 0 0 .71-1.71"
+                                        fill-rule="evenodd"
+                                      />
+                                    </svg>
+                                  </span>
+                                </button>
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>

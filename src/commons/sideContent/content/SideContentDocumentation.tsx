@@ -1,41 +1,102 @@
-import { Button, ButtonGroup } from '@blueprintjs/core';
+import { Button, ButtonGroup, Tooltip } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import classNames from 'classnames';
 import { useState } from 'react';
 
-import { Links } from '../../utils/Constants';
+import { useLanguageDocumentation } from '../../../features/directory/useLanguageDocumentation';
+import { useResponsive } from '../../utils/Hooks';
+import { useSideContent } from '../SideContentHelper';
+import { type SideContentLocation, SideContentType } from '../SideContentTypes';
 
-const DOCS = { python: Links.pythonDocs, modules: Links.moduleDocs } as const;
-type DocKey = keyof typeof DOCS;
+type DocumentationPage = 'language' | 'modules';
+
+const SIDE_CONTENT_CHROME_HEIGHT = 70;
 
 const buttonClass = 'px-4 py-1.5 text-[15px]';
 
-function SideContentDocumentation() {
-  const [selected, setSelected] = useState<DocKey>('python');
+function getContainerHeight(isMobile: boolean, sideContentHeight?: number): string {
+  if (isMobile) {
+    return '100%';
+  }
+  if (sideContentHeight === undefined) {
+    return '60vh';
+  }
+  return `${sideContentHeight - SIDE_CONTENT_CHROME_HEIGHT}px`;
+}
+
+type Props = {
+  workspaceLocation: SideContentLocation;
+  sideContentHeight?: number;
+};
+
+function SideContentDocumentation({ workspaceLocation, sideContentHeight }: Props) {
+  const { languageName, languageDocsUrl, modulesDocsUrl } =
+    useLanguageDocumentation(workspaceLocation);
+  const { selectedTab } = useSideContent(workspaceLocation);
+  const { isMobileBreakpoint } = useResponsive();
+
+  const [activePage, setActivePage] = useState<DocumentationPage>('language');
+  const [shownPages, setShownPages] = useState<DocumentationPage[]>([]);
+  const [resetCounts, setResetCounts] = useState({ language: 0, modules: 0 });
+
+  // Frames load only once first shown, then stay mounted so each keeps its current page
+  const isTabSelected = selectedTab === SideContentType.documentation;
+  if (isTabSelected && !shownPages.includes(activePage)) {
+    setShownPages([...shownPages, activePage]);
+  }
+
+  // Remounting returns the frame to its start page without adding a browser history entry
+  const resetActivePage = () => {
+    setResetCounts(counts => ({ ...counts, [activePage]: counts[activePage] + 1 }));
+  };
+
+  const frameClassName = (page: DocumentationPage) =>
+    classNames('w-full flex-1 border-none bg-white', { hidden: page !== activePage });
 
   return (
-    <div className="flex h-[75vh] w-full flex-col">
-      <ButtonGroup className="mb-2 self-start">
-        <Button
-          className={buttonClass}
-          active={selected === 'python'}
-          onClick={() => setSelected('python')}
-          text="Python"
-        />
-        <Button
-          className={buttonClass}
-          active={selected === 'modules'}
-          onClick={() => setSelected('modules')}
-          text="Modules"
-        />
-      </ButtonGroup>
-      {(Object.keys(DOCS) as DocKey[]).map(key => (
-        // Both stay mounted so each keeps its scroll position when toggled.
+    <div
+      className="flex w-full flex-col"
+      style={{ height: getContainerHeight(!!isMobileBreakpoint, sideContentHeight) }}
+    >
+      <div className="mb-2 flex justify-between">
+        <ButtonGroup>
+          <Button
+            className={buttonClass}
+            active={activePage === 'language'}
+            onClick={() => setActivePage('language')}
+            text={languageName}
+          />
+          <Button
+            className={buttonClass}
+            active={activePage === 'modules'}
+            onClick={() => setActivePage('modules')}
+            text="Modules"
+          />
+        </ButtonGroup>
+        <Tooltip content="Reset documentation">
+          <Button
+            icon={IconNames.HOME}
+            aria-label="Reset documentation"
+            onClick={resetActivePage}
+          />
+        </Tooltip>
+      </div>
+      {shownPages.includes('language') && (
         <iframe
-          key={key}
-          title={key}
-          src={DOCS[key]}
-          className={`w-full flex-1 border-none bg-white ${key === selected ? '' : 'hidden'}`}
+          key={`${languageDocsUrl}-${resetCounts.language}`}
+          title={languageName}
+          src={languageDocsUrl}
+          className={frameClassName('language')}
         />
-      ))}
+      )}
+      {shownPages.includes('modules') && (
+        <iframe
+          key={`${modulesDocsUrl}-${resetCounts.modules}`}
+          title="Modules"
+          src={modulesDocsUrl}
+          className={frameClassName('modules')}
+        />
+      )}
     </div>
   );
 }

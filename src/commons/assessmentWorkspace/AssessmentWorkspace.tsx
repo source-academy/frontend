@@ -635,6 +635,12 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
           id: SideContentType.briefing,
         },
         {
+          label: `Documentation`,
+          iconName: IconNames.MANUAL,
+          body: <SideContentDocumentation workspaceLocation={workspaceLocation} />,
+          id: SideContentType.documentation,
+        },
+        {
           label: `Autograder`,
           iconName: IconNames.AIRPLANE,
           body: (
@@ -680,16 +686,6 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
         id: SideContentType.toneMatrix,
-      });
-    }
-
-    const showDocumentationTab = assessment!.type === 'PA';
-    if (showDocumentationTab) {
-      tabs.push({
-        label: `Documentation`,
-        iconName: IconNames.MANUAL,
-        body: <SideContentDocumentation />,
-        id: SideContentType.documentation,
       });
     }
 
