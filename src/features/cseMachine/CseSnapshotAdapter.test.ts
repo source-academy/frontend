@@ -1147,4 +1147,21 @@ describe('a name bound to a built-in function (py-slang#583)', () => {
     const bindings = frame!.frame.bindings;
     expect(bindings.map(b => b.rendersReferencedValue())).toEqual([true, false, true]);
   });
+
+  it('is a built-in: tooltip <built-in>, no arrow to a frame, only the left circle reacts', () => {
+    CseMachine.drawEnvironments(snapshot, { width: 500, height: 500, clearDeadFrames: false });
+    const fn = [...Layout.values.values()].find(v => v instanceof GlobalFnValue) as GlobalFnValue;
+    expect(fn.isPyBuiltin).toBe(true);
+    expect(fn.tooltip).toBe('<built-in>');
+    expect(fn.arrow()).toBeUndefined();
+    const group = (fn.draw() as any).props.children[0];
+    expect(group.props.onMouseEnter).toBeUndefined();
+    const circles = group.props.children as any[];
+    expect(circles.map(c => c.props.onMouseEnter !== undefined)).toEqual([
+      true,
+      true,
+      false,
+      false,
+    ]);
+  });
 });

@@ -188,6 +188,7 @@ function toJsValue(
       }
       const builtinFn: any = function PyBuiltinFunction() {};
       builtinFn.toString = () => v.displayValue;
+      builtinFn.isPyBuiltin = true; // drawn as `GlobalFnValue` with a `<built-in>` tooltip
       closureCache.set(cacheKey, builtinFn);
       return builtinFn;
     }

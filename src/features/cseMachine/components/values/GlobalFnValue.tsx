@@ -31,6 +31,12 @@ export class GlobalFnValue extends Value implements IHoverable {
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
 
+  /**
+   * A built-in of an evaluator that has no source for it (py-slang's): two circles, only the left
+   * one reacting to the mouse, with the tooltip `<built-in>`, and no arrow to a frame.
+   */
+  readonly isPyBuiltin: boolean;
+
   readonly paramsText: string;
   readonly bodyText: string;
   readonly exportBodyText: string;
@@ -59,6 +65,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     mainReference: Binding,
   ) {
     super();
+    this.isPyBuiltin = (data as { isPyBuiltin?: boolean }).isPyBuiltin === true;
     Layout.memoizeValue(data, this);
     // check for frame x cooridnate in cache
     const ghostX = Layout.getGhostFrameX(mainReference.frame.environment.id);
@@ -76,14 +83,14 @@ export class GlobalFnValue extends Value implements IHoverable {
     this._width = this.radius * 4;
     this._height = this.radius * 2;
 
-    this.paramsText = `params: ${getParamsText(this.data)}`;
-    this.bodyText = `body: ${getBodyText(this.data)}`;
+    this.paramsText = this.isPyBuiltin ? '' : `params: ${getParamsText(this.data)}`;
+    this.bodyText = this.isPyBuiltin ? '<built-in>' : `body: ${getBodyText(this.data)}`;
     this.exportBodyText =
       (this.bodyText.length > 23 ? this.bodyText.slice(0, 20) : this.bodyText)
         .split('\n')
         .slice(0, 2)
         .join('\n') + ' ...';
-    this.tooltip = `${this.paramsText}\n${this.bodyText}`;
+    this.tooltip = this.isPyBuiltin ? this.bodyText : `${this.paramsText}\n${this.bodyText}`;
     this.exportTooltip = truncateFunctionTooltip(
       this.tooltip,
       Config.FnDescriptionMaxWidth,
@@ -216,7 +223,7 @@ export class GlobalFnValue extends Value implements IHoverable {
 
   draw(): React.ReactNode {
     this._isDrawn = true;
-    if (Layout.globalEnvNode.frame) {
+    if (Layout.globalEnvNode.frame && !this.isPyBuiltin) {
       this._arrow = new ArrowFromFn(this).to(Layout.globalEnvNode.frame) as ArrowFromFn;
     }
     if (!this.tooltipArrow) {
@@ -241,16 +248,17 @@ export class GlobalFnValue extends Value implements IHoverable {
         revealLabelRef={this.revealLabelRef}
       />,
     );
+    const hover = {
+      onMouseEnter: this.onMouseEnter,
+      onMouseLeave: this.onMouseLeave,
+      onClick: this.onClick,
+    };
     return (
       <Fragment key={Layout.key++}>
-        <Group
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-          onClick={this.onClick}
-          ref={this.ref}
-        >
+        <Group {...(this.isPyBuiltin ? {} : hover)} ref={this.ref}>
           <Circle
             {...ShapeDefaultProps}
+            {...(this.isPyBuiltin ? hover : {})}
             key={Layout.key++}
             x={this.centerX - this.radius}
             y={this.y()}
@@ -260,6 +268,7 @@ export class GlobalFnValue extends Value implements IHoverable {
           />
           <Circle
             {...ShapeDefaultProps}
+            {...(this.isPyBuiltin ? hover : {})}
             key={Layout.key++}
             x={this.centerX - this.radius}
             y={this.y()}
