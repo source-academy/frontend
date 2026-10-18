@@ -740,8 +740,7 @@ and also the
                           class="side-content-text"
                         >
                           <div
-                            class="flex w-full flex-col"
-                            style="height: 60vh;"
+                            class="flex w-full flex-col h-[75vh]"
                           >
                             <div
                               class="mb-2 flex justify-between"
@@ -2371,8 +2370,7 @@ and also the
                           class="side-content-text"
                         >
                           <div
-                            class="flex w-full flex-col"
-                            style="height: 60vh;"
+                            class="flex w-full flex-col h-[75vh]"
                           >
                             <div
                               class="mb-2 flex justify-between"

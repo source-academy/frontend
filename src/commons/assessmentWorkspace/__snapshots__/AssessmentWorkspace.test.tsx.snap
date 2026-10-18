@@ -1476,8 +1476,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with MCQ question render
                           class="side-content-text"
                         >
                           <div
-                            class="flex w-full flex-col"
-                            style="height: 60vh;"
+                            class="flex w-full flex-col h-[75vh]"
                           >
                             <div
                               class="mb-2 flex justify-between"
@@ -2477,8 +2476,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                           class="side-content-text"
                         >
                           <div
-                            class="flex w-full flex-col"
-                            style="height: 60vh;"
+                            class="flex w-full flex-col h-[75vh]"
                           >
                             <div
                               class="mb-2 flex justify-between"
@@ -3474,8 +3472,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                           class="side-content-text"
                         >
                           <div
-                            class="flex w-full flex-col"
-                            style="height: 60vh;"
+                            class="flex w-full flex-col h-[75vh]"
                           >
                             <div
                               class="mb-2 flex justify-between"
@@ -4496,8 +4493,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                           class="side-content-text"
                         >
                           <div
-                            class="flex w-full flex-col"
-                            style="height: 60vh;"
+                            class="flex w-full flex-col h-[75vh]"
                           >
                             <div
                               class="mb-2 flex justify-between"

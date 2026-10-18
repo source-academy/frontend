@@ -10,26 +10,13 @@ import { type SideContentLocation, SideContentType } from '../SideContentTypes';
 
 type DocumentationPage = 'language' | 'modules';
 
-const SIDE_CONTENT_CHROME_HEIGHT = 70;
-
 const buttonClass = 'px-4 py-1.5 text-[15px]';
-
-function getContainerHeight(isMobile: boolean, sideContentHeight?: number): string {
-  if (isMobile) {
-    return '100%';
-  }
-  if (sideContentHeight === undefined) {
-    return '60vh';
-  }
-  return `${sideContentHeight - SIDE_CONTENT_CHROME_HEIGHT}px`;
-}
 
 type Props = {
   workspaceLocation: SideContentLocation;
-  sideContentHeight?: number;
 };
 
-function SideContentDocumentation({ workspaceLocation, sideContentHeight }: Props) {
+function SideContentDocumentation({ workspaceLocation }: Props) {
   const { languageName, languageDocsUrl, modulesDocsUrl } =
     useLanguageDocumentation(workspaceLocation);
   const { selectedTab } = useSideContent(workspaceLocation);
@@ -54,10 +41,7 @@ function SideContentDocumentation({ workspaceLocation, sideContentHeight }: Prop
     classNames('w-full flex-1 border-none bg-white', { hidden: page !== activePage });
 
   return (
-    <div
-      className="flex w-full flex-col"
-      style={{ height: getContainerHeight(!!isMobileBreakpoint, sideContentHeight) }}
-    >
+    <div className={classNames('flex w-full flex-col', isMobileBreakpoint ? 'h-full' : 'h-[75vh]')}>
       <div className="mb-2 flex justify-between">
         <ButtonGroup>
           <Button
