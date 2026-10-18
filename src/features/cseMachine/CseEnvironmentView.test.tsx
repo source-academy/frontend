@@ -410,6 +410,30 @@ describe('CseEnvironmentView in fullscreen (source-academy/frontend#4500)', () =
     expect(fullscreen.contains(menu)).toBe(true);
     fullscreen.remove();
   });
+
+  test('an open Filter Arrows menu follows fullscreen being entered after the view rendered', () => {
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+      width: 600,
+      height: 400,
+    } as DOMRect);
+    const fullscreen = document.createElement('div');
+    document.body.appendChild(fullscreen);
+
+    // The host (cseDiagramService) does not re-render the view when fullscreen changes.
+    const { container } = render(<CseEnvironmentView snapshots={snapshots} step={0} />, {
+      container: fullscreen.appendChild(document.createElement('div')),
+    });
+    fireEvent.click(container.querySelector('[data-icon="flow-branch"]')!);
+    const menu = () => screen.getByText('Filter Arrows', { selector: 'div' });
+    expect(fullscreen.contains(menu())).toBe(false);
+
+    act(() => {
+      setFullscreenElement(fullscreen);
+      document.dispatchEvent(new Event('fullscreenchange'));
+    });
+    expect(fullscreen.contains(menu())).toBe(true);
+    fullscreen.remove();
+  });
 });
 
 describe('CseEnvironmentView', () => {
