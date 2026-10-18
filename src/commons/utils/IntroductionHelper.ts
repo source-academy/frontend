@@ -1,6 +1,10 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
 
-import { type SALanguage, styliseSublanguage } from '../application/ApplicationTypes';
+import {
+  isSourceLanguage,
+  type SALanguage,
+  styliseSublanguage,
+} from '../application/ApplicationTypes';
 import { Links } from './Constants';
 
 const MAIN_INTRODUCTION = `
@@ -17,8 +21,7 @@ and also the [_Source Academy keyboard shortcuts_](${Links.sourceHotkeys}).
 `;
 
 export const getSourceDocsUrl = (chapter: Chapter, variant: Variant): string | undefined => {
-  const isSourceChapter = chapter >= Chapter.SOURCE_1 && chapter <= Chapter.SOURCE_4;
-  if (!isSourceChapter) {
+  if (!isSourceLanguage(chapter)) {
     return undefined;
   }
 
