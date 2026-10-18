@@ -684,18 +684,27 @@ describe('EVAL_EDITOR under Conductor', () => {
  * `setNextStatus` below, it can also be changed later via `setNextError` for a later chunk (e.g. a
  * REPL line sent to an already-live session) sent to this same fake.
  */
-function makeFakeConductor(options: { error?: unknown } = {}) {
+function makeFakeConductor(options: { error?: unknown; lateOutput?: string[] } = {}) {
   const sentChunks: string[] = [];
   const terminate = vi.fn();
   let nextStatus: RunnerStatus = RunnerStatus.EVAL_READY;
   let nextError: unknown = options.error;
   const settle = () => {
-    Promise.resolve().then(() => {
+    Promise.resolve().then(async () => {
       if (nextError !== undefined) {
         hostPlugin.receiveError?.(nextError);
       }
-      hostPlugin.receiveStatusUpdate?.(RunnerStatus.RUNNING, true, 0);
-      hostPlugin.receiveStatusUpdate?.(nextStatus, true, 0);
+      // `options.lateOutput`: the lines the program printed before the error, delivered after it
+      // (each conductor channel is its own MessagePort, so the error can overtake them) and
+      // counted in the status update's sentCount the way RunnerPlugin counts them.
+      const late = options.lateOutput ?? [];
+      for (const line of late) {
+        await new Promise(resolve => setTimeout(resolve, 0));
+        hostPlugin.receiveOutput?.(line);
+      }
+      const sentCount = late.length + (nextError !== undefined && options.lateOutput ? 1 : 0);
+      hostPlugin.receiveStatusUpdate?.(RunnerStatus.RUNNING, true, sentCount);
+      hostPlugin.receiveStatusUpdate?.(nextStatus, true, sentCount);
     });
   };
   const hostPlugin: any = {
@@ -825,6 +834,57 @@ describe('EVAL_REPL session persistence under Conductor', () => {
         payload: { workspaceLocation },
       })
       .silentRun();
+  });
+});
+
+describe('Conductor runtime errors keep the output printed before them (source-academy/frontend#4406)', () => {
+  const workspaceLocation: WorkspaceLocation = 'playground';
+
+  test('output that arrives after the error is still shown, and the worker is stopped only afterwards', async () => {
+    // A real Error instance, as a runtime error arrives after a Worker's structured clone:
+    // redux-saga's take throws an Error taken from a channel into the generator, which used to
+    // send it down handleErrors' interrupting catch path and tear the Worker down before the
+    // lines printed ahead of the error had been received.
+    const printed = ['1', '2', '3'];
+    const fake = makeFakeConductor({
+      error: new TypeError('unsupported argument type for head: None'),
+      lateOutput: printed,
+    });
+    fake.setNextStatus(RunnerStatus.STOPPED);
+    const context = createContext();
+    const state = generateDefaultState(workspaceLocation, { context });
+
+    const shown: string[] = [];
+    let terminatedAfter = -1;
+    fake.terminate.mockImplementation(() => {
+      terminatedAfter = shown.length;
+    });
+    await expectSaga(
+      evalCodeConductorSaga,
+      { '/code.py': 'print(1)' },
+      '/code.py',
+      context,
+      workspaceLocation,
+      WorkspaceActions.evalEditor.type,
+    )
+      .withState(state)
+      .provide([
+        [matchers.call.fn(getEvaluatorDefinitionSaga), { path: 'fake-evaluator-path' }],
+        [matchers.call.fn(getPreparedConductorSaga), fake],
+        [matchers.spawn.fn(preloadConductorEvaluatorSaga), undefined],
+        {
+          put(effect, next) {
+            if (effect.action.type === InterpreterActions.handleConsoleLog.type) {
+              shown.push(...effect.action.payload.logString);
+            }
+            return next();
+          },
+        },
+      ])
+      .silentRun(1000);
+
+    expect(shown).toEqual(printed);
+    expect(terminatedAfter).toBe(printed.length);
   });
 });
 
