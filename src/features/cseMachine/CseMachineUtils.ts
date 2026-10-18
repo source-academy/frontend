@@ -547,9 +547,19 @@ export function isMainReference(value: Value, reference: ReferenceType) {
     );
   }
   if (isGlobalFn(value.data)) {
+    if (!(reference instanceof Binding)) {
+      return false;
+    }
+    const inGlobalFrame = (r: ReferenceType) =>
+      r instanceof Binding && isEnvEqual(r.frame.environment, Layout.globalEnvNode.environment);
+    if (inGlobalFrame(reference)) {
+      return true;
+    }
+    // py-slang does not bind its built-ins in the global frame (the frame is empty), so when no
+    // binding there refers to the function, the first binding that does (`p = print`) draws it.
     return (
-      reference instanceof Binding &&
-      isEnvEqual(reference.frame.environment, Layout.globalEnvNode.environment)
+      !value.references.some(inGlobalFrame) &&
+      value.references.find(r => r instanceof Binding) === reference
     );
   }
   if (!isNonGlobalFn(value.data) && !isDataArray(value.data)) {
