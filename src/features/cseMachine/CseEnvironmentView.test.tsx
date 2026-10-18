@@ -381,6 +381,61 @@ describe('CseArrowFilterMenu program references', () => {
   });
 });
 
+describe('CseEnvironmentView in fullscreen (source-academy/frontend#4500)', () => {
+  const setFullscreenElement = (element: Element | null) =>
+    Object.defineProperty(document, 'fullscreenElement', { configurable: true, value: element });
+
+  afterEach(() => {
+    delete (document as { fullscreenElement?: unknown }).fullscreenElement;
+    vi.restoreAllMocks();
+  });
+
+  test('the Filter Arrows menu opens inside the fullscreen element, where it can be seen', () => {
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+      width: 600,
+      height: 400,
+    } as DOMRect);
+    // Only the fullscreen element's subtree is drawn in fullscreen mode, so a menu portalled to
+    // document.body (Blueprint's default) would be invisible and unusable.
+    const fullscreen = document.createElement('div');
+    document.body.appendChild(fullscreen);
+    setFullscreenElement(fullscreen);
+
+    const { container } = render(<CseEnvironmentView snapshots={snapshots} step={0} />, {
+      container: fullscreen.appendChild(document.createElement('div')),
+    });
+    fireEvent.click(container.querySelector('[data-icon="flow-branch"]')!);
+
+    const menu = screen.getByText('Filter Arrows', { selector: 'div' });
+    expect(fullscreen.contains(menu)).toBe(true);
+    fullscreen.remove();
+  });
+
+  test('an open Filter Arrows menu follows fullscreen being entered after the view rendered', () => {
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+      width: 600,
+      height: 400,
+    } as DOMRect);
+    const fullscreen = document.createElement('div');
+    document.body.appendChild(fullscreen);
+
+    // The host (cseDiagramService) does not re-render the view when fullscreen changes.
+    const { container } = render(<CseEnvironmentView snapshots={snapshots} step={0} />, {
+      container: fullscreen.appendChild(document.createElement('div')),
+    });
+    fireEvent.click(container.querySelector('[data-icon="flow-branch"]')!);
+    const menu = () => screen.getByText('Filter Arrows', { selector: 'div' });
+    expect(fullscreen.contains(menu())).toBe(false);
+
+    act(() => {
+      setFullscreenElement(fullscreen);
+      document.dispatchEvent(new Event('fullscreenchange'));
+    });
+    expect(fullscreen.contains(menu())).toBe(true);
+    fullscreen.remove();
+  });
+});
+
 describe('CseEnvironmentView', () => {
   const sized = () =>
     vi
