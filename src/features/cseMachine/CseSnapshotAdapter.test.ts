@@ -926,6 +926,30 @@ describe.each(['list', 'array'])('a closure referred to only by a %s', label => 
     expect(fns).toHaveLength(1);
     expect(fns[0].x()).toBeGreaterThan(0);
   });
+
+  it('is not drawn when clearing, if nothing refers to it any more (as a list is not)', () => {
+    CseMachine.drawEnvironments(snapshot, { width: 500, height: 500, clearDeadFrames: false });
+    const fn = [...Layout.values.values()].find(v => v instanceof FnValue) as FnValue;
+    const liveIds = Layout.liveObjectIDs;
+    try {
+      Layout.liveObjectIDs = new Set([(fn.data as any).id]);
+      Layout.clearDeadFrames = true;
+      expect(fn.draw()).not.toBeNull();
+      Layout.liveObjectIDs = new Set();
+      expect(fn.isLive()).toBe(false);
+      expect(fn.draw()).toBeNull();
+      // The layout does not make room for it either: its binding does not render it.
+      const binding = fn.references.find(r => r instanceof Binding) as Binding | undefined;
+      expect(binding).toBeDefined();
+      expect(binding!.rendersReferencedValue()).toBe(false);
+      Layout.clearDeadFrames = false;
+      expect(binding!.rendersReferencedValue()).toBe(true);
+      expect(fn.draw()).not.toBeNull();
+    } finally {
+      Layout.liveObjectIDs = liveIds;
+      Layout.clearDeadFrames = false;
+    }
+  });
 });
 
 describe('Source-shaped snapshots (js-slang)', () => {
