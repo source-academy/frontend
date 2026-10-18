@@ -272,6 +272,10 @@ export class FnValue extends Value implements IHoverable {
     }
     this.tooltipArrow.setVisible(CseMachine.getPrintableMode() || this.showTooltipArrow);
 
+    // Clearing hides a function object that nothing refers to any more, as it hides a list.
+    if (Layout.clearDeadFrames && !this.isLive()) {
+      return null;
+    }
     const isLive: boolean = this.isLive();
     const textColor = isLive ? defaultTextColor() : fadedTextColor();
     const strokeColor = isLive ? defaultStrokeColor() : fadedStrokeColor();
@@ -291,7 +295,6 @@ export class FnValue extends Value implements IHoverable {
         revealLabelRef={this.revealLabelRef}
       />,
     );
-    // Keep function objects rendered so they remain hoverable in clear-dead-frames mode.
     return (
       <Fragment key={Layout.key++}>
         <Group

@@ -924,6 +924,25 @@ describe.each(['list', 'array'])('a closure referred to only by a %s', label => 
     expect(fns).toHaveLength(1);
     expect(fns[0].x()).toBeGreaterThan(0);
   });
+
+  it('is not drawn when clearing, if nothing refers to it any more (as a list is not)', () => {
+    CseMachine.drawEnvironments(snapshot, { width: 500, height: 500, clearDeadFrames: false });
+    const fn = [...Layout.values.values()].find(v => v instanceof FnValue) as FnValue;
+    const liveIds = Layout.liveObjectIDs;
+    try {
+      Layout.liveObjectIDs = new Set([(fn.data as any).id]);
+      Layout.clearDeadFrames = true;
+      expect(fn.draw()).not.toBeNull();
+      Layout.liveObjectIDs = new Set();
+      expect(fn.isLive()).toBe(false);
+      expect(fn.draw()).toBeNull();
+      Layout.clearDeadFrames = false;
+      expect(fn.draw()).not.toBeNull();
+    } finally {
+      Layout.liveObjectIDs = liveIds;
+      Layout.clearDeadFrames = false;
+    }
+  });
 });
 
 describe('Source-shaped snapshots (js-slang)', () => {
