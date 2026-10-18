@@ -16,6 +16,7 @@ import CseArrowFilterMenu from './CseArrowFilterMenu';
 import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
 import { snapshotWithDeadFrames } from './cseSnapshotHistory';
+import { fullscreenPortalContainer } from './fullscreenPortalContainer';
 
 /** A point in the view's own coordinates: pixels from its top-left corner. */
 type AnchorPoint = {
@@ -245,8 +246,9 @@ function CseEnvironmentView({
           {toggle('Alignment', 'eye-open', CseMachine.getCenterAlignment(), () =>
             CseMachine.toggleCenterAlignment(),
           )}
-          <Tooltip content="Filter Arrows" compact>
+          <Tooltip content="Filter Arrows" compact portalContainer={fullscreenPortalContainer()}>
             <Popover
+              portalContainer={fullscreenPortalContainer()}
               isOpen={filtersOpen}
               onInteraction={setFiltersOpen}
               position={Position.BOTTOM_LEFT}

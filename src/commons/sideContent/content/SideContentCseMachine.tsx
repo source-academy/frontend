@@ -33,6 +33,7 @@ import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
 import { Layout } from 'src/features/cseMachine/CseMachineLayout';
 import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils';
 import { snapshotWithDeadFrames } from 'src/features/cseMachine/cseSnapshotHistory';
+import { fullscreenPortalContainer } from 'src/features/cseMachine/fullscreenPortalContainer';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
 import type { CseSnapshot } from '../../../features/conductor/CseMachineHostPlugin';
@@ -422,8 +423,13 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                     />
                   </AnchorButton>
                 </Tooltip>
-                <Tooltip content="Filter Arrows" compact>
+                <Tooltip
+                  content="Filter Arrows"
+                  compact
+                  portalContainer={fullscreenPortalContainer()}
+                >
                   <Popover
+                    portalContainer={fullscreenPortalContainer()}
                     isOpen={this.state.arrowFilterOpen}
                     onInteraction={nextOpen => this.setState({ arrowFilterOpen: nextOpen })}
                     position={Position.BOTTOM_LEFT}
