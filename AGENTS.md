@@ -1,5 +1,14 @@
 # AI Agent Instructions
 
+## Commands
+
+Use the scripts in `package.json`, not the tools directly.
+
+* Format: `yarn format` (oxfmt, not Prettier; `yarn format:ci` lists unformatted files)
+* Lint: `yarn lint`
+* Test: `yarn test` (Vitest, with `TZ=Asia/Singapore`), e.g. `yarn test src/features/cseMachine` for one folder
+* In a git worktree, run `yarn install` there first
+
 ## TypeScript Rules
 
 * Prefer `type`s over `interface`s for type definitions
