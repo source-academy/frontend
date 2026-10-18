@@ -188,6 +188,7 @@ function toJsValue(
       }
       const builtinFn: any = function PyBuiltinFunction() {};
       builtinFn.toString = () => v.displayValue;
+      builtinFn.isPyBuiltin = true; // drawn as `GlobalFnValue` with a `<built-in>` tooltip
       closureCache.set(cacheKey, builtinFn);
       return builtinFn;
     }
@@ -415,10 +416,7 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
   for (const f of frames) {
     const env = envMap.get(f.id)!;
     for (const b of f.bindings) {
-      if (
-        /closure|function|lambda|method/i.test(b.value.label) &&
-        (b.value.metadata as any)?.closureFrameId
-      ) {
+      if (/closure|function|lambda|method/i.test(b.value.label)) {
         const val = toJsValue(b.value, envMap, closureCache, listCache);
         Object.defineProperty(env.head, b.name, {
           value: val,
