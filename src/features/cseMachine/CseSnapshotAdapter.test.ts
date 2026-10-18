@@ -4,8 +4,10 @@ import { describe, expect, it, vi } from 'vitest';
 
 import type { CseSnapshot } from '../conductor/CseMachineHostPlugin';
 import { ArrayNullUnit } from './components/ArrayNullUnit';
+import { Binding } from './components/Binding';
 import { Frame } from './components/Frame';
 import { FnValue } from './components/values/FnValue';
+import { GlobalFnValue } from './components/values/GlobalFnValue';
 import CseMachine from './CseMachine';
 import { CseAnimation } from './CseMachineAnimation';
 import { Config } from './CseMachineConfig';
@@ -1093,5 +1095,73 @@ describe('non-finite numbers reach the canvas as themselves', () => {
     // Asserted unconditionally: a guard here would let the test pass vacuously if the binding
     // text ever went missing, which is the regression most worth catching.
     expect(value?.text?.fullStr).toBe(displayValue);
+  });
+});
+
+describe('a name bound to a built-in function (py-slang#583)', () => {
+  // `p = print`, as py-slang sends it: the built-in has no closureFrameId.
+  const builtin = (name: string) => ({
+    displayValue: `<built-in function ${name}>`,
+    label: 'builtin_function_or_method',
+  });
+  const snapshot = {
+    stepIndex: 0,
+    control: [],
+    stash: [],
+    environments: [
+      {
+        id: 'Global',
+        name: 'programEnvironment',
+        parentId: '-1',
+        bindings: [
+          { name: 'p', value: builtin('print') },
+          { name: 'q', value: builtin('print') },
+          { name: 'n', value: { displayValue: '5', label: 'int' } },
+        ],
+        isActive: true,
+      },
+      { id: '-1', name: 'global', parentId: null, bindings: [], isActive: false },
+    ],
+  } as unknown as CseSnapshot;
+
+  it('keeps the binding in the frame, with the same function for the same built-in', () => {
+    const { envTree } = buildFakeEnvTreeFromSnapshot(snapshot);
+    const head = findNode(envTree, 'Global')!.environment.head as Record<string, unknown>;
+    expect(Object.keys(head)).toEqual(['p', 'q', 'n']);
+    expect(isBuiltInFn(head.p as any)).toBe(true);
+    expect(head.q).toBe(head.p);
+  });
+
+  it('draws it as a built-in function', () => {
+    CseMachine.drawEnvironments(snapshot, { width: 500, height: 500, clearDeadFrames: false });
+    const fn = [...Layout.values.values()].find(v => v instanceof GlobalFnValue);
+    expect(fn).toBeDefined();
+    // The built-in is not bound in py-slang's (empty) built-ins frame, so the first binding to
+    // it, `p`, draws it, and `q` only points to it.
+    const frame = [...Layout.values.values()]
+      .flatMap(v => v.references)
+      .find(r => r instanceof Binding && r.frame.environment.name === 'programEnvironment') as
+      | Binding
+      | undefined;
+    expect(frame).toBeDefined();
+    const bindings = frame!.frame.bindings;
+    expect(bindings.map(b => b.rendersReferencedValue())).toEqual([true, false, true]);
+  });
+
+  it('is a built-in: tooltip <built-in>, no arrow to a frame, only the left circle reacts', () => {
+    CseMachine.drawEnvironments(snapshot, { width: 500, height: 500, clearDeadFrames: false });
+    const fn = [...Layout.values.values()].find(v => v instanceof GlobalFnValue) as GlobalFnValue;
+    expect(fn.isPyBuiltin).toBe(true);
+    expect(fn.tooltip).toBe('<built-in>');
+    expect(fn.arrow()).toBeUndefined();
+    const group = (fn.draw() as any).props.children[0];
+    expect(group.props.onMouseEnter).toBeUndefined();
+    const circles = group.props.children as any[];
+    expect(circles.map(c => c.props.onMouseEnter !== undefined)).toEqual([
+      true,
+      true,
+      false,
+      false,
+    ]);
   });
 });
