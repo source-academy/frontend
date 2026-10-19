@@ -56,6 +56,11 @@ function getFrameLabel(environment: Env): string {
 // Height of one header row (frame name, or the globals annotation stacked below it).
 const headerRowHeight = Config.FontSize + Config.TextPaddingY / 2;
 
+// A heading is drawn at the bottom of its row, next to the frame (or the row below it): the arrow
+// from a frame to its parent runs across the middle of the space above the frame, and would strike
+// through a heading at the top of the row (#4512).
+const headerOffsetY = headerRowHeight - Config.FontSize;
+
 /** this class encapsulates a frame of key-value bindings to be drawn on canvas */
 export class Frame extends Visible implements IHoverable {
   private static envFrameMap: Map<string, Frame> = new Map();
@@ -287,10 +292,15 @@ export class Frame extends Visible implements IHoverable {
       ? lastVisibleBinding.y() - this.y() + lastVisibleBinding.height() + Config.FramePaddingY
       : Config.FramePaddingY * 2;
 
-    this._name = new Text(getFrameLabel(this.environment), this.x(), this.level.y(), {
-      maxWidth: this.width(),
-      faded: !this.isLive,
-    });
+    this._name = new Text(
+      getFrameLabel(this.environment),
+      this.x(),
+      this.level.y() + headerOffsetY,
+      {
+        maxWidth: this.width(),
+        faded: !this.isLive,
+      },
+    );
 
     // Floats above the frame's box, on its own row below the name — not a binding inside the
     // box. Marks that a lookup for these names skips the usual enclosing-scope walk and jumps
@@ -303,7 +313,7 @@ export class Frame extends Visible implements IHoverable {
       this._globalNamesText = new Text(
         globalNamesLabel,
         this.x(),
-        this.level.y() + headerRowHeight,
+        this.level.y() + headerRowHeight + headerOffsetY,
         {
           maxWidth: this.width(),
           faded: !this.isLive,
@@ -344,7 +354,7 @@ export class Frame extends Visible implements IHoverable {
     this._name = new Text(
       getFrameLabel(this.environment),
       this.x() + textOffset,
-      this.level!.y(), // this method is only called after the frame is drawn
+      this.level!.y() + headerOffsetY, // this method is only called after the frame is drawn
       { maxWidth: this.width(), faded: !this.isLive },
     );
     this._globalNamesText?.setX(this.x() + textOffset);
@@ -357,8 +367,8 @@ export class Frame extends Visible implements IHoverable {
   reassignCoordinatesY(newY: number): void {
     this._y = newY;
     const levelY = newY - headerRowHeight * (this._globalNamesText ? 2 : 1);
-    this.name.setY(levelY);
-    this._globalNamesText?.setY(levelY + headerRowHeight);
+    this.name.setY(levelY + headerOffsetY);
+    this._globalNamesText?.setY(levelY + headerRowHeight + headerOffsetY);
   }
 
   reassignWidth(newWidth: number): void {
