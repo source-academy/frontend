@@ -466,7 +466,7 @@ export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[])
   const result: Frame[][] = [];
 
   // Match levels such that oldLevels.length == newLevels.length
-  // in case Clear Dead Frames causes an entire Level to be cleared
+  // in case Clear Unreachable Objects causes an entire Level to be cleared
   const normalizedOldLevels =
     oldLevels.length === newLevels.length
       ? oldLevels
@@ -479,7 +479,9 @@ export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[])
   if (normalizedOldLevels.length !== newLevels.length) {
     // TODO: Change console.error into throw new Error, and catch them upstream (eg at CseMachine.redraw()),
     // with centralized error handling for all layout logic.
-    console.error('Level count mismatch for Clear Dead Frames animation, animation not played.');
+    console.error(
+      'Level count mismatch for Clear Unreachable Objects animation, animation not played.',
+    );
 
     // Empty array is returned to SideContentCseMachine, causing the animation to not play
     // since the length of changedFramePairs (the returned value) == 0.

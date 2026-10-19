@@ -473,7 +473,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
 
             {!this.isJava() && (
               <ButtonGroup>
-                <Tooltip content="Clear Dead Frames" compact>
+                <Tooltip content="Clear Unreachable Objects" compact>
                   <AnchorButton
                     onMouseUp={() => {
                       if (this.state.visualization) {

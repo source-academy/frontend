@@ -2,7 +2,7 @@ import type { CseSerializedEnvFrame, CseSnapshot } from '../conductor/CseMachine
 
 /**
  * `snapshots[step]`, plus every frame seen in an earlier snapshot that is no longer in it, as a
- * dead frame — so the diagram can show (and "Clear Dead Frames" can remove) frames that are gone.
+ * dead frame — so the diagram can show (and "Clear Unreachable Objects" can remove) frames that are gone.
  * Shared by the CSE Machine tab and the environment view lent to web plugins.
  */
 export function snapshotWithDeadFrames(snapshots: CseSnapshot[], step: number): CseSnapshot {

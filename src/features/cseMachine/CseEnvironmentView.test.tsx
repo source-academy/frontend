@@ -142,7 +142,7 @@ describe('dead functions in an otherwise empty frame', () => {
     expect(drawn(1)).toEqual({ frames: ['-1', 'Global'], values: 1 });
   });
 
-  test('arrows can be anchored at the function circles, but not at what Clear Dead Frames hides', () => {
+  test('arrows can be anchored at the function circles, but not at what Clear Unreachable Objects hides', () => {
     const stage = {
       container: () => ({ getBoundingClientRect: () => ({ left: 0, top: 0 }) }),
       getAbsoluteTransform: () => ({ point: (p: { x: number; y: number }) => p }),
@@ -163,7 +163,7 @@ describe('dead functions in an otherwise empty frame', () => {
       expect(anchorResolver(root)({ kind: 'object', id: 'nope' })).toBeNull();
       expect(anchorResolver(root)({ kind: 'frame', id: 'nope' })).toBeNull();
       expect(anchorResolver(null)({ kind: 'object', id: '#1' })).toBeNull();
-      // Dead, and hidden by Clear Dead Frames: not drawn, so no anchor.
+      // Dead, and hidden by Clear Unreachable Objects: not drawn, so no anchor.
       drawn(1);
       Layout.clearDeadFrames = true;
       expect(anchorResolver(root)({ kind: 'object', id: '#1' })).toBeNull();
@@ -173,7 +173,7 @@ describe('dead functions in an otherwise empty frame', () => {
     }
   });
 
-  test('Clear Dead Frames keeps the (empty) program frame', () => {
+  test('Clear Unreachable Objects keeps the (empty) program frame', () => {
     expect(drawn(1, true).frames).toContain('Global');
   });
 });
@@ -455,7 +455,7 @@ describe('CseEnvironmentView', () => {
     expect(draw.mock.lastCall![0].environments.map(f => f.id)).toEqual(['45', '-1', '47']);
   });
 
-  test('the toolbar clears dead frames until the step changes', () => {
+  test('the toolbar clears unreachable objects until the step changes', () => {
     sized();
     const draw = vi.spyOn(CseMachine, 'drawEnvironments');
     const { container, rerender } = render(<CseEnvironmentView snapshots={snapshots} step={2} />);
