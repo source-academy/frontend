@@ -648,7 +648,7 @@ export class Layout {
       // A bindingless frame is normally boring and safe to prune, but not when it's still the
       // defining environment some live closure/array elsewhere draws its arrow to (#4380) — there
       // would be nothing left for that arrow to point at.
-      // (Here, with Clear Dead Frames on, an empty frame goes even if a dead function or array is
+      // (Here, with Clear Unreachable Objects on, an empty frame goes even if a dead function or array is
       // homed in it: those are what the button clears.)
       // The program's frame is the exception: it is drawn even when empty.
       const isEmpty =

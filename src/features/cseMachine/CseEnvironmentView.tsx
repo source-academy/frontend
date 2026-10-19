@@ -62,7 +62,7 @@ export type CseEnvironmentViewProps = {
 
 /**
  * The CSE machine diagram of one snapshot's environments (no control and stash), with the CSE
- * Machine tab's diagram toolbar: alignment, arrow filters, clearing dead frames, printable mode,
+ * Machine tab's diagram toolbar: alignment, arrow filters, clearing unreachable objects, printable mode,
  * saving, zoom. Lent to web plugins through the host's `ICseDiagramService` (see
  * `cseDiagramService.ts`) — the environment stepper's environment pane is one.
  *
@@ -269,7 +269,7 @@ function CseEnvironmentView({
           </Tooltip>
         </ButtonGroup>
         <ButtonGroup>
-          <Tooltip content="Clear Dead Frames" compact>
+          <Tooltip content="Clear Unreachable Objects" compact>
             <AnchorButton
               onMouseUp={() => setClearDeadFrames(true)}
               icon="eraser"
@@ -332,7 +332,7 @@ export function anchorResolver(root: HTMLElement | null): CseDiagramAnchorResolv
           (value instanceof FnValue || value instanceof ArrayValue) &&
           (value.data as { objectId?: string }).objectId === id
         ) {
-          // Not drawn: what Clear Dead Frames hides (as `ArrayValue.draw` skips it).
+          // Not drawn: what Clear Unreachable Objects hides (as `ArrayValue.draw` skips it).
           if (Layout.clearDeadFrames && !value.isLive()) {
             return null;
           }
