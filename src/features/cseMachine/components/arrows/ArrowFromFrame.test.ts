@@ -106,7 +106,10 @@ describe('the arrow from a frame to its parent (#4512)', () => {
     const frame = layOut([frameOf('f0', 'g', ['x']), frameOf('f1', 'g', ['x'])]);
     const f1 = frame('f1');
     const arrow = corners(f1);
-    expect(f1.name.y() + Config.FontSize).toBe(f1.y());
+    // (a few pixels above the frame, so that its text is clear of the frame's border)
+    const clearance = f1.y() - (f1.name.y() + Config.FontSize);
+    expect(clearance).toBeGreaterThanOrEqual(2);
+    expect(clearance).toBeLessThanOrEqual(6);
     // not across the heading
     const crossesHeading =
       arrow.across > f1.name.y() && arrow.across < f1.name.y() + Config.FontSize;
@@ -122,7 +125,7 @@ describe('the arrow from a frame to its parent (#4512)', () => {
     const arrow = corners(f1);
     const names = f1.globalNamesText!;
     expect(f1.name.y() + Config.FontSize).toBeLessThanOrEqual(names.y());
-    expect(names.y() + Config.FontSize).toBe(f1.y());
+    expect(f1.y() - (names.y() + Config.FontSize)).toBeGreaterThanOrEqual(2);
     for (const text of [f1.name, names]) {
       expect(arrow.across > text.y() && arrow.across < text.y() + Config.FontSize).toBe(false);
     }
