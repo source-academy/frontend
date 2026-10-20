@@ -56,6 +56,7 @@ import {
   isGlobalFn,
   isNonGlobalFn,
   isPrimitiveData,
+  isProgramEnvironment,
   isStreamFn,
   isUnassigned,
   setDifference,
@@ -108,6 +109,10 @@ export class Layout {
   /** all environment and value IDs that are live in the current context */
   static liveEnvIDs: Set<string> = new Set();
   static liveObjectIDs: Set<string> = new Set();
+  /** the subset of `liveEnvIDs` that are some live closure's/array's own defining environment —
+   * an otherwise-empty frame in this set must not be pruned in clear-dead-frames mode, since it is
+   * the anchor a value elsewhere still draws its arrow to (#4380) */
+  static closureHomeEnvIDs: Set<string> = new Set();
   /** hide non-live frames temporarily for the current step */
   static clearDeadFrames: boolean = false;
   /** set to true during renderSnapshot() to skip EnvTree deep-copy and changepointSteps tracking */
@@ -118,6 +123,69 @@ export class Layout {
    * or the function objects themselves for built-in functions and stream functions
    */
   static values = new Map<string | (() => any), Value>();
+
+  /**
+   * Told which heap object the mouse enters in the diagram (by the `objectId` its snapshot value
+   * carries), and `null` when it leaves. Set by a view that lends the diagram to a plugin
+   * (`CseEnvironmentView`); the CSE Machine tab leaves it unset.
+   */
+  static onObjectHover: ((objectId: string | null) => void) | undefined = undefined;
+
+  /** Reports the mouse entering (or leaving) a closure or array to `onObjectHover`. */
+  static notifyObjectHover(data: unknown, entered: boolean) {
+    const objectId = (data as { objectId?: string } | null)?.objectId;
+    if (objectId !== undefined) {
+      Layout.onObjectHover?.(entered ? objectId : null);
+    }
+  }
+
+  /**
+   * Highlights the closures and arrays drawn for the heap object `objectId` (see
+   * `notifyObjectHover`) by their background, as frames are (`highlightFrame`), and returns the
+   * others to their normal background. Not by a colour: frames are colour-coded.
+   */
+  static highlightObject(objectId: string | null) {
+    Layout.values.forEach(value => {
+      if (!(value instanceof FnValue || value instanceof ArrayValue)) {
+        return;
+      }
+      const id = (value.data as { objectId?: string }).objectId;
+      if (id === undefined) {
+        return;
+      }
+      value.setHoverBackground(id === objectId);
+    });
+    Layout.stageRef.current?.batchDraw();
+  }
+
+  /**
+   * Frame colours by environment id, while drawing for a view that colours frames (a plugin's
+   * `frameColors`, see `CseMachine.drawEnvironments`); unset for the CSE Machine tab. A frame drawn
+   * with a colour is also hoverable (see `onFrameHover`).
+   */
+  static frameColors: Map<string, string> | undefined = undefined;
+
+  /**
+   * Told which frame the mouse enters (by its environment id), and `null` when it leaves. Set by a
+   * view that lends the diagram to a plugin (`CseEnvironmentView`).
+   */
+  static onFrameHover: ((frameId: string | null) => void) | undefined = undefined;
+
+  static notifyFrameHover(frameId: string, entered: boolean) {
+    Layout.onFrameHover?.(entered ? frameId : null);
+  }
+
+  /**
+   * Highlights the frame `frameId` by its background (darker, or in printable mode a light grey),
+   * leaving its outline (its colour, and the current frame's width) as it is; the other frames get
+   * their normal background.
+   */
+  static highlightFrame(frameId: string | null) {
+    Layout.levels.forEach(level =>
+      level.frames.forEach(frame => frame.setHoverBackground(frame.environment.id === frameId)),
+    );
+    Layout.stageRef.current?.batchDraw();
+  }
 
   /** memoized layout */
   static prevLayout: React.ReactNode;
@@ -140,6 +208,102 @@ export class Layout {
   static invisiblePaddingVertical: number = 300;
   static invisiblePaddingHorizontal: number = 300;
   static scrollContainerRef: React.RefObject<HTMLDivElement | null> = createRef();
+
+  /**
+   * While a view other than the CSE Machine tab draws with `Layout` (`CseEnvironmentView`, see
+   * `lend`), the CSE Machine tab's refs and dimensions, to be given back by `reclaim`.
+   */
+  private static lentState: {
+    refs: unknown[];
+    dimensions: number[];
+  } | null = null;
+  /** The latest size the CSE Machine tab asked for while `Layout` was lent. */
+  private static pendingDimensions: { width: number; height: number } | null = null;
+
+  /** The refs a drawing attaches to (see `draw`). */
+  private static sharedRefs(): React.RefObject<unknown>[] {
+    return [
+      Layout.stageRef,
+      Layout.contentGroupRef,
+      Layout.animationGroupRef,
+      Layout.arrowUnderlayLayerRef,
+      Layout.liveArrowLayerRef,
+      Layout.scrollContainerRef,
+      CseAnimation.layerRef,
+    ];
+  }
+
+  private static getDimensions(): number[] {
+    return [
+      Layout._width,
+      Layout._height,
+      Layout.visibleWidth,
+      Layout.visibleHeight,
+      Layout.stageWidth,
+      Layout.stageHeight,
+      Layout.invisiblePaddingVertical,
+      Layout.invisiblePaddingHorizontal,
+    ];
+  }
+
+  private static setDimensions(dimensions: number[]) {
+    [
+      Layout._width,
+      Layout._height,
+      Layout.visibleWidth,
+      Layout.visibleHeight,
+      Layout.stageWidth,
+      Layout.stageHeight,
+      Layout.invisiblePaddingVertical,
+      Layout.invisiblePaddingHorizontal,
+    ] = dimensions;
+  }
+
+  /** Whether `Layout` is lent to a view other than the CSE Machine tab. */
+  static isLent(): boolean {
+    return Layout.lentState !== null;
+  }
+
+  /**
+   * Lends `Layout` to a view other than the CSE Machine tab, which may be mounted (hidden) at the
+   * same time: saves the tab's refs and dimensions, for `reclaim` to give back. Until then, the
+   * tab's resizes are deferred (see `CseMachine.updateDimensions`).
+   */
+  static lend() {
+    if (Layout.lentState !== null) {
+      return;
+    }
+    Layout.lentState = {
+      refs: Layout.sharedRefs().map(ref => ref.current),
+      dimensions: Layout.getDimensions(),
+    };
+  }
+
+  /**
+   * Gives `Layout` back to the CSE Machine tab once the borrowing view's drawing is gone: restores
+   * the tab's refs and dimensions, then applies the latest resize it asked for meanwhile.
+   */
+  static reclaim() {
+    const state = Layout.lentState;
+    if (state === null) {
+      return;
+    }
+    Layout.lentState = null;
+    Layout.sharedRefs().forEach((ref, i) => {
+      (ref as { current: unknown }).current = state.refs[i];
+    });
+    Layout.setDimensions(state.dimensions);
+    const pending = Layout.pendingDimensions;
+    Layout.pendingDimensions = null;
+    if (pending) {
+      CseMachine.updateDimensions(pending.width, pending.height);
+    }
+  }
+
+  /** Records a resize of the CSE Machine tab while `Layout` is lent, for `reclaim` to apply. */
+  static deferDimensions(width: number, height: number) {
+    Layout.pendingDimensions = { width, height };
+  }
 
   static resetUnderlayArrows() {
     Layout.deadUnderlayArrows = [];
@@ -229,6 +393,7 @@ export class Layout {
     const liveState = computeLiveState({ root: Layout.globalEnvNode } as EnvTree);
     Layout.liveEnvIDs = liveState.liveEnvIds;
     Layout.liveObjectIDs = liveState.liveObjectIds;
+    Layout.closureHomeEnvIDs = liveState.closureHomeEnvIds;
 
     // initialize levels and frames
     Layout.initializeGrid();
@@ -480,7 +645,16 @@ export class Layout {
 
     const visit = (node: EnvTreeNode) => {
       const isLive = Layout.liveEnvIDs.has(node.environment.id);
-      const isEmpty = isEmptyEnvironment(node.environment);
+      // A bindingless frame is normally boring and safe to prune, but not when it's still the
+      // defining environment some live closure/array elsewhere draws its arrow to (#4380) — there
+      // would be nothing left for that arrow to point at.
+      // (Here, with Clear Unreachable Objects on, an empty frame goes even if a dead function or array is
+      // homed in it: those are what the button clears.)
+      // The program's frame is the exception: it is drawn even when empty.
+      const isEmpty =
+        isEmptyEnvironment(node.environment) &&
+        !isProgramEnvironment(node.environment) &&
+        !Layout.closureHomeEnvIDs.has(node.environment.id);
       const shouldSkip = isEmpty || !isLive;
 
       if (!shouldSkip) {

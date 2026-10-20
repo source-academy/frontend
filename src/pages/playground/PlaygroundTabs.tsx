@@ -3,6 +3,7 @@ import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import type { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import Markdown from 'src/commons/Markdown';
 import SideContentRemoteExecution from 'src/commons/sideContent/content/remoteExecution/SideContentRemoteExecution';
+import SideContentDocumentation from 'src/commons/sideContent/content/SideContentDocumentation';
 import SideContentSessionManagement from 'src/commons/sideContent/content/SideContentSessionManagement';
 import SideContentSubstVisualizer from 'src/commons/sideContent/content/SideContentSubstVisualizer';
 import {
@@ -11,7 +12,10 @@ import {
   type SideContentTabId,
   SideContentType,
 } from 'src/commons/sideContent/SideContentTypes';
-import { CONDUCTOR_STEPPER_TAB_ID } from 'src/features/conductor/stepperTab';
+import {
+  CONDUCTOR_E_STEPPER_TAB_ID,
+  CONDUCTOR_STEPPER_TAB_ID,
+} from 'src/features/conductor/stepperTab';
 
 export const mobileOnlyTabIds: readonly SideContentTabId[] = [
   SideContentType.mobileEditor,
@@ -44,6 +48,15 @@ export const makeSessionManagementTabFrom = (
   id: SideContentType.sessionManagement,
 });
 
+export const makeDocumentationTabFrom = (
+  workspaceLocation: SideContentLocation,
+): SideContentTab => ({
+  label: 'Documentation',
+  iconName: IconNames.MANUAL,
+  body: <SideContentDocumentation workspaceLocation={workspaceLocation} />,
+  id: SideContentType.documentation,
+});
+
 export const makeRemoteExecutionTabFrom = (
   deviceSecret: string | undefined,
   callback: React.Dispatch<React.SetStateAction<string | undefined>>,
@@ -64,7 +77,7 @@ export const makeRemoteExecutionTabFrom = (
  * A placeholder Stepper tab for conductor languages that offer stepping. It keeps the tab visible in
  * the tab bar so the user can open it (which selects the stepper evaluator — see Playground) even
  * before that evaluator's conductor has loaded. Once it has, the stepper web plugin registers the
- * live tab under the same id and it takes over (de-duplicated in SideContentProvider), so this body
+ * live tab under the same id and it takes over in the same position, so this body
  * only shows during that brief load.
  */
 export const makeConductorStepperPlaceholderTab = (): SideContentTab => ({
@@ -72,6 +85,26 @@ export const makeConductorStepperPlaceholderTab = (): SideContentTab => ({
   iconName: IconNames.FLOW_REVIEW,
   body: <Markdown content="Loading the stepper…" />,
   id: CONDUCTOR_STEPPER_TAB_ID,
+});
+
+/**
+ * The E-Stepper's placeholder tab, for conductor languages that offer the environment stepper —
+ * exactly like {@link makeConductorStepperPlaceholderTab}: opening it selects the e-stepper
+ * evaluator, and the e-stepper web plugin's live tab replaces it once that evaluator has loaded.
+ */
+export const makeConductorEStepperPlaceholderTab = (): SideContentTab => ({
+  label: 'E-Stepper',
+  // The Stepper's icon: the two never appear together (Stepper: Python §1-2, E-Stepper: §3-4).
+  iconName: IconNames.FLOW_REVIEW,
+  body: <Markdown content="Loading the environment stepper…" />,
+  id: CONDUCTOR_E_STEPPER_TAB_ID,
+});
+
+export const makeConductorDataVisualizerPlaceholderTab = (): SideContentTab => ({
+  label: 'Data Visualizer',
+  iconName: IconNames.EYE_OPEN,
+  body: <Markdown content="Call `draw_data` in your program to visualize data structures here." />,
+  id: SideContentType.dataVisualizer,
 });
 
 export const makeSubstVisualizerTabFrom = (

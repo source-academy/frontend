@@ -45,6 +45,8 @@ export const Config = Object.freeze({
 
   ArrowHeadSize: 10,
   ArrowStrokeWidth: 1,
+  /** Outline width of the current frame where frames are coloured (see `Layout.frameColors`). */
+  CurrentFrameStrokeWidth: 3,
   ArrowHitStrokeWidth: 5,
   ArrowHoveredStrokeWidth: 2,
   ArrowHoveredHeadSize: 15,
@@ -57,6 +59,10 @@ export const Config = Object.freeze({
 
   MinTerminalSegmentLength: 30,
   ArrowPostFrameStraightLength: 10,
+  // How far an arrow from a binding runs straight out of its frame before turning: half of
+  // FrameMarginX, so its vertical part is midway between the frame and the objects beside it.
+  // More than ArrowCornerRadius would start the turn outside the frame, which this does.
+  ArrowFromFrameStraightLength: 25,
   // Canvas background color
   BgColor: '#2c3e50',
   PrintBgColor: '#fff',
@@ -92,6 +98,9 @@ export const Config = Object.freeze({
   // Note that these are also applied with an opacity when drawn
   HoverBgColor: '#000',
   PrintHoverBgColor: '#bbb',
+  /** Background of a frame or object hovered in a plugin's linked diagram (hoverBackgroundColor). */
+  HoverFrameBgColor: '#000',
+  PrintHoverFrameBgColor: '#e6e6e6',
 
   ConstantColon: ':= ',
   VariableColon: ': ',

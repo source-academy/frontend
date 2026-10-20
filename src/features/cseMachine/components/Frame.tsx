@@ -14,6 +14,7 @@ import {
   fadedStrokeColor,
   getTextWidth,
   getUnreferencedObjects,
+  hoverBackgroundColor,
   isClosure,
   isDataArray,
   isDummyKey,
@@ -42,24 +43,35 @@ const frameNames = new Map([
   ['functionBodyEnvironment', 'Function Body'],
 ]);
 
-// Python's LEGB terminology (#4042). Layout.snapshotMode is true only while rendering a
-// Conductor snapshot (currently Python-only) — the legacy non-conductor path (conductor.enable
-// off) always runs js-slang's own real-time interpreter and must keep js-slang's own
-// "Global"/"Program" names unchanged.
-const pythonFrameNames = new Map([
-  ['global', 'Built-in functions'],
-  ['programEnvironment', 'Globals'],
-]);
-
-function getFrameLabel(envName: string): string {
-  const label = Layout.snapshotMode
-    ? (pythonFrameNames.get(envName) ?? frameNames.get(envName))
-    : frameNames.get(envName);
-  return label ?? envName;
+/**
+ * A frame's heading: the one its evaluator chose (e.g. Python's "Global" and "Built-ins" for the
+ * frames JavaScript calls "Program" and "Global", #4042), which `CseSnapshotAdapter.ts` stashes on
+ * the fake Environment as `label`; otherwise derived from the environment's name.
+ */
+function getFrameLabel(environment: Env): string {
+  const label = (environment as unknown as { label?: string }).label;
+  return label ?? frameNames.get(environment.name) ?? environment.name;
 }
 
 // Height of one header row (frame name, or the globals annotation stacked below it).
 const headerRowHeight = Config.FontSize + Config.TextPaddingY / 2;
+
+// A heading is drawn at the bottom of its row, next to the frame (or the row below it): the arrow
+// from a frame to its parent runs across the middle of the space above the frame, and would strike
+// through a heading at the top of the row (#4512).
+const headerOffsetY = headerRowHeight - Config.FontSize;
+
+// The row next to the frame is a few pixels above it, so that the descenders of its text are not
+// against the frame's border. (A row above it is not lifted: the arrow runs between the two rows.)
+const headerLiftY = 3;
+
+/** The y of the frame's name, for a level at `levelY` and a frame with `rows` heading rows. */
+const nameY = (levelY: number, rows: number): number =>
+  levelY + headerOffsetY - (rows === 1 ? headerLiftY : 0);
+
+/** The y of the globals annotation, the second heading row. */
+const globalNamesY = (levelY: number): number =>
+  levelY + headerRowHeight + headerOffsetY - headerLiftY;
 
 /** this class encapsulates a frame of key-value bindings to be drawn on canvas */
 export class Frame extends Visible implements IHoverable {
@@ -142,7 +154,13 @@ export class Frame extends Visible implements IHoverable {
     // move the global frame default text to the first position if it isn't in there already
     if (this.environment.name === 'global' && entries[0][0] !== Config.GlobalFrameDefaultText) {
       const index = entries.findIndex(([key]) => key === Config.GlobalFrameDefaultText);
-      entries.unshift(entries.splice(index, 1)[0]);
+      // Guard the -1: a global frame can legitimately not carry the sentinel at all (js-slang
+      // keeps its builtins in the global frame's own head rather than hiding them), and
+      // `splice(-1, 1)` reads that as "the last entry", silently promoting an unrelated
+      // binding to the front.
+      if (index >= 0) {
+        entries.unshift(entries.splice(index, 1)[0]);
+      }
     }
 
     // get values that are unreferenced, which will used to created dummy bindings
@@ -286,10 +304,15 @@ export class Frame extends Visible implements IHoverable {
       ? lastVisibleBinding.y() - this.y() + lastVisibleBinding.height() + Config.FramePaddingY
       : Config.FramePaddingY * 2;
 
-    this._name = new Text(getFrameLabel(this.environment.name), this.x(), this.level.y(), {
-      maxWidth: this.width(),
-      faded: !this.isLive,
-    });
+    this._name = new Text(
+      getFrameLabel(this.environment),
+      this.x(),
+      nameY(this.level.y(), globalNamesLabel ? 2 : 1),
+      {
+        maxWidth: this.width(),
+        faded: !this.isLive,
+      },
+    );
 
     // Floats above the frame's box, on its own row below the name — not a binding inside the
     // box. Marks that a lookup for these names skips the usual enclosing-scope walk and jumps
@@ -299,15 +322,10 @@ export class Frame extends Visible implements IHoverable {
     // treatment as binding text), so maxWidth only clips in the same rare case bindings do:
     // when the label alone would exceed Config.FrameDefaultWidth.
     if (globalNamesLabel) {
-      this._globalNamesText = new Text(
-        globalNamesLabel,
-        this.x(),
-        this.level.y() + headerRowHeight,
-        {
-          maxWidth: this.width(),
-          faded: !this.isLive,
-        },
-      );
+      this._globalNamesText = new Text(globalNamesLabel, this.x(), globalNamesY(this.level.y()), {
+        maxWidth: this.width(),
+        faded: !this.isLive,
+      });
     }
 
     this.totalHeight = this.height() + (this.y() - this.level.y());
@@ -341,9 +359,9 @@ export class Frame extends Visible implements IHoverable {
       textOffset += Math.floor(this.width() / 2) - Math.floor(this.name.width() / 2);
     }
     this._name = new Text(
-      getFrameLabel(this.environment.name),
+      getFrameLabel(this.environment),
       this.x() + textOffset,
-      this.level!.y(), // this method is only called after the frame is drawn
+      nameY(this.level!.y(), this._globalNamesText ? 2 : 1), // this method is only called after the frame is drawn
       { maxWidth: this.width(), faded: !this.isLive },
     );
     this._globalNamesText?.setX(this.x() + textOffset);
@@ -356,17 +374,55 @@ export class Frame extends Visible implements IHoverable {
   reassignCoordinatesY(newY: number): void {
     this._y = newY;
     const levelY = newY - headerRowHeight * (this._globalNamesText ? 2 : 1);
-    this.name.setY(levelY);
-    this._globalNamesText?.setY(levelY + headerRowHeight);
+    this.name.setY(nameY(levelY, this._globalNamesText ? 2 : 1));
+    this._globalNamesText?.setY(globalNamesY(levelY));
   }
 
   reassignWidth(newWidth: number): void {
     this._width = newWidth;
   }
 
-  onMouseEnter = () => {};
+  /**
+   * This frame's colour, when it is drawn for a view that gives it one (`Layout.frameColors`,
+   * captured when drawn, since the drawing outlives that setting), and whether it is the current
+   * frame. A coloured frame is hoverable, and its box takes its colour; if current, it keeps its
+   * colour with a wider outline instead of the active colour. Frames without a colour (e.g. the
+   * builtins frame) are drawn as in the CSE Machine tab.
+   */
+  private color: string | undefined;
+  private isCurrent: boolean = false;
 
-  onMouseLeave = () => {};
+  private get colored(): boolean {
+    return this.color !== undefined;
+  }
+
+  private boxStroke(): string {
+    if (this.color !== undefined && this.isLive) {
+      return this.color;
+    }
+    return this.isCurrent && !this.colored
+      ? defaultActiveColor()
+      : this.isLive
+        ? defaultStrokeColor()
+        : fadedStrokeColor();
+  }
+
+  onMouseEnter = () => {
+    if (this.colored) {
+      Layout.notifyFrameHover(this.environment.id, true);
+    }
+  };
+
+  onMouseLeave = () => {
+    if (this.colored) {
+      Layout.notifyFrameHover(this.environment.id, false);
+    }
+  };
+
+  /** Gives the frame's box the hovered background, or its normal one. */
+  setHoverBackground(hovered: boolean): void {
+    this.rectRef.current?.fill(hovered ? hoverBackgroundColor() : defaultBackgroundColor());
+  }
 
   setArrowSourceHighlightedStyle(): void {
     if (this.isLive) {
@@ -378,13 +434,7 @@ export class Frame extends Visible implements IHoverable {
   }
 
   setArrowSourceNormalStyle(): void {
-    this.rectRef.current?.stroke(
-      CseMachine.getCurrentEnvId() === this.environment?.id
-        ? defaultActiveColor()
-        : this.isLive
-          ? defaultStrokeColor()
-          : fadedStrokeColor(),
-    );
+    this.rectRef.current?.stroke(this.boxStroke());
     this.name.setArrowSourceNormalStyle();
   }
 
@@ -392,9 +442,16 @@ export class Frame extends Visible implements IHoverable {
     if (CseAnimation.shouldHideFrame(this.environment.id)) {
       return null;
     }
+    this.color = Layout.frameColors?.get(this.environment.id);
+    this.isCurrent = CseMachine.getCurrentEnvId() === this.environment?.id;
 
     return (
-      <Group ref={this.ref} key={Layout.key++}>
+      <Group
+        ref={this.ref}
+        key={Layout.key++}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+      >
         {/*
           The header rows (name, globals annotation) float above the frame's box, in the same
           gap that the parent/tail arrow passes through. Arrows are already drawn on a Konva
@@ -444,17 +501,11 @@ export class Frame extends Visible implements IHoverable {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={
-            CseMachine.getCurrentEnvId() === this.environment?.id
-              ? defaultActiveColor()
-              : this.isLive
-                ? defaultStrokeColor()
-                : fadedStrokeColor()
-          }
+          stroke={this.boxStroke()}
+          strokeWidth={this.colored && this.isCurrent ? Config.CurrentFrameStrokeWidth : 1}
           cornerRadius={Config.FrameCornerRadius}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-          listening={false}
+          // Hoverable only where frames are linked to a plugin (see `onMouseEnter`).
+          listening={this.colored}
           key={Layout.key++}
           fill={defaultBackgroundColor()}
         />

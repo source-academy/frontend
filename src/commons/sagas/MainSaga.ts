@@ -1,5 +1,6 @@
 import type { SagaIterator } from 'redux-saga';
 import { all, fork } from 'redux-saga/effects';
+import RemoteExecutionConductorSaga from 'src/features/remoteExecutionConductor/RemoteExecutionConductorSaga';
 
 import { mockBackendSaga } from '../mocks/BackendMocks';
 import Constants from '../utils/Constants';
@@ -29,6 +30,7 @@ export default function* MainSaga(): SagaIterator {
     fork(PersistenceSaga),
     fork(GitHubPersistenceSaga),
     fork(RemoteExecutionSaga),
+    fork(RemoteExecutionConductorSaga),
     fork(SideContentSaga),
     fork(FeatureFlagSaga),
     fork(LanguageDirectorySaga),

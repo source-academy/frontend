@@ -2,7 +2,12 @@ import { Rect } from 'react-konva';
 
 import { ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { defaultBackgroundColor, defaultStrokeColor, fadedStrokeColor } from '../CseMachineUtils';
+import {
+  defaultBackgroundColor,
+  defaultStrokeColor,
+  fadedStrokeColor,
+  hoverBackgroundColor,
+} from '../CseMachineUtils';
 import { ArrayValue } from './values/ArrayValue';
 import { Visible } from './Visible';
 
@@ -17,6 +22,13 @@ export class ArrayEmptyUnit extends Visible {
     this._y = this.parent.y();
     this._height = this.parent.height();
     this._width = this.parent.width();
+  }
+
+  /** Gives the box the hovered background, or its normal one (see `Layout.highlightObject`). */
+  setHoverBackground(hovered: boolean): void {
+    (this.ref.current as { fill?: (color: string) => void } | null)?.fill?.(
+      hovered ? hoverBackgroundColor() : defaultBackgroundColor(),
+    );
   }
 
   draw(): React.ReactNode {

@@ -25,7 +25,10 @@ import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentH
 import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
-import sideContentManager, { useTabOwnerPath } from 'src/commons/sideContent/SideContentManager';
+import sideContentManager, {
+  useIsServiceTabShown,
+  useTabOwnerPath,
+} from 'src/commons/sideContent/SideContentManager';
 import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 import { useAppDispatch, useAppSelector, useResponsive } from 'src/commons/utils/Hooks';
 import {
@@ -37,8 +40,11 @@ import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import {
+  CONDUCTOR_E_STEPPER_TAB_ID,
   CONDUCTOR_STEPPER_TAB_ID,
   CSE_EVALUATOR_CAPABILITY,
+  E_STEPPER_EVALUATOR_CAPABILITY,
+  isConductorStepperTab,
   isToolEvaluator,
   STEPPER_EVALUATOR_CAPABILITY,
 } from 'src/features/conductor/stepperTab';
@@ -101,7 +107,10 @@ import type {
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   desktopOnlyTabIds,
+  makeConductorDataVisualizerPlaceholderTab,
+  makeConductorEStepperPlaceholderTab,
   makeConductorStepperPlaceholderTab,
+  makeDocumentationTabFrom,
   makeIntroductionTabFrom,
   makeRemoteExecutionTabFrom,
   makeSessionManagementTabFrom,
@@ -270,6 +279,11 @@ function Playground(props: PlaygroundProps) {
     googleUser: persistenceUser,
     githubOctokitObject,
   } = useAppSelector(state => state.session);
+  // When the Conductor framework is enabled, LanguageDirectorySaga applies the course's configured
+  // default language itself (see setCourseConfiguration/setLanguages handlers), so the legacy
+  // chapter/variant path below must not also apply it - `getLanguageConfig` has no entries for
+  // languages 5+ (Python Full, Scheme) and throws for them.
+  const conductorEnabled = useAppSelector(selectConductorEnable);
 
   const dispatch = useAppDispatch();
   const {
@@ -368,8 +382,13 @@ function Playground(props: PlaygroundProps) {
 
   useEffect(() => {
     if (!hash) {
-      // If not a accessing via shared link, use the Source chapter and variant in the current course
-      if (courseSourceChapter && courseSourceVariant) {
+      // Under Conductor, LanguageDirectorySaga applies the course's configured default language
+      // itself (driven off the same courseSourceChapter, reinterpreted as a directory index - see
+      // getCourseDefaultSelectionSaga), so this legacy path must stand down: courseSourceChapter
+      // values above Source §4 (Python Full, Scheme) have no `getLanguageConfig` match and throw,
+      // and even for §1-4 this would resolve the wrong sublanguage (Source's, not the directory's).
+      if (!conductorEnabled && courseSourceChapter && courseSourceVariant) {
+        // If not a accessing via shared link, use the Source chapter and variant in the current course
         handleChapterSelect(courseSourceChapter, courseSourceVariant);
         // TODO: To migrate the state logic away from playgroundSourceChapter
         //       and playgroundSourceVariant into the language config instead
@@ -388,6 +407,7 @@ function Playground(props: PlaygroundProps) {
     dispatch,
     fileSystem,
     hash,
+    conductorEnabled,
     courseSourceChapter,
     courseSourceVariant,
     workspaceLocation,
@@ -540,9 +560,9 @@ function Playground(props: PlaygroundProps) {
     ],
   );
 
-  // When the Conductor framework is enabled, the stepper (and other tools) are provided by web
-  // plugins loaded dynamically, so the legacy in-frontend tabs are hidden in favour of plugin tabs.
-  const conductorEnabled = useAppSelector(selectConductorEnable);
+  // conductorEnabled is read earlier (see its declaration above) - when true, the stepper (and
+  // other tools) are provided by web plugins loaded dynamically, so the legacy in-frontend tabs
+  // are hidden in favour of plugin tabs.
 
   const clearButton = useMemo(
     () =>
@@ -771,6 +791,17 @@ function Playground(props: PlaygroundProps) {
     );
     return evaluator?.id ?? null;
   });
+  const eStepperEvaluatorId = useAppSelector(state => {
+    if (!selectConductorEnable(state)) {
+      return null;
+    }
+    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
+    const lang = langId ? languageMap[langId] : undefined;
+    const evaluator = lang?.evaluators.find(e =>
+      (e.capabilities as string[] | undefined)?.includes(E_STEPPER_EVALUATOR_CAPABILITY),
+    );
+    return evaluator?.id ?? null;
+  });
   const cseEvaluatorId = useAppSelector(state => {
     if (!selectConductorEnable(state)) {
       return null;
@@ -788,13 +819,7 @@ function Playground(props: PlaygroundProps) {
     }
     const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
     const lang = langId ? languageMap[langId] : undefined;
-    const evaluator = lang?.evaluators.find(e => {
-      const capabilities = e.capabilities as string[] | undefined;
-      return (
-        !capabilities?.includes(STEPPER_EVALUATOR_CAPABILITY) &&
-        !capabilities?.includes(CSE_EVALUATOR_CAPABILITY)
-      );
-    });
+    const evaluator = lang?.evaluators.find(e => !isToolEvaluator(e));
     return evaluator?.id ?? null;
   });
 
@@ -835,6 +860,9 @@ function Playground(props: PlaygroundProps) {
     if (selectedTab === CONDUCTOR_STEPPER_TAB_ID) {
       return stepperEvaluatorId;
     }
+    if (selectedTab === CONDUCTOR_E_STEPPER_TAB_ID) {
+      return eStepperEvaluatorId;
+    }
     if (selectedTab === SideContentType.cseMachine) {
       return cseEvaluatorId;
     }
@@ -845,6 +873,7 @@ function Playground(props: PlaygroundProps) {
     selectedTabOwnerPath,
     conductorEvaluators,
     stepperEvaluatorId,
+    eStepperEvaluatorId,
     cseEvaluatorId,
   ]);
 
@@ -945,6 +974,10 @@ function Playground(props: PlaygroundProps) {
       makeIntroductionTabFrom(conductorWelcomeText ?? generateLanguageIntroduction(languageConfig)),
     [conductorWelcomeText, languageConfig],
   );
+  const isDataVisualizerTabShown = useIsServiceTabShown(
+    SideContentType.dataVisualizer,
+    workspaceLocation,
+  );
   const tabs = useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
@@ -963,6 +996,14 @@ function Playground(props: PlaygroundProps) {
       return tabs;
     }
 
+    if (!isSicpEditor) {
+      tabs.push(makeDocumentationTabFrom(workspaceLocation));
+    }
+
+    if (!isSicpEditor && !Constants.playgroundOnly) {
+      tabs.push(remoteExecutionTab);
+    }
+
     if (currentLang === Chapter.FULL_JAVA && process.env.NODE_ENV === 'development') {
       tabs.push(
         makeUploadTabFrom(files =>
@@ -973,31 +1014,27 @@ function Playground(props: PlaygroundProps) {
 
     if (!usingRemoteExecution) {
       // Don't show the following when using remote execution
-      // The legacy data visualizer tab is only shown with the old (non-conductor) pipeline — under
-      // the conductor, `languageConfig` (the old Source-only SALanguage config) is never updated when
-      // selecting a Conductor language, so `shouldShowDataVisualizer` stays stuck at whatever it was
-      // last set to (e.g. true, from the Source §4 default) and would otherwise show this dead tab
-      // alongside the real, dynamically-loaded Conductor plugin tab.
-      if (shouldShowDataVisualizer && !conductorEnabled) {
+      if (conductorEnabled) {
+        if (isDataVisualizerTabShown) {
+          tabs.push(makeConductorDataVisualizerPlaceholderTab());
+        }
+      } else if (shouldShowDataVisualizer) {
         tabs.push(makeDataVisualizerTabFrom(workspaceLocation));
       }
-      // Under the conductor, CSE Machine's tab is pushed via afterDynamicTabs instead, so it lands
-      // after the dynamically-loaded plugin tabs (e.g. Data Visualizer) rather than before them.
-      if (shouldShowCseMachine && !conductorEnabled) {
+      if (shouldShowCseMachine) {
         tabs.push(makeCseMachineTabFrom(workspaceLocation));
       }
-      // The legacy stepper tab is only shown with the old (non-conductor) pipeline.
-      if (shouldShowSubstVisualizer && !conductorEnabled) {
+      if (conductorEnabled) {
+        // Placeholders keep these tabs visible before their plugin loads; each plugin's live tab
+        // replaces its placeholder in place.
+        if (stepperEvaluatorId) {
+          tabs.push(makeConductorStepperPlaceholderTab());
+        }
+        if (eStepperEvaluatorId) {
+          tabs.push(makeConductorEStepperPlaceholderTab());
+        }
+      } else if (shouldShowSubstVisualizer) {
         tabs.push(makeSubstVisualizerTabFrom(workspaceLocation, output));
-      }
-      // Under the conductor, tools are contributed by dynamically-loaded web plugins; their tabs are
-      // injected automatically by SideContentProvider (via the shared tab service), not here.
-    }
-
-    if (!isSicpEditor && !Constants.playgroundOnly) {
-      tabs.push(remoteExecutionTab);
-      if (editorSessionId !== '') {
-        tabs.push(sessionManagementTab);
       }
     }
 
@@ -1011,34 +1048,25 @@ function Playground(props: PlaygroundProps) {
     workspaceLocation,
     dispatch,
     shouldShowDataVisualizer,
+    isDataVisualizerTabShown,
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
     conductorEnabled,
+    stepperEvaluatorId,
+    eStepperEvaluatorId,
     remoteExecutionTab,
-    editorSessionId,
-    sessionManagementTab,
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs].filter(({ id }) => !(id && desktopOnlyTabIds.includes(id)));
 
-  const afterDynamicTabs: SideContentTab[] = useMemo(() => {
-    const tabs: SideContentTab[] = [];
-    // Under the conductor, CSE Machine's tab lives here (rather than in `tabs`/beforeDynamicTabs)
-    // so it lands after the dynamically-loaded plugin tabs (e.g. Data Visualizer), not before them.
-    if (conductorEnabled && shouldShowCseMachine) {
-      tabs.push(makeCseMachineTabFrom(workspaceLocation));
-    }
-    // For a conductor language that offers stepping, keep a placeholder Stepper tab visible so it
-    // can be opened before its evaluator loads. It sits after the dynamic tabs so the stepper
-    // plugin's live tab (registered once the evaluator is selected) lands in the same slot and
-    // de-duplicates the placeholder away (see SideContentProvider), avoiding both a disappearing tab
-    // and a duplicate.
-    if (conductorEnabled && stepperEvaluatorId) {
-      tabs.push(makeConductorStepperPlaceholderTab());
-    }
-    return tabs;
-  }, [conductorEnabled, shouldShowCseMachine, stepperEvaluatorId, workspaceLocation]);
+  const afterDynamicTabs: SideContentTab[] = useMemo(
+    () =>
+      !isSicpEditor && !Constants.playgroundOnly && editorSessionId !== ''
+        ? [sessionManagementTab]
+        : [],
+    [isSicpEditor, editorSessionId, sessionManagementTab],
+  );
 
   const onLoadMethod = useCallback(
     (editor: Ace.Editor) => {
@@ -1129,7 +1157,13 @@ function Playground(props: PlaygroundProps) {
     ],
   );
 
-  const replDisabled = !languageConfig.supports.repl || usingRemoteExecution;
+  // Unlike the other remote-execution disables above (chapter/language switching, visualizer tabs -
+  // things that genuinely don't apply mid-session), the REPL itself is fine to leave enabled while
+  // connected to a device: WorkspaceSaga's evalRepl handler now ships a REPL line to the connected
+  // device through the same Run pipeline as the editor's Run button (see its own remote-execution
+  // branch) instead of evaluating it locally, so there's no conflicting/stale local-context issue
+  // this needs to guard against.
+  const replDisabled = !languageConfig.supports.repl;
 
   const editorContainerHandlers = useMemo(() => {
     return {
@@ -1203,7 +1237,7 @@ function Playground(props: PlaygroundProps) {
       selectedTab === SideContentType.substVisualizer ||
       selectedTab === SideContentType.cseMachine ||
       // When the conductor stepper plugin tab is active, also hide the REPL (matches legacy behaviour)
-      (conductorEnabled && (selectedTab as string) === CONDUCTOR_STEPPER_TAB_ID),
+      (conductorEnabled && isConductorStepperTab(selectedTab as string)),
     inputHidden: replDisabled,
     replButtons: [replDisabled ? null : evalButton, clearButton],
     disableScrolling: isSicpEditor,
@@ -1253,7 +1287,8 @@ function Playground(props: PlaygroundProps) {
         // Conductor languages (e.g. Python) whose selected sublanguage offers a stepper or CSE
         // machine evaluator: their step limit is user-configurable too, driven by this same
         // control through the /__cse_config__ file the host serves per run.
-        (conductorLanguageActive && (stepperEvaluatorId !== null || cseEvaluatorId !== null))
+        (conductorLanguageActive &&
+          (stepperEvaluatorId !== null || eStepperEvaluatorId !== null || cseEvaluatorId !== null))
           ? stepperStepLimit
           : null,
       ],
@@ -1277,7 +1312,7 @@ function Playground(props: PlaygroundProps) {
       selectedTab !== SideContentType.substVisualizer &&
       selectedTab !== SideContentType.cseMachine &&
       // When the conductor stepper plugin tab is active, also disable resizing (matches legacy behaviour)
-      !(conductorEnabled && (selectedTab as string) === CONDUCTOR_STEPPER_TAB_ID),
+      !(conductorEnabled && isConductorStepperTab(selectedTab as string)),
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {

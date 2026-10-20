@@ -12,6 +12,7 @@ import {
   defaultTextColor,
   fadedStrokeColor,
   fadedTextColor,
+  hoverBackgroundColor,
 } from '../CseMachineUtils';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { GenericArrow } from './arrows/GenericArrow';
@@ -61,6 +62,11 @@ export class ArrayUnit extends Visible {
     if (!CseMachine.getPrintableMode()) {
       this.indexRef.current?.hide();
     }
+  }
+
+  /** Gives the box the hovered background, or its normal one (see `Layout.highlightObject`). */
+  setHoverBackground(hovered: boolean): void {
+    this.ref.current?.fill(hovered ? hoverBackgroundColor() : defaultBackgroundColor());
   }
 
   setArrowSourceHighlightedStyle(): void {

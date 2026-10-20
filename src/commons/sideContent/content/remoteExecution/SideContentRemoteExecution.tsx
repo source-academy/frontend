@@ -81,8 +81,11 @@ function SideContentRemoteExecution(props: SideContentRemoteExecutionProps) {
   const isConnected = currentSession?.connection.status === 'CONNECTED';
 
   useEffect(() => {
-    // this is not supposed to happen - the destructor below should disconnect
-    // once the user navigates away from the workspace
+    // Re-adopts a lingering session onto this mount's workspace if they ever disagree (e.g. this
+    // component remounted - see below - while a session for a stale workspace value was still
+    // live). Not expected to fire in practice today since this component is only ever given
+    // workspace="playground" (see PlaygroundTabs.tsx), but kept as a defensive fix-up rather than
+    // relying on a fresh mount to always start from a clean slate.
     if (currentSession && currentSession.workspace !== props.workspace) {
       dispatch(
         actions.remoteExecUpdateSession({
@@ -99,13 +102,17 @@ function SideContentRemoteExecution(props: SideContentRemoteExecutionProps) {
     }
   }, [dispatch, devices, isLoggedIn]);
 
-  useEffect(
-    () => () => {
-      // note the double () => - this function is a destructor
-      dispatch(actions.remoteExecDisconnect());
-    },
-    [dispatch],
-  );
+  // Deliberately no unmount-triggered `remoteExecDisconnect()` here (there used to be one - a
+  // bare `useEffect(() => () => dispatch(...), [dispatch])` "destructor"). The device connection
+  // (the SlingClient/MQTT session backing `state.session.remoteExecutionSession`) is Redux/saga-
+  // owned state that already outlives this component fine on its own; tying its teardown to this
+  // component's unmount instead made it fragile to anything that happens to remount an ancestor -
+  // in particular, Playground swaps its entire tree between <Workspace> and <MobileWorkspace> when
+  // `isMobileBreakpoint` (a window-width media query - see useResponsive in commons/utils/Hooks.ts)
+  // flips during a resize, unmounting and remounting this component and firing that destructor even
+  // though the user never touched "Browser" or a disconnect control. The connection must now only
+  // ever be torn down by an explicit user action - the "Browser" MenuItem and the delete-device
+  // confirmation below both already dispatch remoteExecDisconnect() themselves.
 
   const handleDelete = useCallback(
     async (device: Device) => {

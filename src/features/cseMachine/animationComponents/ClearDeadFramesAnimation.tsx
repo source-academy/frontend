@@ -23,7 +23,7 @@ import {
 import { getNodePosition } from './base/AnimationUtils';
 
 /**
- * Animation after clicking "Clear Dead Frames"
+ * Animation after clicking "Clear Unreachable Objects"
  * Shifts frames to close gaps
  */
 type AnimatedTextPair = {

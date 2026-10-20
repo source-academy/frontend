@@ -57,7 +57,7 @@ const mockRef = { current: {} };
 const processTag = (tag: string, obj: JsonType) => {
   obj['tag'] = tag;
 
-  return processingFunctions[tag](obj, mockRef);
+  return processingFunctions[tag](obj, mockRef, 'javascript');
 };
 
 const testTagSuccessful = (obj: JsonType, tag: string, text: string = '') => {
@@ -213,6 +213,37 @@ describe('Parse snippet', () => {
   ];
 
   objsToTest.forEach(obj => testTagSuccessful(obj['obj'], tag, obj['text']));
+});
+
+describe('Parse disabled snippet with Python highlighting (SICPy)', () => {
+  // def/nonlocal have no JS equivalent, so they only look highlighted if the
+  // eval === false branch actually forwards `language` to the syntax highlighter
+  // instead of falling back to a plain, unhighlighted <Pre>.
+  const body = 'def f():\n    nonlocal x';
+  const obj: JsonType = { tag: snippetTag, body, eval: false };
+
+  test('the <code> element is tagged as Python, not JavaScript', async () => {
+    const tree = await renderTreeJson(
+      <BrowserRouter>{processingFunctions[snippetTag](obj, mockRef, 'python')}</BrowserRouter>,
+    );
+    const code = tree.querySelector('code');
+    expect(code?.className).toContain('language-python');
+  });
+
+  test('def and nonlocal are tokenized as keywords', async () => {
+    const tree = await renderTreeJson(
+      <BrowserRouter>{processingFunctions[snippetTag](obj, mockRef, 'python')}</BrowserRouter>,
+    );
+    const code = tree.querySelector('code');
+    const defSpan = Array.from(code?.querySelectorAll('span') ?? []).find(
+      s => s.textContent === 'def',
+    );
+    const nonlocalSpan = Array.from(code?.querySelectorAll('span') ?? []).find(
+      s => s.textContent === 'nonlocal',
+    );
+    expect(defSpan?.className).toContain('token');
+    expect(nonlocalSpan?.className).toContain('token');
+  });
 });
 
 describe('Parse figures', () => {

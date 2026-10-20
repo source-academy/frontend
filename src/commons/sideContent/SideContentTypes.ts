@@ -7,7 +7,9 @@ export enum SideContentType {
   briefing = 'briefing',
   contestVoting = 'contest_voting',
   cseMachine = 'cse_machine',
-  dataVisualizer = 'data_visualizer',
+  // Also the tab id registered by the conductor data visualizer web plugin.
+  dataVisualizer = 'data-visualizer',
+  documentation = 'documentation',
   editorGrading = 'editor_grading',
   editorAutograder = 'editor_autograder',
   editorBriefing = 'editor_briefing',
@@ -100,6 +102,11 @@ export type SideContentState = {
   dynamicTabs: SideContentTab[];
   alerts: string[];
   selectedTab?: SideContentTabId;
+};
+
+export type PredefinedTabs = {
+  beforeDynamicTabs: SideContentTab[];
+  afterDynamicTabs: SideContentTab[];
 };
 
 export type ChangeTabsCallback = (

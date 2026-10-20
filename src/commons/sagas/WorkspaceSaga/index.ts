@@ -8,6 +8,7 @@ import type { EventChannel } from 'redux-saga';
 import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import AutoCompletePlugin from 'src/features/conductor/AutocompletePlugin';
 import { BrowserHostPlugin } from 'src/features/conductor/BrowserHostPlugin';
+import { selectConductorEv3Enable } from 'src/features/remoteExecutionConductor/flagConductorEv3Enable';
 
 import InterpreterActions from '../../../commons/application/actions/InterpreterActions';
 import { combineSagaHandlers } from '../../../commons/redux/utils';
@@ -22,6 +23,7 @@ import {
   TEST_CASE_EVALUATOR_ID,
   TEST_CASE_LANGUAGE_ID,
 } from '../../../features/directory/testCaseLanguage';
+import type { DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';
 import {
   defaultEditorValue,
@@ -267,6 +269,31 @@ const WorkspaceSaga = combineSagaHandlers({
     const context: Context = yield select(
       (state: OverallState) => state.workspaces[workspaceLocation].context,
     );
+
+    const remoteExecutionSession: DeviceSession | undefined = yield select(
+      (state: OverallState) => state.session.remoteExecutionSession,
+    );
+
+    if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
+      // Mirrors evalEditorSaga's own remote-execution branch (evalEditor.ts) - a REPL line must be
+      // shipped to the connected device through the same Run pipeline as the editor's Run button,
+      // not evaluated below against the browser's own local js-slang/Conductor context. That local
+      // context has no access to the device's hardware (its EV3 functions are meaningless without a
+      // real robot attached), so evaluating it there would silently do nothing (or error) instead of
+      // actually running on the robot - which is what disabled the REPL outright during remote
+      // execution in the first place (see Playground.tsx's `usingRemoteExecution`).
+      const codeFilePath = '/code.js';
+      const codeFiles = { [codeFilePath]: code };
+      // Deliberately gated on the EV3-specific flag, not the general flagConductorEnable, matching
+      // evalEditorSaga - see its own comment for why.
+      const isConductorEv3: boolean = yield select(selectConductorEv3Enable);
+      if (isConductorEv3) {
+        yield put(actions.remoteExecConductorRun(codeFiles, codeFilePath));
+      } else {
+        yield put(actions.remoteExecRun(codeFiles, codeFilePath));
+      }
+      return;
+    }
 
     if (yield select(selectConductorEnable)) {
       const codeFilePath = '/code.js';

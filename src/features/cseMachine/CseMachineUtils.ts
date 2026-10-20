@@ -97,6 +97,30 @@ export function isEmptyEnvironment(env: Env): env is Env & { head: EmptyObject }
   return env === null || isEmptyObject(env.head);
 }
 
+/**
+ * Returns `true` if `env` is the program's own frame (the "Global" frame of the diagram). Unlike
+ * any other frame it is drawn even while it has no bindings: it is the only frame that grows
+ * dynamically, so it is there from the start of the program.
+ */
+export function isProgramEnvironment(env: Env): boolean {
+  return env?.name === 'programEnvironment';
+}
+
+/**
+ * Returns `true` if a frame may be left out of the diagram as boring: it has no bindings, no live
+ * closure or array draws its arrow to it as its defining environment (#4380), and nothing is
+ * homed in it at all — not even a dead function or array, which the diagram draws greyed out
+ * beside its frame, so the frame stays too.
+ */
+export function isPrunableEnvironment(env: Env): boolean {
+  return (
+    isEmptyEnvironment(env) &&
+    !isProgramEnvironment(env) &&
+    !Layout.closureHomeEnvIDs.has(env.id) &&
+    !(env?.heap?.getHeap().size > 0)
+  );
+}
+
 /** Returns `true` if `data` is an array */
 export function isArray(data: any): data is any[] {
   return Array.isArray(data);
@@ -166,6 +190,17 @@ export function isNonGlobalFn(data: Data): data is NonGlobalFn {
 /** Returns `true` if `data` is null */
 export function isNull(data: Data): data is null {
   return data === null;
+}
+
+/**
+ * Whether `data` is a snapshot's `None` (see CseSnapshotAdapter.ts): an object, so that a frame
+ * binding shows it as "None", not JS `null`'s "null"; but in a box of a box-and-pointer diagram,
+ * it is the empty list's terminator, drawn as a slash like `null`.
+ */
+export function isSnapshotNone(data: unknown): boolean {
+  return (
+    typeof data === 'object' && data !== null && (data as { isNone?: unknown }).isNone === true
+  );
 }
 
 /** Returns `true` if `data` is undefined */
@@ -283,12 +318,16 @@ function collectRootEnvIds(): Set<string> {
   return roots;
 }
 
-/** Adds values into liveObjectIds and pushes the values' environments for `markReachableEnvs` */
+/** Adds values into liveObjectIds and pushes the values' environments for `markReachableEnvs`.
+ * `markClosureHome`, when given, is called with the id of an environment that is some closure's
+ * or array's *own* defining environment specifically (not merely an ancestor reached by walking
+ * its tail chain) — see {@link computeLiveState}'s `closureHomeEnvIds`. */
 function pushEnvFromData(
   value: any,
   pushEnv: (e: Env | null | undefined) => void,
   markLiveObject?: (id: string) => void,
   visitedObjects = new Set<any>(),
+  markClosureHome?: (id: string) => void,
 ) {
   if (!value || visitedObjects.has(value)) {
     return;
@@ -303,6 +342,7 @@ function pushEnvFromData(
   if (isClosure(value) || isStreamFn(value)) {
     if (value.environment) {
       pushEnv((value as any).environment as Env);
+      markClosureHome?.((value as any).environment.id);
     }
     return;
   }
@@ -310,10 +350,11 @@ function pushEnvFromData(
   if (isDataArray(value)) {
     if ((value as any).environment) {
       pushEnv((value as any).environment as Env);
+      markClosureHome?.((value as any).environment.id);
     }
     const arr = value as any[]; // going through each element of the array for any references
     for (const elem of arr) {
-      pushEnvFromData(elem, pushEnv, markLiveObject, visitedObjects);
+      pushEnvFromData(elem, pushEnv, markLiveObject, visitedObjects, markClosureHome);
     }
     return;
   }
@@ -323,9 +364,10 @@ function pushEnvFromData(
 function markReachableEnvs(
   envTree: EnvTree,
   rootIds: Set<string>,
-): { liveEnvIds: Set<string>; liveObjectIds: Set<string> } {
+): { liveEnvIds: Set<string>; liveObjectIds: Set<string>; closureHomeEnvIds: Set<string> } {
   const visited = new Set<string>();
   const liveObjectIds = new Set<string>();
+  const closureHomeEnvIds = new Set<string>();
   const worklist: Env[] = [];
 
   const pushEnv = (env: Env | null | undefined) => {
@@ -340,6 +382,7 @@ function markReachableEnvs(
   };
 
   const markLiveObject = (id: string) => liveObjectIds.add(id);
+  const markClosureHome = (id: string) => closureHomeEnvIds.add(id);
   const visitedObjects = new Set<any>();
 
   rootIds.forEach(id => {
@@ -355,40 +398,51 @@ function markReachableEnvs(
     pushEnv(env.tail as Env); //add tail env to worklist since we only go through the head in one iteration
 
     Object.values(env.head).forEach(v => {
-      pushEnvFromData(v, pushEnv, markLiveObject, visitedObjects); //adds envs and objects referenced by this env's head
+      //adds envs and objects referenced by this env's head
+      pushEnvFromData(v, pushEnv, markLiveObject, visitedObjects, markClosureHome);
     });
   }
 
-  return { liveEnvIds: visited, liveObjectIds };
+  return { liveEnvIds: visited, liveObjectIds, closureHomeEnvIds };
 }
 
-/** Returns environment id and object id that are reachable from root environments and control/stash */
+/** Returns environment id and object id that are reachable from root environments and control/stash.
+ * `closureHomeEnvIds` is the subset of `liveEnvIds` that are some live closure's or array's *own*
+ * defining environment (as opposed to merely an ancestor reached via another live environment's
+ * tail chain) — an otherwise-empty frame in this set must not be pruned as "boring": it is the
+ * anchor a value elsewhere still draws its arrow to (#4380). */
 export function computeLiveState(envTree: EnvTree): {
   liveEnvIds: Set<string>;
   liveObjectIds: Set<string>;
+  closureHomeEnvIds: Set<string>;
 } {
   const roots = collectRootEnvIds();
 
   // Add envs reachable from objects on control/stash as extra roots
   const extraRootIds = new Set<string>();
+  const closureHomeEnvIds = new Set<string>();
   const pushEnv = (env: Env | null | undefined) => {
     //specially made ONLY for stack/control dummy bindings
     if (env && env.id) {
       extraRootIds.add(env.id);
     }
   };
+  const markClosureHome = (id: string) => closureHomeEnvIds.add(id);
 
   // const visitedObjects = new Set<any>();
 
   Layout.stash.getStack().forEach((item: any) => {
-    pushEnvFromData(item, pushEnv, undefined, new Set<any>());
+    pushEnvFromData(item, pushEnv, undefined, new Set<any>(), markClosureHome);
   });
   Layout.control.getStack().forEach((item: ControlItem) => {
-    pushEnvFromData(item as any, pushEnv, undefined, new Set<any>());
+    pushEnvFromData(item as any, pushEnv, undefined, new Set<any>(), markClosureHome);
   });
 
   const allRoots = new Set<string>([...roots, ...extraRootIds]); //combine both roots
   const liveState = markReachableEnvs(envTree, allRoots);
+  for (const id of closureHomeEnvIds) {
+    liveState.closureHomeEnvIds.add(id);
+  }
 
   // Mark objects that are live due to being on control/stash
   const markLiveObject = (id: string) => liveState.liveObjectIds.add(id);
@@ -412,7 +466,7 @@ export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[])
   const result: Frame[][] = [];
 
   // Match levels such that oldLevels.length == newLevels.length
-  // in case Clear Dead Frames causes an entire Level to be cleared
+  // in case Clear Unreachable Objects causes an entire Level to be cleared
   const normalizedOldLevels =
     oldLevels.length === newLevels.length
       ? oldLevels
@@ -425,7 +479,9 @@ export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[])
   if (normalizedOldLevels.length !== newLevels.length) {
     // TODO: Change console.error into throw new Error, and catch them upstream (eg at CseMachine.redraw()),
     // with centralized error handling for all layout logic.
-    console.error('Level count mismatch for Clear Dead Frames animation, animation not played.');
+    console.error(
+      'Level count mismatch for Clear Unreachable Objects animation, animation not played.',
+    );
 
     // Empty array is returned to SideContentCseMachine, causing the animation to not play
     // since the length of changedFramePairs (the returned value) == 0.
@@ -493,9 +549,19 @@ export function isMainReference(value: Value, reference: ReferenceType) {
     );
   }
   if (isGlobalFn(value.data)) {
+    if (!(reference instanceof Binding)) {
+      return false;
+    }
+    const inGlobalFrame = (r: ReferenceType) =>
+      r instanceof Binding && isEnvEqual(r.frame.environment, Layout.globalEnvNode.environment);
+    if (inGlobalFrame(reference)) {
+      return true;
+    }
+    // py-slang does not bind its built-ins in the global frame (the frame is empty), so when no
+    // binding there refers to the function, the first binding that does (`p = print`) draws it.
     return (
-      reference instanceof Binding &&
-      isEnvEqual(reference.frame.environment, Layout.globalEnvNode.environment)
+      !value.references.some(inGlobalFrame) &&
+      value.references.find(r => r instanceof Binding) === reference
     );
   }
   if (!isNonGlobalFn(value.data) && !isDataArray(value.data)) {
@@ -607,6 +673,13 @@ export function getParamsText(data: Closure | GlobalFn | StreamFn): string {
 
 /** Returns the body string of the given function */
 export function getBodyText(data: Closure | GlobalFn | StreamFn): string {
+  // A function from a snapshot whose evaluator sent the body's source (e.g. Python's, which has
+  // no braces): one line as it is, several lines indented below the label.
+  const bodySource = (data as { bodySource?: unknown }).bodySource;
+  if (isClosure(data) && typeof bodySource === 'string') {
+    const lines = bodySource.split('\n');
+    return lines.length === 1 ? bodySource : '\n' + lines.map(line => '  ' + line).join('\n');
+  }
   const fnString = data.toString();
   if (isClosure(data)) {
     let body =
@@ -795,7 +868,11 @@ export function deepCopyTree(value: EnvTree): EnvTree {
 }
 
 export function getNextChildren(c: EnvTreeNode): EnvTreeNode[] {
-  if (isEmptyEnvironment(c.environment)) {
+  // A bindingless frame is normally boring and safe to collapse, but not when it's still the
+  // defining environment some live closure/array elsewhere draws its arrow to (#4380) — there
+  // would be nothing left for that arrow to point at.
+  const isCollapsible = isPrunableEnvironment(c.environment);
+  if (isCollapsible) {
     const nextChildren: EnvTreeNode[] = [];
     c.children.forEach(gc => {
       nextChildren.push(...getNextChildren(gc as EnvTreeNode));
@@ -1231,6 +1308,14 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
 
 const isHulkModeEnabled = () =>
   typeof document !== 'undefined' && document.querySelector('.Playground.GreenScreen') !== null;
+
+/**
+ * The background of a frame or object hovered in a plugin's linked diagram (see
+ * `Layout.highlightFrame` / `Layout.highlightObject`): darker in the dark theme, a light grey in
+ * printable mode. A background, not a colour of its own, since frames carry colours of their own.
+ */
+export const hoverBackgroundColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintHoverFrameBgColor : Config.HoverFrameBgColor;
 
 export const defaultBackgroundColor = () =>
   isHulkModeEnabled()

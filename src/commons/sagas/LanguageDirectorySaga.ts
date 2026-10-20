@@ -11,8 +11,10 @@ import {
   selectDirectoryLanguageUrl,
 } from 'src/features/directory/flagDirectoryLanguageUrl';
 
+import { deriveLanguageFromChapter } from '../../features/directory/chapterLanguage';
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
 import type { LanguageDirectoryState } from '../../features/directory/LanguageDirectoryTypes';
+import SessionActions from '../application/actions/SessionActions';
 import type { OverallState } from '../application/ApplicationTypes';
 import { defaultEditorValue } from '../application/ApplicationTypes';
 import { combineSagaHandlers } from '../redux/utils';
@@ -43,9 +45,52 @@ export function* getEvaluatorDefinitionSaga() {
   return getEvaluatorDefinition(language, directory.selectedEvaluatorId);
 }
 
-const languageDirectoryHandlers = combineSagaHandlers({
+/**
+ * The language the current course configures as its default, or `undefined` when there is no course
+ * (logged out), the course predates Conductor, or its `sourceChapter` doesn't name a directory entry.
+ *
+ * Course config stores this as `sourceChapter`, which under Conductor is a 1-based index into the
+ * directory rather than a Source chapter — see `deriveLanguageFromChapter`. Admins set it through
+ * Ground Control's "Default language" selector.
+ */
+export function* getCourseDefaultSelectionSaga() {
+  const conductorEnabled: boolean = yield select(selectConductorEnable);
+  if (!conductorEnabled) {
+    // The legacy path drives the language off `playgroundSourceChapter` instead.
+    return undefined;
+  }
+  const languages: ILanguageDefinition[] = yield select(
+    (state: OverallState) => state.languageDirectory.languages,
+  );
+  const sourceChapter: number | undefined = yield select(
+    (state: OverallState) => state.session.sourceChapter,
+  );
+  return deriveLanguageFromChapter(languages, sourceChapter);
+}
+
+/**
+ * Applies the default selection for `directory`: the course's configured language if one exists,
+ * otherwise the first directory entry. Callers must ensure `directory.languages` is non-empty.
+ *
+ * Always dispatches - including when there's no course default - so that a course whose
+ * `sourceChapter` doesn't resolve to a directory entry (no course, or a stale/out-of-range value)
+ * still lands on a valid selection instead of leaving a previous course's language selected.
+ */
+function* applyDefaultSelectionSaga(directory: Pick<LanguageDirectoryState, 'languages'>) {
+  const courseDefault: { languageId: string; evaluatorId: string } | undefined = yield call(
+    getCourseDefaultSelectionSaga,
+  );
+  const languageId = courseDefault?.languageId ?? directory.languages[0].id;
+  yield put(
+    LanguageDirectoryActions.setSelectedLanguage(languageId, courseDefault?.evaluatorId, true),
+  );
+}
+
+export const languageDirectoryHandlers = combineSagaHandlers({
   [LanguageDirectoryActions.setLanguages.type]: function* () {
-    const directory = yield select((state: OverallState) => state.languageDirectory);
+    const directory: LanguageDirectoryState = yield select(
+      (state: OverallState) => state.languageDirectory,
+    );
     if (directory.languages.length === 0) {
       return;
     }
@@ -54,13 +99,35 @@ const languageDirectoryHandlers = combineSagaHandlers({
     // the setSelectedLanguage handler below couldn't resolve it and bailed out early. Re-run
     // that same selection now that the directory is populated, instead of unconditionally
     // overwriting it with the first language.
-    const languageId = directory.selectedLanguageId ?? directory.languages[0].id;
-    yield put(
-      LanguageDirectoryActions.setSelectedLanguage(
-        languageId,
-        directory.selectedEvaluatorId ?? undefined,
-      ),
+    if (directory.selectedLanguageId && !directory.isDefaultSelection) {
+      yield put(
+        LanguageDirectoryActions.setSelectedLanguage(
+          directory.selectedLanguageId,
+          directory.selectedEvaluatorId ?? undefined,
+        ),
+      );
+      return;
+    }
+    // No deliberate selection is pending, so (re-)apply the default: the current course's
+    // configured language if one exists and the session has already loaded, otherwise the first
+    // directory entry. If the course config arrives later, its handler below re-applies this -
+    // `isDefaultSelection` stays true until something deliberate overrides it.
+    yield call(applyDefaultSelectionSaga, directory);
+  },
+  [SessionActions.setCourseConfiguration.type]: function* () {
+    const directory: LanguageDirectoryState = yield select(
+      (state: OverallState) => state.languageDirectory,
     );
+    // The directory may not have loaded yet (setLanguages will apply the course default itself
+    // once it does), and a deliberate selection - the dropdown, a share link, an assessment - must
+    // never be clobbered by a course config that happens to arrive afterwards.
+    if (directory.languages.length === 0 || !directory.isDefaultSelection) {
+      return;
+    }
+    // Re-apply the default even if the new course has no valid configured language (a stale or
+    // out-of-range sourceChapter): otherwise the previous course's language would stay selected,
+    // even though it's still marked as a default rather than something the user chose here.
+    yield call(applyDefaultSelectionSaga, directory);
   },
   [LanguageDirectoryActions.fetchLanguages.type]: function* () {
     const url: string = yield select(selectDirectoryLanguageUrl);
@@ -81,12 +148,26 @@ const languageDirectoryHandlers = combineSagaHandlers({
     const language: ILanguageDefinition = yield call(getLanguageDefinitionSaga);
 
     // Set the language's default editor program when switching evaluators, but only while the
-    // editor still holds the untouched default (never clobber code the user has written).
+    // editor still holds an untouched default (never clobber code the user has written).
+    //
+    // "An untouched default" means the pristine `defaultEditorValue` *or* any language's own
+    // defaultProgram. Comparing against `defaultEditorValue` alone made the swap one-shot: the
+    // first switch replaced it with, say, Python's `# Type your program in here!`, and every
+    // later switch then failed the comparison and silently left the previous language's comment
+    // in place — so a student moving from Python to Source saw a `#` comment in a JavaScript
+    // editor.
     if (language?.defaultProgram != null) {
       const playground = yield select((state: OverallState) => state.workspaces.playground);
       const activeTabIndex: number = playground.activeEditorTabIndex ?? 0;
       const editorValue: string = playground.editorTabs[activeTabIndex]?.value ?? '';
-      if (editorValue === defaultEditorValue) {
+      const languages: ILanguageDefinition[] = yield select(
+        (state: OverallState) => state.languageDirectory.languages,
+      );
+      const untouchedDefaults = new Set<string>([
+        defaultEditorValue,
+        ...languages.flatMap(l => (l.defaultProgram != null ? [l.defaultProgram] : [])),
+      ]);
+      if (untouchedDefaults.has(editorValue)) {
         yield put(
           WorkspaceActions.updateEditorValue('playground', activeTabIndex, language.defaultProgram),
         );

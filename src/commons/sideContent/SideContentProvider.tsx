@@ -1,19 +1,17 @@
 import { useCallback, useSyncExternalStore } from 'react';
 
-import { getTabId, useSideContent } from './SideContentHelper';
+import { combineAllTabs, getTabId, useSideContent } from './SideContentHelper';
 import sideContentManager from './SideContentManager';
 import type {
   ChangeTabsCallback,
+  PredefinedTabs,
   SideContentLocation,
   SideContentTab,
   SideContentTabId,
 } from './SideContentTypes';
 
 type SideContentProviderProps = {
-  tabs?: {
-    beforeDynamicTabs: SideContentTab[];
-    afterDynamicTabs: SideContentTab[];
-  };
+  tabs?: PredefinedTabs;
   children: (args: {
     tabs: SideContentTab[];
     alerts: string[];
@@ -62,15 +60,9 @@ export default function SideContentProvider({
   );
 
   const combinedTabs = tabs
-    ? [...tabs.beforeDynamicTabs, ...dynamicTabs, ...serviceTabs, ...tabs.afterDynamicTabs]
+    ? combineAllTabs(tabs, dynamicTabs, serviceTabs)
     : [...dynamicTabs, ...serviceTabs];
 
-  // De-duplicate by rendered tab id (the same key React/Blueprint use), keeping the first occurrence.
-  // A statically-provided tab may share an id with a dynamically-registered service tab — e.g. the
-  // Stepper tab, which the Playground provides as a placeholder so it is always visible for a stepping
-  // language, while the conductor's web plugin registers the live one once its evaluator is selected.
-  // Ordering the service tabs before the placeholder lets the live tab win in the same slot, so the
-  // tab neither disappears nor duplicates as the evaluator loads.
   const seenTabIds = new Set<string>();
   const allTabs = combinedTabs.filter(tab => {
     const id = getTabId(tab);
