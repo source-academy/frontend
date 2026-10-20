@@ -168,7 +168,7 @@ function CourseConfigPanel(props: Props) {
           >
             <TextArea
               id="louisChatbotPrompt"
-              className={classes['input-textarea']}
+              className="h-25"
               fill
               value={louisChatbotPrompt || ''}
               onChange={e =>
