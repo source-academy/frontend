@@ -119,7 +119,7 @@ function toJsValue(
 
     // Build a real JS array with own `id` and `environment` so isDataArray() passes.
     const arr: any = elements.map((el: CseSerializedValue) =>
-      toJsValue(el, envMap, closureCache, listCache),
+      inList(toJsValue(el, envMap, closureCache, listCache), envId ? envMap.get(envId) : null),
     );
     arr.forEach(addClosureToHeap);
     Object.defineProperties(arr, {
@@ -163,7 +163,7 @@ function toJsValue(
     }
     listCache.set(listId, arr);
     for (const el of elements) {
-      const element = toJsValue(el, envMap, closureCache, listCache);
+      const element = inList(toJsValue(el, envMap, closureCache, listCache), arr.environment);
       arr.push(element);
       addClosureToHeap(element);
     }
@@ -238,6 +238,23 @@ function toJsValue(
 
   // Fallback: render as a string primitive (shows as PrimitiveValue)
   return v.displayValue;
+}
+
+/**
+ * A built-in function that sits in a list (e.g. the thunk of `stream(1)`, which py-slang sends
+ * without a defining frame) as a function of that list's frame. The diagram draws a built-in only
+ * beside a binding of the global frame; a function with an `environment` is drawn beside its
+ * frame, like the functions that `stream` returns in Source (`isStreamFn`). It is a copy, as the
+ * built-in is shared by the lists that hold it.
+ */
+function inList(element: unknown, environment: unknown): unknown {
+  if (typeof element !== 'function' || !environment || 'environment' in element) {
+    return element;
+  }
+  const fn: any = function PyBuiltinFunction() {};
+  fn.toString = () => element.toString();
+  fn.environment = environment;
+  return fn;
 }
 
 /**

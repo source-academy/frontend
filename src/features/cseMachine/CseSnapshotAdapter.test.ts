@@ -159,6 +159,44 @@ describe('heap objects in Python snapshots', () => {
     return (findNode(buildFakeEnvTreeFromSnapshot(snapshot).envTree, 'g')!.environment as any).head;
   };
 
+  it('draws a built-in function inside a list, as py-slang sends the thunk of `stream(1)` (#621)', () => {
+    const builtin = {
+      displayValue: '<built-in function anonymous stream>',
+      label: 'builtin_function_or_method',
+    };
+    const snapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [list(3, [{ displayValue: '1', label: 'int' }, builtin])],
+      environments: [{ id: 'g', name: 'global', parentId: null, bindings: [], isActive: true }],
+    } as unknown as CseSnapshot;
+    expect(() =>
+      CseMachine.drawEnvironments(snapshot, { width: 500, height: 500, clearDeadFrames: false }),
+    ).not.toThrow();
+    const global = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        {
+          id: 'g',
+          name: 'global',
+          parentId: null,
+          bindings: [
+            {
+              name: 'xs',
+              value: { ...list(4, [{ displayValue: '1', label: 'int' }, builtin]), objectId: '#1' },
+            },
+          ],
+          isActive: true,
+        },
+      ],
+    } as unknown as CseSnapshot;
+    expect(() =>
+      CseMachine.drawEnvironments(global, { width: 500, height: 500, clearDeadFrames: false }),
+    ).not.toThrow();
+  });
+
   it('resolves a back reference to the list itself, for a list that contains itself', () => {
     const head = headOf([
       { name: 'xs', value: { ...list(7, [list(7, [], { backReference: true })]), objectId: '#1' } },
