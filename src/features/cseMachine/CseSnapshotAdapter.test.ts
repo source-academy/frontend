@@ -199,6 +199,10 @@ describe('heap objects in Python snapshots', () => {
     // it is live while the list that holds it is, and drawn when unreachable objects are cleared
     expect(Layout.liveObjectIDs.has((thunk.data as any).id)).toBe(true);
     expect(thunk.isLive()).toBe(true);
+    // Clear Unreachable Objects keeps it: its list is reachable
+    CseMachine.drawEnvironments(global, { width: 500, height: 500, clearDeadFrames: true });
+    const kept = [...Layout.values.values()].find(v => v instanceof FnValue) as FnValue;
+    expect(kept.draw()).not.toBeNull();
     expect(() =>
       CseMachine.drawEnvironments(global, { width: 500, height: 500, clearDeadFrames: false }),
     ).not.toThrow();
