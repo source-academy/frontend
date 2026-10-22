@@ -118,17 +118,36 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
         // Use the approach Y (horizontal segment Y) to decide which face of the circle to land on.
         // Same level → left face; source above → top face; source below → bottom face.
         const approachY = from.y() + from.height() / 2;
-        const [landX, landY] = ((): [number, number] => {
+        const [landX, landY, fromAbove] = ((): [number, number, boolean] => {
           if (approachY < targetCY - r) {
             // from above: top face
-            return [targetCX, targetCY - (fnTarget instanceof ContValue ? 1.5 * r : r)];
+            return [targetCX, targetCY - (fnTarget instanceof ContValue ? 1.5 * r : r), true];
           }
           if (approachY > targetCY + r) {
             // from below: bottom face
-            return [targetCX, targetCY + r];
+            return [targetCX, targetCY + r, false];
           }
-          return [leftFaceX, targetCY]; // same level: left face
+          return [leftFaceX, targetCY, false]; // same level: left face
         })();
+        // A function below the frame, whose top face is nearer than where the arrow leaves the
+        // frame: the arrow would run past it and back. Instead it goes down, by the distance by
+        // which it left the frame, to below the frame, and only there goes across to the function.
+        const frameBottom = from.options.parentFrame
+          ? from.options.parentFrame.y() + from.options.parentFrame.height()
+          : undefined;
+        const acrossY =
+          frameBottom === undefined
+            ? undefined
+            : Math.min(frameBottom + fromFrameStraightLength, landY - terminalSegmentLength);
+        if (
+          landX < frameExitX &&
+          fromAbove &&
+          acrossY !== undefined &&
+          frameBottom !== undefined &&
+          acrossY > frameBottom
+        ) {
+          steps.push((x, y) => [x, acrossY]);
+        }
         steps.push((x, y) => [landX, y]);
         steps.push(() => [landX, landY]);
       } else {
