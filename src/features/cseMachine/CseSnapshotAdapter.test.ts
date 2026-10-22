@@ -192,6 +192,10 @@ describe('heap objects in Python snapshots', () => {
         },
       ],
     } as unknown as CseSnapshot;
+    CseMachine.drawEnvironments(global, { width: 500, height: 500, clearDeadFrames: false });
+    const thunk = [...Layout.values.values()].find(v => v instanceof FnValue) as FnValue;
+    expect(thunk).toBeDefined();
+    expect(thunk.arrow()).toBeUndefined();
     expect(() =>
       CseMachine.drawEnvironments(global, { width: 500, height: 500, clearDeadFrames: false }),
     ).not.toThrow();

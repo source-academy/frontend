@@ -244,8 +244,9 @@ function toJsValue(
  * A built-in function that sits in a list (e.g. the thunk of `stream(1)`, which py-slang sends
  * without a defining frame) as a function of that list's frame. The diagram draws a built-in only
  * beside a binding of the global frame; a function with an `environment` is drawn beside its
- * frame, like the functions that `stream` returns in Source (`isStreamFn`). It is a copy, as the
- * built-in is shared by the lists that hold it.
+ * frame, like the functions that `stream` returns in Source (`isStreamFn`), but `floating`: there is
+ * no arrow to the frame, as a built-in has no defining frame. It is a copy, as the built-in is shared
+ * by the lists that hold it.
  */
 function inList(element: unknown, environment: unknown): unknown {
   if (typeof element !== 'function' || !environment || 'environment' in element) {
@@ -254,6 +255,7 @@ function inList(element: unknown, environment: unknown): unknown {
   const fn: any = function PyBuiltinFunction() {};
   fn.toString = () => element.toString();
   fn.environment = environment;
+  fn.floating = true;
   return fn;
 }
 
