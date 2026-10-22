@@ -157,8 +157,8 @@
     "@types/showdown": "^2.0.1",
     "@types/xml2js": "^0.4.11",
     "@vitejs/plugin-react": "6.1.2",
-    "@vitest/coverage-v8": "5.0.3",
-    "@vitest/ui": "5.0.3",
+    "@vitest/coverage-v8": "5.0.5",
+    "@vitest/ui": "5.0.5",
     "canvas": "^3.1.0",
     "coveralls": "^3.1.1",
     "cross-env": "^10.1.0",
@@ -183,7 +183,7 @@
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.1.0",
     "vite": "8.0.16",
-    "vitest": "5.0.3"
+    "vitest": "5.0.5"
   },
   "dependenciesMeta": {
     "@parcel/watcher": {
