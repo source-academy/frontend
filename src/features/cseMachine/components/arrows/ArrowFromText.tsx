@@ -118,17 +118,34 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
         // Use the approach Y (horizontal segment Y) to decide which face of the circle to land on.
         // Same level → left face; source above → top face; source below → bottom face.
         const approachY = from.y() + from.height() / 2;
-        const [landX, landY] = ((): [number, number] => {
+        const [landX, landY, fromAbove] = ((): [number, number, boolean] => {
           if (approachY < targetCY - r) {
             // from above: top face
-            return [targetCX, targetCY - (fnTarget instanceof ContValue ? 1.5 * r : r)];
+            return [targetCX, targetCY - (fnTarget instanceof ContValue ? 1.5 * r : r), true];
           }
           if (approachY > targetCY + r) {
             // from below: bottom face
-            return [targetCX, targetCY + r];
+            return [targetCX, targetCY + r, false];
           }
-          return [leftFaceX, targetCY]; // same level: left face
+          return [leftFaceX, targetCY, false]; // same level: left face
         })();
+        // A function below the frame, reached from above: the arrow leaves the frame with a bend
+        // of the full radius, goes down parallel to the frame's right edge until it is below the
+        // frame (as far below as it left it to the right), and only then goes across, left or
+        // right, to the x of the function, and down into it. The bend across has the radius that
+        // the length of the way across allows (none if there is no way across).
+        const frame = from.options.parentFrame;
+        const frameBottom = frame ? frame.y() + frame.height() : undefined;
+        const mid = from.y() + from.height() / 2;
+        if (fromAbove && frameBottom !== undefined) {
+          const acrossY = Math.min(
+            Math.max(frameBottom + fromFrameStraightLength, mid + 2 * Config.ArrowCornerRadius),
+            landY - terminalSegmentLength,
+          );
+          if (acrossY >= mid + 2 * Config.ArrowCornerRadius && acrossY > frameBottom) {
+            steps.push((x, y) => [x, acrossY]);
+          }
+        }
         steps.push((x, y) => [landX, y]);
         steps.push(() => [landX, landY]);
       } else {
