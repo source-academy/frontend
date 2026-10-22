@@ -196,9 +196,23 @@ describe('heap objects in Python snapshots', () => {
     const thunk = [...Layout.values.values()].find(v => v instanceof FnValue) as FnValue;
     expect(thunk).toBeDefined();
     expect(thunk.arrow()).toBeUndefined();
+    // it is live while the list that holds it is, and drawn when unreachable objects are cleared
+    expect(Layout.liveObjectIDs.has((thunk.data as any).id)).toBe(true);
+    expect(thunk.isLive()).toBe(true);
     expect(() =>
       CseMachine.drawEnvironments(global, { width: 500, height: 500, clearDeadFrames: false }),
     ).not.toThrow();
+  });
+
+  it('a built-in that occurs twice in a list is one function object, and one list does not share it with another (#4516)', () => {
+    const abs = { displayValue: '<built-in function abs>', label: 'builtin_function_or_method' };
+    const head = headOf([
+      { name: 'xs', value: list(5, [abs, abs]) },
+      { name: 'ys', value: list(6, [abs]) },
+    ]);
+    expect(head.xs[0]).toBe(head.xs[1]);
+    expect(head.xs[0]).not.toBe(head.ys[0]);
+    expect(head.xs[0].id).not.toBe(head.ys[0].id);
   });
 
   it('resolves a back reference to the list itself, for a list that contains itself', () => {

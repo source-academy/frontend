@@ -118,8 +118,13 @@ function toJsValue(
     }
 
     // Build a real JS array with own `id` and `environment` so isDataArray() passes.
+    const builtins = new Map<unknown, unknown>();
     const arr: any = elements.map((el: CseSerializedValue) =>
-      inList(toJsValue(el, envMap, closureCache, listCache), envId ? envMap.get(envId) : null),
+      inList(
+        toJsValue(el, envMap, closureCache, listCache),
+        envId ? envMap.get(envId) : null,
+        builtins,
+      ),
     );
     arr.forEach(addClosureToHeap);
     Object.defineProperties(arr, {
@@ -162,8 +167,13 @@ function toJsValue(
       arr.objectId = v.objectId;
     }
     listCache.set(listId, arr);
+    const builtins = new Map<unknown, unknown>();
     for (const el of elements) {
-      const element = inList(toJsValue(el, envMap, closureCache, listCache), arr.environment);
+      const element = inList(
+        toJsValue(el, envMap, closureCache, listCache),
+        arr.environment,
+        builtins,
+      );
       arr.push(element);
       addClosureToHeap(element);
     }
@@ -246,16 +256,23 @@ function toJsValue(
  * beside a binding of the global frame; a function with an `environment` is drawn beside its
  * frame, like the functions that `stream` returns in Source (`isStreamFn`), but `floating`: there is
  * no arrow to the frame, as a built-in has no defining frame. It is a copy, as the built-in is shared
- * by the lists that hold it.
+ * by the lists that hold it, with an `id` so that it is live while its list is. `builtins` holds the
+ * copies of one list, so that a built-in that occurs twice in it is one function object.
  */
-function inList(element: unknown, environment: unknown): unknown {
+function inList(element: unknown, environment: unknown, builtins: Map<unknown, unknown>): unknown {
   if (typeof element !== 'function' || !environment || 'environment' in element) {
     return element;
   }
+  const existing = builtins.get(element);
+  if (existing) {
+    return existing;
+  }
   const fn: any = function PyBuiltinFunction() {};
   fn.toString = () => element.toString();
+  fn.id = `builtin_${++_closureSeq}`;
   fn.environment = environment;
   fn.floating = true;
+  builtins.set(element, fn);
   return fn;
 }
 
