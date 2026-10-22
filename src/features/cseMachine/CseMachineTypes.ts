@@ -71,7 +71,11 @@ export type PredefinedFn = Omit<Closure, 'predefined'> & { predefined: true };
  *
  * TODO: remove this and all other `StreamFn` code if `stream` becomes a pre-defined function
  */
-export type StreamFn = (() => [any, StreamFn] | null) & { environment: Env };
+export type StreamFn = (() => [any, StreamFn] | null) & {
+  environment: Env;
+  /** Drawn beside its frame, without an arrow to it (a built-in function in a list). */
+  floating?: boolean;
+};
 
 /** types of global functions in JS Slang */
 export type GlobalFn = BuiltInFn | PredefinedFn;

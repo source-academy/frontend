@@ -159,6 +159,66 @@ describe('heap objects in Python snapshots', () => {
     return (findNode(buildFakeEnvTreeFromSnapshot(snapshot).envTree, 'g')!.environment as any).head;
   };
 
+  it('draws a built-in function inside a list, as py-slang sends the thunk of `stream(1)` (#621)', () => {
+    const builtin = {
+      displayValue: '<built-in function anonymous stream>',
+      label: 'builtin_function_or_method',
+    };
+    const snapshot = {
+      stepIndex: 0,
+      control: [],
+      stash: [list(3, [{ displayValue: '1', label: 'int' }, builtin])],
+      environments: [{ id: 'g', name: 'global', parentId: null, bindings: [], isActive: true }],
+    } as unknown as CseSnapshot;
+    expect(() =>
+      CseMachine.drawEnvironments(snapshot, { width: 500, height: 500, clearDeadFrames: false }),
+    ).not.toThrow();
+    const global = {
+      stepIndex: 0,
+      control: [],
+      stash: [],
+      environments: [
+        {
+          id: 'g',
+          name: 'global',
+          parentId: null,
+          bindings: [
+            {
+              name: 'xs',
+              value: { ...list(4, [{ displayValue: '1', label: 'int' }, builtin]), objectId: '#1' },
+            },
+          ],
+          isActive: true,
+        },
+      ],
+    } as unknown as CseSnapshot;
+    CseMachine.drawEnvironments(global, { width: 500, height: 500, clearDeadFrames: false });
+    const thunk = [...Layout.values.values()].find(v => v instanceof FnValue) as FnValue;
+    expect(thunk).toBeDefined();
+    expect(thunk.arrow()).toBeUndefined();
+    // it is live while the list that holds it is, and drawn when unreachable objects are cleared
+    expect(Layout.liveObjectIDs.has((thunk.data as any).id)).toBe(true);
+    expect(thunk.isLive()).toBe(true);
+    // Clear Unreachable Objects keeps it: its list is reachable
+    CseMachine.drawEnvironments(global, { width: 500, height: 500, clearDeadFrames: true });
+    const kept = [...Layout.values.values()].find(v => v instanceof FnValue) as FnValue;
+    expect(kept.draw()).not.toBeNull();
+    expect(() =>
+      CseMachine.drawEnvironments(global, { width: 500, height: 500, clearDeadFrames: false }),
+    ).not.toThrow();
+  });
+
+  it('a built-in that occurs twice in a list is one function object, and one list does not share it with another (#4516)', () => {
+    const abs = { displayValue: '<built-in function abs>', label: 'builtin_function_or_method' };
+    const head = headOf([
+      { name: 'xs', value: list(5, [abs, abs]) },
+      { name: 'ys', value: list(6, [abs]) },
+    ]);
+    expect(head.xs[0]).toBe(head.xs[1]);
+    expect(head.xs[0]).not.toBe(head.ys[0]);
+    expect(head.xs[0].id).not.toBe(head.ys[0].id);
+  });
+
   it('resolves a back reference to the list itself, for a list that contains itself', () => {
     const head = headOf([
       { name: 'xs', value: { ...list(7, [list(7, [], { backReference: true })]), objectId: '#1' } },
