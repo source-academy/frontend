@@ -18,6 +18,7 @@ import {
 } from '../sideContent/SideContentTypes';
 import DraggableRepl from './DraggableRepl';
 import MobileKeyboard from './MobileKeyboard';
+import { mobileReplBehaviour } from './mobileReplBehaviour';
 import MobileSideContent, {
   type MobileSideContentProps,
 } from './mobileSideContent/MobileSideContent';
@@ -179,34 +180,13 @@ function MobileWorkspace(props: MobileWorkspaceProps) {
         handleEditorEval?.();
       }
 
-      // Show the REPL upon pressing the run tab if the previous tab is not listed below.
-      if (
-        newTabId === SideContentType.mobileEditorRun &&
-        !(
-          prevTabId === SideContentType.substVisualizer ||
-          prevTabId === SideContentType.cseMachine ||
-          prevTabId === SideContentType.autograder ||
-          prevTabId === SideContentType.testcases
-        )
-      ) {
+      const { showRepl, disableDragging } = mobileReplBehaviour(newTabId, prevTabId);
+      if (showRepl) {
         handleShowRepl(-300);
       } else {
         handleHideRepl();
       }
-
-      // Disable draggable REPL when on the files & stepper & cse tab.
-      if (
-        newTabId === SideContentType.folder ||
-        newTabId === SideContentType.substVisualizer ||
-        newTabId === SideContentType.cseMachine ||
-        (prevTabId === SideContentType.substVisualizer &&
-          newTabId === SideContentType.mobileEditorRun) ||
-        (prevTabId === SideContentType.cseMachine && newTabId === SideContentType.mobileEditorRun)
-      ) {
-        setIsDraggableReplDisabled(true);
-      } else {
-        setIsDraggableReplDisabled(false);
-      }
+      setIsDraggableReplDisabled(disableDragging);
     },
     [handleEditorEval],
   );

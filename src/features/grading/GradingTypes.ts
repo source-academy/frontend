@@ -151,7 +151,6 @@ export type IGradingTableProperties = {
   pagination: boolean;
   suppressMenuHide: boolean;
   suppressPaginationPanel: boolean;
-  suppressRowClickSelection: boolean;
 };
 
 /**

@@ -19,13 +19,14 @@ import ReactDOM from 'react-dom';
 import * as ReactDOMClient from 'react-dom/client';
 import * as ReactKonva from 'react-konva';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
-import { CONDUCTOR_STEPPER_TAB_ID } from 'src/features/conductor/stepperTab';
+import { isConductorStepperTab } from 'src/features/conductor/stepperTab';
 
 import { useAppSelector } from '../utils/Hooks';
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
 import { visitSideContent } from './SideContentActions';
 import type {
   ModuleSideContent,
+  PredefinedTabs,
   SideContentLocation,
   SideContentState,
   SideContentTab,
@@ -91,6 +92,29 @@ export function getDynamicTabs(debuggerContext: DebuggerContext): SideContentTab
 export const generateIconId = (tabId: TabId) => `${tabId}-icon`;
 export const getTabId = (tab: SideContentTab) =>
   tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
+
+export function combineAllTabs(
+  { beforeDynamicTabs, afterDynamicTabs }: PredefinedTabs,
+  dynamicTabs: SideContentTab[],
+  serviceTabs: SideContentTab[],
+): SideContentTab[] {
+  const serviceTabsById = new Map(serviceTabs.map(tab => [getTabId(tab), tab]));
+  const predefinedTabIds = new Set([...beforeDynamicTabs, ...afterDynamicTabs].map(getTabId));
+
+  const takeServiceTabIfRegistered = (predefinedTab: SideContentTab) =>
+    serviceTabsById.get(getTabId(predefinedTab)) ?? predefinedTab;
+  const serviceTabsWithoutPredefinedSlot = serviceTabs.filter(
+    serviceTab => !predefinedTabIds.has(getTabId(serviceTab)),
+  );
+
+  return [
+    ...beforeDynamicTabs.map(takeServiceTabIfRegistered),
+    ...dynamicTabs,
+    ...serviceTabsWithoutPredefinedSlot,
+    ...afterDynamicTabs.map(takeServiceTabIfRegistered),
+  ];
+}
+
 export const generateTabAlert = (shouldAlert: boolean) =>
   `side-content-tooltip${shouldAlert ? ' side-content-tab-alert' : ''}`;
 
@@ -105,7 +129,7 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
       if (
         (selectedTab === SideContentType.substVisualizer ||
           selectedTab === SideContentType.cseMachine ||
-          selectedTab === CONDUCTOR_STEPPER_TAB_ID) &&
+          isConductorStepperTab(selectedTab)) &&
         newId === SideContentType.mobileEditorRun
       ) {
         return;

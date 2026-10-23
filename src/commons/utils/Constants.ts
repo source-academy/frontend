@@ -142,6 +142,9 @@ const conductorConfig = {
   enable: process.env.REACT_APP_CONDUCTOR_ENABLE
     ? isTrue(process.env.REACT_APP_CONDUCTOR_ENABLE)
     : undefined,
+  ev3Enable: process.env.REACT_APP_CONDUCTOR_EV3_ENABLE
+    ? isTrue(process.env.REACT_APP_CONDUCTOR_EV3_ENABLE)
+    : undefined,
   languageDirectoryUrl: process.env.REACT_APP_LANGUAGE_DIRECTORY_URL || undefined,
   pluginDirectoryUrl: process.env.REACT_APP_PLUGIN_DIRECTORY_URL || undefined,
   modulesDirectoryUrl: process.env.REACT_APP_MODULES_DIRECTORY_URL || undefined,
@@ -157,7 +160,7 @@ export enum Links {
 
   sourceAcademyAssets = 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/',
   sourceDocs = 'https://docs.sourceacademy.org/',
-  pythonDocs = 'https://docs.sourceacademy.org/python/',
+  javascriptDocs = 'https://docs.sourceacademy.org/javascript/',
   moduleDocs = 'https://source-academy.github.io/modules/documentation/',
   textbook = 'https://sourceacademy.org/sicpjs/',
   playground = 'https://sourceacademy.org/playground',

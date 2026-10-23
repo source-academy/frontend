@@ -428,6 +428,9 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
           data={segmentPath}
           stroke={stroke}
           strokeWidth={this.isSelected() ? Config.ArrowHoveredStrokeWidth : Config.ArrowStrokeWidth}
+          // As wide to hit as the underlay path: this copy sits above the frame, which would
+          // otherwise get the hover unless the pointer is exactly on the line.
+          hitStrokeWidth={10}
           listening={interactive}
           onMouseEnter={interactive ? this.onMouseEnter : undefined}
           onMouseLeave={interactive ? this.onMouseLeave : undefined}

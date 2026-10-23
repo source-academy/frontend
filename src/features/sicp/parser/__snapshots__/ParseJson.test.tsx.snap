@@ -660,10 +660,68 @@ exports[`Parse reference > REFERENCE  successful 1`] = `
 exports[`Parse snippet > SNIPPET no eval successful 1`] = `
 <DocumentFragment>
   <pre
-    class="bp6-code-block"
+    style="color: white; background: rgb(44, 62, 80); font-family: "Inconsolata", "Consolas", monospace; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; word-wrap: normal; line-height: 1.5; tab-size: 4; hyphens: none; padding: 1em; margin: 0.5em 0px; overflow: auto; border-radius: 0.3em;"
   >
-    const a = 1;
-a+1;
+    <code
+      class="language-javascript"
+      style="white-space: pre; color: white; background: transparent; font-family: "Inconsolata", "Consolas", monospace; text-align: left; word-spacing: normal; word-break: normal; word-wrap: normal; line-height: 1.5; tab-size: 4; hyphens: none; font-size: 1rem;"
+    >
+      <span
+        class="token token"
+        style="color: rgb(255, 157, 0);"
+      >
+        const
+      </span>
+      <span>
+         a 
+      </span>
+      <span
+        class="token token"
+        style="color: rgb(255, 157, 0);"
+      >
+        =
+      </span>
+      <span>
+         
+      </span>
+      <span
+        class="token token"
+        style="color: rgb(255, 98, 140);"
+      >
+        1
+      </span>
+      <span
+        class="token token"
+        style="color: white;"
+      >
+        ;
+      </span>
+      <span>
+        
+
+      </span>
+      <span>
+        a
+      </span>
+      <span
+        class="token token"
+        style="color: rgb(255, 157, 0);"
+      >
+        +
+      </span>
+      <span
+        class="token token"
+        style="color: rgb(255, 98, 140);"
+      >
+        1
+      </span>
+      <span
+        class="token token"
+        style="color: white;"
+      >
+        ;
+      </span>
+    </code>
   </pre>
 </DocumentFragment>
 `;

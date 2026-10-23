@@ -24,7 +24,7 @@ import type {
   CseSnapshot,
 } from '../../../../features/conductor/CseMachineHostPlugin';
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
-import { CONDUCTOR_STEPPER_TAB_ID } from '../../../../features/conductor/stepperTab';
+import { isConductorStepperTab } from '../../../../features/conductor/stepperTab';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { type OverallState } from '../../../application/ApplicationTypes';
 import { visitSideContent } from '../../../sideContent/SideContentActions';
@@ -654,7 +654,7 @@ function* surfaceConductorError(
     .getTabs(workspaceLocation)
     .some(tab => getTabId(tab) === selectedTab);
   if (
-    selectedTab === CONDUCTOR_STEPPER_TAB_ID ||
+    isConductorStepperTab(selectedTab) ||
     selectedTab === SideContentType.cseMachine ||
     isModuleTabSelected
   ) {
@@ -672,10 +672,13 @@ function* handleErrors(
   lineOffsetRef: LineOffsetRef,
 ): SagaIterator {
   const errorChan = eventChannel(emitter => {
-    // Same undefined-forbidden-by-eventChannel issue as the result channel: the
-    // conductor package's BasicHostPlugin calls receiveError with errorMessage.error
-    // directly, which isn't guaranteed to be defined.
-    const onReceiveError = (error: unknown) => emitter(error === undefined ? null : error);
+    // Wrapped in an object, not emitted bare: eventChannel forbids undefined (and the conductor
+    // package's BasicHostPlugin calls receiveError with errorMessage.error directly, which isn't
+    // guaranteed to be defined), and redux-saga's take THROWS an Error instance into the
+    // generator instead of returning it. A bare runtime error would therefore land in the catch
+    // below, which interrupts at once and tears the Worker down before the output the program
+    // printed ahead of the error (queued on its own MessagePort) has arrived.
+    const onReceiveError = (error: unknown) => emitter({ error });
     hostPlugin.receiveError = onReceiveError;
     return () => {
       if (hostPlugin.receiveError === onReceiveError) {
@@ -685,7 +688,7 @@ function* handleErrors(
   });
   try {
     while (true) {
-      const error = yield take(errorChan);
+      const { error } = yield take(errorChan);
       receivedCount.count++;
       yield* surfaceConductorError(error, workspaceLocation, false, lineOffsetRef.current);
     }

@@ -71,7 +71,11 @@ export type PredefinedFn = Omit<Closure, 'predefined'> & { predefined: true };
  *
  * TODO: remove this and all other `StreamFn` code if `stream` becomes a pre-defined function
  */
-export type StreamFn = (() => [any, StreamFn] | null) & { environment: Env };
+export type StreamFn = (() => [any, StreamFn] | null) & {
+  environment: Env;
+  /** Drawn beside its frame, without an arrow to it (a built-in function in a list). */
+  floating?: boolean;
+};
 
 /** types of global functions in JS Slang */
 export type GlobalFn = BuiltInFn | PredefinedFn;
@@ -114,8 +118,19 @@ export type ReferenceType = Binding | ArrayUnit;
 /** type of an array of steps (as defined by a function), for the arrow classes */
 export type StepsArray = Array<(x: number, y: number) => [number, number]>;
 
-/** categories for filtering arrows by source/origin */
-export type ArrowOriginFilterKey = 'text' | 'frame' | 'function' | 'array' | 'control' | 'stash';
+/**
+ * categories for filtering arrows by source/origin. `program` is the arrows a plugin draws into
+ * the diagram from its own program pane (see `CseEnvironmentView`'s `onAnchors`); it is offered
+ * only by the environment view lent to plugins.
+ */
+export type ArrowOriginFilterKey =
+  | 'text'
+  | 'frame'
+  | 'function'
+  | 'array'
+  | 'control'
+  | 'stash'
+  | 'program';
 
 /** visibility map for arrow origin categories */
 export type ArrowOriginFilters = Record<ArrowOriginFilterKey, boolean>;

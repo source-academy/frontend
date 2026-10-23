@@ -17,6 +17,7 @@ import {
   getParamsText,
   getTextHeight,
   getTextWidth,
+  hoverBackgroundColor,
   isMainReference,
   isStreamFn,
   setHoveredCursor,
@@ -142,6 +143,7 @@ export class FnValue extends Value implements IHoverable {
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    Layout.notifyObjectHover(this.data, true);
     if (CseMachine.getPrintableMode()) {
       return;
     }
@@ -164,6 +166,7 @@ export class FnValue extends Value implements IHoverable {
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    Layout.notifyObjectHover(this.data, false);
     if (CseMachine.getPrintableMode()) {
       return;
     }
@@ -215,6 +218,16 @@ export class FnValue extends Value implements IHoverable {
     return { x: baseX, y: baseY, width, height };
   };
 
+  /** Gives the function's two circles the hovered background, or their normal one. */
+  setHoverBackground(hovered: boolean): void {
+    (this.ref.current?.getChildren() ?? []).forEach((shape: any) => {
+      // The outer circles (the ones with an outline); the inner dots keep their colour.
+      if (shape.attrs?.stroke) {
+        shape.fill(hovered ? hoverBackgroundColor() : defaultBackgroundColor());
+      }
+    });
+  }
+
   setArrowSourceHighlightedStyle(): void {
     const color = this.isLive() ? Config.HoverColor : Config.HoverDeadColor;
     (this.ref.current?.getChildren() ?? []).forEach((shape: any) => {
@@ -251,7 +264,7 @@ export class FnValue extends Value implements IHoverable {
     //update center x accourding to the same id from cache
     this.centerX = this.x() + this.radius * 2;
     this.enclosingFrame = Frame.getFrom(this.data.environment);
-    if (this.enclosingFrame) {
+    if (this.enclosingFrame && !(this.data as { floating?: boolean }).floating) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
     }
     if (!this.tooltipArrow) {
@@ -259,6 +272,10 @@ export class FnValue extends Value implements IHoverable {
     }
     this.tooltipArrow.setVisible(CseMachine.getPrintableMode() || this.showTooltipArrow);
 
+    // Clearing hides a function object that nothing refers to any more, as it hides a list.
+    if (Layout.clearDeadFrames && !this.isLive()) {
+      return null;
+    }
     const isLive: boolean = this.isLive();
     const textColor = isLive ? defaultTextColor() : fadedTextColor();
     const strokeColor = isLive ? defaultStrokeColor() : fadedStrokeColor();
@@ -278,7 +295,6 @@ export class FnValue extends Value implements IHoverable {
         revealLabelRef={this.revealLabelRef}
       />,
     );
-    // Keep function objects rendered so they remain hoverable in clear-dead-frames mode.
     return (
       <Fragment key={Layout.key++}>
         <Group

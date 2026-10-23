@@ -101,6 +101,13 @@ const RemoteExecutionSaga = combineSagaHandlers({
       try {
         oldClient.disconnect();
       } catch {}
+      // Belt-and-braces alongside the remoteExecDisconnect handler's own dispatch of this: a
+      // reconnect (picking a device again, or the automatic retry below) replaces `oldClient`
+      // without ever going through remoteExecDisconnect, so without this the EV3 Conductor's Worker
+      // built against `oldClient` would otherwise sit unused until a later Run happens to notice its
+      // client went stale (RemoteExecutionConductorSaga.ts's activeConductorClient check) instead of
+      // being torn down immediately when we already know `oldClient` is on its way out.
+      yield put(actions.remoteExecConductorDisconnect());
     }
     const client: SlingClient = new SlingClient({
       clientId: `${endpoint.clientNamePrefix}${generateClientNonce()}`,
@@ -246,6 +253,12 @@ const RemoteExecutionSaga = combineSagaHandlers({
     if (oldClient) {
       oldClient.disconnect();
     }
+    // Also tear down the EV3 Conductor's Worker/conduit (RemoteExecutionConductorSaga.ts), if one is
+    // live - it otherwise lingers until the next Run happens to use a different client (see that
+    // saga's own activeConductorClient check), rather than being torn down deterministically here on
+    // an actual, explicit disconnect. Harmless no-op if the Conductor pipeline was never used this
+    // session (handleConductorDisconnect there is idempotent).
+    yield put(actions.remoteExecConductorDisconnect());
     yield put(actions.remoteExecUpdateSession(undefined));
     yield put(actions.externalLibrarySelect(ExternalLibraryName.NONE, session.workspace, true));
   },

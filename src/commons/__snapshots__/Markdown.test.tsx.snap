@@ -13,7 +13,7 @@ exports[`Markdown page renders correctly 1`] = `
     <p>
       This language is 
       <a
-        href="https://docs.sourceacademy.org/"
+        href="https://docs.sourceacademy.org/javascript/"
         rel="noopener noreferrer"
         target="_blank"
       >
@@ -34,7 +34,7 @@ for the book
       </a>
       . You have chosen the sublanguage 
       <a
-        href="https://docs.sourceacademy.org/source_1/"
+        href="https://docs.sourceacademy.org/javascript/javascript_1/"
         rel="noopener noreferrer"
         target="_blank"
       >

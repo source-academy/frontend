@@ -29,8 +29,8 @@ import { Config } from './CseMachineConfig';
 // one circle — using a counter prevents that collision.
 let _closureSeq = 0;
 
-// Minimal stub AST node — getParamsText/getBodyText read .functionName and data.toString()
-// from the fake function, not from this node, so a stub is sufficient.
+// Minimal stub AST node — getParamsText/getBodyText read .functionName, .bodySource and
+// data.toString() from the fake function, not from this node, so a stub is sufficient.
 const STUB_BODY = { type: 'BlockStatement', body: [] };
 
 function makeStubNode(paramNames: string[]) {
@@ -51,8 +51,25 @@ function toJsValue(
   const label = v.label.toLowerCase();
 
   if (label === 'int' || label === 'number') {
-    const n = parseFloat(v.displayValue);
-    return isNaN(n) ? 0 : n;
+    // `Number` rather than `parseFloat`, and no NaN fallback: the three non-finite values are
+    // real Source values a student can produce and see bound in a frame — `NaN` and `Infinity`
+    // are predeclared globals. `parseFloat('NaN')` is NaN, which the old `isNaN(n) ? 0` turned
+    // into 0; `parseFloat` also stops at the first non-numeric character, so a displayValue of
+    // 'Infinity' parsed fine but anything it could not read became 0 too.
+    //
+    // Guarding on the exact spellings keeps the fallback for a genuinely unparseable
+    // displayValue, rather than silently rendering it as a number.
+    if (v.displayValue === 'NaN') {
+      return NaN;
+    }
+    if (v.displayValue === 'Infinity') {
+      return Infinity;
+    }
+    if (v.displayValue === '-Infinity') {
+      return -Infinity;
+    }
+    const n = Number(v.displayValue);
+    return Number.isNaN(n) ? 0 : n;
   }
   if (label === 'float' || label === 'complex') {
     // Return a source object so PrimitiveValue uses toReplString() instead of String(value).
@@ -66,19 +83,28 @@ function toJsValue(
   if (label === 'str' || label === 'string') {
     return v.displayValue.replace(/^["']|["']$/g, '');
   }
+  if (label === 'empty_list') {
+    // Source's empty list. A real `null` is what the renderer wants here: it drives the
+    // ArrayNullUnit visual and the box-and-pointer diagram's terminator. Kept separate from the
+    // Python labels below, which deliberately avoid exactly that visual.
+    return null;
+  }
   if (label === 'nonetype' || label === 'none' || label === 'null') {
     // Return a source object so PrimitiveValue/Text use toReplString() instead of
     // String(value) or the empty-list ArrayNullUnit visual, both of which render JS `null`
-    // as "null" rather than Python's `None`.
-    return { toReplString: () => 'None' };
+    // as "null" rather than Python's `None`. In a list's box, though, it is drawn like the
+    // empty list, as a slash (`isNone`; see isSnapshotNone).
+    return { toReplString: () => 'None', isNone: true };
   }
   if (label === 'undefined') {
     return undefined;
   }
   if (label === 'unassigned') {
-    // Reconstruct the js-slang uninitialized-const sentinel so Frame.tsx
-    // detects it via isUnassigned() and renders the binding as empty (no value shown).
-    return Symbol('const declaration');
+    // A symbol, so Frame.tsx detects it via isUnassigned() and renders the binding as empty (no
+    // value shown). Not js-slang's uninitialized-const sentinel (`Symbol('const declaration')`),
+    // which Frame.tsx also takes to mark a constant, drawn with `:=`: a binding is constant only if
+    // the snapshot says so (`isConst`), and Python's (e.g. a local not yet assigned) never are.
+    return Symbol('unassigned');
   }
 
   if (label === 'array') {
@@ -92,9 +118,15 @@ function toJsValue(
     }
 
     // Build a real JS array with own `id` and `environment` so isDataArray() passes.
+    const builtins = new Map<unknown, unknown>();
     const arr: any = elements.map((el: CseSerializedValue) =>
-      toJsValue(el, envMap, closureCache, listCache),
+      inList(
+        toJsValue(el, envMap, closureCache, listCache),
+        envId ? envMap.get(envId) : null,
+        builtins,
+      ),
     );
+    arr.forEach(addClosureToHeap);
     Object.defineProperties(arr, {
       id: { value: arrayId ?? `arr_${Math.random()}`, writable: true },
       environment: { value: envId ? (envMap.get(envId) ?? null) : null, writable: true },
@@ -125,11 +157,26 @@ function toJsValue(
     }
 
     // Build a real JS array — isDataArray() checks Array.isArray + own 'id' + own 'environment'.
-    const arr: any = elements.map(el => toJsValue(el, envMap, closureCache, listCache));
+    // It is cached before its elements are converted, so a list that contains itself
+    // (`xs[0] = xs`, which py-slang sends as a back reference: the same id, no elements) has
+    // itself as that element.
+    const arr: any = [];
     arr.id = `list_${listId}`;
     arr.environment = envMap.get(envId) ?? null;
-
+    if (v.objectId !== undefined) {
+      arr.objectId = v.objectId;
+    }
     listCache.set(listId, arr);
+    const builtins = new Map<unknown, unknown>();
+    for (const el of elements) {
+      const element = inList(
+        toJsValue(el, envMap, closureCache, listCache),
+        arr.environment,
+        builtins,
+      );
+      arr.push(element);
+      addClosureToHeap(element);
+    }
     return arr;
   }
 
@@ -151,6 +198,7 @@ function toJsValue(
       }
       const builtinFn: any = function PyBuiltinFunction() {};
       builtinFn.toString = () => v.displayValue;
+      builtinFn.isPyBuiltin = true; // drawn as `GlobalFnValue` with a `<built-in>` tooltip
       closureCache.set(cacheKey, builtinFn);
       return builtinFn;
     }
@@ -162,8 +210,16 @@ function toJsValue(
     // Cache named functions only: same name + defining env + params uniquely identifies a named
     // closure. Anonymous lambdas cannot be distinguished by metadata alone — two lambdas with the
     // same params in the same scope would alias, producing incorrect shared JS objects.
+    // A closure the evaluator names (`objectId`) is identified by that, lambdas included.
     const isNamed = funcName !== 'lambda' && funcName !== 'anonymous';
-    const cacheKey = isNamed ? `${funcName}@${closureEnvId}@${params.join(',')}` : null;
+    const cacheKey =
+      v.objectId !== undefined
+        ? `object@${v.objectId}`
+        : isNamed
+          ? // The body too, if sent: a function redefined under the same name (after `g = f`) is
+            // another function, with its own body.
+            `${funcName}@${closureEnvId}@${params.join(',')}@${typeof meta?.body === 'string' ? meta.body : ''}`
+          : null;
     if (cacheKey && closureCache.has(cacheKey)) {
       return closureCache.get(cacheKey);
     }
@@ -171,11 +227,19 @@ function toJsValue(
     const fakeFn: any = function SnapshotClosure() {};
     fakeFn.id = `snap_${++_closureSeq}_${closureEnvId}`;
     fakeFn.environment = envMap.get(closureEnvId) ?? null;
-    fakeFn.functionName = `${funcName}(${params.join(', ')}) => {}`;
+    // getParamsText reads the parameters from `functionName`, up to its `=>`.
+    fakeFn.functionName = `(${params.join(', ')}) => {}`;
+    // The body's source, if the evaluator sends it (py-slang's `metadata.body`), for getBodyText.
+    if (typeof meta?.body === 'string') {
+      fakeFn.bodySource = meta.body;
+    }
     fakeFn.predefined = false;
     fakeFn.node = makeStubNode(params);
     fakeFn.originalNode = fakeFn.node;
     fakeFn.toString = () => `function ${funcName}(${params.join(', ')}) { [Python] }`;
+    if (v.objectId !== undefined) {
+      fakeFn.objectId = v.objectId;
+    }
     if (cacheKey) {
       closureCache.set(cacheKey, fakeFn);
     }
@@ -184,6 +248,64 @@ function toJsValue(
 
   // Fallback: render as a string primitive (shows as PrimitiveValue)
   return v.displayValue;
+}
+
+/**
+ * A built-in function that sits in a list (e.g. the thunk of `stream(1)`, which py-slang sends
+ * without a defining frame) as a function of that list's frame. The diagram draws a built-in only
+ * beside a binding of the global frame; a function with an `environment` is drawn beside its
+ * frame, like the functions that `stream` returns in Source (`isStreamFn`), but `floating`: there is
+ * no arrow to the frame, as a built-in has no defining frame. It is a copy, as the built-in is shared
+ * by the lists that hold it, with an `id` so that it is live while its list is. `builtins` holds the
+ * copies of one list, so that a built-in that occurs twice in it is one function object.
+ */
+function inList(element: unknown, environment: unknown, builtins: Map<unknown, unknown>): unknown {
+  if (typeof element !== 'function' || !environment || 'environment' in element) {
+    return element;
+  }
+  const existing = builtins.get(element);
+  if (existing) {
+    return existing;
+  }
+  const fn: any = function PyBuiltinFunction() {};
+  fn.toString = () => element.toString();
+  fn.id = `builtin_${++_closureSeq}`;
+  fn.environment = environment;
+  fn.floating = true;
+  builtins.set(element, fn);
+  return fn;
+}
+
+/**
+ * Puts a closure that sits in a list or array into the heap of the frame it was made in, like a
+ * closure that is bound to a name in another frame (see pass 3b of buildFakeEnvTreeFromSnapshot).
+ * If nothing in that frame refers to it, getUnreferencedObjects() makes a dummy binding for it
+ * there, which places it beside its frame. Without one, nothing is its main reference (a
+ * reference from its own frame), so it would stay at the origin of the drawing.
+ */
+function addClosureToHeap(element: unknown): void {
+  const environment = typeof element === 'function' ? (element as any).environment : undefined;
+  environment?.heap?.add(element);
+}
+
+/**
+ * Puts a list, and every list nested in it, into its own environment's heap. A nested list may
+ * belong to another environment than the list holding it (e.g. `[f()]`, where `f` returns a
+ * list), and is laid out from its own environment. `seen` guards against lists that contain
+ * themselves.
+ */
+function addListToHeaps(value: unknown, seen: Set<unknown>): void {
+  if (!Array.isArray(value) || seen.has(value)) {
+    return;
+  }
+  seen.add(value);
+  const environment = (value as any).environment;
+  if (environment) {
+    environment.heap.add(value);
+  }
+  for (const element of value) {
+    addListToHeaps(element, seen);
+  }
 }
 
 /** Build a duck-typed stack that satisfies the IStack interface used by ControlStack/StashStack. */
@@ -259,8 +381,14 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
     // Frame.tsx accesses entries[0][0] for 'global' env without guarding for empty heads.
     // py-slang's global env has no head bindings (builtins live in nativeStorage), so we
     // pre-populate the same sentinel Source uses to keep Frame's constructor from crashing.
-    const head: Record<string, unknown> =
-      f.name === 'global' ? { [Config.GlobalFrameDefaultText]: Symbol() } : {};
+    // The sentinel stands in for "the builtins live somewhere you cannot see" — true for
+    // py-slang, whose builtins are in nativeStorage and whose global frame is genuinely empty.
+    // js-slang puts every builtin in the global environment's own head, so that frame arrives
+    // full and the sentinel would just be a spurious extra row above the real bindings.
+    const needsGlobalSentinel = f.name === 'global' && f.bindings.length === 0;
+    const head: Record<string, unknown> = needsGlobalSentinel
+      ? { [Config.GlobalFrameDefaultText]: Symbol() }
+      : {};
     const env = {
       id: f.id,
       name: f.name,
@@ -268,6 +396,8 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
       tail: null as Environment | null,
       heap: new Heap(),
       globalNames: f.globalNames,
+      // The frame's heading, if the evaluator chose one (see Frame.tsx's getFrameLabel).
+      label: f.label,
     } as unknown as Environment;
     envMap.set(f.id, env);
   }
@@ -279,6 +409,24 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
       if (parent) {
         (envMap.get(f.id) as any).tail = parent;
       }
+    }
+  }
+
+  // ── Pass 3-: reserve each binding's place, in the evaluator's order ─────
+  // The two passes below add non-closure and closure values separately, which would draw every
+  // function binding under all the others. A property keeps its place when it is redefined, so
+  // reserving the places first keeps the frame's rows in the order the evaluator listed them
+  // (a frame then only grows downwards). Places no pass fills are removed again after pass 3b.
+  const reserved = Symbol('reserved');
+  for (const f of frames) {
+    const env = envMap.get(f.id)!;
+    for (const b of f.bindings) {
+      Object.defineProperty(env.head, b.name, {
+        value: reserved,
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      });
     }
   }
 
@@ -304,10 +452,7 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
   for (const f of frames) {
     const env = envMap.get(f.id)!;
     for (const b of f.bindings) {
-      if (
-        /closure|function|lambda|method/i.test(b.value.label) &&
-        (b.value.metadata as any)?.closureFrameId
-      ) {
+      if (/closure|function|lambda|method/i.test(b.value.label)) {
         const val = toJsValue(b.value, envMap, closureCache, listCache);
         Object.defineProperty(env.head, b.name, {
           value: val,
@@ -324,6 +469,15 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
         if (definingEnv && definingEnv !== env) {
           definingEnv.heap.add(val);
         }
+      }
+    }
+  }
+
+  for (const f of frames) {
+    const head = envMap.get(f.id)!.head as Record<string, unknown>;
+    for (const b of f.bindings) {
+      if (head[b.name] === reserved) {
+        delete head[b.name];
       }
     }
   }
@@ -474,18 +628,25 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
   const stashSv = [...snapshot.stash].reverse();
   const stashItems = stashSv.map(sv => toJsValue(sv, envMap, closureCache, listCache));
 
-  // Stash closures not yet assigned to a name still need to appear in their defining env's heap
-  // so getUnreferencedObjects() can render them as an unbound arrow in the program frame —
-  // matching the non-conductor CSE machine's behaviour at the step before `assign foo` runs.
+  // Stash closures and lists not yet assigned to a name still need to appear in their env's heap
+  // (a closure's defining env; a list's, from its metadata.envId) so getUnreferencedObjects() can
+  // render them as an unbound arrow in that frame — matching the non-conductor CSE machine's
+  // behaviour at the step before `assign foo` runs. Without this, a list that only the stash holds
+  // (e.g. the e-stepper's `length(llist(1, 2, 3))`, before the call binds it) is not drawn at all.
   for (let i = 0; i < stashSv.length; i++) {
     const sv = stashSv[i];
     const label = sv.label.toLowerCase();
-    if (/closure|function|lambda|method/.test(label) && (sv.metadata as any)?.closureFrameId) {
+    const isStashClosure =
+      /closure|function|lambda|method/.test(label) && (sv.metadata as any)?.closureFrameId;
+    const isStashList = label === 'list' || label === 'array';
+    if (isStashClosure) {
       const val = stashItems[i];
       const definingEnv = (val as any)?.environment;
       if (definingEnv) {
         definingEnv.heap.add(val);
       }
+    } else if (isStashList) {
+      addListToHeaps(stashItems[i], new Set());
     }
   }
 

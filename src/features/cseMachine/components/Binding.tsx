@@ -126,10 +126,6 @@ export class Binding extends Visible {
     if (!Layout.clearDeadFrames) {
       return true;
     }
-    // Keep function values interactive even when they are classified as dead.
-    if (this.value instanceof FnValue || this.value instanceof GlobalFnValue) {
-      return true;
-    }
     return this.value?.isLive?.() ?? true;
   }
 
@@ -175,10 +171,11 @@ export class Binding extends Visible {
 
     return (
       <Fragment key={Layout.key++}>
+        {/* Before the key: the arrow's in-frame part has a wide hit area that starts at the key. */}
+        {this.arrow?.draw()}
         {this.isDummyBinding
           ? null // omit the key since value is anonymous
           : this.key.draw()}
-        {this.arrow?.draw()}
         {shouldRenderReferencedValue ? this.value.draw() : null}
       </Fragment>
     );

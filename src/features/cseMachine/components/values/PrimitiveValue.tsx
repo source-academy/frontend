@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import type { Primitive, ReferenceType } from '../../CseMachineTypes';
-import { getTextWidth, isNull, isSourceObject } from '../../CseMachineUtils';
+import { getTextWidth, isNull, isSnapshotNone, isSourceObject } from '../../CseMachineUtils';
 import { ArrayNullUnit } from '../ArrayNullUnit';
 import { Binding } from '../Binding';
 import { Text } from '../Text';
@@ -45,8 +45,10 @@ export class PrimitiveValue extends Value {
         faded: true,
       });
     } else {
+      // In a box of a box-and-pointer diagram, Python's `None` is drawn as JS `null` is: a slash.
+      const drawnAsNull = isNull(this.data) || isSnapshotNone(this.data);
       const maxWidth = reference.width();
-      const textWidth = isNull(this.data)
+      const textWidth = drawnAsNull
         ? 0
         : Math.min(
             getTextWidth(isSourceObject(data) ? data.toReplString() : String(this.data)),
@@ -54,7 +56,7 @@ export class PrimitiveValue extends Value {
           );
       this._x = reference.x() + (reference.width() - textWidth) / 2;
       this._y = reference.y() + (reference.height() - Config.FontSize) / 2;
-      this.text = isNull(this.data)
+      this.text = drawnAsNull
         ? new ArrayNullUnit(reference)
         : new Text(this.data, this.x(), this.y(), {
             maxWidth: maxWidth,
