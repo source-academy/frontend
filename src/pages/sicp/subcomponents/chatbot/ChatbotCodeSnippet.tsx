@@ -4,8 +4,9 @@ import { useCallback } from 'react';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
 import ControlBarCloseButton from 'src/commons/controlBar/ControlBarCloseButton';
-import { useAppDispatch } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
+import { splitLanguageId } from 'src/features/directory/languageIdCodec';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import Playground from 'src/pages/playground/Playground';
 
@@ -40,8 +41,17 @@ function ChatbotCodeSnippet({
 
   const isActive = activeSnippetId === id;
 
-  // Generate the hash for the Playground
-  const initialEditorValueHash = `prgrm=${compressToEncodedURIComponent(code)}`;
+  const selectedLanguageId = useAppSelector(state => state.languageDirectory.selectedLanguageId);
+
+  // Generate the hash for the Playground. Python snippets open in the student's selected Python
+  // sublanguage, or Python §4 (which accepts §1-§3 code) if they have a non-Python language selected.
+  const pythonLanguageId = selectedLanguageId?.startsWith('python')
+    ? selectedLanguageId
+    : 'python4';
+  const { language: lang, variant } = splitLanguageId(pythonLanguageId);
+  const languageParams =
+    language === 'python' ? `&language=${lang}${variant ? `&variant=${variant}` : ''}` : '';
+  const initialEditorValueHash = `prgrm=${compressToEncodedURIComponent(code)}${languageParams}`;
 
   const handleOpen = () => {
     dispatch(WorkspaceActions.resetWorkspace('sicp'));

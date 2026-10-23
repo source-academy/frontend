@@ -42,6 +42,7 @@ export type SessionState = {
   readonly llmModel?: string;
   readonly llmApiUrl?: string;
   readonly llmCourseLevelPrompt?: string;
+  readonly pixelbotModel?: string;
   readonly pixelbotRoutingPrompt?: string;
   readonly pixelbotAnswerPrompt?: string;
   readonly feedbackUrl?: string;
@@ -126,6 +127,7 @@ export type CourseConfiguration = {
   llmModel?: string;
   llmApiUrl?: string;
   llmCourseLevelPrompt?: string;
+  pixelbotModel?: string;
   pixelbotRoutingPrompt?: string;
   pixelbotAnswerPrompt?: string;
   feedbackUrl?: string;
