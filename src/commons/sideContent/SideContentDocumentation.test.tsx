@@ -15,6 +15,7 @@ const pythonLanguage: ILanguageDefinition = {
   id: 'python1',
   name: 'Python §1',
   evaluators: [],
+  documentation: { languageUrl: 'https://example.com/python_1/' },
 };
 
 type StoreOptions = {
@@ -111,13 +112,19 @@ describe('SideContentDocumentation', () => {
     );
   });
 
-  test('falls back to the default documentation URLs', () => {
+  test('has no Modules page when the language defines no modules documentation', () => {
     renderDocumentation();
-    expect(screen.getByTitle('Python §1').getAttribute('src')).toBe(Links.sourceDocs);
-    expect(screen.queryByTitle('Modules')).toBeNull();
+    expect(screen.getByTitle('Python §1').getAttribute('src')).toBe(
+      'https://example.com/python_1/',
+    );
+    expect(screen.queryByText('Modules')).toBeNull();
+  });
 
-    fireEvent.click(screen.getByText('Modules'));
-    expect(screen.getByTitle('Modules').getAttribute('src')).toBe(Links.moduleDocs);
+  test('renders nothing for a language without documentation', () => {
+    const { container } = renderDocumentation({
+      language: { id: 'python1', name: 'Python §1', evaluators: [] },
+    });
+    expect(container.innerHTML).toBe('');
   });
 
   test('links to the Source chapter documentation when Conductor is disabled', () => {

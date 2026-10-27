@@ -153,7 +153,7 @@ function NavigationBar() {
       selectedLanguage?.textbook
         ? [
             {
-              to: selectedLanguage.textbook.url.endsWith('json_py/') ? '/sicpy' : '/sicpjs',
+              to: selectedLanguage.textbook.route,
               icon: IconNames.BOOK,
               text: selectedLanguage.textbook.name,
             },
