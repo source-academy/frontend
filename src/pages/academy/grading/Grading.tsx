@@ -76,7 +76,6 @@ function Grading() {
     (page: number, filterParams: object) => {
       setRefreshQueryData({ page, filterParams });
       dispatch(WorkspaceActions.setGradingHasLoadedBefore());
-      dispatch(WorkspaceActions.increaseRequestCounter());
       dispatch(
         SessionActions.fetchGradingOverviews(
           showUserGroups,
@@ -92,7 +91,6 @@ function Grading() {
 
   useEffect(() => {
     if (refreshQueried) {
-      dispatch(WorkspaceActions.increaseRequestCounter());
       dispatch(
         SessionActions.fetchGradingOverviews(
           showUserGroups,
@@ -127,8 +125,7 @@ function Grading() {
           : e,
       ) ?? [],
     );
-    dispatch(WorkspaceActions.decreaseRequestCounter());
-  }, [gradingOverviews, dispatch]);
+  }, [gradingOverviews]);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (

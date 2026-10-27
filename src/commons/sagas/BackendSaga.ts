@@ -382,17 +382,22 @@ const newBackendSagaOne = combineSagaHandlers({
       }
     });
 
-    const gradingOverviews: GradingOverviews | null = yield call(
-      getGradingOverviews,
-      tokens,
-      filterToGroup,
-      publishedFilter,
-      pageParams,
-      filterParams,
-      sortedBy,
-    );
-    if (gradingOverviews) {
-      yield put(actions.updateGradingOverviews(gradingOverviews));
+    yield put(actions.increaseRequestCounter());
+    try {
+      const gradingOverviews: GradingOverviews | null = yield call(
+        getGradingOverviews,
+        tokens,
+        filterToGroup,
+        publishedFilter,
+        pageParams,
+        filterParams,
+        sortedBy,
+      );
+      if (gradingOverviews) {
+        yield put(actions.updateGradingOverviews(gradingOverviews));
+      }
+    } finally {
+      yield put(actions.decreaseRequestCounter());
     }
   },
   [SessionActions.fetchTeamFormationOverview.type]: function* (action) {
