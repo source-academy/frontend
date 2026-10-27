@@ -4,7 +4,7 @@ import type { CellClickedEvent, ColDef } from 'ag-grid-community';
 import { AgGridReact, type CustomHeaderProps } from 'ag-grid-react';
 import classNames from 'classnames';
 import { debounce } from 'lodash-es';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import ColumnHeader from 'src/commons/agGrid/ColumnHeader';
 import HiddenColumnsBar from 'src/commons/agGrid/HiddenColumnsBar';
@@ -18,7 +18,6 @@ import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type {
   ColumnFieldsKeys,
   ColumnFilter,
-  ColumnFiltersState,
   GradingOverview,
   IGradingTableProperties,
   IGradingTableRow,
@@ -28,6 +27,7 @@ import { ColumnFields, ColumnName, SortStates } from 'src/features/grading/Gradi
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import classes from '../Grading.module.css';
+import { useGradingTableParams } from '../useGradingTableParams';
 import { getBadgeColorFromLabel } from './gradingBadges/gradingBadgeColors';
 import GradingSortIcon from './GradingSortIcon';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
@@ -81,16 +81,12 @@ function GradingSubmissionTable({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const tableFilters = useAppSelector(state => state.workspaces.grading.submissionsTableFilters);
   const requestCounter = useAppSelector(state => state.workspaces.grading.requestCounter);
   const courseId = useAppSelector(store => store.session.courseId);
 
   const gridRef = useRef<AgGridReact<IGradingTableRow>>(null);
 
-  const [page, setPage] = useState(0);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
-    ...tableFilters.columnFilters,
-  ]);
+  const { page, setPage, columnFilters, setColumnFilters } = useGradingTableParams();
   const [cellFilters, setCellFilters] = useState<{ id: ColumnFields; value: string }[]>([]);
   const columnVisibility = useColumnVisibility({
     getColumnLabel: id => ColumnName[id as ColumnFieldsKeys],
@@ -103,7 +99,6 @@ function GradingSubmissionTable({
   const isLoading = useMemo(() => requestCounter > 0, [requestCounter]);
 
   const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
-  const resetPage = useCallback(() => setPage(0), [setPage]);
 
   const defaultColumnDefs: ColDef = {
     filter: false,
@@ -167,20 +162,15 @@ function GradingSubmissionTable({
 
   // Filter is to filter by cell value
   const handleFilterAdd = ({ id, value }: ColumnFilter) => {
-    setColumnFilters((prev: ColumnFiltersState) => {
-      const alreadyExists = prev.reduce(
-        (acc, curr) => acc || (curr.id === id && curr.value === value),
-        false,
-      );
-      return alreadyExists ? [...prev] : [...prev, { id, value }];
-    });
-    resetPage();
+    const alreadyExists = columnFilters.some(curr => curr.id === id && curr.value === value);
+    if (!alreadyExists) {
+      setColumnFilters([...columnFilters, { id, value }]);
+    }
   };
 
   const handleFilterRemove = ({ id, value }: ColumnFilter) => {
     const newFilters = columnFilters.filter(filter => filter.id !== id && filter.value !== value);
     setColumnFilters(newFilters);
-    resetPage();
   };
 
   useEffect(() => {
@@ -195,22 +185,29 @@ function GradingSubmissionTable({
         false,
       )
     ) {
-      setColumnFilters((prev: ColumnFiltersState) =>
-        prev.filter(filter => filter.id !== ColumnFields.progressStatus),
-      );
-      resetPage();
+      setColumnFilters(columnFilters.filter(filter => filter.id !== ColumnFields.progressStatus));
       return;
     }
     dispatch(WorkspaceActions.updateSubmissionsTableFilters({ columnFilters }));
-  }, [columnFilters, showAllSubmissions, dispatch, resetPage]);
+  }, [columnFilters, showAllSubmissions, setColumnFilters, dispatch]);
+
+  // use effect event to prevent refetching the current page
+  const isPageOutOfRange = useEffectEvent((page: number) => maxPage >= 0 && page > maxPage);
 
   useEffect(() => {
-    resetPage();
-  }, [updateEntries, resetPage]);
-
-  useEffect(() => {
+    if (isPageOutOfRange(page)) {
+      setPage(0);
+      return;
+    }
     updateEntries(page, backendFilterParams);
-  }, [updateEntries, page, backendFilterParams]);
+  }, [updateEntries, page, backendFilterParams, setPage]);
+
+  // possible for rows to disappear after reloading, e.g. after publishing
+  useEffect(() => {
+    if (!isLoading && maxPage >= 0 && page > maxPage) {
+      setPage(0);
+    }
+  }, [isLoading, maxPage, page, setPage]);
 
   useEffect(() => {
     if (gridRef.current?.api) {
@@ -267,7 +264,7 @@ function GradingSubmissionTable({
 
   useEffect(() => {
     setColDefs(columns);
-  }, [resetPage, columns]);
+  }, [columns]);
 
   return (
     <>
