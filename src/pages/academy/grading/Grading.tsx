@@ -45,7 +45,8 @@ function Grading() {
   const defaultShowUserGroups = !isAdmin && group !== null;
 
   const tableParams = useGradingTableParams();
-  const { pageSize, setPageSize, showAllSubmissions, setShowAllSubmissions, sort } = tableParams;
+  const { setPage, pageSize, setPageSize, showAllSubmissions, setShowAllSubmissions, sort } =
+    tableParams;
   const showUserGroups = tableParams.showUserGroups ?? defaultShowUserGroups;
   const setShowUserGroups = (value: boolean) =>
     tableParams.setShowUserGroups(value === defaultShowUserGroups ? undefined : value);
@@ -126,6 +127,13 @@ function Grading() {
       ) ?? [],
     );
   }, [gradingOverviews]);
+
+  const isPastLastPage = gradingOverviews?.data?.length === 0 && gradingOverviews.count > 0;
+  useEffect(() => {
+    if (isPastLastPage) {
+      setPage(0);
+    }
+  }, [isPastLastPage, setPage]);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (

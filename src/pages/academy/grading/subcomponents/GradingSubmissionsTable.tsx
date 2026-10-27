@@ -4,7 +4,7 @@ import type { CellClickedEvent, ColDef } from 'ag-grid-community';
 import { AgGridReact, type CustomHeaderProps } from 'ag-grid-react';
 import classNames from 'classnames';
 import { debounce } from 'lodash-es';
-import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import ColumnHeader from 'src/commons/agGrid/ColumnHeader';
 import HiddenColumnsBar from 'src/commons/agGrid/HiddenColumnsBar';
@@ -191,23 +191,9 @@ function GradingSubmissionTable({
     dispatch(WorkspaceActions.updateSubmissionsTableFilters({ columnFilters }));
   }, [columnFilters, showAllSubmissions, setColumnFilters, dispatch]);
 
-  // use effect event to prevent refetching the current page
-  const isPageOutOfRange = useEffectEvent((page: number) => maxPage >= 0 && page > maxPage);
-
   useEffect(() => {
-    if (isPageOutOfRange(page)) {
-      setPage(0);
-      return;
-    }
     updateEntries(page, backendFilterParams);
-  }, [updateEntries, page, backendFilterParams, setPage]);
-
-  // possible for rows to disappear after reloading, e.g. after publishing
-  useEffect(() => {
-    if (!isLoading && maxPage >= 0 && page > maxPage) {
-      setPage(0);
-    }
-  }, [isLoading, maxPage, page, setPage]);
+  }, [updateEntries, page, backendFilterParams]);
 
   useEffect(() => {
     if (gridRef.current?.api) {
