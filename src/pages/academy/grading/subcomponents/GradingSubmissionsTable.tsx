@@ -134,6 +134,14 @@ function GradingSubmissionTable({
 
   useEffect(() => () => debouncedSetPage.cancel(), [debouncedSetPage]);
 
+  // ensure only one request in flight
+  useEffect(() => {
+    if (isLoading && pendingPage !== page) {
+      debouncedSetPage.cancel();
+      setPendingPage(page);
+    }
+  }, [isLoading, pendingPage, page, debouncedSetPage]);
+
   // the page can fall out of range when rows disappear (e.g. after publishing), so go back to the first page
   useEffect(() => {
     if (!isLoading && maxPage >= 0 && (page > maxPage || pendingPage > maxPage)) {
