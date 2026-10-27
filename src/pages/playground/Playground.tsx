@@ -94,7 +94,10 @@ import MobileWorkspace, {
 import type { SideBarTab } from '../../commons/sideBar/SideBar';
 import { type SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants, { Links } from '../../commons/utils/Constants';
-import { generateLanguageIntroduction } from '../../commons/utils/IntroductionHelper';
+import {
+  DEFAULT_WELCOME_TEXT,
+  generateLanguageIntroduction,
+} from '../../commons/utils/IntroductionHelper';
 import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
 import { type IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { type WorkspaceProps } from '../../commons/workspace/Workspace';
@@ -969,10 +972,24 @@ function Playground(props: PlaygroundProps) {
     return evaluator?.welcome ? `${lang.welcome}\n\n${evaluator.welcome}` : lang.welcome;
   });
 
+  // A Conductor language without documentation links gets no Documentation tab; the legacy Source
+  // languages always have one.
+  const hasDocumentation = useAppSelector(state => {
+    if (!selectConductorEnable(state)) {
+      return true;
+    }
+    const { selectedLanguageId, languageMap } = state.languageDirectory;
+    return !!(selectedLanguageId && languageMap[selectedLanguageId]?.documentation);
+  });
+
   const playgroundIntroductionTab: SideContentTab = useMemo(
     () =>
-      makeIntroductionTabFrom(conductorWelcomeText ?? generateLanguageIntroduction(languageConfig)),
-    [conductorWelcomeText, languageConfig],
+      makeIntroductionTabFrom(
+        conductorEnabled
+          ? (conductorWelcomeText ?? DEFAULT_WELCOME_TEXT)
+          : generateLanguageIntroduction(languageConfig),
+      ),
+    [conductorEnabled, conductorWelcomeText, languageConfig],
   );
   const isDataVisualizerTabShown = useIsServiceTabShown(
     SideContentType.dataVisualizer,
@@ -996,7 +1013,7 @@ function Playground(props: PlaygroundProps) {
       return tabs;
     }
 
-    if (!isSicpEditor) {
+    if (!isSicpEditor && hasDocumentation) {
       tabs.push(makeDocumentationTabFrom(workspaceLocation));
     }
 
@@ -1052,6 +1069,7 @@ function Playground(props: PlaygroundProps) {
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
     conductorEnabled,
+    hasDocumentation,
     stepperEvaluatorId,
     eStepperEvaluatorId,
     remoteExecutionTab,

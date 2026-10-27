@@ -1,12 +1,18 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
-import { describe, expect, it, test, vi } from 'vitest';
+import { beforeEach, describe, expect, it, test, vi } from 'vitest';
 
 import { Role } from '../application/ApplicationTypes';
 import NavigationBar from './NavigationBar';
+
+const mockConductorEnabled = vi.hoisted(() => ({ value: false }));
+vi.mock('../../features/conductor/flagConductorEnable', async importOriginal => ({
+  ...(await importOriginal<typeof import('../../features/conductor/flagConductorEnable')>()),
+  useConductorEnable: () => mockConductorEnabled.value,
+}));
 
 const renderNav = (store: any) =>
   render(
@@ -71,5 +77,35 @@ describe('NavigationBar', () => {
 
     const tree = renderNav(store);
     expect(tree.asFragment()).toMatchSnapshot();
+  });
+
+  describe('textbook button', () => {
+    const studentStore = () =>
+      mockInitialStore({
+        session: { role: Role.Student, name: 'Bob', courseId: 1, courseShortName: 'CS1101S' },
+      });
+
+    beforeEach(() => {
+      mockConductorEnabled.value = false;
+    });
+
+    it('defaults to SICP JS for the legacy Source languages', () => {
+      renderNav(studentStore());
+      expect(screen.getAllByText('SICP JS').length).toBeGreaterThan(0);
+    });
+
+    it('is absent for a Conductor language without a textbook', () => {
+      mockConductorEnabled.value = true;
+      renderNav(
+        mockInitialStore({
+          session: { role: Role.Student, name: 'Bob', courseId: 1, courseShortName: 'CS1101S' },
+          languageDirectory: {
+            selectedLanguageId: 'python1',
+            languageMap: { python1: { id: 'python1', name: 'Python §1', evaluators: [] } },
+          },
+        }),
+      );
+      expect(screen.queryByText('SICP JS')).toBeNull();
+    });
   });
 });
