@@ -38,10 +38,7 @@ const NavigationBarLangSelectButton = () => {
     if (isInTextbook) {
       const newLang = languageMap[languageId];
       if (newLang?.textbook) {
-        const newPath = newLang.textbook.url.endsWith('json_py/')
-          ? '/sicpy/index'
-          : '/sicpjs/index';
-        navigate(newPath);
+        navigate(`${newLang.textbook.route}/index`);
       } else {
         navigate('/playground');
       }

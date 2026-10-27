@@ -8,14 +8,15 @@ import { useConductorEnable } from '../conductor/flagConductorEnable';
 type LanguageDocumentationLinks = {
   languageName: string;
   languageDocsUrl: string;
-  modulesDocsUrl: string;
+  modulesDocsUrl?: string;
 };
 
 const DEFAULT_LANGUAGE_NAME = 'Documentation';
 
+/** The documentation pages of the selected language, or `undefined` if it has none. */
 export function useLanguageDocumentation(
   workspaceLocation: SideContentLocation,
-): LanguageDocumentationLinks {
+): LanguageDocumentationLinks | undefined {
   const conductorEnabled = useConductorEnable();
   const directoryLanguage = useAppSelector(state => {
     const { selectedLanguageId, languageMap } = state.languageDirectory;
@@ -35,9 +36,12 @@ export function useLanguageDocumentation(
     };
   }
 
-  return {
-    languageName: directoryLanguage?.name ?? DEFAULT_LANGUAGE_NAME,
-    languageDocsUrl: directoryLanguage?.documentation?.languageUrl ?? Links.sourceDocs,
-    modulesDocsUrl: directoryLanguage?.documentation?.modulesUrl ?? Links.moduleDocs,
-  };
+  const documentation = directoryLanguage?.documentation;
+  return documentation
+    ? {
+        languageName: directoryLanguage.name,
+        languageDocsUrl: documentation.languageUrl,
+        modulesDocsUrl: documentation.modulesUrl,
+      }
+    : undefined;
 }

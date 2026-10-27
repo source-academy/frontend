@@ -17,12 +17,14 @@ type Props = {
 };
 
 function SideContentDocumentation({ workspaceLocation }: Props) {
-  const { languageName, languageDocsUrl, modulesDocsUrl } =
-    useLanguageDocumentation(workspaceLocation);
+  const documentation = useLanguageDocumentation(workspaceLocation);
   const { selectedTab } = useSideContent(workspaceLocation);
   const { isMobileBreakpoint } = useResponsive();
 
-  const [activePage, setActivePage] = useState<DocumentationPage>('language');
+  const [selectedPage, setActivePage] = useState<DocumentationPage>('language');
+  // A language without modules documentation has only its language page
+  const activePage =
+    selectedPage === 'modules' && !documentation?.modulesDocsUrl ? 'language' : selectedPage;
   const [shownPages, setShownPages] = useState<DocumentationPage[]>([]);
   const [resetCounts, setResetCounts] = useState({ language: 0, modules: 0 });
 
@@ -37,6 +39,11 @@ function SideContentDocumentation({ workspaceLocation }: Props) {
     setResetCounts(counts => ({ ...counts, [activePage]: counts[activePage] + 1 }));
   };
 
+  if (!documentation) {
+    return null;
+  }
+  const { languageName, languageDocsUrl, modulesDocsUrl } = documentation;
+
   const frameClassName = (page: DocumentationPage) =>
     classNames('w-full flex-1 border-none bg-white', { hidden: page !== activePage });
 
@@ -50,12 +57,14 @@ function SideContentDocumentation({ workspaceLocation }: Props) {
             onClick={() => setActivePage('language')}
             text={languageName}
           />
-          <Button
-            className={buttonClass}
-            active={activePage === 'modules'}
-            onClick={() => setActivePage('modules')}
-            text="Modules"
-          />
+          {modulesDocsUrl && (
+            <Button
+              className={buttonClass}
+              active={activePage === 'modules'}
+              onClick={() => setActivePage('modules')}
+              text="Modules"
+            />
+          )}
         </ButtonGroup>
         <Tooltip content="Reset documentation">
           <Button
@@ -73,7 +82,7 @@ function SideContentDocumentation({ workspaceLocation }: Props) {
           className={frameClassName('language')}
         />
       )}
-      {shownPages.includes('modules') && (
+      {modulesDocsUrl && shownPages.includes('modules') && (
         <iframe
           key={`${modulesDocsUrl}-${resetCounts.modules}`}
           title="Modules"
