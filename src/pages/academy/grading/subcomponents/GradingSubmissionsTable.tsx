@@ -70,6 +70,7 @@ type Props = {
 };
 
 const HEADER_HEIGHT: number = 48; // in px, declared here to calculate table height
+const PAGE_CHANGE_DEBOUNCE_MS = 500; // debounce to allow for page skipping
 
 function GradingSubmissionTable({
   showAllSubmissions,
@@ -87,7 +88,10 @@ function GradingSubmissionTable({
 
   const gridRef = useRef<AgGridReact<IGradingTableRow>>(null);
 
+  // `pendingPage` is shown in the navigator immediately, 
+  // but actual `page` is fetched once debounce time up
   const [page, setPage] = useState(0);
+  const [pendingPage, setPendingPage] = useState(0);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
     ...tableFilters.columnFilters,
   ]);
@@ -103,7 +107,27 @@ function GradingSubmissionTable({
   const isLoading = useMemo(() => requestCounter > 0, [requestCounter]);
 
   const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
-  const resetPage = useCallback(() => setPage(0), [setPage]);
+  const debouncedSetPage = useMemo(() => debounce(setPage, PAGE_CHANGE_DEBOUNCE_MS), []);
+
+  const goToPage = (newPage: number) => {
+    setPendingPage(newPage);
+    debouncedSetPage(newPage);
+  };
+
+  const resetPage = useCallback(() => {
+    debouncedSetPage.cancel();
+    setPendingPage(0);
+    setPage(0);
+  }, [debouncedSetPage]);
+
+  useEffect(() => () => debouncedSetPage.cancel(), [debouncedSetPage]);
+
+  // the page can fall out of range when rows disappear (e.g. after publishing), so go back to the first page
+  useEffect(() => {
+    if (!isLoading && maxPage >= 0 && page > maxPage) {
+      resetPage();
+    }
+  }, [isLoading, maxPage, page, resetPage]);
 
   const defaultColumnDefs: ColDef = {
     filter: false,
@@ -361,32 +385,32 @@ function GradingSubmissionTable({
           size="small"
           variant="minimal"
           icon={IconNames.DOUBLE_CHEVRON_LEFT}
-          onClick={() => setPage(0)}
-          disabled={page <= 0 || isLoading}
+          onClick={() => goToPage(0)}
+          disabled={pendingPage <= 0 || isLoading}
         />
         <Button
           size="small"
           variant="minimal"
           icon={IconNames.ARROW_LEFT}
-          onClick={() => setPage(page - 1)}
-          disabled={page <= 0 || isLoading}
+          onClick={() => goToPage(pendingPage - 1)}
+          disabled={pendingPage <= 0 || isLoading}
         />
         <H6 className="my-auto">
-          Page {maxPage + 1 === 0 ? 0 : page + 1} of {maxPage + 1}
+          Page {maxPage + 1 === 0 ? 0 : pendingPage + 1} of {maxPage + 1}
         </H6>
         <Button
           size="small"
           variant="minimal"
           icon={IconNames.ARROW_RIGHT}
-          onClick={() => setPage(page + 1)}
-          disabled={page >= maxPage || isLoading}
+          onClick={() => goToPage(pendingPage + 1)}
+          disabled={pendingPage >= maxPage || isLoading}
         />
         <Button
           size="small"
           variant="minimal"
           icon={IconNames.DOUBLE_CHEVRON_RIGHT}
-          onClick={() => setPage(maxPage)}
-          disabled={page >= maxPage || isLoading}
+          onClick={() => goToPage(maxPage)}
+          disabled={pendingPage >= maxPage || isLoading}
         />
       </GradingFlex>
     </>
