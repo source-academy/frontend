@@ -1,7 +1,6 @@
 import { Button, Icon, Tooltip } from '@blueprintjs/core';
 import type { CustomHeaderProps } from 'ag-grid-react';
-import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
+import { useAppDispatch } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type { ColumnFieldsKeys, SortStateProperties } from 'src/features/grading/GradingTypes';
 import { SortStates } from 'src/features/grading/GradingTypes';
@@ -28,21 +27,11 @@ type Props = {
 function GradingSortIcon({ headerProps }: Props) {
   const colId = headerProps.column.getColId() as ColumnFieldsKeys;
   const dispatch = useAppDispatch();
-  const colsSortState = useAppSelector(state => state.workspaces.grading.allColsSortStates);
   const { sort, setSort } = useGradingTableParams();
-  const [sortState, setSortState] = useState(
-    sort?.sortBy === colId ? sort.direction : SortStates.NONE,
-  );
-
-  useEffect(() => {
-    if (colsSortState.sortBy !== colId && sort?.sortBy !== colId) {
-      setSortState(SortStates.NONE);
-    }
-  }, [colsSortState, sort, colId]);
+  const sortState = sort?.sortBy === colId ? sort.direction : SortStates.NONE;
 
   const handleClick = () => {
     const next = getNextSortState(sortState);
-    setSortState(next);
     const newState: SortStateProperties = { ...freshSortState };
     newState[colId] = next;
     dispatch(WorkspaceActions.updateAllColsSortStates({ currentState: newState, sortBy: colId }));
