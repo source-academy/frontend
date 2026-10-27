@@ -88,10 +88,11 @@ function GradingSubmissionTable({
 
   const gridRef = useRef<AgGridReact<IGradingTableRow>>(null);
 
-  // `pendingPage` is shown in the navigator immediately, 
+  // `pendingPage` is shown in the navigator immediately,
   // but actual `page` is fetched once debounce time up
   const [page, setPage] = useState(0);
   const [pendingPage, setPendingPage] = useState(0);
+  const [fetchedPage, setFetchedPage] = useState(0);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
     ...tableFilters.columnFilters,
   ]);
@@ -105,6 +106,7 @@ function GradingSubmissionTable({
   const [filterMode, setFilterMode] = useState<boolean>(false);
 
   const isLoading = useMemo(() => requestCounter > 0, [requestCounter]);
+  const isPageChangePending = pendingPage !== fetchedPage;
 
   const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
   const debouncedSetPage = useMemo(() => debounce(setPage, PAGE_CHANGE_DEBOUNCE_MS), []);
@@ -234,6 +236,7 @@ function GradingSubmissionTable({
 
   useEffect(() => {
     updateEntries(page, backendFilterParams);
+    setFetchedPage(page);
   }, [updateEntries, page, backendFilterParams]);
 
   useEffect(() => {
@@ -346,7 +349,7 @@ function GradingSubmissionTable({
           components={tableProperties.customComponents}
           defaultColDef={tableProperties.defaultColDefs}
           headerHeight={tableProperties.headerHeight}
-          loading={isLoading}
+          loading={isLoading || isPageChangePending}
           overlayLoadingTemplate={tableProperties.overlayLoadingTemplate}
           overlayNoRowsTemplate={tableProperties.overlayNoRowsTemplate}
           pagination={tableProperties.pagination}
