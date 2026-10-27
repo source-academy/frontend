@@ -96,7 +96,15 @@ describe('NavigationBar', () => {
 
     it('is absent for a Conductor language without a textbook', () => {
       mockConductorEnabled.value = true;
-      renderNav(studentStore());
+      renderNav(
+        mockInitialStore({
+          session: { role: Role.Student, name: 'Bob', courseId: 1, courseShortName: 'CS1101S' },
+          languageDirectory: {
+            selectedLanguageId: 'python1',
+            languageMap: { python1: { id: 'python1', name: 'Python §1', evaluators: [] } },
+          },
+        }),
+      );
       expect(screen.queryByText('SICP JS')).toBeNull();
     });
   });

@@ -21,7 +21,10 @@ function SideContentDocumentation({ workspaceLocation }: Props) {
   const { selectedTab } = useSideContent(workspaceLocation);
   const { isMobileBreakpoint } = useResponsive();
 
-  const [activePage, setActivePage] = useState<DocumentationPage>('language');
+  const [selectedPage, setActivePage] = useState<DocumentationPage>('language');
+  // A language without modules documentation has only its language page
+  const activePage =
+    selectedPage === 'modules' && !documentation?.modulesDocsUrl ? 'language' : selectedPage;
   const [shownPages, setShownPages] = useState<DocumentationPage[]>([]);
   const [resetCounts, setResetCounts] = useState({ language: 0, modules: 0 });
 

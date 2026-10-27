@@ -120,6 +120,33 @@ describe('SideContentDocumentation', () => {
     expect(screen.queryByText('Modules')).toBeNull();
   });
 
+  test('shows the language page after switching from Modules to a language without them', () => {
+    const { rerender } = renderDocumentation({
+      language: {
+        ...pythonLanguage,
+        documentation: {
+          languageUrl: 'https://example.com/python_1/',
+          modulesUrl: 'https://example.com/modules/',
+        },
+      },
+    });
+    fireEvent.click(screen.getByText('Modules'));
+
+    rerender(
+      createDocumentation({
+        language: {
+          id: 'source1',
+          name: 'Source §1',
+          evaluators: [],
+          documentation: { languageUrl: 'https://example.com/javascript_1/' },
+        },
+      }),
+    );
+
+    expect(screen.queryByTitle('Modules')).toBeNull();
+    expect(screen.getByTitle('Source §1').classList).not.toContain('hidden');
+  });
+
   test('renders nothing for a language without documentation', () => {
     const { container } = renderDocumentation({
       language: { id: 'python1', name: 'Python §1', evaluators: [] },
