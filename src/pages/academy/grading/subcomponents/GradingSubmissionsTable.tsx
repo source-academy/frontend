@@ -112,9 +112,19 @@ function GradingSubmissionTable({
   const debouncedSetPage = useMemo(() => debounce(setPage, PAGE_CHANGE_DEBOUNCE_MS), []);
 
   const goToPage = (newPage: number) => {
+    if (isLoading) {
+      return;
+    }
     setPendingPage(newPage);
     debouncedSetPage(newPage);
   };
+
+  const loadingNavButtonProps = isLoading
+    ? {
+        'aria-disabled': true,
+        className: 'cursor-not-allowed! hover:bg-transparent active:bg-transparent',
+      }
+    : {};
 
   const resetPage = useCallback(() => {
     debouncedSetPage.cancel();
@@ -389,14 +399,16 @@ function GradingSubmissionTable({
           variant="minimal"
           icon={IconNames.DOUBLE_CHEVRON_LEFT}
           onClick={() => goToPage(0)}
-          disabled={pendingPage <= 0 || isLoading}
+          disabled={pendingPage <= 0}
+          {...loadingNavButtonProps}
         />
         <Button
           size="small"
           variant="minimal"
           icon={IconNames.ARROW_LEFT}
           onClick={() => goToPage(pendingPage - 1)}
-          disabled={pendingPage <= 0 || isLoading}
+          disabled={pendingPage <= 0}
+          {...loadingNavButtonProps}
         />
         <H6 className="my-auto">
           Page {maxPage + 1 === 0 ? 0 : pendingPage + 1} of {maxPage + 1}
@@ -406,14 +418,16 @@ function GradingSubmissionTable({
           variant="minimal"
           icon={IconNames.ARROW_RIGHT}
           onClick={() => goToPage(pendingPage + 1)}
-          disabled={pendingPage >= maxPage || isLoading}
+          disabled={pendingPage >= maxPage}
+          {...loadingNavButtonProps}
         />
         <Button
           size="small"
           variant="minimal"
           icon={IconNames.DOUBLE_CHEVRON_RIGHT}
           onClick={() => goToPage(maxPage)}
-          disabled={pendingPage >= maxPage || isLoading}
+          disabled={pendingPage >= maxPage}
+          {...loadingNavButtonProps}
         />
       </GradingFlex>
     </>
