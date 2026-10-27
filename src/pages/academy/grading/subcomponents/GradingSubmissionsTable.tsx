@@ -136,10 +136,10 @@ function GradingSubmissionTable({
 
   // the page can fall out of range when rows disappear (e.g. after publishing), so go back to the first page
   useEffect(() => {
-    if (!isLoading && maxPage >= 0 && page > maxPage) {
+    if (!isLoading && maxPage >= 0 && (page > maxPage || pendingPage > maxPage)) {
       resetPage();
     }
-  }, [isLoading, maxPage, page, resetPage]);
+  }, [isLoading, maxPage, page, pendingPage, resetPage]);
 
   const defaultColumnDefs: ColDef = {
     filter: false,
