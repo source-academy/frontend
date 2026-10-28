@@ -30,10 +30,12 @@ function RagChatbot({ assessmentId, questionId }: Props) {
       ? state.session.assessments[assessmentId]?.questions[questionId]?.content
       : undefined,
   );
+  const language = useAppSelector(state => state.languageDirectory.selectedLanguageId ?? undefined);
 
   const send = useCallback(
-    (tokens: Tokens, userInput: string) => sendRagMessage(tokens, userInput, { code, question }),
-    [code, question],
+    (tokens: Tokens, userInput: string) =>
+      sendRagMessage(tokens, userInput, { code, question, language }),
+    [code, question, language],
   );
 
   return (
