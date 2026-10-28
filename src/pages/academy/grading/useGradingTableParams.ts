@@ -14,7 +14,7 @@ export function useGradingTableParams() {
 
   const params = useMemo(() => parseGradingTableParams(searchParams), [searchParams]);
 
-  // add a reference to keep things stable
+  // keep the latest searchParams, so that two updates in the same tick do not overwrite each other
   const searchParamsRef = useRef(searchParams);
   useLayoutEffect(() => {
     searchParamsRef.current = searchParams;
