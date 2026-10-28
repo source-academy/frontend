@@ -463,13 +463,16 @@ export default class CseMachine {
     CseMachine.printLayoutCache = null;
     CseMachine.printLiveLayoutCache = null;
     // Laying out the frames for their places is not a step: it must neither animate (from the step
-    // drawn before) nor become the step that the next animation starts from.
+    // drawn before) nor become the step that the next animation starts from — its control and
+    // stash, and its current frame.
     const { controlComponent, stashComponent } = Layout;
+    const restoreFrames = CseAnimation.keepFrames();
     Layout.controlComponent = undefined as unknown as typeof controlComponent;
     setContext(Layout.clearDeadFrames ? snapshot : (layoutSnapshot ?? snapshot));
     CseMachine.setMasterLayout(Layout.getLayoutPositions(CseMachine.controlStash));
     Layout.controlComponent = controlComponent;
     Layout.stashComponent = stashComponent;
+    restoreFrames();
     setContext(snapshot);
     Layout.applyFixedPositions();
   }
