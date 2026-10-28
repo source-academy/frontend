@@ -11,7 +11,8 @@ import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useAppDispatch, useAppSelector, useSession } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
-import type { GradingOverview } from 'src/features/grading/GradingTypes';
+import { GRADING_PAGE_SIZES } from 'src/features/grading/gradingTableParams';
+import type { AllColsSortStates, GradingOverview } from 'src/features/grading/GradingTypes';
 import {
   exportGradingCSV,
   paginationToBackendParams,
@@ -20,8 +21,9 @@ import {
 
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { convertParamToInt } from '../../../commons/utils/ParamParseHelper';
-import GradingSubmissionsTable from './subcomponents/GradingSubmissionsTable';
+import GradingSubmissionsTable, { freshSortState } from './subcomponents/GradingSubmissionsTable';
 import GradingWorkspace from './subcomponents/GradingWorkspace';
+import { useGradingTableParams } from './useGradingTableParams';
 
 const groupOptions = [
   { value: true, label: 'my groups' },
@@ -33,29 +35,37 @@ const showOptions = [
   { value: true, label: 'all' },
 ];
 
-const pageSizeOptions = [
-  { value: 10, label: '10' },
-  { value: 15, label: '15' },
-  { value: 25, label: '25' },
-  { value: 50, label: '50' },
-];
+const pageSizeOptions = GRADING_PAGE_SIZES.map(size => ({ value: size, label: String(size) }));
 
 function Grading() {
   const { courseId, gradingOverviews, role, group } = useSession();
   const params = useParams<{ submissionId: string; questionId: string }>();
 
   const isAdmin = role === Role.Admin;
-  const [showUserGroups, setShowUserGroups] = useState(!isAdmin && group !== null);
+  const defaultShowUserGroups = !isAdmin && group !== null;
 
-  const [pageSize, setPageSize] = useState(10);
-  const [showAllSubmissions, setShowAllSubmissions] = useState(false);
+  const tableParams = useGradingTableParams();
+  const { setPage, pageSize, setPageSize, showAllSubmissions, setShowAllSubmissions, sort } =
+    tableParams;
+  const showUserGroups = tableParams.showUserGroups ?? defaultShowUserGroups;
+  const setShowUserGroups = (value: boolean) =>
+    tableParams.setShowUserGroups(value === defaultShowUserGroups ? undefined : value);
   const [refreshQueryData, setRefreshQueryData] = useState({ page: 1, filterParams: {} });
   const [refreshQueried, setRefreshQueried] = useState(false); // for callback (immediately becomes false)
   const [animateRefresh, setAnimateRefresh] = useState(false); // for animation (becomes false on animation end)
   const [submissions, setSubmissions] = useState<GradingOverview[]>([]);
 
   const dispatch = useAppDispatch();
-  const allColsSortStates = useAppSelector(state => state.workspaces.grading.allColsSortStates);
+  const allColsSortStates: AllColsSortStates = useMemo(
+    () =>
+      sort
+        ? {
+            currentState: { ...freshSortState, [sort.sortBy]: sort.direction },
+            sortBy: sort.sortBy,
+          }
+        : { currentState: freshSortState, sortBy: '' },
+    [sort],
+  );
   const hasLoadedBefore = useAppSelector(state => state.workspaces.grading.hasLoadedBefore);
   const requestCounter = useAppSelector(state => state.workspaces.grading.requestCounter);
   const accessToken = useAppSelector(state => state.session.accessToken);
@@ -67,7 +77,6 @@ function Grading() {
     (page: number, filterParams: object) => {
       setRefreshQueryData({ page, filterParams });
       dispatch(WorkspaceActions.setGradingHasLoadedBefore());
-      dispatch(WorkspaceActions.increaseRequestCounter());
       dispatch(
         SessionActions.fetchGradingOverviews(
           showUserGroups,
@@ -83,7 +92,6 @@ function Grading() {
 
   useEffect(() => {
     if (refreshQueried) {
-      dispatch(WorkspaceActions.increaseRequestCounter());
       dispatch(
         SessionActions.fetchGradingOverviews(
           showUserGroups,
@@ -118,8 +126,14 @@ function Grading() {
           : e,
       ) ?? [],
     );
-    dispatch(WorkspaceActions.decreaseRequestCounter());
-  }, [gradingOverviews, dispatch]);
+  }, [gradingOverviews]);
+
+  const isPastLastPage = gradingOverviews?.data?.length === 0 && gradingOverviews.count > 0;
+  useEffect(() => {
+    if (isPastLastPage) {
+      setPage(0);
+    }
+  }, [isPastLastPage, setPage]);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (

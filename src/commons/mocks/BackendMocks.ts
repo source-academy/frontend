@@ -201,11 +201,16 @@ export function* mockBackendSaga(): SagaIterator {
         }
       });
 
-      const gradingOverviews = yield call(() =>
-        mockFetchGradingOverview(accessToken, filterToGroup, pageParams, filterParams, sortedBy),
-      );
-      if (gradingOverviews !== null) {
-        yield put(actions.updateGradingOverviews(gradingOverviews));
+      yield put(actions.increaseRequestCounter());
+      try {
+        const gradingOverviews = yield call(() =>
+          mockFetchGradingOverview(accessToken, filterToGroup, pageParams, filterParams, sortedBy),
+        );
+        if (gradingOverviews !== null) {
+          yield put(actions.updateGradingOverviews(gradingOverviews));
+        }
+      } finally {
+        yield put(actions.decreaseRequestCounter());
       }
     },
   );
