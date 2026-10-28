@@ -19,3 +19,28 @@ export function snapshotWithDeadFrames(snapshots: CseSnapshot[], step: number): 
     .map(f => ({ ...f, isActive: false, isOnCallStack: false }));
   return { ...snapshot, environments: [...snapshot.environments, ...deadFrames] };
 }
+
+/**
+ * The last of `snapshots`, with every frame the run ever had — those that are gone as dead
+ * frames — in the order the frames first appeared. Laid out once, it gives each frame the place it
+ * keeps at every step (see `CseMachine.drawEnvironments`), as the CSE Machine tab places a Source
+ * program's frames where they are at its last step (source-academy/frontend#3594).
+ */
+export function snapshotWithAllFrames(snapshots: CseSnapshot[]): CseSnapshot | undefined {
+  const last = snapshots[snapshots.length - 1];
+  if (last === undefined) {
+    return undefined;
+  }
+  // A frame keeps the position of its first appearance, and takes its latest contents.
+  const latest = new Map<string, CseSerializedEnvFrame>();
+  for (const snapshot of snapshots) {
+    for (const frame of snapshot.environments) {
+      latest.set(frame.id, frame);
+    }
+  }
+  const liveIds = new Set(last.environments.map(f => f.id));
+  const environments = [...latest.values()].map(f =>
+    liveIds.has(f.id) ? f : { ...f, isActive: false, isOnCallStack: false },
+  );
+  return { ...last, environments };
+}

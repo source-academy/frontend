@@ -3,13 +3,14 @@ import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import { hostServices } from '../conductor/cseDiagramService';
 import type { CseSnapshot } from '../conductor/CseMachineHostPlugin';
+import { ArrayValue } from './components/values/ArrayValue';
 import CseArrowFilterMenu from './CseArrowFilterMenu';
 import CseEnvironmentView, { anchorResolver } from './CseEnvironmentView';
 import CseMachine from './CseMachine';
 import { CseAnimation } from './CseMachineAnimation';
 import { Config } from './CseMachineConfig';
 import { Layout } from './CseMachineLayout';
-import { snapshotWithDeadFrames } from './cseSnapshotHistory';
+import { snapshotWithAllFrames, snapshotWithDeadFrames } from './cseSnapshotHistory';
 
 /** Python-shaped snapshots (as py-slang's CSE machine and e-stepper produce): the builtins'
  * global frame, the program's frame, and a function's frame while it runs. */
@@ -255,6 +256,117 @@ describe('CseMachine.drawEnvironments alignment', () => {
   });
 });
 
+describe('frames keep their places from step to step (source-academy/frontend#3594)', () => {
+  /** A call frame below the program frame, which later gains bindings and grows. */
+  const programWith = (names: string[], active: boolean) => ({
+    ...program(active, 1),
+    bindings: names.map(name => ({ name, value: int(1) })),
+  });
+  const run: CseSnapshot[] = [
+    { stepIndex: 0, control: [], stash: [], environments: [programWith(['x'], true), global] },
+    {
+      stepIndex: 1,
+      control: [],
+      stash: [],
+      environments: [call, programWith(['x'], false), global],
+    },
+    {
+      stepIndex: 2,
+      control: [],
+      stash: [],
+      environments: [programWith(['x', 'y', 'z', 'w'], true), global],
+    },
+  ];
+  const callY = (step: number, options: { layoutSnapshot?: CseSnapshot; clear?: boolean }) => {
+    CseMachine.drawEnvironments(snapshotWithDeadFrames(run, step), {
+      width: 600,
+      height: 400,
+      clearDeadFrames: options.clear ?? false,
+      layoutSnapshot: options.layoutSnapshot,
+    });
+    return Layout.levels
+      .flatMap(l => l.frames)
+      .find(f => f.environment.id === '47')
+      ?.y();
+  };
+
+  test('snapshotWithAllFrames has every frame, in the order they first appeared', () => {
+    const all = snapshotWithAllFrames(run)!;
+    expect(all.environments.map(f => f.id)).toEqual(['45', '-1', '47']);
+    // The program frame's latest contents; the call frame, gone, as a dead frame.
+    expect(all.environments[0].bindings).toHaveLength(4);
+    expect(all.environments[2]).toMatchObject({ isActive: false, isOnCallStack: false });
+    expect(snapshotWithAllFrames([])).toBeUndefined();
+  });
+
+  test('laid out step by step, a frame moves when one above it grows', () => {
+    expect(callY(2, {})).toBeGreaterThan(callY(1, {})!);
+  });
+
+  test('laid out from all frames, it stays put', () => {
+    const layoutSnapshot = snapshotWithAllFrames(run);
+    expect(callY(1, { layoutSnapshot })).toBe(callY(2, { layoutSnapshot }));
+  });
+
+  test('clearing dead frames closes the gaps instead (#3603)', () => {
+    // `f` (47) returns, then `g` (48) is called: laid out from all frames, g stays right of f's
+    // place; with f cleared away, g moves into it.
+    const g = { ...call, id: '48', name: 'g' };
+    const calls: CseSnapshot[] = [
+      run[0],
+      run[1],
+      { stepIndex: 2, control: [], stash: [], environments: [g, program(false, 1), global] },
+    ];
+    const layoutSnapshot = snapshotWithAllFrames(calls);
+    const gX = (clear: boolean) => {
+      CseMachine.drawEnvironments(snapshotWithDeadFrames(calls, 2), {
+        width: 600,
+        height: 400,
+        clearDeadFrames: clear,
+        layoutSnapshot,
+      });
+      return Layout.levels
+        .flatMap(l => l.frames)
+        .find(f => f.environment.id === '48')!
+        .x();
+    };
+    const kept = gX(false);
+    expect(gX(true)).toBeLessThan(kept);
+  });
+
+  test('a frame that is wider later does not grow over the data beside it', () => {
+    // `a = [1]`, then a binding with a long name widens the program frame.
+    const list = {
+      displayValue: '[...]',
+      label: 'list',
+      metadata: { id: 1, envId: '45', elements: [int(1)] },
+    };
+    const withA = (extra: { name: string; value: unknown }[]) => ({
+      ...program(true, 1),
+      bindings: [{ name: 'a', value: list }, ...extra],
+    });
+    const widening = [
+      { stepIndex: 0, control: [], stash: [], environments: [withA([]), global] },
+      {
+        stepIndex: 1,
+        control: [],
+        stash: [],
+        environments: [withA([{ name: 'a_much_longer_name', value: int(1) }]), global],
+      },
+    ] as unknown as CseSnapshot[];
+    CseMachine.drawEnvironments(widening[0], {
+      width: 600,
+      height: 400,
+      clearDeadFrames: false,
+      layoutSnapshot: snapshotWithAllFrames(widening),
+    });
+    const frame = Layout.levels.flatMap(l => l.frames).find(f => f.environment.id === '45')!;
+    const array = [...Layout.values.values()].find(v => v instanceof ArrayValue)!;
+    expect(array).toBeDefined();
+    expect(array.x()).toBeGreaterThanOrEqual(frame.x() + frame.width());
+  });
+});
+
 describe('frame colours', () => {
   const framesById = () =>
     new Map(Layout.levels.flatMap(level => level.frames).map(f => [f.environment.id, f as any]));
@@ -442,7 +554,7 @@ describe('CseEnvironmentView', () => {
       .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
       .mockReturnValue({ width: 600, height: 400 } as DOMRect);
 
-  test('draws the current step with earlier frames as dead frames', () => {
+  test('draws the current step with earlier frames as dead frames, placed as at the last step', () => {
     sized();
     const draw = vi.spyOn(CseMachine, 'drawEnvironments');
     const { rerender } = render(<CseEnvironmentView snapshots={snapshots} step={0} />);
@@ -450,6 +562,7 @@ describe('CseEnvironmentView', () => {
       width: 600,
       height: 400,
       clearDeadFrames: false,
+      layoutSnapshot: snapshotWithAllFrames(snapshots),
     });
     rerender(<CseEnvironmentView snapshots={snapshots} step={2} />);
     expect(draw.mock.lastCall![0].environments.map(f => f.id)).toEqual(['45', '-1', '47']);
