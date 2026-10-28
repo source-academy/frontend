@@ -66,6 +66,8 @@ export default class CseMachine {
   private static pairCreationMode: boolean = false;
   /** Last snapshot passed to renderSnapshot(); used by redraw() in snapshot mode. */
   private static lastSnapshot: CseSnapshot | null = null;
+  /** The `layoutSnapshot` last passed to renderSnapshot(), for redraw(). */
+  private static lastLayoutSnapshot: CseSnapshot | undefined;
 
   public static togglePairCreationMode(): void {
     CseMachine.pairCreationMode = !CseMachine.pairCreationMode;
@@ -213,6 +215,7 @@ export default class CseMachine {
     Layout.values.clear();
     arrowSelection.clearSelection();
     CseMachine.lastSnapshot = null;
+    CseMachine.lastLayoutSnapshot = undefined;
   }
 
   /** updates the visualization state in the SideContentCseMachine component based on
@@ -405,13 +408,18 @@ export default class CseMachine {
     Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
   }
 
-  /** Renders a language-agnostic CseSnapshot (from the Conductor __cse channel) using the Source renderer. */
-  static renderSnapshot(snapshot: CseSnapshot): void {
+  /**
+   * Renders a language-agnostic CseSnapshot (from the Conductor __cse channel) using the Source
+   * renderer. Given `layoutSnapshot`, a snapshot with every frame of the run (see
+   * `snapshotWithAllFrames`), frames keep their places from step to step (see `layOutSnapshot`).
+   */
+  static renderSnapshot(snapshot: CseSnapshot, layoutSnapshot?: CseSnapshot): void {
     if (!this.setVis) {
       throw new Error('CSE machine not initialized');
     }
 
     CseMachine.lastSnapshot = snapshot;
+    CseMachine.lastLayoutSnapshot = layoutSnapshot;
     // Clear any live Source context so resize-triggered redraws use lastSnapshot, not stale live data.
     CseMachine.environmentTree = undefined;
     CseMachine.control = undefined;
@@ -422,21 +430,48 @@ export default class CseMachine {
       CseMachine.currentEnvId = activeEnv.id;
     }
 
-    const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
-
-    Layout.snapshotMode = true;
-    try {
-      Layout.setContext(
-        envTree as unknown as EnvTree,
-        fakeControl as unknown as Control,
-        fakeStash as unknown as Stash,
-      );
-    } finally {
-      Layout.snapshotMode = false;
-    }
+    CseMachine.layOutSnapshot(snapshot, layoutSnapshot);
 
     this.setVis(Layout.draw());
     Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
+  }
+
+  /**
+   * Lays out `snapshot`, placing its frames where they are in a layout of `layoutSnapshot` (every
+   * frame of the run, see `snapshotWithAllFrames`), so that they keep their places from step to
+   * step, as a Source program's frames do (source-academy/frontend#3594) — or in a layout of
+   * `snapshot` itself while dead frames are cleared, which closes the gaps they leave (#3603).
+   * The layout caches are recomputed for this snapshot's run (not another's), and center
+   * alignment is applied from them, as `drawCse` does.
+   */
+  private static layOutSnapshot(snapshot: CseSnapshot, layoutSnapshot?: CseSnapshot): void {
+    const setContext = (from: CseSnapshot) => {
+      const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(from);
+      Layout.snapshotMode = true;
+      try {
+        Layout.setContext(
+          envTree as unknown as EnvTree,
+          fakeControl as unknown as Control,
+          fakeStash as unknown as Stash,
+        );
+      } finally {
+        Layout.snapshotMode = false;
+      }
+    };
+    CseMachine.normalLayoutCache = null;
+    CseMachine.normalLiveLayoutCache = null;
+    CseMachine.printLayoutCache = null;
+    CseMachine.printLiveLayoutCache = null;
+    // Laying out the frames for their places is not a step: it must neither animate (from the step
+    // drawn before) nor become the step that the next animation starts from.
+    const { controlComponent, stashComponent } = Layout;
+    Layout.controlComponent = undefined as unknown as typeof controlComponent;
+    setContext(Layout.clearDeadFrames ? snapshot : (layoutSnapshot ?? snapshot));
+    CseMachine.setMasterLayout(Layout.getLayoutPositions(CseMachine.controlStash));
+    Layout.controlComponent = controlComponent;
+    Layout.stashComponent = stashComponent;
+    setContext(snapshot);
+    Layout.applyFixedPositions();
   }
 
   /**
@@ -489,30 +524,7 @@ export default class CseMachine {
       }
       // Draw afresh, not the CSE Machine tab's memoized drawing.
       CseMachine.clearMemoizedLayouts();
-      const setContext = (from: CseSnapshot) => {
-        const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(from);
-        Layout.snapshotMode = true;
-        try {
-          Layout.setContext(
-            envTree as unknown as EnvTree,
-            fakeControl as unknown as Control,
-            fakeStash as unknown as Stash,
-          );
-        } finally {
-          Layout.snapshotMode = false;
-        }
-      };
-      // This run's own layout cache, not the CSE Machine tab's (which belongs to another run): lay
-      // the frames out, record their positions, and place them from those, as `drawCse` does —
-      // that is where center alignment is applied.
-      CseMachine.normalLayoutCache = null;
-      CseMachine.normalLiveLayoutCache = null;
-      CseMachine.printLayoutCache = null;
-      CseMachine.printLiveLayoutCache = null;
-      setContext(options.clearDeadFrames ? snapshot : (options.layoutSnapshot ?? snapshot));
-      CseMachine.setMasterLayout(Layout.getLayoutPositions(false));
-      setContext(snapshot);
-      Layout.applyFixedPositions();
+      CseMachine.layOutSnapshot(snapshot, options.layoutSnapshot);
       return Layout.draw();
     } finally {
       [
@@ -533,7 +545,7 @@ export default class CseMachine {
   static redraw() {
     // In snapshot mode, re-render from the last snapshot instead of the js-slang context.
     if (!CseMachine.environmentTree && CseMachine.lastSnapshot) {
-      CseMachine.renderSnapshot(CseMachine.lastSnapshot);
+      CseMachine.renderSnapshot(CseMachine.lastSnapshot, CseMachine.lastLayoutSnapshot);
       return;
     }
 

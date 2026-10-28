@@ -365,6 +365,34 @@ describe('frames keep their places from step to step (source-academy/frontend#35
     expect(array).toBeDefined();
     expect(array.x()).toBeGreaterThanOrEqual(frame.x() + frame.width());
   });
+
+  test('in the CSE Machine tab too, and when it redraws', () => {
+    CseMachine.init(
+      () => {},
+      600,
+      400,
+      () => {},
+      () => {},
+    );
+    const layoutSnapshot = snapshotWithAllFrames(run);
+    const tabCallY = () =>
+      Layout.levels
+        .flatMap(l => l.frames)
+        .find(f => f.environment.id === '47')
+        ?.y();
+    try {
+      CseMachine.renderSnapshot(snapshotWithDeadFrames(run, 2), layoutSnapshot);
+      const atEnd = tabCallY();
+      CseMachine.renderSnapshot(snapshotWithDeadFrames(run, 1), layoutSnapshot);
+      expect(tabCallY()).toBe(atEnd);
+      CseMachine.redraw();
+      expect(tabCallY()).toBe(atEnd);
+      CseMachine.renderSnapshot(snapshotWithDeadFrames(run, 1));
+      expect(tabCallY()).toBeLessThan(atEnd!);
+    } finally {
+      CseMachine.clear();
+    }
+  });
 });
 
 describe('frame colours', () => {
