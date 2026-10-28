@@ -30,6 +30,20 @@ type RequestOptions = {
 
 export type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
+/**
+ * Error thrown by `request` to signal a non-2xx (and non-401) HTTP response.
+ *
+ * Callers in the saga layer should catch this to surface a useful error message
+ * to the user; a bare `null` return from `request` now strictly means the
+ * request never reached the backend (network/transport failure).
+ */
+export class ResponseError extends Error {
+  constructor(public readonly response: Response) {
+    super(`Request failed with status ${response.status}`);
+    this.name = 'ResponseError';
+  }
+}
+
 let refreshingTokensPromise: Promise<Tokens | null> | undefined;
 
 /**
@@ -66,8 +80,7 @@ export const request = async (
 
     // Non-unauthorized errors (these don't need to trigger refresh token flow)
     if (resp.status !== 401) {
-      showWarningMessage(opts.errorMessage ? opts.errorMessage : getResponseErrorMessage(resp));
-      return null;
+      throw new ResponseError(resp);
     }
 
     // Unauthorized errors (trigger refresh token flow)
@@ -104,11 +117,11 @@ export const request = async (
         throw Error('Invalid refreshed access token');
       }
 
-      showWarningMessage(
-        opts.errorMessage ? opts.errorMessage : getResponseErrorMessage(retriedResp),
-      );
-      return null;
+      throw new ResponseError(retriedResp);
     } catch (err) {
+      if (err instanceof ResponseError) {
+        throw err;
+      }
       // Refresh token flow or retried API call 401s again. Force logout in non-AssessmentWorkspace routes.
       const isAssessmentUrl = !!window.location.pathname.match(assessmentFullPathRegex);
 
@@ -128,6 +141,14 @@ export const request = async (
       refreshingTokensPromise = undefined;
     }
   } catch (err) {
+    if (err instanceof ResponseError) {
+      // Surface a useful status-based message and let the caller decide what
+      // to do (e.g. show the response body in the saga layer).
+      showWarningMessage(
+        opts.errorMessage ? opts.errorMessage : getResponseErrorMessage(err.response),
+      );
+      return null;
+    }
     // `fetch` throws only when network error is encountered (https://developer.mozilla.org/en-US/docs/Web/API/fetch)
     showWarningMessage(networkErrorMessage, undefined, networkErrorNotificationKey);
     return null;
