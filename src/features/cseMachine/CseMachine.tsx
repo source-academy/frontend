@@ -455,6 +455,13 @@ export default class CseMachine {
       clearDeadFrames: boolean;
       /** Frame colours by frame id (see `Layout.frameColors`). */
       frameColors?: Record<string, string>;
+      /**
+       * A snapshot with every frame of the run (see `snapshotWithAllFrames`). Frames are placed
+       * where they are in its layout, so that they keep their places from step to step, as in the
+       * CSE Machine tab (source-academy/frontend#3594) — except while dead frames are cleared,
+       * which closes the gaps they leave (#3603).
+       */
+      layoutSnapshot?: CseSnapshot;
     },
   ): React.ReactNode {
     const saved = {
@@ -482,8 +489,8 @@ export default class CseMachine {
       }
       // Draw afresh, not the CSE Machine tab's memoized drawing.
       CseMachine.clearMemoizedLayouts();
-      const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(snapshot);
-      const setContext = () => {
+      const setContext = (from: CseSnapshot) => {
+        const { envTree, fakeControl, fakeStash } = buildFakeEnvTreeFromSnapshot(from);
         Layout.snapshotMode = true;
         try {
           Layout.setContext(
@@ -495,16 +502,16 @@ export default class CseMachine {
           Layout.snapshotMode = false;
         }
       };
-      // This snapshot's own layout cache, not the CSE Machine tab's (which belongs to another run):
-      // lay the frames out, record their positions, and place them from those, as `drawCse` does —
+      // This run's own layout cache, not the CSE Machine tab's (which belongs to another run): lay
+      // the frames out, record their positions, and place them from those, as `drawCse` does —
       // that is where center alignment is applied.
       CseMachine.normalLayoutCache = null;
       CseMachine.normalLiveLayoutCache = null;
       CseMachine.printLayoutCache = null;
       CseMachine.printLiveLayoutCache = null;
-      setContext();
+      setContext(options.clearDeadFrames ? snapshot : (options.layoutSnapshot ?? snapshot));
       CseMachine.setMasterLayout(Layout.getLayoutPositions(false));
-      setContext();
+      setContext(snapshot);
       Layout.applyFixedPositions();
       return Layout.draw();
     } finally {

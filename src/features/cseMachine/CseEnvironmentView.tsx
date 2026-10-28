@@ -15,7 +15,7 @@ import { FnValue } from './components/values/FnValue';
 import CseArrowFilterMenu from './CseArrowFilterMenu';
 import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
-import { snapshotWithDeadFrames } from './cseSnapshotHistory';
+import { snapshotWithAllFrames, snapshotWithDeadFrames } from './cseSnapshotHistory';
 import { useFullscreenPortalContainer } from './fullscreenPortalContainer';
 
 /** A point in the view's own coordinates: pixels from its top-left corner. */
@@ -148,6 +148,9 @@ function CseEnvironmentView({
   // As in the CSE Machine tab, moving to another step shows dead frames again.
   useEffect(() => setClearDeadFrames(false), [snapshots, step]);
 
+  // Every frame of the run, whose layout places the frames at every step: they stay put.
+  const layoutSnapshot = useMemo(() => snapshotWithAllFrames(snapshots), [snapshots]);
+
   const drawing = useMemo(() => {
     if (!visible || size.width === 0 || size.height === 0 || snapshots[step] === undefined) {
       return null;
@@ -157,10 +160,11 @@ function CseEnvironmentView({
       height: size.height,
       clearDeadFrames,
       frameColors,
+      layoutSnapshot,
     });
     // `version` redraws after a change to the shared display preferences.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible, size, snapshots, step, clearDeadFrames, frameColors, version]);
+  }, [visible, size, snapshots, step, clearDeadFrames, frameColors, layoutSnapshot, version]);
 
   // Hovering: the diagram reports the object under the mouse while this view has the `Layout`,
   // and highlights the hovered object (also when it is hovered elsewhere, e.g. in the plugin's
