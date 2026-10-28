@@ -3713,8 +3713,8 @@ __metadata:
   linkType: hard
 
 "@rsbuild/core@npm:^2.0.3":
-  version: 2.2.13
-  resolution: "@rsbuild/core@npm:2.2.13"
+  version: 2.2.14
+  resolution: "@rsbuild/core@npm:2.2.14"
   dependencies:
     "@rspack/core": "npm:~2.2.9"
     "@swc/helpers": "npm:^0.5.23"
@@ -3725,7 +3725,7 @@ __metadata:
       optional: true
   bin:
     rsbuild: ./bin/rsbuild.js
-  checksum: 10c0/4de7821f4645641512bee22bf7efdfb959691c8a5b593f282264db57a1d52142d95002d9642e100e15719f1abac1d9f3375bb0ca16f0a7488ced3b67af61ba5d
+  checksum: 10c0/b54e0b44fef1f926eb34fd2b82a39eabacda0b32cf2dcff44fd241d2f6199ced653f9dfc620def0473ef4aa7b098a04f812c6e46850c3ff031671ce35e7bf96a
   languageName: node
   linkType: hard
 
@@ -10458,8 +10458,8 @@ __metadata:
   linkType: hard
 
 "konva@npm:^10.0.0":
-  version: 10.7.1
-  resolution: "konva@npm:10.7.1"
+  version: 10.9.0
+  resolution: "konva@npm:10.9.0"
   peerDependencies:
     canvas: ^3.0.0
     skia-canvas: ^3.0.0
@@ -10468,7 +10468,7 @@ __metadata:
       optional: true
     skia-canvas:
       optional: true
-  checksum: 10c0/558bff33b3af9bffaeffcb316c207da3cc85a3e2779497f12c576cbf8c7c756648a0d25f847d1ff858277fc7a3890e90b2d3c6beaf5f56fb48b49d091697f661
+  checksum: 10c0/89d1c79956283d331d19366254a61363812a739da28f3a51fd9920a86fa6b5d1aff65a60485060688198e5a9930d0663badafc2d49085f0b115cde520f714320
   languageName: node
   linkType: hard
 
