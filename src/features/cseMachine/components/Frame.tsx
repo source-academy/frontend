@@ -243,6 +243,14 @@ export class Frame extends Visible implements IHoverable {
       );
       this._width = Math.min(this._width, Config.FrameDefaultWidth);
     }
+    // A frame that keeps its place (see `Layout.applyFixedPositions`) takes the width it has there
+    // already now, before its values are placed beside it, so that it does not grow over them.
+    const fixedWidth = this.environment
+      ? Layout.getGhostFrameWidth(this.environment.id)
+      : undefined;
+    if (fixedWidth !== undefined) {
+      this._width = Math.max(this._width, fixedWidth);
+    }
 
     this.isLive = this.environment ? Layout.liveEnvIDs.has(this.environment.id) : false;
 

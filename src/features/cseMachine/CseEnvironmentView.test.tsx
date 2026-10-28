@@ -3,6 +3,7 @@ import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import { hostServices } from '../conductor/cseDiagramService';
 import type { CseSnapshot } from '../conductor/CseMachineHostPlugin';
+import { ArrayValue } from './components/values/ArrayValue';
 import CseArrowFilterMenu from './CseArrowFilterMenu';
 import CseEnvironmentView, { anchorResolver } from './CseEnvironmentView';
 import CseMachine from './CseMachine';
@@ -308,8 +309,61 @@ describe('frames keep their places from step to step (source-academy/frontend#35
   });
 
   test('clearing dead frames closes the gaps instead (#3603)', () => {
-    const layoutSnapshot = snapshotWithAllFrames(run);
-    expect(callY(1, { layoutSnapshot, clear: true })).toBe(callY(1, {}));
+    // `f` (47) returns, then `g` (48) is called: laid out from all frames, g stays right of f's
+    // place; with f cleared away, g moves into it.
+    const g = { ...call, id: '48', name: 'g' };
+    const calls: CseSnapshot[] = [
+      run[0],
+      run[1],
+      { stepIndex: 2, control: [], stash: [], environments: [g, program(false, 1), global] },
+    ];
+    const layoutSnapshot = snapshotWithAllFrames(calls);
+    const gX = (clear: boolean) => {
+      CseMachine.drawEnvironments(snapshotWithDeadFrames(calls, 2), {
+        width: 600,
+        height: 400,
+        clearDeadFrames: clear,
+        layoutSnapshot,
+      });
+      return Layout.levels
+        .flatMap(l => l.frames)
+        .find(f => f.environment.id === '48')!
+        .x();
+    };
+    const kept = gX(false);
+    expect(gX(true)).toBeLessThan(kept);
+  });
+
+  test('a frame that is wider later does not grow over the data beside it', () => {
+    // `a = [1]`, then a binding with a long name widens the program frame.
+    const list = {
+      displayValue: '[...]',
+      label: 'list',
+      metadata: { id: 1, envId: '45', elements: [int(1)] },
+    };
+    const withA = (extra: { name: string; value: unknown }[]) => ({
+      ...program(true, 1),
+      bindings: [{ name: 'a', value: list }, ...extra],
+    });
+    const widening = [
+      { stepIndex: 0, control: [], stash: [], environments: [withA([]), global] },
+      {
+        stepIndex: 1,
+        control: [],
+        stash: [],
+        environments: [withA([{ name: 'a_much_longer_name', value: int(1) }]), global],
+      },
+    ] as unknown as CseSnapshot[];
+    CseMachine.drawEnvironments(widening[0], {
+      width: 600,
+      height: 400,
+      clearDeadFrames: false,
+      layoutSnapshot: snapshotWithAllFrames(widening),
+    });
+    const frame = Layout.levels.flatMap(l => l.frames).find(f => f.environment.id === '45')!;
+    const array = [...Layout.values.values()].find(v => v instanceof ArrayValue)!;
+    expect(array).toBeDefined();
+    expect(array.x()).toBeGreaterThanOrEqual(frame.x() + frame.width());
   });
 });
 
