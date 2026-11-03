@@ -71,7 +71,14 @@ function DropdownCreateCourse(props: Props) {
       showWarningMessage('Course Name cannot be empty!');
       return;
     }
-    dispatch(AcademyActions.createCourse(courseConfig));
+    // Do not submit the LLM API key when LLM grading is disabled. Hiding the
+    // input is purely a UI concern; a previously typed key would otherwise be
+    // dispatched with the rest of the configuration.
+    const { llmApiKey: _llmApiKey, ...configToSubmit } = courseConfig;
+    const payload = courseConfig.enableLlmGrading
+      ? courseConfig
+      : (configToSubmit as UpdateCourseConfiguration);
+    dispatch(AcademyActions.createCourse(payload));
     props.onClose();
   };
 
@@ -260,24 +267,26 @@ function DropdownCreateCourse(props: Props) {
               fill
             />
           </FormGroup>
-          <FormGroup
-            helperText="API Key for LLM endpoint. This key will be encrypted and will not be retrievable on the frontend after."
-            label={'LLM API Key'}
-            labelInfo="(optional)"
-            labelFor="llmApiKey"
-          >
-            <InputGroup
-              id="llmApiKey"
-              type="password"
-              value={courseConfig.llmApiKey}
-              onChange={e =>
-                setCourseConfig({
-                  ...courseConfig,
-                  llmApiKey: e.target.value,
-                })
-              }
-            />
-          </FormGroup>
+          {courseConfig.enableLlmGrading && (
+            <FormGroup
+              helperText="API Key for LLM endpoint. This key will be encrypted and will not be retrievable on the frontend after."
+              label={'LLM API Key'}
+              labelInfo="(optional)"
+              labelFor="llmApiKey"
+            >
+              <InputGroup
+                id="llmApiKey"
+                type="password"
+                value={courseConfig.llmApiKey}
+                onChange={e =>
+                  setCourseConfig({
+                    ...courseConfig,
+                    llmApiKey: e.target.value,
+                  })
+                }
+              />
+            </FormGroup>
+          )}
         </div>
         <div className="create-course-button-container mt-5 flex justify-center items-center">
           <Button text="Create Course" onClick={submitHandler} />
