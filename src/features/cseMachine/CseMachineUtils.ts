@@ -684,6 +684,15 @@ export function getScopeNamesTexts(data: Closure | GlobalFn | StreamFn): string[
   return [`locals: ${localNames.join(', ')}`, `globals: ${globalNames.join(', ')}`];
 }
 
+/**
+ * The height that the description of a function may take up before it is truncated: that of a
+ * function's parameters and body, and a line more for each line of local or global names, so
+ * that those lines do not push the body out of the description.
+ */
+export function getFunctionTooltipMaxHeight(scopeNamesLineCount: number): number {
+  return Config.FnDescriptionMaxHeight + scopeNamesLineCount * Config.FontSize;
+}
+
 /** Returns the body string of the given function */
 export function getBodyText(data: Closure | GlobalFn | StreamFn): string {
   // A function from a snapshot whose evaluator sent the body's source (e.g. Python's, which has
