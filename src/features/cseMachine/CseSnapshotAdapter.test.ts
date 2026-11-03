@@ -287,8 +287,8 @@ describe('heap objects in Python snapshots', () => {
       { name: 'k', value: fn('k', { locals: [], globals: [] }) },
       { name: 'm', value: fn('m') },
     ]);
-    expect(getScopeNamesTexts(head.f)).toEqual(['locals: (y, h)', 'globals: (g)']);
-    expect(getScopeNamesTexts(head.k)).toEqual(['locals: ()', 'globals: ()']);
+    expect(getScopeNamesTexts(head.f)).toEqual(['locals: y, h', 'globals: g']);
+    expect(getScopeNamesTexts(head.k)).toEqual(['locals: ', 'globals: ']);
     // Without them (e.g. from an older evaluator), no such lines.
     expect(getScopeNamesTexts(head.m)).toEqual([]);
   });

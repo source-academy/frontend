@@ -674,14 +674,14 @@ export function getParamsText(data: Closure | GlobalFn | StreamFn): string {
 /**
  * The lines that list the local and the global names of a function from a snapshot whose evaluator
  * sends them (Python's: the names its body assigns or defines, and those it declares global), in
- * the style of its parameters; none for other functions.
+ * comma-separated lists; none for other functions.
  */
 export function getScopeNamesTexts(data: Closure | GlobalFn | StreamFn): string[] {
   const { localNames, globalNames } = data as { localNames?: unknown; globalNames?: unknown };
   if (!isClosure(data) || !Array.isArray(localNames) || !Array.isArray(globalNames)) {
     return [];
   }
-  return [`locals: (${localNames.join(', ')})`, `globals: (${globalNames.join(', ')})`];
+  return [`locals: ${localNames.join(', ')}`, `globals: ${globalNames.join(', ')}`];
 }
 
 /** Returns the body string of the given function */
