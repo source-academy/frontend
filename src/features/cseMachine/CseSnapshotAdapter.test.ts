@@ -13,7 +13,7 @@ import { CseAnimation } from './CseMachineAnimation';
 import { Config } from './CseMachineConfig';
 import { Layout } from './CseMachineLayout';
 import type { EnvTree } from './CseMachineTypes';
-import { getBodyText, getParamsText, isBuiltInFn } from './CseMachineUtils';
+import { getBodyText, getParamsText, getScopeNamesTexts, isBuiltInFn } from './CseMachineUtils';
 import { buildFakeEnvTreeFromSnapshot } from './CseSnapshotAdapter';
 
 // Real (headless) Konva stage/layer so animation components — which need a live layer
@@ -274,6 +274,23 @@ describe('heap objects in Python snapshots', () => {
     ]);
     expect(getBodyText(redefined.g)).toBe('return 1');
     expect(getBodyText(redefined.f)).toBe('return 2');
+  });
+
+  it('lists the local and global names of a function, if the evaluator sends them', () => {
+    const fn = (name: string, scope?: { locals: string[]; globals: string[] }) => ({
+      displayValue: name,
+      label: 'function',
+      metadata: { closureFrameId: 'g', params: ['x'], funcName: name, ...scope },
+    });
+    const head = headOf([
+      { name: 'f', value: fn('f', { locals: ['y', 'h'], globals: ['g'] }) },
+      { name: 'k', value: fn('k', { locals: [], globals: [] }) },
+      { name: 'm', value: fn('m') },
+    ]);
+    expect(getScopeNamesTexts(head.f)).toEqual(['locals: (y, h)', 'globals: (g)']);
+    expect(getScopeNamesTexts(head.k)).toEqual(['locals: ()', 'globals: ()']);
+    // Without them (e.g. from an older evaluator), no such lines.
+    expect(getScopeNamesTexts(head.m)).toEqual([]);
   });
 
   it("gives a hovered object's circles or boxes a black background, light grey in printable mode", () => {
