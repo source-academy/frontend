@@ -19,10 +19,7 @@ import CseMachine from '../../../features/cseMachine/CseMachine';
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
 import LanguageDirectoryActions from '../../../features/directory/LanguageDirectoryActions';
 import { selectDefaultFileExtension } from '../../../features/directory/LanguageDirectoryTypes';
-import {
-  TEST_CASE_EVALUATOR_ID,
-  TEST_CASE_LANGUAGE_ID,
-} from '../../../features/directory/testCaseLanguage';
+import { selectTestCaseLanguage } from '../../../features/directory/testCaseLanguage';
 import type { DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';
 import {
@@ -569,7 +566,8 @@ const WorkspaceSaga = combineSagaHandlers({
       // Display a message to the user
       yield call(showSuccessMessage, `Running all testcases!`, 2000);
 
-      // Grading always runs under TEST_CASE_LANGUAGE_ID/EVALUATOR_ID (see testCaseLanguage.ts) -
+      // Grading runs under the language that testCaseLanguageFor gives (see testCaseLanguage.ts:
+      // TEST_CASE_LANGUAGE_ID/EVALUATOR_ID, or the typed evaluator for Python §4 Typed) -
       // switch once for this whole batch (rather than once per testcase inside
       // runTestCaseConductor), since each switch tears down and rebuilds the Conductor session
       // (conductorEvaluatorCache.ts's ensureConductorSessionSaga). Doing that up to 2N times in
@@ -583,8 +581,12 @@ const WorkspaceSaga = combineSagaHandlers({
         ({ selectedLanguageId, selectedEvaluatorId } = yield select(
           (state: OverallState) => state.languageDirectory,
         ));
-        yield put(LanguageDirectoryActions.setSelectedLanguage(TEST_CASE_LANGUAGE_ID));
-        yield put(LanguageDirectoryActions.setSelectedEvaluator(TEST_CASE_EVALUATOR_ID));
+        // Python §4 Typed grades under its own typed evaluator (see testCaseLanguage.ts).
+        const testCase: { languageId: string; evaluatorId: string } = yield select(
+          (state: OverallState) => selectTestCaseLanguage(state, workspaceLocation),
+        );
+        yield put(LanguageDirectoryActions.setSelectedLanguage(testCase.languageId));
+        yield put(LanguageDirectoryActions.setSelectedEvaluator(testCase.evaluatorId));
       }
 
       try {

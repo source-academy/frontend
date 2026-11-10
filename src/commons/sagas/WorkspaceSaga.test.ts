@@ -2269,6 +2269,105 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
   });
 });
 
+describe('runTestCaseConductor for Python §4 Typed', () => {
+  test('runs one test case under the typed evaluator and restores the selection, also after an error', () => {
+    const workspaceLocation: WorkspaceLocation = 'grading';
+    const state: OverallState = {
+      ...generateDefaultState(workspaceLocation, { context: createContext(), output: [] }),
+      languageDirectory: {
+        ...defaultState.languageDirectory,
+        selectedLanguageId: 'python4Typed',
+        selectedEvaluatorId: 'python4TypedPy2js',
+      },
+    };
+    const languages: string[] = [];
+    const evaluators: string[] = [];
+
+    return expectSaga(
+      runTestCaseConductor,
+      workspaceLocation,
+      0,
+      'def f(x: int) -> int:\n    return x',
+      'print(f(1))',
+      TestcaseTypes.public,
+      '',
+      '',
+      1000,
+    )
+      .withState(state)
+      .provide([
+        {
+          call(effect, next) {
+            // the evaluation fails, as a type error does
+            return effect.fn === evalCodeSaga ? Promise.reject(new Error('type error')) : next();
+          },
+          put(effect, next) {
+            if (effect.action.type === LanguageDirectoryActions.setSelectedLanguage.type) {
+              languages.push(effect.action.payload.languageId);
+            }
+            if (effect.action.type === LanguageDirectoryActions.setSelectedEvaluator.type) {
+              evaluators.push(effect.action.payload.evaluatorId);
+            }
+            return next();
+          },
+        },
+      ])
+      .run()
+      .catch(() => undefined)
+      .then(() => {
+        // Never python4/python4Py2js (which rejects annotations); selected, then restored.
+        expect(languages).toEqual(['python4Typed', 'python4Typed']);
+        expect(evaluators).toEqual(['python4TypedPy2js', 'python4TypedPy2js']);
+      });
+  });
+});
+
+describe('runAllTestcases for Python §4 Typed', () => {
+  test('under Conductor, grades under the typed evaluator and restores the selection', () => {
+    const workspaceLocation: WorkspaceLocation = 'assessment';
+    const state: OverallState = {
+      ...generateDefaultState(workspaceLocation, { editorTestcases: mockTestcases }),
+      featureFlags: { modifiedFlags: { [flagConductorEnable.flagName]: true } },
+      languageDirectory: {
+        ...defaultState.languageDirectory,
+        selectedLanguageId: 'python4Typed',
+        selectedEvaluatorId: 'python4TypedPy2js',
+      },
+    };
+    const languages: string[] = [];
+    const evaluators: string[] = [];
+
+    return expectSaga(workspaceSaga)
+      .withState(state)
+      .provide([
+        {
+          call(effect, next) {
+            return effect.fn === runTestCase ? true : next();
+          },
+          put(effect, next) {
+            if (effect.action.type === LanguageDirectoryActions.setSelectedLanguage.type) {
+              languages.push(effect.action.payload.languageId);
+            }
+            if (effect.action.type === LanguageDirectoryActions.setSelectedEvaluator.type) {
+              evaluators.push(effect.action.payload.evaluatorId);
+            }
+            return next();
+          },
+        },
+        [matchers.call.fn(evalEditorSaga), undefined],
+        [matchers.call.fn(showSuccessMessage), undefined],
+      ])
+      .dispatch({ type: WorkspaceActions.runAllTestcases.type, payload: { workspaceLocation } })
+      .run(2000)
+      .then(() => {
+        // Set once for the batch and restored once: never python4/python4Py2js, which rejects
+        // type annotations.
+        expect(languages).toEqual(['python4Typed', 'python4Typed']);
+        expect(evaluators).toEqual(['python4TypedPy2js', 'python4TypedPy2js']);
+      });
+  });
+});
+
 describe('VERSION_HISTORY', () => {
   // Helper to build state with proper assessment/grading data so getCurrentQuestionId
   // can resolve the actual question ID from the question index.

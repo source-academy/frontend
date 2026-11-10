@@ -5,10 +5,7 @@ import { call, put, select, type StrictEffect } from 'redux-saga/effects';
 
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
-import {
-  TEST_CASE_EVALUATOR_ID,
-  TEST_CASE_LANGUAGE_ID,
-} from '../../../../features/directory/testCaseLanguage';
+import { selectTestCaseLanguage } from '../../../../features/directory/testCaseLanguage';
 import type { OverallState } from '../../../application/ApplicationTypes';
 import type { TestcaseType } from '../../../assessment/AssessmentTypes';
 import { TestcaseTypes } from '../../../assessment/AssessmentTypes';
@@ -119,8 +116,9 @@ export function* runTestCaseConductor(
 
   yield put(actions.resetTestcase(workspaceLocation, index));
 
-  // Grading always runs under TEST_CASE_LANGUAGE_ID/EVALUATOR_ID (see testCaseLanguage.ts),
-  // regardless of the assessment's own chapter-derived language - temporarily override the
+  // Grading runs under the language that testCaseLanguageFor gives (see testCaseLanguage.ts):
+  // TEST_CASE_LANGUAGE_ID/EVALUATOR_ID, or the typed evaluator for Python §4 Typed,
+  // not the assessment's own sub-chapter language - temporarily override the
   // shared selection for this call, then restore it, so a subsequent Run (outside the testing
   // tab) goes back to using the student's assigned sub-chapter. Skipped when the caller (see
   // runAllTestcases in WorkspaceSaga/index.ts) already switched once for the whole batch.
@@ -130,8 +128,11 @@ export function* runTestCaseConductor(
     ({ selectedLanguageId, selectedEvaluatorId } = yield select(
       (state: OverallState) => state.languageDirectory,
     ));
-    yield put(LanguageDirectoryActions.setSelectedLanguage(TEST_CASE_LANGUAGE_ID));
-    yield put(LanguageDirectoryActions.setSelectedEvaluator(TEST_CASE_EVALUATOR_ID));
+    const testCase: { languageId: string; evaluatorId: string } = yield select(
+      (state: OverallState) => selectTestCaseLanguage(state, workspaceLocation),
+    );
+    yield put(LanguageDirectoryActions.setSelectedLanguage(testCase.languageId));
+    yield put(LanguageDirectoryActions.setSelectedEvaluator(testCase.evaluatorId));
   }
 
   try {
