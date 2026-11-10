@@ -20,6 +20,8 @@ export async function initRagChat(tokens: Tokens): Promise<InitChatResponse> {
 export type ScreenContext = {
   code?: string;
   question?: string;
+  /** Language directory id the student has selected, e.g. "python3" */
+  language?: string;
 };
 
 export async function sendRagMessage(
@@ -33,6 +35,7 @@ export async function sendRagMessage(
       message: userMessage,
       code: screenContext?.code,
       question: screenContext?.question,
+      language: screenContext?.language,
     },
   });
   if (!response) {
