@@ -124,6 +124,27 @@ export function* routerNavigate(path: string) {
  * chapterLanguage.ts) - not a separate assessment-level field.
  */
 function* selectAssessmentLanguageSaga(assessment: Assessment) {
+  yield call(selectLanguageForChapterSaga, assessment.questions[0]?.library.chapter);
+}
+
+/**
+ * The same for a submission that is being graded: the grading workspace shares the global
+ * languageDirectory slice too, and the test cases of a Python §4 Typed submission run under the
+ * typed evaluator only if that language is selected (see testCaseLanguage.ts), not whatever was
+ * selected last. The chapter is that of the first programming question (a submission does not mix
+ * chapters); a submission with no programming question leaves the selection alone.
+ */
+function* selectGradingLanguageSaga(grading: GradingQuery) {
+  const chapter = grading.answers
+    .map(answer => ('library' in answer.question ? answer.question.library?.chapter : undefined))
+    .find(chapter => chapter !== undefined);
+  if (chapter === undefined) {
+    return;
+  }
+  yield call(selectLanguageForChapterSaga, chapter);
+}
+
+function* selectLanguageForChapterSaga(chapter: number | undefined) {
   const conductorEnabled: boolean = yield select(selectConductorEnable);
   if (!conductorEnabled) {
     return;
@@ -131,7 +152,7 @@ function* selectAssessmentLanguageSaga(assessment: Assessment) {
   const languages: ILanguageDefinition[] = yield select(
     (state: OverallState) => state.languageDirectory.languages,
   );
-  const derived = deriveLanguageFromChapter(languages, assessment.questions[0]?.library.chapter);
+  const derived = deriveLanguageFromChapter(languages, chapter);
 
   if (!derived) {
     // Otherwise a prior assessment's selection would leak into this one.
@@ -526,6 +547,7 @@ const newBackendSagaOne = combineSagaHandlers({
     const grading: GradingQuery | null = yield call(getGrading, id, tokens);
     if (grading) {
       yield put(actions.updateGrading(id, grading));
+      yield call(selectGradingLanguageSaga, grading);
     }
   },
   /**

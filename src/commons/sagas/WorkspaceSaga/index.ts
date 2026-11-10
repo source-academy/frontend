@@ -566,7 +566,8 @@ const WorkspaceSaga = combineSagaHandlers({
       // Display a message to the user
       yield call(showSuccessMessage, `Running all testcases!`, 2000);
 
-      // Grading always runs under TEST_CASE_LANGUAGE_ID/EVALUATOR_ID (see testCaseLanguage.ts) -
+      // Grading runs under the language that testCaseLanguageFor gives (see testCaseLanguage.ts:
+      // TEST_CASE_LANGUAGE_ID/EVALUATOR_ID, or the typed evaluator for Python §4 Typed) -
       // switch once for this whole batch (rather than once per testcase inside
       // runTestCaseConductor), since each switch tears down and rebuilds the Conductor session
       // (conductorEvaluatorCache.ts's ensureConductorSessionSaga). Doing that up to 2N times in
