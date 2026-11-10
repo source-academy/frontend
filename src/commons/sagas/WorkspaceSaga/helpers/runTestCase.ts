@@ -5,10 +5,7 @@ import { call, put, select, type StrictEffect } from 'redux-saga/effects';
 
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
-import {
-  TEST_CASE_EVALUATOR_ID,
-  TEST_CASE_LANGUAGE_ID,
-} from '../../../../features/directory/testCaseLanguage';
+import { testCaseLanguageFor } from '../../../../features/directory/testCaseLanguage';
 import type { OverallState } from '../../../application/ApplicationTypes';
 import type { TestcaseType } from '../../../assessment/AssessmentTypes';
 import { TestcaseTypes } from '../../../assessment/AssessmentTypes';
@@ -130,8 +127,9 @@ export function* runTestCaseConductor(
     ({ selectedLanguageId, selectedEvaluatorId } = yield select(
       (state: OverallState) => state.languageDirectory,
     ));
-    yield put(LanguageDirectoryActions.setSelectedLanguage(TEST_CASE_LANGUAGE_ID));
-    yield put(LanguageDirectoryActions.setSelectedEvaluator(TEST_CASE_EVALUATOR_ID));
+    const testCase = testCaseLanguageFor(selectedLanguageId);
+    yield put(LanguageDirectoryActions.setSelectedLanguage(testCase.languageId));
+    yield put(LanguageDirectoryActions.setSelectedEvaluator(testCase.evaluatorId));
   }
 
   try {

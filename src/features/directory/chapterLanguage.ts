@@ -2,9 +2,10 @@ import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist
 
 /**
  * An assessment's `library.chapter` is a 1-based index into the language directory's
- * `languages` array (python1=1, python2=2, python3=3, python4=4, pythonFull=5, scheme=6) once
- * Conductor is enabled - Source is no longer used, so there is no other meaning to distinguish
- * from. This mirrors the backend's PROGRAMMINGLANGUAGE `interpreter` attribute, which is stored
+ * `languages` array (python1=1, python2=2, python3=3, python4=4, python4Typed=5, pythonFull=6,
+ * and so on, in the order of the directory) once Conductor is enabled; without Conductor it is a
+ * Source chapter. The position is the stored identity of a language, so a change of the order
+ * changes the language of existing assessments (source-academy/backend#1387). This mirrors the backend's PROGRAMMINGLANGUAGE `interpreter` attribute, which is stored
  * verbatim into `chapter` with no translation.
  *
  * Always picks the language's first listed evaluator - Py2JS for python1-python4 (each lists

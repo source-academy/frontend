@@ -11,3 +11,21 @@
  */
 export const TEST_CASE_LANGUAGE_ID = 'python4';
 export const TEST_CASE_EVALUATOR_ID = 'python4Py2js';
+
+/**
+ * Python §4 Typed is the exception: its test cases run under the typed evaluator, so that the program
+ * (the student's code together with the test case) is type-checked, and a type error fails the test
+ * case. Plain Python §4 rejects type annotations.
+ */
+export const TYPED_TEST_CASE_LANGUAGE_ID = 'python4Typed';
+export const TYPED_TEST_CASE_EVALUATOR_ID = 'python4TypedPy2js';
+
+/** The language and evaluator that test cases run under, for the language that is selected. */
+export function testCaseLanguageFor(selectedLanguageId: string | null | undefined): {
+  languageId: string;
+  evaluatorId: string;
+} {
+  return selectedLanguageId === TYPED_TEST_CASE_LANGUAGE_ID
+    ? { languageId: TYPED_TEST_CASE_LANGUAGE_ID, evaluatorId: TYPED_TEST_CASE_EVALUATOR_ID }
+    : { languageId: TEST_CASE_LANGUAGE_ID, evaluatorId: TEST_CASE_EVALUATOR_ID };
+}
