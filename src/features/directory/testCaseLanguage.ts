@@ -1,3 +1,6 @@
+import type { OverallState } from '../../commons/application/ApplicationTypes';
+import { deriveLanguageFromChapter } from './chapterLanguage';
+
 /**
  * Testcase grading always runs under this language/evaluator, regardless of what an
  * assessment's own languageId/evaluatorId (or the student's Playground selection)
@@ -28,4 +31,49 @@ export function testCaseLanguageFor(selectedLanguageId: string | null | undefine
   return selectedLanguageId === TYPED_TEST_CASE_LANGUAGE_ID
     ? { languageId: TYPED_TEST_CASE_LANGUAGE_ID, evaluatorId: TYPED_TEST_CASE_EVALUATOR_ID }
     : { languageId: TEST_CASE_LANGUAGE_ID, evaluatorId: TEST_CASE_EVALUATOR_ID };
+}
+
+/**
+ * The chapter of the question that a workspace shows: of the graded submission (grading workspace),
+ * or of the assessment (assessment workspace, which Mission Control's editing workspace shares).
+ */
+function activeQuestionChapter(
+  state: OverallState,
+  workspaceLocation: 'grading' | 'assessment' | string,
+): number | undefined {
+  if (workspaceLocation === 'grading') {
+    const { currentSubmission, currentQuestion } = state.workspaces.grading;
+    const answers =
+      currentSubmission === undefined
+        ? undefined
+        : state.session.gradings[currentSubmission]?.answers;
+    const question = answers?.[currentQuestion ?? 0]?.question;
+    return question && 'library' in question ? question.library?.chapter : undefined;
+  }
+  if (workspaceLocation === 'assessment') {
+    const { currentAssessment, currentQuestion } = state.workspaces.assessment;
+    const questions =
+      currentAssessment === undefined
+        ? undefined
+        : state.session.assessments[currentAssessment]?.questions;
+    return questions?.[currentQuestion ?? 0]?.library?.chapter;
+  }
+  return undefined;
+}
+
+/**
+ * The language and evaluator that the test cases of a workspace run under. It is derived from the
+ * question that the workspace shows (the language of its chapter), not from the global selection,
+ * which belongs to whichever page set it last; the selection is the fallback, for a workspace whose
+ * question is not known.
+ */
+export function selectTestCaseLanguage(
+  state: OverallState,
+  workspaceLocation: string,
+): { languageId: string; evaluatorId: string } {
+  const derived = deriveLanguageFromChapter(
+    state.languageDirectory.languages,
+    activeQuestionChapter(state, workspaceLocation),
+  );
+  return testCaseLanguageFor(derived?.languageId ?? state.languageDirectory.selectedLanguageId);
 }

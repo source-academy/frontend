@@ -19,7 +19,7 @@ import CseMachine from '../../../features/cseMachine/CseMachine';
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
 import LanguageDirectoryActions from '../../../features/directory/LanguageDirectoryActions';
 import { selectDefaultFileExtension } from '../../../features/directory/LanguageDirectoryTypes';
-import { testCaseLanguageFor } from '../../../features/directory/testCaseLanguage';
+import { selectTestCaseLanguage } from '../../../features/directory/testCaseLanguage';
 import type { DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';
 import {
@@ -582,7 +582,9 @@ const WorkspaceSaga = combineSagaHandlers({
           (state: OverallState) => state.languageDirectory,
         ));
         // Python §4 Typed grades under its own typed evaluator (see testCaseLanguage.ts).
-        const testCase = testCaseLanguageFor(selectedLanguageId);
+        const testCase: { languageId: string; evaluatorId: string } = yield select(
+          (state: OverallState) => selectTestCaseLanguage(state, workspaceLocation),
+        );
         yield put(LanguageDirectoryActions.setSelectedLanguage(testCase.languageId));
         yield put(LanguageDirectoryActions.setSelectedEvaluator(testCase.evaluatorId));
       }
