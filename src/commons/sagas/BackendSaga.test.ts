@@ -1097,6 +1097,32 @@ describe('Test FETCH_GRADING action', () => {
       .silentRun();
   });
 
+  test('ignores the response of a superseded request, so that it cannot select its language', () => {
+    const untypedGrading = mockGradingQuery; // chapter 1: python1
+    return expectSaga(BackendSaga)
+      .withState({
+        session: mockTokens,
+        featureFlags: { modifiedFlags: { 'conductor.enable': true } },
+        languageDirectory: { ...defaultLanguageDirectory, languages },
+      })
+      .provide({
+        call(effect, next) {
+          if (effect.fn === getGrading) {
+            // submission 7 (typed) answers late, submission 8 (untyped) at once
+            return effect.args[0] === 7
+              ? new Promise(resolve => setTimeout(() => resolve(typedGrading), 100))
+              : untypedGrading;
+          }
+          return next();
+        },
+      })
+      .not.put(LanguageDirectoryActions.setSelectedLanguage('python4Typed'))
+      .put(LanguageDirectoryActions.setSelectedLanguage('python1'))
+      .dispatch({ type: SessionActions.fetchGrading.type, payload: 7 })
+      .dispatch({ type: SessionActions.fetchGrading.type, payload: 8 })
+      .silentRun(400);
+  });
+
   test('does not touch the selected language when Conductor is disabled', () => {
     return expectSaga(BackendSaga)
       .withState({

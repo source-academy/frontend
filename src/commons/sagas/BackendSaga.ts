@@ -540,15 +540,19 @@ const newBackendSagaOne = combineSagaHandlers({
       yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
     }
   },
-  [SessionActions.fetchGrading.type]: function* (action) {
-    const tokens: Tokens = yield selectTokens();
-    const id = action.payload;
+  // Latest only: a response that arrives after the grader moved on to another submission must neither
+  // be stored over it nor select its language (selectGradingLanguageSaga), as the selection is global.
+  [SessionActions.fetchGrading.type]: {
+    takeLatest: function* (action) {
+      const tokens: Tokens = yield selectTokens();
+      const id = action.payload;
 
-    const grading: GradingQuery | null = yield call(getGrading, id, tokens);
-    if (grading) {
-      yield put(actions.updateGrading(id, grading));
-      yield call(selectGradingLanguageSaga, grading);
-    }
+      const grading: GradingQuery | null = yield call(getGrading, id, tokens);
+      if (grading) {
+        yield put(actions.updateGrading(id, grading));
+        yield call(selectGradingLanguageSaga, grading);
+      }
+    },
   },
   /**
    * Unsubmits the submission and updates the grading overviews of the new status.
