@@ -50,6 +50,7 @@ import type {
   WorkspaceLocation,
   WorkspaceState,
 } from '../../../../commons/workspace/WorkspaceTypes';
+import { useSelectGradingLanguage } from '../../../../features/directory/gradingLanguage';
 import type { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditor';
 
@@ -92,6 +93,8 @@ function GradingWorkspace(props: Props) {
   );
 
   const grading = useAppSelector(state => state.session.gradings[props.submissionId]);
+  // The test cases run under the language of the submission shown (see gradingLanguage.ts).
+  useSelectGradingLanguage(grading);
   const courseId = useAppSelector(state => state.session.courseId);
   const llm_grading = useAppSelector(state => state.session.enableLlmGrading);
   const {

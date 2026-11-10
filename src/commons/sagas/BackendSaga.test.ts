@@ -36,9 +36,8 @@ import {
   mockAssessmentOverviews,
   mockAssessmentQuestions,
   mockAssessments,
-  mockLibrary,
 } from '../mocks/AssessmentMocks';
-import { mockGradingQuery, mockGradingSummary } from '../mocks/GradingMocks';
+import { mockGradingSummary } from '../mocks/GradingMocks';
 import { mockNotifications, mockStudents } from '../mocks/UserMocks';
 import type { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { AuthProviderType, computeFrontendRedirectUri } from '../utils/AuthHelper';
@@ -52,7 +51,6 @@ import {
   getAssessmentConfigs,
   getAssessmentOverviews,
   getCourseConfig,
-  getGrading,
   getGradingSummary,
   getLatestCourseRegistrationAndConfiguration,
   getNotifications,
@@ -1055,85 +1053,6 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
       .not.put.actionType(SessionActions.setCourseConfiguration.type)
       .not.call.fn(showSuccessMessage)
       .dispatch({ type: SessionActions.updateCourseConfig.type, payload: courseConfiguration })
-      .silentRun();
-  });
-});
-
-describe('Test FETCH_GRADING action', () => {
-  const id = 7;
-  // The language is the position in the directory: python4Typed is the fifth.
-  const languages = [
-    makeMockLanguageDefinition('python1', ['python1Py2js']),
-    makeMockLanguageDefinition('python2', ['python2Py2js']),
-    makeMockLanguageDefinition('python3', ['python3Py2js']),
-    makeMockLanguageDefinition('python4', ['python4Py2js']),
-    makeMockLanguageDefinition('python4Typed', ['python4TypedPy2js']),
-  ];
-  const typedGrading = {
-    ...mockGradingQuery,
-    answers: mockGradingQuery.answers.map(answer => ({
-      ...answer,
-      question: { ...answer.question, library: { ...mockLibrary, chapter: 5 as Chapter } },
-    })),
-  } as typeof mockGradingQuery;
-
-  test('selects the language of the graded submission, so that its test cases run under it', () => {
-    return expectSaga(BackendSaga)
-      .withState({
-        session: mockTokens,
-        featureFlags: { modifiedFlags: { 'conductor.enable': true } },
-        languageDirectory: {
-          ...defaultLanguageDirectory,
-          languages,
-          // what was selected last: a grader came from a Python §4 assessment
-          selectedLanguageId: 'python4',
-          selectedEvaluatorId: 'python4Py2js',
-        },
-      })
-      .provide([[call(getGrading, id, mockTokens), typedGrading]])
-      .put(LanguageDirectoryActions.setSelectedLanguage('python4Typed'))
-      .put(LanguageDirectoryActions.setSelectedEvaluator('python4TypedPy2js'))
-      .dispatch({ type: SessionActions.fetchGrading.type, payload: id })
-      .silentRun();
-  });
-
-  test('ignores the response of a superseded request, so that it cannot select its language', () => {
-    const untypedGrading = mockGradingQuery; // chapter 1: python1
-    return expectSaga(BackendSaga)
-      .withState({
-        session: mockTokens,
-        featureFlags: { modifiedFlags: { 'conductor.enable': true } },
-        languageDirectory: { ...defaultLanguageDirectory, languages },
-      })
-      .provide({
-        call(effect, next) {
-          if (effect.fn === getGrading) {
-            // submission 7 (typed) answers late, submission 8 (untyped) at once
-            return effect.args[0] === 7
-              ? new Promise(resolve => setTimeout(() => resolve(typedGrading), 100))
-              : untypedGrading;
-          }
-          return next();
-        },
-      })
-      .not.put(LanguageDirectoryActions.setSelectedLanguage('python4Typed'))
-      .put(LanguageDirectoryActions.setSelectedLanguage('python1'))
-      .dispatch({ type: SessionActions.fetchGrading.type, payload: 7 })
-      .dispatch({ type: SessionActions.fetchGrading.type, payload: 8 })
-      .silentRun(400);
-  });
-
-  test('does not touch the selected language when Conductor is disabled', () => {
-    return expectSaga(BackendSaga)
-      .withState({
-        session: mockTokens,
-        featureFlags: { modifiedFlags: { 'conductor.enable': false } },
-        languageDirectory: { ...defaultLanguageDirectory, languages },
-      })
-      .provide([[call(getGrading, id, mockTokens), typedGrading]])
-      .not.put.actionType(LanguageDirectoryActions.setSelectedLanguage.type)
-      .not.put.actionType(LanguageDirectoryActions.clearSelectedLanguage.type)
-      .dispatch({ type: SessionActions.fetchGrading.type, payload: id })
       .silentRun();
   });
 });

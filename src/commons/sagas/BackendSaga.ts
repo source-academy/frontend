@@ -124,27 +124,6 @@ export function* routerNavigate(path: string) {
  * chapterLanguage.ts) - not a separate assessment-level field.
  */
 function* selectAssessmentLanguageSaga(assessment: Assessment) {
-  yield call(selectLanguageForChapterSaga, assessment.questions[0]?.library.chapter);
-}
-
-/**
- * The same for a submission that is being graded: the grading workspace shares the global
- * languageDirectory slice too, and the test cases of a Python §4 Typed submission run under the
- * typed evaluator only if that language is selected (see testCaseLanguage.ts), not whatever was
- * selected last. The chapter is that of the first programming question (a submission does not mix
- * chapters); a submission with no programming question leaves the selection alone.
- */
-function* selectGradingLanguageSaga(grading: GradingQuery) {
-  const chapter = grading.answers
-    .map(answer => ('library' in answer.question ? answer.question.library?.chapter : undefined))
-    .find(chapter => chapter !== undefined);
-  if (chapter === undefined) {
-    return;
-  }
-  yield call(selectLanguageForChapterSaga, chapter);
-}
-
-function* selectLanguageForChapterSaga(chapter: number | undefined) {
   const conductorEnabled: boolean = yield select(selectConductorEnable);
   if (!conductorEnabled) {
     return;
@@ -152,7 +131,7 @@ function* selectLanguageForChapterSaga(chapter: number | undefined) {
   const languages: ILanguageDefinition[] = yield select(
     (state: OverallState) => state.languageDirectory.languages,
   );
-  const derived = deriveLanguageFromChapter(languages, chapter);
+  const derived = deriveLanguageFromChapter(languages, assessment.questions[0]?.library.chapter);
 
   if (!derived) {
     // Otherwise a prior assessment's selection would leak into this one.
@@ -540,19 +519,14 @@ const newBackendSagaOne = combineSagaHandlers({
       yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
     }
   },
-  // Latest only: a response that arrives after the grader moved on to another submission must neither
-  // be stored over it nor select its language (selectGradingLanguageSaga), as the selection is global.
-  [SessionActions.fetchGrading.type]: {
-    takeLatest: function* (action) {
-      const tokens: Tokens = yield selectTokens();
-      const id = action.payload;
+  [SessionActions.fetchGrading.type]: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const id = action.payload;
 
-      const grading: GradingQuery | null = yield call(getGrading, id, tokens);
-      if (grading) {
-        yield put(actions.updateGrading(id, grading));
-        yield call(selectGradingLanguageSaga, grading);
-      }
-    },
+    const grading: GradingQuery | null = yield call(getGrading, id, tokens);
+    if (grading) {
+      yield put(actions.updateGrading(id, grading));
+    }
   },
   /**
    * Unsubmits the submission and updates the grading overviews of the new status.
