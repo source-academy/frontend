@@ -38,9 +38,15 @@ function ControlBarAutorunButtons(props: Props) {
     <ControlButton label="Stop" icon={IconNames.STOP} onClick={props.handleInterruptEval} />
   );
 
-  const showDebuggerPause = !props.pauseDisabled && props.isRunning && !props.isDebugging && (
-    <ControlButton label="Pause" icon={IconNames.STOP} onClick={props.handleDebuggerPause} />
-  );
+  // Pause drives the legacy js-slang debugger (beginDebuggerPause). Under Conductor, every
+  // evaluator runs in a Worker and that action is never handled, so the button would be inert -
+  // hide it rather than leave dead UI in the control bar.
+  const showDebuggerPause = !conductorEnabled &&
+    !props.pauseDisabled &&
+    props.isRunning &&
+    !props.isDebugging && (
+      <ControlButton label="Pause" icon={IconNames.STOP} onClick={props.handleDebuggerPause} />
+    );
 
   const showDebuggerResume = !props.isRunning && props.isDebugging && (
     <ControlButton

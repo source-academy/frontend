@@ -750,11 +750,18 @@ function* handleCseSnapshots(
   }
 }
 
+/**
+ * Listens for the runner's status updates. A session only applies them while its generation is
+ * still the workspace's current run: a superseded session's teardown can take a moment, and a
+ * status arriving in that window must not clear the new run's `isRunning` (and hide its Stop
+ * button - source-academy/frontend#4555).
+ */
 function* handleStatuses(
   hostPlugin: BrowserHostPlugin,
   workspaceLocation: WorkspaceLocation,
   receivedCount: ReceivedCount,
   chunkSettledChan: ReturnType<typeof channel<ChunkSettled>>,
+  generation: number,
 ): SagaIterator {
   const statusChan = eventChannel<{ status: RunnerStatus; isActive: boolean; sentCount: number }>(
     emitter => {
@@ -771,6 +778,12 @@ function* handleStatuses(
   try {
     while (true) {
       const { status, isActive, sentCount } = yield take(statusChan);
+      // This session belongs to an older run. Stop applying its state updates; the run that
+      // superseded it owns `isRunning` now. Breaking also frees this handler before the rest of
+      // the teardown finishes.
+      if (runGenerations.get(workspaceLocation) !== generation) {
+        break;
+      }
       // A chunk boundary: the evaluator finished whatever it was just sent (the entrypoint file,
       // or a later REPL line) and is waiting for the next one - see conductor's
       // BasicEvaluator.startEvaluator, which reports EVAL_READY between chunks instead of
@@ -834,6 +847,9 @@ type ReplSession = {
   /** The evaluator path this session was established against - see evalCodeConductorSaga's own
    * evaluatorPath check for why a REPL chunk send validates this before reusing a session. */
   evaluatorPath: string;
+  /** The run generation this session belongs to - see nextRunGeneration's doc comment for why a
+   * teardown must not reset the workspace's running state once a newer run has started. */
+  generation: number;
   chunkSettledChan: ReturnType<typeof channel<ChunkSettled>>;
   /** handleStdout/handleInputRequest/handleResults/handleErrors/handleStatuses/
    * handleCseSnapshots, spawn()ed (not fork()ed) when the session was established - their
@@ -846,6 +862,40 @@ type ReplSession = {
 };
 
 const replSessions = new Map<WorkspaceLocation, ReplSession>();
+
+/**
+ * Identifies the newest Run (or REPL line that starts a session) in each workspace.
+ *
+ * A session's teardown is asynchronous: it waits briefly for in-flight output, then cancels its
+ * tasks and terminates its Worker before resetting the workspace's interpreter state. An older
+ * teardown can therefore still be running after a newer run has started. Only the newest run may
+ * reset that state - otherwise the old teardown's `isRunning = false` lands after the new run
+ * began, hiding the Stop button for the whole new program (source-academy/frontend#4555).
+ */
+const runGenerations = new Map<WorkspaceLocation, number>();
+
+/** Claims and returns the next run generation for `workspaceLocation` - see the map's comment. */
+function nextRunGeneration(workspaceLocation: WorkspaceLocation): number {
+  const generation = (runGenerations.get(workspaceLocation) ?? 0) + 1;
+  runGenerations.set(workspaceLocation, generation);
+  return generation;
+}
+
+/**
+ * Resets the workspace's interpreter state only when `generation` is still the current run. A
+ * superseded run's asynchronous teardown must not hide the Stop button of the run that replaced it
+ * (source-academy/frontend#4555).
+ */
+function* resetRunStateIfCurrent(
+  workspaceLocation: WorkspaceLocation,
+  generation: number,
+): SagaIterator {
+  if (runGenerations.get(workspaceLocation) !== generation) {
+    return;
+  }
+  yield put(actions.endInterruptExecution(workspaceLocation));
+  yield put(actions.setIsRunning(false, workspaceLocation));
+}
 
 /**
  * Ends `workspaceLocation`'s live REPL session, if any — the only place a session's Worker is
@@ -882,8 +932,10 @@ function* endReplSessionSaga(workspaceLocation: WorkspaceLocation): SagaIterator
     } catch {
       // already terminated (e.g. the runner tore itself down before we got here)
     }
-    yield put(actions.endInterruptExecution(workspaceLocation));
-    yield put(actions.setIsRunning(false, workspaceLocation));
+    // Only reset the interpreter state if this is still the workspace's current run. A teardown
+    // that a newer run superseded must not hide the newer run's Stop button - see
+    // nextRunGeneration's doc comment.
+    yield* resetRunStateIfCurrent(workspaceLocation, session.generation);
   }
 }
 
@@ -987,7 +1039,19 @@ export function* evalCodeConductorSaga(
 
   // Starting a fresh session: a Run always supersedes whatever REPL session was live before it; a
   // REPL line with no live (same-evaluator) session establishes one from just that line.
+  //
+  // Claim a new run generation before tearing the old session down. Its cleanup is asynchronous,
+  // and must not reset the running state of the run we are about to start (see
+  // nextRunGeneration's doc comment). The evalEditor/evalRepl actions set `isRunning` to true
+  // already, but a teardown that finished before this point may have cleared it again - and the
+  // initial entrypoint chunk sends no RUNNING status (conductor only sends that between REPL
+  // chunks), so nothing else would show the Stop button while the program runs
+  // (source-academy/frontend#4555).
+  const generation = nextRunGeneration(workspaceLocation);
   yield* endReplSessionSaga(workspaceLocation);
+  if (isReplChunk || actionType === WorkspaceActions.evalEditor.type) {
+    yield put(actions.setIsRunning(true, workspaceLocation));
+  }
 
   // Inject step limit so the evaluator knows how many snapshots to collect
   const { stepLimit, editorTabs, activeEditorTabIndex, programPrependValue } =
@@ -1068,6 +1132,7 @@ export function* evalCodeConductorSaga(
       hostPlugin,
       conduit,
       evaluatorPath: evaluator.path,
+      generation,
       chunkSettledChan,
       tasks: [],
       lineOffsetRef,
@@ -1080,7 +1145,14 @@ export function* evalCodeConductorSaga(
       yield spawn(handleErrors, hostPlugin, workspaceLocation, receivedCount, lineOffsetRef),
     );
     session.tasks.push(
-      yield spawn(handleStatuses, hostPlugin, workspaceLocation, receivedCount, chunkSettledChan),
+      yield spawn(
+        handleStatuses,
+        hostPlugin,
+        workspaceLocation,
+        receivedCount,
+        chunkSettledChan,
+        generation,
+      ),
     );
     session.tasks.push(yield spawn(handleCseSnapshots, csePlugin, workspaceLocation));
 
@@ -1095,7 +1167,13 @@ export function* evalCodeConductorSaga(
     // startEvaluator rejection here rather than letting it escape as an uncaught saga error. The
     // Python stepper's async rejection is delivered to and handled in `handleErrors`, not here.
     yield* surfaceConductorError(runError, workspaceLocation);
+    const hadSession = replSessions.has(workspaceLocation);
     yield* endReplSessionSaga(workspaceLocation);
+    // endReplSessionSaga already resets the state for a registered session; if setup failed before
+    // one was registered, nothing else would clear the `isRunning` this fresh run just set.
+    if (!hadSession) {
+      yield* resetRunStateIfCurrent(workspaceLocation, generation);
+    }
   } finally {
     // Guards against this call itself being cancelled mid-setup (e.g. a second Run's takeLatest
     // superseding this one) - without this, the tasks/conduit spawned just above would be
