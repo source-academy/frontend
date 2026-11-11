@@ -1,6 +1,7 @@
 import { RunnerStatus } from '@sourceacademy/conductor/types';
 import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
-import { call } from 'redux-saga/effects';
+import type { SagaIterator } from 'redux-saga';
+import { call, cancel, delay, fork } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import type { Matcher } from 'redux-saga-test-plan/matchers';
 import * as matchers from 'redux-saga-test-plan/matchers';
@@ -310,7 +311,9 @@ describe('EVAL_EDITOR under Conductor', () => {
  * `setNextStatus` below, it can also be changed later via `setNextError` for a later chunk (e.g. a
  * REPL line sent to an already-live session) sent to this same fake.
  */
-function makeFakeConductor(options: { error?: unknown; lateOutput?: string[] } = {}) {
+function makeFakeConductor(
+  options: { error?: unknown; lateOutput?: string[]; hold?: boolean } = {},
+) {
   const sentChunks: string[] = [];
   const terminate = vi.fn();
   let nextStatus: RunnerStatus = RunnerStatus.EVAL_READY;
@@ -333,11 +336,16 @@ function makeFakeConductor(options: { error?: unknown; lateOutput?: string[] } =
       hostPlugin.receiveStatusUpdate?.(nextStatus, true, sentCount);
     });
   };
+  // A pending Promise models a chunk that is still running: `hold` leaves startEvaluator (and
+  // sendChunk) unresolved until the test emits a status manually.
+  const held = () => new Promise<void>(() => {});
   const hostPlugin: any = {
-    startEvaluator: vi.fn(() => settle()),
+    startEvaluator: vi.fn(() => (options.hold ? held() : settle())),
     sendChunk: vi.fn((chunk: string) => {
       sentChunks.push(chunk);
-      settle();
+      if (!options.hold) {
+        settle();
+      }
     }),
   };
   const csePlugin: any = { sendSnapshots: vi.fn() };
@@ -357,6 +365,10 @@ function makeFakeConductor(options: { error?: unknown; lateOutput?: string[] } =
      * stop delivering one if called with `undefined`. */
     setNextError: (error: unknown) => {
       nextError = error;
+    },
+    /** Delivers a status directly, as a held runner would when its current chunk ends. */
+    emitStatus: (status: RunnerStatus, isActive: boolean = true, sentCount: number = 0) => {
+      hostPlugin.receiveStatusUpdate?.(status, isActive, sentCount);
     },
   };
 }
@@ -431,6 +443,89 @@ describe('EVAL_REPL session persistence under Conductor', () => {
 
     expect(fake.hostPlugin.startEvaluator).toHaveBeenCalledWith('/code.js');
     expect(fake.terminate).toHaveBeenCalledTimes(1);
+  });
+
+  test('a late status from a superseded session cannot hide the new Run Stop button', async () => {
+    // Regression test for source-academy/frontend#4555, including the follow-up review finding:
+    // cancelling a still-running Run leaves its handlers alive for the teardown delay. A status
+    // that arrives in that window used to clear isRunning after the replacement Run had set it,
+    // hiding Stop for the new program.
+    const firstFake = makeFakeConductor({ hold: true });
+    const secondFake = makeFakeConductor({ hold: true });
+    const state = generateDefaultState(workspaceLocation);
+    const runningValues: boolean[] = [];
+    let preparedCalls = 0;
+    let valuesBeforeSecondTeardown: boolean[] = [];
+
+    function* overlappingRuns(): SagaIterator {
+      const first = yield fork(
+        evalCodeConductorSaga,
+        { '/code.py': 'print(1)' },
+        '/code.py',
+        workspaceLocation,
+        WorkspaceActions.evalEditor.type,
+      );
+      // Let the first Run establish its session and block on its (held) first chunk.
+      while (firstFake.hostPlugin.startEvaluator.mock.calls.length === 0) {
+        yield delay(1);
+      }
+
+      // Cancel the first Run and let its asynchronous teardown start without awaiting it, as
+      // takeLatest does. Its session is removed immediately; its handlers survive for the delay.
+      yield fork(function* () {
+        yield cancel(first);
+      });
+      yield delay(10);
+
+      const second = yield fork(
+        evalCodeConductorSaga,
+        { '/code.py': 'while True:\n    pass' },
+        '/code.py',
+        workspaceLocation,
+        WorkspaceActions.evalEditor.type,
+      );
+      // Wait until the replacement Run has claimed the generation and marked itself running.
+      while (runningValues.filter(Boolean).length < 2) {
+        yield delay(1);
+      }
+
+      // The superseded session reports a chunk boundary while its teardown is still in flight.
+      firstFake.emitStatus(RunnerStatus.EVAL_READY, true, 0);
+      yield delay(50);
+
+      valuesBeforeSecondTeardown = [...runningValues];
+      yield cancel(second);
+    }
+
+    await expectSaga(overlappingRuns)
+      .withState(state)
+      .provide([
+        [matchers.call.fn(getEvaluatorDefinitionSaga), { path: 'fake-evaluator-path' }],
+        [matchers.spawn.fn(preloadConductorEvaluatorSaga), undefined],
+        {
+          call(effect, next) {
+            if (effect.fn === getPreparedConductorSaga) {
+              return preparedCalls++ === 0 ? firstFake : secondFake;
+            }
+            return next();
+          },
+        },
+        {
+          put(effect, next) {
+            if (effect.action.type === InterpreterActions.setIsRunning.type) {
+              runningValues.push(effect.action.payload.isRunning);
+            }
+            return next();
+          },
+        },
+      ])
+      .silentRun(2000);
+
+    // Both Runs marked themselves running, and the superseded session's late EVAL_READY did not
+    // clear that state before the replacement Run was torn down by this test.
+    expect(valuesBeforeSecondTeardown.filter(Boolean)).toHaveLength(2);
+    expect(valuesBeforeSecondTeardown.filter(value => !value)).toHaveLength(0);
+    expect(secondFake.hostPlugin.startEvaluator).toHaveBeenCalledTimes(1);
   });
 
   test('the evalRepl handler does not dispatch beginInterruptExecution before the Conductor branch', () => {
