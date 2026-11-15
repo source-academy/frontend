@@ -81,6 +81,7 @@ import ControlBarStepLimit from '../../commons/controlBar/ControlBarStepLimit';
 import ControlBarToggleFolderModeButton from '../../commons/controlBar/ControlBarToggleFolderModeButton';
 import ControlBarGitHubButtons from '../../commons/controlBar/github/ControlBarGitHubButtons';
 import ControlBarChapterSelect from '../../commons/controlBar/variantSelector/ControlBarChapterSelect';
+import ControlBarRuntimeSelect from '../../commons/controlBar/variantSelector/ControlBarRuntimeSelect';
 import {
   convertEditorTabStateToProps,
   type NormalEditorContainerProps,
@@ -219,7 +220,11 @@ export async function handleHash(
       // they're shared via separate `language`/`variant`/`evaluator` params instead of
       // `chap`/`variant`. Reassemble the directory's compound ids from those three fields.
       const languageId = joinLanguageId(qs.language, qs.variant);
-      const evaluatorId = qs.evaluator ? joinEvaluatorId(languageId, qs.evaluator) : undefined;
+      // Without the runtime selector the runtime can't be seen or changed, so always use the default.
+      const evaluatorId =
+        qs.evaluator && Constants.featureFlags.playgroundRuntimeSelect
+          ? joinEvaluatorId(languageId, qs.evaluator)
+          : undefined;
       dispatch(LanguageDirectoryActions.setSelectedLanguage(languageId, evaluatorId));
     }
   }
@@ -905,6 +910,17 @@ function Playground(props: PlaygroundProps) {
     ],
   );
 
+  const runtimeSelectButton = useMemo(
+    () =>
+      conductorEnabled && Constants.featureFlags.playgroundRuntimeSelect ? (
+        <ControlBarRuntimeSelect
+          key="runtime"
+          disabled={usingRemoteExecution || selectedTabOwnerId !== null}
+        />
+      ) : null,
+    [conductorEnabled, usingRemoteExecution, selectedTabOwnerId],
+  );
+
   // Keep the selected evaluator in sync with whichever tab is selected. A tab with an owner (directly
   // tracked, like Data Visualizer, or one of the two Playground-rendered fallbacks above) pins the
   // dropdown to that evaluator so a Run drives the right tool; leaving it for a tab with no owner
@@ -1295,6 +1311,7 @@ function Playground(props: PlaygroundProps) {
         autorunButtons,
         languageConfig.chapter === Chapter.FULL_JS ? null : shareButton,
         chapterSelectButton,
+        runtimeSelectButton,
         isSicpEditor ? null : sessionButtons,
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
         persistenceButtons,
@@ -1342,6 +1359,7 @@ function Playground(props: PlaygroundProps) {
         editorButtons: [
           autorunButtons,
           chapterSelectButton,
+          runtimeSelectButton,
           languageConfig.chapter === Chapter.FULL_JS ? null : shareButton,
           isSicpEditor ? null : sessionButtons,
           languageConfig.supports.multiFile ? toggleFolderModeButton : null,

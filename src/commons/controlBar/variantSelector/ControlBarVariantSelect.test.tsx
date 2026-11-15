@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import LanguageDirectoryActions from '../../../features/directory/LanguageDirectoryActions';
 import { mockInitialStore } from '../../mocks/StoreMocks';
+import ControlBarRuntimeSelect from './ControlBarRuntimeSelect';
 import ControlBarVariantSelect from './ControlBarVariantSelect';
 
 const evaluator = (id: string, name: string, capabilities: string[] = []) => ({
@@ -82,6 +83,32 @@ describe('ControlBarVariantSelect', () => {
 
     const button = await container.findByTestId('ControlBarVariantSelect');
     expect(button.textContent).toBe('Scheme');
+    expect(button).toBeDisabled();
+  });
+});
+
+describe('ControlBarRuntimeSelect', () => {
+  it('lists the selectable runtimes and selects one', async () => {
+    const { container, dispatch } = renderWithSelection(<ControlBarRuntimeSelect />, 'python3');
+
+    const button = await container.findByTestId('ControlBarRuntimeSelect');
+    expect(button.textContent).toBe('py2js');
+    await userEvent.click(button);
+
+    const items = await container.findAllByRole('menuitem');
+    expect(items.map(item => item.textContent)).toEqual(['py2js', 'Pynter']);
+    await userEvent.click(items[1]);
+
+    expect(dispatch).toHaveBeenCalledWith(
+      LanguageDirectoryActions.setSelectedEvaluator('python3Pynter'),
+    );
+  });
+
+  it('is disabled when only one runtime is selectable', async () => {
+    const { container } = renderWithSelection(<ControlBarRuntimeSelect />, 'python1');
+
+    const button = await container.findByTestId('ControlBarRuntimeSelect');
+    expect(button.textContent).toBe('py2js');
     expect(button).toBeDisabled();
   });
 });

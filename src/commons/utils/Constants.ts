@@ -134,6 +134,7 @@ const hasNusAuthProviders = nusAuthProviders.size > 0;
 
 const featureFlags = {
   enableSicpChatbot: isTrue(process.env.REACT_APP_FEATURE_ENABLE_SICP_CHATBOT),
+  playgroundRuntimeSelect: isTrue(process.env.REACT_APP_FEATURE_PLAYGROUND_RUNTIME_SELECT),
 };
 
 // Deployment-pinned Conductor settings; `undefined` leaves the corresponding feature flag under
