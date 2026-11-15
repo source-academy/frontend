@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
 import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
+import { deriveLanguageFromChapter } from 'src/features/directory/chapterLanguage';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import Messages, { sendToWebview } from 'src/features/vscode/messages';
 import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
@@ -116,6 +117,7 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
   const assessment = useAppSelector(state => state.session.assessments[props.assessmentId]);
   const assessmentOverviews = useAppSelector(state => state.session.assessmentOverviews);
   const teamFormationOverview = useAppSelector(state => state.session.teamFormationOverview);
+  const directoryLanguages = useAppSelector(state => state.languageDirectory.languages);
   const assessmentOverview = assessmentOverviews?.find(assessmentOverview => {
     return assessmentOverview.id === assessment?.id;
   });
@@ -882,6 +884,10 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
         isFolderModeEnabled={isFolderModeEnabled}
         sourceChapter={question.library.chapter}
         sourceVariant={question.library.variant ?? Constants.defaultSourceVariant}
+        // From the question rather than the shared selection, which grading switches temporarily.
+        languageId={
+          deriveLanguageFromChapter(directoryLanguages, question.library.chapter)?.languageId
+        }
         disabled
         key="chapter"
       />

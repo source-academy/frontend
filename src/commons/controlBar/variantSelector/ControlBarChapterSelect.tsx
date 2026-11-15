@@ -1,15 +1,8 @@
-import { Button, Menu, MenuItem } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
-import { type ItemListRenderer, type ItemRenderer, Select } from '@blueprintjs/select';
-import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { useConductorEnable } from '../../../features/conductor/flagConductorEnable';
-import { isToolEvaluator } from '../../../features/conductor/stepperTab';
-import LanguageDirectoryActions from '../../../features/directory/LanguageDirectoryActions';
 import type { SALanguage } from '../../application/ApplicationTypes';
-import { useAppSelector } from '../../utils/Hooks';
+import ControlBarVariantSelect from './ControlBarVariantSelect';
 import LegacyControlBarChapterSelect from './LegacyControlBarChapterSelect';
 
 type Props = {
@@ -18,6 +11,8 @@ type Props = {
   sourceChapter: Chapter;
   sourceVariant: Variant;
   disabled?: boolean;
+  /** The Conductor language to show; defaults to the selected language. */
+  languageId?: string;
 };
 
 function ControlBarChapterSelect({
@@ -26,12 +21,9 @@ function ControlBarChapterSelect({
   sourceVariant,
   handleChapterSelect = () => {},
   disabled = false,
+  languageId,
 }: Props) {
-  const dispatch = useAppDispatch();
   const directoryEnabled = useConductorEnable();
-  const selectedLanguageId = useAppSelector(s => s.languageDirectory.selectedLanguageId);
-  const selectedEvaluatorId = useAppSelector(s => s.languageDirectory.selectedEvaluatorId);
-  const dirLanguages = useAppSelector(s => s.languageDirectory.languages);
 
   if (!directoryEnabled) {
     return (
@@ -45,51 +37,7 @@ function ControlBarChapterSelect({
     );
   }
 
-  const currentLanguage = dirLanguages.find(l => l.id === selectedLanguageId);
-  const evaluators = currentLanguage?.evaluators ?? [];
-  // The stepper and CSE machine evaluators are hidden from the dropdown: each is reached only via its
-  // own tab, which selects it automatically (see Playground). The button label still resolves against
-  // the full list so it shows the true current evaluator (e.g. "Stepper"/"CSE") even while that entry
-  // is unselectable.
-  const selectableEvaluators = evaluators.filter(e => !isToolEvaluator(e));
-  const selectedEvaluator = evaluators.find(e => e.id === selectedEvaluatorId);
-
-  const evaluatorListRenderer: ItemListRenderer<IEvaluatorDefinition> = ({
-    itemsParentRef,
-    renderItem,
-    items,
-  }) => (
-    <Menu ulRef={itemsParentRef} style={{ display: 'flex', flexDirection: 'column' }}>
-      {items.map(renderItem)}
-    </Menu>
-  );
-
-  const evaluatorRenderer: ItemRenderer<IEvaluatorDefinition> = (evaluator, { handleClick }) => (
-    <MenuItem key={evaluator.id} onClick={handleClick} text={evaluator.name} />
-  );
-
-  const onSelectEvaluator = (evaluator: IEvaluatorDefinition) => {
-    dispatch(LanguageDirectoryActions.setSelectedEvaluator(evaluator.id));
-  };
-
-  return (
-    <Select<IEvaluatorDefinition>
-      items={selectableEvaluators}
-      onItemSelect={onSelectEvaluator}
-      itemRenderer={evaluatorRenderer}
-      itemListRenderer={evaluatorListRenderer}
-      filterable={false}
-      disabled={disabled}
-    >
-      <Button
-        variant="minimal"
-        text={selectedEvaluator ? selectedEvaluator.name : 'Select Evaluator'}
-        endIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
-        data-testid="ControlBarEvaluatorSelect"
-        disabled={disabled}
-      />
-    </Select>
-  );
+  return <ControlBarVariantSelect languageId={languageId} disabled={disabled} />;
 }
 
 export default ControlBarChapterSelect;
