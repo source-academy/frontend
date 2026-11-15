@@ -5,11 +5,11 @@ import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dis
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
 
-import { useConductorEnable } from '../../features/conductor/flagConductorEnable';
-import { isToolEvaluator } from '../../features/conductor/stepperTab';
-import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
-import type { SALanguage } from '../application/ApplicationTypes';
-import { useAppSelector } from '../utils/Hooks';
+import { useConductorEnable } from '../../../features/conductor/flagConductorEnable';
+import { isToolEvaluator } from '../../../features/conductor/stepperTab';
+import LanguageDirectoryActions from '../../../features/directory/LanguageDirectoryActions';
+import type { SALanguage } from '../../application/ApplicationTypes';
+import { useAppSelector } from '../../utils/Hooks';
 import LegacyControlBarChapterSelect from './LegacyControlBarChapterSelect';
 
 type Props = {

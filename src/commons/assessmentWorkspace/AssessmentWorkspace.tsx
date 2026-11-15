@@ -44,7 +44,6 @@ import type {
 } from '../assessment/AssessmentTypes';
 import { QuestionTypes } from '../assessment/AssessmentTypes';
 import type { ControlBarProps } from '../controlBar/ControlBar';
-import ControlBarChapterSelect from '../controlBar/ControlBarChapterSelect';
 import ControlBarClearButton from '../controlBar/ControlBarClearButton';
 import ControlBarEvalButton from '../controlBar/ControlBarEvalButton';
 import ControlBarNextButton from '../controlBar/ControlBarNextButton';
@@ -55,6 +54,7 @@ import ControlBarRunButton from '../controlBar/ControlBarRunButton';
 import ControlButtonSaveButton from '../controlBar/ControlBarSaveButton';
 import ControlBarSaveStatusIndicator from '../controlBar/ControlBarSaveStatusIndicator';
 import ControlBarVersionHistoryButton from '../controlBar/ControlBarVersionHistoryButton';
+import ControlBarChapterSelect from '../controlBar/variantSelector/ControlBarChapterSelect';
 import VersionHistoryPanel from '../controlBar/VersionHistoryPanel';
 import ControlButton from '../ControlButton';
 import {

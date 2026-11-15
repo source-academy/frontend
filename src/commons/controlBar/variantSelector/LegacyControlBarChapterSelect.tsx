@@ -11,9 +11,9 @@ import {
   type SALanguage,
   sourceLanguages,
   styliseSublanguage,
-} from '../application/ApplicationTypes';
-import Constants from '../utils/Constants';
-import { useAppSelector } from '../utils/Hooks';
+} from '../../application/ApplicationTypes';
+import Constants from '../../utils/Constants';
+import { useAppSelector } from '../../utils/Hooks';
 
 type Props = {
   handleChapterSelect?: (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => void;

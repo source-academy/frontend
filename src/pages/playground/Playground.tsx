@@ -72,7 +72,6 @@ import {
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import ControlBarAutorunButtons from '../../commons/controlBar/ControlBarAutorunButtons';
-import ControlBarChapterSelect from '../../commons/controlBar/ControlBarChapterSelect';
 import ControlBarClearButton from '../../commons/controlBar/ControlBarClearButton';
 import ControlBarEvalButton from '../../commons/controlBar/ControlBarEvalButton';
 import ControlBarGoogleDriveButtons from '../../commons/controlBar/ControlBarGoogleDriveButtons';
@@ -81,6 +80,7 @@ import ControlBarShareButton from '../../commons/controlBar/ControlBarShareButto
 import ControlBarStepLimit from '../../commons/controlBar/ControlBarStepLimit';
 import ControlBarToggleFolderModeButton from '../../commons/controlBar/ControlBarToggleFolderModeButton';
 import ControlBarGitHubButtons from '../../commons/controlBar/github/ControlBarGitHubButtons';
+import ControlBarChapterSelect from '../../commons/controlBar/variantSelector/ControlBarChapterSelect';
 import {
   convertEditorTabStateToProps,
   type NormalEditorContainerProps,
