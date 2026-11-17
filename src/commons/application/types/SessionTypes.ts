@@ -38,10 +38,12 @@ export type SessionState = {
   readonly enableGame?: boolean;
   readonly enableAchievements?: boolean;
   readonly enableLlmGrading?: boolean;
+  readonly enableLouisChatbot?: boolean;
   readonly enablePixelbot?: boolean;
   readonly llmModel?: string;
   readonly llmApiUrl?: string;
   readonly llmCourseLevelPrompt?: string;
+  readonly louisChatbotPrompt?: string;
   readonly pixelbotRoutingPrompt?: string;
   readonly pixelbotAnswerPrompt?: string;
   readonly feedbackUrl?: string;
@@ -114,6 +116,7 @@ export type CourseConfiguration = {
   enableGame: boolean;
   enableAchievements: boolean;
   enableLlmGrading?: boolean;
+  enableLouisChatbot?: boolean;
   enablePixelbot?: boolean;
   enableOverallLeaderboard: boolean;
   enableContestLeaderboard: boolean;
@@ -126,6 +129,7 @@ export type CourseConfiguration = {
   llmModel?: string;
   llmApiUrl?: string;
   llmCourseLevelPrompt?: string;
+  louisChatbotPrompt?: string;
   pixelbotRoutingPrompt?: string;
   pixelbotAnswerPrompt?: string;
   feedbackUrl?: string;
