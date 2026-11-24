@@ -1,3 +1,4 @@
+import 'ace-builds/src-noconflict/mode-ocaml';
 import 'ace-builds/src-noconflict/mode-python';
 
 import type {
