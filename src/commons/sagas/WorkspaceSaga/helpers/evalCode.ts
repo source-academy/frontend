@@ -3,7 +3,6 @@ import { RunnerStatus } from '@sourceacademy/conductor/types';
 import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import type { Context } from 'js-slang';
 import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors/base';
-import { Variant } from 'js-slang/dist/langs';
 import { channel, END, eventChannel, type SagaIterator, type Task } from 'redux-saga';
 import { call, cancel, cancelled, put, race, select, spawn, take } from 'redux-saga/effects';
 
@@ -642,15 +641,11 @@ export function* evalCodeConductorSaga(
   const activeEditorTab =
     isEditorRun && activeEditorTabIndex !== null ? editorTabs[activeEditorTabIndex] : undefined;
   // evalEditorSaga (evalEditor.ts) concatenates `${programPrependValue}\n` onto the entrypoint
-  // before this saga ever runs, for a non-TYPED Conductor Run with a non-empty prepend - shifting
-  // every line of the student's own code down by the prepend's own line count. (The TYPED-variant
-  // prepend, by contrast, is joined onto line 1 with no newlines - no lines shift, so no offset is
-  // needed there.) Breakpoints are recorded against the student's un-prepended editor content, so
+  // before this saga ever runs, for a Conductor Run with a non-empty prepend - shifting every line
+  // of the student's own code down by the prepend's own line count. Breakpoints are recorded against the student's un-prepended editor content, so
   // that same shift must be applied here to still land on the right line post-concatenation.
   const preludeLineOffset =
-    isEditorRun && context.variant !== Variant.TYPED && programPrependValue.length > 0
-      ? programPrependValue.split('\n').length
-      : 0;
+    isEditorRun && programPrependValue.length > 0 ? programPrependValue.split('\n').length : 0;
   const breakpointLines = getBreakpointLineNumbers(activeEditorTab?.breakpoints ?? []).map(
     line => line + 1 + preludeLineOffset,
   );

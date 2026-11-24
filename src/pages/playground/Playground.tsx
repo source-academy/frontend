@@ -166,6 +166,7 @@ export async function handleHash(
   // By default, use the first editor tab.
   const activeEditorTabIndex = convertParamToInt(qs.tabIdx) ?? 0;
   dispatch(WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex));
+  const legacyChapter = convertParamToInt(qs.chap);
   if (qs.language) {
     // Conductor-based languages (e.g. Python) aren't part of the js-slang Chapter enum, so
     // they're shared via separate `language`/`variant`/`evaluator` params instead of
@@ -173,6 +174,13 @@ export async function handleHash(
     const languageId = joinLanguageId(qs.language, qs.variant);
     const evaluatorId = qs.evaluator ? joinEvaluatorId(languageId, qs.evaluator) : undefined;
     dispatch(LanguageDirectoryActions.setSelectedLanguage(languageId, evaluatorId));
+  } else if (legacyChapter !== null && legacyChapter >= 1 && legacyChapter <= 4) {
+    // Links from before the language directory encode a Source chapter in `chap`; the
+    // directory's Source languages are named after them. The old variants (typed, native, ...)
+    // have no directory counterpart, so they open the chapter's default.
+    dispatch(
+      LanguageDirectoryActions.setSelectedLanguage(joinLanguageId('source', `${legacyChapter}`)),
+    );
   }
 }
 

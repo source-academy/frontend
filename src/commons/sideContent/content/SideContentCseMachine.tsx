@@ -231,8 +231,15 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     if (!this.isJava()) {
       CseMachine.resetArrowOriginFilters();
     }
-    // The tab owns the state it puts on the workspace: leaving it clears the drawing, the step
-    // counters and the editor highlights.
+    this.clearView();
+  }
+
+  /**
+   * The tab owns the state it puts on the workspace: the drawing, the step counters and the editor
+   * highlights. It stays mounted while another tab is shown, so this runs whenever the tab stops
+   * being active or its snapshots go away, not only on unmount.
+   */
+  private clearView() {
     CseMachine.clearCse();
     this.props.handleStepUpdate(-1);
     this.props.handleStepsTotalUpdate(0);
@@ -265,9 +272,18 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     // Snapshot mode: user navigated away from CSE tab — clear visualization
     if (prevProps.isOnCseTab && !isOnCseTab) {
       this.setState({ visualization: null, value: -1 });
+      this.clearView();
       if (cseSnapshots) {
         this.props.doUpdateCseSnapshots(null);
       }
+      return;
+    }
+
+    // The snapshots went away while the tab is shown (a run that produced none): clear the view
+    // rather than leave the previous run's diagram and step controls active.
+    if (isOnCseTab && prevProps.cseSnapshots !== null && cseSnapshots === null) {
+      this.setState({ visualization: null, value: -1 });
+      this.clearView();
       return;
     }
 

@@ -87,6 +87,8 @@ describe('Playground tests', () => {
     expect(tree).toMatchSnapshot();
 
     expect(getEditorValueFromStore(mockStore)).toBe("display('hello!');");
+    // The chapter of a legacy link selects the directory's Source language of that name.
+    expect(mockStore.getState().languageDirectory.selectedLanguageId).toBe('source2');
   });
 
   test('loading a share link overwrites a stale editor tab left over from a previous session, even if its filePath predates leading-slash normalization (#4268)', async () => {

@@ -136,6 +136,12 @@ $code-color-notification: #f9f0d7;
       }
     }
 
+    // The line highlight drawn from the workspace's `highlightedLines` (see Editor's getMarkers).
+    .myMarker {
+      position: absolute;
+      background-color: blue;
+    }
+
     .ace_breakpoint:before {
       content: ' \25CF';
       margin-left: -10px;

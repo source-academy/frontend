@@ -1180,7 +1180,7 @@ exports[`Playground tests > Playground with a legacy share link (chap=2) still l
               <span
                 class="bp6-button-text"
               >
-                py2js
+                Default
               </span>
               <span
                 aria-hidden="true"
@@ -1238,12 +1238,8 @@ exports[`Playground tests > Playground with a legacy share link (chap=2) still l
           <span
             class="bp6-popover-target"
           >
-            <a
-              aria-disabled="true"
-              class="bp6-button bp6-disabled bp6-minimal"
-              disabled=""
-              role="button"
-              tabindex="-1"
+            <button
+              class="bp6-button bp6-minimal"
             >
               <span
                 aria-hidden="true"
@@ -1267,7 +1263,7 @@ exports[`Playground tests > Playground with a legacy share link (chap=2) still l
               >
                 Folder
               </span>
-            </a>
+            </button>
           </span>
           <span
             class="bp6-popover-target"
@@ -1815,65 +1811,36 @@ exports[`Playground tests > Playground with a legacy share link (chap=2) still l
                             <p>
                               The book 
                               <a
-                                href="https://sourceacademy.org/sicpy/"
+                                href="https://sourceacademy.org/sicpjs/"
                                 rel="noopener noreferrer"
                                 target="_blank"
                               >
                                 <em>
-                                  Structure and Interpretation of Computer Programs, Python Edition
+                                  Structure and Interpretation of Computer Programs, JavaScript Edition
                                 </em>
                               </a>
-                               uses Python sublanguages that match the textbook chapters. You have chosen 
+                               uses restricted 
                               <a
-                                href="https://docs.sourceacademy.org/python/python_1/"
+                                href="https://docs.sourceacademy.org/javascript/"
                                 rel="noopener noreferrer"
                                 target="_blank"
                               >
-                                <strong>
-                                  Python §1
-                                </strong>
+                                JavaScript sublanguages
                               </a>
-                              , matching 
-                              <a
-                                href="https://sourceacademy.org/sicpy/1"
-                                rel="noopener noreferrer"
-                                target="_blank"
-                              >
-                                <strong>
-                                  SICPy §1
-                                </strong>
-                              </a>
-                              . Read the 
-                              <a
-                                href="https://docs.sourceacademy.org/python/python_styleguide.pdf"
-                                rel="noopener noreferrer"
-                                target="_blank"
-                              >
-                                Python Style Guide
-                              </a>
-                               for how to lay out your programs.
+                              . You have chosen 
+                              <strong>
+                                JavaScript §2
+                              </strong>
+                              , matching SICP JS §2.
                             </p>
                             
 
                             <p>
                               You have chosen the 
                               <strong>
-                                Py2JS
+                                Default
                               </strong>
-                               evaluator, which compiles Python §1 directly to JavaScript and runs it on the browser's own JavaScript engine, rather than through an interpreter loop.
-                            </p>
-                            
-
-                            <p>
-                              This evaluator supports all 
-                              <a
-                                href="https://source-academy.github.io/modules/documentation/"
-                                rel="noopener noreferrer"
-                                target="_blank"
-                              >
-                                Source Academy modules
-                              </a>
-                              .
+                               evaluator for JavaScript §2, which compiles your program to JavaScript and runs it on the browser's own JavaScript engine.
                             </p>
                           </div>
                         </div>
@@ -1904,7 +1871,7 @@ exports[`Playground tests > Playground with a legacy share link (chap=2) still l
                                   <span
                                     class="bp6-button-text"
                                   >
-                                    Python §1
+                                    JavaScript §2
                                   </span>
                                 </button>
                               </div>
