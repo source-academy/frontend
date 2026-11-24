@@ -1,5 +1,5 @@
 import type { SourceError } from 'js-slang/dist/errors/base';
-import { Chapter, type LanguageOptions, Variant } from 'js-slang/dist/langs';
+import { type LanguageOptions } from 'js-slang/dist/langs';
 
 import type { ExternalLibrary } from '../application/types/ExternalTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
@@ -176,8 +176,8 @@ export type BaseQuestion = {
 export type Question = IProgrammingQuestion | IMCQQuestion | IContestVotingQuestion;
 
 export type Library = {
-  chapter: Chapter;
-  variant?: Variant;
+  /** A 1-based position in the language directory (see `deriveLanguageFromChapter`). */
+  chapter: number;
   execTimeMs?: number;
   external: ExternalLibrary;
   globals: Array<{
@@ -245,7 +245,7 @@ export const emptyLibrary = (): Library => {
 
 export const normalLibrary = (): Library => {
   return {
-    chapter: Chapter.SOURCE_1,
+    chapter: 1,
     external: {
       name: 'NONE' as ExternalLibraryName,
       symbols: [],

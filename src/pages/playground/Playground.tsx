@@ -226,8 +226,12 @@ function Playground(props: PlaygroundProps) {
     sharedbConnected,
     isFolderModeEnabled,
     activeEditorTabIndex,
-    context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant },
   } = useAppSelector(state => state.workspaces[workspaceLocation]);
+  // The selected language's 1-based position in the language directory (0 if none).
+  const languagePosition = useAppSelector(state => {
+    const { languages, selectedLanguageId } = state.languageDirectory;
+    return languages.findIndex(language => language.id === selectedLanguageId) + 1;
+  });
   const fileSystem = useAppSelector(state => state.fileSystem.inBrowserFileSystem);
   const { queryString, shortURL, persistenceFile, githubSaveInfo } = useAppSelector(
     state => state.playground,
@@ -269,12 +273,17 @@ function Playground(props: PlaygroundProps) {
     workspaceLocation,
     shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction,
   );
+  // The event-log session starts once a language is selected, so that its initial event does not
+  // record "no language" while the language directory is still loading.
+  const hasLanguage = languagePosition > 0;
   const [sessionId, setSessionId] = useState(() =>
-    initSession('playground', {
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorValue: editorTabs[0]?.value ?? '',
-      chapter: playgroundSourceChapter,
-    }),
+    hasLanguage
+      ? initSession('playground', {
+          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+          editorValue: editorTabs[0]?.value ?? '',
+          chapter: languagePosition,
+        })
+      : undefined,
   );
   const [users, setUsers] = useState<Record<string, SharedbAceUser>>({});
 
@@ -302,16 +311,20 @@ function Playground(props: PlaygroundProps) {
   const externalLibraryName = useAppSelector(state => state.workspaces.playground.externalLibrary);
 
   useEffect(() => {
-    // When the editor session Id changes, then treat it as a new session.
+    // When the editor session Id changes, or the first language is selected, then treat it as a
+    // new session.
+    if (!hasLanguage) {
+      return;
+    }
     setSessionId(
       initSession('playground', {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         editorValue: editorTabs[0]?.value ?? '',
-        chapter: playgroundSourceChapter,
+        chapter: languagePosition,
       }),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editorSessionId]);
+  }, [editorSessionId, hasLanguage]);
 
   const hash = isSicpEditor ? props.initialEditorValueHash : location.hash;
 
@@ -345,11 +358,18 @@ function Playground(props: PlaygroundProps) {
     [handleEditorValueChange],
   );
 
+  // The directory loads asynchronously, so the language is not known on mount.
+  const isLanguageDirectoryLoaded = useAppSelector(
+    state => state.languageDirectory.languages.length > 0,
+  );
+  const hasSentNewEditor = useRef(false);
+
   useEffect(() => {
     // Only the playground is expected to work with VSC for now
-    if (workspaceLocation === 'sicp') {
+    if (workspaceLocation === 'sicp' || !isLanguageDirectoryLoaded || hasSentNewEditor.current) {
       return;
     }
+    hasSentNewEditor.current = true;
     const initialCode = editorTabs[0]?.value ?? '';
     const breakpoints = editorTabs[0]?.breakpoints ?? [];
     sendToWebview(
@@ -357,7 +377,7 @@ function Playground(props: PlaygroundProps) {
         workspaceLocation,
         'playground',
         1,
-        playgroundSourceChapter,
+        languagePosition,
         '',
         initialCode,
         breakpoints,
@@ -365,11 +385,13 @@ function Playground(props: PlaygroundProps) {
     );
     // We don't want to re-send this message even when the variables change
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isLanguageDirectoryLoaded]);
 
   const pushLog = useCallback(
     (newInput: Input) => {
-      log(sessionId, newInput);
+      if (sessionId) {
+        log(sessionId, newInput);
+      }
     },
     [sessionId],
   );
@@ -916,9 +938,7 @@ function Playground(props: PlaygroundProps) {
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
     onLoad: isSicpEditor && props.prependLength ? onLoadMethod : undefined,
-    sourceChapter: playgroundSourceChapter,
     externalLibraryName,
-    sourceVariant: playgroundSourceVariant,
     handleEditorValueChange: onEditorValueChange,
     handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
     setUsers,
@@ -941,8 +961,6 @@ function Playground(props: PlaygroundProps) {
     handleBrowseHistoryDown: replHandlers.handleBrowseHistoryDown,
     handleBrowseHistoryUp: replHandlers.handleBrowseHistoryUp,
     handleReplValueChange: replHandlers.handleReplValueChange,
-    sourceChapter: playgroundSourceChapter,
-    sourceVariant: playgroundSourceVariant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
     hidden:
       selectedTab === SideContentType.substVisualizer ||

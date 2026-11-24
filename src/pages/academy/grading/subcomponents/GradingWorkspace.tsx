@@ -1,7 +1,6 @@
 import { Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
@@ -555,8 +554,6 @@ function GradingWorkspace(props: Props) {
             handleEditorValueChange: handleEditorValueChange,
             handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
             handlePromptAutocomplete: handlePromptAutocomplete,
-            sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
-            sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
             externalLibraryName: question?.library?.external?.name || 'NONE',
           }
         : undefined,
@@ -576,8 +573,6 @@ function GradingWorkspace(props: Props) {
       handleReplValueChange: handleReplValueChange,
       output: output,
       replValue: replValue,
-      sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
-      sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
       externalLibrary: question?.library?.external?.name || 'NONE',
       replButtons: replButtons(),
     },

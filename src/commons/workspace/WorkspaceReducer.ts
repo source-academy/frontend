@@ -1,6 +1,7 @@
 import { createReducer, type Reducer } from '@reduxjs/toolkit';
 import { castDraft, type Draft } from 'immer';
 import { type SourceError } from 'js-slang/dist/errors/base';
+import type { Chapter } from 'js-slang/dist/langs';
 
 import { logOut } from '../application/actions/CommonsActions';
 import InterpreterActions from '../application/actions/InterpreterActions';
@@ -148,11 +149,13 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
+          // TODO: goes away with the legacy local execution (js-slang `Context`) in workspace
+          // state. `library.chapter` is a language directory position, not a Source chapter.
           context: createContext<WorkspaceLocation>(
-            action.payload.library.chapter,
+            action.payload.library.chapter as Chapter,
             action.payload.library.external.symbols,
             workspaceLocation,
-            action.payload.library.variant,
+            undefined,
             action.payload.library.languageOptions,
           ),
           globals: action.payload.library.globals,
@@ -363,12 +366,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
           hasUnsavedChanges: action.payload.hasUnsavedChanges,
         },
       };
-    })
-    .addCase(WorkspaceActions.updateSublanguage, (state, action) => {
-      // TODO: Mark for removal
-      const { chapter, variant } = action.payload.sublang;
-      state.playground.context.chapter = chapter;
-      state.playground.context.variant = variant;
     })
     .addCase(WorkspaceActions.notifyProgramEvaluated, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);

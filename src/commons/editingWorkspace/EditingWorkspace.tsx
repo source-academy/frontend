@@ -10,7 +10,6 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
@@ -712,8 +711,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
       handleReplValueChange: handleReplValueChange,
       output: output,
       replValue: replValue,
-      sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
-      sourceVariant: Variant.DEFAULT,
       externalLibrary: question?.library?.external?.name || 'NONE',
       replButtons: replButtons(),
     },

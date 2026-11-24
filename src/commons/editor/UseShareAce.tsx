@@ -9,12 +9,9 @@ import * as Sentry from '@sentry/react';
 import sharedbAce from '@sourceacademy/sharedb-ace';
 import type SharedbAceBinding from '@sourceacademy/sharedb-ace/binding';
 import { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useEffect, useRef } from 'react';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
 
-import { getLanguageConfig } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import CollabEditingActions from '../collabEditing/CollabEditingActions';
 import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabEditingHelper';
 import { useSession } from '../utils/Hooks';
@@ -98,21 +95,11 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       if (!sessionDetails) {
         return;
       }
-      const binding = ShareAce.add(
-        editor,
-        ['contents'],
-        {
-          cursorManager,
-          selectionManager,
-          radarManager,
-        },
-        {
-          languageSelectHandler: (language: string) => {
-            const { chapter, variant } = parseModeString(language);
-            propsRef.current.updateLanguageCallback?.(getLanguageConfig(chapter, variant), null);
-          },
-        },
-      );
+      const binding = ShareAce.add(editor, ['contents'], {
+        cursorManager,
+        selectionManager,
+        radarManager,
+      });
       propsRef.current.handleSetSharedbConnected!(true);
       dispatch(
         CollabEditingActions.setUpdateUserRoleCallback('playground', binding.changeUserRole),
@@ -213,51 +200,3 @@ function getColor() {
 }
 
 export default useShareAce;
-
-export const parseModeString = (
-  modeString: string,
-): { chapter: Chapter; variant: Variant; library: ExternalLibraryName } => {
-  switch (modeString) {
-    case 'html':
-      return { chapter: Chapter.HTML, variant: Variant.DEFAULT, library: ExternalLibraryName.NONE };
-    case 'typescript':
-      return {
-        chapter: Chapter.FULL_TS,
-        variant: Variant.DEFAULT,
-        library: ExternalLibraryName.NONE,
-      };
-    case 'java':
-      return {
-        chapter: Chapter.FULL_JAVA,
-        variant: Variant.DEFAULT,
-        library: ExternalLibraryName.NONE,
-      };
-    case 'c_cpp':
-      return {
-        chapter: Chapter.FULL_C,
-        variant: Variant.DEFAULT,
-        library: ExternalLibraryName.NONE,
-      };
-    default: {
-      const matches = modeString.match(/source(-?\d+)([a-z-]+)([A-Z]+)/);
-      if (!matches) {
-        throw new Error('Invalid modeString');
-      }
-      const [_, chapter, variant, externalLibraryName] = matches;
-      return {
-        chapter:
-          chapter === '1'
-            ? Chapter.SOURCE_1
-            : chapter === '2'
-              ? Chapter.SOURCE_2
-              : chapter === '3'
-                ? Chapter.SOURCE_3
-                : Chapter.SOURCE_4,
-        variant: Variant[variant as keyof typeof Variant] || Variant.DEFAULT,
-        library:
-          ExternalLibraryName[externalLibraryName as keyof typeof ExternalLibraryName] ||
-          ExternalLibraryName.NONE,
-      };
-    }
-  }
-};

@@ -12,7 +12,6 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { isEqual } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -1057,8 +1056,6 @@ It is safe to close this window.`}
           editorTabs: editorTabs.map(convertEditorTabStateToProps),
           editorSessionId: '',
           sessionDetails: null,
-          sourceChapter: question.library.chapter || Chapter.SOURCE_4,
-          sourceVariant: question.library.variant ?? Variant.DEFAULT,
           externalLibraryName: question.library.external.name || 'NONE',
           handleDeclarationNavigate: editorContainerHandlers.handleDeclarationNavigate,
           handleEditorEval: handleEval,
@@ -1082,8 +1079,6 @@ It is safe to close this window.`}
     handleReplValueChange: replHandlers.handleReplValueChange,
     output: output,
     replValue: replValue,
-    sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
-    sourceVariant: question.library.variant ?? Variant.DEFAULT,
     externalLibrary: question?.library?.external?.name || 'NONE',
     replButtons: replButtons,
   };

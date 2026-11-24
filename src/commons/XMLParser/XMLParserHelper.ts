@@ -1,4 +1,3 @@
-import { Chapter } from 'js-slang/dist/langs';
 import { Builder } from 'xml2js';
 
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
@@ -127,7 +126,7 @@ const makeLibrary = (deploymentArr: XmlParseStrDeployment[] | undefined): Librar
         >)
       : [];
     return {
-      chapter: parseInt(deployment.$.interpreter, 10) as Chapter,
+      chapter: parseInt(deployment.$.interpreter, 10),
       external: {
         name: nameVal as ExternalLibraryName,
         symbols: symbolsVal,
