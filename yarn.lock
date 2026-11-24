@@ -1876,48 +1876,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@chevrotain/cst-dts-gen@npm:11.0.3":
-  version: 11.0.3
-  resolution: "@chevrotain/cst-dts-gen@npm:11.0.3"
-  dependencies:
-    "@chevrotain/gast": "npm:11.0.3"
-    "@chevrotain/types": "npm:11.0.3"
-    lodash-es: "npm:4.17.21"
-  checksum: 10c0/9e945a0611386e4e08af34c2d0b3af36c1af08f726b58145f11310f2aeafcb2d65264c06ec65a32df6b6a65771e6a55be70580c853afe3ceb51487e506967104
-  languageName: node
-  linkType: hard
-
-"@chevrotain/gast@npm:11.0.3":
-  version: 11.0.3
-  resolution: "@chevrotain/gast@npm:11.0.3"
-  dependencies:
-    "@chevrotain/types": "npm:11.0.3"
-    lodash-es: "npm:4.17.21"
-  checksum: 10c0/54fc44d7b4a7b0323f49d957dd88ad44504922d30cb226d93b430b0e09925efe44e0726068581d777f423fabfb878a2238ed2c87b690c0c0014ebd12b6968354
-  languageName: node
-  linkType: hard
-
-"@chevrotain/regexp-to-ast@npm:11.0.3":
-  version: 11.0.3
-  resolution: "@chevrotain/regexp-to-ast@npm:11.0.3"
-  checksum: 10c0/6939c5c94fbfb8c559a4a37a283af5ded8e6147b184a7d7bcf5ad1404d9d663c78d81602bd8ea8458ec497358a9e1671541099c511835d0be2cad46f00c62b3f
-  languageName: node
-  linkType: hard
-
-"@chevrotain/types@npm:11.0.3":
-  version: 11.0.3
-  resolution: "@chevrotain/types@npm:11.0.3"
-  checksum: 10c0/72fe8f0010ebef848e47faea14a88c6fdc3cdbafaef6b13df4a18c7d33249b1b675e37b05cb90a421700c7016dae7cd4187ab6b549e176a81cea434f69cd2503
-  languageName: node
-  linkType: hard
-
-"@chevrotain/utils@npm:11.0.3":
-  version: 11.0.3
-  resolution: "@chevrotain/utils@npm:11.0.3"
-  checksum: 10c0/b31972d1b2d444eef1499cf9b7576fc1793e8544910de33a3c18e07c270cfad88067f175d0ee63e7bc604713ebed647f8190db45cc8311852cd2d4fe2ef14068
-  languageName: node
-  linkType: hard
-
 "@commander-js/extra-typings@npm:^14.0.0":
   version: 14.0.0
   resolution: "@commander-js/extra-typings@npm:14.0.0"
@@ -3381,15 +3339,6 @@ __metadata:
     "@parcel/watcher-win32-x64":
       optional: true
   checksum: 10c0/8f35073d0c0b34a63d4c8d2213482f0ebc6a25de7b2cdd415d19cb929964a793cb285b68d1d50bfb732b070b3c82a2fdb4eb9c250eab709a1cd9d63345455a82
-  languageName: node
-  linkType: hard
-
-"@peggyjs/from-mem@npm:1.2.1":
-  version: 1.2.1
-  resolution: "@peggyjs/from-mem@npm:1.2.1"
-  dependencies:
-    semver: "npm:7.6.0"
-  checksum: 10c0/ef9e488e057ddb75c5778e6881ebbb0179fba0c5db972ee3aa754505a547499a46da79cf454fec86139432d23fef46b6244d28986691dede56248561527d4f4e
   languageName: node
   linkType: hard
 
@@ -5308,7 +5257,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:*, @types/lodash@npm:^4.14.198":
+"@types/lodash@npm:*":
   version: 4.17.24
   resolution: "@types/lodash@npm:4.17.24"
   checksum: 10c0/b72f60d4daacdad1fa643edb3faba204c02a01eb1ac00a83ff73496a6d236fc55e459c06106e8ced42277dba932d087d8fc090f8de4ef590d3f91e6d6f7ce85a
@@ -6834,31 +6783,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chevrotain-allstar@npm:0.3.1":
-  version: 0.3.1
-  resolution: "chevrotain-allstar@npm:0.3.1"
-  dependencies:
-    lodash-es: "npm:^4.17.21"
-  peerDependencies:
-    chevrotain: ^11.0.0
-  checksum: 10c0/5cadedffd3114eb06b15fd3939bb1aa6c75412dbd737fe302b52c5c24334f9cb01cee8edc1d1067d98ba80dddf971f1d0e94b387de51423fc6cf3c5d8b7ef27a
-  languageName: node
-  linkType: hard
-
-"chevrotain@npm:11.0.3":
-  version: 11.0.3
-  resolution: "chevrotain@npm:11.0.3"
-  dependencies:
-    "@chevrotain/cst-dts-gen": "npm:11.0.3"
-    "@chevrotain/gast": "npm:11.0.3"
-    "@chevrotain/regexp-to-ast": "npm:11.0.3"
-    "@chevrotain/types": "npm:11.0.3"
-    "@chevrotain/utils": "npm:11.0.3"
-    lodash-es: "npm:4.17.21"
-  checksum: 10c0/ffd425fa321e3f17e9833d7f44cd39f2743f066e92ca74b226176080ca5d455f853fe9091cdfd86354bd899d85c08b3bdc3f55b267e7d07124b048a88349765f
-  languageName: node
-  linkType: hard
-
 "chokidar@npm:^5.0.0":
   version: 5.0.0
   resolution: "chokidar@npm:5.0.0"
@@ -6958,13 +6882,6 @@ __metadata:
   version: 2.0.3
   resolution: "comma-separated-tokens@npm:2.0.3"
   checksum: 10c0/91f90f1aae320f1755d6957ef0b864fe4f54737f3313bd95e0802686ee2ca38bff1dd381964d00ae5db42912dd1f4ae5c2709644e82706ffc6f6842a813cdd67
-  languageName: node
-  linkType: hard
-
-"commander@npm:^12.0.0":
-  version: 12.1.0
-  resolution: "commander@npm:12.1.0"
-  checksum: 10c0/6e1996680c083b3b897bfc1cfe1c58dfbcd9842fd43e1aaf8a795fbc237f65efcc860a3ef457b318e73f29a4f4a28f6403c3d653d021d960e4632dd45bde54a9
   languageName: node
   linkType: hard
 
@@ -8799,7 +8716,6 @@ __metadata:
     i18next-browser-languagedetector: "npm:^8.0.0"
     identity-obj-proxy: "npm:^3.0.0"
     immer: "npm:^9.0.21"
-    java-slang: "npm:^1.0.13"
     js-cookie: "npm:^3.0.5"
     js-slang: "npm:^1.0.94"
     jsdom: "npm:^30.0.0"
@@ -10083,29 +9999,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"java-parser@npm:^2.0.5":
-  version: 2.3.0
-  resolution: "java-parser@npm:2.3.0"
-  dependencies:
-    chevrotain: "npm:11.0.3"
-    chevrotain-allstar: "npm:0.3.1"
-    lodash: "npm:4.17.21"
-  checksum: 10c0/2b2760c68c48d0f23ba6c31c87e2ed4f9f6dece9cf021edd9a22b62b34fd0bb234437b8e05c0be44dc94601211e71399e029230c4c80b0713169dc0fa3954e0b
-  languageName: node
-  linkType: hard
-
-"java-slang@npm:^1.0.13":
-  version: 1.0.14
-  resolution: "java-slang@npm:1.0.14"
-  dependencies:
-    "@types/lodash": "npm:^4.14.198"
-    java-parser: "npm:^2.0.5"
-    lodash: "npm:^4.17.21"
-    peggy: "npm:^4.0.2"
-  checksum: 10c0/630906d46a7acb10a985bff496a1578e386651c37d250bb106fcea82bd987d8271ba3242a1d6abc16b34f1554d8939b2791091ac97cd63ca17afb51958fd9945
-  languageName: node
-  linkType: hard
-
 "jiti@npm:^2.7.0":
   version: 2.7.0
   resolution: "jiti@npm:2.7.0"
@@ -10760,14 +10653,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash-es@npm:4.17.21":
-  version: 4.17.21
-  resolution: "lodash-es@npm:4.17.21"
-  checksum: 10c0/fb407355f7e6cd523a9383e76e6b455321f0f153a6c9625e21a8827d10c54c2a2341bd2ae8d034358b60e07325e1330c14c224ff582d04612a46a4f0479ff2f2
-  languageName: node
-  linkType: hard
-
-"lodash-es@npm:^4.17.21, lodash-es@npm:^4.18.1":
+"lodash-es@npm:^4.18.1":
   version: 4.18.1
   resolution: "lodash-es@npm:4.18.1"
   checksum: 10c0/35d4dcf87ef07f8d090f409447575800108057e360b445f590d0d25d09e3d1e33a163d2fc100d4d072b0f901d5e2fc533cd7c4bfd8eeb38a06abec693823c8b8
@@ -10813,13 +10699,6 @@ __metadata:
   version: 4.7.0
   resolution: "lodash.sortby@npm:4.7.0"
   checksum: 10c0/fc48fb54ff7669f33bb32997cab9460757ee99fafaf72400b261c3e10fde21538e47d8cfcbe6a25a31bcb5b7b727c27d52626386fc2de24eb059a6d64a89cdf5
-  languageName: node
-  linkType: hard
-
-"lodash@npm:4.17.21":
-  version: 4.17.21
-  resolution: "lodash@npm:4.17.21"
-  checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
   languageName: node
   linkType: hard
 
@@ -12587,19 +12466,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"peggy@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "peggy@npm:4.0.2"
-  dependencies:
-    "@peggyjs/from-mem": "npm:1.2.1"
-    commander: "npm:^12.0.0"
-    source-map-generator: "npm:0.8.0"
-  bin:
-    peggy: bin/peggy.js
-  checksum: 10c0/7b08616255f03d24af6f716363f880ac680523421038eab7be508fc8a5a01c464a7022f5709cb5dd063297d0adba638fdc396c6571e0fec282583055e6b1ce59
-  languageName: node
-  linkType: hard
-
 "performance-now@npm:^2.1.0":
   version: 2.1.0
   resolution: "performance-now@npm:2.1.0"
@@ -14149,17 +14015,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:7.6.0":
-  version: 7.6.0
-  resolution: "semver@npm:7.6.0"
-  dependencies:
-    lru-cache: "npm:^6.0.0"
-  bin:
-    semver: bin/semver.js
-  checksum: 10c0/fbfe717094ace0aa8d6332d7ef5ce727259815bd8d8815700853f4faf23aacbd7192522f0dc5af6df52ef4fa85a355ebd2f5d39f554bd028200d6cf481ab9b53
-  languageName: node
-  linkType: hard
-
 "semver@npm:^6.3.1":
   version: 6.3.1
   resolution: "semver@npm:6.3.1"
@@ -14477,13 +14332,6 @@ __metadata:
     ip-address: "npm:^9.0.5"
     smart-buffer: "npm:^4.2.0"
   checksum: 10c0/d54a52bf9325165770b674a67241143a3d8b4e4c8884560c4e0e078aace2a728dffc7f70150660f51b85797c4e1a3b82f9b7aa25e0a0ceae1a243365da5c51a7
-  languageName: node
-  linkType: hard
-
-"source-map-generator@npm:0.8.0":
-  version: 0.8.0
-  resolution: "source-map-generator@npm:0.8.0"
-  checksum: 10c0/4cab61cd56c81c4ecd8f2249ea0d81e24210686de1d5814432e9ae03f153692d0e85f1f1edf87ae54f74a18dd4211ad966d721e034d6cacfb08a6f099b0b1329
   languageName: node
   linkType: hard
 

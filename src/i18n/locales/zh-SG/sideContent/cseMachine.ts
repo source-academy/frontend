@@ -1,9 +1,6 @@
 const translations = {
   maxStepsExceeded: '超出最大步骤数。',
   increaseStepLimit: '如果您希望查看进一步的评估，请增加步骤限制。',
-  csecDescription:
-    'CSEC 机器生成控制、存储、环境和类模型图，这些图基于<0>《计算机程序的构造和解释，JavaScript 版》第 3 章第 2 节</0>中介绍的符号。',
-  javaCsec: '您已选择子语言 <0>Java CSEC</0>。',
   cseDescription:
     'CSE 机器生成控制、存储和环境模型图，这些图基于<0>《计算机程序的构造和解释，JavaScript 版》第 3 章第 2 节</0>中介绍的符号。',
   instructions:

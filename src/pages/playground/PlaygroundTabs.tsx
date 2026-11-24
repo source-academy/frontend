@@ -1,11 +1,9 @@
 import { IconNames } from '@blueprintjs/icons';
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
-import type { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import Markdown from 'src/commons/Markdown';
 import SideContentRemoteExecution from 'src/commons/sideContent/content/remoteExecution/SideContentRemoteExecution';
 import SideContentDocumentation from 'src/commons/sideContent/content/SideContentDocumentation';
 import SideContentSessionManagement from 'src/commons/sideContent/content/SideContentSessionManagement';
-import SideContentSubstVisualizer from 'src/commons/sideContent/content/SideContentSubstVisualizer';
 import {
   type SideContentLocation,
   type SideContentTab,
@@ -106,36 +104,3 @@ export const makeConductorDataVisualizerPlaceholderTab = (): SideContentTab => (
   body: <Markdown content="Call `draw_data` in your program to visualize data structures here." />,
   id: SideContentType.dataVisualizer,
 });
-
-export const makeSubstVisualizerTabFrom = (
-  workspaceLocation: SideContentLocation,
-  output: InterpreterOutput[],
-): SideContentTab => {
-  const processStepperOutput = (output: InterpreterOutput[]) => {
-    const editorOutput = output[0];
-    if (
-      editorOutput &&
-      editorOutput.type === 'result' &&
-      editorOutput.value instanceof Array &&
-      editorOutput.value[0] === Object(editorOutput.value[0]) &&
-      // check if output is from stepper
-      'ast' in editorOutput.value[0]
-    ) {
-      return editorOutput.value;
-    } else {
-      return [];
-    }
-  };
-
-  return {
-    label: 'Stepper',
-    iconName: IconNames.FLOW_REVIEW,
-    body: (
-      <SideContentSubstVisualizer
-        workspaceLocation={workspaceLocation}
-        content={processStepperOutput(output)}
-      />
-    ),
-    id: SideContentType.substVisualizer,
-  };
-};
