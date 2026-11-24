@@ -13,8 +13,7 @@ import { retrieveFilesInWorkspaceAsRecord } from '../../../fileSystem/utils';
 import { actions } from '../../../utils/ActionsHelper';
 import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { selectWorkspace } from '../../SafeEffects';
-import { clearContext } from './clearContext';
-import { evalCodeSaga } from './evalCode';
+import { evalCodeConductorSaga } from './evalCode';
 
 export function* evalEditorSaga(
   workspaceLocation: WorkspaceLocation,
@@ -23,7 +22,6 @@ export function* evalEditorSaga(
     activeEditorTabIndex,
     programPrependValue: prepend,
     editorTabs,
-    execTime,
     isFolderModeEnabled,
   } = yield* selectWorkspace(workspaceLocation);
 
@@ -73,13 +71,7 @@ export function* evalEditorSaga(
   } else {
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
-    const entrypointCode = files[entrypointFilePath];
-    yield* clearContext(workspaceLocation, entrypointCode);
     yield put(actions.clearReplOutput(workspaceLocation));
-    const context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context,
-    );
-
     for (const editorTab of editorTabs) {
       files[editorTab.filePath ?? defaultFilePath] = editorTab.value;
     }
@@ -90,13 +82,11 @@ export function* evalEditorSaga(
       files[entrypointFilePath] = `${prepend}\n${files[entrypointFilePath]}`;
     }
     yield call(
-      evalCodeSaga,
+      evalCodeConductorSaga,
       files,
       entrypointFilePath,
-      context,
-      execTime,
-      WorkspaceActions.evalEditor.type,
       workspaceLocation,
+      WorkspaceActions.evalEditor.type,
     );
   }
 }

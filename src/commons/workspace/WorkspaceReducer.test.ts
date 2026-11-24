@@ -1,4 +1,3 @@
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { cloneDeep } from 'lodash-es';
 import CommonsActions from 'src/commons/application/actions/CommonsActions';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
@@ -17,10 +16,9 @@ import {
   type RunningOutput,
 } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { type Library, type Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
+import { type Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
 import type { HighlightedLines, Position } from '../editor/EditorTypes';
 import Constants from '../utils/Constants';
-import { createContext } from '../utils/JsSlangHelper';
 import WorkspaceActions from './WorkspaceActions';
 import { WorkspaceReducer } from './WorkspaceReducer';
 import type {
@@ -285,56 +283,6 @@ describe('CLEAR_REPL_OUTPUT_LAST', () => {
           output: [output[0]],
         },
       });
-    });
-  });
-});
-
-describe('END_CLEAR_CONTEXT', () => {
-  test('sets context and globals correctly', () => {
-    const mockGlobals: Array<[string, any]> = [
-      ['testNumber', 3.141592653589793],
-      ['testString', 'who dat boi'],
-      ['testBooleanTrue', true],
-      ['testBooleanFalse', false],
-      ['testBooleanUndefined', undefined],
-      ['testBooleanNull', null],
-      ['testObject', { a: 1, b: 2 }],
-      ['testArray', [1, 2, 'a', 'b']],
-    ];
-    const library: Library = {
-      chapter: Chapter.SOURCE_4,
-      external: {
-        name: 'SOUNDS' as ExternalLibraryName,
-        symbols: [],
-      },
-      globals: mockGlobals,
-    };
-
-    const actions = generateActions(l => WorkspaceActions.endClearContext(library, l));
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location: WorkspaceLocation = action.payload.workspaceLocation;
-      const context = createContext<WorkspaceLocation>(
-        library.chapter,
-        library.external.symbols,
-        location,
-        Variant.DEFAULT,
-      );
-
-      // Note: we stringify because context contains functions which cause
-      // the two to compare unequal; stringifying strips functions
-      expect(JSON.stringify(result)).toEqual(
-        JSON.stringify({
-          ...defaultWorkspaceManager,
-          [location]: {
-            ...defaultWorkspaceManager[location],
-            context,
-            globals: mockGlobals,
-            externalLibrary: 'SOUNDS' as const,
-          },
-        }),
-      );
     });
   });
 });
@@ -885,7 +833,6 @@ describe('RESET_WORKSPACE', () => {
             ...defaultWorkspaceManager[location],
             ...newContext,
             ...workspaceOptions,
-            context: newContext.context,
           },
         }),
       );
@@ -1196,7 +1143,6 @@ describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
                 breakpoints: [],
               },
             ],
-            context: newContext.context,
           },
         }),
       );

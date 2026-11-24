@@ -736,7 +736,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     breakpointSteps: workspace.breakpointSteps,
     changepointSteps: workspace.changepointSteps,
     machineOutput: workspace.output,
-    chapter: workspace.context.chapter,
+    // The CSE machine formats values identically for every chapter that has it.
+    chapter: Chapter.SOURCE_4,
     cseSnapshots: workspace.cseSnapshots,
     isOnCseTab: state.sideContent[loc]?.selectedTab === SideContentType.cseMachine,
   };

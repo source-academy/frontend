@@ -1,4 +1,3 @@
-import type { Context } from 'js-slang';
 import type { SourceError } from 'js-slang/dist/errors/base';
 import { call, put, select, type StrictEffect } from 'redux-saga/effects';
 
@@ -10,8 +9,7 @@ import { TestcaseTypes } from '../../../assessment/AssessmentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { selectWorkspace } from '../../SafeEffects';
-import { clearContext } from './clearContext';
-import { evalCodeSaga } from './evalCode';
+import { evalCodeConductorSaga } from './evalCode';
 
 /**
  * Runs a testcase under Conductor.
@@ -70,7 +68,6 @@ export function* runTestCaseConductor(
   type: TestcaseType,
   prepend: string,
   postpend: string,
-  execTime: number,
   /**
    * Skip this call's own switch-to-TEST_CASE-language/restore dance - set by runAllTestcases
    * (WorkspaceSaga/index.ts), which switches once for the whole batch of testcases instead of
@@ -84,10 +81,6 @@ export function* runTestCaseConductor(
    */
   skipLanguageSwitch?: boolean,
 ): Generator<StrictEffect, boolean, any> {
-  const context: Context<any> = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].context,
-  );
-
   // Testing always runs the full concatenated bundle under Python's top chapter,
   // regardless of the student's own assigned sub-chapter, so a sub-chapter's syntax
   // restrictions (e.g. recursion-only, no loops) aren't enforced by the evaluator here.
@@ -131,13 +124,11 @@ export function* runTestCaseConductor(
 
   try {
     yield call(
-      evalCodeSaga,
+      evalCodeConductorSaga,
       { [combinedFilePath]: combinedCode },
       combinedFilePath,
-      context,
-      execTime,
-      EVAL_SILENT,
       workspaceLocation,
+      EVAL_SILENT,
     );
   } finally {
     if (!skipLanguageSwitch) {
@@ -203,12 +194,9 @@ export function* runTestCase(
     editorTestcases: {
       [index]: { program: testcase, type: type },
     },
-    execTime,
     programPrependValue: prepend,
     programPostpendValue: postpend,
   } = yield* selectWorkspace(workspaceLocation);
-
-  yield* clearContext(workspaceLocation, value);
 
   // Do NOT clear the REPL output!
 
@@ -220,7 +208,6 @@ export function* runTestCase(
     type,
     prepend,
     postpend,
-    execTime,
     skipLanguageSwitch,
   );
 }

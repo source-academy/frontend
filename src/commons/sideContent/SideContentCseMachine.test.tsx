@@ -4,10 +4,10 @@ import { act } from 'react';
 import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
+import CseMachine from 'src/features/cseMachine/CseMachine';
 import { expect, test, vi } from 'vitest';
 
 import { mockContext } from '../mocks/ContextMocks';
-import { visualizeCseMachine } from '../utils/JsSlangHelper';
 import { SideContentCseMachine } from './content/SideContentCseMachine';
 
 // Mock BlueprintJS Slider due to a bug in initial state causing invalid CSS
@@ -36,7 +36,7 @@ test('CSE Machine sets visualization state and renders', async () => {
 
   const context = mockContext();
   await runInContext('const hello="world"; debugger;', context);
-  act(() => visualizeCseMachine({ context }));
+  act(() => CseMachine.drawCse(context));
 
   expect(screen.queryAllByTestId('cse-machine-default-text')).toHaveLength(0);
   expect(screen.queryAllByTestId('sa-cse-machine')).toHaveLength(1);

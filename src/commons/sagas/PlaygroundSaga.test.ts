@@ -1,4 +1,3 @@
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
 import { call } from 'redux-saga/effects';
@@ -426,8 +425,6 @@ function createQueryString(files: Record<string, string>, state: OverallState): 
     .map(editorTab => editorTab.filePath)
     .filter((filePath): filePath is string => filePath !== undefined);
   const activeEditorTabIndex: number | null = state.workspaces.playground.activeEditorTabIndex;
-  const chapter: Chapter = state.workspaces.playground.context.chapter;
-  const variant: Variant = state.workspaces.playground.context.variant;
   const external: ExternalLibraryName = state.workspaces.playground.externalLibrary;
   const execTime: number = state.workspaces.playground.execTime;
   const newQueryString: string = qs.stringify({
@@ -435,8 +432,6 @@ function createQueryString(files: Record<string, string>, state: OverallState): 
     files: compressToEncodedURIComponent(qs.stringify(files)),
     tabs: editorTabFilePaths.map(compressToEncodedURIComponent),
     tabIdx: activeEditorTabIndex,
-    chap: chapter,
-    variant,
     ext: external,
     exec: execTime,
   });

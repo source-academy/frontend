@@ -1,9 +1,7 @@
 import { type AutoCompleteEntry, WEB_PLUGIN_ID } from '@sourceacademy/common-autocomplete';
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
-import { type Context, findDeclaration } from 'js-slang';
-import { Chapter } from 'js-slang/dist/langs';
-import Phaser from 'phaser';
+import { findDeclaration } from 'js-slang';
 import type { EventChannel } from 'redux-saga';
 import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import AutoCompletePlugin from 'src/features/conductor/AutocompletePlugin';
@@ -20,11 +18,11 @@ import { selectTestCaseLanguage } from '../../../features/directory/testCaseLang
 import type { DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';
 import { defaultEditorValue, type OverallState } from '../../application/ApplicationTypes';
-import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
-import type { Library, Testcase } from '../../assessment/AssessmentTypes';
+import { ExternalLibraryName } from '../../application/types/ExternalTypes';
+import type { Testcase } from '../../assessment/AssessmentTypes';
+import { createAnalysisContext } from '../../editor/sourceAnalysis';
 import { writeFileRecursively } from '../../fileSystem/utils';
 import { actions } from '../../utils/ActionsHelper';
-import {} from '../../utils/JsSlangHelper';
 import {
   showSuccessMessage,
   showWarningMessage,
@@ -206,10 +204,6 @@ const WorkspaceSaga = combineSagaHandlers({
     yield put(actions.clearReplInput(workspaceLocation));
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
 
-    const context: Context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context,
-    );
-
     const remoteExecutionSession: DeviceSession | undefined = yield select(
       (state: OverallState) => state.session.remoteExecutionSession,
     );
@@ -240,7 +234,6 @@ const WorkspaceSaga = combineSagaHandlers({
       evalCodeConductorSaga,
       { [codeFilePath]: code },
       codeFilePath,
-      context,
       workspaceLocation,
       WorkspaceActions.evalRepl.type,
     );
@@ -265,56 +258,17 @@ const WorkspaceSaga = combineSagaHandlers({
    */
   [WorkspaceActions.externalLibrarySelect.type]: function* (action) {
     const { workspaceLocation, externalLibraryName: newExternalLibraryName } = action.payload;
-    const [chapter, globals, oldExternalLibraryName]: [
-      Chapter,
-      Array<[string, any]>,
-      ExternalLibraryName,
-    ] = yield select((state: OverallState) => [
-      state.workspaces[workspaceLocation].context.chapter,
-      state.workspaces[workspaceLocation].globals,
-      state.workspaces[workspaceLocation].externalLibrary,
-    ]);
-    const symbols = externalLibraries.get(newExternalLibraryName)!;
-    const library: Library = {
-      chapter,
-      external: {
-        name: newExternalLibraryName,
-        symbols,
-      },
-      globals,
-    };
+    const oldExternalLibraryName: ExternalLibraryName = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].externalLibrary,
+    );
     if (newExternalLibraryName !== oldExternalLibraryName || action.payload.initialise) {
       yield put(actions.changeExternalLibrary(newExternalLibraryName, workspaceLocation));
-      yield put(actions.beginClearContext(workspaceLocation, library, true));
+      yield call([DataVisualizer, DataVisualizer.clearWithData]);
       yield put(actions.clearReplOutput(workspaceLocation));
       if (!action.payload.initialise) {
         yield call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000);
       }
     }
-  },
-  /**
-   * Handles the side effects of resetting the context: clears the visualizers and re-exposes the
-   * library's globals.
-   */
-  [WorkspaceActions.beginClearContext.type]: function* (action): any {
-    yield call([DataVisualizer, DataVisualizer.clearWithData]);
-    const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
-    for (const [key, value] of globals) {
-      window[key as any] = value;
-    }
-    yield put(
-      actions.endClearContext(
-        {
-          ...action.payload.library,
-          moduleParams: {
-            runes: {},
-            phaser: Phaser,
-          },
-        },
-        action.payload.workspaceLocation,
-      ),
-    );
-    yield undefined;
   },
   [WorkspaceActions.navigateToDeclaration.type]: function* (action) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -322,11 +276,7 @@ const WorkspaceSaga = combineSagaHandlers({
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].value,
     );
-    const context: Context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context,
-    );
-
-    const result = findDeclaration(code, context, {
+    const result = findDeclaration(code, createAnalysisContext(), {
       line: action.payload.cursorPosition.row + 1,
       column: action.payload.cursorPosition.column,
     });

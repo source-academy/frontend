@@ -85,7 +85,6 @@ export type EditorTabState = {
 
 export type WorkspaceState = {
   readonly autogradingResults: AutogradingResult[];
-  readonly context: Context;
   readonly isFolderModeEnabled: boolean;
   readonly activeEditorTabIndex: number | null;
   readonly editorTabs: EditorTabState[];
@@ -108,7 +107,6 @@ export type WorkspaceState = {
   readonly customNotification: string;
   readonly sharedbConnected: boolean;
   readonly stepLimit: number;
-  readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
   readonly cseSnapshots: CseSnapshot[] | null;
   readonly files: UploadResult;

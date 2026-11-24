@@ -146,7 +146,7 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
   const {
     handleTeamOverviewFetch,
     handleTestcaseEval,
-    handleClearContext,
+    handleChangeLibrary,
     handleChangeExecTime,
     handleUpdateCurrentAssessmentId,
     handleResetWorkspace,
@@ -172,8 +172,8 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
         dispatch(SessionActions.fetchTeamFormationOverview(assessmentId)),
       handleTestcaseEval: (id: number) =>
         dispatch(WorkspaceActions.evalTestcase(workspaceLocation, id)),
-      handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
-        dispatch(WorkspaceActions.beginClearContext(workspaceLocation, library, shouldInitLibrary)),
+      handleChangeLibrary: (library: Library) =>
+        dispatch(WorkspaceActions.changeExternalLibrary(library.external.name, workspaceLocation)),
       handleChangeExecTime: (execTimeMs: number) =>
         dispatch(WorkspaceActions.changeExecTime(execTimeMs, workspaceLocation)),
       handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) =>
@@ -453,7 +453,7 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
     handleChangeExecTime(
       question.library.execTimeMs ?? defaultWorkspaceManager.assessment.execTime,
     );
-    handleClearContext(question.library, true);
+    handleChangeLibrary(question.library);
     // Clear out any module tabs (e.g. Runes, Curves) left over from the
     // previous question, so they don't linger until the next run.
     dispatch(resetSideContent(workspaceLocation));

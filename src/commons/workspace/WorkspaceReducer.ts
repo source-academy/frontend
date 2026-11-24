@@ -1,7 +1,6 @@
 import { createReducer, type Reducer } from '@reduxjs/toolkit';
 import { castDraft, type Draft } from 'immer';
 import { type SourceError } from 'js-slang/dist/errors/base';
-import type { Chapter } from 'js-slang/dist/langs';
 
 import { logOut } from '../application/actions/CommonsActions';
 import InterpreterActions from '../application/actions/InterpreterActions';
@@ -20,7 +19,6 @@ import {
   setUpdateUserRoleCallback,
 } from '../collabEditing/CollabEditingActions';
 import type { SourceActionType } from '../utils/ActionsHelper';
-import { createContext } from '../utils/JsSlangHelper';
 import { handleCseAndStepperActions } from './reducers/cseReducer';
 import { handleEditorActions } from './reducers/editorReducer';
 import { handleReplActions } from './reducers/replReducer';
@@ -140,28 +138,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(WorkspaceActions.changeExecTime, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].execTime = action.payload.execTime;
-    })
-    .addCase(WorkspaceActions.endClearContext, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      // For some reason mutating the state directly results in type
-      // errors, so we have to do it the old-fashioned way
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          // TODO: goes away with the legacy local execution (js-slang `Context`) in workspace
-          // state. `library.chapter` is a language directory position, not a Source chapter.
-          context: createContext<WorkspaceLocation>(
-            action.payload.library.chapter as Chapter,
-            action.payload.library.external.symbols,
-            workspaceLocation,
-            undefined,
-            action.payload.library.languageOptions,
-          ),
-          globals: action.payload.library.globals,
-          externalLibrary: action.payload.library.external.name,
-        },
-      };
     })
     .addCase(WorkspaceActions.changeExternalLibrary, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);

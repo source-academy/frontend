@@ -3,7 +3,6 @@ import type { Context } from 'js-slang';
 import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
 import type { AllColsSortStates } from '../../features/grading/GradingTypes';
 import type { ExternalLibraryName } from '../application/types/ExternalTypes';
-import type { Library } from '../assessment/AssessmentTypes';
 import type { HighlightedLines, Position } from '../editor/EditorTypes';
 import { createActions } from '../redux/utils';
 import type { UploadResult } from '../sideContent/content/SideContentUpload';
@@ -41,43 +40,9 @@ const newActions = createActions('workspace', {
     workspaceLocation: WorkspaceLocation,
     initialise?: boolean,
   ) => ({ externalLibraryName, workspaceLocation, initialise: initialise || false }),
-  /**
-   * Starts the process to clear the js-slang Context
-   * at a specified workspace location.
-   *
-   * This action is to be handled by saga, in order to
-   * call upon side effects such as loading libraries in
-   * the global scope.
-   *
-   * @param library the Library that the context shall be using
-   * @param workspaceLocation the location of the workspace
-   *
-   * @see Library in assessmentShape.ts
-   */
-  beginClearContext: (
-    workspaceLocation: WorkspaceLocation,
-    library: Library,
-    shouldInitLibrary: boolean,
-  ) => ({ library, workspaceLocation, shouldInitLibrary }),
   clearReplInput: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   clearReplOutput: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   clearReplOutputLast: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
-  /**
-   * Finishes the process to clear the js-slang Context
-   * at a specified workspace location.
-   *
-   * This action is to be handled in the reducer, to call the reset on the
-   * Context in the state.
-   *
-   * @param library the Library that the context shall be using
-   * @param workspaceLocation the location of the workspace
-   *
-   * @see Library in assessmentShape.ts
-   */
-  endClearContext: (library: Library, workspaceLocation: WorkspaceLocation) => ({
-    library,
-    workspaceLocation,
-  }),
   evalEditor: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   evalRepl: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   evalTestcase: (workspaceLocation: WorkspaceLocation, testcaseId: number) => ({
