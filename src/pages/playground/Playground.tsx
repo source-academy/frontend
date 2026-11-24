@@ -273,12 +273,17 @@ function Playground(props: PlaygroundProps) {
     workspaceLocation,
     shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction,
   );
+  // The event-log session starts once a language is selected, so that its initial event does not
+  // record "no language" while the language directory is still loading.
+  const hasLanguage = languagePosition > 0;
   const [sessionId, setSessionId] = useState(() =>
-    initSession('playground', {
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorValue: editorTabs[0]?.value ?? '',
-      chapter: languagePosition,
-    }),
+    hasLanguage
+      ? initSession('playground', {
+          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+          editorValue: editorTabs[0]?.value ?? '',
+          chapter: languagePosition,
+        })
+      : undefined,
   );
   const [users, setUsers] = useState<Record<string, SharedbAceUser>>({});
 
@@ -306,7 +311,11 @@ function Playground(props: PlaygroundProps) {
   const externalLibraryName = useAppSelector(state => state.workspaces.playground.externalLibrary);
 
   useEffect(() => {
-    // When the editor session Id changes, then treat it as a new session.
+    // When the editor session Id changes, or the first language is selected, then treat it as a
+    // new session.
+    if (!hasLanguage) {
+      return;
+    }
     setSessionId(
       initSession('playground', {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
@@ -315,7 +324,7 @@ function Playground(props: PlaygroundProps) {
       }),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editorSessionId]);
+  }, [editorSessionId, hasLanguage]);
 
   const hash = isSicpEditor ? props.initialEditorValueHash : location.hash;
 
@@ -380,7 +389,9 @@ function Playground(props: PlaygroundProps) {
 
   const pushLog = useCallback(
     (newInput: Input) => {
-      log(sessionId, newInput);
+      if (sessionId) {
+        log(sessionId, newInput);
+      }
     },
     [sessionId],
   );
