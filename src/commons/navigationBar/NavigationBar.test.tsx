@@ -3,16 +3,10 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
-import { beforeEach, describe, expect, it, test, vi } from 'vitest';
+import { describe, expect, it, test, vi } from 'vitest';
 
 import { Role } from '../application/ApplicationTypes';
 import NavigationBar from './NavigationBar';
-
-const mockConductorEnabled = vi.hoisted(() => ({ value: false }));
-vi.mock('../../features/conductor/flagConductorEnable', async importOriginal => ({
-  ...(await importOriginal<typeof import('../../features/conductor/flagConductorEnable')>()),
-  useConductorEnable: () => mockConductorEnabled.value,
-}));
 
 const renderNav = (store: any) =>
   render(
@@ -80,22 +74,7 @@ describe('NavigationBar', () => {
   });
 
   describe('textbook button', () => {
-    const studentStore = () =>
-      mockInitialStore({
-        session: { role: Role.Student, name: 'Bob', courseId: 1, courseShortName: 'CS1101S' },
-      });
-
-    beforeEach(() => {
-      mockConductorEnabled.value = false;
-    });
-
-    it('defaults to SICP JS for the legacy Source languages', () => {
-      renderNav(studentStore());
-      expect(screen.getAllByText('SICP JS').length).toBeGreaterThan(0);
-    });
-
-    it('is absent for a Conductor language without a textbook', () => {
-      mockConductorEnabled.value = true;
+    it('is absent for a language without a textbook', () => {
       renderNav(
         mockInitialStore({
           session: { role: Role.Student, name: 'Bob', courseId: 1, courseShortName: 'CS1101S' },

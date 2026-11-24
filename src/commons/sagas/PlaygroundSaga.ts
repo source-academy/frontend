@@ -1,15 +1,11 @@
 import type { FSModule } from 'browserfs/dist/node/core/FS';
-import { Chapter } from 'js-slang/dist/langs';
 import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
 import { call, delay, put, race, select } from 'redux-saga/effects';
-import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
-import CseMachine from 'src/features/cseMachine/CseMachine';
-import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 import { splitEvaluatorId, splitLanguageId } from 'src/features/directory/languageIdCodec';
 
 import PlaygroundActions from '../../features/playground/PlaygroundActions';
-import { isSourceLanguage, type OverallState } from '../application/ApplicationTypes';
+import type { OverallState } from '../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
 import { combineSagaHandlers } from '../redux/utils';
 import SideContentActions from '../sideContent/SideContentActions';
@@ -60,50 +56,6 @@ const PlaygroundSaga = combineSagaHandlers({
       return;
     }
 
-    // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
-    if (prevId === SideContentType.substVisualizer && newId === SideContentType.mobileEditorRun) {
-      return;
-    }
-
-    const {
-      context: { chapter: playgroundSourceChapter },
-      editorTabs,
-    } = yield* selectWorkspace(workspaceLocation);
-
-    if (prevId === SideContentType.substVisualizer) {
-      const hasBreakpoints = editorTabs.some(({ breakpoints }) => breakpoints.some(Boolean));
-
-      if (!hasBreakpoints) {
-        yield put(WorkspaceActions.toggleUsingSubst(false, workspaceLocation));
-        yield put(WorkspaceActions.clearReplOutput(workspaceLocation));
-      }
-    }
-
-    if (newId !== SideContentType.cseMachine) {
-      yield put(WorkspaceActions.toggleUsingCse(false, workspaceLocation));
-      yield call([CseMachine, CseMachine.clearCse]);
-      yield call([JavaCseMachine, JavaCseMachine.clearCse]);
-      yield put(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
-      yield put(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
-      yield put(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
-      yield put(WorkspaceActions.setEditorHighlightedLines(workspaceLocation, 0, []));
-    }
-
-    if (playgroundSourceChapter === Chapter.FULL_JAVA && newId === SideContentType.cseMachine) {
-      yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
-    }
-
-    if (
-      isSourceLanguage(playgroundSourceChapter) &&
-      (newId === SideContentType.substVisualizer || newId === SideContentType.cseMachine)
-    ) {
-      if (playgroundSourceChapter <= Chapter.SOURCE_2) {
-        yield put(WorkspaceActions.toggleUsingSubst(true, workspaceLocation));
-      } else {
-        yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
-      }
-    }
-
     if (newId === SideContentType.upload) {
       yield put(WorkspaceActions.toggleUsingUpload(true, workspaceLocation));
     } else {
@@ -126,13 +78,11 @@ function* updateQueryString() {
 
   const {
     activeEditorTabIndex,
-    context: { chapter, variant },
     editorTabs,
     externalLibrary: external,
     isFolderModeEnabled,
   } = yield* selectWorkspace('playground');
 
-  const conductorEnabled: boolean = yield select(selectConductorEnable);
   const { selectedLanguageId, selectedEvaluatorId } = yield select(
     (state: OverallState) => state.languageDirectory,
   );
@@ -156,15 +106,11 @@ function* updateQueryString() {
     files: compressToEncodedURIComponent(qs.stringify(files)),
     tabs: editorTabFilePaths.map(compressToEncodedURIComponent),
     tabIdx: activeEditorTabIndex,
-    // Conductor-based languages (e.g. Python) and legacy js-slang chapters are mutually
-    // exclusive, so only one set is ever meaningful. Encoding both unconditionally would
-    // make `chap` (which always has a real default value) win on decode and shadow `language`.
-    chap: conductorEnabled ? undefined : chapter,
-    // `variant` doubles as the js-slang Variant enum (legacy chapters) or the directory
-    // language's chapter number (Conductor languages) — the two are mutually exclusive.
-    variant: conductorEnabled ? dirVariant : variant,
-    language: conductorEnabled ? dirLanguage : undefined,
-    evaluator: conductorEnabled ? dirEvaluator : undefined,
+    // `chap` is deliberately not encoded: it always has a real default value, so it would win
+    // on decode and shadow `language`.
+    variant: dirVariant,
+    language: dirLanguage,
+    evaluator: dirEvaluator,
     ext: external,
   });
   yield put(PlaygroundActions.changeQueryString(newQueryString));

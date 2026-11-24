@@ -27,12 +27,10 @@ import type {
   EditorTabState,
   PlaygroundWorkspaceState,
   WorkspaceLocation,
-  WorkspaceLocationsWithTools,
   WorkspaceManagerState,
 } from './WorkspaceTypes';
 
 const playgroundWorkspace: WorkspaceLocation = 'playground';
-const sicpWorkspace: WorkspaceLocation = 'sicp';
 const locations: ReadonlyArray<WorkspaceLocation> = [
   'assessment',
   'grading',
@@ -291,54 +289,6 @@ describe('CLEAR_REPL_OUTPUT_LAST', () => {
   });
 });
 
-describe('DEBUG_RESET', () => {
-  test('sets isRunning and isDebugging to false', () => {
-    const isRunning = true;
-    const isDebugging = true;
-    const debugResetDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
-      isRunning,
-      isDebugging,
-    });
-    const actions = generateActions(InterpreterActions.debuggerReset);
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(debugResetDefaultState, action);
-      const location: WorkspaceLocation = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...debugResetDefaultState,
-        [location]: {
-          ...debugResetDefaultState[location],
-          isRunning: false,
-          isDebugging: false,
-        },
-      });
-    });
-  });
-});
-
-describe('DEBUG_RESUME', () => {
-  test('sets isRunning to true and isDebugging to false', () => {
-    const isDebugging = true;
-    const debugResumeDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
-      isDebugging,
-    });
-    const actions = generateActions(InterpreterActions.debuggerResume);
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(debugResumeDefaultState, action);
-      const location: WorkspaceLocation = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...debugResumeDefaultState,
-        [location]: {
-          ...debugResumeDefaultState[location],
-          isRunning: true,
-          isDebugging: false,
-        },
-      });
-    });
-  });
-});
-
 describe('END_CLEAR_CONTEXT', () => {
   test('sets context and globals correctly', () => {
     const mockGlobals: Array<[string, any]> = [
@@ -389,34 +339,11 @@ describe('END_CLEAR_CONTEXT', () => {
   });
 });
 
-describe('END_DEBUG_PAUSE', () => {
-  test('sets isRunning to false and isDebugging to true', () => {
-    const isRunning = true;
-    const debugPauseDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ isRunning });
-    const actions = generateActions(InterpreterActions.endDebuggerPause);
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(debugPauseDefaultState, action);
-      const location: WorkspaceLocation = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...debugPauseDefaultState,
-        [location]: {
-          ...debugPauseDefaultState[location],
-          isRunning: false,
-          isDebugging: true,
-        },
-      });
-    });
-  });
-});
-
 describe('END_INTERRUPT_EXECUTION', () => {
-  test('sets isRunning and isDebugging to false', () => {
+  test('sets isRunning', () => {
     const isRunning = true;
-    const isDebugging = true;
     const interruptExecutionDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       isRunning,
-      isDebugging,
     });
     const actions = generateActions(InterpreterActions.endInterruptExecution);
 
@@ -428,7 +355,6 @@ describe('END_INTERRUPT_EXECUTION', () => {
         [location]: {
           ...interruptExecutionDefaultState[location],
           isRunning: false,
-          isDebugging: false,
         },
       });
     });
@@ -436,11 +362,8 @@ describe('END_INTERRUPT_EXECUTION', () => {
 });
 
 describe('EVAL_EDITOR', () => {
-  test('sets isRunning to true and isDebugging to false', () => {
-    const isDebugging = true;
-    const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
-      isDebugging,
-    });
+  test('sets isRunning to true', () => {
+    const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({});
     const actions = generateActions(WorkspaceActions.evalEditor);
 
     actions.forEach(action => {
@@ -451,7 +374,6 @@ describe('EVAL_EDITOR', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: true,
-          isDebugging: false,
         },
       });
     });
@@ -472,12 +394,10 @@ const outputWithRunningAndCodeOutput: InterpreterOutput[] = [
 describe('EVAL_INTERPRETER_ERROR', () => {
   test('works correctly with RunningOutput', () => {
     const isRunning = true;
-    const isDebugging = true;
 
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningOutput,
       isRunning,
-      isDebugging,
     });
     const actions = generateActions(l => InterpreterActions.evalInterpreterError([], l));
 
@@ -489,7 +409,6 @@ describe('EVAL_INTERPRETER_ERROR', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: false,
-          isDebugging: false,
           output: [
             { ...outputWithRunningOutput[0] },
             { type: 'errors', errors: [], consoleLogs: ['console-log-test-2'] },
@@ -501,11 +420,9 @@ describe('EVAL_INTERPRETER_ERROR', () => {
 
   test('works correctly with other outputs', () => {
     const isRunning = true;
-    const isDebugging = true;
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput,
       isRunning,
-      isDebugging,
     });
 
     const actions = generateActions(l => InterpreterActions.evalInterpreterError([], l));
@@ -518,7 +435,6 @@ describe('EVAL_INTERPRETER_ERROR', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: false,
-          isDebugging: false,
           output: [
             { ...outputWithRunningAndCodeOutput[0] },
             { ...outputWithRunningAndCodeOutput[1] },
@@ -665,11 +581,10 @@ describe('SET_IS_RUNNING', () => {
 });
 
 describe('APPEND_INTERPRETER_ERROR', () => {
-  test('updates output without changing isRunning or isDebugging', () => {
+  test('updates output without changing isRunning', () => {
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput,
       isRunning: true,
-      isDebugging: true,
     });
 
     const actions = generateActions(l => InterpreterActions.appendInterpreterError([], l));
@@ -682,7 +597,6 @@ describe('APPEND_INTERPRETER_ERROR', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: true,
-          isDebugging: true,
           output: [
             { ...outputWithRunningAndCodeOutput[0] },
             { ...outputWithRunningAndCodeOutput[1] },
@@ -891,10 +805,7 @@ describe('LOG_OUT', () => {
       externalLibrary: 'NONE' as ExternalLibraryName,
       replValue: 'test repl value here',
       sharedbConnected: false,
-      usingSubst: false,
-      usingCse: false,
       usingUpload: false,
-      updateCse: true,
       currentStep: -1,
       stepsTotal: 0,
       breakpointSteps: [],
@@ -2612,33 +2523,6 @@ describe('UPDATE_REPL_VALUE', () => {
           replValue: newReplValue,
         },
       });
-    });
-  });
-});
-
-describe('TOGGLE_USING_SUBST', () => {
-  test('sets usingSubst correctly', () => {
-    const usingSubst = true;
-    const actions = generateActions(l =>
-      WorkspaceActions.toggleUsingSubst(usingSubst, l as WorkspaceLocationsWithTools),
-    );
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location: WorkspaceLocation = action.payload.workspaceLocation;
-
-      const expectedResult =
-        location === playgroundWorkspace || location === sicpWorkspace
-          ? {
-              ...defaultWorkspaceManager,
-              [location]: {
-                ...defaultWorkspaceManager[location],
-                usingSubst: true,
-              },
-            }
-          : { ...defaultWorkspaceManager };
-
-      expect(result).toEqual(expectedResult);
     });
   });
 });

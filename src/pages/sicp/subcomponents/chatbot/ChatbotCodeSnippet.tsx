@@ -45,7 +45,6 @@ function ChatbotCodeSnippet({
 
   const handleOpen = () => {
     dispatch(WorkspaceActions.resetWorkspace('sicp'));
-    dispatch(WorkspaceActions.toggleUsingSubst(false, 'sicp'));
     setActiveSnippet(id);
   };
 

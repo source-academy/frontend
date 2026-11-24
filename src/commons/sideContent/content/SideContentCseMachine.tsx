@@ -37,7 +37,6 @@ import { fullscreenPortalContainer } from 'src/features/cseMachine/fullscreenPor
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
 import type { CseSnapshot } from '../../../features/conductor/CseMachineHostPlugin';
-import { selectConductorEnable } from '../../../features/conductor/flagConductorEnable';
 import type { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
 import type { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
@@ -68,10 +67,8 @@ type StateProps = {
   currentStep: number;
   breakpointSteps: number[];
   changepointSteps: number[];
-  needCseUpdate: boolean;
   machineOutput: InterpreterOutput[];
   chapter: Chapter;
-  isConductorMode: boolean;
   cseSnapshots: CseSnapshot[] | null;
   isOnCseTab: boolean;
 };
@@ -82,6 +79,7 @@ type OwnProps = {
 
 type DispatchProps = {
   handleStepUpdate: (steps: number) => void;
+  handleStepsTotalUpdate: (steps: number) => void;
   handleEditorEval: () => void;
   setEditorHighlightedLines: (
     editorTabIndex: number,
@@ -96,6 +94,8 @@ type DispatchProps = {
 };
 
 class SideContentCseMachineBase extends Component<CseMachineProps, State> {
+  private greenScreenObserver?: MutationObserver;
+
   constructor(props: CseMachineProps) {
     super(props);
     this.state = {
@@ -204,6 +204,18 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
     document.addEventListener('fullscreenchange', this.handleFullscreenChange);
+    // The diagram's colours follow the Playground's green-screen mode, so redraw when it toggles.
+    const playground = document.querySelector('.Playground');
+    if (playground) {
+      this.greenScreenObserver = new MutationObserver(() => {
+        CseMachine.clearCachedLayouts();
+        window.requestAnimationFrame(() => CseMachine.redraw());
+      });
+      this.greenScreenObserver.observe(playground, {
+        attributes: true,
+        attributeFilter: ['class'],
+      });
+    }
     if (this.props.cseSnapshots) {
       this.renderSnapshotAt(0);
     } else {
@@ -215,17 +227,23 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     this.handleResize.cancel();
     window.removeEventListener('resize', this.handleResize);
     document.removeEventListener('fullscreenchange', this.handleFullscreenChange);
+    this.greenScreenObserver?.disconnect();
     if (!this.isJava()) {
       CseMachine.resetArrowOriginFilters();
-      this.props.setEditorHighlightedLinesStep(0, []);
     }
+    // The tab owns the state it puts on the workspace: leaving it clears the drawing, the step
+    // counters and the editor highlights.
+    CseMachine.clearCse();
+    this.props.handleStepUpdate(-1);
+    this.props.handleStepsTotalUpdate(0);
+    this.props.setEditorHighlightedLines(0, []);
+    this.props.setEditorHighlightedLinesStep(0, []);
   }
 
   componentDidUpdate(prevProps: {
     editorWidth?: string;
     sideContentHeight?: number;
     stepsTotal: number;
-    needCseUpdate: boolean;
     isOnCseTab: boolean;
     cseSnapshots: CseSnapshot[] | null;
   }) {
@@ -236,21 +254,16 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       this.handleResize();
     }
 
-    const { isConductorMode, isOnCseTab, cseSnapshots } = this.props;
+    const { isOnCseTab, cseSnapshots } = this.props;
 
     // Snapshot mode: new snapshots arrived while not on the CSE tab — discard them
-    if (
-      isConductorMode &&
-      !isOnCseTab &&
-      cseSnapshots !== null &&
-      prevProps.cseSnapshots !== cseSnapshots
-    ) {
+    if (!isOnCseTab && cseSnapshots !== null && prevProps.cseSnapshots !== cseSnapshots) {
       this.props.doUpdateCseSnapshots(null);
       return;
     }
 
     // Snapshot mode: user navigated away from CSE tab — clear visualization
-    if (isConductorMode && prevProps.isOnCseTab && !isOnCseTab) {
+    if (prevProps.isOnCseTab && !isOnCseTab) {
       this.setState({ visualization: null, value: -1 });
       if (cseSnapshots) {
         this.props.doUpdateCseSnapshots(null);
@@ -258,17 +271,12 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       return;
     }
 
-    if (prevProps.needCseUpdate && !this.props.needCseUpdate) {
+    // A new run's snapshots arrived: start over from the first step.
+    if (cseSnapshots !== null && prevProps.cseSnapshots !== cseSnapshots) {
+      CseMachine.clearCachedLayouts();
+      CseMachine.setClearDeadFrames(false);
       this.setState({ arrowFilterOpen: false });
       this.stepFirst();
-
-      if (cseSnapshots) {
-        // Conductor snapshot mode: stepFirst already calls renderSnapshotAt(0)
-      } else if (this.isJava()) {
-        JavaCseMachine.clearCse();
-      } else {
-        CseMachine.clearCse();
-      }
 
       // Blueprint Slider caches its track width at mount. After a code run the
       // tab is guaranteed visible, so force it to remount and re-measure.
@@ -741,10 +749,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     currentStep: workspace.currentStep,
     breakpointSteps: workspace.breakpointSteps,
     changepointSteps: workspace.changepointSteps,
-    needCseUpdate: workspace.updateCse,
     machineOutput: workspace.output,
     chapter: workspace.context.chapter,
-    isConductorMode: selectConductorEnable(state),
     cseSnapshots: workspace.cseSnapshots,
     isOnCseTab: state.sideContent[loc]?.selectedTab === SideContentType.cseMachine,
   };
@@ -756,6 +762,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
       handleEditorEval: () => WorkspaceActions.evalEditor(props.workspaceLocation),
       handleStepUpdate: (steps: number) =>
         WorkspaceActions.updateCurrentStep(steps, props.workspaceLocation),
+      handleStepsTotalUpdate: (steps: number) =>
+        WorkspaceActions.updateStepsTotal(steps, props.workspaceLocation),
       handleAlertSideContent: () =>
         beginAlertSideContent(SideContentType.cseMachine, props.workspaceLocation),
       setEditorHighlightedLines: (

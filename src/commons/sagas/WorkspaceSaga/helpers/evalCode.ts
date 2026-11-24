@@ -1,29 +1,18 @@
-import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { RunnerStatus } from '@sourceacademy/conductor/types';
 import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
-import { tokenizer } from 'acorn';
-import { type Context, interrupt, type Result, resume, runFilesInContext } from 'js-slang';
-import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
+import type { Context } from 'js-slang';
 import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors/base';
-import { InterruptedError } from 'js-slang/dist/errors/errors';
-import { Chapter, Variant } from 'js-slang/dist/langs';
-import { pick } from 'lodash-es';
+import { Variant } from 'js-slang/dist/langs';
 import { channel, END, eventChannel, type SagaIterator, type Task } from 'redux-saga';
 import { call, cancel, cancelled, put, race, select, spawn, take } from 'redux-saga/effects';
-import * as Sourceror from 'sourceror';
 
-import InterpreterActions from '../../../../commons/application/actions/InterpreterActions';
 import { getBreakpointLineNumbers } from '../../../../commons/editor/Editor';
-import { makeCCompilerConfig, specialCReturnObject } from '../../../../commons/utils/CToWasmHelper';
-import { javaRun } from '../../../../commons/utils/JavaHelper';
-import { EventType } from '../../../../features/achievement/AchievementTypes';
 import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHostPlugin';
 import type {
   CseMachineHostPlugin,
   CseSnapshot,
 } from '../../../../features/conductor/CseMachineHostPlugin';
-import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 import { isConductorStepperTab } from '../../../../features/conductor/stepperTab';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { type OverallState } from '../../../application/ApplicationTypes';
@@ -33,23 +22,14 @@ import sideContentManager from '../../../sideContent/SideContentManager';
 import { type SideContentTabId, SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import { closeDialog, showSimplePromptDialog } from '../../../utils/DialogHelper';
-import DisplayBufferService from '../../../utils/DisplayBufferService';
-import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
-import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
-import {
-  EVAL_SILENT,
-  type WorkspaceLocation,
-  type WorkspaceLocationsWithTools,
-} from '../../../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import {
   getPreparedConductorSaga,
   preloadConductorEvaluatorSaga,
 } from '../../helpers/conductorEvaluatorCache';
 import { getEvaluatorDefinitionSaga } from '../../LanguageDirectorySaga';
 import { selectWorkspace } from '../../SafeEffects';
-import { dumpDisplayBuffer } from './dumpDisplayBuffer';
-import { updateInspector } from './updateInspector';
 
 /**
  * `lineOffset` is the number of prepend lines concatenated onto the entrypoint before it was sent
@@ -116,366 +96,22 @@ function toConductorSourceError(error: unknown, lineOffset: number = 0): SourceE
   };
 }
 
-async function wasm_compile_and_run(
-  wasmCode: string,
-  context: Context,
-  isRepl: boolean,
-): Promise<Result> {
-  try {
-    const wasmModule = await Sourceror.compile(wasmCode, context, isRepl);
-    const transcoder = new Sourceror.Transcoder();
-    const returnedValue = await Sourceror.run(
-      wasmModule,
-      Sourceror.makePlatformImports(makeSourcerorExternalBuiltins(context), transcoder),
-      transcoder,
-      context,
-      isRepl,
-    );
-    return { status: 'finished', context, value: returnedValue };
-  } catch (e) {
-    console.log(e);
-    return { status: 'error', context };
-  }
-}
-
-async function cCompileAndRun(cCode: string, context: Context): Promise<Result> {
-  function reportCCompilationError(errorMessage: string, context: Context) {
-    context.errors.push({
-      type: ErrorType.SYNTAX,
-      severity: ErrorSeverity.ERROR,
-      location: {
-        start: {
-          line: 0,
-          column: 0,
-        },
-        end: {
-          line: 0,
-          column: 0,
-        },
-      },
-      explain: () => errorMessage,
-      elaborate: () => '',
-    });
-  }
-
-  function reportCRuntimeError(errorMessage: string, context: Context) {
-    context.errors.push({
-      type: ErrorType.RUNTIME,
-      severity: ErrorSeverity.ERROR,
-      location: {
-        start: {
-          line: 0,
-          column: 0,
-        },
-        end: {
-          line: 0,
-          column: 0,
-        },
-      },
-      explain: () => errorMessage,
-      elaborate: () => '',
-    });
-  }
-  const cCompilerConfig = await makeCCompilerConfig(cCode, context);
-  try {
-    const compilationResult = await compileAndRunCCode(cCode, cCompilerConfig);
-    if (compilationResult.status === 'failure') {
-      // report any compilation failure
-      reportCCompilationError(
-        `Compilation failed with the following error(s):\n\n${compilationResult.errorMessage}`,
-        context,
-      );
-      return {
-        status: 'error',
-        context,
-      } as Result;
-    }
-    if (compilationResult.warnings.length > 0) {
-      return {
-        status: 'finished',
-        context,
-        value: {
-          toReplString: () =>
-            `Compilation and program execution successful with the following warning(s):\n${compilationResult.warnings.join(
-              '\n',
-            )}`,
-        },
-      };
-    }
-    if (specialCReturnObject === null) {
-      return {
-        status: 'finished',
-        context,
-        value: { toReplString: () => 'Compilation and program execution successful.' },
-      };
-    }
-    return { status: 'finished', context, value: specialCReturnObject };
-  } catch (e) {
-    console.log(e);
-    reportCRuntimeError(e.message, context);
-    return { status: 'error', context };
-  }
-}
-
 export function* evalCodeSaga(
   files: Record<string, string>,
   entrypointFilePath: string,
   context: Context,
-  execTime: number,
+  _execTime: number,
   actionType: string,
   workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
-  if (yield select(selectConductorEnable)) {
-    return yield call(
-      evalCodeConductorSaga,
-      files,
-      entrypointFilePath,
-      context,
-      workspaceLocation,
-      actionType,
-    );
-  }
-  context.runtime.debuggerOn =
-    (actionType === WorkspaceActions.evalEditor.type ||
-      actionType === InterpreterActions.debuggerResume.type) &&
-    context.chapter > 2;
-
-  function* getWorkspaceData() {
-    const workspace = yield* selectWorkspace(workspaceLocation);
-    const commons = pick(workspace, ['isFolderModeEnabled', 'stepLimit']);
-
-    if (workspaceLocation === 'sicp' || workspaceLocation === 'playground') {
-      const { currentStep, updateCse, usingCse, usingSubst } =
-        yield* selectWorkspace(workspaceLocation);
-
-      return {
-        ...commons,
-        currentStep: updateCse ? -1 : currentStep,
-        cseIsActive: usingCse,
-        needUpdateCse: updateCse,
-        substIsActive: usingSubst,
-      };
-    }
-
-    return {
-      ...commons,
-      currentStep: -1,
-      cseIsActive: false,
-      needUpdateCse: false,
-      substIsActive: false,
-    };
-  }
-
-  const entrypointCode = files[entrypointFilePath];
-  // Logic for execution of substitution model visualizer
-  const { currentStep, cseIsActive, isFolderModeEnabled, needUpdateCse, stepLimit, substIsActive } =
-    yield* getWorkspaceData();
-
-  const cseActiveAndCorrectChapter = context.chapter >= Chapter.SOURCE_3 && cseIsActive;
-  if (cseActiveAndCorrectChapter) {
-    context.executionMethod = 'cse-machine';
-  }
-
-  function* getEvalEffect() {
-    if (actionType === InterpreterActions.debuggerResume.type) {
-      const { lastDebuggerResult } = yield* selectWorkspace(workspaceLocation);
-      return call(resume, lastDebuggerResult);
-    }
-
-    if (context.variant === Variant.WASM) {
-      // Note: WASM does not support multiple file programs.
-      return call(
-        wasm_compile_and_run,
-        entrypointCode,
-        context,
-        actionType === WorkspaceActions.evalRepl.type,
-      );
-    }
-
-    switch (context.chapter) {
-      case Chapter.FULL_C:
-        return call(cCompileAndRun, entrypointCode, context);
-      case Chapter.FULL_JAVA: {
-        const {
-          usingCse: isUsingCse,
-          usingUpload: uploadIsActive,
-          files: uploads,
-        } = yield* selectWorkspace('playground');
-
-        return call(javaRun, entrypointCode, context, currentStep, isUsingCse, {
-          uploadIsActive,
-          uploads,
-        });
-      }
-    }
-
-    const substActiveAndCorrectChapter =
-      actionType !== WorkspaceActions.evalRepl.type &&
-      context.chapter <= Chapter.SOURCE_2 &&
-      substIsActive;
-
-    return call(
-      runFilesInContext,
-      isFolderModeEnabled
-        ? files
-        : {
-            [entrypointFilePath]: files[entrypointFilePath],
-          },
-      entrypointFilePath,
-      context,
-      {
-        originalMaxExecTime: execTime,
-        stepLimit: stepLimit,
-        throwInfiniteLoops: true,
-        useSubst: substActiveAndCorrectChapter,
-        envSteps: currentStep,
-        executionMethod: cseActiveAndCorrectChapter ? 'cse-machine' : 'auto',
-      },
-    );
-  }
-
-  // Handles `console.log` statements in fullJS
-  if (context.chapter === Chapter.FULL_JS || context.chapter === Chapter.FULL_TS) {
-    yield call([DisplayBufferService, DisplayBufferService.attachConsole], workspaceLocation);
-  }
-
-  const {
-    result,
-    interrupted,
-    paused,
-  }: {
-    result: Result;
-    interrupted: any;
-    paused: any;
-  } = yield race({
-    result: yield* getEvalEffect(),
-    /**
-     * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
-     * i.e the trigger for the interpreter to interrupt execution.
-     */
-    interrupted: take(InterpreterActions.beginInterruptExecution.type),
-    paused: take(InterpreterActions.beginDebuggerPause.type),
-  });
-
-  if (interrupted) {
-    interrupt(context);
-    /* Redundancy, added ensure that interruption results in an error. */
-    context.errors.push(new InterruptedError(context.runtime.nodes[0]));
-    yield put(actions.debuggerReset(workspaceLocation));
-    yield put(actions.endInterruptExecution(workspaceLocation));
-    yield call(showWarningMessage, 'Execution aborted', 750);
-    return;
-  }
-  if (paused) {
-    yield put(actions.endDebuggerPause(workspaceLocation));
-    // yield put(actions.updateLastDebuggerResult(manualToggleDebugger(context), workspaceLocation));
-    yield call(updateInspector, workspaceLocation);
-    yield call(showWarningMessage, 'Execution paused', 750);
-    return;
-  }
-
-  if (actionType === WorkspaceActions.evalEditor.type) {
-    yield put(actions.updateLastDebuggerResult(result, workspaceLocation));
-  }
-
-  yield call(updateInspector, workspaceLocation);
-
-  if (result.status === 'suspended-cse-eval') {
-    yield put(actions.endDebuggerPause(workspaceLocation));
-    yield put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation));
-    return;
-  } else if (result.status !== 'finished') {
-    yield* dumpDisplayBuffer(workspaceLocation);
-    if (workspaceLocation === 'sicp' || workspaceLocation === 'playground') {
-      const workspace = yield* selectWorkspace(workspaceLocation);
-      if (workspace.usingSubst || workspace.usingCse) {
-        yield put(visitSideContent(SideContentType.introduction, undefined, workspaceLocation));
-      }
-    }
-    const specialError = checkSpecialError(context.errors);
-    if (specialError !== null) {
-      switch (specialError) {
-        case 'source_academy_interrupt': {
-          yield* handleSourceAcademyInterrupt(context, entrypointCode, workspaceLocation);
-          break;
-        }
-        // This should not happen but we check just in case
-        default: {
-          yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
-        }
-      }
-    } else {
-      yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
-      // enable the CSE machine visualizer during errors
-      if (context.executionMethod === 'cse-machine' && needUpdateCse) {
-        yield put(actions.updateStepsTotal(context.runtime.envStepsTotal + 1, workspaceLocation));
-        yield put(actions.toggleUpdateCse(false, workspaceLocation as WorkspaceLocationsWithTools));
-        yield put(
-          actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation),
-        );
-        yield put(
-          actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation),
-        );
-      }
-    }
-
-    const events = context.errors.length > 0 ? [EventType.ERROR] : [];
-
-    yield put(actions.addEvent(events));
-    return;
-  }
-
-  yield* dumpDisplayBuffer(workspaceLocation);
-
-  // Change token count if its assessment and EVAL_EDITOR
-  if (actionType === WorkspaceActions.evalEditor.type && workspaceLocation === 'assessment') {
-    const tokens = [...tokenizer(entrypointCode, ACORN_PARSE_OPTIONS)];
-    const tokenCounter = tokens.length;
-    yield put(actions.setTokenCount(workspaceLocation, tokenCounter));
-  }
-
-  // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
-  if (actionType !== EVAL_SILENT) {
-    yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
-  }
-
-  const lastDebuggerResult = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult,
+  return yield call(
+    evalCodeConductorSaga,
+    files,
+    entrypointFilePath,
+    context,
+    workspaceLocation,
+    actionType,
   );
-  // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
-  if (
-    actionType === WorkspaceActions.evalEditor.type ||
-    actionType === WorkspaceActions.evalRepl.type ||
-    actionType === InterpreterActions.debuggerResume.type
-  ) {
-    if (context.errors.length > 0) {
-      yield put(actions.addEvent([EventType.ERROR]));
-    }
-    yield put(
-      WorkspaceActions.notifyProgramEvaluated(
-        result,
-        lastDebuggerResult,
-        entrypointCode,
-        context,
-        workspaceLocation,
-      ),
-    );
-  }
-
-  // The first time the code is executed using the explicit control evaluator,
-  // the total number of steps and the breakpoints are updated in the CSE Machine slider.
-  if (context.executionMethod === 'cse-machine' && needUpdateCse) {
-    yield put(actions.updateStepsTotal(context.runtime.envStepsTotal, workspaceLocation));
-    // `needUpdateCse` implies `correctWorkspace`, which satisfies the type constraint.
-    // But TS can't infer that yet, so we need a typecast here.
-    yield put(actions.toggleUpdateCse(false, workspaceLocation as WorkspaceLocationsWithTools));
-    yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
-    yield put(actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation));
-  }
-  // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful
-  if (context.executionMethod === 'cse-machine') {
-    yield put(actions.removeSideContentAlert(SideContentType.introduction, workspaceLocation));
-  }
 }
 
 /**
@@ -734,14 +370,12 @@ function* handleCseSnapshots(
         break;
       }
       const { snapshots, breakpointSteps } = batch;
-      yield put(WorkspaceActions.updateCseSnapshots(snapshots, workspaceLocation));
       yield put(
         WorkspaceActions.updateStepsTotal(Math.max(0, snapshots.length - 1), workspaceLocation),
       );
       yield put(WorkspaceActions.updateBreakpointSteps(breakpointSteps ?? [], workspaceLocation));
-      yield put(
-        WorkspaceActions.toggleUpdateCse(false, workspaceLocation as WorkspaceLocationsWithTools),
-      );
+      // Last, so a tab reacting to the new snapshots finds the totals already in place.
+      yield put(WorkspaceActions.updateCseSnapshots(snapshots, workspaceLocation));
     }
   } catch (_e) {
     // Swallow errors from this non-critical background task
@@ -917,7 +551,6 @@ function* waitForChunkSettled(
 
 /**
  * Runs code using the evaluators in the Language Directory using the Conductor framework.
- * Invoked when the conductor.enable feature flag is enabled.
  *
  * A Run (EVAL_EDITOR) always starts a fresh REPL session, ending whatever was live before it -
  * matching the classic (non-Conductor) REPL's own "Run rebuilds the context" behavior. A REPL
@@ -1108,35 +741,4 @@ export function* evalCodeConductorSaga(
       yield* endReplSessionSaga(workspaceLocation);
     }
   }
-}
-
-// Special module errors
-const specialErrors = ['source_academy_interrupt'] as const;
-type SpecialError = (typeof specialErrors)[number];
-
-function checkSpecialError(errors: SourceError[]): SpecialError | null {
-  if (errors.length !== 1) {
-    return null;
-  }
-  const firstError = errors[0] as any;
-  if (typeof firstError.error !== 'string') {
-    return null;
-  }
-  if (!specialErrors.includes(firstError.error)) {
-    return null;
-  }
-
-  return firstError.error as SpecialError;
-}
-
-function* handleSourceAcademyInterrupt(
-  context: Context,
-  entrypointCode: string,
-  workspaceLocation: WorkspaceLocation,
-) {
-  yield put(
-    actions.evalInterpreterSuccess('Program has been interrupted by module', workspaceLocation),
-  );
-  context.errors = [];
-  yield put(actions.notifyProgramEvaluated(null, null, entrypointCode, context, workspaceLocation));
 }

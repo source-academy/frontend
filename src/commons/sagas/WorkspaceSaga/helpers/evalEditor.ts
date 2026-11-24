@@ -1,26 +1,20 @@
 import type { FSModule } from 'browserfs/dist/node/core/FS';
-import { Variant } from 'js-slang/dist/langs';
 import { call, put, select, type StrictEffect } from 'redux-saga/effects';
 import { featureSelector } from 'src/commons/featureFlags/featureSelector';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
-import CseMachine from 'src/features/cseMachine/CseMachine';
 import { flagConductorEv3Enable } from 'src/features/remoteExecutionConductor/flagConductorEv3Enable';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
-import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 import { selectDefaultFileExtension } from '../../../../features/directory/LanguageDirectoryTypes';
 import type { DeviceSession } from '../../../../features/remoteExecution/RemoteExecutionTypes';
 import { WORKSPACE_BASE_PATHS } from '../../../../pages/fileSystem/createInBrowserFileSystem';
 import type { OverallState } from '../../../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../../../fileSystem/utils';
 import { actions } from '../../../utils/ActionsHelper';
-import { makeElevatedContext } from '../../../utils/JsSlangHelper';
-import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { selectWorkspace } from '../../SafeEffects';
-import { blockExtraMethods } from './blockExtraMethods';
 import { clearContext } from './clearContext';
 import { evalCodeSaga } from './evalCode';
-import { insertDebuggerStatements } from './insertDebuggerStatements';
 
 export function* evalEditorSaga(
   workspaceLocation: WorkspaceLocation,
@@ -67,10 +61,9 @@ export function* evalEditorSaga(
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
-    // Deliberately gated on the EV3-specific flag, not the general flagConductorEnable (which
-    // defaults to true) - the legacy Source path (js-slang -> SVML -> SlingClient, see
+    // Deliberately gated on the EV3-specific flag - the legacy Source path (js-slang -> SVML -> SlingClient, see
     // RemoteExecutionSaga.ts) must stay the default for every device until the Conductor/py-slang
-    // pipeline is actually finished end-to-end, regardless of whether Conductor itself is on.
+    // pipeline is actually finished end-to-end,
     const isConductorEv3: boolean = yield select(featureSelector(flagConductorEv3Enable));
     if (isConductorEv3) {
       yield put(actions.remoteExecConductorRun(files, entrypointFilePath));
@@ -87,60 +80,13 @@ export function* evalEditorSaga(
       (state: OverallState) => state.workspaces[workspaceLocation].context,
     );
 
-    if (context.executionMethod === 'cse-machine') {
-      CseMachine.resetArrowOriginFilters();
-      CseMachine.clearRenderedLayouts();
-    }
-
-    const isConductorEnabled: boolean = yield select(selectConductorEnable);
-
-    // Insert debugger statements at the lines of the program with a breakpoint.
     for (const editorTab of editorTabs) {
-      const filePath = editorTab.filePath ?? defaultFilePath;
-      const code = editorTab.value;
-      const breakpoints = editorTab.breakpoints;
-      files[filePath] = yield* insertDebuggerStatements(
-        workspaceLocation,
-        code,
-        breakpoints,
-        context,
-        isConductorEnabled,
-      );
+      files[editorTab.filePath ?? defaultFilePath] = editorTab.value;
     }
 
-    // Evaluate the prepend silently with a privileged context, if it exists.
-    // Skipped under Conductor: each evalCodeSaga call runs in its own fresh,
-    // isolated worker with no shared state, so evaluating the prepend separately
-    // (and the privileged-context method-blocking that depends on it) has no
-    // effect on the entrypoint's run. It's concatenated into the entrypoint below instead.
-    if (prepend.length && !isConductorEnabled) {
-      const elevatedContext = makeElevatedContext(context);
-      const prependFilePath = '/prepend.js';
-      const prependFiles = {
-        [prependFilePath]: prepend,
-      };
-      if (context.variant !== Variant.TYPED) {
-        yield call(
-          evalCodeSaga,
-          prependFiles,
-          prependFilePath,
-          elevatedContext,
-          execTime,
-          EVAL_SILENT,
-          workspaceLocation,
-        );
-      }
-
-      // Block use of methods from privileged context
-      yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
-    }
-
-    if (context.variant === Variant.TYPED) {
-      // Prepend was multi-line, now we need to split them by \n and join them
-      // This is to avoid extra lines in the editor which affects the error message location
-      const prependSingleLine = prepend.split('\n').join('');
-      files[entrypointFilePath] = prependSingleLine + files[entrypointFilePath];
-    } else if (prepend.length && isConductorEnabled) {
+    // Prepend is concatenated into the entrypoint: each evalCodeSaga call runs in its own fresh,
+    // isolated worker with no shared state, so it can't be evaluated separately beforehand.
+    if (prepend.length) {
       files[entrypointFilePath] = `${prepend}\n${files[entrypointFilePath]}`;
     }
     yield call(

@@ -19,7 +19,6 @@ import { Translation } from 'react-i18next';
 import { type Location, NavLink, useLocation, useMatch } from 'react-router';
 import type { i18nDefaultLangKeys } from 'src/i18n/i18next';
 
-import { useConductorEnable } from '../../features/conductor/flagConductorEnable';
 import SicpNavigationBar from '../../features/textbook/navigationBar/SicpNavigationBar';
 import SicPyNavigationBar from '../../features/textbook/navigationBar/SicPyNavigationBar';
 import Dropdown from '../dropdown/Dropdown';
@@ -145,9 +144,7 @@ function NavigationBar() {
     const id = s.languageDirectory.selectedLanguageId;
     return id ? s.languageDirectory.languageMap[id] : null;
   });
-  const conductorEnabled = useConductorEnable();
-  // The legacy Source languages use SICP JS; a Conductor language has a textbook button only if it
-  // defines a textbook.
+  // A language has a textbook button only if it defines a textbook.
   const textbookEntries: NavbarEntryInfo[] = useMemo(
     () =>
       selectedLanguage?.textbook
@@ -158,10 +155,8 @@ function NavigationBar() {
               text: selectedLanguage.textbook.name,
             },
           ]
-        : conductorEnabled
-          ? []
-          : [{ to: '/sicpjs', icon: IconNames.BOOK, text: 'SICP JS' }],
-    [selectedLanguage, conductorEnabled],
+        : [],
+    [selectedLanguage],
   );
 
   const fullAcademyNavbarLeftCommonInfo: NavbarEntryInfo[] = useMemo(() => {

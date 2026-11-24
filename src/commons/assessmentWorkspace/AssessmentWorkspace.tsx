@@ -69,7 +69,6 @@ import SideContentAutograder from '../sideContent/content/SideContentAutograder'
 import SideContentContestLeaderboard from '../sideContent/content/SideContentContestLeaderboard';
 import SideContentContestVotingContainer from '../sideContent/content/SideContentContestVotingContainer';
 import SideContentDocumentation from '../sideContent/content/SideContentDocumentation';
-import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import type { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight, resetSideContent } from '../sideContent/SideContentActions';
 import { useSideContent } from '../sideContent/SideContentHelper';
@@ -78,7 +77,6 @@ import {
   type SideContentTabId,
   SideContentType,
 } from '../sideContent/SideContentTypes';
-import Constants from '../utils/Constants';
 import { useAppSelector, useResponsive } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import { assertType } from '../utils/TypeHelper';
@@ -678,17 +676,6 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
       });
     }
 
-    const externalLibrary = question.library.external;
-    const functionsAttached = externalLibrary.symbols;
-    if (functionsAttached.includes('get_matrix')) {
-      tabs.push({
-        label: `Tone Matrix`,
-        iconName: IconNames.GRID_VIEW,
-        body: <SideContentToneMatrix />,
-        id: SideContentType.toneMatrix,
-      });
-    }
-
     const onChangeTabs = (
       newTabId: SideContentTabId,
       prevTabId: SideContentTabId,
@@ -876,16 +863,7 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
         <ControlBarSaveStatusIndicator saveStatus={saveStatus} key="save_status" />
       ) : null;
 
-    const chapterSelect = (
-      <ControlBarChapterSelect
-        handleChapterSelect={() => {}}
-        isFolderModeEnabled={isFolderModeEnabled}
-        sourceChapter={question.library.chapter}
-        sourceVariant={question.library.variant ?? Constants.defaultSourceVariant}
-        disabled
-        key="chapter"
-      />
-    );
+    const chapterSelect = <ControlBarChapterSelect disabled key="chapter" />;
 
     return {
       editorButtons:

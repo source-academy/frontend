@@ -5,7 +5,6 @@ import { defaultPlayground } from '../../commons/application/ApplicationTypes';
 import type { SourceActionType } from '../../commons/utils/ActionsHelper';
 import {
   changeQueryString,
-  playgroundConfigLanguage,
   playgroundUpdateGitHubSaveInfo,
   playgroundUpdatePersistenceFile,
   updateShortURL,
@@ -27,9 +26,6 @@ export const PlaygroundReducer: Reducer<PlaygroundState, SourceActionType> = cre
       })
       .addCase(playgroundUpdatePersistenceFile, (state, action) => {
         state.persistenceFile = action.payload;
-      })
-      .addCase(playgroundConfigLanguage, (state, action) => {
-        state.languageConfig = action.payload;
       });
   },
 );

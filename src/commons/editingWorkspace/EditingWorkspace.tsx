@@ -47,7 +47,6 @@ import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspace
 import { convertEditorTabStateToProps } from '../editor/EditorContainer';
 import type { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
-import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import type { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight, resetSideContent } from '../sideContent/SideContentActions';
 import { useSideContent } from '../sideContent/SideContentHelper';
@@ -505,15 +504,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
             />
           ),
           id: SideContentType.editorAutograder,
-        });
-      }
-      const functionsAttached = currentAssessment!.globalDeployment!.external.symbols;
-      if (functionsAttached.includes('get_matrix')) {
-        tabs.push({
-          label: `Tone Matrix`,
-          iconName: IconNames.GRID_VIEW,
-          body: <SideContentToneMatrix />,
-          id: SideContentType.toneMatrix,
         });
       }
     } else {

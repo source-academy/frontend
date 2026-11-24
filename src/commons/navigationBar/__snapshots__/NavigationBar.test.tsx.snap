@@ -53,11 +53,6 @@ exports[`NavigationBar > Renders "Not logged in" correctly 1`] = `
           type="button"
         >
           <span
-            class="bp6-button-text"
-          >
-            JavaScript
-          </span>
-          <span
             aria-hidden="true"
             class="bp6-icon bp6-icon-standard bp6-icon-caret-down"
             data-icon="caret-down"
@@ -180,28 +175,6 @@ exports[`NavigationBar > Renders correctly for student with course 1`] = `
           </span>
         </button>
       </a>
-      <a
-        class=""
-        data-discover="true"
-        href="/sicpjs"
-        title="SICP JS"
-      >
-        <button
-          class="bp6-button bp6-minimal"
-          type="button"
-        >
-          <span
-            aria-hidden="true"
-            class="bp6-icon bp6-icon-standard bp6-icon-book"
-            data-icon="book"
-          />
-          <span
-            class="bp6-button-text"
-          >
-            SICP JS
-          </span>
-        </button>
-      </a>
     </div>
     <div
       class="bp6-navbar-group bp6-align-right"
@@ -216,11 +189,6 @@ exports[`NavigationBar > Renders correctly for student with course 1`] = `
           data-testid="NavigationBarLangSelectButton"
           type="button"
         >
-          <span
-            class="bp6-button-text"
-          >
-            JavaScript
-          </span>
           <span
             aria-hidden="true"
             class="bp6-icon bp6-icon-caret-down"
@@ -456,40 +424,6 @@ exports[`NavigationBar > Renders correctly for student without course 1`] = `
           </div>
         </a>
       </span>
-      <a
-        class=""
-        data-discover="true"
-        href="/sicpjs"
-        title="SICP JS"
-      >
-        <button
-          class="bp6-button bp6-minimal"
-          type="button"
-        >
-          <span
-            aria-hidden="true"
-            class="bp6-icon bp6-icon-book"
-          >
-            <svg
-              data-icon="book"
-              height="16"
-              role="img"
-              viewBox="0 0 16 16"
-              width="16"
-            >
-              <path
-                d="M2 1v14c0 .55.45 1 1 1h1V0H3c-.55 0-1 .45-1 1m11-1h-1v7l-2-2-2 2V0H5v16h8c.55 0 1-.45 1-1V1c0-.55-.45-1-1-1"
-                fill-rule="evenodd"
-              />
-            </svg>
-          </span>
-          <span
-            class="bp6-button-text"
-          >
-            SICP JS
-          </span>
-        </button>
-      </a>
     </div>
     <div
       class="bp6-navbar-group bp6-align-right"
@@ -504,11 +438,6 @@ exports[`NavigationBar > Renders correctly for student without course 1`] = `
           data-testid="NavigationBarLangSelectButton"
           type="button"
         >
-          <span
-            class="bp6-button-text"
-          >
-            JavaScript
-          </span>
           <span
             aria-hidden="true"
             class="bp6-icon bp6-icon-caret-down"

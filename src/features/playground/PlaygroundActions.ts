@@ -1,4 +1,3 @@
-import type { SALanguage } from 'src/commons/application/ApplicationTypes';
 import { createActions } from 'src/commons/redux/utils';
 
 import type { PersistenceFile } from '../persistence/PersistenceTypes';
@@ -14,7 +13,6 @@ const PlaygroundActions = createActions('playground', {
     filePath,
     lastSaved,
   }),
-  playgroundConfigLanguage: (languageConfig: SALanguage) => languageConfig,
 });
 
 // For compatibility with existing code (reducer)
@@ -25,7 +23,6 @@ export const {
   changeQueryString,
   playgroundUpdatePersistenceFile,
   playgroundUpdateGitHubSaveInfo,
-  playgroundConfigLanguage,
 } = PlaygroundActions;
 
 // For compatibility with existing code (actions helper)

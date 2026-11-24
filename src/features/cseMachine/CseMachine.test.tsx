@@ -301,8 +301,7 @@ test('the legacy non-conductor (real js-slang) path keeps js-slang\'s own "Globa
   await runInContext('function f() { return 1; } f(); debugger;', context);
 
   // Layout.snapshotMode is left false here (unlike the Python/Conductor path in
-  // CseSnapshotAdapter.test.ts), matching evalCodeSaga's real branch when conductor.enable is
-  // off: it calls Layout.setContext directly from a real js-slang EnvTree, never through
+  // CseSnapshotAdapter.test.ts), matching the removed non-Conductor evalCodeSaga branch: it calls Layout.setContext directly from a real js-slang EnvTree, never through
   // CseMachine.renderSnapshot(). Python's LEGB relabeling (#4042) must not leak in here.
   expect(Layout.snapshotMode).toBe(false);
   Layout.setContext(

@@ -34,9 +34,6 @@ const mockShortDefaultState: SavedState = {
     value: defaultState.workspaces.playground.activeEditorTabIndex,
   },
   playgroundEditorTabs: defaultState.workspaces.playground.editorTabs,
-  playgroundSourceChapter: defaultState.workspaces.playground.context.chapter,
-  playgroundSourceVariant: defaultState.workspaces.playground.context.variant,
-  playgroundLanguage: defaultState.playground.languageConfig,
   playgroundExternalLibrary: defaultState.workspaces.playground.externalLibrary,
 };
 

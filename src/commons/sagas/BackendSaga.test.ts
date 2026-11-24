@@ -658,7 +658,7 @@ describe('Test FETCH_ASSESSMENT action', () => {
       .silentRun();
   });
 
-  test('selects the Conductor language derived from the first question chapter, when Conductor is enabled', () => {
+  test('selects the Conductor language derived from the first question chapter', () => {
     const mockId = mockAssessment.id;
     // mockAssessment's first question has library.chapter === Chapter.SOURCE_1 (1), which under
     // the language directory index scheme (see chapterLanguage.ts) is python1.
@@ -670,7 +670,6 @@ describe('Test FETCH_ASSESSMENT action', () => {
     return expectSaga(BackendSaga)
       .withState({
         session: mockTokens,
-        featureFlags: { modifiedFlags: { 'conductor.enable': true } },
         languageDirectory: { ...defaultLanguageDirectory, languages },
       })
       .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), mockAssessment]])
@@ -680,14 +679,13 @@ describe('Test FETCH_ASSESSMENT action', () => {
       .silentRun();
   });
 
-  test('clears the selected language when Conductor is enabled but the chapter is out of range', () => {
+  test('clears the selected language when the chapter is out of range', () => {
     const mockId = mockAssessment.id;
     const assessmentWithNoQuestions = { ...mockAssessment, questions: [] };
 
     return expectSaga(BackendSaga)
       .withState({
         session: mockTokens,
-        featureFlags: { modifiedFlags: { 'conductor.enable': true } },
         languageDirectory: {
           ...defaultLanguageDirectory,
           languages: [makeMockLanguageDefinition('python1', ['python1Py2js'])],
@@ -698,22 +696,6 @@ describe('Test FETCH_ASSESSMENT action', () => {
         [call(getAssessment, mockId, mockTokens, undefined, undefined), assessmentWithNoQuestions],
       ])
       .put(LanguageDirectoryActions.clearSelectedLanguage())
-      .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
-      .silentRun();
-  });
-
-  test('does not touch the selected language when Conductor is disabled', () => {
-    const mockId = mockAssessment.id;
-
-    return expectSaga(BackendSaga)
-      .withState({
-        session: mockTokens,
-        featureFlags: { modifiedFlags: { 'conductor.enable': false } },
-        languageDirectory: defaultLanguageDirectory,
-      })
-      .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), mockAssessment]])
-      .not.put.actionType(LanguageDirectoryActions.setSelectedLanguage.type)
-      .not.put.actionType(LanguageDirectoryActions.clearSelectedLanguage.type)
       .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
       .silentRun();
   });

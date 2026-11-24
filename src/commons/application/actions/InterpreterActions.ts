@@ -51,10 +51,6 @@ const InterpreterActions = createActions('interpreter', {
   }),
   beginInterruptExecution: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   endInterruptExecution: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
-  beginDebuggerPause: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
-  endDebuggerPause: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
-  debuggerResume: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
-  debuggerReset: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
 });
 
 // For compatibility with existing code (actions helper)

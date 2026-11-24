@@ -27,7 +27,7 @@ import type { IAceEditorProps, IEditorProps } from 'react-ace';
 import AceEditor from 'react-ace';
 import type { IAceEditor } from 'react-ace/lib/types';
 import type { SALanguage } from '../application/ApplicationTypes';
-import { getModeString, selectMode } from '../utils/AceHelper';
+import { selectMode } from '../utils/AceHelper';
 import { objectEntries } from '../utils/TypeHelper';
 import { EditorBinding } from '../WorkspaceSettingsContext';
 import { type KeyFunction, keyBindings } from './EditorHotkeys';
@@ -41,7 +41,6 @@ import {
   normalizeAceModeId,
   useAutocompleteMode,
 } from 'src/features/conductor/autocompleteModeStore';
-import { useConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { useAppSelector } from '../utils/Hooks';
 import useHighlighting from './UseHighlighting';
@@ -477,7 +476,6 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     },
   };
 
-  const conductorEnabled = useConductorEnable();
   const selectedEvaluatorPath = useAppSelector(state => {
     const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
     if (!selectedLanguageId || !selectedEvaluatorId) {
@@ -496,13 +494,11 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
       ? normalizeAceModeId(editorConfig.aceMode)
       : 'ace/mode/text';
   });
-  const autocompleteMode = useAutocompleteMode(
-    conductorEnabled ? selectedEvaluatorPath : undefined,
-  );
+  const autocompleteMode = useAutocompleteMode(selectedEvaluatorPath);
   const conductorMode = autocompleteMode ?? directoryAceMode;
 
   useLayoutEffect(() => {
-    if (!conductorEnabled || !reactAceRef.current) {
+    if (!reactAceRef.current) {
       return;
     }
 
@@ -534,7 +530,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     return () => {
       editor.off('changeSession', onChangeSession);
     };
-  }, [conductorEnabled, conductorMode]);
+  }, [conductorMode]);
 
   const aceEditorProps: IAceEditorProps = {
     className: 'react-ace',
@@ -545,9 +541,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     fontSize: 17,
     height: '100%',
     highlightActiveLine: false,
-    mode: conductorEnabled
-      ? 'text'
-      : getModeString(sourceChapter, sourceVariant, externalLibraryName),
+    mode: 'text',
     theme: 'source',
     value: props.editorValue,
     width: '100%',

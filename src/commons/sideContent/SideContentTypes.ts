@@ -34,7 +34,6 @@ export enum SideContentType {
   mobileEditorRun = 'mobile_editor_run',
   substVisualizer = 'subst_visualiser',
   testcases = 'testcases',
-  toneMatrix = 'tone_matrix',
   htmlDisplay = 'html_display',
   upload = 'upload',
 }

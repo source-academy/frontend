@@ -4368,17 +4368,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/c-slang@npm:^1.0.21":
-  version: 1.0.21
-  resolution: "@sourceacademy/c-slang@npm:1.0.21"
-  dependencies:
-    bignumber.js: "npm:^9.1.2"
-    peggy: "npm:^3.0.2"
-    wabt: "npm:^1.0.32"
-  checksum: 10c0/281d07a1b9db3a87beb029ee25afcb241abf211864a7fd8df1533898273a8c06cbe999167e037b9ee47700eaab064c3df54f0788da5c6296174edac44f9bdf31
-  languageName: node
-  linkType: hard
-
 "@sourceacademy/common-autocomplete@npm:^0.0.1":
   version: 0.0.1
   resolution: "@sourceacademy/common-autocomplete@npm:0.0.1"
@@ -5921,7 +5910,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^8.1, acorn@npm:^8.10.0, acorn@npm:^8.11.0, acorn@npm:^8.14.0, acorn@npm:^8.15.0, acorn@npm:^8.8.2, acorn@npm:^8.9.0":
+"acorn@npm:^8.10.0, acorn@npm:^8.11.0, acorn@npm:^8.14.0, acorn@npm:^8.15.0, acorn@npm:^8.8.2, acorn@npm:^8.9.0":
   version: 8.19.0
   resolution: "acorn@npm:8.19.0"
   bin:
@@ -6403,13 +6392,6 @@ __metadata:
   version: 5.2.2
   resolution: "big.js@npm:5.2.2"
   checksum: 10c0/230520f1ff920b2d2ce3e372d77a33faa4fa60d802fe01ca4ffbc321ee06023fe9a741ac02793ee778040a16b7e497f7d60c504d1c402b8fdab6f03bb785a25f
-  languageName: node
-  linkType: hard
-
-"bignumber.js@npm:^9.1.2":
-  version: 9.3.1
-  resolution: "bignumber.js@npm:9.3.1"
-  checksum: 10c0/61342ba5fe1c10887f0ecf5be02ff6709271481aff48631f86b4d37d55a99b87ce441cfd54df3d16d10ee07ceab7e272fc0be430c657ffafbbbf7b7d631efb75
   languageName: node
   linkType: hard
 
@@ -6976,13 +6958,6 @@ __metadata:
   version: 2.0.3
   resolution: "comma-separated-tokens@npm:2.0.3"
   checksum: 10c0/91f90f1aae320f1755d6957ef0b864fe4f54737f3313bd95e0802686ee2ca38bff1dd381964d00ae5db42912dd1f4ae5c2709644e82706ffc6f6842a813cdd67
-  languageName: node
-  linkType: hard
-
-"commander@npm:^10.0.0":
-  version: 10.0.1
-  resolution: "commander@npm:10.0.1"
-  checksum: 10c0/53f33d8927758a911094adadda4b2cbac111a5b377d8706700587650fd8f45b0bbe336de4b5c3fe47fd61f420a3d9bd452b6e0e6e5600a7e74d7bf0174f6efe3
   languageName: node
   linkType: hard
 
@@ -8758,7 +8733,6 @@ __metadata:
     "@rsbuild/plugin-tailwindcss": "npm:^2.0.3"
     "@rsdoctor/rspack-plugin": "npm:^1.5.18"
     "@sentry/react": "npm:^11.0.0"
-    "@sourceacademy/c-slang": "npm:^1.0.21"
     "@sourceacademy/common-autocomplete": "npm:^0.0.1"
     "@sourceacademy/common-cse-machine": "npm:^0.3.1"
     "@sourceacademy/common-tabs": "npm:^0.0.1"
@@ -8867,7 +8841,6 @@ __metadata:
     resize-observer-polyfill: "npm:^1.5.1"
     sass-embedded: "npm:^1.100.0"
     showdown: "npm:^2.1.0"
-    sourceror: "npm:^0.8.5"
     tailwindcss: "npm:^4.3.0"
     typescript: "npm:^6.0.2"
     typescript-eslint: "npm:^8.1.0"
@@ -11943,13 +11916,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-getopt@npm:^0.3":
-  version: 0.3.2
-  resolution: "node-getopt@npm:0.3.2"
-  checksum: 10c0/4d286f79bd2cad32720a26e3d2dc0a63d18f3e237b7ca7871755aca0942b0c4a440c655002c99a11feaf7e0774d4d713232e4cd498ac88b0d450a1283e5e1b44
-  languageName: node
-  linkType: hard
-
 "node-gyp@npm:latest":
   version: 11.0.0
   resolution: "node-gyp@npm:11.0.0"
@@ -12618,18 +12584,6 @@ __metadata:
     safe-buffer: "npm:^5.0.1"
     sha.js: "npm:^2.4.8"
   checksum: 10c0/5a30374e87d33fa080a92734d778cf172542cc7e41b96198c4c88763997b62d7850de3fbda5c3111ddf79805ee7c1da7046881c90ac4920b5e324204518b05fd
-  languageName: node
-  linkType: hard
-
-"peggy@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "peggy@npm:3.0.2"
-  dependencies:
-    commander: "npm:^10.0.0"
-    source-map-generator: "npm:0.8.0"
-  bin:
-    peggy: bin/peggy.js
-  checksum: 10c0/73c61e4478e015d6ba78736914d53b464318649f4727164d58ded3ce0f71d58e009451dbb8d01de53f2a30378aec9cdd44bc76c926dc9ba7d513f12aa3923cb1
   languageName: node
   linkType: hard
 
@@ -14594,20 +14548,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sourceror@npm:^0.8.5":
-  version: 0.8.5
-  resolution: "sourceror@npm:0.8.5"
-  dependencies:
-    acorn: "npm:^8.1"
-    node-getopt: "npm:^0.3"
-  peerDependencies:
-    js-slang: ^0.5
-  bin:
-    sourceror: dist/cli.js
-  checksum: 10c0/9e51f4c0cb4ee3667b90484724b5dce55b86f365df042e770d676fd40aa3e4c465f3270cb9132d2c86da937de6b96ba06ca04dd7aabb05e84aa2b9961163d79b
-  languageName: node
-  linkType: hard
-
 "space-separated-tokens@npm:^2.0.0":
   version: 2.0.2
   resolution: "space-separated-tokens@npm:2.0.2"
@@ -15944,23 +15884,6 @@ __metadata:
   dependencies:
     xml-name-validator: "npm:^5.0.0"
   checksum: 10c0/8feacd426cafa6b07ed2fee132f0074d62217935c3718134dadb1a2cf2d3b8c481edd44155af192a002c5a4c4d5c3bdecbfcd808afcfde5ab0b350bd8b830556
-  languageName: node
-  linkType: hard
-
-"wabt@npm:^1.0.32":
-  version: 1.0.32
-  resolution: "wabt@npm:1.0.32"
-  bin:
-    wasm-decompile: bin/wasm-decompile
-    wasm-interp: bin/wasm-interp
-    wasm-objdump: bin/wasm-objdump
-    wasm-opcodecnt: bin/wasm-opcodecnt
-    wasm-strip: bin/wasm-strip
-    wasm-validate: bin/wasm-validate
-    wasm2c: bin/wasm2c
-    wasm2wat: bin/wasm2wat
-    wat2wasm: bin/wat2wasm
-  checksum: 10c0/c605c3aecc9b448cfca737f68cf1ffae0c50ada9bab29fe1279bfa41a7f2e147c6ed8dd70b78d46d995868250656caa3cecc646230ca591b6fa7f67c2a3c50d7
   languageName: node
   linkType: hard
 

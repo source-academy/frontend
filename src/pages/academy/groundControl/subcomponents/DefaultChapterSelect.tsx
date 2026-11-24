@@ -14,14 +14,9 @@ import { useCallback, useState } from 'react';
 import Constants from 'src/commons/utils/Constants';
 import { useAppDispatch, useAppSelector, useSession } from 'src/commons/utils/Hooks';
 
-import {
-  type SALanguage,
-  sourceLanguages,
-  styliseSublanguage,
-} from '../../../../commons/application/ApplicationTypes';
+import { type SALanguage } from '../../../../commons/application/ApplicationTypes';
 import ControlButton from '../../../../commons/ControlButton';
 import WorkspaceActions from '../../../../commons/workspace/WorkspaceActions';
-import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 
 /**
  * Just the fields `changeSublanguage` actually persists (course config only stores
@@ -32,32 +27,29 @@ import { selectConductorEnable } from '../../../../features/conductor/flagConduc
 type LanguageChoice = Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>;
 
 function DefaultChapterSelect() {
-  const [chosenLanguage, setChosenLanguage] = useState<LanguageChoice>(sourceLanguages[0]);
+  const [chosenLanguage, setChosenLanguage] = useState<LanguageChoice>({
+    chapter: 1,
+    variant: Variant.DEFAULT,
+    displayName: '',
+  });
   const [isDialogOpen, setDialogState] = useState(false);
 
   const {
     // Temporarily load the defaults when the course configuration fetch has yet to return
     sourceChapter = Constants.defaultSourceChapter,
-    sourceVariant = Constants.defaultSourceVariant,
   } = useSession();
 
-  const isConductorEnabled = useAppSelector(selectConductorEnable);
   const languages = useAppSelector(state => state.languageDirectory.languages);
 
-  // Once Conductor is enabled, `sourceChapter` is a 1-based index into the language directory's
-  // `languages` array (see chapterLanguage.ts's `deriveLanguageFromChapter`) rather than a Source
-  // chapter - Source is no longer used, so there's no other meaning to distinguish from.
-  const items: LanguageChoice[] = isConductorEnabled
-    ? languages.map((lang, index) => ({
-        chapter: index + 1,
-        variant: Variant.DEFAULT,
-        displayName: lang.name,
-      }))
-    : sourceLanguages;
+  // `sourceChapter` is a 1-based index into the language directory's `languages` array (see
+  // chapterLanguage.ts's `deriveLanguageFromChapter`) rather than a Source chapter.
+  const items: LanguageChoice[] = languages.map((lang, index) => ({
+    chapter: index + 1,
+    variant: Variant.DEFAULT,
+    displayName: lang.name,
+  }));
 
-  const currentLanguageName = isConductorEnabled
-    ? (languages[sourceChapter - 1]?.name ?? 'Loading…')
-    : styliseSublanguage(sourceChapter, sourceVariant);
+  const currentLanguageName = languages[sourceChapter - 1]?.name ?? 'Loading…';
 
   const dispatch = useAppDispatch();
   const handleUpdateLanguage = useCallback(
