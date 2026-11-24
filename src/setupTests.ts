@@ -14,13 +14,6 @@ vi.mock('./commons/utils/notifications/createNotification', () => ({
   },
 }));
 
-vi.mock('java-slang', () => {
-  return {
-    compileFromSource: () => '',
-    typeCheck: () => ({ hasTypeErrors: false, errorMsgs: [] }),
-  };
-});
-
 // Fix for react-router v7 and vitest
 // https://stackoverflow.com/a/79332264
 
