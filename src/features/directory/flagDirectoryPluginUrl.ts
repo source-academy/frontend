@@ -5,13 +5,13 @@ import { featureSelector } from '../../commons/featureFlags/featureSelector';
 import Constants from '../../commons/utils/Constants';
 import PluginDirectoryActions from './PluginDirectoryActions';
 
-const { enable, pluginDirectoryUrl } = Constants.conductorConfig;
+const { pluginDirectoryUrl } = Constants.conductorConfig;
 
 export const flagDirectoryPluginUrl = createFeatureFlag(
   'directory.plugin.url',
   'https://source-academy.github.io/plugins/directory.json',
   'The URL where the plugin directory may be found.',
-  enable ? pluginDirectoryUrl : undefined,
+  pluginDirectoryUrl,
   function* () {
     yield put(PluginDirectoryActions.fetchPlugins());
   },

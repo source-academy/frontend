@@ -21,7 +21,6 @@ import {
 import type { SourceActionType } from '../utils/ActionsHelper';
 import { createContext } from '../utils/JsSlangHelper';
 import { handleCseAndStepperActions } from './reducers/cseReducer';
-import { handleDebuggerActions } from './reducers/debuggerReducer';
 import { handleEditorActions } from './reducers/editorReducer';
 import { handleReplActions } from './reducers/replReducer';
 import WorkspaceActions from './WorkspaceActions';
@@ -52,7 +51,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
   handleEditorActions(builder);
   handleCseAndStepperActions(builder);
   handleReplActions(builder);
-  handleDebuggerActions(builder);
 
   function applyInterpreterResultOutput(
     state: Draft<WorkspaceManagerState>,
@@ -109,7 +107,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     workspaceLocation: WorkspaceLocation,
     errors: SourceError[],
     shouldStopRunning: boolean,
-    shouldStopDebugging: boolean,
   ) {
     const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
     let newOutput: InterpreterOutput[];
@@ -131,9 +128,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     state[workspaceLocation].output = newOutput;
     if (shouldStopRunning) {
       state[workspaceLocation].isRunning = false;
-    }
-    if (shouldStopDebugging) {
-      state[workspaceLocation].isDebugging = false;
     }
   }
 
@@ -216,7 +210,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(WorkspaceActions.evalEditor, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].isRunning = true;
-      state[workspaceLocation].isDebugging = false;
     })
     .addCase(InterpreterActions.appendInterpreterResult, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -241,11 +234,11 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     })
     .addCase(InterpreterActions.appendInterpreterError, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
-      applyInterpreterErrorOutput(state, workspaceLocation, action.payload.errors, false, false);
+      applyInterpreterErrorOutput(state, workspaceLocation, action.payload.errors, false);
     })
     .addCase(InterpreterActions.evalInterpreterError, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
-      applyInterpreterErrorOutput(state, workspaceLocation, action.payload.errors, true, true);
+      applyInterpreterErrorOutput(state, workspaceLocation, action.payload.errors, true);
     })
     .addCase(InterpreterActions.setIsRunning, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -270,7 +263,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
        * this action is called.
        */
       state[workspaceLocation].isRunning = false;
-      state[workspaceLocation].isDebugging = false;
     })
     .addCase(WorkspaceActions.resetTestcase, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -398,10 +390,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         state[workspaceLocation].files = action.payload.files;
       }
-    })
-    .addCase(WorkspaceActions.updateLastDebuggerResult, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].lastDebuggerResult = action.payload.lastDebuggerResult;
     })
     .addCase(setUpdateUserRoleCallback, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);

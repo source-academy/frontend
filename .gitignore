@@ -16,7 +16,6 @@ tsconfig.tsbuildinfo
 terraform*
 
 # sourceror bundle
-/public/externalLibs/sourceror
 
 # Conductor dev fixtures: evaluator/web-plugin bundles + local directories.
 # These are built from the language repos (js-slang, py-slang) and the plugins

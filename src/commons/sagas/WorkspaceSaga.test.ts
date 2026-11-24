@@ -1,16 +1,8 @@
 import { RunnerStatus } from '@sourceacademy/conductor/types';
-import {
-  type Context,
-  type IOptions,
-  type Result,
-  resume,
-  runFilesInContext,
-  runInContext,
-} from 'js-slang';
+import type { Context } from 'js-slang';
 import createContext from 'js-slang/dist/createContext';
 import { ErrorType, type SourceError } from 'js-slang/dist/errors/base';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import { type Finished } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import type { Matcher } from 'redux-saga-test-plan/matchers';
@@ -26,7 +18,6 @@ vi.mock('../../pages/createStore', () => ({
   createStore: vi.fn(),
 }));
 
-import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
 import {
   TEST_CASE_EVALUATOR_ID,
@@ -43,12 +34,7 @@ import {
   type OverallState,
 } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
-import {
-  type Library,
-  type Testcase,
-  type TestcaseType,
-  TestcaseTypes,
-} from '../assessment/AssessmentTypes';
+import { type Library, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { mockRuntimeContext } from '../mocks/ContextMocks';
 import { mockTestcases } from '../mocks/GradingMocks';
 import { actions } from '../utils/ActionsHelper';
@@ -64,8 +50,6 @@ import { getVersionHistory, updateVersionName } from './RequestsSaga';
 import workspaceSaga from './WorkspaceSaga';
 import { evalCodeConductorSaga, evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
 import { evalEditorSaga } from './WorkspaceSaga/helpers/evalEditor';
-import { evalTestCode } from './WorkspaceSaga/helpers/evalTestCode';
-import { insertDebuggerStatements } from './WorkspaceSaga/helpers/insertDebuggerStatements';
 import { runTestCase, runTestCaseConductor } from './WorkspaceSaga/helpers/runTestCase';
 import { watchSavingStatus } from './WorkspaceSaga/helpers/versionHistory';
 
@@ -191,382 +175,6 @@ describe('TOGGLE_FOLDER_MODE', () => {
   });
 });
 
-describe('EVAL_EDITOR', () => {
-  test('puts beginClearContext and correctly executes prepend and value in sequence (calls evalCode)', () => {
-    const workspaceLocation = 'playground';
-    const programPrependValue = 'const foo = (x) => -1;\n"reeee";';
-    const editorValue = 'foo(2);';
-    const programPostpendValue = '42;';
-    const execTime = 1000;
-    const context = createContext();
-    const variant = Variant.DEFAULT;
-    const globals: Array<[string, any]> = [
-      ['testNumber', 3.141592653589793],
-      ['testObject', { a: 1, b: 2 }],
-      ['testArray', [1, 2, 'a', 'b']],
-    ];
-
-    const library = {
-      chapter: context.chapter,
-      variant,
-      external: {
-        name: ExternalLibraryName.NONE,
-        symbols: context.externalSymbols,
-      },
-      globals,
-      languageOptions: context.languageOptions,
-    };
-
-    const newDefaultState = generateDefaultState(workspaceLocation, {
-      editorTabs: [
-        {
-          value: editorValue,
-          highlightedLines: [],
-          breakpoints: [],
-        },
-      ],
-      programPrependValue,
-      programPostpendValue,
-      execTime,
-      context,
-      globals,
-    });
-
-    return (
-      expectSaga(workspaceSaga)
-        .withState(newDefaultState)
-        .put(InterpreterActions.beginInterruptExecution(workspaceLocation))
-        .put(WorkspaceActions.beginClearContext(workspaceLocation, library, false))
-        .put(WorkspaceActions.clearReplOutput(workspaceLocation))
-        // calls evalCode here with the prepend in elevated Context: silent run
-        .call.like({
-          fn: runFilesInContext,
-          args: [
-            { '/prepend.js': programPrependValue },
-            '/prepend.js',
-            {
-              originalMaxExecTime: execTime,
-              stepLimit: 1000,
-              useSubst: false,
-              throwInfiniteLoops: true,
-            },
-          ],
-        })
-        // running the prepend block should return 'reeee', but silent run -> not written to REPL
-        .not.put(InterpreterActions.evalInterpreterSuccess('reeee', workspaceLocation))
-        // Single call to evalCode made by blockExtraMethods
-        .call.like({ fn: runFilesInContext })
-        // calls evalCode here with the student's program in normal Context
-        .call.like({
-          fn: runFilesInContext,
-          args: [
-            { '/playground/program.js': editorValue },
-            '/playground/program.js',
-            context,
-            {
-              originalMaxExecTime: execTime,
-              stepLimit: 1000,
-              useSubst: false,
-              throwInfiniteLoops: true,
-            },
-          ],
-        })
-        // running the student's program should return -1, which is written to REPL
-        .put(InterpreterActions.evalInterpreterSuccess(-1, workspaceLocation))
-        // should NOT attempt to execute the postpend block after above
-        .not.call(runFilesInContext)
-        .dispatch({
-          type: WorkspaceActions.evalEditor.type,
-          payload: { workspaceLocation },
-        })
-        .dispatch({
-          type: WorkspaceActions.endClearContext.type,
-        })
-        .silentRun()
-    );
-  });
-});
-
-describe('EVAL_REPL', () => {
-  test('puts beginInterruptExecution, clearReplInput, sendReplInputToOutput and calls evalCode correctly', () => {
-    const workspaceLocation = 'playground';
-    const replValue = 'sample code';
-    const newState = generateDefaultState(workspaceLocation, { replValue });
-    const context = newState.workspaces[workspaceLocation].context;
-
-    return (
-      expectSaga(workspaceSaga)
-        .withState(newState)
-        .put(InterpreterActions.beginInterruptExecution(workspaceLocation))
-        .put(WorkspaceActions.clearReplInput(workspaceLocation))
-        .put(WorkspaceActions.sendReplInputToOutput(replValue, workspaceLocation))
-        // also calls evalCode here
-        .call(runFilesInContext, { '/code.js': replValue }, '/code.js', context, {
-          originalMaxExecTime: 1000,
-          stepLimit: 1000,
-          useSubst: false,
-          throwInfiniteLoops: true,
-          envSteps: -1,
-          executionMethod: 'auto',
-        })
-        .dispatch({
-          type: WorkspaceActions.evalRepl.type,
-          payload: { workspaceLocation },
-        })
-        .silentRun()
-    );
-  });
-});
-
-describe('DEBUG_RESUME', () => {
-  let workspaceLocation: WorkspaceLocation;
-  let editorValue: string;
-  let editorValueFilePath: string;
-  let files: Record<string, string>;
-  let execTime: number;
-  let context: Context;
-  let state: OverallState;
-
-  beforeEach(() => {
-    // Ensure that lastDebuggerResult is set correctly before running each of the tests below
-    workspaceLocation = 'playground';
-    editorValue = 'sample code here';
-    editorValueFilePath = '/playground/program.js';
-    files = {
-      [editorValueFilePath]: editorValue,
-    };
-    execTime = 1000;
-    context = mockRuntimeContext();
-    state = generateDefaultState(workspaceLocation);
-
-    return expectSaga(
-      evalCodeSaga,
-      files,
-      editorValueFilePath,
-      context,
-      execTime,
-      WorkspaceActions.evalEditor.type,
-      workspaceLocation,
-    )
-      .withState(state)
-      .silentRun();
-  });
-
-  test('puts beginInterruptExecution, clearReplOutput, setEditorHighlightedLines and calls evalCode correctly', () => {
-    const newDefaultState = generateDefaultState(workspaceLocation, {
-      editorTabs: [{ value: editorValue }],
-      context,
-    });
-
-    return (
-      expectSaga(workspaceSaga)
-        .withState(newDefaultState)
-        .provide({
-          call(effect) {
-            if (effect.fn === resume) {
-              return { status: 'finished', value: 'abc' };
-            } else {
-              return;
-            }
-          },
-        })
-        .put(InterpreterActions.beginInterruptExecution(workspaceLocation))
-        .put(WorkspaceActions.clearReplOutput(workspaceLocation))
-        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        .put(WorkspaceActions.setEditorHighlightedLines(workspaceLocation, 0, []))
-        // also calls evalCode here
-        .call.like({
-          fn: evalCodeSaga,
-          args: [
-            { '/code.js': editorValue },
-            '/code.js',
-            {},
-            execTime,
-            workspaceLocation,
-            InterpreterActions.debuggerResume.type,
-          ],
-        })
-        .dispatch({
-          type: InterpreterActions.debuggerResume.type,
-          payload: { workspaceLocation },
-        })
-        .silentRun()
-    );
-  });
-});
-
-describe('DEBUG_RESET', () => {
-  test('puts clearReplOutput and highlightHighlightedLine correctly', () => {
-    const workspaceLocation = 'assessment';
-    const newDefaultState = generateDefaultState(workspaceLocation, {
-      editorTabs: [{ value: 'test-value' }],
-    });
-
-    return (
-      expectSaga(workspaceSaga)
-        .withState(newDefaultState)
-        .put(WorkspaceActions.clearReplOutput(workspaceLocation))
-        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        .put(WorkspaceActions.setEditorHighlightedLines(workspaceLocation, 0, []))
-        .dispatch({
-          type: InterpreterActions.debuggerReset.type,
-          payload: { workspaceLocation },
-        })
-        .silentRun()
-        .then(result => {
-          expect(result.storeState.workspaces[workspaceLocation].context.runtime.break).toBe(false);
-        })
-    );
-  });
-});
-
-describe('EVAL_TESTCASE', () => {
-  test('correctly executes prepend, value, postpend, testcase in sequence (calls evalTestCode)', () => {
-    const workspaceLocation = 'grading';
-    const programPrependValue = 'let z = 2;\nconst bar = (x, y) => 10 * x + y;\n"boink";';
-    const editorValue = 'bar(6, 9);';
-    const programPostpendValue = '777;';
-    const execTime = 1000;
-    const testcaseId = 0;
-
-    const editorTestcases: Testcase[] = [
-      {
-        type: TestcaseTypes.public,
-        answer: '42',
-        program: 'bar(4, z);', // test program.
-        score: 1,
-      },
-    ];
-
-    const context = createContext();
-    const globals: Array<[string, any]> = [
-      ['testNumber', 3.141592653589793],
-      ['testObject', { a: 1, b: 2 }],
-      ['testArray', [1, 2, 'a', 'b']],
-    ];
-
-    const library: Library = {
-      chapter: context.chapter,
-      variant: Variant.DEFAULT,
-      external: {
-        name: ExternalLibraryName.NONE,
-        symbols: context.externalSymbols,
-      },
-      globals,
-      languageOptions: context.languageOptions,
-    };
-
-    const newDefaultState = generateDefaultState(workspaceLocation, {
-      editorTabs: [
-        {
-          value: editorValue,
-          highlightedLines: [],
-          breakpoints: [],
-        },
-      ],
-      programPrependValue,
-      programPostpendValue,
-      editorTestcases,
-      execTime,
-      context,
-      globals,
-    });
-
-    return (
-      expectSaga(workspaceSaga)
-        .withState(newDefaultState)
-        // Should interrupt execution and clear context but not clear REPL
-        .not.put(InterpreterActions.beginInterruptExecution(workspaceLocation))
-        .put(WorkspaceActions.beginClearContext(workspaceLocation, library, false))
-        .not.put.actionType(WorkspaceActions.clearReplOutput.type)
-        // Expect it to shard a new privileged context here and execute chunks in order
-        // calls evalCode here with the prepend in elevated Context: silent run
-        .call.like({
-          fn: runFilesInContext,
-          args: [
-            { '/prepend.js': programPrependValue },
-            '/prepend.js',
-            { originalMaxExecTime: execTime },
-          ],
-        })
-        // running the prepend block should return 'boink', but silent run -> not written to REPL
-        .not.put(InterpreterActions.evalInterpreterSuccess('boink', workspaceLocation))
-        // Single call to evalCode made by blockExtraMethods
-        .call.like({ fn: runFilesInContext })
-        // calls evalCode here with the student's program in normal Context
-        .call.like({
-          fn: runFilesInContext,
-          args: [
-            { '/value.js': editorValue },
-            '/value.js',
-            context,
-            { originalMaxExecTime: execTime },
-          ],
-        })
-        // running the student's program should return 69, which is NOT written to REPL (silent)
-        .not.put(InterpreterActions.evalInterpreterSuccess(69, workspaceLocation))
-        // Single call to evalCode made by restoreExtraMethods to enable postpend to run in S4
-        .call.like({ fn: runFilesInContext })
-        // calls evalCode here again with the postpend now in elevated Context: silent run
-        .call.like({
-          fn: runFilesInContext,
-          args: [
-            { '/postpend.js': programPostpendValue },
-            '/postpend.js',
-            { originalMaxExecTime: execTime },
-          ],
-        })
-        // running the postpend block should return true, but silent run -> not written to REPL
-        .not.put(InterpreterActions.evalInterpreterSuccess(true, workspaceLocation))
-        // Single call to evalCode made by blockExtraMethods after postpend execution is complete
-        .call.like({ fn: runFilesInContext })
-        // finally calls evalTestCode on the testcase
-        .call.like({
-          fn: runInContext,
-          args: [editorTestcases[0].program],
-        })
-        // this testcase should execute fine in the elevated context and thus write result to REPL
-        .put(InterpreterActions.evalInterpreterSuccess(42, workspaceLocation))
-        .put(InterpreterActions.evalTestcaseSuccess(42, workspaceLocation, testcaseId))
-        .dispatch({
-          type: WorkspaceActions.evalTestcase.type,
-          payload: { workspaceLocation, testcaseId },
-        })
-        .dispatch({
-          type: WorkspaceActions.endClearContext.type,
-        })
-        .silentRun()
-    );
-  });
-});
-
-describe('insertDebuggerStatements under Conductor', () => {
-  test('skips js-slang parsing entirely and returns the code unchanged when Conductor is enabled', () => {
-    const context = createContext();
-    // Valid Python, invalid JS - if the js-slang pre-parse still ran, this would
-    // populate context.errors instead of being returned untouched.
-    const pythonCode = 'def foo():\n    pass\n';
-
-    const gen = insertDebuggerStatements('playground', pythonCode, [], context, true);
-    const result = gen.next();
-
-    expect(result.done).toBe(true);
-    expect(result.value).toBe(pythonCode);
-    expect(context.errors).toHaveLength(0);
-  });
-
-  test('still parses and inserts debugger statements when Conductor is disabled', () => {
-    const context = createContext();
-    const code = 'const x = 1;\nconst y = 2;';
-
-    const gen = insertDebuggerStatements('playground', code, ['', 'x'], context, false);
-    const result = gen.next();
-
-    expect(result.done).toBe(true);
-    expect(result.value).toBe('const x = 1;\ndebugger;const y = 2;');
-  });
-});
-
 describe('EVAL_EDITOR under Conductor', () => {
   test('concatenates prepend into the entrypoint for a single Conductor call instead of evaluating it separately', () => {
     const workspaceLocation = 'playground';
@@ -582,7 +190,6 @@ describe('EVAL_EDITOR under Conductor', () => {
         execTime,
         context,
       }),
-      featureFlags: { modifiedFlags: { [flagConductorEnable.flagName]: true } },
     };
 
     const entrypointFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
@@ -615,7 +222,6 @@ describe('EVAL_EDITOR under Conductor', () => {
         execTime,
         context,
       }),
-      featureFlags: { modifiedFlags: { [flagConductorEnable.flagName]: true } },
     };
 
     const entrypointFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
@@ -650,7 +256,6 @@ describe('EVAL_EDITOR under Conductor', () => {
         }),
         { id: 'python2', name: 'Python §2', evaluators: [], defaultFileExtension: 'py' },
       ),
-      featureFlags: { modifiedFlags: { [flagConductorEnable.flagName]: true } },
     };
 
     const entrypointFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.py`;
@@ -821,7 +426,6 @@ describe('EVAL_REPL session persistence under Conductor', () => {
     const replValue = 'x = 1';
     const newState = {
       ...generateDefaultState(workspaceLocation, { replValue }),
-      featureFlags: { modifiedFlags: { [flagConductorEnable.flagName]: true } },
     };
 
     return expectSaga(workspaceSaga)
@@ -1639,429 +1243,6 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
   });
 });
 
-describe('evalCode', () => {
-  let workspaceLocation: WorkspaceLocation;
-  let code: string;
-  let codeFilePath: string;
-  let files: Record<string, string>;
-  let execTime: number;
-  let actionType: string;
-  let context: Context;
-  let value: string;
-  let options: Partial<IOptions>;
-  let lastDebuggerResult: Result;
-  let state: OverallState;
-
-  beforeEach(() => {
-    workspaceLocation = 'assessment';
-    code = 'sample code';
-    codeFilePath = '/assessment/program.js';
-    files = {
-      [codeFilePath]: code,
-    };
-    execTime = 1000;
-    actionType = WorkspaceActions.evalEditor.type;
-    context = createContext(); // mockRuntimeContext();
-    value = 'test value';
-    options = {
-      originalMaxExecTime: 1000,
-      stepLimit: 1000,
-      useSubst: false,
-      throwInfiniteLoops: true,
-      envSteps: -1,
-      executionMethod: 'auto',
-    };
-    lastDebuggerResult = { status: 'error', context };
-    state = generateDefaultState(workspaceLocation, {
-      lastDebuggerResult: { status: 'error', context },
-    });
-  });
-
-  describe('on EVAL_EDITOR action without interruptions or pausing', () => {
-    test('calls runInContext, puts evalInterpreterSuccess when runInContext returns finished', () => {
-      return expectSaga(
-        evalCodeSaga,
-        files,
-        codeFilePath,
-        context,
-        execTime,
-        actionType,
-        workspaceLocation,
-      )
-        .withState(state)
-        .provide([
-          [
-            call(runFilesInContext, files, codeFilePath, context, options),
-            { status: 'finished', value },
-          ],
-        ])
-        .call(runFilesInContext, files, codeFilePath, context, {
-          originalMaxExecTime: execTime,
-          stepLimit: 1000,
-          useSubst: false,
-          throwInfiniteLoops: true,
-          envSteps: -1,
-          executionMethod: 'auto',
-        })
-        .put(InterpreterActions.evalInterpreterSuccess(value, workspaceLocation))
-        .silentRun();
-    });
-
-    test('calls runInContext, puts endDebuggerPause and evalInterpreterSuccess when runInContext returns suspended', () => {
-      return expectSaga(
-        evalCodeSaga,
-        files,
-        codeFilePath,
-        context,
-        execTime,
-        actionType,
-        workspaceLocation,
-      )
-        .withState(state)
-        .provide([
-          [
-            call(runFilesInContext, files, codeFilePath, context, options),
-            { status: 'suspended-cse-eval' },
-          ],
-        ])
-        .call(runFilesInContext, files, codeFilePath, context, {
-          originalMaxExecTime: execTime,
-          stepLimit: 1000,
-          useSubst: false,
-          throwInfiniteLoops: true,
-          envSteps: -1,
-          executionMethod: 'auto',
-        })
-        .put(InterpreterActions.endDebuggerPause(workspaceLocation))
-        .put(InterpreterActions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
-        .silentRun();
-    });
-
-    test('calls runInContext, puts evalInterpreterError when runInContext returns error', () => {
-      return expectSaga(
-        evalCodeSaga,
-        files,
-        codeFilePath,
-        context,
-        execTime,
-        actionType,
-        workspaceLocation,
-      )
-        .withState(state)
-        .provide([
-          [call(runFilesInContext, files, codeFilePath, context, options), { status: 'error' }],
-        ])
-        .call(runFilesInContext, files, codeFilePath, context, {
-          originalMaxExecTime: execTime,
-          stepLimit: 1000,
-          useSubst: false,
-          throwInfiniteLoops: true,
-          envSteps: -1,
-          executionMethod: 'auto',
-        })
-        .put.like({ action: { type: InterpreterActions.evalInterpreterError.type } })
-        .silentRun();
-    });
-
-    // TODO: rewrite tests in a way that actually reflects known information.
-    test('with error in the code, should return correct line number in error', () => {
-      code = '// Prepend\n error';
-      state = generateDefaultState(workspaceLocation, {
-        programPrependValue: '// Prepend',
-      });
-
-      runFilesInContext(files, codeFilePath, context, {
-        originalMaxExecTime: 1000,
-        useSubst: false,
-      }).then(result => (context = (result as Finished).context));
-
-      return expectSaga(
-        evalCodeSaga,
-        files,
-        codeFilePath,
-        context,
-        execTime,
-        actionType,
-        workspaceLocation,
-      )
-        .withState(state)
-        .call(runFilesInContext, files, codeFilePath, context, {
-          originalMaxExecTime: execTime,
-          stepLimit: 1000,
-          useSubst: false,
-          throwInfiniteLoops: true,
-          envSteps: -1,
-          executionMethod: 'auto',
-        })
-        .put(InterpreterActions.evalInterpreterError(context.errors, workspaceLocation))
-        .silentRun();
-    });
-  });
-
-  describe('on DEBUG_RESUME action without interruptions or pausing', () => {
-    // Ensure that lastDebuggerResult is set correctly before running each of the tests below
-    beforeEach(() => {
-      return expectSaga(
-        evalCodeSaga,
-        files,
-        codeFilePath,
-        context,
-        execTime,
-        WorkspaceActions.evalEditor.type,
-        workspaceLocation,
-      )
-        .withState(state)
-        .silentRun();
-    });
-
-    test('calls resume, puts evalInterpreterSuccess when resume returns finished', () => {
-      actionType = InterpreterActions.debuggerResume.type;
-
-      return expectSaga(
-        evalCodeSaga,
-        files,
-        codeFilePath,
-        context,
-        execTime,
-        actionType,
-        workspaceLocation,
-      )
-        .withState(state)
-        .provide([[call(resume, lastDebuggerResult), { status: 'finished', value }]])
-        .call(resume, lastDebuggerResult)
-        .put(InterpreterActions.evalInterpreterSuccess(value, workspaceLocation))
-        .silentRun();
-    });
-
-    test('calls resume, puts endDebuggerPause and evalInterpreterSuccess when resume returns suspended', () => {
-      actionType = InterpreterActions.debuggerResume.type;
-
-      return expectSaga(
-        evalCodeSaga,
-        files,
-        codeFilePath,
-        context,
-        execTime,
-        actionType,
-        workspaceLocation,
-      )
-        .withState(state)
-        .provide([[call(resume, lastDebuggerResult), { status: 'suspended-cse-eval' }]])
-        .call(resume, lastDebuggerResult)
-        .put(InterpreterActions.endDebuggerPause(workspaceLocation))
-        .put(InterpreterActions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
-        .silentRun();
-    });
-
-    test('calls resume, puts evalInterpreterError when resume returns error', () => {
-      actionType = InterpreterActions.debuggerResume.type;
-
-      return expectSaga(
-        evalCodeSaga,
-        files,
-        codeFilePath,
-        context,
-        execTime,
-        actionType,
-        workspaceLocation,
-      )
-        .withState(state)
-        .call(resume, lastDebuggerResult)
-        .put.like({ action: { type: InterpreterActions.evalInterpreterError.type } })
-        .silentRun();
-    });
-  });
-
-  describe('on interrupt', () => {
-    test('puts debuggerReset, endInterruptExecution and calls showWarningMessage', () => {
-      return expectSaga(
-        evalCodeSaga,
-        files,
-        codeFilePath,
-        context,
-        execTime,
-        actionType,
-        workspaceLocation,
-      )
-        .withState(state)
-        .provide({
-          race: () => ({
-            interrupted: {
-              type: InterpreterActions.beginInterruptExecution.type,
-              payload: { workspaceLocation },
-            },
-          }),
-        })
-        .put(InterpreterActions.debuggerReset(workspaceLocation))
-        .put(InterpreterActions.endInterruptExecution(workspaceLocation))
-        .call(showWarningMessage, 'Execution aborted', 750)
-        .silentRun()
-        .then(result => {
-          expect(context.errors[0]).toHaveProperty(['type'], 'Runtime');
-        });
-    });
-  });
-
-  describe('on paused', () => {
-    test('puts endDebuggerPause and calls showWarningMessage', () => {
-      return expectSaga(
-        evalCodeSaga,
-        files,
-        codeFilePath,
-        context,
-        execTime,
-        actionType,
-        workspaceLocation,
-      )
-        .withState(state)
-        .provide({
-          race: () => ({
-            paused: {
-              type: InterpreterActions.beginDebuggerPause.type,
-              payload: { workspaceLocation },
-            },
-          }),
-        })
-        .put(InterpreterActions.endDebuggerPause(workspaceLocation))
-        .call(showWarningMessage, 'Execution paused', 750)
-        .silentRun();
-    });
-  });
-
-  describe('special error', () => {
-    test('on throwing of special error, calls evalInterpreterSuccess ', async () => {
-      context.errors = [
-        { type: ErrorType.RUNTIME, error: 'source_academy_interrupt' } as unknown as SourceError,
-      ];
-      return expectSaga(
-        evalCodeSaga,
-        files,
-        codeFilePath,
-        context,
-        execTime,
-        actionType,
-        workspaceLocation,
-      )
-        .withState(state)
-        .provide([
-          [
-            call(runFilesInContext, files, codeFilePath, context, options),
-            { status: 'error', value },
-          ],
-        ])
-        .put(
-          InterpreterActions.evalInterpreterSuccess(
-            'Program has been interrupted by module',
-            workspaceLocation,
-          ),
-        )
-        .silentRun();
-    });
-  });
-});
-
-describe('evalTestCode', () => {
-  let workspaceLocation: WorkspaceLocation;
-  let code: string;
-  let execTime: number;
-  let context: Context;
-  let value: string;
-  let options: Partial<IOptions>;
-  let index: number;
-  let type: TestcaseType;
-  let state: OverallState;
-
-  beforeEach(() => {
-    workspaceLocation = 'assessment';
-    code = 'more sample code';
-    execTime = 1000;
-    context = mockRuntimeContext();
-    value = 'another test value';
-    options = {
-      originalMaxExecTime: 1000,
-      throwInfiniteLoops: true,
-    };
-    index = 1;
-    type = TestcaseTypes.public;
-    state = generateDefaultState(workspaceLocation);
-  });
-
-  describe('without interrupt', () => {
-    test('puts evalInterpreterSuccess and evalTestcaseSuccess on finished status', () => {
-      return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
-        .withState(state)
-        .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
-        .put(InterpreterActions.evalInterpreterSuccess(value, workspaceLocation))
-        .put(InterpreterActions.evalTestcaseSuccess(value, workspaceLocation, index))
-        .not.put(WorkspaceActions.clearReplOutputLast(workspaceLocation))
-        .silentRun();
-    });
-
-    test('puts additional clearReplOutputLast for opaque testcases after finished status', () => {
-      type = TestcaseTypes.opaque;
-
-      return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
-        .withState(state)
-        .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
-        .put(InterpreterActions.evalInterpreterSuccess(value, workspaceLocation))
-        .put(InterpreterActions.evalTestcaseSuccess(value, workspaceLocation, index))
-        .put(WorkspaceActions.clearReplOutputLast(workspaceLocation))
-        .silentRun();
-    });
-
-    test('puts evalInterpreterError and evalTestcaseFailure on error status', () => {
-      return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
-        .withState(state)
-        .provide([[call(runInContext, code, context, options), { status: 'error' }]])
-        .put(InterpreterActions.evalInterpreterError(context.errors, workspaceLocation))
-        .put(InterpreterActions.evalTestcaseFailure(context.errors, workspaceLocation, index))
-        .not.put(WorkspaceActions.clearReplOutputLast(workspaceLocation))
-        .silentRun();
-    });
-
-    test('puts additional clearReplOutputLast for opaque testcases after error status', () => {
-      type = TestcaseTypes.opaque;
-
-      return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
-        .withState(state)
-        .provide([[call(runInContext, code, context, options), { status: 'error' }]])
-        .put(InterpreterActions.evalInterpreterError(context.errors, workspaceLocation))
-        .put(InterpreterActions.evalTestcaseFailure(context.errors, workspaceLocation, index))
-        .put(WorkspaceActions.clearReplOutputLast(workspaceLocation))
-        .silentRun();
-    });
-  });
-
-  describe('on interrupt', () => {
-    test('puts endInterruptExecution and calls showWarningMessage', () => {
-      return expectSaga(
-        evalTestCode,
-        code,
-        context,
-        execTime,
-        workspaceLocation,
-        index,
-        TestcaseTypes.public,
-      )
-        .withState(state)
-        .provide({
-          race: () => ({
-            interrupted: {
-              type: InterpreterActions.beginInterruptExecution.type,
-              payload: { workspaceLocation },
-            },
-          }),
-        })
-        .put(InterpreterActions.endInterruptExecution(workspaceLocation))
-        .call(showWarningMessage, `Execution of testcase ${index} aborted`, 750)
-        .silentRun()
-        .then(() => {
-          expect(context.errors[0]).toHaveProperty(['type'], 'Runtime');
-        });
-    });
-  });
-});
-
 describe('NAV_DECLARATION', () => {
   let workspaceLocation: WorkspaceLocation;
   let context: Context;
@@ -2169,15 +1350,16 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
       })
       .call(showSuccessMessage, 'Running all testcases!', 2000)
       .call.fn(evalEditorSaga)
-      .call(runTestCase, workspaceLocation, 0, false)
-      .call(runTestCase, workspaceLocation, 1, false)
-      .call(runTestCase, workspaceLocation, 2, false)
-      .call(runTestCase, workspaceLocation, 3, false)
+      .call(runTestCase, workspaceLocation, 0, true)
+      .call(runTestCase, workspaceLocation, 1, true)
+      .call(runTestCase, workspaceLocation, 2, true)
+      .call(runTestCase, workspaceLocation, 3, true)
       .provide([
-        [call(runTestCase, workspaceLocation, 0, false), true],
-        [call(runTestCase, workspaceLocation, 1, false), true],
-        [call(runTestCase, workspaceLocation, 2, false), true],
-        [call(runTestCase, workspaceLocation, 3, false), true],
+        [call(runTestCase, workspaceLocation, 0, true), true],
+        [call(runTestCase, workspaceLocation, 1, true), true],
+        [call(runTestCase, workspaceLocation, 2, true), true],
+        [call(runTestCase, workspaceLocation, 3, true), true],
+        [matchers.call.fn(evalEditorSaga), undefined],
       ])
       .silentRun(2000);
   });
@@ -2195,20 +1377,22 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
       })
       .call(showSuccessMessage, 'Running all testcases!', 2000)
       .call.fn(evalEditorSaga)
-      .call(runTestCase, workspaceLocation, 0, false)
-      .not.call(runTestCase, workspaceLocation, 1, false)
-      .not.call(runTestCase, workspaceLocation, 2, false)
-      .not.call(runTestCase, workspaceLocation, 3, false)
-      .provide([[call(runTestCase, workspaceLocation, 0, false), false]])
+      .call(runTestCase, workspaceLocation, 0, true)
+      .not.call(runTestCase, workspaceLocation, 1, true)
+      .not.call(runTestCase, workspaceLocation, 2, true)
+      .not.call(runTestCase, workspaceLocation, 3, true)
+      .provide([
+        [call(runTestCase, workspaceLocation, 0, true), false],
+        [matchers.call.fn(evalEditorSaga), undefined],
+      ])
       .silentRun(2000);
   });
 
-  test('under Conductor, switches the test-case language once for the whole batch instead of once per testcase', () => {
+  test('switches the test-case language once for the whole batch instead of once per testcase', () => {
     state = {
       ...generateDefaultState(workspaceLocation, {
         editorTestcases: mockTestcases,
       }),
-      featureFlags: { modifiedFlags: { [flagConductorEnable.flagName]: true } },
       languageDirectory: {
         ...defaultState.languageDirectory,
         selectedLanguageId: 'python1',
@@ -2323,11 +1507,10 @@ describe('runTestCaseConductor for Python §4 Typed', () => {
 });
 
 describe('runAllTestcases for Python §4 Typed', () => {
-  test('under Conductor, grades under the typed evaluator and restores the selection', () => {
+  test('grades under the typed evaluator and restores the selection', () => {
     const workspaceLocation: WorkspaceLocation = 'assessment';
     const state: OverallState = {
       ...generateDefaultState(workspaceLocation, { editorTestcases: mockTestcases }),
-      featureFlags: { modifiedFlags: { [flagConductorEnable.flagName]: true } },
       languageDirectory: {
         ...defaultState.languageDirectory,
         selectedLanguageId: 'python4Typed',

@@ -27,14 +27,11 @@ const languages = [
   makeMockLanguageDefinition('python3', ['python3Py2js']),
 ];
 
-const conductorEnabledFlags = { modifiedFlags: { 'conductor.enable': true } };
-
 describe('setLanguages', () => {
-  test('selects the course-configured default language, derived from sourceChapter, when Conductor is enabled', () => {
+  test('selects the course-configured default language, derived from sourceChapter', () => {
     return expectSaga(languageDirectoryHandlers)
       .withState({
         session: { sourceChapter: 2 },
-        featureFlags: conductorEnabledFlags,
         // A dispatched action's reducer runs before the saga middleware sees it, so by the time
         // this handler's `select` executes, `state.languageDirectory.languages` already reflects
         // the action being dispatched below - mirror that here rather than leaving it empty.
@@ -49,19 +46,6 @@ describe('setLanguages', () => {
     return expectSaga(languageDirectoryHandlers)
       .withState({
         session: {},
-        featureFlags: conductorEnabledFlags,
-        languageDirectory: { ...defaultLanguageDirectory, languages },
-      })
-      .put(LanguageDirectoryActions.setSelectedLanguage('python1', undefined, true))
-      .dispatch(LanguageDirectoryActions.setLanguages(languages))
-      .silentRun();
-  });
-
-  test('falls back to the first directory entry when Conductor is disabled', () => {
-    return expectSaga(languageDirectoryHandlers)
-      .withState({
-        session: { sourceChapter: 2 },
-        featureFlags: { modifiedFlags: { 'conductor.enable': false } },
         languageDirectory: { ...defaultLanguageDirectory, languages },
       })
       .put(LanguageDirectoryActions.setSelectedLanguage('python1', undefined, true))
@@ -73,7 +57,6 @@ describe('setLanguages', () => {
     return expectSaga(languageDirectoryHandlers)
       .withState({
         session: { sourceChapter: 2 },
-        featureFlags: conductorEnabledFlags,
         languageDirectory: {
           ...defaultLanguageDirectory,
           languages,
@@ -94,7 +77,6 @@ describe('setCourseConfiguration', () => {
         // The session reducer runs before the saga sees this dispatch, so sourceChapter already
         // reflects the setCourseConfiguration payload below by the time this handler's `select` runs.
         session: { sourceChapter: 2 },
-        featureFlags: conductorEnabledFlags,
         languageDirectory: {
           ...defaultLanguageDirectory,
           languages,
@@ -114,7 +96,6 @@ describe('setCourseConfiguration', () => {
     return expectSaga(languageDirectoryHandlers)
       .withState({
         session: { sourceChapter: 99 },
-        featureFlags: conductorEnabledFlags,
         languageDirectory: {
           ...defaultLanguageDirectory,
           languages,
@@ -131,7 +112,6 @@ describe('setCourseConfiguration', () => {
     return expectSaga(languageDirectoryHandlers)
       .withState({
         session: {},
-        featureFlags: conductorEnabledFlags,
         languageDirectory: {
           ...defaultLanguageDirectory,
           languages,
@@ -148,7 +128,6 @@ describe('setCourseConfiguration', () => {
     return expectSaga(languageDirectoryHandlers)
       .withState({
         session: {},
-        featureFlags: conductorEnabledFlags,
         languageDirectory: defaultLanguageDirectory,
       })
       .not.put.actionType(LanguageDirectoryActions.setSelectedLanguage.type)
@@ -165,7 +144,6 @@ describe('setSelectedEvaluator: the default program', () => {
 
   const stateSelecting = (selectedLanguageId: string, editorValue: string) => ({
     session: { sourceChapter: 1 },
-    featureFlags: conductorEnabledFlags,
     languageDirectory: {
       ...defaultLanguageDirectory,
       languages: withDefaults,

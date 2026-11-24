@@ -1,17 +1,11 @@
-import type { Dispatch, Store } from '@reduxjs/toolkit';
+import type { Store } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
-import type { FSModule } from 'browserfs/dist/node/core/FS';
-import { Chapter } from 'js-slang/dist/langs';
 import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
 import { act } from 'react';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, type RouteObject, RouterProvider } from 'react-router';
-import {
-  defaultEditorValue,
-  defaultPlayground,
-  type OverallState,
-} from 'src/commons/application/ApplicationTypes';
+import { defaultEditorValue, type OverallState } from 'src/commons/application/ApplicationTypes';
 import type { Router } from 'src/commons/application/types/CommonsTypes';
 import { visitSideContent } from 'src/commons/sideContent/SideContentActions';
 import sideContentManager from 'src/commons/sideContent/SideContentManager';
@@ -22,7 +16,7 @@ import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryAc
 import { createStore } from 'src/pages/createStore';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-import Playground, { handleHash } from './Playground';
+import Playground from './Playground';
 
 // Mock inspector
 (window as any).Inspector = vi.fn();
@@ -47,8 +41,6 @@ describe('Playground tests', () => {
   let routes: RouteObject[];
   let mockStore: Store<OverallState>;
 
-  const getSourceChapterFromStore = (store: Store<OverallState>) =>
-    store.getState().playground.languageConfig.chapter;
   const getEditorValueFromStore = (store: Store<OverallState>) =>
     store.getState().workspaces.playground.editorTabs[0].value;
 
@@ -79,14 +71,13 @@ describe('Playground tests', () => {
     const tree = await renderTree(router);
     expect(tree).toMatchSnapshot();
 
-    expect(getSourceChapterFromStore(mockStore)).toBe(defaultPlayground.languageConfig.chapter);
     // The bundled language directory's first language (Python §1) supplies its own
     // defaultProgram, which should replace the generic JS-flavoured defaultEditorValue.
     expect(getEditorValueFromStore(mockStore)).not.toBe(defaultEditorValue);
     expect(getEditorValueFromStore(mockStore)).toBe('# Type your program in here!\n\n');
   });
 
-  test('Playground with link renders correctly', async () => {
+  test('Playground with a legacy share link (chap=2) still loads its program', async () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ['/playground#chap=2&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA'],
       initialIndex: 0,
@@ -95,8 +86,9 @@ describe('Playground tests', () => {
     const tree = await renderTree(router);
     expect(tree).toMatchSnapshot();
 
-    expect(getSourceChapterFromStore(mockStore)).toBe(Chapter.SOURCE_2);
     expect(getEditorValueFromStore(mockStore)).toBe("display('hello!');");
+    // The chapter of a legacy link selects the directory's Source language of that name.
+    expect(mockStore.getState().languageDirectory.selectedLanguageId).toBe('source2');
   });
 
   test('loading a share link overwrites a stale editor tab left over from a previous session, even if its filePath predates leading-slash normalization (#4268)', async () => {
@@ -239,30 +231,5 @@ describe('Playground tests', () => {
       sideContentManager.unregisterTab('stepper');
       sideContentManager.setWorkspaceLocation('playground');
     }
-  });
-
-  describe('handleHash', () => {
-    test('disables loading hash with fullJS chapter in URL params', () => {
-      const testHash = '#chap=-1&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA';
-
-      const mockHandleEditorValueChanged = vi.fn();
-      const mockHandleChapterSelect = vi.fn();
-
-      handleHash(
-        testHash,
-        {
-          handleChapterSelect: mockHandleChapterSelect,
-        },
-        'playground',
-        // We cannot make use of 'dispatch' & BrowserFS in test cases. However, the
-        // behaviour being tested here does not actually invoke either of these. As
-        // a workaround, we pass in 'undefined' instead & cast to the expected types.
-        undefined as unknown as Dispatch,
-        undefined as unknown as FSModule,
-      );
-
-      expect(mockHandleEditorValueChanged).not.toHaveBeenCalled();
-      expect(mockHandleChapterSelect).not.toHaveBeenCalled();
-    });
   });
 });

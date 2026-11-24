@@ -35,7 +35,6 @@ import { convertEditorTabStateToProps } from '../../../../commons/editor/EditorC
 import type { Position } from '../../../../commons/editor/EditorTypes';
 import Markdown from '../../../../commons/Markdown';
 import SideContentAutograder from '../../../../commons/sideContent/content/SideContentAutograder';
-import SideContentToneMatrix from '../../../../commons/sideContent/content/SideContentToneMatrix';
 import type { SideContentProps } from '../../../../commons/sideContent/SideContent';
 import { useSideContent } from '../../../../commons/sideContent/SideContentHelper';
 import {
@@ -424,17 +423,6 @@ function GradingWorkspace(props: Props) {
         id: SideContentType.briefing,
       },
     ];
-    const externalLibrary = grading!.answers[questionId].question.library.external;
-    const functionsAttached = externalLibrary.symbols;
-    if (functionsAttached.includes('get_matrix')) {
-      tabs.push({
-        label: `Tone Matrix`,
-        iconName: IconNames.GRID_VIEW,
-        body: <SideContentToneMatrix />,
-        id: SideContentType.toneMatrix,
-      });
-    }
-
     const sideContentProps: SideContentProps = {
       onChange: (
         newTabId: SideContentTabId,

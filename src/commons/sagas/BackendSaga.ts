@@ -4,7 +4,6 @@ import type { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import type { UsernameRoleGroup } from 'src/features/adminPanel/subcomponents/AddUserPanel';
-import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import DashboardActions from 'src/features/dashboard/DashboardActions';
 import { deriveLanguageFromChapter } from 'src/features/directory/chapterLanguage';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
@@ -120,14 +119,10 @@ export function* routerNavigate(path: string) {
  *
  * The language is derived from the assessment's own chapter (the first question's
  * library.chapter — assessments don't mix chapters across their own questions), which is a
- * 1-based index into the language directory's array once Conductor is enabled (see
+ * 1-based index into the language directory's array (see
  * chapterLanguage.ts) - not a separate assessment-level field.
  */
 function* selectAssessmentLanguageSaga(assessment: Assessment) {
-  const conductorEnabled: boolean = yield select(selectConductorEnable);
-  if (!conductorEnabled) {
-    return;
-  }
   const languages: ILanguageDefinition[] = yield select(
     (state: OverallState) => state.languageDirectory.languages,
   );

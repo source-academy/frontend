@@ -585,19 +585,6 @@ test('updateChapter generates correct action object', () => {
   });
 });
 
-test('toggleUsingSubst generates correct action object', () => {
-  const action = WorkspaceActions.toggleUsingSubst(true, playgroundWorkspace);
-  expect(action).toEqual({
-    type: WorkspaceActions.toggleUsingSubst.type,
-    payload: {
-      workspaceLocation: playgroundWorkspace,
-      usingSubst: true,
-    },
-  });
-});
-
-// TODO: Add toggleusingcse
-
 // Version History Actions Tests
 
 test('fetchVersionHistory generates correct action object', () => {

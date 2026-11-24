@@ -6,7 +6,6 @@ import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { Ace, Range } from 'ace-builds';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { isEqual } from 'lodash-es';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -20,9 +19,6 @@ import {
   setSharedbConnected,
 } from 'src/commons/collabEditing/CollabEditingActions';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
-import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
-import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
-import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import sideContentManager, {
@@ -31,14 +27,8 @@ import sideContentManager, {
 } from 'src/commons/sideContent/SideContentManager';
 import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 import { useAppDispatch, useAppSelector, useResponsive } from 'src/commons/utils/Hooks';
-import {
-  showFullJSWarningOnUrlLoad,
-  showFulTSWarningOnUrlLoad,
-  showHTMLDisclaimer,
-} from 'src/commons/utils/WarningDialogHelper';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import {
   CONDUCTOR_E_STEPPER_TAB_ID,
   CONDUCTOR_STEPPER_TAB_ID,
@@ -48,28 +38,18 @@ import {
   isToolEvaluator,
   STEPPER_EVALUATOR_CAPABILITY,
 } from 'src/features/conductor/stepperTab';
-import CseMachine from 'src/features/cseMachine/CseMachine';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
 import { joinEvaluatorId, joinLanguageId } from 'src/features/directory/languageIdCodec';
 import GithubActions from 'src/features/github/GitHubActions';
 import PersistenceActions from 'src/features/persistence/PersistenceActions';
 import {
   generateLzString,
-  playgroundConfigLanguage,
   shortenURL,
   updateShortURL,
 } from 'src/features/playground/PlaygroundActions';
 import Messages, { sendToWebview } from 'src/features/vscode/messages';
 
-import {
-  getDefaultFilePath,
-  getLanguageConfig,
-  isCseVariant,
-  isSourceLanguage,
-  type OverallState,
-  type ResultOutput,
-  type SALanguage,
-} from '../../commons/application/ApplicationTypes';
+import { getDefaultFilePath, type OverallState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import ControlBarAutorunButtons from '../../commons/controlBar/ControlBarAutorunButtons';
 import ControlBarChapterSelect from '../../commons/controlBar/ControlBarChapterSelect';
@@ -94,10 +74,7 @@ import MobileWorkspace, {
 import type { SideBarTab } from '../../commons/sideBar/SideBar';
 import { type SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants, { Links } from '../../commons/utils/Constants';
-import {
-  DEFAULT_WELCOME_TEXT,
-  generateLanguageIntroduction,
-} from '../../commons/utils/IntroductionHelper';
+import { DEFAULT_WELCOME_TEXT } from '../../commons/utils/IntroductionHelper';
 import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
 import { type IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { type WorkspaceProps } from '../../commons/workspace/Workspace';
@@ -117,7 +94,6 @@ import {
   makeIntroductionTabFrom,
   makeRemoteExecutionTabFrom,
   makeSessionManagementTabFrom,
-  makeSubstVisualizerTabFrom,
   mobileOnlyTabIds,
 } from './PlaygroundTabs';
 
@@ -130,9 +106,6 @@ export type PlaygroundProps = {
 
 export async function handleHash(
   hash: string,
-  handlers: {
-    handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
-  },
   workspaceLocation: WorkspaceLocation,
   dispatch: React.Dispatch<SourceActionType>,
   fileSystem: FSModule | null,
@@ -140,88 +113,74 @@ export async function handleHash(
   // Make the parsed query string object a Partial because we might access keys which are not set.
   const qs: Partial<IParsedQuery> = parseQuery(hash);
 
-  const chapter = convertParamToInt(qs.chap) ?? undefined;
-  if (chapter === Chapter.FULL_JS) {
-    showFullJSWarningOnUrlLoad();
-  } else if (chapter === Chapter.FULL_TS) {
-    showFulTSWarningOnUrlLoad();
-  } else {
-    if (chapter === Chapter.HTML) {
-      const continueToHtml = await showHTMLDisclaimer();
-      if (!continueToHtml) {
-        return;
-      }
-    }
+  // For backward compatibility with old share links - 'prgrm' is no longer used.
+  const program = qs.prgrm === undefined ? '' : decompressFromEncodedURIComponent(qs.prgrm);
 
-    // For backward compatibility with old share links - 'prgrm' is no longer used.
-    const program = qs.prgrm === undefined ? '' : decompressFromEncodedURIComponent(qs.prgrm);
+  // By default, create just the default file.
+  const defaultFilePath = getDefaultFilePath(workspaceLocation);
+  // Some share links have historically encoded file paths without a leading slash (e.g.
+  // `playground/program.py` instead of `/playground/program.py`). Normalize them here so
+  // they match WORKSPACE_BASE_PATHS everywhere else they're used below (the BrowserFS write,
+  // and the removeEditorTabsForDirectory/addEditorTab dispatches).
+  const files: Record<string, string> =
+    qs.files === undefined
+      ? {
+          [defaultFilePath]: program,
+        }
+      : Object.fromEntries(
+          Object.entries(parseQuery(decompressFromEncodedURIComponent(qs.files))).map(
+            ([filePath, contents]) => [ensureLeadingSlash(filePath), contents],
+          ),
+        );
+  if (fileSystem !== null) {
+    await overwriteFilesInWorkspace(workspaceLocation, fileSystem, files);
+  }
 
-    // By default, create just the default file.
-    const defaultFilePath = getDefaultFilePath(workspaceLocation);
-    // Some share links have historically encoded file paths without a leading slash (e.g.
-    // `playground/program.py` instead of `/playground/program.py`). Normalize them here so
-    // they match WORKSPACE_BASE_PATHS everywhere else they're used below (the BrowserFS write,
-    // and the removeEditorTabsForDirectory/addEditorTab dispatches).
-    const files: Record<string, string> =
-      qs.files === undefined
-        ? {
-            [defaultFilePath]: program,
-          }
-        : Object.fromEntries(
-            Object.entries(parseQuery(decompressFromEncodedURIComponent(qs.files))).map(
-              ([filePath, contents]) => [ensureLeadingSlash(filePath), contents],
-            ),
-          );
-    if (fileSystem !== null) {
-      await overwriteFilesInWorkspace(workspaceLocation, fileSystem, files);
-    }
+  // BrowserFS does not provide a way of listening to changes in the file system, which makes
+  // updating the file system view troublesome. To force the file system view to re-render
+  // (and thus display the updated file system), we first disable Folder mode.
+  dispatch(WorkspaceActions.setFolderMode(workspaceLocation, false));
+  const isFolderModeEnabled = convertParamToBoolean(qs.isFolder) ?? false;
+  // If Folder mode should be enabled, enabling it after disabling it earlier will cause the
+  // newly-added files to be shown. Note that this has to take place after the files are
+  // already added to the file system.
+  dispatch(WorkspaceActions.setFolderMode(workspaceLocation, isFolderModeEnabled));
 
-    // BrowserFS does not provide a way of listening to changes in the file system, which makes
-    // updating the file system view troublesome. To force the file system view to re-render
-    // (and thus display the updated file system), we first disable Folder mode.
-    dispatch(WorkspaceActions.setFolderMode(workspaceLocation, false));
-    const isFolderModeEnabled = convertParamToBoolean(qs.isFolder) ?? false;
-    // If Folder mode should be enabled, enabling it after disabling it earlier will cause the
-    // newly-added files to be shown. Note that this has to take place after the files are
-    // already added to the file system.
-    dispatch(WorkspaceActions.setFolderMode(workspaceLocation, isFolderModeEnabled));
+  // By default, open a single editor tab containing the default playground file.
+  const editorTabFilePaths = (
+    qs.tabs?.split(',').map(decompressFromEncodedURIComponent) ?? [defaultFilePath]
+  ).map(ensureLeadingSlash);
+  // Remove all editor tabs before populating with the ones from the query string.
+  dispatch(
+    WorkspaceActions.removeEditorTabsForDirectory(
+      workspaceLocation,
+      WORKSPACE_BASE_PATHS[workspaceLocation],
+    ),
+  );
+  // Add editor tabs from the query string.
+  editorTabFilePaths.forEach(filePath =>
+    // Fall back on the empty string if the file contents do not exist.
+    dispatch(WorkspaceActions.addEditorTab(workspaceLocation, filePath, files[filePath] ?? '')),
+  );
 
-    // By default, open a single editor tab containing the default playground file.
-    const editorTabFilePaths = (
-      qs.tabs?.split(',').map(decompressFromEncodedURIComponent) ?? [defaultFilePath]
-    ).map(ensureLeadingSlash);
-    // Remove all editor tabs before populating with the ones from the query string.
+  // By default, use the first editor tab.
+  const activeEditorTabIndex = convertParamToInt(qs.tabIdx) ?? 0;
+  dispatch(WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex));
+  const legacyChapter = convertParamToInt(qs.chap);
+  if (qs.language) {
+    // Conductor-based languages (e.g. Python) aren't part of the js-slang Chapter enum, so
+    // they're shared via separate `language`/`variant`/`evaluator` params instead of
+    // `chap`/`variant`. Reassemble the directory's compound ids from those three fields.
+    const languageId = joinLanguageId(qs.language, qs.variant);
+    const evaluatorId = qs.evaluator ? joinEvaluatorId(languageId, qs.evaluator) : undefined;
+    dispatch(LanguageDirectoryActions.setSelectedLanguage(languageId, evaluatorId));
+  } else if (legacyChapter !== null && legacyChapter >= 1 && legacyChapter <= 4) {
+    // Links from before the language directory encode a Source chapter in `chap`; the
+    // directory's Source languages are named after them. The old variants (typed, native, ...)
+    // have no directory counterpart, so they open the chapter's default.
     dispatch(
-      WorkspaceActions.removeEditorTabsForDirectory(
-        workspaceLocation,
-        WORKSPACE_BASE_PATHS[workspaceLocation],
-      ),
+      LanguageDirectoryActions.setSelectedLanguage(joinLanguageId('source', `${legacyChapter}`)),
     );
-    // Add editor tabs from the query string.
-    editorTabFilePaths.forEach(filePath =>
-      // Fall back on the empty string if the file contents do not exist.
-      dispatch(WorkspaceActions.addEditorTab(workspaceLocation, filePath, files[filePath] ?? '')),
-    );
-
-    // By default, use the first editor tab.
-    const activeEditorTabIndex = convertParamToInt(qs.tabIdx) ?? 0;
-    dispatch(WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex));
-    if (chapter) {
-      // TODO: To migrate the state logic away from playgroundSourceChapter
-      //       and playgroundSourceVariant into the language config instead
-      const languageConfig = getLanguageConfig(chapter, qs.variant as Variant);
-      handlers.handleChapterSelect(chapter, languageConfig.variant);
-      // Hardcoded for Playground only for now, while we await workspace refactoring
-      // to decouple the SicpWorkspace from the Playground.
-      dispatch(playgroundConfigLanguage(languageConfig));
-    } else if (qs.language) {
-      // Conductor-based languages (e.g. Python) aren't part of the js-slang Chapter enum, so
-      // they're shared via separate `language`/`variant`/`evaluator` params instead of
-      // `chap`/`variant`. Reassemble the directory's compound ids from those three fields.
-      const languageId = joinLanguageId(qs.language, qs.variant);
-      const evaluatorId = qs.evaluator ? joinEvaluatorId(languageId, qs.evaluator) : undefined;
-      dispatch(LanguageDirectoryActions.setSelectedLanguage(languageId, evaluatorId));
-    }
   }
 }
 
@@ -262,12 +221,9 @@ function Playground(props: PlaygroundProps) {
     sessionDetails,
     stepLimit,
     isRunning,
-    isDebugging,
     output,
     replValue,
     sharedbConnected,
-    usingSubst,
-    usingCse,
     isFolderModeEnabled,
     activeEditorTabIndex,
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant },
@@ -276,30 +232,18 @@ function Playground(props: PlaygroundProps) {
   const { queryString, shortURL, persistenceFile, githubSaveInfo } = useAppSelector(
     state => state.playground,
   );
-  const {
-    sourceChapter: courseSourceChapter,
-    sourceVariant: courseSourceVariant,
-    googleUser: persistenceUser,
-    githubOctokitObject,
-  } = useAppSelector(state => state.session);
-  // When the Conductor framework is enabled, LanguageDirectorySaga applies the course's configured
-  // default language itself (see setCourseConfiguration/setLanguages handlers), so the legacy
-  // chapter/variant path below must not also apply it - `getLanguageConfig` has no entries for
-  // languages 5+ (Python Full, Scheme) and throws for them.
-  const conductorEnabled = useAppSelector(selectConductorEnable);
+  const { googleUser: persistenceUser, githubOctokitObject } = useAppSelector(
+    state => state.session,
+  );
 
   const dispatch = useAppDispatch();
   const {
-    handleChapterSelect,
     handleEditorValueChange,
     handleSetEditorBreakpoints,
     handleReplEval,
     handleReplOutputClear,
-    handleUsingSubst,
   } = useMemo(() => {
     return {
-      handleChapterSelect: (chapter: Chapter, variant: Variant) =>
-        dispatch(WorkspaceActions.chapterSelect(chapter, variant, workspaceLocation)),
       handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
         dispatch(
           WorkspaceActions.updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue),
@@ -310,8 +254,6 @@ function Playground(props: PlaygroundProps) {
         ),
       handleReplEval: () => dispatch(WorkspaceActions.evalRepl(workspaceLocation)),
       handleReplOutputClear: () => dispatch(WorkspaceActions.clearReplOutput(workspaceLocation)),
-      handleUsingSubst: (usingSubst: boolean) =>
-        dispatch(WorkspaceActions.toggleUsingSubst(usingSubst, workspaceLocation)),
     };
   }, [dispatch, workspaceLocation]);
 
@@ -323,14 +265,9 @@ function Playground(props: PlaygroundProps) {
   }
 
   const [lastEdit, setLastEdit] = useState(new Date());
-  const { alerts, selectedTab, setSelectedTab } = useSideContent(
+  const { selectedTab, setSelectedTab } = useSideContent(
     workspaceLocation,
     shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction,
-  );
-  const showStepperPrompt = alerts.includes(SideContentType.substVisualizer);
-  const hasAnyBreakpoints = useMemo(
-    () => editorTabs.some(tab => tab.breakpoints.some(Boolean)),
-    [editorTabs],
   );
   const [sessionId, setSessionId] = useState(() =>
     initSession('playground', {
@@ -348,11 +285,6 @@ function Playground(props: PlaygroundProps) {
     [setIsGreen],
   );
   useHotkeys(playgroundHotkeyBindings);
-
-  useEffect(() => {
-    CseMachine.clearCachedLayouts();
-    window.requestAnimationFrame(() => CseMachine.redraw());
-  }, [isGreen]);
 
   const remoteExecutionTab: SideContentTab = useMemo(
     () => makeRemoteExecutionTabFrom(deviceSecret, setDeviceSecret),
@@ -385,37 +317,10 @@ function Playground(props: PlaygroundProps) {
 
   useEffect(() => {
     if (!hash) {
-      // Under Conductor, LanguageDirectorySaga applies the course's configured default language
-      // itself (driven off the same courseSourceChapter, reinterpreted as a directory index - see
-      // getCourseDefaultSelectionSaga), so this legacy path must stand down: courseSourceChapter
-      // values above Source §4 (Python Full, Scheme) have no `getLanguageConfig` match and throw,
-      // and even for §1-4 this would resolve the wrong sublanguage (Source's, not the directory's).
-      if (!conductorEnabled && courseSourceChapter && courseSourceVariant) {
-        // If not a accessing via shared link, use the Source chapter and variant in the current course
-        handleChapterSelect(courseSourceChapter, courseSourceVariant);
-        // TODO: To migrate the state logic away from playgroundSourceChapter
-        //       and playgroundSourceVariant into the language config instead
-        const languageConfig = getLanguageConfig(courseSourceChapter, courseSourceVariant);
-        // Hardcoded for Playground only for now, while we await workspace refactoring
-        // to decouple the SicpWorkspace from the Playground.
-        dispatch(playgroundConfigLanguage(languageConfig));
-        // Disable Folder mode when forcing the Source chapter and variant to follow the current course's.
-        // This is because Folder mode only works in Source 2+.
-        dispatch(WorkspaceActions.setFolderMode(workspaceLocation, false));
-      }
       return;
     }
-    handleHash(hash, { handleChapterSelect }, workspaceLocation, dispatch, fileSystem);
-  }, [
-    dispatch,
-    fileSystem,
-    hash,
-    conductorEnabled,
-    courseSourceChapter,
-    courseSourceVariant,
-    workspaceLocation,
-    handleChapterSelect,
-  ]);
+    handleHash(hash, workspaceLocation, dispatch, fileSystem);
+  }, [dispatch, fileSystem, hash, workspaceLocation]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -472,100 +377,27 @@ function Playground(props: PlaygroundProps) {
   const autorunButtonHandlers = useMemo(() => {
     return {
       handleEditorEval: () => {
-        CseMachine.clearCachedLayouts();
-
         // reset stepper before evaluation
         dispatch(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
         dispatch(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
-        dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
-
-        if (playgroundSourceChapter <= Chapter.SOURCE_2) {
-          const shouldUseSubst =
-            selectedTab === SideContentType.substVisualizer || hasAnyBreakpoints;
-          handleUsingSubst(shouldUseSubst);
-        }
 
         dispatch(WorkspaceActions.evalEditor(workspaceLocation));
-        CseMachine.setClearDeadFrames(false);
       },
       handleInterruptEval: () =>
         dispatch(InterpreterActions.beginInterruptExecution(workspaceLocation)),
-      handleDebuggerPause: () => dispatch(InterpreterActions.beginDebuggerPause(workspaceLocation)),
-      handleDebuggerReset: () => dispatch(InterpreterActions.debuggerReset(workspaceLocation)),
-      handleDebuggerResume: () => dispatch(InterpreterActions.debuggerResume(workspaceLocation)),
     };
-  }, [
-    dispatch,
-    workspaceLocation,
-    playgroundSourceChapter,
-    selectedTab,
-    hasAnyBreakpoints,
-    handleUsingSubst,
-  ]);
-
-  const languageConfig: SALanguage = useAppSelector(state => state.playground.languageConfig);
+  }, [dispatch, workspaceLocation]);
 
   const autorunButtons = useMemo(() => {
     return (
       <ControlBarAutorunButtons
         isEntrypointFileDefined={activeEditorTabIndex !== null}
-        isDebugging={isDebugging}
         isRunning={isRunning}
         key="autorun"
-        sourceChapter={languageConfig.chapter}
-        // Disable pause for non-Source languages since they cannot be paused
-        pauseDisabled={usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)}
         {...autorunButtonHandlers}
       />
     );
-  }, [
-    activeEditorTabIndex,
-    isDebugging,
-    isRunning,
-    languageConfig.chapter,
-    autorunButtonHandlers,
-    usingRemoteExecution,
-  ]);
-
-  const chapterSelectHandler = useCallback(
-    (sublanguage: SALanguage, e: any) => {
-      const { chapter, variant } = sublanguage;
-      if ((chapter <= 2 && hasAnyBreakpoints) || selectedTab === SideContentType.substVisualizer) {
-        handleUsingSubst(true);
-      }
-      if (chapter > 2) {
-        handleReplOutputClear();
-        handleUsingSubst(false);
-      }
-
-      const input: Input = {
-        time: Date.now(),
-        type: 'chapterSelect',
-        data: chapter,
-      };
-
-      pushLog(input);
-
-      sendToWebview(Messages.ChangeChapter('playground', 1, chapter, variant));
-      handleChapterSelect(chapter, variant);
-      // Hardcoded for Playground only for now, while we await workspace refactoring
-      // to decouple the SicpWorkspace from the Playground.
-      dispatch(playgroundConfigLanguage(sublanguage));
-    },
-    [
-      dispatch,
-      hasAnyBreakpoints,
-      selectedTab,
-      pushLog,
-      handleReplOutputClear,
-      handleUsingSubst,
-      handleChapterSelect,
-    ],
-  );
-
-  // conductorEnabled is read earlier (see its declaration above) - when true, the stepper (and
-  // other tools) are provided by web plugins loaded dynamically, so the legacy in-frontend tabs
-  // are hidden in favour of plugin tabs.
+  }, [activeEditorTabIndex, isRunning, autorunButtonHandlers]);
 
   const clearButton = useMemo(
     () =>
@@ -640,27 +472,17 @@ function Playground(props: PlaygroundProps) {
     () => (
       <ControlBarStepLimit
         stepLimit={stepLimit}
-        stepSize={usingSubst ? 2 : 1}
+        stepSize={1}
         handleChangeStepLimit={limit => {
           dispatch(WorkspaceActions.changeStepLimit(limit, workspaceLocation));
-          if (usingCse) {
-            dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
-          }
         }}
         handleOnBlurAutoScale={limit => {
-          if (limit % 2 === 0 || !usingSubst) {
-            dispatch(WorkspaceActions.changeStepLimit(limit, workspaceLocation));
-          } else {
-            dispatch(WorkspaceActions.changeStepLimit(limit + 1, workspaceLocation));
-          }
-          if (usingCse) {
-            dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
-          }
+          dispatch(WorkspaceActions.changeStepLimit(limit, workspaceLocation));
         }}
         key="step_limit"
       />
     ),
-    [dispatch, stepLimit, usingSubst, usingCse, workspaceLocation],
+    [dispatch, stepLimit, workspaceLocation],
   );
 
   const getEditorValue = useCallback(
@@ -760,23 +582,9 @@ function Playground(props: PlaygroundProps) {
     foldersEnabled,
   ]);
 
-  useEffect(() => {
-    // TODO: To migrate the state logic away from playgroundSourceChapter
-    //       and playgroundSourceVariant into the language config instead
-    const languageConfigToSet = getLanguageConfig(playgroundSourceChapter, playgroundSourceVariant);
-    // Hardcoded for Playground only for now, while we await workspace refactoring
-    // to decouple the SicpWorkspace from the Playground.
-    dispatch(playgroundConfigLanguage(languageConfigToSet));
-  }, [dispatch, playgroundSourceChapter, playgroundSourceVariant]);
-
-  const shouldShowDataVisualizer = languageConfig.supports.dataVisualizer;
   const hasCseSnapshots = useAppSelector(
     state => state.workspaces[workspaceLocation].cseSnapshots !== null,
   );
-  const conductorLanguageActive = useAppSelector(
-    state => selectConductorEnable(state) && !!state.languageDirectory.selectedLanguageId,
-  );
-  const shouldShowSubstVisualizer = languageConfig.supports.substVisualizer;
 
   // Stepper/CSE Machine tab wiring (conductor only). Each tool's tab is offered for any language that
   // has a matching-capability evaluator; opening the tab selects that (dropdown-hidden) evaluator so a
@@ -784,9 +592,6 @@ function Playground(props: PlaygroundProps) {
   const selectedLanguageId = useAppSelector(state => state.languageDirectory.selectedLanguageId);
   const selectedEvaluatorId = useAppSelector(state => state.languageDirectory.selectedEvaluatorId);
   const stepperEvaluatorId = useAppSelector(state => {
-    if (!selectConductorEnable(state)) {
-      return null;
-    }
     const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
     const lang = langId ? languageMap[langId] : undefined;
     const evaluator = lang?.evaluators.find(e =>
@@ -795,9 +600,6 @@ function Playground(props: PlaygroundProps) {
     return evaluator?.id ?? null;
   });
   const eStepperEvaluatorId = useAppSelector(state => {
-    if (!selectConductorEnable(state)) {
-      return null;
-    }
     const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
     const lang = langId ? languageMap[langId] : undefined;
     const evaluator = lang?.evaluators.find(e =>
@@ -806,9 +608,6 @@ function Playground(props: PlaygroundProps) {
     return evaluator?.id ?? null;
   });
   const cseEvaluatorId = useAppSelector(state => {
-    if (!selectConductorEnable(state)) {
-      return null;
-    }
     const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
     const lang = langId ? languageMap[langId] : undefined;
     const evaluator = lang?.evaluators.find(e =>
@@ -817,9 +616,6 @@ function Playground(props: PlaygroundProps) {
     return evaluator?.id ?? null;
   });
   const defaultEvaluatorId = useAppSelector(state => {
-    if (!selectConductorEnable(state)) {
-      return null;
-    }
     const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
     const lang = langId ? languageMap[langId] : undefined;
     const evaluator = lang?.evaluators.find(e => !isToolEvaluator(e));
@@ -829,16 +625,11 @@ function Playground(props: PlaygroundProps) {
   // For conductor languages: show the CSE tab proactively when the language has a cse-capability
   // evaluator — regardless of which evaluator is currently selected, mirroring the Stepper tab below —
   // or reactively once snapshots arrive. For Source languages use the usual flag.
-  const shouldShowCseMachine = conductorLanguageActive
-    ? cseEvaluatorId !== null || hasCseSnapshots
-    : languageConfig.supports.cseMachine || hasCseSnapshots;
+  const shouldShowCseMachine = cseEvaluatorId !== null || hasCseSnapshots;
 
   // Every evaluator the current sublanguage offers (conductor only) - the full list, including the
   // hidden tool evaluators, so lookups below can resolve any tab's owner by path or id.
   const conductorEvaluators = useAppSelector(state => {
-    if (!selectConductorEnable(state)) {
-      return EMPTY_EVALUATORS;
-    }
     const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
     return (langId ? languageMap[langId]?.evaluators : undefined) ?? EMPTY_EVALUATORS;
   });
@@ -850,7 +641,7 @@ function Playground(props: PlaygroundProps) {
   // checks: every tab a conductor registers now records which evaluator put it there (see
   // DeferredConductorTabService/SideContentManager's TabOwner tracking).
   const selectedTabOwnerId = useMemo<string | null>(() => {
-    if (!conductorEnabled || !selectedTab || selectedTab === SideContentType.introduction) {
+    if (!selectedTab || selectedTab === SideContentType.introduction) {
       return null;
     }
     const dynamicOwner =
@@ -871,7 +662,6 @@ function Playground(props: PlaygroundProps) {
     }
     return null;
   }, [
-    conductorEnabled,
     selectedTab,
     selectedTabOwnerPath,
     conductorEvaluators,
@@ -883,10 +673,6 @@ function Playground(props: PlaygroundProps) {
   const chapterSelectButton = useMemo(
     () => (
       <ControlBarChapterSelect
-        handleChapterSelect={chapterSelectHandler}
-        isFolderModeEnabled={isFolderModeEnabled}
-        sourceChapter={languageConfig.chapter}
-        sourceVariant={languageConfig.variant}
         key="chapter"
         // While a tab owned by a specific evaluator is selected (Stepper, CSE Machine, or a
         // tool-produced tab like Data Visualizer), the evaluator is pinned to whichever evaluator
@@ -895,14 +681,7 @@ function Playground(props: PlaygroundProps) {
         disabled={usingRemoteExecution || selectedTabOwnerId !== null}
       />
     ),
-    [
-      chapterSelectHandler,
-      isFolderModeEnabled,
-      languageConfig.chapter,
-      languageConfig.variant,
-      usingRemoteExecution,
-      selectedTabOwnerId,
-    ],
+    [usingRemoteExecution, selectedTabOwnerId],
   );
 
   // Keep the selected evaluator in sync with whichever tab is selected. A tab with an owner (directly
@@ -912,9 +691,6 @@ function Playground(props: PlaygroundProps) {
   // (Stepper/CSE, unreachable except through their own tab) was selected. A normal selectable
   // evaluator (e.g. whichever produced Data Visualizer) is left selected instead of being yanked away.
   useEffect(() => {
-    if (!conductorEnabled) {
-      return;
-    }
     if (selectedTabOwnerId) {
       if (selectedEvaluatorId !== selectedTabOwnerId) {
         dispatch(LanguageDirectoryActions.setSelectedEvaluator(selectedTabOwnerId));
@@ -928,14 +704,7 @@ function Playground(props: PlaygroundProps) {
     if (selected && isToolEvaluator(selected)) {
       dispatch(LanguageDirectoryActions.setSelectedEvaluator(defaultEvaluatorId));
     }
-  }, [
-    conductorEnabled,
-    selectedTabOwnerId,
-    selectedEvaluatorId,
-    defaultEvaluatorId,
-    conductorEvaluators,
-    dispatch,
-  ]);
+  }, [selectedTabOwnerId, selectedEvaluatorId, defaultEvaluatorId, conductorEvaluators, dispatch]);
 
   // Reset to the Introduction tab whenever the Conductor directory's selected language changes (e.g.
   // Python §1 ⇌ §2). Not stepper-specific: any tab tied to the previous language — a plugin-provided
@@ -955,9 +724,6 @@ function Playground(props: PlaygroundProps) {
   }, [selectedLanguageId, setSelectedTab]);
 
   const conductorWelcomeText = useAppSelector(state => {
-    if (!selectConductorEnable(state)) {
-      return null;
-    }
     const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
     if (!selectedLanguageId) {
       return null;
@@ -975,21 +741,13 @@ function Playground(props: PlaygroundProps) {
   // A Conductor language without documentation links gets no Documentation tab; the legacy Source
   // languages always have one.
   const hasDocumentation = useAppSelector(state => {
-    if (!selectConductorEnable(state)) {
-      return true;
-    }
     const { selectedLanguageId, languageMap } = state.languageDirectory;
     return !!(selectedLanguageId && languageMap[selectedLanguageId]?.documentation);
   });
 
   const playgroundIntroductionTab: SideContentTab = useMemo(
-    () =>
-      makeIntroductionTabFrom(
-        conductorEnabled
-          ? (conductorWelcomeText ?? DEFAULT_WELCOME_TEXT)
-          : generateLanguageIntroduction(languageConfig),
-      ),
-    [conductorEnabled, conductorWelcomeText, languageConfig],
+    () => makeIntroductionTabFrom(conductorWelcomeText ?? DEFAULT_WELCOME_TEXT),
+    [conductorWelcomeText],
   );
   const isDataVisualizerTabShown = useIsServiceTabShown(
     SideContentType.dataVisualizer,
@@ -997,21 +755,6 @@ function Playground(props: PlaygroundProps) {
   );
   const tabs = useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
-
-    const currentLang = languageConfig.chapter;
-    if (currentLang === Chapter.HTML) {
-      // For HTML Chapter, HTML Display tab is added only after code is run
-      if (output.length > 0 && output[0].type === 'result') {
-        tabs.push(
-          makeHtmlDisplayTabFrom(
-            output[0] as ResultOutput,
-            errorMsg => dispatch(WorkspaceActions.addHtmlConsoleError(errorMsg, workspaceLocation)),
-            workspaceLocation,
-          ),
-        );
-      }
-      return tabs;
-    }
 
     if (!isSicpEditor && hasDocumentation) {
       tabs.push(makeDocumentationTabFrom(workspaceLocation));
@@ -1021,54 +764,34 @@ function Playground(props: PlaygroundProps) {
       tabs.push(remoteExecutionTab);
     }
 
-    if (currentLang === Chapter.FULL_JAVA && process.env.NODE_ENV === 'development') {
-      tabs.push(
-        makeUploadTabFrom(files =>
-          dispatch(WorkspaceActions.uploadFiles(files, workspaceLocation)),
-        ),
-      );
-    }
-
     if (!usingRemoteExecution) {
       // Don't show the following when using remote execution
-      if (conductorEnabled) {
-        if (isDataVisualizerTabShown) {
-          tabs.push(makeConductorDataVisualizerPlaceholderTab());
-        }
-      } else if (shouldShowDataVisualizer) {
-        tabs.push(makeDataVisualizerTabFrom(workspaceLocation));
+      if (isDataVisualizerTabShown) {
+        tabs.push(makeConductorDataVisualizerPlaceholderTab());
       }
       if (shouldShowCseMachine) {
         tabs.push(makeCseMachineTabFrom(workspaceLocation));
       }
-      if (conductorEnabled) {
-        // Placeholders keep these tabs visible before their plugin loads; each plugin's live tab
-        // replaces its placeholder in place.
-        if (stepperEvaluatorId) {
-          tabs.push(makeConductorStepperPlaceholderTab());
-        }
-        if (eStepperEvaluatorId) {
-          tabs.push(makeConductorEStepperPlaceholderTab());
-        }
-      } else if (shouldShowSubstVisualizer) {
-        tabs.push(makeSubstVisualizerTabFrom(workspaceLocation, output));
+      // Placeholders keep these tabs visible before their plugin loads; each plugin's live tab
+      // replaces its placeholder in place.
+      if (stepperEvaluatorId) {
+        tabs.push(makeConductorStepperPlaceholderTab());
+      }
+      if (eStepperEvaluatorId) {
+        tabs.push(makeConductorEStepperPlaceholderTab());
       }
     }
 
     return tabs;
   }, [
     playgroundIntroductionTab,
-    languageConfig.chapter,
     usingRemoteExecution,
     isSicpEditor,
     output,
     workspaceLocation,
     dispatch,
-    shouldShowDataVisualizer,
     isDataVisualizerTabShown,
     shouldShowCseMachine,
-    shouldShowSubstVisualizer,
-    conductorEnabled,
     hasDocumentation,
     stepperEvaluatorId,
     eStepperEvaluatorId,
@@ -1107,7 +830,6 @@ function Playground(props: PlaygroundProps) {
       };
 
       pushLog(input);
-      dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
       dispatch(WorkspaceActions.setEditorHighlightedLines(workspaceLocation, 0, []));
     },
     [pushLog, dispatch, workspaceLocation],
@@ -1145,34 +867,9 @@ function Playground(props: PlaygroundProps) {
 
   const handleEditorUpdateBreakpoints = useCallback(
     (editorTabIndex: number, breakpoints: string[]) => {
-      const hasBreakpointsInTab = breakpoints.some(Boolean);
-
-      const hasAnyBreakpointsAfterUpdate = editorTabs.some((tab, index) =>
-        index === editorTabIndex ? hasBreakpointsInTab : tab.breakpoints.some(Boolean),
-      );
-
-      if (hasAnyBreakpointsAfterUpdate && playgroundSourceChapter <= Chapter.SOURCE_2) {
-        handleUsingSubst(true);
-      }
-
-      if (!hasAnyBreakpointsAfterUpdate && selectedTab !== SideContentType.substVisualizer) {
-        handleReplOutputClear();
-        handleUsingSubst(false);
-      }
-
       handleSetEditorBreakpoints(editorTabIndex, breakpoints);
-      dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
     },
-    [
-      editorTabs,
-      selectedTab,
-      dispatch,
-      workspaceLocation,
-      handleSetEditorBreakpoints,
-      handleReplOutputClear,
-      handleUsingSubst,
-      playgroundSourceChapter,
-    ],
+    [dispatch, workspaceLocation, handleSetEditorBreakpoints],
   );
 
   // Unlike the other remote-execution disables above (chapter/language switching, visualizer tabs -
@@ -1181,7 +878,6 @@ function Playground(props: PlaygroundProps) {
   // device through the same Run pipeline as the editor's Run button (see its own remote-execution
   // branch) instead of evaluating it locally, so there's no conflicting/stale local-context issue
   // this needs to guard against.
-  const replDisabled = !languageConfig.supports.repl;
 
   const editorContainerHandlers = useMemo(() => {
     return {
@@ -1220,13 +916,12 @@ function Playground(props: PlaygroundProps) {
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
     onLoad: isSicpEditor && props.prependLength ? onLoadMethod : undefined,
-    sourceChapter: languageConfig.chapter,
+    sourceChapter: playgroundSourceChapter,
     externalLibraryName,
-    sourceVariant: languageConfig.variant,
+    sourceVariant: playgroundSourceVariant,
     handleEditorValueChange: onEditorValueChange,
     handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
     setUsers,
-    updateLanguageCallback: chapterSelectHandler,
   };
 
   const replHandlers = useMemo(() => {
@@ -1243,21 +938,18 @@ function Playground(props: PlaygroundProps) {
     output,
     replValue,
     handleReplEval,
-    usingSubst,
-    showStepperPrompt,
     handleBrowseHistoryDown: replHandlers.handleBrowseHistoryDown,
     handleBrowseHistoryUp: replHandlers.handleBrowseHistoryUp,
     handleReplValueChange: replHandlers.handleReplValueChange,
-    sourceChapter: languageConfig.chapter,
-    sourceVariant: languageConfig.variant,
+    sourceChapter: playgroundSourceChapter,
+    sourceVariant: playgroundSourceVariant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
     hidden:
       selectedTab === SideContentType.substVisualizer ||
       selectedTab === SideContentType.cseMachine ||
       // When the conductor stepper plugin tab is active, also hide the REPL (matches legacy behaviour)
-      (conductorEnabled && isConductorStepperTab(selectedTab as string)),
-    inputHidden: replDisabled,
-    replButtons: [replDisabled ? null : evalButton, clearButton],
+      isConductorStepperTab(selectedTab as string),
+    replButtons: [evalButton, clearButton],
     disableScrolling: isSicpEditor,
   };
 
@@ -1293,20 +985,16 @@ function Playground(props: PlaygroundProps) {
     controlBarProps: {
       editorButtons: [
         autorunButtons,
-        languageConfig.chapter === Chapter.FULL_JS ? null : shareButton,
+        shareButton,
         chapterSelectButton,
         isSicpEditor ? null : sessionButtons,
-        languageConfig.supports.multiFile ? toggleFolderModeButton : null,
+        toggleFolderModeButton,
         persistenceButtons,
         githubButtons,
-        usingSubst ||
-        usingCse ||
-        isCseVariant(languageConfig.variant) ||
         // Conductor languages (e.g. Python) whose selected sublanguage offers a stepper or CSE
         // machine evaluator: their step limit is user-configurable too, driven by this same
         // control through the /__cse_config__ file the host serves per run.
-        (conductorLanguageActive &&
-          (stepperEvaluatorId !== null || eStepperEvaluatorId !== null || cseEvaluatorId !== null))
+        stepperEvaluatorId !== null || eStepperEvaluatorId !== null || cseEvaluatorId !== null
           ? stepperStepLimit
           : null,
       ],
@@ -1330,7 +1018,7 @@ function Playground(props: PlaygroundProps) {
       selectedTab !== SideContentType.substVisualizer &&
       selectedTab !== SideContentType.cseMachine &&
       // When the conductor stepper plugin tab is active, also disable resizing (matches legacy behaviour)
-      !(conductorEnabled && isConductorStepperTab(selectedTab as string)),
+      !isConductorStepperTab(selectedTab as string),
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {
@@ -1342,9 +1030,9 @@ function Playground(props: PlaygroundProps) {
         editorButtons: [
           autorunButtons,
           chapterSelectButton,
-          languageConfig.chapter === Chapter.FULL_JS ? null : shareButton,
+          shareButton,
           isSicpEditor ? null : sessionButtons,
-          languageConfig.supports.multiFile ? toggleFolderModeButton : null,
+          toggleFolderModeButton,
           persistenceButtons,
           githubButtons,
         ],

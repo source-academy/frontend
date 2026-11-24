@@ -31,9 +31,8 @@ const withChapter = (chapter: number): GradingQuery =>
     })),
   }) as GradingQuery;
 
-function render(grading: GradingQuery | undefined, conductor = true) {
+function render(grading: GradingQuery | undefined) {
   const store = createMockStore<OverallState>()({
-    featureFlags: { modifiedFlags: { 'conductor.enable': conductor } },
     languageDirectory: { languages, selectedLanguageId: 'python4' },
   } as unknown as OverallState);
   renderHook(() => useSelectGradingLanguage(grading), {
@@ -64,8 +63,7 @@ describe('useSelectGradingLanguage', () => {
     expect(render(withChapter(50))).toEqual([LanguageDirectoryActions.clearSelectedLanguage()]);
   });
 
-  test('leaves the selection alone without Conductor, and without a grading', () => {
-    expect(render(withChapter(5), false)).toEqual([]);
+  test('leaves the selection alone without a grading', () => {
     expect(render(undefined)).toEqual([]);
   });
 });

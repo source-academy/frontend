@@ -230,10 +230,6 @@ const newActions = createActions('workspace', {
     context: Context,
     workspaceLocation?: WorkspaceLocation,
   ) => ({ result, lastDebuggerResult, code, context, workspaceLocation }),
-  toggleUsingSubst: (usingSubst: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
-    usingSubst,
-    workspaceLocation,
-  }),
   addHtmlConsoleError: (
     errorMsg: string,
     workspaceLocation: WorkspaceLocation,
@@ -242,14 +238,6 @@ const newActions = createActions('workspace', {
   showMcqPane: (workspaceLocation: WorkspaceLocation, options: string[]) => ({
     workspaceLocation,
     options,
-  }),
-  toggleUsingCse: (usingCse: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
-    usingCse,
-    workspaceLocation,
-  }),
-  toggleUpdateCse: (updateCse: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
-    updateCse,
-    workspaceLocation,
   }),
   toggleUsingUpload: (usingUpload: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
     usingUpload,
@@ -273,10 +261,6 @@ const newActions = createActions('workspace', {
   }),
   updateCseSnapshots: (snapshots: CseSnapshot[] | null, workspaceLocation: WorkspaceLocation) => ({
     snapshots,
-    workspaceLocation,
-  }),
-  updateLastDebuggerResult: (lastDebuggerResult: any, workspaceLocation: WorkspaceLocation) => ({
-    lastDebuggerResult,
     workspaceLocation,
   }),
   uploadFiles: (files: UploadResult, workspaceLocation: WorkspaceLocation) => ({

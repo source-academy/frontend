@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../commons/utils/Hooks';
-import { selectConductorEnable } from '../conductor/flagConductorEnable';
 import type { GradingQuery } from '../grading/GradingTypes';
 import { deriveLanguageFromChapter } from './chapterLanguage';
 import LanguageDirectoryActions from './LanguageDirectoryActions';
@@ -23,17 +22,16 @@ export function gradingChapter(grading: GradingQuery | undefined): number | unde
  * testCaseLanguage.ts), not whatever was selected last.
  *
  * It follows the submission that is shown, cached or freshly fetched, so a slow or failed refresh,
- * or a response that arrives late, cannot leave another language selected. Without Conductor, or
- * for a submission without a programming question, the selection is left alone.
+ * or a response that arrives late, cannot leave another language selected. For a submission
+ * without a programming question, the selection is left alone.
  */
 export function useSelectGradingLanguage(grading: GradingQuery | undefined): void {
   const dispatch = useAppDispatch();
-  const conductorEnabled = useAppSelector(selectConductorEnable);
   const languages = useAppSelector(state => state.languageDirectory.languages);
   const chapter = gradingChapter(grading);
 
   useEffect(() => {
-    if (!conductorEnabled || chapter === undefined) {
+    if (chapter === undefined) {
       return;
     }
     const derived = deriveLanguageFromChapter(languages, chapter);
@@ -43,5 +41,5 @@ export function useSelectGradingLanguage(grading: GradingQuery | undefined): voi
     }
     dispatch(LanguageDirectoryActions.setSelectedLanguage(derived.languageId));
     dispatch(LanguageDirectoryActions.setSelectedEvaluator(derived.evaluatorId));
-  }, [dispatch, conductorEnabled, languages, chapter]);
+  }, [dispatch, languages, chapter]);
 }

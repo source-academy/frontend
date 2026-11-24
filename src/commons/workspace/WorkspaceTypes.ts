@@ -58,10 +58,7 @@ type GradingWorkspaceAttr = {
 type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
 
 type PlaygroundWorkspaceAttr = {
-  readonly usingSubst: boolean;
-  readonly usingCse: boolean;
   readonly usingUpload: boolean;
-  readonly updateCse: boolean;
   readonly currentStep: number;
   readonly stepsTotal: number;
   readonly breakpointSteps: number[];
@@ -100,7 +97,6 @@ export type WorkspaceState = {
   readonly execTime: number;
   readonly isRunning: boolean;
   readonly isWaitingForInput: boolean;
-  readonly isDebugging: boolean;
   readonly enableDebugging: boolean;
   readonly isEditorReadonly: boolean;
   readonly output: InterpreterOutput[];
@@ -114,7 +110,6 @@ export type WorkspaceState = {
   readonly stepLimit: number;
   readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
-  readonly lastDebuggerResult: any;
   readonly cseSnapshots: CseSnapshot[] | null;
   readonly files: UploadResult;
   readonly updateUserRoleCallback: (id: string, newRole: CollabEditingAccess) => void;

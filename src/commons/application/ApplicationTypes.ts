@@ -323,7 +323,6 @@ export const defaultLanguageConfig: SALanguage = getDefaultLanguageConfig();
 
 export const defaultPlayground: PlaygroundState = {
   githubSaveInfo: { repoName: '', filePath: '' },
-  languageConfig: defaultLanguageConfig,
 };
 
 export const defaultEditorValue = '// Type your program in here!';
@@ -377,10 +376,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   globals: [],
   isRunning: false,
   isWaitingForInput: false,
-  isDebugging: false,
   enableDebugging: true,
   debuggerContext: {} as DebuggerContext,
-  lastDebuggerResult: undefined,
   cseSnapshots: null,
   files: {},
   updateUserRoleCallback: () => {},
@@ -426,9 +423,6 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   },
   playground: {
     ...createDefaultWorkspace('playground'),
-    usingSubst: false,
-    usingCse: false,
-    updateCse: true,
     usingUpload: false,
     currentStep: -1,
     stepsTotal: 0,
@@ -446,9 +440,6 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   },
   sicp: {
     ...createDefaultWorkspace('sicp'),
-    usingSubst: false,
-    usingCse: false,
-    updateCse: true,
     usingUpload: false,
     currentStep: -1,
     stepsTotal: 0,

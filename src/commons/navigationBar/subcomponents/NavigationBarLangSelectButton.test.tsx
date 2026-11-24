@@ -1,11 +1,12 @@
 import { render } from '@testing-library/react';
-import userEvent, { type UserEvent } from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-import { SupportedLanguage } from '../../../commons/application/ApplicationTypes';
+import { mockInitialStore } from '../../../commons/mocks/StoreMocks';
 import { renderTreeJson } from '../../../commons/utils/TestUtils';
+import LanguageDirectoryActions from '../../../features/directory/LanguageDirectoryActions';
 import { createStore } from '../../../pages/createStore';
 import NavigationBarLangSelectButton from './NavigationBarLangSelectButton';
 
@@ -13,43 +14,46 @@ import NavigationBarLangSelectButton from './NavigationBarLangSelectButton';
 (window as any).Inspector = vi.fn();
 (window as any).Inspector.highlightClean = vi.fn();
 
-const createAppWithStore = () => {
-  const store = createStore();
-  const app = (
-    <Provider store={store}>
-      <MemoryRouter>
-        <NavigationBarLangSelectButton />
-      </MemoryRouter>
-    </Provider>
-  );
-  return { app, store };
-};
-
 describe('NavigationBarLangSelectButton', () => {
-  let user: UserEvent;
-  beforeEach(() => {
-    user = userEvent.setup();
-  });
-
   it('should render correctly', async () => {
-    const { app } = createAppWithStore();
+    const app = (
+      <Provider store={createStore()}>
+        <MemoryRouter>
+          <NavigationBarLangSelectButton />
+        </MemoryRouter>
+      </Provider>
+    );
     const wrapper = await renderTreeJson(app);
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('should call selectLang with "JavaScript" when "JavaScript" menu item is clicked', async () => {
-    const { app, store } = createAppWithStore();
-    const container = render(app);
-
-    const button = await container.findByTestId('NavigationBarLangSelectButton');
-    await user.click(button);
-
-    // First menuitem
-    const javascriptSelector = (await container.findAllByRole('menuitem'))[0];
-    await user.click(javascriptSelector);
-
-    expect(store.getState().playground.languageConfig.mainLanguage).toEqual(
-      SupportedLanguage.JAVASCRIPT,
+  it('selects the clicked directory language', async () => {
+    const store = mockInitialStore({
+      languageDirectory: {
+        languages: [
+          { id: 'python1', name: 'Python §1', evaluators: [] },
+          { id: 'python2', name: 'Python §2', evaluators: [] },
+        ],
+        languageMap: {
+          python1: { id: 'python1', name: 'Python §1', evaluators: [] },
+          python2: { id: 'python2', name: 'Python §2', evaluators: [] },
+        },
+        selectedLanguageId: 'python1',
+      },
+    });
+    const dispatch = vi.spyOn(store, 'dispatch');
+    const container = render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <NavigationBarLangSelectButton />
+        </MemoryRouter>
+      </Provider>,
     );
+
+    const user = userEvent.setup();
+    await user.click(await container.findByTestId('NavigationBarLangSelectButton'));
+    await user.click(await container.findByText('Python §2'));
+
+    expect(dispatch).toHaveBeenCalledWith(LanguageDirectoryActions.setSelectedLanguage('python2'));
   });
 });

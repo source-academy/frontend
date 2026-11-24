@@ -13,24 +13,6 @@ export const handleCseAndStepperActions = (
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].stepLimit = action.payload.stepLimit;
     })
-    .addCase(WorkspaceActions.toggleUsingSubst, (state, action) => {
-      const { workspaceLocation } = action.payload;
-      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        state[workspaceLocation].usingSubst = action.payload.usingSubst;
-      }
-    })
-    .addCase(WorkspaceActions.toggleUsingCse, (state, action) => {
-      const { workspaceLocation } = action.payload;
-      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        state[workspaceLocation].usingCse = action.payload.usingCse;
-      }
-    })
-    .addCase(WorkspaceActions.toggleUpdateCse, (state, action) => {
-      const { workspaceLocation } = action.payload;
-      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        state[workspaceLocation].updateCse = action.payload.updateCse;
-      }
-    })
     .addCase(WorkspaceActions.updateCurrentStep, (state, action) => {
       // For some reason mutating the state directly results in type
       // errors, so we have to do it the old-fashioned way

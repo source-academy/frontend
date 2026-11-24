@@ -28,7 +28,6 @@ export function CodeSnippetProvider({ children }: { children: React.ReactNode })
     (s: string) => {
       setActive(s);
       dispatch(WorkspaceActions.resetWorkspace('sicp'));
-      dispatch(WorkspaceActions.toggleUsingSubst(false, 'sicp'));
     },
     [dispatch],
   );

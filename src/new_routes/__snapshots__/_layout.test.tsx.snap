@@ -41,28 +41,6 @@ exports[`Application renders correctly 1`] = `
             </div>
           </a>
         </span>
-        <a
-          class=""
-          data-discover="true"
-          href="/sicpjs"
-          title="SICP JS"
-        >
-          <button
-            class="bp6-button bp6-minimal"
-            type="button"
-          >
-            <span
-              aria-hidden="true"
-              class="bp6-icon bp6-icon-standard bp6-icon-book"
-              data-icon="book"
-            />
-            <span
-              class="bp6-button-text"
-            >
-              SICP JS
-            </span>
-          </button>
-        </a>
       </div>
       <div
         class="bp6-navbar-group bp6-align-right"
@@ -77,11 +55,6 @@ exports[`Application renders correctly 1`] = `
             data-testid="NavigationBarLangSelectButton"
             type="button"
           >
-            <span
-              class="bp6-button-text"
-            >
-              JavaScript
-            </span>
             <span
               aria-hidden="true"
               class="bp6-icon bp6-icon-standard bp6-icon-caret-down"
