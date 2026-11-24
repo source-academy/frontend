@@ -81,7 +81,8 @@ export function ReplInput(props: ReplInputProps) {
     }
   });
 
-  const mode = useActiveAceMode();
+  // react-ace's `mode` prop takes the short name and prepends `ace/mode/` itself.
+  const mode = useActiveAceMode().replace(/^ace\/mode\//, '');
 
   const replButtons = () => props.replButtons;
 
