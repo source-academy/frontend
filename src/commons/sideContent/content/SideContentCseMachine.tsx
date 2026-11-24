@@ -456,19 +456,13 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                 disabled={isNavDisabled || isAtFirstStep}
                 icon="chevron-left"
                 onClick={
-                  CseMachine.getControlStash()
-                    ? this.stepPrevious
-                    : this.stepPrevChangepoint
+                  CseMachine.getControlStash() ? this.stepPrevious : this.stepPrevChangepoint
                 }
               />
               <Button
                 disabled={isNavDisabled || isAtLastStep}
                 icon="chevron-right"
-                onClick={
-                  CseMachine.getControlStash()
-                    ? this.stepNext
-                    : this.stepNextChangepoint
-                }
+                onClick={CseMachine.getControlStash() ? this.stepNext : this.stepNextChangepoint}
               />
               <Button
                 disabled={isNavDisabled || isAtLastStep}
