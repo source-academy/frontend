@@ -1,6 +1,6 @@
 import { Ace, Range as AceRange } from 'ace-builds';
 import { getAllOccurrencesInScope, getScope } from 'js-slang';
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import type { EditorHook } from './Editor';
 import { createAnalysisContext, useSourceAnalysisEnabled } from './sourceAnalysis';
@@ -9,12 +9,31 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
   const enabled = useSourceAnalysisEnabled();
   const markerIdsRef = useRef<Array<number>>([]);
 
+  const clearMarkers = useCallback(() => {
+    const session = reactAceRef.current?.editor.session;
+    markerIdsRef.current.forEach(id => session?.removeMarker(id));
+    markerIdsRef.current = [];
+  }, [reactAceRef]);
+
+  // Markers outlive a change of the session's mode, so switching to a language that is not
+  // analysed has to remove them explicitly.
+  const isEnabled = enabled.current;
+  useEffect(() => {
+    if (!isEnabled) {
+      clearMarkers();
+    }
+  }, [isEnabled, clearMarkers]);
+
   const handleVariableHighlighting = useCallback(() => {
     // using Ace Editor's way of highlighting as seen here: https://github.com/ajaxorg/ace/blob/master/lib/ace/editor.js#L497
     // We use async blocks so we don't block the browser during editing
 
     setTimeout(() => {
-      if (!reactAceRef.current || !enabled.current) {
+      if (!reactAceRef.current) {
+        return;
+      }
+      if (!enabled.current) {
+        clearMarkers();
         return;
       }
       const editor = reactAceRef.current.editor;
@@ -40,7 +59,7 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
         return session.addMarker(range, markerType, 'text');
       });
     }, 10);
-  }, [reactAceRef, enabled]);
+  }, [reactAceRef, enabled, clearMarkers]);
 
   const handleHighlightScope = useCallback(() => {
     if (!reactAceRef.current || !enabled.current) {

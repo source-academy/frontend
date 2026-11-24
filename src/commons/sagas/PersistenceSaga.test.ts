@@ -121,6 +121,39 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
       .silentRun();
   });
 
+  test('selects the Source language of a file saved with a legacy chapter', () => {
+    return expectSaga(PersistenceSaga)
+      .dispatch(actions.persistenceOpenPicker())
+      .provide({
+        call(effect, next) {
+          switch (effect.fn.name) {
+            case 'pickFile':
+              return { id: FILE_ID, name: FILE_NAME, picked: true };
+            case 'showSimpleConfirmDialog':
+              return true;
+            case 'get':
+              if (effect.args[0].alt === 'media') {
+                return { body: FILE_DATA };
+              }
+              return {
+                result: { appProperties: { chapter: '2', variant: 'default', external: 'NONE' } },
+              };
+            case 'ensureInitialisedAndAuthorised':
+            case 'ensureInitialised':
+            case 'showMessage':
+            case 'showSuccessMessage':
+              return;
+          }
+          assert.fail(`unexpected function called: ${effect.fn.name}`);
+        },
+      })
+      .withState({
+        workspaces: { playground: { activeEditorTabIndex: 0, editorTabs: [{ value: FILE_DATA }] } },
+      })
+      .put(LanguageDirectoryActions.setSelectedLanguage('source2'))
+      .silentRun();
+  });
+
   test('does not open if picker cancelled', () => {
     return expectSaga(PersistenceSaga)
       .dispatch(actions.persistenceOpenPicker())

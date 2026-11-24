@@ -85,15 +85,14 @@ const PersistenceSaga = combineSagaHandlers({
         yield put(actions.updateEditorValue('playground', activeEditorTabIndex, contents.body));
         yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
         if (meta && meta.appProperties) {
-          // Files saved before the language directory recorded a Source chapter instead; those
-          // keep whatever language is currently selected.
-          if (meta.appProperties.language) {
-            yield put(
-              LanguageDirectoryActions.setSelectedLanguage(
-                meta.appProperties.language,
-                meta.appProperties.evaluator,
-              ),
-            );
+          const { language, evaluator, chapter } = meta.appProperties;
+          if (language) {
+            yield put(LanguageDirectoryActions.setSelectedLanguage(language, evaluator));
+          } else if (/^[1-4]$/.test(chapter)) {
+            // Files saved before the language directory recorded a Source chapter (their
+            // variants have no directory counterpart); the directory's Source languages are
+            // named after the chapters, as in legacy share links.
+            yield put(LanguageDirectoryActions.setSelectedLanguage(`source${chapter}`));
           }
           yield put(
             actions.externalLibrarySelect(
@@ -262,7 +261,12 @@ const PersistenceSaga = combineSagaHandlers({
       }
       const code = editorTabs[activeEditorTabIndex].value;
 
-      const config: IPlaygroundConfig = playgroundConfig(language, evaluator, external);
+      // PATCH keeps properties that are omitted; null removes them.
+      const config: IPlaygroundConfig = {
+        language: language ?? null,
+        evaluator: evaluator ?? null,
+        external,
+      };
       yield call(updateFile, id, name, MIME_SOURCE, code, config);
       yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
       yield call(showSuccessMessage, `${name} successfully saved to Google Drive.`, 1000);
@@ -280,9 +284,9 @@ const PersistenceSaga = combineSagaHandlers({
 
 /** Stored as the Drive file's `appProperties`, whose values must be strings. */
 type IPlaygroundConfig = {
-  /** Language directory ids; omitted when no language was selected. */
-  language?: string;
-  evaluator?: string;
+  /** Language directory ids; omitted (or null, to remove them) when no language was selected. */
+  language?: string | null;
+  evaluator?: string | null;
   external: string;
 };
 

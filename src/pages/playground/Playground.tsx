@@ -349,11 +349,18 @@ function Playground(props: PlaygroundProps) {
     [handleEditorValueChange],
   );
 
+  // The directory loads asynchronously, so the language is not known on mount.
+  const isLanguageDirectoryLoaded = useAppSelector(
+    state => state.languageDirectory.languages.length > 0,
+  );
+  const hasSentNewEditor = useRef(false);
+
   useEffect(() => {
     // Only the playground is expected to work with VSC for now
-    if (workspaceLocation === 'sicp') {
+    if (workspaceLocation === 'sicp' || !isLanguageDirectoryLoaded || hasSentNewEditor.current) {
       return;
     }
+    hasSentNewEditor.current = true;
     const initialCode = editorTabs[0]?.value ?? '';
     const breakpoints = editorTabs[0]?.breakpoints ?? [];
     sendToWebview(
@@ -369,7 +376,7 @@ function Playground(props: PlaygroundProps) {
     );
     // We don't want to re-send this message even when the variables change
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isLanguageDirectoryLoaded]);
 
   const pushLog = useCallback(
     (newInput: Input) => {
