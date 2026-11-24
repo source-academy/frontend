@@ -1,5 +1,5 @@
 import { type SourceError } from 'js-slang/dist/errors/base';
-import { Chapter, type Language, Variant } from 'js-slang/dist/langs';
+import { Chapter } from 'js-slang/dist/langs';
 import { type Value } from 'js-slang/dist/types';
 
 import type { AchievementState } from '../../features/achievement/AchievementTypes';
@@ -13,7 +13,6 @@ import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFile
 import { defaultFeatureFlags, type FeatureFlagsState } from '../featureFlags';
 import type { FileSystemState } from '../fileSystem/FileSystemTypes';
 import type { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
-import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import type {
   DebuggerContext,
@@ -119,170 +118,6 @@ export enum Role {
   Admin = 'admin',
 }
 
-export enum SupportedLanguage {
-  JAVASCRIPT = 'JavaScript',
-  JAVA = 'Java',
-  C = 'C',
-}
-
-export const SUPPORTED_LANGUAGES = [
-  SupportedLanguage.JAVASCRIPT,
-  SupportedLanguage.JAVA,
-  SupportedLanguage.C,
-];
-
-/**
- * Defines the languages available for use on Source Academy,
- * including Source sublanguages and other languages e.g. full JS.
- * For external libraries, see ExternalLibrariesTypes.ts
- */
-export interface SALanguage extends Language {
-  displayName: string;
-  mainLanguage: SupportedLanguage;
-  /** Whether the language supports the given features */
-  supports: LanguageFeatures;
-}
-// TODO: Remove Partial type when fully migrated
-type LanguageFeatures = Partial<{
-  dataVisualizer: boolean;
-  substVisualizer: boolean;
-  cseMachine: boolean;
-  multiFile: boolean;
-  repl: boolean;
-}>;
-
-const variantDisplay: Map<Variant, string> = new Map([
-  [Variant.TYPED, 'Typed'],
-  [Variant.WASM, 'WebAssembly'],
-  [Variant.NATIVE, 'Native'],
-  [Variant.EXPLICIT_CONTROL, 'Explicit-Control'],
-]);
-
-export const fullJSLanguage: SALanguage = {
-  chapter: Chapter.FULL_JS,
-  variant: Variant.DEFAULT,
-  displayName: 'full JavaScript',
-  mainLanguage: SupportedLanguage.JAVASCRIPT,
-  supports: { dataVisualizer: true, repl: true },
-};
-
-export const fullTSLanguage: SALanguage = {
-  chapter: Chapter.FULL_TS,
-  variant: Variant.DEFAULT,
-  displayName: 'full TypeScript',
-  mainLanguage: SupportedLanguage.JAVASCRIPT,
-  supports: { dataVisualizer: true, repl: true },
-};
-
-export const htmlLanguage: SALanguage = {
-  chapter: Chapter.HTML,
-  variant: Variant.DEFAULT,
-  displayName: 'HTML',
-  mainLanguage: SupportedLanguage.JAVASCRIPT,
-  supports: {},
-};
-
-export function isCseVariant(variant: Variant): boolean {
-  return variant == Variant.EXPLICIT_CONTROL;
-}
-
-export const javaLanguages: SALanguage[] = [
-  {
-    chapter: Chapter.FULL_JAVA,
-    variant: Variant.DEFAULT,
-    displayName: 'Java',
-    mainLanguage: SupportedLanguage.JAVA,
-    supports: { cseMachine: true },
-  },
-];
-export const cLanguages: SALanguage[] = [
-  {
-    chapter: Chapter.FULL_C,
-    variant: Variant.DEFAULT,
-    displayName: 'C',
-    mainLanguage: SupportedLanguage.C,
-    supports: {},
-  },
-];
-
-export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
-  return getLanguageConfig(chapter, variant).displayName;
-};
-
-const sourceSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant'>> = [
-  { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT },
-  { chapter: Chapter.SOURCE_1, variant: Variant.TYPED },
-  { chapter: Chapter.SOURCE_1, variant: Variant.WASM },
-  { chapter: Chapter.SOURCE_1, variant: Variant.NATIVE },
-
-  { chapter: Chapter.SOURCE_2, variant: Variant.DEFAULT },
-  { chapter: Chapter.SOURCE_2, variant: Variant.TYPED },
-  { chapter: Chapter.SOURCE_2, variant: Variant.NATIVE },
-
-  { chapter: Chapter.SOURCE_3, variant: Variant.DEFAULT },
-  { chapter: Chapter.SOURCE_3, variant: Variant.TYPED },
-  { chapter: Chapter.SOURCE_3, variant: Variant.NATIVE },
-
-  { chapter: Chapter.SOURCE_4, variant: Variant.DEFAULT },
-  { chapter: Chapter.SOURCE_4, variant: Variant.TYPED },
-  { chapter: Chapter.SOURCE_4, variant: Variant.NATIVE },
-  { chapter: Chapter.SOURCE_4, variant: Variant.EXPLICIT_CONTROL },
-];
-
-export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
-  const { chapter, variant } = sublang;
-  const supportedFeatures: LanguageFeatures = {};
-
-  // Enable Data Visualizer for Source Chapter 2 and above
-  supportedFeatures.dataVisualizer = chapter >= Chapter.SOURCE_2;
-
-  // Enable Subst Visualizer only for default Source 1 & 2
-  supportedFeatures.substVisualizer =
-    chapter <= Chapter.SOURCE_2 &&
-    (variant === Variant.DEFAULT || variant === Variant.NATIVE || variant === Variant.TYPED);
-
-  // Enable CSE Machine for Source Chapter 3 and above
-  supportedFeatures.cseMachine = chapter >= Chapter.SOURCE_3;
-
-  // Local imports/exports require Source 2+ as Source 1 does not have lists.
-  supportedFeatures.multiFile = chapter >= Chapter.SOURCE_2;
-
-  // Disable REPL for concurrent variants
-  supportedFeatures.repl = true;
-
-  return {
-    ...sublang,
-    displayName: `Source \xa7${chapter} ${variantDisplay.get(variant) ?? ''}`.trim(),
-    mainLanguage: SupportedLanguage.JAVASCRIPT,
-    supports: supportedFeatures,
-  };
-});
-
-export const isSourceLanguage = (chapter: Chapter) =>
-  [Chapter.SOURCE_1, Chapter.SOURCE_2, Chapter.SOURCE_3, Chapter.SOURCE_4].includes(chapter);
-
-export const ALL_LANGUAGES: readonly SALanguage[] = [
-  ...sourceLanguages,
-  fullJSLanguage,
-  fullTSLanguage,
-  htmlLanguage,
-  ...javaLanguages,
-  ...cLanguages,
-];
-// TODO: Remove this function once logic has been fully migrated
-export const getLanguageConfig = (
-  chapter: Chapter,
-  variant: Variant = Variant.DEFAULT,
-): SALanguage => {
-  const languageConfig = ALL_LANGUAGES.find(
-    lang => lang.chapter === chapter && lang.variant === variant,
-  );
-  if (!languageConfig) {
-    throw new Error(`Language config not found for chapter ${chapter} variant ${variant}`);
-  }
-  return languageConfig;
-};
-
 export const defaultRouter: RouterState = null;
 
 export const defaultDashboard: DashboardState = {
@@ -308,19 +143,6 @@ export const defaultLeaderboard: LeaderboardState = {
   initialRun: {},
 };
 
-const getDefaultLanguageConfig = (): SALanguage => {
-  const languageConfig = ALL_LANGUAGES.find(
-    sublang =>
-      sublang.chapter === Constants.defaultSourceChapter &&
-      sublang.variant === Constants.defaultSourceVariant,
-  );
-  if (!languageConfig) {
-    throw new Error('Cannot find language config to match default chapter and variant');
-  }
-  return languageConfig;
-};
-export const defaultLanguageConfig: SALanguage = getDefaultLanguageConfig();
-
 export const defaultPlayground: PlaygroundState = {
   githubSaveInfo: { repoName: '', filePath: '' },
 };
@@ -335,12 +157,8 @@ export const defaultEditorValue = '// Type your program in here!';
  */
 export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): WorkspaceState => ({
   autogradingResults: [],
-  context: createContext<WorkspaceLocation>(
-    Constants.defaultSourceChapter,
-    [],
-    workspaceLocation,
-    Constants.defaultSourceVariant,
-  ),
+  // TODO: goes away with the legacy local execution (js-slang `Context`) in workspace state
+  context: createContext<WorkspaceLocation>(Chapter.SOURCE_4, [], workspaceLocation),
   isFolderModeEnabled: false,
   activeEditorTabIndex: 0,
   editorTabs: [

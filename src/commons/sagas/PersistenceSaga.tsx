@@ -2,9 +2,9 @@
 /// <reference types="gapi.client.drive-v3" />
 /// <reference types="google.picker" />
 import { Intent } from '@blueprintjs/core';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { call, put, select } from 'redux-saga/effects';
 
+import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
 import type { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import { store } from '../../pages/createStore';
 import type { OverallState } from '../application/ApplicationTypes';
@@ -85,13 +85,16 @@ const PersistenceSaga = combineSagaHandlers({
         yield put(actions.updateEditorValue('playground', activeEditorTabIndex, contents.body));
         yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
         if (meta && meta.appProperties) {
-          yield put(
-            actions.chapterSelect(
-              parseInt(meta.appProperties.chapter || '4', 10) as Chapter,
-              meta.appProperties.variant || Variant.DEFAULT,
-              'playground',
-            ),
-          );
+          // Files saved before the language directory recorded a Source chapter instead; those
+          // keep whatever language is currently selected.
+          if (meta.appProperties.language) {
+            yield put(
+              LanguageDirectoryActions.setSelectedLanguage(
+                meta.appProperties.language,
+                meta.appProperties.evaluator,
+              ),
+            );
+          }
           yield put(
             actions.externalLibrarySelect(
               Object.values(ExternalLibraryName).find(v => v === meta.appProperties.external) ||
@@ -118,12 +121,12 @@ const PersistenceSaga = combineSagaHandlers({
       try {
         yield call(ensureInitialisedAndAuthorised);
 
-        const [activeEditorTabIndex, editorTabs, chapter, variant, external] = yield select(
+        const [activeEditorTabIndex, editorTabs, language, evaluator, external] = yield select(
           (state: OverallState) => [
             state.workspaces.playground.activeEditorTabIndex,
             state.workspaces.playground.editorTabs,
-            state.workspaces.playground.context.chapter,
-            state.workspaces.playground.context.variant,
+            state.languageDirectory.selectedLanguageId,
+            state.languageDirectory.selectedEvaluatorId,
             state.workspaces.playground.externalLibrary,
           ],
         );
@@ -197,11 +200,7 @@ const PersistenceSaga = combineSagaHandlers({
             return;
           }
 
-          const config: IPlaygroundConfig = {
-            chapter,
-            variant,
-            external,
-          };
+          const config: IPlaygroundConfig = playgroundConfig(language, evaluator, external);
 
           toastKey = yield call(showMessage, {
             message: `Saving as ${response.value}...`,
@@ -249,20 +248,21 @@ const PersistenceSaga = combineSagaHandlers({
       const {
         activeEditorTabIndex,
         editorTabs,
-        context: { chapter, variant },
         externalLibrary: external,
       } = yield* selectWorkspace('playground');
+      const [language, evaluator]: [string | null, string | null] = yield select(
+        (state: OverallState) => [
+          state.languageDirectory.selectedLanguageId,
+          state.languageDirectory.selectedEvaluatorId,
+        ],
+      );
 
       if (activeEditorTabIndex === null) {
         throw new Error('No active editor tab found.');
       }
       const code = editorTabs[activeEditorTabIndex].value;
 
-      const config: IPlaygroundConfig = {
-        chapter,
-        variant,
-        external,
-      };
+      const config: IPlaygroundConfig = playgroundConfig(language, evaluator, external);
       yield call(updateFile, id, name, MIME_SOURCE, code, config);
       yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
       yield call(showSuccessMessage, `${name} successfully saved to Google Drive.`, 1000);
@@ -278,11 +278,23 @@ const PersistenceSaga = combineSagaHandlers({
   [actions.persistenceInitialise.type]: ensureInitialised as any,
 });
 
-interface IPlaygroundConfig {
-  chapter: Chapter;
-  variant: string;
+/** Stored as the Drive file's `appProperties`, whose values must be strings. */
+type IPlaygroundConfig = {
+  /** Language directory ids; omitted when no language was selected. */
+  language?: string;
+  evaluator?: string;
   external: string;
-}
+};
+
+const playgroundConfig = (
+  language: string | null,
+  evaluator: string | null,
+  external: string,
+): IPlaygroundConfig => ({
+  ...(language ? { language } : {}),
+  ...(evaluator ? { evaluator } : {}),
+  external,
+});
 
 // Reason for this: we don't want to initialise and load the gapi JS until
 // it is actually needed

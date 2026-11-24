@@ -1,10 +1,11 @@
-import { createContext, hasDeclaration } from 'js-slang';
-import { Variant } from 'js-slang/dist/langs';
+import { hasDeclaration } from 'js-slang';
 import { useCallback, useRef } from 'react';
 
+import { useLanguageDocumentation } from '../../features/directory/useLanguageDocumentation';
 import { Documentation } from '../documentation/Documentation';
 import { Links } from '../utils/Constants';
 import type { EditorHook } from './Editor';
+import { createAnalysisContext, useSourceAnalysisEnabled } from './sourceAnalysis';
 
 // EditorHook structure:
 // EditorHooks grant access to 4 things:
@@ -16,12 +17,19 @@ import type { EditorHook } from './Editor';
 const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
   const propsRef = useRef(inProps);
   propsRef.current = inProps;
+  const enabled = useSourceAnalysisEnabled();
+  const documentation = useLanguageDocumentation();
+  const documentationRef = useRef(documentation);
+  documentationRef.current = documentation;
 
   const handleNavigate = useCallback(() => {
+    if (!enabled.current) {
+      return;
+    }
     const editor = reactAceRef.current!.editor;
     const pos = editor.selection.getCursor();
     const token = editor.session.getTokenAt(pos.row, pos.column);
-    const { sourceChapter, handleDeclarationNavigate } = propsRef.current;
+    const { handleDeclarationNavigate } = propsRef.current;
 
     handleDeclarationNavigate(editor.getCursorPosition());
 
@@ -31,7 +39,7 @@ const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) 
     }
 
     if (
-      hasDeclaration(editor.getValue(), createContext(sourceChapter), {
+      hasDeclaration(editor.getValue(), createAnalysisContext(), {
         line: newPos.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
         column: newPos.column,
       })
@@ -40,10 +48,7 @@ const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) 
     }
 
     const url = Links.sourceDocs;
-    const sourceVariant =
-      propsRef.current.sourceVariant === Variant.DEFAULT
-        ? ''
-        : `_${propsRef.current.sourceVariant}`;
+    const languageDocsUrl = documentationRef.current?.languageDocsUrl;
     const external =
       propsRef.current.externalLibraryName === undefined
         ? 'NONE'
@@ -60,15 +65,16 @@ const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) 
         window.open(`${url}${externalUrl}/global.html#${token.value}`); // opens external library link
       }
     } else if (
+      languageDocsUrl &&
       token !== null &&
       (/\bsupport.function\b/.test(token.type) || /\bbuiltinconsts\b/.test(token.type))
     ) {
-      window.open(`${url}source_${sourceChapter}${sourceVariant}/global.html#${token.value}`); // opens builtn library link
+      window.open(`${languageDocsUrl}global.html#${token.value}`); // opens builtin library link
     }
-    if (token !== null && /\bstorage.type\b/.test(token.type)) {
-      window.open(`${url}source_${sourceChapter}.pdf`);
+    if (languageDocsUrl && token !== null && /\bstorage.type\b/.test(token.type)) {
+      window.open(languageDocsUrl);
     }
-  }, [reactAceRef]);
+  }, [reactAceRef, enabled]);
 
   keyBindings.navigate = handleNavigate;
 };

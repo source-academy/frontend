@@ -10,7 +10,6 @@ type Props = {
   isEntrypointFileDefined: boolean;
   isRunning: boolean;
   key: string;
-  sourceChapter?: number;
 };
 
 function ControlBarAutorunButtons(props: Props) {

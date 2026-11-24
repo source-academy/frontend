@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/langs';
+import { Chapter } from 'js-slang/dist/langs';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import type { UpdateCourseConfiguration } from 'src/commons/application/types/SessionTypes';
 import type { UsernameRoleGroup } from 'src/features/adminPanel/subcomponents/AddUserPanel';
@@ -33,7 +33,6 @@ test('createCourse generates correct action object', () => {
     enableOverallLeaderboard: true,
     enableContestLeaderboard: true,
     sourceChapter: Chapter.SOURCE_1,
-    sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text',
   };
 

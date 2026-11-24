@@ -10,14 +10,13 @@ import { selectWorkspace } from '../../SafeEffects';
 
 export function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCode: string) {
   const {
-    context: { chapter, externalSymbols: symbols, variant, languageOptions },
+    context: { chapter, externalSymbols: symbols, languageOptions },
     externalLibrary: externalLibraryName,
     globals,
   } = yield* selectWorkspace(workspaceLocation);
 
   const library = {
     chapter,
-    variant,
     external: {
       name: externalLibraryName,
       symbols,

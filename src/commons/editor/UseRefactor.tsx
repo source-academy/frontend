@@ -1,8 +1,9 @@
 import { Range } from 'ace-builds';
-import { createContext, getAllOccurrencesInScope } from 'js-slang';
+import { getAllOccurrencesInScope } from 'js-slang';
 import { useCallback } from 'react';
 
 import type { EditorHook } from './Editor';
+import { createAnalysisContext, useSourceAnalysisEnabled } from './sourceAnalysis';
 
 // EditorHook structure:
 // EditorHooks grant access to 4 things:
@@ -12,16 +13,16 @@ import type { EditorHook } from './Editor';
 // reactAceRef is the underlying reactAce instance for hooking.
 
 const useRefactor: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
-  const { sourceChapter } = inProps;
+  const enabled = useSourceAnalysisEnabled();
 
   const refactor = useCallback(() => {
     const editor = reactAceRef.current!.editor;
-    if (!editor) {
+    if (!editor || !enabled.current) {
       return;
     }
     const code = editor.getValue();
     const position = editor.getCursorPosition();
-    const sourceLocations = getAllOccurrencesInScope(code, createContext(sourceChapter), {
+    const sourceLocations = getAllOccurrencesInScope(code, createAnalysisContext(), {
       line: position.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
       column: position.column,
     });
@@ -31,7 +32,7 @@ const useRefactor: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       loc => new Range(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column),
     );
     ranges.forEach(range => selection.addRange(range));
-  }, [reactAceRef, sourceChapter]);
+  }, [reactAceRef, enabled]);
 
   keyBindings.refactor = refactor;
 };

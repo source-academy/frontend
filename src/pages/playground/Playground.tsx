@@ -226,8 +226,12 @@ function Playground(props: PlaygroundProps) {
     sharedbConnected,
     isFolderModeEnabled,
     activeEditorTabIndex,
-    context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant },
   } = useAppSelector(state => state.workspaces[workspaceLocation]);
+  // The selected language's 1-based position in the language directory (0 if none).
+  const languagePosition = useAppSelector(state => {
+    const { languages, selectedLanguageId } = state.languageDirectory;
+    return languages.findIndex(language => language.id === selectedLanguageId) + 1;
+  });
   const fileSystem = useAppSelector(state => state.fileSystem.inBrowserFileSystem);
   const { queryString, shortURL, persistenceFile, githubSaveInfo } = useAppSelector(
     state => state.playground,
@@ -273,7 +277,7 @@ function Playground(props: PlaygroundProps) {
     initSession('playground', {
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorValue: editorTabs[0]?.value ?? '',
-      chapter: playgroundSourceChapter,
+      chapter: languagePosition,
     }),
   );
   const [users, setUsers] = useState<Record<string, SharedbAceUser>>({});
@@ -307,7 +311,7 @@ function Playground(props: PlaygroundProps) {
       initSession('playground', {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         editorValue: editorTabs[0]?.value ?? '',
-        chapter: playgroundSourceChapter,
+        chapter: languagePosition,
       }),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -357,7 +361,7 @@ function Playground(props: PlaygroundProps) {
         workspaceLocation,
         'playground',
         1,
-        playgroundSourceChapter,
+        languagePosition,
         '',
         initialCode,
         breakpoints,
@@ -916,9 +920,7 @@ function Playground(props: PlaygroundProps) {
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
     onLoad: isSicpEditor && props.prependLength ? onLoadMethod : undefined,
-    sourceChapter: playgroundSourceChapter,
     externalLibraryName,
-    sourceVariant: playgroundSourceVariant,
     handleEditorValueChange: onEditorValueChange,
     handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
     setUsers,
@@ -941,8 +943,6 @@ function Playground(props: PlaygroundProps) {
     handleBrowseHistoryDown: replHandlers.handleBrowseHistoryDown,
     handleBrowseHistoryUp: replHandlers.handleBrowseHistoryUp,
     handleReplValueChange: replHandlers.handleReplValueChange,
-    sourceChapter: playgroundSourceChapter,
-    sourceVariant: playgroundSourceVariant,
     externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
     hidden:
       selectedTab === SideContentType.substVisualizer ||

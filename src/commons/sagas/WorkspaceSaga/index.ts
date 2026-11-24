@@ -2,7 +2,7 @@ import { type AutoCompleteEntry, WEB_PLUGIN_ID } from '@sourceacademy/common-aut
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { type Context, findDeclaration } from 'js-slang';
-import { Chapter, Variant } from 'js-slang/dist/langs';
+import { Chapter } from 'js-slang/dist/langs';
 import Phaser from 'phaser';
 import type { EventChannel } from 'redux-saga';
 import { call, delay, put, race, select, take } from 'redux-saga/effects';
@@ -19,11 +19,7 @@ import { selectDefaultFileExtension } from '../../../features/directory/Language
 import { selectTestCaseLanguage } from '../../../features/directory/testCaseLanguage';
 import type { DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';
-import {
-  defaultEditorValue,
-  type OverallState,
-  styliseSublanguage,
-} from '../../application/ApplicationTypes';
+import { defaultEditorValue, type OverallState } from '../../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
 import type { Library, Testcase } from '../../assessment/AssessmentTypes';
 import { writeFileRecursively } from '../../fileSystem/utils';
@@ -33,7 +29,6 @@ import {
   showSuccessMessage,
   showWarningMessage,
 } from '../../utils/notifications/NotificationsHelper';
-import { showFullJSDisclaimer, showFullTSDisclaimer } from '../../utils/WarningDialogHelper';
 import { getPreparedConductorSaga } from '../helpers/conductorEvaluatorCache';
 import { selectWorkspace } from '../SafeEffects';
 import { evalCodeConductorSaga } from './helpers/evalCode';
@@ -256,50 +251,6 @@ const WorkspaceSaga = combineSagaHandlers({
     yield put(actions.addEvent([EventType.RUN_TESTCASE], workspaceLocation));
     const index = action.payload.testcaseId;
     yield* runTestCase(workspaceLocation, index);
-  },
-  [WorkspaceActions.chapterSelect.type]: function* (action) {
-    const { workspaceLocation, chapter: newChapter, variant: newVariant } = action.payload;
-    const [oldVariant, oldChapter, symbols, globals, externalLibraryName]: [
-      Variant,
-      Chapter,
-      string[],
-      Array<[string, any]>,
-      ExternalLibraryName,
-    ] = yield select((state: OverallState) => [
-      state.workspaces[workspaceLocation].context.variant,
-      state.workspaces[workspaceLocation].context.chapter,
-      state.workspaces[workspaceLocation].context.externalSymbols,
-      state.workspaces[workspaceLocation].globals,
-      state.workspaces[workspaceLocation].externalLibrary,
-    ]);
-
-    const chapterChanged: boolean = newChapter !== oldChapter || newVariant !== oldVariant;
-    const toChangeChapter: boolean =
-      newChapter === Chapter.FULL_JS
-        ? chapterChanged && (yield call(showFullJSDisclaimer))
-        : newChapter === Chapter.FULL_TS
-          ? chapterChanged && (yield call(showFullTSDisclaimer))
-          : chapterChanged;
-
-    if (toChangeChapter) {
-      const library: Library = {
-        chapter: newChapter,
-        variant: newVariant,
-        external: {
-          name: externalLibraryName,
-          symbols,
-        },
-        globals,
-      };
-      yield put(actions.beginClearContext(workspaceLocation, library, false));
-      yield put(actions.clearReplOutput(workspaceLocation));
-      yield put(actions.resetSideContent(workspaceLocation));
-      yield call(
-        showSuccessMessage,
-        `Switched to ${styliseSublanguage(newChapter, newVariant)}`,
-        1000,
-      );
-    }
   },
   /**
    * Note that the PLAYGROUND_EXTERNAL_SELECT action is made to

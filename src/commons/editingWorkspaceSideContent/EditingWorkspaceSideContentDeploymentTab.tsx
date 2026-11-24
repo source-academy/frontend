@@ -2,13 +2,7 @@ import { Button, Classes, Divider, MenuItem, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import type { ItemRenderer } from '@blueprintjs/select';
 import { Select } from '@blueprintjs/select';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 
-import {
-  type SALanguage,
-  sourceLanguages,
-  styliseSublanguage,
-} from '../application/ApplicationTypes';
 import {
   type External,
   externalLibraries,
@@ -16,6 +10,7 @@ import {
 } from '../application/types/ExternalTypes';
 import { type Assessment, emptyLibrary, type Library } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
+import DeploymentLanguageSelect from './DeploymentLanguageSelect';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 
@@ -98,7 +93,7 @@ function DeploymentTab(props: Props) {
         <Divider />
         Interpreter:
         <br />
-        {chapterSelect(deployment.chapter, deployment.variant, handleChapterSelect)}
+        <DeploymentLanguageSelect chapter={deployment.chapter} onSelect={handleChapterSelect} />
         <Divider />
         {symbolsFragment}
         <Divider />
@@ -172,10 +167,10 @@ function DeploymentTab(props: Props) {
     props.updateAssessment(assessment);
   };
 
-  const handleChapterSelect = (i: SALanguage, _e?: React.SyntheticEvent<HTMLElement>) => {
+  const handleChapterSelect = (chapter: number) => {
     const assessment = props.assessment;
     const deployment = getValueFromPath(props.pathToLibrary, assessment) as Library;
-    deployment.chapter = i.chapter;
+    deployment.chapter = chapter;
     props.updateAssessment(assessment);
   };
 
@@ -238,30 +233,6 @@ const removeSpaces = (str: string | number) => {
 const altEval = (str: string): any => {
   return Function('"use strict";return (' + str + ')')();
 };
-
-const chapterSelect = (
-  currentChap: Chapter,
-  variant: Variant = Variant.DEFAULT,
-  handleSelect = (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => {},
-) => (
-  <Select<SALanguage>
-    className={Classes.MINIMAL}
-    items={sourceLanguages}
-    onItemSelect={handleSelect}
-    itemRenderer={chapterRenderer}
-    filterable={false}
-  >
-    <Button
-      variant="minimal"
-      text={styliseSublanguage(currentChap, variant)}
-      endIcon={IconNames.DOUBLE_CARET_VERTICAL}
-    />
-  </Select>
-);
-
-const chapterRenderer: ItemRenderer<SALanguage> = (chap, { handleClick, modifiers, query }) => (
-  <MenuItem active={false} key={chap.displayName} onClick={handleClick} text={chap.displayName} />
-);
 
 const iExternals = Array.from(externalLibraries.entries()).map((entry, index) => ({
   name: entry[0] as ExternalLibraryName,

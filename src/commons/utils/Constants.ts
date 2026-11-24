@@ -1,5 +1,3 @@
-import { Chapter, Variant } from 'js-slang/dist/langs';
-
 import { AuthProviderType } from './AuthHelper';
 
 function isTrue(value?: string, defaultTo?: boolean): boolean {
@@ -26,8 +24,6 @@ const useBackend = !isTest && isTrue(process.env.REACT_APP_USE_BACKEND);
  */
 const forwardLoadBalancerCookies = isTrue(process.env.REACT_APP_FORWARD_LOAD_BALANCER_COOKIES);
 const useEmptyAssetPrefix = isTrue(process.env.REACT_APP_USE_EMPTY_ASSET_PREFIX);
-const defaultSourceChapter = Chapter.SOURCE_4;
-const defaultSourceVariant = Variant.DEFAULT;
 const defaultQuestionId = 0;
 const maxBrowseIndex = 50;
 const mobileBreakpoint = 768;
@@ -181,8 +177,6 @@ const Constants = {
   useBackend,
   forwardLoadBalancerCookies,
   useEmptyAssetPrefix,
-  defaultSourceChapter,
-  defaultSourceVariant,
   defaultQuestionId,
   maxBrowseIndex,
   mobileBreakpoint,

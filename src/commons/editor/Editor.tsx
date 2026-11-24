@@ -22,12 +22,10 @@ import 'ace-builds/src-noconflict/keybinding-vim';
 import { Card } from '@blueprintjs/core';
 import * as AceBuilds from 'ace-builds';
 import { Ace, require as acequire, createEditSession } from 'ace-builds';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { IAceEditorProps, IEditorProps } from 'react-ace';
 import AceEditor from 'react-ace';
 import type { IAceEditor } from 'react-ace/lib/types';
-import type { SALanguage } from '../application/ApplicationTypes';
 import { objectEntries } from '../utils/TypeHelper';
 import { EditorBinding } from '../WorkspaceSettingsContext';
 import { type KeyFunction, keyBindings } from './EditorHotkeys';
@@ -67,15 +65,11 @@ type DispatchProps = {
 type EditorStateProps = {
   editorSessionId: string;
   sessionDetails: { docId: string; readOnly: boolean; owner: boolean } | null;
-  sourceChapter?: Chapter;
   externalLibraryName?: string;
-  sourceVariant?: Variant;
   hooks?: EditorHook[];
   editorBinding?: EditorBinding;
   mode?: string;
   setUsers?: React.Dispatch<React.SetStateAction<Record<string, SharedbAceUser>>>;
-  // TODO: Handle changing of external library
-  updateLanguageCallback?: (sublanguage: SALanguage, e: any) => void;
 };
 
 export type EditorTabStateProps = {
@@ -401,6 +395,8 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     };
   }, []);
 
+  const conductorMode = useActiveAceMode();
+
   useLayoutEffect(() => {
     if (editor === undefined) {
       return;
@@ -420,7 +416,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     session.on('changeAnnotation' as any, makeHandleAnnotationChange(session));
 
     // Start autocompletion
-    if (props.sourceChapter === Chapter.FULL_C || props.sourceChapter === Chapter.FULL_JAVA) {
+    if (conductorMode === 'ace/mode/c_cpp' || conductorMode === 'ace/mode/java') {
       // for C, Java language, use the default autocomplete provided by ace editor
       const { textCompleter, keyWordCompleter, setCompleters } = acequire('ace/ext/language_tools');
       setCompleters([textCompleter, keyWordCompleter]);
@@ -429,7 +425,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
         makeCompleter((...args) => handlePromptAutocompleteRef.current(...args)),
       ]);
     }
-  }, [editor, props.sourceChapter, props.editorTabIndex]);
+  }, [editor, conductorMode, props.editorTabIndex]);
 
   useLayoutEffect(() => {
     if (editor === undefined) {
@@ -450,8 +446,6 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
       handleEditorEvalRef.current();
     },
   };
-
-  const conductorMode = useActiveAceMode();
 
   useLayoutEffect(() => {
     if (!reactAceRef.current) {

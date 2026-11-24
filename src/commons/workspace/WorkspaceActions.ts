@@ -1,9 +1,7 @@
 import type { Context } from 'js-slang';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 
 import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
 import type { AllColsSortStates } from '../../features/grading/GradingTypes';
-import type { SALanguage } from '../application/ApplicationTypes';
 import type { ExternalLibraryName } from '../application/types/ExternalTypes';
 import type { Library } from '../assessment/AssessmentTypes';
 import type { HighlightedLines, Position } from '../editor/EditorTypes';
@@ -36,11 +34,6 @@ const newActions = createActions('workspace', {
   }),
   changeStepLimit: (stepLimit: number, workspaceLocation: WorkspaceLocation) => ({
     stepLimit,
-    workspaceLocation,
-  }),
-  chapterSelect: (chapter: Chapter, variant: Variant, workspaceLocation: WorkspaceLocation) => ({
-    chapter,
-    variant,
     workspaceLocation,
   }),
   externalLibrarySelect: (
@@ -215,8 +208,8 @@ const newActions = createActions('workspace', {
     workspaceLocation,
     hasUnsavedChanges,
   }),
-  changeSublanguage: (sublang: Pick<SALanguage, 'chapter' | 'variant'>) => ({ sublang }),
-  updateSublanguage: (sublang: SALanguage) => ({ sublang }),
+  /** Sets the course's default language: a 1-based position in the language directory. */
+  changeDefaultLanguage: (sourceChapter: number) => ({ sourceChapter }),
   promptAutocomplete: (
     workspaceLocation: WorkspaceLocation,
     row: number,

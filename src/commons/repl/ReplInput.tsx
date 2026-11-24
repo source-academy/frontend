@@ -3,7 +3,6 @@ import '../editor/ace/sourceTheme';
 import { Classes } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useEffect, useRef } from 'react';
 import AceEditor from 'react-ace';
 import ReactAce from 'react-ace/lib/ace';
@@ -21,8 +20,6 @@ export type ReplInputProps = {
   onFocus?: (editor: Ace.Editor) => void;
   onBlur?: () => void;
   replValue: string;
-  sourceChapter: Chapter;
-  sourceVariant: Variant;
   externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
   replButtons: Array<React.ReactElement | null>;

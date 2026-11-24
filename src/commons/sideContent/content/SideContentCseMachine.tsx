@@ -550,7 +550,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
         this.props.machineOutput.length &&
         this.props.machineOutput[0].type === 'errors' ? (
           this.props.machineOutput.map((slice, index) => (
-            <Output output={slice} key={index} usingSubst={false} isHtml={false} />
+            <Output output={slice} key={index} usingSubst={false} />
           ))
         ) : (
           <div />

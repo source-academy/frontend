@@ -1,7 +1,7 @@
 import { SlingClient } from '@sourceacademy/sling-client';
 import { assemble, compileFiles, type Context } from 'js-slang';
 import { ExceptionError } from 'js-slang/dist/errors/errors';
-import { Chapter, Variant } from 'js-slang/dist/langs';
+import { Chapter } from 'js-slang/dist/langs';
 import { pickBy } from 'lodash-es';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import RemoteExecutionActions from 'src/features/remoteExecution/RemoteExecutionActions';
@@ -194,7 +194,6 @@ const RemoteExecutionSaga = combineSagaHandlers({
         workspace,
         {
           chapter: deviceType?.languageChapter || Chapter.SOURCE_3,
-          variant: Variant.DEFAULT,
           external: {
             name: deviceType?.deviceLibraryName || ExternalLibraryName.NONE,
             symbols: deviceType?.internalFunctions || [],

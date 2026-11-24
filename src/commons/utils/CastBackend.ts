@@ -14,7 +14,6 @@ export const castLibrary = (lib: any): Library => ({
   },
   // backend provides `null` if these fields are not set, but frontend wants undefined (for defaulting)
   execTimeMs: lib.execTimeMs == null ? undefined : lib.execTimeMs,
-  variant: lib.variant == null ? undefined : lib.variant,
   /** globals are passed as an object, mapping symbol name -> value */
   globals: Object.entries(lib.globals as object).map(entry => {
     /** The value that is passed is evaluated into an actual JS value */

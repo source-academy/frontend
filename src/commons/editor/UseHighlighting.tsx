@@ -1,12 +1,12 @@
 import { Ace, Range as AceRange } from 'ace-builds';
-import { createContext, getAllOccurrencesInScope, getScope } from 'js-slang';
+import { getAllOccurrencesInScope, getScope } from 'js-slang';
 import { useCallback, useRef } from 'react';
 
 import type { EditorHook } from './Editor';
+import { createAnalysisContext, useSourceAnalysisEnabled } from './sourceAnalysis';
 
 const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
-  const propsRef = useRef(inProps);
-  propsRef.current = inProps;
+  const enabled = useSourceAnalysisEnabled();
   const markerIdsRef = useRef<Array<number>>([]);
 
   const handleVariableHighlighting = useCallback(() => {
@@ -14,13 +14,12 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
     // We use async blocks so we don't block the browser during editing
 
     setTimeout(() => {
-      if (!reactAceRef.current) {
+      if (!reactAceRef.current || !enabled.current) {
         return;
       }
       const editor = reactAceRef.current.editor;
       const session: Ace.EditSession = editor.session;
       const code = session.getValue();
-      const chapterNumber = propsRef.current.sourceChapter;
       const position = editor.getCursorPosition();
       if (!session || !(session as any).bgTokenizer) {
         return;
@@ -28,7 +27,7 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
       markerIdsRef.current.forEach(id => {
         session.removeMarker(id);
       });
-      const ranges = getAllOccurrencesInScope(code, createContext(chapterNumber), {
+      const ranges = getAllOccurrencesInScope(code, createAnalysisContext(), {
         line: position.row + 1,
         column: position.column,
       }).map(
@@ -41,18 +40,17 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
         return session.addMarker(range, markerType, 'text');
       });
     }, 10);
-  }, [reactAceRef]);
+  }, [reactAceRef, enabled]);
 
   const handleHighlightScope = useCallback(() => {
-    if (!reactAceRef.current) {
+    if (!reactAceRef.current || !enabled.current) {
       return;
     }
     const editor = reactAceRef.current.editor;
     const code = editor.getValue();
-    const chapter = propsRef.current.sourceChapter;
     const position = editor.getCursorPosition();
 
-    const ranges = getScope(code, createContext(chapter), {
+    const ranges = getScope(code, createAnalysisContext(), {
       line: position.row + 1,
       column: position.column,
     });
@@ -74,7 +72,7 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
         );
       });
     }
-  }, [reactAceRef]);
+  }, [reactAceRef, enabled]);
 
   const { onChange: prevOnChange, onCursorChange: prevOnCursorChange } = outProps;
   outProps.onChange = useCallback(
