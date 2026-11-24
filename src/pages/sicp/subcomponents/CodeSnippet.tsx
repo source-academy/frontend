@@ -1,5 +1,4 @@
 import { Card, Elevation, Pre } from '@blueprintjs/core';
-import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Resizable } from 're-resizable';
 import { useCallback, useMemo } from 'react';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -65,9 +64,6 @@ function CodeSnippet({
 
     handleCloseEditor: handleClose,
   };
-
-  HighlightRulesSelector(4);
-  ModeSelector(4);
 
   const closeButton = useMemo(
     () => <ControlBarCloseButton key="close" handleClose={handleClose} />,
