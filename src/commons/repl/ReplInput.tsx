@@ -1,3 +1,5 @@
+import '../editor/ace/sourceTheme';
+
 import { Classes } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
 import classNames from 'classnames';
@@ -7,7 +9,7 @@ import AceEditor from 'react-ace';
 import ReactAce from 'react-ace/lib/ace';
 
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { getModeString, selectMode } from '../utils/AceHelper';
+import { useActiveAceMode } from '../editor/useActiveAceMode';
 import { useResponsive } from '../utils/Hooks';
 // source mode and chapter imported in Editor.tsx
 
@@ -79,8 +81,7 @@ export function ReplInput(props: ReplInputProps) {
     }
   });
 
-  // see the comment above this same call in Editor.tsx
-  selectMode(props.sourceChapter, props.sourceVariant, props.externalLibrary);
+  const mode = useActiveAceMode();
 
   const replButtons = () => props.replButtons;
 
@@ -88,7 +89,7 @@ export function ReplInput(props: ReplInputProps) {
     <>
       <AceEditor
         className="repl-react-ace react-ace"
-        mode={getModeString(props.sourceChapter, props.sourceVariant, props.externalLibrary)}
+        mode={mode}
         theme="source"
         height="1px"
         width="100%"
