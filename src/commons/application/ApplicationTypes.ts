@@ -1,5 +1,4 @@
 import { type SourceError } from 'js-slang/dist/errors/base';
-import { Chapter } from 'js-slang/dist/langs';
 import { type Value } from 'js-slang/dist/types';
 
 import type { AchievementState } from '../../features/achievement/AchievementTypes';
@@ -13,7 +12,6 @@ import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFile
 import { defaultFeatureFlags, type FeatureFlagsState } from '../featureFlags';
 import type { FileSystemState } from '../fileSystem/FileSystemTypes';
 import type { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
-import { createContext } from '../utils/JsSlangHelper';
 import type {
   DebuggerContext,
   WorkspaceLocation,
@@ -157,8 +155,6 @@ export const defaultEditorValue = '// Type your program in here!';
  */
 export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): WorkspaceState => ({
   autogradingResults: [],
-  // TODO: goes away with the legacy local execution (js-slang `Context`) in workspace state
-  context: createContext<WorkspaceLocation>(Chapter.SOURCE_4, [], workspaceLocation),
   isFolderModeEnabled: false,
   activeEditorTabIndex: 0,
   editorTabs: [
@@ -191,7 +187,6 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   customNotification: '',
   sharedbConnected: false,
   stepLimit: 1000,
-  globals: [],
   isRunning: false,
   isWaitingForInput: false,
   enableDebugging: true,

@@ -1,8 +1,5 @@
 import { RunnerStatus } from '@sourceacademy/conductor/types';
-import type { Context } from 'js-slang';
-import createContext from 'js-slang/dist/createContext';
 import { ErrorType, type SourceError } from 'js-slang/dist/errors/base';
-import { Chapter } from 'js-slang/dist/langs';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import type { Matcher } from 'redux-saga-test-plan/matchers';
@@ -30,9 +27,8 @@ import {
   defaultState,
   type OverallState,
 } from '../application/ApplicationTypes';
-import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
-import { type Library, TestcaseTypes } from '../assessment/AssessmentTypes';
-import { mockRuntimeContext } from '../mocks/ContextMocks';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { TestcaseTypes } from '../assessment/AssessmentTypes';
 import { mockTestcases } from '../mocks/GradingMocks';
 import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
@@ -45,7 +41,7 @@ import {
 import { getEvaluatorDefinitionSaga } from './LanguageDirectorySaga';
 import { getVersionHistory, updateVersionName } from './RequestsSaga';
 import workspaceSaga from './WorkspaceSaga';
-import { evalCodeConductorSaga, evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
+import { evalCodeConductorSaga } from './WorkspaceSaga/helpers/evalCode';
 import { evalEditorSaga } from './WorkspaceSaga/helpers/evalEditor';
 import { runTestCase, runTestCaseConductor } from './WorkspaceSaga/helpers/runTestCase';
 import { watchSavingStatus } from './WorkspaceSaga/helpers/versionHistory';
@@ -178,14 +174,12 @@ describe('EVAL_EDITOR under Conductor', () => {
     const programPrependValue = 'COUNTER = 0';
     const editorValue = 'print(COUNTER)';
     const execTime = 1000;
-    const context = createContext();
 
     const newDefaultState = {
       ...generateDefaultState(workspaceLocation, {
         editorTabs: [{ value: editorValue, highlightedLines: [], breakpoints: [] }],
         programPrependValue,
         execTime,
-        context,
       }),
     };
 
@@ -193,12 +187,12 @@ describe('EVAL_EDITOR under Conductor', () => {
 
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
-      .provide([[matchers.call.fn(evalCodeSaga), undefined]])
+      .provide([[matchers.call.fn(evalCodeConductorSaga), undefined]])
       .call.like({
-        fn: evalCodeSaga,
+        fn: evalCodeConductorSaga,
         args: [{ [entrypointFilePath]: `${programPrependValue}\n${editorValue}` }],
       })
-      .not.call.like({ fn: evalCodeSaga, args: [{ '/prepend.js': programPrependValue }] })
+      .not.call.like({ fn: evalCodeConductorSaga, args: [{ '/prepend.js': programPrependValue }] })
       .dispatch({
         type: WorkspaceActions.evalEditor.type,
         payload: { workspaceLocation },
@@ -210,14 +204,12 @@ describe('EVAL_EDITOR under Conductor', () => {
     const workspaceLocation = 'playground';
     const editorValue = 'print(1)';
     const execTime = 1000;
-    const context = createContext();
 
     const newDefaultState = {
       ...generateDefaultState(workspaceLocation, {
         editorTabs: [{ value: editorValue, highlightedLines: [], breakpoints: [] }],
         programPrependValue: '',
         execTime,
-        context,
       }),
     };
 
@@ -225,9 +217,9 @@ describe('EVAL_EDITOR under Conductor', () => {
 
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
-      .provide([[matchers.call.fn(evalCodeSaga), undefined]])
+      .provide([[matchers.call.fn(evalCodeConductorSaga), undefined]])
       .call.like({
-        fn: evalCodeSaga,
+        fn: evalCodeConductorSaga,
         args: [{ [entrypointFilePath]: editorValue }],
       })
       .dispatch({
@@ -241,7 +233,6 @@ describe('EVAL_EDITOR under Conductor', () => {
     const workspaceLocation = 'playground';
     const editorValue = 'print(1)';
     const execTime = 1000;
-    const context = createContext();
 
     const newDefaultState = {
       ...withSelectedLanguage(
@@ -249,7 +240,6 @@ describe('EVAL_EDITOR under Conductor', () => {
           editorTabs: [{ value: editorValue, highlightedLines: [], breakpoints: [] }],
           programPrependValue: '',
           execTime,
-          context,
         }),
         { id: 'python2', name: 'Python §2', evaluators: [], defaultFileExtension: 'py' },
       ),
@@ -259,9 +249,9 @@ describe('EVAL_EDITOR under Conductor', () => {
 
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
-      .provide([[matchers.call.fn(evalCodeSaga), undefined]])
+      .provide([[matchers.call.fn(evalCodeConductorSaga), undefined]])
       .call.like({
-        fn: evalCodeSaga,
+        fn: evalCodeConductorSaga,
         args: [{ [entrypointFilePath]: editorValue }],
       })
       .dispatch({
@@ -342,8 +332,7 @@ describe('EVAL_REPL session persistence under Conductor', () => {
 
   test('a REPL chunk after a Run reuses the live session instead of requesting a new conductor', async () => {
     const fake = makeFakeConductor();
-    const context = createContext();
-    const state = generateDefaultState(workspaceLocation, { context });
+    const state = generateDefaultState(workspaceLocation);
     const providers: [Matcher, unknown][] = [
       [matchers.call.fn(getEvaluatorDefinitionSaga), { path: 'fake-evaluator-path' }],
       [matchers.call.fn(getPreparedConductorSaga), fake],
@@ -355,7 +344,6 @@ describe('EVAL_REPL session persistence under Conductor', () => {
       evalCodeConductorSaga,
       { '/code.js': 'x = 1' },
       '/code.js',
-      context,
       workspaceLocation,
       WorkspaceActions.evalEditor.type,
     )
@@ -374,7 +362,6 @@ describe('EVAL_REPL session persistence under Conductor', () => {
       evalCodeConductorSaga,
       { '/code.js': 'print(x)' },
       '/code.js',
-      context,
       workspaceLocation,
       WorkspaceActions.evalRepl.type,
     )
@@ -389,15 +376,13 @@ describe('EVAL_REPL session persistence under Conductor', () => {
 
   test('a REPL submission with no prior Run establishes its own session from just that line', async () => {
     const fake = makeFakeConductor();
-    const context = createContext();
-    const state = generateDefaultState(workspaceLocation, { context });
+    const state = generateDefaultState(workspaceLocation);
 
     fake.setNextStatus(RunnerStatus.STOPPED);
     await expectSaga(
       evalCodeConductorSaga,
       { '/code.js': 'x = 1' },
       '/code.js',
-      context,
       workspaceLocation,
       WorkspaceActions.evalRepl.type,
     )
@@ -452,8 +437,7 @@ describe('Conductor runtime errors keep the output printed before them (source-a
       lateOutput: printed,
     });
     fake.setNextStatus(RunnerStatus.STOPPED);
-    const context = createContext();
-    const state = generateDefaultState(workspaceLocation, { context });
+    const state = generateDefaultState(workspaceLocation);
 
     const shown: string[] = [];
     let terminatedAfter = -1;
@@ -464,7 +448,6 @@ describe('Conductor runtime errors keep the output printed before them (source-a
       evalCodeConductorSaga,
       { '/code.py': 'print(1)' },
       '/code.py',
-      context,
       workspaceLocation,
       WorkspaceActions.evalEditor.type,
     )
@@ -511,9 +494,7 @@ describe('Conductor errors subtract the prepend line shift (source-academy/front
     };
     const fake = makeFakeConductor({ error: fakeError });
     fake.setNextStatus(RunnerStatus.STOPPED);
-    const context = createContext();
     const state = generateDefaultState(workspaceLocation, {
-      context,
       programPrependValue,
       editorTabs: [{ value: editorValue, highlightedLines: [], breakpoints: [] }],
       activeEditorTabIndex: 0,
@@ -524,7 +505,6 @@ describe('Conductor errors subtract the prepend line shift (source-academy/front
       evalCodeConductorSaga,
       { [entrypointFilePath]: `${programPrependValue}\n${editorValue}` },
       entrypointFilePath,
-      context,
       workspaceLocation,
       WorkspaceActions.evalEditor.type,
     )
@@ -556,8 +536,7 @@ describe('Conductor errors subtract the prepend line shift (source-academy/front
     // concatenated onto it) - a REPL line sent afterwards is raw input with no prepend involved,
     // so an error there must be reported as-is, not shifted by the Run's prepend all over again.
     const programPrependValue = 'COUNTER = 0';
-    const context = createContext();
-    const state = generateDefaultState(workspaceLocation, { context, programPrependValue });
+    const state = generateDefaultState(workspaceLocation, { programPrependValue });
     const providers: [Matcher, unknown][] = [
       [matchers.call.fn(getEvaluatorDefinitionSaga), { path: 'fake-evaluator-path' }],
       [matchers.spawn.fn(preloadConductorEvaluatorSaga), undefined],
@@ -574,7 +553,6 @@ describe('Conductor errors subtract the prepend line shift (source-academy/front
       evalCodeConductorSaga,
       { '/code.py': `${programPrependValue}\nx = 1` },
       '/code.py',
-      context,
       workspaceLocation,
       WorkspaceActions.evalEditor.type,
     )
@@ -606,7 +584,6 @@ describe('Conductor errors subtract the prepend line shift (source-academy/front
       evalCodeConductorSaga,
       { '/code.py': 'undefined_name' },
       '/code.py',
-      context,
       workspaceLocation,
       WorkspaceActions.evalRepl.type,
     )
@@ -626,12 +603,9 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
   const editorValue = 'def f():\n    return True';
   const programPostpendValue = 'RESULT = f()';
   const testcaseProgram = 'print(RESULT)';
-  const execTime = 1000;
   const testcaseId = 0;
 
   test('runs prepend+code+postpend+testcase as a single concatenated Conductor call', () => {
-    const context = createContext();
-
     return expectSaga(
       runTestCaseConductor,
       workspaceLocation,
@@ -641,17 +615,15 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       TestcaseTypes.public,
       programPrependValue,
       programPostpendValue,
-      execTime,
     )
       .withState(
         generateDefaultState(workspaceLocation, {
-          context,
           output: [],
         }),
       )
-      .provide([[matchers.call.fn(evalCodeSaga), undefined]])
+      .provide([[matchers.call.fn(evalCodeConductorSaga), undefined]])
       .call.like({
-        fn: evalCodeSaga,
+        fn: evalCodeConductorSaga,
         args: [
           {
             '/testcase.py': [
@@ -672,7 +644,6 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
     // sub-chapter, a postpend wanting to enforce e.g. "no loops" has to do so itself via
     // the chapter-4 parse() builtin - which needs the student's source as a string, not
     // just as already-executed code.
-    const context = createContext();
     const editorValueWithQuotesAndNewlines = 'x = "a\\nb"\ndef f():\n    return x';
 
     return expectSaga(
@@ -684,17 +655,15 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       TestcaseTypes.public,
       programPrependValue,
       programPostpendValue,
-      execTime,
     )
       .withState(
         generateDefaultState(workspaceLocation, {
-          context,
           output: [],
         }),
       )
-      .provide([[matchers.call.fn(evalCodeSaga), undefined]])
+      .provide([[matchers.call.fn(evalCodeConductorSaga), undefined]])
       .call.like({
-        fn: evalCodeSaga,
+        fn: evalCodeConductorSaga,
         args: [
           {
             '/testcase.py': [
@@ -711,7 +680,6 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
   });
 
   test('grades by the last printed line, not a returned value', () => {
-    const context = createContext();
     let capturedValue: { toReplString(): string } | undefined;
 
     return expectSaga(
@@ -723,11 +691,9 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       TestcaseTypes.public,
       programPrependValue,
       programPostpendValue,
-      execTime,
     )
       .withState(
         generateDefaultState(workspaceLocation, {
-          context,
           // Simulate a completed Conductor run whose last printed line was "True" -
           // note there is no distinct 'result' value, matching Python's script-level
           // semantics of not producing a REPL-style last-expression value.
@@ -735,7 +701,7 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
         }),
       )
       .provide([
-        [matchers.call.fn(evalCodeSaga), undefined],
+        [matchers.call.fn(evalCodeConductorSaga), undefined],
         {
           put(effect, next) {
             if (effect.action.type === InterpreterActions.evalTestcaseSuccess.type) {
@@ -758,7 +724,6 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
   });
 
   test('finds printed output even when the trailing output entry has no consoleLogs of its own', () => {
-    const context = createContext();
     let capturedValue: { toReplString(): string } | undefined;
 
     return expectSaga(
@@ -770,11 +735,9 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       TestcaseTypes.public,
       programPrependValue,
       programPostpendValue,
-      execTime,
     )
       .withState(
         generateDefaultState(workspaceLocation, {
-          context,
           // stdout and result messages travel on separate Conductor channels with no
           // guaranteed relative ordering, and output is never cleared between runs -
           // so the printed text can end up on an earlier entry than the trailing one.
@@ -782,7 +745,7 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
         }),
       )
       .provide([
-        [matchers.call.fn(evalCodeSaga), undefined],
+        [matchers.call.fn(evalCodeConductorSaga), undefined],
         {
           put(effect, next) {
             if (effect.action.type === InterpreterActions.evalTestcaseSuccess.type) {
@@ -799,7 +762,6 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
   });
 
   test('reports failure without crashing when the Conductor run errors', () => {
-    const context = createContext();
     const errors: SourceError[] = [
       {
         type: ErrorType.RUNTIME,
@@ -819,15 +781,13 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       TestcaseTypes.public,
       programPrependValue,
       programPostpendValue,
-      execTime,
     )
       .withState(
         generateDefaultState(workspaceLocation, {
-          context,
           output: [{ type: 'errors', errors } as any],
         }),
       )
-      .provide([[matchers.call.fn(evalCodeSaga), undefined]])
+      .provide([[matchers.call.fn(evalCodeConductorSaga), undefined]])
       .put.like({
         action: {
           type: InterpreterActions.evalTestcaseFailure.type,
@@ -838,7 +798,6 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
   });
 
   test('excludes prepend from a Conductor testcase error location (source-academy/frontend#4244)', () => {
-    const context = createContext();
     // Two lines, so combinedCode's own line 3 is `editorValue`'s line 1 - see
     // runTestCaseConductor's combinedCode, which joins prepend/value/.../testcase with '\n'.
     const twoLinePrepend = 'COUNTER = 0\nDOUBLE = 2';
@@ -862,16 +821,14 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       TestcaseTypes.public,
       twoLinePrepend,
       programPostpendValue,
-      execTime,
     )
       .withState(
         generateDefaultState(workspaceLocation, {
-          context,
           output: [{ type: 'errors', errors } as any],
         }),
       )
       .provide([
-        [matchers.call.fn(evalCodeSaga), undefined],
+        [matchers.call.fn(evalCodeConductorSaga), undefined],
         {
           put(effect, next) {
             if (effect.action.type === InterpreterActions.evalTestcaseFailure.type) {
@@ -892,7 +849,6 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
   });
 
   test('leaves a Conductor testcase error with no location info (line 0) unshifted', () => {
-    const context = createContext();
     const errors: SourceError[] = [
       {
         type: ErrorType.RUNTIME,
@@ -913,16 +869,14 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       TestcaseTypes.public,
       programPrependValue,
       programPostpendValue,
-      execTime,
     )
       .withState(
         generateDefaultState(workspaceLocation, {
-          context,
           output: [{ type: 'errors', errors } as any],
         }),
       )
       .provide([
-        [matchers.call.fn(evalCodeSaga), undefined],
+        [matchers.call.fn(evalCodeConductorSaga), undefined],
         {
           put(effect, next) {
             if (effect.action.type === InterpreterActions.evalTestcaseFailure.type) {
@@ -942,73 +896,44 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
 
 describe('PLAYGROUND_EXTERNAL_SELECT', () => {
   let workspaceLocation: WorkspaceLocation;
-  let globals: Array<[string, any]>;
-  let chapter: Chapter;
-  let context: Context;
 
   beforeEach(() => {
     workspaceLocation = 'playground';
-    globals = [
-      ['testNumber', 3.141592653589793],
-      ['testObject', { a: 1, b: 2 }],
-      ['testArray', [1, 2, 'a', 'b']],
-    ];
-    chapter = Chapter.SOURCE_4;
-    context = {
-      ...mockRuntimeContext(),
-      chapter,
-    };
   });
 
-  test('puts changeExternalLibrary, beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
+  test('puts changeExternalLibrary, clearReplOutput and calls showSuccessMessage correctly', () => {
     const oldExternalLibraryName = ExternalLibraryName.NONE;
     const newExternalLibraryName = ExternalLibraryName.SOUNDS;
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
-      context,
-      globals,
       externalLibrary: oldExternalLibraryName,
     });
 
-    return (
-      expectSaga(workspaceSaga)
-        .withState(newDefaultState)
-        .put(WorkspaceActions.changeExternalLibrary(newExternalLibraryName, workspaceLocation))
-        // beginClearContext is asserted here but the library object can contain
-        // runtime-specific fields (like languageOptions). Match only the action
-        // shape we care about (type, workspaceLocation and shouldInitLibrary)
-        .put.like({
-          action: {
-            type: WorkspaceActions.beginClearContext.type,
-            payload: { workspaceLocation, shouldInitLibrary: true },
-          },
-        })
-        .put(WorkspaceActions.clearReplOutput(workspaceLocation))
-        .call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
-        .dispatch({
-          type: WorkspaceActions.externalLibrarySelect.type,
-          payload: {
-            externalLibraryName: newExternalLibraryName,
-            workspaceLocation,
-          },
-        })
-        .silentRun()
-    );
+    return expectSaga(workspaceSaga)
+      .withState(newDefaultState)
+      .put(WorkspaceActions.changeExternalLibrary(newExternalLibraryName, workspaceLocation))
+      .put(WorkspaceActions.clearReplOutput(workspaceLocation))
+      .call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
+      .dispatch({
+        type: WorkspaceActions.externalLibrarySelect.type,
+        payload: {
+          externalLibraryName: newExternalLibraryName,
+          workspaceLocation,
+        },
+      })
+      .silentRun();
   });
 
   test('does not call the above when oldExternalLibraryName === newExternalLibraryName', () => {
     const oldExternalLibraryName = ExternalLibraryName.SOUNDS;
     const newExternalLibraryName = ExternalLibraryName.SOUNDS;
     const newDefaultState = generateDefaultState(workspaceLocation, {
-      context,
-      globals,
       externalLibrary: oldExternalLibraryName,
     });
 
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
       .not.put.actionType(WorkspaceActions.changeExternalLibrary.type)
-      .not.put.actionType(WorkspaceActions.beginClearContext.type)
       .not.put.actionType(WorkspaceActions.clearReplOutput.type)
       .not.call.fn(showSuccessMessage)
       .dispatch({
@@ -1022,72 +947,16 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
   });
 });
 
-describe('BEGIN_CLEAR_CONTEXT', () => {
-  let loadLib: any;
-  let getReadyWebGLForCanvas: any;
-  let getReadyStringifyForRunes: any;
-  let chapter: Chapter;
-  let globals: Array<[string, any]>;
-  let workspaceLocation: WorkspaceLocation;
-
-  beforeEach(() => {
-    loadLib = vi.fn();
-    getReadyWebGLForCanvas = vi.fn();
-    getReadyStringifyForRunes = vi.fn();
-
-    (window as any).loadLib = loadLib;
-    (window as any).getReadyWebGLForCanvas = getReadyWebGLForCanvas;
-    (window as any).getReadyStringifyForRunes = getReadyStringifyForRunes;
-
-    workspaceLocation = 'grading';
-    chapter = Chapter.SOURCE_4;
-    globals = [
-      ['testNumber', 3.141592653589793],
-      ['testObject', { a: 1, b: 2 }],
-      ['testArray', [1, 2, 'a', 'b']],
-    ];
-  });
-
-  test('loads SOUNDS library correctly', () => {
-    const newExternalLibraryName = ExternalLibraryName.SOUNDS;
-
-    const symbols = externalLibraries.get(newExternalLibraryName)!;
-    const library: Library = {
-      chapter,
-      external: {
-        name: newExternalLibraryName,
-        symbols,
-      },
-      globals,
-      languageOptions: undefined,
-    };
-
-    return expectSaga(workspaceSaga)
-      .put.like({ action: WorkspaceActions.endClearContext(library, workspaceLocation) })
-      .dispatch({
-        type: WorkspaceActions.beginClearContext.type,
-        payload: { library, workspaceLocation, shouldInitLibrary: true },
-      })
-      .silentRun();
-  });
-});
-
 describe('NAV_DECLARATION', () => {
   let workspaceLocation: WorkspaceLocation;
-  let context: Context;
   let editorValue: string;
   let state: OverallState;
 
   beforeEach(() => {
     workspaceLocation = 'playground';
     editorValue = 'const foo = (x) => -1; foo(2);';
-    context = {
-      ...mockRuntimeContext(),
-      chapter: Chapter.SOURCE_4,
-    };
     state = generateDefaultState(workspaceLocation, {
       editorTabs: [{ value: editorValue }],
-      context,
     });
   });
 
@@ -1286,7 +1155,7 @@ describe('runTestCaseConductor for Python §4 Typed', () => {
   test('runs one test case under the typed evaluator and restores the selection, also after an error', () => {
     const workspaceLocation: WorkspaceLocation = 'grading';
     const state: OverallState = {
-      ...generateDefaultState(workspaceLocation, { context: createContext(), output: [] }),
+      ...generateDefaultState(workspaceLocation, { output: [] }),
       languageDirectory: {
         ...defaultState.languageDirectory,
         selectedLanguageId: 'python4Typed',
@@ -1305,14 +1174,15 @@ describe('runTestCaseConductor for Python §4 Typed', () => {
       TestcaseTypes.public,
       '',
       '',
-      1000,
     )
       .withState(state)
       .provide([
         {
           call(effect, next) {
             // the evaluation fails, as a type error does
-            return effect.fn === evalCodeSaga ? Promise.reject(new Error('type error')) : next();
+            return effect.fn === evalCodeConductorSaga
+              ? Promise.reject(new Error('type error'))
+              : next();
           },
           put(effect, next) {
             if (effect.action.type === LanguageDirectoryActions.setSelectedLanguage.type) {

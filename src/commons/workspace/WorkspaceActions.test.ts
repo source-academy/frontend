@@ -1,10 +1,8 @@
-import { Chapter } from 'js-slang/dist/langs';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { expect, test } from 'vitest';
 
 import { createDefaultWorkspace } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import type { Library } from '../assessment/AssessmentTypes';
 import type { HighlightedLines } from '../editor/EditorTypes';
 import WorkspaceActions from './WorkspaceActions';
 import type { EditorTabState, WorkspaceLocation } from './WorkspaceTypes';
@@ -66,27 +64,6 @@ test('externalLibrarySelect generates correct action object', () => {
   });
 });
 
-test('beginClearContext generates correct action object', () => {
-  const library: Library = {
-    chapter: Chapter.SOURCE_4,
-    external: {
-      name: ExternalLibraryName.SOUNDS,
-      symbols: [],
-    },
-    globals: [],
-  };
-
-  const action = WorkspaceActions.beginClearContext(playgroundWorkspace, library, true);
-  expect(action).toEqual({
-    type: WorkspaceActions.beginClearContext.type,
-    payload: {
-      library,
-      workspaceLocation: playgroundWorkspace,
-      shouldInitLibrary: true,
-    },
-  });
-});
-
 test('clearReplInput generates correct action object', () => {
   const action = WorkspaceActions.clearReplInput(assessmentWorkspace);
   expect(action).toEqual({
@@ -113,26 +90,6 @@ test('clearReplOutput generates correct action object', () => {
     type: WorkspaceActions.clearReplOutput.type,
     payload: {
       workspaceLocation: gradingWorkspace,
-    },
-  });
-});
-
-test('endClearContext generates correct action object', () => {
-  const library: Library = {
-    chapter: Chapter.SOURCE_4,
-    external: {
-      name: ExternalLibraryName.SOUNDS,
-      symbols: [],
-    },
-    globals: [],
-  };
-
-  const action = WorkspaceActions.endClearContext(library, playgroundWorkspace);
-  expect(action).toEqual({
-    type: WorkspaceActions.endClearContext.type,
-    payload: {
-      library,
-      workspaceLocation: playgroundWorkspace,
     },
   });
 });

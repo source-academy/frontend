@@ -113,7 +113,7 @@ function GradingWorkspace(props: Props) {
   const {
     handleBrowseHistoryDown,
     handleBrowseHistoryUp,
-    handleClearContext,
+    handleChangeLibrary,
     handleDeclarationNavigate,
     handleEditorEval,
     handleSetActiveEditorTabIndex,
@@ -143,8 +143,8 @@ function GradingWorkspace(props: Props) {
         dispatch(WorkspaceActions.browseReplHistoryDown(workspaceLocation)),
       handleBrowseHistoryUp: () =>
         dispatch(WorkspaceActions.browseReplHistoryUp(workspaceLocation)),
-      handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
-        dispatch(WorkspaceActions.beginClearContext(workspaceLocation, library, shouldInitLibrary)),
+      handleChangeLibrary: (library: Library) =>
+        dispatch(WorkspaceActions.changeExternalLibrary(library.external.name, workspaceLocation)),
       handleDeclarationNavigate: (cursorPosition: Position) =>
         dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
       handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
@@ -325,7 +325,7 @@ function GradingWorkspace(props: Props) {
       editorTestcases,
     });
     handleChangeExecTime(question.library.execTimeMs ?? defaultWorkspaceManager.grading.execTime);
-    handleClearContext(question.library, true);
+    handleChangeLibrary(question.library);
     // Clear out any module tabs left over from the previously viewed submission.
     dispatch(resetSideContent(workspaceLocation));
     handleUpdateHasUnsavedChanges(false);
