@@ -7,6 +7,9 @@ import type { Library } from '../assessment/AssessmentTypes';
  */
 export const castLibrary = (lib: any): Library => ({
   chapter: lib.chapter,
+  // the ids of the language directory (source-academy/backend#1387); `null` for a question without
+  language: lib.language == null ? undefined : lib.language,
+  evaluator: lib.evaluator == null ? undefined : lib.evaluator,
   external: {
     /** external names are lowercase for API results */
     name: lib.external.name.toUpperCase() as ExternalLibraryName,

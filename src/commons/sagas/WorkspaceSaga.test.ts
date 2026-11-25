@@ -1,4 +1,5 @@
 import { RunnerStatus } from '@sourceacademy/conductor/types';
+import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
 import { ErrorType, type SourceError } from 'js-slang/dist/errors/base';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
@@ -15,10 +16,7 @@ vi.mock('../../pages/createStore', () => ({
 }));
 
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
-import {
-  TEST_CASE_EVALUATOR_ID,
-  TEST_CASE_LANGUAGE_ID,
-} from '../../features/directory/testCaseLanguage';
+import {} from '../../features/directory/testCaseLanguage';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import InterpreterActions from '../application/actions/InterpreterActions';
 import SessionActions from '../application/actions/SessionActions';
@@ -77,6 +75,42 @@ function generateDefaultState(
         ...payload,
       },
     },
+  };
+}
+
+/**
+ * `state`, with a question open in its `assessment` or `grading` workspace whose test cases run
+ * under the given language and evaluator (there is no default language for those that name none),
+ * and a language directory that has them.
+ */
+function withGraderQuestion(
+  state: OverallState,
+  grader: { language: string; evaluator: string },
+): OverallState {
+  const language = (id: string, evaluator: string) =>
+    ({ id, name: id, evaluators: [{ id: evaluator }] }) as ILanguageDefinition;
+  const library = { chapter: 1, ...grader, external: { name: 'NONE', symbols: [] }, globals: [] };
+  const question = { library, frontendGradingLibrary: library };
+  return {
+    ...state,
+    languageDirectory: {
+      ...state.languageDirectory,
+      languages: [
+        language('python1', 'python1Py2js'),
+        language('python4', 'python4Py2js'),
+        language('python4Typed', 'python4TypedPy2js'),
+      ],
+    },
+    session: {
+      ...state.session,
+      assessments: { 1: { questions: [question] } },
+      gradings: { 1: { answers: [{ question }] } },
+    } as unknown as OverallState['session'],
+    workspaces: {
+      ...state.workspaces,
+      assessment: { ...state.workspaces.assessment, currentAssessment: 1, currentQuestion: 0 },
+      grading: { ...state.workspaces.grading, currentSubmission: 1, currentQuestion: 0 },
+    } as unknown as OverallState['workspaces'],
   };
 }
 
@@ -604,6 +638,11 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
   const programPostpendValue = 'RESULT = f()';
   const testcaseProgram = 'print(RESULT)';
   const testcaseId = 0;
+  const gradedState = (payload: object) =>
+    withGraderQuestion(generateDefaultState(workspaceLocation, payload), {
+      language: 'python4',
+      evaluator: 'python4Py2js',
+    });
 
   test('runs prepend+code+postpend+testcase as a single concatenated Conductor call', () => {
     return expectSaga(
@@ -617,7 +656,7 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       programPostpendValue,
     )
       .withState(
-        generateDefaultState(workspaceLocation, {
+        gradedState({
           output: [],
         }),
       )
@@ -657,7 +696,7 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       programPostpendValue,
     )
       .withState(
-        generateDefaultState(workspaceLocation, {
+        gradedState({
           output: [],
         }),
       )
@@ -679,6 +718,51 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       .silentRun();
   });
 
+  test('an OCaml question runs its testcase as an .ml file, without the Python __program__ line', () => {
+    const ocaml = {
+      id: 'ocaml',
+      name: 'OCaml',
+      evaluators: [{ id: 'ocamlJsOfOCaml' }],
+      defaultFileExtension: 'ml',
+    };
+    const named = { chapter: 1, language: 'ocaml', evaluator: 'ocamlJsOfOCaml' };
+    const base = generateDefaultState(workspaceLocation, {
+      output: [],
+      currentSubmission: 9,
+      currentQuestion: 0,
+    });
+    const state = {
+      ...base,
+      session: {
+        ...base.session,
+        gradings: { 9: { answers: [{ question: { library: named } }] } } as any,
+      },
+      languageDirectory: {
+        ...base.languageDirectory,
+        languages: [ocaml] as any,
+        languageMap: { ocaml } as any,
+      },
+    } as OverallState;
+
+    return expectSaga(
+      runTestCaseConductor,
+      workspaceLocation,
+      testcaseId,
+      'let f () = true',
+      ';; f ()',
+      TestcaseTypes.public,
+      '',
+      '',
+    )
+      .withState(state)
+      .provide([[matchers.call.fn(evalCodeConductorSaga), undefined]])
+      .call.like({
+        fn: evalCodeConductorSaga,
+        args: [{ '/testcase.ml': ['let f () = true', ';; f ()'].join('\n') }],
+      })
+      .silentRun();
+  });
+
   test('grades by the last printed line, not a returned value', () => {
     let capturedValue: { toReplString(): string } | undefined;
 
@@ -693,7 +777,7 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       programPostpendValue,
     )
       .withState(
-        generateDefaultState(workspaceLocation, {
+        gradedState({
           // Simulate a completed Conductor run whose last printed line was "True" -
           // note there is no distinct 'result' value, matching Python's script-level
           // semantics of not producing a REPL-style last-expression value.
@@ -737,7 +821,7 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       programPostpendValue,
     )
       .withState(
-        generateDefaultState(workspaceLocation, {
+        gradedState({
           // stdout and result messages travel on separate Conductor channels with no
           // guaranteed relative ordering, and output is never cleared between runs -
           // so the printed text can end up on an earlier entry than the trailing one.
@@ -783,7 +867,7 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       programPostpendValue,
     )
       .withState(
-        generateDefaultState(workspaceLocation, {
+        gradedState({
           output: [{ type: 'errors', errors } as any],
         }),
       )
@@ -823,7 +907,7 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       programPostpendValue,
     )
       .withState(
-        generateDefaultState(workspaceLocation, {
+        gradedState({
           output: [{ type: 'errors', errors } as any],
         }),
       )
@@ -871,7 +955,7 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       programPostpendValue,
     )
       .withState(
-        generateDefaultState(workspaceLocation, {
+        gradedState({
           output: [{ type: 'errors', errors } as any],
         }),
       )
@@ -1036,9 +1120,12 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
   });
 
   test('calls runTestCase when there are testcases', () => {
-    state = generateDefaultState(workspaceLocation, {
-      editorTestcases: mockTestcases,
-    });
+    state = withGraderQuestion(
+      generateDefaultState(workspaceLocation, {
+        editorTestcases: mockTestcases,
+      }),
+      { language: 'python4', evaluator: 'python4Py2js' },
+    );
 
     return expectSaga(workspaceSaga)
       .withState(state)
@@ -1063,9 +1150,12 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
   });
 
   test('prematurely terminates if execution of one testcase results in an error', () => {
-    state = generateDefaultState(workspaceLocation, {
-      editorTestcases: mockTestcases.slice(0, 2),
-    });
+    state = withGraderQuestion(
+      generateDefaultState(workspaceLocation, {
+        editorTestcases: mockTestcases.slice(0, 2),
+      }),
+      { language: 'python4', evaluator: 'python4Py2js' },
+    );
 
     return expectSaga(workspaceSaga)
       .withState(state)
@@ -1087,16 +1177,17 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
   });
 
   test('switches the test-case language once for the whole batch instead of once per testcase', () => {
-    state = {
-      ...generateDefaultState(workspaceLocation, {
-        editorTestcases: mockTestcases,
-      }),
-      languageDirectory: {
-        ...defaultState.languageDirectory,
-        selectedLanguageId: 'python1',
-        selectedEvaluatorId: 'python1Py2js',
+    state = withGraderQuestion(
+      {
+        ...generateDefaultState(workspaceLocation, { editorTestcases: mockTestcases }),
+        languageDirectory: {
+          ...defaultState.languageDirectory,
+          selectedLanguageId: 'python1',
+          selectedEvaluatorId: 'python1Py2js',
+        },
       },
-    };
+      { language: 'python4', evaluator: 'python4Py2js' },
+    );
 
     const capturedSkipFlags: unknown[] = [];
     let setTestCaseLanguageCount = 0;
@@ -1117,14 +1208,14 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
           },
           put(effect, next) {
             if (effect.action.type === LanguageDirectoryActions.setSelectedLanguage.type) {
-              if (effect.action.payload.languageId === TEST_CASE_LANGUAGE_ID) {
+              if (effect.action.payload.languageId === 'python4') {
                 setTestCaseLanguageCount++;
               } else if (effect.action.payload.languageId === 'python1') {
                 restoreLanguageCount++;
               }
             }
             if (effect.action.type === LanguageDirectoryActions.setSelectedEvaluator.type) {
-              if (effect.action.payload.evaluatorId === TEST_CASE_EVALUATOR_ID) {
+              if (effect.action.payload.evaluatorId === 'python4Py2js') {
                 setTestCaseEvaluatorCount++;
               } else if (effect.action.payload.evaluatorId === 'python1Py2js') {
                 restoreEvaluatorCount++;
@@ -1154,14 +1245,17 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
 describe('runTestCaseConductor for Python §4 Typed', () => {
   test('runs one test case under the typed evaluator and restores the selection, also after an error', () => {
     const workspaceLocation: WorkspaceLocation = 'grading';
-    const state: OverallState = {
-      ...generateDefaultState(workspaceLocation, { output: [] }),
-      languageDirectory: {
-        ...defaultState.languageDirectory,
-        selectedLanguageId: 'python4Typed',
-        selectedEvaluatorId: 'python4TypedPy2js',
+    const state: OverallState = withGraderQuestion(
+      {
+        ...generateDefaultState(workspaceLocation, { output: [] }),
+        languageDirectory: {
+          ...defaultState.languageDirectory,
+          selectedLanguageId: 'python4Typed',
+          selectedEvaluatorId: 'python4TypedPy2js',
+        },
       },
-    };
+      { language: 'python4Typed', evaluator: 'python4TypedPy2js' },
+    );
     const languages: string[] = [];
     const evaluators: string[] = [];
 
@@ -1208,14 +1302,17 @@ describe('runTestCaseConductor for Python §4 Typed', () => {
 describe('runAllTestcases for Python §4 Typed', () => {
   test('grades under the typed evaluator and restores the selection', () => {
     const workspaceLocation: WorkspaceLocation = 'assessment';
-    const state: OverallState = {
-      ...generateDefaultState(workspaceLocation, { editorTestcases: mockTestcases }),
-      languageDirectory: {
-        ...defaultState.languageDirectory,
-        selectedLanguageId: 'python4Typed',
-        selectedEvaluatorId: 'python4TypedPy2js',
+    const state: OverallState = withGraderQuestion(
+      {
+        ...generateDefaultState(workspaceLocation, { editorTestcases: mockTestcases }),
+        languageDirectory: {
+          ...defaultState.languageDirectory,
+          selectedLanguageId: 'python4Typed',
+          selectedEvaluatorId: 'python4TypedPy2js',
+        },
       },
-    };
+      { language: 'python4Typed', evaluator: 'python4TypedPy2js' },
+    );
     const languages: string[] = [];
     const evaluators: string[] = [];
 

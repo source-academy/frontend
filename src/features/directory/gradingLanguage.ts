@@ -1,18 +1,19 @@
 import { useEffect } from 'react';
 
+import type { Library } from '../../commons/assessment/AssessmentTypes';
 import { useAppDispatch, useAppSelector } from '../../commons/utils/Hooks';
 import type { GradingQuery } from '../grading/GradingTypes';
-import { deriveLanguageFromChapter } from './chapterLanguage';
 import LanguageDirectoryActions from './LanguageDirectoryActions';
+import { resolveLibraryLanguage } from './libraryLanguage';
 
 /**
- * The chapter of a graded submission: that of its first programming question (a submission does not
- * mix chapters), or `undefined` if it has none.
+ * The library of a graded submission: that of its first programming question (a submission does not
+ * mix languages), or `undefined` if it has none.
  */
-export function gradingChapter(grading: GradingQuery | undefined): number | undefined {
+export function gradingLibrary(grading: GradingQuery | undefined): Library | undefined {
   return grading?.answers
-    .map(answer => ('library' in answer.question ? answer.question.library?.chapter : undefined))
-    .find(chapter => chapter !== undefined);
+    .map(answer => ('library' in answer.question ? answer.question.library : undefined))
+    .find(library => library !== undefined);
 }
 
 /**
@@ -28,18 +29,24 @@ export function gradingChapter(grading: GradingQuery | undefined): number | unde
 export function useSelectGradingLanguage(grading: GradingQuery | undefined): void {
   const dispatch = useAppDispatch();
   const languages = useAppSelector(state => state.languageDirectory.languages);
-  const chapter = gradingChapter(grading);
+  const library = gradingLibrary(grading);
+  // primitives, so that the effect runs when the language changes, not when the response object does
+  const { chapter, language, evaluator } = library ?? {};
 
   useEffect(() => {
     if (chapter === undefined) {
       return;
     }
-    const derived = deriveLanguageFromChapter(languages, chapter);
+    const derived = resolveLibraryLanguage(languages, {
+      chapter,
+      language,
+      evaluator,
+    });
     if (!derived) {
       dispatch(LanguageDirectoryActions.clearSelectedLanguage());
       return;
     }
     dispatch(LanguageDirectoryActions.setSelectedLanguage(derived.languageId));
     dispatch(LanguageDirectoryActions.setSelectedEvaluator(derived.evaluatorId));
-  }, [dispatch, languages, chapter]);
+  }, [dispatch, languages, chapter, language, evaluator]);
 }

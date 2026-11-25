@@ -5,8 +5,17 @@ export const EDITING_ID = -1;
 
 export type XmlParseStrTask = {
   $: XmlParseStrOverview;
-  DEPLOYMENT: XmlParseStrDeployment[];
-  GRADERDEPLOYMENT: XmlParseStrDeployment[];
+  // The three languages and evaluators (source-academy/backend#1387): what the student runs, what the
+  // test cases run under in the workspace, and what the backend grader runs. DEPLOYMENT and
+  // GRADERDEPLOYMENT, and PROGRAMMINGLANGUAGE and GRADERPROGRAMMINGLANGUAGE, are the older names of
+  // the first and the last.
+  USER_PROGRAMMING_LANGUAGE?: XmlParseStrDeployment[];
+  FRONTEND_GRADER_PROGRAMMING_LANGUAGE?: XmlParseStrDeployment[];
+  BACKEND_GRADER_PROGRAMMING_LANGUAGE?: XmlParseStrDeployment[];
+  PROGRAMMINGLANGUAGE?: XmlParseStrDeployment[];
+  GRADERPROGRAMMINGLANGUAGE?: XmlParseStrDeployment[];
+  DEPLOYMENT?: XmlParseStrDeployment[];
+  GRADERDEPLOYMENT?: XmlParseStrDeployment[];
   PROBLEMS: Array<{ PROBLEM: XmlParseStrProblem[] }>;
   READING: string[];
   TEXT: string[];
@@ -15,7 +24,11 @@ export type XmlParseStrTask = {
 
 export type XmlParseStrDeployment = {
   $: {
-    interpreter: string;
+    /** A position in the language directory (the older way to name a language). */
+    interpreter?: string;
+    /** The ids of the language directory */
+    language?: string;
+    evaluator?: string;
   };
   GLOBAL?: Array<{
     IDENTIFIER: string[];
@@ -52,6 +65,11 @@ export type XmlParseStrProblem = {
     maxgrade: string;
     maxxp: string;
   };
+  USER_PROGRAMMING_LANGUAGE?: XmlParseStrDeployment[];
+  FRONTEND_GRADER_PROGRAMMING_LANGUAGE?: XmlParseStrDeployment[];
+  BACKEND_GRADER_PROGRAMMING_LANGUAGE?: XmlParseStrDeployment[];
+  PROGRAMMINGLANGUAGE?: XmlParseStrDeployment[];
+  GRADERPROGRAMMINGLANGUAGE?: XmlParseStrDeployment[];
   DEPLOYMENT?: XmlParseStrDeployment[];
   GRADERDEPLOYMENT?: XmlParseStrDeployment[];
   TEXT: string[];
