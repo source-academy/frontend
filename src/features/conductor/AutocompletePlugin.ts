@@ -102,9 +102,14 @@ export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
     };
     const Mode = function (this: any) {
       this.HighlightRules = highlightRules;
-      this.foldingRules = new (acequire(data.foldingRules.hookFrom).FoldMode)(
-        ...data.foldingRules.args,
-      );
+      // A folding mode that Ace has not defined (one that lives in the file of another language's
+      // mode) means no folding, not a mode that cannot be set.
+      const FoldMode = isAceModuleDefined(data.foldingRules.hookFrom)
+        ? acequire(data.foldingRules.hookFrom).FoldMode
+        : undefined;
+      if (FoldMode) {
+        this.foldingRules = new FoldMode(...data.foldingRules.args);
+      }
       this.$behavior = this.$defaultBehaviour;
     };
 
