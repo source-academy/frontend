@@ -555,7 +555,7 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
     }
 
     return {
-      tabs: { beforeDynamicTabs: tabs, afterDynamicTabs: [] },
+      tabs: { leadingTabs: tabs, trailingTabs: [] },
       workspaceLocation,
     };
   };

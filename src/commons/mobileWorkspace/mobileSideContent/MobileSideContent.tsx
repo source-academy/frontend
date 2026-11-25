@@ -66,7 +66,7 @@ function MobileSideContent({
    * renderedPanels is not memoized since a change in selectedTabId (when changing tabs)
    * would force React.useMemo to recompute the nullary function anyway
    */
-  const renderedPanels = (dynamicTabs: SideContentTab[], selectedTabId?: SideContentTabId) => {
+  const renderedPanels = (tabs: SideContentTab[], selectedTabId?: SideContentTabId) => {
     // TODO: Fix the CSS of all the panels (e.g. subst_visualizer)
     const renderPanel = (tab: SideContentTab, workspaceLocation?: SideContentLocation) => {
       if (!tab.body) {
@@ -88,7 +88,7 @@ function MobileSideContent({
       );
     };
 
-    return dynamicTabs.map(tab => renderPanel(tab, props.workspaceLocation));
+    return tabs.map(tab => renderPanel(tab, props.workspaceLocation));
   };
 
   return (

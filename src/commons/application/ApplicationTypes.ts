@@ -13,7 +13,6 @@ import { defaultFeatureFlags, type FeatureFlagsState } from '../featureFlags';
 import type { FileSystemState } from '../fileSystem/FileSystemTypes';
 import type { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
 import type {
-  DebuggerContext,
   WorkspaceLocation,
   WorkspaceManagerState,
   WorkspaceState,
@@ -190,7 +189,6 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   isRunning: false,
   isWaitingForInput: false,
   enableDebugging: true,
-  debuggerContext: {} as DebuggerContext,
   cseSnapshots: null,
   files: {},
   updateUserRoleCallback: () => {},
@@ -299,7 +297,6 @@ export const defaultFileSystem: FileSystemState = {
 };
 
 export const defaultSideContent: SideContentState = {
-  dynamicTabs: [],
   alerts: [],
 };
 

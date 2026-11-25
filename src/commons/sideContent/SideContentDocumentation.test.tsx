@@ -27,7 +27,6 @@ function createDocumentation({
   const store = mockInitialStore({
     sideContent: {
       playground: {
-        dynamicTabs: [],
         alerts: [],
         selectedTab: isTabSelected ? SideContentType.documentation : SideContentType.introduction,
       },

@@ -1,13 +1,10 @@
 import { createActions } from '../redux/utils';
-import type { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import type { SideContentLocation, SideContentTabId } from './SideContentTypes';
 
 const SideContentActions = createActions('sideContent', {
-  beginAlertSideContent: (id: SideContentTabId, workspaceLocation: SideContentLocation) => ({
-    id,
-    workspaceLocation,
-  }),
-  endAlertSideContent: (id: SideContentTabId, workspaceLocation: SideContentLocation) => ({
+  /** Marks a tab as having news for the user, unless it is already open. */
+  alertSideContent: (id: SideContentTabId, workspaceLocation: SideContentLocation) => ({
     id,
     workspaceLocation,
   }),
@@ -20,10 +17,6 @@ const SideContentActions = createActions('sideContent', {
     id,
     workspaceLocation,
   }),
-  spawnSideContent: (workspaceLocation: SideContentLocation, debuggerContext: DebuggerContext) => ({
-    workspaceLocation,
-    debuggerContext,
-  }),
   resetSideContent: (workspaceLocation: SideContentLocation) => ({ workspaceLocation }),
   changeSideContentHeight: (height: number, workspaceLocation: WorkspaceLocation) => ({
     height,
@@ -33,11 +26,9 @@ const SideContentActions = createActions('sideContent', {
 
 // For compatibility with existing code (reducer)
 export const {
-  beginAlertSideContent,
-  endAlertSideContent,
+  alertSideContent,
   visitSideContent,
   removeSideContentAlert,
-  spawnSideContent,
   resetSideContent,
   changeSideContentHeight,
 } = SideContentActions;

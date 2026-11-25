@@ -343,15 +343,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         },
       };
     })
-    .addCase(WorkspaceActions.notifyProgramEvaluated, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      const debuggerContext = state[workspaceLocation].debuggerContext;
-      debuggerContext.result = action.payload.result;
-      debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
-      debuggerContext.code = action.payload.code;
-      debuggerContext.context = castDraft(action.payload.context);
-      debuggerContext.workspaceLocation = action.payload.workspaceLocation;
-    })
     .addCase(WorkspaceActions.toggleUsingUpload, (state, action) => {
       const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
