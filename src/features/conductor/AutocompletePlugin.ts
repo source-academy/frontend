@@ -1,5 +1,3 @@
-import 'ace-builds/src-noconflict/mode-python';
-
 import type {
   AceRules,
   AutoCompleteEntry,
@@ -14,6 +12,7 @@ import ace, { require as acequire } from 'ace-builds/src-noconflict/ace';
 import type { EventChannel, Unsubscribe } from 'redux-saga';
 import { eventChannel } from 'redux-saga';
 
+import { isAceModuleDefined, loadAceModules } from '../../commons/editor/ace/loadAceModules';
 import { isKeywordMapperToken } from './autocompleteHighlightRules';
 import { createAutocompleteModePublisher, normalizeAceModeId } from './autocompleteModeStore';
 
@@ -53,7 +52,29 @@ export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
     return CustomHighlightRules;
   }
 
-  loadMode(data: SyntaxHighlightData) {
+  /**
+   * An evaluator's mode borrows folding, indentation and outdentation from Ace's own modes
+   * (`hookFrom`), which must be loaded before the mode is defined. A folding mode lives in the file
+   * of a language's mode, so a language that hooks into one also hooks into that language's mode
+   * (`ace/mode/<language>`) for indentation, which is what is loaded here.
+   */
+  private async loadHookedModes(data: SyntaxHighlightData): Promise<void> {
+    const hooks: string[] = [data.foldingRules.hookFrom];
+    for (const hook of [data.indents, data.outdents, data.autoOutdent]) {
+      if (typeof hook !== 'function') {
+        hooks.push(hook.hookFrom);
+      }
+    }
+    await loadAceModules(hooks.filter(id => /^ace\/mode\/[^/]+$/.test(id)));
+    for (const id of hooks) {
+      if (!isAceModuleDefined(id)) {
+        console.error(`Ace module "${id}", hooked into by mode "${data.id}", could not be loaded`);
+      }
+    }
+  }
+
+  async loadMode(data: SyntaxHighlightData) {
+    await this.loadHookedModes(data);
     const TextMode = acequire('ace/mode/text').Mode;
     const highlightRules = this.loadHighlightRules(data.highlightRules);
     const modeId = normalizeAceModeId(data.id);

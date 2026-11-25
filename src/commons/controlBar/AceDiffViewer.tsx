@@ -1,5 +1,4 @@
-import 'ace-builds/src-noconflict/mode-javascript';
-import 'ace-builds/src-noconflict/theme-twilight';
+import '../editor/ace/loadAceModules';
 import 'ace-diff/styles.css';
 import 'ace-diff/styles-twilight.css';
 

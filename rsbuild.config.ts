@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import { InjectManifest } from '@aaroon/workbox-rspack-plugin';
-import { defineConfig, loadEnv } from '@rsbuild/core';
+import { defineConfig, loadEnv, rspack } from '@rsbuild/core';
 import { pluginEslint } from '@rsbuild/plugin-eslint';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import { pluginReact } from '@rsbuild/plugin-react';
@@ -128,6 +128,13 @@ export default defineConfig({
 
       config.plugins = [
         ...config.plugins,
+        // `ace-builds/esm-resolver` (see src/commons/editor/ace/loadAceModules.ts) lets Ace load any
+        // of its modes on demand. Leave out what Source Academy does not use: web workers (5.5 MB;
+        // the editor does not run them) and snippet files.
+        new rspack.IgnorePlugin({
+          resourceRegExp: /^\.\/src-noconflict\/(worker-|snippets\/)/,
+          contextRegExp: /ace-builds$/,
+        }),
         new InjectManifest({
           swSrc: './src/service-worker.ts',
           swDest: 'service-worker.js',
