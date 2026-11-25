@@ -5,12 +5,10 @@ import type { AllColsSortStates } from '../../features/grading/GradingTypes';
 import type { InterpreterOutput } from '../application/ApplicationTypes';
 import type { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import type { HighlightedLines, Position } from '../editor/EditorTypes';
-import type { UploadResult } from '../sideContent/content/SideContentUpload';
 
 export const EVAL_SILENT = 'EVAL_SILENT';
 
 export type WorkspaceLocation = keyof WorkspaceManagerState;
-export type WorkspaceLocationsWithTools = Extract<WorkspaceLocation, 'playground' | 'sicp'>;
 
 export type CodeVersionMetadata = {
   readonly id: string;
@@ -56,7 +54,6 @@ type GradingWorkspaceAttr = {
 type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
 
 type PlaygroundWorkspaceAttr = {
-  readonly usingUpload: boolean;
   readonly currentStep: number;
   readonly stepsTotal: number;
   readonly breakpointSteps: number[];
@@ -105,7 +102,6 @@ export type WorkspaceState = {
   readonly sharedbConnected: boolean;
   readonly stepLimit: number;
   readonly cseSnapshots: CseSnapshot[] | null;
-  readonly files: UploadResult;
   readonly updateUserRoleCallback: (id: string, newRole: CollabEditingAccess) => void;
   readonly versionHistory: VersionHistoryState;
   readonly saveStatus: SaveStatus;

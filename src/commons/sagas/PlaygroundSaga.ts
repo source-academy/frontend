@@ -8,11 +8,8 @@ import PlaygroundActions from '../../features/playground/PlaygroundActions';
 import type { OverallState } from '../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
 import { combineSagaHandlers } from '../redux/utils';
-import SideContentActions from '../sideContent/SideContentActions';
-import { SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import WorkspaceActions from '../workspace/WorkspaceActions';
 import { selectWorkspace } from './SafeEffects';
 
 const PlaygroundSaga = combineSagaHandlers({
@@ -48,19 +45,6 @@ const PlaygroundSaga = combineSagaHandlers({
       yield call(showSuccessMessage, resp.message);
     }
     yield put(PlaygroundActions.updateShortURL(Constants.urlShortenerBase + resp.url.keyword));
-  },
-  [SideContentActions.visitSideContent.type]: function* ({
-    payload: { newId, prevId, workspaceLocation },
-  }) {
-    if ((workspaceLocation !== 'playground' && workspaceLocation !== 'sicp') || newId === prevId) {
-      return;
-    }
-
-    if (newId === SideContentType.upload) {
-      yield put(WorkspaceActions.toggleUsingUpload(true, workspaceLocation));
-    } else {
-      yield put(WorkspaceActions.toggleUsingUpload(false, workspaceLocation));
-    }
   },
 });
 

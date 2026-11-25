@@ -34,7 +34,6 @@ export enum SideContentType {
   substVisualizer = 'subst_visualiser',
   testcases = 'testcases',
   htmlDisplay = 'html_display',
-  upload = 'upload',
 }
 
 /**

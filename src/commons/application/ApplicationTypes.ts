@@ -186,7 +186,6 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   isWaitingForInput: false,
   enableDebugging: true,
   cseSnapshots: null,
-  files: {},
   updateUserRoleCallback: () => {},
   versionHistory: {
     versions: [],
@@ -230,7 +229,6 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   },
   playground: {
     ...createDefaultWorkspace('playground'),
-    usingUpload: false,
     currentStep: -1,
     stepsTotal: 0,
     breakpointSteps: [],
@@ -247,7 +245,6 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   },
   sicp: {
     ...createDefaultWorkspace('sicp'),
-    usingUpload: false,
     currentStep: -1,
     stepsTotal: 0,
     breakpointSteps: [],
