@@ -16,7 +16,6 @@ const renderUseSideContent = (selectedTab: SideContentTabId) => {
     sideContent: {
       playground: {
         alerts: [],
-        dynamicTabs: [],
         selectedTab,
       },
     },
@@ -70,13 +69,9 @@ describe('combineAllTabs', () => {
 
     const tabs = combineAllTabs(
       {
-        beforeDynamicTabs: [makeTab(SideContentType.introduction)],
-        afterDynamicTabs: [
-          makeTab(SideContentType.cseMachine),
-          makeTab(CONDUCTOR_E_STEPPER_TAB_ID),
-        ],
+        leadingTabs: [makeTab(SideContentType.introduction)],
+        trailingTabs: [makeTab(SideContentType.cseMachine), makeTab(CONDUCTOR_E_STEPPER_TAB_ID)],
       },
-      [],
       [makeTab('data-visualizer'), liveEStepperTab],
     );
 

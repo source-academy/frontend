@@ -155,7 +155,7 @@ const AchievementSaga = combineSagaHandlers({
         selectedTab === SideContentType.substVisualizer
       ) {
         yield put(
-          SideContentActions.beginAlertSideContent(SideContentType.introduction, workspaceLocation),
+          SideContentActions.alertSideContent(SideContentType.introduction, workspaceLocation),
         );
       }
     }

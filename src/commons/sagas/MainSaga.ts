@@ -15,7 +15,6 @@ import PersistenceSaga from './PersistenceSaga';
 import PlaygroundSaga from './PlaygroundSaga';
 import PluginDirectorySaga from './PluginDirectorySaga';
 import RemoteExecutionSaga from './RemoteExecutionSaga';
-import SideContentSaga from './SideContentSaga';
 import WorkspaceSaga from './WorkspaceSaga';
 import { watchAutoSave, watchSavingStatus } from './WorkspaceSaga/helpers/versionHistory';
 
@@ -31,7 +30,6 @@ export default function* MainSaga(): SagaIterator {
     fork(GitHubPersistenceSaga),
     fork(RemoteExecutionSaga),
     fork(RemoteExecutionConductorSaga),
-    fork(SideContentSaga),
     fork(FeatureFlagSaga),
     fork(LanguageDirectorySaga),
     fork(PluginDirectorySaga),

@@ -1,5 +1,4 @@
 import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
-import type { Context } from 'js-slang';
 
 import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
 import type { AllColsSortStates } from '../../features/grading/GradingTypes';
@@ -107,7 +106,6 @@ export type WorkspaceState = {
   readonly customNotification: string;
   readonly sharedbConnected: boolean;
   readonly stepLimit: number;
-  readonly debuggerContext: DebuggerContext;
   readonly cseSnapshots: CseSnapshot[] | null;
   readonly files: UploadResult;
   readonly updateUserRoleCallback: (id: string, newRole: CollabEditingAccess) => void;
@@ -119,14 +117,6 @@ type ReplHistory = {
   browseIndex: null | number; // [0, 49] if browsing, else null
   records: string[];
   originalValue: string;
-};
-
-export type DebuggerContext = {
-  result: any;
-  lastDebuggerResult: any;
-  code: string;
-  context: Context;
-  workspaceLocation?: WorkspaceLocation;
 };
 
 export type SubmissionsTableFilters = {

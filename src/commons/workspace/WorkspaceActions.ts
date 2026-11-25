@@ -1,5 +1,3 @@
-import type { Context } from 'js-slang';
-
 import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
 import type { AllColsSortStates } from '../../features/grading/GradingTypes';
 import type { ExternalLibraryName } from '../application/types/ExternalTypes';
@@ -181,13 +179,6 @@ const newActions = createActions('workspace', {
     column: number,
     callback: any, // TODO: define a type for this
   ) => ({ workspaceLocation, row, column, callback }),
-  notifyProgramEvaluated: (
-    result: any,
-    lastDebuggerResult: any,
-    code: string,
-    context: Context,
-    workspaceLocation?: WorkspaceLocation,
-  ) => ({ result, lastDebuggerResult, code, context, workspaceLocation }),
   addHtmlConsoleError: (
     errorMsg: string,
     workspaceLocation: WorkspaceLocation,

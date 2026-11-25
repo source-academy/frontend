@@ -51,7 +51,7 @@ export default function SideContentProvider({
   selectedTab: propsSelectedTab,
   workspaceLocation,
 }: SideContentProviderProps) {
-  const { alerts, height, dynamicTabs, setSelectedTab, selectedTab } = useSideContent(
+  const { alerts, height, setSelectedTab, selectedTab } = useSideContent(
     workspaceLocation,
     defaultTab,
   );
@@ -59,9 +59,7 @@ export default function SideContentProvider({
     sideContentManager.getTabs(workspaceLocation),
   );
 
-  const combinedTabs = tabs
-    ? combineAllTabs(tabs, dynamicTabs, serviceTabs)
-    : [...dynamicTabs, ...serviceTabs];
+  const combinedTabs = tabs ? combineAllTabs(tabs, serviceTabs) : serviceTabs;
 
   const seenTabIds = new Set<string>();
   const allTabs = combinedTabs.filter(tab => {

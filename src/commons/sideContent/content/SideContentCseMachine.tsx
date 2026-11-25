@@ -40,7 +40,7 @@ import type { InterpreterOutput, OverallState } from '../../application/Applicat
 import type { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
-import { beginAlertSideContent } from '../SideContentActions';
+import { alertSideContent } from '../SideContentActions';
 import { getLocation } from '../SideContentHelper';
 import { type SideContentTab, SideContentType } from '../SideContentTypes';
 
@@ -752,7 +752,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
       handleStepsTotalUpdate: (steps: number) =>
         WorkspaceActions.updateStepsTotal(steps, props.workspaceLocation),
       handleAlertSideContent: () =>
-        beginAlertSideContent(SideContentType.cseMachine, props.workspaceLocation),
+        alertSideContent(SideContentType.cseMachine, props.workspaceLocation),
       setEditorHighlightedLines: (
         editorTabIndex: number,
         newHighlightedLines: HighlightedLines[],

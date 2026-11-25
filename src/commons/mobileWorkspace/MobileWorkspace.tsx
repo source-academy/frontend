@@ -212,15 +212,12 @@ function MobileWorkspace(props: MobileWorkspaceProps) {
       ...props.mobileSideContentProps,
       onChange: onSideContentTabChange,
       tabs: {
-        beforeDynamicTabs: [
+        leadingTabs: [
           ...sideBarTabs,
           mobileEditorTab,
-          ...(props.mobileSideContentProps.tabs?.beforeDynamicTabs ?? []),
+          ...(props.mobileSideContentProps.tabs?.leadingTabs ?? []),
         ],
-        afterDynamicTabs: [
-          ...(props.mobileSideContentProps.tabs?.afterDynamicTabs ?? []),
-          mobileRunTab,
-        ],
+        trailingTabs: [...(props.mobileSideContentProps.tabs?.trailingTabs ?? []), mobileRunTab],
       },
     };
   }, [onSideContentTabChange, props.mobileSideContentProps, sideBarTabs]);
