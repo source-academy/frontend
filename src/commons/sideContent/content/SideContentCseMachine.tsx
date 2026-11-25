@@ -550,7 +550,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
               </Tooltip>
             </ButtonGroup>
           </div>
-        </div>
+        </div>{' '}
         {this.state.visualization &&
         this.props.machineOutput.length &&
         this.props.machineOutput[0].type === 'errors' ? (
