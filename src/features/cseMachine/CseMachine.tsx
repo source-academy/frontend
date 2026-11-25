@@ -468,11 +468,16 @@ export default class CseMachine {
     const { controlComponent, stashComponent } = Layout;
     const restoreFrames = CseAnimation.keepFrames();
     Layout.controlComponent = undefined as unknown as typeof controlComponent;
-    setContext(Layout.clearDeadFrames ? snapshot : (layoutSnapshot ?? snapshot));
-    CseMachine.setMasterLayout(Layout.getLayoutPositions(CseMachine.controlStash));
-    Layout.controlComponent = controlComponent;
-    Layout.stashComponent = stashComponent;
-    restoreFrames();
+    try {
+      setContext(Layout.clearDeadFrames ? snapshot : (layoutSnapshot ?? snapshot));
+      CseMachine.setMasterLayout(Layout.getLayoutPositions(CseMachine.controlStash));
+    } finally {
+      // Also when the snapshot is malformed and the layout throws: a later draw or animation
+      // dereferences these.
+      Layout.controlComponent = controlComponent;
+      Layout.stashComponent = stashComponent;
+      restoreFrames();
+    }
     setContext(snapshot);
     Layout.applyFixedPositions();
   }

@@ -419,6 +419,43 @@ describe('frames keep their places from step to step (source-academy/frontend#35
   });
 });
 
+describe('a snapshot that cannot be laid out', () => {
+  test('leaves the layout components and the animation frames as they were', () => {
+    CseMachine.init(
+      () => {},
+      600,
+      400,
+      () => {},
+      () => {},
+    );
+    try {
+      CseMachine.renderSnapshot(snapshots[1], snapshotWithAllFrames(snapshots));
+      const before = {
+        control: Layout.controlComponent,
+        stash: Layout.stashComponent,
+        previous: (CseAnimation as any).previousFrame,
+        current: (CseAnimation as any).currentFrame,
+      };
+      expect(before.control).toBeDefined();
+
+      // A layout snapshot with a binding without a value: reading its label throws while the
+      // frames are laid out, after the control and stash have been taken away.
+      const malformed = {
+        ...snapshots[1],
+        environments: [{ ...call, bindings: [{ name: 'n' }] }, program(false, 1), global],
+      } as unknown as CseSnapshot;
+      expect(() => CseMachine.renderSnapshot(snapshots[1], malformed)).toThrow();
+
+      expect(Layout.controlComponent).toBe(before.control);
+      expect(Layout.stashComponent).toBe(before.stash);
+      expect((CseAnimation as any).previousFrame).toBe(before.previous);
+      expect((CseAnimation as any).currentFrame).toBe(before.current);
+    } finally {
+      CseMachine.clear();
+    }
+  });
+});
+
 describe('frame colours', () => {
   const framesById = () =>
     new Map(Layout.levels.flatMap(level => level.frames).map(f => [f.environment.id, f as any]));
