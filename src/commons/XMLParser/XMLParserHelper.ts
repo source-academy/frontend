@@ -97,8 +97,17 @@ const makeAssessment = (result: any): [Assessment, number] => {
     {
       type: capitalizeFirstLetter(rawOverview.kind) as AssessmentType,
       id: EDITING_ID,
-      globalDeployment: makeLibrary(task.DEPLOYMENT),
-      graderDeployment: makeLibrary(task.GRADERDEPLOYMENT),
+      globalDeployment: makeLibrary(
+        task.USER_PROGRAMMING_LANGUAGE ?? task.PROGRAMMINGLANGUAGE ?? task.DEPLOYMENT,
+      ),
+      graderDeployment: makeLibrary(
+        task.BACKEND_GRADER_PROGRAMMING_LANGUAGE ??
+          task.GRADERPROGRAMMINGLANGUAGE ??
+          task.GRADERDEPLOYMENT,
+      ),
+      frontendGraderDeployment: task.FRONTEND_GRADER_PROGRAMMING_LANGUAGE
+        ? makeLibrary(task.FRONTEND_GRADER_PROGRAMMING_LANGUAGE)
+        : undefined,
       longSummary: task.TEXT[0],
       missionPDF: 'google.com',
       questions: questionArr[0],
@@ -125,8 +134,11 @@ const makeLibrary = (deploymentArr: XmlParseStrDeployment[] | undefined): Librar
           [string, any, string]
         >)
       : [];
+    const interpreter = parseInt(deployment.$.interpreter ?? '', 10);
     return {
-      chapter: parseInt(deployment.$.interpreter, 10),
+      chapter: Number.isNaN(interpreter) ? 1 : interpreter,
+      ...(deployment.$.language ? { language: deployment.$.language } : {}),
+      ...(deployment.$.evaluator ? { evaluator: deployment.$.evaluator } : {}),
       external: {
         name: nameVal as ExternalLibraryName,
         symbols: symbolsVal,
@@ -145,8 +157,19 @@ const makeQuestions = (task: XmlParseStrTask): [Question[], number] => {
       answer: null,
       content: problem.TEXT[0],
       id: curId,
-      library: makeLibrary(problem.DEPLOYMENT),
-      graderLibrary: makeLibrary(problem.GRADERDEPLOYMENT),
+      library: makeLibrary(
+        problem.USER_PROGRAMMING_LANGUAGE ?? problem.PROGRAMMINGLANGUAGE ?? problem.DEPLOYMENT,
+      ),
+      graderLibrary: makeLibrary(
+        problem.BACKEND_GRADER_PROGRAMMING_LANGUAGE ??
+          problem.GRADERPROGRAMMINGLANGUAGE ??
+          problem.GRADERDEPLOYMENT,
+      ),
+      ...(problem.FRONTEND_GRADER_PROGRAMMING_LANGUAGE
+        ? {
+            frontendGradingLibrary: makeLibrary(problem.FRONTEND_GRADER_PROGRAMMING_LANGUAGE),
+          }
+        : {}),
       type: problem.$.type,
       xp: 0,
       maxXp: localMaxXp,
@@ -264,6 +287,8 @@ const exportLibrary = (library: Library) => {
   const deployment = {
     $: {
       interpreter: library.chapter.toString(),
+      ...(library.language ? { language: library.language } : {}),
+      ...(library.evaluator ? { evaluator: library.evaluator } : {}),
     },
     EXTERNAL: {
       $: {
@@ -313,10 +338,15 @@ export const assessmentToXml = (
   task.TEXT = assessment.longSummary;
   task.PROBLEMS = { PROBLEM: [] };
 
-  task.DEPLOYMENT = exportLibrary(assessment.globalDeployment!);
+  // under the names that the backend reads (it does not know DEPLOYMENT and GRADERDEPLOYMENT)
+  task.USER_PROGRAMMING_LANGUAGE = exportLibrary(assessment.globalDeployment!);
+
+  if (assessment.frontendGraderDeployment && assessment.frontendGraderDeployment.chapter !== -1) {
+    task.FRONTEND_GRADER_PROGRAMMING_LANGUAGE = exportLibrary(assessment.frontendGraderDeployment);
+  }
 
   if (assessment.graderDeployment!.chapter !== -1) {
-    task.GRADERDEPLOYMENT = exportLibrary(assessment.graderDeployment!);
+    task.BACKEND_GRADER_PROGRAMMING_LANGUAGE = exportLibrary(assessment.graderDeployment!);
   }
 
   assessment.questions.forEach((question: Question) => {
@@ -333,13 +363,15 @@ export const assessmentToXml = (
     } as any;
 
     if (question.library.chapter !== -1) {
-      /* tslint:disable:no-string-literal */
-      problem.$['DEPLOYMENT'] = exportLibrary(question.library);
+      problem.USER_PROGRAMMING_LANGUAGE = exportLibrary(question.library);
+    }
+
+    if (question.frontendGradingLibrary && question.frontendGradingLibrary.chapter !== -1) {
+      problem.FRONTEND_GRADER_PROGRAMMING_LANGUAGE = exportLibrary(question.frontendGradingLibrary);
     }
 
     if (question.graderLibrary!.chapter !== -1) {
-      /* tslint:disable:no-string-literal */
-      problem.$['GRADERDEPLOYMENT'] = exportLibrary(question.graderLibrary!);
+      problem.BACKEND_GRADER_PROGRAMMING_LANGUAGE = exportLibrary(question.graderLibrary!);
     }
 
     if (question.maxXp) {

@@ -7,11 +7,15 @@ import { describe, expect, test } from 'vitest';
 import type { OverallState } from '../../commons/application/ApplicationTypes';
 import { mockGradingQuery } from '../../commons/mocks/GradingMocks';
 import type { GradingQuery } from '../grading/GradingTypes';
-import { gradingChapter, useSelectGradingLanguage } from './gradingLanguage';
+import { gradingLibrary, useSelectGradingLanguage } from './gradingLanguage';
 import LanguageDirectoryActions from './LanguageDirectoryActions';
 
 const language = (id: string, evaluatorId: string) =>
-  ({ id, name: id, evaluators: [{ id: evaluatorId, name: evaluatorId }] }) as ILanguageDefinition;
+  ({
+    id,
+    name: id,
+    evaluators: [{ id: evaluatorId, name: evaluatorId }],
+  }) as ILanguageDefinition;
 
 // The language is the position in the directory: python4Typed is the fifth.
 const languages = [
@@ -20,6 +24,7 @@ const languages = [
   language('python3', 'python3Py2js'),
   language('python4', 'python4Py2js'),
   language('python4Typed', 'python4TypedPy2js'),
+  language('ocaml', 'ocamlJsOfOCaml'),
 ];
 
 const withChapter = (chapter: number): GradingQuery =>
@@ -27,7 +32,19 @@ const withChapter = (chapter: number): GradingQuery =>
     ...mockGradingQuery,
     answers: mockGradingQuery.answers.map(answer => ({
       ...answer,
-      question: { ...answer.question, library: { ...(answer.question as any).library, chapter } },
+      question: {
+        ...answer.question,
+        library: { ...(answer.question as any).library, chapter },
+      },
+    })),
+  }) as GradingQuery;
+
+const withLibrary = (library: object): GradingQuery =>
+  ({
+    ...mockGradingQuery,
+    answers: mockGradingQuery.answers.map(answer => ({
+      ...answer,
+      question: { ...answer.question, library },
     })),
   }) as GradingQuery;
 
@@ -41,13 +58,13 @@ function render(grading: GradingQuery | undefined) {
   return store.getActions();
 }
 
-describe('gradingChapter', () => {
-  test('is the chapter of the first programming question', () => {
-    expect(gradingChapter(withChapter(5))).toBe(5);
+describe('gradingLibrary', () => {
+  test('is the library of the first programming question', () => {
+    expect(gradingLibrary(withChapter(5))?.chapter).toBe(5);
   });
 
   test('is undefined without a grading', () => {
-    expect(gradingChapter(undefined)).toBeUndefined();
+    expect(gradingLibrary(undefined)).toBeUndefined();
   });
 });
 
@@ -56,6 +73,21 @@ describe('useSelectGradingLanguage', () => {
     expect(render(withChapter(5))).toEqual([
       LanguageDirectoryActions.setSelectedLanguage('python4Typed'),
       LanguageDirectoryActions.setSelectedEvaluator('python4TypedPy2js'),
+    ]);
+  });
+
+  test('a library that names its language and evaluator is not looked up by position', () => {
+    expect(
+      render(
+        withLibrary({
+          chapter: 1,
+          language: 'ocaml',
+          evaluator: 'ocamlJsOfOCaml',
+        }),
+      ),
+    ).toEqual([
+      LanguageDirectoryActions.setSelectedLanguage('ocaml'),
+      LanguageDirectoryActions.setSelectedEvaluator('ocamlJsOfOCaml'),
     ]);
   });
 

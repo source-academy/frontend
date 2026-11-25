@@ -679,6 +679,51 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       .silentRun();
   });
 
+  test('an OCaml question runs its testcase as an .ml file, without the Python __program__ line', () => {
+    const ocaml = {
+      id: 'ocaml',
+      name: 'OCaml',
+      evaluators: [{ id: 'ocamlJsOfOCaml' }],
+      defaultFileExtension: 'ml',
+    };
+    const named = { chapter: 1, language: 'ocaml', evaluator: 'ocamlJsOfOCaml' };
+    const base = generateDefaultState(workspaceLocation, {
+      output: [],
+      currentSubmission: 9,
+      currentQuestion: 0,
+    });
+    const state = {
+      ...base,
+      session: {
+        ...base.session,
+        gradings: { 9: { answers: [{ question: { library: named } }] } } as any,
+      },
+      languageDirectory: {
+        ...base.languageDirectory,
+        languages: [ocaml] as any,
+        languageMap: { ocaml } as any,
+      },
+    } as OverallState;
+
+    return expectSaga(
+      runTestCaseConductor,
+      workspaceLocation,
+      testcaseId,
+      'let f () = true',
+      ';; f ()',
+      TestcaseTypes.public,
+      '',
+      '',
+    )
+      .withState(state)
+      .provide([[matchers.call.fn(evalCodeConductorSaga), undefined]])
+      .call.like({
+        fn: evalCodeConductorSaga,
+        args: [{ '/testcase.ml': ['let f () = true', ';; f ()'].join('\n') }],
+      })
+      .silentRun();
+  });
+
   test('grades by the last printed line, not a returned value', () => {
     let capturedValue: { toReplString(): string } | undefined;
 

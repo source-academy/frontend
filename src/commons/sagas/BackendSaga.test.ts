@@ -675,6 +675,68 @@ describe('Test FETCH_ASSESSMENT action', () => {
       .silentRun();
   });
 
+  test('selects the language and evaluator that the first question names, not a position', () => {
+    const mockId = mockAssessment.id;
+    const named = {
+      ...mockAssessment,
+      questions: mockAssessment.questions.map(q => ({
+        ...q,
+        library: { ...q.library, chapter: 1, language: 'ocaml', evaluator: 'ocamlJsOfOCaml' },
+      })),
+    } as Assessment;
+    const languages = [
+      makeMockLanguageDefinition('python1', ['python1Py2js']),
+      makeMockLanguageDefinition('ocaml', ['ocamlJsOfOCaml']),
+    ];
+
+    return expectSaga(BackendSaga)
+      .withState({
+        session: mockTokens,
+        languageDirectory: { ...defaultLanguageDirectory, languages },
+      })
+      .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), named]])
+      .put(LanguageDirectoryActions.setSelectedLanguage('ocaml'))
+      .put(LanguageDirectoryActions.setSelectedEvaluator('ocamlJsOfOCaml'))
+      .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
+      .silentRun();
+  });
+
+  test('a named language is selected even before the language directory has loaded', () => {
+    const mockId = mockAssessment.id;
+    const named = {
+      ...mockAssessment,
+      questions: mockAssessment.questions.map(q => ({
+        ...q,
+        library: { ...q.library, language: 'ocaml', evaluator: 'ocamlJsOfOCaml' },
+      })),
+    } as Assessment;
+
+    return expectSaga(BackendSaga)
+      .withState({
+        session: mockTokens,
+        languageDirectory: { ...defaultLanguageDirectory, languages: [] },
+      })
+      .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), named]])
+      .put(LanguageDirectoryActions.setSelectedLanguage('ocaml', 'ocamlJsOfOCaml'))
+      .not.put(LanguageDirectoryActions.clearSelectedLanguage())
+      .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
+      .silentRun();
+  });
+
+  test('a chapter, which is a position, does not clear the selection while the directory is empty', () => {
+    const mockId = mockAssessment.id;
+
+    return expectSaga(BackendSaga)
+      .withState({
+        session: mockTokens,
+        languageDirectory: { ...defaultLanguageDirectory, languages: [] },
+      })
+      .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), mockAssessment]])
+      .not.put(LanguageDirectoryActions.clearSelectedLanguage())
+      .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
+      .silentRun();
+  });
+
   test('clears the selected language when the chapter is out of range', () => {
     const mockId = mockAssessment.id;
     const assessmentWithNoQuestions = { ...mockAssessment, questions: [] };

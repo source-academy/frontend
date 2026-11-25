@@ -1,12 +1,12 @@
 import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
 import { camelCase, mapKeys } from 'lodash-es';
 import type { SagaIterator } from 'redux-saga';
-import { all, call, fork, put, select } from 'redux-saga/effects';
+import { all, call, fork, put, select, take } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import type { UsernameRoleGroup } from 'src/features/adminPanel/subcomponents/AddUserPanel';
 import DashboardActions from 'src/features/dashboard/DashboardActions';
-import { deriveLanguageFromChapter } from 'src/features/directory/chapterLanguage';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
+import { resolveLibraryLanguage } from 'src/features/directory/libraryLanguage';
 import GroundControlActions from 'src/features/groundControl/GroundControlActions';
 
 import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
@@ -117,16 +117,35 @@ export function* routerNavigate(path: string) {
  * assessment load is what makes the assessment's Run/testcase-grading use the right language
  * instead of whatever was last selected in the Playground.
  *
- * The language is derived from the assessment's own chapter (the first question's
- * library.chapter — assessments don't mix chapters across their own questions), which is a
- * 1-based index into the language directory's array (see
- * chapterLanguage.ts) - not a separate assessment-level field.
+ * The language is the one that the first question's library names by its language and evaluator
+ * ids (assessments don't mix languages across their own questions); an older question has only a
+ * chapter, which is a 1-based index into the language directory's array (see
+ * libraryLanguage.ts) - not a separate assessment-level field.
  */
-function* selectAssessmentLanguageSaga(assessment: Assessment) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function* selectAssessmentLanguageSaga(assessment: Assessment): Generator<any, void, any> {
   const languages: ILanguageDefinition[] = yield select(
     (state: OverallState) => state.languageDirectory.languages,
   );
-  const derived = deriveLanguageFromChapter(languages, assessment.questions[0]?.library.chapter);
+  const library = assessment.questions[0]?.library;
+
+  if (languages.length === 0) {
+    // The language directory has not loaded yet, and the assessment must not lose its language to
+    // that. A library that names its language and evaluator needs no directory to be selected: the
+    // selection is made now, and `setLanguages` applies it when the directory arrives (as for a share
+    // link). A library with only a chapter, a position in the directory, has to wait for it.
+    if (library?.language) {
+      yield put(LanguageDirectoryActions.setSelectedLanguage(library.language, library.evaluator));
+    } else if (library) {
+      yield fork(function* () {
+        yield take(LanguageDirectoryActions.setLanguages.type);
+        yield call(selectAssessmentLanguageSaga, assessment);
+      });
+    }
+    return;
+  }
+
+  const derived = resolveLibraryLanguage(languages, library);
 
   if (!derived) {
     // Otherwise a prior assessment's selection would leak into this one.
