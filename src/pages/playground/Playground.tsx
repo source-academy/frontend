@@ -823,7 +823,7 @@ function Playground(props: PlaygroundProps) {
   // Remove Intro and Remote Execution tabs for mobile
   const mobileTabs = [...tabs].filter(({ id }) => !(id && desktopOnlyTabIds.includes(id)));
 
-  const afterDynamicTabs: SideContentTab[] = useMemo(
+  const trailingTabs: SideContentTab[] = useMemo(
     () =>
       !isSicpEditor && !Constants.playgroundOnly && editorSessionId !== ''
         ? [sessionManagementTab]
@@ -1027,8 +1027,8 @@ function Playground(props: PlaygroundProps) {
     sideContentProps: {
       selectedTabId: selectedTab,
       tabs: {
-        beforeDynamicTabs: tabs,
-        afterDynamicTabs,
+        leadingTabs: tabs,
+        trailingTabs,
       },
       workspaceLocation,
     },
@@ -1058,8 +1058,8 @@ function Playground(props: PlaygroundProps) {
       selectedTabId: selectedTab,
       onChange: setSelectedTab,
       tabs: {
-        beforeDynamicTabs: mobileTabs,
-        afterDynamicTabs,
+        leadingTabs: mobileTabs,
+        trailingTabs,
       },
       workspaceLocation: workspaceLocation,
     },

@@ -15,8 +15,8 @@ export type SideContentProps = {
   renderActiveTabPanelOnly?: boolean;
   editorWidth?: string;
   tabs?: {
-    beforeDynamicTabs: SideContentTab[];
-    afterDynamicTabs: SideContentTab[];
+    leadingTabs: SideContentTab[];
+    trailingTabs: SideContentTab[];
   };
   onChange?: ChangeTabsCallback;
   selectedTabId?: SideContentTabId;

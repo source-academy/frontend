@@ -689,8 +689,8 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
     return {
       selectedTabId: selectedTab,
       tabs: {
-        beforeDynamicTabs: tabs,
-        afterDynamicTabs: [],
+        leadingTabs: tabs,
+        trailingTabs: [],
       },
       onChange: onChangeTabs,
       workspaceLocation,

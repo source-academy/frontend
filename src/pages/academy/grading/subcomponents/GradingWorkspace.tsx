@@ -434,8 +434,8 @@ function GradingWorkspace(props: Props) {
         setSelectedTab(newTabId);
       },
       tabs: {
-        beforeDynamicTabs: tabs,
-        afterDynamicTabs: [],
+        leadingTabs: tabs,
+        trailingTabs: [],
       },
       workspaceLocation,
     };

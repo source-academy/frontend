@@ -1,6 +1,6 @@
 import type { IconName } from '@blueprintjs/core';
 
-import type { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 export enum SideContentType {
   autograder = 'autograder',
@@ -23,7 +23,6 @@ export enum SideContentType {
   folder = 'folder',
   grading = 'grading',
   introduction = 'introduction',
-  module = 'module',
   popularVoteLeaderboard = 'popular_vote_leaderboard',
   questionOverview = 'question_overview',
   remoteExecution = 'remote_execution',
@@ -68,27 +67,6 @@ export type SideContentTab = {
   disabled?: boolean;
 };
 
-/**
- * Used for modules that dynamically spawn when imported
- *
- * @property label A string that will appear as the tooltip.
- *
- * @property iconName BlueprintJS IconName element, used to render the
- *   icon which will be displayed over the SideContent panel.
- *
- * @property body The element to be rendered in the SideContent panel
- *  when the tab is selected.
- *
- * @property toSpawn function that returns boolean to determine if
- * side content tab should appear
- */
-export type ModuleSideContent = {
-  label: string;
-  iconName: IconName;
-  body: (props: any) => React.ReactElement;
-  toSpawn?: (context: DebuggerContext) => boolean;
-};
-
 export type SideContentManagerState = Record<WorkspaceLocation, SideContentState>;
 
 /**
@@ -98,14 +76,13 @@ export type SideContentLocation = WorkspaceLocation;
 
 export type SideContentState = {
   height?: number;
-  dynamicTabs: SideContentTab[];
   alerts: string[];
   selectedTab?: SideContentTabId;
 };
 
 export type PredefinedTabs = {
-  beforeDynamicTabs: SideContentTab[];
-  afterDynamicTabs: SideContentTab[];
+  leadingTabs: SideContentTab[];
+  trailingTabs: SideContentTab[];
 };
 
 export type ChangeTabsCallback = (
