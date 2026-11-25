@@ -671,6 +671,28 @@ export function getParamsText(data: Closure | GlobalFn | StreamFn): string {
   }
 }
 
+/**
+ * The lines that list the local and the global names of a function from a snapshot whose evaluator
+ * sends them (Python's: the names its body assigns or defines, and those it declares global), in
+ * comma-separated lists; none for other functions.
+ */
+export function getScopeNamesTexts(data: Closure | GlobalFn | StreamFn): string[] {
+  const { localNames, globalNames } = data as { localNames?: unknown; globalNames?: unknown };
+  if (!isClosure(data) || !Array.isArray(localNames) || !Array.isArray(globalNames)) {
+    return [];
+  }
+  return [`locals: ${localNames.join(', ')}`, `globals: ${globalNames.join(', ')}`];
+}
+
+/**
+ * The height that the description of a function may take up before it is truncated: that of a
+ * function's parameters and body, and a line more for each line of local or global names, so
+ * that those lines do not push the body out of the description.
+ */
+export function getFunctionTooltipMaxHeight(scopeNamesLineCount: number): number {
+  return Config.FnDescriptionMaxHeight + scopeNamesLineCount * Config.FontSize;
+}
+
 /** Returns the body string of the given function */
 export function getBodyText(data: Closure | GlobalFn | StreamFn): string {
   // A function from a snapshot whose evaluator sent the body's source (e.g. Python's, which has

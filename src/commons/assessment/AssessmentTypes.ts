@@ -1,8 +1,4 @@
-import type { SourceError } from 'js-slang/dist/errors/base';
-import { Chapter, type LanguageOptions, Variant } from 'js-slang/dist/langs';
-
-import type { ExternalLibrary } from '../application/types/ExternalTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { type InterpreterError } from '../errors/InterpreterError';
 
 export enum AssessmentStatuses {
   attempting = 'attempting',
@@ -94,6 +90,7 @@ export type Assessment = {
   type: AssessmentType;
   globalDeployment?: Library; // For mission control
   graderDeployment?: Library; // For mission control
+  frontendGraderDeployment?: Library; // For mission control
   hasTokenCounter?: boolean;
   isMinigame?: boolean;
   id: number;
@@ -163,6 +160,12 @@ export type BaseQuestion = {
     id: number;
   };
   graderLibrary?: Library; // For mission control
+  /**
+   * What the test cases run under in the workspace (the frontend grader): its language and evaluator.
+   * Absent for a question saved before the backend sent it, which then runs them under its
+   * `library`'s language (see `selectTestCaseLanguage`); there is no default language.
+   */
+  frontendGradingLibrary?: Library;
   id: number;
   library: Library;
   maxXp: number;
@@ -175,9 +178,22 @@ export type BaseQuestion = {
 
 export type Question = IProgrammingQuestion | IMCQQuestion | IContestVotingQuestion;
 
+/** What the backend stores of a question's external library: its name and symbols. */
+export type ExternalLibrary = {
+  name: string;
+  symbols: string[];
+};
+
 export type Library = {
-  chapter: Chapter;
-  variant?: Variant;
+  /** A 1-based position in the language directory (see `deriveLanguageFromChapter`). */
+  chapter: number;
+  /**
+   * The language and the evaluator, by their ids in the language directory (for example `ocaml` and
+   * `ocamlJsOfOCaml`; source-academy/backend#1387). They name what runs, and take precedence over
+   * `chapter`, which only older questions have.
+   */
+  language?: string;
+  evaluator?: string;
   execTimeMs?: number;
   external: ExternalLibrary;
   globals: Array<{
@@ -186,14 +202,14 @@ export type Library = {
     2?: string; // For mission control
   }>;
   moduleParams?: any;
-  languageOptions?: LanguageOptions;
+  languageOptions?: Record<string, string>;
 };
 
 export type Testcase = {
   answer: string; // the correct answer to the testcase
-  errors?: SourceError[]; // errors raised by interpreter during execution
+  errors?: InterpreterError[]; // errors raised by interpreter during execution
   program: string; // the program to be appended to the student's code
-  result?: any; // the result from the execution of the testcase
+  result?: string; // what the testcase printed last: the result from its execution
   score: number;
   type: TestcaseType;
 };
@@ -236,7 +252,7 @@ export const emptyLibrary = (): Library => {
   return {
     chapter: -1,
     external: {
-      name: 'NONE' as ExternalLibraryName,
+      name: 'NONE',
       symbols: [],
     },
     globals: [],
@@ -245,9 +261,9 @@ export const emptyLibrary = (): Library => {
 
 export const normalLibrary = (): Library => {
   return {
-    chapter: Chapter.SOURCE_1,
+    chapter: 1,
     external: {
-      name: 'NONE' as ExternalLibraryName,
+      name: 'NONE',
       symbols: [],
     },
     globals: [],

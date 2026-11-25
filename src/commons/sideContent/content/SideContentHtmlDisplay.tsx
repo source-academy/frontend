@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import type { ResultOutput } from 'src/commons/application/ApplicationTypes';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
 
-import { beginAlertSideContent } from '../SideContentActions';
+import { alertSideContent } from '../SideContentActions';
 import {
   type SideContentLocation,
   type SideContentTab,
@@ -41,7 +41,7 @@ export function SideContentHtmlDisplay(props: Props) {
   });
 
   useEffect(() => {
-    dispatch(beginAlertSideContent(SideContentType.htmlDisplay, workspaceLocation));
+    dispatch(alertSideContent(SideContentType.htmlDisplay, workspaceLocation));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -66,7 +66,7 @@ const makeHtmlDisplayTabFrom = (
   body: (
     <SideContentHtmlDisplay
       workspaceLocation={workspaceLocation}
-      content={output.value}
+      content={String(output.value)}
       handleAddHtmlConsoleError={handleError}
     />
   ),

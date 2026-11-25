@@ -1,4 +1,3 @@
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { cloneDeep } from 'lodash-es';
 import CommonsActions from 'src/commons/application/actions/CommonsActions';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
@@ -16,23 +15,19 @@ import {
   type ResultOutput,
   type RunningOutput,
 } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { type Library, type Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
+import { type Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
 import type { HighlightedLines, Position } from '../editor/EditorTypes';
+import { errorFromException } from '../errors/InterpreterError';
 import Constants from '../utils/Constants';
-import { createContext } from '../utils/JsSlangHelper';
 import WorkspaceActions from './WorkspaceActions';
 import { WorkspaceReducer } from './WorkspaceReducer';
 import type {
   EditorTabState,
   PlaygroundWorkspaceState,
   WorkspaceLocation,
-  WorkspaceLocationsWithTools,
   WorkspaceManagerState,
 } from './WorkspaceTypes';
 
-const playgroundWorkspace: WorkspaceLocation = 'playground';
-const sicpWorkspace: WorkspaceLocation = 'sicp';
 const locations: ReadonlyArray<WorkspaceLocation> = [
   'assessment',
   'grading',
@@ -198,28 +193,6 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
   });
 });
 
-describe('CHANGE_EXTERNAL_LIBRARY', () => {
-  test('sets externalLibrary correctly', () => {
-    const newExternal = 'new_external_test' as ExternalLibraryName;
-    const playgroundAction = {
-      type: WorkspaceActions.changeExternalLibrary.type,
-      payload: {
-        newExternal,
-        workspaceLocation: playgroundWorkspace,
-      },
-    } as const;
-
-    const result = WorkspaceReducer(defaultWorkspaceManager, playgroundAction);
-    expect(result).toEqual({
-      ...defaultWorkspaceManager,
-      playground: {
-        ...defaultWorkspaceManager.playground,
-        externalLibrary: newExternal,
-      },
-    });
-  });
-});
-
 describe('CLEAR_REPL_INPUT', () => {
   test('clears replValue', () => {
     const replValue = 'test repl value';
@@ -291,132 +264,11 @@ describe('CLEAR_REPL_OUTPUT_LAST', () => {
   });
 });
 
-describe('DEBUG_RESET', () => {
-  test('sets isRunning and isDebugging to false', () => {
-    const isRunning = true;
-    const isDebugging = true;
-    const debugResetDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
-      isRunning,
-      isDebugging,
-    });
-    const actions = generateActions(InterpreterActions.debuggerReset);
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(debugResetDefaultState, action);
-      const location: WorkspaceLocation = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...debugResetDefaultState,
-        [location]: {
-          ...debugResetDefaultState[location],
-          isRunning: false,
-          isDebugging: false,
-        },
-      });
-    });
-  });
-});
-
-describe('DEBUG_RESUME', () => {
-  test('sets isRunning to true and isDebugging to false', () => {
-    const isDebugging = true;
-    const debugResumeDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
-      isDebugging,
-    });
-    const actions = generateActions(InterpreterActions.debuggerResume);
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(debugResumeDefaultState, action);
-      const location: WorkspaceLocation = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...debugResumeDefaultState,
-        [location]: {
-          ...debugResumeDefaultState[location],
-          isRunning: true,
-          isDebugging: false,
-        },
-      });
-    });
-  });
-});
-
-describe('END_CLEAR_CONTEXT', () => {
-  test('sets context and globals correctly', () => {
-    const mockGlobals: Array<[string, any]> = [
-      ['testNumber', 3.141592653589793],
-      ['testString', 'who dat boi'],
-      ['testBooleanTrue', true],
-      ['testBooleanFalse', false],
-      ['testBooleanUndefined', undefined],
-      ['testBooleanNull', null],
-      ['testObject', { a: 1, b: 2 }],
-      ['testArray', [1, 2, 'a', 'b']],
-    ];
-    const library: Library = {
-      chapter: Chapter.SOURCE_4,
-      external: {
-        name: 'SOUNDS' as ExternalLibraryName,
-        symbols: [],
-      },
-      globals: mockGlobals,
-    };
-
-    const actions = generateActions(l => WorkspaceActions.endClearContext(library, l));
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location: WorkspaceLocation = action.payload.workspaceLocation;
-      const context = createContext<WorkspaceLocation>(
-        library.chapter,
-        library.external.symbols,
-        location,
-        Variant.DEFAULT,
-      );
-
-      // Note: we stringify because context contains functions which cause
-      // the two to compare unequal; stringifying strips functions
-      expect(JSON.stringify(result)).toEqual(
-        JSON.stringify({
-          ...defaultWorkspaceManager,
-          [location]: {
-            ...defaultWorkspaceManager[location],
-            context,
-            globals: mockGlobals,
-            externalLibrary: 'SOUNDS' as const,
-          },
-        }),
-      );
-    });
-  });
-});
-
-describe('END_DEBUG_PAUSE', () => {
-  test('sets isRunning to false and isDebugging to true', () => {
-    const isRunning = true;
-    const debugPauseDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ isRunning });
-    const actions = generateActions(InterpreterActions.endDebuggerPause);
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(debugPauseDefaultState, action);
-      const location: WorkspaceLocation = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...debugPauseDefaultState,
-        [location]: {
-          ...debugPauseDefaultState[location],
-          isRunning: false,
-          isDebugging: true,
-        },
-      });
-    });
-  });
-});
-
 describe('END_INTERRUPT_EXECUTION', () => {
-  test('sets isRunning and isDebugging to false', () => {
+  test('sets isRunning', () => {
     const isRunning = true;
-    const isDebugging = true;
     const interruptExecutionDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       isRunning,
-      isDebugging,
     });
     const actions = generateActions(InterpreterActions.endInterruptExecution);
 
@@ -428,7 +280,6 @@ describe('END_INTERRUPT_EXECUTION', () => {
         [location]: {
           ...interruptExecutionDefaultState[location],
           isRunning: false,
-          isDebugging: false,
         },
       });
     });
@@ -436,11 +287,8 @@ describe('END_INTERRUPT_EXECUTION', () => {
 });
 
 describe('EVAL_EDITOR', () => {
-  test('sets isRunning to true and isDebugging to false', () => {
-    const isDebugging = true;
-    const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
-      isDebugging,
-    });
+  test('sets isRunning to true', () => {
+    const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({});
     const actions = generateActions(WorkspaceActions.evalEditor);
 
     actions.forEach(action => {
@@ -451,7 +299,6 @@ describe('EVAL_EDITOR', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: true,
-          isDebugging: false,
         },
       });
     });
@@ -472,12 +319,10 @@ const outputWithRunningAndCodeOutput: InterpreterOutput[] = [
 describe('EVAL_INTERPRETER_ERROR', () => {
   test('works correctly with RunningOutput', () => {
     const isRunning = true;
-    const isDebugging = true;
 
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningOutput,
       isRunning,
-      isDebugging,
     });
     const actions = generateActions(l => InterpreterActions.evalInterpreterError([], l));
 
@@ -489,7 +334,6 @@ describe('EVAL_INTERPRETER_ERROR', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: false,
-          isDebugging: false,
           output: [
             { ...outputWithRunningOutput[0] },
             { type: 'errors', errors: [], consoleLogs: ['console-log-test-2'] },
@@ -501,11 +345,9 @@ describe('EVAL_INTERPRETER_ERROR', () => {
 
   test('works correctly with other outputs', () => {
     const isRunning = true;
-    const isDebugging = true;
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput,
       isRunning,
-      isDebugging,
     });
 
     const actions = generateActions(l => InterpreterActions.evalInterpreterError([], l));
@@ -518,7 +360,6 @@ describe('EVAL_INTERPRETER_ERROR', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: false,
-          isDebugging: false,
           output: [
             { ...outputWithRunningAndCodeOutput[0] },
             { ...outputWithRunningAndCodeOutput[1] },
@@ -665,11 +506,10 @@ describe('SET_IS_RUNNING', () => {
 });
 
 describe('APPEND_INTERPRETER_ERROR', () => {
-  test('updates output without changing isRunning or isDebugging', () => {
+  test('updates output without changing isRunning', () => {
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput,
       isRunning: true,
-      isDebugging: true,
     });
 
     const actions = generateActions(l => InterpreterActions.appendInterpreterError([], l));
@@ -682,7 +522,6 @@ describe('APPEND_INTERPRETER_ERROR', () => {
         [location]: {
           ...evalEditorDefaultState[location],
           isRunning: true,
-          isDebugging: true,
           output: [
             { ...outputWithRunningAndCodeOutput[0] },
             { ...outputWithRunningAndCodeOutput[1] },
@@ -722,7 +561,7 @@ const editorTestcases: Testcase[] = [
 
 describe('EVAL_TESTCASE_FAILURE', () => {
   test('sets editorTestcases correctly', () => {
-    const value = 'test-value-failure';
+    const value = [errorFromException(new Error('test-value-failure'))];
     const evalFailureDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       editorTestcases,
     });
@@ -888,13 +727,9 @@ describe('LOG_OUT', () => {
           ],
         },
       ],
-      externalLibrary: 'NONE' as ExternalLibraryName,
       replValue: 'test repl value here',
       sharedbConnected: false,
-      usingSubst: false,
-      usingCse: false,
       usingUpload: false,
-      updateCse: true,
       currentStep: -1,
       stepsTotal: 0,
       breakpointSteps: [],
@@ -974,7 +809,6 @@ describe('RESET_WORKSPACE', () => {
             ...defaultWorkspaceManager[location],
             ...newContext,
             ...workspaceOptions,
-            context: newContext.context,
           },
         }),
       );
@@ -1285,7 +1119,6 @@ describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
                 breakpoints: [],
               },
             ],
-            context: newContext.context,
           },
         }),
       );
@@ -2612,33 +2445,6 @@ describe('UPDATE_REPL_VALUE', () => {
           replValue: newReplValue,
         },
       });
-    });
-  });
-});
-
-describe('TOGGLE_USING_SUBST', () => {
-  test('sets usingSubst correctly', () => {
-    const usingSubst = true;
-    const actions = generateActions(l =>
-      WorkspaceActions.toggleUsingSubst(usingSubst, l as WorkspaceLocationsWithTools),
-    );
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location: WorkspaceLocation = action.payload.workspaceLocation;
-
-      const expectedResult =
-        location === playgroundWorkspace || location === sicpWorkspace
-          ? {
-              ...defaultWorkspaceManager,
-              [location]: {
-                ...defaultWorkspaceManager[location],
-                usingSubst: true,
-              },
-            }
-          : { ...defaultWorkspaceManager };
-
-      expect(result).toEqual(expectedResult);
     });
   });
 });

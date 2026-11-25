@@ -1,5 +1,3 @@
-import { Chapter, Variant } from 'js-slang/dist/langs';
-
 import { type GameState, Role } from '../application/ApplicationTypes';
 import type {
   AdminPanelCourseRegistration,
@@ -375,8 +373,7 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     enableContestLeaderboard: true,
     topLeaderboardDisplay: 100,
     topContestLeaderboardDisplay: 10,
-    sourceChapter: Chapter.SOURCE_1,
-    sourceVariant: Variant.DEFAULT,
+    sourceChapter: 1,
     moduleHelpText: '',
     assetsPrefix: '',
   },
@@ -390,8 +387,7 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     enableContestLeaderboard: true,
     topLeaderboardDisplay: 100,
     topContestLeaderboardDisplay: 10,
-    sourceChapter: Chapter.SOURCE_2,
-    sourceVariant: Variant.DEFAULT,
+    sourceChapter: 2,
     moduleHelpText: 'Help Text!',
     assetsPrefix: '',
   },

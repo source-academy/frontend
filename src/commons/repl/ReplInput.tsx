@@ -1,13 +1,14 @@
+import '../editor/ace/loadAceModules';
+import '../editor/ace/sourceTheme';
+
 import { Classes } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useEffect, useRef } from 'react';
 import AceEditor from 'react-ace';
 import ReactAce from 'react-ace/lib/ace';
 
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { getModeString, selectMode } from '../utils/AceHelper';
+import { useActiveAceMode } from '../editor/useActiveAceMode';
 import { useResponsive } from '../utils/Hooks';
 // source mode and chapter imported in Editor.tsx
 
@@ -19,9 +20,6 @@ export type ReplInputProps = {
   onFocus?: (editor: Ace.Editor) => void;
   onBlur?: () => void;
   replValue: string;
-  sourceChapter: Chapter;
-  sourceVariant: Variant;
-  externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
   replButtons: Array<React.ReactElement | null>;
 };
@@ -79,8 +77,8 @@ export function ReplInput(props: ReplInputProps) {
     }
   });
 
-  // see the comment above this same call in Editor.tsx
-  selectMode(props.sourceChapter, props.sourceVariant, props.externalLibrary);
+  // react-ace's `mode` prop takes the short name and prepends `ace/mode/` itself.
+  const mode = useActiveAceMode().replace(/^ace\/mode\//, '');
 
   const replButtons = () => props.replButtons;
 
@@ -88,7 +86,7 @@ export function ReplInput(props: ReplInputProps) {
     <>
       <AceEditor
         className="repl-react-ace react-ace"
-        mode={getModeString(props.sourceChapter, props.sourceVariant, props.externalLibrary)}
+        mode={mode}
         theme="source"
         height="1px"
         width="100%"

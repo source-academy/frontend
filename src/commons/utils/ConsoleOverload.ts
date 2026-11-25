@@ -1,4 +1,4 @@
-import { stringify } from 'js-slang/dist/utils/stringify';
+import { formatValue } from './formatValue';
 
 type DisplayBufferCallback = (log: string) => void;
 
@@ -14,6 +14,6 @@ export const consoleOverloads: ConsoleOverload = {
   log:
     (bufferCallback: DisplayBufferCallback) =>
     (...args: any[]) => {
-      bufferCallback(args.map(log => (typeof log === 'string' ? log : stringify(log))).join(' '));
+      bufferCallback(args.map(log => (typeof log === 'string' ? log : formatValue(log))).join(' '));
     },
 };

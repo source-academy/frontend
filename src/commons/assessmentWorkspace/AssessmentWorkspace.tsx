@@ -12,7 +12,6 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { isEqual } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -39,7 +38,6 @@ import type {
   IContestVotingQuestion,
   IMCQQuestion,
   IProgrammingQuestion,
-  Library,
   Testcase,
 } from '../assessment/AssessmentTypes';
 import { QuestionTypes } from '../assessment/AssessmentTypes';
@@ -69,7 +67,6 @@ import SideContentAutograder from '../sideContent/content/SideContentAutograder'
 import SideContentContestLeaderboard from '../sideContent/content/SideContentContestLeaderboard';
 import SideContentContestVotingContainer from '../sideContent/content/SideContentContestVotingContainer';
 import SideContentDocumentation from '../sideContent/content/SideContentDocumentation';
-import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import type { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight, resetSideContent } from '../sideContent/SideContentActions';
 import { useSideContent } from '../sideContent/SideContentHelper';
@@ -78,7 +75,6 @@ import {
   type SideContentTabId,
   SideContentType,
 } from '../sideContent/SideContentTypes';
-import Constants from '../utils/Constants';
 import { useAppSelector, useResponsive } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import { assertType } from '../utils/TypeHelper';
@@ -149,7 +145,6 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
   const {
     handleTeamOverviewFetch,
     handleTestcaseEval,
-    handleClearContext,
     handleChangeExecTime,
     handleUpdateCurrentAssessmentId,
     handleResetWorkspace,
@@ -175,8 +170,6 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
         dispatch(SessionActions.fetchTeamFormationOverview(assessmentId)),
       handleTestcaseEval: (id: number) =>
         dispatch(WorkspaceActions.evalTestcase(workspaceLocation, id)),
-      handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
-        dispatch(WorkspaceActions.beginClearContext(workspaceLocation, library, shouldInitLibrary)),
       handleChangeExecTime: (execTimeMs: number) =>
         dispatch(WorkspaceActions.changeExecTime(execTimeMs, workspaceLocation)),
       handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) =>
@@ -412,7 +405,6 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
           setSessionId(
             initSession(`${(assessment as any).number}/${props.questionId}`, {
               chapter: question.library.chapter,
-              externalLibrary: question?.library?.external?.name || 'NONE',
               editorValue: options.editorValue,
             }),
           );
@@ -456,7 +448,6 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
     handleChangeExecTime(
       question.library.execTimeMs ?? defaultWorkspaceManager.assessment.execTime,
     );
-    handleClearContext(question.library, true);
     // Clear out any module tabs (e.g. Runes, Curves) left over from the
     // previous question, so they don't linger until the next run.
     dispatch(resetSideContent(workspaceLocation));
@@ -678,17 +669,6 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
       });
     }
 
-    const externalLibrary = question.library.external;
-    const functionsAttached = externalLibrary.symbols;
-    if (functionsAttached.includes('get_matrix')) {
-      tabs.push({
-        label: `Tone Matrix`,
-        iconName: IconNames.GRID_VIEW,
-        body: <SideContentToneMatrix />,
-        id: SideContentType.toneMatrix,
-      });
-    }
-
     const onChangeTabs = (
       newTabId: SideContentTabId,
       prevTabId: SideContentTabId,
@@ -703,8 +683,8 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
     return {
       selectedTabId: selectedTab,
       tabs: {
-        beforeDynamicTabs: tabs,
-        afterDynamicTabs: [],
+        leadingTabs: tabs,
+        trailingTabs: [],
       },
       onChange: onChangeTabs,
       workspaceLocation,
@@ -876,16 +856,7 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
         <ControlBarSaveStatusIndicator saveStatus={saveStatus} key="save_status" />
       ) : null;
 
-    const chapterSelect = (
-      <ControlBarChapterSelect
-        handleChapterSelect={() => {}}
-        isFolderModeEnabled={isFolderModeEnabled}
-        sourceChapter={question.library.chapter}
-        sourceVariant={question.library.variant ?? Constants.defaultSourceVariant}
-        disabled
-        key="chapter"
-      />
-    );
+    const chapterSelect = <ControlBarChapterSelect disabled key="chapter" />;
 
     return {
       editorButtons:
@@ -1079,9 +1050,6 @@ It is safe to close this window.`}
           editorTabs: editorTabs.map(convertEditorTabStateToProps),
           editorSessionId: '',
           sessionDetails: null,
-          sourceChapter: question.library.chapter || Chapter.SOURCE_4,
-          sourceVariant: question.library.variant ?? Variant.DEFAULT,
-          externalLibraryName: question.library.external.name || 'NONE',
           handleDeclarationNavigate: editorContainerHandlers.handleDeclarationNavigate,
           handleEditorEval: handleEval,
           handleEditorValueChange: handleEditorValueChange,
@@ -1104,9 +1072,6 @@ It is safe to close this window.`}
     handleReplValueChange: replHandlers.handleReplValueChange,
     output: output,
     replValue: replValue,
-    sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
-    sourceVariant: question.library.variant ?? Variant.DEFAULT,
-    externalLibrary: question?.library?.external?.name || 'NONE',
     replButtons: replButtons,
   };
   const sideBarProps = {

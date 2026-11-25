@@ -12,10 +12,8 @@ import { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
 import { useEffect, useRef } from 'react';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
 
-import { getLanguageConfig } from '../application/ApplicationTypes';
 import CollabEditingActions from '../collabEditing/CollabEditingActions';
 import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabEditingHelper';
-import { parseModeString } from '../utils/AceHelper';
 import { useSession } from '../utils/Hooks';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
 import type { EditorHook } from './Editor';
@@ -97,21 +95,11 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       if (!sessionDetails) {
         return;
       }
-      const binding = ShareAce.add(
-        editor,
-        ['contents'],
-        {
-          cursorManager,
-          selectionManager,
-          radarManager,
-        },
-        {
-          languageSelectHandler: (language: string) => {
-            const { chapter, variant } = parseModeString(language);
-            propsRef.current.updateLanguageCallback?.(getLanguageConfig(chapter, variant), null);
-          },
-        },
-      );
+      const binding = ShareAce.add(editor, ['contents'], {
+        cursorManager,
+        selectionManager,
+        radarManager,
+      });
       propsRef.current.handleSetSharedbConnected!(true);
       dispatch(
         CollabEditingActions.setUpdateUserRoleCallback('playground', binding.changeUserRole),

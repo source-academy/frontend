@@ -1,54 +1,32 @@
 import { type AutoCompleteEntry, WEB_PLUGIN_ID } from '@sourceacademy/common-autocomplete';
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
-import { type Context, findDeclaration, getNames } from 'js-slang';
-import { Chapter, Variant } from 'js-slang/dist/langs';
-import Phaser from 'phaser';
+import { findDeclaration } from 'js-slang';
 import type { EventChannel } from 'redux-saga';
 import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import AutoCompletePlugin from 'src/features/conductor/AutocompletePlugin';
 import { BrowserHostPlugin } from 'src/features/conductor/BrowserHostPlugin';
-import { selectConductorEv3Enable } from 'src/features/remoteExecutionConductor/flagConductorEv3Enable';
 
-import InterpreterActions from '../../../commons/application/actions/InterpreterActions';
 import { combineSagaHandlers } from '../../../commons/redux/utils';
 import WorkspaceActions from '../../../commons/workspace/WorkspaceActions';
 import { EventType } from '../../../features/achievement/AchievementTypes';
-import { selectConductorEnable } from '../../../features/conductor/flagConductorEnable';
-import CseMachine from '../../../features/cseMachine/CseMachine';
-import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
 import LanguageDirectoryActions from '../../../features/directory/LanguageDirectoryActions';
 import { selectDefaultFileExtension } from '../../../features/directory/LanguageDirectoryTypes';
-import {
-  TEST_CASE_EVALUATOR_ID,
-  TEST_CASE_LANGUAGE_ID,
-} from '../../../features/directory/testCaseLanguage';
+import { selectTestCaseLanguage } from '../../../features/directory/testCaseLanguage';
 import type { DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';
-import {
-  defaultEditorValue,
-  type OverallState,
-  styliseSublanguage,
-} from '../../application/ApplicationTypes';
-import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
-import type { Library, Testcase } from '../../assessment/AssessmentTypes';
-import { Documentation } from '../../documentation/Documentation';
+import { defaultEditorValue, type OverallState } from '../../application/ApplicationTypes';
+import type { Testcase } from '../../assessment/AssessmentTypes';
+import { createAnalysisContext } from '../../editor/sourceAnalysis';
 import { writeFileRecursively } from '../../fileSystem/utils';
 import { actions } from '../../utils/ActionsHelper';
-import {
-  highlightClean,
-  highlightCleanForControl,
-  highlightLine,
-  highlightLineForControl,
-} from '../../utils/JsSlangHelper';
 import {
   showSuccessMessage,
   showWarningMessage,
 } from '../../utils/notifications/NotificationsHelper';
-import { showFullJSDisclaimer, showFullTSDisclaimer } from '../../utils/WarningDialogHelper';
 import { getPreparedConductorSaga } from '../helpers/conductorEvaluatorCache';
 import { selectWorkspace } from '../SafeEffects';
-import { evalCodeConductorSaga, evalCodeSaga } from './helpers/evalCode';
+import { evalCodeConductorSaga } from './helpers/evalCode';
 import { evalEditorSaga } from './helpers/evalEditor';
 import { runTestCase } from './helpers/runTestCase';
 import {
@@ -156,8 +134,6 @@ const WorkspaceSaga = combineSagaHandlers({
     const {
       activeEditorTabIndex,
       editorTabs,
-      context,
-      externalLibrary: extLib,
       programPrependValue: prepend,
     } = yield* selectWorkspace(workspaceLocation);
     const editorValue = editorTabs[activeEditorTabIndex ?? 0].value;
@@ -172,103 +148,58 @@ const WorkspaceSaga = combineSagaHandlers({
       autocompleteCode = prepend + '\n' + editorValue;
     }
 
-    if (yield select(selectConductorEnable)) {
-      const { conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } =
-        yield call(getPreparedConductorSaga);
+    const { conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } =
+      yield call(getPreparedConductorSaga);
 
-      let plugin: AutoCompletePlugin;
-      try {
-        plugin = conduit.lookupPlugin(WEB_PLUGIN_ID) as AutoCompletePlugin;
-      } catch {
+    let plugin: AutoCompletePlugin;
+    try {
+      plugin = conduit.lookupPlugin(WEB_PLUGIN_ID) as AutoCompletePlugin;
+    } catch {
+      return;
+    }
+
+    if (plugin) {
+      const channel: EventChannel<AutoCompleteEntry[]> = yield call(
+        [plugin, 'complete'],
+        autocompleteCode,
+        action.payload.row + prependLength,
+        action.payload.column,
+      );
+      //const names: AutoCompleteEntry[] = yield take(channel);
+      const { names, timeout }: { names?: AutoCompleteEntry[]; timeout?: true } = yield race({
+        names: take(channel),
+        timeout: delay(3000),
+      });
+
+      if (timeout || !names) {
+        console.warn('autocomplete channel timed out — runner never replied');
+        channel.close();
         return;
       }
 
-      if (plugin) {
-        const channel: EventChannel<AutoCompleteEntry[]> = yield call(
-          [plugin, 'complete'],
-          autocompleteCode,
-          action.payload.row + prependLength,
-          action.payload.column,
-        );
-        //const names: AutoCompleteEntry[] = yield take(channel);
-        const { names, timeout }: { names?: AutoCompleteEntry[]; timeout?: true } = yield race({
-          names: take(channel),
-          timeout: delay(3000),
-        });
-
-        if (timeout || !names) {
-          console.warn('autocomplete channel timed out — runner never replied');
-          channel.close();
-          return;
-        }
-
-        yield call(
-          action.payload.callback,
-          null,
-          names.map(name => ({
-            meta: name.meta,
-            value: name.name,
-            caption: name.name,
-            docHTML: name.docHTML,
-            score: name.score ? name.score + 1000 : 1000, // Prioritize suggestions from code
-            name: undefined,
-          })),
-        );
-        channel.close();
-      } else {
-        yield call(action.payload.callback, null, []);
-      }
-      return;
+      yield call(
+        action.payload.callback,
+        null,
+        names.map(name => ({
+          meta: name.meta,
+          value: name.name,
+          caption: name.name,
+          docHTML: name.docHTML,
+          score: name.score ? name.score + 1000 : 1000, // Prioritize suggestions from code
+          name: undefined,
+        })),
+      );
+      channel.close();
+    } else {
+      yield call(action.payload.callback, null, []);
     }
-
-    const [editorNames, displaySuggestions]: Awaited<ReturnType<typeof getNames>> = yield call(
-      getNames,
-      autocompleteCode,
-      action.payload.row + prependLength,
-      action.payload.column,
-      context,
-    );
-
-    if (!displaySuggestions) {
-      yield call(action.payload.callback);
-      return;
-    }
-
-    const editorSuggestions: any[] = editorNames.map(name => {
-      return {
-        ...name,
-        caption: name.name,
-        value: name.name,
-        score: name.score ? name.score + 1000 : 1000, // Prioritize suggestions from code
-        name: undefined,
-      };
-    });
-
-    let chapterName = context.chapter.toString();
-    const variant = context.variant ?? Variant.DEFAULT;
-    if (variant !== Variant.DEFAULT) {
-      chapterName += '_' + variant;
-    }
-
-    const builtinSuggestions = Documentation.builtins[chapterName] || [];
-    const extLibSuggestions = Documentation.externalLibraries[extLib] || [];
-
-    yield call(
-      action.payload.callback,
-      null,
-      editorSuggestions.concat(builtinSuggestions, extLibSuggestions),
-    );
   },
   [WorkspaceActions.evalRepl.type]: function* (action) {
     const workspaceLocation = action.payload.workspaceLocation;
-    const { replValue: code, execTime } = yield* selectWorkspace(workspaceLocation);
+    const { replValue: code } = yield* selectWorkspace(workspaceLocation);
 
     yield put(actions.clearReplInput(workspaceLocation));
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
-
-    const context: Context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context,
-    );
 
     const remoteExecutionSession: DeviceSession | undefined = yield select(
       (state: OverallState) => state.session.remoteExecutionSession,
@@ -284,130 +215,18 @@ const WorkspaceSaga = combineSagaHandlers({
       // execution in the first place (see Playground.tsx's `usingRemoteExecution`).
       const codeFilePath = '/code.js';
       const codeFiles = { [codeFilePath]: code };
-      // Deliberately gated on the EV3-specific flag, not the general flagConductorEnable, matching
-      // evalEditorSaga - see its own comment for why.
-      const isConductorEv3: boolean = yield select(selectConductorEv3Enable);
-      if (isConductorEv3) {
-        yield put(actions.remoteExecConductorRun(codeFiles, codeFilePath));
-      } else {
-        yield put(actions.remoteExecRun(codeFiles, codeFilePath));
-      }
+      yield put(actions.remoteExecConductorRun(codeFiles, codeFilePath));
       return;
     }
 
-    if (yield select(selectConductorEnable)) {
-      const codeFilePath = '/code.js';
-      yield call(
-        evalCodeConductorSaga,
-        { [codeFilePath]: code },
-        codeFilePath,
-        context,
-        workspaceLocation,
-        WorkspaceActions.evalRepl.type,
-      );
-      return;
-    }
-
-    // Interrupt any evaluation currently in flight before starting this one - legacy,
-    // non-Conductor path only. The Conductor path above manages its own persistent REPL
-    // session (see evalCodeConductorSaga's doc comment) and must not be interrupted just
-    // because a new REPL line was submitted, or every line would tear down and rebuild the
-    // session instead of building on it.
-    yield put(actions.beginInterruptExecution(workspaceLocation));
-
-    // Reset old context.errors
-    context.errors = [];
     const codeFilePath = '/code.js';
-    const codeFiles = {
-      [codeFilePath]: code,
-    };
     yield call(
-      evalCodeSaga,
-      codeFiles,
+      evalCodeConductorSaga,
+      { [codeFilePath]: code },
       codeFilePath,
-      context,
-      execTime,
+      workspaceLocation,
       WorkspaceActions.evalRepl.type,
-      workspaceLocation,
     );
-  },
-  [InterpreterActions.debuggerResume.type]: function* (action) {
-    const workspaceLocation = action.payload.workspaceLocation;
-    const code: string = yield select(
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].value,
-    );
-    const execTime: number = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].execTime,
-    );
-    yield put(actions.beginInterruptExecution(workspaceLocation));
-    /** Clear the context, with the same chapter and externalSymbols as before. */
-    yield put(actions.clearReplOutput(workspaceLocation));
-    const context: Context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context,
-    );
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
-    const codeFilePath = '/code.js';
-    const codeFiles = {
-      [codeFilePath]: code,
-    };
-    yield call(
-      evalCodeSaga,
-      codeFiles,
-      codeFilePath,
-      context,
-      execTime,
-      InterpreterActions.debuggerResume.type,
-      workspaceLocation,
-    );
-  },
-  [InterpreterActions.debuggerReset.type]: function* (action) {
-    const workspaceLocation = action.payload.workspaceLocation;
-    const context: Context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context,
-    );
-    yield put(actions.clearReplOutput(workspaceLocation));
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
-    context.runtime.break = false;
-    yield put(actions.updateLastDebuggerResult(undefined, workspaceLocation));
-  },
-  [WorkspaceActions.setEditorHighlightedLines.type]: function* ({
-    payload: { newHighlightedLines },
-  }) {
-    if (newHighlightedLines.length === 0) {
-      yield call(highlightClean);
-    } else {
-      try {
-        for (const [startRow, endRow] of newHighlightedLines) {
-          for (let row = startRow; row <= endRow; row++) {
-            yield call(highlightLine, row);
-          }
-        }
-      } catch (e) {
-        // Error most likely caused by trying to highlight the lines of the prelude
-        // in CSE Machine. Can be ignored.
-      }
-    }
-  },
-  [WorkspaceActions.setEditorHighlightedLinesControl.type]: function* ({
-    payload: { newHighlightedLines },
-  }) {
-    if (newHighlightedLines.length === 0) {
-      yield call(highlightCleanForControl);
-    } else {
-      try {
-        for (const [startRow, endRow] of newHighlightedLines) {
-          for (let row = startRow; row <= endRow; row++) {
-            yield call(highlightLineForControl, row);
-          }
-        }
-      } catch (e) {
-        // Error most likely caused by trying to highlight the lines of the prelude
-        // in CSE Machine. Can be ignored.
-      }
-    }
   },
   [WorkspaceActions.evalTestcase.type]: function* (action) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -416,129 +235,13 @@ const WorkspaceSaga = combineSagaHandlers({
     const index = action.payload.testcaseId;
     yield* runTestCase(workspaceLocation, index);
   },
-  [WorkspaceActions.chapterSelect.type]: function* (action) {
-    const { workspaceLocation, chapter: newChapter, variant: newVariant } = action.payload;
-    const [oldVariant, oldChapter, symbols, globals, externalLibraryName]: [
-      Variant,
-      Chapter,
-      string[],
-      Array<[string, any]>,
-      ExternalLibraryName,
-    ] = yield select((state: OverallState) => [
-      state.workspaces[workspaceLocation].context.variant,
-      state.workspaces[workspaceLocation].context.chapter,
-      state.workspaces[workspaceLocation].context.externalSymbols,
-      state.workspaces[workspaceLocation].globals,
-      state.workspaces[workspaceLocation].externalLibrary,
-    ]);
-
-    const chapterChanged: boolean = newChapter !== oldChapter || newVariant !== oldVariant;
-    const toChangeChapter: boolean =
-      newChapter === Chapter.FULL_JS
-        ? chapterChanged && (yield call(showFullJSDisclaimer))
-        : newChapter === Chapter.FULL_TS
-          ? chapterChanged && (yield call(showFullTSDisclaimer))
-          : chapterChanged;
-
-    if (toChangeChapter) {
-      const library: Library = {
-        chapter: newChapter,
-        variant: newVariant,
-        external: {
-          name: externalLibraryName,
-          symbols,
-        },
-        globals,
-      };
-      yield put(actions.beginClearContext(workspaceLocation, library, false));
-      yield put(actions.clearReplOutput(workspaceLocation));
-      yield put(actions.debuggerReset(workspaceLocation));
-      yield put(actions.resetSideContent(workspaceLocation));
-      yield call(
-        showSuccessMessage,
-        `Switched to ${styliseSublanguage(newChapter, newVariant)}`,
-        1000,
-      );
-    }
-  },
-  /**
-   * Note that the PLAYGROUND_EXTERNAL_SELECT action is made to
-   * select the library for playground.
-   * This is because assessments do not have a chapter & library select, the question
-   * specifies the chapter and library to be used.
-   *
-   * To abstract this to assessments, the state structure must be manipulated to store
-   * the external library name in a WorkspaceState (as compared to IWorkspaceManagerState).
-   *
-   * @see IWorkspaceManagerState @see WorkspaceState
-   */
-  [WorkspaceActions.externalLibrarySelect.type]: function* (action) {
-    const { workspaceLocation, externalLibraryName: newExternalLibraryName } = action.payload;
-    const [chapter, globals, oldExternalLibraryName]: [
-      Chapter,
-      Array<[string, any]>,
-      ExternalLibraryName,
-    ] = yield select((state: OverallState) => [
-      state.workspaces[workspaceLocation].context.chapter,
-      state.workspaces[workspaceLocation].globals,
-      state.workspaces[workspaceLocation].externalLibrary,
-    ]);
-    const symbols = externalLibraries.get(newExternalLibraryName)!;
-    const library: Library = {
-      chapter,
-      external: {
-        name: newExternalLibraryName,
-        symbols,
-      },
-      globals,
-    };
-    if (newExternalLibraryName !== oldExternalLibraryName || action.payload.initialise) {
-      yield put(actions.changeExternalLibrary(newExternalLibraryName, workspaceLocation));
-      yield put(actions.beginClearContext(workspaceLocation, library, true));
-      yield put(actions.clearReplOutput(workspaceLocation));
-      if (!action.payload.initialise) {
-        yield call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000);
-      }
-    }
-  },
-  /**
-   * Handles the side effect of resetting the WebGL context when context is reset.
-   *
-   * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
-   * the function.
-   */
-  [WorkspaceActions.beginClearContext.type]: function* (action): any {
-    yield call([DataVisualizer, DataVisualizer.clearWithData]);
-    yield call([CseMachine, CseMachine.clear]);
-    const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
-    for (const [key, value] of globals) {
-      window[key as any] = value;
-    }
-    yield put(
-      actions.endClearContext(
-        {
-          ...action.payload.library,
-          moduleParams: {
-            runes: {},
-            phaser: Phaser,
-          },
-        },
-        action.payload.workspaceLocation,
-      ),
-    );
-    yield undefined;
-  },
   [WorkspaceActions.navigateToDeclaration.type]: function* (action) {
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select(
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].value,
     );
-    const context: Context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context,
-    );
-
-    const result = findDeclaration(code, context, {
+    const result = findDeclaration(code, createAnalysisContext(), {
       line: action.payload.cursorPosition.row + 1,
       column: action.payload.cursorPosition.column,
     });
@@ -569,23 +272,31 @@ const WorkspaceSaga = combineSagaHandlers({
       // Display a message to the user
       yield call(showSuccessMessage, `Running all testcases!`, 2000);
 
-      // Grading always runs under TEST_CASE_LANGUAGE_ID/EVALUATOR_ID (see testCaseLanguage.ts) -
+      // Grading runs under the question's frontend grader language and evaluator (see
+      // testCaseLanguage.ts) -
       // switch once for this whole batch (rather than once per testcase inside
       // runTestCaseConductor), since each switch tears down and rebuilds the Conductor session
       // (conductorEvaluatorCache.ts's ensureConductorSessionSaga). Doing that up to 2N times in
       // quick succession raced with Conductor's own internal teardown often enough to throw an
       // uncaught "Conduit already terminated" from inside the vendored library - see
       // source-academy/frontend#4232.
-      const isConductorEnabled: boolean = yield select(selectConductorEnable);
+      const testCase: { languageId: string; evaluatorId: string } | undefined = yield select(
+        (state: OverallState) => selectTestCaseLanguage(state, workspaceLocation),
+      );
+      if (!testCase) {
+        yield call(
+          showWarningMessage,
+          'This question does not name a language for its test cases that the language directory has.',
+        );
+        return;
+      }
       let selectedLanguageId: string | null = null;
       let selectedEvaluatorId: string | null = null;
-      if (isConductorEnabled) {
-        ({ selectedLanguageId, selectedEvaluatorId } = yield select(
-          (state: OverallState) => state.languageDirectory,
-        ));
-        yield put(LanguageDirectoryActions.setSelectedLanguage(TEST_CASE_LANGUAGE_ID));
-        yield put(LanguageDirectoryActions.setSelectedEvaluator(TEST_CASE_EVALUATOR_ID));
-      }
+      ({ selectedLanguageId, selectedEvaluatorId } = yield select(
+        (state: OverallState) => state.languageDirectory,
+      ));
+      yield put(LanguageDirectoryActions.setSelectedLanguage(testCase.languageId));
+      yield put(LanguageDirectoryActions.setSelectedEvaluator(testCase.evaluatorId));
 
       try {
         for (const idx of testcases.keys()) {
@@ -593,27 +304,20 @@ const WorkspaceSaga = combineSagaHandlers({
           // so that the UI updates
           yield new Promise(resolve => setTimeout(resolve, 0));
 
-          const programSucceeded: boolean = yield call(
-            runTestCase,
-            workspaceLocation,
-            idx,
-            isConductorEnabled,
-          );
+          const programSucceeded: boolean = yield call(runTestCase, workspaceLocation, idx, true);
           // Prematurely terminate if execution of the program failed (not the testcase)
           if (!programSucceeded) {
             return;
           }
         }
       } finally {
-        if (isConductorEnabled) {
-          if (selectedLanguageId) {
-            yield put(LanguageDirectoryActions.setSelectedLanguage(selectedLanguageId));
-            if (selectedEvaluatorId) {
-              yield put(LanguageDirectoryActions.setSelectedEvaluator(selectedEvaluatorId));
-            }
-          } else {
-            yield put(LanguageDirectoryActions.clearSelectedLanguage());
+        if (selectedLanguageId) {
+          yield put(LanguageDirectoryActions.setSelectedLanguage(selectedLanguageId));
+          if (selectedEvaluatorId) {
+            yield put(LanguageDirectoryActions.setSelectedEvaluator(selectedEvaluatorId));
           }
+        } else {
+          yield put(LanguageDirectoryActions.clearSelectedLanguage());
         }
       }
     },

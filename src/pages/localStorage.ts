@@ -1,8 +1,6 @@
-import type { Chapter, Variant } from 'js-slang/dist/langs';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
-import type { OverallState, SALanguage } from '../commons/application/ApplicationTypes';
-import type { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
+import type { OverallState } from '../commons/application/ApplicationTypes';
 import type { SessionState } from '../commons/application/types/SessionTypes';
 import type { FeatureFlagsState } from '../commons/featureFlags';
 import { showWarningMessage } from '../commons/utils/notifications/NotificationsHelper';
@@ -25,10 +23,6 @@ export type SavedState = {
   playgroundIsFolderModeEnabled: boolean;
   playgroundActiveEditorTabIndex: NullableValue<number>;
   playgroundEditorTabs: EditorTabState[];
-  playgroundSourceChapter: Chapter;
-  playgroundSourceVariant: Variant;
-  playgroundLanguage: SALanguage;
-  playgroundExternalLibrary: ExternalLibraryName;
 };
 
 export const loadStoredState = (): SavedState | undefined => {
@@ -84,10 +78,6 @@ export const saveState = (state: OverallState) => {
         value: state.workspaces.playground.activeEditorTabIndex,
       },
       playgroundEditorTabs: state.workspaces.playground.editorTabs,
-      playgroundSourceChapter: state.workspaces.playground.context.chapter,
-      playgroundSourceVariant: state.workspaces.playground.context.variant,
-      playgroundLanguage: state.playground.languageConfig,
-      playgroundExternalLibrary: state.workspaces.playground.externalLibrary,
     };
     const serialized = compressToUTF16(JSON.stringify(stateToBeSaved));
     localStorage.setItem('storedState', serialized);

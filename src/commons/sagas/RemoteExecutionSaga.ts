@@ -1,7 +1,4 @@
 import { SlingClient } from '@sourceacademy/sling-client';
-import { assemble, compileFiles, type Context } from 'js-slang';
-import { ExceptionError } from 'js-slang/dist/errors/errors';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { pickBy } from 'lodash-es';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import RemoteExecutionActions from 'src/features/remoteExecution/RemoteExecutionActions';
@@ -15,17 +12,15 @@ import {
 import {
   type Device,
   type DeviceSession,
-  deviceTypesById,
   type WebSocketEndpointInformation,
 } from 'src/features/remoteExecution/RemoteExecutionTypes';
 import { store } from 'src/pages/createStore';
 
 import InterpreterActions from '../application/actions/InterpreterActions';
 import type { OverallState } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { errorFromException } from '../errors/InterpreterError';
 import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
-import type { MaybePromise } from '../utils/TypeHelper';
 import { fetchDevices, getDeviceWSEndpoint } from './RequestsSaga';
 
 const dummyLocation = {
@@ -164,7 +159,7 @@ const RemoteExecutionSaga = combineSagaHandlers({
           store.dispatch(actions.handleConsoleLog(workspace, `${message}`));
           break;
         case 'error': {
-          const error = new ExceptionError(new Error(`${message}`), dummyLocation);
+          const error = errorFromException(new Error(`${message}`), dummyLocation);
           store.dispatch(actions.evalInterpreterError([error], workspace));
           break;
         }
@@ -173,8 +168,6 @@ const RemoteExecutionSaga = combineSagaHandlers({
           break;
       }
     });
-    const deviceType = deviceTypesById.get(device.type);
-
     yield put(
       actions.remoteExecUpdateSession({
         device,
@@ -185,25 +178,8 @@ const RemoteExecutionSaga = combineSagaHandlers({
     yield put(
       actions.updateWorkspace(workspace, {
         isRunning: false,
-        isDebugging: false,
-        externalLibrary: deviceType?.deviceLibraryName,
         output: [],
       }),
-    );
-    yield put(
-      actions.beginClearContext(
-        workspace,
-        {
-          chapter: deviceType?.languageChapter || Chapter.SOURCE_3,
-          variant: Variant.DEFAULT,
-          external: {
-            name: deviceType?.deviceLibraryName || ExternalLibraryName.NONE,
-            symbols: deviceType?.internalFunctions || [],
-          },
-          globals: [],
-        },
-        false,
-      ),
     );
     try {
       const connectPromise = new Promise((resolve, reject) => {
@@ -260,49 +236,6 @@ const RemoteExecutionSaga = combineSagaHandlers({
     // session (handleConductorDisconnect there is idempotent).
     yield put(actions.remoteExecConductorDisconnect());
     yield put(actions.remoteExecUpdateSession(undefined));
-    yield put(actions.externalLibrarySelect(ExternalLibraryName.NONE, session.workspace, true));
-  },
-  [RemoteExecutionActions.remoteExecRun.type]: function* (action) {
-    const { files, entrypointFilePath } = action.payload;
-
-    const session: DeviceSession | undefined = yield select(
-      (state: OverallState) => state.session.remoteExecutionSession,
-    );
-    if (!session) {
-      return;
-    }
-    if (session.connection.status !== 'CONNECTED') {
-      yield put(
-        actions.updateWorkspace(session.workspace, {
-          isRunning: false,
-        }),
-      );
-      return;
-    }
-
-    yield put(actions.clearReplOutput(session.workspace));
-
-    const client = session.connection.client;
-    const context: Context = yield select(
-      (state: OverallState) => state.workspaces[session.workspace].context,
-    );
-    // clear the context of errors (note: the way this works is that the context
-    // is mutated by js-slang anyway, so it's ok to do it like this)
-    context.errors.length = 0;
-    const compiled: MaybePromise<ReturnType<typeof compileFiles>> = yield call(
-      compileFiles,
-      files,
-      entrypointFilePath,
-      context,
-      deviceTypesById.get(session.device.type)?.internalFunctions,
-    );
-    if (!compiled) {
-      yield put(actions.evalInterpreterError(context.errors, session.workspace));
-      return;
-    }
-    const assembled = assemble(compiled);
-
-    client.sendRun(Buffer.from(assembled));
   },
   [InterpreterActions.beginInterruptExecution.type]: function* () {
     const session: DeviceSession | undefined = yield select(

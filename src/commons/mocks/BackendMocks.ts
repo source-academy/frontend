@@ -9,13 +9,7 @@ import type {
 } from '../../features/grading/GradingTypes';
 import { SortStates } from '../../features/grading/GradingTypes';
 import SessionActions from '../application/actions/SessionActions';
-import {
-  type OverallState,
-  Role,
-  type SALanguage,
-  styliseSublanguage,
-  SupportedLanguage,
-} from '../application/ApplicationTypes';
+import { type OverallState, Role } from '../application/ApplicationTypes';
 import type { AdminPanelCourseRegistration, Tokens } from '../application/types/SessionTypes';
 import {
   type AssessmentOverview,
@@ -76,22 +70,10 @@ export function* mockBackendSaga(): SagaIterator {
     const courseRegistration = { ...mockCourseRegistrations[0] };
     const courseConfiguration = { ...mockCourseConfigurations[0] };
     const assessmentConfigurations = [...mockAssessmentConfigurations[0]];
-    const sublanguage: SALanguage = {
-      chapter: courseConfiguration.sourceChapter,
-      variant: courseConfiguration.sourceVariant,
-      displayName: styliseSublanguage(
-        courseConfiguration.sourceChapter,
-        courseConfiguration.sourceVariant,
-      ),
-      mainLanguage: SupportedLanguage.JAVASCRIPT,
-      supports: {},
-    };
-
     yield put(actions.setUser(user));
     yield put(actions.setCourseRegistration(courseRegistration));
     yield put(actions.setCourseConfiguration(courseConfiguration));
     yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-    yield put(actions.updateSublanguage(sublanguage));
   };
 
   yield takeEvery(SessionActions.fetchUserAndCourse.type, mockGetUserAndCourse);
@@ -101,19 +83,13 @@ export function* mockBackendSaga(): SagaIterator {
     yield put(actions.setCourseConfiguration(courseConfiguration));
   });
 
-  // Mirrors BackendSaga's changeSublanguage handler (Ground Control's "Default language"
+  // Mirrors BackendSaga's changeDefaultLanguage handler (Ground Control's "Default language"
   // selector), minus the network round-trip - lets that control be exercised against the mock
   // backend instead of silently no-oping.
   yield takeEvery(
-    WorkspaceActions.changeSublanguage.type,
-    function* (action: ReturnType<typeof WorkspaceActions.changeSublanguage>) {
-      const { sublang } = action.payload;
-      yield put(
-        actions.setCourseConfiguration({
-          sourceChapter: sublang.chapter,
-          sourceVariant: sublang.variant,
-        }),
-      );
+    WorkspaceActions.changeDefaultLanguage.type,
+    function* (action: ReturnType<typeof WorkspaceActions.changeDefaultLanguage>) {
+      yield put(actions.setCourseConfiguration({ sourceChapter: action.payload.sourceChapter }));
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
     },
   );
@@ -455,18 +431,6 @@ export function* mockBackendSaga(): SagaIterator {
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations([...mockAssessmentConfigurations[idx]]));
       yield put(actions.setCourseRegistration({ ...mockCourseRegistrations[idx] }));
-      yield put(
-        actions.updateSublanguage({
-          chapter: courseConfiguration.sourceChapter,
-          variant: courseConfiguration.sourceVariant,
-          displayName: styliseSublanguage(
-            courseConfiguration.sourceChapter,
-            courseConfiguration.sourceVariant,
-          ),
-          mainLanguage: SupportedLanguage.JAVASCRIPT,
-          supports: {},
-        }),
-      );
       yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
     },
   );

@@ -3,14 +3,13 @@ import type { Reducer } from '@reduxjs/toolkit';
 import { defaultSideContent, defaultSideContentManager } from '../application/ApplicationTypes';
 import type { SourceActionType } from '../utils/ActionsHelper';
 import {
+  alertSideContent,
   changeSideContentHeight,
-  endAlertSideContent,
   removeSideContentAlert,
   resetSideContent,
-  spawnSideContent,
   visitSideContent,
 } from './SideContentActions';
-import { getDynamicTabs, getLocation, getTabId } from './SideContentHelper';
+import { getLocation } from './SideContentHelper';
 import type { SideContentManagerState, SideContentState } from './SideContentTypes';
 
 export const SideContentReducer: Reducer<SideContentManagerState, SourceActionType> = (
@@ -34,8 +33,11 @@ export const SideContentReducer: Reducer<SideContentManagerState, SourceActionTy
           height: action.payload.height,
         },
       };
-    case endAlertSideContent.type: {
-      if (action.payload.id !== sideContentState.selectedTab) {
+    case alertSideContent.type: {
+      if (
+        action.payload.id !== sideContentState.selectedTab &&
+        !sideContentState.alerts.includes(action.payload.id)
+      ) {
         return {
           ...state,
           [key]: {
@@ -59,18 +61,6 @@ export const SideContentReducer: Reducer<SideContentManagerState, SourceActionTy
         ...state,
         [key]: defaultSideContent,
       };
-    case spawnSideContent.type: {
-      const dynamicTabs = getDynamicTabs(action.payload.debuggerContext);
-      const alerts = dynamicTabs.map(getTabId).filter(id => id !== sideContentState.selectedTab);
-      return {
-        ...state,
-        [key]: {
-          ...sideContentState,
-          alerts,
-          dynamicTabs,
-        },
-      };
-    }
     case visitSideContent.type:
       return {
         ...state,

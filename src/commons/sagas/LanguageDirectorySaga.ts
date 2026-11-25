@@ -5,7 +5,6 @@ import type {
 } from '@sourceacademy/language-directory/dist/types';
 import { getEvaluatorDefinition } from '@sourceacademy/language-directory/dist/util';
 import { call, fork, put, select } from 'redux-saga/effects';
-import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import {
   flagDirectoryLanguageUrl,
   selectDirectoryLanguageUrl,
@@ -47,18 +46,13 @@ export function* getEvaluatorDefinitionSaga() {
 
 /**
  * The language the current course configures as its default, or `undefined` when there is no course
- * (logged out), the course predates Conductor, or its `sourceChapter` doesn't name a directory entry.
+ * (logged out), or its `sourceChapter` doesn't name a directory entry.
  *
- * Course config stores this as `sourceChapter`, which under Conductor is a 1-based index into the
+ * Course config stores this as `sourceChapter`, which is a 1-based index into the
  * directory rather than a Source chapter — see `deriveLanguageFromChapter`. Admins set it through
  * Ground Control's "Default language" selector.
  */
 export function* getCourseDefaultSelectionSaga() {
-  const conductorEnabled: boolean = yield select(selectConductorEnable);
-  if (!conductorEnabled) {
-    // The legacy path drives the language off `playgroundSourceChapter` instead.
-    return undefined;
-  }
   const languages: ILanguageDefinition[] = yield select(
     (state: OverallState) => state.languageDirectory.languages,
   );
@@ -178,10 +172,6 @@ export const languageDirectoryHandlers = combineSagaHandlers({
     // evaluator (not the language default). Without this, picking e.g. the Stepper evaluator would
     // never update the prepared conductor — the run would keep using the default evaluator, so
     // `hostLoadPlugin("stepper")` would never fire and the Stepper tab would never appear.
-    const conductorEnabled: boolean = yield select(selectConductorEnable);
-    if (!conductorEnabled) {
-      return;
-    }
     if (!evaluator?.path) {
       return;
     }

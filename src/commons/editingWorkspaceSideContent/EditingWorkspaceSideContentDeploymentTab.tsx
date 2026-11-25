@@ -1,27 +1,11 @@
-import { Button, Classes, Divider, MenuItem, Switch } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
-import type { ItemRenderer } from '@blueprintjs/select';
-import { Select } from '@blueprintjs/select';
-import { Chapter, Variant } from 'js-slang/dist/langs';
+import { Divider, Switch } from '@blueprintjs/core';
 
-import {
-  type SALanguage,
-  sourceLanguages,
-  styliseSublanguage,
-} from '../application/ApplicationTypes';
-import {
-  type External,
-  externalLibraries,
-  ExternalLibraryName,
-} from '../application/types/ExternalTypes';
 import { type Assessment, emptyLibrary, type Library } from '../assessment/AssessmentTypes';
-import ControlButton from '../ControlButton';
+import DeploymentLanguageSelect from './DeploymentLanguageSelect';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
-import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 
 type Props = {
   updateAssessment: (assessment: Assessment) => void;
-  handleRefreshLibrary: (library: Library) => void;
   assessment: Assessment;
   label: string;
   pathToLibrary: Array<string | number>;
@@ -29,263 +13,69 @@ type Props = {
   isOptionalDeployment: boolean;
 };
 
-function DeploymentTab(props: Props) {
-  const deploymentTab = () => {
-    const deploymentPath = props.pathToLibrary;
-    const deployment = getValueFromPath(deploymentPath, props.assessment) as Library;
-    // const deploymentDisp = props.isGlobalDeployment ? 'Global Deployment' : 'Local Deployment';
-    const symbols = deployment.external.symbols.map((symbol, i) => (
-      <tr key={i}>
-        <td>{textareaContent(deploymentPath.concat(['external', 'symbols', i]))}</td>
-        <td style={{ width: '100px' }}>
-          <ControlButton label="Delete" icon={IconNames.MINUS} onClick={handleSymbolDelete(i)} />
-        </td>
-      </tr>
-    ));
-
-    const globals = deployment.globals.map((symbol, i) => (
-      <tr key={i}>
-        <td style={{ width: '170px' }}>
-          {textareaContent(deploymentPath.concat(['globals', i, 0]))}
-        </td>
-        <td>{globalValueTextareaContent(i)}</td>
-        <td style={{ width: '90px' }}>
-          <ControlButton label="Delete" icon={IconNames.MINUS} onClick={handleGlobalDelete(i)} />
-        </td>
-      </tr>
-    ));
-
-    const resetLibrary = (
-      <ControlButton
-        label="Use this Library"
-        icon={IconNames.REFRESH}
-        onClick={() => props.handleRefreshLibrary(deployment)}
-      />
-    );
-
-    const symbolsFragment = (
-      <>
-        External Library:
-        <br />
-        {externalSelect(deployment.external.name, handleExternalSelect)}
-        <Divider />
-        <div>Symbols:</div>
-        <br />
-        <table style={{ width: '100%' }}>
-          <tbody>{symbols}</tbody>
-        </table>
-        <ControlButton label="New Symbol" icon={IconNames.PLUS} onClick={handleNewSymbol} />
-      </>
-    );
-
-    const globalsFragment = (
-      <>
-        <div>Globals:</div>
-        <br />
-        <table style={{ width: '100%', borderSpacing: '5px' }}>
-          <tbody>{globals}</tbody>
-        </table>
-        <ControlButton label="New Global" icon={IconNames.PLUS} onClick={handleNewGlobal} />
-      </>
-    );
-
-    return (
-      <div>
-        {/* {deploymentDisp}
-        <br /> */}
-        <Divider />
-        {resetLibrary}
-        <Divider />
-        Interpreter:
-        <br />
-        {chapterSelect(deployment.chapter, deployment.variant, handleChapterSelect)}
-        <Divider />
-        {symbolsFragment}
-        <Divider />
-        {globalsFragment}
-      </div>
-    );
+function DeploymentTab({
+  updateAssessment,
+  assessment,
+  label,
+  pathToLibrary,
+  pathToCopy,
+  isOptionalDeployment,
+}: Props) {
+  const isEmptyLibrary = (path: Array<string | number> = pathToLibrary) => {
+    return getValueFromPath(path.concat(['chapter']), assessment) === -1;
   };
 
-  const textareaContent = (path: Array<string | number>) => {
-    return (
-      <TextAreaContent
-        assessment={props.assessment}
-        path={path}
-        processResults={removeSpaces}
-        updateAssessment={props.updateAssessment}
-        useRawValue
-      />
-    );
-  };
-
-  const globalValueTextareaContent = (i: number) => {
-    const pathVal = props.pathToLibrary.concat(['globals', i, 2]);
-    return (
-      <TextAreaContent
-        assessment={props.assessment}
-        path={pathVal}
-        updateAssessment={handleGlobalValueUpdate(i)}
-        useRawValue
-      />
-    );
-  };
-
-  const handleGlobalValueUpdate = (i: number) => (assessment: Assessment) => {
-    const deployment = getValueFromPath(props.pathToLibrary, props.assessment) as Library;
-    const global = deployment.globals[i];
-    try {
-      global[1] = altEval(global[2]!);
-      props.updateAssessment(assessment);
-    } catch (e) {
-      global[2] = '"Invalid Expression"';
-    }
-  };
-
-  const handleSymbolDelete = (index: number) => () => {
-    const assessment = props.assessment;
-    const deployment = getValueFromPath(props.pathToLibrary, assessment) as Library;
-    const symbols = deployment.external.symbols;
-    symbols.splice(index, 1);
-    props.updateAssessment(assessment);
-  };
-
-  const handleNewSymbol = () => {
-    const assessment = props.assessment;
-    const deployment = getValueFromPath(props.pathToLibrary, assessment) as Library;
-    const symbols = deployment.external.symbols;
-    symbols.push('new_symbol');
-    props.updateAssessment(assessment);
-  };
-
-  const handleGlobalDelete = (index: number) => () => {
-    const assessment = props.assessment;
-    const deployment = getValueFromPath(props.pathToLibrary, assessment) as Library;
-    deployment.globals.splice(index, 1);
-    props.updateAssessment(assessment);
-  };
-
-  const handleNewGlobal = () => {
-    const assessment = props.assessment;
-    const deployment = getValueFromPath(props.pathToLibrary, assessment) as Library;
-    deployment.globals.push(['new_global', null, 'null']);
-    props.updateAssessment(assessment);
-  };
-
-  const handleChapterSelect = (i: SALanguage, _e?: React.SyntheticEvent<HTMLElement>) => {
-    const assessment = props.assessment;
-    const deployment = getValueFromPath(props.pathToLibrary, assessment) as Library;
-    deployment.chapter = i.chapter;
-    props.updateAssessment(assessment);
-  };
-
-  const handleExternalSelect = (i: External, _e?: React.SyntheticEvent<HTMLElement>) => {
-    const assessment = props.assessment;
-    const deployment = getValueFromPath(props.pathToLibrary, assessment) as Library;
-    deployment.external.name = i.name;
-    deployment.external.symbols = JSON.parse(JSON.stringify(externalLibraries.get(i.name)!));
-    props.updateAssessment(assessment);
+  const handleChapterSelect = (chapter: number) => {
+    const deployment = getValueFromPath(pathToLibrary, assessment) as Library;
+    deployment.chapter = chapter;
+    updateAssessment(assessment);
   };
 
   const handleSwitchDeployment = () => {
-    const assessment = props.assessment;
     if (isEmptyLibrary()) {
-      let library = getValueFromPath(
-        props.pathToCopy || ['globalDeployment'],
-        assessment,
-      ) as Library;
+      let library = getValueFromPath(pathToCopy || ['globalDeployment'], assessment) as Library;
       if (library.chapter === -1) {
         library = assessment.globalDeployment!;
       }
       library = JSON.parse(JSON.stringify(library));
-      assignToPath(props.pathToLibrary, library, assessment);
+      assignToPath(pathToLibrary, library, assessment);
     } else {
-      assignToPath(props.pathToLibrary, emptyLibrary(), assessment);
+      assignToPath(pathToLibrary, emptyLibrary(), assessment);
     }
-    props.updateAssessment(assessment);
+    updateAssessment(assessment);
   };
 
-  const isEmptyLibrary = (path: Array<string | number> = props.pathToLibrary) => {
-    return getValueFromPath(path.concat(['chapter']), props.assessment) === -1;
-  };
-
-  if (!props.isOptionalDeployment) {
+  const deploymentTab = () => {
+    const deployment = getValueFromPath(pathToLibrary, assessment) as Library;
     return (
       <div>
-        {props.label + ' Deployment'}
+        <Divider />
+        Interpreter:
+        <br />
+        <DeploymentLanguageSelect chapter={deployment.chapter} onSelect={handleChapterSelect} />
+      </div>
+    );
+  };
+
+  if (!isOptionalDeployment) {
+    return (
+      <div>
+        {label + ' Deployment'}
         <br />
         {deploymentTab()}
       </div>
     );
-  } else {
-    return (
-      <div>
-        <Switch
-          checked={!isEmptyLibrary()}
-          label={'Enable ' + props.label + ' Deployment'}
-          onChange={handleSwitchDeployment}
-        />
-        {isEmptyLibrary() ? null : deploymentTab()}
-      </div>
-    );
   }
+  return (
+    <div>
+      <Switch
+        checked={!isEmptyLibrary()}
+        label={'Enable ' + label + ' Deployment'}
+        onChange={handleSwitchDeployment}
+      />
+      {isEmptyLibrary() ? null : deploymentTab()}
+    </div>
+  );
 }
-
-const removeSpaces = (str: string | number) => {
-  return typeof str === 'string' ? str.replace(/\s+/g, '') : str;
-};
-
-const altEval = (str: string): any => {
-  return Function('"use strict";return (' + str + ')')();
-};
-
-const chapterSelect = (
-  currentChap: Chapter,
-  variant: Variant = Variant.DEFAULT,
-  handleSelect = (i: SALanguage, e?: React.SyntheticEvent<HTMLElement>) => {},
-) => (
-  <Select<SALanguage>
-    className={Classes.MINIMAL}
-    items={sourceLanguages}
-    onItemSelect={handleSelect}
-    itemRenderer={chapterRenderer}
-    filterable={false}
-  >
-    <Button
-      variant="minimal"
-      text={styliseSublanguage(currentChap, variant)}
-      endIcon={IconNames.DOUBLE_CARET_VERTICAL}
-    />
-  </Select>
-);
-
-const chapterRenderer: ItemRenderer<SALanguage> = (chap, { handleClick, modifiers, query }) => (
-  <MenuItem active={false} key={chap.displayName} onClick={handleClick} text={chap.displayName} />
-);
-
-const iExternals = Array.from(externalLibraries.entries()).map((entry, index) => ({
-  name: entry[0] as ExternalLibraryName,
-  key: index,
-  symbols: entry[1],
-}));
-
-const externalSelect = (
-  currentExternal: string,
-  handleSelect: (i: External, e?: React.SyntheticEvent<HTMLElement>) => void,
-) => (
-  <Select<External>
-    className={Classes.MINIMAL}
-    items={iExternals}
-    onItemSelect={handleSelect}
-    itemRenderer={externalRenderer}
-    filterable={false}
-  >
-    <Button variant="minimal" text={currentExternal} endIcon={IconNames.DOUBLE_CARET_VERTICAL} />
-  </Select>
-);
-
-const externalRenderer: ItemRenderer<External> = (external, { handleClick, modifiers, query }) => (
-  <MenuItem active={false} key={external.key} onClick={handleClick} text={external.name} />
-);
 
 export default DeploymentTab;

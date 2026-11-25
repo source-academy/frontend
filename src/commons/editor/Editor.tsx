@@ -6,7 +6,8 @@ import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/ext-settings_menu';
-import 'js-slang/dist/editors/ace/theme/source';
+import './ace/loadAceModules';
+import './ace/sourceTheme';
 
 /**
  * ace-builds/webpack-resolver is causing some issues in the testing environment.
@@ -21,13 +22,10 @@ import 'ace-builds/src-noconflict/keybinding-vim';
 import { Card } from '@blueprintjs/core';
 import * as AceBuilds from 'ace-builds';
 import { Ace, require as acequire, createEditSession } from 'ace-builds';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { IAceEditorProps, IEditorProps } from 'react-ace';
 import AceEditor from 'react-ace';
 import type { IAceEditor } from 'react-ace/lib/types';
-import type { SALanguage } from '../application/ApplicationTypes';
-import { getModeString, selectMode } from '../utils/AceHelper';
 import { objectEntries } from '../utils/TypeHelper';
 import { EditorBinding } from '../WorkspaceSettingsContext';
 import { type KeyFunction, keyBindings } from './EditorHotkeys';
@@ -37,14 +35,9 @@ import type { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 // TODO: Should further refactor into EditorBase + different variants.
 // Ideally, hooks should be specified by the parent component instead.
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
-import {
-  normalizeAceModeId,
-  useAutocompleteMode,
-} from 'src/features/conductor/autocompleteModeStore';
-import { useConductorEnable } from 'src/features/conductor/flagConductorEnable';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { useAppSelector } from '../utils/Hooks';
 import useHighlighting from './UseHighlighting';
+import { loadAceModule } from './ace/loadAceModules';
+import { useActiveAceMode } from './useActiveAceMode';
 import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
@@ -73,15 +66,10 @@ type DispatchProps = {
 type EditorStateProps = {
   editorSessionId: string;
   sessionDetails: { docId: string; readOnly: boolean; owner: boolean } | null;
-  sourceChapter?: Chapter;
-  externalLibraryName?: string;
-  sourceVariant?: Variant;
   hooks?: EditorHook[];
   editorBinding?: EditorBinding;
   mode?: string;
   setUsers?: React.Dispatch<React.SetStateAction<Record<string, SharedbAceUser>>>;
-  // TODO: Handle changing of external library
-  updateLanguageCallback?: (sublanguage: SALanguage, e: any) => void;
 };
 
 export type EditorTabStateProps = {
@@ -368,11 +356,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
   // Set edit session history when switching to another editor tab.
   if (editor !== undefined) {
     if (filePath !== props.filePath) {
-      // Unfortunately, the current editor sets the mode globally.
-      // The side effects make it very hard to ensure that the correct
-      // mode is set for every EditSession. As such, we add this one
-      // line to always propagate the mode whenever we set a new session.
-      // See AceHelper#selectMode for more information.
+      // Propagate the current mode to the session being switched in.
       props.session.setMode(editor.getSession().getMode());
       editor.setSession(props.session);
 
@@ -411,21 +395,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     };
   }, []);
 
-  const [sourceChapter, sourceVariant, externalLibraryName] = [
-    props.sourceChapter || Chapter.SOURCE_1,
-    props.sourceVariant || Variant.DEFAULT,
-    props.externalLibraryName || ExternalLibraryName.NONE,
-  ];
-
-  // this function defines the Ace language and highlighting mode for the
-  // given combination of chapter, variant and external library. it CANNOT be
-  // put in useEffect as it MUST be called before the mode is set on the Ace
-  // editor, and use(Layout)Effect runs after that happens.
-  //
-  // this used to be in useMemo, but selectMode now checks if the mode is
-  // already defined and doesn't do it, so it is now OK to keep calling this
-  // unconditionally.
-  selectMode(sourceChapter, sourceVariant, externalLibraryName);
+  const conductorMode = useActiveAceMode();
 
   useLayoutEffect(() => {
     if (editor === undefined) {
@@ -444,9 +414,16 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
 
     // Change all info annotations to error annotations
     session.on('changeAnnotation' as any, makeHandleAnnotationChange(session));
+  }, [editor, props.editorTabIndex]);
 
-    // Start autocompletion
-    if (props.sourceChapter === Chapter.FULL_C || props.sourceChapter === Chapter.FULL_JAVA) {
+  // Autocompletion depends on the language, which can change after the editor has mounted (the
+  // evaluator publishes its mode when it has loaded), so it must not share an effect with the
+  // once-per-editor subscriptions above.
+  useLayoutEffect(() => {
+    if (editor === undefined) {
+      return;
+    }
+    if (conductorMode === 'ace/mode/c_cpp' || conductorMode === 'ace/mode/java') {
       // for C, Java language, use the default autocomplete provided by ace editor
       const { textCompleter, keyWordCompleter, setCompleters } = acequire('ace/ext/language_tools');
       setCompleters([textCompleter, keyWordCompleter]);
@@ -455,7 +432,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
         makeCompleter((...args) => handlePromptAutocompleteRef.current(...args)),
       ]);
     }
-  }, [editor, props.sourceChapter, props.editorTabIndex]);
+  }, [editor, conductorMode]);
 
   useLayoutEffect(() => {
     if (editor === undefined) {
@@ -477,51 +454,27 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     },
   };
 
-  const conductorEnabled = useConductorEnable();
-  const selectedEvaluatorPath = useAppSelector(state => {
-    const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
-    if (!selectedLanguageId || !selectedEvaluatorId) {
-      return undefined;
-    }
-    return languageMap[selectedLanguageId]?.evaluators.find(
-      evaluator => evaluator.id === selectedEvaluatorId,
-    )?.path;
-  });
-  const directoryAceMode = useAppSelector(state => {
-    const { selectedLanguageId, languageMap } = state.languageDirectory;
-    const editorConfig = selectedLanguageId
-      ? (languageMap[selectedLanguageId]?.editorConfig as { aceMode?: unknown } | undefined)
-      : undefined;
-    return typeof editorConfig?.aceMode === 'string'
-      ? normalizeAceModeId(editorConfig.aceMode)
-      : 'ace/mode/text';
-  });
-  const autocompleteMode = useAutocompleteMode(
-    conductorEnabled ? selectedEvaluatorPath : undefined,
-  );
-  const conductorMode = autocompleteMode ?? directoryAceMode;
-
   useLayoutEffect(() => {
-    if (!conductorEnabled || !reactAceRef.current) {
+    if (!reactAceRef.current) {
       return;
     }
 
     const editor = reactAceRef.current.editor;
+    // The mode may have to be loaded first (a stock Ace mode is loaded on demand), and the language
+    // may change meanwhile.
+    let cancelled = false;
     const apply = (session: Ace.EditSession) => {
-      let modeModule: any;
-      try {
-        modeModule = acequire(conductorMode);
-      } catch {
-        modeModule = acequire('ace/mode/text');
-      }
-      if (!modeModule?.Mode) {
-        modeModule = acequire('ace/mode/text');
-      }
-      const modeId = modeModule.Mode.prototype?.$id ?? conductorMode;
-      if ((session.getMode() as any).$id === modeId) {
-        return;
-      }
-      session.setMode(new modeModule.Mode());
+      void loadAceModule(conductorMode).then(loaded => {
+        if (cancelled) {
+          return;
+        }
+        const modeModule = acequire(loaded ? conductorMode : 'ace/mode/text');
+        const modeId = modeModule.Mode.prototype?.$id ?? conductorMode;
+        if ((session.getMode() as any).$id === modeId) {
+          return;
+        }
+        session.setMode(new modeModule.Mode());
+      });
     };
 
     apply(editor.getSession());
@@ -532,9 +485,10 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     editor.on('changeSession', onChangeSession);
 
     return () => {
+      cancelled = true;
       editor.off('changeSession', onChangeSession);
     };
-  }, [conductorEnabled, conductorMode]);
+  }, [conductorMode]);
 
   const aceEditorProps: IAceEditorProps = {
     className: 'react-ace',
@@ -545,9 +499,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     fontSize: 17,
     height: '100%',
     highlightActiveLine: false,
-    mode: conductorEnabled
-      ? 'text'
-      : getModeString(sourceChapter, sourceVariant, externalLibraryName),
+    mode: 'text',
     theme: 'source',
     value: props.editorValue,
     width: '100%',
@@ -730,7 +682,8 @@ function Editor(props: EditorProps) {
   const [sessions, setSessions] = useState<Record<string, Ace.EditSession>>({});
 
   // Create new edit session.
-  const defaultMode = acequire('ace/mode/javascript').Mode();
+  // Plain text until the selected language's mode has been loaded (see `useActiveAceMode`).
+  const defaultMode = new (acequire('ace/mode/text').Mode)();
   const defaultEditSession = createEditSession(props.editorValue, defaultMode);
 
   // Initialise edit session if file path has not been seen before.

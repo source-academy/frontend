@@ -1,7 +1,5 @@
-import { Chapter } from 'js-slang/dist/langs';
 import { Builder } from 'xml2js';
 
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import type {
   Assessment,
   AssessmentOverview,
@@ -98,8 +96,17 @@ const makeAssessment = (result: any): [Assessment, number] => {
     {
       type: capitalizeFirstLetter(rawOverview.kind) as AssessmentType,
       id: EDITING_ID,
-      globalDeployment: makeLibrary(task.DEPLOYMENT),
-      graderDeployment: makeLibrary(task.GRADERDEPLOYMENT),
+      globalDeployment: makeLibrary(
+        task.USER_PROGRAMMING_LANGUAGE ?? task.PROGRAMMINGLANGUAGE ?? task.DEPLOYMENT,
+      ),
+      graderDeployment: makeLibrary(
+        task.BACKEND_GRADER_PROGRAMMING_LANGUAGE ??
+          task.GRADERPROGRAMMINGLANGUAGE ??
+          task.GRADERDEPLOYMENT,
+      ),
+      frontendGraderDeployment: task.FRONTEND_GRADER_PROGRAMMING_LANGUAGE
+        ? makeLibrary(task.FRONTEND_GRADER_PROGRAMMING_LANGUAGE)
+        : undefined,
       longSummary: task.TEXT[0],
       missionPDF: 'google.com',
       questions: questionArr[0],
@@ -126,10 +133,13 @@ const makeLibrary = (deploymentArr: XmlParseStrDeployment[] | undefined): Librar
           [string, any, string]
         >)
       : [];
+    const interpreter = parseInt(deployment.$.interpreter ?? '', 10);
     return {
-      chapter: parseInt(deployment.$.interpreter, 10) as Chapter,
+      chapter: Number.isNaN(interpreter) ? 1 : interpreter,
+      ...(deployment.$.language ? { language: deployment.$.language } : {}),
+      ...(deployment.$.evaluator ? { evaluator: deployment.$.evaluator } : {}),
       external: {
-        name: nameVal as ExternalLibraryName,
+        name: nameVal,
         symbols: symbolsVal,
       },
       globals: globalsVal,
@@ -146,8 +156,19 @@ const makeQuestions = (task: XmlParseStrTask): [Question[], number] => {
       answer: null,
       content: problem.TEXT[0],
       id: curId,
-      library: makeLibrary(problem.DEPLOYMENT),
-      graderLibrary: makeLibrary(problem.GRADERDEPLOYMENT),
+      library: makeLibrary(
+        problem.USER_PROGRAMMING_LANGUAGE ?? problem.PROGRAMMINGLANGUAGE ?? problem.DEPLOYMENT,
+      ),
+      graderLibrary: makeLibrary(
+        problem.BACKEND_GRADER_PROGRAMMING_LANGUAGE ??
+          problem.GRADERPROGRAMMINGLANGUAGE ??
+          problem.GRADERDEPLOYMENT,
+      ),
+      ...(problem.FRONTEND_GRADER_PROGRAMMING_LANGUAGE
+        ? {
+            frontendGradingLibrary: makeLibrary(problem.FRONTEND_GRADER_PROGRAMMING_LANGUAGE),
+          }
+        : {}),
       type: problem.$.type,
       xp: 0,
       maxXp: localMaxXp,
@@ -261,10 +282,19 @@ const download = (filename: string, text: string) => {
   document.body.removeChild(element);
 };
 
+/**
+ * Whether a library says anything: it names a language (whose `chapter` is then of no account, and
+ * may be -1), or it has a real chapter. `emptyLibrary()` has neither, and is left out.
+ */
+const isConfigured = (library: Library | undefined): library is Library =>
+  !!library && (library.chapter !== -1 || !!library.language);
+
 const exportLibrary = (library: Library) => {
   const deployment = {
     $: {
       interpreter: library.chapter.toString(),
+      ...(library.language ? { language: library.language } : {}),
+      ...(library.evaluator ? { evaluator: library.evaluator } : {}),
     },
     EXTERNAL: {
       $: {
@@ -314,10 +344,15 @@ export const assessmentToXml = (
   task.TEXT = assessment.longSummary;
   task.PROBLEMS = { PROBLEM: [] };
 
-  task.DEPLOYMENT = exportLibrary(assessment.globalDeployment!);
+  // under the names that the backend reads (it does not know DEPLOYMENT and GRADERDEPLOYMENT)
+  task.USER_PROGRAMMING_LANGUAGE = exportLibrary(assessment.globalDeployment!);
 
-  if (assessment.graderDeployment!.chapter !== -1) {
-    task.GRADERDEPLOYMENT = exportLibrary(assessment.graderDeployment!);
+  if (isConfigured(assessment.frontendGraderDeployment)) {
+    task.FRONTEND_GRADER_PROGRAMMING_LANGUAGE = exportLibrary(assessment.frontendGraderDeployment);
+  }
+
+  if (isConfigured(assessment.graderDeployment)) {
+    task.BACKEND_GRADER_PROGRAMMING_LANGUAGE = exportLibrary(assessment.graderDeployment!);
   }
 
   assessment.questions.forEach((question: Question) => {
@@ -333,14 +368,16 @@ export const assessmentToXml = (
       // FIXME: Replace any with proper type
     } as any;
 
-    if (question.library.chapter !== -1) {
-      /* tslint:disable:no-string-literal */
-      problem.$['DEPLOYMENT'] = exportLibrary(question.library);
+    if (isConfigured(question.library)) {
+      problem.USER_PROGRAMMING_LANGUAGE = exportLibrary(question.library);
     }
 
-    if (question.graderLibrary!.chapter !== -1) {
-      /* tslint:disable:no-string-literal */
-      problem.$['GRADERDEPLOYMENT'] = exportLibrary(question.graderLibrary!);
+    if (isConfigured(question.frontendGradingLibrary)) {
+      problem.FRONTEND_GRADER_PROGRAMMING_LANGUAGE = exportLibrary(question.frontendGradingLibrary);
+    }
+
+    if (isConfigured(question.graderLibrary)) {
+      problem.BACKEND_GRADER_PROGRAMMING_LANGUAGE = exportLibrary(question.graderLibrary!);
     }
 
     if (question.maxXp) {

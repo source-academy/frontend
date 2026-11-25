@@ -1,10 +1,10 @@
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { Conduit } from '@sourceacademy/conductor/conduit';
 import type { SlingClient } from '@sourceacademy/sling-client';
-import { ExceptionError } from 'js-slang/dist/errors/errors';
 import { actions } from 'src/commons/utils/ActionsHelper';
 import { store } from 'src/pages/createStore';
 
+import { errorFromException } from '../../commons/errors/InterpreterError';
 import { Ev3WebPlugin } from './Ev3WebPlugin';
 import { resolveEv3EvaluatorPath } from './resolveEv3Evaluator';
 
@@ -13,8 +13,11 @@ const dummyLocation = {
   end: { line: 0, column: 0 },
 };
 
-/** The selected language's EV3 evaluator URL, from the language directory - see resolveEv3Evaluator.ts. */
-function selectedEv3EvaluatorPath(): string {
+/**
+ * The selected language's EV3 evaluator URL, from the language directory - see resolveEv3Evaluator.ts.
+ * Throws, with a message for the REPL, if the selected language has none.
+ */
+export function selectedEv3EvaluatorPath(): string {
   const { selectedLanguageId, languageMap } = store.getState().languageDirectory;
   return resolveEv3EvaluatorPath(selectedLanguageId ? languageMap[selectedLanguageId] : undefined);
 }
@@ -45,11 +48,14 @@ async function createWorkerFromUrl(url: string): Promise<Worker> {
   return new Worker(objectUrl);
 }
 
-export async function createEv3Conductor(client: SlingClient): Promise<{
+export async function createEv3Conductor(
+  client: SlingClient,
+  evaluatorPath: string,
+): Promise<{
   plugin: Ev3WebPlugin;
   conduit: IConduit;
 }> {
-  const worker = await createWorkerFromUrl(selectedEv3EvaluatorPath());
+  const worker = await createWorkerFromUrl(evaluatorPath);
   const conduit = new Conduit(worker, true);
 
   const plugin = conduit.registerPlugin(Ev3WebPlugin);
@@ -64,28 +70,17 @@ export async function createEv3Conductor(client: SlingClient): Promise<{
     if (!currentSession) {
       return;
     }
-    const error = new ExceptionError(new Error(`${message}`), dummyLocation);
+    const error = errorFromException(new Error(`${message}`), dummyLocation);
     store.dispatch(actions.evalInterpreterError([error], currentSession.workspace));
   };
 
-  // Deliberately NOT registering client.on('monitor', ...) / client.on('display', ...) here. This
-  // function used to duplicate both handlers verbatim from RemoteExecutionSaga.ts's own
-  // remoteExecConnect - which registers them unconditionally on every connect, regardless of which
-  // run pipeline (this Conductor one, or the legacy js-slang/SVML one in RemoteExecutionSaga.ts) is
-  // used once connected. Since remoteExecConnect is the only connect path actually dispatched
-  // anywhere (remoteExecConductorConnect, defined alongside remoteExecConductorDisconnect in
-  // RemoteExecutionConductorActions.ts, is never dispatched), that meant every 'display'/'monitor'
-  // event the device published got delivered to BOTH sets of listeners on the same SlingClient
-  // (SlingClient extends a plain multi-listener EventEmitter, so both would always fire) - each
-  // independently dispatching the same handleConsoleLog/evalInterpreterSuccess/evalInterpreterError/
-  // remoteExecUpdateSession action. That is the confirmed root cause of every print() (and result/
-  // error/peripheral update) from the device being applied exactly twice in the frontend, for the
-  // entire lifetime of a single connection - not a reconnect-time leak of a stale conductor, and not
-  // MQTT redelivery. RemoteExecutionSaga.ts's listeners already cover this for any connected client
-  // regardless of pipeline, so this function only wires up what's actually unique to it: shipping a
-  // compiled result to the device (onResult, above) and surfacing this *compile* worker's own errors
-  // (onError, above) - which are local-to-the-browser compile failures, not device-reported ones, so
-  // they are not a duplicate of RemoteExecutionSaga.ts's 'display' 'error' case.
+  // Deliberately NOT registering client.on('monitor', ...) / client.on('display', ...) here:
+  // RemoteExecutionSaga.ts's remoteExecConnect registers them on every connected client, and a
+  // SlingClient is a plain multi-listener EventEmitter, so registering them again would apply every
+  // print(), result, error and peripheral update from the device twice. This function wires only
+  // what is unique to it: shipping a compiled result to the device (onResult, above) and surfacing
+  // this *compile* worker's own errors (onError, above), which are local to the browser and not
+  // device-reported ones.
 
   return { plugin, conduit };
 }

@@ -15,7 +15,7 @@ exports[`NavigationBarLangSelectButton > should render correctly 1`] = `
       <span
         class="bp6-button-text"
       >
-        JavaScript
+        Python §1
       </span>
       <span
         aria-hidden="true"

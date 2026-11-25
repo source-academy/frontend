@@ -42,7 +42,6 @@ import {
   frontendifyAchievementItem,
 } from '../achievement/utils/AchievementBackender';
 import { Role } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import type {
   AdminPanelCourseRegistration,
   CourseConfiguration,
@@ -704,7 +703,7 @@ export const getAssessment = async (
     }
 
     // Make library.external.name uppercase
-    q.library.external.name = q.library.external.name.toUpperCase() as ExternalLibraryName;
+    q.library.external.name = q.library.external.name.toUpperCase();
     // Make globals into an Array of (string, value)
     q.library.globals = Object.entries(q.library.globals as object).map(entry => {
       try {
@@ -712,6 +711,20 @@ export const getAssessment = async (
       } catch (e) {}
       return entry;
     });
+    // The language and evaluator are null for a question without them (not yet converted above:
+    // `castLibrary` takes the library as the backend sends it, with the globals as an object)
+    q.library = {
+      ...q.library,
+      language: q.library.language ?? undefined,
+      evaluator: q.library.evaluator ?? undefined,
+    };
+    // The library that the test cases run under is cast like the question's own, and absent (not
+    // null) for a question without
+    if (q.frontendGradingLibrary) {
+      q.frontendGradingLibrary = castLibrary(q.frontendGradingLibrary);
+    } else {
+      delete q.frontendGradingLibrary;
+    }
 
     return q;
   });
@@ -1036,6 +1049,10 @@ export const getGrading = async (
         content: question.content,
         id: question.id,
         library: castLibrary(question.library),
+        // what the test cases run under; null for a question saved before the backend had it
+        frontendGradingLibrary: question.frontendGradingLibrary
+          ? castLibrary(question.frontendGradingLibrary)
+          : undefined,
         solution: gradingQuestion.solution || question.solution || null,
         solutionTemplate: question.solutionTemplate,
         prepend: question.prepend || '',

@@ -136,20 +136,10 @@ $code-color-notification: #f9f0d7;
       }
     }
 
-    .ace_gutter-cell_hi {
+    // The line highlight drawn from the workspace's `highlightedLines` (see Editor's getMarkers).
+    .myMarker {
+      position: absolute;
       background-color: blue;
-    }
-
-    .ace_line_hi {
-      background-color: blue;
-    }
-
-    .ace_gutter-cell_hi_control {
-      background-color: #32cd32;
-    }
-
-    .ace_line_hi_control {
-      background-color: #32cd32;
     }
 
     .ace_breakpoint:before {

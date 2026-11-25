@@ -233,6 +233,12 @@ function toJsValue(
     if (typeof meta?.body === 'string') {
       fakeFn.bodySource = meta.body;
     }
+    // Its local and global names, if the evaluator sends them (py-slang's `metadata.locals` and
+    // `metadata.globals`), for getScopeNamesTexts.
+    if (Array.isArray(meta?.locals) && Array.isArray(meta?.globals)) {
+      fakeFn.localNames = meta.locals;
+      fakeFn.globalNames = meta.globals;
+    }
     fakeFn.predefined = false;
     fakeFn.node = makeStubNode(params);
     fakeFn.originalNode = fakeFn.node;

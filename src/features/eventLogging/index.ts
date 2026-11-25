@@ -1,12 +1,10 @@
-import { Chapter } from 'js-slang/dist/langs';
 import { v4 as uuid } from 'uuid';
 
-import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import type { Input as RecorderInput } from './EventLoggingTypes';
 
 type PlaybackInitial = {
-  chapter: Chapter;
-  externalLibrary?: ExternalLibraryName;
+  /** A 1-based position in the language directory; 0 if no language is selected. */
+  chapter: number;
   editorValue: string;
 };
 

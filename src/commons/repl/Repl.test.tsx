@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { Provider } from 'react-redux';
+import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { expect, test } from 'vitest';
 
 import type {
@@ -46,10 +47,13 @@ test('Repl renders correctly', async () => {
     replValue: '',
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
-    externalLibrary: ExternalLibraryName.NONE,
     replButtons: [],
   };
-  const { asFragment } = render(<Repl {...props} />);
+  const { asFragment } = render(
+    <Provider store={mockInitialStore()}>
+      <Repl {...props} />
+    </Provider>,
+  );
   expect(asFragment()).toMatchSnapshot();
 });
 

@@ -1,5 +1,4 @@
 import type { Ace } from 'ace-builds';
-import type { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import type { Position } from 'src/commons/editor/EditorTypes';
 import type { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 
@@ -12,7 +11,6 @@ type InputTypeShape = {
   chapterSelect: number;
   cursorPositionChange: Position;
   codeDelta: CodeDelta;
-  externalLibrarySelect: ExternalLibraryName;
   forcePause: null;
   keyboardCommand: KeyboardCommand;
   selectionRangeData: SelectionData;

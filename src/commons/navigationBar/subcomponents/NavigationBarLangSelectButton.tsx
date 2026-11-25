@@ -3,11 +3,7 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
-import { useConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
-
-//TODO <remove legacy>: Remove when conductors.languageDirectory is default behaviour
-import LegacyNavigationBarLangSelectButton from './LegacyNavigationBarLangSelectButton';
 
 function useDirectoryOptions() {
   const langs = useAppSelector(s => s.languageDirectory.languages);
@@ -23,11 +19,6 @@ const NavigationBarLangSelectButton = () => {
   const dirOptions = useDirectoryOptions();
   const location = useLocation();
   const navigate = useNavigate();
-
-  const directoryEnabled = useConductorEnable();
-  if (!directoryEnabled) {
-    return <LegacyNavigationBarLangSelectButton />;
-  }
 
   const selectDirLanguage = (languageId: string) => {
     dispatch(LanguageDirectoryActions.setSelectedLanguage(languageId));

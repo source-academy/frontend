@@ -21,10 +21,10 @@ test('test combineSagaHandlers', () => {
     [WorkspaceActions.toggleFolderMode.type]: {
       takeEvery: mockTakeEveryHandler,
     },
-    [WorkspaceActions.toggleUsingCse.type]: {
+    [WorkspaceActions.updateCurrentStep.type]: {
       takeLatest: mockTakeLatestHandler,
     },
-    [WorkspaceActions.toggleUsingSubst.type]: {
+    [WorkspaceActions.changeStepLimit.type]: {
       takeLeading: mockTakeLeadingHandler,
     },
   });
@@ -35,9 +35,9 @@ test('test combineSagaHandlers', () => {
     .next()
     .takeEvery(WorkspaceActions.toggleFolderMode.type, mockTakeEveryHandler)
     .next()
-    .takeLatest(WorkspaceActions.toggleUsingCse.type, mockTakeLatestHandler)
+    .takeLatest(WorkspaceActions.updateCurrentStep.type, mockTakeLatestHandler)
     .next()
-    .takeLeading(WorkspaceActions.toggleUsingSubst.type, mockTakeLeadingHandler)
+    .takeLeading(WorkspaceActions.changeStepLimit.type, mockTakeLeadingHandler)
     .next()
     .isDone();
 });

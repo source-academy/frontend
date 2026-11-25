@@ -1,3 +1,5 @@
+import '../editor/ace/loadAceModules';
+
 import { Button, Card, Classes, Divider, type IconName, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import type { ItemRenderer } from '@blueprintjs/select';

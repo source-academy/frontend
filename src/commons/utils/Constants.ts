@@ -1,5 +1,3 @@
-import { Chapter, Variant } from 'js-slang/dist/langs';
-
 import { AuthProviderType } from './AuthHelper';
 
 function isTrue(value?: string, defaultTo?: boolean): boolean {
@@ -26,8 +24,6 @@ const useBackend = !isTest && isTrue(process.env.REACT_APP_USE_BACKEND);
  */
 const forwardLoadBalancerCookies = isTrue(process.env.REACT_APP_FORWARD_LOAD_BALANCER_COOKIES);
 const useEmptyAssetPrefix = isTrue(process.env.REACT_APP_USE_EMPTY_ASSET_PREFIX);
-const defaultSourceChapter = Chapter.SOURCE_4;
-const defaultSourceVariant = Variant.DEFAULT;
 const defaultQuestionId = 0;
 const maxBrowseIndex = 50;
 const mobileBreakpoint = 768;
@@ -139,12 +135,6 @@ const featureFlags = {
 // Deployment-pinned Conductor settings; `undefined` leaves the corresponding feature flag under
 // the user's control on /features.
 const conductorConfig = {
-  enable: process.env.REACT_APP_CONDUCTOR_ENABLE
-    ? isTrue(process.env.REACT_APP_CONDUCTOR_ENABLE)
-    : undefined,
-  ev3Enable: process.env.REACT_APP_CONDUCTOR_EV3_ENABLE
-    ? isTrue(process.env.REACT_APP_CONDUCTOR_EV3_ENABLE)
-    : undefined,
   languageDirectoryUrl: process.env.REACT_APP_LANGUAGE_DIRECTORY_URL || undefined,
   pluginDirectoryUrl: process.env.REACT_APP_PLUGIN_DIRECTORY_URL || undefined,
   modulesDirectoryUrl: process.env.REACT_APP_MODULES_DIRECTORY_URL || undefined,
@@ -184,8 +174,6 @@ const Constants = {
   useBackend,
   forwardLoadBalancerCookies,
   useEmptyAssetPrefix,
-  defaultSourceChapter,
-  defaultSourceVariant,
   defaultQuestionId,
   maxBrowseIndex,
   mobileBreakpoint,

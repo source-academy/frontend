@@ -37,15 +37,13 @@ import {
   snapshotWithDeadFrames,
 } from 'src/features/cseMachine/cseSnapshotHistory';
 import { fullscreenPortalContainer } from 'src/features/cseMachine/fullscreenPortalContainer';
-import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
 import type { CseSnapshot } from '../../../features/conductor/CseMachineHostPlugin';
-import { selectConductorEnable } from '../../../features/conductor/flagConductorEnable';
 import type { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
 import type { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
-import { beginAlertSideContent } from '../SideContentActions';
+import { alertSideContent } from '../SideContentActions';
 import { getLocation } from '../SideContentHelper';
 import { type SideContentTab, SideContentType } from '../SideContentTypes';
 
@@ -71,10 +69,8 @@ type StateProps = {
   currentStep: number;
   breakpointSteps: number[];
   changepointSteps: number[];
-  needCseUpdate: boolean;
   machineOutput: InterpreterOutput[];
   chapter: Chapter;
-  isConductorMode: boolean;
   cseSnapshots: CseSnapshot[] | null;
   isOnCseTab: boolean;
 };
@@ -85,6 +81,7 @@ type OwnProps = {
 
 type DispatchProps = {
   handleStepUpdate: (steps: number) => void;
+  handleStepsTotalUpdate: (steps: number) => void;
   handleEditorEval: () => void;
   setEditorHighlightedLines: (
     editorTabIndex: number,
@@ -99,6 +96,8 @@ type DispatchProps = {
 };
 
 class SideContentCseMachineBase extends Component<CseMachineProps, State> {
+  private greenScreenObserver?: MutationObserver;
+
   constructor(props: CseMachineProps) {
     super(props);
     this.state = {
@@ -113,42 +112,29 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       arrowFilterOpen: false,
       sliderKey: 0,
     };
-    if (this.isJava()) {
-      JavaCseMachine.init(
-        visualization => this.setState({ visualization }),
-        (segments: [number, number][]) => {
-          props.setEditorHighlightedLines(0, segments);
-        },
-      );
-    } else {
-      CseMachine.init(
-        visualization => {
-          this.setState({ visualization }, () => CseAnimation.playAnimation());
-          if (visualization) {
-            this.props.handleAlertSideContent();
-          }
-        },
-        this.state.width,
-        this.state.height,
-        (segments: [number, number][]) => {
-          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-          // This comment is copied over from workspace saga
-          props.setEditorHighlightedLines(0, segments);
-        },
-        // We shouldn't be able to move slider to a step number beyond the step limit
-        isControlEmpty => {
-          const isAtLastStep = this.state.value === this.props.stepsTotal;
+    CseMachine.init(
+      visualization => {
+        this.setState({ visualization }, () => CseAnimation.playAnimation());
+        if (visualization) {
+          this.props.handleAlertSideContent();
+        }
+      },
+      this.state.width,
+      this.state.height,
+      (segments: [number, number][]) => {
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        // This comment is copied over from workspace saga
+        props.setEditorHighlightedLines(0, segments);
+      },
+      // We shouldn't be able to move slider to a step number beyond the step limit
+      isControlEmpty => {
+        const isAtLastStep = this.state.value === this.props.stepsTotal;
 
-          this.setState({
-            stepLimitExceeded: !isControlEmpty && isAtLastStep,
-          });
-        },
-      );
-    }
-  }
-
-  private isJava(): boolean {
-    return this.props.chapter === Chapter.FULL_JAVA;
+        this.setState({
+          stepLimitExceeded: !isControlEmpty && isAtLastStep,
+        });
+      },
+    );
   }
 
   private calculateWidth(editorWidth?: string) {
@@ -207,6 +193,18 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
     document.addEventListener('fullscreenchange', this.handleFullscreenChange);
+    // The diagram's colours follow the Playground's green-screen mode, so redraw when it toggles.
+    const playground = document.querySelector('.Playground');
+    if (playground) {
+      this.greenScreenObserver = new MutationObserver(() => {
+        CseMachine.clearCachedLayouts();
+        window.requestAnimationFrame(() => CseMachine.redraw());
+      });
+      this.greenScreenObserver.observe(playground, {
+        attributes: true,
+        attributeFilter: ['class'],
+      });
+    }
     if (this.props.cseSnapshots) {
       this.renderSnapshotAt(0);
     } else {
@@ -218,17 +216,28 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     this.handleResize.cancel();
     window.removeEventListener('resize', this.handleResize);
     document.removeEventListener('fullscreenchange', this.handleFullscreenChange);
-    if (!this.isJava()) {
-      CseMachine.resetArrowOriginFilters();
-      this.props.setEditorHighlightedLinesStep(0, []);
-    }
+    this.greenScreenObserver?.disconnect();
+    CseMachine.resetArrowOriginFilters();
+    this.clearView();
+  }
+
+  /**
+   * The tab owns the state it puts on the workspace: the drawing, the step counters and the editor
+   * highlights. It stays mounted while another tab is shown, so this runs whenever the tab stops
+   * being active or its snapshots go away, not only on unmount.
+   */
+  private clearView() {
+    CseMachine.clearCse();
+    this.props.handleStepUpdate(-1);
+    this.props.handleStepsTotalUpdate(0);
+    this.props.setEditorHighlightedLines(0, []);
+    this.props.setEditorHighlightedLinesStep(0, []);
   }
 
   componentDidUpdate(prevProps: {
     editorWidth?: string;
     sideContentHeight?: number;
     stepsTotal: number;
-    needCseUpdate: boolean;
     isOnCseTab: boolean;
     cseSnapshots: CseSnapshot[] | null;
   }) {
@@ -239,39 +248,38 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       this.handleResize();
     }
 
-    const { isConductorMode, isOnCseTab, cseSnapshots } = this.props;
+    const { isOnCseTab, cseSnapshots } = this.props;
 
     // Snapshot mode: new snapshots arrived while not on the CSE tab — discard them
-    if (
-      isConductorMode &&
-      !isOnCseTab &&
-      cseSnapshots !== null &&
-      prevProps.cseSnapshots !== cseSnapshots
-    ) {
+    if (!isOnCseTab && cseSnapshots !== null && prevProps.cseSnapshots !== cseSnapshots) {
       this.props.doUpdateCseSnapshots(null);
       return;
     }
 
     // Snapshot mode: user navigated away from CSE tab — clear visualization
-    if (isConductorMode && prevProps.isOnCseTab && !isOnCseTab) {
+    if (prevProps.isOnCseTab && !isOnCseTab) {
       this.setState({ visualization: null, value: -1 });
+      this.clearView();
       if (cseSnapshots) {
         this.props.doUpdateCseSnapshots(null);
       }
       return;
     }
 
-    if (prevProps.needCseUpdate && !this.props.needCseUpdate) {
+    // The snapshots went away while the tab is shown (a run that produced none): clear the view
+    // rather than leave the previous run's diagram and step controls active.
+    if (isOnCseTab && prevProps.cseSnapshots !== null && cseSnapshots === null) {
+      this.setState({ visualization: null, value: -1 });
+      this.clearView();
+      return;
+    }
+
+    // A new run's snapshots arrived: start over from the first step.
+    if (cseSnapshots !== null && prevProps.cseSnapshots !== cseSnapshots) {
+      CseMachine.clearCachedLayouts();
+      CseMachine.setClearDeadFrames(false);
       this.setState({ arrowFilterOpen: false });
       this.stepFirst();
-
-      if (cseSnapshots) {
-        // Conductor snapshot mode: stepFirst already calls renderSnapshotAt(0)
-      } else if (this.isJava()) {
-        JavaCseMachine.clearCse();
-      } else {
-        CseMachine.clearCse();
-      }
 
       // Blueprint Slider caches its track width at mount. After a code run the
       // tab is guaranteed visible, so force it to remount and re-measure.
@@ -369,84 +377,82 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
           <div
             style={{
               display: 'flex',
-              justifyContent: this.isJava() ? 'center' : 'space-between',
+              justifyContent: 'space-between',
               alignItems: 'center',
             }}
           >
-            {!this.isJava() && (
-              <ButtonGroup>
-                <Tooltip content="Control and Stash" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        CseMachine.toggleControlStash();
-                        CseMachine.redraw();
-                      }
-                    }}
-                    icon="layers"
-                    disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      checked={CseMachine.getControlStash()}
-                      disabled={!this.state.visualization}
-                      style={{ margin: 0 }}
-                    />
-                  </AnchorButton>
-                </Tooltip>
-                <Tooltip content="Truncate Control" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        CseMachine.toggleStackTruncated();
-                        CseMachine.redraw();
-                      }
-                    }}
-                    icon="minimize"
-                    disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      checked={CseMachine.getStackTruncated()}
-                      disabled={!this.state.visualization}
-                      style={{ margin: 0 }}
-                    />
-                  </AnchorButton>
-                </Tooltip>
-
-                <Tooltip content="Alignment" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        CseMachine.toggleCenterAlignment();
-                        CseMachine.redraw();
-                      }
-                    }}
-                    icon="eye-open"
-                    disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      checked={CseMachine.getCenterAlignment()}
-                      disabled={!this.state.visualization}
-                      style={{ margin: 0 }}
-                    />
-                  </AnchorButton>
-                </Tooltip>
-                <Tooltip
-                  content="Filter Arrows"
-                  compact
-                  portalContainer={fullscreenPortalContainer()}
+            <ButtonGroup>
+              <Tooltip content="Control and Stash" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (this.state.visualization) {
+                      CseMachine.toggleControlStash();
+                      CseMachine.redraw();
+                    }
+                  }}
+                  icon="layers"
+                  disabled={!this.state.visualization}
                 >
-                  <Popover
-                    portalContainer={fullscreenPortalContainer()}
-                    isOpen={this.state.arrowFilterOpen}
-                    onInteraction={nextOpen => this.setState({ arrowFilterOpen: nextOpen })}
-                    position={Position.BOTTOM_LEFT}
-                    content={<CseArrowFilterMenu onChange={this.refreshArrowFilters} />}
-                  >
-                    <AnchorButton icon="flow-branch" disabled={!this.state.visualization} />
-                  </Popover>
-                </Tooltip>
-              </ButtonGroup>
-            )}
+                  <Checkbox
+                    checked={CseMachine.getControlStash()}
+                    disabled={!this.state.visualization}
+                    style={{ margin: 0 }}
+                  />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip content="Truncate Control" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (this.state.visualization) {
+                      CseMachine.toggleStackTruncated();
+                      CseMachine.redraw();
+                    }
+                  }}
+                  icon="minimize"
+                  disabled={!this.state.visualization}
+                >
+                  <Checkbox
+                    checked={CseMachine.getStackTruncated()}
+                    disabled={!this.state.visualization}
+                    style={{ margin: 0 }}
+                  />
+                </AnchorButton>
+              </Tooltip>
+
+              <Tooltip content="Alignment" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (this.state.visualization) {
+                      CseMachine.toggleCenterAlignment();
+                      CseMachine.redraw();
+                    }
+                  }}
+                  icon="eye-open"
+                  disabled={!this.state.visualization}
+                >
+                  <Checkbox
+                    checked={CseMachine.getCenterAlignment()}
+                    disabled={!this.state.visualization}
+                    style={{ margin: 0 }}
+                  />
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip
+                content="Filter Arrows"
+                compact
+                portalContainer={fullscreenPortalContainer()}
+              >
+                <Popover
+                  portalContainer={fullscreenPortalContainer()}
+                  isOpen={this.state.arrowFilterOpen}
+                  onInteraction={nextOpen => this.setState({ arrowFilterOpen: nextOpen })}
+                  position={Position.BOTTOM_LEFT}
+                  content={<CseArrowFilterMenu onChange={this.refreshArrowFilters} />}
+                >
+                  <AnchorButton icon="flow-branch" disabled={!this.state.visualization} />
+                </Popover>
+              </Tooltip>
+            </ButtonGroup>
             <ButtonGroup>
               <Button
                 disabled={isNavDisabled || isAtFirstStep}
@@ -457,19 +463,13 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
                 disabled={isNavDisabled || isAtFirstStep}
                 icon="chevron-left"
                 onClick={
-                  this.isJava() || CseMachine.getControlStash()
-                    ? this.stepPrevious
-                    : this.stepPrevChangepoint
+                  CseMachine.getControlStash() ? this.stepPrevious : this.stepPrevChangepoint
                 }
               />
               <Button
                 disabled={isNavDisabled || isAtLastStep}
                 icon="chevron-right"
-                onClick={
-                  this.isJava() || CseMachine.getControlStash()
-                    ? this.stepNext
-                    : this.stepNextChangepoint
-                }
+                onClick={CseMachine.getControlStash() ? this.stepNext : this.stepNextChangepoint}
               />
               <Button
                 disabled={isNavDisabled || isAtLastStep}
@@ -478,88 +478,86 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
               />
             </ButtonGroup>
 
-            {!this.isJava() && (
-              <ButtonGroup>
-                <Tooltip content="Clear Unreachable Objects" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        const prevLevels = Layout.levels;
-                        this.setState(
-                          prevState => ({
-                            clearDeadFrames: true,
-                          }),
-                          () => {
-                            CseMachine.setClearDeadFrames(this.state.clearDeadFrames);
-                            CseMachine.clearLiveLayouts();
+            <ButtonGroup>
+              <Tooltip content="Clear Unreachable Objects" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (this.state.visualization) {
+                      const prevLevels = Layout.levels;
+                      this.setState(
+                        prevState => ({
+                          clearDeadFrames: true,
+                        }),
+                        () => {
+                          CseMachine.setClearDeadFrames(this.state.clearDeadFrames);
+                          CseMachine.clearLiveLayouts();
 
-                            // Temporarily store the original draw function
-                            const originalDraw = Layout.draw;
+                          // Temporarily store the original draw function
+                          const originalDraw = Layout.draw;
 
-                            // Overriding because the animations are causing
-                            // Konva objects to not be drawn
-                            Layout.draw = () => {
-                              try {
-                                const currLevels = Layout.levels;
-                                const changedFramePairs = computeFramesCoordChange(
-                                  prevLevels,
-                                  currLevels,
+                          // Overriding because the animations are causing
+                          // Konva objects to not be drawn
+                          Layout.draw = () => {
+                            try {
+                              const currLevels = Layout.levels;
+                              const changedFramePairs = computeFramesCoordChange(
+                                prevLevels,
+                                currLevels,
+                              );
+                              if (changedFramePairs.length > 0) {
+                                CseAnimation.animations.push(
+                                  new ClearDeadFramesAnimation(changedFramePairs),
                                 );
-                                if (changedFramePairs.length > 0) {
-                                  CseAnimation.animations.push(
-                                    new ClearDeadFramesAnimation(changedFramePairs),
-                                  );
-                                  CseAnimation.enableAnimations();
-                                }
-
-                                return originalDraw.apply(Layout);
-                              } finally {
-                                Layout.draw = originalDraw;
+                                CseAnimation.enableAnimations();
                               }
-                            };
-                            CseMachine.redraw();
-                          },
-                        );
-                      }
-                    }}
-                    icon="eraser"
-                    disabled={this.state.clearDeadFrames || !this.state.visualization}
-                  />
-                </Tooltip>
-                <Tooltip content="Print" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        CseMachine.togglePrintableMode();
-                        CseMachine.redraw();
-                      }
-                    }}
-                    icon="print"
+
+                              return originalDraw.apply(Layout);
+                            } finally {
+                              Layout.draw = originalDraw;
+                            }
+                          };
+                          CseMachine.redraw();
+                        },
+                      );
+                    }
+                  }}
+                  icon="eraser"
+                  disabled={this.state.clearDeadFrames || !this.state.visualization}
+                />
+              </Tooltip>
+              <Tooltip content="Print" compact>
+                <AnchorButton
+                  onMouseUp={() => {
+                    if (this.state.visualization) {
+                      CseMachine.togglePrintableMode();
+                      CseMachine.redraw();
+                    }
+                  }}
+                  icon="print"
+                  disabled={!this.state.visualization}
+                >
+                  <Checkbox
                     disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      disabled={!this.state.visualization}
-                      checked={CseMachine.getPrintableMode()}
-                      style={{ margin: 0 }}
-                    />
-                  </AnchorButton>
-                </Tooltip>
-                <Tooltip content="Save" compact>
-                  <AnchorButton
-                    icon="floppy-disk"
-                    disabled={!this.state.visualization}
-                    onClick={Layout.exportImage}
+                    checked={CseMachine.getPrintableMode()}
+                    style={{ margin: 0 }}
                   />
-                </Tooltip>
-              </ButtonGroup>
-            )}
+                </AnchorButton>
+              </Tooltip>
+              <Tooltip content="Save" compact>
+                <AnchorButton
+                  icon="floppy-disk"
+                  disabled={!this.state.visualization}
+                  onClick={Layout.exportImage}
+                />
+              </Tooltip>
+            </ButtonGroup>
           </div>
         </div>{' '}
         {this.state.visualization &&
         this.props.machineOutput.length &&
         this.props.machineOutput[0].type === 'errors' ? (
           this.props.machineOutput.map((slice, index) => (
-            <Output output={slice} key={index} usingSubst={false} isHtml={false} />
+            <Output output={slice} key={index} usingSubst={false} />
           ))
         ) : (
           <div />
@@ -579,7 +577,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
             this.state.visualization
           )
         ) : (
-          <CseMachineDefaultText isJava={this.isJava()} />
+          <CseMachineDefaultText />
         )}
         <ButtonGroup vertical style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
           <Button
@@ -600,11 +598,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
   }
 
   private zoomStage = (isZoomIn: boolean, multiplier: number) => {
-    if (this.isJava()) {
-      JavaCseMachine.zoomStage(isZoomIn, multiplier);
-    } else {
-      Layout.zoomStage(isZoomIn, multiplier);
-    }
+    Layout.zoomStage(isZoomIn, multiplier);
   };
 
   private sliderRelease = (newValue: number) => {
@@ -748,10 +742,9 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     currentStep: workspace.currentStep,
     breakpointSteps: workspace.breakpointSteps,
     changepointSteps: workspace.changepointSteps,
-    needCseUpdate: workspace.updateCse,
     machineOutput: workspace.output,
-    chapter: workspace.context.chapter,
-    isConductorMode: selectConductorEnable(state),
+    // The CSE machine formats values identically for every chapter that has it.
+    chapter: Chapter.SOURCE_4,
     cseSnapshots: workspace.cseSnapshots,
     isOnCseTab: state.sideContent[loc]?.selectedTab === SideContentType.cseMachine,
   };
@@ -763,8 +756,10 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
       handleEditorEval: () => WorkspaceActions.evalEditor(props.workspaceLocation),
       handleStepUpdate: (steps: number) =>
         WorkspaceActions.updateCurrentStep(steps, props.workspaceLocation),
+      handleStepsTotalUpdate: (steps: number) =>
+        WorkspaceActions.updateStepsTotal(steps, props.workspaceLocation),
       handleAlertSideContent: () =>
-        beginAlertSideContent(SideContentType.cseMachine, props.workspaceLocation),
+        alertSideContent(SideContentType.cseMachine, props.workspaceLocation),
       setEditorHighlightedLines: (
         editorTabIndex: number,
         newHighlightedLines: HighlightedLines[],
@@ -809,7 +804,7 @@ export function ItalicLink({ href, children }: { href: string; children?: React.
   );
 }
 
-function CseMachineDefaultText({ isJava }: { isJava: boolean }) {
+function CseMachineDefaultText() {
   const { t } = useTranslation('sideContent', { keyPrefix: 'cseMachine' });
   return (
     <div
@@ -817,31 +812,14 @@ function CseMachineDefaultText({ isJava }: { isJava: boolean }) {
       className={Classes.RUNNING_TEXT}
       data-testid="cse-machine-default-text"
     >
-      {isJava ? (
-        <span>
-          <Trans
-            ns="sideContent"
-            i18nKey={$ => $.cseMachine.csecDescription}
-            // eslint-disable-next-line react/jsx-key
-            components={[<ItalicLink href={Links.textbookChapter3_2} />]}
-          />{' '}
-          <Trans
-            ns="sideContent"
-            i18nKey={$ => $.cseMachine.javaCsec}
-            // eslint-disable-next-line react/jsx-key
-            components={[<ItalicLink href={`${Links.sourceDocs}java_csec/`} />]}
-          />
-        </span>
-      ) : (
-        <span>
-          <Trans
-            ns="sideContent"
-            i18nKey={$ => $.cseMachine.cseDescription}
-            // eslint-disable-next-line react/jsx-key
-            components={[<ItalicLink href={Links.textbookChapter3_2} />]}
-          />
-        </span>
-      )}
+      <span>
+        <Trans
+          ns="sideContent"
+          i18nKey={$ => $.cseMachine.cseDescription}
+          // eslint-disable-next-line react/jsx-key
+          components={[<ItalicLink href={Links.textbookChapter3_2} />]}
+        />
+      </span>
       <br />
       <br />
       {t($ => $.instructions)}

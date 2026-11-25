@@ -1,5 +1,5 @@
 import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
-import { Chapter, Variant } from 'js-slang/dist/langs';
+import { Chapter } from 'js-slang/dist/langs';
 import { createMemoryRouter } from 'react-router';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
@@ -15,9 +15,7 @@ import {
   defaultLanguageDirectory,
   type GameState,
   Role,
-  type SALanguage,
   type Story,
-  SupportedLanguage,
 } from '../application/ApplicationTypes';
 import type {
   AdminPanelCourseRegistration,
@@ -150,7 +148,6 @@ const mockCourseConfiguration1: CourseConfiguration = {
   topLeaderboardDisplay: 100,
   topContestLeaderboardDisplay: 10,
   sourceChapter: Chapter.SOURCE_1,
-  sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
   assetsPrefix: '',
 };
@@ -183,7 +180,6 @@ const mockCourseConfiguration2: CourseConfiguration = {
   topLeaderboardDisplay: 100,
   topContestLeaderboardDisplay: 10,
   sourceChapter: Chapter.SOURCE_4,
-  sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
   assetsPrefix: '',
 };
@@ -658,7 +654,7 @@ describe('Test FETCH_ASSESSMENT action', () => {
       .silentRun();
   });
 
-  test('selects the Conductor language derived from the first question chapter, when Conductor is enabled', () => {
+  test('selects the Conductor language derived from the first question chapter', () => {
     const mockId = mockAssessment.id;
     // mockAssessment's first question has library.chapter === Chapter.SOURCE_1 (1), which under
     // the language directory index scheme (see chapterLanguage.ts) is python1.
@@ -670,7 +666,6 @@ describe('Test FETCH_ASSESSMENT action', () => {
     return expectSaga(BackendSaga)
       .withState({
         session: mockTokens,
-        featureFlags: { modifiedFlags: { 'conductor.enable': true } },
         languageDirectory: { ...defaultLanguageDirectory, languages },
       })
       .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), mockAssessment]])
@@ -680,14 +675,108 @@ describe('Test FETCH_ASSESSMENT action', () => {
       .silentRun();
   });
 
-  test('clears the selected language when Conductor is enabled but the chapter is out of range', () => {
+  test('selects the language and evaluator that the first question names, not a position', () => {
+    const mockId = mockAssessment.id;
+    const named = {
+      ...mockAssessment,
+      questions: mockAssessment.questions.map(q => ({
+        ...q,
+        library: { ...q.library, chapter: 1, language: 'ocaml', evaluator: 'ocamlJsOfOCaml' },
+      })),
+    } as Assessment;
+    const languages = [
+      makeMockLanguageDefinition('python1', ['python1Py2js']),
+      makeMockLanguageDefinition('ocaml', ['ocamlJsOfOCaml']),
+    ];
+
+    return expectSaga(BackendSaga)
+      .withState({
+        session: mockTokens,
+        languageDirectory: { ...defaultLanguageDirectory, languages },
+      })
+      .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), named]])
+      .put(LanguageDirectoryActions.setSelectedLanguage('ocaml'))
+      .put(LanguageDirectoryActions.setSelectedEvaluator('ocamlJsOfOCaml'))
+      .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
+      .silentRun();
+  });
+
+  describe('before the language directory has loaded', () => {
+    const mockId = mockAssessment.id;
+    const withLibrary = (library: object) =>
+      ({
+        ...mockAssessment,
+        questions: mockAssessment.questions.map(q => ({
+          ...q,
+          library: { ...q.library, ...library },
+        })),
+      }) as Assessment;
+    // the directory arrives with a setLanguages action
+    const reducer = (state: any, action: any) =>
+      action.type === LanguageDirectoryActions.setLanguages.type
+        ? {
+            ...state,
+            languageDirectory: { ...state.languageDirectory, languages: action.payload.languages },
+          }
+        : state;
+    const empty = { session: mockTokens, languageDirectory: { ...defaultLanguageDirectory } };
+    const languages = [
+      makeMockLanguageDefinition('python1', ['python1Py2js']),
+      makeMockLanguageDefinition('ocaml', ['ocamlJsOfOCaml']),
+    ];
+
+    test('the language that a question names is selected when the directory arrives', () => {
+      return expectSaga(BackendSaga)
+        .withReducer(reducer, empty as any)
+        .provide([
+          [
+            call(getAssessment, mockId, mockTokens, undefined, undefined),
+            withLibrary({ language: 'ocaml', evaluator: 'ocamlJsOfOCaml' }),
+          ],
+        ])
+        .not.put(LanguageDirectoryActions.clearSelectedLanguage())
+        .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
+        .dispatch(LanguageDirectoryActions.setLanguages(languages))
+        .put(LanguageDirectoryActions.setSelectedLanguage('ocaml'))
+        .put(LanguageDirectoryActions.setSelectedEvaluator('ocamlJsOfOCaml'))
+        .silentRun();
+    });
+
+    test('an evaluator that the directory lacks is not replaced by another one', () => {
+      return expectSaga(BackendSaga)
+        .withReducer(reducer, empty as any)
+        .provide([
+          [
+            call(getAssessment, mockId, mockTokens, undefined, undefined),
+            withLibrary({ language: 'ocaml', evaluator: 'ocamlNope' }),
+          ],
+        ])
+        .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
+        .dispatch(LanguageDirectoryActions.setLanguages(languages))
+        .put(LanguageDirectoryActions.clearSelectedLanguage())
+        .not.put(LanguageDirectoryActions.setSelectedLanguage('ocaml'))
+        .silentRun();
+    });
+
+    test('a chapter, which is a position, waits for the directory instead of clearing', () => {
+      return expectSaga(BackendSaga)
+        .withReducer(reducer, empty as any)
+        .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), mockAssessment]])
+        .not.put(LanguageDirectoryActions.clearSelectedLanguage())
+        .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
+        .dispatch(LanguageDirectoryActions.setLanguages(languages))
+        .put(LanguageDirectoryActions.setSelectedLanguage('python1'))
+        .silentRun();
+    });
+  });
+
+  test('clears the selected language when the chapter is out of range', () => {
     const mockId = mockAssessment.id;
     const assessmentWithNoQuestions = { ...mockAssessment, questions: [] };
 
     return expectSaga(BackendSaga)
       .withState({
         session: mockTokens,
-        featureFlags: { modifiedFlags: { 'conductor.enable': true } },
         languageDirectory: {
           ...defaultLanguageDirectory,
           languages: [makeMockLanguageDefinition('python1', ['python1Py2js'])],
@@ -698,22 +787,6 @@ describe('Test FETCH_ASSESSMENT action', () => {
         [call(getAssessment, mockId, mockTokens, undefined, undefined), assessmentWithNoQuestions],
       ])
       .put(LanguageDirectoryActions.clearSelectedLanguage())
-      .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
-      .silentRun();
-  });
-
-  test('does not touch the selected language when Conductor is disabled', () => {
-    const mockId = mockAssessment.id;
-
-    return expectSaga(BackendSaga)
-      .withState({
-        session: mockTokens,
-        featureFlags: { modifiedFlags: { 'conductor.enable': false } },
-        languageDirectory: defaultLanguageDirectory,
-      })
-      .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), mockAssessment]])
-      .not.put.actionType(LanguageDirectoryActions.setSelectedLanguage.type)
-      .not.put.actionType(LanguageDirectoryActions.clearSelectedLanguage.type)
       .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
       .silentRun();
   });
@@ -924,38 +997,16 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS action', () => {
   });
 });
 
-describe('Test CHANGE_SUBLANGUAGE action', () => {
-  test('when chapter is changed', () => {
-    const sublang: SALanguage = {
-      chapter: Chapter.SOURCE_4,
-      variant: Variant.NATIVE,
-      displayName: 'Source \xa74 Concurrent',
-      mainLanguage: SupportedLanguage.JAVASCRIPT,
-      supports: {},
-    };
+describe('Test CHANGE_DEFAULT_LANGUAGE action', () => {
+  test('when the default language is changed', () => {
+    const sourceChapter = 3;
 
     return expectSaga(BackendSaga)
       .withState({ session: { role: Role.Staff, ...mockTokens } })
-      .call(putCourseConfig, mockTokens, {
-        sourceChapter: sublang.chapter,
-        sourceVariant: sublang.variant,
-      })
-      .put(
-        SessionActions.setCourseConfiguration({
-          sourceChapter: sublang.chapter,
-          sourceVariant: sublang.variant,
-        }),
-      )
-      .provide([
-        [
-          call(putCourseConfig, mockTokens, {
-            sourceChapter: Chapter.SOURCE_4,
-            sourceVariant: Variant.NATIVE,
-          }),
-          { ok: true },
-        ],
-      ])
-      .dispatch({ type: WorkspaceActions.changeSublanguage.type, payload: { sublang } })
+      .call(putCourseConfig, mockTokens, { sourceChapter })
+      .put(SessionActions.setCourseConfiguration({ sourceChapter }))
+      .provide([[call(putCourseConfig, mockTokens, { sourceChapter }), { ok: true }]])
+      .dispatch({ type: WorkspaceActions.changeDefaultLanguage.type, payload: { sourceChapter } })
       .silentRun();
   });
 });
@@ -1029,7 +1080,6 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
     topLeaderboardDisplay: 100,
     topContestLeaderboardDisplay: 10,
     sourceChapter: Chapter.SOURCE_4,
-    sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help',
     assetsPrefix: '',
   };
@@ -1127,7 +1177,6 @@ describe('Test CREATE_COURSE action', () => {
     enableOverallLeaderboard: true,
     enableContestLeaderboard: true,
     sourceChapter: Chapter.SOURCE_1,
-    sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text',
   };
   const user = mockUser;

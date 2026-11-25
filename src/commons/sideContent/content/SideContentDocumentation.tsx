@@ -17,7 +17,7 @@ type Props = {
 };
 
 function SideContentDocumentation({ workspaceLocation }: Props) {
-  const documentation = useLanguageDocumentation(workspaceLocation);
+  const documentation = useLanguageDocumentation();
   const { selectedTab } = useSideContent(workspaceLocation);
   const { isMobileBreakpoint } = useResponsive();
 

@@ -1,9 +1,6 @@
 const translations = {
   maxStepsExceeded: 'Maximum number of steps exceeded.',
   increaseStepLimit: 'Please increase the step limit if you would like to see further evaluation.',
-  csecDescription:
-    'The CSEC machine generates control, stash, environment and class model diagrams adapted from the notation introduced in <0>Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2</0>.',
-  javaCsec: 'You have chosen the sublanguage <0>Java CSEC</0>.',
   cseDescription:
     'The CSE machine generates control, stash and environment model diagrams following a notation introduced in <0>Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2</0>.',
   instructions:

@@ -1,13 +1,11 @@
 import { Card, Pre } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
 import classNames from 'classnames';
-import { parseError } from 'js-slang';
-import { Chapter, Variant } from 'js-slang/dist/langs';
-import { stringify } from 'js-slang/dist/utils/stringify';
 import { useMemo } from 'react';
 
 import type { InterpreterOutput, ResultOutput } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { formatErrors } from '../errors/InterpreterError';
+import { formatValue } from '../utils/formatValue';
 import { ReplInput } from './ReplInput';
 import type { OutputProps } from './ReplTypes';
 
@@ -17,9 +15,6 @@ export type ReplProps = {
   hidden?: boolean;
   inputHidden?: boolean;
   usingSubst?: boolean;
-  sourceChapter: Chapter;
-  sourceVariant: Variant;
-  externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
   showStepperPrompt?: boolean;
   handleBrowseHistoryDown: () => void;
@@ -37,7 +32,6 @@ function Repl(props: ReplProps) {
       output={slice}
       key={index}
       usingSubst={props.usingSubst ?? false}
-      isHtml={props.sourceChapter === Chapter.HTML}
       showStepperPrompt={props.showStepperPrompt}
     />
   ));
@@ -56,7 +50,7 @@ function Repl(props: ReplProps) {
 }
 
 function ResultOutputDisplay({ output: { value, consoleLogs } }: { output: ResultOutput }) {
-  const stringified = useMemo(() => stringify(value), [value]);
+  const stringified = useMemo(() => formatValue(value), [value]);
   if (consoleLogs.length === 0) {
     return (
       <Card>
@@ -96,12 +90,6 @@ export function Output(props: OutputProps) {
             <Pre className="log-output">Check out the Stepper tab!</Pre>
           </Card>
         );
-      } else if (props.isHtml) {
-        return (
-          <Card>
-            <Pre className="log-output">Check out the HTML Display tab!</Pre>
-          </Card>
-        );
       } else {
         return <ResultOutputDisplay output={props.output} />;
       }
@@ -110,7 +98,7 @@ export function Output(props: OutputProps) {
       if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
-            <Pre className="error-output">{parseError(props.output.errors)}</Pre>
+            <Pre className="error-output">{formatErrors(props.output.errors)}</Pre>
           </Card>
         );
       } else {
@@ -118,7 +106,7 @@ export function Output(props: OutputProps) {
           <Card>
             <Pre className="log-output">{props.output.consoleLogs.join('\n')}</Pre>
             <br />
-            <Pre className="error-output">{parseError(props.output.errors)}</Pre>
+            <Pre className="error-output">{formatErrors(props.output.errors)}</Pre>
           </Card>
         );
       }

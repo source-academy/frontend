@@ -1,4 +1,3 @@
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
 import { call } from 'redux-saga/effects';
@@ -13,7 +12,6 @@ import {
   getDefaultFilePath,
   type OverallState,
 } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import Constants from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import PlaygroundSaga, { shortenURLRequest } from './PlaygroundSaga';
@@ -36,7 +34,6 @@ describe('Playground saga tests', () => {
   //       ...defaultWorkspaceManager,
   //       playground: {
   //         ...defaultPlaygroundState,
-  //         externalLibrary: ExternalLibraryName.NONE,
   //         editorTabs: [
   //           {
   //             filePath: defaultPlaygroundFilePath,
@@ -70,7 +67,6 @@ describe('Playground saga tests', () => {
         ...defaultWorkspaceManager,
         playground: {
           ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
           editorTabs: [
             {
               filePath: defaultPlaygroundFilePath,
@@ -79,9 +75,6 @@ describe('Playground saga tests', () => {
               highlightedLines: [],
             },
           ],
-          usingSubst: false,
-          usingCse: false,
-          updateCse: true,
           usingUpload: false,
           currentStep: -1,
           stepsTotal: 0,
@@ -139,7 +132,6 @@ describe('Playground saga tests', () => {
         ...defaultWorkspaceManager,
         playground: {
           ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
           editorTabs: [
             {
               filePath: defaultPlaygroundFilePath,
@@ -148,9 +140,6 @@ describe('Playground saga tests', () => {
               highlightedLines: [],
             },
           ],
-          usingSubst: false,
-          usingCse: false,
-          updateCse: true,
           usingUpload: false,
           currentStep: -1,
           stepsTotal: 0,
@@ -208,7 +197,6 @@ describe('Playground saga tests', () => {
         ...defaultWorkspaceManager,
         playground: {
           ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
           editorTabs: [
             {
               filePath: defaultPlaygroundFilePath,
@@ -217,9 +205,6 @@ describe('Playground saga tests', () => {
               highlightedLines: [],
             },
           ],
-          usingSubst: false,
-          usingCse: false,
-          updateCse: true,
           usingUpload: false,
           currentStep: -1,
           stepsTotal: 0,
@@ -260,7 +245,6 @@ describe('Playground saga tests', () => {
         ...defaultWorkspaceManager,
         playground: {
           ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
           editorTabs: [
             {
               filePath: defaultPlaygroundFilePath,
@@ -269,10 +253,7 @@ describe('Playground saga tests', () => {
               highlightedLines: [],
             },
           ],
-          usingSubst: false,
-          usingCse: false,
           usingUpload: false,
-          updateCse: true,
           currentStep: -1,
           stepsTotal: 0,
           breakpointSteps: [],
@@ -331,7 +312,6 @@ describe('Playground saga tests', () => {
         ...defaultWorkspaceManager,
         playground: {
           ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
           editorTabs: [
             {
               filePath: defaultPlaygroundFilePath,
@@ -340,9 +320,6 @@ describe('Playground saga tests', () => {
               highlightedLines: [],
             },
           ],
-          usingSubst: false,
-          usingCse: false,
-          updateCse: true,
           usingUpload: false,
           currentStep: -1,
           stepsTotal: 0,
@@ -391,7 +368,6 @@ describe('Playground saga tests', () => {
         ...defaultWorkspaceManager,
         playground: {
           ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
           editorTabs: [
             {
               filePath: defaultPlaygroundFilePath,
@@ -400,9 +376,6 @@ describe('Playground saga tests', () => {
               highlightedLines: [],
             },
           ],
-          usingSubst: false,
-          usingCse: false,
-          updateCse: true,
           usingUpload: false,
           currentStep: -1,
           stepsTotal: 0,
@@ -444,18 +417,12 @@ function createQueryString(files: Record<string, string>, state: OverallState): 
     .map(editorTab => editorTab.filePath)
     .filter((filePath): filePath is string => filePath !== undefined);
   const activeEditorTabIndex: number | null = state.workspaces.playground.activeEditorTabIndex;
-  const chapter: Chapter = state.workspaces.playground.context.chapter;
-  const variant: Variant = state.workspaces.playground.context.variant;
-  const external: ExternalLibraryName = state.workspaces.playground.externalLibrary;
   const execTime: number = state.workspaces.playground.execTime;
   const newQueryString: string = qs.stringify({
     isFolder: isFolderModeEnabled,
     files: compressToEncodedURIComponent(qs.stringify(files)),
     tabs: editorTabFilePaths.map(compressToEncodedURIComponent),
     tabIdx: activeEditorTabIndex,
-    chap: chapter,
-    variant,
-    ext: external,
     exec: execTime,
   });
   return newQueryString;

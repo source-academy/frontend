@@ -10,7 +10,6 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
@@ -21,7 +20,6 @@ import type {
   AssessmentOverview,
   IMCQQuestion,
   IProgrammingQuestion,
-  Library,
   Question,
   Testcase,
 } from '../assessment/AssessmentTypes';
@@ -47,7 +45,6 @@ import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspace
 import { convertEditorTabStateToProps } from '../editor/EditorContainer';
 import type { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
-import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import type { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight, resetSideContent } from '../sideContent/SideContentActions';
 import { useSideContent } from '../sideContent/SideContentHelper';
@@ -118,7 +115,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
   const {
     handleBrowseHistoryDown,
     handleBrowseHistoryUp,
-    handleClearContext,
     handleDeclarationNavigate,
     handleEditorEval,
     handleEditorValueChange,
@@ -141,8 +137,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
         dispatch(WorkspaceActions.browseReplHistoryDown(workspaceLocation)),
       handleBrowseHistoryUp: () =>
         dispatch(WorkspaceActions.browseReplHistoryUp(workspaceLocation)),
-      handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
-        dispatch(WorkspaceActions.beginClearContext(workspaceLocation, library, shouldInitLibrary)),
       handleDeclarationNavigate: (cursorPosition: Position) =>
         dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
       handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
@@ -238,7 +232,7 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
                 setHasUnsavedChanges(false);
                 setShowResetTemplateOverlay(false);
                 setOriginalMaxXp(getMaxXp());
-                handleRefreshLibrary();
+                clearSideContent();
                 resetWorkspaceValues();
               }}
               options={{ variant: 'default', intent: Intent.DANGER }}
@@ -271,30 +265,12 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
         setAssessment(retrieveLocalAssessment());
         setHasUnsavedChanges(false);
       }
-      handleRefreshLibrary();
+      clearSideContent();
     }
   }
 
-  const handleRefreshLibrary = (library: Library | undefined = undefined) => {
-    const question = assessment!.questions[formatedQuestionId()];
-    if (!library) {
-      library = question.library.chapter === -1 ? assessment!.globalDeployment! : question.library;
-    }
-    if (library && library.globals.length > 0) {
-      const globalsVal = library.globals.map((x: any) => x[0]);
-      const symbolsVal = library.external.symbols.concat(globalsVal);
-      library = {
-        ...library,
-        external: {
-          name: library.external.name,
-          symbols: uniq(symbolsVal),
-        },
-      };
-    }
-    handleClearContext(library, true);
-    // Clear out any module tabs left over from the previous question/library.
-    dispatch(resetSideContent(workspaceLocation));
-  };
+  // Clear out any module tabs left over from the previous question.
+  const clearSideContent = () => dispatch(resetSideContent(workspaceLocation));
 
   const resetWorkspaceValues = () => {
     const question: Question = assessment!.questions[formatedQuestionId()];
@@ -358,7 +334,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
     setAssessment(assessment);
     setHasUnsavedChanges(false);
     storeLocalAssessment(assessment);
-    // this.handleRefreshLibrary();
     handleSaveXp();
   };
 
@@ -391,7 +366,7 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
 
   const updateAndSaveAssessment = (assessmentVal: Assessment) => {
     setAssessment(assessmentVal);
-    handleRefreshLibrary();
+    clearSideContent();
     handleSave();
     resetWorkspaceValues();
   };
@@ -455,7 +430,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
             <DeploymentTab
               assessment={currentAssessment}
               label={'Question Specific'}
-              handleRefreshLibrary={handleRefreshLibrary}
               pathToLibrary={['questions', questionId, 'library']}
               updateAssessment={updateEditAssessmentState}
               isOptionalDeployment
@@ -470,7 +444,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
             <DeploymentTab
               assessment={currentAssessment}
               label={'Question Specific Grader'}
-              handleRefreshLibrary={handleRefreshLibrary}
               pathToLibrary={['questions', questionId, 'graderLibrary']}
               pathToCopy={['questions', questionId, 'library']}
               updateAssessment={updateEditAssessmentState}
@@ -507,15 +480,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
           id: SideContentType.editorAutograder,
         });
       }
-      const functionsAttached = currentAssessment!.globalDeployment!.external.symbols;
-      if (functionsAttached.includes('get_matrix')) {
-        tabs.push({
-          label: `Tone Matrix`,
-          iconName: IconNames.GRID_VIEW,
-          body: <SideContentToneMatrix />,
-          id: SideContentType.toneMatrix,
-        });
-      }
     } else {
       tabs = [
         {
@@ -550,7 +514,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
             <DeploymentTab
               assessment={currentAssessment}
               label={'Global'}
-              handleRefreshLibrary={handleRefreshLibrary}
               pathToLibrary={['globalDeployment']}
               updateAssessment={updateEditAssessmentState}
               isOptionalDeployment={false}
@@ -565,7 +528,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
             <DeploymentTab
               assessment={currentAssessment}
               label={'Global Grader'}
-              handleRefreshLibrary={handleRefreshLibrary}
               pathToLibrary={['graderDeployment']}
               updateAssessment={updateEditAssessmentState}
               isOptionalDeployment
@@ -577,7 +539,7 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
     }
 
     return {
-      tabs: { beforeDynamicTabs: tabs, afterDynamicTabs: [] },
+      tabs: { leadingTabs: tabs, trailingTabs: [] },
       workspaceLocation,
     };
   };
@@ -722,9 +684,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
       handleReplValueChange: handleReplValueChange,
       output: output,
       replValue: replValue,
-      sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
-      sourceVariant: Variant.DEFAULT,
-      externalLibrary: question?.library?.external?.name || 'NONE',
       replButtons: replButtons(),
     },
   };
@@ -734,11 +693,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
       <Workspace {...workspaceProps} />
     </div>
   );
-}
-
-function uniq(a: string[]) {
-  const seen: Record<string, boolean> = {};
-  return a.filter(item => (Object.hasOwnProperty.call(seen, item) ? false : (seen[item] = true)));
 }
 
 export default EditingWorkspace;

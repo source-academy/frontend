@@ -22,10 +22,8 @@ import { useAppDispatch } from 'src/commons/utils/Hooks';
 import { isConductorStepperTab } from 'src/features/conductor/stepperTab';
 
 import { useAppSelector } from '../utils/Hooks';
-import type { DebuggerContext } from '../workspace/WorkspaceTypes';
 import { visitSideContent } from './SideContentActions';
 import type {
-  ModuleSideContent,
   PredefinedTabs,
   SideContentLocation,
   SideContentState,
@@ -60,46 +58,15 @@ export const requireProvider = (x: string) => {
   return exports[x as keyof typeof exports] as any;
 };
 
-export type RawTab = (provider: ReturnType<typeof requireProvider>) => {
-  default: ModuleSideContent;
-};
-
-/**
- * Returns an array of SideContentTabs to be spawned
- * @param debuggerContext - DebuggerContext object from redux store
- */
-export function getDynamicTabs(debuggerContext: DebuggerContext): SideContentTab[] {
-  const moduleContexts = debuggerContext?.context?.moduleContexts;
-
-  if (!moduleContexts) {
-    return [];
-  }
-
-  return Object.values(moduleContexts)
-    .flatMap(({ tabs }) => tabs ?? [])
-    .map((rawTab: RawTab) => {
-      const { default: content } = rawTab(requireProvider);
-      return content;
-    })
-    .filter(({ toSpawn }) => !toSpawn || toSpawn(debuggerContext))
-    .map(tab => ({
-      ...tab,
-      body: tab.body(debuggerContext),
-      id: SideContentType.module,
-    }));
-}
-
 export const generateIconId = (tabId: TabId) => `${tabId}-icon`;
-export const getTabId = (tab: SideContentTab) =>
-  tab.id === undefined || tab.id === SideContentType.module ? tab.label : tab.id;
+export const getTabId = (tab: SideContentTab) => (tab.id === undefined ? tab.label : tab.id);
 
 export function combineAllTabs(
-  { beforeDynamicTabs, afterDynamicTabs }: PredefinedTabs,
-  dynamicTabs: SideContentTab[],
+  { leadingTabs, trailingTabs }: PredefinedTabs,
   serviceTabs: SideContentTab[],
 ): SideContentTab[] {
   const serviceTabsById = new Map(serviceTabs.map(tab => [getTabId(tab), tab]));
-  const predefinedTabIds = new Set([...beforeDynamicTabs, ...afterDynamicTabs].map(getTabId));
+  const predefinedTabIds = new Set([...leadingTabs, ...trailingTabs].map(getTabId));
 
   const takeServiceTabIfRegistered = (predefinedTab: SideContentTab) =>
     serviceTabsById.get(getTabId(predefinedTab)) ?? predefinedTab;
@@ -108,10 +75,9 @@ export function combineAllTabs(
   );
 
   return [
-    ...beforeDynamicTabs.map(takeServiceTabIfRegistered),
-    ...dynamicTabs,
+    ...leadingTabs.map(takeServiceTabIfRegistered),
     ...serviceTabsWithoutPredefinedSlot,
-    ...afterDynamicTabs.map(takeServiceTabIfRegistered),
+    ...trailingTabs.map(takeServiceTabIfRegistered),
   ];
 }
 
@@ -120,7 +86,7 @@ export const generateTabAlert = (shouldAlert: boolean) =>
 
 export const useSideContent = (location: SideContentLocation, defaultTab?: SideContentTabId) => {
   const [workspaceLocation] = getLocation(location);
-  const { alerts, dynamicTabs, selectedTab, height }: SideContentState = useAppSelector(
+  const { alerts, selectedTab, height }: SideContentState = useAppSelector(
     state => state.sideContent[workspaceLocation],
   );
   const dispatch = useAppDispatch();
@@ -141,7 +107,6 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
 
   return {
     alerts,
-    dynamicTabs,
     selectedTab: selectedTab ?? defaultTab,
     setSelectedTab,
     height,

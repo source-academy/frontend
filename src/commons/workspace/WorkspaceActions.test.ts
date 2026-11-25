@@ -1,14 +1,7 @@
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { expect, test } from 'vitest';
 
-import {
-  createDefaultWorkspace,
-  type SALanguage,
-  SupportedLanguage,
-} from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import type { Library } from '../assessment/AssessmentTypes';
+import { createDefaultWorkspace } from '../application/ApplicationTypes';
 import type { HighlightedLines } from '../editor/EditorTypes';
 import WorkspaceActions from './WorkspaceActions';
 import type { EditorTabState, WorkspaceLocation } from './WorkspaceTypes';
@@ -33,18 +26,6 @@ test('browseReplHistoryUp generates correct action object', () => {
   });
 });
 
-test('changeExternalLibrary generates correct action object', () => {
-  const newExternal = 'new-external-test' as ExternalLibraryName;
-  const action = WorkspaceActions.changeExternalLibrary(newExternal, playgroundWorkspace);
-  expect(action).toEqual({
-    type: WorkspaceActions.changeExternalLibrary.type,
-    payload: {
-      newExternal,
-      workspaceLocation: playgroundWorkspace,
-    },
-  });
-});
-
 test('changeSideContentHeight generates correct action object', () => {
   const height = 100;
   const action = changeSideContentHeight(height, gradingWorkspace);
@@ -53,54 +34,6 @@ test('changeSideContentHeight generates correct action object', () => {
     payload: {
       height,
       workspaceLocation: gradingWorkspace,
-    },
-  });
-});
-
-test('chapterSelect generates correct action object', () => {
-  const chapter = Chapter.SOURCE_3;
-  const variant = Variant.DEFAULT;
-  const action = WorkspaceActions.chapterSelect(chapter, variant, playgroundWorkspace);
-  expect(action).toEqual({
-    type: WorkspaceActions.chapterSelect.type,
-    payload: {
-      chapter,
-      variant,
-      workspaceLocation: playgroundWorkspace,
-    },
-  });
-});
-
-test('externalLibrarySelect generates correct action object', () => {
-  const externalLibraryName = ExternalLibraryName.SOUNDS;
-  const action = WorkspaceActions.externalLibrarySelect(externalLibraryName, assessmentWorkspace);
-  expect(action).toEqual({
-    type: WorkspaceActions.externalLibrarySelect.type,
-    payload: {
-      externalLibraryName,
-      workspaceLocation: assessmentWorkspace,
-      initialise: false,
-    },
-  });
-});
-
-test('beginClearContext generates correct action object', () => {
-  const library: Library = {
-    chapter: Chapter.SOURCE_4,
-    external: {
-      name: ExternalLibraryName.SOUNDS,
-      symbols: [],
-    },
-    globals: [],
-  };
-
-  const action = WorkspaceActions.beginClearContext(playgroundWorkspace, library, true);
-  expect(action).toEqual({
-    type: WorkspaceActions.beginClearContext.type,
-    payload: {
-      library,
-      workspaceLocation: playgroundWorkspace,
-      shouldInitLibrary: true,
     },
   });
 });
@@ -131,26 +64,6 @@ test('clearReplOutput generates correct action object', () => {
     type: WorkspaceActions.clearReplOutput.type,
     payload: {
       workspaceLocation: gradingWorkspace,
-    },
-  });
-});
-
-test('endClearContext generates correct action object', () => {
-  const library: Library = {
-    chapter: Chapter.SOURCE_4,
-    external: {
-      name: ExternalLibraryName.SOUNDS,
-      symbols: [],
-    },
-    globals: [],
-  };
-
-  const action = WorkspaceActions.endClearContext(library, playgroundWorkspace);
-  expect(action).toEqual({
-    type: WorkspaceActions.endClearContext.type,
-    payload: {
-      library,
-      workspaceLocation: playgroundWorkspace,
     },
   });
 });
@@ -551,52 +464,15 @@ test('navigateToDeclaration generates correct action object', () => {
   });
 });
 
-test('changeSublanguage generates correct action object', () => {
-  const sublang: SALanguage = {
-    chapter: Chapter.SOURCE_2,
-    variant: Variant.DEFAULT,
-    displayName: 'Source \xa72',
-    mainLanguage: SupportedLanguage.JAVASCRIPT,
-    supports: {},
-  };
-  const action = WorkspaceActions.changeSublanguage(sublang);
+test('changeDefaultLanguage generates correct action object', () => {
+  const action = WorkspaceActions.changeDefaultLanguage(2);
   expect(action).toEqual({
-    type: WorkspaceActions.changeSublanguage.type,
+    type: WorkspaceActions.changeDefaultLanguage.type,
     payload: {
-      sublang,
+      sourceChapter: 2,
     },
   });
 });
-
-test('updateChapter generates correct action object', () => {
-  const sublang: SALanguage = {
-    chapter: Chapter.SOURCE_2,
-    variant: Variant.DEFAULT,
-    displayName: 'Source \xa72',
-    mainLanguage: SupportedLanguage.JAVASCRIPT,
-    supports: {},
-  };
-  const action = WorkspaceActions.updateSublanguage(sublang);
-  expect(action).toEqual({
-    type: WorkspaceActions.updateSublanguage.type,
-    payload: {
-      sublang,
-    },
-  });
-});
-
-test('toggleUsingSubst generates correct action object', () => {
-  const action = WorkspaceActions.toggleUsingSubst(true, playgroundWorkspace);
-  expect(action).toEqual({
-    type: WorkspaceActions.toggleUsingSubst.type,
-    payload: {
-      workspaceLocation: playgroundWorkspace,
-      usingSubst: true,
-    },
-  });
-});
-
-// TODO: Add toggleusingcse
 
 // Version History Actions Tests
 

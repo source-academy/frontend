@@ -14,7 +14,9 @@ import {
   fadedStrokeColor,
   fadedTextColor,
   getBodyText,
+  getFunctionTooltipMaxHeight,
   getParamsText,
+  getScopeNamesTexts,
   getTextHeight,
   getTextWidth,
   hoverBackgroundColor,
@@ -84,14 +86,16 @@ export class FnValue extends Value implements IHoverable {
         .split('\n')
         .slice(0, 2)
         .join('\n') + ' ...';
-    this.tooltip = `${this.paramsText}\n${this.bodyText}`;
+    const scopeNamesTexts = getScopeNamesTexts(this.data);
+    const tooltipLines = [this.paramsText, ...scopeNamesTexts, this.bodyText];
+    this.tooltip = tooltipLines.join('\n');
     this.exportTooltip = truncateFunctionTooltip(
       this.tooltip,
       Config.FnDescriptionMaxWidth,
-      Config.FnDescriptionMaxHeight,
+      getFunctionTooltipMaxHeight(scopeNamesTexts.length),
     );
     this.isTooltipTruncated = this.exportTooltip !== this.tooltip;
-    this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));
+    this.tooltipWidth = Math.max(...tooltipLines.map(line => getTextWidth(line)));
     this.exportTooltipWidth = Math.min(
       Config.FnDescriptionMaxWidth,
       getTextWidth(this.exportTooltip),

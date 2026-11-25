@@ -4,12 +4,7 @@ import { throttle } from 'lodash-es';
 import createSagaMiddleware from 'redux-saga';
 import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
-import {
-  ALL_LANGUAGES,
-  defaultLanguageConfig,
-  defaultState,
-  type OverallState,
-} from '../commons/application/ApplicationTypes';
+import { defaultState, type OverallState } from '../commons/application/ApplicationTypes';
 import rootReducer from '../commons/application/reducers/RootReducer';
 import MainSaga from '../commons/sagas/MainSaga';
 import { generateOctokitInstance } from '../commons/utils/GitHubPersistenceHelper';
@@ -81,28 +76,6 @@ function loadStore(loadedStore: SavedState | undefined) {
         editorTabs: loadedStore.playgroundEditorTabs
           ? loadedStore.playgroundEditorTabs
           : defaultState.workspaces.playground.editorTabs,
-        externalLibrary: loadedStore.playgroundExternalLibrary
-          ? loadedStore.playgroundExternalLibrary
-          : defaultState.workspaces.playground.externalLibrary,
-        context: (() => {
-          const chapter = loadedStore.playgroundSourceChapter
-            ? loadedStore.playgroundSourceChapter
-            : defaultState.workspaces.playground.context.chapter;
-          const variant = loadedStore.playgroundSourceVariant
-            ? loadedStore.playgroundSourceVariant
-            : defaultState.workspaces.playground.context.variant;
-          const validCombination = ALL_LANGUAGES.some(
-            lang => lang.chapter === chapter && lang.variant === variant,
-          );
-          // Invalid stored combinations (e.g. chapter 1 + explicit-control, which can be
-          // persisted when toggling feature flags) would crash on load, so fall back to
-          // the default language config as a coherent, always-valid pair.
-          return {
-            ...defaultState.workspaces.playground.context,
-            chapter: validCombination ? chapter : defaultLanguageConfig.chapter,
-            variant: validCombination ? variant : defaultLanguageConfig.variant,
-          };
-        })(),
       },
     },
   };

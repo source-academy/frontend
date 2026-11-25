@@ -13,13 +13,11 @@ import {
   TextArea,
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useCallback, useState } from 'react';
-import { useAppDispatch } from 'src/commons/utils/Hooks';
+import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 import AcademyActions from 'src/features/academy/AcademyActions';
 
 import { CourseHelpTextEditorTab } from '../../features/adminPanel/subcomponents/CourseConfigPanel';
-import { sourceLanguages } from '../application/ApplicationTypes';
 import type { UpdateCourseConfiguration } from '../application/types/SessionTypes';
 import Markdown from '../Markdown';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
@@ -39,8 +37,7 @@ function DropdownCreateCourse(props: Props) {
     enableGame: true,
     enableAchievements: true,
     enableLlmGrading: false,
-    sourceChapter: Chapter.SOURCE_1,
-    sourceVariant: Variant.DEFAULT,
+    sourceChapter: 1,
     moduleHelpText: '',
     llmApiKey: '',
   });
@@ -48,22 +45,12 @@ function DropdownCreateCourse(props: Props) {
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
     useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
 
-  const sourceChapterOptions = [
-    { value: Chapter.SOURCE_1 },
-    { value: Chapter.SOURCE_2 },
-    { value: Chapter.SOURCE_3 },
-    { value: Chapter.SOURCE_4 },
-  ];
-
-  const sourceVariantOptions = (chapter: Chapter) =>
-    sourceLanguages
-      .filter(e => e.chapter === chapter)
-      .map(e => {
-        return {
-          label: e.variant.replace(/^\w/, c => c.toUpperCase()),
-          value: e.variant,
-        };
-      });
+  const languages = useAppSelector(state => state.languageDirectory.languages);
+  // The stored value is the language's 1-based position in the directory.
+  const languageOptions = languages.map((language, index) => ({
+    label: language.name,
+    value: index + 1,
+  }));
 
   const submitHandler = () => {
     // Validate that courseName is not an empty string
@@ -225,36 +212,18 @@ function DropdownCreateCourse(props: Props) {
         </div>
         <div>
           <FormGroup
-            label="Default Source Chapter"
+            label="Default Language"
             labelInfo="(configurable later on)"
             labelFor="source-chapter"
           >
             <HTMLSelect
               id="source-chapter"
-              options={sourceChapterOptions}
+              options={languageOptions}
               value={courseConfig.sourceChapter}
               onChange={e => {
                 setCourseConfig({
                   ...courseConfig,
                   sourceChapter: parseInt(e.target.value),
-                });
-              }}
-              fill
-            />
-          </FormGroup>
-          <FormGroup
-            label="Default Source Variant"
-            labelInfo="(configurable later on)"
-            labelFor="source-variant"
-          >
-            <HTMLSelect
-              id="source-variant"
-              options={sourceVariantOptions(courseConfig.sourceChapter!)}
-              value={courseConfig.sourceVariant}
-              onChange={e => {
-                setCourseConfig({
-                  ...courseConfig,
-                  sourceVariant: e.target.value as Variant,
                 });
               }}
               fill
