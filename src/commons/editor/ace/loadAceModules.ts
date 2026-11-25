@@ -25,10 +25,20 @@ export function loadAceModule(id: string): Promise<boolean> {
   if (isAceModuleDefined(id)) {
     return Promise.resolve(true);
   }
-  if (!(config as unknown as { dynamicModules: Record<string, unknown> }).dynamicModules[id]) {
+  const load = (config as unknown as { dynamicModules: Record<string, () => Promise<unknown>> })
+    .dynamicModules[id];
+  if (!load) {
     return Promise.resolve(false);
   }
-  return new Promise(resolve => config.loadModule(id, (module: unknown) => resolve(!!module)));
+  // Importing the file defines the module. `config.loadModule` does the same, but it never calls
+  // back when the import fails (a chunk that cannot be fetched), which would leave the caller waiting.
+  return load().then(
+    () => isAceModuleDefined(id),
+    error => {
+      console.error(`Ace module "${id}" could not be loaded`, error);
+      return false;
+    },
+  );
 }
 
 export async function loadAceModules(ids: readonly string[]): Promise<void> {

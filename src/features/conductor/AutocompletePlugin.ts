@@ -19,6 +19,7 @@ import { createAutocompleteModePublisher, normalizeAceModeId } from './autocompl
 export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
   private currentMode: string | null = null;
   private modePublisher?: ReturnType<typeof createAutocompleteModePublisher>;
+  private disposed = false;
 
   constructor(conduit: IConduit, channels: IChannel<unknown>[], tabService: ITabService) {
     super(conduit, channels);
@@ -30,6 +31,7 @@ export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
   }
 
   public dispose(): void {
+    this.disposed = true;
     this.modePublisher?.dispose();
   }
 
@@ -75,6 +77,9 @@ export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
 
   async loadMode(data: SyntaxHighlightData) {
     await this.loadHookedModes(data);
+    if (this.disposed) {
+      return;
+    }
     const TextMode = acequire('ace/mode/text').Mode;
     const highlightRules = this.loadHighlightRules(data.highlightRules);
     const modeId = normalizeAceModeId(data.id);

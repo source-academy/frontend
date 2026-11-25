@@ -82,6 +82,11 @@ export function createAutocompleteModePublisher(tabService: ITabService) {
       emit(evaluatorPath);
     },
     dispose(): void {
+      // A publish that is still on its way (an evaluator's mode waits for Ace's modes to load) must
+      // not bring the mode back.
+      if (currentOwners.get(evaluatorPath) === owner) {
+        currentOwners.delete(evaluatorPath);
+      }
       if (snapshots.get(evaluatorPath)?.owner !== owner) {
         return;
       }
