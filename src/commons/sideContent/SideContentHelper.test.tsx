@@ -1,18 +1,31 @@
 import { act, renderHook } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import createMockStore from 'redux-mock-store';
-import {
-  CONDUCTOR_E_STEPPER_TAB_ID,
-  CONDUCTOR_STEPPER_TAB_ID,
-} from 'src/features/conductor/stepperTab';
 import { describe, expect, test } from 'vitest';
 
 import type { OverallState } from '../application/ApplicationTypes';
 import { combineAllTabs, useSideContent } from './SideContentHelper';
 import { type SideContentTab, type SideContentTabId, SideContentType } from './SideContentTypes';
 
+// Plugins in the plugin directory whose tab hides the REPL (like the Stepper's) and one whose does not.
+const pluginMap = {
+  hiding: {
+    id: 'hiding',
+    name: 'Hiding',
+    resolutions: {},
+    tab: { id: 'hiding-tab', label: 'Hiding', iconName: 'flow-review', hidesRepl: true },
+  },
+  showing: {
+    id: 'showing',
+    name: 'Showing',
+    resolutions: {},
+    tab: { id: 'showing-tab', label: 'Showing', iconName: 'eye-open' },
+  },
+};
+
 const renderUseSideContent = (selectedTab: SideContentTabId) => {
   const store = createMockStore<OverallState>()({
+    pluginDirectory: { plugins: Object.values(pluginMap), pluginMap },
     sideContent: {
       playground: {
         alerts: [],
@@ -27,20 +40,20 @@ const renderUseSideContent = (selectedTab: SideContentTabId) => {
 };
 
 describe('useSideContent', () => {
-  test('keeps the conductor Stepper selected when mobile Run is pressed', () => {
-    const { hook, store } = renderUseSideContent(CONDUCTOR_STEPPER_TAB_ID);
+  test('keeps a tab that hides the REPL selected when mobile Run is pressed', () => {
+    const { hook, store } = renderUseSideContent('hiding-tab');
 
     act(() => hook.result.current.setSelectedTab(SideContentType.mobileEditorRun));
 
     expect(store.getActions()).toEqual([]);
   });
 
-  test('keeps the conductor E-Stepper selected when mobile Run is pressed', () => {
-    const { hook, store } = renderUseSideContent(CONDUCTOR_E_STEPPER_TAB_ID);
+  test('selects mobile Run from a plugin tab that does not hide the REPL', () => {
+    const { hook, store } = renderUseSideContent('showing-tab');
 
     act(() => hook.result.current.setSelectedTab(SideContentType.mobileEditorRun));
 
-    expect(store.getActions()).toEqual([]);
+    expect(store.getActions()).toHaveLength(1);
   });
 
   test('selects mobile Run from a regular tab', () => {
@@ -65,22 +78,22 @@ describe('combineAllTabs', () => {
   });
 
   test('puts a service tab in the slot of the predefined tab sharing its id', () => {
-    const liveEStepperTab = makeTab(CONDUCTOR_E_STEPPER_TAB_ID, 'Live E-Stepper');
+    const livePluginTab = makeTab('showing-tab', 'Live plugin tab');
 
     const tabs = combineAllTabs(
       {
         leadingTabs: [makeTab(SideContentType.introduction)],
-        trailingTabs: [makeTab(SideContentType.cseMachine), makeTab(CONDUCTOR_E_STEPPER_TAB_ID)],
+        trailingTabs: [makeTab(SideContentType.cseMachine), makeTab('showing-tab')],
       },
-      [makeTab('data-visualizer'), liveEStepperTab],
+      [makeTab('data-visualizer'), livePluginTab],
     );
 
     expect(tabs.map(tab => tab.id)).toEqual([
       SideContentType.introduction,
       'data-visualizer',
       SideContentType.cseMachine,
-      CONDUCTOR_E_STEPPER_TAB_ID,
+      'showing-tab',
     ]);
-    expect(tabs.at(-1)).toBe(liveEStepperTab);
+    expect(tabs.at(-1)).toBe(livePluginTab);
   });
 });

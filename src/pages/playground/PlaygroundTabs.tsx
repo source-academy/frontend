@@ -1,4 +1,5 @@
-import { IconNames } from '@blueprintjs/icons';
+import { type IconName, IconNames } from '@blueprintjs/icons';
+import type { IPluginTab } from '@sourceacademy/plugin-directory/dist/types';
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import Markdown from 'src/commons/Markdown';
 import SideContentRemoteExecution from 'src/commons/sideContent/content/remoteExecution/SideContentRemoteExecution';
@@ -10,10 +11,6 @@ import {
   type SideContentTabId,
   SideContentType,
 } from 'src/commons/sideContent/SideContentTypes';
-import {
-  CONDUCTOR_E_STEPPER_TAB_ID,
-  CONDUCTOR_STEPPER_TAB_ID,
-} from 'src/features/conductor/stepperTab';
 
 export const mobileOnlyTabIds: readonly SideContentTabId[] = [
   SideContentType.mobileEditor,
@@ -72,30 +69,21 @@ export const makeRemoteExecutionTabFrom = (
 });
 
 /**
- * A placeholder Stepper tab for conductor languages that offer stepping. It keeps the tab visible in
- * the tab bar so the user can open it (which selects the stepper evaluator — see Playground) even
- * before that evaluator's conductor has loaded. Once it has, the stepper web plugin registers the
- * live tab under the same id and it takes over in the same position, so this body
- * only shows during that brief load.
+ * A placeholder for the tab of a plugin that an evaluator names (see `toolTabsOf`), from what the
+ * plugin directory says about the tab. It keeps the tab visible in the tab bar so the user can open
+ * it (which selects the evaluator that the tab belongs to — see Playground) even before that
+ * evaluator's conductor has loaded. Once it has, the plugin registers the live tab under the same id
+ * and it takes over in the same position, so this body only shows during that brief load.
  */
-export const makeConductorStepperPlaceholderTab = (): SideContentTab => ({
-  label: 'Stepper',
-  iconName: IconNames.FLOW_REVIEW,
-  body: <Markdown content="Loading the stepper…" />,
-  id: CONDUCTOR_STEPPER_TAB_ID,
-});
-
-/**
- * The E-Stepper's placeholder tab, for conductor languages that offer the environment stepper —
- * exactly like {@link makeConductorStepperPlaceholderTab}: opening it selects the e-stepper
- * evaluator, and the e-stepper web plugin's live tab replaces it once that evaluator has loaded.
- */
-export const makeConductorEStepperPlaceholderTab = (): SideContentTab => ({
-  label: 'E-Stepper',
-  // The Stepper's icon: the two never appear together (Stepper: Python §1-2, E-Stepper: §3-4).
-  iconName: IconNames.FLOW_REVIEW,
-  body: <Markdown content="Loading the environment stepper…" />,
-  id: CONDUCTOR_E_STEPPER_TAB_ID,
+export const makeConductorToolPlaceholderTab = ({
+  id,
+  label,
+  iconName,
+}: IPluginTab): SideContentTab => ({
+  label,
+  iconName: iconName as IconName,
+  body: <Markdown content={`Loading the ${label.toLowerCase()}…`} />,
+  id,
 });
 
 export const makeConductorDataVisualizerPlaceholderTab = (): SideContentTab => ({

@@ -10,8 +10,8 @@ import type {
   CseMachineHostPlugin,
   CseSnapshot,
 } from '../../../../features/conductor/CseMachineHostPlugin';
-import { isConductorStepperTab } from '../../../../features/conductor/stepperTab';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
+import { tabBehaviour } from '../../../../features/directory/toolTabs';
 import { type OverallState } from '../../../application/ApplicationTypes';
 import { ErrorSeverity, ErrorType, type InterpreterError } from '../../../errors/InterpreterError';
 import { visitSideContent } from '../../../sideContent/SideContentActions';
@@ -269,11 +269,14 @@ function* surfaceConductorError(
   const selectedTab: SideContentTabId | undefined = yield select(
     (state: OverallState) => state.sideContent[workspaceLocation]?.selectedTab,
   );
+  const pluginMap: OverallState['pluginDirectory']['pluginMap'] = yield select(
+    (state: OverallState) => state.pluginDirectory.pluginMap,
+  );
   const isModuleTabSelected = sideContentManager
     .getTabs(workspaceLocation)
     .some(tab => getTabId(tab) === selectedTab);
   if (
-    isConductorStepperTab(selectedTab) ||
+    tabBehaviour(pluginMap, selectedTab).hidesRepl ||
     selectedTab === SideContentType.cseMachine ||
     isModuleTabSelected
   ) {
