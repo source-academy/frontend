@@ -1,4 +1,5 @@
 import type { Store } from '@reduxjs/toolkit';
+import { plugins } from '@sourceacademy/plugin-directory';
 import { render } from '@testing-library/react';
 import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
@@ -13,6 +14,7 @@ import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
+import PluginDirectoryActions from 'src/features/directory/PluginDirectoryActions';
 import { createStore } from 'src/pages/createStore';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
@@ -46,6 +48,8 @@ describe('Playground tests', () => {
 
   beforeEach(() => {
     mockStore = createStore();
+    // The plugin directory is fetched at startup; the tabs of the tool evaluators come from it.
+    mockStore.dispatch(PluginDirectoryActions.setPlugins(plugins));
     routes = [
       {
         path: '/playground',

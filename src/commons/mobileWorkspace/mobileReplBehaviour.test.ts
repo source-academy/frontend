@@ -1,13 +1,12 @@
-import {
-  CONDUCTOR_E_STEPPER_TAB_ID,
-  CONDUCTOR_STEPPER_TAB_ID,
-} from 'src/features/conductor/stepperTab';
 import { describe, expect, test } from 'vitest';
 
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { mobileReplBehaviour } from './mobileReplBehaviour';
 
 const RUN = SideContentType.mobileEditorRun;
+// A plugin's tab that hides the REPL (its `hidesRepl` in the plugin directory), as the Stepper's does.
+const PLUGIN_TAB = 'plugin-tab';
+const hidesRepl = (tabId: string) => tabId === PLUGIN_TAB;
 
 describe('mobileReplBehaviour', () => {
   test('pressing Run from an ordinary tab shows a draggable REPL', () => {
@@ -17,14 +16,15 @@ describe('mobileReplBehaviour', () => {
     });
   });
 
-  test.each([
-    SideContentType.substVisualizer,
-    SideContentType.cseMachine,
-    CONDUCTOR_STEPPER_TAB_ID,
-    CONDUCTOR_E_STEPPER_TAB_ID,
-  ])('pressing Run from %s keeps the REPL hidden and fixed', tab => {
-    expect(mobileReplBehaviour(RUN, tab)).toEqual({ showRepl: false, disableDragging: true });
-  });
+  test.each([SideContentType.substVisualizer, SideContentType.cseMachine, PLUGIN_TAB])(
+    'pressing Run from %s keeps the REPL hidden and fixed',
+    tab => {
+      expect(mobileReplBehaviour(RUN, tab, hidesRepl)).toEqual({
+        showRepl: false,
+        disableDragging: true,
+      });
+    },
+  );
 
   test.each([SideContentType.autograder, SideContentType.testcases])(
     'pressing Run from %s keeps the REPL hidden',
@@ -33,15 +33,20 @@ describe('mobileReplBehaviour', () => {
     },
   );
 
-  test.each([
-    SideContentType.folder,
-    SideContentType.cseMachine,
-    CONDUCTOR_STEPPER_TAB_ID,
-    CONDUCTOR_E_STEPPER_TAB_ID,
-  ])('opening %s hides the REPL and disables dragging', tab => {
-    expect(mobileReplBehaviour(tab, SideContentType.mobileEditor)).toEqual({
-      showRepl: false,
-      disableDragging: true,
+  test.each([SideContentType.folder, SideContentType.cseMachine, PLUGIN_TAB])(
+    'opening %s hides the REPL and disables dragging',
+    tab => {
+      expect(mobileReplBehaviour(tab, SideContentType.mobileEditor, hidesRepl)).toEqual({
+        showRepl: false,
+        disableDragging: true,
+      });
+    },
+  );
+
+  test('a plugin tab that does not hide the REPL leaves it as for an ordinary tab', () => {
+    expect(mobileReplBehaviour(RUN, 'other-plugin-tab', hidesRepl)).toEqual({
+      showRepl: true,
+      disableDragging: false,
     });
   });
 });

@@ -1,6 +1,6 @@
 import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
 
-import { EV3_EVALUATOR_CAPABILITY } from '../conductor/stepperTab';
+import { EV3_EVALUATOR_CAPABILITY } from '../conductor/toolEvaluators';
 
 /**
  * Returns the script URL of `language`'s EV3 evaluator - the one carrying the `ev3` capability in
