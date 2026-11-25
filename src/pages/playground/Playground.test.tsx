@@ -10,6 +10,7 @@ import type { Router } from 'src/commons/application/types/CommonsTypes';
 import { visitSideContent } from 'src/commons/sideContent/SideContentActions';
 import sideContentManager from 'src/commons/sideContent/SideContentManager';
 import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
+import { recordLegacyUsage } from 'src/commons/utils/legacyUsage';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
@@ -17,6 +18,9 @@ import { createStore } from 'src/pages/createStore';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import Playground from './Playground';
+
+// The counting of legacy-link use goes to Sentry; here it is only checked that it happens.
+vi.mock('src/commons/utils/legacyUsage', () => ({ recordLegacyUsage: vi.fn() }));
 
 // Mock inspector
 (window as any).Inspector = vi.fn();
@@ -89,6 +93,8 @@ describe('Playground tests', () => {
     expect(getEditorValueFromStore(mockStore)).toBe("display('hello!');");
     // The chapter of a legacy link selects the directory's Source language of that name.
     expect(mockStore.getState().languageDirectory.selectedLanguageId).toBe('source2');
+    // And the use of the compatibility path is counted.
+    expect(recordLegacyUsage).toHaveBeenCalledExactlyOnceWith('share-link-chapter');
   });
 
   test('loading a share link overwrites a stale editor tab left over from a previous session, even if its filePath predates leading-slash normalization (#4268)', async () => {
