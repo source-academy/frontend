@@ -32,7 +32,10 @@ import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
 import { Layout } from 'src/features/cseMachine/CseMachineLayout';
 import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils';
-import { snapshotWithDeadFrames } from 'src/features/cseMachine/cseSnapshotHistory';
+import {
+  snapshotWithAllFrames,
+  snapshotWithDeadFrames,
+} from 'src/features/cseMachine/cseSnapshotHistory';
 import { fullscreenPortalContainer } from 'src/features/cseMachine/fullscreenPortalContainer';
 
 import type { CseSnapshot } from '../../../features/conductor/CseMachineHostPlugin';
@@ -302,7 +305,11 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     this.props.setEditorHighlightedLines(0, []);
 
     CseMachine.clearLiveLayouts();
-    CseMachine.renderSnapshot(snapshotWithDeadFrames(cseSnapshots, step));
+    // Laid out with all the run's frames, the frames keep their places from step to step.
+    CseMachine.renderSnapshot(
+      snapshotWithDeadFrames(cseSnapshots, step),
+      snapshotWithAllFrames(cseSnapshots),
+    );
 
     this.props.setEditorHighlightedLinesStep(0, []);
     if (snapshot.currentLine !== undefined && snapshot.currentLine > 0) {

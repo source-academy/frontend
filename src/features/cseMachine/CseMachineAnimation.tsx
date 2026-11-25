@@ -78,6 +78,19 @@ export class CseAnimation {
     CseAnimation.currentFrame = frame;
   }
 
+  /**
+   * Remembers the current and previous frames, and returns a function that puts them back: for a
+   * layout that is not a step (see `CseMachine.layOutSnapshot`), whose active frame must not become
+   * the frame that the next step's animations start from.
+   */
+  static keepFrames(): () => void {
+    const { currentFrame, previousFrame } = CseAnimation;
+    return () => {
+      CseAnimation.currentFrame = currentFrame;
+      CseAnimation.previousFrame = previousFrame;
+    };
+  }
+
   private static clearAnimationComponents(): void {
     CseAnimation.animations.forEach(a => a.destroy());
     CseAnimation.animations.length = 0;

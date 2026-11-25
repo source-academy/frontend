@@ -365,6 +365,95 @@ describe('frames keep their places from step to step (source-academy/frontend#35
     expect(array).toBeDefined();
     expect(array.x()).toBeGreaterThanOrEqual(frame.x() + frame.width());
   });
+
+  test('in the CSE Machine tab too, and when it redraws', () => {
+    CseMachine.init(
+      () => {},
+      600,
+      400,
+      () => {},
+      () => {},
+    );
+    const layoutSnapshot = snapshotWithAllFrames(run);
+    const tabCallY = () =>
+      Layout.levels
+        .flatMap(l => l.frames)
+        .find(f => f.environment.id === '47')
+        ?.y();
+    try {
+      CseMachine.renderSnapshot(snapshotWithDeadFrames(run, 2), layoutSnapshot);
+      const atEnd = tabCallY();
+      CseMachine.renderSnapshot(snapshotWithDeadFrames(run, 1), layoutSnapshot);
+      expect(tabCallY()).toBe(atEnd);
+      CseMachine.redraw();
+      expect(tabCallY()).toBe(atEnd);
+      CseMachine.renderSnapshot(snapshotWithDeadFrames(run, 1));
+      expect(tabCallY()).toBeLessThan(atEnd!);
+    } finally {
+      CseMachine.clear();
+    }
+  });
+
+  test('the step animates from the frame of the step before, not from the layout of all frames', () => {
+    CseMachine.init(
+      () => {},
+      600,
+      400,
+      () => {},
+      () => {},
+    );
+    const layoutSnapshot = snapshotWithAllFrames(run);
+    const animationFrames = () => ({
+      previous: (CseAnimation as any).previousFrame?.environment.id,
+      current: (CseAnimation as any).currentFrame?.environment.id,
+    });
+    try {
+      // From the call (47) back to the program frame (45), whose layout-of-all-frames pass must
+      // not make 45 the frame the step starts from.
+      CseMachine.renderSnapshot(snapshotWithDeadFrames(run, 1), layoutSnapshot);
+      CseMachine.renderSnapshot(snapshotWithDeadFrames(run, 2), layoutSnapshot);
+      expect(animationFrames()).toEqual({ previous: '47', current: '45' });
+    } finally {
+      CseMachine.clear();
+    }
+  });
+});
+
+describe('a snapshot that cannot be laid out', () => {
+  test('leaves the layout components and the animation frames as they were', () => {
+    CseMachine.init(
+      () => {},
+      600,
+      400,
+      () => {},
+      () => {},
+    );
+    try {
+      CseMachine.renderSnapshot(snapshots[1], snapshotWithAllFrames(snapshots));
+      const before = {
+        control: Layout.controlComponent,
+        stash: Layout.stashComponent,
+        previous: (CseAnimation as any).previousFrame,
+        current: (CseAnimation as any).currentFrame,
+      };
+      expect(before.control).toBeDefined();
+
+      // A layout snapshot with a binding without a value: reading its label throws while the
+      // frames are laid out, after the control and stash have been taken away.
+      const malformed = {
+        ...snapshots[1],
+        environments: [{ ...call, bindings: [{ name: 'n' }] }, program(false, 1), global],
+      } as unknown as CseSnapshot;
+      expect(() => CseMachine.renderSnapshot(snapshots[1], malformed)).toThrow();
+
+      expect(Layout.controlComponent).toBe(before.control);
+      expect(Layout.stashComponent).toBe(before.stash);
+      expect((CseAnimation as any).previousFrame).toBe(before.previous);
+      expect((CseAnimation as any).currentFrame).toBe(before.current);
+    } finally {
+      CseMachine.clear();
+    }
+  });
 });
 
 describe('frame colours', () => {
