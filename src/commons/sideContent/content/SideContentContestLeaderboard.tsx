@@ -1,7 +1,6 @@
 import { Button, Collapse, Icon, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import type { ContestEntry } from '../../assessment/AssessmentTypes';
 import { SideContentType } from '../SideContentTypes';
@@ -22,7 +21,6 @@ export type SideContentContestLeaderboardProps = {
  *  handleContestEntryClick: displays contest entry answer in assessment workspace editor}
  */
 function SideContentContestLeaderboard(props: SideContentContestLeaderboardProps) {
-  const { t } = useTranslation('sideContent', { keyPrefix: 'contestLeaderboard' });
   const { orderedContestEntries, handleContestEntryClick, leaderboardType } = props;
   const [showLeaderboard, setShowLeaderboard] = useState(true);
 
@@ -32,19 +30,19 @@ function SideContentContestLeaderboard(props: SideContentContestLeaderboardProps
 
   const leaderboardTitle = useMemo(() => {
     return leaderboardType === SideContentType.scoreLeaderboard
-      ? t($ => $.titles.score)
+      ? 'Score Leaderboard'
       : leaderboardType === SideContentType.popularVoteLeaderboard
-        ? t($ => $.titles.popularVote)
-        : t($ => $.titles.default);
-  }, [leaderboardType, t]);
+        ? 'Popular Vote Leaderboard'
+        : 'Contest Leaderboard';
+  }, [leaderboardType]);
 
   const contestLeaderboardTooltipContent = useMemo(() => {
     return leaderboardType === SideContentType.scoreLeaderboard
-      ? t($ => $.tooltips.score)
+      ? 'View the highest scoring contest entries!'
       : leaderboardType === SideContentType.popularVoteLeaderboard
-        ? t($ => $.tooltips.popularVote)
-        : t($ => $.tooltips.default);
-  }, [leaderboardType, t]);
+        ? 'View the most popular contest entries!'
+        : 'View the top-rated contest entries!';
+  }, [leaderboardType]);
 
   const columnHeader = (colClass: string, colTitle: string) => (
     <div className={colClass}>
@@ -56,25 +54,19 @@ function SideContentContestLeaderboard(props: SideContentContestLeaderboardProps
   const contestEntryHeader = useMemo(() => {
     return (
       <div className="leaderboard-header">
-        {columnHeader(
-          'header-entryid',
-          t($ => $.headers.studentName),
-        )}
-        {columnHeader(
-          'header-entryrank',
-          t($ => $.headers.rank),
-        )}
+        {columnHeader('header-entryid', 'Student Name')}
+        {columnHeader('header-entryrank', 'Rank')}
         {columnHeader(
           'header-score',
           leaderboardType === SideContentType.scoreLeaderboard
-            ? t($ => $.headers.score.calculated)
+            ? 'Calculated Score'
             : leaderboardType === SideContentType.popularVoteLeaderboard
-              ? t($ => $.headers.score.popularity)
-              : t($ => $.headers.score.default),
+              ? 'Popularity Score'
+              : 'Metric',
         )}
       </div>
     );
-  }, [leaderboardType, t]);
+  }, [leaderboardType]);
 
   const contestEntryCards = useMemo(
     () => (
@@ -90,11 +82,11 @@ function SideContentContestLeaderboard(props: SideContentContestLeaderboardProps
             />
           ))
         ) : (
-          <div className="noResults">{t($ => $.noEntries)}</div>
+          <div className="noResults">There are no eligible contest leaderboard entries found.</div>
         )}
       </div>
     ),
-    [handleContestEntryClick, orderedContestEntries, contestEntryHeader, t],
+    [handleContestEntryClick, orderedContestEntries, contestEntryHeader],
   );
 
   return (

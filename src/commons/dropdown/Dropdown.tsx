@@ -1,7 +1,6 @@
 import { Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
 
 import { logOut } from '../application/actions/CommonsActions';
@@ -21,8 +20,6 @@ function Dropdown() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMyCoursesOpen, setIsMyCoursesOpen] = useState(false);
   const [isCreateCourseOpen, setIsCreateCourseOpen] = useState(false);
-
-  const { t } = useTranslation('commons', { keyPrefix: 'dropdown' });
 
   const { isLoggedIn, name, courses, courseId } = useSession();
   const dispatch = useAppDispatch();
@@ -46,23 +43,15 @@ function Dropdown() {
     ) : null;
 
   const myCourses = isLoggedIn ? (
-    <MenuItem
-      icon={IconNames.PROPERTIES}
-      onClick={toggleMyCoursesOpen}
-      text={t($ => $['My Courses'])}
-    />
+    <MenuItem icon={IconNames.PROPERTIES} onClick={toggleMyCoursesOpen} text={'My Courses'} />
   ) : null;
 
   const createCourse = isLoggedIn ? (
-    <MenuItem
-      icon={IconNames.ADD}
-      onClick={toggleCreateCourseOpen}
-      text={t($ => $['Create Course'])}
-    />
+    <MenuItem icon={IconNames.ADD} onClick={toggleCreateCourseOpen} text={'Create Course'} />
   ) : null;
 
   const logout = isLoggedIn ? (
-    <MenuItem icon={IconNames.LOG_OUT} text={t($ => $['Logout'])} onClick={handleLogOut} />
+    <MenuItem icon={IconNames.LOG_OUT} text={'Logout'} onClick={handleLogOut} />
   ) : null;
 
   const menu = (
@@ -70,9 +59,9 @@ function Dropdown() {
       {profile}
       {myCourses}
       {createCourse}
-      <MenuItem icon={IconNames.COG} onClick={toggleSettingsOpen} text={t($ => $['Settings'])} />
-      <MenuItem icon={IconNames.HELP} onClick={toggleAboutOpen} text={t($ => $['About'])} />
-      <MenuItem icon={IconNames.ERROR} onClick={toggleHelpOpen} text={t($ => $['Help'])} />
+      <MenuItem icon={IconNames.COG} onClick={toggleSettingsOpen} text={'Settings'} />
+      <MenuItem icon={IconNames.HELP} onClick={toggleAboutOpen} text={'About'} />
+      <MenuItem icon={IconNames.ERROR} onClick={toggleHelpOpen} text={'Help'} />
       {logout}
     </Menu>
   );

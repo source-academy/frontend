@@ -2,7 +2,6 @@ import { Button, ButtonGroup, Card, Classes, Elevation, H4, Icon } from '@bluepr
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { useCallback } from 'react';
-import { Translation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
@@ -67,7 +66,7 @@ function LoginButton({
       endIcon={IconNames.LOG_IN}
       onClick={useCallback(() => handleClick(id), [handleClick, id])}
     >
-      <Translation ns="login">{t => t($ => $['Log in with'], { name: name })}</Translation>
+      {`Log in with ${name}`}
     </Button>
   );
 }

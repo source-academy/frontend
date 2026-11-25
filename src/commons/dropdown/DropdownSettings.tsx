@@ -13,7 +13,6 @@ import { useContext } from 'react';
 import { useNavigate } from 'react-router';
 
 import { EditorBinding, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
-import LocaleSelector from './LocaleSelector';
 
 const options = [
   { label: 'None', value: EditorBinding.NONE },
@@ -64,7 +63,6 @@ function DropdownSettings({ isOpen, onClose }: Props) {
             <Icon icon={IconNames.Help} />
           </Tooltip>
         </FormGroup>
-        <LocaleSelector />
         <Button
           onClick={() => {
             navigate('/features');

@@ -2,7 +2,6 @@ import { Card, Classes, Elevation, NonIdealState, Spinner, SpinnerSize } from '@
 import classNames from 'classnames';
 import Cookies from 'js-cookie';
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { useAppDispatch, useSession } from 'src/commons/utils/Hooks';
@@ -16,7 +15,6 @@ function LoginCallback() {
   const navigate = useNavigate();
   const { isLoggedIn } = useSession();
   const { code, ticket, provider: providerId } = parseQuery(location.search);
-  const { t } = useTranslation('login');
 
   // `code` parameter from OAuth2 redirect, `ticket` from CAS redirect
   const authCode = code || ticket;
@@ -50,7 +48,7 @@ function LoginCallback() {
       <Card elevation={Elevation.FOUR}>
         <div>
           <NonIdealState
-            description={t($ => $['Logging In'])}
+            description={'Logging In...'}
             icon={<Spinner size={SpinnerSize.LARGE} />}
           />
         </div>

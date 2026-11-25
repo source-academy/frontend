@@ -1,27 +1,22 @@
 import { Card, Elevation, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
-import type { TFunction } from 'i18next';
-import { useTranslation } from 'react-i18next';
 
 import type { AutogradingError, AutogradingResult } from '../../assessment/AssessmentTypes';
 
-const buildErrorString = (
-  t: TFunction<'sideContent', 'resultCard'>,
-  errors: AutogradingError[],
-) => {
+const buildErrorString = (errors: AutogradingError[]) => {
   return errors
     .map(error => {
       switch (error.errorType) {
         case 'timeout':
-          return t($ => $.timeout);
+          return '[TIMEOUT] Submission exceeded time limit for this test case.';
         case 'syntax':
-          return t($ => $.syntax, { line: error.line, errorExplanation: error.errorExplanation });
+          return `[SYNTAX] Line ${error.line}: ${error.errorExplanation}`;
         case 'runtime':
-          return t($ => $.runtime, { line: error.line, errorExplanation: error.errorExplanation });
+          return `[RUNTIME] Line ${error.line}: ${error.errorExplanation}`;
         case 'systemError':
-          return t($ => $.systemError, { errorMessage: error.errorMessage });
+          return `[SYSTEM] ${error.errorMessage}`;
         default:
-          return t($ => $.unknown, { errorType: error.errorType });
+          return `[UNKNOWN] Autograder error: type ${error.errorType}`;
       }
     })
     .join('\n\n');
@@ -33,7 +28,6 @@ type Props = {
 };
 
 function SideContentResultCard({ index, result }: Props) {
-  const { t } = useTranslation('sideContent', { keyPrefix: 'resultCard' });
   return (
     <div
       className={classNames('ResultCard', result.resultType === 'pass' ? 'correct' : 'wrong')}
@@ -52,7 +46,7 @@ function SideContentResultCard({ index, result }: Props) {
           {result.expected!}
         </Pre>
         <Pre className="result-actual" data-testid="result-actual">
-          {result.resultType === 'error' ? buildErrorString(t, result.errors!) : result.actual!}
+          {result.resultType === 'error' ? buildErrorString(result.errors!) : result.actual!}
         </Pre>
       </Card>
     </div>

@@ -15,9 +15,7 @@ import {
 import { type IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { useMemo, useState } from 'react';
-import { Translation } from 'react-i18next';
 import { type Location, NavLink, useLocation, useMatch } from 'react-router';
-import type { i18nDefaultLangKeys } from 'src/i18n/i18next';
 
 import SicpNavigationBar from '../../features/textbook/navigationBar/SicpNavigationBar';
 import SicPyNavigationBar from '../../features/textbook/navigationBar/SicPyNavigationBar';
@@ -359,15 +357,7 @@ export function DesktopNavLink(props: NavbarEntryInfo) {
       title={props.text}
     >
       <Button variant="minimal" icon={props.icon}>
-        {!shouldHide && (
-          <Translation ns="commons" keyPrefix="navigationBar">
-            {t =>
-              t($ => $[props.text as keyof i18nDefaultLangKeys['commons']['navigationBar']], {
-                defaultValue: props.text,
-              })
-            }
-          </Translation>
-        )}
+        {!shouldHide && props.text}
       </Button>
       {props.hasNotifications && (
         <NotificationBadge
@@ -392,13 +382,7 @@ function MobileNavLink(props: MobileNavLinkProps) {
       key={props.text}
     >
       <Button variant="minimal" size="large" icon={props.icon}>
-        <Translation ns="commons" keyPrefix="navigationBar">
-          {t =>
-            t($ => $[props.text as keyof i18nDefaultLangKeys['commons']['navigationBar']], {
-              defaultValue: props.text,
-            })
-          }
-        </Translation>
+        {props.text}
       </Button>
       {props.hasNotifications && (
         <NotificationBadge

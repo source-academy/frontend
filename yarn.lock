@@ -1746,7 +1746,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.28.4, @babel/runtime@npm:^7.29.2, @babel/runtime@npm:^7.29.7, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
+"@babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.28.4, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
   version: 7.29.15
   resolution: "@babel/runtime@npm:7.29.15"
   checksum: 10c0/dd0aeddff9aa61c64431229ef243a5c08d662708c27cc6d5a3e0d90062caa243d1a72fa494f30568e87de21b4d4667092ede858e4eebc63c9c457a02ae4a0274
@@ -8894,8 +8894,6 @@ __metadata:
     flexboxgrid: "npm:^6.3.1"
     flexboxgrid-helpers: "npm:^1.1.3"
     husky: "npm:^9.0.0"
-    i18next: "npm:^26.0.3"
-    i18next-browser-languagedetector: "npm:^8.0.0"
     identity-obj-proxy: "npm:^3.0.0"
     immer: "npm:^9.0.21"
     js-cookie: "npm:^3.0.5"
@@ -8919,7 +8917,6 @@ __metadata:
     react-draggable: "npm:^4.4.5"
     react-dropzone: "npm:^20.0.0"
     react-error-overlay: "npm:^6.0.11"
-    react-i18next: "npm:^17.0.2"
     react-konva: "npm:^19.0.7"
     react-latex-next: "npm:^3.0.0"
     react-markdown: "npm:^10.1.0"
@@ -9499,13 +9496,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"html-parse-stringify@npm:^4.0.1":
-  version: 4.0.1
-  resolution: "html-parse-stringify@npm:4.0.1"
-  checksum: 10c0/8d7267acbc8b70a50096176e28ba491af89fb31613b6a062bce4b8201b2703fd652bedfbe0db6efe90145379c89524a3319b1b58b8c96a72779b0f49e4c2c180
-  languageName: node
-  linkType: hard
-
 "html-url-attributes@npm:^3.0.0":
   version: 3.0.1
   resolution: "html-url-attributes@npm:3.0.1"
@@ -9576,27 +9566,6 @@ __metadata:
   bin:
     husky: bin.js
   checksum: 10c0/35bb110a71086c48906aa7cd3ed4913fb913823715359d65e32e0b964cb1e255593b0ae8014a5005c66a68e6fa66c38dcfa8056dbbdfb8b0187c0ffe7ee3a58f
-  languageName: node
-  linkType: hard
-
-"i18next-browser-languagedetector@npm:^8.0.0":
-  version: 8.3.1
-  resolution: "i18next-browser-languagedetector@npm:8.3.1"
-  dependencies:
-    "@babel/runtime": "npm:^7.29.2"
-  checksum: 10c0/ade531da53a054e5d2f35b69d104073ef3d5293c6fbf50c120639628fbc4785f3b709e21c1023f3e85ba0a4c8c5a99e6c8460d26e493bbdbca0bf1694fe91063
-  languageName: node
-  linkType: hard
-
-"i18next@npm:^26.0.3":
-  version: 26.4.5
-  resolution: "i18next@npm:26.4.5"
-  peerDependencies:
-    typescript: ^5 || ^6 || ^7
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 10c0/e3c8fc1a53f0c52ee04b524c773fe1b21bf4d11919b0be76424d37783fce5cc51f32a1f7fc30e17d67e101c5ad955cfc4ce890eaed2bdb61e5da9f5a71d69faf
   languageName: node
   linkType: hard
 
@@ -13105,28 +13074,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^17.0.2":
-  version: 17.1.13
-  resolution: "react-i18next@npm:17.1.13"
-  dependencies:
-    "@babel/runtime": "npm:^7.29.7"
-    html-parse-stringify: "npm:^4.0.1"
-    use-sync-external-store: "npm:^1.6.0"
-  peerDependencies:
-    i18next: ">= 26.2.0"
-    react: ">= 16.8.0"
-    typescript: ^5 || ^6 || ^7
-  peerDependenciesMeta:
-    react-dom:
-      optional: true
-    react-native:
-      optional: true
-    typescript:
-      optional: true
-  checksum: 10c0/961c7b43e8d568cc31499c810da8d3db7d4b1a8a5f14803c7e3462713bdae4f54444913e299750edd5fcf61f8b6962714d0781ee7399192fb94c3152bc894d38
-  languageName: node
-  linkType: hard
-
 "react-is@npm:^16.13.1, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
@@ -15693,7 +15640,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-sync-external-store@npm:^1.0.0, use-sync-external-store@npm:^1.6.0":
+"use-sync-external-store@npm:^1.0.0":
   version: 1.6.0
   resolution: "use-sync-external-store@npm:1.6.0"
   peerDependencies:

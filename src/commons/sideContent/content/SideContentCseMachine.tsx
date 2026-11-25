@@ -14,11 +14,9 @@ import { IconNames } from '@blueprintjs/icons';
 import type { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
-import { t } from 'i18next';
 import { Chapter } from 'js-slang/dist/langs';
 import { debounce } from 'lodash-es';
 import { Component } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
 import { connect, type MapDispatchToProps, type MapStateToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
@@ -790,7 +788,7 @@ export const SideContentCseMachine = connect(
 )(SideContentCseMachineBase);
 
 const makeCseMachineTabFrom = (location: WorkspaceLocation): SideContentTab => ({
-  label: t($ => $.cseMachine.label, { ns: 'sideContent' }),
+  label: 'CSE Machine',
   iconName: IconNames.GLOBE,
   body: <SideContentCseMachine workspaceLocation={location} />,
   id: SideContentType.cseMachine,
@@ -805,7 +803,6 @@ export function ItalicLink({ href, children }: { href: string; children?: React.
 }
 
 function CseMachineDefaultText() {
-  const { t } = useTranslation('sideContent', { keyPrefix: 'cseMachine' });
   return (
     <div
       id="cse-machine-default-text"
@@ -813,32 +810,35 @@ function CseMachineDefaultText() {
       data-testid="cse-machine-default-text"
     >
       <span>
-        <Trans
-          ns="sideContent"
-          i18nKey={$ => $.cseMachine.cseDescription}
-          // eslint-disable-next-line react/jsx-key
-          components={[<ItalicLink href={Links.textbookChapter3_2} />]}
-        />
+        The CSE machine generates control, stash and environment model diagrams following a notation
+        introduced in{' '}
+        <ItalicLink href={Links.textbookChapter3_2}>
+          Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section
+          2
+        </ItalicLink>
+        .
       </span>
       <br />
       <br />
-      {t($ => $.instructions)}
+      {
+        'On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by running your program and then dragging the slider above to see the state of the control, stash and environment at different stages in the evaluation of your program. Clicking on the fast-forward button (double chevron) will take you to the next breakpoint in your program.'
+      }
       <br />
       <br />
       <Divider />
-      {t($ => $.shortcutsTitle)}
+      Some useful keyboard shortcuts:
       <br />
       <br />
-      {t($ => $.shortcuts.a)}
+      a: Move to the first step
       <br />
-      {t($ => $.shortcuts.e)}
+      e: Move to the last step
       <br />
-      {t($ => $.shortcuts.f)}
+      f: Move to the next step
       <br />
-      {t($ => $.shortcuts.b)}
+      b: Move to the previous step
       <br />
       <br />
-      {t($ => $.shortcutsNote)}
+      Note that these shortcuts are only active when the browser focus is on this tab.
     </div>
   );
 }

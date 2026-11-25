@@ -1,6 +1,0 @@
-const translations = {
-  name: '姓名',
-  role: '角色',
-};
-
-export default translations;

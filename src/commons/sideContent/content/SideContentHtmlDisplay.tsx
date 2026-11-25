@@ -1,7 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
-import { t } from 'i18next';
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import type { ResultOutput } from 'src/commons/application/ApplicationTypes';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
 
@@ -21,7 +19,6 @@ type Props = {
 const ERROR_MESSAGE_REGEX = /^Line \d+: /i;
 
 export function SideContentHtmlDisplay(props: Props) {
-  const { t } = useTranslation('sideContent', { keyPrefix: 'htmlDisplay' });
   const { content, handleAddHtmlConsoleError, workspaceLocation } = props;
   const dispatch = useAppDispatch();
 
@@ -48,7 +45,7 @@ export function SideContentHtmlDisplay(props: Props) {
   return (
     <iframe
       className="sa-html-display"
-      title={t($ => $.title)}
+      title={'HTML Display'}
       sandbox="allow-scripts"
       srcDoc={content}
       src="about:blank"
@@ -61,7 +58,7 @@ const makeHtmlDisplayTabFrom = (
   handleError: (errorMsg: string) => void,
   workspaceLocation: SideContentLocation,
 ): SideContentTab => ({
-  label: t($ => $.htmlDisplay.label, { ns: 'sideContent' }),
+  label: 'HTML Display',
   iconName: IconNames.MODAL,
   body: (
     <SideContentHtmlDisplay

@@ -13,7 +13,6 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { Links } from 'src/commons/utils/Constants';
@@ -25,7 +24,6 @@ function LoginVscodeCallback() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const { t } = useTranslation('login');
   const { isLoggedIn, courseId } = useSession();
   const {
     code,
@@ -76,7 +74,7 @@ function LoginVscodeCallback() {
       <Card elevation={Elevation.FOUR}>
         <div>
           <NonIdealState
-            description={t($ => $['Logging In'])}
+            description={'Logging In...'}
             icon={<Spinner size={SpinnerSize.LARGE} />}
           />
         </div>

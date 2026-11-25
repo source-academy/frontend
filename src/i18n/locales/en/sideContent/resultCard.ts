@@ -1,9 +1,0 @@
-const translations = {
-  timeout: '[TIMEOUT] Submission exceeded time limit for this test case.',
-  syntax: '[SYNTAX] Line {{line}}: {{errorExplanation}}',
-  runtime: '[RUNTIME] Line {{line}}: {{errorExplanation}}',
-  systemError: '[SYSTEM] {{errorMessage}}',
-  unknown: '[UNKNOWN] Autograder error: type {{errorType}}',
-};
-
-export default translations;

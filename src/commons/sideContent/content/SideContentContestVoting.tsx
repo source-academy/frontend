@@ -2,7 +2,6 @@ import { Button, Card, Classes, Collapse, Elevation, Icon, Pre, Tooltip } from '
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import type { ContestEntry } from '../../assessment/AssessmentTypes';
 
@@ -30,7 +29,6 @@ function SideContentContestVoting({
   handleContestEntryClick,
   handleVotingSubmissionChange,
 }: Props) {
-  const { t } = useTranslation('sideContent', { keyPrefix: 'contestVoting' });
   const [showContestEntries, setShowContestEntries] = useState(true);
   const [currentDraggedItem, setCurrentDraggedItem] = useState<HTMLElement | null>(null);
   const [hoveredTier, setHoveredTier] = useState<string | null>(null);
@@ -167,7 +165,7 @@ function SideContentContestVoting({
             </div>
           </div>
         ) : (
-          <div className="noResults">{t($ => $.noEntries)}</div>
+          <div className="noResults">There are no eligible entries for voting found.</div>
         )}
       </div>
     ),
@@ -178,7 +176,6 @@ function SideContentContestVoting({
       handleDragLeave,
       handleDragEnter,
       handleDrop,
-      t,
       isValid,
       canSave,
       handleDragEnd,
@@ -214,8 +211,12 @@ function SideContentContestVoting({
         variant="minimal"
         onClick={() => setShowContestEntries(!showContestEntries)}
       >
-        <span>{t($ => $.title)}</span>
-        <Tooltip content={<span>{t($ => $.tooltip)}</span>}>
+        <span>Contest Voting</span>
+        <Tooltip
+          content={
+            <span>Rank your favourite contest entries from tiers D (worst) to S (best)!</span>
+          }
+        >
           <Icon icon={IconNames.HELP} />
         </Tooltip>
       </Button>
