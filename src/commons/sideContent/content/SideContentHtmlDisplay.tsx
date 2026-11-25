@@ -66,7 +66,7 @@ const makeHtmlDisplayTabFrom = (
   body: (
     <SideContentHtmlDisplay
       workspaceLocation={workspaceLocation}
-      content={output.value}
+      content={String(output.value)}
       handleAddHtmlConsoleError={handleError}
     />
   ),

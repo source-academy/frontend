@@ -1,4 +1,3 @@
-import type { SourceError } from 'js-slang/dist/errors/base';
 import { call, put, select, type StrictEffect } from 'redux-saga/effects';
 
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
@@ -6,6 +5,7 @@ import { selectTestCaseLanguage } from '../../../../features/directory/testCaseL
 import type { OverallState } from '../../../application/ApplicationTypes';
 import type { TestcaseType } from '../../../assessment/AssessmentTypes';
 import { TestcaseTypes } from '../../../assessment/AssessmentTypes';
+import { type InterpreterError } from '../../../errors/InterpreterError';
 import { actions } from '../../../utils/ActionsHelper';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
@@ -40,17 +40,17 @@ import { evalCodeConductorSaga } from './evalCode';
 
 /**
  * Shifts a Conductor-reported error's line numbers back by the number of prepend lines baked
- * into runTestCaseConductor's combined file, mirroring evalCode.ts's toConductorSourceError -
+ * into runTestCaseConductor's combined file, mirroring evalCode.ts's toConductorInterpreterError -
  * without this, an error in the student's own first line is reported at
  * `prepend line count + 1` (source-academy/frontend#4244), same off-by-N bug, different call
  * site: this saga concatenates prepend into the combined file itself (see runTestCaseConductor's
  * own doc comment) rather than going through evalEditorSaga's Run-only concatenation, so
  * evalCodeConductorSaga's own prepend-offset correction (gated on an editor Run's actionType)
  * never applies here. A location's line of 0 means "no location info"
- * (toConductorSourceError's own fallback for an error shape it doesn't recognise) and is left
+ * (toConductorInterpreterError's own fallback for an error shape it doesn't recognise) and is left
  * untouched rather than shifted into a misleadingly specific line 1.
  */
-function shiftErrorLines(error: SourceError, lineOffset: number): SourceError {
+function shiftErrorLines(error: InterpreterError, lineOffset: number): InterpreterError {
   const shift = (line: number) => (line > 0 ? Math.max(1, line - lineOffset) : line);
   return {
     ...error,
@@ -163,7 +163,7 @@ export function* runTestCaseConductor(
 
   let passed: boolean;
   if (lastOutput?.type === 'errors') {
-    const errors: SourceError[] = lastOutput.errors;
+    const errors: InterpreterError[] = lastOutput.errors;
     const correctedErrors =
       prependLineOffset > 0
         ? errors.map(error => shiftErrorLines(error, prependLineOffset))
@@ -182,9 +182,7 @@ export function* runTestCaseConductor(
     const printedLines = lastLogOutput?.consoleLogs ?? [];
     const printedResult =
       printedLines.length > 0 ? printedLines[printedLines.length - 1].trim() : '';
-    yield put(
-      actions.evalTestcaseSuccess({ toReplString: () => printedResult }, workspaceLocation, index),
-    );
+    yield put(actions.evalTestcaseSuccess(printedResult, workspaceLocation, index));
     passed = true;
   }
 

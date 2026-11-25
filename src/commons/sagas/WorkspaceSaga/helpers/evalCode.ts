@@ -1,7 +1,6 @@
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { RunnerStatus } from '@sourceacademy/conductor/types';
 import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
-import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors/base';
 import { channel, END, eventChannel, type SagaIterator, type Task } from 'redux-saga';
 import { call, cancel, cancelled, put, race, select, spawn, take } from 'redux-saga/effects';
 
@@ -14,6 +13,7 @@ import type {
 import { isConductorStepperTab } from '../../../../features/conductor/stepperTab';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { type OverallState } from '../../../application/ApplicationTypes';
+import { ErrorSeverity, ErrorType, type InterpreterError } from '../../../errors/InterpreterError';
 import { visitSideContent } from '../../../sideContent/SideContentActions';
 import { getTabId } from '../../../sideContent/SideContentHelper';
 import sideContentManager from '../../../sideContent/SideContentManager';
@@ -42,7 +42,7 @@ import { selectWorkspace } from '../../SafeEffects';
  * `line`/`column`/`rawMessage` intact - so this checks shape rather than `instanceof
  * EvaluatorError`.
  */
-function toConductorSourceError(error: unknown, lineOffset: number = 0): SourceError {
+function toConductorInterpreterError(error: unknown, lineOffset: number = 0): InterpreterError {
   if (
     typeof error === 'object' &&
     error !== null &&
@@ -103,7 +103,7 @@ function toConductorSourceError(error: unknown, lineOffset: number = 0): SourceE
 type ReceivedCount = { count: number };
 
 /**
- * Mutable box holding the prepend line-offset (see toConductorSourceError's doc comment) to apply
+ * Mutable box holding the prepend line-offset (see toConductorInterpreterError's doc comment) to apply
  * to errors from whichever chunk a session is currently evaluating. It's mutable, not a value
  * baked into handleErrors at spawn time, because a single session's handleErrors task outlives
  * every chunk sent to it (see ReplSession's own doc comment): the offset applies to the initial
@@ -252,7 +252,7 @@ function* handleResults(
  * passes `interrupt: false`: the runner is expected to still send its own terminal STOPPED/ERROR once
  * any pending work (e.g. Python's set_timeout) settles, and handleStatuses drives the interrupt then.
  *
- * `lineOffset` is forwarded to toConductorSourceError - see its own doc comment for why.
+ * `lineOffset` is forwarded to toConductorInterpreterError - see its own doc comment for why.
  */
 function* surfaceConductorError(
   error: unknown,
@@ -261,7 +261,10 @@ function* surfaceConductorError(
   lineOffset: number = 0,
 ): SagaIterator {
   yield put(
-    actions.appendInterpreterError([toConductorSourceError(error, lineOffset)], workspaceLocation),
+    actions.appendInterpreterError(
+      [toConductorInterpreterError(error, lineOffset)],
+      workspaceLocation,
+    ),
   );
   const selectedTab: SideContentTabId | undefined = yield select(
     (state: OverallState) => state.sideContent[workspaceLocation]?.selectedTab,
@@ -577,7 +580,7 @@ export function* evalCodeConductorSaga(
   if (isReplChunk && existingSession && existingSession.evaluatorPath === evaluator.path) {
     // A REPL chunk sent to an already-live session is raw REPL input with no prepend
     // concatenated onto it (unlike the session's own initial entrypoint chunk, see
-    // toConductorSourceError's doc comment) - reset the shared offset so errors from *this*
+    // toConductorInterpreterError's doc comment) - reset the shared offset so errors from *this*
     // chunk aren't corrected using whatever offset applied to the session's first chunk.
     existingSession.lineOffsetRef.current = 0;
     try {

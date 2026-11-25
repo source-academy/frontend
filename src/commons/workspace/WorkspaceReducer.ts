@@ -1,6 +1,5 @@
 import { createReducer, type Reducer } from '@reduxjs/toolkit';
 import { castDraft, type Draft } from 'immer';
-import { type SourceError } from 'js-slang/dist/errors/base';
 
 import { logOut } from '../application/actions/CommonsActions';
 import InterpreterActions from '../application/actions/InterpreterActions';
@@ -18,6 +17,7 @@ import {
   setSharedbConnected,
   setUpdateUserRoleCallback,
 } from '../collabEditing/CollabEditingActions';
+import { type InterpreterError } from '../errors/InterpreterError';
 import type { SourceActionType } from '../utils/ActionsHelper';
 import { handleCseAndStepperActions } from './reducers/cseReducer';
 import { handleEditorActions } from './reducers/editorReducer';
@@ -104,7 +104,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
   function applyInterpreterErrorOutput(
     state: Draft<WorkspaceManagerState>,
     workspaceLocation: WorkspaceLocation,
-    errors: SourceError[],
+    errors: InterpreterError[],
     shouldStopRunning: boolean,
   ) {
     const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
