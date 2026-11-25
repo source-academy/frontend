@@ -125,7 +125,7 @@ let assessmentLanguageRequest = 0;
  * chapter, which is a 1-based index into the language directory's array (see
  * libraryLanguage.ts) - not a separate assessment-level field.
  */
- 
+
 function* selectAssessmentLanguageSaga(
   assessment: Assessment,
   request: number = ++assessmentLanguageRequest,
