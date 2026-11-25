@@ -1,7 +1,6 @@
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { RunnerStatus } from '@sourceacademy/conductor/types';
 import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
-import type { Context } from 'js-slang';
 import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors/base';
 import { channel, END, eventChannel, type SagaIterator, type Task } from 'redux-saga';
 import { call, cancel, cancelled, put, race, select, spawn, take } from 'redux-saga/effects';
@@ -93,24 +92,6 @@ function toConductorSourceError(error: unknown, lineOffset: number = 0): SourceE
     explain: () => message,
     elaborate: () => '',
   };
-}
-
-export function* evalCodeSaga(
-  files: Record<string, string>,
-  entrypointFilePath: string,
-  context: Context,
-  _execTime: number,
-  actionType: string,
-  workspaceLocation: WorkspaceLocation,
-): SagaIterator {
-  return yield call(
-    evalCodeConductorSaga,
-    files,
-    entrypointFilePath,
-    context,
-    workspaceLocation,
-    actionType,
-  );
 }
 
 /**
@@ -561,7 +542,6 @@ function* waitForChunkSettled(
 export function* evalCodeConductorSaga(
   files: Record<string, string>,
   entrypointFilePath: string,
-  context: Context,
   workspaceLocation: WorkspaceLocation,
   actionType: string,
   storyEnv?: string,

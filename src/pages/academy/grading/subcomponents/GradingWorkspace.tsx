@@ -1,7 +1,6 @@
 import { Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
@@ -114,7 +113,7 @@ function GradingWorkspace(props: Props) {
   const {
     handleBrowseHistoryDown,
     handleBrowseHistoryUp,
-    handleClearContext,
+    handleChangeLibrary,
     handleDeclarationNavigate,
     handleEditorEval,
     handleSetActiveEditorTabIndex,
@@ -144,8 +143,8 @@ function GradingWorkspace(props: Props) {
         dispatch(WorkspaceActions.browseReplHistoryDown(workspaceLocation)),
       handleBrowseHistoryUp: () =>
         dispatch(WorkspaceActions.browseReplHistoryUp(workspaceLocation)),
-      handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
-        dispatch(WorkspaceActions.beginClearContext(workspaceLocation, library, shouldInitLibrary)),
+      handleChangeLibrary: (library: Library) =>
+        dispatch(WorkspaceActions.changeExternalLibrary(library.external.name, workspaceLocation)),
       handleDeclarationNavigate: (cursorPosition: Position) =>
         dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
       handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
@@ -326,7 +325,7 @@ function GradingWorkspace(props: Props) {
       editorTestcases,
     });
     handleChangeExecTime(question.library.execTimeMs ?? defaultWorkspaceManager.grading.execTime);
-    handleClearContext(question.library, true);
+    handleChangeLibrary(question.library);
     // Clear out any module tabs left over from the previously viewed submission.
     dispatch(resetSideContent(workspaceLocation));
     handleUpdateHasUnsavedChanges(false);
@@ -435,8 +434,8 @@ function GradingWorkspace(props: Props) {
         setSelectedTab(newTabId);
       },
       tabs: {
-        beforeDynamicTabs: tabs,
-        afterDynamicTabs: [],
+        leadingTabs: tabs,
+        trailingTabs: [],
       },
       workspaceLocation,
     };
@@ -555,8 +554,6 @@ function GradingWorkspace(props: Props) {
             handleEditorValueChange: handleEditorValueChange,
             handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
             handlePromptAutocomplete: handlePromptAutocomplete,
-            sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
-            sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
             externalLibraryName: question?.library?.external?.name || 'NONE',
           }
         : undefined,
@@ -576,8 +573,6 @@ function GradingWorkspace(props: Props) {
       handleReplValueChange: handleReplValueChange,
       output: output,
       replValue: replValue,
-      sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
-      sourceVariant: question?.library?.variant ?? Variant.DEFAULT,
       externalLibrary: question?.library?.external?.name || 'NONE',
       replButtons: replButtons(),
     },

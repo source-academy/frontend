@@ -1,5 +1,5 @@
 import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
-import { Chapter, Variant } from 'js-slang/dist/langs';
+import { Chapter } from 'js-slang/dist/langs';
 import { createMemoryRouter } from 'react-router';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
@@ -15,9 +15,7 @@ import {
   defaultLanguageDirectory,
   type GameState,
   Role,
-  type SALanguage,
   type Story,
-  SupportedLanguage,
 } from '../application/ApplicationTypes';
 import type {
   AdminPanelCourseRegistration,
@@ -150,7 +148,6 @@ const mockCourseConfiguration1: CourseConfiguration = {
   topLeaderboardDisplay: 100,
   topContestLeaderboardDisplay: 10,
   sourceChapter: Chapter.SOURCE_1,
-  sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
   assetsPrefix: '',
 };
@@ -183,7 +180,6 @@ const mockCourseConfiguration2: CourseConfiguration = {
   topLeaderboardDisplay: 100,
   topContestLeaderboardDisplay: 10,
   sourceChapter: Chapter.SOURCE_4,
-  sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
   assetsPrefix: '',
 };
@@ -906,38 +902,16 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS action', () => {
   });
 });
 
-describe('Test CHANGE_SUBLANGUAGE action', () => {
-  test('when chapter is changed', () => {
-    const sublang: SALanguage = {
-      chapter: Chapter.SOURCE_4,
-      variant: Variant.NATIVE,
-      displayName: 'Source \xa74 Concurrent',
-      mainLanguage: SupportedLanguage.JAVASCRIPT,
-      supports: {},
-    };
+describe('Test CHANGE_DEFAULT_LANGUAGE action', () => {
+  test('when the default language is changed', () => {
+    const sourceChapter = 3;
 
     return expectSaga(BackendSaga)
       .withState({ session: { role: Role.Staff, ...mockTokens } })
-      .call(putCourseConfig, mockTokens, {
-        sourceChapter: sublang.chapter,
-        sourceVariant: sublang.variant,
-      })
-      .put(
-        SessionActions.setCourseConfiguration({
-          sourceChapter: sublang.chapter,
-          sourceVariant: sublang.variant,
-        }),
-      )
-      .provide([
-        [
-          call(putCourseConfig, mockTokens, {
-            sourceChapter: Chapter.SOURCE_4,
-            sourceVariant: Variant.NATIVE,
-          }),
-          { ok: true },
-        ],
-      ])
-      .dispatch({ type: WorkspaceActions.changeSublanguage.type, payload: { sublang } })
+      .call(putCourseConfig, mockTokens, { sourceChapter })
+      .put(SessionActions.setCourseConfiguration({ sourceChapter }))
+      .provide([[call(putCourseConfig, mockTokens, { sourceChapter }), { ok: true }]])
+      .dispatch({ type: WorkspaceActions.changeDefaultLanguage.type, payload: { sourceChapter } })
       .silentRun();
   });
 });
@@ -1011,7 +985,6 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
     topLeaderboardDisplay: 100,
     topContestLeaderboardDisplay: 10,
     sourceChapter: Chapter.SOURCE_4,
-    sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help',
     assetsPrefix: '',
   };
@@ -1109,7 +1082,6 @@ describe('Test CREATE_COURSE action', () => {
     enableOverallLeaderboard: true,
     enableContestLeaderboard: true,
     sourceChapter: Chapter.SOURCE_1,
-    sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text',
   };
   const user = mockUser;

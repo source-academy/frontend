@@ -1,14 +1,8 @@
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { expect, test } from 'vitest';
 
-import {
-  createDefaultWorkspace,
-  type SALanguage,
-  SupportedLanguage,
-} from '../application/ApplicationTypes';
+import { createDefaultWorkspace } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import type { Library } from '../assessment/AssessmentTypes';
 import type { HighlightedLines } from '../editor/EditorTypes';
 import WorkspaceActions from './WorkspaceActions';
 import type { EditorTabState, WorkspaceLocation } from './WorkspaceTypes';
@@ -57,20 +51,6 @@ test('changeSideContentHeight generates correct action object', () => {
   });
 });
 
-test('chapterSelect generates correct action object', () => {
-  const chapter = Chapter.SOURCE_3;
-  const variant = Variant.DEFAULT;
-  const action = WorkspaceActions.chapterSelect(chapter, variant, playgroundWorkspace);
-  expect(action).toEqual({
-    type: WorkspaceActions.chapterSelect.type,
-    payload: {
-      chapter,
-      variant,
-      workspaceLocation: playgroundWorkspace,
-    },
-  });
-});
-
 test('externalLibrarySelect generates correct action object', () => {
   const externalLibraryName = ExternalLibraryName.SOUNDS;
   const action = WorkspaceActions.externalLibrarySelect(externalLibraryName, assessmentWorkspace);
@@ -80,27 +60,6 @@ test('externalLibrarySelect generates correct action object', () => {
       externalLibraryName,
       workspaceLocation: assessmentWorkspace,
       initialise: false,
-    },
-  });
-});
-
-test('beginClearContext generates correct action object', () => {
-  const library: Library = {
-    chapter: Chapter.SOURCE_4,
-    external: {
-      name: ExternalLibraryName.SOUNDS,
-      symbols: [],
-    },
-    globals: [],
-  };
-
-  const action = WorkspaceActions.beginClearContext(playgroundWorkspace, library, true);
-  expect(action).toEqual({
-    type: WorkspaceActions.beginClearContext.type,
-    payload: {
-      library,
-      workspaceLocation: playgroundWorkspace,
-      shouldInitLibrary: true,
     },
   });
 });
@@ -131,26 +90,6 @@ test('clearReplOutput generates correct action object', () => {
     type: WorkspaceActions.clearReplOutput.type,
     payload: {
       workspaceLocation: gradingWorkspace,
-    },
-  });
-});
-
-test('endClearContext generates correct action object', () => {
-  const library: Library = {
-    chapter: Chapter.SOURCE_4,
-    external: {
-      name: ExternalLibraryName.SOUNDS,
-      symbols: [],
-    },
-    globals: [],
-  };
-
-  const action = WorkspaceActions.endClearContext(library, playgroundWorkspace);
-  expect(action).toEqual({
-    type: WorkspaceActions.endClearContext.type,
-    payload: {
-      library,
-      workspaceLocation: playgroundWorkspace,
     },
   });
 });
@@ -551,36 +490,12 @@ test('navigateToDeclaration generates correct action object', () => {
   });
 });
 
-test('changeSublanguage generates correct action object', () => {
-  const sublang: SALanguage = {
-    chapter: Chapter.SOURCE_2,
-    variant: Variant.DEFAULT,
-    displayName: 'Source \xa72',
-    mainLanguage: SupportedLanguage.JAVASCRIPT,
-    supports: {},
-  };
-  const action = WorkspaceActions.changeSublanguage(sublang);
+test('changeDefaultLanguage generates correct action object', () => {
+  const action = WorkspaceActions.changeDefaultLanguage(2);
   expect(action).toEqual({
-    type: WorkspaceActions.changeSublanguage.type,
+    type: WorkspaceActions.changeDefaultLanguage.type,
     payload: {
-      sublang,
-    },
-  });
-});
-
-test('updateChapter generates correct action object', () => {
-  const sublang: SALanguage = {
-    chapter: Chapter.SOURCE_2,
-    variant: Variant.DEFAULT,
-    displayName: 'Source \xa72',
-    mainLanguage: SupportedLanguage.JAVASCRIPT,
-    supports: {},
-  };
-  const action = WorkspaceActions.updateSublanguage(sublang);
-  expect(action).toEqual({
-    type: WorkspaceActions.updateSublanguage.type,
-    payload: {
-      sublang,
+      sourceChapter: 2,
     },
   });
 });

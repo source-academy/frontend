@@ -1,5 +1,5 @@
 import { SlingClient } from '@sourceacademy/sling-client';
-import { assemble, compileFiles, type Context } from 'js-slang';
+import { assemble, compileFiles, createContext } from 'js-slang';
 import { ExceptionError } from 'js-slang/dist/errors/errors';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { pickBy } from 'lodash-es';
@@ -189,21 +189,6 @@ const RemoteExecutionSaga = combineSagaHandlers({
         output: [],
       }),
     );
-    yield put(
-      actions.beginClearContext(
-        workspace,
-        {
-          chapter: deviceType?.languageChapter || Chapter.SOURCE_3,
-          variant: Variant.DEFAULT,
-          external: {
-            name: deviceType?.deviceLibraryName || ExternalLibraryName.NONE,
-            symbols: deviceType?.internalFunctions || [],
-          },
-          globals: [],
-        },
-        false,
-      ),
-    );
     try {
       const connectPromise = new Promise((resolve, reject) => {
         try {
@@ -282,18 +267,21 @@ const RemoteExecutionSaga = combineSagaHandlers({
     yield put(actions.clearReplOutput(session.workspace));
 
     const client = session.connection.client;
-    const context: Context = yield select(
-      (state: OverallState) => state.workspaces[session.workspace].context,
+    // The legacy EV3 pipeline compiles with js-slang, which needs a Context to resolve the
+    // device's functions against and to report compile errors into.
+    const deviceType = deviceTypesById.get(session.device.type);
+    const context = createContext(
+      deviceType?.languageChapter ?? Chapter.SOURCE_3,
+      Variant.DEFAULT,
+      undefined,
+      deviceType?.internalFunctions ?? [],
     );
-    // clear the context of errors (note: the way this works is that the context
-    // is mutated by js-slang anyway, so it's ok to do it like this)
-    context.errors.length = 0;
     const compiled: MaybePromise<ReturnType<typeof compileFiles>> = yield call(
       compileFiles,
       files,
       entrypointFilePath,
       context,
-      deviceTypesById.get(session.device.type)?.internalFunctions,
+      deviceType?.internalFunctions,
     );
     if (!compiled) {
       yield put(actions.evalInterpreterError(context.errors, session.workspace));

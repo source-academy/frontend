@@ -10,7 +10,6 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
@@ -117,7 +116,7 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
   const {
     handleBrowseHistoryDown,
     handleBrowseHistoryUp,
-    handleClearContext,
+    handleChangeLibrary,
     handleDeclarationNavigate,
     handleEditorEval,
     handleEditorValueChange,
@@ -140,8 +139,8 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
         dispatch(WorkspaceActions.browseReplHistoryDown(workspaceLocation)),
       handleBrowseHistoryUp: () =>
         dispatch(WorkspaceActions.browseReplHistoryUp(workspaceLocation)),
-      handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
-        dispatch(WorkspaceActions.beginClearContext(workspaceLocation, library, shouldInitLibrary)),
+      handleChangeLibrary: (library: Library) =>
+        dispatch(WorkspaceActions.changeExternalLibrary(library.external.name, workspaceLocation)),
       handleDeclarationNavigate: (cursorPosition: Position) =>
         dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
       handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
@@ -279,18 +278,7 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
     if (!library) {
       library = question.library.chapter === -1 ? assessment!.globalDeployment! : question.library;
     }
-    if (library && library.globals.length > 0) {
-      const globalsVal = library.globals.map((x: any) => x[0]);
-      const symbolsVal = library.external.symbols.concat(globalsVal);
-      library = {
-        ...library,
-        external: {
-          name: library.external.name,
-          symbols: uniq(symbolsVal),
-        },
-      };
-    }
-    handleClearContext(library, true);
+    handleChangeLibrary(library);
     // Clear out any module tabs left over from the previous question/library.
     dispatch(resetSideContent(workspaceLocation));
   };
@@ -567,7 +555,7 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
     }
 
     return {
-      tabs: { beforeDynamicTabs: tabs, afterDynamicTabs: [] },
+      tabs: { leadingTabs: tabs, trailingTabs: [] },
       workspaceLocation,
     };
   };
@@ -712,8 +700,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
       handleReplValueChange: handleReplValueChange,
       output: output,
       replValue: replValue,
-      sourceChapter: question?.library?.chapter || Chapter.SOURCE_4,
-      sourceVariant: Variant.DEFAULT,
       externalLibrary: question?.library?.external?.name || 'NONE',
       replButtons: replButtons(),
     },
@@ -724,11 +710,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
       <Workspace {...workspaceProps} />
     </div>
   );
-}
-
-function uniq(a: string[]) {
-  const seen: Record<string, boolean> = {};
-  return a.filter(item => (Object.hasOwnProperty.call(seen, item) ? false : (seen[item] = true)));
 }
 
 export default EditingWorkspace;

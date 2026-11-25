@@ -735,24 +735,16 @@ const newBackendSagaTwo = combineSagaHandlers({
       return yield handleResponseError(resp);
     }
   },
-  [WorkspaceActions.changeSublanguage.type]: function* (action) {
+  [WorkspaceActions.changeDefaultLanguage.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
-    const { sublang } = action.payload;
+    const { sourceChapter } = action.payload;
 
-    const resp: Response | null = yield call(putCourseConfig, tokens, {
-      sourceChapter: sublang.chapter,
-      sourceVariant: sublang.variant,
-    });
+    const resp: Response | null = yield call(putCourseConfig, tokens, { sourceChapter });
     if (!resp || !resp.ok) {
       return yield handleResponseError(resp);
     }
 
-    yield put(
-      actions.setCourseConfiguration({
-        sourceChapter: sublang.chapter,
-        sourceVariant: sublang.variant,
-      }),
-    );
+    yield put(actions.setCourseConfiguration({ sourceChapter }));
     yield call(showSuccessMessage, 'Updated successfully!', 1000);
   },
   [SessionActions.updateLatestViewedCourse.type]: function* (action) {

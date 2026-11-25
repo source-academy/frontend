@@ -2,7 +2,6 @@ import { Card, Pre } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
 import classNames from 'classnames';
 import { parseError } from 'js-slang';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { useMemo } from 'react';
 
@@ -17,8 +16,6 @@ export type ReplProps = {
   hidden?: boolean;
   inputHidden?: boolean;
   usingSubst?: boolean;
-  sourceChapter: Chapter;
-  sourceVariant: Variant;
   externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
   showStepperPrompt?: boolean;
@@ -37,7 +34,6 @@ function Repl(props: ReplProps) {
       output={slice}
       key={index}
       usingSubst={props.usingSubst ?? false}
-      isHtml={props.sourceChapter === Chapter.HTML}
       showStepperPrompt={props.showStepperPrompt}
     />
   ));
@@ -94,12 +90,6 @@ export function Output(props: OutputProps) {
         return (
           <Card>
             <Pre className="log-output">Check out the Stepper tab!</Pre>
-          </Card>
-        );
-      } else if (props.isHtml) {
-        return (
-          <Card>
-            <Pre className="log-output">Check out the HTML Display tab!</Pre>
           </Card>
         );
       } else {

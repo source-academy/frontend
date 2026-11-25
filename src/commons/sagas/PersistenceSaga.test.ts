@@ -1,7 +1,7 @@
 /// <reference types="gapi.auth2" />
-import { Chapter, Variant } from 'js-slang/dist/langs';
 import { expectSaga } from 'redux-saga-test-plan';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
+import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
 import PlaygroundActions from 'src/features/playground/PlaygroundActions';
 import { assert, beforeAll, describe, expect, test, vi } from 'vitest';
 
@@ -19,8 +19,8 @@ const USER_EMAIL = 'test@email.com';
 const FILE_ID = '123';
 const FILE_NAME = 'file';
 const FILE_DATA = '// Hello world';
-const SOURCE_CHAPTER = Chapter.SOURCE_3;
-const SOURCE_VARIANT = Variant.DEFAULT;
+const LANGUAGE = 'source3';
+const EVALUATOR = 'source3Js';
 const SOURCE_LIBRARY = ExternalLibraryName.SOUNDS;
 
 beforeAll(() => {
@@ -70,15 +70,12 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
   test('opens a file on success path', () => {
     return expectSaga(PersistenceSaga)
       .withState({
+        languageDirectory: { selectedLanguageId: LANGUAGE, selectedEvaluatorId: EVALUATOR },
         workspaces: {
           playground: {
             activeEditorTabIndex: 0,
             editorTabs: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
-            context: {
-              chapter: SOURCE_CHAPTER,
-              variant: SOURCE_VARIANT,
-            },
           },
         },
       })
@@ -98,8 +95,8 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
                 return {
                   result: {
                     appProperties: {
-                      chapter: SOURCE_CHAPTER,
-                      variant: SOURCE_VARIANT,
+                      language: LANGUAGE,
+                      evaluator: EVALUATOR,
                       external: SOURCE_LIBRARY,
                     },
                   },
@@ -119,8 +116,41 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
         action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME }),
       })
       .put(actions.updateEditorValue('playground', 0, FILE_DATA))
-      .put(actions.chapterSelect(SOURCE_CHAPTER, SOURCE_VARIANT, 'playground'))
+      .put(LanguageDirectoryActions.setSelectedLanguage(LANGUAGE, EVALUATOR))
       .put(actions.externalLibrarySelect(SOURCE_LIBRARY, 'playground'))
+      .silentRun();
+  });
+
+  test('selects the Source language of a file saved with a legacy chapter', () => {
+    return expectSaga(PersistenceSaga)
+      .dispatch(actions.persistenceOpenPicker())
+      .provide({
+        call(effect, next) {
+          switch (effect.fn.name) {
+            case 'pickFile':
+              return { id: FILE_ID, name: FILE_NAME, picked: true };
+            case 'showSimpleConfirmDialog':
+              return true;
+            case 'get':
+              if (effect.args[0].alt === 'media') {
+                return { body: FILE_DATA };
+              }
+              return {
+                result: { appProperties: { chapter: '2', variant: 'default', external: 'NONE' } },
+              };
+            case 'ensureInitialisedAndAuthorised':
+            case 'ensureInitialised':
+            case 'showMessage':
+            case 'showSuccessMessage':
+              return;
+          }
+          assert.fail(`unexpected function called: ${effect.fn.name}`);
+        },
+      })
+      .withState({
+        workspaces: { playground: { activeEditorTabIndex: 0, editorTabs: [{ value: FILE_DATA }] } },
+      })
+      .put(LanguageDirectoryActions.setSelectedLanguage('source2'))
       .silentRun();
   });
 
@@ -143,7 +173,7 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
       })
       .not.put.like({ action: { type: PlaygroundActions.playgroundUpdatePersistenceFile.type } })
       .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
-      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: LanguageDirectoryActions.setSelectedLanguage.type } })
       .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun();
   });
@@ -165,7 +195,7 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
       })
       .not.put.like({ action: { type: PlaygroundActions.playgroundUpdatePersistenceFile.type } })
       .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
-      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: LanguageDirectoryActions.setSelectedLanguage.type } })
       .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun();
   });
@@ -175,15 +205,12 @@ test('PERSISTENCE_SAVE_FILE saves', () => {
   let updateFileCalled = false;
   return expectSaga(PersistenceSaga)
     .withState({
+      languageDirectory: { selectedLanguageId: LANGUAGE, selectedEvaluatorId: EVALUATOR },
       workspaces: {
         playground: {
           activeEditorTabIndex: 0,
           editorTabs: [{ value: FILE_DATA }],
           externalLibrary: SOURCE_LIBRARY,
-          context: {
-            chapter: SOURCE_CHAPTER,
-            variant: SOURCE_VARIANT,
-          },
         },
       },
     })
@@ -198,7 +225,7 @@ test('PERSISTENCE_SAVE_FILE saves', () => {
               FILE_NAME,
               'text/plain',
               FILE_DATA,
-              { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY },
+              { language: LANGUAGE, evaluator: EVALUATOR, external: SOURCE_LIBRARY },
             ]);
             updateFileCalled = true;
             return;
@@ -215,7 +242,7 @@ test('PERSISTENCE_SAVE_FILE saves', () => {
       action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME }),
     })
     .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
-    .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+    .not.put.like({ action: { type: LanguageDirectoryActions.setSelectedLanguage.type } })
     .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
     .silentRun();
 });
@@ -227,15 +254,12 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
     let updateFileCalled = false;
     await expectSaga(PersistenceSaga)
       .withState({
+        languageDirectory: { selectedLanguageId: LANGUAGE, selectedEvaluatorId: EVALUATOR },
         workspaces: {
           playground: {
             activeEditorTabIndex: 0,
             editorTabs: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
-            context: {
-              chapter: SOURCE_CHAPTER,
-              variant: SOURCE_VARIANT,
-            },
           },
         },
       })
@@ -256,7 +280,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
                 FILE_NAME,
                 'text/plain',
                 FILE_DATA,
-                { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY },
+                { language: LANGUAGE, evaluator: EVALUATOR, external: SOURCE_LIBRARY },
               ]);
               updateFileCalled = true;
               return;
@@ -275,7 +299,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
         action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME }),
       })
       .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
-      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: LanguageDirectoryActions.setSelectedLanguage.type } })
       .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun();
     expect(updateFileCalled).toBe(true);
@@ -285,15 +309,12 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
     let updateFileCalled = false;
     await expectSaga(PersistenceSaga)
       .withState({
+        languageDirectory: { selectedLanguageId: LANGUAGE, selectedEvaluatorId: EVALUATOR },
         workspaces: {
           playground: {
             activeEditorTabIndex: 0,
             editorTabs: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
-            context: {
-              chapter: SOURCE_CHAPTER,
-              variant: SOURCE_VARIANT,
-            },
           },
         },
       })
@@ -314,7 +335,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
                 FILE_NAME,
                 'text/plain',
                 FILE_DATA,
-                { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY },
+                { language: LANGUAGE, evaluator: EVALUATOR, external: SOURCE_LIBRARY },
               ]);
               updateFileCalled = true;
               return;
@@ -333,7 +354,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
         action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME }),
       })
       .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
-      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: LanguageDirectoryActions.setSelectedLanguage.type } })
       .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun();
     expect(updateFileCalled).toBe(true);
@@ -343,15 +364,12 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
     let createFileCalled = false;
     await expectSaga(PersistenceSaga)
       .withState({
+        languageDirectory: { selectedLanguageId: LANGUAGE, selectedEvaluatorId: EVALUATOR },
         workspaces: {
           playground: {
             activeEditorTabIndex: 0,
             editorTabs: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
-            context: {
-              chapter: SOURCE_CHAPTER,
-              variant: SOURCE_VARIANT,
-            },
           },
         },
       })
@@ -372,7 +390,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
                 'root',
                 'text/plain',
                 FILE_DATA,
-                { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY },
+                { language: LANGUAGE, evaluator: EVALUATOR, external: SOURCE_LIBRARY },
               ]);
               createFileCalled = true;
               return { id: FILE_ID, name: FILE_NAME };
@@ -393,7 +411,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
         action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME }),
       })
       .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
-      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: LanguageDirectoryActions.setSelectedLanguage.type } })
       .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun();
     expect(createFileCalled).toBe(true);
@@ -403,15 +421,12 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
     let createFileCalled = false;
     await expectSaga(PersistenceSaga)
       .withState({
+        languageDirectory: { selectedLanguageId: LANGUAGE, selectedEvaluatorId: EVALUATOR },
         workspaces: {
           playground: {
             activeEditorTabIndex: 0,
             editorTabs: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
-            context: {
-              chapter: SOURCE_CHAPTER,
-              variant: SOURCE_VARIANT,
-            },
           },
         },
       })
@@ -432,7 +447,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
                 DIR.id,
                 'text/plain',
                 FILE_DATA,
-                { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY },
+                { language: LANGUAGE, evaluator: EVALUATOR, external: SOURCE_LIBRARY },
               ]);
               createFileCalled = true;
               return { id: FILE_ID, name: FILE_NAME };
@@ -453,7 +468,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
         action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME }),
       })
       .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
-      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: LanguageDirectoryActions.setSelectedLanguage.type } })
       .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun();
     expect(createFileCalled).toBe(true);
@@ -462,15 +477,12 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
   test('does not overwrite if cancelled', () =>
     expectSaga(PersistenceSaga)
       .withState({
+        languageDirectory: { selectedLanguageId: LANGUAGE, selectedEvaluatorId: EVALUATOR },
         workspaces: {
           playground: {
             activeEditorTabIndex: 0,
             editorTabs: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
-            context: {
-              chapter: SOURCE_CHAPTER,
-              variant: SOURCE_VARIANT,
-            },
           },
         },
       })
@@ -497,22 +509,19 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       })
       .not.put.like({ action: { type: PlaygroundActions.playgroundUpdatePersistenceFile.type } })
       .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
-      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: LanguageDirectoryActions.setSelectedLanguage.type } })
       .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun());
 
   test('does not create a new file if cancelled', () =>
     expectSaga(PersistenceSaga)
       .withState({
+        languageDirectory: { selectedLanguageId: LANGUAGE, selectedEvaluatorId: EVALUATOR },
         workspaces: {
           playground: {
             activeEditorTabIndex: 0,
             editorTabs: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
-            context: {
-              chapter: SOURCE_CHAPTER,
-              variant: SOURCE_VARIANT,
-            },
           },
         },
       })
@@ -541,7 +550,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       })
       .not.put.like({ action: { type: PlaygroundActions.playgroundUpdatePersistenceFile.type } })
       .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
-      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: LanguageDirectoryActions.setSelectedLanguage.type } })
       .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun());
 });

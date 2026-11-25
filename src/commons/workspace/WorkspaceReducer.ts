@@ -19,7 +19,6 @@ import {
   setUpdateUserRoleCallback,
 } from '../collabEditing/CollabEditingActions';
 import type { SourceActionType } from '../utils/ActionsHelper';
-import { createContext } from '../utils/JsSlangHelper';
 import { handleCseAndStepperActions } from './reducers/cseReducer';
 import { handleEditorActions } from './reducers/editorReducer';
 import { handleReplActions } from './reducers/replReducer';
@@ -139,26 +138,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(WorkspaceActions.changeExecTime, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].execTime = action.payload.execTime;
-    })
-    .addCase(WorkspaceActions.endClearContext, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      // For some reason mutating the state directly results in type
-      // errors, so we have to do it the old-fashioned way
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          context: createContext<WorkspaceLocation>(
-            action.payload.library.chapter,
-            action.payload.library.external.symbols,
-            workspaceLocation,
-            action.payload.library.variant,
-            action.payload.library.languageOptions,
-          ),
-          globals: action.payload.library.globals,
-          externalLibrary: action.payload.library.external.name,
-        },
-      };
     })
     .addCase(WorkspaceActions.changeExternalLibrary, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -363,21 +342,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
           hasUnsavedChanges: action.payload.hasUnsavedChanges,
         },
       };
-    })
-    .addCase(WorkspaceActions.updateSublanguage, (state, action) => {
-      // TODO: Mark for removal
-      const { chapter, variant } = action.payload.sublang;
-      state.playground.context.chapter = chapter;
-      state.playground.context.variant = variant;
-    })
-    .addCase(WorkspaceActions.notifyProgramEvaluated, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      const debuggerContext = state[workspaceLocation].debuggerContext;
-      debuggerContext.result = action.payload.result;
-      debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
-      debuggerContext.code = action.payload.code;
-      debuggerContext.context = castDraft(action.payload.context);
-      debuggerContext.workspaceLocation = action.payload.workspaceLocation;
     })
     .addCase(WorkspaceActions.toggleUsingUpload, (state, action) => {
       const { workspaceLocation } = action.payload;

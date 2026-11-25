@@ -1,43 +1,23 @@
-import {
-  Button,
-  Dialog,
-  DialogBody,
-  DialogFooter,
-  Intent,
-  Menu,
-  MenuItem,
-} from '@blueprintjs/core';
+import { Button, Dialog, DialogBody, DialogFooter, Intent, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { type ItemListRenderer, type ItemRenderer, Select } from '@blueprintjs/select';
-import { Variant } from 'js-slang/dist/langs';
+import { type ItemRenderer, Select } from '@blueprintjs/select';
 import { useCallback, useState } from 'react';
-import Constants from 'src/commons/utils/Constants';
 import { useAppDispatch, useAppSelector, useSession } from 'src/commons/utils/Hooks';
 
-import { type SALanguage } from '../../../../commons/application/ApplicationTypes';
 import ControlButton from '../../../../commons/ControlButton';
 import WorkspaceActions from '../../../../commons/workspace/WorkspaceActions';
 
-/**
- * Just the fields `changeSublanguage` actually persists (course config only stores
- * `sourceChapter`/`sourceVariant`) - lets a Conductor language-directory entry (which has no
- * `variant`, `mainLanguage` or `supports` of its own) be selected through the same menu/dialog
- * as a legacy Source `SALanguage` without having to fake those fields.
- */
-type LanguageChoice = Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>;
+/** A language directory entry, identified by its 1-based position in the directory. */
+type LanguageChoice = { chapter: number; displayName: string };
 
 function DefaultChapterSelect() {
   const [chosenLanguage, setChosenLanguage] = useState<LanguageChoice>({
     chapter: 1,
-    variant: Variant.DEFAULT,
     displayName: '',
   });
   const [isDialogOpen, setDialogState] = useState(false);
 
-  const {
-    // Temporarily load the defaults when the course configuration fetch has yet to return
-    sourceChapter = Constants.defaultSourceChapter,
-  } = useSession();
+  const { sourceChapter } = useSession();
 
   const languages = useAppSelector(state => state.languageDirectory.languages);
 
@@ -45,15 +25,15 @@ function DefaultChapterSelect() {
   // chapterLanguage.ts's `deriveLanguageFromChapter`) rather than a Source chapter.
   const items: LanguageChoice[] = languages.map((lang, index) => ({
     chapter: index + 1,
-    variant: Variant.DEFAULT,
     displayName: lang.name,
   }));
 
-  const currentLanguageName = languages[sourceChapter - 1]?.name ?? 'Loading…';
+  const currentLanguageName =
+    (sourceChapter ? languages[sourceChapter - 1]?.name : undefined) ?? 'Loading…';
 
   const dispatch = useAppDispatch();
   const handleUpdateLanguage = useCallback(
-    (lang: LanguageChoice) => dispatch(WorkspaceActions.changeSublanguage(lang)),
+    (lang: LanguageChoice) => dispatch(WorkspaceActions.changeDefaultLanguage(lang.chapter)),
     [dispatch],
   );
 
@@ -76,25 +56,6 @@ function DefaultChapterSelect() {
     (lang, { handleClick }) => (
       <MenuItem key={lang.displayName} onClick={handleClick} text={lang.displayName} />
     ),
-    [],
-  );
-
-  const chapterListRenderer: ItemListRenderer<LanguageChoice> = useCallback(
-    ({ itemsParentRef, renderItem, items }) => {
-      const defaultChoices = items.filter(({ variant }) => variant === Variant.DEFAULT);
-      const variantChoices = items.filter(({ variant }) => variant !== Variant.DEFAULT);
-
-      return (
-        <Menu ulRef={itemsParentRef}>
-          {defaultChoices.map(renderItem)}
-          {variantChoices.length > 0 && (
-            <MenuItem key="variant-menu" text="Variants" icon="cog">
-              {variantChoices.map(renderItem)}
-            </MenuItem>
-          )}
-        </Menu>
-      );
-    },
     [],
   );
 
@@ -138,7 +99,6 @@ function DefaultChapterSelect() {
         items={items}
         onItemSelect={handleOpenDialog}
         itemRenderer={chapterRenderer}
-        itemListRenderer={chapterListRenderer}
         filterable={false}
       >
         <Button endIcon={IconNames.DOUBLE_CARET_VERTICAL}>

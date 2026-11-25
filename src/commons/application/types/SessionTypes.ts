@@ -1,5 +1,4 @@
 import { Octokit } from '@octokit/rest';
-import { Chapter, Variant } from 'js-slang/dist/langs';
 
 import type { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
 import type { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
@@ -49,8 +48,8 @@ export type SessionState = {
   readonly enableContestLeaderboard?: boolean;
   readonly topLeaderboardDisplay?: number;
   readonly topContestLeaderboardDisplay?: number;
-  readonly sourceChapter?: Chapter;
-  readonly sourceVariant?: Variant;
+  /** A 1-based position in the language directory (see `deriveLanguageFromChapter`). */
+  readonly sourceChapter?: number;
   readonly moduleHelpText?: string;
   readonly assetsPrefix?: string;
 
@@ -119,8 +118,8 @@ export type CourseConfiguration = {
   enableContestLeaderboard: boolean;
   topLeaderboardDisplay: number;
   topContestLeaderboardDisplay: number;
-  sourceChapter: Chapter;
-  sourceVariant: Variant;
+  /** A 1-based position in the language directory (see `deriveLanguageFromChapter`). */
+  sourceChapter: number;
   moduleHelpText: string;
   assetsPrefix: string;
   llmModel?: string;

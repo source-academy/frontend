@@ -40,7 +40,7 @@ import type { InterpreterOutput, OverallState } from '../../application/Applicat
 import type { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
-import { beginAlertSideContent } from '../SideContentActions';
+import { alertSideContent } from '../SideContentActions';
 import { getLocation } from '../SideContentHelper';
 import { type SideContentTab, SideContentType } from '../SideContentTypes';
 
@@ -550,7 +550,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
         this.props.machineOutput.length &&
         this.props.machineOutput[0].type === 'errors' ? (
           this.props.machineOutput.map((slice, index) => (
-            <Output output={slice} key={index} usingSubst={false} isHtml={false} />
+            <Output output={slice} key={index} usingSubst={false} />
           ))
         ) : (
           <div />
@@ -736,7 +736,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     breakpointSteps: workspace.breakpointSteps,
     changepointSteps: workspace.changepointSteps,
     machineOutput: workspace.output,
-    chapter: workspace.context.chapter,
+    // The CSE machine formats values identically for every chapter that has it.
+    chapter: Chapter.SOURCE_4,
     cseSnapshots: workspace.cseSnapshots,
     isOnCseTab: state.sideContent[loc]?.selectedTab === SideContentType.cseMachine,
   };
@@ -751,7 +752,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatc
       handleStepsTotalUpdate: (steps: number) =>
         WorkspaceActions.updateStepsTotal(steps, props.workspaceLocation),
       handleAlertSideContent: () =>
-        beginAlertSideContent(SideContentType.cseMachine, props.workspaceLocation),
+        alertSideContent(SideContentType.cseMachine, props.workspaceLocation),
       setEditorHighlightedLines: (
         editorTabIndex: number,
         newHighlightedLines: HighlightedLines[],

@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 import { showSuccessMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import classes from 'src/styles/SideContentSessionManagement.module.scss';
 
-import { beginAlertSideContent } from '../SideContentActions';
+import { alertSideContent } from '../SideContentActions';
 import { type SideContentLocation, SideContentType } from '../SideContentTypes';
 
 interface AdminViewProps {
@@ -142,7 +142,7 @@ function SideContentSessionManagement({
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(beginAlertSideContent(SideContentType.sessionManagement, workspaceLocation));
+    dispatch(alertSideContent(SideContentType.sessionManagement, workspaceLocation));
   }, [dispatch, workspaceLocation, users]);
 
   if (Object.values(users).length === 0) {

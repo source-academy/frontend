@@ -1,13 +1,28 @@
 import { Ace, Range as AceRange } from 'ace-builds';
-import { createContext, getAllOccurrencesInScope, getScope } from 'js-slang';
-import { useCallback, useRef } from 'react';
+import { getAllOccurrencesInScope, getScope } from 'js-slang';
+import { useCallback, useEffect, useRef } from 'react';
 
 import type { EditorHook } from './Editor';
+import { createAnalysisContext, useSourceAnalysisEnabled } from './sourceAnalysis';
 
 const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
-  const propsRef = useRef(inProps);
-  propsRef.current = inProps;
+  const enabled = useSourceAnalysisEnabled();
   const markerIdsRef = useRef<Array<number>>([]);
+
+  const clearMarkers = useCallback(() => {
+    const session = reactAceRef.current?.editor.session;
+    markerIdsRef.current.forEach(id => session?.removeMarker(id));
+    markerIdsRef.current = [];
+  }, [reactAceRef]);
+
+  // Markers outlive a change of the session's mode, so switching to a language that is not
+  // analysed has to remove them explicitly.
+  const isEnabled = enabled.current;
+  useEffect(() => {
+    if (!isEnabled) {
+      clearMarkers();
+    }
+  }, [isEnabled, clearMarkers]);
 
   const handleVariableHighlighting = useCallback(() => {
     // using Ace Editor's way of highlighting as seen here: https://github.com/ajaxorg/ace/blob/master/lib/ace/editor.js#L497
@@ -17,10 +32,13 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
       if (!reactAceRef.current) {
         return;
       }
+      if (!enabled.current) {
+        clearMarkers();
+        return;
+      }
       const editor = reactAceRef.current.editor;
       const session: Ace.EditSession = editor.session;
       const code = session.getValue();
-      const chapterNumber = propsRef.current.sourceChapter;
       const position = editor.getCursorPosition();
       if (!session || !(session as any).bgTokenizer) {
         return;
@@ -28,7 +46,7 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
       markerIdsRef.current.forEach(id => {
         session.removeMarker(id);
       });
-      const ranges = getAllOccurrencesInScope(code, createContext(chapterNumber), {
+      const ranges = getAllOccurrencesInScope(code, createAnalysisContext(), {
         line: position.row + 1,
         column: position.column,
       }).map(
@@ -41,18 +59,17 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
         return session.addMarker(range, markerType, 'text');
       });
     }, 10);
-  }, [reactAceRef]);
+  }, [reactAceRef, enabled, clearMarkers]);
 
   const handleHighlightScope = useCallback(() => {
-    if (!reactAceRef.current) {
+    if (!reactAceRef.current || !enabled.current) {
       return;
     }
     const editor = reactAceRef.current.editor;
     const code = editor.getValue();
-    const chapter = propsRef.current.sourceChapter;
     const position = editor.getCursorPosition();
 
-    const ranges = getScope(code, createContext(chapter), {
+    const ranges = getScope(code, createAnalysisContext(), {
       line: position.row + 1,
       column: position.column,
     });
@@ -74,7 +91,7 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
         );
       });
     }
-  }, [reactAceRef]);
+  }, [reactAceRef, enabled]);
 
   const { onChange: prevOnChange, onCursorChange: prevOnCursorChange } = outProps;
   outProps.onChange = useCallback(
