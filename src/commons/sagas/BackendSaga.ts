@@ -1,12 +1,12 @@
 import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
 import { camelCase, mapKeys } from 'lodash-es';
 import type { SagaIterator } from 'redux-saga';
-import { all, call, fork, put, select } from 'redux-saga/effects';
+import { all, call, fork, put, select, take } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import type { UsernameRoleGroup } from 'src/features/adminPanel/subcomponents/AddUserPanel';
 import DashboardActions from 'src/features/dashboard/DashboardActions';
-import { deriveLanguageFromChapter } from 'src/features/directory/chapterLanguage';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
+import { resolveLibraryLanguage } from 'src/features/directory/libraryLanguage';
 import GroundControlActions from 'src/features/groundControl/GroundControlActions';
 
 import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
@@ -111,22 +111,45 @@ export function* routerNavigate(path: string) {
   return router?.navigate(path);
 }
 
+/** Which assessment's language was asked for last: an older one that waits for the directory must not apply. */
+let assessmentLanguageRequest = 0;
+
 /**
  * Assessment workspaces don't expose a language dropdown of their own — they share the same
  * global languageDirectory Redux slice the Playground dropdown writes to. Setting it here on
  * assessment load is what makes the assessment's Run/testcase-grading use the right language
  * instead of whatever was last selected in the Playground.
  *
- * The language is derived from the assessment's own chapter (the first question's
- * library.chapter — assessments don't mix chapters across their own questions), which is a
- * 1-based index into the language directory's array (see
- * chapterLanguage.ts) - not a separate assessment-level field.
+ * The language is the one that the first question's library names by its language and evaluator
+ * ids (assessments don't mix languages across their own questions); an older question has only a
+ * chapter, which is a 1-based index into the language directory's array (see
+ * libraryLanguage.ts) - not a separate assessment-level field.
  */
-function* selectAssessmentLanguageSaga(assessment: Assessment) {
+
+function* selectAssessmentLanguageSaga(
+  assessment: Assessment,
+  request: number = ++assessmentLanguageRequest,
+): Generator<any, void, any> {
   const languages: ILanguageDefinition[] = yield select(
     (state: OverallState) => state.languageDirectory.languages,
   );
-  const derived = deriveLanguageFromChapter(languages, assessment.questions[0]?.library.chapter);
+  const library = assessment.questions[0]?.library;
+
+  if (languages.length === 0) {
+    // The language directory has not loaded yet, and the assessment must not lose its language to
+    // that: the ids and the chapter are looked up in the directory, so wait for it, and then select
+    // exactly what the question names (a name that the directory lacks clears the selection, and is
+    // not replaced by another). An assessment opened since then has the say instead.
+    yield fork(function* () {
+      yield take(LanguageDirectoryActions.setLanguages.type);
+      if (request === assessmentLanguageRequest) {
+        yield call(selectAssessmentLanguageSaga, assessment, request);
+      }
+    });
+    return;
+  }
+
+  const derived = resolveLibraryLanguage(languages, library);
 
   if (!derived) {
     // Otherwise a prior assessment's selection would leak into this one.

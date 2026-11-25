@@ -307,23 +307,29 @@ const WorkspaceSaga = combineSagaHandlers({
       // Display a message to the user
       yield call(showSuccessMessage, `Running all testcases!`, 2000);
 
-      // Grading runs under the language that testCaseLanguageFor gives (see testCaseLanguage.ts:
-      // TEST_CASE_LANGUAGE_ID/EVALUATOR_ID, or the typed evaluator for Python §4 Typed) -
+      // Grading runs under the question's frontend grader language and evaluator (see
+      // testCaseLanguage.ts) -
       // switch once for this whole batch (rather than once per testcase inside
       // runTestCaseConductor), since each switch tears down and rebuilds the Conductor session
       // (conductorEvaluatorCache.ts's ensureConductorSessionSaga). Doing that up to 2N times in
       // quick succession raced with Conductor's own internal teardown often enough to throw an
       // uncaught "Conduit already terminated" from inside the vendored library - see
       // source-academy/frontend#4232.
+      const testCase: { languageId: string; evaluatorId: string } | undefined = yield select(
+        (state: OverallState) => selectTestCaseLanguage(state, workspaceLocation),
+      );
+      if (!testCase) {
+        yield call(
+          showWarningMessage,
+          'This question does not name a language for its test cases that the language directory has.',
+        );
+        return;
+      }
       let selectedLanguageId: string | null = null;
       let selectedEvaluatorId: string | null = null;
       ({ selectedLanguageId, selectedEvaluatorId } = yield select(
         (state: OverallState) => state.languageDirectory,
       ));
-      // Python §4 Typed grades under its own typed evaluator (see testCaseLanguage.ts).
-      const testCase: { languageId: string; evaluatorId: string } = yield select(
-        (state: OverallState) => selectTestCaseLanguage(state, workspaceLocation),
-      );
       yield put(LanguageDirectoryActions.setSelectedLanguage(testCase.languageId));
       yield put(LanguageDirectoryActions.setSelectedEvaluator(testCase.evaluatorId));
 

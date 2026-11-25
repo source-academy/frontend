@@ -94,6 +94,7 @@ export type Assessment = {
   type: AssessmentType;
   globalDeployment?: Library; // For mission control
   graderDeployment?: Library; // For mission control
+  frontendGraderDeployment?: Library; // For mission control
   hasTokenCounter?: boolean;
   isMinigame?: boolean;
   id: number;
@@ -163,6 +164,12 @@ export type BaseQuestion = {
     id: number;
   };
   graderLibrary?: Library; // For mission control
+  /**
+   * What the test cases run under in the workspace (the frontend grader): its language and evaluator.
+   * Absent for a question saved before the backend sent it, which then runs them under its
+   * `library`'s language (see `selectTestCaseLanguage`); there is no default language.
+   */
+  frontendGradingLibrary?: Library;
   id: number;
   library: Library;
   maxXp: number;
@@ -178,6 +185,13 @@ export type Question = IProgrammingQuestion | IMCQQuestion | IContestVotingQuest
 export type Library = {
   /** A 1-based position in the language directory (see `deriveLanguageFromChapter`). */
   chapter: number;
+  /**
+   * The language and the evaluator, by their ids in the language directory (for example `ocaml` and
+   * `ocamlJsOfOCaml`; source-academy/backend#1387). They name what runs, and take precedence over
+   * `chapter`, which only older questions have.
+   */
+  language?: string;
+  evaluator?: string;
   execTimeMs?: number;
   external: ExternalLibrary;
   globals: Array<{

@@ -7,6 +7,7 @@ import type { OverallState } from '../../../application/ApplicationTypes';
 import type { TestcaseType } from '../../../assessment/AssessmentTypes';
 import { TestcaseTypes } from '../../../assessment/AssessmentTypes';
 import { actions } from '../../../utils/ActionsHelper';
+import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { selectWorkspace } from '../../SafeEffects';
 import { evalCodeConductorSaga } from './evalCode';
@@ -69,7 +70,7 @@ export function* runTestCaseConductor(
   prepend: string,
   postpend: string,
   /**
-   * Skip this call's own switch-to-TEST_CASE-language/restore dance - set by runAllTestcases
+   * Skip this call's own switch-to-the-grader's-language/restore dance - set by runAllTestcases
    * (WorkspaceSaga/index.ts), which switches once for the whole batch of testcases instead of
    * once per testcase. Repeatedly switching `state.languageDirectory`'s selection back and forth
    * between every testcase (each switch tears down and rebuilds the Conductor session - see
@@ -81,19 +82,36 @@ export function* runTestCaseConductor(
    */
   skipLanguageSwitch?: boolean,
 ): Generator<StrictEffect, boolean, any> {
-  // Testing always runs the full concatenated bundle under Python's top chapter,
-  // regardless of the student's own assigned sub-chapter, so a sub-chapter's syntax
-  // restrictions (e.g. recursion-only, no loops) aren't enforced by the evaluator here.
-  // A postpend that needs to check the student didn't use a disallowed construct can
-  // call the chapter-4 `parse(__program__)` builtin and walk the returned tree itself
-  // (loop nodes come back tagged "while_loop"/"for_loop") - __program__ is the
-  // student's own source as a string, injected here since `value` only exists as
-  // executed code otherwise. JSON.stringify produces a valid Python string literal for
-  // any source text (its backslash/quote/control-char/unicode escapes are a subset of
-  // Python's).
-  const studentSourceLiteral = `__program__ = ${JSON.stringify(value)}`;
+  // The test cases run under the question's frontend grader language and evaluator (see
+  // testCaseLanguage.ts), which need not be the student's own: for Python, the full language, so that
+  // the sub-chapter's syntax restrictions (e.g. recursion-only, no loops) aren't enforced on prepend
+  // and postpend. The student's own program has been run under the user language before this (by
+  // evalEditorSaga), which is where its error messages come from.
+  const graderLanguage: { languageId: string; evaluatorId: string } | undefined = yield select(
+    (state: OverallState) => selectTestCaseLanguage(state, workspaceLocation),
+  );
+  if (!graderLanguage) {
+    yield call(
+      showWarningMessage,
+      'This question does not name a language for its test cases that the language directory has.',
+    );
+    return false;
+  }
+  // The combined file is named by the extension of the language that runs it (`.py`, `.ml`, ...)
+  const extension: string = yield select(
+    (state: OverallState) =>
+      state.languageDirectory.languageMap[graderLanguage.languageId]?.defaultFileExtension ?? 'py',
+  );
 
-  const combinedFilePath = '/testcase.py';
+  // A postpend that needs to check the student didn't use a disallowed construct can call the
+  // chapter-4 `parse(__program__)` builtin of Python and walk the returned tree itself (loop nodes come
+  // back tagged "while_loop"/"for_loop") - __program__ is the student's own source as a string,
+  // injected here since `value` only exists as executed code otherwise. JSON.stringify produces a valid
+  // Python string literal for any source text (its backslash/quote/control-char/unicode escapes are a
+  // subset of Python's). It is Python's feature: other languages have no such variable.
+  const studentSourceLiteral = extension === 'py' ? `__program__ = ${JSON.stringify(value)}` : '';
+
+  const combinedFilePath = `/testcase.${extension}`;
   const combinedCode = [prepend, value, studentSourceLiteral, postpend, testcase]
     .filter(part => part && part.trim().length > 0)
     .join('\n');
@@ -103,23 +121,18 @@ export function* runTestCaseConductor(
 
   yield put(actions.resetTestcase(workspaceLocation, index));
 
-  // Grading runs under the language that testCaseLanguageFor gives (see testCaseLanguage.ts):
-  // TEST_CASE_LANGUAGE_ID/EVALUATOR_ID, or the typed evaluator for Python §4 Typed,
-  // not the assessment's own sub-chapter language - temporarily override the
-  // shared selection for this call, then restore it, so a subsequent Run (outside the testing
-  // tab) goes back to using the student's assigned sub-chapter. Skipped when the caller (see
-  // runAllTestcases in WorkspaceSaga/index.ts) already switched once for the whole batch.
+  // Grading runs under that language - temporarily override the shared selection for this call, then
+  // restore it, so a subsequent Run (outside the testing tab) goes back to using the user's language.
+  // Skipped when the caller (see runAllTestcases in WorkspaceSaga/index.ts) already switched once for
+  // the whole batch.
   let selectedLanguageId: string | null = null;
   let selectedEvaluatorId: string | null = null;
   if (!skipLanguageSwitch) {
     ({ selectedLanguageId, selectedEvaluatorId } = yield select(
       (state: OverallState) => state.languageDirectory,
     ));
-    const testCase: { languageId: string; evaluatorId: string } = yield select(
-      (state: OverallState) => selectTestCaseLanguage(state, workspaceLocation),
-    );
-    yield put(LanguageDirectoryActions.setSelectedLanguage(testCase.languageId));
-    yield put(LanguageDirectoryActions.setSelectedEvaluator(testCase.evaluatorId));
+    yield put(LanguageDirectoryActions.setSelectedLanguage(graderLanguage.languageId));
+    yield put(LanguageDirectoryActions.setSelectedEvaluator(graderLanguage.evaluatorId));
   }
 
   try {
