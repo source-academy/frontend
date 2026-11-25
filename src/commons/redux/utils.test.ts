@@ -17,7 +17,7 @@ test('test combineSagaHandlers', () => {
   const mockTakeLeadingHandler = vi.fn();
 
   const saga = combineSagaHandlers({
-    [WorkspaceActions.toggleUsingUpload.type]: mockTakeEveryHandler,
+    [WorkspaceActions.enableTokenCounter.type]: mockTakeEveryHandler,
     [WorkspaceActions.toggleFolderMode.type]: {
       takeEvery: mockTakeEveryHandler,
     },
@@ -31,7 +31,7 @@ test('test combineSagaHandlers', () => {
 
   testSaga(saga)
     .next()
-    .takeEvery(WorkspaceActions.toggleUsingUpload.type, mockTakeEveryHandler)
+    .takeEvery(WorkspaceActions.enableTokenCounter.type, mockTakeEveryHandler)
     .next()
     .takeEvery(WorkspaceActions.toggleFolderMode.type, mockTakeEveryHandler)
     .next()

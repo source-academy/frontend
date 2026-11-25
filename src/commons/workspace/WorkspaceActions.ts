@@ -2,14 +2,12 @@ import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin'
 import type { AllColsSortStates } from '../../features/grading/GradingTypes';
 import type { HighlightedLines, Position } from '../editor/EditorTypes';
 import { createActions } from '../redux/utils';
-import type { UploadResult } from '../sideContent/content/SideContentUpload';
 import type {
   CodeVersionMetadata,
   EditorTabState,
   SaveStatus,
   SubmissionsTableFilters,
   WorkspaceLocation,
-  WorkspaceLocationsWithTools,
   WorkspaceState,
 } from './WorkspaceTypes';
 
@@ -178,10 +176,6 @@ const newActions = createActions('workspace', {
     workspaceLocation,
     options,
   }),
-  toggleUsingUpload: (usingUpload: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
-    usingUpload,
-    workspaceLocation,
-  }),
   updateCurrentStep: (steps: number, workspaceLocation: WorkspaceLocation) => ({
     steps,
     workspaceLocation,
@@ -200,10 +194,6 @@ const newActions = createActions('workspace', {
   }),
   updateCseSnapshots: (snapshots: CseSnapshot[] | null, workspaceLocation: WorkspaceLocation) => ({
     snapshots,
-    workspaceLocation,
-  }),
-  uploadFiles: (files: UploadResult, workspaceLocation: WorkspaceLocation) => ({
-    files,
     workspaceLocation,
   }),
   // For grading table
