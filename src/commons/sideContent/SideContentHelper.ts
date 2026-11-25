@@ -19,7 +19,7 @@ import ReactDOM from 'react-dom';
 import * as ReactDOMClient from 'react-dom/client';
 import * as ReactKonva from 'react-konva';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
-import { isConductorStepperTab } from 'src/features/conductor/stepperTab';
+import { tabBehaviour } from 'src/features/directory/toolTabs';
 
 import { useAppSelector } from '../utils/Hooks';
 import { visitSideContent } from './SideContentActions';
@@ -89,20 +89,21 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
   const { alerts, selectedTab, height }: SideContentState = useAppSelector(
     state => state.sideContent[workspaceLocation],
   );
+  const pluginMap = useAppSelector(state => state.pluginDirectory.pluginMap);
   const dispatch = useAppDispatch();
   const setSelectedTab = useCallback(
     (newId: SideContentTabId) => {
       if (
         (selectedTab === SideContentType.substVisualizer ||
           selectedTab === SideContentType.cseMachine ||
-          isConductorStepperTab(selectedTab)) &&
+          tabBehaviour(pluginMap, selectedTab).hidesRepl) &&
         newId === SideContentType.mobileEditorRun
       ) {
         return;
       }
       dispatch(visitSideContent(newId, selectedTab, location));
     },
-    [dispatch, location, selectedTab],
+    [dispatch, location, selectedTab, pluginMap],
   );
 
   return {

@@ -4,7 +4,7 @@ import { type ItemListRenderer, type ItemRenderer, Select } from '@blueprintjs/s
 import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import { useAppDispatch } from 'src/commons/utils/Hooks';
 
-import { isToolEvaluator } from '../../features/conductor/stepperTab';
+import { isToolEvaluator } from '../../features/conductor/toolEvaluators';
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
 import { useAppSelector } from '../utils/Hooks';
 
@@ -20,9 +20,9 @@ function ControlBarChapterSelect({ disabled = false }: Props) {
 
   const currentLanguage = dirLanguages.find(l => l.id === selectedLanguageId);
   const evaluators = currentLanguage?.evaluators ?? [];
-  // The stepper and CSE machine evaluators are hidden from the dropdown: each is reached only via its
+  // Tool evaluators (those a plugin tab belongs to, and the CSE machine) are hidden from the dropdown: each is reached only via its
   // own tab, which selects it automatically (see Playground). The button label still resolves against
-  // the full list so it shows the true current evaluator (e.g. "Stepper"/"CSE") even while that entry
+  // the full list so it shows the true current evaluator (e.g. "CSE") even while that entry
   // is unselectable.
   const selectableEvaluators = evaluators.filter(e => !isToolEvaluator(e));
   const selectedEvaluator = evaluators.find(e => e.id === selectedEvaluatorId);

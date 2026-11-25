@@ -30,17 +30,10 @@ import { useAppDispatch, useAppSelector, useResponsive } from 'src/commons/utils
 import { recordLegacyUsage } from 'src/commons/utils/legacyUsage';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-import {
-  CONDUCTOR_E_STEPPER_TAB_ID,
-  CONDUCTOR_STEPPER_TAB_ID,
-  CSE_EVALUATOR_CAPABILITY,
-  E_STEPPER_EVALUATOR_CAPABILITY,
-  isConductorStepperTab,
-  isToolEvaluator,
-  STEPPER_EVALUATOR_CAPABILITY,
-} from 'src/features/conductor/stepperTab';
+import { CSE_EVALUATOR_CAPABILITY, isToolEvaluator } from 'src/features/conductor/toolEvaluators';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
 import { joinEvaluatorId, joinLanguageId } from 'src/features/directory/languageIdCodec';
+import { tabBehaviour, toolTabsOf } from 'src/features/directory/toolTabs';
 import GithubActions from 'src/features/github/GitHubActions';
 import PersistenceActions from 'src/features/persistence/PersistenceActions';
 import {
@@ -88,8 +81,7 @@ import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   desktopOnlyTabIds,
   makeConductorDataVisualizerPlaceholderTab,
-  makeConductorEStepperPlaceholderTab,
-  makeConductorStepperPlaceholderTab,
+  makeConductorToolPlaceholderTab,
   makeDocumentationTabFrom,
   makeIntroductionTabFrom,
   makeRemoteExecutionTabFrom,
@@ -606,27 +598,12 @@ function Playground(props: PlaygroundProps) {
     state => state.workspaces[workspaceLocation].cseSnapshots !== null,
   );
 
-  // Stepper/CSE Machine tab wiring (conductor only). Each tool's tab is offered for any language that
-  // has a matching-capability evaluator; opening the tab selects that (dropdown-hidden) evaluator so a
-  // Run drives the tool, and leaving it restores the language's default evaluator. See the effect below.
+  // Tool tab wiring (conductor only). An evaluator that names a plugin brings that plugin's tab (the
+  // plugin directory describes it); the CSE Machine's tab is offered for a language with a
+  // cse-capability evaluator. Opening a tab selects its (dropdown-hidden) evaluator so a Run drives the
+  // tool, and leaving it restores the language's default evaluator. See the effect below.
   const selectedLanguageId = useAppSelector(state => state.languageDirectory.selectedLanguageId);
   const selectedEvaluatorId = useAppSelector(state => state.languageDirectory.selectedEvaluatorId);
-  const stepperEvaluatorId = useAppSelector(state => {
-    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
-    const lang = langId ? languageMap[langId] : undefined;
-    const evaluator = lang?.evaluators.find(e =>
-      (e.capabilities as string[] | undefined)?.includes(STEPPER_EVALUATOR_CAPABILITY),
-    );
-    return evaluator?.id ?? null;
-  });
-  const eStepperEvaluatorId = useAppSelector(state => {
-    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
-    const lang = langId ? languageMap[langId] : undefined;
-    const evaluator = lang?.evaluators.find(e =>
-      (e.capabilities as string[] | undefined)?.includes(E_STEPPER_EVALUATOR_CAPABILITY),
-    );
-    return evaluator?.id ?? null;
-  });
   const cseEvaluatorId = useAppSelector(state => {
     const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
     const lang = langId ? languageMap[langId] : undefined;
@@ -654,6 +631,17 @@ function Playground(props: PlaygroundProps) {
     return (langId ? languageMap[langId]?.evaluators : undefined) ?? EMPTY_EVALUATORS;
   });
 
+  const pluginMap = useAppSelector(state => state.pluginDirectory.pluginMap);
+  // The tabs that the language's evaluators bring, by way of the plugins they name.
+  const toolTabs = useMemo(
+    () => toolTabsOf(conductorEvaluators, pluginMap),
+    [conductorEvaluators, pluginMap],
+  );
+  // Whether the language has an evaluator that a plugin's tab belongs to. From the language directory
+  // alone, so it holds before the plugin directory has loaded.
+  const hasPluginEvaluator = conductorEvaluators.some(e => e.plugin);
+  const selectedTabBehaviour = tabBehaviour(pluginMap, selectedTab as string);
+
   const selectedTabOwnerPath = useTabOwnerPath(selectedTab);
 
   // The evaluator that owns the selected tab, or null for Home (which owns nothing - it's where the
@@ -669,26 +657,17 @@ function Playground(props: PlaygroundProps) {
     if (dynamicOwner) {
       return dynamicOwner.id;
     }
-    // Fallback for the two tabs the Playground renders itself before their plugin's own tab ever
-    // registers (the CSE Machine tab, and the Stepper placeholder shown while its plugin loads).
-    if (selectedTab === CONDUCTOR_STEPPER_TAB_ID) {
-      return stepperEvaluatorId;
-    }
-    if (selectedTab === CONDUCTOR_E_STEPPER_TAB_ID) {
-      return eStepperEvaluatorId;
+    // Fallback for the tabs the Playground renders itself before their plugin's own tab ever
+    // registers (the CSE Machine tab, and the placeholders shown while a tool's plugin loads).
+    const toolTab = toolTabs.find(({ tab }) => tab.id === selectedTab);
+    if (toolTab) {
+      return toolTab.evaluatorId;
     }
     if (selectedTab === SideContentType.cseMachine) {
       return cseEvaluatorId;
     }
     return null;
-  }, [
-    selectedTab,
-    selectedTabOwnerPath,
-    conductorEvaluators,
-    stepperEvaluatorId,
-    eStepperEvaluatorId,
-    cseEvaluatorId,
-  ]);
+  }, [selectedTab, selectedTabOwnerPath, conductorEvaluators, toolTabs, cseEvaluatorId]);
 
   const chapterSelectButton = useMemo(
     () => (
@@ -794,11 +773,8 @@ function Playground(props: PlaygroundProps) {
       }
       // Placeholders keep these tabs visible before their plugin loads; each plugin's live tab
       // replaces its placeholder in place.
-      if (stepperEvaluatorId) {
-        tabs.push(makeConductorStepperPlaceholderTab());
-      }
-      if (eStepperEvaluatorId) {
-        tabs.push(makeConductorEStepperPlaceholderTab());
+      for (const { tab } of toolTabs) {
+        tabs.push(makeConductorToolPlaceholderTab(tab));
       }
     }
 
@@ -813,8 +789,7 @@ function Playground(props: PlaygroundProps) {
     isDataVisualizerTabShown,
     shouldShowCseMachine,
     hasDocumentation,
-    stepperEvaluatorId,
-    eStepperEvaluatorId,
+    toolTabs,
     remoteExecutionTab,
   ]);
 
@@ -961,8 +936,8 @@ function Playground(props: PlaygroundProps) {
     hidden:
       selectedTab === SideContentType.substVisualizer ||
       selectedTab === SideContentType.cseMachine ||
-      // When the conductor stepper plugin tab is active, also hide the REPL (matches legacy behaviour)
-      isConductorStepperTab(selectedTab as string),
+      // A plugin's tab can hide the REPL too (its `hidesRepl` in the plugin directory).
+      selectedTabBehaviour.hidesRepl,
     replButtons: [evalButton, clearButton],
     disableScrolling: isSicpEditor,
   };
@@ -1008,9 +983,7 @@ function Playground(props: PlaygroundProps) {
         // Conductor languages (e.g. Python) whose selected sublanguage offers a stepper or CSE
         // machine evaluator: their step limit is user-configurable too, driven by this same
         // control through the /__cse_config__ file the host serves per run.
-        stepperEvaluatorId !== null || eStepperEvaluatorId !== null || cseEvaluatorId !== null
-          ? stepperStepLimit
-          : null,
+        hasPluginEvaluator || cseEvaluatorId !== null ? stepperStepLimit : null,
       ],
     },
     editorContainerProps: editorContainerProps,
@@ -1031,8 +1004,8 @@ function Playground(props: PlaygroundProps) {
     sideContentIsResizeable:
       selectedTab !== SideContentType.substVisualizer &&
       selectedTab !== SideContentType.cseMachine &&
-      // When the conductor stepper plugin tab is active, also disable resizing (matches legacy behaviour)
-      !isConductorStepperTab(selectedTab as string),
+      // A plugin's tab can fix the size of the side content (its `resizable` in the plugin directory).
+      selectedTabBehaviour.resizable,
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {

@@ -5,6 +5,7 @@ import { Ace } from 'ace-builds';
 import { useCallback, useEffect, useState } from 'react';
 import type { DraggableEvent } from 'react-draggable';
 
+import { tabBehaviour } from '../../features/directory/toolTabs';
 import ControlBar from '../controlBar/ControlBar';
 import EditorContainer, { type EditorContainerProps } from '../editor/EditorContainer';
 import McqChooser, { type McqChooserProps } from '../mcqChooser/McqChooser';
@@ -16,6 +17,7 @@ import {
   type SideContentTabId,
   SideContentType,
 } from '../sideContent/SideContentTypes';
+import { useAppSelector } from '../utils/Hooks';
 import DraggableRepl from './DraggableRepl';
 import MobileKeyboard from './MobileKeyboard';
 import { mobileReplBehaviour } from './mobileReplBehaviour';
@@ -39,7 +41,7 @@ function MobileWorkspace(props: MobileWorkspaceProps) {
   const isPortrait = useMediaQuery('(orientation: portrait)');
   const [draggableReplPosition, setDraggableReplPosition] = useState({ x: 0, y: 0 });
 
-  // For disabling draggable Repl when in stepper tab
+  // For disabling draggable Repl when in a tab that hides the REPL
   const [isDraggableReplDisabled, setIsDraggableReplDisabled] = useState(false);
 
   // Get rid of the focus border on blueprint components
@@ -172,6 +174,7 @@ function MobileWorkspace(props: MobileWorkspaceProps) {
     document.documentElement.style.setProperty('--mobile-repl-height', '0px');
   };
 
+  const pluginMap = useAppSelector(state => state.pluginDirectory.pluginMap);
   const handleEditorEval = props.editorContainerProps?.handleEditorEval;
   const handleTabChangeForRepl = useCallback(
     (newTabId: SideContentTabId, prevTabId: SideContentTabId) => {
@@ -180,7 +183,11 @@ function MobileWorkspace(props: MobileWorkspaceProps) {
         handleEditorEval?.();
       }
 
-      const { showRepl, disableDragging } = mobileReplBehaviour(newTabId, prevTabId);
+      const { showRepl, disableDragging } = mobileReplBehaviour(
+        newTabId,
+        prevTabId,
+        tabId => tabBehaviour(pluginMap, tabId).hidesRepl,
+      );
       if (showRepl) {
         handleShowRepl(-300);
       } else {
@@ -188,7 +195,7 @@ function MobileWorkspace(props: MobileWorkspaceProps) {
       }
       setIsDraggableReplDisabled(disableDragging);
     },
-    [handleEditorEval],
+    [handleEditorEval, pluginMap],
   );
 
   const onChange = props.mobileSideContentProps.onChange;
