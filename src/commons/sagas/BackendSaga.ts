@@ -111,6 +111,9 @@ export function* routerNavigate(path: string) {
   return router?.navigate(path);
 }
 
+/** Which assessment's language was asked for last: an older one that waits for the directory must not apply. */
+let assessmentLanguageRequest = 0;
+
 /**
  * Assessment workspaces don't expose a language dropdown of their own — they share the same
  * global languageDirectory Redux slice the Playground dropdown writes to. Setting it here on
@@ -122,8 +125,11 @@ export function* routerNavigate(path: string) {
  * chapter, which is a 1-based index into the language directory's array (see
  * libraryLanguage.ts) - not a separate assessment-level field.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function* selectAssessmentLanguageSaga(assessment: Assessment): Generator<any, void, any> {
+ 
+function* selectAssessmentLanguageSaga(
+  assessment: Assessment,
+  request: number = ++assessmentLanguageRequest,
+): Generator<any, void, any> {
   const languages: ILanguageDefinition[] = yield select(
     (state: OverallState) => state.languageDirectory.languages,
   );
@@ -131,17 +137,15 @@ function* selectAssessmentLanguageSaga(assessment: Assessment): Generator<any, v
 
   if (languages.length === 0) {
     // The language directory has not loaded yet, and the assessment must not lose its language to
-    // that. A library that names its language and evaluator needs no directory to be selected: the
-    // selection is made now, and `setLanguages` applies it when the directory arrives (as for a share
-    // link). A library with only a chapter, a position in the directory, has to wait for it.
-    if (library?.language) {
-      yield put(LanguageDirectoryActions.setSelectedLanguage(library.language, library.evaluator));
-    } else if (library) {
-      yield fork(function* () {
-        yield take(LanguageDirectoryActions.setLanguages.type);
-        yield call(selectAssessmentLanguageSaga, assessment);
-      });
-    }
+    // that: the ids and the chapter are looked up in the directory, so wait for it, and then select
+    // exactly what the question names (a name that the directory lacks clears the selection, and is
+    // not replaced by another). An assessment opened since then has the say instead.
+    yield fork(function* () {
+      yield take(LanguageDirectoryActions.setLanguages.type);
+      if (request === assessmentLanguageRequest) {
+        yield call(selectAssessmentLanguageSaga, assessment, request);
+      }
+    });
     return;
   }
 
