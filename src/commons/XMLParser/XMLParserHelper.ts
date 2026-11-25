@@ -283,6 +283,13 @@ const download = (filename: string, text: string) => {
   document.body.removeChild(element);
 };
 
+/**
+ * Whether a library says anything: it names a language (whose `chapter` is then of no account, and
+ * may be -1), or it has a real chapter. `emptyLibrary()` has neither, and is left out.
+ */
+const isConfigured = (library: Library | undefined): library is Library =>
+  !!library && (library.chapter !== -1 || !!library.language);
+
 const exportLibrary = (library: Library) => {
   const deployment = {
     $: {
@@ -341,11 +348,11 @@ export const assessmentToXml = (
   // under the names that the backend reads (it does not know DEPLOYMENT and GRADERDEPLOYMENT)
   task.USER_PROGRAMMING_LANGUAGE = exportLibrary(assessment.globalDeployment!);
 
-  if (assessment.frontendGraderDeployment && assessment.frontendGraderDeployment.chapter !== -1) {
+  if (isConfigured(assessment.frontendGraderDeployment)) {
     task.FRONTEND_GRADER_PROGRAMMING_LANGUAGE = exportLibrary(assessment.frontendGraderDeployment);
   }
 
-  if (assessment.graderDeployment!.chapter !== -1) {
+  if (isConfigured(assessment.graderDeployment)) {
     task.BACKEND_GRADER_PROGRAMMING_LANGUAGE = exportLibrary(assessment.graderDeployment!);
   }
 
@@ -362,15 +369,15 @@ export const assessmentToXml = (
       // FIXME: Replace any with proper type
     } as any;
 
-    if (question.library.chapter !== -1) {
+    if (isConfigured(question.library)) {
       problem.USER_PROGRAMMING_LANGUAGE = exportLibrary(question.library);
     }
 
-    if (question.frontendGradingLibrary && question.frontendGradingLibrary.chapter !== -1) {
+    if (isConfigured(question.frontendGradingLibrary)) {
       problem.FRONTEND_GRADER_PROGRAMMING_LANGUAGE = exportLibrary(question.frontendGradingLibrary);
     }
 
-    if (question.graderLibrary!.chapter !== -1) {
+    if (isConfigured(question.graderLibrary)) {
       problem.BACKEND_GRADER_PROGRAMMING_LANGUAGE = exportLibrary(question.graderLibrary!);
     }
 
