@@ -9,10 +9,6 @@ const RemoteExecutionActions = createActions('remoteExecution', {
   remoteExecUpdateSession: (session?: DeviceSession) => session,
   remoteExecConnect: (workspace: WorkspaceLocation, device: Device) => ({ workspace, device }),
   remoteExecDisconnect: () => ({}),
-  remoteExecRun: (files: Record<string, string>, entrypointFilePath: string) => ({
-    files,
-    entrypointFilePath,
-  }),
   remoteExecReplInput: (input: string) => input,
 });
 

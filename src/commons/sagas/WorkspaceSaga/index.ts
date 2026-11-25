@@ -6,7 +6,6 @@ import type { EventChannel } from 'redux-saga';
 import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import AutoCompletePlugin from 'src/features/conductor/AutocompletePlugin';
 import { BrowserHostPlugin } from 'src/features/conductor/BrowserHostPlugin';
-import { selectConductorEv3Enable } from 'src/features/remoteExecutionConductor/flagConductorEv3Enable';
 
 import { combineSagaHandlers } from '../../../commons/redux/utils';
 import WorkspaceActions from '../../../commons/workspace/WorkspaceActions';
@@ -218,14 +217,7 @@ const WorkspaceSaga = combineSagaHandlers({
       // execution in the first place (see Playground.tsx's `usingRemoteExecution`).
       const codeFilePath = '/code.js';
       const codeFiles = { [codeFilePath]: code };
-      // Deliberately gated on the EV3-specific flag, matching
-      // evalEditorSaga - see its own comment for why.
-      const isConductorEv3: boolean = yield select(selectConductorEv3Enable);
-      if (isConductorEv3) {
-        yield put(actions.remoteExecConductorRun(codeFiles, codeFilePath));
-      } else {
-        yield put(actions.remoteExecRun(codeFiles, codeFilePath));
-      }
+      yield put(actions.remoteExecConductorRun(codeFiles, codeFilePath));
       return;
     }
 

@@ -135,9 +135,6 @@ const featureFlags = {
 // Deployment-pinned Conductor settings; `undefined` leaves the corresponding feature flag under
 // the user's control on /features.
 const conductorConfig = {
-  ev3Enable: process.env.REACT_APP_CONDUCTOR_EV3_ENABLE
-    ? isTrue(process.env.REACT_APP_CONDUCTOR_EV3_ENABLE)
-    : undefined,
   languageDirectoryUrl: process.env.REACT_APP_LANGUAGE_DIRECTORY_URL || undefined,
   pluginDirectoryUrl: process.env.REACT_APP_PLUGIN_DIRECTORY_URL || undefined,
   modulesDirectoryUrl: process.env.REACT_APP_MODULES_DIRECTORY_URL || undefined,
