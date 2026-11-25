@@ -70,7 +70,7 @@ function SideContentUpload({ onUpload }: Props) {
       <FileInput
         inputProps={{ multiple: true, accept: '.class' }}
         onInputChange={handleFileUpload}
-        text={count === 0 ? 'Choose files...' : `${count} $file(s) uploaded.`}
+        text={count === 0 ? 'Choose files...' : `${count} file(s) uploaded.`}
       />
     </div>
   );
