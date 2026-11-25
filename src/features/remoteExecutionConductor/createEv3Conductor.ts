@@ -13,8 +13,11 @@ const dummyLocation = {
   end: { line: 0, column: 0 },
 };
 
-/** The selected language's EV3 evaluator URL, from the language directory - see resolveEv3Evaluator.ts. */
-function selectedEv3EvaluatorPath(): string {
+/**
+ * The selected language's EV3 evaluator URL, from the language directory - see resolveEv3Evaluator.ts.
+ * Throws, with a message for the REPL, if the selected language has none.
+ */
+export function selectedEv3EvaluatorPath(): string {
   const { selectedLanguageId, languageMap } = store.getState().languageDirectory;
   return resolveEv3EvaluatorPath(selectedLanguageId ? languageMap[selectedLanguageId] : undefined);
 }
@@ -45,11 +48,14 @@ async function createWorkerFromUrl(url: string): Promise<Worker> {
   return new Worker(objectUrl);
 }
 
-export async function createEv3Conductor(client: SlingClient): Promise<{
+export async function createEv3Conductor(
+  client: SlingClient,
+  evaluatorPath: string,
+): Promise<{
   plugin: Ev3WebPlugin;
   conduit: IConduit;
 }> {
-  const worker = await createWorkerFromUrl(selectedEv3EvaluatorPath());
+  const worker = await createWorkerFromUrl(evaluatorPath);
   const conduit = new Conduit(worker, true);
 
   const plugin = conduit.registerPlugin(Ev3WebPlugin);
