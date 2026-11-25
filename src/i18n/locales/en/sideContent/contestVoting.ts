@@ -1,7 +1,0 @@
-const translations = {
-  noEntries: 'There are no eligible entries for voting found.',
-  title: 'Contest Voting',
-  tooltip: 'Rank your favourite contest entries from tiers D (worst) to S (best)!',
-};
-
-export default translations;

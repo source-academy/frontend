@@ -3,7 +3,6 @@ import { IconNames } from '@blueprintjs/icons';
 import { CollabEditingAccess, type SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
   changeDefaultEditable,
   getPlaygroundSessionUrl,
@@ -23,7 +22,6 @@ interface AdminViewProps {
 }
 
 function AdminView({ users, playgroundCode }: AdminViewProps) {
-  const { t } = useTranslation('sideContent', { keyPrefix: 'sessionManagement' });
   const [toggleAll, setToggleAll] = useState<boolean>(true);
   const [defaultRole, setDefaultRole] = useState<boolean>(true);
   const [toggling, setToggling] = useState<{ [key: string]: boolean }>(
@@ -93,8 +91,8 @@ function AdminView({ users, playgroundCode }: AdminViewProps) {
       <HTMLTable compact className={classes['table']}>
         <thead>
           <tr>
-            <th>{t($ => $.name)}</th>
-            <th>{t($ => $.role)}</th>
+            <th>Name</th>
+            <th>Role</th>
           </tr>
         </thead>
         <tbody>
@@ -138,7 +136,6 @@ function SideContentSessionManagement({
   readOnly,
   workspaceLocation,
 }: Props) {
-  const { t } = useTranslation('sideContent', { keyPrefix: 'sessionManagement' });
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -182,8 +179,8 @@ function SideContentSessionManagement({
           <HTMLTable compact className={classes['table']}>
             <thead>
               <tr>
-                <th>{t($ => $.name)}</th>
-                <th>{t($ => $.role)}</th>
+                <th>Name</th>
+                <th>Role</th>
               </tr>
             </thead>
             <tbody>

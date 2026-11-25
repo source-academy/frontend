@@ -1,7 +1,6 @@
 import { Button, Collapse, Icon, PopoverPosition, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import type { AutogradingResult, Testcase } from '../../assessment/AssessmentTypes';
 import ControlButton from '../../ControlButton';
@@ -21,7 +20,6 @@ export type SideContentAutograderProps = {
 };
 
 function SideContentAutograder(props: SideContentAutograderProps) {
-  const { t } = useTranslation('sideContent', { keyPrefix: 'autograder' });
   const [showsTestcases, setTestcasesShown] = useState(true);
   const [showsResults, setResultsShown] = useState(true);
 
@@ -30,59 +28,42 @@ function SideContentAutograder(props: SideContentAutograderProps) {
   const autograderTooltip = useMemo(
     () => (
       <div className="autograder-help-tooltip">
-        <p>{t($ => $.tooltip.clickTestcase)}</p>
-        <p>{t($ => $.tooltip.executeAll)}</p>
-        <p>{t($ => $.tooltip.backgroundInfo)}</p>
-        <p>{t($ => $.tooltip.privateTestcases)}</p>
+        <p>Click on each testcase below to execute it with the program in the editor.</p>
+        <p>
+          {
+            'To execute all testcases at once, evaluate the program in the editor with this tab active.'
+          }
+        </p>
+        <p>A green or red background indicates a passed or failed testcase respectively.</p>
+        <p>Private testcases (only visible to staff when grading) have a grey background.</p>
       </div>
     ),
-    [t],
+    [],
   );
 
   const testcasesHeader = useMemo(
     () => (
       <div className="testcases-header" data-testid="testcases-header">
-        {columnHeader(
-          'header-fn',
-          t($ => $.headers.testcase),
-        )}
-        {columnHeader(
-          'header-expected',
-          t($ => $.headers.expected),
-        )}
-        {columnHeader(
-          'header-actual',
-          t($ => $.headers.actual),
-        )}
+        {columnHeader('header-fn', 'Testcase')}
+        {columnHeader('header-expected', 'Expected result')}
+        {columnHeader('header-actual', 'Actual result')}
       </div>
     ),
-    [t],
+    [],
   );
 
   const resultsHeader = useMemo(
     () => (
       <div className="results-header" data-testid="results-header">
         <div className="header-data">
-          {columnHeader(
-            'header-sn',
-            t($ => $.headers.sn),
-          )}
-          {columnHeader(
-            'header-status',
-            t($ => $.headers.status),
-          )}
+          {columnHeader('header-sn', 'S/N')}
+          {columnHeader('header-status', 'Testcase status')}
         </div>
-        {columnHeader(
-          'header-expected',
-          t($ => $.headers.expected),
-        )}
-        {columnHeader(
-          'header-actual',
-          t($ => $.headers.actual),
-        )}
+        {columnHeader('header-expected', 'Expected result')}
+        {columnHeader('header-actual', 'Actual result')}
       </div>
     ),
-    [t],
+    [],
   );
 
   const testcaseCards = useMemo(
@@ -102,10 +83,10 @@ function SideContentAutograder(props: SideContentAutograderProps) {
         </div>
       ) : (
         <div className="noResults" data-testid="noResults">
-          {t($ => $.noTestcases)}
+          There are no testcases provided for this question.
         </div>
       ),
-    [testcases, testcasesHeader, t, handleTestcaseEval, workspaceLocation],
+    [testcases, testcasesHeader, handleTestcaseEval, workspaceLocation],
   );
 
   const resultCards = useMemo(
@@ -119,10 +100,10 @@ function SideContentAutograder(props: SideContentAutograderProps) {
         </div>
       ) : (
         <div className="noResults" data-testid="noResults">
-          {t($ => $.noResults)}
+          There are no results to show.
         </div>
       ),
-    [autogradingResults, resultsHeader, t],
+    [autogradingResults, resultsHeader],
   );
 
   const toggleTestcases = useCallback(() => {
@@ -139,7 +120,7 @@ function SideContentAutograder(props: SideContentAutograderProps) {
         variant="minimal"
         onClick={toggleTestcases}
       >
-        <span>{t($ => $.testcases)}</span>
+        <span>Testcases</span>
         <Tooltip content={autograderTooltip} placement={PopoverPosition.LEFT}>
           <Icon icon={IconNames.HELP} />
         </Tooltip>
@@ -147,11 +128,7 @@ function SideContentAutograder(props: SideContentAutograderProps) {
       <Collapse isOpen={showsTestcases} keepChildrenMounted>
         {testcaseCards}
       </Collapse>
-      {collapseButton(
-        t($ => $.results),
-        showsResults,
-        toggleResults,
-      )}
+      {collapseButton('Autograder Results', showsResults, toggleResults)}
       <Collapse isOpen={showsResults} keepChildrenMounted>
         {resultCards}
       </Collapse>

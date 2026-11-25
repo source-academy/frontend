@@ -1,8 +1,6 @@
 import { FileInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { t } from 'i18next';
 import { useCallback, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { type SideContentTab, SideContentType } from '../SideContentTypes';
 
@@ -30,7 +28,6 @@ type Props = {
  * This component is responsible for uploading Java class files to bypass the compiler.
  */
 function SideContentUpload({ onUpload }: Props) {
-  const { t } = useTranslation('sideContent', { keyPrefix: 'upload' });
   const [count, setCount] = useState(0);
 
   const handleFileUpload: React.ChangeEventHandler<HTMLInputElement> = useCallback(
@@ -56,27 +53,31 @@ function SideContentUpload({ onUpload }: Props) {
 
   return (
     <div>
-      <p>{t($ => $.description)}</p>
-      <p>{t($ => $.acceptedFiles)}</p>
-      <p>{t($ => $.compileCommand)}</p>
-      <pre>
-        <code>{t($ => $.javacCommand)}</code>
-      </pre>
-      <p>{t($ => $.warning)}</p>
+      <p>Bypass the compiler and type checker by uploading class files to run in the JVM.</p>
       <p>
-        <strong>{t($ => $.mainClass)}</strong>
+        {
+          'Only .class files are accepted. Code in the editor will be ignored when running while this tab is active.'
+        }
+      </p>
+      <p>Compile the files with the following command:</p>
+      <pre>
+        <code>javac *.java -target 8 -source 8</code>
+      </pre>
+      <p>Avoid running class files downloaded from unknown sources.</p>
+      <p>
+        <strong>Main class must be named Main and uploaded as Main.class.</strong>
       </p>
       <FileInput
         inputProps={{ multiple: true, accept: '.class' }}
         onInputChange={handleFileUpload}
-        text={count === 0 ? t($ => $.chooseFiles) : `${count} ${t($ => $.filesUploaded)}`}
+        text={count === 0 ? 'Choose files...' : `${count} $file(s) uploaded.`}
       />
     </div>
   );
 }
 
 const makeUploadTabFrom = (onUpload: (files: UploadResult) => void): SideContentTab => ({
-  label: t($ => $.upload.label, { ns: 'sideContent' }),
+  label: 'Upload files',
   iconName: IconNames.Upload,
   body: <SideContentUpload onUpload={onUpload} />,
   id: SideContentType.upload,
