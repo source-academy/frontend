@@ -18,6 +18,7 @@ import {
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { type Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
 import type { HighlightedLines, Position } from '../editor/EditorTypes';
+import { errorFromException } from '../errors/InterpreterError';
 import Constants from '../utils/Constants';
 import WorkspaceActions from './WorkspaceActions';
 import { WorkspaceReducer } from './WorkspaceReducer';
@@ -584,7 +585,7 @@ const editorTestcases: Testcase[] = [
 
 describe('EVAL_TESTCASE_FAILURE', () => {
   test('sets editorTestcases correctly', () => {
-    const value = 'test-value-failure';
+    const value = [errorFromException(new Error('test-value-failure'))];
     const evalFailureDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       editorTestcases,
     });

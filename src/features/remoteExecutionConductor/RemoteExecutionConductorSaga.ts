@@ -1,9 +1,9 @@
 import type { SlingClient } from '@sourceacademy/sling-client';
-import { ExceptionError } from 'js-slang/dist/errors/errors';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 import type { OverallState } from 'src/commons/application/ApplicationTypes';
 import { actions } from 'src/commons/utils/ActionsHelper';
 
+import { errorFromException } from '../../commons/errors/InterpreterError';
 import type { DeviceSession } from '../remoteExecution/RemoteExecutionTypes';
 import { createEv3Conductor } from './createEv3Conductor';
 import RemoteExecutionConductorActions from './RemoteExecutionConductorActions';
@@ -68,7 +68,7 @@ function* handleConductorRun(
     // createEv3Conductor (worker fetch/creation) or plugin.run can throw - uncaught, this would
     // bubble through the saga tree since handleConductorRun is attached via takeEvery/fork/all,
     // stopping the whole conductor watcher rather than just failing this one run.
-    const error = new ExceptionError(
+    const error = errorFromException(
       err instanceof Error ? err : new Error(String(err)),
       dummyLocation,
     );

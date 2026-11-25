@@ -1,10 +1,9 @@
 import { Card, Classes, Elevation, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
-import { parseError } from 'js-slang';
-import { stringify } from 'js-slang/dist/utils/stringify';
 import { useCallback, useMemo } from 'react';
 
 import { type Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
+import { formatErrors } from '../../errors/InterpreterError';
 import type { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 
 type Props = {
@@ -19,7 +18,7 @@ function SideContentTestcaseCard(props: Props) {
 
   const extraClasses = useMemo(() => {
     const isEvaluated = testcase.result !== undefined || testcase.errors;
-    const isEqual = stringify(testcase.result) === testcase.answer;
+    const isEqual = testcase.result === testcase.answer;
 
     return {
       correct: isEvaluated && isEqual,
@@ -66,9 +65,9 @@ function SideContentTestcaseCard(props: Props) {
             <Pre className="testcase-expected">{testcase.answer}</Pre>
             <Pre className="testcase-actual" data-testid="testcase-actual">
               {testcase.errors
-                ? parseError(testcase.errors)
+                ? formatErrors(testcase.errors)
                 : testcase.result !== undefined
-                  ? stringify(testcase.result)
+                  ? testcase.result
                   : 'No Answer'}
             </Pre>
           </>

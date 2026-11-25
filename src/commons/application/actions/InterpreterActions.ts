@@ -1,7 +1,6 @@
-import type { SourceError } from 'js-slang/dist/errors/base';
-import type { Value } from 'js-slang/dist/types';
 import { createActions } from 'src/commons/redux/utils';
 
+import { type InterpreterError } from '../../errors/InterpreterError';
 import type { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 
 const InterpreterActions = createActions('interpreter', {
@@ -9,34 +8,38 @@ const InterpreterActions = createActions('interpreter', {
     logString,
     workspaceLocation,
   }),
-  appendInterpreterResult: (value: Value, workspaceLocation: WorkspaceLocation) => ({
+  appendInterpreterResult: (value: unknown, workspaceLocation: WorkspaceLocation) => ({
     type: 'result',
     value,
     workspaceLocation,
   }),
-  evalInterpreterSuccess: (value: Value, workspaceLocation: WorkspaceLocation) => ({
+  evalInterpreterSuccess: (value: unknown, workspaceLocation: WorkspaceLocation) => ({
     type: 'result',
     value,
     workspaceLocation,
   }),
-  evalTestcaseSuccess: (value: Value, workspaceLocation: WorkspaceLocation, index: number) => ({
+  evalTestcaseSuccess: (value: string, workspaceLocation: WorkspaceLocation, index: number) => ({
     type: 'result',
     value,
     workspaceLocation,
     index,
   }),
-  evalTestcaseFailure: (value: Value, workspaceLocation: WorkspaceLocation, index: number) => ({
+  evalTestcaseFailure: (
+    value: InterpreterError[],
+    workspaceLocation: WorkspaceLocation,
+    index: number,
+  ) => ({
     type: 'errors',
     value,
     workspaceLocation,
     index,
   }),
-  evalInterpreterError: (errors: SourceError[], workspaceLocation: WorkspaceLocation) => ({
+  evalInterpreterError: (errors: InterpreterError[], workspaceLocation: WorkspaceLocation) => ({
     type: 'errors',
     errors,
     workspaceLocation,
   }),
-  appendInterpreterError: (errors: SourceError[], workspaceLocation: WorkspaceLocation) => ({
+  appendInterpreterError: (errors: InterpreterError[], workspaceLocation: WorkspaceLocation) => ({
     type: 'errors',
     errors,
     workspaceLocation,

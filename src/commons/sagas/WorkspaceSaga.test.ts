@@ -1,11 +1,12 @@
 import { RunnerStatus } from '@sourceacademy/conductor/types';
 import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
-import { ErrorType, type SourceError } from 'js-slang/dist/errors/base';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import type { Matcher } from 'redux-saga-test-plan/matchers';
 import * as matchers from 'redux-saga-test-plan/matchers';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
+
+import { ErrorType, type InterpreterError } from '../errors/InterpreterError';
 
 // Mock createStore to prevent Immer auto-freeze from freezing defaultWorkspaceManager.
 // Importing RequestsSaga triggers store creation via createStore, and due to ES module
@@ -512,7 +513,7 @@ describe('Conductor errors subtract the prepend line shift (source-academy/front
   test("a one-line prepend shifts a reported error line back to the student's own line", async () => {
     // Mirrors the reported bug exactly: a one-line PREPEND made every error line off-by-one.
     // evalEditorSaga concatenates `${prepend}\n${entrypoint}` before this saga ever runs (see
-    // toConductorSourceError's doc comment), so the student's own first line becomes combined-file
+    // toConductorInterpreterError's doc comment), so the student's own first line becomes combined-file
     // line 2 - simulate the evaluator (e.g. py-slang) reporting an error there via a structured,
     // EvaluatorError-shaped object (line/column/rawMessage own properties survive a Worker's
     // postMessage structured clone even though the class prototype doesn't).
@@ -534,7 +535,7 @@ describe('Conductor errors subtract the prepend line shift (source-academy/front
       activeEditorTabIndex: 0,
     });
 
-    let capturedErrors: SourceError[] | undefined;
+    let capturedErrors: InterpreterError[] | undefined;
     await expectSaga(
       evalCodeConductorSaga,
       { [entrypointFilePath]: `${programPrependValue}\n${editorValue}` },
@@ -581,7 +582,7 @@ describe('Conductor errors subtract the prepend line shift (source-academy/front
     // through *this* call's own store/middleware) after this call's own silentRun() resolves -
     // it's the same task that later handles the REPL chunk's error below, so the put-capturing
     // provider has to be registered here, not on the second expectSaga call, to see it.
-    let capturedErrors: SourceError[] | undefined;
+    let capturedErrors: InterpreterError[] | undefined;
     const runFake = makeFakeConductor();
     await expectSaga(
       evalCodeConductorSaga,
@@ -764,7 +765,7 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
   });
 
   test('grades by the last printed line, not a returned value', () => {
-    let capturedValue: { toReplString(): string } | undefined;
+    let capturedValue: string | undefined;
 
     return expectSaga(
       runTestCaseConductor,
@@ -803,12 +804,12 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       })
       .run()
       .then(() => {
-        expect(capturedValue?.toReplString()).toBe('True');
+        expect(capturedValue).toBe('True');
       });
   });
 
   test('finds printed output even when the trailing output entry has no consoleLogs of its own', () => {
-    let capturedValue: { toReplString(): string } | undefined;
+    let capturedValue: string | undefined;
 
     return expectSaga(
       runTestCaseConductor,
@@ -841,12 +842,12 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
       ])
       .run()
       .then(() => {
-        expect(capturedValue?.toReplString()).toBe('True');
+        expect(capturedValue).toBe('True');
       });
   });
 
   test('reports failure without crashing when the Conductor run errors', () => {
-    const errors: SourceError[] = [
+    const errors: InterpreterError[] = [
       {
         type: ErrorType.RUNTIME,
         severity: 'Error' as any,
@@ -885,7 +886,7 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
     // Two lines, so combinedCode's own line 3 is `editorValue`'s line 1 - see
     // runTestCaseConductor's combinedCode, which joins prepend/value/.../testcase with '\n'.
     const twoLinePrepend = 'COUNTER = 0\nDOUBLE = 2';
-    const errors: SourceError[] = [
+    const errors: InterpreterError[] = [
       {
         type: ErrorType.RUNTIME,
         severity: 'Error' as any,
@@ -894,7 +895,7 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
         elaborate: () => '',
       },
     ];
-    let capturedErrors: SourceError[] | undefined;
+    let capturedErrors: InterpreterError[] | undefined;
 
     return expectSaga(
       runTestCaseConductor,
@@ -933,7 +934,7 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
   });
 
   test('leaves a Conductor testcase error with no location info (line 0) unshifted', () => {
-    const errors: SourceError[] = [
+    const errors: InterpreterError[] = [
       {
         type: ErrorType.RUNTIME,
         severity: 'Error' as any,
@@ -942,7 +943,7 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
         elaborate: () => '',
       },
     ];
-    let capturedErrors: SourceError[] | undefined;
+    let capturedErrors: InterpreterError[] | undefined;
 
     return expectSaga(
       runTestCaseConductor,

@@ -1,8 +1,6 @@
-import type { SourceError } from 'js-slang/dist/errors/base';
-import { type LanguageOptions } from 'js-slang/dist/langs';
-
 import type { ExternalLibrary } from '../application/types/ExternalTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { type InterpreterError } from '../errors/InterpreterError';
 
 export enum AssessmentStatuses {
   attempting = 'attempting',
@@ -200,14 +198,14 @@ export type Library = {
     2?: string; // For mission control
   }>;
   moduleParams?: any;
-  languageOptions?: LanguageOptions;
+  languageOptions?: Record<string, string>;
 };
 
 export type Testcase = {
   answer: string; // the correct answer to the testcase
-  errors?: SourceError[]; // errors raised by interpreter during execution
+  errors?: InterpreterError[]; // errors raised by interpreter during execution
   program: string; // the program to be appended to the student's code
-  result?: any; // the result from the execution of the testcase
+  result?: string; // what the testcase printed last: the result from its execution
   score: number;
   type: TestcaseType;
 };

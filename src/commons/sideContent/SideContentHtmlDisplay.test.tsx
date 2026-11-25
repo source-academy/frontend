@@ -1,5 +1,4 @@
 import { fireEvent, render } from '@testing-library/react';
-import { stringify } from 'js-slang/dist/utils/stringify';
 import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
@@ -19,7 +18,7 @@ function Component(props: React.ComponentProps<typeof SideContentHtmlDisplay>) {
 
 test('HTML Display renders correctly', async () => {
   const mockProps = {
-    content: stringify('<p>Hello World!</p>'),
+    content: JSON.stringify('<p>Hello World!</p>'),
     workspaceLocation: 'playground' as SideContentLocation,
     handleAddHtmlConsoleError: (errorMsg: string) => {},
   };
@@ -31,7 +30,7 @@ describe('HTML Display postMessage Listener', () => {
   const mockHandleAddHtmlConsoleError = vi.fn((errorMsg: string) => {});
 
   const mockProps = {
-    content: stringify('<p>Hello World!</p>'),
+    content: JSON.stringify('<p>Hello World!</p>'),
     handleAddHtmlConsoleError: mockHandleAddHtmlConsoleError,
     workspaceLocation: 'playground' as SideContentLocation,
   };

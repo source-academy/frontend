@@ -1,5 +1,3 @@
-import { stringify } from 'js-slang/dist/utils/stringify';
-
 import { Role } from '../../commons/application/ApplicationTypes';
 import {
   type AssessmentOverview,
@@ -51,7 +49,7 @@ export const onClickProgress = (
       }
     } else if (question.type === QuestionTypes.programming) {
       const isCorrect = testcases.reduce((acc, testcase) => {
-        return acc && stringify(testcase.result) === testcase.answer;
+        return acc && testcase.result === testcase.answer;
       }, true);
       if (!isCorrect) {
         return showWarningMessage('Your solution has not passed all testcases!', 750);
