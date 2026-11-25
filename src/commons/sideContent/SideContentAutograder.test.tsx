@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors/base';
 import { expect, test } from 'vitest';
 
 import {
@@ -7,12 +6,13 @@ import {
   type Testcase,
   TestcaseTypes,
 } from '../assessment/AssessmentTypes';
+import { ErrorSeverity, ErrorType, type InterpreterError } from '../errors/InterpreterError';
 import { mockGradingAnswer } from '../mocks/GradingMocks';
 import SideContentAutograder, {
   type SideContentAutograderProps,
 } from './content/SideContentAutograder';
 
-const mockErrors: SourceError[] = [
+const mockErrors: InterpreterError[] = [
   {
     type: ErrorType.RUNTIME,
     severity: ErrorSeverity.ERROR,
@@ -28,10 +28,10 @@ const mockErrors: SourceError[] = [
 
 // The five testcases have statuses: correct, (none), correct, incorrect and error
 const mockPublicTestcases: Testcase[] = [
-  { program: `"string";`, score: 0, answer: `"string"`, result: `string` },
+  { program: `"string";`, score: 0, answer: `"string"`, result: `"string"` },
   { program: `fibonacci(2);`, score: 1, answer: `2` },
-  { program: `fibonacci(3);`, score: 1, answer: `2`, result: 2 },
-  { program: `fibonacci(4);`, score: 2, answer: `3`, result: 4 },
+  { program: `fibonacci(3);`, score: 1, answer: `2`, result: `2` },
+  { program: `fibonacci(4);`, score: 2, answer: `3`, result: `4` },
   { program: `fibonacci(5);`, score: 3, answer: `5`, errors: mockErrors },
 ].map(proto => {
   return { ...proto, type: TestcaseTypes.public };
@@ -48,8 +48,8 @@ const publicTestcaseCardClasses = [
 // The four opaque testcases have statuses: (none), correct, incorrect and error
 const mockOpaqueTestcases: Testcase[] = [
   { program: `add(3, 0);`, score: 1, answer: `3` },
-  { program: `add(5, 2);`, score: 1, answer: `7`, result: 7 },
-  { program: `add(-6, 6);`, score: 2, answer: `0`, result: 12 },
+  { program: `add(5, 2);`, score: 1, answer: `7`, result: `7` },
+  { program: `add(-6, 6);`, score: 2, answer: `0`, result: `12` },
   { program: `add(-4, -7);`, score: 3, answer: `-11`, errors: mockErrors },
 ].map(proto => {
   return { ...proto, type: TestcaseTypes.opaque };
@@ -61,10 +61,10 @@ const opaqueTestcaseCardClasses = publicTestcaseCardClasses
 
 // The five testcases have statuses: correct, (none), correct, incorrect and error
 const mockSecretTestcases: Testcase[] = [
-  { program: `"lorem";`, score: 0, answer: `"lorem"`, result: `lorem` },
+  { program: `"lorem";`, score: 0, answer: `"lorem"`, result: `"lorem"` },
   { program: `is_prime(2);`, score: 1, answer: `true` },
-  { program: `is_prime(3);`, score: 1, answer: `true`, result: true },
-  { program: `is_prime(4);`, score: 2, answer: `false`, result: true },
+  { program: `is_prime(3);`, score: 1, answer: `true`, result: `true` },
+  { program: `is_prime(4);`, score: 2, answer: `false`, result: `true` },
   { program: `is_prime(5);`, score: 3, answer: `true`, errors: mockErrors },
 ].map(proto => {
   return { ...proto, type: TestcaseTypes.secret };

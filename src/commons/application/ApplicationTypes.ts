@@ -1,6 +1,3 @@
-import { type SourceError } from 'js-slang/dist/errors/base';
-import { type Value } from 'js-slang/dist/types';
-
 import type { AchievementState } from '../../features/achievement/AchievementTypes';
 import type { DashboardState } from '../../features/dashboard/DashboardTypes';
 import type { LanguageDirectoryState } from '../../features/directory/LanguageDirectoryTypes';
@@ -9,6 +6,7 @@ import type { LeaderboardState } from '../../features/leaderboard/LeaderboardTyp
 import type { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { freshSortState } from '../../pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
+import { type InterpreterError } from '../errors/InterpreterError';
 import { defaultFeatureFlags, type FeatureFlagsState } from '../featureFlags';
 import type { FileSystemState } from '../fileSystem/FileSystemTypes';
 import type { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
@@ -75,7 +73,7 @@ export type CodeOutput = {
  */
 export type ResultOutput = {
   type: 'result';
-  value: Value;
+  value: unknown;
   consoleLogs: string[];
   runtime?: number;
   isProgram?: boolean;
@@ -88,7 +86,7 @@ export type ResultOutput = {
  */
 export type ErrorOutput = {
   type: 'errors';
-  errors: SourceError[];
+  errors: InterpreterError[];
   consoleLogs: string[];
 };
 

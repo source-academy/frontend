@@ -1,6 +1,5 @@
 import { SlingClient } from '@sourceacademy/sling-client';
 import { assemble, compileFiles, createContext } from 'js-slang';
-import { ExceptionError } from 'js-slang/dist/errors/errors';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { pickBy } from 'lodash-es';
 import { call, put, race, select, take } from 'redux-saga/effects';
@@ -23,6 +22,7 @@ import { store } from 'src/pages/createStore';
 import InterpreterActions from '../application/actions/InterpreterActions';
 import type { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { errorFromException } from '../errors/InterpreterError';
 import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
 import type { MaybePromise } from '../utils/TypeHelper';
@@ -164,7 +164,7 @@ const RemoteExecutionSaga = combineSagaHandlers({
           store.dispatch(actions.handleConsoleLog(workspace, `${message}`));
           break;
         case 'error': {
-          const error = new ExceptionError(new Error(`${message}`), dummyLocation);
+          const error = errorFromException(new Error(`${message}`), dummyLocation);
           store.dispatch(actions.evalInterpreterError([error], workspace));
           break;
         }

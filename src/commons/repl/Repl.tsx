@@ -1,12 +1,12 @@
 import { Card, Pre } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
 import classNames from 'classnames';
-import { parseError } from 'js-slang';
-import { stringify } from 'js-slang/dist/utils/stringify';
 import { useMemo } from 'react';
 
 import type { InterpreterOutput, ResultOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { formatErrors } from '../errors/InterpreterError';
+import { formatValue } from '../utils/formatValue';
 import { ReplInput } from './ReplInput';
 import type { OutputProps } from './ReplTypes';
 
@@ -52,7 +52,7 @@ function Repl(props: ReplProps) {
 }
 
 function ResultOutputDisplay({ output: { value, consoleLogs } }: { output: ResultOutput }) {
-  const stringified = useMemo(() => stringify(value), [value]);
+  const stringified = useMemo(() => formatValue(value), [value]);
   if (consoleLogs.length === 0) {
     return (
       <Card>
@@ -100,7 +100,7 @@ export function Output(props: OutputProps) {
       if (props.output.consoleLogs.length === 0) {
         return (
           <Card>
-            <Pre className="error-output">{parseError(props.output.errors)}</Pre>
+            <Pre className="error-output">{formatErrors(props.output.errors)}</Pre>
           </Card>
         );
       } else {
@@ -108,7 +108,7 @@ export function Output(props: OutputProps) {
           <Card>
             <Pre className="log-output">{props.output.consoleLogs.join('\n')}</Pre>
             <br />
-            <Pre className="error-output">{parseError(props.output.errors)}</Pre>
+            <Pre className="error-output">{formatErrors(props.output.errors)}</Pre>
           </Card>
         );
       }

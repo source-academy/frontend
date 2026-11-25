@@ -1,10 +1,10 @@
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { Conduit } from '@sourceacademy/conductor/conduit';
 import type { SlingClient } from '@sourceacademy/sling-client';
-import { ExceptionError } from 'js-slang/dist/errors/errors';
 import { actions } from 'src/commons/utils/ActionsHelper';
 import { store } from 'src/pages/createStore';
 
+import { errorFromException } from '../../commons/errors/InterpreterError';
 import { Ev3WebPlugin } from './Ev3WebPlugin';
 import { resolveEv3EvaluatorPath } from './resolveEv3Evaluator';
 
@@ -64,7 +64,7 @@ export async function createEv3Conductor(client: SlingClient): Promise<{
     if (!currentSession) {
       return;
     }
-    const error = new ExceptionError(new Error(`${message}`), dummyLocation);
+    const error = errorFromException(new Error(`${message}`), dummyLocation);
     store.dispatch(actions.evalInterpreterError([error], currentSession.workspace));
   };
 
