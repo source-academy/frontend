@@ -1,5 +1,3 @@
-import type { ExternalLibrary } from '../application/types/ExternalTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { type InterpreterError } from '../errors/InterpreterError';
 
 export enum AssessmentStatuses {
@@ -180,6 +178,12 @@ export type BaseQuestion = {
 
 export type Question = IProgrammingQuestion | IMCQQuestion | IContestVotingQuestion;
 
+/** What the backend stores of a question's external library: its name and symbols. */
+export type ExternalLibrary = {
+  name: string;
+  symbols: string[];
+};
+
 export type Library = {
   /** A 1-based position in the language directory (see `deriveLanguageFromChapter`). */
   chapter: number;
@@ -248,7 +252,7 @@ export const emptyLibrary = (): Library => {
   return {
     chapter: -1,
     external: {
-      name: 'NONE' as ExternalLibraryName,
+      name: 'NONE',
       symbols: [],
     },
     globals: [],
@@ -259,7 +263,7 @@ export const normalLibrary = (): Library => {
   return {
     chapter: 1,
     external: {
-      name: 'NONE' as ExternalLibraryName,
+      name: 'NONE',
       symbols: [],
     },
     globals: [],

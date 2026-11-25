@@ -12,7 +12,6 @@ import {
   getDefaultFilePath,
   type OverallState,
 } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import Constants from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import PlaygroundSaga, { shortenURLRequest } from './PlaygroundSaga';
@@ -35,7 +34,6 @@ describe('Playground saga tests', () => {
   //       ...defaultWorkspaceManager,
   //       playground: {
   //         ...defaultPlaygroundState,
-  //         externalLibrary: ExternalLibraryName.NONE,
   //         editorTabs: [
   //           {
   //             filePath: defaultPlaygroundFilePath,
@@ -69,7 +67,6 @@ describe('Playground saga tests', () => {
         ...defaultWorkspaceManager,
         playground: {
           ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
           editorTabs: [
             {
               filePath: defaultPlaygroundFilePath,
@@ -135,7 +132,6 @@ describe('Playground saga tests', () => {
         ...defaultWorkspaceManager,
         playground: {
           ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
           editorTabs: [
             {
               filePath: defaultPlaygroundFilePath,
@@ -201,7 +197,6 @@ describe('Playground saga tests', () => {
         ...defaultWorkspaceManager,
         playground: {
           ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
           editorTabs: [
             {
               filePath: defaultPlaygroundFilePath,
@@ -250,7 +245,6 @@ describe('Playground saga tests', () => {
         ...defaultWorkspaceManager,
         playground: {
           ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
           editorTabs: [
             {
               filePath: defaultPlaygroundFilePath,
@@ -318,7 +312,6 @@ describe('Playground saga tests', () => {
         ...defaultWorkspaceManager,
         playground: {
           ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
           editorTabs: [
             {
               filePath: defaultPlaygroundFilePath,
@@ -375,7 +368,6 @@ describe('Playground saga tests', () => {
         ...defaultWorkspaceManager,
         playground: {
           ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
           editorTabs: [
             {
               filePath: defaultPlaygroundFilePath,
@@ -425,14 +417,12 @@ function createQueryString(files: Record<string, string>, state: OverallState): 
     .map(editorTab => editorTab.filePath)
     .filter((filePath): filePath is string => filePath !== undefined);
   const activeEditorTabIndex: number | null = state.workspaces.playground.activeEditorTabIndex;
-  const external: ExternalLibraryName = state.workspaces.playground.externalLibrary;
   const execTime: number = state.workspaces.playground.execTime;
   const newQueryString: string = qs.stringify({
     isFolder: isFolderModeEnabled,
     files: compressToEncodedURIComponent(qs.stringify(files)),
     tabs: editorTabFilePaths.map(compressToEncodedURIComponent),
     tabIdx: activeEditorTabIndex,
-    ext: external,
     exec: execTime,
   });
   return newQueryString;

@@ -16,7 +16,6 @@ import { defaultWorkspaceManager } from '../../../../commons/application/Applica
 import type {
   AutogradingResult,
   IMCQQuestion,
-  Library,
   Question,
   Testcase,
 } from '../../../../commons/assessment/AssessmentTypes';
@@ -113,7 +112,6 @@ function GradingWorkspace(props: Props) {
   const {
     handleBrowseHistoryDown,
     handleBrowseHistoryUp,
-    handleChangeLibrary,
     handleDeclarationNavigate,
     handleEditorEval,
     handleSetActiveEditorTabIndex,
@@ -143,8 +141,6 @@ function GradingWorkspace(props: Props) {
         dispatch(WorkspaceActions.browseReplHistoryDown(workspaceLocation)),
       handleBrowseHistoryUp: () =>
         dispatch(WorkspaceActions.browseReplHistoryUp(workspaceLocation)),
-      handleChangeLibrary: (library: Library) =>
-        dispatch(WorkspaceActions.changeExternalLibrary(library.external.name, workspaceLocation)),
       handleDeclarationNavigate: (cursorPosition: Position) =>
         dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
       handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
@@ -325,7 +321,6 @@ function GradingWorkspace(props: Props) {
       editorTestcases,
     });
     handleChangeExecTime(question.library.execTimeMs ?? defaultWorkspaceManager.grading.execTime);
-    handleChangeLibrary(question.library);
     // Clear out any module tabs left over from the previously viewed submission.
     dispatch(resetSideContent(workspaceLocation));
     handleUpdateHasUnsavedChanges(false);
@@ -554,7 +549,6 @@ function GradingWorkspace(props: Props) {
             handleEditorValueChange: handleEditorValueChange,
             handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
             handlePromptAutocomplete: handlePromptAutocomplete,
-            externalLibraryName: question?.library?.external?.name || 'NONE',
           }
         : undefined,
     handleSideContentHeightChange: handleSideContentHeightChange,
@@ -573,7 +567,6 @@ function GradingWorkspace(props: Props) {
       handleReplValueChange: handleReplValueChange,
       output: output,
       replValue: replValue,
-      externalLibrary: question?.library?.external?.name || 'NONE',
       replButtons: replButtons(),
     },
   };

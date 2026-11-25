@@ -3,7 +3,6 @@ import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
 import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
 import type { AllColsSortStates } from '../../features/grading/GradingTypes';
 import type { InterpreterOutput } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import type { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import type { HighlightedLines, Position } from '../editor/EditorTypes';
 import type { UploadResult } from '../sideContent/content/SideContentUpload';
@@ -98,7 +97,6 @@ export type WorkspaceState = {
   readonly enableDebugging: boolean;
   readonly isEditorReadonly: boolean;
   readonly output: InterpreterOutput[];
-  readonly externalLibrary: ExternalLibraryName;
   readonly replHistory: ReplHistory;
   readonly replValue: string;
   readonly hasTokenCounter: boolean;

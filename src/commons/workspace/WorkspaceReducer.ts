@@ -139,10 +139,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].execTime = action.payload.execTime;
     })
-    .addCase(WorkspaceActions.changeExternalLibrary, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].externalLibrary = action.payload.newExternal;
-    })
     .addCase(InterpreterActions.handleConsoleLog, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       /* Possible cases:

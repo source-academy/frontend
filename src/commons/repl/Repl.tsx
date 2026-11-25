@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { useMemo } from 'react';
 
 import type { InterpreterOutput, ResultOutput } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { formatErrors } from '../errors/InterpreterError';
 import { formatValue } from '../utils/formatValue';
 import { ReplInput } from './ReplInput';
@@ -16,7 +15,6 @@ export type ReplProps = {
   hidden?: boolean;
   inputHidden?: boolean;
   usingSubst?: boolean;
-  externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
   showStepperPrompt?: boolean;
   handleBrowseHistoryDown: () => void;

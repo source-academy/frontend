@@ -26,7 +26,6 @@ import {
   defaultState,
   type OverallState,
 } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { TestcaseTypes } from '../assessment/AssessmentTypes';
 import { mockTestcases } from '../mocks/GradingMocks';
 import { actions } from '../utils/ActionsHelper';
@@ -976,59 +975,6 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
         expect(capturedErrors).toHaveLength(1);
         expect(capturedErrors![0].location.start.line).toBe(0);
       });
-  });
-});
-
-describe('PLAYGROUND_EXTERNAL_SELECT', () => {
-  let workspaceLocation: WorkspaceLocation;
-
-  beforeEach(() => {
-    workspaceLocation = 'playground';
-  });
-
-  test('puts changeExternalLibrary, clearReplOutput and calls showSuccessMessage correctly', () => {
-    const oldExternalLibraryName = ExternalLibraryName.NONE;
-    const newExternalLibraryName = ExternalLibraryName.SOUNDS;
-
-    const newDefaultState = generateDefaultState(workspaceLocation, {
-      externalLibrary: oldExternalLibraryName,
-    });
-
-    return expectSaga(workspaceSaga)
-      .withState(newDefaultState)
-      .put(WorkspaceActions.changeExternalLibrary(newExternalLibraryName, workspaceLocation))
-      .put(WorkspaceActions.clearReplOutput(workspaceLocation))
-      .call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
-      .dispatch({
-        type: WorkspaceActions.externalLibrarySelect.type,
-        payload: {
-          externalLibraryName: newExternalLibraryName,
-          workspaceLocation,
-        },
-      })
-      .silentRun();
-  });
-
-  test('does not call the above when oldExternalLibraryName === newExternalLibraryName', () => {
-    const oldExternalLibraryName = ExternalLibraryName.SOUNDS;
-    const newExternalLibraryName = ExternalLibraryName.SOUNDS;
-    const newDefaultState = generateDefaultState(workspaceLocation, {
-      externalLibrary: oldExternalLibraryName,
-    });
-
-    return expectSaga(workspaceSaga)
-      .withState(newDefaultState)
-      .not.put.actionType(WorkspaceActions.changeExternalLibrary.type)
-      .not.put.actionType(WorkspaceActions.clearReplOutput.type)
-      .not.call.fn(showSuccessMessage)
-      .dispatch({
-        type: WorkspaceActions.externalLibrarySelect.type,
-        payload: {
-          externalLibraryName: newExternalLibraryName,
-          workspaceLocation,
-        },
-      })
-      .silentRun();
   });
 });
 

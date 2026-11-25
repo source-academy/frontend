@@ -8,7 +8,6 @@ import LanguageDirectoryActions from '../../features/directory/LanguageDirectory
 import type { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import { store } from '../../pages/createStore';
 import type { OverallState } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
@@ -94,13 +93,6 @@ const PersistenceSaga = combineSagaHandlers({
             // named after the chapters, as in legacy share links.
             yield put(LanguageDirectoryActions.setSelectedLanguage(`source${chapter}`));
           }
-          yield put(
-            actions.externalLibrarySelect(
-              Object.values(ExternalLibraryName).find(v => v === meta.appProperties.external) ||
-                ExternalLibraryName.NONE,
-              'playground',
-            ),
-          );
         }
 
         yield call(showSuccessMessage, `Loaded ${name}.`, 1000);
@@ -120,13 +112,12 @@ const PersistenceSaga = combineSagaHandlers({
       try {
         yield call(ensureInitialisedAndAuthorised);
 
-        const [activeEditorTabIndex, editorTabs, language, evaluator, external] = yield select(
+        const [activeEditorTabIndex, editorTabs, language, evaluator] = yield select(
           (state: OverallState) => [
             state.workspaces.playground.activeEditorTabIndex,
             state.workspaces.playground.editorTabs,
             state.languageDirectory.selectedLanguageId,
             state.languageDirectory.selectedEvaluatorId,
-            state.workspaces.playground.externalLibrary,
           ],
         );
 
@@ -199,7 +190,7 @@ const PersistenceSaga = combineSagaHandlers({
             return;
           }
 
-          const config: IPlaygroundConfig = playgroundConfig(language, evaluator, external);
+          const config: IPlaygroundConfig = playgroundConfig(language, evaluator);
 
           toastKey = yield call(showMessage, {
             message: `Saving as ${response.value}...`,
@@ -244,11 +235,7 @@ const PersistenceSaga = combineSagaHandlers({
 
       yield call(ensureInitialisedAndAuthorised);
 
-      const {
-        activeEditorTabIndex,
-        editorTabs,
-        externalLibrary: external,
-      } = yield* selectWorkspace('playground');
+      const { activeEditorTabIndex, editorTabs } = yield* selectWorkspace('playground');
       const [language, evaluator]: [string | null, string | null] = yield select(
         (state: OverallState) => [
           state.languageDirectory.selectedLanguageId,
@@ -265,7 +252,6 @@ const PersistenceSaga = combineSagaHandlers({
       const config: IPlaygroundConfig = {
         language: language ?? null,
         evaluator: evaluator ?? null,
-        external,
       };
       yield call(updateFile, id, name, MIME_SOURCE, code, config);
       yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
@@ -287,17 +273,14 @@ type IPlaygroundConfig = {
   /** Language directory ids; omitted (or null, to remove them) when no language was selected. */
   language?: string | null;
   evaluator?: string | null;
-  external: string;
 };
 
 const playgroundConfig = (
   language: string | null,
   evaluator: string | null,
-  external: string,
 ): IPlaygroundConfig => ({
   ...(language ? { language } : {}),
   ...(evaluator ? { evaluator } : {}),
-  external,
 });
 
 // Reason for this: we don't want to initialise and load the gapi JS until

@@ -50,7 +50,6 @@ import {
 import Messages, { sendToWebview } from 'src/features/vscode/messages';
 
 import { getDefaultFilePath, type OverallState } from '../../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import ControlBarAutorunButtons from '../../commons/controlBar/ControlBarAutorunButtons';
 import ControlBarChapterSelect from '../../commons/controlBar/ControlBarChapterSelect';
 import ControlBarClearButton from '../../commons/controlBar/ControlBarClearButton';
@@ -306,9 +305,6 @@ function Playground(props: PlaygroundProps) {
 
   const usingRemoteExecution =
     useAppSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
-  // this is still used by remote execution (EV3)
-  // specifically, for the editor Ctrl+B to work
-  const externalLibraryName = useAppSelector(state => state.workspaces.playground.externalLibrary);
 
   useEffect(() => {
     // When the editor session Id changes, or the first language is selected, then treat it as a
@@ -938,7 +934,6 @@ function Playground(props: PlaygroundProps) {
     onCursorChange: onCursorChangeMethod,
     onSelectionChange: onSelectionChangeMethod,
     onLoad: isSicpEditor && props.prependLength ? onLoadMethod : undefined,
-    externalLibraryName,
     handleEditorValueChange: onEditorValueChange,
     handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
     setUsers,
@@ -961,7 +956,6 @@ function Playground(props: PlaygroundProps) {
     handleBrowseHistoryDown: replHandlers.handleBrowseHistoryDown,
     handleBrowseHistoryUp: replHandlers.handleBrowseHistoryUp,
     handleReplValueChange: replHandlers.handleReplValueChange,
-    externalLibrary: ExternalLibraryName.NONE, // temporary placeholder as we phase out libraries
     hidden:
       selectedTab === SideContentType.substVisualizer ||
       selectedTab === SideContentType.cseMachine ||

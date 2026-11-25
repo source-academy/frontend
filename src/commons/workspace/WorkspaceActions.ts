@@ -1,6 +1,5 @@
 import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
 import type { AllColsSortStates } from '../../features/grading/GradingTypes';
-import type { ExternalLibraryName } from '../application/types/ExternalTypes';
 import type { HighlightedLines, Position } from '../editor/EditorTypes';
 import { createActions } from '../redux/utils';
 import type { UploadResult } from '../sideContent/content/SideContentUpload';
@@ -21,10 +20,6 @@ const newActions = createActions('workspace', {
   }),
   browseReplHistoryDown: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   browseReplHistoryUp: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
-  changeExternalLibrary: (
-    newExternal: ExternalLibraryName,
-    workspaceLocation: WorkspaceLocation,
-  ) => ({ newExternal, workspaceLocation }),
   changeExecTime: (execTime: number, workspaceLocation: WorkspaceLocation) => ({
     execTime,
     workspaceLocation,
@@ -33,11 +28,6 @@ const newActions = createActions('workspace', {
     stepLimit,
     workspaceLocation,
   }),
-  externalLibrarySelect: (
-    externalLibraryName: ExternalLibraryName,
-    workspaceLocation: WorkspaceLocation,
-    initialise?: boolean,
-  ) => ({ externalLibraryName, workspaceLocation, initialise: initialise || false }),
   clearReplInput: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   clearReplOutput: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   clearReplOutputLast: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),

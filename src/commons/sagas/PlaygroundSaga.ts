@@ -76,12 +76,8 @@ function* updateQueryString() {
     fileSystem,
   );
 
-  const {
-    activeEditorTabIndex,
-    editorTabs,
-    externalLibrary: external,
-    isFolderModeEnabled,
-  } = yield* selectWorkspace('playground');
+  const { activeEditorTabIndex, editorTabs, isFolderModeEnabled } =
+    yield* selectWorkspace('playground');
 
   const { selectedLanguageId, selectedEvaluatorId } = yield select(
     (state: OverallState) => state.languageDirectory,
@@ -111,7 +107,6 @@ function* updateQueryString() {
     variant: dirVariant,
     language: dirLanguage,
     evaluator: dirEvaluator,
-    ext: external,
   });
   yield put(PlaygroundActions.changeQueryString(newQueryString));
 }

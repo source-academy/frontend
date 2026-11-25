@@ -16,7 +16,6 @@ import type {
   WorkspaceState,
 } from '../workspace/WorkspaceTypes';
 import type { RouterState } from './types/CommonsTypes';
-import { ExternalLibraryName } from './types/ExternalTypes';
 import type { SessionState } from './types/SessionTypes';
 import type { VscodeState } from './types/VscodeTypes';
 
@@ -170,7 +169,6 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   sessionDetails: null,
   isEditorReadonly: false,
   editorTestcases: [],
-  externalLibrary: ExternalLibraryName.NONE,
   execTime: 1000,
   output: [],
   replHistory: {

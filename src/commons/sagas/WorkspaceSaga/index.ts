@@ -10,14 +10,12 @@ import { BrowserHostPlugin } from 'src/features/conductor/BrowserHostPlugin';
 import { combineSagaHandlers } from '../../../commons/redux/utils';
 import WorkspaceActions from '../../../commons/workspace/WorkspaceActions';
 import { EventType } from '../../../features/achievement/AchievementTypes';
-import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
 import LanguageDirectoryActions from '../../../features/directory/LanguageDirectoryActions';
 import { selectDefaultFileExtension } from '../../../features/directory/LanguageDirectoryTypes';
 import { selectTestCaseLanguage } from '../../../features/directory/testCaseLanguage';
 import type { DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';
 import { defaultEditorValue, type OverallState } from '../../application/ApplicationTypes';
-import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import type { Testcase } from '../../assessment/AssessmentTypes';
 import { createAnalysisContext } from '../../editor/sourceAnalysis';
 import { writeFileRecursively } from '../../fileSystem/utils';
@@ -236,31 +234,6 @@ const WorkspaceSaga = combineSagaHandlers({
     yield put(actions.addEvent([EventType.RUN_TESTCASE], workspaceLocation));
     const index = action.payload.testcaseId;
     yield* runTestCase(workspaceLocation, index);
-  },
-  /**
-   * Note that the PLAYGROUND_EXTERNAL_SELECT action is made to
-   * select the library for playground.
-   * This is because assessments do not have a chapter & library select, the question
-   * specifies the chapter and library to be used.
-   *
-   * To abstract this to assessments, the state structure must be manipulated to store
-   * the external library name in a WorkspaceState (as compared to IWorkspaceManagerState).
-   *
-   * @see IWorkspaceManagerState @see WorkspaceState
-   */
-  [WorkspaceActions.externalLibrarySelect.type]: function* (action) {
-    const { workspaceLocation, externalLibraryName: newExternalLibraryName } = action.payload;
-    const oldExternalLibraryName: ExternalLibraryName = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].externalLibrary,
-    );
-    if (newExternalLibraryName !== oldExternalLibraryName || action.payload.initialise) {
-      yield put(actions.changeExternalLibrary(newExternalLibraryName, workspaceLocation));
-      yield call([DataVisualizer, DataVisualizer.clearWithData]);
-      yield put(actions.clearReplOutput(workspaceLocation));
-      if (!action.payload.initialise) {
-        yield call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000);
-      }
-    }
   },
   [WorkspaceActions.navigateToDeclaration.type]: function* (action) {
     const workspaceLocation = action.payload.workspaceLocation;

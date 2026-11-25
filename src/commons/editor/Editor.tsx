@@ -66,7 +66,6 @@ type DispatchProps = {
 type EditorStateProps = {
   editorSessionId: string;
   sessionDetails: { docId: string; readOnly: boolean; owner: boolean } | null;
-  externalLibraryName?: string;
   hooks?: EditorHook[];
   editorBinding?: EditorBinding;
   mode?: string;
