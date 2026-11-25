@@ -1,3 +1,4 @@
+import '../editor/ace/loadAceModules';
 import '../editor/ace/sourceTheme';
 
 import { Classes } from '@blueprintjs/core';

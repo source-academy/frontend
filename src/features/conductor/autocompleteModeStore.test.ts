@@ -15,6 +15,18 @@ describe('autocomplete mode store', () => {
     expect(normalizeAceModeId('ace/mode/python')).toBe('ace/mode/python');
   });
 
+  test('a publish after dispose does not bring the mode back', () => {
+    const evaluatorPath = '/evaluators/late.js';
+    const tabService = {} as ITabService;
+    associateAutocompleteEvaluator(tabService, evaluatorPath);
+    const publisher = createAutocompleteModePublisher(tabService);
+    const { result } = renderHook(() => useAutocompleteMode(evaluatorPath));
+
+    act(() => publisher.dispose());
+    act(() => publisher.publish('python'));
+    expect(result.current).toBeNull();
+  });
+
   test('updates React when an evaluator mode is published', () => {
     const evaluatorPath = '/evaluators/python.js';
     const tabService = {} as ITabService;

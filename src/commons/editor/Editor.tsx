@@ -6,7 +6,7 @@ import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/ext-settings_menu';
-import './ace/modes';
+import './ace/loadAceModules';
 import './ace/sourceTheme';
 
 /**
@@ -36,6 +36,7 @@ import type { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 // Ideally, hooks should be specified by the parent component instead.
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import useHighlighting from './UseHighlighting';
+import { loadAceModule } from './ace/loadAceModules';
 import { useActiveAceMode } from './useActiveAceMode';
 import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
@@ -460,21 +461,21 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     }
 
     const editor = reactAceRef.current.editor;
+    // The mode may have to be loaded first (a stock Ace mode is loaded on demand), and the language
+    // may change meanwhile.
+    let cancelled = false;
     const apply = (session: Ace.EditSession) => {
-      let modeModule: any;
-      try {
-        modeModule = acequire(conductorMode);
-      } catch {
-        modeModule = acequire('ace/mode/text');
-      }
-      if (!modeModule?.Mode) {
-        modeModule = acequire('ace/mode/text');
-      }
-      const modeId = modeModule.Mode.prototype?.$id ?? conductorMode;
-      if ((session.getMode() as any).$id === modeId) {
-        return;
-      }
-      session.setMode(new modeModule.Mode());
+      void loadAceModule(conductorMode).then(loaded => {
+        if (cancelled) {
+          return;
+        }
+        const modeModule = acequire(loaded ? conductorMode : 'ace/mode/text');
+        const modeId = modeModule.Mode.prototype?.$id ?? conductorMode;
+        if ((session.getMode() as any).$id === modeId) {
+          return;
+        }
+        session.setMode(new modeModule.Mode());
+      });
     };
 
     apply(editor.getSession());
@@ -485,6 +486,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     editor.on('changeSession', onChangeSession);
 
     return () => {
+      cancelled = true;
       editor.off('changeSession', onChangeSession);
     };
   }, [conductorMode]);
@@ -681,7 +683,8 @@ function Editor(props: EditorProps) {
   const [sessions, setSessions] = useState<Record<string, Ace.EditSession>>({});
 
   // Create new edit session.
-  const defaultMode = acequire('ace/mode/javascript').Mode();
+  // Plain text until the selected language's mode has been loaded (see `useActiveAceMode`).
+  const defaultMode = new (acequire('ace/mode/text').Mode)();
   const defaultEditSession = createEditSession(props.editorValue, defaultMode);
 
   // Initialise edit session if file path has not been seen before.
