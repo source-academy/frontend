@@ -1,8 +1,6 @@
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { call, put, select, type StrictEffect } from 'redux-saga/effects';
-import { featureSelector } from 'src/commons/featureFlags/featureSelector';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
-import { flagConductorEv3Enable } from 'src/features/remoteExecutionConductor/flagConductorEv3Enable';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import { selectDefaultFileExtension } from '../../../../features/directory/LanguageDirectoryTypes';
@@ -59,15 +57,7 @@ export function* evalEditorSaga(
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
-    // Deliberately gated on the EV3-specific flag - the legacy Source path (js-slang -> SVML -> SlingClient, see
-    // RemoteExecutionSaga.ts) must stay the default for every device until the Conductor/py-slang
-    // pipeline is actually finished end-to-end,
-    const isConductorEv3: boolean = yield select(featureSelector(flagConductorEv3Enable));
-    if (isConductorEv3) {
-      yield put(actions.remoteExecConductorRun(files, entrypointFilePath));
-    } else {
-      yield put(actions.remoteExecRun(files, entrypointFilePath));
-    }
+    yield put(actions.remoteExecConductorRun(files, entrypointFilePath));
   } else {
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));

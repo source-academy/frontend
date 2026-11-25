@@ -1,5 +1,4 @@
 import { SlingClient } from '@sourceacademy/sling-client';
-import { Chapter } from 'js-slang/dist/langs';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
@@ -34,7 +33,6 @@ export interface DeviceType {
   id: string;
   name: string;
   internalFunctions: string[];
-  languageChapter: Chapter;
   deviceLibraryName: ExternalLibraryName;
 }
 
@@ -88,7 +86,6 @@ export const deviceTypes: DeviceType[] = [
       'ev3_ledGetBrightness',
       'ev3_ledSetBrightness',
     ],
-    languageChapter: Chapter.SOURCE_3,
     deviceLibraryName: ExternalLibraryName.EV3,
   },
 ];
