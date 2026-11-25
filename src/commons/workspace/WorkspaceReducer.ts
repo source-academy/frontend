@@ -339,18 +339,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         },
       };
     })
-    .addCase(WorkspaceActions.toggleUsingUpload, (state, action) => {
-      const { workspaceLocation } = action.payload;
-      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        state[workspaceLocation].usingUpload = action.payload.usingUpload;
-      }
-    })
-    .addCase(WorkspaceActions.uploadFiles, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        state[workspaceLocation].files = action.payload.files;
-      }
-    })
     .addCase(setUpdateUserRoleCallback, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].updateUserRoleCallback = action.payload.updateUserRoleCallback;
