@@ -20,7 +20,6 @@ import type {
   AssessmentOverview,
   IMCQQuestion,
   IProgrammingQuestion,
-  Library,
   Question,
   Testcase,
 } from '../assessment/AssessmentTypes';
@@ -116,7 +115,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
   const {
     handleBrowseHistoryDown,
     handleBrowseHistoryUp,
-    handleChangeLibrary,
     handleDeclarationNavigate,
     handleEditorEval,
     handleEditorValueChange,
@@ -139,8 +137,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
         dispatch(WorkspaceActions.browseReplHistoryDown(workspaceLocation)),
       handleBrowseHistoryUp: () =>
         dispatch(WorkspaceActions.browseReplHistoryUp(workspaceLocation)),
-      handleChangeLibrary: (library: Library) =>
-        dispatch(WorkspaceActions.changeExternalLibrary(library.external.name, workspaceLocation)),
       handleDeclarationNavigate: (cursorPosition: Position) =>
         dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
       handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
@@ -236,7 +232,7 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
                 setHasUnsavedChanges(false);
                 setShowResetTemplateOverlay(false);
                 setOriginalMaxXp(getMaxXp());
-                handleRefreshLibrary();
+                clearSideContent();
                 resetWorkspaceValues();
               }}
               options={{ variant: 'default', intent: Intent.DANGER }}
@@ -269,19 +265,12 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
         setAssessment(retrieveLocalAssessment());
         setHasUnsavedChanges(false);
       }
-      handleRefreshLibrary();
+      clearSideContent();
     }
   }
 
-  const handleRefreshLibrary = (library: Library | undefined = undefined) => {
-    const question = assessment!.questions[formatedQuestionId()];
-    if (!library) {
-      library = question.library.chapter === -1 ? assessment!.globalDeployment! : question.library;
-    }
-    handleChangeLibrary(library);
-    // Clear out any module tabs left over from the previous question/library.
-    dispatch(resetSideContent(workspaceLocation));
-  };
+  // Clear out any module tabs left over from the previous question.
+  const clearSideContent = () => dispatch(resetSideContent(workspaceLocation));
 
   const resetWorkspaceValues = () => {
     const question: Question = assessment!.questions[formatedQuestionId()];
@@ -345,7 +334,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
     setAssessment(assessment);
     setHasUnsavedChanges(false);
     storeLocalAssessment(assessment);
-    // this.handleRefreshLibrary();
     handleSaveXp();
   };
 
@@ -378,7 +366,7 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
 
   const updateAndSaveAssessment = (assessmentVal: Assessment) => {
     setAssessment(assessmentVal);
-    handleRefreshLibrary();
+    clearSideContent();
     handleSave();
     resetWorkspaceValues();
   };
@@ -442,7 +430,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
             <DeploymentTab
               assessment={currentAssessment}
               label={'Question Specific'}
-              handleRefreshLibrary={handleRefreshLibrary}
               pathToLibrary={['questions', questionId, 'library']}
               updateAssessment={updateEditAssessmentState}
               isOptionalDeployment
@@ -457,7 +444,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
             <DeploymentTab
               assessment={currentAssessment}
               label={'Question Specific Grader'}
-              handleRefreshLibrary={handleRefreshLibrary}
               pathToLibrary={['questions', questionId, 'graderLibrary']}
               pathToCopy={['questions', questionId, 'library']}
               updateAssessment={updateEditAssessmentState}
@@ -528,7 +514,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
             <DeploymentTab
               assessment={currentAssessment}
               label={'Global'}
-              handleRefreshLibrary={handleRefreshLibrary}
               pathToLibrary={['globalDeployment']}
               updateAssessment={updateEditAssessmentState}
               isOptionalDeployment={false}
@@ -543,7 +528,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
             <DeploymentTab
               assessment={currentAssessment}
               label={'Global Grader'}
-              handleRefreshLibrary={handleRefreshLibrary}
               pathToLibrary={['graderDeployment']}
               updateAssessment={updateEditAssessmentState}
               isOptionalDeployment
@@ -700,7 +684,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
       handleReplValueChange: handleReplValueChange,
       output: output,
       replValue: replValue,
-      externalLibrary: question?.library?.external?.name || 'NONE',
       replButtons: replButtons(),
     },
   };

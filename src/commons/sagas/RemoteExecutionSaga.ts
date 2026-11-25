@@ -12,14 +12,12 @@ import {
 import {
   type Device,
   type DeviceSession,
-  deviceTypesById,
   type WebSocketEndpointInformation,
 } from 'src/features/remoteExecution/RemoteExecutionTypes';
 import { store } from 'src/pages/createStore';
 
 import InterpreterActions from '../application/actions/InterpreterActions';
 import type { OverallState } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { errorFromException } from '../errors/InterpreterError';
 import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
@@ -170,8 +168,6 @@ const RemoteExecutionSaga = combineSagaHandlers({
           break;
       }
     });
-    const deviceType = deviceTypesById.get(device.type);
-
     yield put(
       actions.remoteExecUpdateSession({
         device,
@@ -182,7 +178,6 @@ const RemoteExecutionSaga = combineSagaHandlers({
     yield put(
       actions.updateWorkspace(workspace, {
         isRunning: false,
-        externalLibrary: deviceType?.deviceLibraryName,
         output: [],
       }),
     );
@@ -241,7 +236,6 @@ const RemoteExecutionSaga = combineSagaHandlers({
     // session (handleConductorDisconnect there is idempotent).
     yield put(actions.remoteExecConductorDisconnect());
     yield put(actions.remoteExecUpdateSession(undefined));
-    yield put(actions.externalLibrarySelect(ExternalLibraryName.NONE, session.workspace, true));
   },
   [InterpreterActions.beginInterruptExecution.type]: function* () {
     const session: DeviceSession | undefined = yield select(

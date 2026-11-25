@@ -8,7 +8,6 @@ import { useEffect, useRef } from 'react';
 import AceEditor from 'react-ace';
 import ReactAce from 'react-ace/lib/ace';
 
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { useActiveAceMode } from '../editor/useActiveAceMode';
 import { useResponsive } from '../utils/Hooks';
 // source mode and chapter imported in Editor.tsx
@@ -21,7 +20,6 @@ export type ReplInputProps = {
   onFocus?: (editor: Ace.Editor) => void;
   onBlur?: () => void;
   replValue: string;
-  externalLibrary: ExternalLibraryName;
   disableScrolling?: boolean;
   replButtons: Array<React.ReactElement | null>;
 };

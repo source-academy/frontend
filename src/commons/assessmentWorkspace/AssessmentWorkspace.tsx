@@ -38,7 +38,6 @@ import type {
   IContestVotingQuestion,
   IMCQQuestion,
   IProgrammingQuestion,
-  Library,
   Testcase,
 } from '../assessment/AssessmentTypes';
 import { QuestionTypes } from '../assessment/AssessmentTypes';
@@ -146,7 +145,6 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
   const {
     handleTeamOverviewFetch,
     handleTestcaseEval,
-    handleChangeLibrary,
     handleChangeExecTime,
     handleUpdateCurrentAssessmentId,
     handleResetWorkspace,
@@ -172,8 +170,6 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
         dispatch(SessionActions.fetchTeamFormationOverview(assessmentId)),
       handleTestcaseEval: (id: number) =>
         dispatch(WorkspaceActions.evalTestcase(workspaceLocation, id)),
-      handleChangeLibrary: (library: Library) =>
-        dispatch(WorkspaceActions.changeExternalLibrary(library.external.name, workspaceLocation)),
       handleChangeExecTime: (execTimeMs: number) =>
         dispatch(WorkspaceActions.changeExecTime(execTimeMs, workspaceLocation)),
       handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) =>
@@ -409,7 +405,6 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
           setSessionId(
             initSession(`${(assessment as any).number}/${props.questionId}`, {
               chapter: question.library.chapter,
-              externalLibrary: question?.library?.external?.name || 'NONE',
               editorValue: options.editorValue,
             }),
           );
@@ -453,7 +448,6 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
     handleChangeExecTime(
       question.library.execTimeMs ?? defaultWorkspaceManager.assessment.execTime,
     );
-    handleChangeLibrary(question.library);
     // Clear out any module tabs (e.g. Runes, Curves) left over from the
     // previous question, so they don't linger until the next run.
     dispatch(resetSideContent(workspaceLocation));
@@ -1056,7 +1050,6 @@ It is safe to close this window.`}
           editorTabs: editorTabs.map(convertEditorTabStateToProps),
           editorSessionId: '',
           sessionDetails: null,
-          externalLibraryName: question.library.external.name || 'NONE',
           handleDeclarationNavigate: editorContainerHandlers.handleDeclarationNavigate,
           handleEditorEval: handleEval,
           handleEditorValueChange: handleEditorValueChange,
@@ -1079,7 +1072,6 @@ It is safe to close this window.`}
     handleReplValueChange: replHandlers.handleReplValueChange,
     output: output,
     replValue: replValue,
-    externalLibrary: question?.library?.external?.name || 'NONE',
     replButtons: replButtons,
   };
   const sideBarProps = {

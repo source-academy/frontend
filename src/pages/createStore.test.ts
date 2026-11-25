@@ -3,7 +3,6 @@ import { describe, expect, test } from 'vitest';
 
 import type { OverallState } from '../commons/application/ApplicationTypes';
 import { defaultState } from '../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
 import { createStore } from './createStore';
 import type { SavedState } from './localStorage';
 
@@ -36,7 +35,6 @@ const mockChangedStoredState: SavedState = {
       highlightedLines: [],
     },
   ],
-  playgroundExternalLibrary: 'NONE' as ExternalLibraryName,
 };
 
 const mockChangedState: OverallState = {

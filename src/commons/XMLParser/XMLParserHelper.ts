@@ -1,6 +1,5 @@
 import { Builder } from 'xml2js';
 
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import type {
   Assessment,
   AssessmentOverview,
@@ -140,7 +139,7 @@ const makeLibrary = (deploymentArr: XmlParseStrDeployment[] | undefined): Librar
       ...(deployment.$.language ? { language: deployment.$.language } : {}),
       ...(deployment.$.evaluator ? { evaluator: deployment.$.evaluator } : {}),
       external: {
-        name: nameVal as ExternalLibraryName,
+        name: nameVal,
         symbols: symbolsVal,
       },
       globals: globalsVal,

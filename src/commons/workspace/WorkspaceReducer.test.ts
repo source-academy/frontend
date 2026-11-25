@@ -15,7 +15,6 @@ import {
   type ResultOutput,
   type RunningOutput,
 } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { type Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
 import type { HighlightedLines, Position } from '../editor/EditorTypes';
 import { errorFromException } from '../errors/InterpreterError';
@@ -29,7 +28,6 @@ import type {
   WorkspaceManagerState,
 } from './WorkspaceTypes';
 
-const playgroundWorkspace: WorkspaceLocation = 'playground';
 const locations: ReadonlyArray<WorkspaceLocation> = [
   'assessment',
   'grading',
@@ -191,28 +189,6 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
           },
         },
       });
-    });
-  });
-});
-
-describe('CHANGE_EXTERNAL_LIBRARY', () => {
-  test('sets externalLibrary correctly', () => {
-    const newExternal = 'new_external_test' as ExternalLibraryName;
-    const playgroundAction = {
-      type: WorkspaceActions.changeExternalLibrary.type,
-      payload: {
-        newExternal,
-        workspaceLocation: playgroundWorkspace,
-      },
-    } as const;
-
-    const result = WorkspaceReducer(defaultWorkspaceManager, playgroundAction);
-    expect(result).toEqual({
-      ...defaultWorkspaceManager,
-      playground: {
-        ...defaultWorkspaceManager.playground,
-        externalLibrary: newExternal,
-      },
     });
   });
 });
@@ -751,7 +727,6 @@ describe('LOG_OUT', () => {
           ],
         },
       ],
-      externalLibrary: 'NONE' as ExternalLibraryName,
       replValue: 'test repl value here',
       sharedbConnected: false,
       usingUpload: false,

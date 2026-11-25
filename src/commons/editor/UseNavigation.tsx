@@ -2,8 +2,6 @@ import { hasDeclaration } from 'js-slang';
 import { useCallback, useRef } from 'react';
 
 import { useLanguageDocumentation } from '../../features/directory/useLanguageDocumentation';
-import { Documentation } from '../documentation/Documentation';
-import { Links } from '../utils/Constants';
 import type { EditorHook } from './Editor';
 import { createAnalysisContext, useSourceAnalysisEnabled } from './sourceAnalysis';
 
@@ -47,24 +45,8 @@ const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) 
       return;
     }
 
-    const url = Links.sourceDocs;
     const languageDocsUrl = documentationRef.current?.languageDocsUrl;
-    const external =
-      propsRef.current.externalLibraryName === undefined
-        ? 'NONE'
-        : propsRef.current.externalLibraryName;
-    const externalUrl =
-      propsRef.current.externalLibraryName === 'ALL' ? `External%20libraries` : external;
-    const ext = Documentation.externalLibraries[external];
-
-    if (ext.some((node: { caption: string }) => node.caption === (token && token.value))) {
-      if (
-        token !== null &&
-        (/\bsupport.function\b/.test(token.type) || /\bbuiltinconsts\b/.test(token.type))
-      ) {
-        window.open(`${url}${externalUrl}/global.html#${token.value}`); // opens external library link
-      }
-    } else if (
+    if (
       languageDocsUrl &&
       token !== null &&
       (/\bsupport.function\b/.test(token.type) || /\bbuiltinconsts\b/.test(token.type))

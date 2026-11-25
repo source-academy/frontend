@@ -2,7 +2,6 @@ import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActi
 import { expect, test } from 'vitest';
 
 import { createDefaultWorkspace } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import type { HighlightedLines } from '../editor/EditorTypes';
 import WorkspaceActions from './WorkspaceActions';
 import type { EditorTabState, WorkspaceLocation } from './WorkspaceTypes';
@@ -27,18 +26,6 @@ test('browseReplHistoryUp generates correct action object', () => {
   });
 });
 
-test('changeExternalLibrary generates correct action object', () => {
-  const newExternal = 'new-external-test' as ExternalLibraryName;
-  const action = WorkspaceActions.changeExternalLibrary(newExternal, playgroundWorkspace);
-  expect(action).toEqual({
-    type: WorkspaceActions.changeExternalLibrary.type,
-    payload: {
-      newExternal,
-      workspaceLocation: playgroundWorkspace,
-    },
-  });
-});
-
 test('changeSideContentHeight generates correct action object', () => {
   const height = 100;
   const action = changeSideContentHeight(height, gradingWorkspace);
@@ -47,19 +34,6 @@ test('changeSideContentHeight generates correct action object', () => {
     payload: {
       height,
       workspaceLocation: gradingWorkspace,
-    },
-  });
-});
-
-test('externalLibrarySelect generates correct action object', () => {
-  const externalLibraryName = ExternalLibraryName.SOUNDS;
-  const action = WorkspaceActions.externalLibrarySelect(externalLibraryName, assessmentWorkspace);
-  expect(action).toEqual({
-    type: WorkspaceActions.externalLibrarySelect.type,
-    payload: {
-      externalLibraryName,
-      workspaceLocation: assessmentWorkspace,
-      initialise: false,
     },
   });
 });

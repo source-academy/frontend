@@ -1,7 +1,6 @@
 import { render } from '@testing-library/react';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { Provider } from 'react-redux';
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { expect, test } from 'vitest';
 
@@ -48,7 +47,6 @@ test('Repl renders correctly', async () => {
     replValue: '',
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
-    externalLibrary: ExternalLibraryName.NONE,
     replButtons: [],
   };
   const { asFragment } = render(

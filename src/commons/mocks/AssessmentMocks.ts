@@ -1,4 +1,3 @@
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import type {
   Assessment,
   AssessmentConfiguration,
@@ -362,7 +361,7 @@ export const mockAssessmentOverviews = [
 export const mockLibrary: Library = {
   chapter: 1,
   external: {
-    name: ExternalLibraryName.NONE,
+    name: 'NONE',
     symbols: [],
   },
   globals: [],

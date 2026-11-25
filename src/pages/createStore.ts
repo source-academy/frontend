@@ -76,9 +76,6 @@ function loadStore(loadedStore: SavedState | undefined) {
         editorTabs: loadedStore.playgroundEditorTabs
           ? loadedStore.playgroundEditorTabs
           : defaultState.workspaces.playground.editorTabs,
-        externalLibrary: loadedStore.playgroundExternalLibrary
-          ? loadedStore.playgroundExternalLibrary
-          : defaultState.workspaces.playground.externalLibrary,
       },
     },
   };

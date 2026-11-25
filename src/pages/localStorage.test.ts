@@ -34,7 +34,6 @@ const mockShortDefaultState: SavedState = {
     value: defaultState.workspaces.playground.activeEditorTabIndex,
   },
   playgroundEditorTabs: defaultState.workspaces.playground.editorTabs,
-  playgroundExternalLibrary: defaultState.workspaces.playground.externalLibrary,
 };
 
 describe('loadStoredState() function', () => {
