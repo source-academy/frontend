@@ -70,7 +70,7 @@ export function* runTestCaseConductor(
   prepend: string,
   postpend: string,
   /**
-   * Skip this call's own switch-to-TEST_CASE-language/restore dance - set by runAllTestcases
+   * Skip this call's own switch-to-the-grader's-language/restore dance - set by runAllTestcases
    * (WorkspaceSaga/index.ts), which switches once for the whole batch of testcases instead of
    * once per testcase. Repeatedly switching `state.languageDirectory`'s selection back and forth
    * between every testcase (each switch tears down and rebuilds the Conductor session - see
@@ -93,7 +93,7 @@ export function* runTestCaseConductor(
   if (!graderLanguage) {
     yield call(
       showWarningMessage,
-      "The language of this question's test cases is not in the language directory.",
+      'This question does not name a language for its test cases that the language directory has.',
     );
     return false;
   }

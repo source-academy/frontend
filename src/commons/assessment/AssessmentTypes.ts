@@ -166,8 +166,8 @@ export type BaseQuestion = {
   graderLibrary?: Library; // For mission control
   /**
    * What the test cases run under in the workspace (the frontend grader): its language and evaluator.
-   * Absent for a question saved before the backend sent it, which then runs them as before
-   * (see `selectTestCaseLanguage`).
+   * Absent for a question saved before the backend sent it, which then runs them under its
+   * `library`'s language (see `selectTestCaseLanguage`); there is no default language.
    */
   frontendGradingLibrary?: Library;
   id: number;

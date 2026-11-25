@@ -321,7 +321,7 @@ const WorkspaceSaga = combineSagaHandlers({
       if (!testCase) {
         yield call(
           showWarningMessage,
-          "The language of this question's test cases is not in the language directory.",
+          'This question does not name a language for its test cases that the language directory has.',
         );
         return;
       }

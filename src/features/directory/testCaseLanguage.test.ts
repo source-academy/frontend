@@ -2,31 +2,7 @@ import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist
 import { describe, expect, test } from 'vitest';
 
 import type { OverallState } from '../../commons/application/ApplicationTypes';
-import {
-  selectTestCaseLanguage,
-  TEST_CASE_EVALUATOR_ID,
-  TEST_CASE_LANGUAGE_ID,
-  testCaseLanguageFor,
-} from './testCaseLanguage';
-
-describe('testCaseLanguageFor', () => {
-  test('Python §4 Typed grades under its typed evaluator, so that type errors count', () => {
-    expect(testCaseLanguageFor('python4Typed')).toEqual({
-      languageId: 'python4Typed',
-      evaluatorId: 'python4TypedPy2js',
-    });
-  });
-
-  test.each(['python1', 'python3', 'python4', 'pythonFull', 'source1', null, undefined])(
-    'everything else grades under Python §4 (%s)',
-    selected => {
-      expect(testCaseLanguageFor(selected)).toEqual({
-        languageId: TEST_CASE_LANGUAGE_ID,
-        evaluatorId: TEST_CASE_EVALUATOR_ID,
-      });
-    },
-  );
-});
+import { selectTestCaseLanguage } from './testCaseLanguage';
 
 describe('selectTestCaseLanguage', () => {
   const language = (id: string) =>
@@ -39,7 +15,7 @@ describe('selectTestCaseLanguage', () => {
     evaluators: [{ id: 'ocamlJsOfOCaml' }],
   } as ILanguageDefinition;
   languages.push(ocaml);
-  const untyped = { languageId: TEST_CASE_LANGUAGE_ID, evaluatorId: TEST_CASE_EVALUATOR_ID };
+  const python2 = { languageId: 'python2', evaluatorId: 'python2Py2js' };
   const typed = { languageId: 'python4Typed', evaluatorId: 'python4TypedPy2js' };
 
   const state = (overrides: object, selectedLanguageId: string | null = null) =>
@@ -69,7 +45,7 @@ describe('selectTestCaseLanguage', () => {
     expect(selectTestCaseLanguage(s, 'assessment')).toEqual(typed);
   });
 
-  test('an untyped assessment runs under Python §4, although a typed language is selected', () => {
+  test('a chapter-only question runs under its own language, whatever the global selection is', () => {
     const s = state(
       {
         session: { gradings: {}, assessments: { 3: { questions: [withChapter(2)] } } },
@@ -80,7 +56,7 @@ describe('selectTestCaseLanguage', () => {
       },
       'python4Typed',
     );
-    expect(selectTestCaseLanguage(s, 'assessment')).toEqual(untyped);
+    expect(selectTestCaseLanguage(s, 'assessment')).toEqual(python2);
   });
 
   test('a graded submission is judged by its own question', () => {
@@ -102,10 +78,18 @@ describe('selectTestCaseLanguage', () => {
     expect(selectTestCaseLanguage(s, 'grading')).toEqual(typed);
   });
 
-  test('falls back to the selection when the question is not known', () => {
-    expect(selectTestCaseLanguage(state({}, 'python4Typed'), 'assessment')).toEqual(typed);
-    expect(selectTestCaseLanguage(state({}, 'python4'), 'grading')).toEqual(untyped);
-    expect(selectTestCaseLanguage(state({}, null), 'playground')).toEqual(untyped);
+  test('there is no default language: without a question nothing runs, whatever is selected', () => {
+    expect(selectTestCaseLanguage(state({}, 'python4Typed'), 'assessment')).toBeUndefined();
+    expect(selectTestCaseLanguage(state({}, 'python4'), 'grading')).toBeUndefined();
+    expect(selectTestCaseLanguage(state({}, null), 'playground')).toBeUndefined();
+  });
+
+  test('a question that names no language the directory has gets none, not Python', () => {
+    const s = state({
+      session: { gradings: {}, assessments: { 3: { questions: [withChapter(99)] } } },
+      workspaces: { grading: {}, assessment: { currentAssessment: 3, currentQuestion: 0 } },
+    });
+    expect(selectTestCaseLanguage(s, 'assessment')).toBeUndefined();
   });
 
   describe('a question that names its languages and evaluators (backend#1387)', () => {
