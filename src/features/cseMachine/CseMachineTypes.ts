@@ -1,4 +1,3 @@
-import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
 import type { KonvaEventObject } from 'konva/lib/Node';
 
 import { ArrayUnit } from './components/ArrayUnit';
@@ -55,8 +54,27 @@ export type SourceObject = {
 /** types of primitives in JS Slang  */
 export type Primitive = number | string | boolean | null | undefined | SourceObject;
 
-/** types of closures in JS Slang, redefined here for convenience. */
-export type Closure = JsSlangClosure;
+/**
+ * A closure, as the renderer reads one: a function value with the fields below. js-slang's `Closure`
+ * has them (as own properties, which is how `isClosure` recognises one), and so does the function
+ * that `CseSnapshotAdapter` makes from a snapshot's closure.
+ */
+export type Closure = Function & {
+  /** Unique id of the closure. */
+  readonly id: string;
+  /** The function expression: its parameters, and the body whose text is shown. */
+  node: any;
+  /** The environment that the closure was made in. */
+  environment: Environment;
+  /** The name of the constant declaration that the closure is assigned to, if it is. */
+  declaredName?: string;
+  /** The text of the function head, e.g. `x => ...`. */
+  functionName: string;
+  /** Whether the closure is a pre-defined function. */
+  predefined: boolean;
+  /** The node that the closure was made from. */
+  originalNode: any;
+};
 
 /** types of built-in functions in JS Slang */
 export type BuiltInFn = () => never; // Use `never` to differentiate from `StreamFn`
