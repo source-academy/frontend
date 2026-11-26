@@ -2,6 +2,7 @@ import {
   AnchorButton,
   Button,
   ButtonGroup,
+  Callout,
   Checkbox,
   Classes,
   Divider,
@@ -37,7 +38,7 @@ import {
 } from 'src/features/cseMachine/cseSnapshotHistory';
 import { fullscreenPortalContainer } from 'src/features/cseMachine/fullscreenPortalContainer';
 
-import type { CseSnapshot } from '../../../features/conductor/CseMachineHostPlugin';
+import type { CseSnapshot, CseTraceEnd } from '../../../features/conductor/CseMachineHostPlugin';
 import type { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
 import type { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
@@ -73,6 +74,8 @@ type StateProps = {
   machineOutput: InterpreterOutput[];
   chapter: Chapter;
   cseSnapshots: CseSnapshot[] | null;
+  /** How the run ended, if the evaluator said (see `cseEnd` of the workspace). */
+  cseEnd: CseTraceEnd | null;
   isOnCseTab: boolean;
 };
 
@@ -570,6 +573,20 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
             </ButtonGroup>
           </div>
         </div>{' '}
+        {/* The evaluator cut the run off (its own cap): the diagram at the last step is still a valid
+            state, so this is beside it, not instead of it. A run that was stopped, or that ended on
+            its own, has nothing to say. */}
+        {this.props.cseEnd?.status === 'cut-off' ? (
+          <Callout
+            intent="warning"
+            icon="warning-sign"
+            compact
+            data-testid="cse-machine-cut-off"
+            style={{ margin: '8px 0' }}
+          >
+            The steps end here, before the program finished: {this.props.cseEnd.reason}.
+          </Callout>
+        ) : null}
         {this.state.visualization &&
         this.props.machineOutput.length &&
         this.props.machineOutput[0].type === 'errors' ? (
@@ -763,6 +780,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     // The CSE machine formats values identically for every chapter that has it.
     chapter: Chapter.SOURCE_4,
     cseSnapshots: workspace.cseSnapshots,
+    cseEnd: workspace.cseEnd,
     isOnCseTab: state.sideContent[loc]?.selectedTab === SideContentType.cseMachine,
   };
 };

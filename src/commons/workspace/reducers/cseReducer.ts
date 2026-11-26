@@ -65,5 +65,15 @@ export const handleCseAndStepperActions = (
           cseSnapshots: action.payload.snapshots,
         },
       };
+    })
+    .addCase(WorkspaceActions.updateCseEnd, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          cseEnd: action.payload.end,
+        },
+      };
     });
 };

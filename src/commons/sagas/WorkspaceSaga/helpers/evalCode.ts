@@ -9,6 +9,7 @@ import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHo
 import type {
   CseMachineHostPlugin,
   CseSnapshot,
+  CseTraceEnd,
 } from '../../../../features/conductor/CseMachineHostPlugin';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { tabBehaviour } from '../../../../features/directory/toolTabs';
@@ -334,24 +335,36 @@ function* handleErrors(
 }
 
 type CseSnapshotBatch = { snapshots: CseSnapshot[]; breakpointSteps: number[] };
+/** What the CSE plugin hands the saga: snapshots so far, or how the run ended. */
+type CseHostEvent = CseSnapshotBatch | { end: CseTraceEnd };
 
 function* handleCseSnapshots(
   csePlugin: CseMachineHostPlugin,
   workspaceLocation: WorkspaceLocation,
 ): SagaIterator {
-  const snapshotChan = eventChannel<CseSnapshotBatch>(emitter => {
+  const snapshotChan = eventChannel<CseHostEvent>(emitter => {
     const receive = (snapshots: CseSnapshot[], breakpointSteps: number[]) =>
       emitter({ snapshots, breakpointSteps });
+    const receiveEnd = (end: CseTraceEnd) => emitter({ end });
     csePlugin.receiveSnapshots = receive;
+    csePlugin.onEnd = receiveEnd;
     return () => {
       if (csePlugin.receiveSnapshots === receive) {
         csePlugin.receiveSnapshots = () => {};
+      }
+      if (csePlugin.onEnd === receiveEnd) {
+        csePlugin.onEnd = () => {};
       }
     };
   });
   try {
     while (true) {
-      const batch: CseSnapshotBatch | typeof END = yield take(snapshotChan);
+      const batch: CseHostEvent | typeof END = yield take(snapshotChan);
+      if ('end' in batch) {
+        // How the run ended (after its last batch): the tab says if it was cut off.
+        yield put(WorkspaceActions.updateCseEnd(batch.end, workspaceLocation));
+        continue;
+      }
       if (!('snapshots' in batch) || !Array.isArray(batch.snapshots)) {
         break;
       }
@@ -608,6 +621,7 @@ export function* evalCodeConductorSaga(
   // its own (e.g. a REPL line at a chapter below §3) - otherwise the CSE Machine tab would keep
   // showing an earlier chunk's steps well after that chunk is no longer the "current" one.
   yield put(WorkspaceActions.updateCseSnapshots(null, workspaceLocation));
+  yield put(WorkspaceActions.updateCseEnd(null, workspaceLocation));
 
   // Wait 5 seconds for language directory to initialise before continuing evaluation
   let evaluator: IEvaluatorDefinition | undefined = yield call(getEvaluatorDefinitionSaga);
