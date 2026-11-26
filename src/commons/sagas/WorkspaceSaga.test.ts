@@ -51,7 +51,6 @@ vi.mock('src/features/cseMachine/CseMachine', async importOriginal => {
     ...actual, // Keep all original exports (like the default export)
     CseMachine: {
       ...actual.CseMachine, // Keep any other CseMachine properties
-      drawCse: vi.fn(), // Mock just the UI methods that crash the test
       init: vi.fn(),
       clearCse: vi.fn(),
     },
