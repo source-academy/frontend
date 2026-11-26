@@ -2,7 +2,6 @@ import Constants from './Constants';
 
 export enum AuthProviderType {
   OAUTH2 = 'OAUTH2',
-  SAML_SSO = 'SAML',
 }
 
 export function computeEndpointUrl(providerId: string, forVscode?: boolean): string | undefined {
@@ -15,9 +14,6 @@ export function computeEndpointUrl(providerId: string, forVscode?: boolean): str
     switch (ep.type) {
       case AuthProviderType.OAUTH2:
         epUrl.searchParams.set('redirect_uri', computeFrontendRedirectUri(providerId, forVscode)!);
-        break;
-      case AuthProviderType.SAML_SSO:
-        epUrl.searchParams.set('target_url', computeSamlRedirectUri(providerId)!);
         break;
     }
     return epUrl.toString();
@@ -40,17 +36,6 @@ export function computeFrontendRedirectUri(
   const callback = `${window.location.protocol}//${window.location.hostname}${port}${path}${
     ep.isDefault ? '' : '?provider=' + encodeURIComponent(providerId)
   }`;
-  return callback;
-}
-
-function computeSamlRedirectUri(providerId: string): string | undefined {
-  const ep = Constants.authProviders.get(providerId);
-  if (!ep) {
-    return undefined;
-  }
-  const callback = `${Constants.backendUrl}/v2/auth/saml_redirect?provider=${encodeURIComponent(
-    providerId,
-  )}`;
   return callback;
 }
 
