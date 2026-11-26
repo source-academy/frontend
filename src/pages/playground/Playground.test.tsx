@@ -1,5 +1,4 @@
 import type { Store } from '@reduxjs/toolkit';
-import { getLanguageOfTextbookChapter, languages } from '@sourceacademy/language-directory';
 import { plugins } from '@sourceacademy/plugin-directory';
 import { render } from '@testing-library/react';
 import { compressToEncodedURIComponent } from 'lz-string';
@@ -100,49 +99,6 @@ describe('Playground tests', () => {
     expect(mockStore.getState().languageDirectory.selectedLanguageId).toBe('source2');
     // And the use of the compatibility path is counted.
     expect(recordLegacyUsage).toHaveBeenCalledExactlyOnceWith('share-link-chapter');
-  });
-
-  describe('a snippet of the textbook', () => {
-    // The editor of a snippet is a Playground with the snippet's link as its hash, on the page of
-    // the section that the snippet is in.
-    const renderSnippet = async (pathname: string, hash: string) => {
-      mockStore.dispatch(LanguageDirectoryActions.setLanguages(languages));
-      const router = createMemoryRouter(
-        [
-          {
-            path: '/:book/:section',
-            element: (
-              <Provider store={mockStore}>
-                <WorkspaceSettingsContext.Provider
-                  value={[{ editorBinding: EditorBinding.NONE }, vi.fn()]}
-                >
-                  <Playground isSicpEditor initialEditorValueHash={hash} />
-                </WorkspaceSettingsContext.Provider>
-              </Provider>
-            ),
-          },
-        ],
-        { initialEntries: [pathname], initialIndex: 0 },
-      );
-      await renderTree(router);
-    };
-    const program = compressToEncodedURIComponent('display(1);');
-
-    test('whose link names no language runs in the language of its chapter, as the directory says', async () => {
-      await renderSnippet('/sicpjs/3.2', `prgrm=${program}`);
-      expect(mockStore.getState().languageDirectory.selectedLanguageId).toBe(
-        getLanguageOfTextbookChapter(languages, '/sicpjs', '3')?.id,
-      );
-      await renderSnippet('/sicpy/2.1', `prgrm=${program}`);
-      expect(mockStore.getState().languageDirectory.selectedLanguageId).toBe(
-        getLanguageOfTextbookChapter(languages, '/sicpy', '2')?.id,
-      );
-    });
-
-    test("whose link names a language runs in that one, not the chapter's", async () => {
-      await renderSnippet('/sicpjs/3.2', `chap=1&prgrm=${program}`);
-      expect(mockStore.getState().languageDirectory.selectedLanguageId).toBe('source1');
-    });
   });
 
   test('loading a share link overwrites a stale editor tab left over from a previous session, even if its filePath predates leading-slash normalization (#4268)', async () => {

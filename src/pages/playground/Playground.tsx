@@ -299,6 +299,12 @@ function Playground(props: PlaygroundProps) {
   const usingRemoteExecution =
     useAppSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
 
+  // A snippet of the textbook can change the language after the session started (see the effect
+  // that selects the language of its chapter), and its events belong to that language, so there a
+  // change of language is a new session. In the playground it is not: the reader switches language
+  // within a session.
+  const sessionLanguage = isSicpEditor ? languagePosition : 0;
+
   useEffect(() => {
     // When the editor session Id changes, or the first language is selected, then treat it as a
     // new session.
@@ -313,7 +319,7 @@ function Playground(props: PlaygroundProps) {
       }),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editorSessionId, hasLanguage]);
+  }, [editorSessionId, hasLanguage, sessionLanguage]);
 
   const hash = isSicpEditor ? props.initialEditorValueHash : location.hash;
 
