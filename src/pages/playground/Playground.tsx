@@ -76,6 +76,7 @@ import type {
   Input,
   SelectionRange,
 } from '../../features/eventLogging/EventLoggingTypes';
+import { hashNamesLanguage, languageOfSnippetAt } from '../../features/sicp/snippetLanguage';
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   desktopOnlyTabIds,
@@ -298,6 +299,12 @@ function Playground(props: PlaygroundProps) {
   const usingRemoteExecution =
     useAppSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
 
+  // A snippet of the textbook can change the language after the session started (see the effect
+  // that selects the language of its chapter), and its events belong to that language, so there a
+  // change of language is a new session. In the playground it is not: the reader switches language
+  // within a session.
+  const sessionLanguage = isSicpEditor ? languagePosition : 0;
+
   useEffect(() => {
     // When the editor session Id changes, or the first language is selected, then treat it as a
     // new session.
@@ -312,7 +319,7 @@ function Playground(props: PlaygroundProps) {
       }),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editorSessionId, hasLanguage]);
+  }, [editorSessionId, hasLanguage, sessionLanguage]);
 
   const hash = isSicpEditor ? props.initialEditorValueHash : location.hash;
 
@@ -345,6 +352,20 @@ function Playground(props: PlaygroundProps) {
     },
     [handleEditorValueChange],
   );
+
+  // A snippet of the textbook whose link names no language runs in the language of its chapter.
+  // The directory loads asynchronously, so this waits for it.
+  const languages = useAppSelector(state => state.languageDirectory.languages);
+  const snippetPathname = location.pathname;
+  useEffect(() => {
+    if (!isSicpEditor || !hash || hashNamesLanguage(hash)) {
+      return;
+    }
+    const language = languageOfSnippetAt(languages, snippetPathname);
+    if (language) {
+      dispatch(LanguageDirectoryActions.setSelectedLanguage(language.id));
+    }
+  }, [dispatch, hash, isSicpEditor, languages, snippetPathname]);
 
   // The directory loads asynchronously, so the language is not known on mount.
   const isLanguageDirectoryLoaded = useAppSelector(
