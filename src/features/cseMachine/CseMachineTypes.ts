@@ -1,15 +1,15 @@
-import {
-  EnvTree as EnvironmentTree,
-  EnvTreeNode as EnvironmentTreeNode,
-} from 'js-slang/dist/createContext';
 import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
-import type { Environment } from 'js-slang/dist/types';
 import type { KonvaEventObject } from 'konva/lib/Node';
 
 import { ArrayUnit } from './components/ArrayUnit';
 import { Binding } from './components/Binding';
 import { Frame } from './components/Frame';
 import { Level } from './components/Level';
+import type {
+  Environment,
+  EnvTree as EnvironmentTree,
+  EnvTreeNode as EnvironmentTreeNode,
+} from './CseRenderTypes';
 import { Continuation } from './utils/continuation';
 
 /** this interface defines a drawing function */

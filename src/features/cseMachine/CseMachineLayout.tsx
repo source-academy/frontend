@@ -1,7 +1,5 @@
-import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Chapter } from 'js-slang/dist/langs';
-import type { Frame } from 'js-slang/dist/types';
 import { Group as KonvaGroupNode } from 'konva/lib/Group';
 import { Layer as KonvaLayerNode } from 'konva/lib/Layer';
 import type { KonvaEventObject } from 'konva/lib/Node';
@@ -61,6 +59,7 @@ import {
   isUnassigned,
   setDifference,
 } from './CseMachineUtils';
+import { type Frame, Heap } from './CseRenderTypes';
 import { Continuation, isContinuation } from './utils/continuation';
 export type LayoutCache = {
   framesX: Map<string, number>;
