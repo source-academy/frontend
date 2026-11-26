@@ -1,12 +1,13 @@
 import type { Store } from '@reduxjs/toolkit';
 import { getLanguageOfTextbookChapter, languages } from '@sourceacademy/language-directory';
 import { plugins } from '@sourceacademy/plugin-directory';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { compressToEncodedURIComponent } from 'lz-string';
 import { act } from 'react';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import type { OverallState } from 'src/commons/application/ApplicationTypes';
+import { Links } from 'src/commons/utils/Constants';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
@@ -22,6 +23,13 @@ vi.mock('src/features/eventLogging', async importOriginal => ({
   ...(await importOriginal<typeof import('src/features/eventLogging')>()),
   initSession: vi.fn(() => 'test-session'),
   log: vi.fn(),
+}));
+
+// The share button of the editor, to see the link that it is given.
+vi.mock('src/commons/controlBar/ControlBarShareButton', () => ({
+  default: (props: { queryString?: string }) => (
+    <div data-testid="share-link" data-link={props.queryString} />
+  ),
 }));
 
 // Mock inspector
@@ -105,6 +113,18 @@ describe('a snippet of the textbook', () => {
 
     expect(selectedLanguageId()).toBe(languageOfChapter('/sicpjs', '3'));
     expect(store.getState().workspaces.sicp.editorTabs[0].value).toBe('display(2); // typed');
+  });
+
+  test('is shared with a link in the scheme of today, for the language that it runs in', async () => {
+    // A link from before the language directory, with a Source chapter.
+    await renderSnippet('/sicpjs/3.2', `chap=3&variant=default&prgrm=${program}`);
+    const link = screen.getAllByTestId('share-link')[0].getAttribute('data-link');
+    expect(link).toMatch(
+      new RegExp(
+        `^${Links.playground}#prgrm=${program.replace(/\+/g, '\\+')}&language=source&variant=3`,
+      ),
+    );
+    expect(link).not.toContain('chap=');
   });
 
   test('starts its event-log session in the language of its chapter, not in the one selected before', async () => {

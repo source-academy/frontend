@@ -26,3 +26,21 @@ export function splitEvaluatorId(languageId: string, evaluatorId: string): strin
 export function joinEvaluatorId(languageId: string, evaluatorSuffix: string): string {
   return `${languageId}${evaluatorSuffix}`;
 }
+
+/**
+ * The three fields that a share link names a language by (`language`, `variant`, `evaluator`), for
+ * the selected language and evaluator of the directory; all of them absent when there is none.
+ */
+export function languageShareFields(
+  selectedLanguageId: string | null,
+  selectedEvaluatorId: string | null,
+): { language?: string; variant?: string; evaluator?: string } {
+  if (!selectedLanguageId) {
+    return {};
+  }
+  const { language, variant } = splitLanguageId(selectedLanguageId);
+  const evaluator = selectedEvaluatorId
+    ? splitEvaluatorId(selectedLanguageId, selectedEvaluatorId)
+    : undefined;
+  return { language, variant, evaluator };
+}
