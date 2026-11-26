@@ -6041,40 +6041,40 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ag-charts-types@npm:14.2.0":
-  version: 14.2.0
-  resolution: "ag-charts-types@npm:14.2.0"
-  checksum: 10c0/78a14697f9598973ca376ace040875af26c304e79e359dd398abad86a85c1dba404a3824401b24f26a788e56cdfb86fc3b86758b7e8e16cd70aedc53b19394e8
+"ag-charts-types@npm:14.3.0":
+  version: 14.3.0
+  resolution: "ag-charts-types@npm:14.3.0"
+  checksum: 10c0/b23efa2c6f5ddf3280cc39b0efbc81e70cbd62c238354fbb65c941c54c2047acef7a653cdeb909e7cd61797de778fc37d49432af14b440514bce89ca15c68e2a
   languageName: node
   linkType: hard
 
-"ag-grid-community@npm:36.2.0, ag-grid-community@npm:^36.0.0":
-  version: 36.2.0
-  resolution: "ag-grid-community@npm:36.2.0"
+"ag-grid-community@npm:36.3.0, ag-grid-community@npm:^36.0.0":
+  version: 36.3.0
+  resolution: "ag-grid-community@npm:36.3.0"
   dependencies:
-    ag-charts-types: "npm:14.2.0"
-    ag-stack: "npm:36.2.0"
-  checksum: 10c0/90eca56199121ee06fb10e5528a8b92f98e1ce574fc99d08339e3f14468fddf992ad1c42e6c029f9edf6fed51df0ddf89c1e4491437a67685364e37fa0618b8b
+    ag-charts-types: "npm:14.3.0"
+    ag-stack: "npm:36.3.0"
+  checksum: 10c0/d9ea07a3d3ba8d0bdd82fbfb9531419868e02352fc6428b963eb10e46db6db7aae96f84bf5afe983b30723fb9a3847428c48fded9f58ae01eab18da4c626db7f
   languageName: node
   linkType: hard
 
 "ag-grid-react@npm:^36.0.0":
-  version: 36.2.0
-  resolution: "ag-grid-react@npm:36.2.0"
+  version: 36.3.0
+  resolution: "ag-grid-react@npm:36.3.0"
   dependencies:
-    ag-grid-community: "npm:36.2.0"
+    ag-grid-community: "npm:36.3.0"
     prop-types: "npm:^15.8.1"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/c46216961f3eb93a000c57102c8aedef6be73353f3495fb4f19ee2f9b3691bf01a8a52d52a9f21fbc1819abe80a96ee300507b801701891c846607dd938d1b3c
+  checksum: 10c0/1c57655023ea599a640186cbcdac31c89a6bb765259a5c9cd675d3adb95cd33fe4733ee2dcf90cf3513c640e282330543e99900f7147e22d799ca5868e29963d
   languageName: node
   linkType: hard
 
-"ag-stack@npm:36.2.0":
-  version: 36.2.0
-  resolution: "ag-stack@npm:36.2.0"
-  checksum: 10c0/c3428b8b5204d4b4ba3c14c482e7248c1a29272552e87c9768b0afe76faac5bfc3c29b77f469b3534f053e203f3b661a0b0e657541e81cddd2affdcb01733cd9
+"ag-stack@npm:36.3.0":
+  version: 36.3.0
+  resolution: "ag-stack@npm:36.3.0"
+  checksum: 10c0/f600d9cc9a180fa26555e86dfa2e3a96f26c1fc1fcc4cca2e3aa316d7abc4979d308cd36477cd0cec88677cf0f34cf4deafcaf84de74835e536574b54cc6ff6c
   languageName: node
   linkType: hard
 
