@@ -1,4 +1,3 @@
-import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Group as KonvaGroupNode } from 'konva/lib/Group';
 import { Layer as KonvaLayerNode } from 'konva/lib/Layer';
 import type { KonvaEventObject } from 'konva/lib/Node';
@@ -58,6 +57,7 @@ import {
   isUnassigned,
   setDifference,
 } from './CseMachineUtils';
+import type { Control, Stash } from './CseRenderTypes';
 import { type Frame, Heap } from './CseRenderTypes';
 import { type Continuation, isContinuation } from './utils/continuation';
 export type LayoutCache = {
