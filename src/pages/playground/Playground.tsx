@@ -27,6 +27,7 @@ import sideContentManager, {
 } from 'src/commons/sideContent/SideContentManager';
 import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 import { useAppDispatch, useAppSelector, useResponsive } from 'src/commons/utils/Hooks';
+import { recordLegacyUsage } from 'src/commons/utils/legacyUsage';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import { CSE_EVALUATOR_CAPABILITY, isToolEvaluator } from 'src/features/conductor/toolEvaluators';
@@ -169,6 +170,7 @@ export async function handleHash(
     // Links from before the language directory encode a Source chapter in `chap`; the
     // directory's Source languages are named after them. The old variants (typed, native, ...)
     // have no directory counterpart, so they open the chapter's default.
+    recordLegacyUsage('share-link-chapter');
     dispatch(
       LanguageDirectoryActions.setSelectedLanguage(joinLanguageId('source', `${legacyChapter}`)),
     );

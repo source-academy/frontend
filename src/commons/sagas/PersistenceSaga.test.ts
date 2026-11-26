@@ -6,6 +6,7 @@ import PlaygroundActions from 'src/features/playground/PlaygroundActions';
 import { assert, beforeAll, describe, expect, test, vi } from 'vitest';
 
 import { actions } from '../utils/ActionsHelper';
+import { recordLegacyUsage } from '../utils/legacyUsage';
 import PersistenceSaga from './PersistenceSaga';
 
 // mock away the store - the store can't be created in a test, it leads to
@@ -13,6 +14,8 @@ import PersistenceSaga from './PersistenceSaga';
 // this is before the import below because we need to ensure PersistenceSaga's
 // store import is mocked
 vi.mock('../../pages/createStore');
+// Counting the use of a legacy path goes to Sentry; here it is only checked that it happens.
+vi.mock('../utils/legacyUsage', () => ({ recordLegacyUsage: vi.fn() }));
 
 const USER_EMAIL = 'test@email.com';
 const FILE_ID = '123';
@@ -146,7 +149,10 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
         workspaces: { playground: { activeEditorTabIndex: 0, editorTabs: [{ value: FILE_DATA }] } },
       })
       .put(LanguageDirectoryActions.setSelectedLanguage('source2'))
-      .silentRun();
+      .silentRun()
+      .then(() => {
+        expect(recordLegacyUsage).toHaveBeenCalledWith('drive-file-chapter');
+      });
   });
 
   test('does not open if picker cancelled', () => {

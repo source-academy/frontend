@@ -12,6 +12,7 @@ import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { showSimpleConfirmDialog, showSimplePromptDialog } from '../utils/DialogHelper';
+import { recordLegacyUsage } from '../utils/legacyUsage';
 import {
   dismiss,
   showMessage,
@@ -91,6 +92,7 @@ const PersistenceSaga = combineSagaHandlers({
             // Files saved before the language directory recorded a Source chapter (their
             // variants have no directory counterpart); the directory's Source languages are
             // named after the chapters, as in legacy share links.
+            recordLegacyUsage('drive-file-chapter');
             yield put(LanguageDirectoryActions.setSelectedLanguage(`source${chapter}`));
           }
         }
