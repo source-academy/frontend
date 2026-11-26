@@ -1,18 +1,3 @@
-import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
-import type {
-  AppInstr,
-  ArrLitInstr,
-  AssmtInstr,
-  BinOpInstr,
-  ControlItem,
-  EnvInstr,
-  Instr,
-  UnOpInstr,
-} from 'js-slang/dist/cse-machine/types';
-import { InstrType } from 'js-slang/dist/cse-machine/types';
-import { Chapter } from 'js-slang/dist/langs';
-import type { Environment, Value as StashValue } from 'js-slang/dist/types';
-import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
@@ -32,6 +17,17 @@ import { ContValue } from './components/values/ContValue';
 import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
+import type {
+  AppInstr,
+  ArrLitInstr,
+  AssmtInstr,
+  BinOpInstr,
+  ControlItem,
+  EnvInstr,
+  Instr,
+  UnOpInstr,
+} from './CseInstructions';
+import { InstrType } from './CseInstructions';
 import CseMachine from './CseMachine';
 import { Config } from './CseMachineConfig';
 import { Layout } from './CseMachineLayout';
@@ -53,6 +49,8 @@ import type {
   StreamFn,
   Unassigned,
 } from './CseMachineTypes';
+import type { Environment, Value as StashValue } from './CseRenderTypes';
+import { astToString } from './utils/astToString';
 import { isContinuation } from './utils/continuation';
 class AssertionError extends Error {
   constructor(msg?: string) {
@@ -154,13 +152,15 @@ export function isPredefinedFn(data: Data): data is PredefinedFn {
 
 const closureFields = ['id', 'environment', 'functionName', 'predefined', 'node', 'originalNode'];
 
-/** Returns `true` if `data` is a JS Slang closure */
+/**
+ * Returns `true` if `data` is a closure: a function with the fields of `Closure` as own properties
+ * (js-slang's own closures have them, so they need no `instanceof` check of their own).
+ */
 export function isClosure(data: Data): data is Closure {
   const obj = {};
   return (
-    data instanceof JsSlangClosure ||
-    (isFunction(data) &&
-      closureFields.reduce((prev, field) => prev && obj.hasOwnProperty.call(data, field), true))
+    isFunction(data) &&
+    closureFields.reduce((prev, field) => prev && obj.hasOwnProperty.call(data, field), true)
   );
 }
 
@@ -994,7 +994,6 @@ export function getControlItemComponent(
   index: number,
   highlightOnHover: () => void,
   unhighlightOnHover: () => void,
-  chapter: Chapter,
 ): ControlItemComponent {
   const topItem = CseMachine.getStackTruncated()
     ? index === Math.min(Layout.control.size() - 1, 9)
@@ -1272,7 +1271,6 @@ export function getStashItemComponent(
   stashItem: StashValue,
   stackHeight: number,
   index: number,
-  _chapter: Chapter,
 ): StashItemComponent {
   let arrowTo: ArrayValue | FnValue | GlobalFnValue | ContValue | undefined;
   if (isFunction(stashItem) || isDataArray(stashItem || isContinuation(stashItem))) {

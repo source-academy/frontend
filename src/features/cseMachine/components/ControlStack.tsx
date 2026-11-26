@@ -1,10 +1,7 @@
-import { Control } from 'js-slang/dist/cse-machine/interpreter';
-import type { ControlItem, Instr } from 'js-slang/dist/cse-machine/types';
-import { Chapter } from 'js-slang/dist/langs';
-import type { Node, StatementSequence } from 'js-slang/dist/types';
 import type { KonvaEventObject } from 'konva/lib/Node';
 import { Label, Tag, Text } from 'react-konva';
 
+import type { ControlItem, Instr, Node, StatementSequence } from '../CseInstructions';
 import CseMachine from '../CseMachine';
 import { Config } from '../CseMachineConfig';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
@@ -19,6 +16,7 @@ import {
   setUnhoveredCursor,
   setUnhoveredStyle,
 } from '../CseMachineUtils';
+import type { Control } from '../CseRenderTypes';
 import { ControlItemComponent } from './ControlItemComponent';
 import { Visible } from './Visible';
 
@@ -29,7 +27,6 @@ export class ControlStack extends Visible implements IHoverable {
   constructor(
     /** the control object */
     readonly control: Control,
-    readonly chapter: Chapter,
   ) {
     super();
     this._x = ControlStashConfig.ControlPosX;
@@ -37,7 +34,6 @@ export class ControlStack extends Visible implements IHoverable {
     this._width = ControlStashConfig.ControlItemWidth;
     this._height = ControlStashConfig.StashItemHeight + ControlStashConfig.StashItemTextPadding * 2;
     this.control = control;
-    this.chapter = chapter;
 
     // Function to convert the stack items to their components
     let i = 0;
@@ -64,7 +60,6 @@ export class ControlStack extends Visible implements IHoverable {
         i,
         highlightOnHover,
         unhighlightOnHover,
-        this.chapter,
       );
       this._height += component.height();
       i += 1;

@@ -1,4 +1,4 @@
-import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
+import type { CseSnapshot, CseTraceEnd } from '../../features/conductor/CseMachineHostPlugin';
 import type { AllColsSortStates } from '../../features/grading/GradingTypes';
 import type { HighlightedLines, Position } from '../editor/EditorTypes';
 import { createActions } from '../redux/utils';
@@ -190,6 +190,10 @@ const newActions = createActions('workspace', {
   }),
   updateCseSnapshots: (snapshots: CseSnapshot[] | null, workspaceLocation: WorkspaceLocation) => ({
     snapshots,
+    workspaceLocation,
+  }),
+  updateCseEnd: (end: CseTraceEnd | null, workspaceLocation: WorkspaceLocation) => ({
+    end,
     workspaceLocation,
   }),
   // For grading table

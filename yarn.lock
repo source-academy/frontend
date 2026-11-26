@@ -6318,7 +6318,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astring@npm:^1.4.3":
+"astring@npm:^1.4.3, astring@npm:^1.9.0":
   version: 1.9.0
   resolution: "astring@npm:1.9.0"
   bin:
@@ -8870,6 +8870,7 @@ __metadata:
     acorn: "npm:^8.9.0"
     ag-grid-community: "npm:^36.0.0"
     ag-grid-react: "npm:^36.0.0"
+    astring: "npm:^1.9.0"
     browserfs: "npm:^1.4.3"
     canvas: "npm:^3.1.0"
     classnames: "npm:^2.3.2"
