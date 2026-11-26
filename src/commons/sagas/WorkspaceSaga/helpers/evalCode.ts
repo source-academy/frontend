@@ -671,8 +671,7 @@ export function* evalCodeConductorSaga(
     yield put(actions.setIsRunning(true, workspaceLocation));
   }
 
-  // Inject step limit so the evaluator knows how many snapshots to collect
-  const { stepLimit, editorTabs, activeEditorTabIndex, programPrependValue } =
+  const { editorTabs, activeEditorTabIndex, programPrependValue } =
     yield* selectWorkspace(workspaceLocation);
   // Gutter-click breakpoints (py-slang#383): the active tab's ace breakpoints, resolved to
   // 1-indexed lines and threaded into /__cse_config__ so the evaluator can mark the closest
@@ -701,7 +700,7 @@ export function* evalCodeConductorSaga(
   );
   const filesWithConfig = {
     ...files,
-    '/__cse_config__': JSON.stringify({ stepLimit, breakpointLines }),
+    '/__cse_config__': JSON.stringify({ breakpointLines }),
   };
 
   try {

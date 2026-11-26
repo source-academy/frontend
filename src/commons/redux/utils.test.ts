@@ -24,7 +24,7 @@ test('test combineSagaHandlers', () => {
     [WorkspaceActions.updateCurrentStep.type]: {
       takeLatest: mockTakeLatestHandler,
     },
-    [WorkspaceActions.changeStepLimit.type]: {
+    [WorkspaceActions.changeExecTime.type]: {
       takeLeading: mockTakeLeadingHandler,
     },
   });
@@ -37,7 +37,7 @@ test('test combineSagaHandlers', () => {
     .next()
     .takeLatest(WorkspaceActions.updateCurrentStep.type, mockTakeLatestHandler)
     .next()
-    .takeLeading(WorkspaceActions.changeStepLimit.type, mockTakeLeadingHandler)
+    .takeLeading(WorkspaceActions.changeExecTime.type, mockTakeLeadingHandler)
     .next()
     .isDone();
 });

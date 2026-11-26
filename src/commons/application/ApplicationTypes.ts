@@ -181,7 +181,6 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   tokenCount: 0,
   customNotification: '',
   sharedbConnected: false,
-  stepLimit: 1000,
   isRunning: false,
   isWaitingForInput: false,
   enableDebugging: true,

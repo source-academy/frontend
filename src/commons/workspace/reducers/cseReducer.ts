@@ -8,11 +8,6 @@ export const handleCseAndStepperActions = (
   builder: ActionReducerMapBuilder<WorkspaceManagerState>,
 ) => {
   builder
-    .addCase(WorkspaceActions.changeStepLimit, (state, action) => {
-      // TODO: Use a separate step limit for CSE and Stepper
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].stepLimit = action.payload.stepLimit;
-    })
     .addCase(WorkspaceActions.updateCurrentStep, (state, action) => {
       // For some reason mutating the state directly results in type
       // errors, so we have to do it the old-fashioned way

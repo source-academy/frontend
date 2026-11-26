@@ -51,7 +51,6 @@ import ControlBarEvalButton from '../../commons/controlBar/ControlBarEvalButton'
 import ControlBarGoogleDriveButtons from '../../commons/controlBar/ControlBarGoogleDriveButtons';
 import ControlBarSessionButtons from '../../commons/controlBar/ControlBarSessionButton';
 import ControlBarShareButton from '../../commons/controlBar/ControlBarShareButton';
-import ControlBarStepLimit from '../../commons/controlBar/ControlBarStepLimit';
 import ControlBarToggleFolderModeButton from '../../commons/controlBar/ControlBarToggleFolderModeButton';
 import ControlBarGitHubButtons from '../../commons/controlBar/github/ControlBarGitHubButtons';
 import {
@@ -212,7 +211,6 @@ function Playground(props: PlaygroundProps) {
     editorTabs,
     editorSessionId,
     sessionDetails,
-    stepLimit,
     isRunning,
     output,
     replValue,
@@ -480,23 +478,6 @@ function Playground(props: PlaygroundProps) {
     isFolderModeEnabled,
   ]);
 
-  const stepperStepLimit = useMemo(
-    () => (
-      <ControlBarStepLimit
-        stepLimit={stepLimit}
-        stepSize={1}
-        handleChangeStepLimit={limit => {
-          dispatch(WorkspaceActions.changeStepLimit(limit, workspaceLocation));
-        }}
-        handleOnBlurAutoScale={limit => {
-          dispatch(WorkspaceActions.changeStepLimit(limit, workspaceLocation));
-        }}
-        key="step_limit"
-      />
-    ),
-    [dispatch, stepLimit, workspaceLocation],
-  );
-
   const getEditorValue = useCallback(
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     () => store.getState().workspaces[workspaceLocation].editorTabs[0].value,
@@ -637,9 +618,6 @@ function Playground(props: PlaygroundProps) {
     () => toolTabsOf(conductorEvaluators, pluginMap),
     [conductorEvaluators, pluginMap],
   );
-  // Whether the language has an evaluator that a plugin's tab belongs to. From the language directory
-  // alone, so it holds before the plugin directory has loaded.
-  const hasPluginEvaluator = conductorEvaluators.some(e => e.plugin);
   const selectedTabBehaviour = tabBehaviour(pluginMap, selectedTab as string);
 
   const selectedTabOwnerPath = useTabOwnerPath(selectedTab);
@@ -980,10 +958,6 @@ function Playground(props: PlaygroundProps) {
         toggleFolderModeButton,
         persistenceButtons,
         githubButtons,
-        // Conductor languages (e.g. Python) whose selected sublanguage offers a stepper or CSE
-        // machine evaluator: their step limit is user-configurable too, driven by this same
-        // control through the /__cse_config__ file the host serves per run.
-        hasPluginEvaluator || cseEvaluatorId !== null ? stepperStepLimit : null,
       ],
     },
     editorContainerProps: editorContainerProps,
