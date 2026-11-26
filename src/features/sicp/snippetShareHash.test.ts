@@ -32,11 +32,17 @@ describe('snippetShareHash', () => {
     );
   });
 
-  test('a language without a variant has none, and no selected language names none', () => {
+  test('a language without a variant has none', () => {
     expect(snippetShareHash('prgrm=abc', 'pythonFull', 'pythonFullPvml')).toBe(
       'prgrm=abc&language=pythonFull&evaluator=Pvml',
     );
-    expect(snippetShareHash('chap=2&prgrm=abc', null, null)).toBe('prgrm=abc');
+  });
+
+  test("is the snippet's own link while no language is selected (the directory is loading)", () => {
+    expect(snippetShareHash('chap=2&prgrm=abc', null, null)).toBe('chap=2&prgrm=abc');
+    expect(snippetShareHash('language=python&variant=1&prgrm=abc', null, null)).toBe(
+      'language=python&variant=1&prgrm=abc',
+    );
   });
 
   test('does not mistake the name of another field for a language field', () => {

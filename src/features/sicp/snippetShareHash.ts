@@ -18,6 +18,11 @@ export function snippetShareHash(
   selectedLanguageId: string | null,
   selectedEvaluatorId: string | null,
 ): string {
+  // The directory loads after the editor mounts. Until a language is selected there is nothing to
+  // name it by, and the snippet's own link, which may name one, is the better link.
+  if (!selectedLanguageId) {
+    return hash;
+  }
   const kept = hash.split('&').filter(segment => {
     const name = segment.split('=')[0];
     return segment !== '' && !LANGUAGE_FIELDS.includes(name);

@@ -26,11 +26,13 @@ vi.mock('src/features/eventLogging', async importOriginal => ({
 }));
 
 // The share button of the editor, to see the link that it is given.
-vi.mock('src/commons/controlBar/ControlBarShareButton', () => ({
-  default: (props: { queryString?: string }) => (
-    <div data-testid="share-link" data-link={props.queryString} />
-  ),
-}));
+type ShareButtonProps = { queryString?: string };
+vi.mock('src/commons/controlBar/ControlBarShareButton', () => {
+  function ControlBarShareButton({ queryString }: ShareButtonProps) {
+    return <div data-testid="share-link" data-link={queryString} />;
+  }
+  return { default: ControlBarShareButton };
+});
 
 // Mock inspector
 (window as any).Inspector = vi.fn();
