@@ -59,7 +59,7 @@ import {
   setDifference,
 } from './CseMachineUtils';
 import { type Frame, Heap } from './CseRenderTypes';
-import { Continuation, isContinuation } from './utils/continuation';
+import { type Continuation, isContinuation } from './utils/continuation';
 export type LayoutCache = {
   framesX: Map<string, number>;
   framesY: Map<string, number>;
