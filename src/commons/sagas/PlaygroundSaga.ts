@@ -2,7 +2,7 @@ import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
 import { call, delay, put, race, select } from 'redux-saga/effects';
-import { splitEvaluatorId, splitLanguageId } from 'src/features/directory/languageIdCodec';
+import { languageShareFields } from 'src/features/directory/languageIdCodec';
 
 import PlaygroundActions from '../../features/playground/PlaygroundActions';
 import type { OverallState } from '../application/ApplicationTypes';
@@ -69,13 +69,7 @@ function* updateQueryString() {
 
   // Decompose the compound directory ids (e.g. "python2" / "python2Pvml") into the three
   // fields a share link exposes, instead of leaking the raw id-concatenation convention.
-  const { language: dirLanguage, variant: dirVariant } = selectedLanguageId
-    ? splitLanguageId(selectedLanguageId)
-    : { language: undefined, variant: undefined };
-  const dirEvaluator =
-    selectedLanguageId && selectedEvaluatorId
-      ? splitEvaluatorId(selectedLanguageId, selectedEvaluatorId)
-      : undefined;
+  const languageFields = languageShareFields(selectedLanguageId, selectedEvaluatorId);
 
   const editorTabFilePaths = editorTabs
     .map(editorTab => editorTab.filePath)
@@ -88,9 +82,7 @@ function* updateQueryString() {
     tabIdx: activeEditorTabIndex,
     // `chap` is deliberately not encoded: it always has a real default value, so it would win
     // on decode and shadow `language`.
-    variant: dirVariant,
-    language: dirLanguage,
-    evaluator: dirEvaluator,
+    ...languageFields,
   });
   yield put(PlaygroundActions.changeQueryString(newQueryString));
 }

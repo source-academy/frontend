@@ -77,6 +77,7 @@ import type {
   SelectionRange,
 } from '../../features/eventLogging/EventLoggingTypes';
 import { hashNamesLanguage, languageOfSnippetAt } from '../../features/sicp/snippetLanguage';
+import { snippetShareHash } from '../../features/sicp/snippetShareHash';
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   desktopOnlyTabIds,
@@ -538,8 +539,19 @@ function Playground(props: PlaygroundProps) {
     ],
   );
 
+  const selectedLanguageId = useAppSelector(state => state.languageDirectory.selectedLanguageId);
+  const selectedEvaluatorId = useAppSelector(state => state.languageDirectory.selectedEvaluatorId);
+
   const shareButton = useMemo(() => {
-    const qs = isSicpEditor ? Links.playground + '#' + props.initialEditorValueHash : queryString;
+    const qs = isSicpEditor
+      ? Links.playground +
+        '#' +
+        snippetShareHash(
+          props.initialEditorValueHash ?? '',
+          selectedLanguageId,
+          selectedEvaluatorId,
+        )
+      : queryString;
     return (
       <ControlBarShareButton
         handleGenerateLz={() => dispatch(generateLzString())}
@@ -551,7 +563,15 @@ function Playground(props: PlaygroundProps) {
         key="share"
       />
     );
-  }, [dispatch, isSicpEditor, props.initialEditorValueHash, queryString, shortURL]);
+  }, [
+    dispatch,
+    isSicpEditor,
+    props.initialEditorValueHash,
+    queryString,
+    selectedEvaluatorId,
+    selectedLanguageId,
+    shortURL,
+  ]);
 
   // Language Directory's foldersEnabled (defaults to true when the field is
   // absent — legacy/non-directory languages, and any directory language
@@ -604,8 +624,6 @@ function Playground(props: PlaygroundProps) {
   // plugin directory describes it); the CSE Machine's tab is offered for a language with a
   // cse-capability evaluator. Opening a tab selects its (dropdown-hidden) evaluator so a Run drives the
   // tool, and leaving it restores the language's default evaluator. See the effect below.
-  const selectedLanguageId = useAppSelector(state => state.languageDirectory.selectedLanguageId);
-  const selectedEvaluatorId = useAppSelector(state => state.languageDirectory.selectedEvaluatorId);
   const cseEvaluatorId = useAppSelector(state => {
     const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
     const lang = langId ? languageMap[langId] : undefined;
