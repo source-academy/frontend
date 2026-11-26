@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate, useOutletContext, useParams } from 'react-router';
 import { useAppSelector } from 'src/commons/utils/Hooks';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
+import { SICPY_ROUTE, textbookLanguageAt } from 'src/features/textbook/textbooks';
 import SicPyIndexPage from 'src/pages/sicp/subcomponents/sicpIndexPage/SicPyIndexPage';
 import { queries } from 'src/queryKeys';
 
@@ -12,7 +13,7 @@ function SicpPyPage() {
   const { section } = useParams<{ section: string }>();
   const navigate = useNavigate();
   const titleImageUrl = useAppSelector(
-    s => s.languageDirectory.languageMap['python1']?.textbook?.titleImageUrl,
+    s => textbookLanguageAt(s.languageDirectory.languages, SICPY_ROUTE)?.textbook?.titleImageUrl,
   );
   const { data: tocNavigation } = useQuery(queries.sicp.tocNavigationPy);
 

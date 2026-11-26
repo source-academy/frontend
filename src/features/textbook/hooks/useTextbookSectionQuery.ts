@@ -1,8 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 import { setLocalStorage } from 'src/commons/hooks/useLocalStorageState';
+import { useAppSelector } from 'src/commons/utils/Hooks';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { queries } from 'src/queryKeys';
+
+import { SICPJS_ROUTE, SICPY_ROUTE, textbookHighlightLanguage } from '../textbooks';
 
 export const SICP_INDEX = 'index';
 export const SICP_CACHE_KEY = 'sicp-section';
@@ -39,12 +42,15 @@ const defaultRefs: Record<'js' | 'py', Record<string, HTMLElement | null>> = {
 
 export function useSicpJsSectionQuery(section: string | undefined) {
   const refs = useRef<Record<string, HTMLElement | null>>(defaultRefs.js);
+  const language = useAppSelector(s =>
+    textbookHighlightLanguage(s.languageDirectory.languages, SICPJS_ROUTE),
+  );
   const { data, error, isPending, isFetching } = useQuery({
     ...queries.sicp.sectionJs(section ?? ''),
     enabled: !!section && section !== SICP_INDEX,
     select: json => {
       try {
-        return parseArr(json, refs);
+        return parseArr(json, refs, language);
       } catch (e) {
         throw new ParseJsonError('Failed to parse SICP JSON', { cause: e });
       }
@@ -64,12 +70,15 @@ export const SICPY_CACHE_KEY = 'sicPy-section';
 
 export function useSicPySectionQuery(section: string | undefined) {
   const refs = useRef<Record<string, HTMLElement | null>>(defaultRefs.py);
+  const language = useAppSelector(s =>
+    textbookHighlightLanguage(s.languageDirectory.languages, SICPY_ROUTE),
+  );
   const { data, error, isPending, isFetching } = useQuery({
     ...queries.sicp.sectionPy(section ?? ''),
     enabled: !!section && section !== SICPY_INDEX,
     select: json => {
       try {
-        return parseArr(json, refs, 'python');
+        return parseArr(json, refs, language);
       } catch (e) {
         throw new ParseJsonError('Failed to parse SICPy JSON', { cause: e });
       }

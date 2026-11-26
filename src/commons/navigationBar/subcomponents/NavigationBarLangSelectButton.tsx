@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useAppDispatch, useAppSelector } from 'src/commons/utils/Hooks';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
+import { isTextbookPath } from 'src/features/textbook/textbooks';
 
 function useDirectoryOptions() {
   const langs = useAppSelector(s => s.languageDirectory.languages);
@@ -14,6 +15,7 @@ const NavigationBarLangSelectButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const selectedDirLanguageId = useAppSelector(s => s.languageDirectory.selectedLanguageId);
   const languageMap = useAppSelector(s => s.languageDirectory.languageMap);
+  const languages = useAppSelector(s => s.languageDirectory.languages);
 
   const dispatch = useAppDispatch();
   const dirOptions = useDirectoryOptions();
@@ -24,9 +26,7 @@ const NavigationBarLangSelectButton = () => {
     dispatch(LanguageDirectoryActions.setSelectedLanguage(languageId));
     setIsOpen(false);
 
-    const isInTextbook =
-      location.pathname.startsWith('/sicpjs') || location.pathname.startsWith('/sicpy');
-    if (isInTextbook) {
+    if (isTextbookPath(languages, location.pathname)) {
       const newLang = languageMap[languageId];
       if (newLang?.textbook) {
         navigate(`${newLang.textbook.route}/index`);

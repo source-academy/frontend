@@ -19,6 +19,7 @@ import { type Location, NavLink, useLocation, useMatch } from 'react-router';
 
 import SicpNavigationBar from '../../features/textbook/navigationBar/SicpNavigationBar';
 import SicPyNavigationBar from '../../features/textbook/navigationBar/SicPyNavigationBar';
+import { SICPJS_ROUTE, SICPY_ROUTE, textbookRoutes } from '../../features/textbook/textbooks';
 import Dropdown from '../dropdown/Dropdown';
 import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByType } from '../notificationBadge/NotificationBadgeHelper';
@@ -91,8 +92,8 @@ function useSecondaryNavbarType() {
   const isContributors = useMatch('/contributors');
   const isAchievements = useMatch('/courses/:courseId/achievements/*');
   const isLeaderboard = useMatch('/courses/:courseId/leaderboard/*');
-  const isSicp = useMatch('/sicpjs/:section?');
-  const isSicpPy = useMatch('/sicpy/:section?');
+  const isSicp = useMatch(`${SICPJS_ROUTE}/:section?`);
+  const isSicpPy = useMatch(`${SICPY_ROUTE}/:section?`);
 
   const isHidden = isPlayground || isContributors || isAchievements || isLeaderboard;
 
@@ -142,6 +143,7 @@ function NavigationBar() {
     const id = s.languageDirectory.selectedLanguageId;
     return id ? s.languageDirectory.languageMap[id] : null;
   });
+  const languages = useAppSelector(s => s.languageDirectory.languages);
   // A language has a textbook button only if it defines a textbook.
   const textbookEntries: NavbarEntryInfo[] = useMemo(
     () =>
@@ -241,8 +243,7 @@ function NavigationBar() {
     );
     const topNavbarNavlinks = [
       '/playground',
-      '/sicpjs',
-      '/sicpy',
+      ...textbookRoutes(languages),
       '/contributors',
       `/courses/${courseId}/achievements`,
       `/courses/${courseId}/leaderboard`,
