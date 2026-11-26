@@ -76,6 +76,7 @@ import type {
   Input,
   SelectionRange,
 } from '../../features/eventLogging/EventLoggingTypes';
+import { hashNamesLanguage, languageOfSnippetAt } from '../../features/sicp/snippetLanguage';
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   desktopOnlyTabIds,
@@ -345,6 +346,20 @@ function Playground(props: PlaygroundProps) {
     },
     [handleEditorValueChange],
   );
+
+  // A snippet of the textbook whose link names no language runs in the language of its chapter.
+  // The directory loads asynchronously, so this waits for it.
+  const languages = useAppSelector(state => state.languageDirectory.languages);
+  const snippetPathname = location.pathname;
+  useEffect(() => {
+    if (!isSicpEditor || !hash || hashNamesLanguage(hash)) {
+      return;
+    }
+    const language = languageOfSnippetAt(languages, snippetPathname);
+    if (language) {
+      dispatch(LanguageDirectoryActions.setSelectedLanguage(language.id));
+    }
+  }, [dispatch, hash, isSicpEditor, languages, snippetPathname]);
 
   // The directory loads asynchronously, so the language is not known on mount.
   const isLanguageDirectoryLoaded = useAppSelector(

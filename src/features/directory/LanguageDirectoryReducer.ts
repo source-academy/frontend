@@ -1,5 +1,6 @@
 import { createReducer, type Reducer } from '@reduxjs/toolkit';
 import { generateLanguageMap } from '@sourceacademy/language-directory/dist/util';
+import { castDraft } from 'immer';
 
 import { defaultLanguageDirectory } from '../../commons/application/ApplicationTypes';
 import type { SourceActionType } from '../../commons/utils/ActionsHelper';
@@ -10,8 +11,11 @@ export const LanguageDirectoryReducer: Reducer<LanguageDirectoryState, SourceAct
   createReducer(defaultLanguageDirectory, builder => {
     builder
       .addCase(Actions.setLanguages, (state, action) => {
-        state.languages = action.payload.languages;
-        state.languageMap = Object.fromEntries(generateLanguageMap(action.payload.languages));
+        // The directory's definitions are readonly all the way down; the draft's type is not.
+        state.languages = castDraft(action.payload.languages);
+        state.languageMap = castDraft(
+          Object.fromEntries(generateLanguageMap(action.payload.languages)),
+        );
       })
       .addCase(Actions.setSelectedLanguage, (state, action) => {
         state.selectedLanguageId = action.payload.languageId;
