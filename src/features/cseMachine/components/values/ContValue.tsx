@@ -1,5 +1,4 @@
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
-import type { Environment } from 'js-slang/dist/types';
 import type { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
 import { createRef, Fragment } from 'react';
@@ -27,6 +26,7 @@ import {
   setHoveredCursor,
   setUnhoveredCursor,
 } from '../../CseMachineUtils';
+import type { Environment } from '../../CseRenderTypes';
 import { Continuation } from '../../utils/continuation';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';

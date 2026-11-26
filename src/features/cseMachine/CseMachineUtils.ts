@@ -11,7 +11,6 @@ import type {
 } from 'js-slang/dist/cse-machine/types';
 import { InstrType } from 'js-slang/dist/cse-machine/types';
 import { Chapter } from 'js-slang/dist/langs';
-import type { Environment, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
@@ -53,6 +52,7 @@ import type {
   StreamFn,
   Unassigned,
 } from './CseMachineTypes';
+import type { Environment, Value as StashValue } from './CseRenderTypes';
 import { isContinuation } from './utils/continuation';
 class AssertionError extends Error {
   constructor(msg?: string) {
