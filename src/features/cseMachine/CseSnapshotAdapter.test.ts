@@ -853,7 +853,6 @@ describe('assignment animation across a snapshot step (regression)', () => {
       1000,
       1000,
       () => {},
-      () => {},
     );
     if (!CseMachine.getControlStash()) {
       CseMachine.toggleControlStash();
@@ -899,7 +898,6 @@ describe('a closure whose home frame has no bindings keeps that frame visible (p
       () => {},
       1000,
       1000,
-      () => {},
       () => {},
     );
 

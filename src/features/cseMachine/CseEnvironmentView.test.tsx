@@ -372,7 +372,6 @@ describe('frames keep their places from step to step (source-academy/frontend#35
       600,
       400,
       () => {},
-      () => {},
     );
     const layoutSnapshot = snapshotWithAllFrames(run);
     const tabCallY = () =>
@@ -400,7 +399,6 @@ describe('frames keep their places from step to step (source-academy/frontend#35
       600,
       400,
       () => {},
-      () => {},
     );
     const layoutSnapshot = snapshotWithAllFrames(run);
     const animationFrames = () => ({
@@ -425,7 +423,6 @@ describe('a snapshot that cannot be laid out', () => {
       () => {},
       600,
       400,
-      () => {},
       () => {},
     );
     try {

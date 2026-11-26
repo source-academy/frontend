@@ -53,9 +53,6 @@ type State = {
   height: number;
   width: number;
   lastStep: boolean;
-  /** Whether the steps end before the program has finished (it was stopped, or ran for more steps
-   * than are recorded): the drawing is at the last step and the control still has items. */
-  endsUnfinished: boolean;
   chapter: Chapter;
   clearDeadFrames: boolean;
   arrowFilterOpen: boolean;
@@ -110,7 +107,6 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       width: this.calculateWidth(props.editorWidth),
       height: this.calculateHeight(props.sideContentHeight),
       lastStep: false,
-      endsUnfinished: false,
       chapter: props.chapter,
       clearDeadFrames: false,
       arrowFilterOpen: false,
@@ -129,15 +125,6 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         // This comment is copied over from workspace saga
         props.setEditorHighlightedLines(0, segments);
-      },
-      // At the last step with items still on the control, the program did not finish: the steps end
-      // here.
-      isControlEmpty => {
-        const isAtLastStep = this.state.value === this.props.stepsTotal;
-
-        this.setState({
-          endsUnfinished: !isControlEmpty && isAtLastStep,
-        });
       },
     );
   }
@@ -596,23 +583,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
         ) : (
           <div />
         )}
-        {this.state.visualization ? (
-          this.state.endsUnfinished ? (
-            <div
-              id="cse-machine-default-text"
-              className={Classes.RUNNING_TEXT}
-              data-testid="cse-machine-default-text"
-            >
-              The steps end here, before the program finished.
-              <Divider />
-              The run was stopped, or has more steps than the CSE machine records.
-            </div>
-          ) : (
-            this.state.visualization
-          )
-        ) : (
-          <CseMachineDefaultText />
-        )}
+        {this.state.visualization ? this.state.visualization : <CseMachineDefaultText />}
         <ButtonGroup vertical style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
           <Button
             icon="plus"
