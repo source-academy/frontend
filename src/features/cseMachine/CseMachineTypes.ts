@@ -10,7 +10,7 @@ import type {
   EnvTree as EnvironmentTree,
   EnvTreeNode as EnvironmentTreeNode,
 } from './CseRenderTypes';
-import { Continuation } from './utils/continuation';
+import type { Continuation } from './utils/continuation';
 
 /** this interface defines a drawing function */
 export interface Drawable {
