@@ -1,9 +1,8 @@
 import { Range } from 'ace-builds';
-import { getAllOccurrencesInScope } from 'js-slang';
 import { useCallback } from 'react';
 
 import type { EditorHook } from './Editor';
-import { createAnalysisContext, useSourceAnalysisEnabled } from './sourceAnalysis';
+import { useAnalysis } from './useAnalysis';
 
 // EditorHook structure:
 // EditorHooks grant access to 4 things:
@@ -12,27 +11,31 @@ import { createAnalysisContext, useSourceAnalysisEnabled } from './sourceAnalysi
 // keyBindings allow exporting new hotkeys
 // reactAceRef is the underlying reactAce instance for hooking.
 
-const useRefactor: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
-  const enabled = useSourceAnalysisEnabled();
+const useRefactor: EditorHook = (_inProps, _outProps, keyBindings, reactAceRef) => {
+  const analysis = useAnalysis();
 
-  const refactor = useCallback(() => {
-    const editor = reactAceRef.current!.editor;
-    if (!editor || !enabled.current) {
+  const refactor = useCallback(async () => {
+    const provider = analysis.current;
+    const editor = reactAceRef.current?.editor;
+    if (!editor || !provider?.capabilities.occurrences) {
       return;
     }
     const code = editor.getValue();
     const position = editor.getCursorPosition();
-    const sourceLocations = getAllOccurrencesInScope(code, createAnalysisContext(), {
-      line: position.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
-      column: position.column,
+    const occurrences = await provider.occurrences(code, {
+      line: position.row,
+      character: position.column,
     });
 
+    // The ranges are those of the code of the request: not of what is there now.
+    if (editor.getValue() !== code) {
+      return;
+    }
     const selection = editor.getSelection();
-    const ranges = sourceLocations.map(
-      loc => new Range(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column),
+    occurrences.forEach(({ start, end }) =>
+      selection.addRange(new Range(start.line, start.character, end.line, end.character)),
     );
-    ranges.forEach(range => selection.addRange(range));
-  }, [reactAceRef, enabled]);
+  }, [reactAceRef, analysis]);
 
   keyBindings.refactor = refactor;
 };

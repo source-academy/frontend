@@ -30,7 +30,6 @@ import ControlBarRunButton from '../../../../commons/controlBar/ControlBarRunBut
 import ControlBarVersionHistoryButton from '../../../../commons/controlBar/ControlBarVersionHistoryButton';
 import VersionHistoryPanel from '../../../../commons/controlBar/VersionHistoryPanel';
 import { convertEditorTabStateToProps } from '../../../../commons/editor/EditorContainer';
-import type { Position } from '../../../../commons/editor/EditorTypes';
 import Markdown from '../../../../commons/Markdown';
 import SideContentAutograder from '../../../../commons/sideContent/content/SideContentAutograder';
 import type { SideContentProps } from '../../../../commons/sideContent/SideContent';
@@ -112,7 +111,6 @@ function GradingWorkspace(props: Props) {
   const {
     handleBrowseHistoryDown,
     handleBrowseHistoryUp,
-    handleDeclarationNavigate,
     handleEditorEval,
     handleSetActiveEditorTabIndex,
     handleRemoveEditorTabByIndex,
@@ -141,8 +139,6 @@ function GradingWorkspace(props: Props) {
         dispatch(WorkspaceActions.browseReplHistoryDown(workspaceLocation)),
       handleBrowseHistoryUp: () =>
         dispatch(WorkspaceActions.browseReplHistoryUp(workspaceLocation)),
-      handleDeclarationNavigate: (cursorPosition: Position) =>
-        dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
       handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
       handleSetActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
         dispatch(
@@ -544,7 +540,6 @@ function GradingWorkspace(props: Props) {
             editorTabs: editorTabs.map(convertEditorTabStateToProps),
             editorSessionId: '',
             sessionDetails: null,
-            handleDeclarationNavigate: handleDeclarationNavigate,
             handleEditorEval: handleEval,
             handleEditorValueChange: handleEditorValueChange,
             handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,

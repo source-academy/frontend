@@ -30,6 +30,7 @@ import { objectEntries } from '../utils/TypeHelper';
 import { EditorBinding } from '../WorkspaceSettingsContext';
 import { type KeyFunction, keyBindings } from './EditorHotkeys';
 import type { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
+import { moveCursor } from './moveCursor';
 
 // =============== Hooks ===============
 // TODO: Should further refactor into EditorBase + different variants.
@@ -53,7 +54,6 @@ export type EditorHook = (
 export type EditorProps = DispatchProps & EditorStateProps & EditorTabStateProps & OnEvent;
 
 type DispatchProps = {
-  handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => void;
   handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => void;
@@ -336,13 +336,6 @@ const makeCompleter = (handlePromptAutocomplete: DispatchProps['handlePromptAuto
     handlePromptAutocomplete(pos.row + 1, pos.column, callback);
   },
 });
-
-const moveCursor = (editor: AceEditor['editor'], position: Position) => {
-  editor.selection.clearSelection();
-  editor.moveCursorToPosition(position);
-  editor.renderer.showCursor();
-  editor.renderer.scrollCursorIntoView(position, 0.5);
-};
 
 const EditorBase = memo((props: EditorProps & LocalStateProps) => {
   const reactAceRef: React.RefObject<AceEditor | null> = useRef(null);

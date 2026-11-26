@@ -1,13 +1,15 @@
 import { Ace, Range as AceRange } from 'ace-builds';
-import { getAllOccurrencesInScope, getScope } from 'js-slang';
 import { useCallback, useEffect, useRef } from 'react';
 
 import type { EditorHook } from './Editor';
-import { createAnalysisContext, useSourceAnalysisEnabled } from './sourceAnalysis';
+import { useAnalysis } from './useAnalysis';
 
 const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
-  const enabled = useSourceAnalysisEnabled();
+  const analysis = useAnalysis();
   const markerIdsRef = useRef<Array<number>>([]);
+  // Numbers the requests for the variable highlighting, so that an answer that a later request has
+  // overtaken (the cursor has moved on) is dropped.
+  const latestRequestRef = useRef(0);
 
   const clearMarkers = useCallback(() => {
     const session = reactAceRef.current?.editor.session;
@@ -17,7 +19,7 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
 
   // Markers outlive a change of the session's mode, so switching to a language that is not
   // analysed has to remove them explicitly.
-  const isEnabled = enabled.current;
+  const isEnabled = !!analysis.current;
   useEffect(() => {
     if (!isEnabled) {
       clearMarkers();
@@ -28,11 +30,13 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
     // using Ace Editor's way of highlighting as seen here: https://github.com/ajaxorg/ace/blob/master/lib/ace/editor.js#L497
     // We use async blocks so we don't block the browser during editing
 
-    setTimeout(() => {
+    const request = ++latestRequestRef.current;
+    setTimeout(async () => {
       if (!reactAceRef.current) {
         return;
       }
-      if (!enabled.current) {
+      const provider = analysis.current;
+      if (!provider?.capabilities.occurrences) {
         clearMarkers();
         return;
       }
@@ -43,55 +47,55 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
       if (!session || !(session as any).bgTokenizer) {
         return;
       }
+      const occurrences = await provider.occurrences(code, {
+        line: position.row,
+        character: position.column,
+      });
+      // A later request has been made while the evaluator was answering this one.
+      if (request !== latestRequestRef.current || !reactAceRef.current) {
+        return;
+      }
       markerIdsRef.current.forEach(id => {
         session.removeMarker(id);
       });
-      const ranges = getAllOccurrencesInScope(code, createAnalysisContext(), {
-        line: position.row + 1,
-        column: position.column,
-      }).map(
-        loc => new AceRange(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column),
-      );
-
       const markerType = 'ace_variable_highlighting';
-      markerIdsRef.current = ranges.map(range => {
+      markerIdsRef.current = occurrences.map(({ start, end }) =>
         // returns the marker ID for removal later
-        return session.addMarker(range, markerType, 'text');
-      });
+        session.addMarker(
+          new AceRange(start.line, start.character, end.line, end.character),
+          markerType,
+          'text',
+        ),
+      );
     }, 10);
-  }, [reactAceRef, enabled, clearMarkers]);
+  }, [reactAceRef, analysis, clearMarkers]);
 
-  const handleHighlightScope = useCallback(() => {
-    if (!reactAceRef.current || !enabled.current) {
+  const handleHighlightScope = useCallback(async () => {
+    const provider = analysis.current;
+    if (!reactAceRef.current || !provider?.capabilities.scope) {
       return;
     }
     const editor = reactAceRef.current.editor;
     const code = editor.getValue();
     const position = editor.getCursorPosition();
 
-    const ranges = getScope(code, createAnalysisContext(), {
-      line: position.row + 1,
-      column: position.column,
-    });
+    const ranges = await provider.scope(code, { line: position.row, character: position.column });
 
-    if (ranges.length !== 0) {
-      ranges.forEach(range => {
-        // Highlight the scope ranges
-        markerIdsRef.current.push(
-          editor.session.addMarker(
-            new AceRange(
-              range.start.line - 1,
-              range.start.column,
-              range.end.line - 1,
-              range.end.column,
-            ),
-            'ace_selection',
-            'text',
-          ),
-        );
-      });
+    // The ranges are those of the code of the request: not of what is there now.
+    if (!reactAceRef.current || editor.getValue() !== code) {
+      return;
     }
-  }, [reactAceRef, enabled]);
+    ranges.forEach(({ start, end }) => {
+      // Highlight the scope ranges
+      markerIdsRef.current.push(
+        editor.session.addMarker(
+          new AceRange(start.line, start.character, end.line, end.character),
+          'ace_selection',
+          'text',
+        ),
+      );
+    });
+  }, [reactAceRef, analysis]);
 
   const { onChange: prevOnChange, onCursorChange: prevOnCursorChange } = outProps;
   outProps.onChange = useCallback(

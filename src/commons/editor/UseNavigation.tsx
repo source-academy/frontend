@@ -1,9 +1,9 @@
-import { hasDeclaration } from 'js-slang';
 import { useCallback, useRef } from 'react';
 
 import { useLanguageDocumentation } from '../../features/directory/useLanguageDocumentation';
 import type { EditorHook } from './Editor';
-import { createAnalysisContext, useSourceAnalysisEnabled } from './sourceAnalysis';
+import { moveCursor } from './moveCursor';
+import { useAnalysis } from './useAnalysis';
 
 // EditorHook structure:
 // EditorHooks grant access to 4 things:
@@ -12,39 +12,39 @@ import { createAnalysisContext, useSourceAnalysisEnabled } from './sourceAnalysi
 // keyBindings allow exporting new hotkeys
 // reactAceRef is the underlying reactAce instance for hooking.
 
-const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
-  const propsRef = useRef(inProps);
-  propsRef.current = inProps;
-  const enabled = useSourceAnalysisEnabled();
+const useNavigation: EditorHook = (_inProps, _outProps, keyBindings, reactAceRef) => {
+  const analysis = useAnalysis();
   const documentation = useLanguageDocumentation();
   const documentationRef = useRef(documentation);
   documentationRef.current = documentation;
 
-  const handleNavigate = useCallback(() => {
-    if (!enabled.current) {
+  const handleNavigate = useCallback(async () => {
+    const provider = analysis.current;
+    if (!provider?.capabilities.definition) {
       return;
     }
-    const editor = reactAceRef.current!.editor;
-    const pos = editor.selection.getCursor();
+    const editor = reactAceRef.current?.editor;
+    if (!editor) {
+      return;
+    }
+    const code = editor.getValue();
+    const pos = editor.getCursorPosition();
     const token = editor.session.getTokenAt(pos.row, pos.column);
-    const { handleDeclarationNavigate } = propsRef.current;
 
-    handleDeclarationNavigate(editor.getCursorPosition());
+    const declaration = await provider.definition(code, { line: pos.row, character: pos.column });
 
-    const newPos = editor.selection.getCursor();
-    if (newPos.row !== pos.row || newPos.column !== pos.column) {
+    // The answer is for the code and the cursor of the request: not for what is there now.
+    const now = editor.getCursorPosition();
+    if (editor.getValue() !== code || now.row !== pos.row || now.column !== pos.column) {
+      return;
+    }
+    if (declaration) {
+      moveCursor(editor, { row: declaration.start.line, column: declaration.start.character });
       return;
     }
 
-    if (
-      hasDeclaration(editor.getValue(), createAnalysisContext(), {
-        line: newPos.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
-        column: newPos.column,
-      })
-    ) {
-      return;
-    }
-
+    // Not a declaration of the program: a name of the language's library, or a keyword, goes to
+    // the language's documentation.
     const languageDocsUrl = documentationRef.current?.languageDocsUrl;
     if (
       languageDocsUrl &&
@@ -56,7 +56,7 @@ const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) 
     if (languageDocsUrl && token !== null && /\bstorage.type\b/.test(token.type)) {
       window.open(languageDocsUrl);
     }
-  }, [reactAceRef, enabled]);
+  }, [reactAceRef, analysis]);
 
   keyBindings.navigate = handleNavigate;
 };

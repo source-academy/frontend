@@ -57,7 +57,6 @@ import {
   convertEditorTabStateToProps,
   type NormalEditorContainerProps,
 } from '../../commons/editor/EditorContainer';
-import type { Position } from '../../commons/editor/EditorTypes';
 import { ensureLeadingSlash, overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';
 import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import MobileWorkspace, {
@@ -893,8 +892,6 @@ function Playground(props: PlaygroundProps) {
 
   const editorContainerHandlers = useMemo(() => {
     return {
-      handleDeclarationNavigate: (cursorPosition: Position) =>
-        dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         dispatch(WorkspaceActions.promptAutocomplete(workspaceLocation, row, col, callback)),
       handleSendReplInputToOutput: (code: string) =>
@@ -919,7 +916,6 @@ function Playground(props: PlaygroundProps) {
     setActiveEditorTabIndex: editorContainerHandlers.setActiveEditorTabIndex,
     removeEditorTabByIndex: editorContainerHandlers.removeEditorTabByIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),
-    handleDeclarationNavigate: editorContainerHandlers.handleDeclarationNavigate,
     handleEditorEval: autorunButtonHandlers.handleEditorEval,
     handlePromptAutocomplete: editorContainerHandlers.handlePromptAutocomplete,
     handleSendReplInputToOutput: editorContainerHandlers.handleSendReplInputToOutput,

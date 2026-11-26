@@ -117,10 +117,6 @@ const newActions = createActions('workspace', {
     workspaceLocation,
     index,
   }),
-  navigateToDeclaration: (workspaceLocation: WorkspaceLocation, cursorPosition: Position) => ({
-    workspaceLocation,
-    cursorPosition,
-  }),
   /**
    * Resets a workspace to its default properties.
    *

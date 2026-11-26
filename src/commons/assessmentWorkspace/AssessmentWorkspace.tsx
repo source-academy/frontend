@@ -59,7 +59,6 @@ import {
   convertEditorTabStateToProps,
   type NormalEditorContainerProps,
 } from '../editor/EditorContainer';
-import type { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import type { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/MobileSideContent';
 import MobileWorkspace, { type MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
@@ -925,8 +924,6 @@ function AssessmentWorkspace(props: AssessmentWorkspaceProps) {
         ),
       removeEditorTabByIndex: (editorTabIndex: number) =>
         dispatch(WorkspaceActions.removeEditorTab(workspaceLocation, editorTabIndex)),
-      handleDeclarationNavigate: (cursorPosition: Position) =>
-        dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         dispatch(WorkspaceActions.promptAutocomplete(workspaceLocation, row, col, callback)),
     };
@@ -1050,7 +1047,6 @@ It is safe to close this window.`}
           editorTabs: editorTabs.map(convertEditorTabStateToProps),
           editorSessionId: '',
           sessionDetails: null,
-          handleDeclarationNavigate: editorContainerHandlers.handleDeclarationNavigate,
           handleEditorEval: handleEval,
           handleEditorValueChange: handleEditorValueChange,
           handleUpdateHasUnsavedChanges: handleUpdateHasUnsavedChanges,

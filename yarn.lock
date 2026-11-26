@@ -4475,10 +4475,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/common-autocomplete@npm:^0.0.1":
-  version: 0.0.1
-  resolution: "@sourceacademy/common-autocomplete@npm:0.0.1"
-  checksum: 10c0/24be061f41ba6629585681abafb8b29e00f3f6e79723ca92d242655324c12e9de8f38e041192040f1271d24a71974920bf48bf4aa26cc0163e221806fe15917e
+"@sourceacademy/common-autocomplete@npm:^0.0.2":
+  version: 0.0.2
+  resolution: "@sourceacademy/common-autocomplete@npm:0.0.2"
+  checksum: 10c0/56269cec51fe530cc022d34e423c0719ba11f5f1c4d9493a3c3d767ec659a61ae881e4937822feb45b125b7aa124efdaf9816b71e1aca2a4dcc9d1c73dbda005
   languageName: node
   linkType: hard
 
@@ -4551,14 +4551,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/web-autocomplete@npm:^0.0.2":
-  version: 0.0.2
-  resolution: "@sourceacademy/web-autocomplete@npm:0.0.2"
+"@sourceacademy/web-autocomplete@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "@sourceacademy/web-autocomplete@npm:0.0.3"
   dependencies:
-    "@sourceacademy/common-autocomplete": "npm:^0.0.1"
+    "@sourceacademy/common-autocomplete": "npm:^0.0.2"
   peerDependencies:
-    "@sourceacademy/conductor": ">=0.3.0"
-  checksum: 10c0/a3d542da7a72f199bfb6741ddd088da8a8eb6c386b39f59a4790702d506bb3905cd0055433669afd577cb0ef81a09a0823b1ede5db0f669b49bedda067e3f169
+    "@sourceacademy/conductor": ^0.8.0
+  checksum: 10c0/c76034a357eb936df4d98e060aebb18838c3bd1367689f3d2109dbb0c2325898a4216bad90525a2e19b85e119337a406803d27558d69fcf8655a03c6b0964a4d
   languageName: node
   linkType: hard
 
@@ -8825,7 +8825,7 @@ __metadata:
     "@rsbuild/plugin-tailwindcss": "npm:^2.0.3"
     "@rsdoctor/rspack-plugin": "npm:^1.5.18"
     "@sentry/react": "npm:^11.0.0"
-    "@sourceacademy/common-autocomplete": "npm:^0.0.1"
+    "@sourceacademy/common-autocomplete": "npm:^0.0.2"
     "@sourceacademy/common-cse-machine": "npm:^0.5.0"
     "@sourceacademy/common-tabs": "npm:^0.0.1"
     "@sourceacademy/conductor": "npm:^0.8.3"
@@ -8834,7 +8834,7 @@ __metadata:
     "@sourceacademy/runner-module-loader": "npm:^0.1.0"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
-    "@sourceacademy/web-autocomplete": "npm:^0.0.2"
+    "@sourceacademy/web-autocomplete": "npm:^0.0.3"
     "@sourceacademy/web-cse-machine": "npm:^3.1.0"
     "@sourceacademy/web-module-loader": "npm:^0.0.2"
     "@sourceacademy/web-test": "npm:^0.0.2"

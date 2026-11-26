@@ -1072,68 +1072,6 @@ describe('EVAL_TESTCASE under Conductor (runTestCaseConductor)', () => {
   });
 });
 
-describe('NAV_DECLARATION', () => {
-  let workspaceLocation: WorkspaceLocation;
-  let editorValue: string;
-  let state: OverallState;
-
-  beforeEach(() => {
-    workspaceLocation = 'playground';
-    editorValue = 'const foo = (x) => -1; foo(2);';
-    state = generateDefaultState(workspaceLocation, {
-      editorTabs: [{ value: editorValue }],
-    });
-  });
-
-  test('moves cursor to declaration correctly', () => {
-    const loc = { row: 0, column: 24 };
-    const resultLoc = { row: 0, column: 6 };
-    return (
-      expectSaga(workspaceSaga)
-        .withState(state)
-        .dispatch({
-          type: WorkspaceActions.navigateToDeclaration.type,
-          payload: { workspaceLocation, cursorPosition: loc },
-        })
-        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        .put(WorkspaceActions.moveCursor(workspaceLocation, 0, resultLoc))
-        .silentRun()
-    );
-  });
-
-  test('does not move cursor if node is not an identifier', () => {
-    const pos = { row: 0, column: 27 };
-    const resultPos = { row: 0, column: 6 };
-    return (
-      expectSaga(workspaceSaga)
-        .withState(state)
-        .dispatch({
-          type: WorkspaceActions.navigateToDeclaration.type,
-          payload: { workspaceLocation, cursorPosition: pos },
-        })
-        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        .not.put(WorkspaceActions.moveCursor(workspaceLocation, 0, resultPos))
-        .silentRun()
-    );
-  });
-
-  test('does not move cursor if node is same as declaration', () => {
-    const pos = { row: 0, column: 7 };
-    const resultPos = { row: 0, column: 6 };
-    return (
-      expectSaga(workspaceSaga)
-        .withState(state)
-        .dispatch({
-          type: WorkspaceActions.navigateToDeclaration.type,
-          payload: { workspaceLocation, cursorPosition: pos },
-        })
-        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        .not.put(WorkspaceActions.moveCursor(workspaceLocation, 0, resultPos))
-        .silentRun()
-    );
-  });
-});
-
 describe('EVAL_EDITOR_AND_TESTCASES', () => {
   let workspaceLocation: WorkspaceLocation;
   let state: OverallState;

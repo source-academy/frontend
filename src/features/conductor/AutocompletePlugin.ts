@@ -1,5 +1,6 @@
 import type {
   AceRules,
+  AnalysisCapabilities,
   AutoCompleteEntry,
   ModeFunction,
   SyntaxHighlightData,
@@ -13,17 +14,35 @@ import type { EventChannel, Unsubscribe } from 'redux-saga';
 import { eventChannel } from 'redux-saga';
 
 import { isAceModuleDefined, loadAceModules } from '../../commons/editor/ace/loadAceModules';
+import { createAnalysisPublisher } from './analysisStore';
 import { isKeywordMapperToken } from './autocompleteHighlightRules';
 import { createAutocompleteModePublisher, normalizeAceModeId } from './autocompleteModeStore';
 
 export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
   private currentMode: string | null = null;
   private modePublisher?: ReturnType<typeof createAutocompleteModePublisher>;
+  private analysisPublisher?: ReturnType<typeof createAnalysisPublisher>;
   private disposed = false;
 
   constructor(conduit: IConduit, channels: IChannel<unknown>[], tabService: ITabService) {
     super(conduit, channels);
     this.modePublisher = createAutocompleteModePublisher(tabService);
+    this.analysisPublisher = createAnalysisPublisher(tabService);
+    // A runner that announced before this constructor had finished (with a conduit, the messages
+    // come later, but not in every harness) was heard by `onAnalysisCapabilities` with no publisher.
+    if (this.analysisCapabilities) {
+      this.onAnalysisCapabilities(this.analysisCapabilities);
+    }
+  }
+
+  /** The runner has said which analyses it answers: offer them to the editor. */
+  override onAnalysisCapabilities(capabilities: AnalysisCapabilities): void {
+    this.analysisPublisher?.publish({
+      capabilities,
+      occurrences: (code, position) => this.occurrences(code, position),
+      definition: (code, position) => this.definition(code, position),
+      scope: (code, position) => this.scope(code, position),
+    });
   }
 
   public getMode(): string | null {
@@ -33,6 +52,7 @@ export default class AutoCompletePlugin extends BaseAutoCompleteWebPlugin {
   public dispose(): void {
     this.disposed = true;
     this.modePublisher?.dispose();
+    this.analysisPublisher?.dispose();
   }
 
   loadHighlightRules(data: AceRules) {

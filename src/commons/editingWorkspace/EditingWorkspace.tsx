@@ -43,7 +43,6 @@ import MCQQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorksp
 import ProgrammingQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentProgrammingQuestionTemplateTab';
 import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentTextAreaContent';
 import { convertEditorTabStateToProps } from '../editor/EditorContainer';
-import type { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import type { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight, resetSideContent } from '../sideContent/SideContentActions';
@@ -115,7 +114,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
   const {
     handleBrowseHistoryDown,
     handleBrowseHistoryUp,
-    handleDeclarationNavigate,
     handleEditorEval,
     handleEditorValueChange,
     handleEditorUpdateBreakpoints,
@@ -137,8 +135,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
         dispatch(WorkspaceActions.browseReplHistoryDown(workspaceLocation)),
       handleBrowseHistoryUp: () =>
         dispatch(WorkspaceActions.browseReplHistoryUp(workspaceLocation)),
-      handleDeclarationNavigate: (cursorPosition: Position) =>
-        dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
       handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
       handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
         dispatch(
@@ -658,7 +654,6 @@ function EditingWorkspace(props: EditingWorkspaceProps) {
               }),
             editorSessionId: '',
             sessionDetails: null,
-            handleDeclarationNavigate: handleDeclarationNavigate,
             handleEditorEval: handleEval,
             handleEditorValueChange: handleEditorValueChange,
             handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
