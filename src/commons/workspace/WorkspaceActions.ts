@@ -22,10 +22,6 @@ const newActions = createActions('workspace', {
     execTime,
     workspaceLocation,
   }),
-  changeStepLimit: (stepLimit: number, workspaceLocation: WorkspaceLocation) => ({
-    stepLimit,
-    workspaceLocation,
-  }),
   clearReplInput: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   clearReplOutput: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   clearReplOutputLast: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),

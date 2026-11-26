@@ -100,7 +100,6 @@ export type WorkspaceState = {
   readonly tokenCount: integer;
   readonly customNotification: string;
   readonly sharedbConnected: boolean;
-  readonly stepLimit: number;
   readonly cseSnapshots: CseSnapshot[] | null;
   readonly updateUserRoleCallback: (id: string, newRole: CollabEditingAccess) => void;
   readonly versionHistory: VersionHistoryState;

@@ -25,6 +25,7 @@ import {
   type WorkspaceLocation,
 } from 'src/commons/workspace/WorkspaceTypes';
 import { ClearDeadFramesAnimation } from 'src/features/cseMachine/animationComponents/ClearDeadFramesAnimation';
+import { continuesRun } from 'src/features/cseMachine/continuesRun';
 import CseArrowFilterMenu from 'src/features/cseMachine/CseArrowFilterMenu';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
@@ -51,7 +52,9 @@ type State = {
   height: number;
   width: number;
   lastStep: boolean;
-  stepLimitExceeded: boolean;
+  /** Whether the steps end before the program has finished (it was stopped, or ran for more steps
+   * than are recorded): the drawing is at the last step and the control still has items. */
+  endsUnfinished: boolean;
   chapter: Chapter;
   clearDeadFrames: boolean;
   arrowFilterOpen: boolean;
@@ -104,7 +107,7 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       width: this.calculateWidth(props.editorWidth),
       height: this.calculateHeight(props.sideContentHeight),
       lastStep: false,
-      stepLimitExceeded: false,
+      endsUnfinished: false,
       chapter: props.chapter,
       clearDeadFrames: false,
       arrowFilterOpen: false,
@@ -124,12 +127,13 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
         // This comment is copied over from workspace saga
         props.setEditorHighlightedLines(0, segments);
       },
-      // We shouldn't be able to move slider to a step number beyond the step limit
+      // At the last step with items still on the control, the program did not finish: the steps end
+      // here.
       isControlEmpty => {
         const isAtLastStep = this.state.value === this.props.stepsTotal;
 
         this.setState({
-          stepLimitExceeded: !isControlEmpty && isAtLastStep,
+          endsUnfinished: !isControlEmpty && isAtLastStep,
         });
       },
     );
@@ -269,6 +273,21 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
     if (isOnCseTab && prevProps.cseSnapshots !== null && cseSnapshots === null) {
       this.setState({ visualization: null, value: -1 });
       this.clearView();
+      return;
+    }
+
+    // The run that is going on has more snapshots: keep the user's place (and the slider as it is).
+    // The frames are laid out with all of the run's frames, so the layouts of the steps may change
+    // with a frame that is new: they are laid out again, and the step being shown is drawn again.
+    if (
+      cseSnapshots !== null &&
+      prevProps.cseSnapshots !== cseSnapshots &&
+      continuesRun(prevProps.cseSnapshots, cseSnapshots)
+    ) {
+      CseMachine.clearCachedLayouts();
+      if (this.state.value >= 0) {
+        this.renderSnapshotAt(this.state.value);
+      }
       return;
     }
 
@@ -561,15 +580,15 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
           <div />
         )}
         {this.state.visualization ? (
-          this.state.stepLimitExceeded ? (
+          this.state.endsUnfinished ? (
             <div
               id="cse-machine-default-text"
               className={Classes.RUNNING_TEXT}
               data-testid="cse-machine-default-text"
             >
-              Maximum number of steps exceeded.
+              The steps end here, before the program finished.
               <Divider />
-              Please increase the step limit if you would like to see futher evaluation.
+              The run was stopped, or has more steps than the CSE machine records.
             </div>
           ) : (
             this.state.visualization

@@ -17,7 +17,7 @@ import { buildFakeEnvTreeFromSnapshot } from './CseSnapshotAdapter';
 
 type SetVis = (vis: React.ReactNode) => void;
 type SetEditorHighlightedLines = (segments: [number, number][]) => void;
-type SetisStepLimitExceeded = (isControlEmpty: boolean) => void;
+type SetIsControlEmpty = (isControlEmpty: boolean) => void;
 
 /** CSE Machine is exposed from this class */
 export default class CseMachine {
@@ -42,8 +42,8 @@ export default class CseMachine {
   private static setVis: SetVis;
   /** function to highlight editor lines */
   public static setEditorHighlightedLines: SetEditorHighlightedLines;
-  /** callback function to update the step limit exceeded state in the SideContentCseMachine component */
-  private static setIsStepLimitExceeded: SetisStepLimitExceeded;
+  /** callback function to say whether the control is empty to the SideContentCseMachine component */
+  private static setIsControlEmpty: SetIsControlEmpty;
   // Ghost layout snapshots, separated by mode to keep coordinates fixed within each mode.
   public static normalLayoutCache: LayoutCache | null = null;
   public static normalLiveLayoutCache: LayoutCache | null = null;
@@ -202,13 +202,13 @@ export default class CseMachine {
     width: number,
     height: number,
     setEditorHighlightedLines: (segments: [number, number][]) => void,
-    setIsStepLimitExceeded: SetisStepLimitExceeded,
+    setIsControlEmpty: SetIsControlEmpty,
   ) {
     Layout.visibleHeight = height;
     Layout.visibleWidth = width;
     this.setVis = setVis;
     this.setEditorHighlightedLines = setEditorHighlightedLines;
-    this.setIsStepLimitExceeded = setIsStepLimitExceeded;
+    this.setIsControlEmpty = setIsControlEmpty;
   }
 
   static clear() {
@@ -404,7 +404,7 @@ export default class CseMachine {
       CseAnimation.updateAnimation();
     }
     this.setVis(Layout.draw());
-    this.setIsStepLimitExceeded(context.runtime.control.isEmpty());
+    this.setIsControlEmpty(context.runtime.control.isEmpty());
     Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
   }
 
