@@ -5,7 +5,6 @@ import { renderTree } from 'src/commons/utils/TestUtils';
 import { expect, test } from 'vitest';
 
 import Editor, { type EditorProps } from './Editor';
-import type { Position } from './EditorTypes';
 
 test('Editor renders correctly', async () => {
   const props: EditorProps = {
@@ -15,7 +14,6 @@ test('Editor renders correctly', async () => {
     sessionDetails: null,
     editorValue: '',
     highlightedLines: [],
-    handleDeclarationNavigate: (cursorPosition: Position) => {},
     handleEditorEval: () => {},
     handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) => {},
     handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) => {},

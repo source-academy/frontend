@@ -60,6 +60,11 @@ export function associateAutocompleteEvaluator(
 
 const currentOwners = new Map<string, symbol>();
 
+/** The evaluator that a tab service was associated with (see `associateAutocompleteEvaluator`). */
+export function getAutocompleteEvaluatorPath(tabService: ITabService): string | undefined {
+  return evaluatorPaths.get(tabService);
+}
+
 export function createAutocompleteModePublisher(tabService: ITabService) {
   const evaluatorPath = evaluatorPaths.get(tabService);
   if (!evaluatorPath) {

@@ -11,8 +11,12 @@ import {
  * (see `features/conductor/AutocompletePlugin.ts`). Until that evaluator has published its mode,
  * the language directory's `editorConfig.aceMode` is used, and `ace/mode/text` if that is unset.
  */
-export const useActiveAceMode = (): string => {
-  const evaluatorPath = useAppSelector(state => {
+/**
+ * The path of the evaluator that is selected in the language directory: what the evaluator's
+ * plugins publish to the editor under (the Ace mode of its syntax, its analysis).
+ */
+export const useActiveEvaluatorPath = (): string | undefined =>
+  useAppSelector(state => {
     const { selectedLanguageId, selectedEvaluatorId, languageMap } = state.languageDirectory;
     if (!selectedLanguageId || !selectedEvaluatorId) {
       return undefined;
@@ -21,6 +25,9 @@ export const useActiveAceMode = (): string => {
       evaluator => evaluator.id === selectedEvaluatorId,
     )?.path;
   });
+
+export const useActiveAceMode = (): string => {
+  const evaluatorPath = useActiveEvaluatorPath();
   const directoryMode = useAppSelector(state => {
     const { selectedLanguageId, languageMap } = state.languageDirectory;
     const editorConfig = selectedLanguageId

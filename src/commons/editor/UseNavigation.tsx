@@ -1,9 +1,9 @@
-import { hasDeclaration } from 'js-slang';
 import { useCallback, useRef } from 'react';
 
 import { useLanguageDocumentation } from '../../features/directory/useLanguageDocumentation';
 import type { EditorHook } from './Editor';
-import { createAnalysisContext, useSourceAnalysisEnabled } from './sourceAnalysis';
+import { moveCursor } from './moveCursor';
+import { captureAnalysisRequest, useAnalysis } from './useAnalysis';
 
 // EditorHook structure:
 // EditorHooks grant access to 4 things:
@@ -12,51 +12,68 @@ import { createAnalysisContext, useSourceAnalysisEnabled } from './sourceAnalysi
 // keyBindings allow exporting new hotkeys
 // reactAceRef is the underlying reactAce instance for hooking.
 
-const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
-  const propsRef = useRef(inProps);
-  propsRef.current = inProps;
-  const enabled = useSourceAnalysisEnabled();
+type Token = { type: string; value: string } | null;
+
+/** The page of the language's documentation for what is under the cursor, if it has one. */
+function documentationUrl(languageDocsUrl: string | undefined, token: Token): string | undefined {
+  if (!languageDocsUrl || token === null) {
+    return undefined;
+  }
+  if (/\bsupport.function\b/.test(token.type) || /\bbuiltinconsts\b/.test(token.type)) {
+    return `${languageDocsUrl}global.html#${token.value}`; // a builtin library name
+  }
+  if (/\bstorage.type\b/.test(token.type)) {
+    return languageDocsUrl;
+  }
+  return undefined;
+}
+
+const useNavigation: EditorHook = (_inProps, _outProps, keyBindings, reactAceRef) => {
+  const analysis = useAnalysis();
   const documentation = useLanguageDocumentation();
   const documentationRef = useRef(documentation);
   documentationRef.current = documentation;
 
-  const handleNavigate = useCallback(() => {
-    if (!enabled.current) {
+  const handleNavigate = useCallback(async () => {
+    if (!analysis.current?.capabilities.definition) {
       return;
     }
-    const editor = reactAceRef.current!.editor;
-    const pos = editor.selection.getCursor();
-    const token = editor.session.getTokenAt(pos.row, pos.column);
-    const { handleDeclarationNavigate } = propsRef.current;
-
-    handleDeclarationNavigate(editor.getCursorPosition());
-
-    const newPos = editor.selection.getCursor();
-    if (newPos.row !== pos.row || newPos.column !== pos.column) {
+    const editor = reactAceRef.current?.editor;
+    if (!editor) {
       return;
     }
+    const request = captureAnalysisRequest(editor, analysis);
+    const token = editor.session.getTokenAt(request.cursor.row, request.cursor.column);
 
-    if (
-      hasDeclaration(editor.getValue(), createAnalysisContext(), {
-        line: newPos.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
-        column: newPos.column,
-      })
-    ) {
+    // Not a declaration of the program: a name of the language's library, or a keyword, goes to
+    // the language's documentation. The evaluator's answer comes too late for a browser to let a
+    // page open a tab (it allows that for a moment after a keypress), so the tab is opened now, and
+    // either given the documentation or closed when the answer is known.
+    const docsUrl = documentationUrl(documentationRef.current?.languageDocsUrl, token);
+    const docsTab = docsUrl ? window.open('', '_blank') : null;
+    const closeDocsTab = () => docsTab?.close();
+
+    const declaration = await request.provider!.definition(request.code, request.position);
+
+    // The answer is for the editor as it was asked: not for what is there now.
+    if (!request.isCurrent()) {
+      closeDocsTab();
       return;
     }
-
-    const languageDocsUrl = documentationRef.current?.languageDocsUrl;
-    if (
-      languageDocsUrl &&
-      token !== null &&
-      (/\bsupport.function\b/.test(token.type) || /\bbuiltinconsts\b/.test(token.type))
-    ) {
-      window.open(`${languageDocsUrl}global.html#${token.value}`); // opens builtin library link
+    if (declaration) {
+      closeDocsTab();
+      moveCursor(editor, { row: declaration.start.line, column: declaration.start.character });
+      return;
     }
-    if (languageDocsUrl && token !== null && /\bstorage.type\b/.test(token.type)) {
-      window.open(languageDocsUrl);
+    if (docsUrl) {
+      if (docsTab) {
+        docsTab.location.href = docsUrl;
+      } else {
+        // The tab could not be reserved (a blocked popup, say): try as it was done before.
+        window.open(docsUrl);
+      }
     }
-  }, [reactAceRef, enabled]);
+  }, [reactAceRef, analysis]);
 
   keyBindings.navigate = handleNavigate;
 };

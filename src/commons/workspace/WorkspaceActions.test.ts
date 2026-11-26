@@ -452,18 +452,6 @@ test('updateHasUnsavedChanges generates correct action object', () => {
   });
 });
 
-test('navigateToDeclaration generates correct action object', () => {
-  const cursorPosition = { row: 0, column: 0 };
-  const action = WorkspaceActions.navigateToDeclaration(playgroundWorkspace, cursorPosition);
-  expect(action).toEqual({
-    type: WorkspaceActions.navigateToDeclaration.type,
-    payload: {
-      workspaceLocation: playgroundWorkspace,
-      cursorPosition,
-    },
-  });
-});
-
 test('changeDefaultLanguage generates correct action object', () => {
   const action = WorkspaceActions.changeDefaultLanguage(2);
   expect(action).toEqual({

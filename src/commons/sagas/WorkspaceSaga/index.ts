@@ -1,7 +1,6 @@
 import { type AutoCompleteEntry, WEB_PLUGIN_ID } from '@sourceacademy/common-autocomplete';
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
-import { findDeclaration } from 'js-slang';
 import type { EventChannel } from 'redux-saga';
 import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import AutoCompletePlugin from 'src/features/conductor/AutocompletePlugin';
@@ -17,7 +16,6 @@ import type { DeviceSession } from '../../../features/remoteExecution/RemoteExec
 import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';
 import { defaultEditorValue, type OverallState } from '../../application/ApplicationTypes';
 import type { Testcase } from '../../assessment/AssessmentTypes';
-import { createAnalysisContext } from '../../editor/sourceAnalysis';
 import { writeFileRecursively } from '../../fileSystem/utils';
 import { actions } from '../../utils/ActionsHelper';
 import {
@@ -234,26 +232,6 @@ const WorkspaceSaga = combineSagaHandlers({
     yield put(actions.addEvent([EventType.RUN_TESTCASE], workspaceLocation));
     const index = action.payload.testcaseId;
     yield* runTestCase(workspaceLocation, index);
-  },
-  [WorkspaceActions.navigateToDeclaration.type]: function* (action) {
-    const workspaceLocation = action.payload.workspaceLocation;
-    const code: string = yield select(
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].value,
-    );
-    const result = findDeclaration(code, createAnalysisContext(), {
-      line: action.payload.cursorPosition.row + 1,
-      column: action.payload.cursorPosition.column,
-    });
-    if (result) {
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      yield put(
-        actions.moveCursor(action.payload.workspaceLocation, 0, {
-          row: result.start.line - 1,
-          column: result.start.column,
-        }),
-      );
-    }
   },
   [WorkspaceActions.runAllTestcases.type]: {
     takeLeading: function* (action): any {
