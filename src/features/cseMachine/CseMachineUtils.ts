@@ -1,4 +1,3 @@
-import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
 import type {
   AppInstr,
   ArrLitInstr,
@@ -153,13 +152,15 @@ export function isPredefinedFn(data: Data): data is PredefinedFn {
 
 const closureFields = ['id', 'environment', 'functionName', 'predefined', 'node', 'originalNode'];
 
-/** Returns `true` if `data` is a JS Slang closure */
+/**
+ * Returns `true` if `data` is a closure: a function with the fields of `Closure` as own properties
+ * (js-slang's own closures have them, so they need no `instanceof` check of their own).
+ */
 export function isClosure(data: Data): data is Closure {
   const obj = {};
   return (
-    data instanceof JsSlangClosure ||
-    (isFunction(data) &&
-      closureFields.reduce((prev, field) => prev && obj.hasOwnProperty.call(data, field), true))
+    isFunction(data) &&
+    closureFields.reduce((prev, field) => prev && obj.hasOwnProperty.call(data, field), true)
   );
 }
 
