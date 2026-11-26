@@ -113,4 +113,68 @@ describe('snapshots that arrive in batches', () => {
     expect(clear).toHaveBeenCalled();
     clear.mockRestore();
   });
+
+  describe('how the run ended', () => {
+    const end = (end: Parameters<typeof WorkspaceActions.updateCseEnd>[0]) =>
+      WorkspaceActions.updateCseEnd(end, 'playground');
+
+    test('a run that was cut off says so, with the reason, beside the diagram', async () => {
+      const { store, send } = await setUp();
+      await send(run(10));
+      act(() => {
+        store.dispatch(end({ status: 'cut-off', reason: 'the limit of 2500 steps was reached' }));
+      });
+      const notice = screen.getByTestId('cse-machine-cut-off');
+      expect(notice.textContent).toContain('The steps end here, before the program finished');
+      expect(notice.textContent).toContain('the limit of 2500 steps was reached');
+      // The diagram is still there: the last step is a valid state.
+      expect(screen.queryAllByTestId('sa-cse-machine')).toHaveLength(1);
+    });
+
+    test('a run that finished, or that did not say how it ended, has no notice', async () => {
+      const { store, send } = await setUp();
+      await send(run(10));
+      expect(screen.queryAllByTestId('cse-machine-cut-off')).toHaveLength(0);
+      act(() => {
+        store.dispatch(end({ status: 'complete' }));
+      });
+      expect(screen.queryAllByTestId('cse-machine-cut-off')).toHaveLength(0);
+    });
+
+    test('the notice does not outlive the trace: leaving the tab discards it, and returning shows no notice', async () => {
+      const { store, send } = await setUp();
+      await send(run(10));
+      act(() => {
+        store.dispatch(end({ status: 'cut-off', reason: 'too long' }));
+      });
+      expect(screen.queryAllByTestId('cse-machine-cut-off')).toHaveLength(1);
+      // Leaving the tab discards its snapshots, and with them what they ended in.
+      act(() => {
+        store.dispatch(
+          visitSideContent(SideContentType.introduction, SideContentType.cseMachine, 'playground'),
+        );
+      });
+      act(() => {
+        store.dispatch(
+          visitSideContent(SideContentType.cseMachine, SideContentType.introduction, 'playground'),
+        );
+      });
+      expect(store.getState().workspaces.playground.cseSnapshots).toBeNull();
+      expect(store.getState().workspaces.playground.cseEnd).toBeNull();
+      expect(screen.queryAllByTestId('cse-machine-cut-off')).toHaveLength(0);
+    });
+
+    test('the notice goes when the end is cleared for the next run', async () => {
+      const { store, send } = await setUp();
+      await send(run(10));
+      act(() => {
+        store.dispatch(end({ status: 'cut-off', reason: 'too long' }));
+      });
+      expect(screen.queryAllByTestId('cse-machine-cut-off')).toHaveLength(1);
+      act(() => {
+        store.dispatch(end(null));
+      });
+      expect(screen.queryAllByTestId('cse-machine-cut-off')).toHaveLength(0);
+    });
+  });
 });

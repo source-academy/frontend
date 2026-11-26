@@ -9,6 +9,7 @@ import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHo
 import type {
   CseMachineHostPlugin,
   CseSnapshot,
+  CseTraceEnd,
 } from '../../../../features/conductor/CseMachineHostPlugin';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { tabBehaviour } from '../../../../features/directory/toolTabs';
@@ -334,24 +335,47 @@ function* handleErrors(
 }
 
 type CseSnapshotBatch = { snapshots: CseSnapshot[]; breakpointSteps: number[] };
+/** What the CSE plugin hands the saga: snapshots so far, or how the run ended. */
+type CseHostEvent = CseSnapshotBatch | { end: CseTraceEnd };
 
-function* handleCseSnapshots(
+/**
+ * Puts the snapshots of the run, and how it ended, into the workspace as the CSE plugin hands them
+ * over. A session only applies them while its `generation` is still the workspace's current run: the
+ * session of an older run stays subscribed while it is torn down, and what it sends in that time
+ * (its last batch, its cut-off end) must not show up beside the new run's.
+ */
+export function* handleCseSnapshots(
   csePlugin: CseMachineHostPlugin,
   workspaceLocation: WorkspaceLocation,
+  generation: number,
 ): SagaIterator {
-  const snapshotChan = eventChannel<CseSnapshotBatch>(emitter => {
+  const snapshotChan = eventChannel<CseHostEvent>(emitter => {
     const receive = (snapshots: CseSnapshot[], breakpointSteps: number[]) =>
       emitter({ snapshots, breakpointSteps });
+    const receiveEnd = (end: CseTraceEnd) => emitter({ end });
     csePlugin.receiveSnapshots = receive;
+    csePlugin.onEnd = receiveEnd;
     return () => {
       if (csePlugin.receiveSnapshots === receive) {
         csePlugin.receiveSnapshots = () => {};
+      }
+      if (csePlugin.onEnd === receiveEnd) {
+        csePlugin.onEnd = () => {};
       }
     };
   });
   try {
     while (true) {
-      const batch: CseSnapshotBatch | typeof END = yield take(snapshotChan);
+      const batch: CseHostEvent | typeof END = yield take(snapshotChan);
+      // This session belongs to an older run: stop applying what it sends (see above).
+      if (runGenerations.get(workspaceLocation) !== generation) {
+        break;
+      }
+      if ('end' in batch) {
+        // How the run ended (after its last batch): the tab says if it was cut off.
+        yield put(WorkspaceActions.updateCseEnd(batch.end, workspaceLocation));
+        continue;
+      }
       if (!('snapshots' in batch) || !Array.isArray(batch.snapshots)) {
         break;
       }
@@ -495,7 +519,7 @@ const replSessions = new Map<WorkspaceLocation, ReplSession>();
 const runGenerations = new Map<WorkspaceLocation, number>();
 
 /** Claims and returns the next run generation for `workspaceLocation` - see the map's comment. */
-function nextRunGeneration(workspaceLocation: WorkspaceLocation): number {
+export function nextRunGeneration(workspaceLocation: WorkspaceLocation): number {
   const generation = (runGenerations.get(workspaceLocation) ?? 0) + 1;
   runGenerations.set(workspaceLocation, generation);
   return generation;
@@ -767,7 +791,7 @@ export function* evalCodeConductorSaga(
         generation,
       ),
     );
-    session.tasks.push(yield spawn(handleCseSnapshots, csePlugin, workspaceLocation));
+    session.tasks.push(yield spawn(handleCseSnapshots, csePlugin, workspaceLocation, generation));
 
     yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
 

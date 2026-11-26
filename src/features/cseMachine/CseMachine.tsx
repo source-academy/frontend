@@ -1,10 +1,9 @@
-import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
-
 import type { CseSerializedEnvFrame, CseSnapshot } from '../conductor/CseMachineHostPlugin';
 import { arrowSelection } from './components/arrows/ArrowSelection';
 import { CseAnimation } from './CseMachineAnimation';
 import { Layout, type LayoutCache } from './CseMachineLayout';
 import type { ArrowOriginFilterKey, ArrowOriginFilters, EnvTree } from './CseMachineTypes';
+import type { Control, Stash } from './CseRenderTypes';
 import { buildFakeEnvTreeFromSnapshot } from './CseSnapshotAdapter';
 
 type SetVis = (vis: React.ReactNode) => void;

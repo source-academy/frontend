@@ -8,10 +8,20 @@
 import {
   CseMachineHostPlugin as _CseMachineHostPluginBase,
   type CseSnapshot,
+  type CseTraceEnd,
 } from '@sourceacademy/web-cse-machine';
 
 export class CseMachineHostPlugin extends _CseMachineHostPluginBase {
   receiveSnapshots: (snapshots: CseSnapshot[], breakpointSteps: number[]) => void = () => {};
+
+  /** What to do when a run that was sent in batches ends; evalCode.ts wires it like `receiveSnapshots`. */
+  onEnd: (end: CseTraceEnd) => void = () => {};
+
+  // The base class's `receiveEnd` is a method (it has a default), so it cannot be reassigned as a
+  // property; it hands over to `onEnd`, which can.
+  override receiveEnd(end: CseTraceEnd): void {
+    this.onEnd(end);
+  }
 }
 
 export type {
@@ -21,4 +31,5 @@ export type {
   CseSerializedBinding,
   CseSerializedEnvFrame,
   CseSnapshotMessage,
+  CseTraceEnd,
 } from '@sourceacademy/web-cse-machine';

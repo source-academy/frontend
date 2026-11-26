@@ -14,6 +14,7 @@ import { Config } from './CseMachineConfig';
 import { Layout } from './CseMachineLayout';
 import type { Env, EnvTree } from './CseMachineTypes';
 import { isMainReference } from './CseMachineUtils';
+import type { Control, Stash } from './CseRenderTypes';
 
 function isArray(x: any): x is any[] {
   return Array.isArray(x);
@@ -92,9 +93,9 @@ codeSamples.forEach((code, idx) => {
     const context = createContext(4);
     await runInContext(code, context);
     Layout.setContext(
-      context.runtime.environmentTree as EnvTree,
-      context.runtime.control!,
-      context.runtime.stash!,
+      context.runtime.environmentTree as unknown as EnvTree,
+      context.runtime.control! as unknown as Control,
+      context.runtime.stash! as unknown as Stash,
     );
 
     // Map of environment.id to Frame
@@ -256,9 +257,9 @@ codeSamplesControlStash.forEach(codeSample => {
     const context = createContext(4);
     await runInContext(code, context, { executionMethod: 'cse-machine', envSteps: currentStep });
     Layout.setContext(
-      context.runtime.environmentTree as EnvTree,
-      context.runtime.control!,
-      context.runtime.stash!,
+      context.runtime.environmentTree as unknown as EnvTree,
+      context.runtime.control! as unknown as Control,
+      context.runtime.stash! as unknown as Stash,
     );
     Layout.draw();
     const controlItemsToTest: ControlItemComponent[] = Layout.controlComponent.stackItemComponents;
@@ -305,9 +306,9 @@ test('the legacy non-conductor (real js-slang) path keeps js-slang\'s own "Globa
   // CseMachine.renderSnapshot(). Python's LEGB relabeling (#4042) must not leak in here.
   expect(Layout.snapshotMode).toBe(false);
   Layout.setContext(
-    context.runtime.environmentTree as EnvTree,
-    context.runtime.control!,
-    context.runtime.stash!,
+    context.runtime.environmentTree as unknown as EnvTree,
+    context.runtime.control! as unknown as Control,
+    context.runtime.stash! as unknown as Stash,
   );
 
   const globalFrame = Array.from(Layout.levels[0].frames)[0];
