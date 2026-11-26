@@ -2,7 +2,6 @@ import Constants from './Constants';
 
 export enum AuthProviderType {
   OAUTH2 = 'OAUTH2',
-  CAS = 'CAS',
 }
 
 export function computeEndpointUrl(providerId: string, forVscode?: boolean): string | undefined {
@@ -15,9 +14,6 @@ export function computeEndpointUrl(providerId: string, forVscode?: boolean): str
     switch (ep.type) {
       case AuthProviderType.OAUTH2:
         epUrl.searchParams.set('redirect_uri', computeFrontendRedirectUri(providerId, forVscode)!);
-        break;
-      case AuthProviderType.CAS:
-        epUrl.searchParams.set('service', computeFrontendRedirectUri(providerId, forVscode)!);
         break;
     }
     return epUrl.toString();

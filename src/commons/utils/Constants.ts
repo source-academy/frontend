@@ -85,19 +85,6 @@ for (let i = 1; ; ++i) {
   });
 }
 
-for (let i = 1; ; ++i) {
-  const id = process.env[`REACT_APP_CAS_PROVIDER${i}`];
-  if (!id) {
-    break;
-  }
-
-  const name = process.env[`REACT_APP_CAS_PROVIDER${i}_NAME`] || 'Unnamed provider';
-  const endpoint = process.env[`REACT_APP_CAS_PROVIDER${i}_ENDPOINT`] || '';
-  const screen = getProviderScreen('REACT_APP_CAS_PROVIDER', i);
-
-  authProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.CAS, screen });
-}
-
 // Computed providers filtered by screen
 const defaultAuthProviders = new Map(
   [...authProviders.entries()].filter(([, p]) => p.screen === 'default'),

@@ -13,10 +13,10 @@ function LoginCallback() {
   const location = useLocation();
   const navigate = useNavigate();
   const { isLoggedIn } = useSession();
-  const { code, ticket, provider: providerId } = parseQuery(location.search);
+  const { code, provider: providerId } = parseQuery(location.search);
 
-  // `code` parameter from OAuth2 redirect, `ticket` from CAS redirect
-  const authCode = code || ticket;
+  // `code` parameter from OAuth2 redirect
+  const authCode = code;
 
   useEffect(() => {
     if (isLoggedIn) {
