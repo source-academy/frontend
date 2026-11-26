@@ -119,11 +119,10 @@ describe('a snippet of the textbook', () => {
     // A link from before the language directory, with a Source chapter.
     await renderSnippet('/sicpjs/3.2', `chap=3&variant=default&prgrm=${program}`);
     const link = screen.getAllByTestId('share-link')[0].getAttribute('data-link');
-    expect(link).toMatch(
-      new RegExp(
-        `^${Links.playground}#prgrm=${program.replace(/\+/g, '\\+')}&language=source&variant=3`,
-      ),
-    );
+    // Compared as plain text: the program, compressed, can have characters that a pattern would take
+    // for its own.
+    const start = `${Links.playground}#prgrm=${program}&language=source&variant=3`;
+    expect(link?.slice(0, start.length)).toBe(start);
     expect(link).not.toContain('chap=');
   });
 
