@@ -1,4 +1,3 @@
-import type { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import Konva from 'konva';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -14,6 +13,7 @@ import { Config } from './CseMachineConfig';
 import { Layout } from './CseMachineLayout';
 import type { EnvTree } from './CseMachineTypes';
 import { getBodyText, getParamsText, getScopeNamesTexts, isBuiltInFn } from './CseMachineUtils';
+import type { Control, Stash } from './CseRenderTypes';
 import { buildFakeEnvTreeFromSnapshot } from './CseSnapshotAdapter';
 
 // Real (headless) Konva stage/layer so animation components — which need a live layer

@@ -1,10 +1,10 @@
-import type { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { describe, expect, it } from 'vitest';
 
 import type { CseSnapshot } from '../../../conductor/CseMachineHostPlugin';
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import type { EnvTree } from '../../CseMachineTypes';
+import type { Control, Stash } from '../../CseRenderTypes';
 import { buildFakeEnvTreeFromSnapshot } from '../../CseSnapshotAdapter';
 import { Frame } from '../Frame';
 
