@@ -92,7 +92,7 @@ codeSamples.forEach((code, idx) => {
     const context = createContext(4);
     await runInContext(code, context);
     Layout.setContext(
-      context.runtime.environmentTree as EnvTree,
+      context.runtime.environmentTree as unknown as EnvTree,
       context.runtime.control!,
       context.runtime.stash!,
     );
@@ -256,7 +256,7 @@ codeSamplesControlStash.forEach(codeSample => {
     const context = createContext(4);
     await runInContext(code, context, { executionMethod: 'cse-machine', envSteps: currentStep });
     Layout.setContext(
-      context.runtime.environmentTree as EnvTree,
+      context.runtime.environmentTree as unknown as EnvTree,
       context.runtime.control!,
       context.runtime.stash!,
     );
@@ -305,7 +305,7 @@ test('the legacy non-conductor (real js-slang) path keeps js-slang\'s own "Globa
   // CseMachine.renderSnapshot(). Python's LEGB relabeling (#4042) must not leak in here.
   expect(Layout.snapshotMode).toBe(false);
   Layout.setContext(
-    context.runtime.environmentTree as EnvTree,
+    context.runtime.environmentTree as unknown as EnvTree,
     context.runtime.control!,
     context.runtime.stash!,
   );

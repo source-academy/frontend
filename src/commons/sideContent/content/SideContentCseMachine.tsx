@@ -15,7 +15,6 @@ import { IconNames } from '@blueprintjs/icons';
 import type { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
-import { Chapter } from 'js-slang/dist/langs';
 import { debounce } from 'lodash-es';
 import { Component } from 'react';
 import { connect, type MapDispatchToProps, type MapStateToProps } from 'react-redux';
@@ -53,7 +52,6 @@ type State = {
   height: number;
   width: number;
   lastStep: boolean;
-  chapter: Chapter;
   clearDeadFrames: boolean;
   arrowFilterOpen: boolean;
   sliderKey: number;
@@ -69,7 +67,6 @@ type StateProps = {
   breakpointSteps: number[];
   changepointSteps: number[];
   machineOutput: InterpreterOutput[];
-  chapter: Chapter;
   cseSnapshots: CseSnapshot[] | null;
   /** How the run ended, if the evaluator said (see `cseEnd` of the workspace). */
   cseEnd: CseTraceEnd | null;
@@ -107,7 +104,6 @@ class SideContentCseMachineBase extends Component<CseMachineProps, State> {
       width: this.calculateWidth(props.editorWidth),
       height: this.calculateHeight(props.sideContentHeight),
       lastStep: false,
-      chapter: props.chapter,
       clearDeadFrames: false,
       arrowFilterOpen: false,
       sliderKey: 0,
@@ -748,8 +744,6 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     breakpointSteps: workspace.breakpointSteps,
     changepointSteps: workspace.changepointSteps,
     machineOutput: workspace.output,
-    // The CSE machine formats values identically for every chapter that has it.
-    chapter: Chapter.SOURCE_4,
     cseSnapshots: workspace.cseSnapshots,
     cseEnd: workspace.cseEnd,
     isOnCseTab: state.sideContent[loc]?.selectedTab === SideContentType.cseMachine,

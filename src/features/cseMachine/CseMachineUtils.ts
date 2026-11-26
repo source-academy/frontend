@@ -10,8 +10,6 @@ import type {
   UnOpInstr,
 } from 'js-slang/dist/cse-machine/types';
 import { InstrType } from 'js-slang/dist/cse-machine/types';
-import { Chapter } from 'js-slang/dist/langs';
-import type { Environment, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
@@ -53,6 +51,7 @@ import type {
   StreamFn,
   Unassigned,
 } from './CseMachineTypes';
+import type { Environment, Value as StashValue } from './CseRenderTypes';
 import { isContinuation } from './utils/continuation';
 class AssertionError extends Error {
   constructor(msg?: string) {
@@ -994,7 +993,6 @@ export function getControlItemComponent(
   index: number,
   highlightOnHover: () => void,
   unhighlightOnHover: () => void,
-  chapter: Chapter,
 ): ControlItemComponent {
   const topItem = CseMachine.getStackTruncated()
     ? index === Math.min(Layout.control.size() - 1, 9)
@@ -1272,7 +1270,6 @@ export function getStashItemComponent(
   stashItem: StashValue,
   stackHeight: number,
   index: number,
-  _chapter: Chapter,
 ): StashItemComponent {
   let arrowTo: ArrayValue | FnValue | GlobalFnValue | ContValue | undefined;
   if (isFunction(stashItem) || isDataArray(stashItem || isContinuation(stashItem))) {
