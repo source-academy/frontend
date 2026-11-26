@@ -1,6 +1,6 @@
 import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
 
-import type { CseSnapshot } from '../../features/conductor/CseMachineHostPlugin';
+import type { CseSnapshot, CseTraceEnd } from '../../features/conductor/CseMachineHostPlugin';
 import type { AllColsSortStates } from '../../features/grading/GradingTypes';
 import type { InterpreterOutput } from '../application/ApplicationTypes';
 import type { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
@@ -101,6 +101,8 @@ export type WorkspaceState = {
   readonly customNotification: string;
   readonly sharedbConnected: boolean;
   readonly cseSnapshots: CseSnapshot[] | null;
+  /** How the run whose snapshots these are ended, if the evaluator said (it sends them in batches). */
+  readonly cseEnd: CseTraceEnd | null;
   readonly updateUserRoleCallback: (id: string, newRole: CollabEditingAccess) => void;
   readonly versionHistory: VersionHistoryState;
   readonly saveStatus: SaveStatus;
