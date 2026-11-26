@@ -1,5 +1,4 @@
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
-import { Chapter } from 'js-slang/dist/langs';
 import { Group as KonvaGroupNode } from 'konva/lib/Group';
 import { Layer as KonvaLayerNode } from 'konva/lib/Layer';
 import type { KonvaEventObject } from 'konva/lib/Node';
@@ -359,12 +358,7 @@ export class Layout {
   }
 
   /** processes the runtime context from JS Slang */
-  static setContext(
-    envTree: EnvTree,
-    control: Control,
-    stash: Stash,
-    chapter: Chapter = Chapter.SOURCE_4,
-  ): void {
+  static setContext(envTree: EnvTree, control: Control, stash: Stash): void {
     Layout.currentLight = undefined;
     Layout.currentDark = undefined;
     Layout.currentStackDark = undefined;
@@ -397,7 +391,7 @@ export class Layout {
     // initialize levels and frames
     Layout.initializeGrid();
     // initialize control and stash
-    Layout.initializeControlStash(chapter);
+    Layout.initializeControlStash();
 
     if (CseMachine.getControlStash()) {
       Layout.controlStashHeight = Math.max(
@@ -437,11 +431,11 @@ export class Layout {
     }
   }
 
-  static initializeControlStash(chapter: Chapter) {
+  static initializeControlStash() {
     Layout.previousControlComponent = Layout.controlComponent;
     Layout.previousStashComponent = Layout.stashComponent;
-    this.controlComponent = new ControlStack(this.control, chapter);
-    this.stashComponent = new StashStack(this.stash, chapter);
+    this.controlComponent = new ControlStack(this.control);
+    this.stashComponent = new StashStack(this.stash);
   }
 
   /**
