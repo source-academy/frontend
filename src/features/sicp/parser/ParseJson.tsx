@@ -43,7 +43,8 @@ export type JsonType = {
 };
 
 type RefType = React.RefObject<Record<string, HTMLElement | null>>;
-type SnippetLanguage = 'javascript' | 'python';
+/** The name that the syntax highlighter knows the code by; none shows it plain. */
+type SnippetLanguage = string | undefined;
 type AnchorLinkType = {
   children: React.ReactNode;
   id: string | undefined;
@@ -312,11 +313,7 @@ export const processingFunctions: Record<
 };
 
 // Parse array of objects. An array of objects represent sibling nodes.
-export const parseArr = (
-  arr: Array<JsonType>,
-  refs: RefType,
-  language: SnippetLanguage = 'javascript',
-) => {
+export const parseArr = (arr: Array<JsonType>, refs: RefType, language?: SnippetLanguage) => {
   if (!arr) {
     return <></>;
   }
@@ -329,7 +326,7 @@ export const parseObj = (
   obj: JsonType,
   index: number | undefined,
   refs: RefType,
-  language: SnippetLanguage = 'javascript',
+  language?: SnippetLanguage,
 ) => {
   if (obj.tag) {
     if (processingFunctions[obj.tag]) {

@@ -16,7 +16,7 @@ type OwnProps = {
   id: string;
   initialEditorValueHash: string;
   prependLength: number | undefined;
-  language?: 'javascript' | 'python';
+  language?: string;
 };
 
 const resizableProps = {
@@ -44,7 +44,7 @@ function CodeSnippet({
   id,
   initialEditorValueHash,
   prependLength,
-  language = 'javascript',
+  language,
 }: CodeSnippetProps) {
   const context = useCodeSnippetContext();
   const { isMobileBreakpoint } = useResponsive();

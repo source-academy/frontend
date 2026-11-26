@@ -22,6 +22,7 @@ describe('Sicp Code Snippet', () => {
   test('renders correctly with prepend', () => {
     const props = {
       body: body,
+      language: 'javascript',
       output: output,
       id: 'id',
       initialEditorValueHash: program,
@@ -39,6 +40,7 @@ describe('Sicp Code Snippet', () => {
   test('renders correctly without prepend', () => {
     const props = {
       body: body,
+      language: 'javascript',
       output: output,
       id: 'id',
       initialEditorValueHash: program,
