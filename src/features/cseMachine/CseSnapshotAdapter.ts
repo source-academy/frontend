@@ -11,13 +11,12 @@
  * Primitives: actual JS number/string/boolean — pass typeof checks naturally.
  * Arrays: real JS arrays with .id and .environment own properties — pass isDataArray() check.
  */
-import { InstrType } from 'js-slang/dist/cse-machine/types';
-
 import type {
   CseSerializedEnvFrame,
   CseSerializedValue,
   CseSnapshot,
 } from '../conductor/CseMachineHostPlugin';
+import { InstrType } from './CseInstructions';
 import { Config } from './CseMachineConfig';
 import type { Control, Stash } from './CseRenderTypes';
 import { type Environment, EnvTree, Heap } from './CseRenderTypes';

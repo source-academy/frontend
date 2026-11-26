@@ -7,7 +7,7 @@
  * wherever one of these is, and the objects that `CseSnapshotAdapter` makes from a snapshot are one
  * of these without js-slang.
  */
-import type { ControlItem } from 'js-slang/dist/cse-machine/types';
+import type { ControlItem } from './CseInstructions';
 
 /** A value that a name is bound to, or that a stash holds; the renderer tells them apart by shape. */
 

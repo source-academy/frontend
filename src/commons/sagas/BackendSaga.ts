@@ -1,5 +1,4 @@
 import type { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
-import { camelCase, mapKeys } from 'lodash-es';
 import type { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select, take } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
@@ -190,13 +189,6 @@ const newBackendSagaOne = combineSagaHandlers({
      * - However, the current router instance we have access to HERE in this saga via `routerNavigate` is the old router instance.
      * - Thus handling navigation in <Login /> allows us to directly access the latest router via `useNavigate`.
      */
-  },
-  [SessionActions.handleSamlRedirect.type]: function* (action) {
-    const { jwtCookie } = action.payload;
-    const tokens = mapKeys(JSON.parse(jwtCookie), (v, k) => camelCase(k)) as Tokens;
-
-    yield put(actions.setTokens(tokens));
-    yield put(actions.fetchUserAndCourse());
   },
   [SessionActions.fetchUserAndCourse.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();

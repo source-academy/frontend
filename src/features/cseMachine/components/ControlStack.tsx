@@ -1,8 +1,7 @@
-import type { ControlItem, Instr } from 'js-slang/dist/cse-machine/types';
-import type { Node, StatementSequence } from 'js-slang/dist/types';
 import type { KonvaEventObject } from 'konva/lib/Node';
 import { Label, Tag, Text } from 'react-konva';
 
+import type { ControlItem, Instr, Node, StatementSequence } from '../CseInstructions';
 import CseMachine from '../CseMachine';
 import { Config } from '../CseMachineConfig';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';

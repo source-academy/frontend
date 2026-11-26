@@ -1,15 +1,3 @@
-import type {
-  AppInstr,
-  ArrLitInstr,
-  AssmtInstr,
-  BinOpInstr,
-  ControlItem,
-  EnvInstr,
-  Instr,
-  UnOpInstr,
-} from 'js-slang/dist/cse-machine/types';
-import { InstrType } from 'js-slang/dist/cse-machine/types';
-import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
@@ -29,6 +17,17 @@ import { ContValue } from './components/values/ContValue';
 import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
+import type {
+  AppInstr,
+  ArrLitInstr,
+  AssmtInstr,
+  BinOpInstr,
+  ControlItem,
+  EnvInstr,
+  Instr,
+  UnOpInstr,
+} from './CseInstructions';
+import { InstrType } from './CseInstructions';
 import CseMachine from './CseMachine';
 import { Config } from './CseMachineConfig';
 import { Layout } from './CseMachineLayout';
@@ -51,6 +50,7 @@ import type {
   Unassigned,
 } from './CseMachineTypes';
 import type { Environment, Value as StashValue } from './CseRenderTypes';
+import { astToString } from './utils/astToString';
 import { isContinuation } from './utils/continuation';
 class AssertionError extends Error {
   constructor(msg?: string) {
