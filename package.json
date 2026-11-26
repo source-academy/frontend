@@ -203,7 +203,7 @@
     ]
   },
   "resolutions": {
-    "@types/estree": "1.0.9",
+    "@types/estree": "1.0.10",
     "vite": "8.1.6"
   }
 }
