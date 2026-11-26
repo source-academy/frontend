@@ -430,17 +430,6 @@ describe('Test FETCH_AUTH action', () => {
   });
 });
 
-test('Test handleSamlRedirect action', () => {
-  const jwtCookie = `{"access_token":"${mockTokens.accessToken}","refresh_token":"${mockTokens.refreshToken}"}`;
-
-  return expectSaga(BackendSaga)
-    .withState({ session: mockTokens }) // need to mock tokens for the downstream selectTokens() call in fetchUserAndCourse()
-    .put(SessionActions.setTokens(mockTokens))
-    .put(SessionActions.fetchUserAndCourse())
-    .dispatch({ type: SessionActions.handleSamlRedirect.type, payload: { jwtCookie } })
-    .silentRun();
-});
-
 describe('Test FETCH_USER_AND_COURSE action', () => {
   const user = mockUser;
   const courseConfiguration = mockCourseConfiguration1;

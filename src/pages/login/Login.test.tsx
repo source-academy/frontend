@@ -86,20 +86,6 @@ describe('Login', () => {
     expect(dispatchMock).toHaveBeenCalledWith(SessionActions.fetchAuth(code, providerId));
   });
 
-  test('Dispatches handleSamlRedirect when JWT cookies is present (from SAML redirect), and NOT logged in', () => {
-    const jwtCookie = `{"access_token":"12345","refresh_token":"67890"}`;
-    Object.defineProperty(window.document, 'cookie', {
-      writable: true,
-      value: `jwts=${jwtCookie}`,
-    });
-
-    const store = mockInitialStore();
-    const app = createTestComponent(store, `/login/callback`);
-    render(app);
-
-    expect(dispatchMock).toHaveBeenCalledWith(SessionActions.handleSamlRedirect(jwtCookie));
-  });
-
   describe('When isLoggedIn and no course', () => {
     test('/login redirects to /welcome', () => {
       const store = mockInitialStore({
@@ -156,7 +142,7 @@ describe('Login', () => {
     });
   });
 
-  test('/login/callback redirects to /login when not isLoggedIn, nor code/ticket nor SAML redirect', () => {
+  test('/login/callback redirects to /login when not isLoggedIn, nor code', () => {
     const store = mockInitialStore();
     const app = createTestComponent(store, '/login/callback');
     render(app);
