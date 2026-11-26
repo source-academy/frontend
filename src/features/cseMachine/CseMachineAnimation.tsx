@@ -1,7 +1,4 @@
 import type { Identifier } from 'estree';
-import type { AppInstr, ArrLitInstr, AssmtInstr } from 'js-slang/dist/cse-machine/types';
-import { InstrType } from 'js-slang/dist/cse-machine/types';
-import type { Node } from 'js-slang/dist/types';
 import { Layer } from 'konva/lib/Layer';
 import { Easings } from 'konva/lib/Tween';
 import { createRef } from 'react';
@@ -26,6 +23,9 @@ import { UnaryOperationAnimation } from './animationComponents/UnaryOperationAni
 import { isNode } from './components/ControlStack';
 import { Frame } from './components/Frame';
 import { ArrayValue } from './components/values/ArrayValue';
+import type { AppInstr, ArrLitInstr, AssmtInstr } from './CseInstructions';
+import type { Node } from './CseInstructions';
+import { InstrType } from './CseInstructions';
 import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
 import { isBuiltInFn, isEnvEqual, isInstr, isStreamFn } from './CseMachineUtils';
