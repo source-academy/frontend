@@ -1,4 +1,3 @@
-import { Control } from 'js-slang/dist/cse-machine/interpreter';
 import type { ControlItem, Instr } from 'js-slang/dist/cse-machine/types';
 import type { Node, StatementSequence } from 'js-slang/dist/types';
 import type { KonvaEventObject } from 'konva/lib/Node';
@@ -18,6 +17,7 @@ import {
   setUnhoveredCursor,
   setUnhoveredStyle,
 } from '../CseMachineUtils';
+import type { Control } from '../CseRenderTypes';
 import { ControlItemComponent } from './ControlItemComponent';
 import { Visible } from './Visible';
 

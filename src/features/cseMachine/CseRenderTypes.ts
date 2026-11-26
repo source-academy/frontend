@@ -7,6 +7,7 @@
  * wherever one of these is, and the objects that `CseSnapshotAdapter` makes from a snapshot are one
  * of these without js-slang.
  */
+import type { ControlItem } from 'js-slang/dist/cse-machine/types';
 
 /** A value that a name is bound to, or that a stash holds; the renderer tells them apart by shape. */
 
@@ -61,6 +62,22 @@ export class Heap {
 
 /** What the renderer asks of a heap: `Heap`, and js-slang's own, have it. */
 export type HeapLike = Pick<Heap, 'add' | 'contains' | 'size' | 'move' | 'getHeap'>;
+
+/** What the renderer reads of a register of the machine (the control or the stash): its items. */
+export type RegisterStack<T> = {
+  /** The item on top, if there is one. */
+  peek(): T | undefined;
+  size(): number;
+  isEmpty(): boolean;
+  /** The items, the one on top last. */
+  getStack(): T[];
+};
+
+/** The control: the instructions and the program parts that are still to be evaluated. */
+export type Control = RegisterStack<ControlItem>;
+
+/** The stash: the values that have been evaluated and are not yet used. */
+export type Stash = RegisterStack<Value>;
 
 /** A frame of the environment model, with the environment it extends. */
 export type Environment = {

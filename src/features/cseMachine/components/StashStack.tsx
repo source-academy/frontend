@@ -1,9 +1,8 @@
-import { Stash } from 'js-slang/dist/cse-machine/interpreter';
-
 import CseMachine from '../CseMachine';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { getStashItemComponent } from '../CseMachineUtils';
 import type { Value } from '../CseRenderTypes';
+import type { Stash } from '../CseRenderTypes';
 import { StashItemComponent } from './StashItemComponent';
 import { Visible } from './Visible';
 

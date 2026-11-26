@@ -1,6 +1,5 @@
-import type { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
-
 import type { Environment } from '../CseRenderTypes';
+import type { Control, Stash } from '../CseRenderTypes';
 
 /**
  * A continuation, as the renderer reads one: a function value that holds the control, the stash and

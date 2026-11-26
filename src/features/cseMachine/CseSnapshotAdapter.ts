@@ -11,7 +11,6 @@
  * Primitives: actual JS number/string/boolean — pass typeof checks naturally.
  * Arrays: real JS arrays with .id and .environment own properties — pass isDataArray() check.
  */
-import type { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { InstrType } from 'js-slang/dist/cse-machine/types';
 
 import type {
@@ -20,6 +19,7 @@ import type {
   CseSnapshot,
 } from '../conductor/CseMachineHostPlugin';
 import { Config } from './CseMachineConfig';
+import type { Control, Stash } from './CseRenderTypes';
 import { type Environment, EnvTree, Heap } from './CseRenderTypes';
 
 // Global counter so every fake closure gets a unique id regardless of which env it was defined in.
@@ -622,7 +622,7 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
   // py-slang now emits real ENVIRONMENT instructions (pointing to the caller's env) for
   // every function call. Those are picked up by collectRootEnvIds Root 3, keeping all
   // call-stack frames alive without any synthetic injection here.
-  const fakeControl = makeFakeStack(controlItems) as unknown as Control;
+  const fakeControl = makeFakeStack(controlItems);
 
   // ── Build fake Stash ─────────────────────────────────────────────────────
   // The evaluator serializes stash newest-first (rawStash.slice().reverse()), so we must
@@ -654,7 +654,7 @@ export function buildFakeEnvTreeFromSnapshot(snapshot: CseSnapshot): SnapshotAda
     }
   }
 
-  const fakeStash = makeFakeStack(stashItems) as unknown as Stash;
+  const fakeStash = makeFakeStack(stashItems);
 
   return { envTree, fakeControl, fakeStash };
 }
