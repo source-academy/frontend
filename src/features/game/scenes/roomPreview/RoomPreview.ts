@@ -1,7 +1,3 @@
-import type { Context } from 'js-slang';
-import { createContext, runInContext } from 'js-slang';
-import { Chapter, Variant } from 'js-slang/dist/langs';
-
 import ImageAssets from '../../assets/ImageAssets';
 import { getAwardProp } from '../../awards/GameAwardsHelper';
 import GameAwardsManager from '../../awards/GameAwardsManager';
@@ -23,6 +19,7 @@ import { createButton } from '../../utils/ButtonUtils';
 import { mandatory, toS3Path } from '../../utils/GameUtils';
 import { loadImage, loadSound, loadSpritesheet } from '../../utils/LoaderUtils';
 import { resizeOverflow } from '../../utils/SpriteUtils';
+import RoomCodeRunner from './RoomCodeRunner';
 import { RoomConstants, roomDefaultCode } from './RoomPreviewConstants';
 import { createCMRGamePhases, createVerifiedHoverContainer } from './RoomPreviewHelper';
 
@@ -58,7 +55,7 @@ export default class RoomPreview extends Phaser.Scene {
 
   private verifCont: Phaser.GameObjects.Container | undefined;
 
-  private context?: Context;
+  private runner?: RoomCodeRunner;
   private sceneLoaded = false;
 
   constructor() {
@@ -162,9 +159,9 @@ export default class RoomPreview extends Phaser.Scene {
 
   public update() {
     /**
-     * runInContext appends new frame everytime it is run,
+     * Running code appends a new frame to the context every time,
      * which leads to out of memory error when we run
-     * runInContext as often as FPS of the game for `update()`.
+     * the code as often as FPS of the game for `update()`.
      *
      * Hence, we replace the scope instead of appending
      * new one each time.
@@ -175,24 +172,20 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public createContext() {
-    this.context = createContext(Chapter.SOURCE_4, Variant.DEFAULT, undefined, [], 'playground');
-    this.context.moduleContexts.game = {
-      tabs: null,
-      state: {
-        scene: this,
-        preloadImageMap: this.preloadImageMap,
-        preloadSoundMap: this.preloadSoundMap,
-        preloadSpritesheetMap: this.preloadSpritesheetMap,
-        remotePath: (file: string) => toS3Path(file, true),
-        screenSize: screenSize,
-        createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key),
-      },
-    };
+    this.runner = new RoomCodeRunner({
+      scene: this,
+      preloadImageMap: this.preloadImageMap,
+      preloadSoundMap: this.preloadSoundMap,
+      preloadSpritesheetMap: this.preloadSpritesheetMap,
+      remotePath: (file: string) => toS3Path(file, true),
+      screenSize: screenSize,
+      createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key),
+    });
   }
 
   private async eval(code: string) {
-    // runInContext also automatically updates the context
-    await runInContext(code, this.context!);
+    // The runner keeps what the code declares, so that the later calls see it
+    await this.runner!.run(code);
   }
 
   /**
