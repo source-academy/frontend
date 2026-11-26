@@ -2,7 +2,7 @@ import { Range } from 'ace-builds';
 import { useCallback } from 'react';
 
 import type { EditorHook } from './Editor';
-import { useAnalysis } from './useAnalysis';
+import { captureAnalysisRequest, useAnalysis } from './useAnalysis';
 
 // EditorHook structure:
 // EditorHooks grant access to 4 things:
@@ -15,20 +15,17 @@ const useRefactor: EditorHook = (_inProps, _outProps, keyBindings, reactAceRef) 
   const analysis = useAnalysis();
 
   const refactor = useCallback(async () => {
-    const provider = analysis.current;
     const editor = reactAceRef.current?.editor;
-    if (!editor || !provider?.capabilities.occurrences) {
+    if (!editor || !analysis.current?.capabilities.occurrences) {
       return;
     }
-    const code = editor.getValue();
-    const position = editor.getCursorPosition();
-    const occurrences = await provider.occurrences(code, {
-      line: position.row,
-      character: position.column,
-    });
+    const request = captureAnalysisRequest(editor, analysis);
+    const occurrences = await request.provider!.occurrences(request.code, request.position);
 
-    // The ranges are those of the code of the request: not of what is there now.
-    if (editor.getValue() !== code) {
+    // The ranges are those of the code, the cursor and the evaluator of the request: not of what
+    // is there now (they would be selected beside the user's own selection, and typing would
+    // rename the old name as well as the new one).
+    if (!request.isCurrent()) {
       return;
     }
     const selection = editor.getSelection();

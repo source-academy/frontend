@@ -2,7 +2,7 @@ import { Ace, Range as AceRange } from 'ace-builds';
 import { useCallback, useEffect, useRef } from 'react';
 
 import type { EditorHook } from './Editor';
-import { useAnalysis } from './useAnalysis';
+import { captureAnalysisRequest, useAnalysis } from './useAnalysis';
 
 const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
   const analysis = useAnalysis();
@@ -17,9 +17,9 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
     markerIdsRef.current = [];
   }, [reactAceRef]);
 
-  // Markers outlive a change of the session's mode, so switching to a language that is not
-  // analysed has to remove them explicitly.
-  const isEnabled = !!analysis.current;
+  // Markers outlive a change of the session's mode, so switching to an evaluator that does not
+  // provide the occurrences (or one that no longer says that it does) has to remove them explicitly.
+  const isEnabled = !!analysis.current?.capabilities.occurrences;
   useEffect(() => {
     if (!isEnabled) {
       clearMarkers();
@@ -42,17 +42,14 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
       }
       const editor = reactAceRef.current.editor;
       const session: Ace.EditSession = editor.session;
-      const code = session.getValue();
-      const position = editor.getCursorPosition();
       if (!session || !(session as any).bgTokenizer) {
         return;
       }
-      const occurrences = await provider.occurrences(code, {
-        line: position.row,
-        character: position.column,
-      });
-      // A later request has been made while the evaluator was answering this one.
-      if (request !== latestRequestRef.current || !reactAceRef.current) {
+      const asked = captureAnalysisRequest(editor, analysis);
+      const occurrences = await provider.occurrences(asked.code, asked.position);
+      // A later request has been made while the evaluator was answering this one, or the editor
+      // is not what it was (the cursor, the code, the tab, the evaluator).
+      if (request !== latestRequestRef.current || !reactAceRef.current || !asked.isCurrent()) {
         return;
       }
       markerIdsRef.current.forEach(id => {
@@ -71,18 +68,17 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
   }, [reactAceRef, analysis, clearMarkers]);
 
   const handleHighlightScope = useCallback(async () => {
-    const provider = analysis.current;
-    if (!reactAceRef.current || !provider?.capabilities.scope) {
+    if (!reactAceRef.current || !analysis.current?.capabilities.scope) {
       return;
     }
     const editor = reactAceRef.current.editor;
-    const code = editor.getValue();
-    const position = editor.getCursorPosition();
+    const asked = captureAnalysisRequest(editor, analysis);
 
-    const ranges = await provider.scope(code, { line: position.row, character: position.column });
+    const ranges = await asked.provider!.scope(asked.code, asked.position);
 
-    // The ranges are those of the code of the request: not of what is there now.
-    if (!reactAceRef.current || editor.getValue() !== code) {
+    // The ranges are for the editor as it was asked: not for what is there now (the cursor may
+    // have moved on, and the markers of the old position have been replaced).
+    if (!reactAceRef.current || !asked.isCurrent()) {
       return;
     }
     ranges.forEach(({ start, end }) => {

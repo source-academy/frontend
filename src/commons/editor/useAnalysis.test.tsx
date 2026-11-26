@@ -32,9 +32,10 @@ const provider: AnalysisProvider = {
 function setUp() {
   const store = createStore();
   store.dispatch(LanguageDirectoryActions.setLanguages([language]));
-  const wrapper = ({ children }: { children: React.ReactNode }) => (
-    <Provider store={store}>{children}</Provider>
-  );
+  type Props = { children: React.ReactNode };
+  function wrapper({ children }: Props) {
+    return <Provider store={store}>{children}</Provider>;
+  }
   const publisherFor = (evaluatorPath: string) => {
     const tabService = {} as ITabService;
     associateAutocompleteEvaluator(tabService, evaluatorPath);
