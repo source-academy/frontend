@@ -185,6 +185,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   isWaitingForInput: false,
   enableDebugging: true,
   cseSnapshots: null,
+  cseEnd: null,
   updateUserRoleCallback: () => {},
   versionHistory: {
     versions: [],
