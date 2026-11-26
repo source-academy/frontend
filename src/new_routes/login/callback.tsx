@@ -1,6 +1,5 @@
 import { Card, Classes, Elevation, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import classNames from 'classnames';
-import Cookies from 'js-cookie';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
@@ -19,9 +18,6 @@ function LoginCallback() {
   // `code` parameter from OAuth2 redirect
   const authCode = code;
 
-  // From SAML redirect to frontend after ACS consumption
-  const jwtCookie = Cookies.get(samlRedirectJwtCookieKey);
-
   useEffect(() => {
     if (isLoggedIn) {
       return;
@@ -33,15 +29,9 @@ function LoginCallback() {
       return;
     }
 
-    if (jwtCookie) {
-      Cookies.remove(samlRedirectJwtCookieKey, { domain: window.location.hostname });
-      dispatch(SessionActions.handleSamlRedirect(jwtCookie));
-      return;
-    }
-
-    // No authCode (OAuth) nor jwt cookie (SAML redirect)
+    // No authCode (OAuth)
     navigate('/login');
-  }, [authCode, isLoggedIn, dispatch, jwtCookie, navigate, providerId]);
+  }, [authCode, isLoggedIn, dispatch, navigate, providerId]);
 
   return (
     <div className={classNames(classes['Login'], Classes.DARK)}>
@@ -56,7 +46,5 @@ function LoginCallback() {
     </div>
   );
 }
-
-const samlRedirectJwtCookieKey = 'jwts';
 
 export const Component = LoginCallback;
