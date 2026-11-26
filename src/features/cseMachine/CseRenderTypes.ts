@@ -63,17 +63,16 @@ export class Heap {
 export type HeapLike = Pick<Heap, 'add' | 'contains' | 'size' | 'move' | 'getHeap'>;
 
 /** A frame of the environment model, with the environment it extends. */
-export interface Environment {
+export type Environment = {
   readonly id: string;
   name: string;
   tail: Environment | null;
   /** The call that made the frame, if the evaluator says (its source text is what is shown). */
-
   callExpression?: any;
   head: Frame;
   heap: HeapLike;
   thisContext?: Value;
-}
+};
 
 /** A frame of the environment model in the tree of the frames, with the frames made from it. */
 export class EnvTreeNode {
