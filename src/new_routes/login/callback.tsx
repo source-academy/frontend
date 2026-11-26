@@ -14,10 +14,10 @@ function LoginCallback() {
   const location = useLocation();
   const navigate = useNavigate();
   const { isLoggedIn } = useSession();
-  const { code, ticket, provider: providerId } = parseQuery(location.search);
+  const { code, provider: providerId } = parseQuery(location.search);
 
-  // `code` parameter from OAuth2 redirect, `ticket` from CAS redirect
-  const authCode = code || ticket;
+  // `code` parameter from OAuth2 redirect
+  const authCode = code;
 
   // From SAML redirect to frontend after ACS consumption
   const jwtCookie = Cookies.get(samlRedirectJwtCookieKey);
@@ -39,7 +39,7 @@ function LoginCallback() {
       return;
     }
 
-    // No authCode (OAuth, CAS) nor jwt cookie (SAML redirect)
+    // No authCode (OAuth) nor jwt cookie (SAML redirect)
     navigate('/login');
   }, [authCode, isLoggedIn, dispatch, jwtCookie, navigate, providerId]);
 
