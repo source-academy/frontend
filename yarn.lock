@@ -4499,17 +4499,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.41":
+"@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.42":
   version: 0.0.41
-  resolution: "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#commit=e7c3c1450d7f50abfa6330b956760d8b04956a30"
-  checksum: 10c0/3bebaf3ff2511f028fe3bdc55d71b8f8a45972e7f2430d7471014e9a3b208dfafd7c62d2747ebfde18353e307c045403e95599440ba0bc1bed569bbfdbcaad5a
+  resolution: "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#commit=f7aba954b788e7b23fb865f8e58d213336df8a60"
+  checksum: 10c0/438ce5e1e2c3267dfaa7961e70463a40dbb6358850794d555b460d64920aadd0d735f89f6ad193531fa3ea30f6583690f4351631c0aa26bdd5821cc0dc4b7d11
   languageName: node
   linkType: hard
 
-"@sourceacademy/plugin-directory@https://github.com/source-academy/plugin-directory.git#0.0.5":
+"@sourceacademy/plugin-directory@https://github.com/source-academy/plugin-directory.git#0.0.6":
   version: 0.0.3
-  resolution: "@sourceacademy/plugin-directory@https://github.com/source-academy/plugin-directory.git#commit=0cc9be5a99d4354acdeed7421eacf0a4bbdf6450"
-  checksum: 10c0/2922cad07844af91efb3dacc7fa7839327aa38d69bf3bb6bf3e42ff02f3542f44e8aa1566988a5abe0d8fc5020b77bc215992bd5f4e813a36ffbd71fff8f7bdc
+  resolution: "@sourceacademy/plugin-directory@https://github.com/source-academy/plugin-directory.git#commit=b07689ab2e930ba5e8113518dd1bd74829d93d97"
+  checksum: 10c0/9b23e6e256001fd3ce833115e833d3b8102788ded5968fb4d623034f86569eb26fd3b3527f923e6d8de1af31379a940deab8744fe33a8123be135a515ddb19cb
   languageName: node
   linkType: hard
 
@@ -8811,8 +8811,8 @@ __metadata:
     "@sourceacademy/common-autocomplete": "npm:^0.0.2"
     "@sourceacademy/common-tabs": "npm:^0.2.0"
     "@sourceacademy/conductor": "npm:^0.8.3"
-    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.41"
-    "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.5"
+    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.42"
+    "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.6"
     "@sourceacademy/runner-module-loader": "npm:^0.1.0"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
