@@ -20,10 +20,7 @@ import {
 } from 'src/commons/collabEditing/CollabEditingActions';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
-import sideContentManager, {
-  useIsServiceTabShown,
-  useTabOwnerPath,
-} from 'src/commons/sideContent/SideContentManager';
+import sideContentManager, { useTabOwnerPath } from 'src/commons/sideContent/SideContentManager';
 import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 import { useAppDispatch, useAppSelector, useResponsive } from 'src/commons/utils/Hooks';
 import { recordLegacyUsage } from 'src/commons/utils/legacyUsage';
@@ -79,7 +76,6 @@ import { snippetShareHash } from '../../features/sicp/snippetShareHash';
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
 import {
   desktopOnlyTabIds,
-  makeConductorDataVisualizerPlaceholderTab,
   makeConductorToolPlaceholderTab,
   makeDocumentationTabFrom,
   makeIntroductionTabFrom,
@@ -426,23 +422,15 @@ function Playground(props: PlaygroundProps) {
   }, [activeEditorTabIndex, isRunning, autorunButtonHandlers]);
 
   const clearButton = useMemo(
-    () =>
-      selectedTab === SideContentType.substVisualizer ? null : (
-        <ControlBarClearButton handleReplOutputClear={handleReplOutputClear} key="clear_repl" />
-      ),
-    [handleReplOutputClear, selectedTab],
+    () => <ControlBarClearButton handleReplOutputClear={handleReplOutputClear} key="clear_repl" />,
+    [handleReplOutputClear],
   );
 
   const evalButton = useMemo(
-    () =>
-      selectedTab === SideContentType.substVisualizer ? null : (
-        <ControlBarEvalButton
-          handleReplEval={handleReplEval}
-          isRunning={isRunning}
-          key="eval_repl"
-        />
-      ),
-    [handleReplEval, isRunning, selectedTab],
+    () => (
+      <ControlBarEvalButton handleReplEval={handleReplEval} isRunning={isRunning} key="eval_repl" />
+    ),
+    [handleReplEval, isRunning],
   );
 
   // Compute this here to avoid re-rendering the button every keystroke
@@ -736,10 +724,6 @@ function Playground(props: PlaygroundProps) {
     () => makeIntroductionTabFrom(conductorWelcomeText ?? DEFAULT_WELCOME_TEXT),
     [conductorWelcomeText],
   );
-  const isDataVisualizerTabShown = useIsServiceTabShown(
-    SideContentType.dataVisualizer,
-    workspaceLocation,
-  );
   const tabs = useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
@@ -753,9 +737,6 @@ function Playground(props: PlaygroundProps) {
 
     if (!usingRemoteExecution) {
       // Don't show the following when using remote execution
-      if (isDataVisualizerTabShown) {
-        tabs.push(makeConductorDataVisualizerPlaceholderTab());
-      }
       // Placeholders keep these tabs visible before their plugin loads; each plugin's live tab
       // replaces its placeholder in place.
       for (const { tab } of toolTabs) {
@@ -771,7 +752,6 @@ function Playground(props: PlaygroundProps) {
     output,
     workspaceLocation,
     dispatch,
-    isDataVisualizerTabShown,
     hasDocumentation,
     toolTabs,
     remoteExecutionTab,
@@ -914,10 +894,8 @@ function Playground(props: PlaygroundProps) {
     handleBrowseHistoryDown: replHandlers.handleBrowseHistoryDown,
     handleBrowseHistoryUp: replHandlers.handleBrowseHistoryUp,
     handleReplValueChange: replHandlers.handleReplValueChange,
-    hidden:
-      selectedTab === SideContentType.substVisualizer ||
-      // A plugin's tab can hide the REPL too (its `hidesRepl` in the plugin directory).
-      selectedTabBehaviour.hidesRepl,
+    // A plugin's tab can hide the REPL (its `hidesRepl` in the plugin directory).
+    hidden: selectedTabBehaviour.hidesRepl,
     replButtons: [evalButton, clearButton],
     disableScrolling: isSicpEditor,
   };
@@ -977,10 +955,8 @@ function Playground(props: PlaygroundProps) {
       },
       workspaceLocation,
     },
-    sideContentIsResizeable:
-      selectedTab !== SideContentType.substVisualizer &&
-      // A plugin's tab can fix the size of the side content (its `resizable` in the plugin directory).
-      selectedTabBehaviour.resizable,
+    // A plugin's tab can fix the size of the side content (its `resizable` in the plugin directory).
+    sideContentIsResizeable: selectedTabBehaviour.resizable,
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {
