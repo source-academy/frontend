@@ -698,7 +698,7 @@ export function* evalCodeConductorSaga(
   const { editorTabs, activeEditorTabIndex, programPrependValue } =
     yield* selectWorkspace(workspaceLocation);
   // Gutter-click breakpoints (py-slang#383): the active tab's ace breakpoints, resolved to
-  // 1-indexed lines and threaded into /__cse_config__ so the evaluator can mark the closest
+  // 1-indexed lines and threaded into /__run_config__ so the evaluator can mark the closest
   // enclosing statement, exactly like an explicit `breakpoint()` call. Conductor's own analogue of
   // insertDebuggerStatements.ts's `debugger;` insertion (which is a no-op under Conductor, see its
   // own doc comment) - a *line* is host-side editor state, so the host, not the evaluator bundle,
@@ -722,9 +722,14 @@ export function* evalCodeConductorSaga(
   const breakpointLines = getBreakpointLineNumbers(activeEditorTab?.breakpoints ?? []).map(
     line => line + 1 + preludeLineOffset,
   );
+  // The per-run settings are a file of the run, named for the run and not for any tool. Evaluators
+  // built before the rename ask for '/__cse_config__', so the same text is served under both names
+  // until none of them does; the old name is to be removed then.
+  const runConfig = JSON.stringify({ breakpointLines });
   const filesWithConfig = {
     ...files,
-    '/__cse_config__': JSON.stringify({ breakpointLines }),
+    '/__run_config__': runConfig,
+    '/__cse_config__': runConfig,
   };
 
   try {
