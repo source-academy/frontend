@@ -12,11 +12,18 @@ import { store } from '../../pages/createStore';
  */
 export const editorService: IEditorService = {
   highlight(lines: readonly LineRange[]): void {
+    const workspaceLocation = sideContentManager.getWorkspaceLocation();
+    // The user may have closed every editor tab; there is then nothing to mark or to clear, and the
+    // reducer would throw for any tab index.
+    if (store.getState().workspaces[workspaceLocation].editorTabs.length === 0) {
+      return;
+    }
+    // The contract's lines are 1-based, as the editor shows them; the editor's state is 0-based rows.
     store.dispatch(
       WorkspaceActions.setEditorHighlightedLines(
-        sideContentManager.getWorkspaceLocation(),
+        workspaceLocation,
         0,
-        lines.map(([first, last]): [number, number] => [first, last]),
+        lines.map(([first, last]): [number, number] => [first - 1, last - 1]),
       ),
     );
   },
