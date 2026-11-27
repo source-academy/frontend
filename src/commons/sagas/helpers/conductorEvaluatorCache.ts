@@ -1,4 +1,5 @@
 import { WEB_PLUGIN_ID } from '@sourceacademy/common-autocomplete';
+import { CSE_DIRECTORY_ID } from '@sourceacademy/common-cse-machine';
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { PluginType } from '@sourceacademy/plugin-directory';
 import { ModuleLoaderWebPlugin } from '@sourceacademy/web-module-loader';
@@ -197,6 +198,17 @@ async function resolveWebPluginUrl(
 }
 
 /**
+ * Whether a plugin that the runner asks for is loaded from the plugin directory. Not the CSE
+ * machine, which the frontend still has built in (it registers its own host plugin and draws the
+ * tab itself): the plugins repository publishes it as a plugin with a tab of its own, and loading
+ * that as well would give a second CSE Machine tab, fed by the same snapshots. Removed with the
+ * built-in one (source-academy/frontend#4587).
+ */
+export function isLoadedFromDirectory(pluginId: string): boolean {
+  return pluginId !== CSE_DIRECTORY_ID;
+}
+
+/**
  * Loads a web plugin requested by the runner. The plugin's web-half URL is resolved generically
  * from the plugin directory (`resolutions[WEB]`); after registering it, any side-content tab it
  * exposes is surfaced to the UI. This is plugin-agnostic — no per-plugin code lives here.
@@ -209,6 +221,9 @@ async function loadWebPlugin(
   evaluatorPath: string,
 ): Promise<void> {
   if (!hostPlugin) {
+    return;
+  }
+  if (!isLoadedFromDirectory(pluginId)) {
     return;
   }
   const builtInPlugin = registry.get(pluginId);
