@@ -20,7 +20,7 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 
 ### Installation of [Source Academy](https://source-academy.github.io/)
 
-1. Install the version of Node.js as specified in the `.node-version` file
+1. Install the version of Node.js as specified in the `.node-version` file (Node 24; see the [Node.js version](https://github.com/source-academy/documentation/blob/main/app/docs/developers/node-version.md) page)
 
 1. Clone this repository and navigate to it using your command line
 
