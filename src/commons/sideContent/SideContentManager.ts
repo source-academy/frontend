@@ -90,6 +90,10 @@ export class TabService implements ITabService {
     return this.visibleTabs;
   }
 
+  getWorkspaceLocation(): SideContentLocation {
+    return this.workspaceLocation;
+  }
+
   setWorkspaceLocation(workspaceLocation: SideContentLocation): void {
     if (this.workspaceLocation === workspaceLocation) {
       return;
