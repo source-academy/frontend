@@ -410,8 +410,7 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
   }, [editor, props.editorTabIndex]);
 
   // Completions come from the evaluator, whichever the language: an evaluator that has none
-  // gives none. (Ace's own completers used to be used for C and Java, picked by the name of the
-  // Ace mode; Java's evaluator now has completions of its own, and C is not in the directory.)
+  // gives none.
   useLayoutEffect(() => {
     if (editor === undefined) {
       return;
