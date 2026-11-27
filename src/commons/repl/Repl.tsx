@@ -14,9 +14,7 @@ export type ReplProps = {
   replValue: string;
   hidden?: boolean;
   inputHidden?: boolean;
-  usingSubst?: boolean;
   disableScrolling?: boolean;
-  showStepperPrompt?: boolean;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleReplEval: () => void;
@@ -27,14 +25,7 @@ export type ReplProps = {
 };
 
 function Repl(props: ReplProps) {
-  const cards = props.output.map((slice, index) => (
-    <Output
-      output={slice}
-      key={index}
-      usingSubst={props.usingSubst ?? false}
-      showStepperPrompt={props.showStepperPrompt}
-    />
-  ));
+  const cards = props.output.map((slice, index) => <Output output={slice} key={index} />);
   return (
     <div className="Repl" style={{ display: props.hidden ? 'none' : undefined }}>
       <div className="repl-output-parent">
@@ -81,19 +72,8 @@ export function Output(props: OutputProps) {
           <Pre className="log-output">{props.output.consoleLogs.join('\n')}</Pre>
         </Card>
       );
-    case 'result': {
-      // We check if we are using Stepper, so we can process the REPL results properly
-      const shouldShowStepperPrompt = props.showStepperPrompt ?? false;
-      if (shouldShowStepperPrompt && props.output.value instanceof Array) {
-        return (
-          <Card>
-            <Pre className="log-output">Check out the Stepper tab!</Pre>
-          </Card>
-        );
-      } else {
-        return <ResultOutputDisplay output={props.output} />;
-      }
-    }
+    case 'result':
+      return <ResultOutputDisplay output={props.output} />;
     case 'errors':
       if (props.output.consoleLogs.length === 0) {
         return (
