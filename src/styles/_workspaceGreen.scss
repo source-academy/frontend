@@ -1,6 +1,10 @@
 $pure-green: #00ff00;
 $dark-green: #00e000;
 .GreenScreen {
+  // The background that a plugin's drawing (on a canvas, which this stylesheet cannot colour) takes
+  // from the page's style: it reads this property from its element, which inherits it from here.
+  --visualizer-background: #{$pure-green};
+
   // Hide NavigationBar
   position: absolute;
   height: 100vh;
