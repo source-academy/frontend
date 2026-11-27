@@ -409,23 +409,17 @@ const EditorBase = memo((props: EditorProps & LocalStateProps) => {
     session.on('changeAnnotation' as any, makeHandleAnnotationChange(session));
   }, [editor, props.editorTabIndex]);
 
-  // Autocompletion depends on the language, which can change after the editor has mounted (the
-  // evaluator publishes its mode when it has loaded), so it must not share an effect with the
-  // once-per-editor subscriptions above.
+  // Completions come from the evaluator, whichever the language: an evaluator that has none
+  // gives none. (Ace's own completers used to be used for C and Java, picked by the name of the
+  // Ace mode; Java's evaluator now has completions of its own, and C is not in the directory.)
   useLayoutEffect(() => {
     if (editor === undefined) {
       return;
     }
-    if (conductorMode === 'ace/mode/c_cpp' || conductorMode === 'ace/mode/java') {
-      // for C, Java language, use the default autocomplete provided by ace editor
-      const { textCompleter, keyWordCompleter, setCompleters } = acequire('ace/ext/language_tools');
-      setCompleters([textCompleter, keyWordCompleter]);
-    } else {
-      acequire('ace/ext/language_tools').setCompleters([
-        makeCompleter((...args) => handlePromptAutocompleteRef.current(...args)),
-      ]);
-    }
-  }, [editor, conductorMode]);
+    acequire('ace/ext/language_tools').setCompleters([
+      makeCompleter((...args) => handlePromptAutocompleteRef.current(...args)),
+    ]);
+  }, [editor]);
 
   useLayoutEffect(() => {
     if (editor === undefined) {
