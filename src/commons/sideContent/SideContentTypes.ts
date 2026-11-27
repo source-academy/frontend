@@ -6,8 +6,6 @@ export enum SideContentType {
   autograder = 'autograder',
   briefing = 'briefing',
   contestVoting = 'contest_voting',
-  // Also the tab id registered by the conductor data visualizer web plugin.
-  dataVisualizer = 'data-visualizer',
   documentation = 'documentation',
   editorGrading = 'editor_grading',
   editorAutograder = 'editor_autograder',
@@ -30,7 +28,6 @@ export enum SideContentType {
   missionMetadata = 'mission_metadata',
   mobileEditor = 'mobile_editor',
   mobileEditorRun = 'mobile_editor_run',
-  substVisualizer = 'subst_visualiser',
   testcases = 'testcases',
   htmlDisplay = 'html_display',
 }

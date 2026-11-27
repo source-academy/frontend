@@ -8,9 +8,6 @@ import { goalIncludesEvents, incrementCount } from '../achievement/utils/EventHa
 import type { OverallState } from '../application/ApplicationTypes';
 import type { Tokens } from '../application/types/SessionTypes';
 import { combineSagaHandlers } from '../redux/utils';
-import SideContentActions from '../sideContent/SideContentActions';
-import { getLocation } from '../sideContent/SideContentHelper';
-import { type SideContentTabId, SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { selectTokens } from './BackendSaga';
@@ -144,18 +141,6 @@ const AchievementSaga = combineSagaHandlers({
     const enableAchievements = yield select(
       (state: OverallState) => state.session.enableAchievements,
     );
-    if (workspaceLocation !== undefined && eventNames.find(e => e === EventType.ERROR)) {
-      const selectedTab: SideContentTabId | undefined = yield select((state: OverallState) => {
-        const [loc] = getLocation(workspaceLocation);
-        return state.sideContent[loc].selectedTab;
-      });
-
-      if (selectedTab === SideContentType.substVisualizer) {
-        yield put(
-          SideContentActions.alertSideContent(SideContentType.introduction, workspaceLocation),
-        );
-      }
-    }
     if (role && enableAchievements && !Constants.playgroundOnly) {
       loggedEvents.push(eventNames);
 

@@ -94,8 +94,7 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
   const setSelectedTab = useCallback(
     (newId: SideContentTabId) => {
       if (
-        (selectedTab === SideContentType.substVisualizer ||
-          tabBehaviour(pluginMap, selectedTab).hidesRepl) &&
+        tabBehaviour(pluginMap, selectedTab).hidesRepl &&
         newId === SideContentType.mobileEditorRun
       ) {
         return;
