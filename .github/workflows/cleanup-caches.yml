@@ -1,0 +1,33 @@
+# Deletes the Actions caches of a pull request when it is closed or merged. A pull request's caches can only be
+# read by that pull request, so after it closes they only use up the repository's 10 GB, and push out the
+# caches of the default branch, which everyone uses. (source-academy/documentation#73's sibling: the cleanup
+# of the organisation; see tools/org-health in source-academy/documentation.)
+#
+# No checkout and no code of the pull request runs here: the job only calls `gh cache delete`. Pull requests from
+# forks get a read-only token, so their caches are not cleaned (they expire after seven days without use).
+name: Clean up pull request caches
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions: {}
+
+jobs:
+  cleanup:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Delete the caches of this pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          REF: refs/pull/${{ github.event.pull_request.number }}/merge
+        run: |
+          ids=$(gh cache list --ref "$REF" --limit 100 --json id --jq '.[].id')
+          echo "caches of $REF: $(echo "$ids" | grep -c . || true)"
+          for id in $ids; do
+            gh cache delete "$id" || true
+          done
