@@ -1,5 +1,5 @@
 import type { IHostServices } from '@sourceacademy/common-cse-machine';
-import type { ITabService } from '@sourceacademy/common-tabs';
+import type { IHostContract, ITabService } from '@sourceacademy/common-tabs';
 import type { PluginClass } from '@sourceacademy/conductor/conduit';
 import { requireProvider } from 'src/commons/sideContent/SideContentHelper';
 
@@ -56,7 +56,7 @@ export async function importAndRegisterWebPlugin(
     throw new Error(`Conductor web plugin at "${url}" did not export a plugin class`);
   }
   hostPlugin.registerPlugin(
-    pluginClass as PluginClass<[ITabService, IHostServices]>,
+    pluginClass as PluginClass<[ITabService, IHostServices & IHostContract]>,
     tabService,
     hostServices,
   );
