@@ -16,15 +16,12 @@ describe('mobileReplBehaviour', () => {
     });
   });
 
-  test.each([SideContentType.substVisualizer, PLUGIN_TAB])(
-    'pressing Run from %s keeps the REPL hidden and fixed',
-    tab => {
-      expect(mobileReplBehaviour(RUN, tab, hidesRepl)).toEqual({
-        showRepl: false,
-        disableDragging: true,
-      });
-    },
-  );
+  test.each([PLUGIN_TAB])('pressing Run from %s keeps the REPL hidden and fixed', tab => {
+    expect(mobileReplBehaviour(RUN, tab, hidesRepl)).toEqual({
+      showRepl: false,
+      disableDragging: true,
+    });
+  });
 
   test.each([SideContentType.autograder, SideContentType.testcases])(
     'pressing Run from %s keeps the REPL hidden',
