@@ -50,7 +50,8 @@ GENERAL INSTRUCTIONS:
   using (e.g. \`\`\`python ... \`\`\`).`;
 
 function PixelbotConfigPanel(props: Props) {
-  const { pixelbotRoutingPrompt, pixelbotAnswerPrompt, feedbackUrl } = props.courseConfiguration;
+  const { pixelbotModel, pixelbotRoutingPrompt, pixelbotAnswerPrompt, feedbackUrl } =
+    props.courseConfiguration;
 
   const [editingRouting, setEditingRouting] = useState(false);
   const [editingAnswer, setEditingAnswer] = useState(false);
@@ -119,6 +120,35 @@ function PixelbotConfigPanel(props: Props) {
 
       <div className={classes['section']}>
         <PixelbotDocumentsPanel />
+      </div>
+
+      <div className={classes['section']}>
+        <div className={classes['section-header-center']}>
+          <div>
+            <div className={classes['section-title']}>Model</div>
+            <div className={classes['section-helper']}>
+              The model Pixel answers students with. Leave blank to use the default.
+            </div>
+          </div>
+        </div>
+        <FormGroup inline={false} labelFor="pixelbotModel">
+          <InputGroup
+            id="pixelbotModel"
+            value={pixelbotModel || ''}
+            placeholder="e.g gpt-4o"
+            onChange={e =>
+              props.setCourseConfiguration({
+                ...props.courseConfiguration,
+                pixelbotModel: e.target.value,
+              })
+            }
+          />
+        </FormGroup>
+        <Button
+          text="Save Model"
+          onClick={() => props.onSave(props.courseConfiguration)}
+          style={{ marginBottom: '8px' }}
+        />
       </div>
 
       <div className={classes['section']}>
