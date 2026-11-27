@@ -85,10 +85,3 @@ export const makeConductorToolPlaceholderTab = ({
   body: <Markdown content={`Loading the ${label.toLowerCase()}…`} />,
   id,
 });
-
-export const makeConductorDataVisualizerPlaceholderTab = (): SideContentTab => ({
-  label: 'Data Visualizer',
-  iconName: IconNames.EYE_OPEN,
-  body: <Markdown content="Call `draw_data` in your program to visualize data structures here." />,
-  id: SideContentType.dataVisualizer,
-});

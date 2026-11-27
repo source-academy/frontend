@@ -7,8 +7,7 @@ type HotKeysProps = {
 };
 
 /**
- * This HOC was created to facilitate the migration out of react-hotkeys in favor of @mantine/hooks useHotkeys,
- * as SideContentDataVisualizer still uses class-based React.
+ * This HOC was created to facilitate the migration out of react-hotkeys in favor of @mantine/hooks useHotkeys.
  *
  * NOTE:
  * - New hotkey implementations should NOT use this component. Use functional React and the useHotkeys hook
