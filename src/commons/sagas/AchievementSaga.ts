@@ -150,10 +150,7 @@ const AchievementSaga = combineSagaHandlers({
         return state.sideContent[loc].selectedTab;
       });
 
-      if (
-        selectedTab === SideContentType.cseMachine ||
-        selectedTab === SideContentType.substVisualizer
-      ) {
+      if (selectedTab === SideContentType.substVisualizer) {
         yield put(
           SideContentActions.alertSideContent(SideContentType.introduction, workspaceLocation),
         );

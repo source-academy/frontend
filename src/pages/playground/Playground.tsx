@@ -18,7 +18,6 @@ import {
   setSessionDetails,
   setSharedbConnected,
 } from 'src/commons/collabEditing/CollabEditingActions';
-import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import sideContentManager, {
@@ -30,7 +29,7 @@ import { useAppDispatch, useAppSelector, useResponsive } from 'src/commons/utils
 import { recordLegacyUsage } from 'src/commons/utils/legacyUsage';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-import { CSE_EVALUATOR_CAPABILITY, isToolEvaluator } from 'src/features/conductor/toolEvaluators';
+import { isToolEvaluator } from 'src/features/conductor/toolEvaluators';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
 import { joinEvaluatorId, joinLanguageId } from 'src/features/directory/languageIdCodec';
 import { tabBehaviour, toolTabsOf } from 'src/features/directory/toolTabs';
@@ -408,10 +407,6 @@ function Playground(props: PlaygroundProps) {
   const autorunButtonHandlers = useMemo(() => {
     return {
       handleEditorEval: () => {
-        // reset stepper before evaluation
-        dispatch(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
-        dispatch(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
-
         dispatch(WorkspaceActions.evalEditor(workspaceLocation));
       },
       handleInterruptEval: () =>
@@ -615,33 +610,15 @@ function Playground(props: PlaygroundProps) {
     foldersEnabled,
   ]);
 
-  const hasCseSnapshots = useAppSelector(
-    state => state.workspaces[workspaceLocation].cseSnapshots !== null,
-  );
-
   // Tool tab wiring (conductor only). An evaluator that names a plugin brings that plugin's tab (the
-  // plugin directory describes it); the CSE Machine's tab is offered for a language with a
-  // cse-capability evaluator. Opening a tab selects its (dropdown-hidden) evaluator so a Run drives the
-  // tool, and leaving it restores the language's default evaluator. See the effect below.
-  const cseEvaluatorId = useAppSelector(state => {
-    const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
-    const lang = langId ? languageMap[langId] : undefined;
-    const evaluator = lang?.evaluators.find(e =>
-      (e.capabilities as string[] | undefined)?.includes(CSE_EVALUATOR_CAPABILITY),
-    );
-    return evaluator?.id ?? null;
-  });
+  // plugin directory describes it). Opening a tab selects its (dropdown-hidden) evaluator so a Run
+  // drives the tool, and leaving it restores the language's default evaluator. See the effect below.
   const defaultEvaluatorId = useAppSelector(state => {
     const { selectedLanguageId: langId, languageMap } = state.languageDirectory;
     const lang = langId ? languageMap[langId] : undefined;
     const evaluator = lang?.evaluators.find(e => !isToolEvaluator(e));
     return evaluator?.id ?? null;
   });
-
-  // For conductor languages: show the CSE tab proactively when the language has a cse-capability
-  // evaluator — regardless of which evaluator is currently selected, mirroring the Stepper tab below —
-  // or reactively once snapshots arrive. For Source languages use the usual flag.
-  const shouldShowCseMachine = cseEvaluatorId !== null || hasCseSnapshots;
 
   // Every evaluator the current sublanguage offers (conductor only) - the full list, including the
   // hidden tool evaluators, so lookups below can resolve any tab's owner by path or id.
@@ -661,8 +638,7 @@ function Playground(props: PlaygroundProps) {
   const selectedTabOwnerPath = useTabOwnerPath(selectedTab);
 
   // The evaluator that owns the selected tab, or null for Home (which owns nothing - it's where the
-  // dropdown is free) and for tabs no conductor produced. Generalizes the old hardcoded Stepper/CSE
-  // checks: every tab a conductor registers now records which evaluator put it there (see
+  // dropdown is free) and for tabs no conductor produced. Every tab a conductor registers now records which evaluator put it there (see
   // DeferredConductorTabService/SideContentManager's TabOwner tracking).
   const selectedTabOwnerId = useMemo<string | null>(() => {
     if (!selectedTab || selectedTab === SideContentType.introduction) {
@@ -673,24 +649,20 @@ function Playground(props: PlaygroundProps) {
     if (dynamicOwner) {
       return dynamicOwner.id;
     }
-    // Fallback for the tabs the Playground renders itself before their plugin's own tab ever
-    // registers (the CSE Machine tab, and the placeholders shown while a tool's plugin loads).
+    // Fallback for the placeholders shown before a tool's plugin has registered its own tab.
     const toolTab = toolTabs.find(({ tab }) => tab.id === selectedTab);
     if (toolTab) {
       return toolTab.evaluatorId;
     }
-    if (selectedTab === SideContentType.cseMachine) {
-      return cseEvaluatorId;
-    }
     return null;
-  }, [selectedTab, selectedTabOwnerPath, conductorEvaluators, toolTabs, cseEvaluatorId]);
+  }, [selectedTab, selectedTabOwnerPath, conductorEvaluators, toolTabs]);
 
   const chapterSelectButton = useMemo(
     () => (
       <ControlBarChapterSelect
         key="chapter"
-        // While a tab owned by a specific evaluator is selected (Stepper, CSE Machine, or a
-        // tool-produced tab like Data Visualizer), the evaluator is pinned to whichever evaluator
+        // While a tab owned by a specific evaluator is selected (a tool's tab, such as
+        // the Data Visualizer's), the evaluator is pinned to whichever evaluator
         // produced it, so disable the dropdown: changing evaluator here would fight the
         // tab-to-evaluator sync below.
         disabled={usingRemoteExecution || selectedTabOwnerId !== null}
@@ -700,10 +672,10 @@ function Playground(props: PlaygroundProps) {
   );
 
   // Keep the selected evaluator in sync with whichever tab is selected. A tab with an owner (directly
-  // tracked, like Data Visualizer, or one of the two Playground-rendered fallbacks above) pins the
+  // tracked, or one of the placeholder fallbacks above) pins the
   // dropdown to that evaluator so a Run drives the right tool; leaving it for a tab with no owner
   // (Home, or an untracked tab) restores the default evaluator - but only if a *tool* evaluator
-  // (Stepper/CSE, unreachable except through their own tab) was selected. A normal selectable
+  // (unreachable except through its own tab) was selected. A normal selectable
   // evaluator (e.g. whichever produced Data Visualizer) is left selected instead of being yanked away.
   useEffect(() => {
     if (selectedTabOwnerId) {
@@ -784,9 +756,6 @@ function Playground(props: PlaygroundProps) {
       if (isDataVisualizerTabShown) {
         tabs.push(makeConductorDataVisualizerPlaceholderTab());
       }
-      if (shouldShowCseMachine) {
-        tabs.push(makeCseMachineTabFrom(workspaceLocation));
-      }
       // Placeholders keep these tabs visible before their plugin loads; each plugin's live tab
       // replaces its placeholder in place.
       for (const { tab } of toolTabs) {
@@ -803,7 +772,6 @@ function Playground(props: PlaygroundProps) {
     workspaceLocation,
     dispatch,
     isDataVisualizerTabShown,
-    shouldShowCseMachine,
     hasDocumentation,
     toolTabs,
     remoteExecutionTab,
@@ -948,7 +916,6 @@ function Playground(props: PlaygroundProps) {
     handleReplValueChange: replHandlers.handleReplValueChange,
     hidden:
       selectedTab === SideContentType.substVisualizer ||
-      selectedTab === SideContentType.cseMachine ||
       // A plugin's tab can hide the REPL too (its `hidesRepl` in the plugin directory).
       selectedTabBehaviour.hidesRepl,
     replButtons: [evalButton, clearButton],
@@ -1012,7 +979,6 @@ function Playground(props: PlaygroundProps) {
     },
     sideContentIsResizeable:
       selectedTab !== SideContentType.substVisualizer &&
-      selectedTab !== SideContentType.cseMachine &&
       // A plugin's tab can fix the size of the side content (its `resizable` in the plugin directory).
       selectedTabBehaviour.resizable,
   };

@@ -1,5 +1,4 @@
 import { WEB_PLUGIN_ID } from '@sourceacademy/common-autocomplete';
-import { CSE_DIRECTORY_ID } from '@sourceacademy/common-cse-machine';
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { PluginType } from '@sourceacademy/plugin-directory';
 import { ModuleLoaderWebPlugin } from '@sourceacademy/web-module-loader';
@@ -12,7 +11,6 @@ import { associateAutocompleteEvaluator } from '../../../features/conductor/auto
 import type AutoCompletePlugin from '../../../features/conductor/AutocompletePlugin';
 import type { BrowserHostPlugin } from '../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../features/conductor/createConductor';
-import type { CseMachineHostPlugin } from '../../../features/conductor/CseMachineHostPlugin';
 import { DeferredConductorTabService } from '../../../features/conductor/deferredConductorTabService';
 import { importAndRegisterWebPlugin } from '../../../features/conductor/importExternalWebPlugin';
 import { registry } from '../../../features/conductor/Registry';
@@ -25,7 +23,6 @@ type PreparedConductor = {
   path: string;
   evaluatorUrl: string;
   hostPlugin: BrowserHostPlugin;
-  csePlugin: CseMachineHostPlugin;
   conduit: IConduit;
   tabService: DeferredConductorTabService;
   moduleLoaderPlugin: ModuleLoaderWebPlugin;
@@ -198,17 +195,6 @@ async function resolveWebPluginUrl(
 }
 
 /**
- * Whether a plugin that the runner asks for is loaded from the plugin directory. Not the CSE
- * machine, which the frontend still has built in (it registers its own host plugin and draws the
- * tab itself): the plugins repository publishes it as a plugin with a tab of its own, and loading
- * that as well would give a second CSE Machine tab, fed by the same snapshots. Removed with the
- * built-in one (source-academy/frontend#4587).
- */
-export function isLoadedFromDirectory(pluginId: string): boolean {
-  return pluginId !== CSE_DIRECTORY_ID;
-}
-
-/**
  * Loads a web plugin requested by the runner. The plugin's web-half URL is resolved generically
  * from the plugin directory (`resolutions[WEB]`); after registering it, any side-content tab it
  * exposes is surfaced to the UI. This is plugin-agnostic — no per-plugin code lives here.
@@ -221,9 +207,6 @@ async function loadWebPlugin(
   evaluatorPath: string,
 ): Promise<void> {
   if (!hostPlugin) {
-    return;
-  }
-  if (!isLoadedFromDirectory(pluginId)) {
     return;
   }
   const builtInPlugin = registry.get(pluginId);
@@ -257,7 +240,7 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
   let currentFiles: Record<string, string> = {};
   let hostPluginRef: BrowserHostPlugin | undefined = undefined;
   const tabService = new DeferredConductorTabService(path);
-  const { hostPlugin, csePlugin, conduit, moduleLoaderPlugin } = createConductor(
+  const { hostPlugin, conduit, moduleLoaderPlugin } = createConductor(
     evaluatorUrl,
     async (fileName: string) => currentFiles[fileName],
     (pluginName: string) =>
@@ -269,7 +252,6 @@ async function createPreparedConductor(path: string): Promise<PreparedConductor>
     path,
     evaluatorUrl,
     hostPlugin,
-    csePlugin,
     conduit,
     tabService,
     moduleLoaderPlugin,
@@ -430,7 +412,6 @@ function pruneConsumedConductors(session: ConductorSession): void {
  */
 export function* getPreparedConductorSaga(options?: GetPreparedConductorOptions): SagaIterator<{
   hostPlugin: BrowserHostPlugin;
-  csePlugin: CseMachineHostPlugin;
   conduit: IConduit;
 }> {
   const session: ConductorSession = yield call(ensureConductorSessionSaga);
@@ -461,7 +442,6 @@ export function* getPreparedConductorSaga(options?: GetPreparedConductorOptions)
 
   return {
     hostPlugin: prepared.hostPlugin,
-    csePlugin: prepared.csePlugin,
     conduit: prepared.conduit,
   };
 }

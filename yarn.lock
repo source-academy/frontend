@@ -4482,13 +4482,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/common-cse-machine@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "@sourceacademy/common-cse-machine@npm:0.5.0"
-  checksum: 10c0/14f399f25d940e802f279a6fdb948d60936ed6da804b94c360bf27918a650a8ca67921788123e883915c3f4f7c52f8020bcb6f8b3b0cf6969504c0d9d1b5dfe8
-  languageName: node
-  linkType: hard
-
 "@sourceacademy/common-tabs@npm:^0.2.0":
   version: 0.2.0
   resolution: "@sourceacademy/common-tabs@npm:0.2.0"
@@ -4559,16 +4552,6 @@ __metadata:
   peerDependencies:
     "@sourceacademy/conductor": ^0.8.0
   checksum: 10c0/c76034a357eb936df4d98e060aebb18838c3bd1367689f3d2109dbb0c2325898a4216bad90525a2e19b85e119337a406803d27558d69fcf8655a03c6b0964a4d
-  languageName: node
-  linkType: hard
-
-"@sourceacademy/web-cse-machine@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "@sourceacademy/web-cse-machine@npm:3.1.0"
-  peerDependencies:
-    "@sourceacademy/common-cse-machine": ">=0.5.0"
-    "@sourceacademy/conductor": ^0.8.0
-  checksum: 10c0/ad0bb415698bb0d06d756fb865096c6159119c2aaa176ed76b97af0ce2398ad66d01dc14da99e61e9dc169549261998d09f4010c4ceb80781e604d8cfce28ff5
   languageName: node
   linkType: hard
 
@@ -6318,7 +6301,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astring@npm:^1.4.3, astring@npm:^1.9.0":
+"astring@npm:^1.4.3":
   version: 1.9.0
   resolution: "astring@npm:1.9.0"
   bin:
@@ -8826,7 +8809,6 @@ __metadata:
     "@rsdoctor/rspack-plugin": "npm:^1.5.18"
     "@sentry/react": "npm:^11.0.0"
     "@sourceacademy/common-autocomplete": "npm:^0.0.2"
-    "@sourceacademy/common-cse-machine": "npm:^0.5.0"
     "@sourceacademy/common-tabs": "npm:^0.2.0"
     "@sourceacademy/conductor": "npm:^0.8.3"
     "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.41"
@@ -8835,7 +8817,6 @@ __metadata:
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
     "@sourceacademy/web-autocomplete": "npm:^0.0.3"
-    "@sourceacademy/web-cse-machine": "npm:^3.1.0"
     "@sourceacademy/web-module-loader": "npm:^0.0.2"
     "@sourceacademy/web-test": "npm:^0.0.2"
     "@svgr/webpack": "npm:^8.0.0"
@@ -8870,7 +8851,6 @@ __metadata:
     acorn: "npm:^8.9.0"
     ag-grid-community: "npm:^36.0.0"
     ag-grid-react: "npm:^36.0.0"
-    astring: "npm:^1.9.0"
     browserfs: "npm:^1.4.3"
     canvas: "npm:^3.1.0"
     classnames: "npm:^2.3.2"

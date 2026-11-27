@@ -95,7 +95,6 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
     (newId: SideContentTabId) => {
       if (
         (selectedTab === SideContentType.substVisualizer ||
-          selectedTab === SideContentType.cseMachine ||
           tabBehaviour(pluginMap, selectedTab).hidesRepl) &&
         newId === SideContentType.mobileEditorRun
       ) {

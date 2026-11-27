@@ -83,7 +83,7 @@ describe('combineAllTabs', () => {
     const tabs = combineAllTabs(
       {
         leadingTabs: [makeTab(SideContentType.introduction)],
-        trailingTabs: [makeTab(SideContentType.cseMachine), makeTab('showing-tab')],
+        trailingTabs: [makeTab('predefined-tab'), makeTab('showing-tab')],
       },
       [makeTab('data-visualizer'), livePluginTab],
     );
@@ -91,7 +91,7 @@ describe('combineAllTabs', () => {
     expect(tabs.map(tab => tab.id)).toEqual([
       SideContentType.introduction,
       'data-visualizer',
-      SideContentType.cseMachine,
+      'predefined-tab',
       'showing-tab',
     ]);
     expect(tabs.at(-1)).toBe(livePluginTab);

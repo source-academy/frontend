@@ -19,7 +19,6 @@ import {
 } from '../collabEditing/CollabEditingActions';
 import { type InterpreterError } from '../errors/InterpreterError';
 import type { SourceActionType } from '../utils/ActionsHelper';
-import { handleCseAndStepperActions } from './reducers/cseReducer';
 import { handleEditorActions } from './reducers/editorReducer';
 import { handleReplActions } from './reducers/replReducer';
 import WorkspaceActions from './WorkspaceActions';
@@ -48,7 +47,6 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> 
 
 const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
   handleEditorActions(builder);
-  handleCseAndStepperActions(builder);
   handleReplActions(builder);
 
   function applyInterpreterResultOutput(

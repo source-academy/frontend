@@ -20,9 +20,9 @@ function ControlBarChapterSelect({ disabled = false }: Props) {
 
   const currentLanguage = dirLanguages.find(l => l.id === selectedLanguageId);
   const evaluators = currentLanguage?.evaluators ?? [];
-  // Tool evaluators (those a plugin tab belongs to, and the CSE machine) are hidden from the dropdown: each is reached only via its
+  // Tool evaluators (those a plugin tab belongs to) are hidden from the dropdown: each is reached only via its
   // own tab, which selects it automatically (see Playground). The button label still resolves against
-  // the full list so it shows the true current evaluator (e.g. "CSE") even while that entry
+  // the full list so it shows the true current evaluator (e.g. a tool's) even while that entry
   // is unselectable.
   const selectableEvaluators = evaluators.filter(e => !isToolEvaluator(e));
   const selectedEvaluator = evaluators.find(e => e.id === selectedEvaluatorId);
