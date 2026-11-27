@@ -1,10 +1,9 @@
-import type { IHostServices } from '@sourceacademy/common-cse-machine';
 import type { IHostContract, ITabService } from '@sourceacademy/common-tabs';
 import type { PluginClass } from '@sourceacademy/conductor/conduit';
 import { requireProvider } from 'src/commons/sideContent/SideContentHelper';
 
 import type { BrowserHostPlugin } from './BrowserHostPlugin';
-import { hostServices } from './cseDiagramService';
+import { hostContract } from './hostContract';
 type PluginExports = { plugin?: unknown; default?: unknown };
 
 /**
@@ -40,8 +39,8 @@ function resolvePluginClass(moduleNamespace: PluginExports): unknown {
 /**
  * Imports a Conductor web plugin bundle from `url` and registers it with the host, passing the
  * shared {@link ITabService} as a constructor argument so the plugin can contribute side-content
- * tabs, and the host's optional services ({@link IHostServices}, e.g. the CSE machine diagram) as a
- * further argument, which a plugin that does not need them ignores. This is the host-side counterpart to Conductor's `importAndRegisterExternalPlugin`, which
+ * tabs, and the host contract ({@link IHostContract}) as a further argument, which a plugin that does
+ * not need it ignores. This is the host-side counterpart to Conductor's `importAndRegisterExternalPlugin`, which
  * only understands a named `plugin` export and cannot inject the host's React/Blueprint that the
  * require-wrapper bundles depend on.
  */
@@ -56,8 +55,8 @@ export async function importAndRegisterWebPlugin(
     throw new Error(`Conductor web plugin at "${url}" did not export a plugin class`);
   }
   hostPlugin.registerPlugin(
-    pluginClass as PluginClass<[ITabService, IHostServices & IHostContract]>,
+    pluginClass as PluginClass<[ITabService, IHostContract]>,
     tabService,
-    hostServices,
+    hostContract,
   );
 }

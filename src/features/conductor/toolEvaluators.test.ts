@@ -8,8 +8,13 @@ describe('isToolEvaluator', () => {
     expect(isToolEvaluator({ plugin: 'anything-else', capabilities: [] })).toBe(true);
   });
 
-  test.each(['cse', 'ev3'])('a %s evaluator is a tool evaluator', cap => {
-    expect(isToolEvaluator({ capabilities: [cap] })).toBe(true);
+  test('an ev3 evaluator is a tool evaluator', () => {
+    expect(isToolEvaluator({ capabilities: ['ev3'] })).toBe(true);
+  });
+
+  test('the cse capability alone does not make one: the plugin does', () => {
+    expect(isToolEvaluator({ capabilities: ['cse'] })).toBe(false);
+    expect(isToolEvaluator({ capabilities: ['cse'], plugin: 'cse-machine' })).toBe(true);
   });
 
   test('an ordinary evaluator is not', () => {

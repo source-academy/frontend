@@ -1,7 +1,7 @@
 import { H2, UL } from '@blueprintjs/core';
-import { ItalicLink } from 'src/commons/sideContent/content/SideContentCseMachine';
 import Constants, { Links } from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
+import ItalicLink from 'src/commons/utils/ItalicLink';
 import { PageCard, PageWrapper } from 'src/components/ui/page';
 
 function WelcomePage() {

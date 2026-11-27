@@ -184,8 +184,6 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   isRunning: false,
   isWaitingForInput: false,
   enableDebugging: true,
-  cseSnapshots: null,
-  cseEnd: null,
   updateUserRoleCallback: () => {},
   versionHistory: {
     versions: [],
@@ -229,10 +227,6 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   },
   playground: {
     ...createDefaultWorkspace('playground'),
-    currentStep: -1,
-    stepsTotal: 0,
-    breakpointSteps: [],
-    changepointSteps: [],
     activeEditorTabIndex: 0,
     editorTabs: [
       {
@@ -245,10 +239,6 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   },
   sicp: {
     ...createDefaultWorkspace('sicp'),
-    currentStep: -1,
-    stepsTotal: 0,
-    breakpointSteps: [],
-    changepointSteps: [],
     activeEditorTabIndex: 0,
     editorTabs: [
       {

@@ -3,8 +3,8 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import sideContentManager from '../../commons/sideContent/SideContentManager';
 import WorkspaceActions from '../../commons/workspace/WorkspaceActions';
 import { store } from '../../pages/createStore';
-import { hostServices } from './cseDiagramService';
 import { editorService } from './editorService';
+import { hostContract } from './hostContract';
 
 describe('the editor service that a visualizer plugin is lent', () => {
   /** The state of a store whose workspaces have this many editor tabs. */
@@ -23,7 +23,7 @@ describe('the editor service that a visualizer plugin is lent', () => {
   });
 
   test('is part of what the host lends to every plugin', () => {
-    expect(hostServices.editor).toBe(editorService);
+    expect(hostContract.editor).toBe(editorService);
   });
 
   test('marks the lines in the editor of the workspace that the side content is shown for', () => {

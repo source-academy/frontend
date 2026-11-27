@@ -1,16 +1,11 @@
 import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { RunnerStatus } from '@sourceacademy/conductor/types';
 import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
-import { channel, END, eventChannel, type SagaIterator, type Task } from 'redux-saga';
+import { channel, eventChannel, type SagaIterator, type Task } from 'redux-saga';
 import { call, cancel, cancelled, put, race, select, spawn, take } from 'redux-saga/effects';
 
 import { getBreakpointLineNumbers } from '../../../../commons/editor/Editor';
 import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHostPlugin';
-import type {
-  CseMachineHostPlugin,
-  CseSnapshot,
-  CseTraceEnd,
-} from '../../../../features/conductor/CseMachineHostPlugin';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import { tabBehaviour } from '../../../../features/directory/toolTabs';
 import { type OverallState } from '../../../application/ApplicationTypes';
@@ -243,7 +238,7 @@ function* handleResults(
 
 /**
  * Surfaces a conductor evaluation error: appends it to the REPL and, when the (REPL-hiding) conductor
- * Stepper or CSE Machine tab is active, or any other tab a module dynamically registered (e.g. sound's
+ * tool tab is active, or any other tab a module dynamically registered (e.g. sound's
  * tab), switches to the Introduction tab so the error is visible rather than failing silently — the
  * conductor analogue of the legacy `usingSubst`/`usingCse` path.
  *
@@ -276,11 +271,7 @@ function* surfaceConductorError(
   const isModuleTabSelected = sideContentManager
     .getTabs(workspaceLocation)
     .some(tab => getTabId(tab) === selectedTab);
-  if (
-    tabBehaviour(pluginMap, selectedTab).hidesRepl ||
-    selectedTab === SideContentType.cseMachine ||
-    isModuleTabSelected
-  ) {
+  if (tabBehaviour(pluginMap, selectedTab).hidesRepl || isModuleTabSelected) {
     yield put(visitSideContent(SideContentType.introduction, selectedTab, workspaceLocation));
   }
   if (interrupt) {
@@ -331,66 +322,6 @@ function* handleErrors(
     if (yield cancelled()) {
       errorChan.close();
     }
-  }
-}
-
-type CseSnapshotBatch = { snapshots: CseSnapshot[]; breakpointSteps: number[] };
-/** What the CSE plugin hands the saga: snapshots so far, or how the run ended. */
-type CseHostEvent = CseSnapshotBatch | { end: CseTraceEnd };
-
-/**
- * Puts the snapshots of the run, and how it ended, into the workspace as the CSE plugin hands them
- * over. A session only applies them while its `generation` is still the workspace's current run: the
- * session of an older run stays subscribed while it is torn down, and what it sends in that time
- * (its last batch, its cut-off end) must not show up beside the new run's.
- */
-export function* handleCseSnapshots(
-  csePlugin: CseMachineHostPlugin,
-  workspaceLocation: WorkspaceLocation,
-  generation: number,
-): SagaIterator {
-  const snapshotChan = eventChannel<CseHostEvent>(emitter => {
-    const receive = (snapshots: CseSnapshot[], breakpointSteps: number[]) =>
-      emitter({ snapshots, breakpointSteps });
-    const receiveEnd = (end: CseTraceEnd) => emitter({ end });
-    csePlugin.receiveSnapshots = receive;
-    csePlugin.onEnd = receiveEnd;
-    return () => {
-      if (csePlugin.receiveSnapshots === receive) {
-        csePlugin.receiveSnapshots = () => {};
-      }
-      if (csePlugin.onEnd === receiveEnd) {
-        csePlugin.onEnd = () => {};
-      }
-    };
-  });
-  try {
-    while (true) {
-      const batch: CseHostEvent | typeof END = yield take(snapshotChan);
-      // This session belongs to an older run: stop applying what it sends (see above).
-      if (runGenerations.get(workspaceLocation) !== generation) {
-        break;
-      }
-      if ('end' in batch) {
-        // How the run ended (after its last batch): the tab says if it was cut off.
-        yield put(WorkspaceActions.updateCseEnd(batch.end, workspaceLocation));
-        continue;
-      }
-      if (!('snapshots' in batch) || !Array.isArray(batch.snapshots)) {
-        break;
-      }
-      const { snapshots, breakpointSteps } = batch;
-      yield put(
-        WorkspaceActions.updateStepsTotal(Math.max(0, snapshots.length - 1), workspaceLocation),
-      );
-      yield put(WorkspaceActions.updateBreakpointSteps(breakpointSteps ?? [], workspaceLocation));
-      // Last, so a tab reacting to the new snapshots finds the totals already in place.
-      yield put(WorkspaceActions.updateCseSnapshots(snapshots, workspaceLocation));
-    }
-  } catch (_e) {
-    // Swallow errors from this non-critical background task
-  } finally {
-    snapshotChan.close();
   }
 }
 
@@ -495,8 +426,8 @@ type ReplSession = {
    * teardown must not reset the workspace's running state once a newer run has started. */
   generation: number;
   chunkSettledChan: ReturnType<typeof channel<ChunkSettled>>;
-  /** handleStdout/handleInputRequest/handleResults/handleErrors/handleStatuses/
-   * handleCseSnapshots, spawn()ed (not fork()ed) when the session was established - their
+  /** handleStdout/handleInputRequest/handleResults/handleErrors/handleStatuses,
+   * spawn()ed (not fork()ed) when the session was established - their
    * lifetime is this session's, not tied to whichever saga call happens to be sending the
    * current chunk, so they must keep running after that call returns. */
   tasks: Task[];
@@ -628,11 +559,6 @@ export function* evalCodeConductorSaga(
   actionType: string,
   storyEnv?: string,
 ): SagaIterator {
-  // Clear stale CSE snapshots from the previous chunk, whether or not this one produces any of
-  // its own (e.g. a REPL line at a chapter below §3) - otherwise the CSE Machine tab would keep
-  // showing an earlier chunk's steps well after that chunk is no longer the "current" one.
-  yield put(WorkspaceActions.updateCseSnapshots(null, workspaceLocation));
-
   // Wait 5 seconds for language directory to initialise before continuing evaluation
   let evaluator: IEvaluatorDefinition | undefined = yield call(getEvaluatorDefinitionSaga);
   if (!evaluator?.path) {
@@ -736,14 +662,13 @@ export function* evalCodeConductorSaga(
     // Reuse a preloaded conductor instance when available.
     const prepared: {
       hostPlugin: BrowserHostPlugin;
-      csePlugin: CseMachineHostPlugin;
       conduit: IConduit;
     } = yield call(getPreparedConductorSaga, {
       files: filesWithConfig,
       consume: true,
       workspaceLocation,
     });
-    const { hostPlugin, csePlugin, conduit } = prepared;
+    const { hostPlugin, conduit } = prepared;
 
     // Immediately start warming the next conductor in the background. forceFresh is required
     // here: the instance just obtained above is now consumed and kept alive as this workspace's
@@ -796,7 +721,6 @@ export function* evalCodeConductorSaga(
         generation,
       ),
     );
-    session.tasks.push(yield spawn(handleCseSnapshots, csePlugin, workspaceLocation, generation));
 
     yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
 

@@ -4482,13 +4482,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/common-cse-machine@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "@sourceacademy/common-cse-machine@npm:0.5.0"
-  checksum: 10c0/14f399f25d940e802f279a6fdb948d60936ed6da804b94c360bf27918a650a8ca67921788123e883915c3f4f7c52f8020bcb6f8b3b0cf6969504c0d9d1b5dfe8
-  languageName: node
-  linkType: hard
-
 "@sourceacademy/common-tabs@npm:^0.2.0":
   version: 0.2.0
   resolution: "@sourceacademy/common-tabs@npm:0.2.0"
@@ -4506,17 +4499,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.41":
+"@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.42":
   version: 0.0.41
-  resolution: "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#commit=e7c3c1450d7f50abfa6330b956760d8b04956a30"
-  checksum: 10c0/3bebaf3ff2511f028fe3bdc55d71b8f8a45972e7f2430d7471014e9a3b208dfafd7c62d2747ebfde18353e307c045403e95599440ba0bc1bed569bbfdbcaad5a
+  resolution: "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#commit=f7aba954b788e7b23fb865f8e58d213336df8a60"
+  checksum: 10c0/438ce5e1e2c3267dfaa7961e70463a40dbb6358850794d555b460d64920aadd0d735f89f6ad193531fa3ea30f6583690f4351631c0aa26bdd5821cc0dc4b7d11
   languageName: node
   linkType: hard
 
-"@sourceacademy/plugin-directory@https://github.com/source-academy/plugin-directory.git#0.0.5":
+"@sourceacademy/plugin-directory@https://github.com/source-academy/plugin-directory.git#0.0.6":
   version: 0.0.3
-  resolution: "@sourceacademy/plugin-directory@https://github.com/source-academy/plugin-directory.git#commit=0cc9be5a99d4354acdeed7421eacf0a4bbdf6450"
-  checksum: 10c0/2922cad07844af91efb3dacc7fa7839327aa38d69bf3bb6bf3e42ff02f3542f44e8aa1566988a5abe0d8fc5020b77bc215992bd5f4e813a36ffbd71fff8f7bdc
+  resolution: "@sourceacademy/plugin-directory@https://github.com/source-academy/plugin-directory.git#commit=b07689ab2e930ba5e8113518dd1bd74829d93d97"
+  checksum: 10c0/9b23e6e256001fd3ce833115e833d3b8102788ded5968fb4d623034f86569eb26fd3b3527f923e6d8de1af31379a940deab8744fe33a8123be135a515ddb19cb
   languageName: node
   linkType: hard
 
@@ -4559,16 +4552,6 @@ __metadata:
   peerDependencies:
     "@sourceacademy/conductor": ^0.8.0
   checksum: 10c0/c76034a357eb936df4d98e060aebb18838c3bd1367689f3d2109dbb0c2325898a4216bad90525a2e19b85e119337a406803d27558d69fcf8655a03c6b0964a4d
-  languageName: node
-  linkType: hard
-
-"@sourceacademy/web-cse-machine@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "@sourceacademy/web-cse-machine@npm:3.1.0"
-  peerDependencies:
-    "@sourceacademy/common-cse-machine": ">=0.5.0"
-    "@sourceacademy/conductor": ^0.8.0
-  checksum: 10c0/ad0bb415698bb0d06d756fb865096c6159119c2aaa176ed76b97af0ce2398ad66d01dc14da99e61e9dc169549261998d09f4010c4ceb80781e604d8cfce28ff5
   languageName: node
   linkType: hard
 
@@ -6318,7 +6301,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astring@npm:^1.4.3, astring@npm:^1.9.0":
+"astring@npm:^1.4.3":
   version: 1.9.0
   resolution: "astring@npm:1.9.0"
   bin:
@@ -8826,16 +8809,14 @@ __metadata:
     "@rsdoctor/rspack-plugin": "npm:^1.5.18"
     "@sentry/react": "npm:^11.0.0"
     "@sourceacademy/common-autocomplete": "npm:^0.0.2"
-    "@sourceacademy/common-cse-machine": "npm:^0.5.0"
     "@sourceacademy/common-tabs": "npm:^0.2.0"
     "@sourceacademy/conductor": "npm:^0.8.3"
-    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.41"
-    "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.5"
+    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.42"
+    "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.6"
     "@sourceacademy/runner-module-loader": "npm:^0.1.0"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
     "@sourceacademy/web-autocomplete": "npm:^0.0.3"
-    "@sourceacademy/web-cse-machine": "npm:^3.1.0"
     "@sourceacademy/web-module-loader": "npm:^0.0.2"
     "@sourceacademy/web-test": "npm:^0.0.2"
     "@svgr/webpack": "npm:^8.0.0"
@@ -8870,7 +8851,6 @@ __metadata:
     acorn: "npm:^8.9.0"
     ag-grid-community: "npm:^36.0.0"
     ag-grid-react: "npm:^36.0.0"
-    astring: "npm:^1.9.0"
     browserfs: "npm:^1.4.3"
     canvas: "npm:^3.1.0"
     classnames: "npm:^2.3.2"

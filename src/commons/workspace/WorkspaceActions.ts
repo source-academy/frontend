@@ -1,4 +1,3 @@
-import type { CseSnapshot, CseTraceEnd } from '../../features/conductor/CseMachineHostPlugin';
 import type { AllColsSortStates } from '../../features/grading/GradingTypes';
 import type { HighlightedLines, Position } from '../editor/EditorTypes';
 import { createActions } from '../redux/utils';
@@ -167,30 +166,6 @@ const newActions = createActions('workspace', {
   showMcqPane: (workspaceLocation: WorkspaceLocation, options: string[]) => ({
     workspaceLocation,
     options,
-  }),
-  updateCurrentStep: (steps: number, workspaceLocation: WorkspaceLocation) => ({
-    steps,
-    workspaceLocation,
-  }),
-  updateStepsTotal: (steps: number, workspaceLocation: WorkspaceLocation) => ({
-    steps,
-    workspaceLocation,
-  }),
-  updateBreakpointSteps: (breakpointSteps: number[], workspaceLocation: WorkspaceLocation) => ({
-    breakpointSteps,
-    workspaceLocation,
-  }),
-  updateChangePointSteps: (changepointSteps: number[], workspaceLocation: WorkspaceLocation) => ({
-    changepointSteps,
-    workspaceLocation,
-  }),
-  updateCseSnapshots: (snapshots: CseSnapshot[] | null, workspaceLocation: WorkspaceLocation) => ({
-    snapshots,
-    workspaceLocation,
-  }),
-  updateCseEnd: (end: CseTraceEnd | null, workspaceLocation: WorkspaceLocation) => ({
-    end,
-    workspaceLocation,
   }),
   // For grading table
   increaseRequestCounter: 0,

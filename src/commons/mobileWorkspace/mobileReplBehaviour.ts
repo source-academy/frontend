@@ -8,11 +8,7 @@ function isVisualizerTab(
   tabId: SideContentTabId,
   hidesRepl: (tabId: SideContentTabId) => boolean,
 ): boolean {
-  return (
-    tabId === SideContentType.substVisualizer ||
-    tabId === SideContentType.cseMachine ||
-    hidesRepl(tabId)
-  );
+  return tabId === SideContentType.substVisualizer || hidesRepl(tabId);
 }
 
 /**

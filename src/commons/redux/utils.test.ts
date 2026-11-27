@@ -21,7 +21,7 @@ test('test combineSagaHandlers', () => {
     [WorkspaceActions.toggleFolderMode.type]: {
       takeEvery: mockTakeEveryHandler,
     },
-    [WorkspaceActions.updateCurrentStep.type]: {
+    [WorkspaceActions.updateEditorValue.type]: {
       takeLatest: mockTakeLatestHandler,
     },
     [WorkspaceActions.changeExecTime.type]: {
@@ -35,7 +35,7 @@ test('test combineSagaHandlers', () => {
     .next()
     .takeEvery(WorkspaceActions.toggleFolderMode.type, mockTakeEveryHandler)
     .next()
-    .takeLatest(WorkspaceActions.updateCurrentStep.type, mockTakeLatestHandler)
+    .takeLatest(WorkspaceActions.updateEditorValue.type, mockTakeLatestHandler)
     .next()
     .takeLeading(WorkspaceActions.changeExecTime.type, mockTakeLeadingHandler)
     .next()

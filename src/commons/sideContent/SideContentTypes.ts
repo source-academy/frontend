@@ -6,7 +6,6 @@ export enum SideContentType {
   autograder = 'autograder',
   briefing = 'briefing',
   contestVoting = 'contest_voting',
-  cseMachine = 'cse_machine',
   // Also the tab id registered by the conductor data visualizer web plugin.
   dataVisualizer = 'data-visualizer',
   documentation = 'documentation',
