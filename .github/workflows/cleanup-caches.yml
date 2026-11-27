@@ -1,7 +1,6 @@
 # Deletes the Actions caches of a pull request when it is closed or merged. A pull request's caches can only be
 # read by that pull request, so after it closes they only use up the repository's 10 GB, and push out the
-# caches of the default branch, which everyone uses. (source-academy/documentation#73's sibling: the cleanup
-# of the organisation; see tools/org-health in source-academy/documentation.)
+# caches of the default branch, which everyone uses.
 #
 # No checkout and no code of the pull request runs here: the job only calls `gh cache delete`. Pull requests from
 # forks get a read-only token, so their caches are not cleaned (they expire after seven days without use).
