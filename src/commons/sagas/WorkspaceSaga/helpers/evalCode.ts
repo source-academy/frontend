@@ -648,14 +648,11 @@ export function* evalCodeConductorSaga(
   const breakpointLines = getBreakpointLineNumbers(activeEditorTab?.breakpoints ?? []).map(
     line => line + 1 + preludeLineOffset,
   );
-  // The per-run settings are a file of the run, named for the run and not for any tool. Evaluators
-  // built before the rename ask for '/__cse_config__', so the same text is served under both names
-  // until none of them does; the old name is to be removed then.
-  const runConfig = JSON.stringify({ breakpointLines });
+  // The per-run settings are a file of the run, named for the run and not for any tool: the
+  // evaluator fetches it with `requestFile`.
   const filesWithConfig = {
     ...files,
-    '/__run_config__': runConfig,
-    '/__cse_config__': runConfig,
+    '/__run_config__': JSON.stringify({ breakpointLines }),
   };
 
   try {
