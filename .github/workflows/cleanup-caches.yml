@@ -2,19 +2,20 @@
 # read by that pull request, so after it closes they only use up the repository's 10 GB, and push out the
 # caches of the default branch, which everyone uses.
 #
-# No checkout and no code of the pull request runs here: the job only calls `gh cache delete`. Pull requests from
-# forks get a read-only token, so their caches are not cleaned (they expire after seven days without use).
+# pull_request_target, not pull_request: GitHub does not run pull_request workflows for a pull request that has
+# merge conflicts, and those are the ones that get closed without merging. This is safe here because the
+# workflow checks nothing out, runs none of the pull request's code, and uses only the number and the head commit
+# of the pull request (they are not text that the author controls).
 name: Clean up pull request caches
 
 on:
-  pull_request:
+  pull_request_target:
     types: [closed]
 
 permissions: {}
 
 jobs:
   cleanup:
-    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
       actions: write
@@ -23,10 +24,24 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          REF: refs/pull/${{ github.event.pull_request.number }}/merge
+          PR: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+          RUN_ID: ${{ github.run_id }}
         run: |
-          ids=$(gh cache list --ref "$REF" --limit 100 --json id --jq '.[].id')
-          echo "caches of $REF: $(echo "$ids" | grep -c . || true)"
-          for id in $ids; do
-            gh cache delete "$id" || true
+          # A run of the pull request that is still going saves its cache when it ends, after our deletion and
+          # with nothing left to clean it up: wait (up to 20 minutes) until the other runs of its commit are done.
+          for i in $(seq 1 40); do
+            running=$(gh run list --commit "$SHA" --limit 50 --json databaseId,status \
+              --jq "[.[] | select(.status != \"completed\" and .databaseId != $RUN_ID)] | length")
+            [ "$running" = "0" ] && break
+            echo "waiting for $running run(s) of the pull request to finish ($i/40)"
+            sleep 30
           done
+          ids=$(gh cache list --ref "refs/pull/$PR/merge" --limit 100 --json id --jq '.[].id')
+          echo "caches of refs/pull/$PR/merge: $(echo "$ids" | grep -c . || true)"
+          failed=0
+          for id in $ids; do
+            gh cache delete "$id" || failed=1
+          done
+          # Delete them all, then fail if any deletion failed, so that a cleanup that did not work is visible.
+          exit $failed
