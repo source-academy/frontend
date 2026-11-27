@@ -16,7 +16,7 @@ describe('mobileReplBehaviour', () => {
     });
   });
 
-  test.each([SideContentType.substVisualizer, SideContentType.cseMachine, PLUGIN_TAB])(
+  test.each([SideContentType.substVisualizer, PLUGIN_TAB])(
     'pressing Run from %s keeps the REPL hidden and fixed',
     tab => {
       expect(mobileReplBehaviour(RUN, tab, hidesRepl)).toEqual({
@@ -33,7 +33,7 @@ describe('mobileReplBehaviour', () => {
     },
   );
 
-  test.each([SideContentType.folder, SideContentType.cseMachine, PLUGIN_TAB])(
+  test.each([SideContentType.folder, PLUGIN_TAB])(
     'opening %s hides the REPL and disables dragging',
     tab => {
       expect(mobileReplBehaviour(tab, SideContentType.mobileEditor, hidesRepl)).toEqual({

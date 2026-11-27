@@ -8,15 +8,10 @@ vi.mock('../../../features/conductor/createConductor', () => ({
 
 import { createConductor } from '../../../features/conductor/createConductor';
 import { DeferredConductorTabService } from '../../../features/conductor/deferredConductorTabService';
-import {
-  getPreparedConductorSaga,
-  isLoadedFromDirectory,
-  preloadConductorEvaluatorSaga,
-} from './conductorEvaluatorCache';
+import { getPreparedConductorSaga, preloadConductorEvaluatorSaga } from './conductorEvaluatorCache';
 
 type FakeConductor = {
   hostPlugin: object;
-  csePlugin: object;
   conduit: IConduit & {
     terminate: ReturnType<typeof vi.fn>;
     lookupPlugin: ReturnType<typeof vi.fn>;
@@ -33,7 +28,6 @@ function makeFakeConductor(): FakeConductor {
   } as unknown as FakeConductor['conduit'];
   return {
     hostPlugin: {},
-    csePlugin: {},
     conduit,
     moduleLoaderPlugin: { onModuleDirectoryURLChange: vi.fn(async () => {}) },
   };
@@ -288,14 +282,5 @@ describe('conductorEvaluatorCache', () => {
     await runSaga(env, preloadConductorEvaluatorSaga, '/evaluator-flaky.mjs').toPromise();
 
     expect(activateSpy).toHaveBeenCalledTimes(1);
-  });
-});
-
-describe('isLoadedFromDirectory', () => {
-  test('is false for the CSE machine, which is built in, and true for any other plugin', () => {
-    expect(isLoadedFromDirectory('cse-machine')).toBe(false);
-    expect(isLoadedFromDirectory('stepper')).toBe(true);
-    expect(isLoadedFromDirectory('e-stepper')).toBe(true);
-    expect(isLoadedFromDirectory('data-visualizer')).toBe(true);
   });
 });

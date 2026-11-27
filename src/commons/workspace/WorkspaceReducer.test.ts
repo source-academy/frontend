@@ -729,10 +729,6 @@ describe('LOG_OUT', () => {
       ],
       replValue: 'test repl value here',
       sharedbConnected: false,
-      currentStep: -1,
-      stepsTotal: 0,
-      breakpointSteps: [],
-      changepointSteps: [],
     };
 
     const logoutDefaultState: WorkspaceManagerState = {

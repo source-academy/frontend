@@ -394,9 +394,9 @@ $code-color-notification: #f9f0d7;
       }
     }
 
-    // Specific CSS for the Stepper and CSE Machine tab, since REPL is hidden
+    // Specific CSS for the tool tabs (the Stepper, the CSE Machine) that hide the REPL
     ##{$ns}-tab-panel_side-content-tabs_subst_visualiser,
-    ##{$ns}-tab-panel_side-content-tabs_cse_machine,
+    ##{$ns}-tab-panel_side-content-tabs_cse-machine,
     ##{$ns}-tab-panel_side-content-tabs_stepper {
       height: calc(100% - 60px);
       margin-top: -45px;
